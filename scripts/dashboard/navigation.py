@@ -16,6 +16,7 @@ PAGE_DEFINITIONS = [
     ("Quality", "Section B Audit", "section-b-audit"),
     ("Quality", "Section C Audit", "section-c-audit"),
     ("Quality", "Section D Audit", "section-d-audit"),
+    ("Quality", "CAERS Audit", "caers-audit"),
     ("Intelligence", "Intelligence", "intelligence"),
 ]
 

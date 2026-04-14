@@ -31,8 +31,8 @@ def render_audit_section_b(data):
     _render_score_distribution(section_b_data)
     st.divider()
 
-    tab_flags, tab_blocked, tab_low, tab_details = st.tabs(
-        ["Safety Flag Breakdown", "Blocked & Unsafe", "Lowest Safety Scores", "Detailed Analysis"]
+    tab_flags, tab_blocked, tab_low, tab_caers, tab_details = st.tabs(
+        ["Safety Flag Breakdown", "Blocked & Unsafe", "Lowest Safety Scores", "CAERS Adverse Events", "Detailed Analysis"]
     )
     with tab_flags:
         _render_safety_flags(section_b_data)
@@ -40,6 +40,8 @@ def render_audit_section_b(data):
         _render_blocked_products(section_b_data)
     with tab_low:
         _render_low_safety(section_b_data)
+    with tab_caers:
+        _render_caers_summary(data)
     with tab_details:
         _render_detailed_analysis(section_b_data)
 
@@ -308,3 +310,132 @@ def _render_detailed_analysis(data):
         for i, (label, value) in enumerate(stats.items()):
             with cols[i]:
                 st.metric(label, value)
+
+
+def _render_caers_summary(data):
+    """CAERS Adverse Event Signals — summary tab within Section B audit."""
+    st.write("### FDA CAERS Adverse Event Signals")
+
+    signals = data.caers_signals
+    metadata = data.caers_metadata
+
+    if not signals:
+        st.warning("No CAERS data loaded. Run `python3 scripts/api_audit/ingest_caers.py` to generate.")
+        return
+
+    # Summary metrics
+    total_ingredients = len(signals)
+    strong = sum(1 for s in signals.values() if s.get("signal_strength") == "strong")
+    moderate = sum(1 for s in signals.values() if s.get("signal_strength") == "moderate")
+    weak = sum(1 for s in signals.values() if s.get("signal_strength") == "weak")
+    total_reports = metadata.get("total_supplement_reports_analyzed", 0)
+
+    metric_row([
+        ("Ingredients with signals", total_ingredients),
+        ("Strong signals (100+)", strong),
+        ("Moderate (25-99)", moderate),
+        ("Weak (10-24)", weak),
+        ("Total reports analyzed", f"{total_reports:,}"),
+    ])
+
+    st.divider()
+
+    # Signal strength distribution chart
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        rows = []
+        for canon_id, sig in sorted(signals.items(), key=lambda x: -x[1].get("serious_reports", 0)):
+            rows.append({
+                "Ingredient": canon_id.replace("_", " ").title(),
+                "canonical_id": canon_id,
+                "Serious Reports": sig.get("serious_reports", 0),
+                "Total Reports": sig.get("total_reports", 0),
+                "Signal": sig.get("signal_strength", "unknown"),
+                "Deaths": sig.get("outcomes", {}).get("death", 0),
+                "Hospitalizations": sig.get("outcomes", {}).get("hospitalization", 0),
+                "ER Visits": sig.get("outcomes", {}).get("er_visit", 0),
+                "Life Threatening": sig.get("outcomes", {}).get("life_threatening", 0),
+                "Year Range": sig.get("year_range", ""),
+                "Top Reactions": ", ".join(sig.get("top_reactions", [])[:5]),
+            })
+        df = pd.DataFrame(rows)
+        if not df.empty:
+            fig = px.bar(
+                df.head(30),
+                x="Ingredient", y="Serious Reports",
+                color="Signal",
+                color_discrete_map={"strong": "#dc2626", "moderate": "#f59e0b", "weak": "#6b7280"},
+                title="Top 30 Ingredients by Serious Adverse Event Reports",
+            )
+            fig.update_layout(xaxis_tickangle=-45, height=450)
+            st.plotly_chart(fig, use_container_width=True)
+
+    with col2:
+        st.write("#### Signal Strength Distribution")
+        strength_df = pd.DataFrame([
+            {"Strength": "Strong (100+)", "Count": strong},
+            {"Strength": "Moderate (25-99)", "Count": moderate},
+            {"Strength": "Weak (10-24)", "Count": weak},
+        ])
+        fig2 = px.pie(strength_df, names="Strength", values="Count",
+                       color="Strength",
+                       color_discrete_map={
+                           "Strong (100+)": "#dc2626",
+                           "Moderate (25-99)": "#f59e0b",
+                           "Weak (10-24)": "#6b7280",
+                       })
+        st.plotly_chart(fig2, use_container_width=True)
+
+    st.divider()
+
+    # Filterable table
+    st.write("#### All CAERS Signals")
+    strength_filter = st.multiselect(
+        "Filter by signal strength",
+        ["strong", "moderate", "weak"],
+        default=["strong", "moderate"],
+        key="caers_strength_filter",
+    )
+    if not df.empty:
+        filtered = df[df["Signal"].isin(strength_filter)] if strength_filter else df
+        display_cols = [
+            "Ingredient", "Signal", "Serious Reports", "Total Reports",
+            "Deaths", "Hospitalizations", "ER Visits", "Life Threatening",
+            "Year Range", "Top Reactions",
+        ]
+        st.dataframe(filtered[display_cols], use_container_width=True, height=400)
+        csv = filtered[display_cols].to_csv(index=False)
+        st.download_button("Download CSV", csv, "caers_signals.csv", "text/csv", key="caers_csv")
+
+    st.divider()
+
+    # Outcome breakdown for top ingredients
+    st.write("#### Outcome Breakdown — Top 10 Most Dangerous")
+    if not df.empty:
+        top10 = df.head(10)
+        outcome_data = []
+        for _, row in top10.iterrows():
+            for outcome in ["Deaths", "Hospitalizations", "ER Visits", "Life Threatening"]:
+                outcome_data.append({
+                    "Ingredient": row["Ingredient"],
+                    "Outcome": outcome,
+                    "Count": row[outcome],
+                })
+        outcome_df = pd.DataFrame(outcome_data)
+        fig3 = px.bar(
+            outcome_df, x="Ingredient", y="Count", color="Outcome",
+            barmode="stack",
+            color_discrete_map={
+                "Deaths": "#7f1d1d",
+                "Hospitalizations": "#dc2626",
+                "ER Visits": "#f59e0b",
+                "Life Threatening": "#991b1b",
+            },
+            title="Serious Outcome Breakdown",
+        )
+        fig3.update_layout(xaxis_tickangle=-45, height=400)
+        st.plotly_chart(fig3, use_container_width=True)
+
+    # Metadata
+    with st.expander("CAERS Data Metadata"):
+        st.json(metadata)

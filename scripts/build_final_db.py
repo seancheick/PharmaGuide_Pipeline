@@ -1725,6 +1725,15 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "severity": "critical" if ev.get("pct_ul", 0) >= 200 else "warning",
                 "reason": f"{ev.get('nutrient')}: {ev.get('amount')} vs UL {ev.get('ul')}",
             })
+    if safe_float(b_sub.get("B8_penalty"), 0) > 0:
+        b8_evidence = safe_list(b_sub.get("B8_caers_evidence"))
+        for ev in b8_evidence:
+            penalties.append({
+                "id": "B8",
+                "label": f"FDA adverse events: {ev.get('ingredient', 'unknown')} ({ev.get('serious_reports', 0)} serious reports)",
+                "severity": ev.get("signal_strength", "unknown"),
+                "reason": f"FDA CAERS: {ev.get('total_reports', 0)} total reports, {ev.get('serious_reports', 0)} serious",
+            })
     vp = section_breakdown.get("violation_penalty", 0)
     if vp and safe_float(vp, 0) != 0:
         penalties.append({"id": "violation", "label": "Scoring violation penalty", "score": vp})
@@ -2363,6 +2372,24 @@ def build_core_row(
     score_100 = safe_float(scored.get("score_100_equivalent"))
 
     top_warnings = build_top_warnings(enriched)
+
+    # Inject B8 CAERS adverse event warnings from scored output
+    b8_evidence = safe_list(
+        safe_dict(safe_dict(scored.get("breakdown", {})).get("B", {})).get("B8_caers_evidence")
+    )
+    for ev in b8_evidence:
+        if not isinstance(ev, dict):
+            continue
+        ing = safe_str(ev.get("ingredient"))
+        serious = ev.get("serious_reports", 0)
+        total = ev.get("total_reports", 0)
+        strength = safe_str(ev.get("signal_strength"))
+        if strength in ("strong", "moderate"):
+            top_warnings.append(
+                f"FDA adverse events: {ing.replace('_', ' ').title()} "
+                f"({serious} serious of {total} reports)"
+            )
+
     blocking = derive_blocking_reason(enriched, scored)
     interaction_hint = build_interaction_summary_hint(enriched)
     decision_highlights = build_decision_highlights(enriched, scored, blocking)

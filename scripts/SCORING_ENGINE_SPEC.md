@@ -257,7 +257,7 @@ B = clamp(0, 30, B_raw)
 
 base_score = 25
 bonuses  = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
-penalties = B0_moderate + B1 + B2 + B5 + B6 + B7
+penalties = B0_moderate + B1 + B2 + B5 + B6 + B7 + B8
 ```
 
 - `base_score` (25) and `bonus_pool_cap` (5) are read from config
@@ -473,6 +473,60 @@ Evidence payload (per penalized ingredient):
 
 ---
 
+### B8 CAERS Adverse Event Penalty (max penalty 5)
+
+**Design intent:** FDA CAERS (Center for Food Safety and Applied Nutrition Adverse Event
+Reporting System) contains real-world pharmacovigilance reports — consumers and healthcare
+providers reporting adverse events from dietary supplements. This is the only real-world
+safety signal in the pipeline. An ingredient can be legal (passes B0 banned check),
+well-formulated (high IQM), but still have hundreds of hospitalizations and deaths in CAERS.
+
+**Distinct from other safety sub-components:**
+- B0 (banned/recalled): regulatory actions FDA has already taken
+- B1 (harmful additives): formulation quality of excipients
+- B8 (CAERS): statistical volume of real-world adverse event reports on active ingredients
+
+Input:
+- `caers_adverse_event_signals.json` — loaded once at scorer init
+- Each product ingredient's `canonical_id` is looked up against the signals map
+
+```text
+for each ingredient with a CAERS signal:
+    if signal_strength == "strong" (>=100 serious reports): penalty = 4.0
+    if signal_strength == "moderate" (25-99 serious reports): penalty = 2.0
+    if signal_strength == "weak" (10-24 serious reports):    penalty = 1.0
+    add flag CAERS_SIGNAL_{ingredient}
+
+B8 = min(cap, sum(ingredient_penalties))
+```
+
+Config defaults (scoring_config.json → B8_caers_adverse_events):
+- `strong_penalty`: 4.0 — e.g. kratom (261 deaths), green tea extract (80 hospitalizations)
+- `moderate_penalty`: 2.0
+- `weak_penalty`: 1.0
+- `cap`: 5.0 — maximum total B8 penalty
+- `enabled`: true — can be disabled without code change
+- `data_file`: `data/caers_adverse_event_signals.json`
+
+Evidence payload (per penalized ingredient):
+```json
+{
+  "ingredient": "kratom",
+  "signal_strength": "strong",
+  "serious_reports": 759,
+  "total_reports": 801,
+  "penalty": 4.0
+}
+```
+
+**Note on base-rate filtering:** The ingestion script (`ingest_caers.py`) filters out
+multi-ingredient products (multivitamins, "Centrum", "One A Day", etc.) to prevent
+inflating ubiquitous ingredients like calcium/vitamin D. Products with >3 extracted
+ingredients are also dropped. This ensures signals reflect targeted single-ingredient
+supplement reports, not noise from combo products.
+
+---
+
 ## Section C: Evidence & Research (max 20)
 
 Input:
@@ -676,6 +730,7 @@ Section scores shorthand (`section_scores`):
 | `B0_MODERATE_SUBSTANCE` | B0 | Moderate-severity banned substance hit (pre-5.0 fallback); triggers CAUTION verdict + 10pt penalty |
 | `DISEASE_CLAIM_DETECTED` | B6 | Product makes unsubstantiated disease claims |
 | `OVER_UL_{nutrient}` | B7 | Ingredient exceeds 150% of highest adult UL (e.g. `OVER_UL_Vitamin A`) |
+| `CAERS_SIGNAL_{ingredient}` | B8 | FDA CAERS adverse event signal found for ingredient (e.g. `CAERS_SIGNAL_kratom`) |
 | `LABEL_CONTRADICTION_DETECTED` | B3 | Compliance claims contradict other label text |
 | `MANUFACTURER_VIOLATION` | Post-section | Manufacturer has documented violations; deduction applied |
 | `NO_ACTIVES_DETECTED` | Mapping gate | Zero active ingredients found |

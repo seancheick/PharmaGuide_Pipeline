@@ -303,3 +303,34 @@ This document is updated after each sprint. It captures what went well, what wen
 4. **Drug class gaps block entire categories of interaction.** Missing the SSRI/SNRI class meant SJW serotonin syndrome — one of the most documented herb-drug interactions — was invisible. When adding new interaction rules, always check if the needed drug class exists first.
 
 5. **The interaction rules file is the most impactful safety artifact.** It determines what warnings 5,231 products show to users with health conditions. Any gap = silent failure for real patients. Schedule quarterly audits against clinical literature updates.
+
+---
+
+## Sprint 23a — CAERS Adverse Event Integration (2026-04-14)
+
+### What happened
+Integrated FDA CAERS (Center for Food Safety adverse event reports) as a new pharmacovigilance data source. Downloaded 148K reports, filtered to 48.8K supplement reports, extracted ingredient signals for 159 ingredients, and wired end-to-end through scorer (B8), build_final_db, dashboard, and Flutter.
+
+### Key decisions
+
+1. **CAERS is distinct from banned_recalled AND harmful_additives.** Three different safety dimensions:
+   - `banned_recalled_ingredients.json` (B0) = regulatory actions (FDA bans/recalls) — binary gate
+   - `harmful_additives.json` (B1) = formulation quality of excipients — graduated penalty
+   - `caers_adverse_event_signals.json` (B8) = statistical volume of real-world adverse events on actives — graduated penalty
+   All three can fire independently on the same product.
+
+2. **Multi-ingredient product filtering is critical.** Initial run had calcium and vitamin D topping the list because they appear in every multivitamin. Fixed by filtering out product names containing multivitamin keywords (Centrum, One A Day, prenatal, etc.) and capping extracted ingredients per product at 3.
+
+3. **B8 penalties should be proportional to actual harm.** Initial values (strong=2.0, cap=3.0) were too low — kratom with 261 deaths got the same penalty as a single UL exceedance. Revised to strong=4.0, moderate=2.0, weak=1.0, cap=5.0 to reflect real-world severity.
+
+4. **Scorer loads CAERS at init, not via enricher.** Unlike B0/B1 which read from the enriched product object, B8 loads `caers_adverse_event_signals.json` once at scorer init and looks up ingredients by canonical_id. This avoids touching the enricher pipeline.
+
+5. **CAERS warnings flow through existing top_warnings.** No Flutter code changes needed — B8 evidence is injected into `top_warnings[]` and `score_penalties[]` in build_final_db.py, which Flutter already renders.
+
+### Lessons for future sessions
+
+6. **Base-rate filtering matters for pharmacovigilance data.** Raw CAERS report counts are misleading — calcium has thousands of reports because millions of people take it, not because it's dangerous. Future: consider per-capita normalization if supplement usage data becomes available.
+
+7. **The scorer's sub-component methods need config passed explicitly.** Direct unit test calls to `_compute_caers_penalty()` use code defaults, not config values. Always pass `section_b_cfg` or the tests will assert against stale defaults.
+
+8. **Dashboard cross-reference audit is the real value.** The CAERS Audit view's "Cross-Reference" tab shows ingredients with strong CAERS signals NOT in banned_recalled — these are review candidates for future regulatory additions. Run quarterly.

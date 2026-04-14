@@ -149,6 +149,20 @@ PAGE_META: dict[str, dict[str, Any]] = {
             "Compare evidence coverage across supplement types to prioritize research investment.",
         ],
     },
+    "caers-audit": {
+        "page_title": "CAERS Audit",
+        "page_summary": "FDA CAERS pharmacovigilance audit: adverse event signals, outcome breakdowns, cross-reference with banned/recalled, and B8 scoring impact.",
+        "data_planes": ["Pipeline Data"],
+        "source_paths": ["caers_signals"],
+        "freshness_fields": [],
+        "mixed_plane_warning": "",
+        "related_views": ["Section B Audit", "Intelligence"],
+        "usage_notes": [
+            "Cross-Reference tab shows ingredients with CAERS signals NOT in banned/recalled — review candidates.",
+            "B8 Scoring Impact shows how CAERS penalties affect product scores.",
+            "Reaction Analysis surfaces the most commonly reported adverse reactions.",
+        ],
+    },
     "section-d-audit": {
         "page_title": "Section D Audit",
         "page_summary": "Brand trust audit: manufacturer reputation, third-party testing, full disclosure, and certification gap analysis.",

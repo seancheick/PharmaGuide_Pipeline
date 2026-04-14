@@ -1,0 +1,4311 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "source": "FDA CAERS bulk download (food/event)",
+    "source_url": "https://api.fda.gov/download.json",
+    "last_updated": "2026-04-14T19:38:51Z",
+    "total_supplement_reports_analyzed": 48840,
+    "total_ingredients_with_signals": 159,
+    "signal_thresholds": {
+      "strong": ">=100 serious reports",
+      "moderate": "25-99 serious reports",
+      "weak": "10-24 serious reports",
+      "minimal": "<10 serious reports (excluded)"
+    }
+  },
+  "signals": {
+    "calcium": {
+      "canonical_id": "calcium",
+      "total_reports": 2218,
+      "serious_reports": 2145,
+      "outcomes": {
+        "hospitalization": 328,
+        "er_visit": 153,
+        "life_threatening": 93,
+        "death": 27,
+        "disability": 18,
+        "required_intervention": 24
+      },
+      "top_reactions": [
+        "CHOKING",
+        "DYSPHAGIA",
+        "FOREIGN BODY TRAUMA",
+        "DYSPNOEA",
+        "Choking",
+        "FOREIGN BODY",
+        "VOMITING",
+        "NAUSEA",
+        "THROAT IRRITATION",
+        "NEPHROLITHIASIS"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "vitamin_d": {
+      "canonical_id": "vitamin_d",
+      "total_reports": 1352,
+      "serious_reports": 1301,
+      "outcomes": {
+        "hospitalization": 294,
+        "er_visit": 152,
+        "life_threatening": 99,
+        "death": 16,
+        "disability": 35,
+        "required_intervention": 20
+      },
+      "top_reactions": [
+        "CHOKING",
+        "DYSPHAGIA",
+        "DYSPNOEA",
+        "FOREIGN BODY TRAUMA",
+        "Choking",
+        "COELIAC DISEASE",
+        "DIARRHOEA",
+        "VOMITING",
+        "Dyspnoea",
+        "NAUSEA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "fiber": {
+      "canonical_id": "fiber",
+      "total_reports": 1293,
+      "serious_reports": 1252,
+      "outcomes": {
+        "hospitalization": 323,
+        "er_visit": 176,
+        "life_threatening": 50,
+        "death": 56,
+        "disability": 29,
+        "required_intervention": 16
+      },
+      "top_reactions": [
+        "DIARRHOEA",
+        "CONSTIPATION",
+        "NAUSEA",
+        "ABDOMINAL PAIN UPPER",
+        "VOMITING",
+        "DYSPNOEA",
+        "Diarrhoea",
+        "ABDOMINAL PAIN",
+        "MALAISE",
+        "ABDOMINAL DISTENSION"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "fish_oil_omega3": {
+      "canonical_id": "fish_oil_omega3",
+      "total_reports": 880,
+      "serious_reports": 831,
+      "outcomes": {
+        "hospitalization": 211,
+        "er_visit": 147,
+        "life_threatening": 109,
+        "death": 9,
+        "disability": 32,
+        "required_intervention": 36
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "CHOKING",
+        "DIARRHOEA",
+        "VOMITING",
+        "NAUSEA",
+        "HYPERSENSITIVITY",
+        "Choking",
+        "Dyspnoea",
+        "DIZZINESS",
+        "HEADACHE"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "kratom": {
+      "canonical_id": "kratom",
+      "total_reports": 801,
+      "serious_reports": 759,
+      "outcomes": {
+        "hospitalization": 210,
+        "er_visit": 92,
+        "life_threatening": 119,
+        "death": 261,
+        "disability": 119,
+        "required_intervention": 7
+      },
+      "top_reactions": [
+        "Death",
+        "Dependence",
+        "Toxicity to various agents",
+        "Withdrawal syndrome",
+        "Vomiting",
+        "Nausea",
+        "Anxiety",
+        "Malaise",
+        "Overdose",
+        "Diarrhoea"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2008-2025"
+    },
+    "probiotics": {
+      "canonical_id": "probiotics",
+      "total_reports": 744,
+      "serious_reports": 705,
+      "outcomes": {
+        "hospitalization": 229,
+        "er_visit": 170,
+        "life_threatening": 63,
+        "death": 10,
+        "disability": 26,
+        "required_intervention": 7
+      },
+      "top_reactions": [
+        "Diarrhoea",
+        "Nausea",
+        "DIARRHOEA",
+        "VOMITING",
+        "Abdominal pain",
+        "Vomiting",
+        "ABDOMINAL PAIN",
+        "Abdominal pain upper",
+        "Hypersensitivity",
+        "Gastrointestinal disorder"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "magnesium": {
+      "canonical_id": "magnesium",
+      "total_reports": 633,
+      "serious_reports": 610,
+      "outcomes": {
+        "hospitalization": 135,
+        "er_visit": 83,
+        "life_threatening": 43,
+        "death": 19,
+        "disability": 20,
+        "required_intervention": 7
+      },
+      "top_reactions": [
+        "CHOKING",
+        "Diarrhoea",
+        "DYSPNOEA",
+        "Choking",
+        "FOREIGN BODY TRAUMA",
+        "Nausea",
+        "DYSPHAGIA",
+        "DIARRHOEA",
+        "VOMITING",
+        "Dyspnoea"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2007-2025"
+    },
+    "protein": {
+      "canonical_id": "protein",
+      "total_reports": 558,
+      "serious_reports": 505,
+      "outcomes": {
+        "hospitalization": 135,
+        "er_visit": 120,
+        "life_threatening": 41,
+        "death": 4,
+        "disability": 20,
+        "required_intervention": 16
+      },
+      "top_reactions": [
+        "Hypersensitivity",
+        "Dyspnoea",
+        "Nausea",
+        "Vomiting",
+        "VOMITING",
+        "Diarrhoea",
+        "DIARRHOEA",
+        "NAUSEA",
+        "Abdominal pain upper",
+        "Pharyngeal oedema"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "vitamin_c": {
+      "canonical_id": "vitamin_c",
+      "total_reports": 414,
+      "serious_reports": 378,
+      "outcomes": {
+        "hospitalization": 92,
+        "er_visit": 73,
+        "life_threatening": 37,
+        "death": 6,
+        "disability": 17,
+        "required_intervention": 13
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "CHOKING",
+        "Dyspnoea",
+        "DYSPHAGIA",
+        "ABDOMINAL PAIN UPPER",
+        "NAUSEA",
+        "VOMITING",
+        "Choking",
+        "COUGH",
+        "DIARRHOEA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2003-2025"
+    },
+    "glucosamine": {
+      "canonical_id": "glucosamine",
+      "total_reports": 386,
+      "serious_reports": 355,
+      "outcomes": {
+        "hospitalization": 93,
+        "er_visit": 57,
+        "life_threatening": 107,
+        "death": 5,
+        "disability": 15,
+        "required_intervention": 20
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "CHOKING",
+        "DYSPHAGIA",
+        "FOREIGN BODY TRAUMA",
+        "VOMITING",
+        "HYPERSENSITIVITY",
+        "Choking",
+        "NAUSEA",
+        "FATIGUE",
+        "URTICARIA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "melatonin": {
+      "canonical_id": "melatonin",
+      "total_reports": 346,
+      "serious_reports": 322,
+      "outcomes": {
+        "hospitalization": 82,
+        "er_visit": 67,
+        "life_threatening": 22,
+        "death": 8,
+        "disability": 20,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "Dizziness",
+        "Nausea",
+        "Dyspnoea",
+        "Diarrhoea",
+        "Headache",
+        "NAUSEA",
+        "VOMITING",
+        "INSOMNIA",
+        "Hallucination",
+        "Insomnia"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "iron": {
+      "canonical_id": "iron",
+      "total_reports": 337,
+      "serious_reports": 315,
+      "outcomes": {
+        "hospitalization": 92,
+        "er_visit": 57,
+        "life_threatening": 21,
+        "death": 14,
+        "disability": 7,
+        "required_intervention": 7
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "NAUSEA",
+        "HYPERSENSITIVITY",
+        "DIZZINESS",
+        "VOMITING",
+        "Vomiting",
+        "DIARRHOEA",
+        "Diarrhoea",
+        "Dyspnoea",
+        "ASTHENIA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "vitamin_b3_niacin": {
+      "canonical_id": "vitamin_b3_niacin",
+      "total_reports": 334,
+      "serious_reports": 315,
+      "outcomes": {
+        "hospitalization": 83,
+        "er_visit": 131,
+        "life_threatening": 31,
+        "death": 5,
+        "disability": 8,
+        "required_intervention": 17
+      },
+      "top_reactions": [
+        "ERYTHEMA",
+        "FLUSHING",
+        "PRURITUS",
+        "DYSPNOEA",
+        "DIZZINESS",
+        "BURNING SENSATION",
+        "HYPERSENSITIVITY",
+        "LOSS OF CONSCIOUSNESS",
+        "FEELING HOT",
+        "SWELLING"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "turmeric": {
+      "canonical_id": "turmeric",
+      "total_reports": 307,
+      "serious_reports": 289,
+      "outcomes": {
+        "hospitalization": 104,
+        "er_visit": 72,
+        "life_threatening": 31,
+        "death": 2,
+        "disability": 16,
+        "required_intervention": 5
+      },
+      "top_reactions": [
+        "Nausea",
+        "Dizziness",
+        "Fatigue",
+        "Dyspnoea",
+        "Diarrhoea",
+        "Jaundice",
+        "Rash",
+        "Pruritus",
+        "Drug-induced liver injury",
+        "Asthenia"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2009-2025"
+    },
+    "zinc": {
+      "canonical_id": "zinc",
+      "total_reports": 279,
+      "serious_reports": 267,
+      "outcomes": {
+        "hospitalization": 54,
+        "er_visit": 43,
+        "life_threatening": 33,
+        "death": 2,
+        "disability": 10,
+        "required_intervention": 4
+      },
+      "top_reactions": [
+        "CHOKING",
+        "NAUSEA",
+        "VOMITING",
+        "FOREIGN BODY TRAUMA",
+        "Choking",
+        "DYSPNOEA",
+        "Vomiting",
+        "MALAISE",
+        "PAIN",
+        "COUGH"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2003-2025"
+    },
+    "collagen": {
+      "canonical_id": "collagen",
+      "total_reports": 281,
+      "serious_reports": 262,
+      "outcomes": {
+        "hospitalization": 86,
+        "er_visit": 59,
+        "life_threatening": 29,
+        "death": 0,
+        "disability": 17,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "Vomiting",
+        "Nausea",
+        "Hypersensitivity",
+        "Diarrhoea",
+        "Abdominal pain",
+        "Headache",
+        "Dyspnoea",
+        "Abdominal pain upper",
+        "Dizziness",
+        "Abdominal discomfort"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2006-2025"
+    },
+    "vitamin_b7_biotin": {
+      "canonical_id": "vitamin_b7_biotin",
+      "total_reports": 247,
+      "serious_reports": 234,
+      "outcomes": {
+        "hospitalization": 63,
+        "er_visit": 50,
+        "life_threatening": 20,
+        "death": 1,
+        "disability": 11,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "PRURITUS",
+        "HYPERSENSITIVITY",
+        "URTICARIA",
+        "RASH",
+        "DIZZINESS",
+        "NAUSEA",
+        "PAIN",
+        "ABDOMINAL PAIN UPPER",
+        "BLOOD PRESSURE INCREASED"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2008-2025"
+    },
+    "msm": {
+      "canonical_id": "msm",
+      "total_reports": 245,
+      "serious_reports": 228,
+      "outcomes": {
+        "hospitalization": 74,
+        "er_visit": 35,
+        "life_threatening": 72,
+        "death": 2,
+        "disability": 10,
+        "required_intervention": 9
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "CHOKING",
+        "DYSPHAGIA",
+        "FOREIGN BODY TRAUMA",
+        "Choking",
+        "DIARRHOEA",
+        "VOMITING",
+        "FATIGUE",
+        "HYPERSENSITIVITY",
+        "DIZZINESS"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2024"
+    },
+    "chondroitin": {
+      "canonical_id": "chondroitin",
+      "total_reports": 224,
+      "serious_reports": 209,
+      "outcomes": {
+        "hospitalization": 59,
+        "er_visit": 34,
+        "life_threatening": 58,
+        "death": 2,
+        "disability": 10,
+        "required_intervention": 10
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "CHOKING",
+        "Choking",
+        "FOREIGN BODY TRAUMA",
+        "HYPERSENSITIVITY",
+        "NAUSEA",
+        "VOMITING",
+        "DYSPHAGIA",
+        "URTICARIA",
+        "FATIGUE"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "green_tea_extract": {
+      "canonical_id": "green_tea_extract",
+      "total_reports": 199,
+      "serious_reports": 186,
+      "outcomes": {
+        "hospitalization": 80,
+        "er_visit": 55,
+        "life_threatening": 17,
+        "death": 4,
+        "disability": 6,
+        "required_intervention": 8
+      },
+      "top_reactions": [
+        "DIZZINESS",
+        "NAUSEA",
+        "DYSPNOEA",
+        "ABDOMINAL PAIN UPPER",
+        "VOMITING",
+        "FATIGUE",
+        "HEART RATE INCREASED",
+        "ABDOMINAL PAIN",
+        "DIARRHOEA",
+        "PRURITUS"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "lutein": {
+      "canonical_id": "lutein",
+      "total_reports": 191,
+      "serious_reports": 179,
+      "outcomes": {
+        "hospitalization": 47,
+        "er_visit": 13,
+        "life_threatening": 8,
+        "death": 2,
+        "disability": 3,
+        "required_intervention": 7
+      },
+      "top_reactions": [
+        "CEREBROVASCULAR ACCIDENT",
+        "DYSPHAGIA",
+        "BLOOD PRESSURE INCREASED",
+        "DYSPNOEA",
+        "FOREIGN BODY TRAUMA",
+        "Macular degeneration",
+        "HYPERSENSITIVITY",
+        "Blood pressure increased",
+        "BURNING SENSATION",
+        "Visual impairment"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "creatine_monohydrate": {
+      "canonical_id": "creatine_monohydrate",
+      "total_reports": 167,
+      "serious_reports": 159,
+      "outcomes": {
+        "hospitalization": 61,
+        "er_visit": 42,
+        "life_threatening": 13,
+        "death": 9,
+        "disability": 9,
+        "required_intervention": 15
+      },
+      "top_reactions": [
+        "NAUSEA",
+        "VOMITING",
+        "HEART RATE INCREASED",
+        "BLOOD CREATINE PHOSPHOKINASE INCREASED",
+        "BLOOD PRESSURE INCREASED",
+        "RHABDOMYOLYSIS",
+        "HEADACHE",
+        "DYSPNOEA",
+        "CHROMATURIA",
+        "MYALGIA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2003-2025"
+    },
+    "coq10": {
+      "canonical_id": "coq10",
+      "total_reports": 169,
+      "serious_reports": 159,
+      "outcomes": {
+        "hospitalization": 53,
+        "er_visit": 32,
+        "life_threatening": 18,
+        "death": 1,
+        "disability": 8,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "Dyspnoea",
+        "PAIN",
+        "FATIGUE",
+        "DIARRHOEA",
+        "DIZZINESS",
+        "NAUSEA",
+        "HEADACHE",
+        "BLOOD PRESSURE INCREASED",
+        "VOMITING"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "caffeine": {
+      "canonical_id": "caffeine",
+      "total_reports": 165,
+      "serious_reports": 157,
+      "outcomes": {
+        "hospitalization": 42,
+        "er_visit": 16,
+        "life_threatening": 14,
+        "death": 6,
+        "disability": 6,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "DEPENDENCE",
+        "LIVER FUNCTION TEST ABNORMAL",
+        "DIZZINESS",
+        "EMOTIONAL DISTRESS",
+        "PAIN",
+        "VOMITING",
+        "INJURY",
+        "NAUSEA",
+        "ANXIETY",
+        "RHABDOMYOLYSIS"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2024"
+    },
+    "curcumin": {
+      "canonical_id": "curcumin",
+      "total_reports": 160,
+      "serious_reports": 148,
+      "outcomes": {
+        "hospitalization": 61,
+        "er_visit": 31,
+        "life_threatening": 17,
+        "death": 1,
+        "disability": 13,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "Dizziness",
+        "Fatigue",
+        "Pruritus",
+        "Nausea",
+        "Vomiting",
+        "Blood pressure increased",
+        "Rash",
+        "NAUSEA",
+        "VOMITING",
+        "Headache"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2009-2025"
+    },
+    "red_yeast_rice": {
+      "canonical_id": "red_yeast_rice",
+      "total_reports": 152,
+      "serious_reports": 137,
+      "outcomes": {
+        "hospitalization": 44,
+        "er_visit": 36,
+        "life_threatening": 12,
+        "death": 1,
+        "disability": 11,
+        "required_intervention": 10
+      },
+      "top_reactions": [
+        "PAIN",
+        "ASTHENIA",
+        "MYALGIA",
+        "FATIGUE",
+        "DYSPNOEA",
+        "NAUSEA",
+        "MUSCLE SPASMS",
+        "BLOOD PRESSURE INCREASED",
+        "ABDOMINAL PAIN UPPER",
+        "DIARRHOEA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2005-2025"
+    },
+    "ashwagandha": {
+      "canonical_id": "ashwagandha",
+      "total_reports": 132,
+      "serious_reports": 124,
+      "outcomes": {
+        "hospitalization": 42,
+        "er_visit": 33,
+        "life_threatening": 7,
+        "death": 0,
+        "disability": 16,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "Diarrhoea",
+        "Nausea",
+        "Pruritus",
+        "Vomiting",
+        "Rash",
+        "DIARRHOEA",
+        "Headache",
+        "VOMITING",
+        "Jaundice",
+        "Dyspnoea"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2009-2025"
+    },
+    "vitamin_b12_cobalamin": {
+      "canonical_id": "vitamin_b12_cobalamin",
+      "total_reports": 128,
+      "serious_reports": 115,
+      "outcomes": {
+        "hospitalization": 24,
+        "er_visit": 24,
+        "life_threatening": 5,
+        "death": 2,
+        "disability": 10,
+        "required_intervention": 4
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "PRURITUS",
+        "URTICARIA",
+        "DIARRHOEA",
+        "VOMITING",
+        "NAUSEA",
+        "HYPERSENSITIVITY",
+        "MALAISE",
+        "Malaise",
+        "Headache"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "whey_protein": {
+      "canonical_id": "whey_protein",
+      "total_reports": 125,
+      "serious_reports": 112,
+      "outcomes": {
+        "hospitalization": 29,
+        "er_visit": 24,
+        "life_threatening": 10,
+        "death": 3,
+        "disability": 5,
+        "required_intervention": 5
+      },
+      "top_reactions": [
+        "Nausea",
+        "Vomiting",
+        "NAUSEA",
+        "ABDOMINAL PAIN UPPER",
+        "Hypersensitivity",
+        "DYSPNOEA",
+        "DIARRHOEA",
+        "VOMITING",
+        "HYPERSENSITIVITY",
+        "Diarrhoea"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "ginkgo": {
+      "canonical_id": "ginkgo",
+      "total_reports": 114,
+      "serious_reports": 111,
+      "outcomes": {
+        "hospitalization": 54,
+        "er_visit": 31,
+        "life_threatening": 12,
+        "death": 2,
+        "disability": 3,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "DIZZINESS",
+        "BLOOD PRESSURE INCREASED",
+        "HEADACHE",
+        "VOMITING",
+        "DYSPNOEA",
+        "CONVULSION",
+        "DEHYDRATION",
+        "NAUSEA",
+        "CHEST PAIN",
+        "ASTHENIA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2024"
+    },
+    "ginseng": {
+      "canonical_id": "ginseng",
+      "total_reports": 119,
+      "serious_reports": 111,
+      "outcomes": {
+        "hospitalization": 45,
+        "er_visit": 30,
+        "life_threatening": 8,
+        "death": 1,
+        "disability": 10,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "Headache",
+        "Abdominal pain upper",
+        "Dizziness",
+        "Abdominal pain",
+        "Pruritus",
+        "Abdominal discomfort",
+        "Heart rate increased",
+        "HEADACHE",
+        "Nausea",
+        "Vomiting"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "ginkgo_biloba": {
+      "canonical_id": "ginkgo_biloba",
+      "total_reports": 113,
+      "serious_reports": 110,
+      "outcomes": {
+        "hospitalization": 53,
+        "er_visit": 30,
+        "life_threatening": 12,
+        "death": 2,
+        "disability": 3,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "DIZZINESS",
+        "BLOOD PRESSURE INCREASED",
+        "HEADACHE",
+        "CONVULSION",
+        "VOMITING",
+        "DYSPNOEA",
+        "DEHYDRATION",
+        "NAUSEA",
+        "CHEST PAIN",
+        "ASTHENIA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2024"
+    },
+    "cranberry": {
+      "canonical_id": "cranberry",
+      "total_reports": 115,
+      "serious_reports": 110,
+      "outcomes": {
+        "hospitalization": 35,
+        "er_visit": 28,
+        "life_threatening": 21,
+        "death": 1,
+        "disability": 3,
+        "required_intervention": 4
+      },
+      "top_reactions": [
+        "Dyspnoea",
+        "Choking",
+        "HYPERSENSITIVITY",
+        "RASH",
+        "SWELLING",
+        "ERYTHEMA",
+        "PRURITUS",
+        "URTICARIA",
+        "ABDOMINAL PAIN UPPER",
+        "DIARRHOEA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2007-2025"
+    },
+    "l_carnitine": {
+      "canonical_id": "l_carnitine",
+      "total_reports": 110,
+      "serious_reports": 110,
+      "outcomes": {
+        "hospitalization": 42,
+        "er_visit": 37,
+        "life_threatening": 9,
+        "death": 1,
+        "disability": 5,
+        "required_intervention": 5
+      },
+      "top_reactions": [
+        "DIZZINESS",
+        "NAUSEA",
+        "VOMITING",
+        "HEART RATE INCREASED",
+        "DYSPNOEA",
+        "DIARRHOEA",
+        "ABDOMINAL PAIN",
+        "BLOOD PRESSURE INCREASED",
+        "HYPERTENSION",
+        "HYPERSENSITIVITY"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "vitamin_b1_thiamine": {
+      "canonical_id": "vitamin_b1_thiamine",
+      "total_reports": 114,
+      "serious_reports": 102,
+      "outcomes": {
+        "hospitalization": 23,
+        "er_visit": 23,
+        "life_threatening": 5,
+        "death": 3,
+        "disability": 5,
+        "required_intervention": 4
+      },
+      "top_reactions": [
+        "DIARRHOEA",
+        "PRURITUS",
+        "DYSPNOEA",
+        "URTICARIA",
+        "MALAISE",
+        "VOMITING",
+        "DIZZINESS",
+        "NAUSEA",
+        "FATIGUE",
+        "HYPERSENSITIVITY"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2004-2025"
+    },
+    "vitamin_e": {
+      "canonical_id": "vitamin_e",
+      "total_reports": 108,
+      "serious_reports": 102,
+      "outcomes": {
+        "hospitalization": 40,
+        "er_visit": 18,
+        "life_threatening": 12,
+        "death": 2,
+        "disability": 5,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "NAUSEA",
+        "DIARRHOEA",
+        "HEADACHE",
+        "VOMITING",
+        "MALAISE",
+        "DIZZINESS",
+        "Hypersensitivity",
+        "ABDOMINAL PAIN",
+        "Choking",
+        "CHEST PAIN"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2003-2025"
+    },
+    "saw_palmetto": {
+      "canonical_id": "saw_palmetto",
+      "total_reports": 105,
+      "serious_reports": 100,
+      "outcomes": {
+        "hospitalization": 47,
+        "er_visit": 16,
+        "life_threatening": 10,
+        "death": 4,
+        "disability": 3,
+        "required_intervention": 5
+      },
+      "top_reactions": [
+        "Prostate cancer",
+        "DIZZINESS",
+        "NAUSEA",
+        "ASTHENIA",
+        "CHEST PAIN",
+        "FATIGUE",
+        "LOSS OF CONSCIOUSNESS",
+        "ABDOMINAL PAIN",
+        "DEHYDRATION",
+        "DIARRHOEA"
+      ],
+      "signal_strength": "strong",
+      "year_range": "2003-2025"
+    },
+    "pomegranate": {
+      "canonical_id": "pomegranate",
+      "total_reports": 95,
+      "serious_reports": 93,
+      "outcomes": {
+        "hospitalization": 42,
+        "er_visit": 31,
+        "life_threatening": 5,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Hypersensitivity",
+        "Dyspnoea",
+        "Abdominal pain upper",
+        "Headache",
+        "Urticaria",
+        "Vomiting",
+        "Pharyngeal oedema",
+        "Pruritus",
+        "Nausea",
+        "Dizziness"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2024"
+    },
+    "milk_thistle": {
+      "canonical_id": "milk_thistle",
+      "total_reports": 97,
+      "serious_reports": 92,
+      "outcomes": {
+        "hospitalization": 34,
+        "er_visit": 28,
+        "life_threatening": 6,
+        "death": 1,
+        "disability": 6,
+        "required_intervention": 5
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "VOMITING",
+        "NAUSEA",
+        "ABDOMINAL PAIN UPPER",
+        "HYPERSENSITIVITY",
+        "Diarrhoea",
+        "HEPATIC ENZYME INCREASED",
+        "HEADACHE",
+        "MALAISE",
+        "DIARRHOEA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2024"
+    },
+    "vitamin_b9_folate": {
+      "canonical_id": "vitamin_b9_folate",
+      "total_reports": 97,
+      "serious_reports": 91,
+      "outcomes": {
+        "hospitalization": 36,
+        "er_visit": 16,
+        "life_threatening": 8,
+        "death": 3,
+        "disability": 14,
+        "required_intervention": 5
+      },
+      "top_reactions": [
+        "NAUSEA",
+        "DYSPNOEA",
+        "ABDOMINAL PAIN UPPER",
+        "DIARRHOEA",
+        "DIZZINESS",
+        "VOMITING",
+        "CONSTIPATION",
+        "Hypersensitivity",
+        "ABDOMINAL PAIN",
+        "ASTHENIA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "resveratrol": {
+      "canonical_id": "resveratrol",
+      "total_reports": 99,
+      "serious_reports": 91,
+      "outcomes": {
+        "hospitalization": 32,
+        "er_visit": 18,
+        "life_threatening": 9,
+        "death": 1,
+        "disability": 4,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "BLOOD PRESSURE INCREASED",
+        "Blood pressure increased",
+        "Atrial fibrillation",
+        "Diarrhoea",
+        "DIARRHOEA",
+        "Hypersensitivity",
+        "ERYTHEMA",
+        "SWELLING",
+        "DEHYDRATION",
+        "VOMITING"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2025"
+    },
+    "alpha_lipoic_acid": {
+      "canonical_id": "alpha_lipoic_acid",
+      "total_reports": 90,
+      "serious_reports": 87,
+      "outcomes": {
+        "hospitalization": 22,
+        "er_visit": 19,
+        "life_threatening": 9,
+        "death": 1,
+        "disability": 3,
+        "required_intervention": 4
+      },
+      "top_reactions": [
+        "FATIGUE",
+        "Dyspnoea",
+        "DYSPEPSIA",
+        "ABDOMINAL PAIN UPPER",
+        "Diarrhoea",
+        "MALAISE",
+        "Vomiting",
+        "Urticaria",
+        "PALPITATIONS",
+        "Throat irritation"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "probiotic_unspecified": {
+      "canonical_id": "probiotic_unspecified",
+      "total_reports": 89,
+      "serious_reports": 84,
+      "outcomes": {
+        "hospitalization": 28,
+        "er_visit": 12,
+        "life_threatening": 11,
+        "death": 3,
+        "disability": 8,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Diarrhoea",
+        "ABDOMINAL PAIN UPPER",
+        "Abdominal pain upper",
+        "Nausea",
+        "DIARRHOEA",
+        "Abdominal pain",
+        "Flatulence",
+        "Haematochezia",
+        "VOMITING",
+        "Constipation"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2005-2025"
+    },
+    "l_lysine": {
+      "canonical_id": "l_lysine",
+      "total_reports": 87,
+      "serious_reports": 83,
+      "outcomes": {
+        "hospitalization": 9,
+        "er_visit": 7,
+        "life_threatening": 24,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "Choking",
+        "CHOKING",
+        "DYSPHAGIA",
+        "Dyspnoea",
+        "VOMITING",
+        "COUGH",
+        "FOREIGN BODY",
+        "FOREIGN BODY TRAUMA",
+        "PHARYNGEAL OEDEMA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2025"
+    },
+    "garlic": {
+      "canonical_id": "garlic",
+      "total_reports": 86,
+      "serious_reports": 83,
+      "outcomes": {
+        "hospitalization": 44,
+        "er_visit": 22,
+        "life_threatening": 5,
+        "death": 2,
+        "disability": 1,
+        "required_intervention": 4
+      },
+      "top_reactions": [
+        "NAUSEA",
+        "DIZZINESS",
+        "ASTHENIA",
+        "DYSPNOEA",
+        "WEIGHT DECREASED",
+        "VOMITING",
+        "Dizziness",
+        "HEADACHE",
+        "RASH",
+        "Nausea"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2025"
+    },
+    "5_htp": {
+      "canonical_id": "5_htp",
+      "total_reports": 97,
+      "serious_reports": 83,
+      "outcomes": {
+        "hospitalization": 21,
+        "er_visit": 22,
+        "life_threatening": 5,
+        "death": 2,
+        "disability": 11,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "VOMITING",
+        "Nausea",
+        "Headache",
+        "Vomiting",
+        "MYALGIA",
+        "NAUSEA",
+        "DIARRHOEA",
+        "HYPOAESTHESIA",
+        "RASH",
+        "ABDOMINAL PAIN"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2024"
+    },
+    "l_arginine": {
+      "canonical_id": "l_arginine",
+      "total_reports": 84,
+      "serious_reports": 82,
+      "outcomes": {
+        "hospitalization": 21,
+        "er_visit": 23,
+        "life_threatening": 16,
+        "death": 0,
+        "disability": 6,
+        "required_intervention": 5
+      },
+      "top_reactions": [
+        "HEART RATE INCREASED",
+        "BLOOD PRESSURE INCREASED",
+        "DIZZINESS",
+        "PAIN",
+        "FOREIGN BODY TRAUMA",
+        "HEADACHE",
+        "Nausea",
+        "ABDOMINAL PAIN UPPER",
+        "VOMITING",
+        "ABDOMINAL PAIN"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2006-2025"
+    },
+    "potassium": {
+      "canonical_id": "potassium",
+      "total_reports": 85,
+      "serious_reports": 81,
+      "outcomes": {
+        "hospitalization": 37,
+        "er_visit": 31,
+        "life_threatening": 8,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "DEHYDRATION",
+        "VOMITING",
+        "BLOOD POTASSIUM DECREASED",
+        "HYPERSENSITIVITY",
+        "NAUSEA",
+        "MALAISE",
+        "Muscle spasms",
+        "DYSPNOEA",
+        "Diarrhoea",
+        "Nausea"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2025"
+    },
+    "cinnamon": {
+      "canonical_id": "cinnamon",
+      "total_reports": 84,
+      "serious_reports": 80,
+      "outcomes": {
+        "hospitalization": 33,
+        "er_visit": 17,
+        "life_threatening": 10,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "BLOOD PRESSURE INCREASED",
+        "HYPERSENSITIVITY",
+        "DIZZINESS",
+        "Dyspnoea",
+        "HYPOAESTHESIA",
+        "HEADACHE",
+        "CHEST PAIN",
+        "BLOOD PRESSURE DECREASED",
+        "Pruritus"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2025"
+    },
+    "dhea": {
+      "canonical_id": "dhea",
+      "total_reports": 100,
+      "serious_reports": 79,
+      "outcomes": {
+        "hospitalization": 23,
+        "er_visit": 10,
+        "life_threatening": 7,
+        "death": 2,
+        "disability": 7,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "HEART RATE INCREASED",
+        "CHEST PAIN",
+        "HYPERSENSITIVITY",
+        "BLOOD PRESSURE INCREASED",
+        "HYPOTRICHOSIS",
+        "DIZZINESS",
+        "Blood pressure increased",
+        "Nausea",
+        "CHILLS",
+        "DYSPNOEA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "rose_hips": {
+      "canonical_id": "rose_hips",
+      "total_reports": 80,
+      "serious_reports": 79,
+      "outcomes": {
+        "hospitalization": 24,
+        "er_visit": 10,
+        "life_threatening": 19,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "Choking",
+        "CHOKING",
+        "DYSPHAGIA",
+        "VOMITING",
+        "Foreign body",
+        "COUGH",
+        "FOREIGN BODY TRAUMA",
+        "Dyspnoea",
+        "DIARRHOEA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2008-2025"
+    },
+    "psyllium": {
+      "canonical_id": "psyllium",
+      "total_reports": 87,
+      "serious_reports": 77,
+      "outcomes": {
+        "hospitalization": 33,
+        "er_visit": 22,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 4,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "Vomiting",
+        "VOMITING",
+        "Constipation",
+        "NAUSEA",
+        "DIZZINESS",
+        "MALAISE",
+        "Intestinal obstruction",
+        "LOSS OF CONSCIOUSNESS",
+        "URTICARIA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2025"
+    },
+    "garcinia_cambogia": {
+      "canonical_id": "garcinia_cambogia",
+      "total_reports": 93,
+      "serious_reports": 74,
+      "outcomes": {
+        "hospitalization": 25,
+        "er_visit": 13,
+        "life_threatening": 6,
+        "death": 1,
+        "disability": 4,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "HEADACHE",
+        "ALANINE AMINOTRANSFERASE INCREASED",
+        "ASPARTATE AMINOTRANSFERASE INCREASED",
+        "NAUSEA",
+        "FATIGUE",
+        "Nausea",
+        "BLOOD BILIRUBIN INCREASED",
+        "SOMNOLENCE",
+        "RASH",
+        "ABDOMINAL PAIN"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2013-2023"
+    },
+    "vitamin_b6_pyridoxine": {
+      "canonical_id": "vitamin_b6_pyridoxine",
+      "total_reports": 79,
+      "serious_reports": 74,
+      "outcomes": {
+        "hospitalization": 11,
+        "er_visit": 6,
+        "life_threatening": 4,
+        "death": 1,
+        "disability": 27,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Neuropathy peripheral",
+        "Hypoaesthesia",
+        "Paraesthesia",
+        "Hypervitaminosis",
+        "Anxiety",
+        "Nausea",
+        "Muscle twitching",
+        "Arthralgia",
+        "Dizziness",
+        "Insomnia"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2005-2025"
+    },
+    "chromium": {
+      "canonical_id": "chromium",
+      "total_reports": 75,
+      "serious_reports": 72,
+      "outcomes": {
+        "hospitalization": 22,
+        "er_visit": 20,
+        "life_threatening": 9,
+        "death": 1,
+        "disability": 3,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "Dizziness",
+        "DYSPNOEA",
+        "URTICARIA",
+        "HYPERSENSITIVITY",
+        "PRURITUS",
+        "BLOOD PRESSURE INCREASED",
+        "NAUSEA",
+        "DIZZINESS",
+        "BLOOD GLUCOSE DECREASED",
+        "LOSS OF CONSCIOUSNESS"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2005-2025"
+    },
+    "ephedra": {
+      "canonical_id": "ephedra",
+      "total_reports": 81,
+      "serious_reports": 70,
+      "outcomes": {
+        "hospitalization": 38,
+        "er_visit": 15,
+        "life_threatening": 12,
+        "death": 4,
+        "disability": 8,
+        "required_intervention": 6
+      },
+      "top_reactions": [
+        "LIVER INJURY",
+        "ANXIETY",
+        "PAIN",
+        "EMOTIONAL DISTRESS",
+        "DYSPNOEA",
+        "LIVER FUNCTION TEST ABNORMAL",
+        "HEART RATE INCREASED",
+        "PALPITATIONS",
+        "INJURY",
+        "CONVULSION"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2003-2021"
+    },
+    "ginger": {
+      "canonical_id": "ginger",
+      "total_reports": 76,
+      "serious_reports": 70,
+      "outcomes": {
+        "hospitalization": 20,
+        "er_visit": 13,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 10,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Rash",
+        "Arthralgia",
+        "Nausea",
+        "Diarrhoea",
+        "Hypoaesthesia",
+        "Drug-induced liver injury",
+        "Weight decreased",
+        "Abdominal pain",
+        "Dizziness",
+        "Fatigue"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2025"
+    },
+    "hyaluronic_acid": {
+      "canonical_id": "hyaluronic_acid",
+      "total_reports": 65,
+      "serious_reports": 65,
+      "outcomes": {
+        "hospitalization": 18,
+        "er_visit": 6,
+        "life_threatening": 5,
+        "death": 2,
+        "disability": 6,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Contusion",
+        "Diarrhoea",
+        "Dizziness",
+        "Fatigue",
+        "Abdominal pain upper",
+        "Weight increased",
+        "Hepatic enzyme increased",
+        "Muscle spasms",
+        "Abdominal pain",
+        "Acute kidney injury"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2025"
+    },
+    "inositol": {
+      "canonical_id": "inositol",
+      "total_reports": 67,
+      "serious_reports": 63,
+      "outcomes": {
+        "hospitalization": 24,
+        "er_visit": 21,
+        "life_threatening": 4,
+        "death": 2,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "BURNING SENSATION",
+        "BLOOD PRESSURE INCREASED",
+        "DYSPNOEA",
+        "FLUSHING",
+        "CEREBROVASCULAR ACCIDENT",
+        "DIZZINESS",
+        "NAUSEA",
+        "PRURITUS",
+        "VOMITING",
+        "Headache"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2010-2025"
+    },
+    "yohimbe": {
+      "canonical_id": "yohimbe",
+      "total_reports": 64,
+      "serious_reports": 61,
+      "outcomes": {
+        "hospitalization": 19,
+        "er_visit": 24,
+        "life_threatening": 11,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 8
+      },
+      "top_reactions": [
+        "HEART RATE INCREASED",
+        "TREMOR",
+        "BLOOD PRESSURE INCREASED",
+        "VOMITING",
+        "HYPERHIDROSIS",
+        "NAUSEA",
+        "DIZZINESS",
+        "HEADACHE",
+        "CHEST PAIN",
+        "Blood pressure increased"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "black_cohosh": {
+      "canonical_id": "black_cohosh",
+      "total_reports": 65,
+      "serious_reports": 60,
+      "outcomes": {
+        "hospitalization": 24,
+        "er_visit": 22,
+        "life_threatening": 8,
+        "death": 0,
+        "disability": 5,
+        "required_intervention": 5
+      },
+      "top_reactions": [
+        "HEPATIC ENZYME INCREASED",
+        "DIZZINESS",
+        "ASTHENIA",
+        "NAUSEA",
+        "PALPITATIONS",
+        "HYPERSENSITIVITY",
+        "JAUNDICE",
+        "MALAISE",
+        "ABDOMINAL PAIN",
+        "Dyspnoea"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "vitamin_a": {
+      "canonical_id": "vitamin_a",
+      "total_reports": 66,
+      "serious_reports": 59,
+      "outcomes": {
+        "hospitalization": 18,
+        "er_visit": 9,
+        "life_threatening": 9,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "HEADACHE",
+        "DIZZINESS",
+        "ABDOMINAL PAIN",
+        "NAUSEA",
+        "DIARRHOEA",
+        "Blood pressure increased",
+        "ABDOMINAL PAIN UPPER",
+        "VOMITING",
+        "ASTHENIA",
+        "BLOOD GLUCOSE INCREASED"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "selenium": {
+      "canonical_id": "selenium",
+      "total_reports": 62,
+      "serious_reports": 59,
+      "outcomes": {
+        "hospitalization": 23,
+        "er_visit": 11,
+        "life_threatening": 6,
+        "death": 2,
+        "disability": 5,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "DIZZINESS",
+        "VOMITING",
+        "Nausea",
+        "NAUSEA",
+        "Alopecia",
+        "Palpitations",
+        "FATIGUE",
+        "PAIN",
+        "MYOCARDIAL INFARCTION",
+        "Abdominal pain"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2005-2025"
+    },
+    "saccharomyces_boulardii": {
+      "canonical_id": "saccharomyces_boulardii",
+      "total_reports": 58,
+      "serious_reports": 58,
+      "outcomes": {
+        "hospitalization": 31,
+        "er_visit": 6,
+        "life_threatening": 3,
+        "death": 8,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Fungaemia",
+        "Death",
+        "Fungal infection",
+        "Clostridium difficile infection",
+        "Diarrhoea",
+        "Contraindicated product administered",
+        "Pain",
+        "Abdominal pain",
+        "Pneumonia",
+        "Hospitalisation"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2025"
+    },
+    "sam_e": {
+      "canonical_id": "sam_e",
+      "total_reports": 64,
+      "serious_reports": 58,
+      "outcomes": {
+        "hospitalization": 19,
+        "er_visit": 14,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "HYPERSENSITIVITY",
+        "CHEST PAIN",
+        "HEART RATE INCREASED",
+        "PAIN",
+        "ABDOMINAL PAIN UPPER",
+        "BLOOD PRESSURE INCREASED",
+        "DIZZINESS",
+        "HEADACHE",
+        "PARAESTHESIA",
+        "CHEST DISCOMFORT"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "krill_oil": {
+      "canonical_id": "krill_oil",
+      "total_reports": 61,
+      "serious_reports": 56,
+      "outcomes": {
+        "hospitalization": 16,
+        "er_visit": 10,
+        "life_threatening": 4,
+        "death": 3,
+        "disability": 5,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "CEREBROVASCULAR ACCIDENT",
+        "HYPERSENSITIVITY",
+        "EPISTAXIS",
+        "Diarrhoea",
+        "ARTHRALGIA",
+        "DYSPNOEA",
+        "DIZZINESS",
+        "RASH",
+        "DIARRHOEA",
+        "HAEMORRHAGIC DIATHESIS"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2025"
+    },
+    "flavonoids": {
+      "canonical_id": "flavonoids",
+      "total_reports": 55,
+      "serious_reports": 55,
+      "outcomes": {
+        "hospitalization": 23,
+        "er_visit": 8,
+        "life_threatening": 13,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Choking",
+        "Nephrolithiasis",
+        "Hernia",
+        "Cough",
+        "NAUSEA",
+        "Cerebrovascular accident",
+        "Blood calcium increased",
+        "Dehydration",
+        "Dizziness",
+        "Urticaria"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2008-2024"
+    },
+    "elderberry": {
+      "canonical_id": "elderberry",
+      "total_reports": 60,
+      "serious_reports": 54,
+      "outcomes": {
+        "hospitalization": 16,
+        "er_visit": 13,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 5,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Nausea",
+        "Dizziness",
+        "Diarrhoea",
+        "Malaise",
+        "Dyspnoea",
+        "Vomiting",
+        "Headache",
+        "Abdominal pain upper",
+        "Asthenia",
+        "Lethargy"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2008-2025"
+    },
+    "organ_extracts": {
+      "canonical_id": "organ_extracts",
+      "total_reports": 59,
+      "serious_reports": 54,
+      "outcomes": {
+        "hospitalization": 18,
+        "er_visit": 17,
+        "life_threatening": 10,
+        "death": 0,
+        "disability": 7,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "Diarrhoea",
+        "Nausea",
+        "Dizziness",
+        "DIZZINESS",
+        "HEADACHE",
+        "DYSPNOEA",
+        "Asthenia",
+        "Dyspnoea",
+        "Vomiting",
+        "HYPOAESTHESIA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "bioflavonoids": {
+      "canonical_id": "bioflavonoids",
+      "total_reports": 54,
+      "serious_reports": 54,
+      "outcomes": {
+        "hospitalization": 23,
+        "er_visit": 8,
+        "life_threatening": 13,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Choking",
+        "Nephrolithiasis",
+        "Hernia",
+        "Cough",
+        "NAUSEA",
+        "Cerebrovascular accident",
+        "Blood calcium increased",
+        "Dehydration",
+        "Dizziness",
+        "Pneumonia"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2008-2024"
+    },
+    "inulin": {
+      "canonical_id": "inulin",
+      "total_reports": 54,
+      "serious_reports": 53,
+      "outcomes": {
+        "hospitalization": 10,
+        "er_visit": 5,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 4,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "RECTAL HAEMORRHAGE",
+        "ABDOMINAL DISTENSION",
+        "FLATULENCE",
+        "ABDOMINAL PAIN UPPER",
+        "DYSPNOEA",
+        "HAEMATOCHEZIA",
+        "DIARRHOEA",
+        "MALAISE",
+        "NAUSEA",
+        "ABDOMINAL PAIN"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2024"
+    },
+    "flaxseed": {
+      "canonical_id": "flaxseed",
+      "total_reports": 56,
+      "serious_reports": 52,
+      "outcomes": {
+        "hospitalization": 16,
+        "er_visit": 11,
+        "life_threatening": 6,
+        "death": 1,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "DIZZINESS",
+        "CHOKING",
+        "MALAISE",
+        "DIARRHOEA",
+        "CHEST PAIN",
+        "ABDOMINAL PAIN",
+        "ASTHENIA",
+        "VOMITING",
+        "FATIGUE"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2023"
+    },
+    "kava": {
+      "canonical_id": "kava",
+      "total_reports": 54,
+      "serious_reports": 50,
+      "outcomes": {
+        "hospitalization": 21,
+        "er_visit": 5,
+        "life_threatening": 7,
+        "death": 4,
+        "disability": 11,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "Nausea",
+        "Dependence",
+        "Diarrhoea",
+        "Fatigue",
+        "Vomiting",
+        "Death",
+        "Headache",
+        "NAUSEA",
+        "SWELLING",
+        "PRURITUS"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "rhodiola": {
+      "canonical_id": "rhodiola",
+      "total_reports": 53,
+      "serious_reports": 48,
+      "outcomes": {
+        "hospitalization": 18,
+        "er_visit": 17,
+        "life_threatening": 3,
+        "death": 2,
+        "disability": 4,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Blood pressure increased",
+        "HEADACHE",
+        "Dizziness",
+        "ANXIETY",
+        "HYPERSENSITIVITY",
+        "Malaise",
+        "HEART RATE INCREASED",
+        "Heart rate increased",
+        "DYSPNOEA",
+        "Fatigue"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "vitamin_k": {
+      "canonical_id": "vitamin_k",
+      "total_reports": 50,
+      "serious_reports": 48,
+      "outcomes": {
+        "hospitalization": 21,
+        "er_visit": 12,
+        "life_threatening": 6,
+        "death": 3,
+        "disability": 2,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "Arthralgia",
+        "ERYTHEMA",
+        "PAIN",
+        "CHEST PAIN",
+        "Nephrolithiasis",
+        "Epistaxis",
+        "HYPERSENSITIVITY",
+        "SWELLING",
+        "Blood disorder",
+        "Death"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2008-2024"
+    },
+    "echinacea": {
+      "canonical_id": "echinacea",
+      "total_reports": 49,
+      "serious_reports": 48,
+      "outcomes": {
+        "hospitalization": 20,
+        "er_visit": 14,
+        "life_threatening": 9,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "NAUSEA",
+        "DIARRHOEA",
+        "VOMITING",
+        "DIZZINESS",
+        "ABDOMINAL PAIN",
+        "HYPERSENSITIVITY",
+        "ABDOMINAL PAIN UPPER",
+        "LOSS OF CONSCIOUSNESS",
+        "Dizziness",
+        "HEADACHE"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2005-2024"
+    },
+    "maca": {
+      "canonical_id": "maca",
+      "total_reports": 53,
+      "serious_reports": 48,
+      "outcomes": {
+        "hospitalization": 19,
+        "er_visit": 10,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 3,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "VOMITING",
+        "NAUSEA",
+        "Vomiting",
+        "Nausea",
+        "DYSPNOEA",
+        "Diarrhoea",
+        "DIARRHOEA",
+        "Feeling abnormal",
+        "CHEST PAIN",
+        "CHILLS"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2006-2025"
+    },
+    "berberine": {
+      "canonical_id": "berberine",
+      "total_reports": 48,
+      "serious_reports": 47,
+      "outcomes": {
+        "hospitalization": 24,
+        "er_visit": 19,
+        "life_threatening": 7,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Vomiting",
+        "Nausea",
+        "Malaise",
+        "Dehydration",
+        "Asthenia",
+        "Diarrhoea",
+        "Fatigue",
+        "Fall",
+        "Jaundice",
+        "Chills"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2008-2025"
+    },
+    "l_glutamine": {
+      "canonical_id": "l_glutamine",
+      "total_reports": 46,
+      "serious_reports": 44,
+      "outcomes": {
+        "hospitalization": 17,
+        "er_visit": 15,
+        "life_threatening": 3,
+        "death": 1,
+        "disability": 2,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "ABDOMINAL PAIN",
+        "ABDOMINAL PAIN UPPER",
+        "Anxiety",
+        "Dizziness",
+        "FEELING ABNORMAL",
+        "DIZZINESS",
+        "DYSPNOEA",
+        "Insomnia",
+        "ASTHENIA",
+        "NAUSEA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "aloe_vera": {
+      "canonical_id": "aloe_vera",
+      "total_reports": 51,
+      "serious_reports": 43,
+      "outcomes": {
+        "hospitalization": 20,
+        "er_visit": 14,
+        "life_threatening": 5,
+        "death": 2,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "DIARRHOEA",
+        "MALAISE",
+        "Dizziness",
+        "VOMITING",
+        "Diarrhoea",
+        "Nausea",
+        "URTICARIA",
+        "PALPITATIONS",
+        "MYOCARDIAL INFARCTION",
+        "ABDOMINAL DISTENSION"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "digestive_enzymes": {
+      "canonical_id": "digestive_enzymes",
+      "total_reports": 41,
+      "serious_reports": 38,
+      "outcomes": {
+        "hospitalization": 13,
+        "er_visit": 12,
+        "life_threatening": 1,
+        "death": 1,
+        "disability": 5,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Diarrhoea",
+        "Vomiting",
+        "Dizziness",
+        "Dyspnoea",
+        "Nausea",
+        "Blood pressure increased",
+        "Headache",
+        "Fatigue",
+        "Pruritus",
+        "Pain"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2006-2024"
+    },
+    "lecithin": {
+      "canonical_id": "lecithin",
+      "total_reports": 40,
+      "serious_reports": 37,
+      "outcomes": {
+        "hospitalization": 16,
+        "er_visit": 8,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 2,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "ABDOMINAL PAIN UPPER",
+        "DYSPNOEA",
+        "VOMITING",
+        "Loss of consciousness",
+        "CHEST PAIN",
+        "BACK PAIN",
+        "MUSCLE SPASMS",
+        "Breast cancer",
+        "BODY TEMPERATURE INCREASED",
+        "HEADACHE"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2024"
+    },
+    "acetyl_l_carnitine": {
+      "canonical_id": "acetyl_l_carnitine",
+      "total_reports": 37,
+      "serious_reports": 37,
+      "outcomes": {
+        "hospitalization": 16,
+        "er_visit": 15,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "FATIGUE",
+        "DIZZINESS",
+        "DYSPNOEA",
+        "PHARYNGEAL OEDEMA",
+        "DYSPEPSIA",
+        "NAUSEA",
+        "VISION BLURRED",
+        "DIARRHOEA",
+        "GASTROINTESTINAL DISORDER",
+        "HEADACHE"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2024"
+    },
+    "apple_cider_vinegar": {
+      "canonical_id": "apple_cider_vinegar",
+      "total_reports": 39,
+      "serious_reports": 36,
+      "outcomes": {
+        "hospitalization": 11,
+        "er_visit": 7,
+        "life_threatening": 3,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Dizziness",
+        "Hypersensitivity",
+        "Headache",
+        "Abdominal pain upper",
+        "Nausea",
+        "Fatigue",
+        "Vomiting",
+        "Diarrhoea",
+        "Malaise",
+        "Dyspnoea"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2010-2025"
+    },
+    "st_johns_wort": {
+      "canonical_id": "st_johns_wort",
+      "total_reports": 42,
+      "serious_reports": 35,
+      "outcomes": {
+        "hospitalization": 14,
+        "er_visit": 7,
+        "life_threatening": 5,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "HEADACHE",
+        "NAUSEA",
+        "ABDOMINAL PAIN",
+        "DYSPEPSIA",
+        "DIZZINESS",
+        "ANXIETY",
+        "BLOOD PRESSURE INCREASED",
+        "BACK PAIN",
+        "TREMOR",
+        "BURNING SENSATION"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2020"
+    },
+    "tribulus": {
+      "canonical_id": "tribulus",
+      "total_reports": 35,
+      "serious_reports": 34,
+      "outcomes": {
+        "hospitalization": 13,
+        "er_visit": 7,
+        "life_threatening": 2,
+        "death": 2,
+        "disability": 3,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "BLOOD PRESSURE INCREASED",
+        "DIZZINESS",
+        "HYPERHIDROSIS",
+        "ANXIETY",
+        "FEELING HOT",
+        "MALAISE",
+        "DYSPNOEA",
+        "Abdominal pain upper",
+        "BLOOD GLUCOSE INCREASED",
+        "HEART RATE IRREGULAR"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2025"
+    },
+    "oregano": {
+      "canonical_id": "oregano",
+      "total_reports": 41,
+      "serious_reports": 34,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 16,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Nausea",
+        "BURNING SENSATION",
+        "Vomiting",
+        "Hypersensitivity",
+        "Chromaturia",
+        "Decreased appetite",
+        "Fatigue",
+        "DIARRHOEA",
+        "NAUSEA",
+        "DYSPEPSIA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2005-2025"
+    },
+    "pea_protein": {
+      "canonical_id": "pea_protein",
+      "total_reports": 32,
+      "serious_reports": 32,
+      "outcomes": {
+        "hospitalization": 13,
+        "er_visit": 9,
+        "life_threatening": 0,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Abdominal pain upper",
+        "Vomiting",
+        "Abdominal discomfort",
+        "Pruritus",
+        "Rash",
+        "Throat tightness",
+        "Diarrhoea",
+        "Swelling",
+        "Nausea",
+        "Muscle spasms"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2012-2024"
+    },
+    "l_cysteine": {
+      "canonical_id": "l_cysteine",
+      "total_reports": 33,
+      "serious_reports": 31,
+      "outcomes": {
+        "hospitalization": 7,
+        "er_visit": 6,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Nausea",
+        "Urticaria",
+        "Malaise",
+        "ABDOMINAL PAIN UPPER",
+        "Pruritus",
+        "Anxiety",
+        "Dizziness",
+        "Fall",
+        "Loss of consciousness",
+        "Abdominal pain"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2012-2025"
+    },
+    "valerian": {
+      "canonical_id": "valerian",
+      "total_reports": 35,
+      "serious_reports": 31,
+      "outcomes": {
+        "hospitalization": 11,
+        "er_visit": 9,
+        "life_threatening": 0,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "Diarrhoea",
+        "Nightmare",
+        "ASTHMA",
+        "Pruritus",
+        "PALPITATIONS",
+        "INSOMNIA",
+        "CHEST DISCOMFORT",
+        "PRURITUS",
+        "DYSPNOEA",
+        "STRESS"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2025"
+    },
+    "iodine": {
+      "canonical_id": "iodine",
+      "total_reports": 32,
+      "serious_reports": 31,
+      "outcomes": {
+        "hospitalization": 7,
+        "er_visit": 7,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 3,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "Diarrhoea",
+        "Nausea",
+        "Weight decreased",
+        "SWELLING FACE",
+        "Confusional state",
+        "Hypoaesthesia",
+        "Local swelling",
+        "SWELLING",
+        "DYSPHONIA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2023"
+    },
+    "acai_berry": {
+      "canonical_id": "acai_berry",
+      "total_reports": 33,
+      "serious_reports": 30,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 8,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "DIARRHOEA",
+        "ABDOMINAL PAIN",
+        "CHEST PAIN",
+        "ASTHENIA",
+        "ABDOMINAL DISTENSION",
+        "CONSTIPATION",
+        "ANXIETY",
+        "DYSPNOEA",
+        "HAEMATOCHEZIA",
+        "HYPERSENSITIVITY"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2008-2016"
+    },
+    "cordyceps": {
+      "canonical_id": "cordyceps",
+      "total_reports": 32,
+      "serious_reports": 30,
+      "outcomes": {
+        "hospitalization": 12,
+        "er_visit": 10,
+        "life_threatening": 5,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Vomiting",
+        "Loss of consciousness",
+        "Headache",
+        "Abdominal pain upper",
+        "Diarrhoea",
+        "Hepatic enzyme increased",
+        "Gastrointestinal obstruction",
+        "Blood pressure increased",
+        "Hypertension",
+        "BACK PAIN"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2008-2023"
+    },
+    "chlorella": {
+      "canonical_id": "chlorella",
+      "total_reports": 33,
+      "serious_reports": 29,
+      "outcomes": {
+        "hospitalization": 12,
+        "er_visit": 6,
+        "life_threatening": 6,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Vomiting",
+        "VOMITING",
+        "Diarrhoea",
+        "Nausea",
+        "DIARRHOEA",
+        "Malaise",
+        "THROMBOSIS",
+        "Abdominal distension",
+        "Cold sweat",
+        "Dizziness"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2024"
+    },
+    "papaya": {
+      "canonical_id": "papaya",
+      "total_reports": 28,
+      "serious_reports": 28,
+      "outcomes": {
+        "hospitalization": 12,
+        "er_visit": 9,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "PAIN",
+        "URTICARIA",
+        "Nausea",
+        "ABDOMINAL PAIN UPPER",
+        "DIZZINESS",
+        "INTESTINAL OBSTRUCTION",
+        "NAUSEA",
+        "ATRIAL FIBRILLATION",
+        "BLOOD PRESSURE INCREASED",
+        "CHEST PAIN"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2023"
+    },
+    "evening_primrose_oil": {
+      "canonical_id": "evening_primrose_oil",
+      "total_reports": 33,
+      "serious_reports": 27,
+      "outcomes": {
+        "hospitalization": 9,
+        "er_visit": 7,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "FATIGUE",
+        "HYPERSENSITIVITY",
+        "PRURITUS",
+        "MALAISE",
+        "HAEMORRHAGE",
+        "HEADACHE",
+        "ALANINE AMINOTRANSFERASE INCREASED",
+        "ANXIETY",
+        "FEELING HOT",
+        "NAUSEA"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2006-2023"
+    },
+    "blueberry": {
+      "canonical_id": "blueberry",
+      "total_reports": 27,
+      "serious_reports": 27,
+      "outcomes": {
+        "hospitalization": 11,
+        "er_visit": 5,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "DIABETES MELLITUS",
+        "Hospitalisation",
+        "HEPATIC ENZYME INCREASED",
+        "HYPERSENSITIVITY",
+        "DEHYDRATION",
+        "DIARRHOEA",
+        "HEADACHE",
+        "VOMITING",
+        "LIVER FUNCTION TEST ABNORMAL",
+        "PRURITUS"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2025"
+    },
+    "fenugreek": {
+      "canonical_id": "fenugreek",
+      "total_reports": 28,
+      "serious_reports": 27,
+      "outcomes": {
+        "hospitalization": 11,
+        "er_visit": 4,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "URTICARIA",
+        "FLATULENCE",
+        "HAEMATOCHEZIA",
+        "ABDOMINAL PAIN",
+        "THROAT TIGHTNESS",
+        "Hypersensitivity",
+        "LIP SWELLING",
+        "NAUSEA",
+        "VOMITING",
+        "MALAISE"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2007-2025"
+    },
+    "lions_mane": {
+      "canonical_id": "lions_mane",
+      "total_reports": 28,
+      "serious_reports": 27,
+      "outcomes": {
+        "hospitalization": 9,
+        "er_visit": 5,
+        "life_threatening": 6,
+        "death": 1,
+        "disability": 6,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Headache",
+        "Anxiety",
+        "Nausea",
+        "Vomiting",
+        "Panic attack",
+        "Diarrhoea",
+        "Brain fog",
+        "Depersonalisation/derealisation disorder",
+        "Dehydration",
+        "Muscular weakness"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2016-2025"
+    },
+    "bilberry": {
+      "canonical_id": "bilberry",
+      "total_reports": 29,
+      "serious_reports": 27,
+      "outcomes": {
+        "hospitalization": 14,
+        "er_visit": 7,
+        "life_threatening": 3,
+        "death": 2,
+        "disability": 2,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "MYOCARDIAL INFARCTION",
+        "ASTHENIA",
+        "Blood pressure increased",
+        "HYPOTENSION",
+        "CHEST PAIN",
+        "LOSS OF CONSCIOUSNESS",
+        "Feeling cold",
+        "Hypersensitivity",
+        "Weight decreased",
+        "DEHYDRATION"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2005-2024"
+    },
+    "hawthorn": {
+      "canonical_id": "hawthorn",
+      "total_reports": 27,
+      "serious_reports": 26,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 5,
+        "life_threatening": 1,
+        "death": 1,
+        "disability": 0,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "BLOOD PRESSURE INCREASED",
+        "DIZZINESS",
+        "URINARY TRACT INFECTION",
+        "HYPERTENSION",
+        "EXTRASYSTOLES",
+        "HEART RATE INCREASED",
+        "ASTHENIA",
+        "VOMITING",
+        "DYSURIA",
+        "FATIGUE"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2004-2023"
+    },
+    "zeaxanthin": {
+      "canonical_id": "zeaxanthin",
+      "total_reports": 26,
+      "serious_reports": 25,
+      "outcomes": {
+        "hospitalization": 5,
+        "er_visit": 5,
+        "life_threatening": 0,
+        "death": 4,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Death",
+        "Dizziness",
+        "Vision blurred",
+        "DYSPHAGIA",
+        "FOREIGN BODY TRAUMA",
+        "DIZZINESS",
+        "Dyspnoea",
+        "Blood pressure increased",
+        "HEART RATE INCREASED",
+        "Fatigue"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2006-2025"
+    },
+    "peppermint": {
+      "canonical_id": "peppermint",
+      "total_reports": 27,
+      "serious_reports": 25,
+      "outcomes": {
+        "hospitalization": 10,
+        "er_visit": 8,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "NEPHROLITHIASIS",
+        "Pruritus",
+        "Rash",
+        "Swollen tongue",
+        "Loss of consciousness",
+        "BLOOD CALCIUM INCREASED",
+        "DYSPNOEA",
+        "Dyspnoea",
+        "Erythema",
+        "Skin reaction"
+      ],
+      "signal_strength": "moderate",
+      "year_range": "2009-2025"
+    },
+    "linoleic_acid": {
+      "canonical_id": "linoleic_acid",
+      "total_reports": 25,
+      "serious_reports": 24,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 6,
+        "life_threatening": 0,
+        "death": 0,
+        "disability": 3,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Malaise",
+        "Nausea",
+        "LOSS OF CONSCIOUSNESS",
+        "NAUSEA",
+        "PANCREATITIS",
+        "ASTHENIA",
+        "DIARRHOEA",
+        "VOMITING",
+        "HEADACHE",
+        "DYSPEPSIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2006-2020"
+    },
+    "oleic_acid": {
+      "canonical_id": "oleic_acid",
+      "total_reports": 26,
+      "serious_reports": 24,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 6,
+        "life_threatening": 0,
+        "death": 0,
+        "disability": 3,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Malaise",
+        "Nausea",
+        "LOSS OF CONSCIOUSNESS",
+        "NAUSEA",
+        "PANCREATITIS",
+        "ASTHENIA",
+        "DIARRHOEA",
+        "VOMITING",
+        "HEADACHE",
+        "DYSPEPSIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2006-2020"
+    },
+    "spirulina": {
+      "canonical_id": "spirulina",
+      "total_reports": 29,
+      "serious_reports": 24,
+      "outcomes": {
+        "hospitalization": 11,
+        "er_visit": 9,
+        "life_threatening": 4,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "VOMITING",
+        "DYSPNOEA",
+        "MALAISE",
+        "NAUSEA",
+        "DIARRHOEA",
+        "Headache",
+        "ABDOMINAL PAIN UPPER",
+        "SWELLING",
+        "Adverse reaction",
+        "HEADACHE"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2005-2024"
+    },
+    "boswellia": {
+      "canonical_id": "boswellia",
+      "total_reports": 24,
+      "serious_reports": 23,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 7,
+        "life_threatening": 4,
+        "death": 0,
+        "disability": 3,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Pruritus",
+        "Rash",
+        "OSTEOARTHRITIS",
+        "ABDOMINAL PAIN",
+        "ARTHROPATHY",
+        "LOSS OF CONSCIOUSNESS",
+        "Anaphylactic reaction",
+        "Abdominal pain",
+        "Diverticulitis",
+        "Epiploic appendagitis"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2014-2025"
+    },
+    "cla": {
+      "canonical_id": "cla",
+      "total_reports": 24,
+      "serious_reports": 23,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 6,
+        "life_threatening": 0,
+        "death": 0,
+        "disability": 3,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "LOSS OF CONSCIOUSNESS",
+        "NAUSEA",
+        "PANCREATITIS",
+        "Malaise",
+        "Nausea",
+        "ASTHENIA",
+        "DIARRHOEA",
+        "VOMITING",
+        "HEADACHE",
+        "DYSPEPSIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2006-2020"
+    },
+    "raspberry_ketones": {
+      "canonical_id": "raspberry_ketones",
+      "total_reports": 23,
+      "serious_reports": 23,
+      "outcomes": {
+        "hospitalization": 9,
+        "er_visit": 6,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 3
+      },
+      "top_reactions": [
+        "BLOOD PRESSURE INCREASED",
+        "ALANINE AMINOTRANSFERASE INCREASED",
+        "ASPARTATE AMINOTRANSFERASE INCREASED",
+        "BLOOD BILIRUBIN INCREASED",
+        "DYSPNOEA",
+        "ABDOMINAL PAIN",
+        "BLOOD ALKALINE PHOSPHATASE INCREASED",
+        "BURNING SENSATION",
+        "NAUSEA",
+        "VOMITING"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2012-2020"
+    },
+    "mct_oil": {
+      "canonical_id": "mct_oil",
+      "total_reports": 24,
+      "serious_reports": 22,
+      "outcomes": {
+        "hospitalization": 5,
+        "er_visit": 3,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 2,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Diarrhoea",
+        "Nausea",
+        "Abdominal pain upper",
+        "Blood cholesterol increased",
+        "Headache",
+        "Asthenia",
+        "Dyspnoea",
+        "Hypersensitivity",
+        "Loss of consciousness",
+        "Blood triglycerides increased"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2019-2024"
+    },
+    "licorice": {
+      "canonical_id": "licorice",
+      "total_reports": 25,
+      "serious_reports": 22,
+      "outcomes": {
+        "hospitalization": 11,
+        "er_visit": 8,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "BLOOD PRESSURE INCREASED",
+        "BLOOD POTASSIUM DECREASED",
+        "ABDOMINAL DISTENSION",
+        "DIARRHOEA",
+        "NAUSEA",
+        "Hypertension",
+        "ALANINE AMINOTRANSFERASE INCREASED",
+        "ASPARTATE AMINOTRANSFERASE INCREASED",
+        "HYPERSENSITIVITY",
+        "MALAISE"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2007-2023"
+    },
+    "goldenseal": {
+      "canonical_id": "goldenseal",
+      "total_reports": 22,
+      "serious_reports": 22,
+      "outcomes": {
+        "hospitalization": 4,
+        "er_visit": 6,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 2,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DIARRHOEA",
+        "VOMITING",
+        "NAUSEA",
+        "HYPERSENSITIVITY",
+        "LOSS OF CONSCIOUSNESS",
+        "PRURITUS",
+        "DYSPNOEA",
+        "ABDOMINAL PAIN UPPER",
+        "ACTIVITIES OF DAILY LIVING IMPAIRED",
+        "DEHYDRATION"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2004-2025"
+    },
+    "royal_jelly": {
+      "canonical_id": "royal_jelly",
+      "total_reports": 23,
+      "serious_reports": 22,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 4,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "LOSS OF CONSCIOUSNESS",
+        "ABDOMINAL PAIN UPPER",
+        "WEIGHT DECREASED",
+        "BLOOD PRESSURE INCREASED",
+        "Blood lead increased",
+        "CHEST PAIN",
+        "FALL",
+        "DYSPNOEA",
+        "URTICARIA",
+        "DYSPHAGIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2006-2023"
+    },
+    "l_theanine": {
+      "canonical_id": "l_theanine",
+      "total_reports": 23,
+      "serious_reports": 21,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 4,
+        "life_threatening": 4,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "COUGH",
+        "Nausea",
+        "HYPERSENSITIVITY",
+        "OROPHARYNGEAL PAIN",
+        "PRURITUS",
+        "SWELLING FACE",
+        "THROAT IRRITATION",
+        "URTICARIA",
+        "Fatigue",
+        "Diarrhoea"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2025"
+    },
+    "quercetin": {
+      "canonical_id": "quercetin",
+      "total_reports": 21,
+      "serious_reports": 21,
+      "outcomes": {
+        "hospitalization": 7,
+        "er_visit": 6,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Colitis ulcerative",
+        "Rectal haemorrhage",
+        "OROPHARYNGEAL PAIN",
+        "DYSPNOEA",
+        "CEREBROVASCULAR ACCIDENT",
+        "Loss of consciousness",
+        "Anaphylactic shock",
+        "Dyspepsia",
+        "Gastric disorder",
+        "Nausea"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2024"
+    },
+    "olive_leaf": {
+      "canonical_id": "olive_leaf",
+      "total_reports": 22,
+      "serious_reports": 21,
+      "outcomes": {
+        "hospitalization": 10,
+        "er_visit": 3,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Vomiting",
+        "DIARRHOEA",
+        "ALANINE AMINOTRANSFERASE INCREASED",
+        "ASPARTATE AMINOTRANSFERASE INCREASED",
+        "VOMITING",
+        "HYPERSENSITIVITY",
+        "Loss of consciousness",
+        "HEPATIC ENZYME INCREASED",
+        "ABDOMINAL PAIN UPPER",
+        "Abdominal discomfort"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2008-2024"
+    },
+    "dandelion": {
+      "canonical_id": "dandelion",
+      "total_reports": 21,
+      "serious_reports": 21,
+      "outcomes": {
+        "hospitalization": 10,
+        "er_visit": 5,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "ABDOMINAL PAIN UPPER",
+        "DYSPNOEA",
+        "VOMITING",
+        "TREMOR",
+        "DIARRHOEA",
+        "GALLBLADDER DISORDER",
+        "Blood pressure increased",
+        "THROMBOSIS",
+        "FATIGUE",
+        "BLOOD PRESSURE INCREASED"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2008-2024"
+    },
+    "cod_liver_oil": {
+      "canonical_id": "cod_liver_oil",
+      "total_reports": 22,
+      "serious_reports": 20,
+      "outcomes": {
+        "hospitalization": 7,
+        "er_visit": 7,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 0,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "ABDOMINAL PAIN UPPER",
+        "Rash",
+        "CONSTIPATION",
+        "HEADACHE",
+        "Diarrhoea",
+        "LETHARGY",
+        "PAIN",
+        "DIARRHOEA",
+        "VOMITING",
+        "PRURITUS"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2006-2025"
+    },
+    "phosphatidylserine": {
+      "canonical_id": "phosphatidylserine",
+      "total_reports": 20,
+      "serious_reports": 19,
+      "outcomes": {
+        "hospitalization": 9,
+        "er_visit": 4,
+        "life_threatening": 6,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "VOMITING",
+        "MENTAL IMPAIRMENT",
+        "Cerebrovascular accident",
+        "CONTUSION",
+        "CHILLS",
+        "INSOMNIA",
+        "HEADACHE",
+        "CRYING",
+        "FEAR",
+        "OCULAR HYPERAEMIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2024"
+    },
+    "taurine": {
+      "canonical_id": "taurine",
+      "total_reports": 20,
+      "serious_reports": 19,
+      "outcomes": {
+        "hospitalization": 10,
+        "er_visit": 6,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "VOMITING",
+        "Diarrhoea",
+        "Malaise",
+        "Nausea",
+        "HAEMORRHAGE",
+        "HOSPITALISATION",
+        "ASTHENIA",
+        "FALL",
+        "Vomiting",
+        "Fatigue"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2004-2025"
+    },
+    "choline": {
+      "canonical_id": "choline",
+      "total_reports": 22,
+      "serious_reports": 19,
+      "outcomes": {
+        "hospitalization": 7,
+        "er_visit": 3,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "HEPATIC ENZYME INCREASED",
+        "BURNING SENSATION",
+        "DIARRHOEA",
+        "FATIGUE",
+        "ASTHENIA",
+        "BLOOD CREATINE PHOSPHOKINASE INCREASED",
+        "HAEMATURIA",
+        "HOSPITALISATION",
+        "PAIN IN EXTREMITY",
+        "PROTEINURIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2005-2025"
+    },
+    "epa_dha": {
+      "canonical_id": "epa_dha",
+      "total_reports": 20,
+      "serious_reports": 19,
+      "outcomes": {
+        "hospitalization": 2,
+        "er_visit": 2,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 4,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "HYPERSENSITIVITY",
+        "Pruritus",
+        "Arthralgia",
+        "VOMITING",
+        "CHEST PAIN",
+        "LOSS OF CONSCIOUSNESS",
+        "ATRIAL FIBRILLATION",
+        "Abdominal pain",
+        "Flatulence",
+        "BLOOD ARSENIC INCREASED"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2025"
+    },
+    "lycopene": {
+      "canonical_id": "lycopene",
+      "total_reports": 19,
+      "serious_reports": 18,
+      "outcomes": {
+        "hospitalization": 7,
+        "er_visit": 4,
+        "life_threatening": 3,
+        "death": 1,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "CHEST PAIN",
+        "Hypertension",
+        "Bladder cancer",
+        "BURNING SENSATION",
+        "DYSPEPSIA",
+        "LOSS OF CONSCIOUSNESS",
+        "MYOCARDIAL INFARCTION",
+        "STOMACH DISCOMFORT",
+        "ULCER",
+        "POSTMENOPAUSAL HAEMORRHAGE"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2013-2024"
+    },
+    "reishi": {
+      "canonical_id": "reishi",
+      "total_reports": 18,
+      "serious_reports": 17,
+      "outcomes": {
+        "hospitalization": 10,
+        "er_visit": 6,
+        "life_threatening": 6,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "CONVULSION",
+        "CHEST DISCOMFORT",
+        "DIZZINESS",
+        "HEART RATE INCREASED",
+        "FATIGUE",
+        "ABDOMINAL PAIN UPPER",
+        "ANGER",
+        "BACK PAIN",
+        "DRY MOUTH"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2008-2022"
+    },
+    "guarana": {
+      "canonical_id": "guarana",
+      "total_reports": 17,
+      "serious_reports": 17,
+      "outcomes": {
+        "hospitalization": 13,
+        "er_visit": 4,
+        "life_threatening": 0,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "ASTHENIA",
+        "DIZZINESS",
+        "ABORTION SPONTANEOUS",
+        "CHEST PAIN",
+        "HEADACHE",
+        "BRONCHITIS",
+        "DYSPNOEA",
+        "DIARRHOEA",
+        "THIRST",
+        "PAIN"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2017"
+    },
+    "citrus_bioflavonoids": {
+      "canonical_id": "citrus_bioflavonoids",
+      "total_reports": 16,
+      "serious_reports": 16,
+      "outcomes": {
+        "hospitalization": 4,
+        "er_visit": 3,
+        "life_threatening": 7,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Choking",
+        "Blood calcium increased",
+        "BLOOD DISORDER",
+        "BLOOD GLUCOSE INCREASED",
+        "BLOOD PRESSURE INCREASED",
+        "EYE HAEMORRHAGE",
+        "NAUSEA",
+        "Abdominal pain lower",
+        "Dehydration",
+        "Dysuria"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2011-2024"
+    },
+    "astaxanthin": {
+      "canonical_id": "astaxanthin",
+      "total_reports": 16,
+      "serious_reports": 16,
+      "outcomes": {
+        "hospitalization": 6,
+        "er_visit": 6,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 2,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Convulsion",
+        "Mania",
+        "Suicidal ideation",
+        "ABNORMAL FAECES",
+        "COLON INJURY",
+        "FREQUENT BOWEL MOVEMENTS",
+        "HAEMOGLOBIN DECREASED",
+        "INTESTINAL HAEMORRHAGE",
+        "WEIGHT INCREASED",
+        "ABDOMINAL PAIN"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2013-2023"
+    },
+    "tmg_betaine": {
+      "canonical_id": "tmg_betaine",
+      "total_reports": 16,
+      "serious_reports": 15,
+      "outcomes": {
+        "hospitalization": 4,
+        "er_visit": 6,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "MALAISE",
+        "VOMITING",
+        "Hypersensitivity",
+        "ASTHENIA",
+        "Swollen tongue",
+        "Dizziness",
+        "Headache",
+        "Blood potassium decreased",
+        "Blood sodium decreased"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2006-2025"
+    },
+    "forskolin": {
+      "canonical_id": "forskolin",
+      "total_reports": 17,
+      "serious_reports": 15,
+      "outcomes": {
+        "hospitalization": 4,
+        "er_visit": 4,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DIARRHOEA",
+        "VOMITING",
+        "PRURITUS",
+        "Nausea",
+        "LIP SWELLING",
+        "Faecal incontinence",
+        "Abdominal pain upper",
+        "Diarrhoea",
+        "Gastric ulcer",
+        "Mass"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2015-2020"
+    },
+    "horse_chestnut": {
+      "canonical_id": "horse_chestnut",
+      "total_reports": 15,
+      "serious_reports": 15,
+      "outcomes": {
+        "hospitalization": 5,
+        "er_visit": 3,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 2
+      },
+      "top_reactions": [
+        "BLOOD PRESSURE INCREASED",
+        "Nausea",
+        "BALANCE DISORDER",
+        "GAIT DISTURBANCE",
+        "TREMOR",
+        "Balance disorder",
+        "Dizziness",
+        "Nervousness",
+        "Dyspnoea",
+        "Pruritus"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2025"
+    },
+    "beta_carotene": {
+      "canonical_id": "beta_carotene",
+      "total_reports": 17,
+      "serious_reports": 15,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 3,
+        "life_threatening": 0,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "ABDOMINAL PAIN",
+        "NAUSEA",
+        "VOMITING",
+        "ASTHENIA",
+        "HEADACHE",
+        "Discomfort",
+        "Blood glucose decreased",
+        "Diabetes mellitus",
+        "Cerebrovascular accident",
+        "Hospitalisation"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2006-2021"
+    },
+    "7_keto_dhea": {
+      "canonical_id": "7_keto_dhea",
+      "total_reports": 16,
+      "serious_reports": 15,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 4,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "HYPERSENSITIVITY",
+        "ATRIAL FIBRILLATION",
+        "BLOOD PRESSURE INCREASED",
+        "HEART RATE INCREASED",
+        "THYROID FUNCTION TEST ABNORMAL",
+        "Dyspepsia",
+        "Blood testosterone increased",
+        "OEDEMA",
+        "BODY TEMPERATURE INCREASED",
+        "CHILLS"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2025"
+    },
+    "tart_cherry": {
+      "canonical_id": "tart_cherry",
+      "total_reports": 15,
+      "serious_reports": 15,
+      "outcomes": {
+        "hospitalization": 7,
+        "er_visit": 4,
+        "life_threatening": 0,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Blood pressure increased",
+        "ABDOMINAL PAIN",
+        "DYSURIA",
+        "LEUKAEMIA",
+        "WHITE BLOOD CELL COUNT INCREASED",
+        "Skin tightness",
+        "ALANINE AMINOTRANSFERASE INCREASED",
+        "ASPARTATE AMINOTRANSFERASE INCREASED",
+        "AUTOIMMUNE DISORDER",
+        "BLOOD ALKALINE PHOSPHATASE INCREASED"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2014-2025"
+    },
+    "glutathione": {
+      "canonical_id": "glutathione",
+      "total_reports": 16,
+      "serious_reports": 14,
+      "outcomes": {
+        "hospitalization": 2,
+        "er_visit": 7,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DIARRHOEA",
+        "Anaphylactic reaction",
+        "Hypersensitivity",
+        "Nausea",
+        "Pain",
+        "Emergency care",
+        "Dyspnoea",
+        "Fatigue",
+        "Pyrexia",
+        "HYPERSENSITIVITY"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2005-2025"
+    },
+    "l_tyrosine": {
+      "canonical_id": "l_tyrosine",
+      "total_reports": 15,
+      "serious_reports": 14,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 3,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "MALAISE",
+        "HEPATIC ENZYME INCREASED",
+        "HEADACHE",
+        "ABASIA",
+        "BLOOD ZINC ABNORMAL",
+        "HYPOAESTHESIA",
+        "BLOOD POTASSIUM DECREASED",
+        "GLYCOSYLATED HAEMOGLOBIN INCREASED",
+        "SKIN LESION",
+        "STAPHYLOCOCCAL INFECTION"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2021"
+    },
+    "hemp_seed_oil": {
+      "canonical_id": "hemp_seed_oil",
+      "total_reports": 16,
+      "serious_reports": 14,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 2,
+        "life_threatening": 1,
+        "death": 2,
+        "disability": 2,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Chest pain",
+        "Vomiting",
+        "Dizziness",
+        "Abdominal discomfort",
+        "Fatigue",
+        "Headache",
+        "Pain",
+        "Death",
+        "Diarrhoea",
+        "Drug ineffective"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2017-2024"
+    },
+    "l_tryptophan": {
+      "canonical_id": "l_tryptophan",
+      "total_reports": 16,
+      "serious_reports": 13,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 1,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 5,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "MUSCLE SPASMS",
+        "Fatigue",
+        "EOSINOPHILIA MYALGIA SYNDROME",
+        "DYSPNOEA",
+        "Pain",
+        "PARAESTHESIA",
+        "MALAISE",
+        "MYALGIA",
+        "FATIGUE",
+        "Joint stiffness"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2005-2024"
+    },
+    "policosanol": {
+      "canonical_id": "policosanol",
+      "total_reports": 14,
+      "serious_reports": 13,
+      "outcomes": {
+        "hospitalization": 7,
+        "er_visit": 2,
+        "life_threatening": 0,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "HYPOTENSION",
+        "RENAL DISORDER",
+        "RENAL FAILURE",
+        "ATRIAL FIBRILLATION",
+        "BLOOD PRESSURE INCREASED",
+        "HEART RATE INCREASED",
+        "THYROID FUNCTION TEST ABNORMAL",
+        "CHRONIC OBSTRUCTIVE PULMONARY DISEASE",
+        "FLUID RETENTION",
+        "CONSTIPATION"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2004-2023"
+    },
+    "saffron": {
+      "canonical_id": "saffron",
+      "total_reports": 14,
+      "serious_reports": 13,
+      "outcomes": {
+        "hospitalization": 6,
+        "er_visit": 2,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Pruritus",
+        "Rash",
+        "Urticaria",
+        "Throat tightness",
+        "Hepatotoxicity",
+        "Pyrexia",
+        "Acute coronary syndrome",
+        "INSOMNIA",
+        "LOCALISED OEDEMA",
+        "MOOD ALTERED"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2012-2025"
+    },
+    "nattokinase": {
+      "canonical_id": "nattokinase",
+      "total_reports": 12,
+      "serious_reports": 12,
+      "outcomes": {
+        "hospitalization": 8,
+        "er_visit": 6,
+        "life_threatening": 4,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "TRANSIENT ISCHAEMIC ATTACK",
+        "Dyspnoea",
+        "Hypersensitivity",
+        "Pulmonary embolism",
+        "BLOOD PRESSURE INCREASED",
+        "DYSPNOEA",
+        "PLEURAL EFFUSION",
+        "HEART RATE INCREASED",
+        "ABNORMAL FAECES",
+        "COLON INJURY"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2004-2025"
+    },
+    "pregnenolone": {
+      "canonical_id": "pregnenolone",
+      "total_reports": 16,
+      "serious_reports": 12,
+      "outcomes": {
+        "hospitalization": 4,
+        "er_visit": 3,
+        "life_threatening": 0,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "HEADACHE",
+        "Nausea",
+        "HEART RATE INCREASED",
+        "Dizziness",
+        "CHILLS",
+        "HYPERSENSITIVITY",
+        "TREMOR",
+        "AGITATION",
+        "DYSPNOEA",
+        "ASTHENIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2005-2021"
+    },
+    "senna": {
+      "canonical_id": "senna",
+      "total_reports": 12,
+      "serious_reports": 12,
+      "outcomes": {
+        "hospitalization": 6,
+        "er_visit": 5,
+        "life_threatening": 0,
+        "death": 1,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DIARRHOEA",
+        "Urticaria",
+        "Rash",
+        "ABDOMINAL PAIN",
+        "CONFUSIONAL STATE",
+        "TRANSIENT ISCHAEMIC ATTACK",
+        "Abdominal pain upper",
+        "ABDOMINAL PAIN UPPER",
+        "CARDIAC DISORDER",
+        "RESPIRATORY DISORDER"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2008-2025"
+    },
+    "silymarin": {
+      "canonical_id": "silymarin",
+      "total_reports": 12,
+      "serious_reports": 12,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 2,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "NAUSEA",
+        "HEPATIC ENZYME INCREASED",
+        "VOMITING",
+        "HEADACHE",
+        "JAUNDICE",
+        "Menorrhagia",
+        "Uterine polyp",
+        "HYPERSENSITIVITY",
+        "MALAISE",
+        "Nephrolithiasis"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2007-2022"
+    },
+    "propolis": {
+      "canonical_id": "propolis",
+      "total_reports": 12,
+      "serious_reports": 12,
+      "outcomes": {
+        "hospitalization": 5,
+        "er_visit": 7,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "CEREBROVASCULAR ACCIDENT",
+        "HYPERSENSITIVITY",
+        "THROAT TIGHTNESS",
+        "DYSPNOEA",
+        "Cough",
+        "ARTERIOSCLEROSIS",
+        "CAROTID ARTERIOSCLEROSIS",
+        "CORONARY ARTERY DISEASE",
+        "DYSPHAGIA",
+        "PHARYNGEAL OEDEMA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2014-2025"
+    },
+    "colostrum": {
+      "canonical_id": "colostrum",
+      "total_reports": 12,
+      "serious_reports": 11,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 3,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 3,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "Abdominal pain upper",
+        "Atrial fibrillation",
+        "Food intolerance",
+        "Dermatitis",
+        "Hypersensitivity",
+        "Diarrhoea",
+        "Malaise",
+        "Dyspnoea",
+        "Nervousness",
+        "Adverse event"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2004-2023"
+    },
+    "argan_oil": {
+      "canonical_id": "argan_oil",
+      "total_reports": 12,
+      "serious_reports": 11,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 1,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "CHEST PAIN",
+        "DIZZINESS",
+        "Atrial fibrillation",
+        "Haemoglobin decreased",
+        "CHEST DISCOMFORT",
+        "ERYTHEMA",
+        "PARAESTHESIA ORAL",
+        "PRURITUS",
+        "THROAT TIGHTNESS"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2014-2022"
+    },
+    "lavender": {
+      "canonical_id": "lavender",
+      "total_reports": 11,
+      "serious_reports": 11,
+      "outcomes": {
+        "hospitalization": 4,
+        "er_visit": 1,
+        "life_threatening": 3,
+        "death": 0,
+        "disability": 2,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Abasia",
+        "Convulsion",
+        "Speech disorder",
+        "Hypersensitivity",
+        "Lacrimation increased",
+        "Pruritus",
+        "ALANINE AMINOTRANSFERASE INCREASED",
+        "ASPARTATE AMINOTRANSFERASE INCREASED",
+        "BIOPSY LIVER ABNORMAL",
+        "BLOOD ALBUMIN DECREASED"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2012-2021"
+    },
+    "astragalus": {
+      "canonical_id": "astragalus",
+      "total_reports": 14,
+      "serious_reports": 11,
+      "outcomes": {
+        "hospitalization": 5,
+        "er_visit": 3,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DIZZINESS",
+        "VOMITING",
+        "DYSPNOEA",
+        "HEPATIC ENZYME INCREASED",
+        "LOSS OF CONSCIOUSNESS",
+        "LUNG DISORDER",
+        "THROMBOSIS",
+        "Anaphylactic shock",
+        "Diarrhoea",
+        "Vomiting"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2005-2022"
+    },
+    "cascara_sagrada": {
+      "canonical_id": "cascara_sagrada",
+      "total_reports": 13,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 4,
+        "er_visit": 1,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Rectal haemorrhage",
+        "COLON INJURY",
+        "DIARRHOEA",
+        "DYSPEPSIA",
+        "Asthenia",
+        "Hypotension",
+        "Nausea",
+        "ABDOMINAL PAIN UPPER",
+        "CARDIAC DISORDER",
+        "RESPIRATORY DISORDER"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2012-2025"
+    },
+    "cascara": {
+      "canonical_id": "cascara",
+      "total_reports": 13,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 4,
+        "er_visit": 1,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Rectal haemorrhage",
+        "COLON INJURY",
+        "DIARRHOEA",
+        "DYSPEPSIA",
+        "Asthenia",
+        "Hypotension",
+        "Nausea",
+        "ABDOMINAL PAIN UPPER",
+        "CARDIAC DISORDER",
+        "RESPIRATORY DISORDER"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2012-2025"
+    },
+    "gaba": {
+      "canonical_id": "gaba",
+      "total_reports": 10,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 2,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "BREAST ENLARGEMENT",
+        "BREAST PAIN",
+        "BURNING SENSATION",
+        "LIGAMENT SPRAIN",
+        "MUSCULOSKELETAL CHEST PAIN",
+        "Atrial fibrillation",
+        "Haemoglobin decreased",
+        "Tinnitus",
+        "ANXIETY",
+        "FEELING ABNORMAL"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2008-2023"
+    },
+    "butyric_acid": {
+      "canonical_id": "butyric_acid",
+      "total_reports": 10,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 3,
+        "er_visit": 2,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 1
+      },
+      "top_reactions": [
+        "BREAST ENLARGEMENT",
+        "BREAST PAIN",
+        "BURNING SENSATION",
+        "LIGAMENT SPRAIN",
+        "MUSCULOSKELETAL CHEST PAIN",
+        "Atrial fibrillation",
+        "Haemoglobin decreased",
+        "Tinnitus",
+        "ANXIETY",
+        "FEELING ABNORMAL"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2008-2023"
+    },
+    "red_wine_extract": {
+      "canonical_id": "red_wine_extract",
+      "total_reports": 12,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 1,
+        "er_visit": 1,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "RASH",
+        "BLOOD PRESSURE INCREASED",
+        "HAEMORRHAGE",
+        "Breast cancer",
+        "DEHYDRATION",
+        "DIARRHOEA",
+        "GALLBLADDER DISORDER",
+        "LIVER FUNCTION TEST ABNORMAL",
+        "VOMITING",
+        "BODY TEMPERATURE INCREASED"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2020"
+    },
+    "bacopa": {
+      "canonical_id": "bacopa",
+      "total_reports": 11,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 2,
+        "er_visit": 0,
+        "life_threatening": 2,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "NAUSEA",
+        "ABDOMINAL PAIN UPPER",
+        "DECREASED APPETITE",
+        "WEIGHT DECREASED",
+        "DIZZINESS",
+        "Biopsy liver abnormal",
+        "Blood pressure decreased",
+        "Jaundice",
+        "Liver injury",
+        "Loss of consciousness"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2011-2023"
+    },
+    "vitamin_b2_riboflavin": {
+      "canonical_id": "vitamin_b2_riboflavin",
+      "total_reports": 11,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 1,
+        "er_visit": 0,
+        "life_threatening": 2,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "URTICARIA",
+        "Abdominal pain upper",
+        "Diarrhoea",
+        "ALANINE AMINOTRANSFERASE INCREASED",
+        "ASPARTATE AMINOTRANSFERASE INCREASED",
+        "ASTHENIA",
+        "BLOOD ALKALINE PHOSPHATASE INCREASED",
+        "BLOOD BILIRUBIN INCREASED",
+        "CHOLESTASIS",
+        "CHROMATURIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2006-2024"
+    },
+    "grape_seed_extract": {
+      "canonical_id": "grape_seed_extract",
+      "total_reports": 10,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 1,
+        "er_visit": 0,
+        "life_threatening": 0,
+        "death": 1,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "ABASIA",
+        "BLOOD ZINC ABNORMAL",
+        "HYPOAESTHESIA",
+        "Choking",
+        "DIARRHOEA",
+        "Cardiac disorder",
+        "Death",
+        "Dyspepsia",
+        "Alanine aminotransferase increased",
+        "Aspartate aminotransferase increased"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2009-2022"
+    },
+    "fatty_acids": {
+      "canonical_id": "fatty_acids",
+      "total_reports": 12,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 2,
+        "er_visit": 0,
+        "life_threatening": 0,
+        "death": 0,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "CHOKING",
+        "NAUSEA",
+        "DYSPHAGIA",
+        "ABDOMINAL PAIN UPPER",
+        "ABNORMAL SENSATION IN EYE",
+        "EXPOSURE TO NOISE",
+        "HEADACHE",
+        "HYPERACUSIS",
+        "MIGRAINE",
+        "PHOTOPHOBIA"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2004-2020"
+    },
+    "copper": {
+      "canonical_id": "copper",
+      "total_reports": 10,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 5,
+        "er_visit": 5,
+        "life_threatening": 0,
+        "death": 1,
+        "disability": 0,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "Dyspnoea",
+        "Vision blurred",
+        "MACULAR DEGENERATION",
+        "Death",
+        "LOCALISED INFECTION",
+        "PULMONARY EMBOLISM",
+        "THROMBOSIS",
+        "Seizure",
+        "Blood cholesterol increased",
+        "Breast cancer"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2014-2024"
+    },
+    "activated_charcoal": {
+      "canonical_id": "activated_charcoal",
+      "total_reports": 12,
+      "serious_reports": 10,
+      "outcomes": {
+        "hospitalization": 2,
+        "er_visit": 4,
+        "life_threatening": 1,
+        "death": 0,
+        "disability": 1,
+        "required_intervention": 0
+      },
+      "top_reactions": [
+        "DYSPNOEA",
+        "HYPERSENSITIVITY",
+        "URTICARIA",
+        "Abdominal pain upper",
+        "Malaise",
+        "CONSTIPATION",
+        "Acquired oesophageal web",
+        "Foreign body",
+        "Oesophagitis",
+        "NEOPLASM MALIGNANT"
+      ],
+      "signal_strength": "weak",
+      "year_range": "2012-2021"
+    }
+  }
+}

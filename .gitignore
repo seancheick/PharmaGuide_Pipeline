@@ -34,6 +34,9 @@ scripts/smoke_scored/
 # Accidentally-captured browser profile state (no actual screenshots)
 docs/plans/dashboard-screenshots/
 
+# FDA CAERS bulk download (99MB unzipped — regenerable via ingest_caers.py)
+scripts/data/fda_caers/
+
 # Logs (regenerated each run)
 scripts/logs/
 

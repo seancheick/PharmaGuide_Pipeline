@@ -33,6 +33,7 @@ from scripts.dashboard.views import (
     render_audit_section_b,
     render_audit_section_c,
     render_audit_section_d,
+    render_audit_caers,
 )
 
 # --- Page Setup ---
@@ -166,6 +167,8 @@ def _render_current_view() -> None:
         render_audit_section_c(data)
     elif view == "Section D Audit":
         render_audit_section_d(data)
+    elif view == "CAERS Audit":
+        render_audit_caers(data)
     elif view == "Observability":
         render_observability(data)
     elif view == "Release Diff":

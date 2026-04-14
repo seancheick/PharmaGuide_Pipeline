@@ -299,6 +299,15 @@
       "threshold_pct": 150,
       "single_penalty": 2.0,
       "cap": 3.0
+    },
+    "B8_caers_adverse_events": {
+      "_description": "Penalty based on FDA CAERS adverse event signal strength for active ingredients. Thresholds are on serious_reports count (hospitalizations, deaths, ER visits, etc.). Strong signals include ingredients with 100+ serious reports (e.g. kratom: 261 deaths, green tea extract: 80 hospitalizations).",
+      "enabled": true,
+      "strong_penalty": 4.0,
+      "moderate_penalty": 2.0,
+      "weak_penalty": 1.0,
+      "cap": 5.0,
+      "data_file": "data/caers_adverse_event_signals.json"
     }
   },
   "section_C_evidence_research": {

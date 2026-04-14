@@ -80,6 +80,9 @@ class DashboardData:
     blob_analytics: dict[str, Any] = field(default_factory=dict)
     product_catalog: pd.DataFrame = field(default_factory=pd.DataFrame)
 
+    caers_signals: dict[str, Any] = field(default_factory=dict)
+    caers_metadata: dict[str, Any] = field(default_factory=dict)
+
 
 def _parse_datetime(value: str | None) -> datetime | None:
     if not value:
@@ -1143,5 +1146,12 @@ def load_dashboard_data(config: Any) -> DashboardData:
     if not data.blob_analytics.get("bonus_frequency") and data.db_conn is not None:
         data.blob_analytics = _compute_blob_analytics_from_db(data.db_conn)
     data.product_catalog = _load_product_catalog(data.db_conn)
+
+    # Load CAERS adverse event signals
+    caers_path = Path("scripts/data/caers_adverse_event_signals.json")
+    caers_raw = safe_load_json(caers_path)
+    if caers_raw:
+        data.caers_signals = caers_raw.get("signals", {})
+        data.caers_metadata = caers_raw.get("_metadata", {})
 
     return data

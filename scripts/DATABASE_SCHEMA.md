@@ -68,6 +68,7 @@ Every database file MUST include a `_metadata` object as its first key:
 | `allergen_flagging` | allergens.json | Enrichment |
 | `safety_disqualification_and_regulatory_compliance` | banned_recalled_ingredients.json | Enrichment |
 | `penalty_scoring` | harmful_additives.json | Enrichment |
+| `adverse_event_signals` | caers_adverse_event_signals.json | Scoring (B8) |
 | `match_override` | banned_match_allowlist.json | Enrichment |
 | `evidence_scoring` | backed_clinical_studies.json | Enrichment |
 | `probiotic_strain_validation` | clinically_relevant_strains.json | Cleaning, Enrichment |
@@ -370,6 +371,37 @@ No `critical` tier — substances posing immediate hazards belong in `banned_rec
 Category enum (20 values): `colorant`, `colorant_artificial`, `colorant_natural`, `contaminant`, `emulsifier`, `excipient`, `fat_oil`, `filler`, `flavor`, `mineral_compound`, `nutrient_synthetic`, `phosphate`, `preservative`, `preservative_antioxidant`, `processing_aid`, `stimulant_laxative`, `sweetener`, `sweetener_artificial`, `sweetener_natural`, `sweetener_sugar_alcohol`
 
 **Removed in v5.1:** `CUI` (top-level duplicate), `label_tokens`, `regex`, `exposure_context`, `entity_type` (when "ingredient"), `class_tags`, `severity_score`, `critical` severity tier.
+
+---
+
+### 14b. caers_adverse_event_signals.json
+**Purpose:** `adverse_event_signals` | **Schema:** 1.0.0 | **Source:** FDA CAERS bulk download
+
+Primary key: `signals` (object keyed by IQM canonical_id)
+
+B8 graduated penalty scoring — FDA pharmacovigilance data (real-world adverse event reports):
+
+| Signal Strength | B8 Penalty | Threshold | Examples |
+|----------------|-----------|-----------|----------|
+| `strong` | -4.0 pts | >=100 serious reports | kratom (759 serious, 261 deaths), green tea extract (186 serious) |
+| `moderate` | -2.0 pts | 25-99 serious reports | turmeric, ashwagandha, garcinia |
+| `weak` | -1.0 pt | 10-24 serious reports | elderberry, boswellia |
+
+Cap: 5.0 pts max per product. Multi-ingredient products (multivitamins, combos) are excluded during ingestion to prevent base-rate inflation.
+
+**Distinct from harmful_additives.json** (B1 = formulation quality of excipients) and **banned_recalled_ingredients.json** (B0 = regulatory actions). CAERS = statistical volume of real-world adverse events on active ingredients.
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `canonical_id` | string | YES | IQM canonical ingredient ID |
+| `total_reports` | integer | YES | Total CAERS reports mentioning this ingredient |
+| `serious_reports` | integer | YES | Reports with serious outcomes (hospitalization, death, ER, etc.) |
+| `outcomes` | object | YES | Breakdown: `hospitalization`, `er_visit`, `life_threatening`, `death`, `disability`, `required_intervention` |
+| `top_reactions` | string[] | YES | Top 10 MedDRA reaction terms |
+| `signal_strength` | string | YES | `strong`, `moderate`, `weak` (minimal excluded) |
+| `year_range` | string | YES | Date range of reports (e.g. "2008-2025") |
+
+Ingestion: `scripts/api_audit/ingest_caers.py` — downloads FDA CAERS bulk data, filters to dietary supplements (industry_code 54), extracts ingredient names, matches to IQM canonical_ids, aggregates signals.
 
 ---
 

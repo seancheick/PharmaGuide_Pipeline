@@ -131,7 +131,7 @@ B_raw = base_score + bonuses - penalties
 B = clamp(0, 30, B_raw)
 base_score = 25
 bonuses = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
-penalties = B0_moderate + B1 + B2 + B5 + B6 + B7
+penalties = B0_moderate + B1 + B2 + B5 + B6 + B7 + B8
 ```
 
 - B0: immediate safety gate logic.
@@ -156,6 +156,7 @@ penalties = B0_moderate + B1 + B2 + B5 + B6 + B7
 - B5: proprietary blend transparency penalty (max 10).
 - B6: disease/marketing claim penalty (max 5).
 - B7: dose safety penalty (max 3). Penalises products with ingredients exceeding 150% of highest adult UL. Per ingredient: -2.0, capped at -3.0 total. Below 150%, UL enforcement is deferred to phone-side Section E1 (user-profile-aware). Source: `rda_ul_data.safety_flags` from enricher, verified against `rda_optimal_uls.json`.
+- B8: CAERS adverse event penalty (max 5). FDA pharmacovigilance signal — real-world adverse event reports from consumers/providers. Per ingredient: `strong` (100+ serious reports) = -4.0, `moderate` (25-99) = -2.0, `weak` (10-24) = -1.0, capped at -5.0 total. Distinct from B0 (regulatory actions) and B1 (excipient quality) — B8 captures statistical harm volume on active ingredients. Source: `caers_adverse_event_signals.json` (159 ingredients, schema 1.0.0), ingested from FDA CAERS bulk download via `ingest_caers.py`. Config-gated (`enabled: true` in `B8_caers_adverse_events`).
 - Optional gated `B_hypoallergenic` contribution can be added to bonus pool.
 
 #### B5 proprietary blend model

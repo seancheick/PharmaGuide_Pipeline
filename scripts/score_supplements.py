@@ -117,6 +117,24 @@ class SupplementScorer:
         self.feature_gates = self.config.get("feature_gates", {})
         self.paths = self.config.get("paths", {})
         self._parent_total_warned = False
+        self._caers_signals = self._load_caers_signals()
+
+    def _load_caers_signals(self) -> Dict[str, Any]:
+        """Load CAERS adverse event signals from data file (once at init)."""
+        b8_cfg = self.config.get("section_B_safety_purity", {}).get(
+            "B8_caers_adverse_events", {}
+        )
+        if not b8_cfg.get("enabled", False):
+            return {}
+        data_file = b8_cfg.get("data_file", "data/caers_adverse_event_signals.json")
+        if not os.path.isabs(data_file):
+            data_file = str(Path(__file__).parent / data_file)
+        try:
+            with open(data_file, "r", encoding="utf-8") as f:
+                raw = json.load(f)
+            return raw.get("signals", {})
+        except (FileNotFoundError, json.JSONDecodeError):
+            return {}
 
     def _setup_logging(self) -> logging.Logger:
         logging.basicConfig(
@@ -2081,6 +2099,82 @@ class SupplementScorer:
         total_penalty = min(total_penalty, cap)
         return total_penalty, evidence
 
+    def _compute_caers_penalty(
+        self,
+        product: Dict[str, Any],
+        flags: List[str],
+        config: Optional[Dict[str, Any]] = None,
+    ) -> Tuple[float, List[Dict[str, Any]]]:
+        """B8: CAERS adverse event signal penalty.
+
+        Looks up each active ingredient's canonical_id in the pre-loaded CAERS
+        signals data.  Applies graduated penalty based on signal_strength:
+          strong  (>=100 serious reports): strong_penalty  (default 2.0)
+          moderate (25-99):                moderate_penalty (default 1.0)
+          weak     (10-24):                weak_penalty     (default 0.5)
+
+        Returns (penalty, evidence_list).
+        """
+        if not self._caers_signals:
+            return 0.0, []
+
+        b8_cfg = (config or {}).get("B8_caers_adverse_events", {})
+        if not b8_cfg.get("enabled", True):
+            return 0.0, []
+
+        strong_pen = as_float(b8_cfg.get("strong_penalty"), 2.0)
+        moderate_pen = as_float(b8_cfg.get("moderate_penalty"), 1.0)
+        weak_pen = as_float(b8_cfg.get("weak_penalty"), 0.5)
+        cap = as_float(b8_cfg.get("cap"), 3.0)
+
+        # Collect all ingredient canonical_ids from the product
+        ingredient_ids = set()
+        ingredients = product.get("ingredients", [])
+        if isinstance(ingredients, list):
+            for ing in ingredients:
+                if isinstance(ing, dict):
+                    for key in ("canonical_id", "matched_id", "ingredient_id"):
+                        cid = ing.get(key)
+                        if cid and isinstance(cid, str):
+                            ingredient_ids.add(cid)
+                            break
+
+        if not ingredient_ids:
+            return 0.0, []
+
+        evidence: List[Dict[str, Any]] = []
+        total_penalty = 0.0
+
+        for cid in sorted(ingredient_ids):
+            signal = self._caers_signals.get(cid)
+            if not signal:
+                continue
+
+            strength = signal.get("signal_strength", "minimal")
+            if strength == "strong":
+                pen = strong_pen
+            elif strength == "moderate":
+                pen = moderate_pen
+            elif strength == "weak":
+                pen = weak_pen
+            else:
+                continue
+
+            evidence.append({
+                "ingredient": cid,
+                "signal_strength": strength,
+                "serious_reports": signal.get("serious_reports", 0),
+                "total_reports": signal.get("total_reports", 0),
+                "penalty": pen,
+            })
+            total_penalty += pen
+            flag = f"CAERS_SIGNAL_{cid}"
+            if flag not in flags:
+                flags.append(flag)
+
+        total_penalty = min(total_penalty, cap)
+        return total_penalty, evidence
+
     def _compute_safety_purity_score(
         self,
         product: Dict[str, Any],
@@ -2133,9 +2227,10 @@ class SupplementScorer:
         b5 = self._compute_proprietary_blend_penalty(product, flags, section_b_cfg)
         b6 = self._compute_disease_claims_penalty(product, flags, section_b_cfg)
         b7, b7_evidence = self._compute_dose_safety_penalty(product, flags, section_b_cfg)
+        b8, b8_evidence = self._compute_caers_penalty(product, flags, section_b_cfg)
 
         bonuses = min(bonus_pool_cap, b3 + b4a + b4b + b4c + b_hypoallergenic)
-        penalties = b1 + b2 + b5 + b6 + b7 + b0_moderate_penalty
+        penalties = b1 + b2 + b5 + b6 + b7 + b8 + b0_moderate_penalty
 
         b_raw = base_score + bonuses - penalties
         total = clamp(0.0, max_points, b_raw)
@@ -2157,6 +2252,8 @@ class SupplementScorer:
             "B6_penalty": round(b6, 2),
             "B7_penalty": round(b7, 2),
             "B7_dose_safety_evidence": b7_evidence,
+            "B8_penalty": round(b8, 2),
+            "B8_caers_evidence": b8_evidence,
             "bonuses": round(bonuses, 2),
             "penalties": round(penalties, 2),
             "raw": round(b_raw, 2),
