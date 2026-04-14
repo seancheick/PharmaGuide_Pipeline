@@ -1,6 +1,6 @@
 # Pipeline Operations README
 
-Updated: 2026-04-12
+Updated: 2026-04-14
 Owner: Sean Cheick Baradji
 
 This file is a practical command guide for the pipeline work added and updated today.
@@ -21,6 +21,7 @@ It covers:
 | v1.3.0   | 2026-04-07 | 87      | Stack interaction, social sharing, search/filter, goal matching, dosing/allergen summary                             |
 | v1.3.1   | 2026-04-10 | 89      | `serving_info` phantom key bugfix (`dosing_summary` + `servings_per_container` now populate) + `net_contents_*`      |
 | v1.3.2   | 2026-04-10 | 90      | Nutrition hybrid (`calories_per_serving` column + `nutrition_detail` blob) + `unmapped_actives` blob transparency    |
+| v1.3.3   | 2026-04-14 | 90      | Interaction safety expansion: 127 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM 588 entries (was 571) |
 
 Runtime source of truth: `CORE_COLUMN_COUNT` in `build_final_db.py` plus `EXPORT_SCHEMA_VERSION`. See `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
 

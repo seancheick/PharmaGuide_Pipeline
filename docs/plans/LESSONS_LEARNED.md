@@ -265,3 +265,41 @@ This document is updated after each sprint. It captures what went well, what wen
 - 2026-04-09 reviewer re-check: no remaining material code or documentation blockers beyond the manual screenshot artifact and recording formal sign-off evidence.
 - Manual screenshot capture is now documented in `scripts/dashboard/INSTRUCTIONS.md`, so the remaining handoff work is operational rather than implementation-related.
 - 2026-04-09 UX refresh verification: navigation, page metadata, app shell, time formatting, and command-center coverage were added and verified in the expanded dashboard suite.
+
+---
+
+## Session: 2026-04-14 — Interaction Safety Expansion
+
+**Scope:** Citation integrity, IQM expansion, context-aware scoring, interaction rules overhaul
+
+### What went well
+
+1. **Hallucinated PMID detection pattern works.** `verify_all_citations_content.py` caught 25 PMIDs that existed in PubMed but were about completely different topics. PMID existence alone proves nothing — content verification (checking the paper title actually matches the claimed topic) is essential. Always run content verification after any AI-generated citation.
+
+2. **SUPPai CUI alias mapping at scale.** Adding 131 CUI aliases to 86 IQM entries unlocked 1,573 SUPPai research pairs. The bottleneck was string identity mismatches (e.g., SUPPai uses CUI C3540037 "Calcium Supplement" while IQM uses "calcium"). Alias expansion is high-ROI, low-risk work.
+
+3. **Cross-DB overlap allowlist caught real issues.** When we added canola oil and MSG to IQM, the test guard instantly flagged overlaps with harmful_additives. The test-time guard pattern (fail-on-overlap, force human review) works exactly as designed.
+
+4. **Context-aware harmful scoring was the right call.** Research confirmed no major platform dual-scores an ingredient as both quality bonus AND safety penalty. The fix was surgical: 2 files changed, 10 new tests, zero regressions. The enricher tags source_section, the scorer suppresses active-source precautionary penalties.
+
+5. **Interaction rules gap analysis found critical safety holes.** Ginkgo was missing its #1 interaction (anticoagulants), SJW was missing SSRI serotonin syndrome, and magnesium was missing kidney_disease. These are life-safety bugs in a medical app.
+
+### What went wrong
+
+1. **Original interaction rules had undocumented severity values.** The taxonomy defines `monitor`, `info`, and `theoretical` as valid, but my initial validator only checked `caution/avoid/contraindicated`. Pre-existing rules using `monitor` looked like errors. Lesson: always read the full taxonomy before writing validators.
+
+2. **SUPPai "new entries" list needed heavy manual triage.** The gap analysis flagged 300 "new" supplements, but ~50% were hormones, metabolites, lab markers, or drugs (ACTH, glucose, progesterone, procaine). Blindly adding them would have polluted the IQM. Each "new entry" candidate needs a human judgment call: is this actually a dietary supplement?
+
+3. **Some easy-map matches were wrong.** Token-overlap matching incorrectly suggested Glycerol → monolaurin, Linolenic acid → gamma_linolenic_acid, and CLA → linoleic acid. These are chemically distinct compounds that share words. Fuzzy matching needs chemistry-aware review.
+
+### Lessons for future sessions
+
+1. **PMID content verification is non-negotiable.** Run `verify_all_citations_content.py` after ANY data file change that involves PMIDs. AI-generated PMIDs pass existence checks but fail content checks ~30% of the time.
+
+2. **IQM alias additions are safe to batch (additive-only).** Adding CUI aliases to existing entries has zero risk — it only expands matching, never changes scoring. New entries need full schema validation and API verification.
+
+3. **Harmful additive penalties should be section-aware.** If an ingredient is in Supplement Facts (active), the IQM quality score is the correct signal. Additive penalties should only fire for Other Ingredients (inactive), with high/critical severity as the exception.
+
+4. **Drug class gaps block entire categories of interaction.** Missing the SSRI/SNRI class meant SJW serotonin syndrome — one of the most documented herb-drug interactions — was invisible. When adding new interaction rules, always check if the needed drug class exists first.
+
+5. **The interaction rules file is the most impactful safety artifact.** It determines what warnings 5,231 products show to users with health conditions. Any gap = silent failure for real patients. Schedule quarterly audits against clinical literature updates.
