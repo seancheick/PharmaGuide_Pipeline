@@ -3,29 +3,8 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
+from scripts.dashboard.components import _safe_columns, _safe_tabs
 from scripts.dashboard.components.data_table import data_table
-
-
-def _safe_columns(spec):
-    try:
-        columns = st.columns(spec)
-        expected = spec if isinstance(spec, int) else len(spec)
-        if isinstance(columns, (list, tuple)) and len(columns) >= expected:
-            return list(columns[:expected])
-    except Exception:
-        pass
-    fallback_count = spec if isinstance(spec, int) else len(spec)
-    return [st for _ in range(fallback_count)]
-
-
-def _safe_tabs(labels):
-    try:
-        tabs = st.tabs(labels)
-        if isinstance(tabs, (list, tuple)) and len(tabs) >= len(labels):
-            return list(tabs[: len(labels)])
-    except Exception:
-        pass
-    return [st for _ in labels]
 
 
 def render_intelligence(data):

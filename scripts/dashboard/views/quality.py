@@ -145,7 +145,7 @@ def _render_verdict_distribution(filtered_products):
         )
     )
     fig.update_layout(height=340, margin=dict(l=20, r=20, t=40, b=20), title="Verdict Distribution")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 def _render_score_histogram(filtered_products):
@@ -161,7 +161,7 @@ def _render_score_histogram(filtered_products):
         fig.add_vline(x=value, line_dash="dash", line_color="gray", annotation_text=label)
     fig.add_annotation(x=95, y=0, text=f"Mean {df['score'].mean():.1f} | Median {df['score'].median():.1f}", showarrow=False)
     fig.update_layout(height=340, margin=dict(l=20, r=20, t=40, b=20), title="Score Distribution")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
 
 def _render_coverage_gate(data, dataset_scope):
@@ -190,9 +190,9 @@ def _render_coverage_gate(data, dataset_scope):
     for column in ["cleaned_count", "error_count", "unmapped_active", "needs_review_active"]:
         fig.add_trace(go.Bar(name=column.replace("_", " ").title(), x=df["dataset"], y=df[column]))
     fig.update_layout(barmode="group", height=320, margin=dict(l=20, r=20, t=30, b=20))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     st.write("#### Coverage details")
-    st.dataframe(df, use_container_width=True, height=260, hide_index=True)
+    st.dataframe(df, width="stretch", height=260, hide_index=True)
 
 
 def _render_not_scored_queue(data, filtered_products):
@@ -309,15 +309,15 @@ def _render_config_snapshot(data):
     section_maxima = config.get("section_maximums") or {}
     feature_gates = config.get("feature_gates") or {}
     rows = [
-        {"field": "Scoring version", "value": (data.export_manifest or {}).get("scoring_version", "N/A")},
+        {"field": "Scoring version", "value": str((data.export_manifest or {}).get("scoring_version", "N/A"))},
         {"field": "Average coverage", "value": f"{data.shared_metrics.get('average_coverage_pct', 'N/A')}%"},
-        {"field": "Ingredient Quality Max", "value": section_maxima.get("A_ingredient_quality", 25)},
-        {"field": "Safety & Purity Max", "value": section_maxima.get("B_safety_purity", 30)},
-        {"field": "Evidence & Research Max", "value": section_maxima.get("C_evidence_research", 20)},
-        {"field": "Brand Trust Max", "value": section_maxima.get("D_brand_trust", 5)},
-        {"field": "Non-GMO bonus enabled", "value": bool(feature_gates.get("enable_non_gmo_bonus"))},
+        {"field": "Ingredient Quality Max", "value": str(section_maxima.get("A_ingredient_quality", 25))},
+        {"field": "Safety & Purity Max", "value": str(section_maxima.get("B_safety_purity", 30))},
+        {"field": "Evidence & Research Max", "value": str(section_maxima.get("C_evidence_research", 20))},
+        {"field": "Brand Trust Max", "value": str(section_maxima.get("D_brand_trust", 5))},
+        {"field": "Non-GMO bonus enabled", "value": str(bool(feature_gates.get("enable_non_gmo_bonus")))},
     ]
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
 
 def _scoped_dataset_reports(data, dataset_scope):

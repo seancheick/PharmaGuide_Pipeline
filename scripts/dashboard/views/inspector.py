@@ -3,32 +3,11 @@ import pandas as pd
 import sqlite3
 import json
 from pathlib import Path
+from scripts.dashboard.components import _safe_columns, _safe_tabs
 from scripts.dashboard.components.data_table import data_table
 from scripts.dashboard.components.product_header import product_header
 from scripts.dashboard.components.score_breakdown import score_breakdown
 from scripts.dashboard.components.score_trace import score_trace
-
-
-def _safe_columns(spec):
-    try:
-        columns = st.columns(spec)
-        expected = spec if isinstance(spec, int) else len(spec)
-        if isinstance(columns, (list, tuple)) and len(columns) >= expected:
-            return list(columns[:expected])
-    except Exception:
-        pass
-    fallback_count = spec if isinstance(spec, int) else len(spec)
-    return [st for _ in range(fallback_count)]
-
-
-def _safe_tabs(labels):
-    try:
-        tabs = st.tabs(labels)
-        if isinstance(tabs, (list, tuple)) and len(tabs) >= len(labels):
-            return list(tabs[: len(labels)])
-    except Exception:
-        pass
-    return [st for _ in labels]
 
 
 def render_inspector(data):
@@ -182,14 +161,14 @@ def render_drill_down(dsld_id, data):
                 # Column selection and styling
                 cols = ["name", "bio_score", "form", "dosage", "flags"]
                 available_cols = [c for c in cols if c in active_df.columns]
-                st.dataframe(active_df[available_cols], use_container_width=True)
+                st.dataframe(active_df[available_cols], width="stretch")
             else:
                 st.caption("No active ingredients listed.")
                 
         with tab_inactive:
             inactive_df = pd.DataFrame(blob.get("inactive_ingredients", []))
             if not inactive_df.empty:
-                st.dataframe(inactive_df, use_container_width=True)
+                st.dataframe(inactive_df, width="stretch")
             else:
                 st.caption("No inactive ingredients listed.")
     else:
@@ -219,17 +198,17 @@ def render_drill_down(dsld_id, data):
             with col_left:
                 st.write("**Supplement Type Audit**")
                 if audit.get("supplement_type"):
-                    st.dataframe(pd.DataFrame([audit["supplement_type"]]), use_container_width=True, hide_index=True)
+                    st.dataframe(pd.DataFrame([audit["supplement_type"]]), width="stretch", hide_index=True)
                 st.write("**Non-GMO Audit**")
                 if blob.get("non_gmo_audit"):
-                    st.dataframe(pd.DataFrame([blob["non_gmo_audit"]]), use_container_width=True, hide_index=True)
+                    st.dataframe(pd.DataFrame([blob["non_gmo_audit"]]), width="stretch", hide_index=True)
             with col_right:
                 st.write("**Omega-3 Audit**")
                 if blob.get("omega3_audit"):
-                    st.dataframe(pd.DataFrame([blob["omega3_audit"]]), use_container_width=True, hide_index=True)
+                    st.dataframe(pd.DataFrame([blob["omega3_audit"]]), width="stretch", hide_index=True)
                 st.write("**Proprietary Blend Audit**")
                 if blob.get("proprietary_blend_audit"):
-                    st.dataframe(pd.DataFrame([blob["proprietary_blend_audit"]]), use_container_width=True, hide_index=True)
+                    st.dataframe(pd.DataFrame([blob["proprietary_blend_audit"]]), width="stretch", hide_index=True)
         else:
             st.caption("Audit evidence unavailable without detail blob.")
 

@@ -13,31 +13,17 @@ The refreshed UI is organized as an executive analytics workspace with:
 
 Run commands from the repository root:
 
-`/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie`
-
-Do not `cd` into `.venv`. Use the virtualenv binary from the repo root, or activate the virtualenv first.
-
-Use the project virtualenv:
-
 ```bash
-cd /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie
-.venv/bin/streamlit run scripts/dashboard/app.py
-```
-
-Alternative with an activated shell:
-
-```bash
-cd /Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie
-source .venv/bin/activate
+cd /Users/seancheick/Downloads/dsld_clean
 streamlit run scripts/dashboard/app.py
 ```
 
 Optional explicit paths:
 
 ```bash
-.venv/bin/streamlit run scripts/dashboard/app.py -- \
+streamlit run scripts/dashboard/app.py -- \
   --scan-dir scripts/products \
-  --build-root scripts/final_db_output
+  --build-root scripts/dist
 ```
 
 Open a specific view directly after launch with `?view=`:
@@ -46,6 +32,7 @@ Open a specific view directly after launch with `?view=`:
 - `product-inspector`
 - `pipeline-health`
 - `data-quality`
+- `section-a-audit`
 - `observability`
 - `release-diff`
 - `batch-diff`
@@ -55,20 +42,20 @@ Open a specific view directly after launch with `?view=`:
 
 The dashboard reads existing pipeline artifacts only.
 
-- Release artifacts from `scripts/final_db_output/`
+- Release artifacts from `scripts/dist/`
   - `pharmaguide_core.db`
   - `export_manifest.json`
-  - `export_audit_report.json`
-  - `detail_index.json`
-  - `detail_blobs/*.json`
-- Dataset and batch artifacts from `scripts/products/`
+  - `export_audit_report.json` (optional)
+  - `detail_index.json` (optional)
+  - `detail_blobs/*.json` (optional)
+- Dataset and batch artifacts from `scripts/products/` (if present)
   - `output_*/`
   - `logs/processing_state.json`
   - `logs/batch_*_log.txt`
 
 Important: the dashboard intentionally blends different data planes.
 
-- `Release Snapshot` comes from `scripts/final_db_output/`
+- `Release Snapshot` comes from `scripts/dist/`
 - `Pipeline Logs` come from `scripts/products/logs/`
 - `Dataset Outputs` come from `scripts/products/output_*`
 
@@ -79,7 +66,7 @@ Those timelines may not match. The UI now labels that explicitly per page.
 Primary dashboard verification:
 
 ```bash
-.venv/bin/python -m pytest -q \
+python3 -m pytest -q \
   scripts/tests/test_dashboard_navigation.py \
   scripts/tests/test_dashboard_app_shell.py \
   scripts/tests/test_dashboard_page_meta.py \

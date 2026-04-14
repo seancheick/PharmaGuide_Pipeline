@@ -8,13 +8,13 @@ from pathlib import Path
 @dataclass
 class DashboardConfig:
     scan_dir: Path          # default: scripts/products/
-    build_root: Path        # default: scripts/final_db_output/
+    build_root: Path        # default: scripts/dist/
     dataset_root: Path | None = None
 
 def get_config() -> DashboardConfig:
     parser = argparse.ArgumentParser(description="PharmaGuide Dashboard Config")
     parser.add_argument("--scan-dir", type=str, default="scripts/products/", help="Directory to scan for pipeline reports")
-    parser.add_argument("--build-root", type=str, default="scripts/final_db_output/", help="Directory containing the final DB and manifest")
+    parser.add_argument("--build-root", type=str, default="scripts/dist/", help="Directory containing the final DB and manifest")
     parser.add_argument("--dataset-root", type=str, default=None, help="Optional specific dataset root")
 
     # Streamlit passes args after `--` in `streamlit run app.py -- --scan-dir=...`

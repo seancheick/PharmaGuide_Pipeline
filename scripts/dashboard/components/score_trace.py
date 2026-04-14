@@ -172,7 +172,7 @@ def score_trace(section_breakdown: dict, bonuses: list[dict], penalties: list[di
     st.write("#### Detailed Component Breakdown")
     for section in model["section_models"]:
         st.write(f"**{section['section']}** (Score: {section['score']:.1f}/{section['max']:.1f})")
-        st.dataframe(pd.DataFrame(section["rows"]), use_container_width=True, hide_index=True, height=280)
+        st.dataframe(pd.DataFrame(section["rows"]), width="stretch", hide_index=True, height=280)
 
     probiotic_breakdown = (
         section_breakdown.get("ingredient_quality", {})
@@ -187,23 +187,23 @@ def score_trace(section_breakdown: dict, bonuses: list[dict], penalties: list[di
         if checks:
             st.dataframe(
                 pd.DataFrame([{"check": key, "passed": value} for key, value in checks.items()]),
-                use_container_width=True,
+                width="stretch",
                 hide_index=True,
                 height=220,
             )
         if inputs:
             st.dataframe(
-                pd.DataFrame([{"field": key, "value": value} for key, value in inputs.items()]),
-                use_container_width=True,
+                pd.DataFrame([{"field": key, "value": str(value)} for key, value in inputs.items()]),
+                width="stretch",
                 hide_index=True,
                 height=220,
             )
 
     st.write("#### Section Totals")
-    st.dataframe(pd.DataFrame(model["section_rows"]), use_container_width=True, height=220, hide_index=True)
+    st.dataframe(pd.DataFrame(model["section_rows"]), width="stretch", height=220, hide_index=True)
 
     st.write("#### Running Score Trace")
-    st.dataframe(pd.DataFrame(model["overall_rows"]), use_container_width=True, height=320, hide_index=True)
+    st.dataframe(pd.DataFrame(model["overall_rows"]), width="stretch", height=320, hide_index=True)
 
     st.write("#### Final Score Math")
     st.markdown(

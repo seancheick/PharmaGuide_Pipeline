@@ -3,17 +3,7 @@ from __future__ import annotations
 import pandas as pd
 import streamlit as st
 
-
-def _safe_columns(spec):
-    try:
-        columns = st.columns(spec)
-        expected = spec if isinstance(spec, int) else len(spec)
-        if isinstance(columns, (list, tuple)) and len(columns) >= expected:
-            return list(columns[:expected])
-    except Exception:
-        pass
-    fallback_count = spec if isinstance(spec, int) else len(spec)
-    return [st for _ in range(fallback_count)]
+from scripts.dashboard.components import _safe_columns
 
 
 def render_batch_diff(data):
@@ -51,4 +41,4 @@ def render_batch_diff(data):
                 "errors_b": len(candidate_state.get("errors", [])),
             }
         )
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)

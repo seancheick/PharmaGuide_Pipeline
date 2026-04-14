@@ -59,4 +59,4 @@ def data_table(
             },
         ]
     )
-    st.dataframe(styled_df, use_container_width=True, height=height)
+    st.dataframe(styled_df, width="stretch", height=height)

@@ -155,7 +155,7 @@ def _render_section_a_summary(section_a_data: dict, probiotic_issues: dict):
     st.write("### Section A Quality Summary")
 
     if not section_a_data["products"]:
-        st.info("No scoring data available")
+        st.info("No scoring data available.")
         return
 
     total_products = len(section_a_data["products"])
@@ -181,7 +181,7 @@ def _render_score_distribution(section_a_data: dict):
     st.write("### Section A Score Distribution")
 
     if not section_a_data["scores"]:
-        st.info("No scoring data available")
+        st.info("No scoring data available.")
         return
 
     # Threshold slider
@@ -217,7 +217,7 @@ def _render_score_distribution(section_a_data: dict):
         )
 
         fig.update_xaxes(range=[0, 25])
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     # Show counts
     below_threshold = sum(1 for s in section_a_data["scores"] if s < threshold)
@@ -229,7 +229,7 @@ def _render_below_threshold(section_a_data: dict):
     st.write("### Products Below Threshold")
 
     if not section_a_data["products"]:
-        st.info("No data available")
+        st.info("No data available.")
         return
 
     # Filters
@@ -271,7 +271,7 @@ def _render_below_threshold(section_a_data: dict):
             for p in filtered_products
         ])
 
-        st.dataframe(df, use_container_width=True, height=400)
+        st.dataframe(df, width="stretch", height=400)
 
         # Export option
         csv = df.to_csv(index=False)
@@ -286,7 +286,7 @@ def _render_below_threshold(section_a_data: dict):
 def _render_ceiling_hits(section_a_data: dict):
     st.write("### Highest Section A Scores")
     if not section_a_data["products"]:
-        st.info("No data available")
+        st.info("No data available.")
         return
 
     threshold = st.slider("Ceiling proximity", min_value=0.0, max_value=25.0, value=20.0, step=0.5)
@@ -312,7 +312,7 @@ def _render_ceiling_hits(section_a_data: dict):
             for p in rows[:500]
         ]
     )
-    st.dataframe(frame, use_container_width=True, height=380, hide_index=True)
+    st.dataframe(frame, width="stretch", height=380, hide_index=True)
 
 
 def _render_probiotic_issues(probiotic_issues: dict, section_a_data: dict):
@@ -346,7 +346,7 @@ def _render_probiotic_issues(probiotic_issues: dict, section_a_data: dict):
 def _render_probiotic_table(products: list):
     """Render a table of probiotic products."""
     if not products:
-        st.info("No products to display")
+        st.info("No products to display.")
         return
 
     df = pd.DataFrame([
@@ -361,7 +361,7 @@ def _render_probiotic_table(products: list):
         for p in products[:500]  # Limit to 500 for performance
     ])
 
-    st.dataframe(df, use_container_width=True, height=300)
+    st.dataframe(df, width="stretch", height=300)
 
     if len(products) > 500:
         st.caption(f"Showing 500 of {len(products)} products")
@@ -386,7 +386,7 @@ def _render_detailed_analysis(section_a_data: dict, probiotic_issues: dict):
                 title="Products by Verdict",
                 labels={"index": "Verdict", "count": "Count"},
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
     with col2:
         st.write("#### Supplement Type Distribution")
@@ -401,7 +401,7 @@ def _render_detailed_analysis(section_a_data: dict, probiotic_issues: dict):
                 title="Products by Type",
                 labels={"index": "Type", "count": "Count"},
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
 
     st.divider()
 

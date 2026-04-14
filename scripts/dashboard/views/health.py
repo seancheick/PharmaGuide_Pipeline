@@ -41,7 +41,7 @@ def _render_release_card(data):
     artifact_rows = []
     for key, present in data.release_artifact_status.items():
         artifact_rows.append({"artifact": key.replace("_", " ").title(), "status": "Present" if present else "Missing"})
-    st.dataframe(pd.DataFrame(artifact_rows), use_container_width=True, hide_index=True, height=240)
+    st.dataframe(pd.DataFrame(artifact_rows), width="stretch", hide_index=True, height=240)
 
 
 def _render_release_gate(data):
@@ -105,7 +105,7 @@ def _render_latest_batch(data):
         metric_row(batch_metrics)
         st.dataframe(
             pd.DataFrame(snapshot.get("datasets", [])),
-            use_container_width=True,
+            width="stretch",
             hide_index=True,
             height=260,
         )
@@ -148,7 +148,7 @@ def _render_latest_batch(data):
                 "stage_rail": _format_stage_rail(details.get("stage_marks", {})),
             }
         )
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True, height=260)
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True, height=260)
 
     with st.expander("Latest batch errors"):
         if latest.get("error_lines"):
@@ -268,13 +268,13 @@ def _render_processing_state(data):
         return
 
     rows = [
-        {"field": "Started", "value": format_dashboard_datetime(state.get("started"), include_timezone=True)},
-        {"field": "Last updated", "value": format_dashboard_datetime(state.get("last_updated"), include_timezone=True)},
+        {"field": "Started", "value": str(format_dashboard_datetime(state.get("started"), include_timezone=True))},
+        {"field": "Last updated", "value": str(format_dashboard_datetime(state.get("last_updated"), include_timezone=True))},
         {"field": "Progress", "value": f"{state.get('processed_files', 0)} / {state.get('total_files', 0)} files"},
-        {"field": "Can resume", "value": state.get("can_resume")},
-        {"field": "Errors", "value": len(state.get("errors", []))},
+        {"field": "Can resume", "value": str(state.get("can_resume"))},
+        {"field": "Errors", "value": str(len(state.get("errors", [])))},
     ]
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True, height=240)
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True, height=240)
 
 
 def _render_missing_artifacts(data):
@@ -298,7 +298,7 @@ def _render_missing_artifacts(data):
             }
         )
     df = pd.DataFrame(rows).sort_values(["error_files", "cleaned_files"], ascending=[False, False])
-    st.dataframe(df, use_container_width=True, hide_index=True, height=300)
+    st.dataframe(df, width="stretch", hide_index=True, height=300)
 
 
 def _render_batch_history(data):
@@ -319,4 +319,4 @@ def _render_batch_history(data):
                 "datasets": ", ".join(entry.get("datasets", {}).keys()),
             }
         )
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True, height=320)
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True, height=320)

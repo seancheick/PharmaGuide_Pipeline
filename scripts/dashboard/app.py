@@ -24,12 +24,15 @@ from scripts.dashboard.time_format import format_dashboard_datetime
 from scripts.dashboard.views import (
     render_inspector,
     render_health,
-    render_quality, 
+    render_quality,
     render_observability,
     render_diff,
     render_batch_diff,
     render_intelligence,
     render_audit_section_a,
+    render_audit_section_b,
+    render_audit_section_c,
+    render_audit_section_d,
 )
 
 # --- Page Setup ---
@@ -107,10 +110,7 @@ if st.sidebar.button("🔄 Force Data Refresh"):
     st.rerun()
 
 st.sidebar.divider()
-st.sidebar.caption("Data planes")
-st.sidebar.caption("Release Snapshot")
-st.sidebar.caption("Pipeline Logs")
-st.sidebar.caption("Dataset Outputs")
+st.sidebar.caption("Data planes: Release Snapshot · Pipeline Logs · Dataset Outputs")
 st.sidebar.divider()
 st.sidebar.caption(f"Last export: {format_dashboard_datetime(data.latest_export_at, style='compact')}")
 st.sidebar.caption(f"Last batch: {format_dashboard_datetime(data.latest_batch_at, style='compact')}")
@@ -160,6 +160,12 @@ def _render_current_view() -> None:
         render_quality(data)
     elif view == "Section A Audit":
         render_audit_section_a(data)
+    elif view == "Section B Audit":
+        render_audit_section_b(data)
+    elif view == "Section C Audit":
+        render_audit_section_c(data)
+    elif view == "Section D Audit":
+        render_audit_section_d(data)
     elif view == "Observability":
         render_observability(data)
     elif view == "Release Diff":

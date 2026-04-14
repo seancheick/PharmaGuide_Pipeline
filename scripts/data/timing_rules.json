@@ -3,8 +3,8 @@
     "description": "Supplement timing and absorption interaction rules for optimal nutrient uptake",
     "purpose": "timing_optimization",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-12",
-    "total_entries": 39
+    "last_updated": "2026-04-14",
+    "total_entries": 42
   },
   "timing_rules": [
     {
@@ -90,10 +90,10 @@
       "ingredient2": "magnesium",
       "rule_type": "separate",
       "advice": "Take iron and magnesium at least 2 hours apart — magnesium can reduce non-heme iron absorption.",
-      "mechanism": "Magnesium at high supplemental doses competes with non-heme iron for divalent mineral transporters in the proximal small intestine.",
+      "mechanism": "Magnesium at high supplemental doses may interfere with non-heme iron absorption, though the mechanism is less clear than for calcium or zinc. Magnesium is primarily absorbed via TRPM6/TRPM7 channels, not DMT1, so direct transporter competition is limited. The interaction is most relevant at high doses (>400 mg) and the clinical significance is debated.",
       "separation_hours": 2,
       "score_impact": -1,
-      "evidence_level": "probable",
+      "evidence_level": "possible",
       "sources": [
         {
           "source_type": "reference",
@@ -108,7 +108,7 @@
       "ingredient2": "calcium",
       "rule_type": "separate",
       "advice": "Avoid taking iron, calcium, and zinc together — all three compete for the same absorption pathway and significantly reduce each other's uptake.",
-      "mechanism": "Trivalent competition at DMT1 and related transporters; aggregate inhibition at the intestinal brush border is additive when all three minerals are present simultaneously.",
+      "mechanism": "Divalent cation competition at DMT1 and related transporters; aggregate inhibition at the intestinal brush border is additive when all three minerals are present simultaneously.",
       "separation_hours": 2,
       "score_impact": -2,
       "evidence_level": "established",
@@ -151,7 +151,7 @@
       "sources": [
         {
           "source_type": "pubmed",
-          "label": "Christakos S et al. — Vitamin D and intestinal calcium absorption",
+          "label": "Ross AC, Manson JE, Abrams SA et al. — The 2011 IOM report on dietary reference intakes for calcium and vitamin D. J Clin Endocrinol Metab. 2011",
           "url": "https://pubmed.ncbi.nlm.nih.gov/21118827/"
         }
       ]
@@ -259,7 +259,7 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "Gominak SC & Stumpf WE — The world epidemic of sleep disorders is linked to vitamin D deficiency (Med Hypotheses, 2012)",
+          "label": "Gominak WE & Stumpf WE — The world epidemic of sleep disorders is linked to vitamin D deficiency (HYPOTHESIS PAPER, not RCT). Med Hypotheses. 2012",
           "url": "https://pubmed.ncbi.nlm.nih.gov/22583560/"
         }
       ]
@@ -277,8 +277,8 @@
       "sources": [
         {
           "source_type": "reference",
-          "label": "Arendt J & Skene DJ — Melatonin as a chronobiotic (Sleep Med Rev, 2005)",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/15585768/"
+          "label": "Arendt J & Skene DJ — Melatonin as a chronobiotic. Sleep Med Rev. 2005",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15649736/"
         }
       ]
     },
@@ -305,11 +305,11 @@
       "ingredient1": "probiotics",
       "ingredient2": "food",
       "rule_type": "take_on_empty_stomach",
-      "advice": "Take probiotics on an empty stomach or 30 minutes before a meal so bacteria pass through gastric acid quickly and reach the intestine viable.",
-      "mechanism": "Gastric pH drops below 2 postprandially and during active digestion; fasted gastric transit is faster, reducing acid exposure time. Some enteric-coated formulas are exceptions — follow label instructions.",
+      "advice": "Probiotic timing depends on formulation. Enteric-coated capsules can be taken any time. For standard probiotics, taking with a small meal may improve survival. Follow manufacturer guidance when available.",
+      "mechanism": "The optimal timing for probiotics is debated. Fasted gastric pH is actually lower (more acidic, ~1.5-2.0) than postprandial pH (~3-5 due to food buffering). However, fasted gastric transit is faster, reducing total acid exposure time. Some evidence (Tompkins 2011, PMID 22146689) suggests probiotic survival is better WITH a meal containing fat or oatmeal due to acid buffering. Enteric-coated formulations bypass this concern. Net effect depends on strain, formulation, and meal composition.",
       "separation_hours": null,
       "score_impact": -1,
-      "evidence_level": "probable",
+      "evidence_level": "possible",
       "sources": [
         {
           "source_type": "reference",
@@ -438,9 +438,9 @@
       "evidence_level": "possible",
       "sources": [
         {
-          "source_type": "pubmed",
-          "label": "Maret W — Apoptosis induced by chelation of intracellular zinc is associated with depletion of cellular reduced glutathione level",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/10731516/"
+          "source_type": "reference",
+          "label": "Precautionary recommendation based on NAC thiol-metal chelation chemistry. No controlled human clinical trial directly demonstrates this interaction.",
+          "url": "https://lpi.oregonstate.edu/mic/dietary-factors/phytochemicals/N-acetylcysteine"
         }
       ]
     },
@@ -486,7 +486,7 @@
       "ingredient2": "vitamin b12",
       "rule_type": "separate",
       "advice": "Take berberine and B vitamins (especially B12) at different times — berberine may reduce B12 absorption with long-term use.",
-      "mechanism": "Berberine inhibits intestinal PCFT (proton-coupled folate transporter) and may impair active B12 absorption via its effects on gut motility and intestinal enzyme activity; metformin-like effects on intrinsic factor pathway are plausible but less well characterized.",
+      "mechanism": "Berberine may impair B12 absorption through metformin-like effects on ileal intrinsic factor-mediated transport and gut microbiome changes. The precise mechanism is not established — no controlled human trials have directly demonstrated this interaction. The analogy is drawn from metformin's well-documented B12 depletion effect (PMID 10977010, Bauman 2000). Berberine's effects on folate transport (via PCFT) are a separate pathway and do not explain B12 impairment.",
       "separation_hours": 2,
       "score_impact": -1,
       "evidence_level": "possible",
@@ -711,6 +711,65 @@
           "source_type": "reference",
           "label": "NIH Office of Dietary Supplements — Zinc Fact Sheet for Health Professionals",
           "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+        }
+      ]
+    },
+    {
+      "id": "timing_thyroid_med_coffee_separate",
+      "ingredient1": "levothyroxine",
+      "ingredient2": "caffeine",
+      "rule_type": "separate",
+      "advice": "Take levothyroxine at least 60 minutes before coffee — espresso reduces absorption by up to 36%.",
+      "mechanism": "Coffee (especially espresso) reduces levothyroxine absorption by 25-36% when taken concurrently. The mechanism involves altered intestinal motility and pH changes from coffee's chlorogenic acids and other compounds that interfere with T4 dissolution and absorption in the proximal small intestine.",
+      "separation_hours": 1,
+      "score_impact": -2,
+      "evidence_level": "established",
+      "sources": [
+        {
+          "source_type": "pubmed",
+          "label": "Benvenga S et al. — Altered intestinal absorption of L-thyroxine caused by coffee. Thyroid. 2008",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18341376/"
+        }
+      ]
+    },
+    {
+      "id": "timing_calcium_carbonate_with_food",
+      "ingredient1": "calcium carbonate",
+      "ingredient2": "food",
+      "rule_type": "take_with_food",
+      "advice": "Take calcium carbonate with meals — it requires stomach acid to dissolve. Calcium citrate can be taken without food.",
+      "mechanism": "Calcium carbonate requires gastric acid to dissolve and release ionized calcium for absorption. In achlorhydric or fasted conditions, dissolution is markedly impaired. Calcium citrate is pre-solubilized and does not require acid, making it suitable for fasting or for patients on acid-suppressing medications (PPIs, H2 blockers).",
+      "separation_hours": null,
+      "score_impact": -1,
+      "evidence_level": "established",
+      "sources": [
+        {
+          "source_type": "pubmed",
+          "label": "Recker RR — Calcium absorption and achlorhydria. N Engl J Med. 1985",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/4000241/"
+        },
+        {
+          "source_type": "nih_ods",
+          "label": "NIH ODS — Calcium Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+        }
+      ]
+    },
+    {
+      "id": "timing_thyroid_med_soy_separate",
+      "ingredient1": "levothyroxine",
+      "ingredient2": "soy protein",
+      "rule_type": "separate",
+      "advice": "Take levothyroxine at least 4 hours apart from soy protein or soy isoflavone supplements.",
+      "mechanism": "Soy protein and soy isoflavones (genistein, daidzein) can reduce levothyroxine absorption and may also inhibit thyroid peroxidase, compounding the effect in hypothyroid patients. The FDA prescribing information for levothyroxine warns about concurrent soy intake.",
+      "separation_hours": 4,
+      "score_impact": -2,
+      "evidence_level": "established",
+      "sources": [
+        {
+          "source_type": "pubmed",
+          "label": "Messina M & Redmond G — Effects of soy protein and soybean isoflavones on thyroid function. Thyroid. 2006",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16571087/"
         }
       ]
     }

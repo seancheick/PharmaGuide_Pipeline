@@ -8,30 +8,9 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+from scripts.dashboard.components import _safe_columns, _safe_tabs
 from scripts.dashboard.components.metric_cards import metric_card, metric_row
 from scripts.dashboard.time_format import format_dashboard_datetime
-
-
-def _safe_columns(spec):
-    try:
-        columns = st.columns(spec)
-        expected = spec if isinstance(spec, int) else len(spec)
-        if not isinstance(columns, (list, tuple)) or len(columns) < expected:
-            raise ValueError("columns unavailable")
-        return list(columns[:expected])
-    except Exception:
-        fallback_count = spec if isinstance(spec, int) else len(spec)
-        return [st for _ in range(fallback_count)]
-
-
-def _safe_tabs(labels):
-    try:
-        tabs = st.tabs(labels)
-        if not isinstance(tabs, (list, tuple)) or len(tabs) < len(labels):
-            raise ValueError("tabs unavailable")
-        return list(tabs[: len(labels)])
-    except Exception:
-        return [st for _ in labels]
 
 
 def render_observability(data):
@@ -144,9 +123,9 @@ def _render_product_flow(data):
         )
     )
     fig.update_layout(height=380, margin=dict(l=20, r=20, t=20, b=20))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
-    st.dataframe(pd.DataFrame(summary_rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(summary_rows), width="stretch", hide_index=True)
 
 
 def _render_mismatch_tracker(data):
@@ -162,7 +141,7 @@ def _render_mismatch_tracker(data):
             "note": "Products scored without matching enriched record",
         },
     ]
-    st.dataframe(pd.DataFrame(current_rows), use_container_width=True, hide_index=True)
+    st.dataframe(pd.DataFrame(current_rows), width="stretch", hide_index=True)
 
     history_rows = []
     for entry in data.build_history:
@@ -192,7 +171,7 @@ def _render_mismatch_tracker(data):
             title="Mismatch and error trend by build",
         )
         fig.update_layout(height=320)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     dataset_rows = []
     if data.batch_history:
@@ -208,7 +187,7 @@ def _render_mismatch_tracker(data):
             )
     if dataset_rows:
         st.write("### Latest Batch Impact")
-        st.dataframe(pd.DataFrame(dataset_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(dataset_rows), width="stretch", hide_index=True)
 
 
 def _render_export_errors(data):
@@ -228,14 +207,14 @@ def _render_export_errors(data):
     with col1:
         fig = px.bar(top_reasons, x="count", y="classification", color="dataset", orientation="h", title="Top failure reasons")
         fig.update_layout(height=360, yaxis={"categoryorder": "total ascending"})
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     with col2:
-        st.dataframe(top_reasons, use_container_width=True, hide_index=True)
+        st.dataframe(top_reasons, width="stretch", hide_index=True)
 
     st.write("### Error Drill-Down")
     st.dataframe(
         error_df.sort_values(["batch", "dataset", "classification", "dsld_id"], ascending=[False, True, True, True]),
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
 
@@ -256,7 +235,7 @@ def _render_safety_dashboard(data):
             metric_card(label, safety.get(key, 0))
     sample = (data.export_audit or {}).get("products_with_warnings_sample", [])
     if sample:
-        st.dataframe(pd.DataFrame(sample), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(sample), width="stretch", hide_index=True)
 
 
 def _render_analytics(data):
@@ -276,11 +255,11 @@ def _render_analytics(data):
         top_brands = df["brand_name"].value_counts().nlargest(10).index
         fig = px.box(df[df["brand_name"].isin(top_brands)], x="brand_name", y="score", color="brand_name")
         fig.update_layout(showlegend=False, height=360)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     with col2:
         fig = px.scatter(df, x="mapped_coverage", y="score", color="verdict", opacity=0.6)
         fig.update_layout(height=360)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     st.write("### Ingredient Coverage Health")
     coverage_rows = []
@@ -304,9 +283,9 @@ def _render_analytics(data):
                 title="Unmapped ingredient concentration by dataset",
             )
             fig.update_layout(height=340)
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width="stretch")
         with right:
-            st.dataframe(coverage_df.sort_values("unmapped_total", ascending=False), use_container_width=True, hide_index=True)
+            st.dataframe(coverage_df.sort_values("unmapped_total", ascending=False), width="stretch", hide_index=True)
 
 
 def _render_monitoring(data):
@@ -326,7 +305,7 @@ def _render_monitoring(data):
         history_df["generated_at"] = history_df["generated_at"].map(
             lambda value: format_dashboard_datetime(value, style="compact", include_timezone=True)
         )
-        st.dataframe(history_df, use_container_width=True, hide_index=True)
+        st.dataframe(history_df, width="stretch", hide_index=True)
         fig = px.scatter(
             history_df,
             x="generated_at",
@@ -337,7 +316,7 @@ def _render_monitoring(data):
             title="Build timeline",
         )
         fig.update_layout(height=320)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     else:
         st.info("No build history entries discovered.")
 
@@ -376,7 +355,7 @@ def _render_monitoring(data):
         ]
         drift_df = pd.DataFrame(drift_rows)
         drift_df["delta"] = drift_df["current"].fillna(0) - drift_df["prior"].fillna(0)
-        st.dataframe(drift_df, use_container_width=True, hide_index=True)
+        st.dataframe(drift_df, width="stretch", hide_index=True)
         for row in drift_df.to_dict("records"):
             if row["metric"] in {"error_count", "enriched_only_count", "scored_only_count"} and row["delta"] > 0:
                 st.warning(f"Drift alert: {row['metric']} increased by {row['delta']} vs prior build.")
@@ -393,7 +372,7 @@ def _render_monitoring(data):
         )
         fig = px.bar(df, x="batch", y="processing_time")
         fig.update_layout(height=320)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     st.write("### Trend Over Time")
     if len(history) < 2:
@@ -413,13 +392,13 @@ def _render_monitoring(data):
         melted = trend_df.melt(id_vars=["generated_at"], var_name="metric", value_name="value")
         fig = px.line(melted, x="generated_at", y="value", color="metric", markers=True)
         fig.update_layout(height=320)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
 
     st.write("### Data Completeness")
     completeness = data.blob_analytics.get("completeness_records", [])
     if completeness:
         df = pd.DataFrame(completeness[:100])
-        st.dataframe(df[["dsld_id", "product_name", "brand_name", "completeness_pct", "missing_fields"]], use_container_width=True, hide_index=True)
+        st.dataframe(df[["dsld_id", "product_name", "brand_name", "completeness_pct", "missing_fields"]], width="stretch", hide_index=True)
 
     st.write("### Outlier Detector")
     _render_outliers(data)
@@ -472,8 +451,8 @@ def _render_outliers(data):
             if df.empty:
                 st.caption("No rows matched.")
             else:
-                st.dataframe(df.head(100), use_container_width=True, hide_index=True)
-    st.dataframe(pd.DataFrame(rows), use_container_width=True, hide_index=True)
+                st.dataframe(df.head(100), width="stretch", hide_index=True)
+    st.dataframe(pd.DataFrame(rows), width="stretch", hide_index=True)
 
 
 def _render_operations(data):
@@ -492,7 +471,7 @@ def _render_operations(data):
             },
         ]
         st.success("Remote manifest loaded.")
-        st.dataframe(pd.DataFrame(status_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(status_rows), width="stretch", hide_index=True)
     else:
         status_rows = [
             {
@@ -504,7 +483,7 @@ def _render_operations(data):
             {"scope": "remote", "db_version": None, "generated_at": None, "status": "credentials not configured"},
         ]
         st.warning("Credentials not configured; showing local-only status.")
-        st.dataframe(pd.DataFrame(status_rows), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(status_rows), width="stretch", hide_index=True)
 
     st.write("### Storage Health")
     if data.build_root.exists():
@@ -532,7 +511,7 @@ def _render_operations(data):
     st.write("### Safe Cleanup Preview")
     if cleanup_candidates:
         if st.checkbox("Preview cleanup candidates", value=False):
-            st.dataframe(pd.DataFrame(cleanup_candidates), use_container_width=True, hide_index=True)
+            st.dataframe(pd.DataFrame(cleanup_candidates), width="stretch", hide_index=True)
             st.warning("Preview only. This dashboard does not delete files.")
     else:
         st.info("No older build directories available for cleanup preview.")

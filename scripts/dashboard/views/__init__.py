@@ -6,3 +6,6 @@ from .diff import render_diff
 from .batch_diff import render_batch_diff
 from .intelligence import render_intelligence
 from .audit_section_a import render_audit_section_a
+from .audit_section_b import render_audit_section_b
+from .audit_section_c import render_audit_section_c
+from .audit_section_d import render_audit_section_d

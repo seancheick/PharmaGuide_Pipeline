@@ -1748,7 +1748,13 @@ class TestDescriptorLeakageRegression:
 
 
 class TestHarmfulPrecedenceRegression:
-    """Harmful identities must beat scorable or benign overlap paths."""
+    """Harmful additive recognition must not block IQM scoring.
+
+    Ingredients in BOTH harmful_additives AND IQM receive:
+      - Section A quality score (IQM)
+      - Section B1 penalty (harmful_additives)
+    These are independent concerns.  See test_harmful_iqm_dual_scoring.py.
+    """
 
     @pytest.fixture
     def enricher(self):
@@ -1768,15 +1774,12 @@ class TestHarmfulPrecedenceRegression:
             "Senna",
             "Silicon Dioxide",
             "Copper Sulfate",
-            # "synthetic folate" and "synthetic vitamin e" removed: preprocess_text strips
-            # "synthetic" prefix, leaving "folate"/"vitamin e" which falsely blocks real
-            # folate/vitamin E ingredients. Covered by specific aliases: dl-alpha tocopherol,
-            # pteroylmonoglutamic acid for the actual synthetic compound forms.
         ],
     )
-    def test_harmful_overlap_is_skipped_before_active_quality_scoring(
+    def test_harmful_iqm_dual_classified_is_scored_not_skipped(
         self, enricher, quality_map, botanicals_db, name
     ):
+        """IQM-known ingredients in harmful_additives must be scored, not skipped."""
         ingredient = {
             "name": name,
             "standardName": name,
@@ -1786,7 +1789,12 @@ class TestHarmfulPrecedenceRegression:
 
         skip_reason = enricher._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
 
-        assert skip_reason == SKIP_REASON_RECOGNIZED_NON_SCORABLE
+        # These are in both IQM and harmful_additives — IQM wins for scoring,
+        # harmful_additives penalty is applied separately in Section B1.
+        assert skip_reason is None, (
+            f"{name} is in IQM and should be scored (skip=None), not skipped. "
+            f"Got skip_reason={skip_reason}"
+        )
 
     @pytest.mark.parametrize(
         "name,expected_id",

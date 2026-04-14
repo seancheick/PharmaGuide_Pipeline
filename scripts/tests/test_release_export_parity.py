@@ -3,6 +3,7 @@ import sqlite3
 import sys
 from pathlib import Path
 
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -10,6 +11,9 @@ from build_final_db import build_detail_blob, resolve_export_supplement_type
 
 
 BUILD_ROOT = Path("scripts/final_db_output")
+
+_BUILD_EXISTS = BUILD_ROOT.exists() and (BUILD_ROOT / "export_manifest.json").exists()
+_SKIP_MSG = "final_db_output not present — run build_final_db.py first"
 PRODUCTS_ROOT = Path("scripts/products")
 
 
@@ -40,6 +44,7 @@ def _load_products(directories: list[Path]) -> dict[str, dict]:
     return products
 
 
+@pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
 def test_release_export_counts_and_index_parity():
     enriched_lookup = _load_products(ENRICHED_DIRS)
     scored_lookup = _load_products(SCORED_DIRS)
@@ -63,6 +68,7 @@ def test_release_export_counts_and_index_parity():
     assert not audit["contract_failures"]
 
 
+@pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
 def test_release_export_matches_source_scored_and_resolved_type():
     enriched_lookup = _load_products(ENRICHED_DIRS)
     scored_lookup = _load_products(SCORED_DIRS)
@@ -102,6 +108,7 @@ def test_release_export_matches_source_scored_and_resolved_type():
         assert row["mapped_coverage"] == expected_coverage
 
 
+@pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
 def test_release_detail_blobs_match_recomputed_export_contract():
     enriched_lookup = _load_products(ENRICHED_DIRS)
     scored_lookup = _load_products(SCORED_DIRS)

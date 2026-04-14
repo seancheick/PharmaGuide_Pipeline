@@ -53,7 +53,7 @@ def render_command_center(data) -> None:
                 },
             ]
         )
-        st.dataframe(timeline_rows, use_container_width=True, hide_index=True)
+        st.dataframe(timeline_rows, width="stretch", hide_index=True)
 
         if getattr(data, "latest_export_at", None) and getattr(data, "latest_batch_at", None) and data.latest_batch_at > data.latest_export_at:
             st.warning(
@@ -71,7 +71,7 @@ def render_command_center(data) -> None:
             attention.append({"priority": "Medium", "issue": "Mismatch counts detected across pipeline stages", "go_to": "Observability"})
         if not attention:
             attention.append({"priority": "Normal", "issue": "No urgent blockers under current thresholds", "go_to": "Pipeline Health"})
-        st.dataframe(pd.DataFrame(attention), use_container_width=True, hide_index=True)
+        st.dataframe(pd.DataFrame(attention), width="stretch", hide_index=True)
 
     st.markdown("#### Navigate By Question")
     shortcuts = pd.DataFrame(
@@ -84,4 +84,4 @@ def render_command_center(data) -> None:
             {"question": "Which brands and ingredients look strongest?", "view": "Intelligence"},
         ]
     )
-    st.dataframe(shortcuts, use_container_width=True, hide_index=True)
+    st.dataframe(shortcuts, width="stretch", hide_index=True)

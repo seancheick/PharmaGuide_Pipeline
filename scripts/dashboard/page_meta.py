@@ -110,6 +110,58 @@ PAGE_META: dict[str, dict[str, Any]] = {
             "Use this page for cross-product insights, not pipeline run diagnosis.",
         ],
     },
+    "section-a-audit": {
+        "page_title": "Section A Audit",
+        "page_summary": "Deep-dive into ingredient quality (Section A) scoring: low-scoring products, probiotic CFU detection, and IQM coverage gaps.",
+        "data_planes": ["Release Snapshot", "Dataset Outputs"],
+        "source_paths": ["release_db", "dataset_outputs"],
+        "freshness_fields": ["latest_export_at", "latest_dataset_activity"],
+        "mixed_plane_warning": "Section A audit combines release snapshot scores with dataset-level ingredient detail.",
+        "related_views": ["Data Quality", "Section B Audit", "Product Inspector"],
+        "usage_notes": [
+            "Use audit filters to isolate brands or categories with low Section A scores.",
+            "Check probiotic CFU detection rates if supplement type includes probiotics.",
+        ],
+    },
+    "section-b-audit": {
+        "page_title": "Section B Audit",
+        "page_summary": "Safety and purity audit: banned substances, recalled ingredients, harmful additives, allergen risks, and dose safety analysis.",
+        "data_planes": ["Release Snapshot"],
+        "source_paths": ["release_db"],
+        "freshness_fields": ["latest_export_at"],
+        "mixed_plane_warning": "",
+        "related_views": ["Section A Audit", "Section C Audit", "Data Quality"],
+        "usage_notes": [
+            "Use safety flag filters to isolate products with specific risk types.",
+            "Check the blocked/unsafe tab for products that failed the safety gate.",
+        ],
+    },
+    "section-c-audit": {
+        "page_title": "Section C Audit",
+        "page_summary": "Evidence and research audit: clinical backing coverage, zero-evidence products, and evidence strength gaps by brand and type.",
+        "data_planes": ["Release Snapshot"],
+        "source_paths": ["release_db"],
+        "freshness_fields": ["latest_export_at"],
+        "mixed_plane_warning": "",
+        "related_views": ["Section A Audit", "Section D Audit", "Intelligence"],
+        "usage_notes": [
+            "Focus on SAFE products with zero evidence — these are the best candidates for clinical study enrichment.",
+            "Compare evidence coverage across supplement types to prioritize research investment.",
+        ],
+    },
+    "section-d-audit": {
+        "page_title": "Section D Audit",
+        "page_summary": "Brand trust audit: manufacturer reputation, third-party testing, full disclosure, and certification gap analysis.",
+        "data_planes": ["Release Snapshot"],
+        "source_paths": ["release_db"],
+        "freshness_fields": ["latest_export_at"],
+        "mixed_plane_warning": "",
+        "related_views": ["Section B Audit", "Section C Audit", "Intelligence"],
+        "usage_notes": [
+            "Use trust gaps tab to find SAFE products that could score higher with better manufacturer data.",
+            "Brand leaderboard shows which manufacturers have the strongest trust signals.",
+        ],
+    },
 }
 
 

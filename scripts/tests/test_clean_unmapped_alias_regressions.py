@@ -1034,7 +1034,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("North Atlantic Kelp", "Brown Kelp"),
         ("Blueberry, Wild", "Blueberry"),
         ("L-Alpha-Glycerylphosphorylcholine", "Alpha GPC"),
-        ("Isatis", "Woad"),
+        ("Isatis", "Isatis tinctoria"),
         ("Pycrinil Artichoke (Cynara cardunculus) leaf extract", "Globe Artichoke"),
         ("Alfalfa (Medicago sativa) aerial part extract", "Alfalfa"),
         ("Ivy extract", "Ivy"),

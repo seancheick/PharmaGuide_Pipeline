@@ -13,6 +13,9 @@ PAGE_DEFINITIONS = [
     ("Pipeline", "Batch Diff", "batch-diff"),
     ("Quality", "Data Quality", "data-quality"),
     ("Quality", "Section A Audit", "section-a-audit"),
+    ("Quality", "Section B Audit", "section-b-audit"),
+    ("Quality", "Section C Audit", "section-c-audit"),
+    ("Quality", "Section D Audit", "section-d-audit"),
     ("Intelligence", "Intelligence", "intelligence"),
 ]
 

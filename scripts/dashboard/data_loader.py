@@ -505,7 +505,17 @@ def _load_product_catalog(db_conn: sqlite3.Connection | None) -> pd.DataFrame:
             {has_banned_substance},
             {has_recalled_ingredient},
             {has_harmful_additives},
-            {has_allergen_risks}
+            {has_allergen_risks},
+            {score_safety_purity},
+            {score_safety_purity_max},
+            {score_evidence_research},
+            {score_evidence_research_max},
+            {score_brand_trust},
+            {score_brand_trust_max},
+            {is_trusted_manufacturer},
+            {has_third_party_testing},
+            {has_full_disclosure},
+            {blocking_reason}
         FROM products_core
     """.format(
         dsld_id=select_expr("dsld_id"),
@@ -525,6 +535,16 @@ def _load_product_catalog(db_conn: sqlite3.Connection | None) -> pd.DataFrame:
         has_recalled_ingredient=select_expr("has_recalled_ingredient"),
         has_harmful_additives=select_expr("has_harmful_additives"),
         has_allergen_risks=select_expr("has_allergen_risks"),
+        score_safety_purity=select_expr("score_safety_purity", "section_b_score"),
+        score_safety_purity_max=select_expr("score_safety_purity_max", "section_b_max"),
+        score_evidence_research=select_expr("score_evidence_research", "section_c_score"),
+        score_evidence_research_max=select_expr("score_evidence_research_max", "section_c_max"),
+        score_brand_trust=select_expr("score_brand_trust", "section_d_score"),
+        score_brand_trust_max=select_expr("score_brand_trust_max", "section_d_max"),
+        is_trusted_manufacturer=select_expr("is_trusted_manufacturer"),
+        has_third_party_testing=select_expr("has_third_party_testing"),
+        has_full_disclosure=select_expr("has_full_disclosure"),
+        blocking_reason=select_expr("blocking_reason"),
     )
     frame = pd.read_sql_query(query, db_conn)
     if frame.empty:
@@ -769,7 +789,7 @@ def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Conn
             {
                 "driver": label,
                 "count": len(scores),
-                "avg_impact": round(sum(scores) / len(scores), 2),
+                "avg_impact": round(sum(scores) / len(scores), 2) if scores else 0.0,
             }
         )
     driver_rows.sort(key=lambda row: abs(row["avg_impact"]), reverse=True)
@@ -812,6 +832,142 @@ def _compute_blob_analytics(detail_blobs_dir: Path | None, db_conn: sqlite3.Conn
         "ingredient_products": dict(ingredient_products),
         "product_explainers": product_explainers,
         "completeness_records": completeness_records,
+    }
+
+
+def _compute_blob_analytics_from_db(db_conn: sqlite3.Connection | None) -> dict[str, Any]:
+    """Fallback analytics computed from the SQLite DB when detail blobs are unavailable."""
+    if db_conn is None:
+        return {}
+
+    import json as _json
+
+    # Bonus/penalty frequency from badges and safety flags
+    bonus_counts: Counter[str] = Counter()
+    penalty_counts: Counter[str] = Counter()
+    driver_impacts: defaultdict[str, list[float]] = defaultdict(list)
+
+    rows = db_conn.execute(
+        """SELECT has_banned_substance, has_recalled_ingredient,
+                  has_harmful_additives, has_allergen_risks, has_third_party_testing,
+                  has_full_disclosure, is_organic, is_non_gmo, is_trusted_manufacturer,
+                  score_ingredient_quality, score_safety_purity,
+                  score_evidence_research, score_brand_trust
+           FROM products_core"""
+    ).fetchall()
+
+    for (banned, recalled, harmful, allergens, tpt, fd, organic, nongmo,
+         trusted, s_iq, s_sp, s_er, s_bt) in rows:
+        # Bonuses
+        if tpt:
+            bonus_counts["Third-party tested"] += 1
+        if fd:
+            bonus_counts["Full disclosure"] += 1
+        if organic:
+            bonus_counts["Organic"] += 1
+        if nongmo:
+            bonus_counts["Non-GMO"] += 1
+        if trusted:
+            bonus_counts["Trusted manufacturer"] += 1
+        # Penalties
+        if banned:
+            penalty_counts["Banned substance"] += 1
+        if recalled:
+            penalty_counts["Recalled ingredient"] += 1
+        if harmful:
+            penalty_counts["Harmful additives"] += 1
+        if allergens:
+            penalty_counts["Allergen risks"] += 1
+        # Section drivers
+        if s_iq is not None:
+            driver_impacts["Ingredient Quality (A)"].append(float(s_iq))
+        if s_sp is not None:
+            driver_impacts["Safety & Purity (B)"].append(float(s_sp))
+        if s_er is not None:
+            driver_impacts["Evidence & Research (C)"].append(float(s_er))
+        if s_bt is not None:
+            driver_impacts["Brand Trust (D)"].append(float(s_bt))
+
+    bonus_rows = [{"label": label, "count": count}
+                  for label, count in bonus_counts.most_common(25)]
+    penalty_rows = [{"label": label, "count": count}
+                    for label, count in penalty_counts.most_common(25)]
+    driver_rows = []
+    for label, scores in driver_impacts.items():
+        if scores:
+            driver_rows.append({
+                "driver": label,
+                "count": len(scores),
+                "avg_impact": round(sum(scores) / len(scores), 2) if scores else 0.0,
+            })
+    driver_rows.sort(key=lambda r: abs(r["avg_impact"]), reverse=True)
+
+    # High-risk ingredients from safety flags — one row per flag type
+    flag_map = {
+        "Banned substances": "has_banned_substance",
+        "Recalled ingredients": "has_recalled_ingredient",
+        "Harmful additives": "has_harmful_additives",
+        "Allergen risks": "has_allergen_risks",
+    }
+    high_risk_rows = []
+    for label, col in flag_map.items():
+        row = db_conn.execute(
+            f"SELECT COUNT(*) FROM products_core WHERE {col} = 1"
+        ).fetchone()
+        count = row[0] if row else 0
+        if count > 0:
+            high_risk_rows.append({
+                "ingredient_name": label,
+                "occurrences": count,
+                "risk_product_count": count,
+                "unsafe_product_count": 0,
+                "banned_hits": count if "banned" in col else 0,
+                "recalled_hits": count if "recalled" in col else 0,
+                "harmful_hits": count if "harmful" in col else 0,
+                "allergen_hits": count if "allergen" in col else 0,
+            })
+    high_risk_rows.sort(key=lambda r: r["risk_product_count"], reverse=True)
+
+    # Product explainers from decision_highlights
+    explainer_rows = []
+    dh_rows = db_conn.execute(
+        """SELECT dsld_id, product_name, brand_name, decision_highlights,
+                  score_100_equivalent, supplement_type
+           FROM products_core
+           WHERE decision_highlights IS NOT NULL AND decision_highlights != ''
+           ORDER BY score_100_equivalent DESC
+           LIMIT 200"""
+    ).fetchall()
+    for dsld_id, name, brand, dh_raw, score, stype in dh_rows:
+        try:
+            dh = _json.loads(dh_raw)
+            explanation = dh.get("positive", "")
+            if dh.get("caution"):
+                explanation += f" {dh['caution']}"
+        except (ValueError, TypeError):
+            explanation = ""
+        explainer_rows.append({
+            "dsld_id": dsld_id,
+            "product_name": name,
+            "brand_name": brand,
+            "score": score,
+            "supplement_type": stype,
+            "explanation": explanation or "No explainer available.",
+            "top_bonuses": [],
+            "top_penalties": [],
+        })
+
+    return {
+        "ingredient_forms": [],
+        "ingredient_usage": [],
+        "high_risk_ingredients": high_risk_rows[:50],
+        "low_quality_ingredients": [],
+        "bonus_frequency": bonus_rows,
+        "penalty_frequency": penalty_rows,
+        "driver_impacts": driver_rows[:50],
+        "ingredient_products": {},
+        "product_explainers": explainer_rows,
+        "completeness_records": [],
     }
 
 
@@ -983,6 +1139,9 @@ def load_dashboard_data(config: Any) -> DashboardData:
 
     data.shared_metrics = _compute_shared_metrics(data.db_conn, data.export_manifest, data.export_audit, data.integrity_data)
     data.blob_analytics = _compute_blob_analytics(data.detail_blobs_dir, data.db_conn)
+    # Fallback: if detail blobs are missing, compute analytics from the DB
+    if not data.blob_analytics.get("bonus_frequency") and data.db_conn is not None:
+        data.blob_analytics = _compute_blob_analytics_from_db(data.db_conn)
     data.product_catalog = _load_product_catalog(data.db_conn)
 
     return data

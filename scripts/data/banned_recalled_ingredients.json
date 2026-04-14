@@ -3,7 +3,7 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-23",
+    "last_updated": "2026-04-14",
     "total_entries": 143,
     "data_source_metadata": {
       "sources": [
@@ -309,6 +309,16 @@
             "Documented approved null-CUI statuses and the rule to add exact aliases before accepting a null CUI",
             "Expanded alias normalization for eight intentional-null research-chemical entries to cover common spaced, hyphenated, and registry-style variants",
             "Confirmed 25 intentional null-CUI records are documented rather than unresolved"
+          ]
+        },
+        {
+          "version": "5.0.4",
+          "date": "2026-04-14",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Weekly FDA sync (7-day scan 2026-04-07 to 2026-04-14): 0 new entries added",
+            "Filtered 3 false positives: 2 processing defects (Imu-Tek Colostrum), 1 allergen labeling (Divided Sunset Collagen)",
+            "Re-verified 3 stale historical recalls (Hydroxycut, Jack3d, OxyElite Pro) — all match_mode=historical confirmed correct"
           ]
         }
       ],
@@ -1041,7 +1051,13 @@
         "case_sensitive": false,
         "priority": 1,
         "match_type": "normalized",
-        "confidence": "high"
+        "confidence": "high",
+        "negative_match_terms": [
+          "prasterone",
+          "micronized dhea",
+          "dhea-s",
+          "dhea sulfate"
+        ]
       },
       "entity_type": "ingredient",
       "legal_status_enum": "restricted",
@@ -1859,7 +1875,18 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "dim",
+          "diindolylmethane",
+          "i3c",
+          "indole-3-carbinol",
+          "blocks xenoestrogens",
+          "anti-xenoestrogen",
+          "xenoestrogen blocker",
+          "bioidentical",
+          "phytoestrogen",
+          "natural estrogen"
+        ]
       },
       "references_structured": [
         {
@@ -2080,7 +2107,17 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "ginger root",
+          "zingiber",
+          "zingiber officinale",
+          "zingiber mioga",
+          "black cohosh",
+          "actaea racemosa",
+          "cimicifuga racemosa",
+          "black snakeroot",
+          "virginia snakeroot-free"
+        ]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -2400,21 +2437,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C1654882",
-      "external_ids": {
-        "unii": "241ATL177A"
-      },
-      "rxcui": "9949",
-      "gsrs": {
-        "substance_name": "SOYBEAN OIL",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "BANNED_CBD_US",
@@ -2476,7 +2501,9 @@
           "cbd-free",
           "thc-free",
           "hemp seed oil",
-          "hemp hearts"
+          "hemp hearts",
+          "hemp oil",
+          "hemp protein"
         ]
       },
       "legal_status_enum": "not_lawful_as_supplement",
@@ -2742,7 +2769,20 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "comfrey topical",
+          "topical comfrey",
+          "comfrey cream",
+          "comfrey ointment",
+          "comfrey salve",
+          "comfrey gel",
+          "external use",
+          "for topical use only",
+          "borage",
+          "coltsfoot",
+          "pa-free",
+          "pyrrolizidine-free"
+        ]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -2831,20 +2871,8 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C1621344",
-      "external_ids": {
-        "unii": "9MGC702WRJ"
-      },
-      "gsrs": {
-        "substance_name": "SYMPHYTUM TUBEROSUM WHOLE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "id": "BANNED_CONTAMINATED_GLP1",
@@ -3496,7 +3524,8 @@
         "confidence": "high",
         "negative_match_terms": [
           "ephedra nevadensis",
-          "ephedra-free"
+          "ephedra-free",
+          "ephedra viridis"
         ]
       },
       "legal_status_enum": "banned_federal",
@@ -3564,20 +3593,8 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0885298",
-      "external_ids": {
-        "unii": "584L885IMR"
-      },
-      "gsrs": {
-        "substance_name": "EPHEDRA EQUISETINA STEM",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "id": "BANNED_FASORACETAM",
@@ -3718,7 +3735,19 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "amaranth grain",
+          "amaranth seed",
+          "amaranth protein",
+          "amaranth flour",
+          "amaranth powder",
+          "amaranth leaf",
+          "amaranth extract",
+          "puffed amaranth",
+          "amaranthus",
+          "amaranthus hypochondriacus",
+          "amaranth sprout"
+        ]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "critical",
@@ -3961,21 +3990,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0993598",
-      "external_ids": {
-        "unii": "D0QJI8UQVR"
-      },
-      "rxcui": "1311595",
-      "gsrs": {
-        "substance_name": "GARCINIA GUMMI-GUTTA FRUIT",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "BANNED_HIGENAMINE",
@@ -4002,7 +4019,16 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "lotus seed",
+          "lotus root",
+          "lotus leaf",
+          "lotus flower",
+          "sacred lotus",
+          "nelumbo nucifera",
+          "coptis chinensis",
+          "goldthread"
+        ]
       },
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "critical",
@@ -4316,20 +4342,8 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C5674892",
-      "external_ids": {
-        "unii": "DK7PL4F3TT"
-      },
-      "gsrs": {
-        "substance_name": "INSULIN-LIKE GROWTH FACTOR 1 RECEPTOR",
-        "substance_class": "protein",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "id": "BANNED_IGF1_LR3",
@@ -5053,7 +5067,15 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "monacolin j",
+          "monacolin l",
+          "monacolin m",
+          "statin-free",
+          "low monacolin",
+          "no monacolin k",
+          "monacolin-free"
+        ]
       },
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "high",
@@ -6038,20 +6060,8 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0331122",
-      "external_ids": {
-        "unii": "2XXV95X8GQ"
-      },
-      "gsrs": {
-        "substance_name": "CASCABELA THEVETIA ROOT",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "id": "BANNED_YK11",
@@ -6234,21 +6244,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C1050700",
-      "external_ids": {
-        "unii": "PK0TXD049P"
-      },
-      "rxcui": "1311133",
-      "gsrs": {
-        "substance_name": "LARREA TRIDENTATA LEAF",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "HIGH_RISK_GERMANDER",
@@ -8021,20 +8019,8 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0618539",
-      "external_ids": {
-        "unii": "289199VKN4"
-      },
-      "gsrs": {
-        "substance_name": "PHENYLPIRACETAM HYDRAZIDE",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "id": "NOOTROPIC_PIRACETAM",
@@ -9637,8 +9623,8 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-23",
-        "next_review_due": "2026-09-23",
+        "last_reviewed_at": "2026-04-14",
+        "next_review_due": "2026-10-14",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
@@ -9654,6 +9640,11 @@
           {
             "date": "2026-03-23",
             "change": "Weekly re-verification: match_mode=historical still correct. No change.",
+            "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-04-14",
+            "change": "Weekly re-verification: match_mode=historical still correct. No new FDA enforcement activity.",
             "by": "fda_weekly_sync"
           }
         ]
@@ -9758,8 +9749,8 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-23",
-        "next_review_due": "2026-09-23",
+        "last_reviewed_at": "2026-04-14",
+        "next_review_due": "2026-10-14",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
@@ -9775,6 +9766,11 @@
           {
             "date": "2026-03-23",
             "change": "Weekly re-verification: match_mode=historical still correct. No change.",
+            "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-04-14",
+            "change": "Weekly re-verification: match_mode=historical still correct. No new FDA enforcement activity.",
             "by": "fda_weekly_sync"
           }
         ]
@@ -10172,8 +10168,8 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-03-23",
-        "next_review_due": "2026-09-23",
+        "last_reviewed_at": "2026-04-14",
+        "next_review_due": "2026-10-14",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
           {
@@ -10189,6 +10185,11 @@
           {
             "date": "2026-03-23",
             "change": "Weekly re-verification: match_mode=historical still correct. No change.",
+            "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-04-14",
+            "change": "Weekly re-verification: match_mode=historical still correct. No new FDA enforcement activity.",
             "by": "fda_weekly_sync"
           }
         ]
@@ -11222,21 +11223,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0939882",
-      "external_ids": {
-        "unii": "BOW48C81XP"
-      },
-      "rxcui": "285228",
-      "gsrs": {
-        "substance_name": "PIPER METHYSTICUM ROOT",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "RISK_KRATOM_NATURAL",
@@ -12474,7 +12463,16 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "dhea",
+          "dehydroepiandrosterone",
+          "pregnenolone",
+          "wild yam",
+          "diosgenin",
+          "natural prohormone",
+          "prohormone precursor",
+          "7-keto dhea"
+        ]
       },
       "legal_status_enum": "adulterant",
       "clinical_risk_enum": "critical",
@@ -13383,49 +13381,9 @@
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional.",
-      "external_ids": {
-        "unii": "3M7OB98Y7H"
-      },
-      "rxcui": "136411",
-      "gsrs": {
-        "substance_name": "SILDENAFIL",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "Sildenafil Citrate",
-            "unii": "BW9B0ZE037"
-          }
-        ],
-        "metabolic_relationships": [
-          {
-            "type": "METABOLIC ENZYME->SUBSTRATE",
-            "name": "CYTOCHROME P450 3A5",
-            "unii": "805SU96HKF"
-          },
-          {
-            "type": "METABOLIC ENZYME->SUBSTRATE",
-            "name": "CYTOCHROME P450 3A4",
-            "unii": "PUO0521HZV"
-          }
-        ],
-        "metabolites": [
-          {
-            "type": "METABOLITE ACTIVE->PARENT",
-            "name": "DESMETHYLSILDENAFIL",
-            "unii": "L6WO34R9YG"
-          },
-          {
-            "type": "METABOLITE->PARENT",
-            "name": "UK-150564",
-            "unii": "3Q43L9B5T3"
-          }
-        ]
-      }
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "SPIKE_SILDENAFIL",
@@ -14094,7 +14052,18 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "thc-free",
+          "0% thc",
+          "no thc",
+          "non-detectable thc",
+          "below 0.3% thc",
+          "thc below",
+          "undetectable thc",
+          "thc nd",
+          "hemp seed",
+          "hemp seed oil"
+        ]
       },
       "legal_status_enum": "wada_prohibited",
       "clinical_risk_enum": "high",
@@ -14632,20 +14601,8 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0331296",
-      "external_ids": {
-        "unii": "7QFT17RLRG"
-      },
-      "gsrs": {
-        "substance_name": "LOBELIA INFLATA LEAF",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 143,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Lobelia | 1512 (Number of products:143)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "id": "ADD_5A_HYDROXY_LAXOGENIN",
@@ -14767,7 +14724,15 @@
         "fuzzy_threshold": 0.72,
         "case_sensitive": false,
         "preferred_alias": "Cascara Sagrada",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "cascara coffee",
+          "coffee cascara",
+          "cascara tea",
+          "coffee fruit cascara",
+          "coffee cherry cascara",
+          "coffea arabica cascara",
+          "coffee fruit"
+        ]
       },
       "jurisdictions": [],
       "references_structured": [
@@ -14818,21 +14783,9 @@
         ]
       },
       "cui": "C0205704",
-      "external_ids": {
-        "unii": "4VBP01X99F"
-      },
-      "rxcui": "1350209",
-      "gsrs": {
-        "substance_name": "FRANGULA PURSHIANA BARK",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
@@ -14861,7 +14814,14 @@
         "fuzzy_threshold": 0.72,
         "case_sensitive": false,
         "preferred_alias": "Colloidal Silver",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "silver vine",
+          "silver needle",
+          "silver fern",
+          "silver tips",
+          "silver birch",
+          "silver label"
+        ]
       },
       "jurisdictions": [],
       "references_structured": [
@@ -15287,37 +15247,9 @@
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional.",
-      "external_ids": {
-        "unii": "ARQ8157E0Q"
-      },
-      "rxcui": "1745413",
-      "gsrs": {
-        "substance_name": "Dimethylamine",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "DIMETHYLAMINE MONOSULFATE",
-            "unii": "OTX81K3TGJ"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "Dimethylamine hydrochloride",
-            "unii": "7M4CWB6AOK"
-          },
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "DICAMBA-DIMETHYLAMMONIUM",
-            "unii": "123F051HEM"
-          }
-        ],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "ADD_RED3",
@@ -15891,15 +15823,15 @@
       "standard_name": "Sodium Tetraborate (Borax)",
       "aliases": [
         "borax",
-        "sodium borate",
         "sodium tetraborate",
         "sodium tetraborate decahydrate",
-        "E285"
+        "E285",
+        "borax decahydrate"
       ],
       "entity_type": "ingredient",
       "match_mode": "active",
       "status": "banned",
-      "reason": "Borax (sodium tetraborate) is an EU-banned food additive classified as a reproductive toxicant (CMR 1B). Despite folk remedy claims, no dietary supplement use is warranted. ECHA SVHC listing under REACH since 2010.",
+      "reason": "Borax (sodium tetraborate) is an EU-banned food additive classified as a reproductive toxicant (CMR 1B). Despite folk remedy claims, no dietary supplement use is warranted. ECHA SVHC listing under REACH since 2010. NOTE: 'Sodium Borate' removed from aliases to avoid false positives — DSLD labels use 'Sodium Borate' as a trace boron mineral source in multivitamins, not as borax food additive.",
       "legal_status_enum": "not_lawful_as_supplement",
       "clinical_risk_enum": "high",
       "source_category": "banned_food_additive",
@@ -15911,7 +15843,14 @@
         "fuzzy_threshold": 0.75,
         "case_sensitive": false,
         "preferred_alias": "Sodium Tetraborate (Borax)",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "sodium borate",
+          "boron as borax",
+          "boron (as borax)",
+          "boron as sodium borate",
+          "boron (as sodium borate)",
+          "boron (as sodium tetraborate)"
+        ]
       },
       "jurisdictions": [],
       "references_structured": [
@@ -16101,20 +16040,8 @@
         ]
       },
       "cui": "C0037138",
-      "external_ids": {
-        "unii": "QU3C8D8GQY"
-      },
-      "gsrs": {
-        "substance_name": ".ALPHA.-BUTYLDIMETHYLSILYL-AND .OMEGA.-3-METHACRYLOXYPROPYLDIMETHYLSILYL-TERMINATED POLYDIMETHYLSILOXANE (1000 MW)",
-        "substance_class": "polymer",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "id": "ADD_HEXADRONE",
@@ -16512,7 +16439,16 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "activated charcoal",
+          "activated carbon",
+          "medicinal charcoal",
+          "coconut charcoal",
+          "bamboo charcoal",
+          "charcoal capsule",
+          "charcoal supplement",
+          "charcoal powder supplement"
+        ]
       },
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "moderate",
@@ -16838,7 +16774,11 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "acorus americanus",
+          "american sweet flag",
+          "north american calamus"
+        ]
       },
       "legal_status_enum": "banned_federal",
       "clinical_risk_enum": "high",

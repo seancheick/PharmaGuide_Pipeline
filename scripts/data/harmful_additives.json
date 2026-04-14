@@ -1951,32 +1951,9 @@
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Composite excipient name did not return a stable exact UMLS concept in live verification; retain null until an authoritative ingredient concept is confirmed.",
-      "external_ids": {
-        "unii": "MLM29U2X85"
-      },
-      "rxcui": "47613",
-      "gsrs": {
-        "substance_name": "CALCIUM CITRATE",
-        "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 184.1195"
-        ],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": {
-          "name": "CALCIUM CATION",
-          "unii": "2M83C4R6ZB"
-        },
-        "salt_parents": [
-          {
-            "type": "PARENT->SALT/SOLVATE",
-            "name": "Anhydrous citric acid",
-            "unii": "XF417D3PSL"
-          }
-        ],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "ADD_CALCIUM_DISODIUM_EDTA",
@@ -3832,20 +3809,8 @@
       "dose_thresholds": null,
       "entity_relationships": null,
       "cui": "C0054527",
-      "external_ids": {
-        "unii": "MAO53YB5PV"
-      },
-      "gsrs": {
-        "substance_name": "CASSAVA",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 12,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Cassava | 1700 (Number of products:12)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "external_ids": {},
+      "gsrs": null
     },
     {
       "id": "ADD_CORN_OIL",
@@ -4461,8 +4426,7 @@
       "entity_relationships": null,
       "cui": "C0728803",
       "external_ids": {
-        "cas": "9003-39-8",
-        "unii": "2S7830E561"
+        "cas": "9003-39-8"
       }
     },
     {
@@ -4937,30 +4901,10 @@
       "cui": "C0012695",
       "external_ids": {
         "cas": "139-33-3",
-        "pubchem_cid": 13020083,
-        "unii": "8NLQ36F6MM"
+        "pubchem_cid": 13020083
       },
-      "rxcui": "3539",
-      "gsrs": {
-        "substance_name": "EDETATE DISODIUM ANHYDROUS",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": {
-          "name": "Edetic Acid",
-          "unii": "9G34HU7RV0"
-        },
-        "salt_parents": [
-          {
-            "type": "PARENT->SALT/SOLVATE",
-            "name": "Edetic Acid",
-            "unii": "9G34HU7RV0"
-          }
-        ],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "ADD_D_MANNOSE",
@@ -5600,9 +5544,7 @@
       "gsrs": {
         "substance_name": "FAST GREEN",
         "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 74.203"
-        ],
+        "cfr_sections": [],
         "dsld_count": null,
         "dsld_info_raw": null,
         "active_moiety": null,
@@ -5926,7 +5868,9 @@
         "substance_name": "FERRIC OXIDE RED",
         "substance_class": "chemical",
         "cfr_sections": [
-          "21 CFR 73.1200"
+          "21 CFR 186.1300",
+          "21 CFR 186.1374",
+          "21 CFR 176.170"
         ],
         "dsld_count": 1,
         "dsld_info_raw": "Dietary Supplement Label Database|other|Ferric oxide | 3326 (Number of products:1)",
@@ -7480,21 +7424,10 @@
       "cui": "C0038179",
       "external_ids": {
         "cas": null,
-        "pubchem_cid": null,
-        "unii": "461P5CJN6T"
+        "pubchem_cid": null
       },
-      "rxcui": "1425926",
-      "gsrs": {
-        "substance_name": "MODIFIED CORN STARCH (1-OCTENYL SUCCINIC ANHYDRIDE)",
-        "substance_class": "mixture",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
+      "rxcui": null,
+      "gsrs": null,
       "cui_note": "CUI C0038179 maps to generic 'starch'; no specific UMLS concept for 'modified food starch' class."
     },
     {
@@ -7670,9 +7603,7 @@
       "gsrs": {
         "substance_name": "MONOSODIUM GLUTAMATE ANHYDROUS",
         "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 182.1480"
-        ],
+        "cfr_sections": [],
         "dsld_count": null,
         "dsld_info_raw": null,
         "active_moiety": null,
@@ -8776,20 +8707,9 @@
       "cui": "C0032483",
       "external_ids": {
         "cas": "25322-68-3",
-        "pubchem_cid": null,
-        "unii": "U95VVU3IDQ"
+        "pubchem_cid": null
       },
-      "gsrs": {
-        "substance_name": "POLYETHYLENE GLYCOL, UNSPECIFIED",
-        "substance_class": "polymer",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "gsrs": null
     },
     {
       "id": "ADD_POLYSORBATE80",
@@ -9486,13 +9406,18 @@
         "pubchem_cid": null,
         "unii": "FZ989GH94E"
       },
-      "rxcui": "2109746",
+      "rxcui": "8610",
       "gsrs": {
-        "substance_name": "POVIDONE",
-        "substance_class": "polymer",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
+        "substance_name": "POVIDONE, UNSPECIFIED",
+        "substance_class": "mixture",
+        "cfr_sections": [
+          "21 CFR 172.210",
+          "21 CFR 173.55",
+          "21 CFR 349.12",
+          "21 CFR 216.24"
+        ],
+        "dsld_count": 1,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Polyvinylpyrrolidone | 1154 (Number of products:1)",
         "active_moiety": null,
         "salt_parents": [],
         "metabolic_relationships": [],
@@ -10398,9 +10323,7 @@
       "gsrs": {
         "substance_name": "Saccharin",
         "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 180.37"
-        ],
+        "cfr_sections": [],
         "dsld_count": null,
         "dsld_info_raw": null,
         "active_moiety": null,
@@ -11511,9 +11434,7 @@
       "gsrs": {
         "substance_name": "SODIUM CASEINATE",
         "substance_class": "structurallyDiverse",
-        "cfr_sections": [
-          "21 CFR 182.1748"
-        ],
+        "cfr_sections": [],
         "dsld_count": null,
         "dsld_info_raw": null,
         "active_moiety": null,
@@ -11763,8 +11684,7 @@
       ],
       "external_ids": {
         "cas": "10124-56-8",
-        "pubchem_cid": 24968,
-        "unii": "N40N91DW96"
+        "pubchem_cid": 24968
       },
       "jurisdictional_statuses": [
         {
@@ -11822,18 +11742,8 @@
       },
       "entity_relationships": null,
       "cui": "C0074759",
-      "rxcui": "1487530",
-      "gsrs": {
-        "substance_name": "HEXASODIUM HEXAMETAPHOSPHATE",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      }
+      "rxcui": null,
+      "gsrs": null
     },
     {
       "id": "ADD_SODIUM_LAURYL_SULFATE",
@@ -12676,9 +12586,7 @@
       "gsrs": {
         "substance_name": "Sorbic Acid",
         "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 182.3089"
-        ],
+        "cfr_sections": [],
         "dsld_count": 8,
         "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Sorbic Acid | 2046 (Number of products:8)",
         "active_moiety": null,
@@ -13722,10 +13630,20 @@
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
-        "unii": null
+        "unii": "3OWL53L36A"
       },
       "rxcui": "6628",
-      "gsrs": null,
+      "gsrs": {
+        "substance_name": "MANNITOL",
+        "substance_class": "chemical",
+        "cfr_sections": [],
+        "dsld_count": 8,
+        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Mannitol | 1364 (Number of products:8)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
       "cui_note": "CUI C0038654 is the class concept 'Sugar Alcohols' — covers sorbitol, maltitol, xylitol, erythritol, etc."
     },
     {
@@ -14516,7 +14434,7 @@
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
-        "unii": null
+        "unii": "24SC3U704I"
       },
       "rxcui": "901346",
       "gsrs": {
@@ -15367,9 +15285,7 @@
       "gsrs": {
         "substance_name": "Vanillin",
         "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 182.60"
-        ],
+        "cfr_sections": [],
         "dsld_count": null,
         "dsld_info_raw": null,
         "active_moiety": null,
@@ -15891,7 +15807,7 @@
         "substance_name": "BUTYLATED HYDROXYANISOLE",
         "substance_class": "mixture",
         "cfr_sections": [
-          "21 CFR 172.110"
+          "21 CFR 171.110"
         ],
         "dsld_count": null,
         "dsld_info_raw": null,
@@ -16852,7 +16768,7 @@
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
-        "unii": null
+        "unii": "8470G57WFM"
       },
       "rxcui": "2854",
       "gsrs": {
@@ -17523,9 +17439,7 @@
       "gsrs": {
         "substance_name": "FRUCTOSE",
         "substance_class": "chemical",
-        "cfr_sections": [
-          "21 CFR 184.1857"
-        ],
+        "cfr_sections": [],
         "dsld_count": 48,
         "dsld_info_raw": "Dietary Supplement Label Database|Carbohydrate|Fructose | 1322 (Number of products:48)",
         "active_moiety": null,
@@ -18207,7 +18121,20 @@
         "unit": "g/day",
         "source": "Literature consensus: GI effects threshold 20-30 g/day"
       },
-      "entity_relationships": null
+      "entity_relationships": null,
+      "gsrs": {
+        "substance_name": "Xylitol",
+        "substance_class": "chemical",
+        "cfr_sections": [
+          "21 CFR 172.395"
+        ],
+        "dsld_count": 166,
+        "dsld_info_raw": "Dietary Supplement Label Database|TBD|Xylitol | 2243 (Number of products:166)",
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      }
     },
     {
       "id": "ADD_ALUMINUM_LAKE_GENERIC",
@@ -18281,7 +18208,7 @@
       "severity_level": "low",
       "penalty_points": -0.5,
       "entity_type": "ingredient",
-      "cui": null,
+      "cui": "C0032600",
       "external_ids": {
         "unii": "4R0MI3KBZF",
         "cas": "9005-64-5"
