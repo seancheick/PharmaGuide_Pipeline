@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "last_updated": "2026-04-12",
-    "total_entries": 99,
+    "last_updated": "2026-04-14",
+    "total_entries": 109,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -46,7 +46,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
-      "evidence_notes": "Vitamin K directly antagonizes warfarin mechanism. This is stated on every warfarin drug label. NIH ODS Vitamin K fact sheet explicitly warns anticoagulant users."
+      "evidence_notes": "Vitamin K directly antagonizes warfarin mechanism. This is stated on every warfarin drug label. NIH ODS Vitamin K fact sheet explicitly warns anticoagulant users.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "vitamin_k"
     },
     {
       "id": "DSI_WAR_OMEGA3",
@@ -61,10 +63,10 @@
       "management": "Use fish oil supplements cautiously with warfarin. Doses up to 1 g/day are generally low risk. Inform your doctor; monitor for bruising or unusual bleeding. INR monitoring is advisable when starting or stopping high-dose fish oil.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/18487280/"
+        "https://pubmed.ncbi.nlm.nih.gov/17192169/"
       ],
       "source_pmids": [
-        "18487280"
+        "17192169"
       ],
       "verification": {
         "status": "verified",
@@ -78,7 +80,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "fish_oil"
     },
     {
       "id": "DSI_WAR_GINKGO",
@@ -96,7 +100,7 @@
         "https://nccih.nih.gov/health/ginkgo/ataglance.htm"
       ],
       "source_pmids": [
-        "11302778",
+        "40198642",
         "9475490"
       ],
       "verification": {
@@ -111,7 +115,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "evidence_notes": "Mixed: observational data suggest increased bleeding risk, but controlled studies at recommended doses show no significant effect. Severity reflects precautionary approach for anticoagulant users."
+      "evidence_notes": "Mixed: observational data suggest increased bleeding risk, but controlled studies at recommended doses show no significant effect. Severity reflects precautionary approach for anticoagulant users.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ginkgo"
     },
     {
       "id": "DSI_WAR_GARLIC",
@@ -144,7 +150,9 @@
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
       "evidence_notes": "Mainly case reports. Culinary amounts are safe. Concentrated supplements may have mild antiplatelet effect.",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "garlic"
     },
     {
       "id": "DSI_WAR_SJW",
@@ -177,7 +185,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
     },
     {
       "id": "DSI_WAR_VITE",
@@ -192,10 +202,10 @@
       "management": "Doses ≤400 IU/day are generally safe alongside warfarin. Higher doses warrant INR monitoring. Inform prescriber if starting vitamin E supplementation.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/11684533/"
+        "https://pubmed.ncbi.nlm.nih.gov/24166490/"
       ],
       "source_pmids": [
-        "11684533"
+        "24166490"
       ],
       "verification": {
         "status": "verified",
@@ -209,7 +219,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "vitamin_e"
     },
     {
       "id": "DSI_WAR_COQ10",
@@ -241,7 +253,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "coq10"
     },
     {
       "id": "DSI_WAR_GLUCOSAMINE",
@@ -271,7 +285,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low"
+      "clinical_confidence": "low",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "glucosamine"
     },
     {
       "id": "DSI_WAR_CRANBERRY",
@@ -303,7 +319,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium"
+      "clinical_confidence": "medium",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "cranberry"
     },
     {
       "id": "DSI_WAR_TURMERIC",
@@ -335,7 +353,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "turmeric"
     },
     {
       "id": "DSI_WAR_DONGQUAI",
@@ -366,7 +386,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "dong_quai"
     },
     {
       "id": "DSI_WAR_GINGER",
@@ -395,7 +417,9 @@
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
       "evidence_notes": "Theoretical based on in-vitro platelet inhibition. Clinical evidence for interaction at dietary doses is weak.",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ginger"
     },
     {
       "id": "DSI_STATINS_SJW",
@@ -427,7 +451,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
     },
     {
       "id": "DSI_STATINS_RYR",
@@ -460,7 +486,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "red_yeast_rice"
     },
     {
       "id": "DSI_STATINS_GRAPEFRUIT",
@@ -492,7 +520,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "grapefruit"
     },
     {
       "id": "DSI_STATINS_NIACIN",
@@ -523,7 +553,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "vitamin_b3_niacin"
     },
     {
       "id": "DSI_STATINS_COQ10",
@@ -555,7 +587,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "coq10"
     },
     {
       "id": "DSI_SSRI_SJW",
@@ -570,11 +604,11 @@
       "management": "Never combine St. John's Wort with any SSRI, SNRI, or other serotonergic agent. A washout period equivalent to 5 half-lives of the SSRI is required before switching. Seek emergency care immediately if serotonin syndrome symptoms appear.",
       "source_urls": [
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/10584377/",
+        "https://pubmed.ncbi.nlm.nih.gov/17868285/",
         "https://www.fda.gov/drugs/drug-safety-and-availability/fda-drug-safety-communication-revised-recommendations-celexa-citalopram"
       ],
       "source_pmids": [
-        "10584377"
+        "17868285"
       ],
       "verification": {
         "status": "verified",
@@ -588,7 +622,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
     },
     {
       "id": "DSI_SSRI_5HTP",
@@ -620,7 +656,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "5_htp"
     },
     {
       "id": "DSI_SSRI_SAME",
@@ -638,7 +676,7 @@
         "https://nccih.nih.gov/health/supplements/SAMe"
       ],
       "source_pmids": [
-        "15505162"
+        "36402294"
       ],
       "verification": {
         "status": "verified",
@@ -652,7 +690,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same"
     },
     {
       "id": "DSI_SSRI_FISHOIL",
@@ -680,7 +720,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "fish_oil"
     },
     {
       "id": "DSI_SSRI_GINKGO",
@@ -697,7 +739,7 @@
         "https://www.nccih.nih.gov/health/ginkgo"
       ],
       "source_pmids": [
-        "11302778"
+        "40198642"
       ],
       "verification": {
         "status": "verified",
@@ -711,7 +753,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ginkgo"
     },
     {
       "id": "DSI_SSRI_MELATONIN",
@@ -725,10 +769,10 @@
       "mechanism": "Fluvoxamine (an SSRI) strongly inhibits CYP1A2, the main enzyme metabolizing melatonin. Fluvoxamine + melatonin can cause up to 17-fold increase in melatonin plasma levels, causing excessive sedation. Other SSRIs have minimal effect on melatonin metabolism.",
       "management": "Avoid melatonin supplements with fluvoxamine specifically. Other SSRIs: use low melatonin doses (0.5–1 mg) for sleep and monitor for excessive drowsiness.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/9588492/"
+        "https://pubmed.ncbi.nlm.nih.gov/10877005/"
       ],
       "source_pmids": [
-        "9588492"
+        "10877005"
       ],
       "verification": {
         "status": "verified",
@@ -742,7 +786,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "melatonin"
     },
     {
       "id": "DSI_ACEI_POTASSIUM",
@@ -774,7 +820,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "potassium"
     },
     {
       "id": "DSI_ANTIHYP_LICORICE",
@@ -789,10 +837,10 @@
       "management": "Avoid licorice root supplements (glycyrrhizin-containing) while on antihypertensives. DGL (deglycyrrhizinated licorice) is safer. Blood pressure should be re-checked if licorice exposure is suspected.",
       "source_urls": [
         "https://nccih.nih.gov/health/licorice",
-        "https://pubmed.ncbi.nlm.nih.gov/12450891/"
+        "https://pubmed.ncbi.nlm.nih.gov/28660884/"
       ],
       "source_pmids": [
-        "12450891"
+        "28660884"
       ],
       "verification": {
         "status": "verified",
@@ -806,7 +854,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "licorice"
     },
     {
       "id": "DSI_BETABLOCK_EPHEDRA",
@@ -821,10 +871,10 @@
       "management": "Do not use ephedra or products containing ephedrine alkaloids with beta blockers. Note: Ephedra was banned for dietary supplements in the US in 2004 but persists in some herbal products marketed outside the US.",
       "source_urls": [
         "https://www.fda.gov/food/dietary-supplements/ephedra-and-ephedrine-alkaloids-dietary-supplements",
-        "https://pubmed.ncbi.nlm.nih.gov/15271125/"
+        "https://pubmed.ncbi.nlm.nih.gov/11117974/"
       ],
       "source_pmids": [
-        "15271125"
+        "11117974"
       ],
       "verification": {
         "status": "verified",
@@ -838,7 +888,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ephedra"
     },
     {
       "id": "DSI_CCB_GRAPEFRUIT",
@@ -870,7 +922,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "grapefruit"
     },
     {
       "id": "DSI_DIURETICS_POTASSIUM",
@@ -898,7 +952,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "potassium"
     },
     {
       "id": "DSI_ACEI_IRON",
@@ -926,7 +982,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "iron"
     },
     {
       "id": "DSI_ANTIHYP_COQ10",
@@ -940,10 +998,10 @@
       "mechanism": "CoQ10 has been shown in some trials to modestly lower blood pressure (~10–17 mmHg systolic). When combined with antihypertensive medications, this additive effect is usually beneficial, but can occasionally cause excessive blood pressure reduction.",
       "management": "CoQ10 can be a useful adjunct in hypertension management. Monitor blood pressure when starting CoQ10. Dose adjustment of antihypertensives may be needed in some cases.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/18279423/"
+        "https://pubmed.ncbi.nlm.nih.gov/26935713/"
       ],
       "source_pmids": [
-        "18279423"
+        "26935713"
       ],
       "verification": {
         "status": "verified",
@@ -957,7 +1015,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "coq10"
     },
     {
       "id": "DSI_METFORMIN_ALA",
@@ -988,7 +1048,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "alpha_lipoic_acid"
     },
     {
       "id": "DSI_DM_CHROMIUM",
@@ -1020,7 +1082,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "chromium"
     },
     {
       "id": "DSI_DM_BERBERINE",
@@ -1052,7 +1116,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "berberine_supplement"
     },
     {
       "id": "DSI_DM_BITTERMELON",
@@ -1084,7 +1150,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "bitter_melon"
     },
     {
       "id": "DSI_DM_FENUGREEK",
@@ -1115,7 +1183,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "fenugreek"
     },
     {
       "id": "DSI_DM_GYMNEMA",
@@ -1146,7 +1216,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "gymnema_sylvestre"
     },
     {
       "id": "DSI_DM_CINNAMON",
@@ -1177,7 +1249,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "cinnamon"
     },
     {
       "id": "DSI_LEVOTHYROXINE_CALCIUM",
@@ -1191,11 +1265,11 @@
       "mechanism": "Calcium forms insoluble complexes with levothyroxine in the GI tract, significantly reducing its absorption (by up to 40%). This can result in inadequately controlled hypothyroidism.",
       "management": "Take levothyroxine at least 4 hours before or after calcium supplements. Take levothyroxine on an empty stomach, 30–60 minutes before breakfast. Monitor thyroid function tests if supplementation regimen changes.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/10381054/",
+        "https://pubmed.ncbi.nlm.nih.gov/21595516/",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f4f5a9a4-b4db-4b9f-908b-c0be9a0e5b20"
       ],
       "source_pmids": [
-        "10381054"
+        "21595516"
       ],
       "verification": {
         "status": "verified",
@@ -1208,7 +1282,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "calcium"
     },
     {
       "id": "DSI_LEVOTHYROXINE_IRON",
@@ -1222,11 +1298,11 @@
       "mechanism": "Ferrous sulfate and other iron supplements form insoluble complexes with levothyroxine in the GI tract, reducing levothyroxine absorption significantly. This is a well-documented interaction affecting thyroid control.",
       "management": "Take levothyroxine at least 4 hours before or after iron supplements. Monitor TSH levels after starting or stopping iron. Women often take both and need to manage this timing carefully.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/1619534/",
+        "https://pubmed.ncbi.nlm.nih.gov/20554088/",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f4f5a9a4-b4db-4b9f-908b-c0be9a0e5b20"
       ],
       "source_pmids": [
-        "1619534"
+        "20554088"
       ],
       "verification": {
         "status": "verified",
@@ -1239,7 +1315,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "iron"
     },
     {
       "id": "DSI_LEVOTHYROXINE_MAGNESIUM",
@@ -1269,7 +1347,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium"
+      "clinical_confidence": "medium",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "magnesium"
     },
     {
       "id": "DSI_LEVOTHYROXINE_SOY",
@@ -1300,7 +1380,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "phosphatidylserine"
     },
     {
       "id": "DSI_LEVOTHYROXINE_COFFEE",
@@ -1330,7 +1412,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "low"
+      "clinical_confidence": "low",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "coffee"
     },
     {
       "id": "DSI_IMMUNO_SJW",
@@ -1363,7 +1447,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
     },
     {
       "id": "DSI_IMMUNO_ECHINACEA",
@@ -1395,7 +1481,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "echinacea"
     },
     {
       "id": "DSI_IMMUNO_CATSCLAW",
@@ -1423,7 +1511,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "cat_s_claw"
     },
     {
       "id": "DSI_IMMUNO_ASTRAGALUS",
@@ -1451,7 +1541,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "astragalus"
     },
     {
       "id": "DSI_IMMUNO_GRAPEFRUIT",
@@ -1479,7 +1571,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "grapefruit"
     },
     {
       "id": "DSI_ANTICONV_FOLATE",
@@ -1494,10 +1588,10 @@
       "management": "Folate supplementation is recommended for women of childbearing age on AEDs to prevent neural tube defects. However, high-dose folate (>1 mg/day) requires seizure monitoring. Work with your neurologist.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/11435406/"
+        "https://pubmed.ncbi.nlm.nih.gov/9073038/"
       ],
       "source_pmids": [
-        "11435406"
+        "9073038"
       ],
       "verification": {
         "status": "verified",
@@ -1511,7 +1605,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "vitamin_b9_folate"
     },
     {
       "id": "DSI_ANTICONV_VITD",
@@ -1543,7 +1639,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "vitamin_d"
     },
     {
       "id": "DSI_ANTICONV_EPO",
@@ -1575,7 +1673,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "evening_primrose_oil"
     },
     {
       "id": "DSI_ANTICONV_GINKGO",
@@ -1606,7 +1706,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ginkgo"
     },
     {
       "id": "DSI_MAOI_TYRAMINE",
@@ -1639,7 +1741,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
-      "evidence_notes": "MAOI + tyramine hypertensive crisis is one of the most established drug-food interactions in clinical pharmacology. FDA black box warning on all MAOI labels."
+      "evidence_notes": "MAOI + tyramine hypertensive crisis is one of the most established drug-food interactions in clinical pharmacology. FDA black box warning on all MAOI labels.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "tyramine"
     },
     {
       "id": "DSI_MAOI_SJW",
@@ -1654,10 +1758,10 @@
       "management": "Absolutely contraindicated. St. John's Wort must not be used with any MAOI. A 14-day washout after stopping an MAOI is required before any serotonergic supplement.",
       "source_urls": [
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/10584377/"
+        "https://pubmed.ncbi.nlm.nih.gov/17868285/"
       ],
       "source_pmids": [
-        "10584377"
+        "17868285"
       ],
       "verification": {
         "status": "verified",
@@ -1672,7 +1776,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
-      "evidence_notes": "St Johns Wort is a known serotonergic agent. Combination with MAOIs carries serotonin syndrome risk. NCCIH and FDA both warn against this combination."
+      "evidence_notes": "St Johns Wort is a known serotonergic agent. Combination with MAOIs carries serotonin syndrome risk. NCCIH and FDA both warn against this combination.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
     },
     {
       "id": "DSI_MAOI_5HTP",
@@ -1701,7 +1807,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
-      "evidence_notes": "5-HTP is a direct serotonin precursor. Combination with MAOIs is universally contraindicated due to serotonin syndrome risk. Clinical pharmacology consensus."
+      "evidence_notes": "5-HTP is a direct serotonin precursor. Combination with MAOIs is universally contraindicated due to serotonin syndrome risk. Clinical pharmacology consensus.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "5_htp"
     },
     {
       "id": "DSI_MAOI_SAME",
@@ -1715,10 +1823,10 @@
       "mechanism": "SAMe has serotonergic activity and monoamine-modulating properties. Combined with an MAOI, it can potentiate serotonin syndrome risk through additive serotonergic load.",
       "management": "Contraindicated. Do not use SAMe with any MAOI. Observe appropriate washout periods.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/15505162/"
+        "https://pubmed.ncbi.nlm.nih.gov/36402294/"
       ],
       "source_pmids": [
-        "15505162"
+        "36402294"
       ],
       "verification": {
         "status": "verified",
@@ -1733,7 +1841,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "whole_class",
-      "evidence_notes": "SAMe has documented serotonergic activity. NCCIH explicitly warns against combination with serotonergic drugs including MAOIs."
+      "evidence_notes": "SAMe has documented serotonergic activity. NCCIH explicitly warns against combination with serotonergic drugs including MAOIs.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "same"
     },
     {
       "id": "DSI_MAOI_GINSENG",
@@ -1765,7 +1875,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ginseng"
     },
     {
       "id": "DSI_NSAID_FISHOIL",
@@ -1793,7 +1905,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "fish_oil"
     },
     {
       "id": "DSI_NSAID_GARLIC",
@@ -1821,7 +1935,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "garlic"
     },
     {
       "id": "DSI_NSAID_GINKGO",
@@ -1835,10 +1951,10 @@
       "mechanism": "Ginkgo inhibits PAF and platelet aggregation. NSAIDs inhibit COX-mediated thromboxane synthesis. The combined antiplatelet effect increases GI and systemic bleeding risk.",
       "management": "Avoid ginkgo with regular NSAID use. Watch for GI bleeding, unusual bruising. Inform prescriber of all supplements.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/11302778/"
+        "https://pubmed.ncbi.nlm.nih.gov/40198642/"
       ],
       "source_pmids": [
-        "11302778"
+        "40198642"
       ],
       "verification": {
         "status": "verified",
@@ -1852,7 +1968,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ginkgo"
     },
     {
       "id": "DSI_NSAID_WILLOWBARK",
@@ -1884,7 +2002,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "white_willow_bark"
     },
     {
       "id": "DSI_SEDATIVES_VALERIAN",
@@ -1899,10 +2019,10 @@
       "management": "Avoid valerian with prescription sedatives or sleep medications. Do not drive or operate machinery if using both. Inform your doctor.",
       "source_urls": [
         "https://nccih.nih.gov/health/valerian/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/16520820/"
+        "https://pubmed.ncbi.nlm.nih.gov/15901352/"
       ],
       "source_pmids": [
-        "16520820"
+        "15901352"
       ],
       "verification": {
         "status": "verified",
@@ -1916,7 +2036,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "valerian"
     },
     {
       "id": "DSI_SEDATIVES_KAVA",
@@ -1949,7 +2071,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "kavalactones"
     },
     {
       "id": "DSI_BENZO_MELATONIN",
@@ -1977,7 +2101,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "melatonin"
     },
     {
       "id": "DSI_SEDATIVES_PASSIONFLOWER",
@@ -2005,7 +2131,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "passionflower"
     },
     {
       "id": "DSI_PPI_IRON",
@@ -2037,7 +2165,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "iron"
     },
     {
       "id": "DSI_PPI_B12",
@@ -2069,7 +2199,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "vitamin_b12_cobalamin"
     },
     {
       "id": "DSI_PPI_MAGNESIUM",
@@ -2098,7 +2230,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "magnesium"
     },
     {
       "id": "DSI_PPI_CALCIUM",
@@ -2130,7 +2264,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "calcium"
     },
     {
       "id": "DSI_CORTICO_LICORICE",
@@ -2147,7 +2283,7 @@
         "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
       ],
       "source_pmids": [
-        "12450891"
+        "28660884"
       ],
       "verification": {
         "status": "verified",
@@ -2161,7 +2297,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "licorice"
     },
     {
       "id": "DSI_CORTICO_CALCIUM_VITD",
@@ -2193,7 +2331,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "calcium"
     },
     {
       "id": "DSI_CORTICO_ECHINACEA",
@@ -2221,7 +2361,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "echinacea"
     },
     {
       "id": "DSI_OC_SJW",
@@ -2236,11 +2378,11 @@
       "management": "Do not use St. John's Wort with oral contraceptives. Use a backup contraceptive method if concurrent use occurred. Discuss with your prescriber regarding timing before resuming reliance on OC alone.",
       "source_urls": [
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/11172189/",
+        "https://pubmed.ncbi.nlm.nih.gov/27444983/",
         "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers"
       ],
       "source_pmids": [
-        "11172189"
+        "27444983"
       ],
       "verification": {
         "status": "verified",
@@ -2254,7 +2396,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
     },
     {
       "id": "DSI_OC_CHASTEBERRY",
@@ -2282,7 +2426,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "chasteberry"
     },
     {
       "id": "DSI_OC_SOY",
@@ -2310,7 +2456,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "phosphatidylserine"
     },
     {
       "id": "SSI_IRON_CALCIUM",
@@ -2341,7 +2489,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium"
+      "clinical_confidence": "medium",
+      "agent1_canonical_id": "iron",
+      "agent2_canonical_id": "calcium"
     },
     {
       "id": "SSI_IRON_GREENTEA",
@@ -2355,10 +2505,10 @@
       "mechanism": "Catechins and tannins in green tea bind non-heme iron, forming insoluble iron-polyphenol complexes that cannot be absorbed. This can reduce iron absorption by 50–90% when consumed together.",
       "management": "Do not take iron supplements with green tea extract or green tea beverages. Separate by at least 2 hours. Take iron with vitamin C instead to enhance absorption.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/9414590/"
+        "https://pubmed.ncbi.nlm.nih.gov/29046302/"
       ],
       "source_pmids": [
-        "9414590"
+        "29046302"
       ],
       "verification": {
         "status": "verified",
@@ -2371,7 +2521,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "medium"
+      "clinical_confidence": "medium",
+      "agent1_canonical_id": "iron",
+      "agent2_canonical_id": "green_tea_extract"
     },
     {
       "id": "SSI_ZINC_COPPER",
@@ -2403,7 +2555,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": "zinc",
+      "agent2_canonical_id": "copper"
     },
     {
       "id": "SSI_SJW_5HTP",
@@ -2417,11 +2571,11 @@
       "mechanism": "St. John's Wort inhibits serotonin reuptake. 5-HTP increases serotonin synthesis as a direct precursor. Combined, these supplements produce additive serotonin loading, potentially causing serotonin syndrome even without prescription medications.",
       "management": "Do not combine St. John's Wort with 5-HTP. Choose one or the other for mood support. If either is used with prescription serotonergic drugs, additional caution is required.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/10584377/",
+        "https://pubmed.ncbi.nlm.nih.gov/17868285/",
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm"
       ],
       "source_pmids": [
-        "10584377"
+        "17868285"
       ],
       "verification": {
         "status": "verified",
@@ -2434,7 +2588,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "clinical_literature",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "agent1_canonical_id": "st_johns_wort",
+      "agent2_canonical_id": "5_htp"
     },
     {
       "id": "SSI_KAVA_ACETAMINOPHEN",
@@ -2466,7 +2622,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": "kavalactones",
+      "agent2_canonical_id": null
     },
     {
       "id": "SSI_VITE_VITK",
@@ -2481,10 +2639,10 @@
       "management": "Avoid combining very high-dose vitamin E (>400 IU/day) with low vitamin K intake. Those on anticoagulants are particularly vulnerable. Maintain adequate dietary vitamin K.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/11684533/"
+        "https://pubmed.ncbi.nlm.nih.gov/24166490/"
       ],
       "source_pmids": [
-        "11684533"
+        "24166490"
       ],
       "verification": {
         "status": "verified",
@@ -2498,7 +2656,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": "vitamin_e",
+      "agent2_canonical_id": "vitamin_k"
     },
     {
       "id": "DSI_DM_VITD",
@@ -2513,10 +2673,10 @@
       "management": "Vitamin D supplementation is generally beneficial in diabetes management. Monitor blood glucose when starting high-dose vitamin D. Levels >4000 IU/day warrant medical supervision.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/17823436/"
+        "https://pubmed.ncbi.nlm.nih.gov/41707752/"
       ],
       "source_pmids": [
-        "17823436"
+        "41707752"
       ],
       "verification": {
         "status": "verified",
@@ -2530,7 +2690,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "vitamin_d"
     },
     {
       "id": "DSI_ANTIHYP_MAGNESIUM",
@@ -2562,7 +2724,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "magnesium"
     },
     {
       "id": "DSI_ANTIPSYCH_MELATONIN",
@@ -2590,7 +2754,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "melatonin"
     },
     {
       "id": "DSI_ANTICOAG_CBD",
@@ -2605,10 +2771,10 @@
       "management": "Monitor INR closely if CBD is started or stopped with warfarin. Dose adjustment of warfarin may be required. Inform prescriber of all CBD use including oils and capsules.",
       "source_urls": [
         "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers",
-        "https://pubmed.ncbi.nlm.nih.gov/31412221/"
+        "https://pubmed.ncbi.nlm.nih.gov/37740600/"
       ],
       "source_pmids": [
-        "31412221"
+        "37740600"
       ],
       "verification": {
         "status": "verified",
@@ -2622,7 +2788,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "cbd"
     },
     {
       "id": "DSI_ANTIHYP_CBD",
@@ -2639,7 +2807,7 @@
         "https://www.fda.gov/consumers/consumer-updates/what-we-know-and-dont-know-about-cbd"
       ],
       "source_pmids": [
-        "31412221"
+        "37740600"
       ],
       "verification": {
         "status": "verified",
@@ -2653,7 +2821,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "cbd"
     },
     {
       "id": "DSI_STATINS_CBD",
@@ -2670,7 +2840,7 @@
         "https://www.fda.gov/consumers/consumer-updates/what-we-know-and-dont-know-about-cbd"
       ],
       "source_pmids": [
-        "31412221"
+        "37740600"
       ],
       "verification": {
         "status": "verified",
@@ -2684,7 +2854,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "cbd"
     },
     {
       "id": "DSI_DM_ASHWAGANDHA",
@@ -2701,7 +2873,7 @@
         "https://www.nccih.nih.gov/health/ashwagandha"
       ],
       "source_pmids": [
-        "25485040"
+        "25237891"
       ],
       "verification": {
         "status": "verified",
@@ -2715,7 +2887,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ashwagandha"
     },
     {
       "id": "DSI_ANTIHYP_ASHWAGANDHA",
@@ -2729,10 +2903,10 @@
       "mechanism": "Ashwagandha has mild adaptogenic blood pressure-lowering effects in some studies. Combined with antihypertensives, minor additive effects are possible.",
       "management": "Monitor blood pressure when starting ashwagandha with antihypertensive therapy. Generally well-tolerated but inform prescriber.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/25485040/"
+        "https://pubmed.ncbi.nlm.nih.gov/25237891/"
       ],
       "source_pmids": [
-        "25485040"
+        "25237891"
       ],
       "verification": {
         "status": "verified",
@@ -2746,7 +2920,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ashwagandha"
     },
     {
       "id": "DSI_SEDATIVES_ASHWAGANDHA",
@@ -2777,7 +2953,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ashwagandha"
     },
     {
       "id": "DSI_THYROID_TURMERIC",
@@ -2791,10 +2969,10 @@
       "mechanism": "Curcumin may bind thyroid hormone and reduce its absorption when taken simultaneously. Evidence is limited to in vitro and animal data, but a small clinical effect on levothyroxine absorption is plausible at high doses.",
       "management": "Take levothyroxine well before curcumin supplements. Separate by at least 4 hours. Monitor TSH if starting high-dose curcumin.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/27297661/"
+        "https://pubmed.ncbi.nlm.nih.gov/30070343/"
       ],
       "source_pmids": [
-        "27297661"
+        "30070343"
       ],
       "verification": {
         "status": "verified",
@@ -2808,7 +2986,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "turmeric"
     },
     {
       "id": "DSI_ANTICOAG_TURMERIC",
@@ -2839,7 +3019,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "turmeric"
     },
     {
       "id": "DSI_DM_MAGNESIUM",
@@ -2854,10 +3036,10 @@
       "management": "Magnesium is generally beneficial in diabetes management. Monitor blood glucose when starting magnesium. Particularly relevant in patients with hypomagnesemia (common in type 2 diabetes).",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/22279144/"
+        "https://pubmed.ncbi.nlm.nih.gov/35045911/"
       ],
       "source_pmids": [
-        "22279144"
+        "35045911"
       ],
       "verification": {
         "status": "verified",
@@ -2871,7 +3053,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "magnesium"
     },
     {
       "id": "SSI_MAGNESIUM_CALCIUM",
@@ -2899,7 +3083,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": "magnesium",
+      "agent2_canonical_id": "calcium"
     },
     {
       "id": "SSI_VITD_VITK2",
@@ -2930,7 +3116,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": "vitamin_d",
+      "agent2_canonical_id": "vitamin_k"
     },
     {
       "id": "DSI_BETABLOCK_MELATONIN",
@@ -2944,10 +3132,10 @@
       "mechanism": "Beta blockers (especially propranolol, atenolol) suppress endogenous melatonin secretion by blocking sympathetic signaling to the pineal gland. This can impair sleep quality in patients on beta blockers. Melatonin supplementation may restore normal sleep.",
       "management": "Melatonin supplementation (0.5–3 mg at bedtime) may be helpful for sleep disturbances in patients on beta blockers. Generally safe. Inform prescriber.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/9588492/"
+        "https://pubmed.ncbi.nlm.nih.gov/10877005/"
       ],
       "source_pmids": [
-        "9588492"
+        "10877005"
       ],
       "verification": {
         "status": "verified",
@@ -2961,7 +3149,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "melatonin"
     },
     {
       "id": "DSI_HIV_SJW",
@@ -2993,7 +3183,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "st_johns_wort"
     },
     {
       "id": "DSI_IMMUNOSUP_PROBIOTICS",
@@ -3025,7 +3217,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "probiotic_unspecified"
     },
     {
       "id": "DSI_ANTICOAG_GINSENG",
@@ -3056,7 +3250,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "ginseng"
     },
     {
       "id": "DSI_ANTIHYP_VITD",
@@ -3088,7 +3284,309 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "low",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "vitamin_d"
+    },
+    {
+      "id": "DSI_FISHOIL_VITE",
+      "type": "Sup-Sup",
+      "agent1_name": "Fish Oil / Omega-3",
+      "agent1_id": "C0016157",
+      "agent1_canonical_id": "fish_oil",
+      "agent2_name": "Vitamin E (high dose)",
+      "agent2_id": "C0042874",
+      "agent2_canonical_id": "vitamin_e",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Both omega-3 fatty acids and vitamin E suppress platelet aggregation via separate pathways (membrane phospholipid remodeling and inhibition of platelet thromboxane synthesis), producing additive antiplatelet effects.",
+      "management": "Monitor for signs of easy bruising or bleeding. Consider limiting vitamin E to ≤400 IU/day when taking fish oil.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/22300597/"
+      ],
+      "source_pmids": [
+        "22300597"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "systematic_review",
+      "clinical_confidence": "moderate"
+    },
+    {
+      "id": "DSI_FISHOIL_GINKGO",
+      "type": "Sup-Sup",
+      "agent1_name": "Fish Oil / Omega-3",
+      "agent1_id": "C0016157",
+      "agent1_canonical_id": "fish_oil",
+      "agent2_name": "Ginkgo biloba",
+      "agent2_id": "C0772125",
+      "agent2_canonical_id": "ginkgo",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Both omega-3 fatty acids and ginkgo biloba (via ginkgolides inhibiting PAF) independently inhibit platelet aggregation, producing additive antiplatelet/bleeding risk.",
+      "management": "Monitor for signs of bruising or prolonged bleeding, especially before surgery. Consider separating or reducing doses.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/20617421/"
+      ],
+      "source_pmids": [
+        "20617421"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "review",
+      "clinical_confidence": "moderate"
+    },
+    {
+      "id": "DSI_MELATONIN_VALERIAN",
+      "type": "Sup-Sup",
+      "agent1_name": "Melatonin",
+      "agent1_id": "C0025219",
+      "agent1_canonical_id": "melatonin",
+      "agent2_name": "Valerian",
+      "agent2_id": "C0728749",
+      "agent2_canonical_id": "valerian",
+      "severity": "Minor",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Valerian acts as a GABAergic/adenosine modulator promoting sleep, while melatonin acts on MT1/MT2 receptors; combined use produces additive CNS sedation and may increase next-day drowsiness.",
+      "management": "Start with lower doses of both if combining. Avoid driving or operating machinery after taking both.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/38359657/"
+      ],
+      "source_pmids": [
+        "38359657"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "mechanism_inferred",
+      "clinical_confidence": "low"
+    },
+    {
+      "id": "DSI_CALCIUM_FLUOROQUINOLONE",
+      "type": "Med-Sup",
+      "agent1_name": "Fluoroquinolones (class)",
+      "agent1_id": "class:fluoroquinolones",
+      "agent1_canonical_id": null,
+      "agent2_name": "Calcium",
+      "agent2_id": "C0006675",
+      "agent2_canonical_id": "calcium",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Calcium ions form poorly soluble chelate complexes with the fluoroquinolone ring structure, significantly reducing GI absorption and plasma concentrations, risking antibiotic treatment failure.",
+      "management": "Take fluoroquinolone antibiotics at least 2 hours before or 6 hours after calcium supplements.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/14655198/"
+      ],
+      "source_pmids": [
+        "14655198"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "rct",
+      "clinical_confidence": "high"
+    },
+    {
+      "id": "DSI_IRON_PPI",
+      "type": "Med-Sup",
+      "agent1_name": "Proton Pump Inhibitors (class)",
+      "agent1_id": "class:proton_pump_inhibitors",
+      "agent1_canonical_id": null,
+      "agent2_name": "Iron (supplement)",
+      "agent2_id": "C0302583",
+      "agent2_canonical_id": "iron",
+      "severity": "Moderate",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "PPIs suppress gastric acid production; acidic pH is required to reduce dietary ferric iron (Fe3+) to absorbable ferrous form (Fe2+), so hypochlorhydria impairs non-heme iron absorption.",
+      "management": "Consider taking iron supplements at a different time than PPI, or use ferrous bisglycinate which is less pH-dependent.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/37756627/"
+      ],
+      "source_pmids": [
+        "37756627"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "observational",
+      "clinical_confidence": "moderate"
+    },
+    {
+      "id": "DSI_MAGNESIUM_BISPHOSPHONATE",
+      "type": "Med-Sup",
+      "agent1_name": "Bisphosphonates (class)",
+      "agent1_id": "class:bisphosphonates",
+      "agent1_canonical_id": null,
+      "agent2_name": "Magnesium",
+      "agent2_id": "C0024467",
+      "agent2_canonical_id": "magnesium",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Divalent cations (Mg2+, Ca2+) form insoluble chelate complexes with bisphosphonate molecules in the GI tract, severely reducing oral bioavailability.",
+      "management": "Take bisphosphonates on an empty stomach with plain water. Wait at least 30-60 minutes before any mineral supplements.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/26934925/"
+      ],
+      "source_pmids": [
+        "26934925"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "preclinical",
+      "clinical_confidence": "high"
+    },
+    {
+      "id": "DSI_GINKGO_ANTIPLATELET",
+      "type": "Med-Sup",
+      "agent1_name": "Antiplatelet Agents (class)",
+      "agent1_id": "class:antiplatelet_agents",
+      "agent1_canonical_id": null,
+      "agent2_name": "Ginkgo biloba",
+      "agent2_id": "C0772125",
+      "agent2_canonical_id": "ginkgo",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Ginkgolides (particularly ginkgolide B) are potent PAF antagonists; concurrent use with aspirin (COX-1) or clopidogrel (P2Y12) produces additive inhibition of platelet activation, increasing bleeding risk.",
+      "management": "Avoid combining ginkgo with antiplatelet drugs. Discontinue ginkgo at least 7 days before surgery.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/40198642/"
+      ],
+      "source_pmids": [
+        "40198642"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "systematic_review",
+      "clinical_confidence": "high"
+    },
+    {
+      "id": "DSI_SJW_CONTRACEPTIVES",
+      "type": "Med-Sup",
+      "agent1_name": "Oral Contraceptives (class)",
+      "agent1_id": "class:oral_contraceptives",
+      "agent1_canonical_id": null,
+      "agent2_name": "St. John's Wort",
+      "agent2_id": "C0813171",
+      "agent2_canonical_id": "st_johns_wort",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Hyperforin in St John's Wort potently induces CYP3A4 and P-glycoprotein, accelerating metabolism of synthetic estrogens and progestins, reducing plasma concentrations and causing contraceptive failure.",
+      "management": "Do not combine St John's Wort with hormonal contraceptives. Use alternative non-hormonal contraception if taking SJW.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/27444983/"
+      ],
+      "source_pmids": [
+        "27444983"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "systematic_review",
+      "clinical_confidence": "high"
+    },
+    {
+      "id": "DSI_VITE_ANTICOAG",
+      "type": "Med-Sup",
+      "agent1_name": "Anticoagulants (class)",
+      "agent1_id": "class:anticoagulants",
+      "agent1_canonical_id": null,
+      "agent2_name": "Vitamin E (high dose)",
+      "agent2_id": "C0042874",
+      "agent2_canonical_id": "vitamin_e",
+      "severity": "Major",
+      "interaction_effect_type": "Additive",
+      "mechanism": "High-dose alpha-tocopherol antagonizes vitamin K-dependent clotting factor activation and independently inhibits platelet aggregation; combined with anticoagulants, this produces additive bleeding risk and may elevate INR.",
+      "management": "Limit vitamin E to ≤400 IU/day when taking anticoagulants. Monitor INR more frequently if vitamin E is added or removed.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/40065887/"
+      ],
+      "source_pmids": [
+        "40065887"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "review",
+      "clinical_confidence": "high"
+    },
+    {
+      "id": "DSI_ZINC_FLUOROQUINOLONE",
+      "type": "Med-Sup",
+      "agent1_name": "Fluoroquinolones (class)",
+      "agent1_id": "class:fluoroquinolones",
+      "agent1_canonical_id": null,
+      "agent2_name": "Zinc",
+      "agent2_id": "C0043481",
+      "agent2_canonical_id": "zinc",
+      "severity": "Major",
+      "interaction_effect_type": "Inhibitor",
+      "mechanism": "Zinc ions chelate the 4-oxo and 3-carboxyl groups of fluoroquinolones in the GI lumen, forming insoluble complexes that are not absorbed, reducing antibiotic bioavailability and risking treatment failure.",
+      "management": "Take fluoroquinolone antibiotics at least 2 hours before or 6 hours after zinc supplements.",
+      "source_urls": [
+        "https://pubmed.ncbi.nlm.nih.gov/1524699/"
+      ],
+      "source_pmids": [
+        "1524699"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_with": {
+          "rxnorm": false,
+          "umls": true,
+          "pubmed": true
+        }
+      },
+      "evidence_basis": "review",
+      "clinical_confidence": "high"
     }
   ]
 }

@@ -1,11 +1,13 @@
 {
   "_metadata": {
-    "version": "4.0.0",
-    "schema_version": "5.0.0",
+    "version": "5.0.0",
+    "schema_version": "5.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-03-25",
-    "total_entries": 27
+    "last_updated": "2026-04-14",
+    "total_entries": 31,
+    "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches — the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
+    "reviewed_at": "2026-04-14"
   },
   "allowed_overlaps": [
     {
@@ -196,6 +198,34 @@
         "harmful:iqm"
       ],
       "reason": "Xylitol synonym 'wood sugar': active dental ingredient (IQM) and inactive sweetener penalty (harmful_additives)."
+    },
+    {
+      "term_normalized": "canola oil",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Canola oil is both a harmful additive (refined, oxidation risk) and an IQM carrier oil ingredient (softgel excipient, ALA source). Context-dependent routing."
+    },
+    {
+      "term_normalized": "rapeseed oil",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "Rapeseed oil synonym for canola oil; same dual-listing rationale as canola oil."
+    },
+    {
+      "term_normalized": "monosodium glutamate",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "MSG is both a harmful food additive (excitotoxin concern) and a form of glutamate amino acid (IQM). Additive context triggers penalty; active amino acid context is neutral."
+    },
+    {
+      "term_normalized": "msg",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "MSG abbreviation; same dual-listing rationale as monosodium glutamate."
     }
   ]
 }

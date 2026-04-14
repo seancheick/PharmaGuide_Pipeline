@@ -3,8 +3,8 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "5.1.0",
-    "last_updated": "2026-04-09",
-    "total_entries": 98,
+    "last_updated": "2026-04-14",
+    "total_entries": 127,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object."
   },
   "interaction_rules": [
@@ -352,6 +352,21 @@
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
             "https://pubmed.ncbi.nlm.nih.gov/26312811/"
           ]
+        },
+        {
+          "_note": "This is an ADDITION to the existing RULE_IQM_BERBERINE_DIABETES rule. Add this object to the drug_class_rules array of that rule.",
+          "_target_rule_id": "RULE_IQM_BERBERINE_DIABETES",
+          "drug_class_rules_addition": {
+            "drug_class_id": "maois",
+            "severity": "avoid",
+            "evidence_level": "probable",
+            "mechanism": "Berberine inhibits MAO-A and MAO-B activity in vitro, producing additive monoamine oxidase inhibition when combined with MAOI antidepressants (phenelzine, tranylcypromine, selegiline). This combined MAO inhibition can elevate serotonin, dopamine, and norepinephrine to toxic levels, increasing risk of serotonin syndrome (agitation, hyperthermia, clonus, autonomic instability) and hypertensive crisis. Additionally, berberine inhibits CYP2D6 and CYP3A4, reducing metabolic clearance of MAOIs.",
+            "action": "Avoid combining berberine with MAOIs. If transitioning from MAOI to berberine-containing supplements, observe a minimum 14-day washout. Alert prescriber to use.",
+            "sources": [
+              "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
+              "https://pubmed.ncbi.nlm.nih.gov/26312811/"
+            ]
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -364,7 +379,7 @@
           "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
         ]
       },
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
       "dose_thresholds": []
     },
@@ -903,6 +918,16 @@
           "sources": [
             "https://www.nccih.nih.gov/health/ginger"
           ]
+        },
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Ginger inhibits thromboxane A2 (TXA2) synthesis and PAF-induced platelet aggregation. In patients with inherited or acquired bleeding disorders, this antiplatelet activity increases hemorrhage risk.",
+          "action": "Use ginger supplements with caution in bleeding disorders. Monitor for bruising or prolonged bleeding.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/25230580/"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -915,10 +940,20 @@
           "sources": [
             "https://www.nccih.nih.gov/health/ginger"
           ]
+        },
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive antiplatelet effect: ginger TXA2 inhibition combined with aspirin COX-1 or clopidogrel ADP pathway inhibition.",
+          "action": "Monitor for increased bleeding risk when combining ginger with antiplatelet drugs.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/25230580/"
+          ]
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-02-28",
+      "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
       "dose_thresholds": []
     },
@@ -950,6 +985,27 @@
             "https://pubmed.ncbi.nlm.nih.gov/22736461/"
           ],
           "evidence_level": "probable"
+        },
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Ginkgolides (especially ginkgolide B) inhibit platelet-activating factor (PAF), reducing platelet aggregation and extending bleeding time. Multiple case reports of spontaneous hemorrhage including subdural hematoma.",
+          "action": "Avoid ginkgo with bleeding disorders. If used, monitor for bruising, prolonged bleeding, or unexplained headache.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/15764334/",
+            "https://www.nccih.nih.gov/health/ginkgo"
+          ]
+        },
+        {
+          "condition_id": "surgery_scheduled",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "PAF inhibition by ginkgolides increases perioperative bleeding risk. Discontinue at least 2 weeks before scheduled surgery.",
+          "action": "Discontinue ginkgo at least 14 days before surgery.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/11302778/"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -962,10 +1018,31 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/14598602/"
           ]
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Ginkgolide B inhibits PAF; co-administration with warfarin or DOACs increases hemorrhage risk. Case reports of subdural hematoma with ginkgo + warfarin.",
+          "action": "Monitor INR closely if ginkgo is used with anticoagulants. Consider avoiding combination.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/15764334/",
+            "https://www.nccih.nih.gov/health/ginkgo"
+          ]
+        },
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive antiplatelet effect via PAF inhibition combined with COX/ADP pathway inhibition from aspirin/clopidogrel.",
+          "action": "Monitor for increased bruising or bleeding. Inform prescriber.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/ginkgo"
+          ]
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
       "dose_thresholds": []
     },
@@ -1375,11 +1452,12 @@
           "condition_id": "hypertension",
           "severity": "avoid",
           "evidence_level": "established",
-          "mechanism": "Glycyrrhizin can increase sodium retention and blood pressure.",
+          "mechanism": "Glycyrrhizin can increase sodium retention and blood pressure. NOTE: DGL (deglycyrrhizinated licorice) has glycyrrhizin removed and does NOT have this interaction. This rule applies only to whole/standard licorice extract containing glycyrrhizin.",
           "action": "Avoid in uncontrolled blood pressure unless deglycyrrhizinated form is confirmed.",
           "sources": [
             "https://www.nccih.nih.gov/health/licorice-root"
-          ]
+          ],
+          "form_exclusion": "DGL (deglycyrrhizinated licorice)"
         }
       ],
       "drug_class_rules": [
@@ -1387,7 +1465,7 @@
           "drug_class_id": "antihypertensives",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "May blunt blood pressure control from antihypertensive therapy.",
+          "mechanism": "May blunt blood pressure control from antihypertensive therapy. Does not apply to DGL (deglycyrrhizinated) licorice.",
           "action": "Monitor blood pressure and review supplement use with clinician.",
           "sources": [
             "https://www.nccih.nih.gov/health/licorice-root"
@@ -1405,7 +1483,7 @@
           "https://pubmed.ncbi.nlm.nih.gov/28133296/"
         ]
       },
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
       "dose_thresholds": []
     },
@@ -1436,6 +1514,17 @@
             "https://pubmed.ncbi.nlm.nih.gov/25864370/",
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
           ]
+        },
+        {
+          "condition_id": "kidney_disease",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Impaired renal magnesium excretion in CKD (especially eGFR <30) leads to hypermagnesemia accumulation. Supplemental magnesium doses safe in healthy adults can cause life-threatening hypermagnesemia in CKD patients (cardiac arrest, respiratory failure).",
+          "action": "Avoid magnesium supplementation in severe CKD (eGFR <30) without nephrologist guidance. In mild-moderate CKD, use with caution and monitor serum Mg levels.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/25747286/",
+            "https://www.kidney.org/atoz/content/potassium"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -1462,7 +1551,7 @@
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
       "dose_thresholds": []
     },
@@ -1637,6 +1726,27 @@
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
           ]
+        },
+        {
+          "drug_class_id": "antidepressants_ssri_snri",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "St John's Wort increases serotonin levels via monoamine reuptake inhibition. Combined with SSRIs/SNRIs, this causes additive serotonergic stimulation leading to serotonin syndrome — a potentially fatal toxidrome (hyperthermia, clonus, agitation, seizures). Multiple case reports and pharmacovigilance alerts.",
+          "action": "Do NOT combine St John's Wort with any SSRI or SNRI. If switching, allow 2-week washout. This is a life-threatening interaction.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://pubmed.ncbi.nlm.nih.gov/17868285/"
+          ]
+        },
+        {
+          "drug_class_id": "maois",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "St John's Wort has weak MAOI activity. Combined with pharmaceutical MAOIs, risk of serotonin syndrome and hypertensive crisis.",
+          "action": "Do NOT combine St John's Wort with MAOIs. Life-threatening interaction.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/st-johns-wort"
+          ]
         }
       ],
       "dose_thresholds": [],
@@ -1650,7 +1760,7 @@
           "https://www.nccih.nih.gov/health/st-johns-wort"
         ]
       },
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -2472,40 +2582,10 @@
           "unit": "mg",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor"
-        },
-        {
-          "scope": "condition",
-          "target_id": "liver_disease",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 500,
-          "unit": "mg",
-          "severity_if_met": "caution",
-          "severity_if_not_met": "monitor"
-        },
-        {
-          "scope": "condition",
-          "target_id": "liver_disease",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 500,
-          "unit": "mg",
-          "severity_if_met": "caution",
-          "severity_if_not_met": "monitor"
-        },
-        {
-          "scope": "condition",
-          "target_id": "liver_disease",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 500,
-          "unit": "mg",
-          "severity_if_met": "caution",
-          "severity_if_not_met": "monitor"
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -5030,6 +5110,1268 @@
       ],
       "pregnancy_lactation": null,
       "last_reviewed": "2026-04-09",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_5HTP_SEROTONIN",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "5_htp"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "possible",
+          "mechanism": "5-HTP is a direct precursor to serotonin via aromatic L-amino acid decarboxylase. Elevated maternal serotonin during organogenesis has been associated with cardiac and craniofacial developmental abnormalities in animal models; human safety data are absent.",
+          "action": "Avoid 5-HTP during pregnancy. No human safety data exist; consult an obstetrician before any use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/5-htp",
+            "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antidepressants_ssri_snri",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "5-HTP increases presynaptic serotonin synthesis while SSRIs/SNRIs block serotonin reuptake at SERT. The combination raises synaptic serotonin to levels associated with serotonin syndrome (hyperthermia, clonus, agitation, autonomic instability). Case reports of serotonin syndrome with this combination exist.",
+          "action": "Do not combine with SSRIs or SNRIs. If transitioning off an antidepressant, observe a washout period before initiating 5-HTP. Seek prescriber guidance.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/5-htp",
+            "https://pubmed.ncbi.nlm.nih.gov/9861593/"
+          ]
+        },
+        {
+          "drug_class_id": "maois",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "MAO-A is the primary enzyme degrading serotonin. MAO inhibitors prevent serotonin catabolism; combined with the serotonin precursor 5-HTP, this produces severe serotonin excess. Life-threatening serotonin syndrome (hyperpyrexia, rigidity, cardiovascular collapse) is a well-documented risk.",
+          "action": "Absolutely contraindicated with MAOIs. Do not initiate 5-HTP within 14 days of stopping an MAOI.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/5-htp",
+            "https://pubmed.ncbi.nlm.nih.gov/9861593/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_SENNA_PREGNANCY",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "senna"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Sennosides stimulate myenteric plexus nerve endings and increase colonic peristalsis via prostaglandin release. Chronic or high-dose use may trigger uterine smooth muscle contractions; limited human data show occasional association with preterm labor at high doses.",
+          "action": "Avoid prolonged or high-dose use during pregnancy. Osmotic laxatives are preferred. Consult an obstetrician for any laxative use beyond occasional short-term relief.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/senna",
+            "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
+          ]
+        },
+        {
+          "condition_id": "kidney_disease",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Chronic anthraquinone laxative use can cause electrolyte depletion (hypokalemia, hyponatremia) which is poorly tolerated in chronic kidney disease. Potassium wasting compounds the risk of dangerous hyperkalemia rebound and cardiac arrhythmia in CKD patients on renin-angiotensin-aldosterone system blockers.",
+          "action": "Use senna only short-term in kidney disease. Monitor serum electrolytes with any repeated use; avoid long-term use without nephrologist oversight.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/senna",
+            "https://pubmed.ncbi.nlm.nih.gov/10940988/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "cardiac_glycosides",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Senna-induced hypokalemia potentiates digoxin toxicity by increasing cardiac glycoside binding affinity at the Na+/K+-ATPase pump. Even modest decreases in serum potassium (e.g., from 3.5 to 3.0 mEq/L) can shift digoxin into the toxic range.",
+          "action": "Avoid senna with digoxin or other cardiac glycosides. If a laxative is required, use an osmotic agent and monitor serum potassium and digoxin levels.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/senna",
+            "https://pubmed.ncbi.nlm.nih.gov/10940988/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_CHASTEBERRY_PREGNANCY",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "chasteberry"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Chasteberry (Vitex agnus-castus) acts on pituitary dopamine D2 receptors to suppress prolactin and modulate LH/FSH secretion. These hormonal effects on the hypothalamic-pituitary axis pose a theoretical risk of disrupting the hormonal environment required for embryo implantation and maintenance of early pregnancy.",
+          "action": "Discontinue chasteberry upon confirmed pregnancy. Do not use during the first trimester. Inform obstetrician of prior use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/chasteberry",
+            "https://pubmed.ncbi.nlm.nih.gov/23136064/"
+          ]
+        },
+        {
+          "condition_id": "ttc",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Chasteberry has been studied for luteal phase defect and hyperprolactinemia-related infertility, showing possible benefit in some trials. However, it alters LH pulsatility and progesterone levels, which could be counterproductive if the underlying cause of infertility differs. Timing discontinuation at confirmed conception is critical as the hormonal window for implantation is sensitive.",
+          "action": "If using chasteberry while trying to conceive, plan to discontinue immediately upon positive pregnancy test. Use should be under the guidance of a fertility specialist.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/chasteberry",
+            "https://pubmed.ncbi.nlm.nih.gov/23136064/"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_NAC_BLEEDING",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "nac"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "N-acetylcysteine (NAC) inhibits platelet aggregation by reducing disulfide bonds on platelet surface glycoproteins and by increasing nitric oxide bioavailability. At high doses (>1200 mg/day) this antiplatelet effect may be clinically meaningful in patients with underlying coagulopathy.",
+          "action": "Use with caution in bleeding disorders. Avoid high doses (>1200 mg/day) without haematology oversight. Inform prescribers before surgical procedures.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/nac-n-acetyl-cysteine",
+            "https://pubmed.ncbi.nlm.nih.gov/8298118/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "NAC reduces disulfide bridges on coagulation factors and on platelet membrane glycoproteins, and it scavenges reactive oxygen species that normally promote pro-coagulant states. Combined with warfarin, case reports document enhanced anticoagulant effect and elevated INR.",
+          "action": "Monitor INR more frequently if starting or stopping NAC during anticoagulant therapy. Alert prescriber to any INR changes.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/nac-n-acetyl-cysteine",
+            "https://pubmed.ncbi.nlm.nih.gov/8298118/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_BUTTERBUR_PREGNANCY",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "butterbur"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "contraindicated",
+          "evidence_level": "probable",
+          "mechanism": "Raw butterbur (Petasites hybridus) contains pyrrolizidine alkaloids (PAs) including senkirkine and senecionine, which are hepatotoxic and genotoxic. PAs are metabolised by CYP3A4 to pyrrolic esters that form DNA adducts and cause sinusoidal obstruction syndrome. Fetal exposure risk from maternal ingestion is unacceptable.",
+          "action": "Do not use any butterbur product containing pyrrolizidine alkaloids during pregnancy. Even PA-free certified extracts lack adequate human safety data for pregnancy; avoid entirely.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/butterbur",
+            "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances"
+          ]
+        },
+        {
+          "condition_id": "liver_disease",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "Pyrrolizidine alkaloids in non-PA-free butterbur are direct hepatotoxins that cause sinusoidal obstruction syndrome (veno-occlusive disease). Even PA-certified-free products carry a hepatotoxicity risk signal; multiple case reports of liver injury from butterbur supplements exist.",
+          "action": "Avoid butterbur in any pre-existing liver disease. If considering butterbur for migraine, use only a certified PA-free product and only under hepatologist guidance. Monitor LFTs.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/butterbur",
+            "https://pubmed.ncbi.nlm.nih.gov/22566672/"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_CASCARA_SAGRADA_PREGNANCY",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "cascara_sagrada"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Cascara sagrada contains anthraquinone glycosides (cascarosides A-D) that stimulate colonic smooth muscle via prostaglandin and nitric oxide pathways. Anthraquinones pass into breast milk and are detectable in maternal plasma; their stimulant effects on smooth muscle may extend to uterine tissue.",
+          "action": "Avoid during pregnancy. Select a safer laxative such as polyethylene glycol or psyllium and consult an obstetrician.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/cascara-sagrada",
+            "https://pubmed.ncbi.nlm.nih.gov/10940988/"
+          ]
+        },
+        {
+          "condition_id": "liver_disease",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Chronic use of anthraquinone laxatives including cascara sagrada has been associated with hepatotoxicity; the FDA withdrew OTC cascara sagrada products in 2002 partly on safety grounds. Emodins and aloe-emodins in cascara have demonstrated hepatotoxic effects in rodent models and isolated human hepatocytes.",
+          "action": "Do not use cascara sagrada in liver disease. Use an osmotic laxative instead.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/cascara-sagrada",
+            "https://pubmed.ncbi.nlm.nih.gov/16923387/"
+          ]
+        },
+        {
+          "condition_id": "kidney_disease",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Anthraquinone-induced electrolyte depletion (hypokalemia, hypomagnesemia) is amplified in CKD where electrolyte homeostasis is already impaired. Hypokalaemia exacerbates the cardiovascular risk profile in dialysis patients and in those on renin-angiotensin-aldosterone system inhibitors.",
+          "action": "Avoid prolonged use in kidney disease. If a laxative is necessary, choose an osmotic agent. Monitor electrolytes with any use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/cascara-sagrada",
+            "https://pubmed.ncbi.nlm.nih.gov/10940988/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "cardiac_glycosides",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Anthraquinone-induced hypokalemia increases myocardial sensitivity to digoxin and other cardiac glycosides by enhancing Na+/K+-ATPase inhibition. Potassium depletion lowers the toxic threshold for digoxin significantly.",
+          "action": "Avoid cascara sagrada with cardiac glycosides. If constipation management is required, select a potassium-sparing approach and monitor serum potassium and digoxin levels.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/cascara-sagrada",
+            "https://pubmed.ncbi.nlm.nih.gov/10940988/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_CHINESE_SKULLCAP_LIVER",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "chinese_skullcap"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "possible",
+          "mechanism": "Chinese skullcap (Scutellaria baicalensis) contains baicalin and baicalein which inhibit CYP1A2 and CYP2C9. Animal data suggest possible teratogenic risk at high doses; human safety data in pregnancy are absent.",
+          "action": "Avoid during pregnancy due to absent safety data. Inform obstetrician of any prior use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/32444096/"
+          ]
+        },
+        {
+          "condition_id": "liver_disease",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Scutellaria species have been linked to herb-induced liver injury (HILI) in published case series. Proposed mechanisms include flavone-mediated mitochondrial dysfunction and idiosyncratic immune-mediated hepatocyte damage. Chinese skullcap preparations adulterated with Teucrium species carry additional germander-related hepatotoxicity risk.",
+          "action": "Avoid in active liver disease. If use is considered, verify product is authenticated Scutellaria baicalensis (not Teucrium), monitor LFTs monthly, and discontinue immediately upon any elevation.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/32444096/"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "black_seed_oil"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "diabetes",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Thymoquinone (the primary active constituent of black seed oil/Nigella sativa) stimulates insulin secretion from pancreatic beta cells and increases peripheral glucose uptake via PPAR-gamma activation. Multiple small RCTs demonstrate fasting glucose reductions of 15-20 mg/dL, creating additive hypoglycemia risk with antidiabetic agents.",
+          "action": "Monitor blood glucose closely when starting or stopping black seed oil in patients on diabetes medications. Warn of additive hypoglycemia risk.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/black-seed",
+            "https://pubmed.ncbi.nlm.nih.gov/21537493/"
+          ]
+        },
+        {
+          "condition_id": "hypertension",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Thymoquinone inhibits voltage-gated calcium channels and increases endothelial nitric oxide synthase (eNOS) activity, reducing peripheral vascular resistance. Reductions of 5-10 mmHg systolic have been reported in small trials, creating additive hypotension risk with antihypertensive therapy.",
+          "action": "Monitor blood pressure when combining with antihypertensive medications. Alert prescriber to use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/black-seed",
+            "https://pubmed.ncbi.nlm.nih.gov/21537493/"
+          ]
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Nigella sativa seed oil has demonstrated uterine contraction-stimulating activity in animal models (oxytocic effect), attributed to thymoquinone stimulation of uterine smooth muscle. High-dose use has been associated with abortifacient effects in animal studies.",
+          "action": "Avoid black seed oil during pregnancy, especially in the first and third trimesters. Inform obstetrician of use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/black-seed",
+            "https://pubmed.ncbi.nlm.nih.gov/21537493/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Thymoquinone inhibits thromboxane B2 synthesis and platelet aggregation, and in vitro data suggest weak inhibition of CYP2C9 which is the primary metabolic pathway for warfarin S-enantiomer. A combined antiplatelet and potential pharmacokinetic interaction may increase bleeding risk.",
+          "action": "Monitor INR if combining black seed oil with warfarin or other anticoagulants. Alert prescriber to use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/black-seed",
+            "https://pubmed.ncbi.nlm.nih.gov/21537493/"
+          ]
+        },
+        {
+          "drug_class_id": "hypoglycemics",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive glucose-lowering via PPAR-gamma activation and beta-cell stimulation. Risk of symptomatic hypoglycemia particularly with sulfonylureas and insulin.",
+          "action": "Monitor blood glucose more frequently. Avoid unsupervised combinations with insulin or sulfonylureas.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/black-seed",
+            "https://pubmed.ncbi.nlm.nih.gov/21537493/"
+          ]
+        },
+        {
+          "drug_class_id": "antihypertensives",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Additive blood pressure-lowering via calcium channel inhibition and increased nitric oxide production may cause symptomatic hypotension, particularly with calcium channel blockers and ACE inhibitors.",
+          "action": "Monitor blood pressure. Alert prescriber to black seed oil use if on antihypertensive therapy.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/black-seed",
+            "https://pubmed.ncbi.nlm.nih.gov/21537493/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_DHA_BLEEDING",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "dha"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "DHA (docosahexaenoic acid) is incorporated into platelet phospholipid membranes, displacing arachidonic acid and reducing thromboxane A2 (TXA2) synthesis. TXA2 is the primary platelet aggregation amplifier; reduced TXA2 production measurably prolongs bleeding time at doses above 2 g/day.",
+          "action": "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "DHA reduces platelet TXA2 synthesis and may weakly inhibit vitamin K-dependent coagulation factor synthesis. Combined with warfarin, a small but clinically relevant INR elevation has been observed in controlled studies.",
+          "action": "Monitor INR when adding or removing high-dose DHA (>2 g/day) in patients on warfarin. Alert prescriber to use.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+          ]
+        },
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive antiplatelet effect via independent mechanisms: clopidogrel blocks P2Y12 receptor while DHA reduces TXA2 production. The combination further impairs platelet aggregation beyond either agent alone.",
+          "action": "Advise prescriber of DHA use when on antiplatelet therapy. Avoid high-dose supplements (>3 g/day) without haematology guidance.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_EPA_BLEEDING",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "epa"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "EPA (eicosapentaenoic acid) competitively inhibits arachidonic acid conversion to thromboxane A2 via cyclooxygenase, and generates thromboxane A3 (a much weaker platelet aggregator) instead. This antiplatelet mechanism prolongs bleeding time, particularly at doses above 2 g/day.",
+          "action": "Use with caution in bleeding disorders. Limit EPA intake to under 2 g/day without physician oversight. Disclose use to any treating surgeon.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "EPA reduces platelet TXA2 synthesis and may affect the vitamin K-dependent coagulation cascade. Clinical studies with high-dose fish oil (containing EPA) and warfarin show small but consistent INR elevations.",
+          "action": "Monitor INR when starting or stopping high-dose EPA (>2 g/day) in patients on warfarin or other anticoagulants.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+          ]
+        },
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
+          "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_L_THEANINE_ANTIHYPERTENSIVES",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "l_theanine"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antihypertensives",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "L-theanine stimulates alpha-wave brain activity and attenuates sympathetic nervous system activation, which has been associated with modest blood pressure reductions (approximately 5-8 mmHg systolic) in small RCTs. Additive hypotensive effects are possible, particularly with alpha-blocker and calcium channel blocker antihypertensives.",
+          "action": "Monitor blood pressure when combining L-theanine with antihypertensive medications, particularly in patients with borderline-low blood pressure.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/18296328/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        },
+        {
+          "drug_class_id": "sedatives",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "L-theanine increases GABA, glycine, and serotonin levels in the brain and modulates AMPA receptor activity, producing anxiolytic and sedative-like effects. These CNS depressant effects may be additive with benzodiazepines, non-benzodiazepine hypnotics (z-drugs), and barbiturates.",
+          "action": "Advise patients on sedative-hypnotic medications of potential additive sedation. Avoid high doses of L-theanine if operating machinery or driving.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/18296328/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_BACOPA_THYROID",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "bacopa"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "thyroid_disorder",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Bacopa monnieri has been shown in animal studies to increase thyroid hormone levels (T4 specifically) via stimulation of thyroid iodide uptake and thyroglobulin synthesis. The clinical relevance in humans is uncertain but persons with hyperthyroidism or Graves disease may be at greater risk.",
+          "action": "Use with caution in thyroid disorders, particularly hyperthyroidism. Monitor thyroid function tests (TSH, free T4) periodically during use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/bacopa",
+            "https://pubmed.ncbi.nlm.nih.gov/12162764/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "thyroid_medications",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Bacopa may increase endogenous thyroid hormone levels, potentially altering the equilibrium maintained by levothyroxine replacement therapy and requiring dose adjustment.",
+          "action": "Monitor TSH levels when initiating or discontinuing Bacopa in patients on thyroid hormone replacement. Alert prescriber to supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/bacopa",
+            "https://pubmed.ncbi.nlm.nih.gov/12162764/"
+          ]
+        },
+        {
+          "drug_class_id": "sedatives",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Bacopa has adaptogenic effects and modulates serotonergic and GABA-ergic neurotransmission. Animal studies show additive sedative effects when combined with CNS depressants.",
+          "action": "Advise caution with concomitant use of sedative-hypnotic medications. Avoid if operating heavy machinery.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/bacopa",
+            "https://pubmed.ncbi.nlm.nih.gov/12162764/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_CREATINE_KIDNEY",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "creatine_monohydrate"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "kidney_disease",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Creatine is metabolised to creatinine and excreted renally. Supplemental creatine reliably elevates serum creatinine, which can spuriously worsen estimated GFR calculations (eGFR via CKD-EPI or MDRD) and complicate monitoring of true kidney function in CKD patients. At high doses, creatine may also increase glomerular filtration pressure.",
+          "action": "In CKD patients, consult a nephrologist before starting creatine. Clarify with the treating team that serum creatinine elevations may be non-pathological (supplement-related). Avoid creatine loading protocols (>10 g/day) in kidney disease.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/12701816/"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_DANDELION_KIDNEY",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "dandelion"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "kidney_disease",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Dandelion (Taraxacum officinale) acts as a natural diuretic, increasing urine output via inhibition of renal tubular sodium reabsorption. In CKD, fluid management is critical; uncontrolled diuresis can precipitate dehydration, acute kidney injury, and electrolyte derangements (hypokalemia or hyperkalemia depending on residual kidney function).",
+          "action": "Avoid unsupervised dandelion supplementation in kidney disease. Any diuretic effect should be managed in consultation with a nephrologist.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/dandelion",
+            "https://pubmed.ncbi.nlm.nih.gov/21538168/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antihypertensives",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Dandelion's diuretic effect is additive with thiazide and loop diuretics used for blood pressure control, potentially causing excessive volume depletion and symptomatic hypotension.",
+          "action": "Monitor blood pressure and fluid status when using dandelion with diuretic antihypertensives. Alert prescriber.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/dandelion",
+            "https://pubmed.ncbi.nlm.nih.gov/21538168/"
+          ]
+        },
+        {
+          "drug_class_id": "hypoglycemics",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Dandelion root extract has demonstrated alpha-glucosidase inhibitory activity and modest insulin-sensitising effects in animal models, producing additive glucose-lowering when combined with antidiabetic medications.",
+          "action": "Monitor blood glucose when using dandelion with antidiabetic drugs. Warn of possible additive hypoglycemia, particularly with sulfonylureas.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/dandelion",
+            "https://pubmed.ncbi.nlm.nih.gov/21538168/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_ALCAR_THYROID",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "acetyl_l_carnitine"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "thyroid_disorder",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "L-carnitine (including the acetylated form ALCAR) has been shown in a placebo-controlled trial to act as a peripheral antagonist of thyroid hormone action by preventing thyroid hormone nuclear translocation. It may thus reduce the effectiveness of exogenous thyroid hormone therapy and potentially worsen hypothyroidism at high doses.",
+          "action": "Monitor TSH in patients with hypothyroidism taking ALCAR. Alert endocrinologist to supplement use; dose of levothyroxine may need adjustment.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/15470137/",
+            "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "thyroid_medications",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "ALCAR antagonises thyroid hormone nuclear receptor entry, potentially reducing the efficacy of levothyroxine replacement. TSH may rise despite adequate levothyroxine dosing.",
+          "action": "Monitor TSH levels when starting or stopping ALCAR in patients on levothyroxine or other thyroid hormone replacement therapies.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/15470137/",
+            "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
+          ]
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Case reports and mechanistic data suggest that L-carnitine may enhance the anticoagulant effect of acenocoumarol and potentially warfarin, possibly through altered vitamin K metabolism or carnitine-mediated changes in fatty acid oxidation that affect coagulation factor synthesis.",
+          "action": "Monitor INR when starting or stopping ALCAR in patients on anticoagulants. Alert prescriber to use.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/15470137/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_WHITE_WILLOW_BARK_BLEEDING",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "white_willow_bark"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "White willow bark contains salicin, which is metabolised in the gut and liver to salicylate and salicylic acid — pharmacologically similar to aspirin. Salicylates irreversibly acetylate cyclooxygenase-1 in platelets, blocking thromboxane A2 synthesis and impairing platelet aggregation for the lifespan of the platelet (8-10 days).",
+          "action": "Avoid in bleeding disorders. Treat similarly to aspirin from a bleeding risk perspective.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/white-willow-bark",
+            "https://pubmed.ncbi.nlm.nih.gov/12197782/"
+          ]
+        },
+        {
+          "condition_id": "surgery_scheduled",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Salicylates from white willow bark irreversibly inhibit platelet cyclooxygenase-1 (COX-1). Because platelet COX-1 inhibition lasts the platelet lifespan (~10 days), stopping willow bark 7-10 days pre-operatively is necessary to restore normal platelet function.",
+          "action": "Discontinue white willow bark at least 7-10 days before any elective surgical procedure. Inform the surgical and anaesthesia team.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/white-willow-bark",
+            "https://pubmed.ncbi.nlm.nih.gov/12197782/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Salicylate from white willow bark inhibits platelet aggregation (antiplatelet) AND displaces warfarin from albumin binding sites, potentially elevating free warfarin plasma concentrations and raising INR. The combination significantly increases haemorrhagic risk.",
+          "action": "Avoid white willow bark with anticoagulants. If analgesic is needed, consult prescriber about alternatives.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/white-willow-bark",
+            "https://pubmed.ncbi.nlm.nih.gov/12197782/"
+          ]
+        },
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Additive irreversible COX-1 inhibition. White willow bark combined with aspirin or clopidogrel produces dual antiplatelet inhibition beyond standard cardioprotective dosing.",
+          "action": "Do not combine with antiplatelet therapy. Consult prescriber if analgesic is needed.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/white-willow-bark",
+            "https://pubmed.ncbi.nlm.nih.gov/12197782/"
+          ]
+        },
+        {
+          "drug_class_id": "nsaids",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Concurrent salicylate from white willow bark and NSAID use creates additive COX-1/COX-2 inhibition, increasing gastrointestinal bleeding risk and nephrotoxicity. Comparable to aspirin-NSAID co-administration.",
+          "action": "Do not combine white willow bark with NSAIDs. Select an alternative analgesic in consultation with prescriber.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/white-willow-bark",
+            "https://pubmed.ncbi.nlm.nih.gov/12197782/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "huperzine_a"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "seizure_disorder",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Huperzine A inhibits acetylcholinesterase (AChE), increasing synaptic acetylcholine. Elevated cholinergic tone in the CNS can lower seizure threshold and has been associated with seizure-like activity in overdose scenarios. The clinical significance at standard supplement doses is unclear but warrants caution.",
+          "action": "Use with caution in seizure disorders. Alert neurologist to huperzine A use. Report any changes in seizure frequency.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/huperzine-a",
+            "https://pubmed.ncbi.nlm.nih.gov/24573804/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticholinergics",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "Huperzine A inhibits acetylcholinesterase, dramatically increasing synaptic acetylcholine. Anticholinergic drugs (oxybutynin, benztropine, scopolamine, tricyclic antidepressants) act by blocking muscarinic acetylcholine receptors. Combining an AChE inhibitor with an anticholinergic creates pharmacological antagonism that can result in cholinergic toxidrome (bronchospasm, bradycardia, excessive secretions, miosis) if the cholinergic effect predominates, or unpredictable effects on both systems.",
+          "action": "Do not combine huperzine A with anticholinergic medications. Alert prescriber to supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/huperzine-a",
+            "https://pubmed.ncbi.nlm.nih.gov/24573804/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_ALPHA_GPC_ANTICHOLINERGICS",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "alpha_gpc"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticholinergics",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that directly increases brain acetylcholine synthesis and release by providing substrate for choline acetyltransferase. Anticholinergic drugs block muscarinic receptors to reduce cholinergic transmission. Alpha-GPC antagonises this pharmacological effect, potentially reducing the therapeutic efficacy of anticholinergics (e.g., overactive bladder treatment with oxybutynin) or creating unpredictable CNS effects.",
+          "action": "Inform prescriber of alpha-GPC use if taking anticholinergic medications. The therapeutic effect of anticholinergics may be reduced. Monitor for loss of efficacy.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/8247568/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_L_TYROSINE_THYROID",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "l_tyrosine"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "thyroid_disorder",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "L-tyrosine is the direct biosynthetic precursor to thyroid hormones (T3 and T4). Thyroglobulin contains tyrosine residues that are iodinated to form monoiodotyrosine and diiodotyrosine, which couple to form T3 and T4. Supplemental tyrosine loading may theoretically increase thyroid hormone synthesis, particularly concerning in hyperthyroidism or Graves disease.",
+          "action": "Use with caution in hyperthyroidism. Monitor thyroid function tests (TSH, free T4) when initiating L-tyrosine supplementation. Alert endocrinologist to use.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/DietarySupplements-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/11869656/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "maois",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "L-tyrosine is converted to tyramine in the gut. Tyramine is normally metabolised by MAO-A in the gut wall and liver (first-pass). MAO inhibitors block this pathway, leading to tyramine accumulation and triggering norepinephrine release from sympathetic nerve terminals — the classic 'cheese reaction' causing hypertensive crisis (severe headache, diaphoresis, hypertension to malignant levels, stroke risk).",
+          "action": "Absolutely contraindicated with MAOIs. A tyramine-restricted diet AND avoidance of tyrosine supplements is mandatory during MAOI therapy.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/11869656/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        },
+        {
+          "drug_class_id": "thyroid_medications",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "L-tyrosine provides substrate for thyroid hormone synthesis. Supplemental loading could theoretically alter thyroid hormone production, affecting the dose balance required for stable levothyroxine replacement.",
+          "action": "Monitor TSH levels periodically if taking L-tyrosine with levothyroxine. Alert endocrinologist to supplement use.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/DietarySupplements-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/11869656/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_SILYMARIN_LIVER",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "silymarin"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "liver_disease",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Silymarin (milk thistle extract) has hepatoprotective effects via antioxidant activity and stimulation of ribosomal RNA polymerase I. However, silymarin is a potent inhibitor of CYP3A4, CYP2C9, UGT1A1, and P-glycoprotein. In patients with liver disease on polypharmacy, this CYP inhibition can increase plasma concentrations of co-administered hepatically metabolised drugs, paradoxically worsening hepatotoxic drug burden.",
+          "action": "In liver disease patients on multiple medications, review all concurrent drugs for CYP3A4/2C9 interactions before starting silymarin. Clinically meaningful interactions exist with immunosuppressants (tacrolimus, cyclosporine), statins, and antivirals. Benefit-risk assessment required.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/milk-thistle",
+            "https://pubmed.ncbi.nlm.nih.gov/17569230/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "immunosuppressants",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Silymarin inhibits CYP3A4 and P-glycoprotein, which are the primary metabolic and transport pathways for tacrolimus and cyclosporine. Inhibition can increase plasma immunosuppressant concentrations by 20-40%, raising toxicity risk (nephrotoxicity, neurotoxicity).",
+          "action": "Monitor immunosuppressant trough levels (tacrolimus, cyclosporine) when starting or stopping silymarin. Dose adjustment by transplant team may be required.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/milk-thistle",
+            "https://pubmed.ncbi.nlm.nih.gov/17569230/"
+          ]
+        },
+        {
+          "drug_class_id": "statins",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Silymarin inhibits CYP3A4 and OATP1B1 transport, which are primary pathways for simvastatin, lovastatin, and atorvastatin metabolism. Elevated statin plasma levels increase myopathy and rhabdomyolysis risk.",
+          "action": "Use the lowest effective statin dose when combining with silymarin. Monitor for myalgia, weakness, or elevated CK. Avoid high-dose simvastatin or lovastatin.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/milk-thistle",
+            "https://pubmed.ncbi.nlm.nih.gov/17569230/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_FORSKOLIN_ANTIHYPERTENSIVES",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "forskolin"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antihypertensives",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Forskolin (Coleus forskohlii) directly activates adenylate cyclase, raising intracellular cAMP. In vascular smooth muscle, increased cAMP activates protein kinase A, which phosphorylates myosin light chain kinase and causes vasodilation. This additive blood pressure reduction can cause symptomatic hypotension when combined with antihypertensive agents.",
+          "action": "Monitor blood pressure closely when combining forskolin with antihypertensive medications. Alert prescriber to supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/11507730/"
+          ]
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Forskolin has demonstrated platelet aggregation inhibitory effects via cAMP-dependent suppression of platelet activation. This antiplatelet property may add to anticoagulant bleeding risk.",
+          "action": "Monitor coagulation parameters when using forskolin with anticoagulants. Inform prescriber of supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/11507730/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_HORNY_GOAT_WEED_HEART",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "horny_goat_weed"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "heart_disease",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Icariin (the primary active flavonoid in Epimedium/horny goat weed) inhibits phosphodiesterase-5 (PDE5) and to a lesser extent PDE4. PDE5 inhibition causes vasodilation; in patients with cardiovascular disease, particularly those on nitrates, this can precipitate severe hypotension. Icariin also has a weak estrogen receptor agonist activity.",
+          "action": "Use with caution in established heart disease. Do not combine with nitrates (extreme hypotension risk). Alert cardiologist to supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/16112024/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antihypertensives",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "PDE5 inhibition by icariin causes smooth muscle relaxation and vasodilation, producing additive hypotension with antihypertensive agents, especially alpha-blockers and nitrates.",
+          "action": "Monitor blood pressure if combining horny goat weed with antihypertensives. Do not combine with alpha-blockers or nitrates.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/16112024/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_STINGING_NETTLE_DIABETES",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "stinging_nettle"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "diabetes",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Stinging nettle (Urtica dioica) leaf extract has demonstrated alpha-glucosidase inhibitory activity and increases insulin secretion in animal and small human studies. These mechanisms produce additive glucose-lowering when combined with antidiabetic medications.",
+          "action": "Monitor blood glucose when using stinging nettle with diabetes medications. Risk of additive hypoglycemia, particularly with insulin and sulfonylureas.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/stinging-nettle",
+            "https://pubmed.ncbi.nlm.nih.gov/23098397/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antihypertensives",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Stinging nettle has diuretic and mild vasodilatory properties in animal models. Combined with antihypertensive medications, additive blood pressure lowering and risk of volume depletion are possible.",
+          "action": "Monitor blood pressure and fluid status when combining stinging nettle with antihypertensive or diuretic medications.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/stinging-nettle",
+            "https://pubmed.ncbi.nlm.nih.gov/23098397/"
+          ]
+        },
+        {
+          "drug_class_id": "hypoglycemics",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Alpha-glucosidase inhibitory and insulin secretagogue properties of nettle extract create additive hypoglycemic risk with antidiabetic drugs, particularly sulfonylureas and insulin.",
+          "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/stinging-nettle",
+            "https://pubmed.ncbi.nlm.nih.gov/23098397/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_PYGEUM_NSAIDS",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "pygeum"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "nsaids",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Pygeum africanum bark extract contains phytosterols (beta-sitosterol), pentacyclic triterpenes, and ferulic acid esters that inhibit prostaglandin biosynthesis by reducing arachidonic acid release from membrane phospholipids and by directly inhibiting 5-lipoxygenase and COX pathways. Combined with NSAID COX inhibition, there is theoretical additive anti-inflammatory activity and a possible additive risk of gastrointestinal mucosal injury.",
+          "action": "If combining pygeum with NSAIDs, use the lowest NSAID dose for the shortest duration. Take both with food. Monitor for GI symptoms.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/pygeum",
+            "https://pubmed.ncbi.nlm.nih.gov/9161097/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_OLIVE_LEAF_DIABETES",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "olive_leaf"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "diabetes",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Oleuropein and hydroxytyrosol in olive leaf extract stimulate glucose uptake in muscle cells via GLUT4 translocation (independent of insulin) and inhibit intestinal alpha-glucosidase. RCTs show fasting glucose reductions of 15-25 mg/dL, creating clinically relevant additive hypoglycemia risk with antidiabetic medications.",
+          "action": "Monitor blood glucose when starting or stopping olive leaf extract in diabetic patients on medication. Warn of additive hypoglycemia risk with insulin and sulfonylureas.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/24130475/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "antihypertensives",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Oleuropein is a calcium channel blocker with endothelium-independent vasodilatory effects and mild ACE-inhibitory activity. A 500 mg/day olive leaf extract RCT showed blood pressure reduction comparable to 25 mg/day captopril. Additive hypotension with antihypertensive drugs is a real risk.",
+          "action": "Monitor blood pressure when combining olive leaf extract with antihypertensive medications. Alert prescriber; dose adjustment of antihypertensives may be needed.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/24130475/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        },
+        {
+          "drug_class_id": "hypoglycemics",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "GLUT4 translocation stimulation and alpha-glucosidase inhibition produce additive blood glucose lowering with antidiabetic agents. Risk of hypoglycemia is greatest with insulin, sulfonylureas, and meglitinides.",
+          "action": "Increase blood glucose monitoring frequency. Advise patients to recognise hypoglycemia symptoms.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/24130475/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_CORDYCEPS_AUTOIMMUNE",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "cordyceps"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "autoimmune",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Cordyceps (Cordyceps sinensis/militaris) contains cordycepin (3-deoxyadenosine) and beta-glucans that stimulate NK cell activity, macrophage activation, and T-helper cell proliferation via Toll-like receptor and NFkappaB pathways. This immune potentiation may exacerbate autoimmune conditions (e.g., rheumatoid arthritis, lupus, multiple sclerosis, inflammatory bowel disease).",
+          "action": "Avoid unsupervised use in autoimmune conditions. Consult a rheumatologist or immunologist before starting cordyceps.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/15857459/"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "immunosuppressants",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Cordyceps immune-stimulating effects (NK cell and T-cell activation via NFkappaB pathway) directly oppose the mechanism of immunosuppressants such as tacrolimus, cyclosporine, mycophenolate, and corticosteroids, potentially precipitating organ rejection in transplant patients.",
+          "action": "Do not use cordyceps if on immunosuppressant therapy. Alert transplant team or rheumatologist to any supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/15857459/"
+          ]
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Cordyceps has demonstrated in vitro platelet aggregation inhibitory activity and adenosine-mediated vasodilation. Cordycepin (adenosine analogue) may contribute to antiplatelet effects additive with anticoagulant therapy.",
+          "action": "Monitor coagulation parameters when combining cordyceps with anticoagulants. Alert prescriber to supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance",
+            "https://pubmed.ncbi.nlm.nih.gov/15857459/"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_LIONS_MANE_ANTICOAGULANTS",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "lions_mane"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "possible",
+          "mechanism": "Lion's mane (Hericium erinaceus) contains hericenones and erinacines that have demonstrated inhibition of ADP-induced and collagen-induced platelet aggregation in in vitro and animal studies, attributed to reduced thromboxane B2 synthesis. Combined with anticoagulant therapy, additive antiplatelet/anticoagulant effects may increase bleeding risk.",
+          "action": "Monitor coagulation parameters when combining lion's mane with anticoagulants or antiplatelets. Report any unusual bruising or bleeding. Alert prescriber to supplement use.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/20109089/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_QUERCETIN_THYROID",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "quercetin"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "thyroid_disorder",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Quercetin inhibits thyroid peroxidase (TPO), the enzyme responsible for iodinating tyrosine residues in thyroglobulin to form T3 and T4. At high supplemental doses (>500 mg/day), this TPO inhibition may impair thyroid hormone synthesis, contributing to goitre formation or worsening hypothyroidism, particularly in individuals with borderline iodine intake.",
+          "action": "Use with caution in thyroid disorders, especially hypothyroidism. Limit dose to under 500 mg/day. Monitor TSH periodically and inform endocrinologist of use.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/12065157/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Quercetin inhibits CYP2C9 (the primary metabolic enzyme for S-warfarin) and inhibits P-glycoprotein. Both mechanisms reduce warfarin clearance, potentially increasing plasma warfarin concentration and INR. Quercetin also inhibits platelet aggregation independently.",
+          "action": "Monitor INR frequently when starting or stopping quercetin supplementation in patients on warfarin. Alert prescriber to dose and any INR changes.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/12065157/",
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_RESVERATROL_BLEEDING",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "resveratrol"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Resveratrol inhibits thromboxane A2 synthesis by suppressing COX-1/COX-2 activity in platelets and inhibits collagen-induced platelet aggregation via the GPVI signalling pathway. At doses above 150 mg/day, clinically meaningful antiplatelet effects have been documented.",
+          "action": "Use with caution in bleeding disorders. Limit dose and inform haematologist or treating physician of use, particularly before invasive procedures.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/16243026/",
+            "https://www.nccih.nih.gov/health/resveratrol"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Resveratrol inhibits CYP2C9 (primary metabolism pathway for S-warfarin) and CYP3A4. Inhibition of CYP2C9 reduces warfarin clearance, raising plasma concentrations and INR. Concomitant antiplatelet activity adds further haemostatic impairment.",
+          "action": "Monitor INR closely when starting, adjusting, or stopping resveratrol in patients on warfarin. Alert prescriber; warfarin dose may need reduction.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/16243026/",
+            "https://www.nccih.nih.gov/health/resveratrol"
+          ]
+        },
+        {
+          "drug_class_id": "antiplatelets",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive antiplatelet effect via complementary mechanisms: resveratrol inhibits COX-1/COX-2 and GPVI signalling while aspirin/clopidogrel block COX-1 or P2Y12 pathways, producing greater aggregate inhibition of platelet function than either alone.",
+          "action": "Inform prescriber of resveratrol use when on antiplatelet therapy. Avoid high doses (>250 mg/day) without physician oversight.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/16243026/",
+            "https://www.nccih.nih.gov/health/resveratrol"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
     }
   ]

@@ -228,6 +228,8 @@ def validate_iqm_br_collision(data_dir: Path = DATA_DIR) -> Dict:
         "kavalactones",      # RISK_KAVA high_risk — hepatotoxicity risk, legal in US
         "synephrine",        # RISK_BITTER_ORANGE high_risk — cardiovascular risk
         "garcinia_cambogia", # RISK_GARCINIA_CAMBOGIA high_risk — hepatotoxicity warning layer
+        "7_keto_dhea",       # BANNED_7_KETO_DHEA high_risk — legal in US, banned in UK/CA/AU/NZ
+        "cascara_sagrada",   # ADD_CASCARA_SAGRADA high_risk — FDA Category III, legal in supplements
     }
 
     # Walk IQM entries and check every standard_name + alias

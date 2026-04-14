@@ -1188,6 +1188,72 @@ class SupplementScorer:
             "prescription_dose": prescription_dose,
         }
 
+    def _build_section_a_zero_diagnostic(self, product: Dict[str, Any]) -> Dict[str, Any]:
+        """Build diagnostic detail when Section A scores 0.0.
+
+        Returns a dict with:
+        - total_active_ingredients: count from enriched data
+        - scorable_count: how many made it into ingredients_scorable
+        - skipped_ingredients: list of dicts per skipped ingredient with
+          name, category, skip_reason, recognition_source, recognition_type,
+          is_active, quantity, unit
+        - summary: human-readable reason string
+        """
+        iqd = product.get("ingredient_quality_data", {})
+        scorable = safe_list(iqd.get("ingredients_scorable"))
+        skipped = safe_list(iqd.get("ingredients_skipped"))
+        all_ings = safe_list(iqd.get("ingredients"))
+
+        skipped_detail = []
+        for ing in skipped:
+            skipped_detail.append({
+                "name": ing.get("name", ""),
+                "category": ing.get("dsld_category", ing.get("category", "")),
+                "skip_reason": ing.get("skip_reason", "unknown"),
+                "recognition_source": ing.get("recognition_source", ""),
+                "recognition_type": ing.get("recognition_type", ""),
+                "is_active": ing.get("source_section") == "active",
+                "quantity": ing.get("quantity"),
+                "unit": ing.get("unit_normalized", ing.get("unit", "")),
+                "is_botanical": "botanical" in (ing.get("recognition_type") or "").lower()
+                    or "botanical" in (ing.get("dsld_category") or ing.get("category") or "").lower(),
+                "iqm_gap": ing.get("skip_reason") == "recognized_non_scorable"
+                    and ing.get("recognition_type") in ("botanical_unscored", "non_scorable"),
+            })
+
+        # Also check scorable ingredients that have no usable dose
+        no_dose_scorable = []
+        for ing in scorable:
+            if not self._has_usable_individual_dose(ing):
+                no_dose_scorable.append({
+                    "name": ing.get("name", ""),
+                    "quantity": ing.get("quantity"),
+                    "unit": ing.get("unit_normalized", ing.get("unit", "")),
+                    "reason": "no_usable_individual_dose",
+                })
+
+        # Build summary
+        reasons = {}
+        for s in skipped_detail:
+            r = s["skip_reason"]
+            reasons[r] = reasons.get(r, 0) + 1
+        reason_parts = [f"{cnt} {reason}" for reason, cnt in sorted(reasons.items(), key=lambda x: -x[1])]
+        summary = f"{len(scorable)} scorable, {len(skipped)} skipped"
+        if reason_parts:
+            summary += f" ({', '.join(reason_parts)})"
+        if no_dose_scorable:
+            summary += f", {len(no_dose_scorable)} scorable but no usable dose"
+
+        return {
+            "total_active_ingredients": iqd.get("total_active", len(all_ings)),
+            "scorable_count": len(scorable),
+            "skipped_count": len(skipped),
+            "no_dose_scorable_count": len(no_dose_scorable),
+            "skipped_ingredients": skipped_detail,
+            "no_dose_scorable": no_dose_scorable,
+            "summary": summary,
+        }
+
     def _compute_ingredient_quality_score(self, product: Dict[str, Any], supp_type: str,
                          flags: Optional[List[str]] = None) -> Dict[str, Any]:
         a_cfg = self.config.get("section_A_ingredient_quality", {})
@@ -1263,10 +1329,20 @@ class SupplementScorer:
                 if numeric is not None:
                     risk_map[norm_text(key)] = numeric
         # Deduplicate by additive_id — keep highest severity penalty per ID.
+        # Context-aware routing: skip precautionary (low/moderate) penalties
+        # for ingredients sourced from the Supplement Facts (active) panel.
+        # Active-source ingredients are already quality-scored via IQM;
+        # applying an additive penalty on top would double-count.  High and
+        # critical severity still fire for actives (genuine safety concern
+        # overrides section context — e.g., chronic senna risk).
         seen_ids: Dict[str, float] = {}
         for item in additives:
+            source = item.get("source_section", "unknown")
+            sev_text = norm_text(item.get("severity_level"))
+            if source == "active" and sev_text in ("low", "moderate"):
+                continue  # suppress — IQM quality score is the correct signal
             aid = item.get("additive_id") or item.get("id") or f"_anon_{id(item)}"
-            sev = risk_map.get(norm_text(item.get("severity_level")), 0.0)
+            sev = risk_map.get(sev_text, 0.0)
             seen_ids[aid] = max(seen_ids.get(aid, 0.0), sev)
         named_penalty = sum(seen_ids.values())
         b1_cap = as_float(b1_cfg.get("cap"), 8.0)
@@ -3321,6 +3397,12 @@ class SupplementScorer:
             # Note: Section A now includes category bonuses (probiotic, omega-3 dose)
             # so it needs access to flags for the PRESCRIPTION_DOSE_OMEGA3 flag.
             section_a = self._compute_ingredient_quality_score(product, supp_type, flags=flags)
+
+            # Section A zero-score diagnostic: when score=0, capture why
+            if section_a["score"] == 0.0:
+                section_a["zero_score_diagnostic"] = self._build_section_a_zero_diagnostic(product)
+                if section_a["zero_score_diagnostic"]["skipped_ingredients"]:
+                    flags.append("SECTION_A_ZERO_NO_SCORABLE_INGREDIENTS")
             section_b = self._compute_safety_purity_score(
                 product,
                 supp_type,

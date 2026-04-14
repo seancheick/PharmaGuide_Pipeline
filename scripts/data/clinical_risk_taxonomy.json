@@ -3,7 +3,7 @@
     "description": "Controlled clinical risk taxonomy for condition and medication-class interaction alerts",
     "purpose": "interaction_alert_taxonomy",
     "schema_version": "5.1.0",
-    "last_updated": "2026-03-17",
+    "last_updated": "2026-04-14",
     "total_entries": 36
   },
   "conditions": [
@@ -147,6 +147,30 @@
       "label": "Statins",
       "category": "cardiovascular",
       "display_priority": 9
+    },
+    {
+      "id": "antidepressants_ssri_snri",
+      "label": "Antidepressants (SSRIs/SNRIs)",
+      "category": "psychiatry",
+      "display_priority": 10
+    },
+    {
+      "id": "maois",
+      "label": "MAOIs (Monoamine Oxidase Inhibitors)",
+      "category": "psychiatry",
+      "display_priority": 11
+    },
+    {
+      "id": "cardiac_glycosides",
+      "label": "Cardiac Glycosides (Digoxin)",
+      "category": "cardiology",
+      "display_priority": 12
+    },
+    {
+      "id": "anticholinergics",
+      "label": "Anticholinergic Medications",
+      "category": "neurology",
+      "display_priority": 13
     }
   ],
   "severity_levels": [

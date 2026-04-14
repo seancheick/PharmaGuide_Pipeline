@@ -243,6 +243,8 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
         ("kavalactones", "RISK_KAVA"),
         ("synephrine", "RISK_BITTER_ORANGE"),
         ("yohimbe", "RISK_YOHIMBE"),
+        ("7_keto_dhea", "BANNED_7_KETO_DHEA"),
+        ("cascara_sagrada", "ADD_CASCARA_SAGRADA"),
     }
     assert ("citrus_bioflavonoids", "RISK_BITTER_ORANGE") not in observed_parent_ids
     assert all(status in {"high_risk", "watchlist"} for _, _, status, _ in overlaps)

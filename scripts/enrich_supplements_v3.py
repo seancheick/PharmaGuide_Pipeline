@@ -988,11 +988,18 @@ class SupplementEnricherV3:
 
     @staticmethod
     def _recognition_blocks_scoring(recognition: Optional[Dict]) -> bool:
-        """Penalty-bearing safety identities override nutrient scoring and promotion."""
+        """Only banned/recalled ingredients block scoring outright (B0 gate).
+
+        harmful_additives are a SEPARATE penalty concern (Section B1) and must
+        NEVER block IQM quality scoring (Section A).  An ingredient can
+        legitimately appear in both IQM and harmful_additives, but scoring
+        is context-aware: the scorer suppresses low/moderate harmful
+        penalties for active-source ingredients (their IQM quality score is
+        the correct signal).  High/critical severity still fires for actives.
+        """
         if not recognition:
             return False
         return recognition.get("recognition_source") in {
-            "harmful_additives",
             "banned_recalled_ingredients",
         }
 
@@ -2337,7 +2344,7 @@ class SupplementEnricherV3:
             return True, "excipient_never_promote"
 
         for excipient in EXCIPIENT_NEVER_PROMOTE:
-            if excipient in ing_name:
+            if excipient in ing_name and re.search(r'\b' + re.escape(excipient) + r'\b', ing_name):
                 return True, "excipient_never_promote"
 
         return False, None
@@ -2542,27 +2549,12 @@ class SupplementEnricherV3:
                 else SKIP_REASON_BLEND_HEADER_NO_DOSE
             )
 
-        recognized = self._is_recognized_non_scorable(ing_name, std_name)
-        if self._recognition_blocks_scoring(recognized):
-            return SKIP_REASON_RECOGNIZED_NON_SCORABLE
-
-        # =================================================================
-        # OVERRIDE CHECK: If known in quality map or botanicals, always score
-        # =================================================================
-        if self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db):
-            return None
-
-        # Deterministic role split: recognized non-scorable identities are skipped.
-        # This prevents excipients/label technologies from inflating unmapped actives.
-        if recognized:
-            return SKIP_REASON_RECOGNIZED_NON_SCORABLE
-
-        # OVERRIDE CHECK: If has potency markers in name, always score
-        if self._has_potency_markers(ing_name):
-            return None
-
         # =================================================================
         # GROUP A: Structural flags from cleaning
+        # These are product-level signals (isAdditive, additiveType) that
+        # reflect how the ingredient is USED in this product.  They take
+        # precedence over IQM presence because the label explicitly says
+        # "this is an additive here" (e.g., xylitol as sweetener).
         # =================================================================
 
         # A1: Check isAdditive flag
@@ -2573,6 +2565,29 @@ class SupplementEnricherV3:
         additive_type = ingredient.get('additiveType', '')
         if additive_type and additive_type.lower() in ADDITIVE_TYPES_SKIP_SCORING:
             return SKIP_REASON_ADDITIVE_TYPE
+
+        # =================================================================
+        # THERAPEUTIC OVERRIDE: If known in quality map or botanicals, score.
+        # This MUST run before recognition-based skips so that IQM-known
+        # ingredients are never blocked by harmful_additives or banned_recalled
+        # high_risk/watchlist entries.  IQM scoring (Section A) and safety
+        # penalties (Section B) are independent concerns.
+        # =================================================================
+        if self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db):
+            return None
+
+        recognized = self._is_recognized_non_scorable(ing_name, std_name)
+        if self._recognition_blocks_scoring(recognized):
+            return SKIP_REASON_RECOGNIZED_NON_SCORABLE
+
+        # Deterministic role split: recognized non-scorable identities are skipped.
+        # This prevents excipients/label technologies from inflating unmapped actives.
+        if recognized:
+            return SKIP_REASON_RECOGNIZED_NON_SCORABLE
+
+        # OVERRIDE CHECK: If has potency markers in name, always score
+        if self._has_potency_markers(ing_name):
+            return None
 
         # A3: Check nested under non-therapeutic parent
         if ingredient.get('isNestedIngredient', False):
@@ -2744,16 +2759,17 @@ class SupplementEnricherV3:
         if name_lower in EXCIPIENT_NEVER_PROMOTE:
             return None
 
-        # Check for partial matches in excipient list (ing_name only)
+        # Check for partial matches in excipient list (ing_name only).
+        # Use word-boundary matching to prevent false positives like
+        # "citric acid" matching inside "hydroxycitric acid".
         for excipient in EXCIPIENT_NEVER_PROMOTE:
-            if excipient in name_lower:
+            if excipient in name_lower and re.search(r'\b' + re.escape(excipient) + r'\b', name_lower):
                 return None
 
-        recognized = self._is_recognized_non_scorable(ing_name, std_name)
-        if self._recognition_blocks_scoring(recognized):
-            return None
-
         # RULE A: Known therapeutic ingredient (single factor - high confidence)
+        # This MUST run before recognition-based blocking so IQM-known
+        # ingredients are never prevented from promotion by harmful_additives
+        # or banned_recalled high_risk/watchlist entries.
         is_known = self._is_known_therapeutic(
             ing_name, std_name, quality_map, botanicals_db
         )
@@ -2762,6 +2778,11 @@ class SupplementEnricherV3:
                 "reason": PROMOTE_REASON_KNOWN_DB,
                 "confidence": "HIGH"
             }
+
+        # Block promotion for banned_recalled ingredients not in IQM
+        recognized = self._is_recognized_non_scorable(ing_name, std_name)
+        if self._recognition_blocks_scoring(recognized):
+            return None
 
         # RULE B: TWO-FACTOR - Has dose AND therapeutic signal
         # Dose alone is not sufficient (prevents "2g sorbitol" backdoor)
@@ -3134,8 +3155,10 @@ class SupplementEnricherV3:
 
         # Check for partial matches (e.g., "organic sunflower oil" matches "sunflower oil")
         # Only match against ing_name — std_name is excluded for the same reason as above.
+        # Use word-boundary matching to prevent false positives like
+        # "citric acid" matching inside "hydroxycitric acid".
         for excipient in EXCIPIENT_NEVER_PROMOTE:
-            if excipient in name_lower:
+            if excipient in name_lower and re.search(r'\b' + re.escape(excipient) + r'\b', name_lower):
                 return {
                     "recognition_source": "excipient_list",
                     "recognition_reason": "known_excipient_partial",
@@ -5554,7 +5577,19 @@ class SupplementEnricherV3:
         - Harmful additives
         - Allergens
         """
-        all_ingredients = product.get('activeIngredients', []) + product.get('inactiveIngredients', [])
+        # Tag each ingredient with its source section so downstream
+        # scoring can apply context-aware penalties (active ingredients
+        # that match harmful_additives get suppressed for low/moderate
+        # severity — the IQM quality score is the correct signal there).
+        active_tagged = [
+            {**ing, '_source_section': 'active'}
+            for ing in product.get('activeIngredients', [])
+        ]
+        inactive_tagged = [
+            {**ing, '_source_section': 'inactive'}
+            for ing in product.get('inactiveIngredients', [])
+        ]
+        all_ingredients = active_tagged + inactive_tagged
 
         return {
             "banned_substances": self._check_banned_substances(all_ingredients, product),
@@ -5891,6 +5926,13 @@ class SupplementEnricherV3:
         """
         Check for harmful additives.
 
+        Each ingredient dict may carry a ``_source_section`` key (``"active"``
+        or ``"inactive"``) set by ``_collect_contaminant_data``.  The value is
+        forwarded into every match record as ``source_section`` so the scorer
+        can suppress precautionary (low/moderate) penalties for ingredients
+        that appear in the Supplement Facts panel — their IQM quality score
+        is the correct signal, not an additive penalty.
+
         P0.5: Natural colors classification with EXPLICIT DYE PRIORITY:
         1. Check explicit_artificial_dyes FIRST (deterministic) - always flag as artificial
         2. Check explicit_natural_dyes NEXT - never flag as artificial
@@ -6036,6 +6078,11 @@ class SupplementEnricherV3:
                         "mechanism_of_harm": additive.get('mechanism_of_harm', ''),
                         "population_warnings": additive.get('population_warnings', []),
                         "regulatory_status": additive.get('regulatory_status', {}),
+                        # Source section for context-aware scoring:
+                        # "active" = from Supplement Facts, "inactive" = from Other Ingredients.
+                        # Scorer suppresses low/moderate penalties for active-source matches
+                        # because the IQM quality score is the correct signal for actives.
+                        "source_section": ingredient.get('_source_section', 'unknown'),
                     })
 
         return {

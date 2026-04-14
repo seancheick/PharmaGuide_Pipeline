@@ -41,7 +41,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_MAOI_MEPERIDINE",
@@ -70,7 +72,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_MTX_TRIMETHOPRIM",
@@ -98,7 +102,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_ERGOTAMINE_ERYTHROMYCIN",
@@ -126,7 +132,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "high"
+      "clinical_confidence": "high",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_ANTICOAG_NSAID",
@@ -155,7 +163,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_LITHIUM_ACE",
@@ -184,7 +194,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_LITHIUM_THIAZIDE",
@@ -214,7 +226,9 @@
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
       "applies_to": "dose_dependent",
-      "evidence_notes": "Thiazide diuretics reduce lithium clearance, causing accumulation and toxicity. This interaction is stated on lithium drug labels and is a standard pharmacology teaching point."
+      "evidence_notes": "Thiazide diuretics reduce lithium clearance, causing accumulation and toxicity. This interaction is stated on lithium drug labels and is a standard pharmacology teaching point.",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_SIMVASTATIN_ERYTHROMYCIN",
@@ -242,7 +256,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium"
+      "clinical_confidence": "medium",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_ONDANSETRON_LEVOFLOXACIN",
@@ -271,7 +287,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_SPIRO_ACE",
@@ -300,7 +318,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "high",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_SSRI_TRIPTAN",
@@ -329,7 +349,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_METFORMIN_IVCONTRAST",
@@ -357,7 +379,8 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium"
+      "clinical_confidence": "medium",
+      "agent1_canonical_id": null
     },
     {
       "id": "DDI_CLOPIDOGREL_OMEPRAZOLE",
@@ -385,7 +408,9 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "label_regulatory",
-      "clinical_confidence": "medium"
+      "clinical_confidence": "medium",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_FLUCONAZOLE_STATINS",
@@ -414,7 +439,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_BETABLOCKER_VERAPAMIL",
@@ -429,7 +456,7 @@
       "management": "Use together only when clinically necessary with careful monitoring. Avoid IV verapamil in patients on beta blockers. Monitor heart rate and ECG at initiation and dose changes. Dose reductions of one or both agents may be required.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=c2d3e4f5-a6b7-4c8d-9e0f-1a2b3c4d5e6f",
-        "https://pubmed.ncbi.nlm.nih.gov/6133710/"
+        "https://pubmed.ncbi.nlm.nih.gov/6127992/"
       ],
       "verification": {
         "status": "verified",
@@ -443,7 +470,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_ACE_KSUPPLEMENT",
@@ -472,7 +501,9 @@
       },
       "evidence_basis": "authoritative_review",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "potassium"
     },
     {
       "id": "DDI_DIGOXIN_AMIODARONE",
@@ -501,7 +532,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_THEOPHYLLINE_CIPRO",
@@ -530,7 +563,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_ANTICOAG_ACETAMINOPHEN",
@@ -544,7 +579,7 @@
       "mechanism": "Acetaminophen at higher doses (>2 g/day regularly) inhibits vitamin K-dependent clotting factor synthesis via an unclear mechanism, potentiating warfarin's anticoagulant effect and raising INR. The interaction is dose-dependent — occasional low-dose use has minimal impact.",
       "management": "Acetaminophen at ≤2 g/day is the preferred analgesic over NSAIDs for patients on anticoagulants. At higher or chronic doses, monitor INR more frequently. Advise patients to report any signs of unusual bruising or bleeding.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/9726980/",
+        "https://pubmed.ncbi.nlm.nih.gov/21191575/",
         "https://www.ncbi.nlm.nih.gov/books/NBK470313/"
       ],
       "verification": {
@@ -559,7 +594,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_ANTICONV_OCP",
@@ -588,7 +625,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_PHENYTOIN_VALPROATE",
@@ -603,7 +642,7 @@
       "management": "Monitor both free phenytoin and valproate levels when used together. Dose adjustments for both agents are typically required. Neurologist oversight is essential. Avoid initiating both simultaneously — introduce one at a time with careful level monitoring.",
       "source_urls": [
         "https://dailymed.nlm.nih.gov/dailymed/lookup.cfm?setid=a6b7c8d9-e0f1-4a2b-3c4d-5e6f7a8b9c0d",
-        "https://pubmed.ncbi.nlm.nih.gov/6108530/"
+        "https://pubmed.ncbi.nlm.nih.gov/6776391/"
       ],
       "verification": {
         "status": "verified",
@@ -617,7 +656,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_CORTICO_NSAID",
@@ -646,7 +687,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_ANTIPSYCH_BENZO",
@@ -675,7 +718,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_SSRI_NSAID",
@@ -704,7 +749,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_METFORMIN_ALCOHOL",
@@ -732,7 +779,8 @@
         "method": "live_api_batch_2026_04_13"
       },
       "evidence_basis": "authoritative_review",
-      "clinical_confidence": "medium"
+      "clinical_confidence": "medium",
+      "agent1_canonical_id": null
     },
     {
       "id": "DDI_DIGOXIN_DIURETICS",
@@ -761,7 +809,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_STATIN_GEMFIBROZIL",
@@ -790,7 +840,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "medium",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_ANTIHYP_NSAID",
@@ -819,7 +871,9 @@
       },
       "evidence_basis": "clinical_literature",
       "clinical_confidence": "medium",
-      "applies_to": "whole_class"
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     },
     {
       "id": "DDI_BENZO_OPIOID",
@@ -848,7 +902,9 @@
       },
       "evidence_basis": "label_regulatory",
       "clinical_confidence": "high",
-      "applies_to": "dose_dependent"
+      "applies_to": "dose_dependent",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": null
     }
   ]
 }

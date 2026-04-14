@@ -3,9 +3,9 @@
     "schema_version": "1.0.0",
     "description": "Drug class expansion map for interaction matching (class:X → RxCUIs)",
     "purpose": "interaction_db_class_expansion",
-    "last_updated": "2026-04-11",
-    "total_classes": 24,
-    "total_members": 693,
+    "last_updated": "2026-04-14",
+    "total_classes": 28,
+    "total_members": 710,
     "data_source_metadata": {
       "sources": [
         "NLM RxClass (ATC)"
@@ -21,7 +21,8 @@
       "dry_run_command": "python3 scripts/api_audit/seed_drug_classes.py --dry-run",
       "live_command": "python3 scripts/api_audit/seed_drug_classes.py --live"
     },
-    "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build."
+    "usage": "Referenced by build_interaction_db.py when expanding class:X agents at build time. Missing class → blocks build.",
+    "total_entries": 28
   },
   "classes": {
     "class:statins": {
@@ -1712,6 +1713,88 @@
         "B01AF"
       ],
       "notes": "Critical for supplement interactions: warfarin vs vitamin K, ginkgo, fish oil, garlic"
+    },
+    "class:fluoroquinolones": {
+      "display_name": "Fluoroquinolones",
+      "description": "Fluoroquinolone antibiotics — ciprofloxacin, levofloxacin, moxifloxacin, etc.",
+      "member_rxcuis": [
+        "2551",
+        "82122",
+        "6922",
+        "139462"
+      ],
+      "member_names": [
+        "ciprofloxacin",
+        "levofloxacin",
+        "moxifloxacin",
+        "ofloxacin"
+      ],
+      "rxclass_id": "J01MA",
+      "atc_codes": [
+        "J01MA"
+      ]
+    },
+    "class:proton_pump_inhibitors": {
+      "display_name": "Proton Pump Inhibitors",
+      "description": "Gastric acid suppressants — omeprazole, pantoprazole, esomeprazole, etc.",
+      "member_rxcuis": [
+        "283742",
+        "112002",
+        "7646",
+        "40790",
+        "114979"
+      ],
+      "member_names": [
+        "esomeprazole",
+        "lansoprazole",
+        "omeprazole",
+        "pantoprazole",
+        "rabeprazole"
+      ],
+      "rxclass_id": "A02BC",
+      "atc_codes": [
+        "A02BC"
+      ]
+    },
+    "class:bisphosphonates": {
+      "display_name": "Bisphosphonates",
+      "description": "Bone resorption inhibitors — alendronate, risedronate, zoledronic acid, etc.",
+      "member_rxcuis": [
+        "3009",
+        "42470",
+        "35894",
+        "77634"
+      ],
+      "member_names": [
+        "alendronate",
+        "ibandronate",
+        "risedronate",
+        "zoledronic acid"
+      ],
+      "rxclass_id": "M05BA",
+      "atc_codes": [
+        "M05BA"
+      ]
+    },
+    "class:antiplatelet_agents": {
+      "display_name": "Antiplatelet Agents",
+      "description": "Platelet aggregation inhibitors — aspirin, clopidogrel, prasugrel, ticagrelor, etc.",
+      "member_rxcuis": [
+        "1191",
+        "32968",
+        "73731",
+        "323455"
+      ],
+      "member_names": [
+        "aspirin",
+        "clopidogrel",
+        "prasugrel",
+        "ticagrelor"
+      ],
+      "rxclass_id": "B01AC",
+      "atc_codes": [
+        "B01AC"
+      ]
     }
   }
 }

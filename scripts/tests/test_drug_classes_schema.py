@@ -50,6 +50,10 @@ EXPECTED_CLASSES = {
     "class:antihypertensives",
     "class:b_vitamins",
     "class:anticoagulants",
+    "class:fluoroquinolones",
+    "class:proton_pump_inhibitors",
+    "class:bisphosphonates",
+    "class:antiplatelet_agents",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -154,7 +158,7 @@ def test_all_expected_classes_present(classes):
 
 
 def test_exactly_twenty_four_classes(classes):
-    assert len(classes) == 24
+    assert len(classes) == 28
 
 
 # --------------------------------------------------------------------------- #
