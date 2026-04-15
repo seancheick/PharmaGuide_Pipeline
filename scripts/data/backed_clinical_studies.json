@@ -20345,6 +20345,18 @@
           "max_phase": 4,
           "natural_product": true,
           "molecular_weight": 336.37
+        },
+        {
+          "pmid": "18442638",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18442638/",
+          "source": "PubMed",
+          "verified": true
+        },
+        {
+          "pmid": "27157250",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27157250/",
+          "source": "PubMed",
+          "verified": true
         }
       ],
       "effect_direction": "mixed",
@@ -20424,6 +20436,18 @@
           "authority": "EMBL-EBI ChEMBL",
           "chembl_id": "CHEMBL2108769",
           "max_phase": 3
+        },
+        {
+          "pmid": "12006122",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/12006122/",
+          "source": "PubMed",
+          "verified": true
+        },
+        {
+          "pmid": "29694707",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29694707/",
+          "source": "PubMed",
+          "verified": true
         }
       ],
       "effect_direction": "null",
@@ -20505,6 +20529,18 @@
           "evidence_grade": "rct",
           "enrollment": 16,
           "sponsor": "Technological Centre of Nutrition and Health, Spain"
+        },
+        {
+          "pmid": "34798267",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34798267/",
+          "source": "PubMed",
+          "verified": true
+        },
+        {
+          "pmid": "33671310",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33671310/",
+          "source": "PubMed",
+          "verified": true
         }
       ],
       "effect_direction": "positive_strong",
@@ -20552,32 +20588,32 @@
       "notable_studies": "NCT01411436 (n=1637): Nexavar Post-marketing Surveillance for Hepatocellular Carcinoma in Japan. NCT00619541 (n=46): Study of Sorafenib and Infusional 5-Fluorouracil in Advanced Hepatocellular Carcinoma (HCC). NCT02961829 (n=30): Multi Interventional Study Exploring HIV-1 Residual Replication: a Step Towards HIV-1 Eradication and Sterilizing Cure.",
       "references_structured": [
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT01411436",
-          "title": "Nexavar Post-marketing Surveillance for Hepatocellular Carcinoma in Japan",
-          "evidence_grade": "rct",
-          "enrollment": 1637
+          "pmid": "11498460",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/11498460/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT00619541",
-          "title": "Study of Sorafenib and Infusional 5-Fluorouracil in Advanced Hepatocellular Carcinoma (HCC)",
-          "evidence_grade": "rct",
-          "enrollment": 46
+          "pmid": "15642562",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15642562/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT02961829",
-          "title": "Multi Interventional Study Exploring HIV-1 Residual Replication: a Step Towards HIV-1 Eradication and Sterilizing Cure",
-          "evidence_grade": "rct",
-          "enrollment": 30
+          "pmid": "9732910",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9732910/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL573",
-          "max_phase": "4.0",
-          "natural_product": 1
+          "pmid": "25141367",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25141367/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 852,
@@ -20617,32 +20653,18 @@
       "notable_studies": "NCT04892056 (n=30): Evaluation of the Rate of Anterior Segment Retraction Using Two Types of Mechanics. NCT01894165 (n=24): Phase 1 Single Dose Study of ALXN1101 in Healthy Volunteers. NCT04594252 (n=17): Copper Balance in Healthy Participants Administered ALXN1840.",
       "references_structured": [
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT04892056",
-          "title": "Evaluation of the Rate of Anterior Segment Retraction Using Two Types of Mechanics",
-          "evidence_grade": "rct",
-          "enrollment": 30
+          "pmid": "19318634",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/19318634/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT01894165",
-          "title": "Phase 1 Single Dose Study of ALXN1101 in Healthy Volunteers",
-          "evidence_grade": "rct",
-          "enrollment": 24
-        },
-        {
-          "type": "clinical_trial",
-          "nct_id": "NCT04594252",
-          "title": "Copper Balance in Healthy Participants Administered ALXN1840",
-          "evidence_grade": "rct",
-          "enrollment": 17
-        },
-        {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL4594300",
-          "max_phase": "4.0",
-          "natural_product": 0
+          "pmid": "16896051",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16896051/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 28,
@@ -20691,17 +20713,38 @@
         },
         {
           "type": "clinical_trial",
-          "nct_id": "NCT05016557",
-          "title": "The Muscle Protein Synthetic Response of Algal and Fungal Protein",
-          "evidence_grade": "rct",
-          "enrollment": 36
-        },
-        {
-          "type": "clinical_trial",
           "nct_id": "NCT01752972",
           "title": "Effect of Spirulina on Zinc, Vitamin E and Linoleic Acid Levels in Palm Skin Following Chronic Exposure to Arsenic",
           "evidence_grade": "rct",
           "enrollment": 30
+        },
+        {
+          "pmid": "34538515",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34538515/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "30544795",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30544795/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "25057105",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25057105/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "12487756",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/12487756/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 58,
@@ -20745,31 +20788,38 @@
       "references_structured": [
         {
           "type": "clinical_trial",
-          "nct_id": "NCT01868737",
-          "title": "Probiotics in the Management of Necrotizing Enterocolitis in HIV-exposed Premature Infants",
-          "evidence_grade": "rct",
-          "enrollment": 184
-        },
-        {
-          "type": "clinical_trial",
           "nct_id": "NCT02103972",
           "title": "Assessment of Efficacy of the Consumption of a Heat-treated Lactobacillus Paracasei (GM080) on Atopic Dermatitis",
           "evidence_grade": "rct",
           "enrollment": 126
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT00305227",
-          "title": "Intravaginal LACTIN-V for Prevention of Recurrent Urinary Tract Infection",
-          "evidence_grade": "rct",
-          "enrollment": 100
+          "pmid": "32538776",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32538776/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL2109070",
-          "max_phase": "3.0",
-          "natural_product": 0
+          "pmid": "35727573",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35727573/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "23829297",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23829297/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "35070839",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35070839/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 808,
@@ -20810,24 +20860,31 @@
       "references_structured": [
         {
           "type": "clinical_trial",
-          "nct_id": "NCT04567823",
-          "title": "Nutrient Bioavailability From Microalgae",
-          "evidence_grade": "rct",
-          "enrollment": 80
-        },
-        {
-          "type": "clinical_trial",
-          "nct_id": "NCT05016557",
-          "title": "The Muscle Protein Synthetic Response of Algal and Fungal Protein",
-          "evidence_grade": "rct",
-          "enrollment": 36
-        },
-        {
-          "type": "clinical_trial",
           "nct_id": "NCT05639634",
           "title": "The Efficacy of Chlorella Supplementation on Health and Performance Following a 12-week Training Programme",
           "evidence_grade": "rct",
           "enrollment": 36
+        },
+        {
+          "pmid": "29037431",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29037431/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "23234816",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23234816/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "35331862",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35331862/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 9,
@@ -20870,32 +20927,32 @@
       "notable_studies": "NCT00426751 (n=429): Efficacy Of Eptifibatide Compared To Abciximab In Primary Percutaneous Coronary Intervention (PCI) For Acute ST Elevation Myocardial Infarction (STEMI). NCT00288600 (n=92): Efficacy of High-dose Intravenous Immunoglobulin Therapy for Hyperbilirubinemia Due Rh Hemolytic Disease. NCT03705429 (n=51): A Study Comparing Two Standard of Care Adjuvant Chemotherapy Regimens for Lower Risk HER-2 Positive Breast Cancer.",
       "references_structured": [
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT00426751",
-          "title": "Efficacy Of Eptifibatide Compared To Abciximab In Primary Percutaneous Coronary Intervention (PCI) For Acute ST Elevation Myocardial Infarction (STEMI)",
-          "evidence_grade": "rct",
-          "enrollment": 429
+          "pmid": "38625669",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38625669/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT00288600",
-          "title": "Efficacy of High-dose Intravenous Immunoglobulin Therapy for Hyperbilirubinemia Due Rh Hemolytic Disease",
-          "evidence_grade": "rct",
-          "enrollment": 92
+          "pmid": "40381110",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40381110/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT03705429",
-          "title": "A Study Comparing Two Standard of Care Adjuvant Chemotherapy Regimens for Lower Risk HER-2 Positive Breast Cancer",
-          "evidence_grade": "rct",
-          "enrollment": 51
+          "pmid": "22569039",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/22569039/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL1201498",
-          "max_phase": "4.0",
-          "natural_product": 0
+          "pmid": "37189033",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37189033/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 18820,
@@ -20939,13 +20996,6 @@
       "references_structured": [
         {
           "type": "clinical_trial",
-          "nct_id": "NCT04989101",
-          "title": "Nigelle 5 in Prevention of Influanza",
-          "evidence_grade": "rct",
-          "enrollment": 500
-        },
-        {
-          "type": "clinical_trial",
           "nct_id": "NCT04553705",
           "title": "Omega-3, Nigella Sativa, Indian Costus, Quinine, Anise Seed, Deglycyrrhizinated Licorice, Artemisinin, Febrifugine on Immunity of Patients With (COVID-19)",
           "evidence_grade": "rct",
@@ -20959,11 +21009,32 @@
           "enrollment": 108
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL1093278",
-          "max_phase": null,
-          "natural_product": 0
+          "pmid": "40210172",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/40210172/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "37341696",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37341696/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "21675032",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21675032/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "34407441",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/34407441/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 28,
@@ -21014,25 +21085,25 @@
           "enrollment": 116
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT02140697",
-          "title": "Efficacy and Safety of Hippophae Rhamnoides L. Leaf Extract on Body Fat",
-          "evidence_grade": "rct",
-          "enrollment": 80
+          "pmid": "20554904",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20554904/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT05581108",
-          "title": "Enhancement of Learning and Memory Following Supplementation With Juice PLUS+® OMEGA in an Adolescent Population",
-          "evidence_grade": "rct",
-          "enrollment": 66
+          "pmid": "36043374",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36043374/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL4594496",
-          "max_phase": "1.0",
-          "natural_product": 0
+          "pmid": "23472020",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23472020/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 12,
@@ -21074,32 +21145,18 @@
       "notable_studies": "NOTE: Originally auto-associated NCTs (NCT04036006, NCT02233088) are mismatches — these are 'Enhanced Lifestyles for Metabolic Syndrome' lifestyle studies. Actual slippery elm evidence: PMID 20954962 (IBS pilot, multi-herb formula, n=31), PMID 32151878 (Gut Relief combination formula, n=43).",
       "references_structured": [
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT04036006",
-          "title": "Enhanced Lifestyles for Metabolic Syndrome",
-          "evidence_grade": "rct",
-          "enrollment": 618
+          "pmid": "20954962",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/20954962/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT02233088",
-          "title": "A Pilot Study of a Lifestyle Intervention on the Metabolic Syndrome (3ELM Study)",
-          "evidence_grade": "rct",
-          "enrollment": 48
-        },
-        {
-          "type": "clinical_trial",
-          "nct_id": "NCT05197413",
-          "title": "Study to Evaluate the Efficacy of Arrae's Bloat & Calm Alchemy Capsules to Reduce Bloating, Heartburn and Gas, and Alleviate the Intensity of IBS Symptoms",
-          "evidence_grade": "rct",
-          "enrollment": 35
-        },
-        {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL2108399",
-          "max_phase": "-1.0",
-          "natural_product": 0
+          "pmid": "32151878",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32151878/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 7,
@@ -21142,24 +21199,31 @@
       "references_structured": [
         {
           "type": "clinical_trial",
-          "nct_id": "NCT03415503",
-          "title": "Dietary Anthocyanins Improve Lipid Metabolism in a Dose - Dependent Manner",
-          "evidence_grade": "rct",
-          "enrollment": 169
-        },
-        {
-          "type": "clinical_trial",
-          "nct_id": "NCT01568983",
-          "title": "The Effects of Polyphenol-rich Berry Juice on Blood Pressure in Hypertensive Subjects",
-          "evidence_grade": "rct",
-          "enrollment": 153
-        },
-        {
-          "type": "clinical_trial",
           "nct_id": "NCT02194361",
           "title": "Efficacy of a Standardised Bilberry Extract in Improving the Night Vision of Healthy Volunteers",
           "evidence_grade": "rct",
           "enrollment": 119
+        },
+        {
+          "pmid": "32106548",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32106548/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "25923485",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25923485/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "25191571",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/25191571/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 30,
@@ -21203,31 +21267,31 @@
       "references_structured": [
         {
           "type": "clinical_trial",
-          "nct_id": "NCT04706559",
-          "title": "Efficacy of Oral Supplementation of Probiotics in Children With Atopic Dermatitis",
-          "evidence_grade": "rct",
-          "enrollment": 98
-        },
-        {
-          "type": "clinical_trial",
-          "nct_id": "NCT05367427",
-          "title": "Heat-treated Postbiotic Consumption in Healthy People With Mild to Moderate Gastrointestinal Symptoms",
-          "evidence_grade": "rct",
-          "enrollment": 60
-        },
-        {
-          "type": "clinical_trial",
           "nct_id": "NCT04422327",
           "title": "The Impact of a Combination of Bifidobacterium Longum 35624® and 1714™ Strains in Adults With Irritable Bowel Syndrome",
           "evidence_grade": "rct",
           "enrollment": 40
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL4297912",
-          "max_phase": "3.0",
-          "natural_product": 0
+          "pmid": "37702965",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/37702965/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "35317278",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35317278/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "27801892",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/27801892/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 131,
@@ -21278,25 +21342,32 @@
           "enrollment": 583
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT06035835",
-          "title": "Probiotics and Breastmilk Decrease Risk of Atopic Dermatitis in Premature Infants",
-          "evidence_grade": "rct",
-          "enrollment": 437
+          "pmid": "21418261",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21418261/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT04958460",
-          "title": "Effect of Probiotics on ADHD",
-          "evidence_grade": "rct",
-          "enrollment": 150
+          "pmid": "32277872",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32277872/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL4297912",
-          "max_phase": "3.0",
-          "natural_product": 0
+          "pmid": "32300799",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/32300799/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "31342226",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/31342226/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 73,
@@ -21346,24 +21417,31 @@
         },
         {
           "type": "clinical_trial",
-          "nct_id": "NCT03461380",
-          "title": "Effect of Menopause Relief EP-40 in Women With Menopausal Symptoms",
-          "evidence_grade": "rct",
-          "enrollment": 220
-        },
-        {
-          "type": "clinical_trial",
           "nct_id": "NCT06328348",
           "title": "Assessing the Synergistic Effects of Black Cohosh, Soy Isoflavones, and SDG Lignans (Soloways TM) on Menopausal Symptoms",
           "evidence_grade": "rct",
           "enrollment": 96
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL1093278",
-          "max_phase": null,
-          "natural_product": 0
+          "pmid": "15565808",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15565808/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "16039414",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/16039414/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
+        },
+        {
+          "pmid": "17565936",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/17565936/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 14,
@@ -21404,32 +21482,32 @@
       "notable_studies": "NCT06097871 (n=102): RCT of an Oral Acne Supplement for Adult Women. NCT04249128 (n=75): Nourishing Hair, Skin & Nails Supplement Study (Derm Aid). NCT05390866 (n=36): Investigating the Circulating Sphingolipidome Response to a Single High-intensity Interval Training Session.",
       "references_structured": [
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT06097871",
-          "title": "RCT of an Oral Acne Supplement for Adult Women",
-          "evidence_grade": "rct",
-          "enrollment": 102
+          "pmid": "33055441",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33055441/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT04249128",
-          "title": "Nourishing Hair, Skin & Nails Supplement Study (Derm Aid)",
-          "evidence_grade": "rct",
-          "enrollment": 75
+          "pmid": "38999848",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/38999848/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "clinical_trial",
-          "nct_id": "NCT05390866",
-          "title": "Investigating the Circulating Sphingolipidome Response to a Single High-intensity Interval Training Session",
-          "evidence_grade": "rct",
-          "enrollment": 36
+          "pmid": "35807914",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35807914/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         },
         {
-          "type": "chembl",
-          "authority": "EMBL-EBI ChEMBL",
-          "chembl_id": "CHEMBL155886",
-          "max_phase": "2.0",
-          "natural_product": 1
+          "pmid": "35719159",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/35719159/",
+          "source": "PubMed",
+          "verified": true,
+          "note": "Extracted from key_endpoints text — needs content verification"
         }
       ],
       "published_studies_count": 26,
