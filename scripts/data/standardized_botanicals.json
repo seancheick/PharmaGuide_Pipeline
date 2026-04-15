@@ -238,14 +238,17 @@
         "AlphaWave L-Theanine",
         "L-Theanine AlphaWave"
       ],
-      "markers": [],
+      "markers": [
+        "l-theanine"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "alphawave_l_theanine",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "AlphaWave — pure L-theanine from fermentation. Standardized to ≥99% L-theanine (HPLC).",
+      "category": "amino_acid",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 100
     },
     {
       "standard_name": "American Ginseng",
@@ -1872,17 +1875,20 @@
         "Chromax",
         "Cromax"
       ],
-      "markers": [],
+      "markers": [
+        "elemental chromium",
+        "chromium picolinate"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "chromax",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Chromax — chromium picolinate by Nutrition21. Dosed by elemental chromium (typically 200 mcg/dose).",
+      "category": "mineral_chelate",
       "external_ids": {
         "cas": "14639-25-9",
         "pubchem_cid": 151932
       },
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "Cinnamon",
@@ -2100,14 +2106,18 @@
       "aliases": [
         "Cognizin Citicoline"
       ],
-      "markers": [],
+      "markers": [
+        "citicoline",
+        "cdp-choline"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "cognizin_citicoline",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Cognizin — fermentation-derived citicoline by Kyowa Hakko. ≥99% purity by HPLC.",
+      "category": "nootropic",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 99
     },
     {
       "standard_name": "Coleus Forskohlii",
@@ -2225,14 +2235,19 @@
       "aliases": [
         "CranRx"
       ],
-      "markers": [],
+      "markers": [
+        "proanthocyanidins",
+        "PAC"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "cranrx",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "CranRx — cranberry (Vaccinium macrocarpon) extract. Standardized to 36 mg PAC/dose by BL-DMAC method.",
+      "category": "standardized_extract",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 36,
+      "standardization_unit": "mg_per_dose"
     },
     {
       "standard_name": "Cucumber",
@@ -2683,42 +2698,53 @@
       "aliases": [
         "Enovita"
       ],
-      "markers": [],
+      "markers": [
+        "oligomeric proanthocyanidins",
+        "OPC"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "enovita",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Enovita — grape seed extract (Vitis vinifera). Standardized to ≥95% OPCs.",
+      "category": "standardized_extract",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 95
     },
     {
       "standard_name": "EnXtra",
       "aliases": [
         "EnXtra"
       ],
-      "markers": [],
+      "markers": [
+        "acetoxychavicol acetate",
+        "ACA"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "enxtra",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "EnXtra — Alpinia galanga rhizome extract by Laila Nutraceuticals. Standardized to ACA profile (exact threshold proprietary).",
+      "category": "standardized_extract",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "EpiCor",
       "aliases": [
         "EpiCor High-Metabolite Immunogens"
       ],
-      "markers": [],
+      "markers": [
+        "beta-glucans",
+        "mannans",
+        "metabolites"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "epicor",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "EpiCor — dried yeast fermentate (S. cerevisiae). Whole-food matrix, not standardized to single marker. Identity-tested as complete fermentate.",
+      "category": "fermentate",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "EPs 7630",
@@ -2994,14 +3020,17 @@
       "aliases": [
         "FruiteX-B Calcium Fructoborate"
       ],
-      "markers": [],
+      "markers": [
+        "boron",
+        "calcium fructoborate"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "fruitex_b_calcium_fructoborate",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "FruiteX-B — calcium fructoborate. Provides 3 mg elemental boron per clinical dose.",
+      "category": "mineral_complex",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "Galdieria",
@@ -4022,14 +4051,17 @@
       "aliases": [
         "KeraGLO"
       ],
-      "markers": [],
+      "markers": [
+        "functional keratin",
+        "cysteine-rich peptides"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "keraglo",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "KeraGLO — solubilized keratin from wool (Keraplast technology). Identity-tested, not standardized to % marker.",
+      "category": "structural_protein",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "Kola Nut",
@@ -4196,12 +4228,15 @@
       "aliases": [
         "Levagen"
       ],
-      "markers": [],
+      "markers": [
+        "palmitoylethanolamide",
+        "PEA"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "levagen",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Levagen+ — palmitoylethanolamide (PEA) with LipiSperse dispersion. ≥98% PEA by HPLC.",
+      "category": "fatty_acid_amide",
       "external_ids": {
         "cas": "544-31-0",
         "pubchem_cid": 4671,
@@ -4219,7 +4254,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 98
     },
     {
       "standard_name": "Licorice",
@@ -4270,14 +4306,17 @@
         "Life's DHA",
         "life'sDHA"
       ],
-      "markers": [],
+      "markers": [
+        "docosahexaenoic acid",
+        "DHA"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "life_s_dha",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Life's DHA — algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %.",
+      "category": "algal_oil",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "Linden Flower",
@@ -4592,14 +4631,16 @@
       "aliases": [
         "MicroActive Melatonin"
       ],
-      "markers": [],
+      "markers": [
+        "melatonin"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "microactive_melatonin",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "MicroActive Melatonin — microencapsulated sustained-release melatonin. Dosed by mg/serving.",
+      "category": "hormone_analog",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "Milk Thistle",
@@ -4684,14 +4725,18 @@
       "aliases": [
         "Morosil Sicilian Red Orange Fruit Extract"
       ],
-      "markers": [],
+      "markers": [
+        "anthocyanins",
+        "cyanidin-3-glucoside"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "morosil",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Morosil — Moro blood orange extract (Citrus sinensis cv. Moro). Standardized to ≥5% anthocyanins.",
+      "category": "standardized_extract",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 5
     },
     {
       "standard_name": "Mucuna Pruriens",
@@ -5053,8 +5098,8 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "organic_gold_standard_potentiating_nutrients",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Proprietary blend — not a single-ingredient brand. Insufficient public data for standardization markers.",
+      "category": "blend",
       "external_ids": {},
       "data_quality": "stub"
     },
@@ -5373,14 +5418,18 @@
       "aliases": [
         "Proanthoplex"
       ],
-      "markers": [],
+      "markers": [
+        "oligomeric proanthocyanidins",
+        "OPC"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "proanthoplex",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Proanthoplex — grape seed OPC extract. Standardized to ≥95% OPCs.",
+      "category": "standardized_extract",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 95
     },
     {
       "standard_name": "Propolis",
@@ -6066,14 +6115,18 @@
       "aliases": [
         "Setria"
       ],
-      "markers": [],
+      "markers": [
+        "reduced glutathione",
+        "L-glutathione"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "setria",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Setria — fermentation-derived L-glutathione by Kyowa Hakko. ≥98% L-glutathione by HPLC.",
+      "category": "tripeptide",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 98
     },
     {
       "standard_name": "Sharp-PS Green",
@@ -6255,14 +6308,17 @@
       "aliases": [
         "Slimbione"
       ],
-      "markers": [],
+      "markers": [
+        "charantin",
+        "polypeptide-p"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "slimbione",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Slimbione — bitter melon (Momordica charantia) extract. Standardized to charantin + polypeptide-p (proprietary ratio).",
+      "category": "standardized_extract",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "Slippery Elm",
@@ -6471,14 +6527,17 @@
       "aliases": [
         "SunActive Iron"
       ],
-      "markers": [],
+      "markers": [
+        "elemental iron",
+        "ferric pyrophosphate"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "sunactive_iron",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "SunActive Iron — micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron.",
+      "category": "mineral",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "Tart Cherry",
@@ -6506,14 +6565,17 @@
       "aliases": [
         "Thermosil"
       ],
-      "markers": [],
+      "markers": [
+        "silicon",
+        "orthosilicic acid"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "thermosil",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Thermosil — silicon/silica complex. Limited public standardization data. Requires verification.",
+      "category": "mineral",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "requires_verification"
     },
     {
       "standard_name": "Thyme",
@@ -6727,14 +6789,17 @@
       "aliases": [
         "Uniflex"
       ],
-      "markers": [],
+      "markers": [
+        "undenatured type II collagen",
+        "UC-II"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "uniflex",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Uniflex (UC-II) — undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization.",
+      "category": "structural_protein",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete"
     },
     {
       "standard_name": "Uva Ursi",
@@ -6799,14 +6864,18 @@
         "Wellmune Baker's Yeast Beta Glucan",
         "wellmune beta glucan"
       ],
-      "markers": [],
+      "markers": [
+        "beta-1,3/1,6-glucan",
+        "beta-glucan"
+      ],
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "wellmune",
-      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
-      "category": "standardized",
+      "notes": "Wellmune — beta-1,3/1,6-glucan from S. cerevisiae (Kerry). Standardized to ≥75% beta-glucan by weight.",
+      "category": "polysaccharide",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "complete",
+      "min_threshold": 75
     },
     {
       "standard_name": "Wheatgrass",
