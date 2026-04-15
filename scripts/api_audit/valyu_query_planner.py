@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, UTC
+from datetime import datetime, timedelta, timezone
 
 
 CLINICAL_SOURCES = [
@@ -17,8 +17,8 @@ REGULATORY_SOURCES = [
 
 
 def build_search_plan(domain: str, entity_name: str, months_back: int = 24) -> dict[str, object]:
-    end_date = datetime.now(UTC).date()
-    start_date = (datetime.now(UTC) - timedelta(days=months_back * 30)).date()
+    end_date = datetime.now(timezone.utc).date()
+    start_date = (datetime.now(timezone.utc) - timedelta(days=months_back * 30)).date()
 
     if domain == "clinical_refresh":
         included_sources = CLINICAL_SOURCES

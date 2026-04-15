@@ -58926,7 +58926,7 @@
           "value": 0.85,
           "range_low": 0.75,
           "range_high": 0.95,
-          "quality": "high",
+          "quality": "very_good",
           "notes": "Rapidly absorbed via active transport in small intestine"
         }
       }
@@ -58975,7 +58975,7 @@
           "value": 0.9,
           "range_low": 0.8,
           "range_high": 0.95,
-          "quality": "high",
+          "quality": "very_good",
           "notes": "Lipase-mediated hydrolysis and efficient absorption via lymphatic system"
         },
         "external_ids": {
@@ -59028,7 +59028,7 @@
           "value": 0.95,
           "range_low": 0.9,
           "range_high": 0.98,
-          "quality": "high",
+          "quality": "very_good",
           "notes": "Completely absorbed; enters Krebs cycle directly"
         },
         "external_ids": {
@@ -59349,7 +59349,7 @@
           "value": 0.9,
           "range_low": 0.85,
           "range_high": 0.95,
-          "quality": "high",
+          "quality": "very_good",
           "notes": "Efficiently absorbed as triglycerides via lipase hydrolysis"
         },
         "external_ids": {
@@ -59457,7 +59457,7 @@
           "value": 0.0,
           "range_low": 0.0,
           "range_high": 0.0,
-          "quality": "not_applicable",
+          "quality": "unknown",
           "notes": "Designed to resist digestion; fermented by colonic microbiota"
         }
       }
@@ -59507,7 +59507,7 @@
           "value": 0.9,
           "range_low": 0.85,
           "range_high": 0.95,
-          "quality": "high",
+          "quality": "very_good",
           "notes": "Efficiently absorbed as triglycerides"
         },
         "external_ids": {
@@ -59563,7 +59563,7 @@
           "value": 0.8,
           "range_low": 0.7,
           "range_high": 0.9,
-          "quality": "high",
+          "quality": "very_good",
           "notes": "Orally well absorbed; rapidly converted in pyrimidine biosynthesis pathway"
         },
         "external_ids": {
@@ -59672,7 +59672,7 @@
           "value": 0.85,
           "range_low": 0.75,
           "range_high": 0.95,
-          "quality": "high",
+          "quality": "very_good",
           "notes": "Well absorbed as triglyceride via standard lipid absorption pathway"
         },
         "external_ids": {
@@ -59779,7 +59779,7 @@
           "value": 0.8,
           "range_low": 0.7,
           "range_high": 0.9,
-          "quality": "high",
+          "quality": "very_good",
           "notes": "Phospholipids well absorbed via pancreatic phospholipase A2; PC converted to choline and glycerophosphocholine"
         }
       }

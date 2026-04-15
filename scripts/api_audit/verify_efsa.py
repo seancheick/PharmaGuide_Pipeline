@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 EFSA OpenFoodTox validation tool for PharmaGuide harmful additives.
 
@@ -30,7 +31,7 @@ import argparse
 import json
 import re
 import sys
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -290,7 +291,7 @@ def validate_harmful_additives(
         # --- Stale opinion check ---
         efsa_year = ref.get("efsa_opinion_year")
         our_year = _extract_efsa_year_from_text(eu_text)
-        current_year = datetime.now(UTC).year
+        current_year = datetime.now(timezone.utc).year
 
         if efsa_year and (current_year - efsa_year) > STALE_OPINION_YEARS:
             issues.append("stale_opinion")

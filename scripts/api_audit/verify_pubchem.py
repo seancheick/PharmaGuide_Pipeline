@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 PubChem PUG REST verification and enrichment tool for PharmaGuide data files.
 
@@ -44,7 +45,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -252,7 +253,7 @@ class PubChemClient:
         expires_at = cached.get("expires_at")
         if isinstance(expires_at, str):
             try:
-                if datetime.fromisoformat(expires_at) <= datetime.now(UTC):
+                if datetime.fromisoformat(expires_at) <= datetime.now(timezone.utc):
                     self._cache.pop(key, None)
                     return None
             except ValueError:
@@ -264,7 +265,7 @@ class PubChemClient:
         self._cache[key] = {
             "payload": payload,
             "expires_at": (
-                datetime.now(UTC) + timedelta(seconds=self.cache_ttl_seconds)
+                datetime.now(timezone.utc) + timedelta(seconds=self.cache_ttl_seconds)
             ).isoformat(),
         }
 

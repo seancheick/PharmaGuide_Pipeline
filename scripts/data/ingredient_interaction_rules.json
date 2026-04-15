@@ -4,7 +4,7 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "5.1.0",
     "last_updated": "2026-04-14",
-    "total_entries": 127,
+    "total_entries": 129,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
     "total_rules": 129
   },

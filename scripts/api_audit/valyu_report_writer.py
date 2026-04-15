@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from collections import Counter
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -15,7 +15,7 @@ REPORT_DIR = SCRIPTS_ROOT / "api_audit" / "reports" / "valyu"
 def _timestamp_slug(timestamp: str | None = None) -> str:
     if timestamp:
         return timestamp
-    return datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    return datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
 
 
 def build_report_paths(timestamp: str | None = None, output_dir: Path | None = None) -> dict[str, Path]:

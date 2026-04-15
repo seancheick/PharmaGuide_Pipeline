@@ -11,7 +11,9 @@
       "moderate": "25-99 serious reports",
       "weak": "10-24 serious reports",
       "minimal": "<10 serious reports (excluded)"
-    }
+    },
+    "description": "FDA CAERS adverse event signals aggregated per supplement ingredient for B8 scoring",
+    "purpose": "adverse_event_signals"
   },
   "signals": {
     "calcium": {

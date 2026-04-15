@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 PharmaGuide Final DB Builder v1.1.0
 ====================================

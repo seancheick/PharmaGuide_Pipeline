@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 Enhanced DSLD Data Normalizer Module
 Improved ingredient mapping with fuzzy matching, better preprocessing, and expanded aliases
@@ -9,7 +10,7 @@ import string
 import os
 import functools
 from typing import Dict, List, Tuple, Optional, Any, Set, Union
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from pathlib import Path
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -3567,7 +3568,7 @@ class EnhancedDSLDNormalizer:
 
                 # ========== METADATA (CLEANING ONLY) ==========
                 "metadata": {
-                    "lastCleaned": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+                    "lastCleaned": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                     "cleaningVersion": "2.1.0",  # Updated version - NO ENRICHMENT
                     "reference_versions": self.reference_versions,  # Track data file versions for auditability
                     "mappingStats": {

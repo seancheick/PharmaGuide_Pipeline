@@ -66,7 +66,7 @@ def test_umls_exact_search_vitamin_k():
 
 def test_end_to_end_live_verification(tmp_path):
     """Full pipeline smoke test against real APIs."""
-    from datetime import UTC, datetime
+    from datetime import datetime, timezone
 
     import json
 

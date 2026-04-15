@@ -11,7 +11,7 @@ from __future__ import annotations
 import argparse
 import os
 import sys
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -179,7 +179,7 @@ def run_mode(mode: str, *, limit: int | None = None, client: Any | None = None) 
             review_rows.append(classified)
 
     metadata = {
-        "timestamp": datetime.now(UTC).isoformat(),
+        "timestamp": datetime.now(timezone.utc).isoformat(),
         "mode": mode,
         "targets_scanned": len(targets),
     }

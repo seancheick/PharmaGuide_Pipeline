@@ -11,7 +11,7 @@ must record their matches through this ledger.
 
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Any
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 import normalization as norm_module
 
 
@@ -665,7 +665,7 @@ class MatchLedgerBuilder:
 
         return {
             "schema_version": SCHEMA_VERSION,
-            "generated_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+            "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "domains": domains,
             "summary": {
                 "total_entities": total_entities,

@@ -1,3 +1,4 @@
+from __future__ import annotations
 """
 unii_cache.py — Local-first UNII lookup with GSRS API fallback.
 

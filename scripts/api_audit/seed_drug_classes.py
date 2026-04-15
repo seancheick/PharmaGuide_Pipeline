@@ -49,7 +49,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # --------------------------------------------------------------------------- #
@@ -459,7 +459,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     # Live mode
-    fetched_at = datetime.now(UTC).isoformat(timespec="seconds").replace("+00:00", "Z")
+    fetched_at = datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     print(f"Seeding {len(CLASS_DEFINITIONS)} classes from RxClass…", file=sys.stderr)
 
     results: list[SeedResult] = []

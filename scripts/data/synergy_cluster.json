@@ -4,7 +4,7 @@
     "purpose": "synergy_bonuses",
     "schema_version": "5.0.0",
     "last_updated": "2026-04-14",
-    "total_entries": 57,
+    "total_entries": 58,
     "citation_fields": "note + sources (phase_3 curated_no_query_placeholders)",
     "citation_coverage": {
       "clusters_with_sources": 54,

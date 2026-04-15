@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 DSLD Supplement Enrichment System v3.0.0
 =========================================
@@ -29,7 +30,7 @@ import math
 import logging
 import argparse
 import traceback
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from difflib import SequenceMatcher
 from typing import Dict, List, Any, Optional, Tuple
 from pathlib import Path
@@ -314,7 +315,7 @@ class SupplementEnricherV3:
             "error_type": error_type,
             "error_message": message,
             "stage": stage,
-            "timestamp": datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ'),
+            "timestamp": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
             "enrichment_version": self.VERSION,
         }
         if traceback_str:
@@ -10868,7 +10869,7 @@ class SupplementEnricherV3:
             # Add enrichment metadata
             enriched["enrichment_version"] = self.VERSION
             enriched["compatible_scoring_versions"] = self.COMPATIBLE_SCORING_VERSIONS
-            enriched["enriched_date"] = datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
+            enriched["enriched_date"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             enriched["reference_versions"] = self.reference_versions  # Track data file versions for auditability
 
             # Classify supplement type (determines scoring adjustments)
@@ -10983,7 +10984,7 @@ class SupplementEnricherV3:
                 "enrichment_version": self.VERSION,
                 "scoring_compatibility": self.COMPATIBLE_SCORING_VERSIONS,
                 "generated_by": "SupplementEnricherV3",
-                "generated_at": datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ'),
+                "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                 "data_completeness": self._calculate_completeness(enriched),
                 "ready_for_scoring": True,
                 "unmapped_active_count": enriched.get("ingredient_quality_data", {}).get("unmapped_count", 0),
@@ -11013,7 +11014,7 @@ class SupplementEnricherV3:
             issues.append(f"Data structure error: {str(e)}")
             product.update(copy.deepcopy(self.EMPTY_ENRICHMENT_SCHEMA))
             product["enrichment_version"] = self.VERSION
-            product["enriched_date"] = datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
+            product["enriched_date"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             product["enrichment_status"] = "failed"
             product["enrichment_error"] = f"Data structure error: {str(e)}"
             return product, issues
@@ -11024,7 +11025,7 @@ class SupplementEnricherV3:
             issues.append(f"Value error: {str(e)}")
             product.update(copy.deepcopy(self.EMPTY_ENRICHMENT_SCHEMA))
             product["enrichment_version"] = self.VERSION
-            product["enriched_date"] = datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
+            product["enriched_date"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             product["enrichment_status"] = "failed"
             product["enrichment_error"] = f"Value error: {str(e)}"
             return product, issues
@@ -11039,7 +11040,7 @@ class SupplementEnricherV3:
             # causing the scorer to produce scores without safety checks.
             product.update(copy.deepcopy(self.EMPTY_ENRICHMENT_SCHEMA))
             product["enrichment_version"] = self.VERSION
-            product["enriched_date"] = datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ')
+            product["enriched_date"] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
             product["enrichment_status"] = "failed"
             product["enrichment_error"] = str(e)
 
@@ -11616,7 +11617,7 @@ class SupplementEnricherV3:
         self.logger.info(f"Found {len(input_files)} files to process")
 
         # Process all files
-        start_time = datetime.now(UTC)
+        start_time = datetime.now(timezone.utc)
         total_stats = {
             "total_products": 0,
             "successful": 0,
@@ -11632,7 +11633,7 @@ class SupplementEnricherV3:
                 total_stats[key] += batch_stats.get(key, 0)
 
         # Generate summary
-        end_time = datetime.now(UTC)
+        end_time = datetime.now(timezone.utc)
         duration = (end_time - start_time).total_seconds()
 
         summary = {
@@ -11719,7 +11720,7 @@ class SupplementEnricherV3:
                 same = [v for v in seen_form_fb.values() if not v["forms_differ"]]
 
                 form_fallback_report = {
-                    "generated_at": datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ'),
+                    "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                     "total_form_fallback_count": len(self._form_fallback_details),
                     "unique_form_fallback_count": len(seen_form_fb),
                     "forms_differ_count": len(differs),
@@ -11748,7 +11749,7 @@ class SupplementEnricherV3:
                 )
             else:
                 form_fallback_report = {
-                    "generated_at": datetime.now(UTC).strftime('%Y-%m-%dT%H:%M:%SZ'),
+                    "generated_at": datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
                     "total_form_fallback_count": 0,
                     "unique_form_fallback_count": 0,
                     "forms_differ_count": 0,

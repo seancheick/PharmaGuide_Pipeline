@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 Alias accuracy auditor for PharmaGuide data files.
 
@@ -37,7 +38,7 @@ import time
 import urllib.error
 import urllib.request
 from collections import defaultdict
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 

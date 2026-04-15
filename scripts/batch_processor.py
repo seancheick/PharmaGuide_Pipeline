@@ -7,7 +7,7 @@ import logging
 import time
 from pathlib import Path
 from typing import Dict, List, Tuple, Any, Optional, Set
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from collections import Counter
 from dataclasses import dataclass, asdict
@@ -218,7 +218,7 @@ class BatchProcessor:
             "error_type": error.exception_type,
             "error_message": error.message,
             "processing_stage": error.stage,
-            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "traceback": error.traceback
         }
 
@@ -254,7 +254,7 @@ class BatchProcessor:
             "top_level_keys": list(result.data.keys()) if result.data else [],
             "pipeline_version": self.config.get("pipeline_version", "unknown"),
             "config_checksum": self.config.get("config_checksum"),
-            "timestamp": datetime.now(UTC).isoformat().replace("+00:00", "Z")
+            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         }
 
         try:
@@ -480,8 +480,8 @@ class BatchProcessor:
         last_file = sorted_files[-1] if sorted_files else ""
 
         return BatchState(
-            started=datetime.now(UTC).isoformat().replace("+00:00", "Z"),
-            last_updated=datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+            started=datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+            last_updated=datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             last_completed_batch=-1,  # -1 means no batches completed yet
             total_batches=total_batches,
             processed_files=0,
@@ -699,7 +699,7 @@ class BatchProcessor:
             if batch_result.get("write_success", True):
                 state.last_completed_batch = batch_num
             state.processed_files += len(batch_result.get("processed_files", []))
-            state.last_updated = datetime.now(UTC).isoformat().replace("+00:00", "Z")
+            state.last_updated = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
             state.errors.extend(batch_result.get("errors", []))
             # FIX 1+2: Track processed file paths for per-file resume
             state.processed_file_paths.extend(batch_result.get("processed_files", []))
@@ -1179,14 +1179,14 @@ class BatchProcessor:
                     {
                         "name": name,
                         "occurrences": count,
-                        "firstSeen": datetime.now(UTC).isoformat().replace("+00:00", "Z")
+                        "firstSeen": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
                     }
                     for name, count in self._sort_counter_deterministic(self.global_unmapped)
                 ],
                 "stats": {
                     "totalUnmapped": len(self.global_unmapped),
                     "totalOccurrences": sum(self.global_unmapped.values()),
-                    "generatedAt": datetime.now(UTC).isoformat().replace("+00:00", "Z")
+                    "generatedAt": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
                 }
             }
             

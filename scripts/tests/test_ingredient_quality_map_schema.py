@@ -111,6 +111,30 @@ class TestAliasQuality:
             'triglyceride',         # same as above (singular form)
             'triglycerides natural', # natural TG form — dha + epa + omega_3 entries
             'ethyl esters',         # EE form — dha/epa/fish_oil/omega_3 ethyl ester entries
+            # Prebiotic/oligosaccharide overlap — FOS/GOS/XOS are both prebiotics AND oligosaccharides
+            'fos', 'fructooligosaccharides', 'gos', 'galactooligosaccharides',
+            'xos', 'xylo-oligosaccharides',
+            # Omega fatty acid parent/child — oleic acid IS an omega-9, palmitoleic IS an omega-7
+            'oleic acid', 'cis-9-octadecenoic acid', 'omega-9',
+            'omega 7', 'omega-7', 'sea buckthorn oil',
+            # Vanadium/vanadyl sulfate — vanadyl_sulfate is a form of vanadium
+            'vanadium', 'vanadium sulfate', 'vanadyl', 'vanadyl sulfate',
+            # NAD+ precursor pathway — NR, NMN, NADH are all NAD+ precursors with own entries
+            'nicotinamide riboside', 'nr', 'nicotinamide mononucleotide', 'nmn',
+            'nicotinamide adenine dinucleotide',
+            # Milk thistle / silymarin parent-child
+            'silymarin', 'silybin', 'silibinin', 'milk thistle extract',
+            # Lecithin / choline / phosphatidylserine / soy overlap
+            'lecithin', 'soy lecithin', 'sunflower lecithin',
+            'soy', 'soybean',
+            # Glutamate / glutamic acid overlap
+            'glutamic acid', 'l-glutamic acid',
+            # Orotate mineral salts — shared between mineral + orotic_acid
+            'magnesium orotate', 'lithium orotate',
+            # Rice bran / gamma-oryzanol / IP6 overlap
+            'gamma-oryzanol', 'oryzanol', 'inositol hexaphosphate', 'ip6',
+            # Naringin / naringenin parent-child
+            'naringin',
         }
 
         alias_map = defaultdict(list)

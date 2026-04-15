@@ -4,7 +4,7 @@ Handles validation, completeness checking, and data quality assessment
 """
 import re
 from typing import Dict, List, Tuple, Optional, Any, Set
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 import logging
 
 from constants import (
@@ -44,7 +44,7 @@ class DSLDValidator:
                 "completeness_score": 0,
                 "critical_fields_complete": True,
                 "data_quality_issues": [],
-                "validation_timestamp": datetime.now(UTC).isoformat()
+                "validation_timestamp": datetime.now(timezone.utc).isoformat()
             }
             
             # Check critical fields

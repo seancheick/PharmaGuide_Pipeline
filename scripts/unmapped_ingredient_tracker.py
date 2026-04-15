@@ -13,7 +13,7 @@ import json
 import logging
 from pathlib import Path
 from typing import Dict, Set, Any, Optional, List
-from datetime import datetime, UTC
+from datetime import datetime, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -116,7 +116,7 @@ class UnmappedIngredientTracker:
             with open(active_file, 'w', encoding='utf-8') as f:
                 json.dump({
                     "metadata": {
-                        "generated_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+                        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                         "products_processed": self.processed_count,
                         "total_unmapped": len(sorted_active),
                         "total_occurrences": sum(sorted_active.values())
@@ -129,7 +129,7 @@ class UnmappedIngredientTracker:
             with open(inactive_file, 'w', encoding='utf-8') as f:
                 json.dump({
                     "metadata": {
-                        "generated_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+                        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                         "products_processed": self.processed_count,
                         "total_unmapped": len(sorted_inactive),
                         "total_occurrences": sum(sorted_inactive.values())
@@ -141,7 +141,7 @@ class UnmappedIngredientTracker:
             with open(needs_active_file, 'w', encoding='utf-8') as f:
                 json.dump({
                     "metadata": {
-                        "generated_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+                        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                         "products_processed": self.processed_count,
                         "total_needs_verification": len(self.needs_verification_active),
                         "total_occurrences": sum(row["occurrences"] for row in self.needs_verification_active),
@@ -156,7 +156,7 @@ class UnmappedIngredientTracker:
             with open(needs_inactive_file, 'w', encoding='utf-8') as f:
                 json.dump({
                     "metadata": {
-                        "generated_at": datetime.now(UTC).isoformat().replace("+00:00", "Z"),
+                        "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
                         "products_processed": self.processed_count,
                         "total_needs_verification": len(self.needs_verification_inactive),
                         "total_occurrences": sum(row["occurrences"] for row in self.needs_verification_inactive),
