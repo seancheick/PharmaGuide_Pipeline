@@ -23,8 +23,8 @@ def test_acai_rows_use_plant_cui_not_disease_cui():
     botanicals = _load_rows(BOTANICALS_PATH, "botanical_ingredients")
     standardized = _load_rows(STANDARDIZED_PATH, "standardized_botanicals")
 
-    assert botanicals["acai_berry"]["CUI"] == "C1054955"
-    assert standardized["acai"]["CUI"] == "C1054955"
+    assert botanicals["acai_berry"]["cui"] == "C1054955"
+    assert standardized["acai"]["cui"] == "C1054955"
 
 
 def test_generic_ashwagandha_does_not_carry_withanolide_pubchem_ids():
@@ -60,7 +60,7 @@ def test_enrich_botanicals_dry_run_does_not_write_pre_enrichment_changes(tmp_pat
                 "standard_name": "Acai Berry",
                 "latin_name": "Euterpe oleracea",
                 "aliases": ["acai berry extract"],
-                "CUI": "C1054955",
+                "cui": "C1054955",
             }
         ]
     }
@@ -89,17 +89,17 @@ def test_enrich_botanicals_dry_run_does_not_write_pre_enrichment_changes(tmp_pat
             "botanical_ingredients": {
                 "file": botanicals_path,
                 "list_key": "botanical_ingredients",
-                "cui_field": "CUI",
+                "cui_field": "cui",
             },
             "other_ingredients": {
                 "file": other_path,
                 "list_key": "other_ingredients",
-                "cui_field": "CUI",
+                "cui_field": "cui",
             },
             "standardized_botanicals": {
                 "file": standardized_path,
                 "list_key": "standardized_botanicals",
-                "cui_field": "CUI",
+                "cui_field": "cui",
             },
         },
     )

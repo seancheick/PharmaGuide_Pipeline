@@ -254,10 +254,10 @@ def test_botanical_ashwagandha_uses_plant_cui():
     botanicals = _load_json("botanical_ingredients.json").get("botanical_ingredients", [])
     by_id = {entry.get("id"): entry for entry in botanicals}
 
-    assert by_id["ashwagandha"]["CUI"] == "C1061163"
-    assert by_id["aloe_vera"]["CUI"] == "C0718405"
-    assert by_id["andrographis"]["CUI"] == "C1256659"
-    assert by_id["bilberry"]["CUI"] == "C0795673"
-    assert by_id["blueberry"]["CUI"] == "C1027331"
-    assert by_id["chamomile"]["CUI"] == "C1510478"
-    assert by_id["citrus_bergamot"]["CUI"] == "C1258049"
+    assert by_id["ashwagandha"]["cui"] == "C1061163"
+    assert by_id["aloe_vera"]["cui"] == "C0718405"
+    assert by_id["andrographis"]["cui"] == "C1256659"
+    assert by_id["bilberry"]["cui"] == "C0795673"
+    assert by_id["blueberry"]["cui"] == "C1027331"
+    assert by_id["chamomile"]["cui"] == "C1510478"
+    assert by_id["citrus_bergamot"]["cui"] == "C1258049"

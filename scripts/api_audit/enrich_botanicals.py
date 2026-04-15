@@ -57,17 +57,17 @@ TARGETS = {
     "botanical_ingredients": {
         "file": DATA_DIR / "botanical_ingredients.json",
         "list_key": "botanical_ingredients",
-        "cui_field": "CUI",  # capital C in this file
+        "cui_field": "cui",
     },
     "other_ingredients": {
         "file": DATA_DIR / "other_ingredients.json",
         "list_key": "other_ingredients",
-        "cui_field": "CUI",  # capital C in this file
+        "cui_field": "cui",
     },
     "standardized_botanicals": {
         "file": DATA_DIR / "standardized_botanicals.json",
         "list_key": "standardized_botanicals",
-        "cui_field": "CUI",  # will be created
+        "cui_field": "cui",
     },
 }
 
@@ -97,7 +97,7 @@ def copy_cuis_from_botanicals(std_data: dict, bot_data: dict) -> int:
     name_to_cui = {}
     latin_to_cui = {}
     for entry in bot_entries:
-        cui = entry.get("CUI")
+        cui = entry.get("cui")
         if not cui:
             continue
         sname = (entry.get("standard_name") or "").lower().strip()
@@ -110,7 +110,7 @@ def copy_cuis_from_botanicals(std_data: dict, bot_data: dict) -> int:
     std_entries = std_data.get("standardized_botanicals", [])
     filled = 0
     for entry in std_entries:
-        if entry.get("CUI"):
+        if entry.get("cui"):
             continue  # already has one
         sname = (entry.get("standard_name") or "").lower().strip()
         cui = name_to_cui.get(sname)
@@ -122,13 +122,13 @@ def copy_cuis_from_botanicals(std_data: dict, bot_data: dict) -> int:
                 if cui:
                     break
         if cui:
-            entry["CUI"] = cui
+            entry["cui"] = cui
             filled += 1
     return filled
 
 
 def run_enrichment_script(script_name: str, file_path: Path, list_key: str,
-                          cui_field: str = "CUI", apply: bool = False) -> int:
+                          cui_field: str = "cui", apply: bool = False) -> int:
     """Run one of the verify_*.py scripts. Returns the exit code."""
     script_path = SCRIPT_DIR / script_name
 
