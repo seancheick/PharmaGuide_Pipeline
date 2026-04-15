@@ -242,9 +242,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "alphawave_l_theanine",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "American Ginseng",
@@ -1875,12 +1876,13 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "chromax",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
       "external_ids": {
         "cas": "14639-25-9",
         "pubchem_cid": 151932
-      }
+      },
+      "data_quality": "stub"
     },
     {
       "standard_name": "Cinnamon",
@@ -2102,9 +2104,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "cognizin_citicoline",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Coleus Forskohlii",
@@ -2226,9 +2229,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "cranrx",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Cucumber",
@@ -2683,9 +2687,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "enovita",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "EnXtra",
@@ -2696,9 +2701,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "enxtra",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "EpiCor",
@@ -2709,9 +2715,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "epicor",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "EPs 7630",
@@ -2991,9 +2998,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "fruitex_b_calcium_fructoborate",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Galdieria",
@@ -4018,9 +4026,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "keraglo",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Kola Nut",
@@ -4191,7 +4200,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "levagen",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
       "external_ids": {
         "cas": "544-31-0",
@@ -4209,7 +4218,8 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      }
+      },
+      "data_quality": "stub"
     },
     {
       "standard_name": "Licorice",
@@ -4264,9 +4274,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "life_s_dha",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Linden Flower",
@@ -4585,9 +4596,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "microactive_melatonin",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Milk Thistle",
@@ -4676,9 +4688,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "morosil",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Mucuna Pruriens",
@@ -5040,9 +5053,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "organic_gold_standard_potentiating_nutrients",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Pacran",
@@ -5363,9 +5377,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "proanthoplex",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Propolis",
@@ -6055,9 +6070,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "setria",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Sharp-PS Green",
@@ -6243,9 +6259,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "slimbione",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Slippery Elm",
@@ -6458,9 +6475,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "sunactive_iron",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Tart Cherry",
@@ -6492,9 +6510,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "thermosil",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Thyme",
@@ -6712,9 +6731,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "uniflex",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Uva Ursi",
@@ -6783,9 +6803,10 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "wellmune",
-      "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
+      "notes": "Branded/proprietary ingredient — no standardization markers available. Does not qualify for A5b botanical bonus until markers are identified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "data_quality": "stub"
     },
     {
       "standard_name": "Wheatgrass",
