@@ -4196,6 +4196,24 @@ class SupplementEnricherV3:
                     if form_info.get('has_form_evidence') and not (
                         multi_form_result and multi_form_result.get('all_forms_generic')
                     ):
+                        # PRIORITY 1.5: Try combined forms text as a single lookup.
+                        # DSLD labels like "Camellia sinensis extract, Phospholipid complex"
+                        # are split into individual forms by the parser, but the IQM alias
+                        # may cover the full combined text (e.g., phytosome descriptors).
+                        combined_forms = ", ".join(
+                            f.get('raw_form_text', '') for f in form_info.get('extracted_forms', [])
+                            if f.get('raw_form_text')
+                        )
+                        if combined_forms:
+                            combined_match = self._match_quality_map(
+                                combined_forms, std_name, quality_map, _form_extraction_attempt=True,
+                                preferred_parent=preferred_parent if 'preferred_parent' in dir() else None
+                            )
+                            if combined_match and combined_match.get('form_id') and 'unspecified' not in combined_match.get('form_id', '').lower():
+                                combined_match['combined_form_match'] = True
+                                combined_match['original_label'] = ing_name
+                                return combined_match
+
                         # Fallback: try parent/base matching so product can still score
                         # conservatively while preserving form-unmapped telemetry.
                         fallback_base = form_info.get('base_name') or ing_name
