@@ -435,11 +435,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2026-01-09",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0083381",
       "external_ids": {
         "unii": "VG2QF83CGL"
@@ -537,11 +535,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2009-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0025598",
       "external_ids": {
         "unii": "9100L32L2N"
@@ -658,11 +654,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2007-06-13",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1142933",
       "external_ids": {
         "unii": "RML78EN3XE"
@@ -826,11 +820,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2000-02-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0043992",
       "external_ids": {
         "unii": "7XOO2LE6G3"
@@ -976,11 +968,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-07-15",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1435927",
       "external_ids": {
         "unii": "2T3TWA75R0"
@@ -1164,11 +1154,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0525091",
       "external_ids": {}
     },
@@ -1261,7 +1249,6 @@
       "regulatory_date": "2013-11-18",
       "regulatory_date_label": "FDA warning letter issued",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0051816",
       "external_ids": {
         "unii": "5PP654XB7D"
@@ -1373,7 +1360,6 @@
       "regulatory_date": "1963-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0602979",
       "external_ids": {
         "unii": "2QE5Y68984"
@@ -1482,7 +1468,6 @@
       "regulatory_date": "2011-06-10",
       "regulatory_date_label": "Carcinogen classification effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0016564",
       "external_ids": {
         "unii": "1HG84L3525"
@@ -1591,7 +1576,6 @@
       "regulatory_date": "1978-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0387837",
       "external_ids": {
         "unii": "RGU455OS50"
@@ -1740,7 +1724,6 @@
       "regulatory_date": "2008-08-14",
       "regulatory_date_label": "Federal restriction effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0136960",
       "external_ids": {
         "unii": "2286E5R2KE"
@@ -1838,7 +1821,6 @@
       "regulatory_date": "1991-01-01",
       "regulatory_date_label": "EU/International ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0071753",
       "external_ids": {
         "unii": "04MB35W6ZA"
@@ -1978,7 +1960,6 @@
       "regulatory_date": "1979-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0014941",
       "external_ids": {
         "unii": "423D2T571U"
@@ -2080,8 +2061,6 @@
       "regulatory_date": "1958-09-06",
       "regulatory_date_label": "Regulatory framework established",
       "match_mode": "disabled",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Policy watchlist spans multiple synthetic food acids; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
@@ -2195,11 +2174,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2001-04-09",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0052377",
       "external_ids": {
         "unii": "94218WFP5T"
@@ -2308,11 +2285,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2015-04-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C4041589",
       "external_ids": {}
     },
@@ -2442,15 +2417,11 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2024-07-02",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1654882",
-      "external_ids": {},
-      "rxcui": null,
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "BANNED_CBD_US",
@@ -2643,11 +2614,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2018-12-20",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C4704022",
       "external_ids": {
         "unii": "19GBJ60SN5"
@@ -2876,16 +2845,13 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2001-07-06",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1621344",
       "external_ids": {
         "unii": "M9VVZ08EKQ"
-      },
-      "gsrs": null
+      }
     },
     {
       "id": "BANNED_CONTAMINATED_GLP1",
@@ -2989,12 +2955,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Contamination watchlist spans multiple GLP-1 compounds and quality defects; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -3109,7 +3072,6 @@
       "regulatory_date": "2021-05-04",
       "regulatory_date_label": "FDA safety advisory published",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0057341",
       "external_ids": {
         "unii": "B49D0HH807"
@@ -3290,7 +3252,6 @@
       "regulatory_date": "2013-04-11",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C3492032",
       "external_ids": {
         "unii": "X49C572YQO"
@@ -3369,11 +3330,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2015-04-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C4076845",
       "external_ids": {
         "unii": "KXP599H5R6"
@@ -3478,12 +3437,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2019-10-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this supplement-market stimulant name; null CUI is intentional.",
       "external_ids": {
@@ -3607,16 +3563,13 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2004-04-12",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0885298",
       "external_ids": {
         "unii": "GN83C131XS"
-      },
-      "gsrs": null
+      }
     },
     {
       "id": "BANNED_FASORACETAM",
@@ -3699,11 +3652,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1880737",
       "external_ids": {
         "unii": "42O8UF5CJB"
@@ -3873,11 +3824,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1976-01-19",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0002406",
       "external_ids": {
         "unii": "37RBV3X49K"
@@ -4006,17 +3955,13 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-04-15",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0993598",
       "external_ids": {
         "unii": "8W94T9026R"
-      },
-      "rxcui": null,
-      "gsrs": null
+      }
     },
     {
       "id": "BANNED_HIGENAMINE",
@@ -4113,11 +4058,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2019-04-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0062705",
       "external_ids": {
         "unii": "TBV5O16GAP"
@@ -4227,7 +4170,6 @@
       "regulatory_date": "2020-11-10",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0528358",
       "external_ids": {
         "unii": "GJ0EGN38UL"
@@ -4360,14 +4302,11 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1997-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C5674892",
-      "external_ids": {},
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "BANNED_IGF1_LR3",
@@ -4442,12 +4381,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2000-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this peptide analogue name; null CUI is intentional.",
       "external_ids": {
@@ -4538,12 +4474,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2024-07-25",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Contamination category covers multiple metal fiber and particle variants; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -4672,12 +4605,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-05-14",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Pediatric fluoride supplement entry spans multiple salts and dosage forms; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -4810,11 +4740,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2019-04-10",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0048007",
       "external_ids": {
         "unii": "T2M58D6LA8"
@@ -4949,12 +4877,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2015-06-16",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Partially hydrogenated oils are a class entry and the PHO abbreviation is ambiguous; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -5036,11 +4961,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2015-11-30",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0137049",
       "external_ids": {
         "unii": "0S5N9SEK4N"
@@ -5187,11 +5110,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1998-05-20",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0763533",
       "external_ids": {
         "unii": "43CAU2Q6DY"
@@ -5303,11 +5224,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0163688",
       "external_ids": {
         "unii": "XDK89456WM"
@@ -5416,7 +5335,6 @@
       "regulatory_date": "2010-10-08",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0074493",
       "external_ids": {
         "unii": "WV5EC51866"
@@ -5552,11 +5470,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C3492460",
       "external_ids": {
         "unii": "X5DCA09N30"
@@ -5641,11 +5557,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C4549780",
       "external_ids": {
         "unii": "66924E735K"
@@ -5925,11 +5839,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0076652",
       "external_ids": {
         "unii": "0T493YFU8O"
@@ -6081,14 +5993,11 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0331122",
-      "external_ids": {},
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "BANNED_YK11",
@@ -6159,12 +6068,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this investigational SARM name; null CUI is intentional.",
       "external_ids": {
@@ -6265,15 +6171,11 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1050700",
-      "external_ids": {},
-      "rxcui": null,
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "HIGH_RISK_GERMANDER",
@@ -6386,11 +6288,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0522471",
       "external_ids": {
         "unii": "SQ131ED9QD"
@@ -6503,11 +6403,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1992-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0070247",
       "external_ids": {
         "unii": "AK85U7Y3MV"
@@ -6664,11 +6562,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0936225",
       "external_ids": {
         "unii": "N712M78A8G"
@@ -6800,11 +6696,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1986-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0373557",
       "external_ids": {
         "unii": "00BH33GNGH"
@@ -6935,11 +6829,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1986-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0023175",
       "external_ids": {
         "unii": "2P299V784P"
@@ -7072,11 +6964,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1979-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0025424",
       "external_ids": {
         "unii": "FXS1BY2PGL"
@@ -7176,11 +7066,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C2354537",
       "external_ids": {}
     },
@@ -7291,11 +7179,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0101700",
       "external_ids": {
         "unii": "BI81Z4542G"
@@ -7438,11 +7324,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0051917",
       "external_ids": {
         "unii": "5L16LKN964"
@@ -7556,11 +7440,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1997-01-01",
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0252077",
       "external_ids": {
         "unii": "N1ILS53XWK"
@@ -7663,12 +7545,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-08-15",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this research-chemical nootropic name; null CUI is intentional.",
       "external_ids": {
@@ -7770,11 +7649,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1998-12-24",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0066677",
       "external_ids": {
         "unii": "R3UK8X3U3D"
@@ -7910,11 +7787,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C5238120",
       "external_ids": {
         "unii": "4QBJ98683M"
@@ -8044,14 +7919,11 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0618539",
-      "external_ids": {},
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "NOOTROPIC_PIRACETAM",
@@ -8148,11 +8020,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2019-11-25",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0031977",
       "external_ids": {
         "unii": "ZH516LNZ10"
@@ -8280,11 +8150,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-04-15",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0075501",
       "external_ids": {
         "unii": "42NCM1BW43"
@@ -8427,11 +8295,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2016-09-07",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0059752",
       "external_ids": {
         "unii": "543512OBTC"
@@ -8553,7 +8419,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2022-01-01",
       "regulatory_date_label": "FDA enforcement action",
       "match_mode": "active",
@@ -8700,7 +8565,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2009-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
@@ -8850,12 +8714,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2022-01-01",
       "regulatory_date_label": "FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this marketed peptide analogue name; null CUI is intentional.",
       "external_ids": {
@@ -8942,11 +8803,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0215087",
       "external_ids": {
         "unii": "GB2433A4M3"
@@ -9044,11 +8903,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2020-02-13",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C2350948",
       "external_ids": {
         "unii": "637E494O0Z"
@@ -9302,12 +9159,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2008-01-01",
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Analogue watchlist spans multiple cardarine derivatives; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -9387,7 +9241,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-12-02",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
@@ -9399,7 +9252,6 @@
         "effective_to": null,
         "note": "FDA warning-letter enforcement for supplement product containing undeclared trendione."
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -9471,7 +9323,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-12-26",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
@@ -9483,7 +9334,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -9557,7 +9407,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-08-29",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
@@ -9569,7 +9418,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -9684,7 +9532,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2009-05-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "historical",
@@ -9696,7 +9543,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -9811,7 +9657,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "historical",
@@ -9823,7 +9668,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -9905,7 +9749,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2026-01-20",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
@@ -9917,7 +9760,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -9991,7 +9833,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2026-01-09",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
@@ -10003,7 +9844,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -10100,7 +9940,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-11-21",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
@@ -10112,7 +9951,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -10234,7 +10072,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2013-11-08",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "historical",
@@ -10246,7 +10083,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -10323,7 +10159,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-10-28",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
@@ -10335,7 +10170,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -10416,7 +10250,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-12-10",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
@@ -10428,7 +10261,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -10516,7 +10348,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-12-29",
       "regulatory_date_label": "Regulatory limit established",
       "match_mode": "active",
@@ -10528,7 +10359,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -10602,7 +10432,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2026-01-09",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
@@ -10614,7 +10443,6 @@
         "effective_to": null,
         "note": null
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -10702,7 +10530,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-12-12",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
@@ -10714,7 +10541,6 @@
         "effective_to": null,
         "note": "FDA warning-letter enforcement covering SARMs products marketed as dietary supplements."
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -10810,11 +10636,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2004-01-01",
       "regulatory_date_label": "FDA safety advisory published",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0330922",
       "external_ids": {
         "unii": "DQD16J2B5O"
@@ -10941,12 +10765,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1993-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Inorganic germanium entry spans multiple salts and oxides; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
@@ -11047,12 +10868,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2008-01-01",
       "regulatory_date_label": "Safety advisory published",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Dose-conditioned green tea extract risk entry is broader than one ingredient concept; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -11267,17 +11085,13 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2002-01-01",
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0939882",
       "external_ids": {
         "unii": "W1ES06373M"
-      },
-      "rxcui": null,
-      "gsrs": null
+      }
     },
     {
       "id": "RISK_KRATOM_NATURAL",
@@ -11424,7 +11238,6 @@
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1197867",
       "external_ids": {
         "unii": "754HG7WK00"
@@ -11545,11 +11358,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1993-01-01",
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1123032",
       "external_ids": {
         "unii": "9M051HS3S5"
@@ -11662,11 +11473,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1528658",
       "external_ids": {
         "unii": "7UT2HAH49H"
@@ -11770,11 +11579,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C4740822",
       "external_ids": {
         "unii": "7I2HA1NU22"
@@ -11896,11 +11703,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C4550372",
       "external_ids": {}
     },
@@ -12004,11 +11809,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C2742262",
       "external_ids": {
         "unii": "O3571H3R8N"
@@ -12127,11 +11930,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-10-31",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0601132",
       "external_ids": {}
     },
@@ -12261,14 +12062,10 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0319647",
-      "cui_status": null,
-      "cui_note": null,
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
@@ -12415,11 +12212,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1970-10-27",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0033850",
       "external_ids": {
         "cas": "520-52-5",
@@ -12584,12 +12379,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1990-11-29",
       "regulatory_date_label": "Federal ban effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Policy watchlist spans many synthetic anabolic steroids; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
@@ -12666,12 +12458,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional.",
       "external_ids": {
@@ -12764,11 +12553,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0011777",
       "external_ids": {
         "unii": "7S5I7G3JQL"
@@ -12915,11 +12702,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2013-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0012091",
       "external_ids": {
         "unii": "144O8QL0L1"
@@ -13090,11 +12875,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2008-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0016365",
       "external_ids": {
         "unii": "01K63SUP8D"
@@ -13239,12 +13022,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this kratom-derived analogue name; null CUI is intentional.",
       "external_ids": {}
@@ -13339,11 +13119,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1999-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0600489",
       "external_ids": {
         "unii": "6QK969R2IF"
@@ -13431,19 +13209,14 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional.",
       "external_ids": {
         "unii": "2JW56253DF"
-      },
-      "rxcui": null,
-      "gsrs": null
+      }
     },
     {
       "id": "SPIKE_SILDENAFIL",
@@ -13515,11 +13288,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2003-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0529793",
       "external_ids": {
         "unii": "3M7OB98Y7H"
@@ -13633,11 +13404,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2006-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C1176316",
       "external_ids": {
         "unii": "742SXX0ICT"
@@ -13762,12 +13531,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Policy watchlist spans multiple tianeptine analogues; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -13851,11 +13617,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2014-01-01",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C4743057",
       "external_ids": {}
     },
@@ -13969,12 +13733,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2013-04-11",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Policy watchlist spans multiple methylhexanamine analogues; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -14054,11 +13815,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2017-01-01",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C5198249",
       "external_ids": {
         "unii": "H4APZ90T9U"
@@ -14186,12 +13945,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2004-01-01",
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
-      "recall_scope": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Entry combines cannabis and THC policy coverage; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {}
@@ -14263,11 +14019,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "WADA prohibition effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0040610",
       "external_ids": {
         "unii": "39J1LGJ30J"
@@ -14453,7 +14207,6 @@
       "regulatory_date": "2012-01-01",
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0604275",
       "external_ids": {}
     },
@@ -14526,11 +14279,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2025-01-01",
       "regulatory_date_label": "First FDA enforcement action",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0025659",
       "external_ids": {
         "unii": "125OD7737X"
@@ -14662,14 +14413,11 @@
       "entity_type": "ingredient",
       "regulatory_date": "1993-12-29",
       "regulatory_date_label": "FDA lobeline OTC ban effective",
-      "supersedes_ids": null,
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0331296",
       "external_ids": {
         "unii": "9PP1T3TC5U"
-      },
-      "gsrs": null
+      }
     },
     {
       "id": "ADD_5A_HYDROXY_LAXOGENIN",
@@ -14696,8 +14444,6 @@
       "clinical_risk_enum": "high",
       "source_category": "steroidal_analog",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -14728,8 +14474,6 @@
           "title": "FDA dietary supplement constituent updates (5-alpha-hydroxy-laxogenin)"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-02-23",
@@ -14743,7 +14487,6 @@
           }
         ]
       },
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this supplement-market steroid derivative name; null CUI is intentional.",
       "external_ids": {
@@ -14784,8 +14527,6 @@
       "clinical_risk_enum": "high",
       "source_category": "stimulant_laxative",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -14834,8 +14575,6 @@
           "title": "LiverTox: Cascara"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-02-18",
@@ -14852,9 +14591,7 @@
       "cui": "C0205704",
       "external_ids": {
         "unii": "3SJ3U7J6V2"
-      },
-      "rxcui": null,
-      "gsrs": null
+      }
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
@@ -14876,8 +14613,6 @@
       "clinical_risk_enum": "high",
       "source_category": "heavy_metal",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -14914,8 +14649,6 @@
           "title": "ICSC 0810 - Silver"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-02-16",
@@ -15007,8 +14740,6 @@
       "clinical_risk_enum": "high",
       "source_category": "thyroid_hormone_analog",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.74,
@@ -15039,8 +14770,6 @@
           "title": "PMID: 22217997"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-01",
@@ -15084,8 +14813,6 @@
       "clinical_risk_enum": "moderate",
       "source_category": "pharmaceutical_contaminant",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -15106,8 +14833,6 @@
           ]
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "cadence": "annual",
@@ -15166,8 +14891,6 @@
       "clinical_risk_enum": "moderate",
       "source_category": "stimulant_sympathomimetic",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -15198,8 +14921,6 @@
           "title": "DOI: 10.1016/j.fct.2019.110676 - Hordenine toxicological review"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-02-22",
@@ -15267,8 +14988,6 @@
       "clinical_risk_enum": "moderate",
       "source_category": "stimulant_phenethylamine_analog",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -15299,8 +15018,6 @@
           "title": "FDA warning letters addressing stimulant-adulterated products"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-02-23",
@@ -15314,14 +15031,11 @@
           }
         ]
       },
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional.",
       "external_ids": {
         "unii": "G8WX4UG544"
-      },
-      "rxcui": null,
-      "gsrs": null
+      }
     },
     {
       "id": "ADD_RED3",
@@ -15347,8 +15061,6 @@
       "clinical_risk_enum": "high",
       "source_category": "colorant_artificial",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.72,
@@ -15408,8 +15120,6 @@
           "title": "DOI: 10.1016/j.fct.2007.09.001 - Erythrosine thyroid effects in animals"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-02-22",
@@ -15472,8 +15182,6 @@
       "clinical_risk_enum": "high",
       "source_category": "prescription_chelation_drug",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -15494,8 +15202,6 @@
           "title": "FDA NDA 019998 - Chemet (succimer) approval for lead poisoning chelation"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-06",
@@ -15559,8 +15265,6 @@
       "clinical_risk_enum": "critical",
       "source_category": "industrial_chemical",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -15591,8 +15295,6 @@
           "title": "PubMed 41392340 - Fatal 2,4-DNP toxicity report"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-06",
@@ -15644,8 +15346,6 @@
       "clinical_risk_enum": "critical",
       "source_category": "hepatotoxic_botanical",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -15676,8 +15376,6 @@
           "title": "PubMed 16610575 - Acute liver failure associated with a usnic acid-containing dietary supplement"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-06",
@@ -15731,8 +15429,6 @@
       "clinical_risk_enum": "critical",
       "source_category": "illegal_spiking_agents",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -15763,8 +15459,6 @@
           "title": "PubMed 31887249 - Clenbuterol use and human toxicity outcomes"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-06",
@@ -15837,8 +15531,6 @@
       "clinical_risk_enum": "critical",
       "source_category": "toxic_botanical",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -15859,8 +15551,6 @@
           "title": "PubMed 40315779 - Aconitine poisoning forensic review"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-06",
@@ -15908,8 +15598,6 @@
       "clinical_risk_enum": "high",
       "source_category": "banned_food_additive",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -15947,8 +15635,6 @@
           "title": "ECHA SVHC identification ED/61/2010 — Sodium tetraborate decahydrate (borax)"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-01",
@@ -16001,8 +15687,6 @@
       "clinical_risk_enum": "high",
       "source_category": "prescription_biologic",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -16023,8 +15707,6 @@
           "title": "FDA BLA 125104 — Thyrogen (thyrotropin alfa) biologic approval"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-01",
@@ -16074,8 +15756,6 @@
       "clinical_risk_enum": "low",
       "source_category": "otc_drug_ingredient",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -16096,8 +15776,6 @@
           "title": "21 CFR 332.10 — OTC antiflatulent drug products, simethicone monograph"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-01",
@@ -16112,8 +15790,7 @@
         ]
       },
       "cui": "C0037138",
-      "external_ids": {},
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "ADD_HEXADRONE",
@@ -16134,8 +15811,6 @@
       "clinical_risk_enum": "high",
       "source_category": "anabolic_steroid_prohormone",
       "class_tags": [],
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_rules": {
         "regex": null,
         "fuzzy_threshold": 0.75,
@@ -16156,8 +15831,6 @@
           "title": "Designer Anabolic Steroid Control Act of 2014, Pub.L. 113-260"
         }
       ],
-      "recall_scope": null,
-      "supersedes_ids": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-01",
@@ -16171,7 +15844,6 @@
           }
         ]
       },
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this designer steroid name; null CUI is intentional.",
       "external_ids": {}
@@ -16291,7 +15963,6 @@
       "regulatory_date": "2022-08-07",
       "regulatory_date_label": "EU ban effective date",
       "match_mode": "active",
-      "recall_scope": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-08",
@@ -16447,7 +16118,6 @@
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "Most recent FDA asbestos contamination recall year",
       "match_mode": "active",
-      "recall_scope": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-08",
@@ -16572,10 +16242,7 @@
         "ADD_CAROB_COLOR"
       ],
       "entity_type": "ingredient",
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_mode": "active",
-      "recall_scope": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-08",
@@ -16594,7 +16261,6 @@
           }
         ]
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Food-color entry spans formulation and coloring variants; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
@@ -16680,10 +16346,7 @@
         "ADD_OCTOPAMINE"
       ],
       "entity_type": "ingredient",
-      "regulatory_date": null,
-      "regulatory_date_label": null,
       "match_mode": "active",
-      "recall_scope": null,
       "review": {
         "status": "validated",
         "last_reviewed_at": "2026-03-08",
@@ -16745,7 +16408,6 @@
       "match_mode": "active",
       "reason": "Isopropylnorsynephrine (also marketed as deterenol) is a beta-adrenergic stimulant found in dietary supplements. Peer-reviewed analyses have documented it in weight-loss and performance products, where it can cause clinically relevant increases in heart rate and blood pressure. Deterenol is prohibited in sport by WADA and is not a lawful dietary supplement ingredient.",
       "source_category": "permanently_banned",
-      "match_confidence": null,
       "match_rules": {
         "exclusions": [],
         "case_sensitive": false,
@@ -16910,10 +16572,8 @@
         ]
       },
       "supersedes_ids": [],
-      "regulatory_date": null,
       "regulatory_date_label": "FDA prohibition in human food",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0949888",
       "external_ids": {
         "unii": "Q46A6NDR5C"
@@ -17066,9 +16726,7 @@
         ]
       },
       "cui": "C1707393",
-      "external_ids": {},
-      "rxcui": null,
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "RECALLED_ROSABELLA_MORINGA",
@@ -17139,7 +16797,6 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2026-02-13",
       "regulatory_date_label": "FDA recall initiation date",
       "recall_scope": {
@@ -17150,7 +16807,6 @@
         "effective_to": null,
         "note": "Ambrosia Brands LLC, 60 capsules/bottle, UPC 860012161720"
       },
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {}
@@ -17275,11 +16931,9 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "1970-10-27",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0033848",
       "external_ids": {
         "cas": "520-53-6",
@@ -17429,14 +17083,10 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0026818",
-      "cui_status": null,
-      "cui_note": null,
       "external_ids": {
         "cas": "2763-96-4",
         "pubchem_cid": 4266,
@@ -17588,14 +17238,10 @@
           }
         ]
       },
-      "supersedes_ids": null,
       "regulatory_date": "2024-01-01",
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
-      "recall_scope": null,
       "cui": "C0020738",
-      "cui_status": null,
-      "cui_note": null,
       "external_ids": {
         "cas": "2552-55-8",
         "pubchem_cid": 1233,

@@ -296,7 +296,6 @@
         ]
       },
       "confidence": "medium",
-      "entity_relationships": null,
       "severity_level": "moderate",
       "dose_thresholds": [
         {
@@ -499,8 +498,6 @@
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0050587",
       "rxcui": "1368125",
       "gsrs": {
@@ -682,7 +679,6 @@
           "source": "EFSA ADI (EFSA Journal 2013;11(7):3301)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C3490290",
       "rxcui": "1591894",
       "gsrs": {
@@ -890,8 +886,6 @@
           "source": "EFSA TDI for antimony trioxide"
         }
       ],
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "This record intentionally covers elemental antimony plus multiple antimony compounds; no single UMLS concept fully represents the grouped contaminant policy entry."
     },
@@ -1062,8 +1056,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0982157",
       "external_ids": {}
     },
@@ -1256,7 +1248,6 @@
           "source": "JECFA ADI (reaffirmed 2023)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0003999",
       "rxcui": "1311524",
       "gsrs": {
@@ -1488,7 +1479,6 @@
           "source": "EFSA ADI (EFSA Journal 2010;8(11):1853)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0772270",
       "rxcui": "1310605",
       "gsrs": {
@@ -1658,7 +1648,6 @@
           "source": "JECFA ADI"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0021219",
       "gsrs": {
         "substance_name": "FD&C BLUE NO. 2",
@@ -1948,14 +1937,9 @@
       },
       "confidence": "low",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Composite excipient name did not return a stable exact UMLS concept in live verification; retain null until an authoritative ingredient concept is confirmed.",
-      "external_ids": {},
-      "rxcui": null,
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "ADD_CALCIUM_DISODIUM_EDTA",
@@ -2109,7 +2093,6 @@
           "source": "SCF ADI (1977, reconfirmed 1990)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0006692",
       "rxcui": "1371967",
       "gsrs": {
@@ -2240,8 +2223,6 @@
       },
       "confidence": "low",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C6016988",
       "gsrs": {
         "substance_name": "CALCIUM LAURATE",
@@ -2362,8 +2343,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0054483",
       "rxcui": "1311526",
       "gsrs": {
@@ -2518,9 +2497,6 @@
       },
       "confidence": "high",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_single_umls_concept",
       "cui_note": "Candurin Silver is a branded pearlescent pigment system rather than one atomic ingredient concept; treat it as an intentionally null proprietary mixture entry."
     },
@@ -2627,8 +2603,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0026370",
       "external_ids": {
         "unii": "LSU3YX0KZO"
@@ -2765,8 +2739,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0038636",
       "rxcui": "10159",
       "gsrs": {
@@ -2932,8 +2904,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0072982",
       "rxcui": "1306155",
       "gsrs": {
@@ -3129,7 +3099,6 @@
           "source": "California Prop 65 (4-MEI NSRL)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0108509",
       "external_ids": {
         "unii": "T9D99G2B1R"
@@ -3273,8 +3242,6 @@
       },
       "confidence": "high",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0007068",
       "rxcui": "491498",
       "gsrs": {
@@ -3449,7 +3416,6 @@
           "source": "JECFA ADI (26th meeting, as carmine)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0007250"
     },
     {
@@ -3667,7 +3633,6 @@
           "source": "EFSA 2018 temporary group ADI (EFSA Journal 2018;16(4):5238)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0007289",
       "rxcui": "1368862",
       "gsrs": {
@@ -3811,11 +3776,8 @@
       },
       "confidence": "low",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0054527",
-      "external_ids": {},
-      "gsrs": null
+      "external_ids": {}
     },
     {
       "id": "ADD_CORN_OIL",
@@ -3946,8 +3908,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0010029",
       "external_ids": {
         "unii": "8470G57WFM"
@@ -4111,8 +4071,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0991816",
       "external_ids": {
         "unii": "9G5L16BK6N"
@@ -4269,8 +4227,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0010353",
       "external_ids": {
         "unii": "M28OL1HH48"
@@ -4427,8 +4383,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0728803",
       "external_ids": {
         "cas": "9003-39-8",
@@ -4594,7 +4548,6 @@
           "source": "IOM Tolerable Upper Intake Level for copper in adults (2001)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0056301",
       "external_ids": {
         "cas": "7758-98-7",
@@ -4740,8 +4693,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0017725",
       "external_ids": {
         "cas": "50-99-7",
@@ -4903,14 +4854,11 @@
           "source": "JECFA ADI (established 1973, reaffirmed)"
         }
       ],
-      "entity_relationships": null,
       "cui": "C0012695",
       "external_ids": {
         "cas": "139-33-3",
         "pubchem_cid": 13020083
-      },
-      "rxcui": null,
-      "gsrs": null
+      }
     },
     {
       "id": "ADD_D_MANNOSE",
@@ -5043,8 +4991,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0024742",
       "external_ids": {
         "cas": "530-26-7",
@@ -5269,7 +5215,6 @@
         "unit": "g/kg/day",
         "source": "EFSA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0014757",
       "external_ids": {
         "cas": "149-32-6",
@@ -5417,10 +5362,7 @@
         "unit": "mg/kg/day",
         "source": "JECFA ADI"
       },
-      "entity_relationships": null,
-      "cui": "C0982350",
-      "gsrs": null,
-      "rxcui": null
+      "cui": "C0982350"
     },
     {
       "id": "ADD_GREEN3",
@@ -5545,7 +5487,6 @@
         "unit": "mg/kg/day",
         "source": "JECFA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0060087",
       "gsrs": {
         "substance_name": "FAST GREEN",
@@ -5707,7 +5648,6 @@
         "unit": "g/day",
         "source": "laxative threshold (individual tolerance 20-30 g/day)"
       },
-      "entity_relationships": null,
       "cui": "C4026203",
       "external_ids": {
         "cas": "68425-17-2",
@@ -5867,7 +5807,6 @@
         "unit": "mg/day",
         "source": "FDA 21 CFR 73.1200 (elemental iron from color additive)"
       },
-      "entity_relationships": null,
       "cui": "C0060240",
       "rxcui": "1310572",
       "gsrs": {
@@ -5987,16 +5926,12 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C4306776",
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
         "unii": null
-      },
-      "gsrs": null,
-      "rxcui": null
+      }
     },
     {
       "id": "ADD_MAGNESIUM_CITRATE_LAURATE",
@@ -6078,18 +6013,13 @@
       },
       "confidence": "low",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Composite excipient name did not return a stable exact UMLS concept in live verification; retain null until an authoritative ingredient concept is confirmed.",
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
         "unii": null
-      },
-      "rxcui": null,
-      "gsrs": null
+      }
     },
     {
       "id": "ADD_MAGNESIUM_LAURATE",
@@ -6189,8 +6119,6 @@
       },
       "confidence": "low",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0891913",
       "gsrs": {
         "substance_name": "MAGNESIUM LAURATE",
@@ -6335,8 +6263,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0126791",
       "rxcui": "1310567",
       "gsrs": {
@@ -6508,7 +6434,6 @@
         "unit": "g/serving",
         "source": "laxative threshold (single dose)"
       },
-      "entity_relationships": null,
       "cui": "C0065600",
       "external_ids": {
         "cas": "585-88-6",
@@ -6658,8 +6583,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0065601",
       "external_ids": {
         "cas": "9050-36-6",
@@ -6826,7 +6749,6 @@
         "unit": "mg/kg/day",
         "source": "JECFA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0065605",
       "external_ids": {
         "cas": "118-71-8",
@@ -6975,18 +6897,13 @@
       },
       "confidence": "low",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Live UMLS verification did not produce a trustworthy exact concept for this sweetener label; keep null until a validated synonym or concept is available.",
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
         "unii": null
-      },
-      "gsrs": null,
-      "rxcui": null
+      }
     },
     {
       "id": "ADD_MICROCRYSTALLINE_CELLULOSE",
@@ -7120,8 +7037,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0669247",
       "external_ids": {
         "cas": "9004-34-6",
@@ -7263,8 +7178,6 @@
       },
       "confidence": "high",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0026156",
       "rxcui": "6972",
       "gsrs": {
@@ -7425,16 +7338,12 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0038179",
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
         "unii": "9M44R3409A"
       },
-      "rxcui": null,
-      "gsrs": null,
       "cui_note": "CUI C0038179 maps to generic 'starch'; no specific UMLS concept for 'modified food starch' class."
     },
     {
@@ -7599,7 +7508,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA group ADI (glutamic acid, E620-E625)"
       },
-      "entity_relationships": null,
       "cui": "C0037511",
       "external_ids": {
         "cas": "142-47-2",
@@ -7766,7 +7674,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA ADI (2025 revision)"
       },
-      "entity_relationships": null,
       "cui": "C0912295",
       "external_ids": {
         "cas": "165450-17-9",
@@ -7965,7 +7872,6 @@
         "source": "EFSA TDI (2020)"
       },
       "severity_level": "high",
-      "entity_relationships": null,
       "cui": "C0028013",
       "external_ids": {
         "cas": "7440-02-0",
@@ -8367,8 +8273,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0069962",
       "external_ids": {
         "cas": "8002-75-3",
@@ -8551,7 +8455,6 @@
         "unit": "g/day",
         "source": "laxative threshold (individual tolerance)"
       },
-      "entity_relationships": null,
       "cui": "C0071545",
       "external_ids": {
         "cas": "68424-04-4",
@@ -8709,15 +8612,12 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0032483",
       "external_ids": {
         "cas": "25322-68-3",
         "pubchem_cid": null,
         "unii": "B697894SGQ"
-      },
-      "gsrs": null
+      }
     },
     {
       "id": "ADD_POLYSORBATE80",
@@ -8933,7 +8833,6 @@
         }
       ],
       "severity_level": "moderate",
-      "entity_relationships": null,
       "cui": "C0032601",
       "external_ids": {
         "cas": "9005-65-6",
@@ -9098,7 +8997,6 @@
         }
       ],
       "severity_level": "moderate",
-      "entity_relationships": null,
       "cui": "C0526783",
       "external_ids": {
         "cas": "9005-66-7",
@@ -9267,7 +9165,6 @@
         }
       ],
       "severity_level": "moderate",
-      "entity_relationships": null,
       "cui": "C1533416",
       "external_ids": {
         "cas": "9005-71-4",
@@ -9406,8 +9303,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0032856",
       "external_ids": {
         "cas": "9003-39-8",
@@ -9581,8 +9476,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0071767",
       "external_ids": {
         "cas": "1310-58-3",
@@ -9720,7 +9613,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA revised group ADI (2019, as sorbic acid)"
       },
-      "entity_relationships": null,
       "cui": "C0032841",
       "rxcui": "8606",
       "gsrs": {
@@ -9889,7 +9781,6 @@
         "unit": "mg/kg/day",
         "source": "JECFA/EFSA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0033437",
       "external_ids": {
         "cas": "57-55-6",
@@ -10023,9 +9914,6 @@
       },
       "confidence": "low",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Proprietary branded sweetener blend; no discrete UMLS concept exists.",
       "external_ids": {
@@ -10200,7 +10088,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA ADI (2009, maintained)"
       },
-      "entity_relationships": null,
       "cui": "C0051224",
       "external_ids": {
         "cas": "25956-17-6",
@@ -10325,7 +10212,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0036023",
       "rxcui": "9509",
       "gsrs": {
@@ -10553,8 +10439,6 @@
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0330722",
       "rxcui": "237929",
       "gsrs": {
@@ -10711,8 +10595,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0074445",
       "external_ids": {
         "cas": "9000-59-3",
@@ -10891,8 +10773,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0037098",
       "external_ids": {
         "cas": "7631-86-9",
@@ -11019,9 +10899,6 @@
       },
       "confidence": "low",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Proprietary branded sweetener blend; no discrete UMLS concept exists.",
       "external_ids": {
@@ -11178,7 +11055,6 @@
         }
       ],
       "severity_level": "moderate",
-      "entity_relationships": null,
       "cui": "C0051521",
       "external_ids": {
         "cas": "7785-88-8",
@@ -11300,7 +11176,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA/JECFA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0142805",
       "rxcui": "56455",
       "gsrs": {
@@ -11435,8 +11310,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0037488",
       "rxcui": "1366917",
       "gsrs": {
@@ -11600,7 +11473,6 @@
         "unit": "mg/kg/day",
         "source": "JECFA/EFSA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0951590",
       "external_ids": {
         "cas": "11006-34-1",
@@ -11749,10 +11621,7 @@
         "unit": "mg P/kg/day",
         "source": "EFSA group ADI for phosphate additives (2019)"
       },
-      "entity_relationships": null,
-      "cui": "C0074759",
-      "rxcui": null,
-      "gsrs": null
+      "cui": "C0074759"
     },
     {
       "id": "ADD_SODIUM_LAURYL_SULFATE",
@@ -11912,8 +11781,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0037506",
       "external_ids": {
         "cas": "151-21-3",
@@ -12110,7 +11977,6 @@
         "unit": "mg SO2/kg/day",
         "source": "JECFA group ADI (EFSA withdrew EU ADI in 2022, uses MOE approach)"
       },
-      "entity_relationships": null,
       "cui": "C0074744",
       "external_ids": {
         "cas": "7681-57-4",
@@ -12295,7 +12161,6 @@
         "unit": "mg SO2/kg/day",
         "source": "JECFA group ADI (EFSA withdrew EU ADI in 2022, uses MOE approach)"
       },
-      "entity_relationships": null,
       "cui": "C0074771",
       "external_ids": {
         "cas": "7757-83-7",
@@ -12450,7 +12315,6 @@
         "unit": "mg P/kg/day",
         "source": "EFSA group ADI for phosphate additives (2019)"
       },
-      "entity_relationships": null,
       "cui": "C2827333",
       "external_ids": {
         "cas": "7758-29-4",
@@ -12589,7 +12453,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA revised group ADI (2019, as sorbic acid)"
       },
-      "entity_relationships": null,
       "cui": "C0037686",
       "rxcui": "1311139",
       "gsrs": {
@@ -12772,7 +12635,6 @@
         }
       ],
       "severity_level": "low",
-      "entity_relationships": null,
       "cui": "C0074915",
       "external_ids": {
         "cas": "1338-41-6",
@@ -12926,7 +12788,6 @@
         "unit": "g/day",
         "source": "laxative threshold (individual tolerance ~20-50 g/day)"
       },
-      "entity_relationships": null,
       "cui": "C0037688",
       "external_ids": {
         "cas": "50-70-4",
@@ -13060,8 +12921,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0026481"
     },
     {
@@ -13204,8 +13063,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0038229",
       "external_ids": {
         "cas": "57-11-4",
@@ -13463,7 +13320,6 @@
         "unit": "mg/kg/day",
         "source": "FDA ADI (more conservative than EFSA/JECFA 15 mg/kg)"
       },
-      "entity_relationships": null,
       "cui": "C0077046",
       "external_ids": {
         "cas": "56038-13-2",
@@ -13633,8 +13489,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C0038654",
       "external_ids": {
         "cas": null,
@@ -13817,7 +13671,6 @@
         "unit": "mg/kg/day",
         "source": "JECFA group ADI (EFSA withdrew EU ADI in 2022, uses MOE approach)"
       },
-      "entity_relationships": null,
       "cui": "C0038777",
       "external_ids": {
         "cas": "7446-09-5",
@@ -13984,9 +13837,6 @@
       },
       "confidence": "medium",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Class entry covering synthetic forms of B vitamins (cyanocobalamin, folic acid, pyridoxine HCl, etc.). No single UMLS concept.",
       "external_ids": {
@@ -14130,9 +13980,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Class entry covering all synthetic vitamin forms. No single UMLS concept.",
       "external_ids": {
@@ -14297,9 +14144,6 @@
       },
       "confidence": "medium",
       "severity_level": "moderate",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Class entry covering supplement syrups (rice syrup, corn syrup, glucose syrup, etc.). No single UMLS concept.",
       "external_ids": {
@@ -14435,9 +14279,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Class entry for refined tapioca starch used as filler. GSRS has STARCH, TAPIOCA but that covers food-grade tapioca broadly.",
       "external_ids": {
@@ -14590,7 +14431,6 @@
         "unit": "mg P/kg/day",
         "source": "EFSA group ADI for phosphate additives (2019)"
       },
-      "entity_relationships": null,
       "cui": "C0074764",
       "external_ids": {
         "cas": "7722-88-5",
@@ -14739,8 +14579,6 @@
       },
       "confidence": "high",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
       "cui": "C4048309",
       "external_ids": {
         "cas": "53850-34-3",
@@ -14862,9 +14700,6 @@
       },
       "confidence": "low",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Proprietary sustained-release coating technology. No discrete UMLS concept.",
       "external_ids": {
@@ -15037,7 +14872,6 @@
         "unit": "mg/kg/week",
         "source": "JECFA PTWI for inorganic tin (1988, reaffirmed 2006)"
       },
-      "entity_relationships": null,
       "cui": "C0206446",
       "external_ids": {
         "cas": "7440-31-5",
@@ -15158,9 +14992,6 @@
       "confidence": "medium",
       "entity_type": "category",
       "severity_level": "low",
-      "dose_thresholds": null,
-      "entity_relationships": null,
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Class entry for undisclosed colorants on labels. No single UMLS concept.",
       "external_ids": {
@@ -15288,7 +15119,6 @@
         "unit": "mg/kg/day",
         "source": "JECFA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0078032",
       "rxcui": "1368176",
       "gsrs": {
@@ -15473,7 +15303,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA/JECFA ADI (2009 reduced from 10)"
       },
-      "entity_relationships": null,
       "cui": "C0039329",
       "external_ids": {
         "cas": "1934-21-0",
@@ -15669,7 +15498,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA/JECFA ADI"
       },
-      "entity_relationships": null,
       "cui": "C0060120",
       "external_ids": {
         "cas": "2783-94-0",
@@ -16527,7 +16355,6 @@
       "notes": "Umbrella cross-reference for synthetic phenolic antioxidant preservatives. CORRECTION: Previous entry stated 'all are IARC 2B or have carcinogenicity concerns' — this is WRONG. BHT is IARC Group 3 (not classifiable); TBHQ is not evaluated by IARC. Only BHA is Group 2B. Individual entries (ADD_BHA, ADD_BHT, ADD_TBHQ) are canonical — this umbrella entry is a cross-reference only and should not be used for scoring.",
       "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
-      "cui": null,
       "entity_type": "class",
       "member_ids": [
         "ADD_BHA",
@@ -16771,7 +16598,6 @@
       "scientific_references": [],
       "last_updated": "2026-03-28",
       "jurisdictional_statuses": [],
-      "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Specific partially hydrogenated variant of corn oil. GSRS has generic CORN OIL.",
       "external_ids": {
@@ -16877,7 +16703,6 @@
         "unit": "mg/kg/day",
         "source": "EFSA/JECFA group ADI (as benzoic acid)"
       },
-      "entity_relationships": null,
       "cui": "C0137992",
       "rxcui": "54991",
       "gsrs": {
@@ -17804,7 +17629,6 @@
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
       "gsrs": {
         "substance_name": "BISPHENOL S",
         "substance_class": "chemical",
@@ -18000,7 +17824,6 @@
       },
       "confidence": "high",
       "severity_level": "high",
-      "dose_thresholds": null,
       "gsrs": {
         "substance_name": "BISPHENOL F",
         "substance_class": "chemical",
@@ -18130,7 +17953,6 @@
         "unit": "g/day",
         "source": "Literature consensus: GI effects threshold 20-30 g/day"
       },
-      "entity_relationships": null,
       "gsrs": {
         "substance_name": "Xylitol",
         "substance_class": "chemical",
@@ -18157,7 +17979,6 @@
       "category": "artificial_color",
       "notes": "Generic FD&C aluminum lake without specific color identification. Aluminum lakes are water-insoluble forms of FD&C dyes adsorbed onto alumina substrate. All specific FD&C aluminum lakes carry moderate severity. When the specific color is not labeled, the generic penalty applies.",
       "entity_type": "ingredient",
-      "cui": null,
       "external_ids": {},
       "regulatory": {
         "fda_status": "approved_with_limits",
