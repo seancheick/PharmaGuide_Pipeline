@@ -7,26 +7,26 @@
 # Creates separate output directories for each dataset
 #
 # Usage:
-#   bash batch_run_all_datasets.sh
-#   bash batch_run_all_datasets.sh score
-#   bash batch_run_all_datasets.sh --stages clean,enrich,score
-#   bash batch_run_all_datasets.sh --targets Thorne,Olly
-#   bash batch_run_all_datasets.sh --stages enrich,score --targets Nature-Made
-#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"
-#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne
+#   bash batch_run_all_datasets.sh                          # Full pipeline on all brands
+#   bash batch_run_all_datasets.sh score                    # Score-only on all brands
+#   bash batch_run_all_datasets.sh --stages enrich,score    # Enrich + score only
+#   bash batch_run_all_datasets.sh --targets Thorne,Olly    # Specific brands only
+#   bash batch_run_all_datasets.sh --stages score --targets Nature_Made
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
-#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly" --stages score
-#   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/gummies"
+#
+# Environment:
+#   PYTHON=python3.13 bash batch_run_all_datasets.sh        # Use specific python
 ###############################################################################
 
 set -e -o pipefail  # Exit on error and fail pipelines when any segment fails
 
 # Configuration
-DATASET_ROOT="$HOME/Documents/DataSetDsld"
-SCRIPTS_DIR="/Users/seancheick/.claude-worktrees/dsld_clean/peaceful-ritchie/scripts"
+DATASET_ROOT="$HOME/Documents/DataSetDsld/staging/brands"
+SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/scripts" && pwd)"
 STAGES="clean,enrich,score"  # Default: full pipeline
 TARGET_DATASETS=""  # Empty = all datasets
+PYTHON="${PYTHON:-python3}"  # Use python3 by default
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -65,6 +65,13 @@ fi
 
 if [ ! -d "$SCRIPTS_DIR" ]; then
     echo -e "${RED}ERROR: Scripts directory not found: $SCRIPTS_DIR${NC}"
+    echo -e "${RED}Run this script from the dsld_clean project root.${NC}"
+    exit 1
+fi
+
+# Verify python3 works
+if ! command -v "$PYTHON" &> /dev/null; then
+    echo -e "${RED}ERROR: $PYTHON not found. Set PYTHON=path/to/python3${NC}"
     exit 1
 fi
 
@@ -102,20 +109,18 @@ while IFS= read -r dirpath; do
     sorted_folders+=("$dirpath")
 done < <(ls -d "$DATASET_ROOT"/*/ 2>/dev/null)
 
-# Skip infra folders when pointed at the top-level DataSetDsld root.
-if [[ "$DATASET_ROOT" == "$HOME/Documents/DataSetDsld" ]]; then
-    filtered_top_level=()
-    for folder in "${sorted_folders[@]}"; do
-        folder_name=$(basename "$folder")
-        case "$folder_name" in
-            forms|state|delta|reports|staging|.qodo)
-                continue
-                ;;
-        esac
-        filtered_top_level+=("$folder")
-    done
-    sorted_folders=("${filtered_top_level[@]}")
-fi
+# Skip infra/hidden folders regardless of root
+filtered_top_level=()
+for folder in "${sorted_folders[@]}"; do
+    folder_name=$(basename "$folder")
+    case "$folder_name" in
+        forms|state|delta|reports|staging|.qodo|xOld*|__pycache__)
+            continue
+            ;;
+    esac
+    filtered_top_level+=("$folder")
+done
+sorted_folders=("${filtered_top_level[@]}")
 
 # Filter by target datasets if specified
 if [ -n "$TARGET_DATASETS" ]; then
@@ -155,7 +160,7 @@ for folder in "${sorted_folders[@]}"; do
     echo ""
 
     # Run pipeline
-    if python run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" 2>&1 | tee -a "$SUMMARY_FILE"; then
+    if $PYTHON run_pipeline.py --raw-dir "$folder" --output-prefix "products/output_${folder_name}" --stages "$STAGES" 2>&1 | tee -a "$SUMMARY_FILE"; then
         echo -e "${GREEN}${PROGRESS} ✓ SUCCESS: ${folder_name}${NC}"
         PASSED+=("$folder_name")
     else
