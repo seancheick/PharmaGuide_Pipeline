@@ -1280,6 +1280,7 @@ class EnhancedDSLDNormalizer:
                                 "severity": sev,
                                 "bucket": bucket,
                                 "reason": banned.get("reason", banned.get("recall_reason", "banned")),
+                                "match_rules": banned.get("match_rules", {}) or {},
                                 "mapped": True,
                                 "priority": 1
                             }
@@ -1294,6 +1295,7 @@ class EnhancedDSLDNormalizer:
                                     "severity": sev,
                                     "bucket": bucket,
                                     "reason": banned.get("reason", banned.get("recall_reason", "banned")),
+                                    "match_rules": banned.get("match_rules", {}) or {},
                                     "mapped": True,
                                     "priority": 1
                                 }
@@ -2630,6 +2632,18 @@ class EnhancedDSLDNormalizer:
             if normalized_group and normalized_group != normalized_name:
                 group_result = self._exact_ingredient_group_lookup(ingredient_group)
                 if group_result.get("mapped", False):
+                    negative_terms = (
+                        (group_result.get("match_rules", {}) or {}).get("negative_match_terms", [])
+                    )
+                    if negative_terms:
+                        lowered_name = (name or "").lower()
+                        if any(str(term).lower() in lowered_name for term in negative_terms):
+                            logger.debug(
+                                "ingredientGroup fallback vetoed by negative_match_terms: '%s' via '%s'",
+                                name,
+                                ingredient_group,
+                            )
+                            return name, False, forms
                     result_type = group_result.get("type", "unknown")
                     standard_name = group_result.get("standard_name", ingredient_group)
                     logger.debug(
@@ -4608,6 +4622,7 @@ class EnhancedDSLDNormalizer:
         for form in forms:
             if isinstance(form, dict):
                 form_name = form.get("name", "")
+                form_group = form.get("ingredientGroup") or ingredient.get("ingredientGroup")
                 expanded_names = self._expand_compound_inactive_form_name(form_name, source_path)
                 if expanded_names:
                     for expanded_name in expanded_names:
@@ -4619,7 +4634,7 @@ class EnhancedDSLDNormalizer:
                             "raw_source_path": source_path,
                             "normalized_key": norm_module.make_normalized_key(expanded_name),
                             "name": expanded_name,
-                            "ingredientGroup": ingredient.get("ingredientGroup"),
+                            "ingredientGroup": form_group,
                             "forms": [],
                             "alternateNames": [],
                             "_fromLabelHeader": name,
@@ -4645,7 +4660,7 @@ class EnhancedDSLDNormalizer:
                         "raw_source_path": source_path,
                         "normalized_key": norm_module.make_normalized_key(form_name),
                         "name": form_name,
-                        "ingredientGroup": ingredient.get("ingredientGroup"),
+                        "ingredientGroup": form_group,
                         "forms": [],
                         "alternateNames": [],
                         "_fromLabelHeader": name,

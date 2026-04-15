@@ -355,19 +355,15 @@
           ]
         },
         {
-          "_note": "This is an ADDITION to the existing RULE_IQM_BERBERINE_DIABETES rule. Add this object to the drug_class_rules array of that rule.",
-          "_target_rule_id": "RULE_IQM_BERBERINE_DIABETES",
-          "drug_class_rules_addition": {
-            "drug_class_id": "maois",
-            "severity": "avoid",
-            "evidence_level": "probable",
-            "mechanism": "Berberine inhibits MAO-A and MAO-B activity in vitro, producing additive monoamine oxidase inhibition when combined with MAOI antidepressants (phenelzine, tranylcypromine, selegiline). This combined MAO inhibition can elevate serotonin, dopamine, and norepinephrine to toxic levels, increasing risk of serotonin syndrome (agitation, hyperthermia, clonus, autonomic instability) and hypertensive crisis. Additionally, berberine inhibits CYP2D6 and CYP3A4, reducing metabolic clearance of MAOIs.",
-            "action": "Avoid combining berberine with MAOIs. If transitioning from MAOI to berberine-containing supplements, observe a minimum 14-day washout. Alert prescriber to use.",
-            "sources": [
-              "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
-              "https://pubmed.ncbi.nlm.nih.gov/26312811/"
-            ]
-          }
+          "drug_class_id": "maois",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Berberine inhibits MAO-A and MAO-B activity in vitro, producing additive monoamine oxidase inhibition when combined with MAOI antidepressants (phenelzine, tranylcypromine, selegiline). This combined MAO inhibition can elevate serotonin, dopamine, and norepinephrine to toxic levels, increasing risk of serotonin syndrome (agitation, hyperthermia, clonus, autonomic instability) and hypertensive crisis. Additionally, berberine inhibits CYP2D6 and CYP3A4, reducing metabolic clearance of MAOIs.",
+          "action": "Avoid combining berberine with MAOIs. If transitioning from MAOI to berberine-containing supplements, observe a minimum 14-day washout. Alert prescriber to use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
+            "https://pubmed.ncbi.nlm.nih.gov/26312811/"
+          ]
         }
       ],
       "pregnancy_lactation": {
@@ -382,7 +378,11 @@
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
-      "dose_thresholds": []
+      "dose_thresholds": [],
+      "drug_class_id": "hypoglycemics",
+      "severity": "avoid",
+      "evidence_level": "established",
+      "action": "See drug-class-specific rules for detailed guidance."
     },
     {
       "id": "RULE_IQM_BITTER_MELON_DIABETES",
@@ -5123,7 +5123,7 @@
         {
           "condition_id": "pregnancy",
           "severity": "avoid",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "5-HTP is a direct precursor to serotonin via aromatic L-amino acid decarboxylase. Elevated maternal serotonin during organogenesis has been associated with cardiac and craniofacial developmental abnormalities in animal models; human safety data are absent.",
           "action": "Avoid 5-HTP during pregnancy. No human safety data exist; consult an obstetrician before any use.",
           "sources": [
@@ -5387,7 +5387,7 @@
         {
           "condition_id": "pregnancy",
           "severity": "avoid",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Chinese skullcap (Scutellaria baicalensis) contains baicalin and baicalein which inhibit CYP1A2 and CYP2C9. Animal data suggest possible teratogenic risk at high doses; human safety data in pregnancy are absent.",
           "action": "Avoid during pregnancy due to absent safety data. Inform obstetrician of any prior use.",
           "sources": [
@@ -5458,7 +5458,7 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Thymoquinone inhibits thromboxane B2 synthesis and platelet aggregation, and in vitro data suggest weak inhibition of CYP2C9 which is the primary metabolic pathway for warfarin S-enantiomer. A combined antiplatelet and potential pharmacokinetic interaction may increase bleeding risk.",
           "action": "Monitor INR if combining black seed oil with warfarin or other anticoagulants. Alert prescriber to use.",
           "sources": [
@@ -5480,7 +5480,7 @@
         {
           "drug_class_id": "antihypertensives",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Additive blood pressure-lowering via calcium channel inhibition and increased nitric oxide production may cause symptomatic hypotension, particularly with calcium channel blockers and ACE inhibitors.",
           "action": "Monitor blood pressure. Alert prescriber to black seed oil use if on antihypertensive therapy.",
           "sources": [
@@ -5601,7 +5601,7 @@
         {
           "drug_class_id": "antihypertensives",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "L-theanine stimulates alpha-wave brain activity and attenuates sympathetic nervous system activation, which has been associated with modest blood pressure reductions (approximately 5-8 mmHg systolic) in small RCTs. Additive hypotensive effects are possible, particularly with alpha-blocker and calcium channel blocker antihypertensives.",
           "action": "Monitor blood pressure when combining L-theanine with antihypertensive medications, particularly in patients with borderline-low blood pressure.",
           "sources": [
@@ -5612,7 +5612,7 @@
         {
           "drug_class_id": "sedatives",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "L-theanine increases GABA, glycine, and serotonin levels in the brain and modulates AMPA receptor activity, producing anxiolytic and sedative-like effects. These CNS depressant effects may be additive with benzodiazepines, non-benzodiazepine hypnotics (z-drugs), and barbiturates.",
           "action": "Advise patients on sedative-hypnotic medications of potential additive sedation. Avoid high doses of L-theanine if operating machinery or driving.",
           "sources": [
@@ -5636,7 +5636,7 @@
         {
           "condition_id": "thyroid_disorder",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Bacopa monnieri has been shown in animal studies to increase thyroid hormone levels (T4 specifically) via stimulation of thyroid iodide uptake and thyroglobulin synthesis. The clinical relevance in humans is uncertain but persons with hyperthyroidism or Graves disease may be at greater risk.",
           "action": "Use with caution in thyroid disorders, particularly hyperthyroidism. Monitor thyroid function tests (TSH, free T4) periodically during use.",
           "sources": [
@@ -5649,7 +5649,7 @@
         {
           "drug_class_id": "thyroid_medications",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Bacopa may increase endogenous thyroid hormone levels, potentially altering the equilibrium maintained by levothyroxine replacement therapy and requiring dose adjustment.",
           "action": "Monitor TSH levels when initiating or discontinuing Bacopa in patients on thyroid hormone replacement. Alert prescriber to supplement use.",
           "sources": [
@@ -5660,7 +5660,7 @@
         {
           "drug_class_id": "sedatives",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Bacopa has adaptogenic effects and modulates serotonergic and GABA-ergic neurotransmission. Animal studies show additive sedative effects when combined with CNS depressants.",
           "action": "Advise caution with concomitant use of sedative-hypnotic medications. Avoid if operating heavy machinery.",
           "sources": [
@@ -5733,7 +5733,7 @@
         {
           "drug_class_id": "hypoglycemics",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Dandelion root extract has demonstrated alpha-glucosidase inhibitory activity and modest insulin-sensitising effects in animal models, producing additive glucose-lowering when combined with antidiabetic medications.",
           "action": "Monitor blood glucose when using dandelion with antidiabetic drugs. Warn of possible additive hypoglycemia, particularly with sulfonylureas.",
           "sources": [
@@ -5781,7 +5781,7 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Case reports and mechanistic data suggest that L-carnitine may enhance the anticoagulant effect of acenocoumarol and potentially warfarin, possibly through altered vitamin K metabolism or carnitine-mediated changes in fatty acid oxidation that affect coagulation factor synthesis.",
           "action": "Monitor INR when starting or stopping ALCAR in patients on anticoagulants. Alert prescriber to use.",
           "sources": [
@@ -5875,7 +5875,7 @@
         {
           "condition_id": "seizure_disorder",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Huperzine A inhibits acetylcholinesterase (AChE), increasing synaptic acetylcholine. Elevated cholinergic tone in the CNS can lower seizure threshold and has been associated with seizure-like activity in overdose scenarios. The clinical significance at standard supplement doses is unclear but warrants caution.",
           "action": "Use with caution in seizure disorders. Alert neurologist to huperzine A use. Report any changes in seizure frequency.",
           "sources": [
@@ -5961,7 +5961,7 @@
         {
           "drug_class_id": "thyroid_medications",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "L-tyrosine provides substrate for thyroid hormone synthesis. Supplemental loading could theoretically alter thyroid hormone production, affecting the dose balance required for stable levothyroxine replacement.",
           "action": "Monitor TSH levels periodically if taking L-tyrosine with levothyroxine. Alert endocrinologist to supplement use.",
           "sources": [
@@ -6045,7 +6045,7 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Forskolin has demonstrated platelet aggregation inhibitory effects via cAMP-dependent suppression of platelet activation. This antiplatelet property may add to anticoagulant bleeding risk.",
           "action": "Monitor coagulation parameters when using forskolin with anticoagulants. Inform prescriber of supplement use.",
           "sources": [
@@ -6063,13 +6063,13 @@
       "id": "RULE_IQM_HORNY_GOAT_WEED_HEART",
       "subject_ref": {
         "db": "ingredient_quality_map",
-        "canonical_id": "horny_goat_weed"
+        "canonical_id": "icariin"
       },
       "condition_rules": [
         {
           "condition_id": "heart_disease",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Icariin (the primary active flavonoid in Epimedium/horny goat weed) inhibits phosphodiesterase-5 (PDE5) and to a lesser extent PDE4. PDE5 inhibition causes vasodilation; in patients with cardiovascular disease, particularly those on nitrates, this can precipitate severe hypotension. Icariin also has a weak estrogen receptor agonist activity.",
           "action": "Use with caution in established heart disease. Do not combine with nitrates (extreme hypotension risk). Alert cardiologist to supplement use.",
           "sources": [
@@ -6082,7 +6082,7 @@
         {
           "drug_class_id": "antihypertensives",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "PDE5 inhibition by icariin causes smooth muscle relaxation and vasodilation, producing additive hypotension with antihypertensive agents, especially alpha-blockers and nitrates.",
           "action": "Monitor blood pressure if combining horny goat weed with antihypertensives. Do not combine with alpha-blockers or nitrates.",
           "sources": [
@@ -6119,7 +6119,7 @@
         {
           "drug_class_id": "antihypertensives",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Stinging nettle has diuretic and mild vasodilatory properties in animal models. Combined with antihypertensive medications, additive blood pressure lowering and risk of volume depletion are possible.",
           "action": "Monitor blood pressure and fluid status when combining stinging nettle with antihypertensive or diuretic medications.",
           "sources": [
@@ -6155,7 +6155,7 @@
         {
           "drug_class_id": "nsaids",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Pygeum africanum bark extract contains phytosterols (beta-sitosterol), pentacyclic triterpenes, and ferulic acid esters that inhibit prostaglandin biosynthesis by reducing arachidonic acid release from membrane phospholipids and by directly inhibiting 5-lipoxygenase and COX pathways. Combined with NSAID COX inhibition, there is theoretical additive anti-inflammatory activity and a possible additive risk of gastrointestinal mucosal injury.",
           "action": "If combining pygeum with NSAIDs, use the lowest NSAID dose for the shortest duration. Take both with food. Monitor for GI symptoms.",
           "sources": [
@@ -6227,7 +6227,7 @@
         {
           "condition_id": "autoimmune",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Cordyceps (Cordyceps sinensis/militaris) contains cordycepin (3-deoxyadenosine) and beta-glucans that stimulate NK cell activity, macrophage activation, and T-helper cell proliferation via Toll-like receptor and NFkappaB pathways. This immune potentiation may exacerbate autoimmune conditions (e.g., rheumatoid arthritis, lupus, multiple sclerosis, inflammatory bowel disease).",
           "action": "Avoid unsupervised use in autoimmune conditions. Consult a rheumatologist or immunologist before starting cordyceps.",
           "sources": [
@@ -6251,7 +6251,7 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Cordyceps has demonstrated in vitro platelet aggregation inhibitory activity and adenosine-mediated vasodilation. Cordycepin (adenosine analogue) may contribute to antiplatelet effects additive with anticoagulant therapy.",
           "action": "Monitor coagulation parameters when combining cordyceps with anticoagulants. Alert prescriber to supplement use.",
           "sources": [
@@ -6276,7 +6276,7 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "theoretical",
           "mechanism": "Lion's mane (Hericium erinaceus) contains hericenones and erinacines that have demonstrated inhibition of ADP-induced and collagen-induced platelet aggregation in in vitro and animal studies, attributed to reduced thromboxane B2 synthesis. Combined with anticoagulant therapy, additive antiplatelet/anticoagulant effects may increase bleeding risk.",
           "action": "Monitor coagulation parameters when combining lion's mane with anticoagulants or antiplatelets. Report any unusual bruising or bleeding. Alert prescriber to supplement use.",
           "sources": [
@@ -6419,7 +6419,7 @@
           ]
         },
         {
-          "drug_class_id": "antiplatelet_agents",
+          "drug_class_id": "antiplatelets",
           "severity": "caution",
           "evidence_level": "probable",
           "mechanism": "Additive antiplatelet effects. Omega-3 fatty acids inhibit platelet aggregation via thromboxane A2 suppression, which may compound the effects of antiplatelet agents like aspirin or clopidogrel.",
@@ -6432,16 +6432,20 @@
       ],
       "dose_thresholds": [
         {
-          "threshold_mg": 3000,
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 3000,
           "unit": "mg EPA+DHA/day",
-          "severity_above": "caution",
-          "severity_below": "informational",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
           "note": "FDA labeling states >3g/day omega-3 from all sources may lead to excessive bleeding."
         }
       ],
       "pregnancy_lactation": {
-        "pregnancy_category": "safe_with_limits",
-        "lactation_category": "safe_with_limits",
+        "pregnancy_category": "monitor",
+        "lactation_category": "monitor",
         "evidence_level": "established",
         "notes": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day."
       },

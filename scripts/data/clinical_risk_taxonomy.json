@@ -4,7 +4,7 @@
     "purpose": "interaction_alert_taxonomy",
     "schema_version": "5.1.0",
     "last_updated": "2026-04-14",
-    "total_entries": 36
+    "total_entries": 41
   },
   "conditions": [
     {
@@ -171,6 +171,19 @@
       "label": "Anticholinergic Medications",
       "category": "neurology",
       "display_priority": 13
+    },
+    {
+      "id": "anticonvulsants",
+      "label": "Anticonvulsants (Anti-Seizure Medications)",
+      "examples": [
+        "carbamazepine",
+        "phenytoin",
+        "valproic acid",
+        "lamotrigine",
+        "levetiracetam",
+        "topiramate"
+      ],
+      "mechanism_note": "Supplements that affect CYP3A4/2C19 metabolism or GABAergic signaling may alter anticonvulsant drug levels or seizure threshold."
     }
   ],
   "severity_levels": [

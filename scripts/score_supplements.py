@@ -764,18 +764,28 @@ class SupplementScorer:
         else:
             is_organic = bool(organic_data)
 
-        has_std = bool(product.get("has_standardized_botanical", False))
-        if not has_std:
-            std = safe_list(formulation.get("standardized_botanicals", []))
-            has_std = any(
-                bool(item.get("meets_threshold"))
-                or (
-                    as_float(item.get("percentage_found"), None) is not None
-                    and as_float(item.get("min_threshold"), None) is not None
-                    and as_float(item.get("percentage_found"), 0.0) >= as_float(item.get("min_threshold"), 0.0)
-                )
-                for item in std
-            )
+        # Tiered standardized botanical scoring:
+        #   1.0 = percentage verified AND meets threshold, or branded form
+        #   0.5 = marker-word match only (no threshold or no percentage found)
+        #   0.0 = no match
+        std_bonus = 0.0
+        std = safe_list(formulation.get("standardized_botanicals", []))
+        for item in std:
+            if not isinstance(item, dict) or not item.get("meets_threshold"):
+                continue
+            ev = item.get("evidence_source", "")
+            if ev in ("branded_form", "percentage_local", "percentage_context"):
+                std_bonus = 1.0
+                break  # full credit — no need to check further
+            elif ev == "marker_word_only":
+                std_bonus = max(std_bonus, 0.5)  # partial credit, keep looking
+            else:
+                # Legacy data or marker_word_match with threshold — full credit
+                std_bonus = 1.0
+                break
+        # Fallback: check top-level boolean for backward compat
+        if std_bonus == 0.0 and bool(product.get("has_standardized_botanical", False)):
+            std_bonus = 1.0
 
         synergy_bonus = self._synergy_cluster_qualified(product)
 
@@ -786,7 +796,7 @@ class SupplementScorer:
 
         return {
             "A5a_organic": 1.0 if is_organic else 0.0,
-            "A5b_standardized_botanical": 1.0 if has_std else 0.0,
+            "A5b_standardized_botanical": round(std_bonus, 1),
             "A5c_synergy_cluster": round(synergy_bonus, 2),
             "A5d_non_gmo_verified": a5d,
         }

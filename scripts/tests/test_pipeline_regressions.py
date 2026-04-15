@@ -182,6 +182,37 @@ class TestStructuralContainerUnwrap:
         assert "Cellulose" in names
         assert "Silica" in names
 
+    def test_label_header_child_forms_preserve_form_specific_ingredient_group(self, normalizer):
+        raw_other = {
+            "ingredients": [
+                {
+                    "order": 1,
+                    "name": "Contains Less Than 2% of",
+                    "ingredientGroup": "Blend",
+                    "forms": [
+                        {
+                            "order": 1,
+                            "name": "Cholecalciferol",
+                            "ingredientId": 101,
+                            "ingredientGroup": "Vitamin D",
+                        },
+                        {
+                            "order": 2,
+                            "name": "Zinc Oxide",
+                            "ingredientId": 102,
+                            "ingredientGroup": "Zinc",
+                        },
+                    ],
+                }
+            ]
+        }
+
+        processed = normalizer._process_other_ingredients_enhanced(raw_other)
+        groups_by_name = {ing.get("name"): ing.get("ingredientGroup") for ing in processed}
+
+        assert groups_by_name["Cholecalciferol"] == "Vitamin D"
+        assert groups_by_name["Zinc Oxide"] == "Zinc"
+
     def test_active_structural_container_drops_parent_and_keeps_children(self, normalizer):
         raw_product = {
             "id": "zma-test",

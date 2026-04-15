@@ -3176,7 +3176,7 @@
       "note": "Supported by human trial data per PMC10600480 systematic review. Niacin may cause flushing; extended-release formulations reduce this.",
       "sources": [
         {
-          "source_type": "pmc",
+          "source_type": "pubmed",
           "label": "PMC10600480: Synergistic Health Effects of Dietary Supplement Combinations",
           "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10600480/",
           "verified": true

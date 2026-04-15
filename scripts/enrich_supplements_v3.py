@@ -5302,7 +5302,13 @@ class SupplementEnricherV3:
                     # e.g., percentage=5.0 means 5%, min_threshold=50 means 50%
                     meets_threshold = False
                     evidence_source = "none"
-                    if min_threshold is not None:
+                    is_branded = bool(botanical.get("branded_form"))
+                    if is_branded:
+                        # Branded forms (KSM-66, Cran-Max, FloraGLO, etc.)
+                        # guarantee standardization by trademark — no % needed
+                        meets_threshold = True
+                        evidence_source = "branded_form"
+                    elif min_threshold is not None:
                         if percentage > 0:
                             # Direct comparison - both are raw percentage values
                             meets_threshold = percentage >= min_threshold
@@ -5317,16 +5323,15 @@ class SupplementEnricherV3:
                             if meets_threshold:
                                 evidence_source = "marker_word_match"
                     else:
-                        # No threshold - check for standardization evidence
-                        # Use word boundary matching to avoid false positives like
-                        # "De-Glycyrrhizinated" matching "glycyrrhizin"
+                        # No threshold and not branded — marker-word match only
+                        # gets partial credit (evidence_source distinguishes)
                         meets_threshold = percentage > 0 or self._has_marker_word_match(
                             markers, marker_text
                         )
                         if percentage > 0:
                             evidence_source = f"percentage_{percentage_source}"
                         elif meets_threshold:
-                            evidence_source = "marker_word_match"
+                            evidence_source = "marker_word_only"
 
                     found_botanicals.append({
                         "name": ing_name,

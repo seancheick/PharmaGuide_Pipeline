@@ -224,7 +224,7 @@ def check_synergy_cluster(findings: List[Finding], data: Dict[str, Any], file: s
                     file,
                     f"[{i}].evidence_tier",
                     "missing_required_key",
-                    "int(1|2|3)",
+                    "int(1|2|3|4)",
                     "missing",
                 )
             )
@@ -235,18 +235,18 @@ def check_synergy_cluster(findings: List[Finding], data: Dict[str, Any], file: s
                     file,
                     f"[{i}].evidence_tier",
                     "type_mismatch",
-                    "int(1|2|3)",
+                    "int(1|2|3|4)",
                     _type_name(evidence_tier),
                 )
             )
-        elif evidence_tier not in {1, 2, 3}:
+        elif evidence_tier not in {1, 2, 3, 4}:
             findings.append(
                 Finding(
                     "error",
                     file,
                     f"[{i}].evidence_tier",
                     "invalid_enum",
-                    "1|2|3",
+                    "1|2|3|4",
                     str(evidence_tier),
                 )
             )

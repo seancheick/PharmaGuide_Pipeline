@@ -70,6 +70,15 @@ def test_ingredient_group_fallback_uses_exact_normalized_lookup(normalizer):
     assert standard_name == "Unknown Carrier"
 
 
+def test_banned_ingredient_group_fallback_respects_negative_match_terms(normalizer):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        "Sodium Borate", [], ingredient_group="Borax"
+    )
+
+    assert standard_name != "Sodium Tetraborate (Borax)"
+    assert mapped is False
+
+
 @pytest.mark.parametrize(
     "name,expected_substring",
     [
@@ -542,8 +551,8 @@ def test_batch17_partially_hydrogenated_corn_oil_routes_to_harmful(normalizer):
 @pytest.mark.parametrize(
     "name,ingredient_group,expected_substring",
     [
-        ("High Choline Lecithin", "lecithin", "Choline"),
-        ("liquid Soy Lecithin", "lecithin", "Choline"),
+        ("High Choline Lecithin", "lecithin", "Lecithin"),
+        ("liquid Soy Lecithin", "lecithin", "Lecithin"),
         ("Trimethylglycerine Hydrochloride", "Betaine", "TMG"),
         ("Ascorbyl Palmitate and Ascorbate", "Blend (Combination)", "Vitamin C"),
     ],

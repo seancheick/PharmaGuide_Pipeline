@@ -1,4 +1,4 @@
-# PharmaGuide Unmapped Ingredient Resolution — v2.0 Batch Protocol
+# PharmaGuide Unmapped Ingredient Resolution — v3.0 Batch Protocol
 
 ## Role
 
@@ -24,16 +24,14 @@ Do not guess. Do not improvise chemistry. Do not treat weak fallback matches as 
 
 1. Exact raw DSLD files for the current working set:
    - dated delta folder in `/Users/seancheick/Documents/DataSetDsld/delta/...`
-   - or staging folder in `/Users/seancheick/Documents/DataSetDsld/staging/...`
+   - or staging folder in `/Users/seancheick/Documents/DataSetDsld/staging/brands/<brand>`
+   - or staging forms folder in `/Users/seancheick/Documents/DataSetDsld/staging/forms/<form>`
    - or manual import folder used with `python3 scripts/dsld_api_sync.py import-local ...`
-2. Canonical raw corpus in `/Users/seancheick/Documents/DataSetDsld/forms/`
-3. Current cleaner output in `scripts/output_*/cleaned/`
-4. Current unmapped reports in `scripts/output_*/unmapped/`
-5. Current enriched output in `scripts/output_*_enriched/enriched/`
-6. Current fallback reports in `scripts/output_*_enriched/reports/`
-7. Current database files in `scripts/data/`
-8. Primary external sources for identity / safety / clinical claims
-9. API verification tools in `scripts/api_audit/`
+2. Canonical raw corpus in `/Users/seancheick/Documents/DataSetDsld/forms/` (organized by dosage form: bars, capsules, gummies, liquids, lozenges, other, powders, softgels, tablets-pills)
+3. Current pipeline output in `scripts/products/output_<brand>/` (see Output Folder Layout below)
+4. Current database files in `scripts/data/`
+5. Primary external sources for identity / safety / clinical claims
+6. API verification tools in `scripts/api_audit/`
 
 If the exact run folder contradicts canonical corpus, inspect both and explain why.
 If raw DSLD contradicts cleaned output, raw wins.
@@ -49,6 +47,14 @@ Use API verification whenever adding or changing:
 - CUI → `python3 scripts/api_audit/verify_cui.py --search "<name>"` or `--cui <CUI>`
 - UNII → `python3 scripts/api_audit/verify_unii.py --search "<name>"`
 - CAS → `python3 scripts/api_audit/verify_pubchem.py --search "<name>"` or `--cid <CID>`
+- RDA/UL → `python3 scripts/api_audit/verify_rda_uls.py`
+- PubMed citations → `python3 scripts/api_audit/verify_pubmed_references.py`
+- All citations content → `python3 scripts/api_audit/verify_all_citations_content.py`
+- Clinical trials → `python3 scripts/api_audit/verify_clinical_trials.py`
+- EFSA → `python3 scripts/api_audit/verify_efsa.py`
+- CompTox → `python3 scripts/api_audit/verify_comptox.py`
+- Interactions → `python3 scripts/api_audit/verify_interactions.py`
+- Depletion PMIDs → `python3 scripts/api_audit/verify_depletion_timing_pmids.py`
 
 Important:
 
@@ -95,15 +101,16 @@ This is a medical-grade product.
 
 Before adding ANY alias or new entry, search ALL routing databases:
 
-- `ingredient_quality_map.json`
-- `other_ingredients.json`
-- `harmful_additives.json`
-- `banned_recalled_ingredients.json`
-- `botanical_ingredients.json`
-- `standardized_botanicals.json`
-- `proprietary_blends.json` when descriptor-level mapping is relevant
+- `ingredient_quality_map.json` (588 IQM parents)
+- `other_ingredients.json` (662 entries)
+- `harmful_additives.json` (115 entries)
+- `banned_recalled_ingredients.json` (143 entries)
+- `botanical_ingredients.json` (433 entries)
+- `standardized_botanicals.json` (239 entries)
+- `proprietary_blends.json` (19 entries)
+- `cross_db_overlap_allowlist.json` (31 entries)
 
-Do not rely on hard-coded entry counts in this prompt; counts may change as the databases evolve.
+Do not rely on hard-coded entry counts in this prompt; counts may change as the databases evolve. Always read the `_metadata.total_entries` from the live file.
 
 If the ingredient already exists in another file, do NOT create a duplicate. Either:
 
@@ -214,6 +221,52 @@ After the batch:
 
 ---
 
+## Output Folder Layout
+
+The pipeline produces output under `scripts/products/`. The batch runner uses `--output-prefix products/output_<brand>`.
+
+### Per-brand folder triplet
+
+```
+scripts/products/
+  output_<Brand>/                    # Clean stage output
+    cleaned/                         # cleaned_batch_*.json
+    unmapped/                        # unmapped/needs_verification reports
+      unmapped_active_ingredients.json
+      unmapped_inactive_ingredients.json
+      needs_verification_active_ingredients.json
+      needs_verification_inactive_ingredients.json
+    errors/
+    incomplete/
+    needs_review/
+    quarantine/
+    reports/
+  output_<Brand>_enriched/           # Enrich stage output
+    enriched/                        # enriched_cleaned_batch_*.json
+    reports/
+      parent_fallback_report.json
+      form_fallback_audit_report.json
+      enrichment_summary.json
+      coverage_report.json
+      coverage_report.md
+  output_<Brand>_scored/             # Score stage output
+    scored/                          # scored_cleaned_batch_*.json
+    reports/
+```
+
+### Discovering what's been processed
+
+The pipeline output is dynamic — brands and categories are added over time. To see what's currently processed:
+
+```bash
+# List all processed datasets (brands, categories, etc.)
+ls -d scripts/products/output_*/ 2>/dev/null | grep -v '_enriched\|_scored' | sed 's|scripts/products/output_||;s|/||'
+```
+
+The scan script auto-discovers all output folders. Never hardcode a brand/category list.
+
+---
+
 ## What Counts as "Unmapped" in This Pipeline
 
 There are **3 distinct surfaces**. Do not mix them.
@@ -222,17 +275,17 @@ There are **3 distinct surfaces**. Do not mix them.
 
 Files:
 
-- `scripts/output_*/unmapped/unmapped_active_ingredients.json`
-- `scripts/output_*/unmapped/unmapped_inactive_ingredients.json`
-- `scripts/output_*/unmapped/needs_verification_active_ingredients.json`
-- `scripts/output_*/unmapped/needs_verification_inactive_ingredients.json`
+- `scripts/products/output_<Brand>/unmapped/unmapped_active_ingredients.json`
+- `scripts/products/output_<Brand>/unmapped/unmapped_inactive_ingredients.json`
+- `scripts/products/output_<Brand>/unmapped/needs_verification_active_ingredients.json`
+- `scripts/products/output_<Brand>/unmapped/needs_verification_inactive_ingredients.json`
 
 Meaning: The cleaner could not map the ingredient against any known database or protection logic.
 This is the **primary backlog for database growth**.
 
 ### Surface B: Enrichment unmapped
 
-Files: `scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json`
+Files: `scripts/products/output_<Brand>_enriched/enriched/enriched_cleaned_batch_*.json`
 Path: `product.ingredient_quality_data.ingredients_scorable[].mapped == false`
 
 Meaning: The cleaner let the ingredient through as scorable, but enrichment failed to resolve it to IQM.
@@ -242,8 +295,8 @@ Usually: IQM alias gap, enricher routing bug, precedence bug, cleaner/enricher m
 
 Files:
 
-- `scripts/output_*_enriched/reports/parent_fallback_report.json`
-- `scripts/output_*_enriched/reports/form_fallback_audit_report.json`
+- `scripts/products/output_<Brand>_enriched/reports/parent_fallback_report.json`
+- `scripts/products/output_<Brand>_enriched/reports/form_fallback_audit_report.json`
 
 Meaning: The ingredient matched an IQM parent, but not the correct form alias, so it fell back to a conservative form.
 Usually: IQM form alias gap, branded-token or normalization bug.
@@ -276,53 +329,80 @@ Classify it as either:
 
 ```bash
 python3 <<'SCAN_EOF'
-import glob, json
+import glob, json, os
+
+os.chdir(os.path.expanduser('~/Downloads/dsld_clean/scripts'))
 
 print('=' * 72)
 print('UNMAPPED / FALLBACK SCAN — CURRENT STATE')
 print('=' * 72)
 
-active_files = sorted(glob.glob('scripts/output_*/unmapped/unmapped_active_ingredients.json'))
-inactive_files = sorted(glob.glob('scripts/output_*/unmapped/unmapped_inactive_ingredients.json'))
-needs_active_files = sorted(glob.glob('scripts/output_*/unmapped/needs_verification_active_ingredients.json'))
-needs_inactive_files = sorted(glob.glob('scripts/output_*/unmapped/needs_verification_inactive_ingredients.json'))
-enriched_files = sorted(glob.glob('scripts/output_*_enriched/enriched/enriched_cleaned_batch_*.json'))
-parent_fallback_files = sorted(glob.glob('scripts/output_*_enriched/reports/parent_fallback_report.json'))
-form_audit_files = sorted(glob.glob('scripts/output_*_enriched/reports/form_fallback_audit_report.json'))
+# Layout: scripts/products/output_<Brand>/unmapped/ and scripts/products/output_<Brand>_enriched/
+active_files = sorted(glob.glob('products/output_*/unmapped/unmapped_active_ingredients.json'))
+inactive_files = sorted(glob.glob('products/output_*/unmapped/unmapped_inactive_ingredients.json'))
+needs_active_files = sorted(glob.glob('products/output_*/unmapped/needs_verification_active_ingredients.json'))
+needs_inactive_files = sorted(glob.glob('products/output_*/unmapped/needs_verification_inactive_ingredients.json'))
+enriched_files = sorted(glob.glob('products/output_*_enriched/enriched/enriched_cleaned_batch_*.json'))
+parent_fallback_files = sorted(glob.glob('products/output_*_enriched/reports/parent_fallback_report.json'))
+form_audit_files = sorted(glob.glob('products/output_*_enriched/reports/form_fallback_audit_report.json'))
 
+# --- Helpers ---
+def safe_load(fp):
+    try:
+        with open(fp) as f:
+            return json.load(f)
+    except Exception as e:
+        print(f'  WARNING: Failed to load {fp}: {e}')
+        return {}
+
+def brand_from_path(fp):
+    """Extract brand name from output path for reporting."""
+    parts = fp.replace('\\', '/').split('/')
+    for p in parts:
+        if p.startswith('output_') and not p.endswith('_enriched') and not p.endswith('_scored'):
+            return p.replace('output_', '')
+    return 'unknown'
+
+# --- Surface A: Cleaning unmapped ---
 clean_active = {}
 clean_inactive = {}
 needs_active = {}
 needs_inactive = {}
+brands_scanned = set()
+
 for fp in active_files:
-    with open(fp) as f:
-        data = json.load(f)
+    brands_scanned.add(brand_from_path(fp))
+    data = safe_load(fp)
     for k, v in data.get('unmapped_ingredients', {}).items():
         clean_active[k] = clean_active.get(k, 0) + v
+
 for fp in inactive_files:
-    with open(fp) as f:
-        data = json.load(f)
+    data = safe_load(fp)
     for k, v in data.get('unmapped_ingredients', {}).items():
         clean_inactive[k] = clean_inactive.get(k, 0) + v
+
 for fp in needs_active_files:
-    with open(fp) as f:
-        data = json.load(f)
+    data = safe_load(fp)
     for row in data.get('ingredients', []):
         name = row.get('label_text', 'UNKNOWN')
         needs_active[name] = needs_active.get(name, 0) + row.get('occurrences', 0)
+
 for fp in needs_inactive_files:
-    with open(fp) as f:
-        data = json.load(f)
+    data = safe_load(fp)
     for row in data.get('ingredients', []):
         name = row.get('label_text', 'UNKNOWN')
         needs_inactive[name] = needs_inactive.get(name, 0) + row.get('occurrences', 0)
 
+# --- Surface B: Enrichment unmapped ---
 enrich_unmapped = {}
 products = 0
 scorable = 0
 for fp in enriched_files:
-    with open(fp) as f:
-        batch = json.load(f)
+    data = safe_load(fp)
+    if isinstance(data, list):
+        batch = data
+    else:
+        batch = data.get('products', [])
     for p in batch:
         products += 1
         for ing in p.get('ingredient_quality_data', {}).get('ingredients_scorable', []):
@@ -331,61 +411,97 @@ for fp in enriched_files:
                 name = ing.get('name', 'UNKNOWN')
                 enrich_unmapped[name] = enrich_unmapped.get(name, 0) + 1
 
+# --- Surface C: Fallbacks ---
 fallbacks = {}
 for fp in parent_fallback_files:
-    with open(fp) as f:
-        data = json.load(f)
+    data = safe_load(fp)
     for row in data.get('fallbacks', []):
         key = row.get('ingredient_normalized') or row.get('ingredient_raw') or 'UNKNOWN'
         fallbacks[key] = fallbacks.get(key, 0) + row.get('occurrence_count', 0)
 
-print('\n[CLEANING]')
-print(f"  Active unmapped:   {len(clean_active):,} unique / {sum(clean_active.values()):,} occ")
-print(f"  Inactive unmapped: {len(clean_inactive):,} unique / {sum(clean_inactive.values()):,} occ")
-print(f"  Needs verify act:  {len(needs_active):,} unique / {sum(needs_active.values()):,} occ")
-print(f"  Needs verify ina:  {len(needs_inactive):,} unique / {sum(needs_inactive.values()):,} occ")
+form_fallbacks = {}
+for fp in form_audit_files:
+    data = safe_load(fp)
+    for row in data.get('fallbacks', data.get('form_fallbacks', [])):
+        key = row.get('ingredient_normalized') or row.get('ingredient_raw') or 'UNKNOWN'
+        form_fallbacks[key] = form_fallbacks.get(key, 0) + row.get('occurrence_count', row.get('count', 0))
 
-print('\n[ENRICHMENT]')
-print(f"  Products scanned:       {products:,}")
-print(f"  Scorable ingredients:   {scorable:,}")
-print(f"  Enrichment unmapped:    {len(enrich_unmapped):,} unique / {sum(enrich_unmapped.values()):,} occ")
+# --- Database stats ---
+db_files = {
+    'IQM': 'data/ingredient_quality_map.json',
+    'Other Ingredients': 'data/other_ingredients.json',
+    'Harmful Additives': 'data/harmful_additives.json',
+    'Banned/Recalled': 'data/banned_recalled_ingredients.json',
+    'Botanical': 'data/botanical_ingredients.json',
+    'Std Botanical': 'data/standardized_botanicals.json',
+    'Proprietary Blends': 'data/proprietary_blends.json',
+    'Cross-DB Overlap': 'data/cross_db_overlap_allowlist.json',
+}
+
+print('\n[DATABASE STATUS]')
+for label, fp in db_files.items():
+    try:
+        d = json.load(open(fp))
+        total = d.get('_metadata', {}).get('total_entries', '?')
+        ver = d.get('_metadata', {}).get('schema_version', '?')
+        print(f'  {label:20s}: {total:>5} entries (schema {ver})')
+    except Exception as e:
+        print(f'  {label:20s}: ERROR - {e}')
+
+print(f'\n[BRANDS SCANNED]: {sorted(brands_scanned) if brands_scanned else "NONE — run pipeline first"}')
+print(f'  Output folders found: {len(active_files)} clean, {len(enriched_files)} enriched, {len(parent_fallback_files)} fallback reports')
+
+print('\n[CLEANING — Surface A]')
+print(f'  Active unmapped:   {len(clean_active):,} unique / {sum(clean_active.values()):,} occ')
+print(f'  Inactive unmapped: {len(clean_inactive):,} unique / {sum(clean_inactive.values()):,} occ')
+print(f'  Needs verify act:  {len(needs_active):,} unique / {sum(needs_active.values()):,} occ')
+print(f'  Needs verify ina:  {len(needs_inactive):,} unique / {sum(needs_inactive.values()):,} occ')
+
+print('\n[ENRICHMENT — Surface B]')
+print(f'  Products scanned:       {products:,}')
+print(f'  Scorable ingredients:   {scorable:,}')
+print(f'  Enrichment unmapped:    {len(enrich_unmapped):,} unique / {sum(enrich_unmapped.values()):,} occ')
 
 clean_active_set = set(clean_active)
 enrich_set = set(enrich_unmapped)
-print('\n[OVERLAP]')
-print(f"  In both:                {len(clean_active_set & enrich_set):,}")
-print(f"  Cleaning-only active:   {len(clean_active_set - enrich_set):,}")
-print(f"  Enrichment-only:        {len(enrich_set - clean_active_set):,}")
+print('\n[OVERLAP A ∩ B]')
+print(f'  In both:                {len(clean_active_set & enrich_set):,}')
+print(f'  Cleaning-only active:   {len(clean_active_set - enrich_set):,}')
+print(f'  Enrichment-only:        {len(enrich_set - clean_active_set):,}')
 
-print('\n[FALLBACK]')
-print(f"  Parent fallback files:  {len(parent_fallback_files)}")
-print(f"  Form audit files:       {len(form_audit_files)}")
-print(f"  Unique fallback labels: {len(fallbacks):,}")
-print(f"  Total fallback occ:     {sum(fallbacks.values()):,}")
+print('\n[FALLBACK — Surface C]')
+print(f'  Parent fallback files:  {len(parent_fallback_files)}')
+print(f'  Form audit files:       {len(form_audit_files)}')
+print(f'  Unique parent fallback: {len(fallbacks):,} / {sum(fallbacks.values()):,} occ')
+print(f'  Unique form fallback:   {len(form_fallbacks):,} / {sum(form_fallbacks.values()):,} occ')
 
-print('\n[TOP CLEAN ACTIVE UNMAPPED]')
+print('\n[TOP 25 — CLEAN ACTIVE UNMAPPED]')
 for name, count in sorted(clean_active.items(), key=lambda x: -x[1])[:25]:
-    print(f"  {count:4d}x  {name}")
+    print(f'  {count:4d}x  {name}')
 
-print('\n[TOP CLEAN INACTIVE UNMAPPED]')
+print('\n[TOP 25 — CLEAN INACTIVE UNMAPPED]')
 for name, count in sorted(clean_inactive.items(), key=lambda x: -x[1])[:25]:
-    print(f"  {count:4d}x  {name}")
+    print(f'  {count:4d}x  {name}')
 
-print('\n[TOP NEEDS VERIFICATION ACTIVE]')
+print('\n[TOP 25 — NEEDS VERIFICATION ACTIVE]')
 for name, count in sorted(needs_active.items(), key=lambda x: -x[1])[:25]:
-    print(f"  {count:4d}x  {name}")
+    print(f'  {count:4d}x  {name}')
 
-print('\n[TOP NEEDS VERIFICATION INACTIVE]')
+print('\n[TOP 25 — NEEDS VERIFICATION INACTIVE]')
 for name, count in sorted(needs_inactive.items(), key=lambda x: -x[1])[:25]:
-    print(f"  {count:4d}x  {name}")
+    print(f'  {count:4d}x  {name}')
 
-print('\n[TOP ENRICHMENT UNMAPPED]')
+print('\n[TOP 25 — ENRICHMENT UNMAPPED]')
 for name, count in sorted(enrich_unmapped.items(), key=lambda x: -x[1])[:25]:
-    print(f"  {count:4d}x  {name}")
+    print(f'  {count:4d}x  {name}')
 
-print('\n[TOP FALLBACKS]')
+print('\n[TOP 25 — PARENT FALLBACKS]')
 for name, count in sorted(fallbacks.items(), key=lambda x: -x[1])[:25]:
-    print(f"  {count:4d}x  {name}")
+    print(f'  {count:4d}x  {name}')
+
+print('\n[TOP 25 — FORM FALLBACKS]')
+for name, count in sorted(form_fallbacks.items(), key=lambda x: -x[1])[:25]:
+    print(f'  {count:4d}x  {name}')
 
 print('\n' + '=' * 72)
 print('SCAN COMPLETE')
@@ -393,19 +509,44 @@ print('=' * 72)
 SCAN_EOF
 ```
 
+---
+
 ## Path Conventions
 
-Assume the operator uses this dataset root unless explicitly told otherwise:
+### Dataset root
 
 `/Users/seancheick/Documents/DataSetDsld`
 
 Important subpaths:
 
-- canonical raw: `/Users/seancheick/Documents/DataSetDsld/forms`
-- sync state: `/Users/seancheick/Documents/DataSetDsld/state/dsld_sync_state.json`
-- dated deltas: `/Users/seancheick/Documents/DataSetDsld/delta`
-- sync reports: `/Users/seancheick/Documents/DataSetDsld/reports`
-- temporary seed / review folders: `/Users/seancheick/Documents/DataSetDsld/staging`
+| Path                         | Purpose                                                                                                                              |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `forms/`                     | Canonical raw corpus (organized by dosage form: bars, capsules, gummies, liquids, lozenges, other, powders, softgels, tablets-pills) |
+| `staging/brands/<brand>/`    | First-time brand seed staging area                                                                                                   |
+| `staging/forms/<form>/`      | First-time form/category seed staging area                                                                                           |
+| `delta/<target>/`            | Dated delta update output                                                                                                            |
+| `state/dsld_sync_state.json` | Sync state tracking                                                                                                                  |
+| `reports/<target>/`          | Sync reports                                                                                                                         |
+
+### Pipeline repo root
+
+`/Users/seancheick/Downloads/dsld_clean`
+
+Important subpaths:
+
+| Path                                 | Purpose                                                                           |
+| ------------------------------------ | --------------------------------------------------------------------------------- |
+| `scripts/`                           | All pipeline scripts (46 Python files)                                            |
+| `scripts/data/`                      | 39 reference JSON databases                                                       |
+| `scripts/data/curated_overrides/`    | Manual CUI/PubChem/GSRS policy overrides                                          |
+| `scripts/data/curated_interactions/` | Drug-supplement interaction data                                                  |
+| `scripts/data/fda_caers/`            | FDA CAERS adverse event data                                                      |
+| `scripts/data/fda_drug_labels/`      | FDA drug label data (13 parts)                                                    |
+| `scripts/data/suppai_import/`        | SuppAI import data                                                                |
+| `scripts/api_audit/`                 | 30+ API verification scripts                                                      |
+| `scripts/tests/`                     | 81+ test files, 3065+ test functions                                              |
+| `scripts/config/`                    | cleaning_config.json, enrichment_config.json, scoring_config.json                 |
+| `scripts/products/`                  | Pipeline output per dataset (brands, categories — clean/enriched/scored triplets) |
 
 Do not assume legacy flat brand folders are canonical unless the operator explicitly says they are using a legacy folder.
 
@@ -425,17 +566,80 @@ Raw DSLD data may enter the system in 4 ways:
 
 The prompt must inspect the exact raw folder used for the current run whenever possible, not just the final canonical corpus.
 
-### Primary routing targets
+---
 
-| Database               | File                               | Purpose                                                                                            |
-| ---------------------- | ---------------------------------- | -------------------------------------------------------------------------------------------------- |
-| IQM                    | `ingredient_quality_map.json`      | Scorable actives                                                                                   |
-| Other Ingredients      | `other_ingredients.json`           | Neutral excipients / carriers / shell                                                              |
-| Harmful Additives      | `harmful_additives.json`           | Penalty-bearing inactive ingredients                                                               |
-| Banned/Recalled        | `banned_recalled_ingredients.json` | Disqualification gate and penalty (watchlist and high_risk)                                        |
-| Botanical              | `botanical_ingredients.json`       | Basic botanical mapping                                                                            |
-| Standardized Botanical | `standardized_botanicals.json`     | Standardized botanical extracts (bonus file if map meets threshold and standardization is present) |
-| Proprietary Blends     | `proprietary_blends.json`          | Mapping-only descriptors - the enricher does not score these, the scorer handles penalty           |
+## Batch Pipeline Runner
+
+The batch runner processes all brands through the full pipeline:
+
+```bash
+# Full pipeline on all brands (default root: staging/brands)
+bash batch_run_all_datasets.sh
+
+# Score-only on all brands
+bash batch_run_all_datasets.sh --stages score
+
+# Enrich + score only
+bash batch_run_all_datasets.sh --stages enrich,score
+
+# Specific brands only
+bash batch_run_all_datasets.sh --targets Thorne,Olly
+
+# Custom root (e.g., forms)
+bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"
+
+# Example: specific brands
+bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,GNC
+
+# Example: run by dosage form category
+bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/forms"
+```
+
+The batch runner uses `PYTHON="${PYTHON:-python3}"` — override with `PYTHON=python3.13 bash batch_run_all_datasets.sh` if needed.
+
+---
+
+## Primary Routing Targets
+
+| Database               | File                               | Entries | Schema | Purpose                                           |
+| ---------------------- | ---------------------------------- | ------- | ------ | ------------------------------------------------- |
+| IQM                    | `ingredient_quality_map.json`      | 588     | 5.0.0  | Scorable active ingredients (bonuses)             |
+| Other Ingredients      | `other_ingredients.json`           | 662     | 5.0.0  | Neutral excipients / carriers / shell             |
+| Harmful Additives      | `harmful_additives.json`           | 115     | 5.1.0  | Penalty-bearing inactive ingredients              |
+| Banned/Recalled        | `banned_recalled_ingredients.json` | 143     | 5.0.0  | Disqualification gate and penalty                 |
+| Botanical              | `botanical_ingredients.json`       | 433     | 5.0.0  | Basic botanical mapping                           |
+| Standardized Botanical | `standardized_botanicals.json`     | 239     | 5.0.0  | Standardized botanical extracts (bonus)           |
+| Proprietary Blends     | `proprietary_blends.json`          | 19      | 5.0.0  | Descriptor-level mapping (scorer handles penalty) |
+| Cross-DB Overlap       | `cross_db_overlap_allowlist.json`  | 31      | 5.1.0  | Legitimate multi-file entries                     |
+
+### Supporting data files (not routing targets, but referenced during resolution)
+
+| File                                   | Entries | Purpose                               |
+| -------------------------------------- | ------- | ------------------------------------- |
+| `absorption_enhancers.json`            | 23      | Absorption enhancer classification    |
+| `allergens.json`                       | 17      | Big 8 allergen classification         |
+| `backed_clinical_studies.json`         | 197     | PMID-backed clinical evidence bonuses |
+| `synergy_cluster.json`                 | 58      | Ingredient synergy bonuses            |
+| `rda_optimal_uls.json`                 | 47      | RDA/AI/UL dosing benchmarks           |
+| `medication_depletions.json`           | 68      | Drug-induced nutrient depletions      |
+| `ingredient_classification.json`       | 34      | Active/inactive classification rules  |
+| `ingredient_interaction_rules.json`    | 129     | Interaction rule engine               |
+| `drug_classes.json`                    | 28      | Drug class definitions                |
+| `timing_rules.json`                    | 42      | Dosing timing guidance                |
+| `clinically_relevant_strains.json`     | 42      | Probiotic strain specificity          |
+| `color_indicators.json`                | 66      | Color additive classification         |
+| `enhanced_delivery.json`               | 78      | Enhanced delivery system bonuses      |
+| `functional_ingredient_groupings.json` | 8       | Functional grouping definitions       |
+| `manufacturer_violations.json`         | —       | Brand trust penalties                 |
+| `rda_therapeutic_dosing.json`          | —       | Therapeutic dosing ranges             |
+
+### Curated override files (prevent known bad auto-matches)
+
+| File                                      | Content                           |
+| ----------------------------------------- | --------------------------------- |
+| `curated_overrides/cui_overrides.json`    | 66 CUI override entries           |
+| `curated_overrides/gsrs_policies.json`    | 88 entry policies + 24 skip names |
+| `curated_overrides/pubchem_policies.json` | 17 entry policies + 23 skip names |
 
 ### Default routing rule
 
@@ -546,14 +750,15 @@ Action: Do not write. Report what must be verified.
 
 ## Identifier Verification for Alias Additions
 
-**This is the critical new step.** Before adding any alias, run this checklist:
+**This is the critical step.** Before adding any alias, run this checklist:
 
 ### Step 1: Find the target entry
 
 ```bash
 # Search all DBs for the canonical ingredient
 python3 -c "
-import json, sys
+import json, sys, os
+os.chdir(os.path.expanduser('~/Downloads/dsld_clean'))
 term = sys.argv[1].lower()
 files = [
     ('scripts/data/ingredient_quality_map.json', 'iqm'),
@@ -562,6 +767,7 @@ files = [
     ('scripts/data/banned_recalled_ingredients.json', 'ingredients'),
     ('scripts/data/botanical_ingredients.json', 'botanical_ingredients'),
     ('scripts/data/standardized_botanicals.json', 'standardized_botanicals'),
+    ('scripts/data/proprietary_blends.json', 'proprietary_blends'),
 ]
 for fpath, key in files:
     d = json.load(open(fpath))
@@ -571,14 +777,30 @@ for fpath, key in files:
             if not isinstance(v, dict): continue
             sname = (v.get('standard_name') or '').lower()
             aliases = [a.lower() for a in v.get('aliases', []) if isinstance(a, str)]
-            if term in sname or any(term in a for a in aliases):
-                print(f'  IQM: {k} ({v.get(\"standard_name\")})')
-    else:
+            form_aliases = []
+            for fname, fdata in v.get('forms', {}).items():
+                if isinstance(fdata, dict):
+                    form_aliases.extend([a.lower() for a in fdata.get('aliases', []) if isinstance(a, str)])
+            all_terms = [sname] + aliases + form_aliases + [k.lower()]
+            if any(term in t for t in all_terms):
+                print(f'  IQM: {k} ({v.get(\"standard_name\")}) — {len(v.get(\"forms\",{}))} forms')
+    elif key == 'proprietary_blends':
         for e in d.get(key, []):
+            sname = (e.get('name') or e.get('standard_name') or '').lower()
+            aliases = [a.lower() for a in e.get('aliases', []) if isinstance(a, str)]
+            if any(term in t for t in [sname] + aliases):
+                print(f'  {fpath.split(\"/\")[-1]}: {e.get(\"name\")} ({e.get(\"standard_name\",\"\")})')
+    else:
+        entries = d.get(key, [])
+        if isinstance(entries, dict):
+            entries = list(entries.values())
+        for e in entries:
+            if not isinstance(e, dict): continue
             sname = (e.get('standard_name') or '').lower()
             aliases = [a.lower() for a in e.get('aliases', []) if isinstance(a, str)]
-            if term in sname or any(term in a for a in aliases):
-                print(f'  {fpath.split(\"/\")[-1]}: {e.get(\"id\")} ({e.get(\"standard_name\")})')
+            eid = e.get('id', '')
+            if any(term in t for t in [sname] + aliases + [str(eid).lower()]):
+                print(f'  {fpath.split(\"/\")[-1]}: {eid} ({e.get(\"standard_name\")})')
 " "<search_term>"
 ```
 
@@ -613,9 +835,23 @@ python3 scripts/api_audit/verify_pubchem.py --search "<alias_text>"
 ```bash
 # Verify the alias doesn't already exist in another DB file
 python3 -c "
-import json, sys
+import json, sys, os
+os.chdir(os.path.expanduser('~/Downloads/dsld_clean'))
 alias = sys.argv[1].lower()
-# ... search all files for this exact alias text
+files = [
+    'scripts/data/ingredient_quality_map.json',
+    'scripts/data/other_ingredients.json',
+    'scripts/data/harmful_additives.json',
+    'scripts/data/banned_recalled_ingredients.json',
+    'scripts/data/botanical_ingredients.json',
+    'scripts/data/standardized_botanicals.json',
+    'scripts/data/proprietary_blends.json',
+]
+for fpath in files:
+    d = json.load(open(fpath))
+    text = json.dumps(d).lower()
+    if alias in text:
+        print(f'  FOUND in {fpath.split(\"/\")[-1]}')
 " "<alias_text>"
 ```
 
@@ -632,13 +868,13 @@ If alias exists in another file → do NOT duplicate. Either:
 For any suspicious item, compare across the full pipeline:
 
 1. **Exact raw working-set file**:
-   - dated delta folder for update runs
-   - staging folder for first-time seed runs
+   - staging folder: `/Users/seancheick/Documents/DataSetDsld/staging/brands/<brand>/`
+   - dated delta folder for update runs: `/Users/seancheick/Documents/DataSetDsld/delta/<target>/`
    - manual import folder for local-import runs
-2. **Canonical raw file** in `/Users/seancheick/Documents/DataSetDsld/forms/`
-3. **Cleaned output**: How did the cleaner normalize it?
-4. **Enriched output**: Did enrichment resolve it? To what?
-5. **Unmapped / needs-verification / fallback reports**: Why is it unresolved?
+2. **Canonical raw file** in `/Users/seancheick/Documents/DataSetDsld/forms/<dosage_form>/`
+3. **Cleaned output**: `scripts/products/output_<Brand>/cleaned/cleaned_batch_*.json`
+4. **Enriched output**: `scripts/products/output_<Brand>_enriched/enriched/enriched_cleaned_batch_*.json`
+5. **Unmapped / needs-verification / fallback reports**: `scripts/products/output_<Brand>/unmapped/` and `scripts/products/output_<Brand>_enriched/reports/`
 
 Key fields to compare:
 
@@ -650,6 +886,28 @@ Key fields to compare:
 
 If raw shows a blend/container/header and cleaned surfaces it as unmapped ingredient text → code issue first.
 Prefer the exact current run folder first, because that is the operator's working set. Use canonical `forms/` as the long-term reference copy.
+
+---
+
+## Key Pipeline Scripts Reference
+
+| Script                             | Purpose                                       | When to use during resolution    |
+| ---------------------------------- | --------------------------------------------- | -------------------------------- |
+| `run_pipeline.py`                  | Orchestrates Clean → Enrich → Score           | Shadow-run verification          |
+| `clean_dsld_data.py`               | Stage 1: normalize raw DSLD JSON              | Investigate cleaning bugs        |
+| `enrich_supplements_v3.py`         | Stage 2: match, classify, enrich (~12K lines) | Investigate enrichment bugs      |
+| `score_supplements.py`             | Stage 3: arithmetic scoring (~3K lines)       | Investigate scoring bugs         |
+| `enhanced_normalizer.py`           | Core text normalization engine (~6K lines)    | Investigate normalization bugs   |
+| `constants.py`                     | Shared constants and mappings (~1.5K lines)   | Check canonical aliases/mappings |
+| `fuzzy_matcher.py`                 | Fuzzy string matching                         | Investigate match failures       |
+| `functional_grouping_handler.py`   | Functional grouping logic                     | Investigate grouping bugs        |
+| `proprietary_blend_detector.py`    | Blend detection                               | Investigate blend routing        |
+| `rda_ul_calculator.py`             | RDA/UL dose calculations                      | Investigate dose scoring         |
+| `dosage_normalizer.py`             | Dose normalization                            | Investigate dose parsing         |
+| `match_ledger.py`                  | Match tracking/auditing                       | Trace match decisions            |
+| `db_integrity_sanity_check.py`     | Schema and data validation (~1.5K lines)      | Mandatory after every edit       |
+| `coverage_gate.py`                 | Quality/coverage threshold enforcement        | Quality gate checking            |
+| `enrichment_contract_validator.py` | Enrichment output validation                  | Verify enrichment contracts      |
 
 ---
 
@@ -715,17 +973,45 @@ Use at least one of:
 
 ## API Verification Tools
 
-| Script              | API      | What it checks                           | Key flags                           |
-| ------------------- | -------- | ---------------------------------------- | ----------------------------------- |
-| `verify_cui.py`     | UMLS     | CUI validity, concept name               | `--cui C0000000`, `--search "name"` |
-| `verify_unii.py`    | FDA GSRS | UNII, CFR, DSLD, metabolic relationships | `--search "name"`                   |
-| `verify_pubchem.py` | PubChem  | CAS, PubChem CID, molecular identity     | `--search "name"`, `--cid 12345`    |
+| Script                             | API                             | What it checks                                            | Key flags                           |
+| ---------------------------------- | ------------------------------- | --------------------------------------------------------- | ----------------------------------- |
+| `verify_cui.py`                    | UMLS                            | CUI validity, concept name                                | `--cui C0000000`, `--search "name"` |
+| `verify_unii.py`                   | FDA GSRS                        | UNII, CFR, DSLD, metabolic relationships                  | `--search "name"`                   |
+| `verify_pubchem.py`                | PubChem                         | CAS, PubChem CID, molecular identity                      | `--search "name"`, `--cid 12345`    |
+| `verify_rda_uls.py`                | USDA FoodData Central + NAM DRI | RDA/AI/UL values                                          | —                                   |
+| `verify_efsa.py`                   | EFSA OpenFoodTox                | EU regulatory ADI/opinion                                 | —                                   |
+| `verify_clinical_trials.py`        | ClinicalTrials.gov              | NCT ID validity                                           | —                                   |
+| `verify_comptox.py`                | EPA CompTox                     | Chemical toxicity data                                    | —                                   |
+| `verify_interactions.py`           | RxNorm + UMLS                   | Drug-supplement interactions                              | —                                   |
+| `verify_pubmed_references.py`      | PubMed                          | Cross-file PMID validation                                | —                                   |
+| `verify_all_citations_content.py`  | PubMed                          | Content-verify ALL PMIDs (title must match claimed topic) | —                                   |
+| `verify_depletion_timing_pmids.py` | PubMed                          | Depletion/timing PMID content verification                | —                                   |
+
+### Enrichment/audit scripts
+
+| Script                                          | Purpose                                           |
+| ----------------------------------------------- | ------------------------------------------------- |
+| `api_audit/enrich_botanicals.py`                | Botanical enrichment with standardization markers |
+| `api_audit/enrich_chembl_bioactivity.py`        | ChEMBL mechanism of action enrichment             |
+| `api_audit/audit_alias_accuracy.py`             | Alias accuracy audit                              |
+| `api_audit/audit_banned_recalled_accuracy.py`   | Release gate for banned/recalled data             |
+| `api_audit/audit_clinical_evidence_strength.py` | Evidence strength classification                  |
+| `api_audit/audit_clinical_sources.py`           | Clinical source validation                        |
+| `api_audit/audit_notes_alignment.py`            | Notes alignment check                             |
+| `api_audit/discover_clinical_evidence.py`       | Clinical evidence discovery                       |
+| `api_audit/normalize_clinical_pubmed.py`        | PubMed citation normalization                     |
+| `api_audit/build_unii_cache.py`                 | Build local UNII cache from FDA bulk              |
+| `api_audit/ingest_caers.py`                     | Ingest FDA CAERS adverse event data               |
+| `api_audit/mine_drug_label_interactions.py`     | Mine FDA drug labels for interactions             |
+| `api_audit/seed_drug_classes.py`                | Seed drug class definitions                       |
+| `api_audit/fda_weekly_sync.py`                  | FDA recall tracking (openFDA, RSS, DEA)           |
+| `api_audit/fda_manufacturer_violations_sync.py` | Manufacturer violation sync                       |
 
 Curated override files (prevent known bad auto-matches):
 
 - `scripts/data/curated_overrides/cui_overrides.json` (66 entries)
-- `scripts/data/curated_overrides/gsrs_policies.json` (88 entries)
-- `scripts/data/curated_overrides/pubchem_policies.json` (17 entries)
+- `scripts/data/curated_overrides/gsrs_policies.json` (88 entry policies, 24 skip names)
+- `scripts/data/curated_overrides/pubchem_policies.json` (17 entry policies, 23 skip names)
 
 **NEVER use `--apply` in bulk.** Dry-run only, verify each result individually.
 
@@ -832,7 +1118,7 @@ Rows that are label-visible but should not score: keep in display ledger, mark n
 1. **No batch fixes.** 8-12 items per batch. Verify each individually. Test-pin before editing data.
 2. **API-verify all identifiers** before adding aliases or new entries. CUI via UMLS, UNII via GSRS, CAS via PubChem.
 3. **No alias should match a different compound** — verify via CUI/UNII/CAS. If identifiers disagree, decouple.
-4. **No duplicate entries across files.** Search all 6+ routing databases before adding anything.
+4. **No duplicate entries across files.** Search all 7+ routing databases before adding anything.
 5. **No hallucinated references.** If you can't find a real source, write "needs verification."
 6. **Fix code bugs with code, not data.** Do not paper over parser/normalizer/precedence bugs with aliases.
 7. **Raw DSLD verification is mandatory** for any suspicious or ambiguous case.

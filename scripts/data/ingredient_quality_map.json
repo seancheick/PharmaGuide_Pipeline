@@ -287,7 +287,8 @@
           "vit a",
           "retinoids",
           "vitamin a complex",
-          "vitamin a-"
+          "vitamin a-",
+          "Carotenoids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -460,7 +461,8 @@
           "thiamine supplement",
           "vitamin b1 supplement",
           "b1 supplement",
-          "thiaminum hydrochloridum supplement"
+          "thiaminum hydrochloridum supplement",
+          "Thiamine Chloride"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -1977,7 +1979,8 @@
           "biotin supplement",
           "commercial biotin supplement",
           "free biotin",
-          "free biotin supplement"
+          "free biotin supplement",
+          "Magnesium Biotinate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -3169,7 +3172,8 @@
           "natural c acerola supplement",
           "acerola fruit c supplement",
           "Acerola juice powder",
-          "acerola berry juice powder"
+          "acerola berry juice powder",
+          "Malpighia glabra Fruit Extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -4914,7 +4918,8 @@
           "TRAACS Calcium supplement",
           "calcium glycinate",
           "Calcium Chelate",
-          "calcium amino acid chelate"
+          "calcium amino acid chelate",
+          "Albion Calcium Bisglycinate Chelate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -5284,7 +5289,8 @@
           "calcium aspartate",
           "Calcium, Natural",
           "Calcium Formate",
-          "calcium potassium phosphate citrate"
+          "calcium potassium phosphate citrate",
+          "Calcium Hydroxycitrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5499,7 +5505,9 @@
           "magnesium lysinate glycinate",
           "Magnesium Chelate",
           "Magnesium Glycinate Buffered",
-          "Magnesium Bisglycinate Chelate Buffered"
+          "Magnesium Bisglycinate Chelate Buffered",
+          "TRAACS Magnesium Lysinate Glycinate Chelate",
+          "Albion Magnesium Lysinate Glycinate Chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -5884,7 +5892,9 @@
           "elemental magnesium",
           "magnesio",
           "tri-mg",
-          "tri-mg(tm)"
+          "tri-mg(tm)",
+          "Magnesium Caprylate",
+          "Magnesium Beta Hydroxybutyrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6000,7 +6010,8 @@
           "ferrous glycinate",
           "iron bis-glycinate",
           "iron tris-glycinate",
-          "iron trisglycinate"
+          "iron trisglycinate",
+          "Albion Ferrochel"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6213,7 +6224,8 @@
           "iron supplement",
           "fe",
           "Iron, Natural",
-          "Sumulate"
+          "Sumulate",
+          "Ferric Orthophosphate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6538,7 +6550,9 @@
           "Albion Zinc Bisglycinate",
           "zinc bisglycinate supplement",
           "zinc glycinate chelate",
-          "zinc chelate"
+          "zinc chelate",
+          "TRAACS Zinc Bisglycinate",
+          "Albion Z-life Zinc Bisglycinate Chelate Max"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -6909,7 +6923,8 @@
           "elm bark",
           "red elm",
           "indian elm",
-          "moose elm"
+          "moose elm",
+          "Ulmus fulva, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption": "unknown",
@@ -7369,7 +7384,8 @@
           "se",
           "selenium supplement",
           "selenium hydrolyzed rice protein chelate",
-          "{selenium} hydrolyzed rice protein chelate"
+          "{selenium} hydrolyzed rice protein chelate",
+          "Selenium Aspartate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7672,7 +7688,8 @@
           "microbiomex",
           "flavanones",
           "citrus sinensis",
-          "citrus sinensis extract"
+          "citrus sinensis extract",
+          "Citrus spp."
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8533,7 +8550,8 @@
           "diindolylymethane",
           "3,3'-diindolymethane",
           "3,3 diindolylmethane",
-          "3,3' diindolylmethane"
+          "3,3' diindolylmethane",
+          "Crystalline DIM"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8639,7 +8657,8 @@
           "Polygonum cuspidatum",
           "Reynoutria japonica root extract",
           "Fallopia japonica",
-          "BioVin"
+          "BioVin",
+          "Japanese Knotweed Root Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8661,7 +8680,8 @@
           "resveratrols",
           "Total Resveratrol",
           "resveratrol supplement",
-          "grape resveratrol"
+          "grape resveratrol",
+          "MicroActive Resveratrol"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -8941,7 +8961,8 @@
           "myristic acid saw palmetto supplement",
           "oleic acid saw palmetto supplement",
           "palmitic acid saw palmetto supplement",
-          "serenoa repens berry extract"
+          "serenoa repens berry extract",
+          "Serenoa repens Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9030,7 +9051,8 @@
           "Fatty Acids and Sterols",
           "saw palmetto fatty acids and sterols",
           "mytosterone(r) saw palmetto berries (serenoa repens) and astaxanthin",
-          "mytosterone saw palmetto"
+          "mytosterone saw palmetto",
+          "Serenoa repens"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -9408,7 +9430,10 @@
           "vanadium amino acid chelate",
           "vanadium glycinate",
           "vanadium, natural",
-          "natural vanadium"
+          "natural vanadium",
+          "Vanadium Nicotinate Glycinate Chelate",
+          "Vanadium Krebs Cycle Chelates",
+          "Bis-Glycinato Oxo Vanadium"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -9632,7 +9657,9 @@
           "TRAACS Copper supplement",
           "copper rice protein chelate",
           "Copper Bis-Glycinate",
-          "Albion Copper Bisglycinate Chelate"
+          "Albion Copper Bisglycinate Chelate",
+          "Albion Copper Bisglycinate",
+          "Copper Glycinate Chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9655,7 +9682,8 @@
           "gluconate-bound copper",
           "copper gluconate supplement",
           "gluconic acid copper supplement",
-          "gluconate-bound copper supplement"
+          "gluconate-bound copper supplement",
+          "Cupric Gluconate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9872,7 +9900,8 @@
           "pure crystalline chromium picolinate",
           "chromax chromium picolinate",
           "chromium chromax(r)",
-          "chromium chromax"
+          "chromium chromax",
+          "Chromium Picolinate Chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9901,7 +9930,8 @@
           "chromemate chromium polynicotinate",
           "chrome mate",
           "chromemate cm-100m",
-          "chromemate cm-100"
+          "chromemate cm-100",
+          "Chromium Dinicocysteinate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -9998,7 +10028,9 @@
           "TRAACS Chromium",
           "albion chromium",
           "Albion chromium chelate",
-          "Albion Chromium Nicotinate Glycinate Chelate"
+          "Albion Chromium Nicotinate Glycinate Chelate",
+          "TRAACS Chromium Glycinate Chelate",
+          "TRAACS Nicotinate Glycinate Chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -10022,7 +10054,9 @@
           "trivalent chromium",
           "zychrome chromium",
           "cromo",
-          "Zychrome"
+          "Zychrome",
+          "Chromium Citrate",
+          "Chromium Aspartate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10065,7 +10099,9 @@
         "aliases": [
           "chromium chelidamate arginate",
           "chromium chelidamate arginate chelate",
-          "chelidamic acid arginine chromium"
+          "chelidamic acid arginine chromium",
+          "Chromium Arginate",
+          "Chromium Chelidamate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -10167,7 +10203,9 @@
           "bladderwrack iodine",
           "kelp extract",
           "brown seaweed iodine",
-          "organic kelp"
+          "organic kelp",
+          "Laminaria saccharina",
+          "Laminaria saccharina, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10243,7 +10281,8 @@
           "yodo",
           "iodine complex",
           "iodine, natural",
-          "natural iodine"
+          "natural iodine",
+          "Iodine Chelate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -10710,7 +10749,8 @@
           "TRAACS Molybdenum",
           "Mo glycinate",
           "molybdenum bisglycinate chelate",
-          "Albion Molybdenum Glycinate"
+          "Albion Molybdenum Glycinate",
+          "Albion Molybdenum Glycinate Chelate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -10973,7 +11013,11 @@
           "boron diglycinate",
           "boron rice protein chelate",
           "Albion Bororganic Glycine",
-          "Albion Bororganic"
+          "Albion Bororganic",
+          "Bororganic Boron Glycinate Chelate",
+          "Bororganic Glycinate Complex",
+          "Boroganic Glycine",
+          "{Boron} Glycinate Amino Acid Complex"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -11114,7 +11158,8 @@
           "citric acid potassium",
           "citrate-bound potassium",
           "K citrate",
-          "potassium citrate monohydrate"
+          "potassium citrate monohydrate",
+          "Tripotassium Citrate Monohydrate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -11440,7 +11485,8 @@
           "pure algal omega-3",
           "pure algal omega 3",
           "algae oil docosahexaenoic acid",
-          "algal dha oil"
+          "algal dha oil",
+          "Schizochytrium sp. Oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12229,7 +12275,8 @@
           "Meriva Turmeric Phytosome Complex Curcuma longa extract",
           "Meriva Turmeric Phytosome Complex Soy Phospholipid",
           "Meriva Turmeric Phytosome Curcuma longa extract",
-          "Meriva Turmeric Phytosome Curcuma longa Root Extract"
+          "Meriva Turmeric Phytosome Curcuma longa Root Extract",
+          "Curcuma longa Root Extract, Phospholipid Complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12510,7 +12557,9 @@
           "Quercefit",
           "quercefit quercetin",
           "indena quercetin phytosome",
-          "phospholipid quercetin"
+          "phospholipid quercetin",
+          "Phospholipid Complex, Sophora japonica Flower Extract",
+          "Sophora japonica Flower Extract, Sunflower Phospholipids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12559,7 +12608,8 @@
           "d.r.-quercetin",
           "dr quercetin",
           "standard quercetin",
-          "quercetin aglycone"
+          "quercetin aglycone",
+          "Sophora japonica"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -13485,11 +13535,7 @@
         "notes": "Cell membrane phospholipid — 13% choline by weight. Supports liver health and fat metabolism. Found naturally in lecithin (soy, sunflower, egg). Less brain-targeted than Alpha-GPC or citicoline.",
         "aliases": [
           "phosphatidylcholine",
-          "lecithin",
           "PC",
-          "soy lecithin",
-          "sunflower lecithin",
-          "egg lecithin",
           "phosphatidyl choline"
         ],
         "dosage_importance": 1.0,
@@ -16887,7 +16933,8 @@
           "Sulforaphane Glucosinolate",
           "Sulforaphane Glucosinate",
           "TrueBroc",
-          "TrueBroc Broccoli extract"
+          "TrueBroc Broccoli extract",
+          "Broccoli"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18457,7 +18504,8 @@
           "salidroside",
           "salidrosides",
           "rhodiola salidroside",
-          "tyrosol glucoside"
+          "tyrosol glucoside",
+          "Rhodiola rosea Root Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -18557,7 +18605,8 @@
           "nano-encapsulated ginkgo",
           "lipid-bound ginkgo",
           "high-absorption ginkgo",
-          "Ginkgo Phytosome"
+          "Ginkgo Phytosome",
+          "Ginkgo biloba, Phosphatidylserine Complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19235,7 +19284,8 @@
           "collagen",
           "tendoguard",
           "KoAct(R) Calcium Collagen Chelate",
-          "l-hydroxylysine"
+          "l-hydroxylysine",
+          "hydrolyzed Gelatin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19571,6 +19621,7 @@
           "glucosamine sulfate 2kcl",
           "glucosamine sulfate 2kci",
           "glucosamine sulfate potassium chloride",
+          "Glucosamine Sulfate Potassium Chloride Complex",
           "glucosamine sulfate 2 kcl",
           "glucosamine sulfate 2nacl",
           "glucosamine sulphate 2kcl",
@@ -19845,7 +19896,9 @@
           "GreenSelect Green Tea Phytosome",
           "Camellia sinensis extract, Phospholipid complex",
           "Camellia sinensis, Phospholipid complex",
-          "camellia sinensis extract phospholipid complex"
+          "camellia sinensis extract phospholipid complex",
+          "Camellia sinensis extract, Phospholipid",
+          "Camellia sinensis Leaf Extract, Decaffeinated, Phospholipid Complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19912,7 +19965,8 @@
           "whole leaf green tea",
           "ground matcha",
           "pure matcha powder",
-          "traditional matcha"
+          "traditional matcha",
+          "Camellia sinensis, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -19966,7 +20020,8 @@
           "catechins",
           "epicatechin",
           "catechin",
-          "tea catechins"
+          "tea catechins",
+          "Total Monomeric Phenols"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20040,7 +20095,8 @@
           "LeucoSelect Phytosome Grape Seed",
           "LeucoSelect grape seed proanthocyanidin",
           "Leucoselect Phytosome standardized Grape seed extract",
-          "Leucoselect Grape extract"
+          "Leucoselect Grape extract",
+          "Phospholipid Complex, Vitis vinifera extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20573,7 +20629,8 @@
           "Asian Ginseng (4:1) - Manchurian",
           "senactiv",
           "senactiv panax notoginseng",
-          "Seneactiv"
+          "Seneactiv",
+          "Panax notoginseng, Rosa roxburghii"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21285,7 +21342,8 @@
           "cranberry proanthocyanidins",
           "UTI support cranberry",
           "cranberry PAC extract",
-          "high-potency cranberry"
+          "high-potency cranberry",
+          "Vaccinium macrocarpon Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21438,7 +21496,8 @@
           "bilberry powder wild",
           "bilberon",
           "bilberry berry extract",
-          "Bilberry standardized extract"
+          "Bilberry standardized extract",
+          "Vaccinium myrtillus Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21621,7 +21680,9 @@
           "Elderberry (Sambucus nigra L.) fruit 30:1 extract",
           "elderberry (sambucus nigra) berry extract",
           "sambucus nigra berry 36:1 extract",
-          "sambucus nigra fruit 30:1 extract"
+          "sambucus nigra fruit 30:1 extract",
+          "Sambucus nigra Berry Extract",
+          "European Elderberry Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21861,7 +21922,8 @@
           "pancreatin 10x",
           "pancreatic enzymes 11x",
           "full strength pancreatin",
-          "Pancreatin 5X"
+          "Pancreatin 5X",
+          "Porcine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22569,7 +22631,8 @@
           "from 286 mg of lyc-o-mato(r)",
           "Lyc-O-Mato Lycopene",
           "Lycopene LYC-O-MATO(R) tomato extract",
-          "Lycored Lycopene"
+          "Lycored Lycopene",
+          "Tomato"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -26494,7 +26557,8 @@
           "di-caffeine malate",
           "infinergy",
           "caffeine anhydrous 50% extract",
-          "PURENERGY"
+          "PURENERGY",
+          "Caffeine Pterostilbene Complex"
         ]
       },
       "caffeine (natural source)": {
@@ -30132,7 +30196,8 @@
           "Sitosterol",
           "beta-sitosterol",
           "beta sitosterol supplement",
-          "free beta-sitosterol"
+          "free beta-sitosterol",
+          "Soy Phytosterol Complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33096,7 +33161,8 @@
           "gymnemic acid",
           "gymnemagenin",
           "gymnemic acids 25%",
-          "gymnemic acids 75%"
+          "gymnemic acids 75%",
+          "Gymnema sylvestre Leaf Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -33290,7 +33356,9 @@
           "berberpur",
           "berberpure",
           "Super Berberine",
-          "berberine phytosome"
+          "berberine phytosome",
+          "Indian Barberry root extract",
+          "Berberis aristata"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34182,7 +34250,8 @@
           "6-gingerol",
           "8-gingerol",
           "10-gingerol",
-          "gingerol extract"
+          "gingerol extract",
+          "Ginger Rhizome Extract, Ginger Root Extract"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -34486,7 +34555,8 @@
           "bacopa (bacopa monnieri) aerial part extract",
           "bacopa monnieri aerial part extract",
           "bacopa aerial part extract",
-          "bacopa monnieri whole herb extract"
+          "bacopa monnieri whole herb extract",
+          "Bacopasides"
         ],
         "score": 9,
         "dosage_importance": 1.0,
@@ -34545,7 +34615,8 @@
           "reishi mushroom",
           "ganoderma lucidum",
           "reishi powder",
-          "lingzhi"
+          "lingzhi",
+          "Ganoderma lucidum Fruiting Body Extract"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -34840,7 +34911,8 @@
           "turkey tail fruiting body supplement",
           "Turkey Tail Mushroom fruiting body extract",
           "turkey tails",
-          "turkey tails fruiting body extract"
+          "turkey tails fruiting body extract",
+          "Coriolus versicolor Fruiting Body Extract"
         ],
         "score": 11,
         "dosage_importance": 1.0,
@@ -35036,7 +35108,8 @@
         "aliases": [
           "cordyceps sinensis",
           "cordyceps mycelium",
-          "cs-4"
+          "cs-4",
+          "Ophiocordyceps sinensis"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -35194,7 +35267,8 @@
           "Maca tuber extract",
           "Black Maca root extract",
           "MacaRich",
-          "maca tuber"
+          "maca tuber",
+          "Macamides and Macaenes"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35243,7 +35317,8 @@
           "fractionated coconut oil",
           "MCT Oil 99%",
           "62% MCTs",
-          "Coconut MCT Oil"
+          "Coconut MCT Oil",
+          "Coconut"
         ],
         "score": 16,
         "dosage_importance": 1.0,
@@ -38438,7 +38513,9 @@
           "Beta-Boswellic Acids",
           "AKBA, Beta-Boswellic Acids, total organic and Boswellic Acid",
           "acetyl-11-keto-beta-boswellic acid",
-          "AKBAs"
+          "AKBAs",
+          "Indian Frankincense (Boswellia serrata) extract",
+          "Boswellia serrata, Phospholipid complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39454,7 +39531,8 @@
           "valeriana officinalis",
           "valerian root unspecified",
           "Valerian (Valeriana officinalis) (root) supercritical extract",
-          "16 mg {Valerian} supercritical extract"
+          "16 mg {Valerian} supercritical extract",
+          "Valerenic Acids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39579,7 +39657,8 @@
           "Chasteberry concentrated powder",
           "chastetree fruit extract",
           "chastetree fruit",
-          "organic vitex"
+          "organic vitex",
+          "Agnusides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -39922,7 +40001,8 @@
         "aliases": [
           "dha (docosahexaenoic acid)",
           "dha",
-          "Docosahexaenoic Acid"
+          "Docosahexaenoic Acid",
+          "Algae"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40746,7 +40826,8 @@
         "aliases": [
           "hemp seed oil",
           "non psychotropic Hemp Oil",
-          "non-psychotropic hemp oil"
+          "non-psychotropic hemp oil",
+          "Beta-Caryophyllene, Phytocannabinoids, Terpenes"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -41475,7 +41556,9 @@
           "Aceite de Pescado",
           "Ocean Fish Oil, Natural",
           "Fish Oil, Natural",
-          "marine lipid oil"
+          "marine lipid oil",
+          "Omega-3 Fatty Acids, Sardines",
+          "Cod"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -42546,7 +42629,8 @@
           "magnolia bark extract",
           "magnolia officinalis",
           "magnolia officinalis extract",
-          "magnolia extract"
+          "magnolia extract",
+          "Magnolia officinalis Bark Extract"
         ],
         "absorption_structured": {
           "value": 0.45,
@@ -45774,7 +45858,8 @@
           "pomegranate",
           "punica granatum",
           "Punicosides",
-          "Punicoside"
+          "Punicoside",
+          "Polyphenols, Punicalagin"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
@@ -46105,7 +46190,8 @@
           "organic Amla extract",
           "amla berry fruit extract",
           "organic amla berry extract",
-          "organic amla berry (fruit) extract"
+          "organic amla berry (fruit) extract",
+          "Emblica officinalis Fruit Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -46719,7 +46805,8 @@
           "scutellaria baicalensis root",
           "scute",
           "Chinese Skullcap (Scutellaria baicalensis) (root) aqueous extract",
-          "Wogonin"
+          "Wogonin",
+          "Baicalins"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47725,7 +47812,8 @@
           "hawthorn leaf extract",
           "hawthorn flower extract",
           "hawthorn berry and leaf extract",
-          "hawthorn berry leaf extract"
+          "hawthorn berry leaf extract",
+          "Crataegus spp. Flower Extract, Crataegus spp. Leaf Extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47764,7 +47852,8 @@
           "hawthorn leaves and flowers extract",
           "hawthorne leaf & flower extract",
           "hawthorne leaf and flower extract",
-          "hawthorn (crataegus pinnatifida) leaf extract"
+          "hawthorn (crataegus pinnatifida) leaf extract",
+          "Vitexins"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -54652,7 +54741,8 @@
           "tart cherry fruit",
           "tart cherry berry",
           "Tart Cherry Whole Concentrate",
-          "CherryPURE"
+          "CherryPURE",
+          "Prunus cerasus, Powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -56165,7 +56255,8 @@
           "TO-A JPC",
           "R0179",
           "DEE11",
-          "hay bacillus"
+          "hay bacillus",
+          "Bacillus subtilis MB40"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -58953,7 +59044,7 @@
   "oleic_acid": {
     "standard_name": "Oleic Acid",
     "severity_level": "low",
-    "category": "essential_fatty_acids",
+    "category": "fatty_acids",
     "source": "fatty_acid",
     "description": "Omega-9 monounsaturated fatty acid abundant in olive oil and avocado. Supports cardiovascular health.",
     "dosage_importance": 1.0,
@@ -58991,7 +59082,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "essential_fatty_acids",
+    "category_enum": "fatty_acids",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -59327,7 +59418,7 @@
   "sunflower_oil": {
     "standard_name": "Sunflower Oil",
     "severity_level": "low",
-    "category": "essential_fatty_acids",
+    "category": "fatty_acids",
     "source": "seed_oil",
     "description": "Vegetable oil rich in linoleic acid (omega-6) and vitamin E. Used as a carrier oil in softgel supplements.",
     "dosage_importance": 0.5,
@@ -59365,7 +59456,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "essential_fatty_acids",
+    "category_enum": "fatty_acids",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -59484,7 +59575,7 @@
   "canola_oil": {
     "standard_name": "Canola Oil (Brassica napus)",
     "severity_level": "low",
-    "category": "essential_fatty_acids",
+    "category": "fatty_acids",
     "source": "seed_oil",
     "description": "Rapeseed-derived oil rich in oleic acid and ALA. Used as carrier oil in softgel supplements.",
     "dosage_importance": 0.5,
@@ -59523,7 +59614,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "essential_fatty_acids",
+    "category_enum": "fatty_acids",
     "cui_note": "UMLS preferred name is Brassica napus (source plant); used here for canola oil ingredient",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -59649,7 +59740,7 @@
   "palmitoleic_acid": {
     "standard_name": "Palmitoleic Acid",
     "severity_level": "low",
-    "category": "essential_fatty_acids",
+    "category": "fatty_acids",
     "source": "fatty_acid",
     "description": "Omega-7 monounsaturated fatty acid found in sea buckthorn and macadamia nut oil. Supports metabolic and skin health.",
     "dosage_importance": 1.0,
@@ -59688,7 +59779,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "essential_fatty_acids",
+    "category_enum": "fatty_acids",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -59772,6 +59863,9 @@
           "lecithins",
           "soy lecithin",
           "sunflower lecithin",
+          "egg lecithin",
+          "high choline lecithin",
+          "liquid soy lecithin",
           "phosphatidylcholine complex"
         ],
         "dosage_importance": 1.0,

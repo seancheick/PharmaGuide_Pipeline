@@ -14,7 +14,7 @@
 #   bash batch_run_all_datasets.sh --stages score --targets Nature_Made
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
-#
+#bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
 # Environment:
 #   PYTHON=python3.13 bash batch_run_all_datasets.sh        # Use specific python
 ###############################################################################

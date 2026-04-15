@@ -3,7 +3,7 @@
     "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
     "purpose": "ingredient_mapping_and_standardization",
     "schema_version": "5.0.0",
-    "last_updated": "2026-03-13",
+    "last_updated": "2026-04-15",
     "total_entries": 239,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight.",
     "required_fields": [
@@ -138,7 +138,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1086056"
+      "cui": "C1086056",
+      "min_threshold": 10,
+      "threshold_source": "10% beta-glucans — functional mushroom standard"
     },
     {
       "standard_name": "Akarkara",
@@ -412,7 +414,9 @@
       "notes": "High-antioxidant berry with exceptional anthocyanin content.",
       "last_updated": "2026-01-05",
       "external_ids": {},
-      "cui": "C1215581"
+      "cui": "C1215581",
+      "min_threshold": 15,
+      "threshold_source": "15% anthocyanins — standard chokeberry extract"
     },
     {
       "standard_name": "Artichoke",
@@ -580,7 +584,8 @@
       "id": "astazine",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
       "category": "herb",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Astragalus",
@@ -621,7 +626,9 @@
       "id": "astragalus_extract",
       "notes": "Standardized botanical extract with polysaccharides, astragalosides as primary marker compounds.",
       "external_ids": {},
-      "cui": "C1095897"
+      "cui": "C1095897",
+      "min_threshold": 0.3,
+      "threshold_source": "0.3% astragalosides — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Bacopa",
@@ -932,7 +939,9 @@
         "cas": "9041-22-9",
         "pubchem_cid": 439262
       },
-      "cui": "C1134651"
+      "cui": "C1134651",
+      "min_threshold": 20,
+      "threshold_source": "20% beta-glucans — minimum for functional claim"
     },
     {
       "standard_name": "Bil-Max",
@@ -947,7 +956,8 @@
       "id": "bil_max",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Bilberry",
@@ -1074,7 +1084,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0771400"
+      "cui": "C0771400",
+      "min_threshold": 25,
+      "threshold_source": "25% anthocyanins — concentrated seed/fruit extract"
     },
     {
       "standard_name": "Black Musli",
@@ -1270,7 +1282,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1083174"
+      "cui": "C1083174",
+      "min_threshold": 0.03,
+      "threshold_source": "0.03% iodine content — typical standardization"
     },
     {
       "standard_name": "Blue-Green Algae",
@@ -1318,7 +1332,8 @@
       "id": "blue_max",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Blueberry",
@@ -1446,7 +1461,9 @@
       "external_ids": {
         "unii": "U182GP2CF3"
       },
-      "cui": "C0006217"
+      "cui": "C0006217",
+      "min_threshold": 2400,
+      "threshold_source": "2400 GDU/g — activity unit threshold"
     },
     {
       "standard_name": "Burdock Root",
@@ -1478,7 +1495,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0873127"
+      "cui": "C0873127",
+      "min_threshold": 1,
+      "threshold_source": "1% arctiin — standard root extract"
     },
     {
       "standard_name": "Butcher's Broom",
@@ -1497,7 +1516,9 @@
       "notes": "Botanical ingredient standardized for ruscogenin. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C1021282"
+      "cui": "C1021282",
+      "min_threshold": 10,
+      "threshold_source": "10% ruscogenin — European Pharmacopoeia standard"
     },
     {
       "standard_name": "Butterbur",
@@ -1700,7 +1721,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1365522"
+      "cui": "C1365522",
+      "min_threshold": 1,
+      "threshold_source": "1% 3-n-butylphthalide — celery seed extract standard"
     },
     {
       "standard_name": "Century Plant",
@@ -1888,7 +1911,8 @@
         "cas": "14639-25-9",
         "pubchem_cid": 151932
       },
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "Cinnamon",
@@ -1959,7 +1983,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0301249"
+      "cui": "C0301249",
+      "min_threshold": 55,
+      "threshold_source": "55% cinnamaldehyde — USP/Ph.Eur standard"
     },
     {
       "standard_name": "Cissus Quadrangularis",
@@ -1990,7 +2016,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1078516"
+      "cui": "C1078516",
+      "min_threshold": 2.5,
+      "threshold_source": "2.5% ketosteroids — 3-Keto-beta-sitosterol standard"
     },
     {
       "standard_name": "Cistanche",
@@ -2038,7 +2066,9 @@
       "notes": "Polyphenol-rich bergamot extract used for lipid and cardiometabolic support. Clinical literature commonly profiles neoeriocitrin, naringin, and neohesperidin in bergamot polyphenolic fractions.",
       "category": "fruit",
       "external_ids": {},
-      "cui": "C1258049"
+      "cui": "C1258049",
+      "min_threshold": 25,
+      "threshold_source": "25% BPF (bergamot polyphenolic fraction)"
     },
     {
       "standard_name": "Cocoa Flavanol Extract",
@@ -2062,7 +2092,9 @@
       "notes": "Cocoa extract used for vascular and cardiometabolic support. Clinical evidence most often references daily cocoa flavanol content and epicatechin-rich profiles rather than a universal label percentage threshold.",
       "category": "seed_fruit",
       "external_ids": {},
-      "cui": "C3651730"
+      "cui": "C3651730",
+      "min_threshold": 10,
+      "threshold_source": "10% flavanols — standardized cocoa extract"
     },
     {
       "standard_name": "Coffeeberry",
@@ -2081,7 +2113,9 @@
       "notes": "Botanical ingredient standardized for chlorogenic acids, polyphenols. Commonly used in dietary supplements.",
       "category": "seed_fruit",
       "external_ids": {},
-      "cui": "C1138610"
+      "cui": "C1138610",
+      "min_threshold": 45,
+      "threshold_source": "45% chlorogenic acids — standard coffee fruit extract"
     },
     {
       "standard_name": "Cognigrape",
@@ -2099,7 +2133,8 @@
       "priority": "medium",
       "notes": "Branded grape seed extract standardized for cognitive health benefits.",
       "last_updated": "2026-01-05",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Cognizin Citicoline",
@@ -2190,7 +2225,8 @@
       "id": "cran_max",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Cranberry",
@@ -2469,7 +2505,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0440015"
+      "cui": "C0440015",
+      "min_threshold": 2,
+      "threshold_source": "2% sesquiterpene lactones — standard root extract"
     },
     {
       "standard_name": "Devil's Claw",
@@ -2568,7 +2606,9 @@
       "id": "echinacea_extract",
       "notes": "Standardized botanical extract with phenolic_compounds, echinacoside as primary marker compounds.",
       "external_ids": {},
-      "cui": "C0752270"
+      "cui": "C0752270",
+      "min_threshold": 4,
+      "threshold_source": "4% phenolic compounds — aligns with species-level entries"
     },
     {
       "standard_name": "Echinacea Purpurea",
@@ -2726,7 +2766,8 @@
       "notes": "EnXtra — Alpinia galanga rhizome extract by Laila Nutraceuticals. Standardized to ACA profile (exact threshold proprietary).",
       "category": "standardized_extract",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "EpiCor",
@@ -2744,7 +2785,8 @@
       "notes": "EpiCor — dried yeast fermentate (S. cerevisiae). Whole-food matrix, not standardized to single marker. Identity-tested as complete fermentate.",
       "category": "fermentate",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "EPs 7630",
@@ -2760,7 +2802,8 @@
       "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C1310768"
+      "cui": "C1310768",
+      "branded_form": true
     },
     {
       "standard_name": "Eucalyptus",
@@ -2782,7 +2825,9 @@
       "external_ids": {
         "unii": "2R04ONI662"
       },
-      "cui": "C0015148"
+      "cui": "C0015148",
+      "min_threshold": 70,
+      "threshold_source": "70% eucalyptol/1,8-cineole — Ph.Eur monograph"
     },
     {
       "standard_name": "Evening Primrose",
@@ -2836,7 +2881,9 @@
       "notes": "African herb traditionally used for testosterone support. Limited clinical research - use with caution due to potential liver/kidney concerns.",
       "last_updated": "2026-01-05",
       "external_ids": {},
-      "cui": "C3728253"
+      "cui": "C3728253",
+      "min_threshold": 1,
+      "threshold_source": "1% saponins — stem extract standard"
     },
     {
       "standard_name": "Fennel",
@@ -2997,7 +3044,8 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      }
+      },
+      "branded_form": true
     },
     {
       "standard_name": "Flowens",
@@ -3013,7 +3061,8 @@
       "id": "flowens",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "FruiteX-B Calcium Fructoborate",
@@ -3030,7 +3079,8 @@
       "notes": "FruiteX-B — calcium fructoborate. Provides 3 mg elemental boron per clinical dose.",
       "category": "mineral_complex",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "Galdieria",
@@ -3051,7 +3101,8 @@
       "external_ids": {
         "unii": "2E5CL9KYZ8"
       },
-      "cui": "C1086344"
+      "cui": "C1086344",
+      "branded_form": true
     },
     {
       "standard_name": "Garlic",
@@ -3118,7 +3169,9 @@
       "notes": "Extremely bitter herb used as digestive tonic. Stimulates stomach acid and bile production.",
       "last_updated": "2026-01-05",
       "external_ids": {},
-      "cui": "C0017439"
+      "cui": "C0017439",
+      "min_threshold": 2,
+      "threshold_source": "2% gentiopicroside — European Pharmacopoeia"
     },
     {
       "standard_name": "Ginger Extract",
@@ -3186,7 +3239,9 @@
       "id": "gingerols",
       "notes": "Botanical ingredient standardized for 6-gingerol, 8-gingerol. Commonly used in dietary supplements.",
       "external_ids": {},
-      "cui": "C0061267"
+      "cui": "C0061267",
+      "min_threshold": 5,
+      "threshold_source": "5% gingerols — standard ginger extract"
     },
     {
       "standard_name": "Ginkgo Biloba",
@@ -3249,7 +3304,9 @@
       "id": "ginkgolides",
       "notes": "Botanical ingredient standardized for ginkgolide A, ginkgolide B. Commonly used in dietary supplements.",
       "external_ids": {},
-      "cui": "C0599524"
+      "cui": "C0599524",
+      "min_threshold": 6,
+      "threshold_source": "6% terpene lactones — EGb 761 terpene fraction"
     },
     {
       "standard_name": "Goji Berry",
@@ -3268,7 +3325,9 @@
       "notes": "Botanical ingredient standardized for polysaccharides, zeaxanthin. Commonly used in dietary supplements.",
       "category": "seed_fruit",
       "external_ids": {},
-      "cui": "C4255019"
+      "cui": "C4255019",
+      "min_threshold": 20,
+      "threshold_source": "20% polysaccharides — Lycium barbarum standard"
     },
     {
       "standard_name": "Goldenseal",
@@ -3367,7 +3426,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2776583"
+      "cui": "C2776583",
+      "min_threshold": 12.5,
+      "threshold_source": "12.5% 6-paradol — Paradoxine standard"
     },
     {
       "standard_name": "Grape Seed",
@@ -3693,7 +3754,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950016"
+      "cui": "C0950016",
+      "min_threshold": 20,
+      "threshold_source": "20% gypenosides — standard jiaogulan extract"
     },
     {
       "standard_name": "Hawthorn",
@@ -3739,7 +3802,9 @@
       "notes": "Botanical ingredient standardized for stilbenes, TSG. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C1031603"
+      "cui": "C1031603",
+      "min_threshold": 1,
+      "threshold_source": "1% TSG (2,3,5,4'-tetrahydroxystilbene-2-O-β-D-glucoside) — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Hibiscus Extract",
@@ -3774,7 +3839,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1207898"
+      "cui": "C1207898",
+      "min_threshold": 1.5,
+      "threshold_source": "1.5% anthocyanins — common standardization"
     },
     {
       "standard_name": "Holy Basil",
@@ -4022,7 +4089,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1004696"
+      "cui": "C1004696",
+      "min_threshold": 0.5,
+      "threshold_source": "0.5% mesembrine — standard Sceletium tortuosum extract"
     },
     {
       "standard_name": "Kelp",
@@ -4061,7 +4130,8 @@
       "notes": "KeraGLO — solubilized keratin from wool (Keraplast technology). Identity-tested, not standardized to % marker.",
       "category": "structural_protein",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "Kola Nut",
@@ -4095,7 +4165,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1572690"
+      "cui": "C1572690",
+      "min_threshold": 6,
+      "threshold_source": "6% caffeine — standard kola extract"
     },
     {
       "standard_name": "KSM-66 Ashwagandha",
@@ -4112,7 +4184,8 @@
       "id": "ksm_66_ashwagandha",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
       "category": "herb",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Kudzu",
@@ -4132,7 +4205,9 @@
       "notes": "Botanical ingredient standardized for puerarin, daidzein. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C5779733"
+      "cui": "C5779733",
+      "min_threshold": 40,
+      "threshold_source": "40% puerarin — standard root extract"
     },
     {
       "standard_name": "L-Theanine",
@@ -4298,7 +4373,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0086555"
+      "cui": "C0086555",
+      "min_threshold": 4,
+      "threshold_source": "4% glycyrrhizin — European Pharmacopoeia"
     },
     {
       "standard_name": "Life's DHA",
@@ -4316,7 +4393,8 @@
       "notes": "Life's DHA — algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %.",
       "category": "algal_oil",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "Linden Flower",
@@ -4393,7 +4471,8 @@
       "id": "lutemax_2020",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
       "category": "herb",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Maca",
@@ -4555,7 +4634,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1067051"
+      "cui": "C1067051",
+      "min_threshold": 10,
+      "threshold_source": "10% anthocyanins — Delphinol standard"
     },
     {
       "standard_name": "Marigold",
@@ -4640,7 +4721,8 @@
       "notes": "MicroActive Melatonin — microencapsulated sustained-release melatonin. Dosed by mg/serving.",
       "category": "hormone_analog",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "Milk Thistle",
@@ -4699,7 +4781,9 @@
       "notes": "Botanical ingredient standardized for viscotoxin, lectins. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C0042785"
+      "cui": "C0042785",
+      "min_threshold": 0.1,
+      "threshold_source": "0.1% viscotoxins — European mistletoe standard"
     },
     {
       "standard_name": "Moringa",
@@ -4718,7 +4802,9 @@
       "notes": "Botanical ingredient standardized for isothiocyanates, chlorogenic acids. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C5981468"
+      "cui": "C5981468",
+      "min_threshold": 1,
+      "threshold_source": "1% isothiocyanates — leaf extract standard"
     },
     {
       "standard_name": "Morosil",
@@ -4825,7 +4911,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330540"
+      "cui": "C0330540",
+      "min_threshold": 1,
+      "threshold_source": "1% DNJ — standard white mulberry extract"
     },
     {
       "standard_name": "Mullein",
@@ -4935,7 +5023,8 @@
       "notes": "Patented coffee fruit extract shown to increase BDNF (brain-derived neurotrophic factor).",
       "last_updated": "2026-01-05",
       "external_ids": {},
-      "cui": "C5445257"
+      "cui": "C5445257",
+      "branded_form": true
     },
     {
       "standard_name": "Olive Fruit",
@@ -4954,7 +5043,9 @@
       "notes": "Botanical ingredient standardized for hydroxytyrosol. Commonly used in dietary supplements.",
       "category": "seed_fruit",
       "external_ids": {},
-      "cui": "C1365464"
+      "cui": "C1365464",
+      "min_threshold": 6,
+      "threshold_source": "6% hydroxytyrosol — clinical dosing standard"
     },
     {
       "standard_name": "Olive Leaf",
@@ -5051,7 +5142,8 @@
       "id": "optiberry",
       "notes": "Branded multiple-berry anthocyanin blend. Raw DSLD OpriBerry(R) rows match the documented OptiBerry composition of cranberry, elderberry, raspberry, strawberry, bilberry, and blueberry/wild blueberry.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Oregano",
@@ -5117,7 +5209,8 @@
       "id": "pacran",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Panax Ginseng",
@@ -5204,7 +5297,9 @@
       "notes": "South African plant extract (EPs 7630) clinically studied for respiratory health support.",
       "last_updated": "2026-01-05",
       "external_ids": {},
-      "cui": "C3779996"
+      "cui": "C3779996",
+      "min_threshold": 0.1,
+      "threshold_source": "EPs 7630 standard — coumarins marker"
     },
     {
       "standard_name": "Peppermint",
@@ -5240,7 +5335,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0697157"
+      "cui": "C0697157",
+      "min_threshold": 1,
+      "threshold_source": "1% menthol — leaf extract minimum"
     },
     {
       "standard_name": "Peppermint Essential Oil",
@@ -5264,7 +5361,9 @@
       "external_ids": {
         "unii": "AV092KU4JH"
       },
-      "cui": "C0070325"
+      "cui": "C0070325",
+      "min_threshold": 38,
+      "threshold_source": "38% menthol — USP monograph"
     },
     {
       "standard_name": "Phosphatidylserine",
@@ -5411,7 +5510,9 @@
       "notes": "Botanical ingredient standardized for betalains, indicaxanthin. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C0949996"
+      "cui": "C0949996",
+      "min_threshold": 5,
+      "threshold_source": "5% betalains — Opuntia ficus-indica standard"
     },
     {
       "standard_name": "Proanthoplex",
@@ -5468,7 +5569,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0033488"
+      "cui": "C0033488",
+      "min_threshold": 5,
+      "threshold_source": "5% total polyphenols — commercial standard"
     },
     {
       "standard_name": "Psyllium",
@@ -5691,7 +5794,9 @@
       "notes": "Botanical ingredient standardized for catalpol. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C1382907"
+      "cui": "C1382907",
+      "min_threshold": 0.1,
+      "threshold_source": "0.1% catalpol — Chinese Pharmacopoeia reference"
     },
     {
       "standard_name": "Reishi",
@@ -5868,7 +5973,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1074162"
+      "cui": "C1074162",
+      "min_threshold": 3,
+      "threshold_source": "3% aspalathin — concentrated rooibos extract"
     },
     {
       "standard_name": "Rosehip",
@@ -5996,7 +6103,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0696940"
+      "cui": "C0696940",
+      "min_threshold": 5,
+      "threshold_source": "5% salvianolic acid B — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Sarsaparilla",
@@ -6108,7 +6217,9 @@
       "notes": "Berry rich in omega-7 fatty acids and antioxidants. Used for skin health and mucous membrane support.",
       "last_updated": "2026-01-05",
       "external_ids": {},
-      "cui": "C1013835"
+      "cui": "C1013835",
+      "min_threshold": 3,
+      "threshold_source": "3% omega-7 palmitoleic acid — berry/seed oil standard"
     },
     {
       "standard_name": "Setria",
@@ -6141,7 +6252,8 @@
       "id": "sharp_ps_green",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
       "category": "standardized",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Shatavari",
@@ -6260,7 +6372,9 @@
       "id": "shogaols",
       "notes": "Botanical ingredient standardized for 6-shogaol, 8-shogaol. Commonly used in dietary supplements.",
       "external_ids": {},
-      "cui": "C0074460"
+      "cui": "C0074460",
+      "min_threshold": 5,
+      "threshold_source": "5% shogaols — dried/processed ginger standard"
     },
     {
       "standard_name": "Siberian Ginseng",
@@ -6282,7 +6396,9 @@
       "external_ids": {
         "unii": "ZQH6VH092Z"
       },
-      "cui": "C1035215"
+      "cui": "C1035215",
+      "min_threshold": 0.8,
+      "threshold_source": "0.8% eleutherosides — European Pharmacopoeia"
     },
     {
       "standard_name": "Slendesta",
@@ -6301,7 +6417,8 @@
       "notes": "Patented potato protein extract that promotes satiety by triggering CCK release.",
       "last_updated": "2026-01-05",
       "external_ids": {},
-      "cui": "C1414370"
+      "cui": "C1414370",
+      "branded_form": true
     },
     {
       "standard_name": "Slimbione",
@@ -6318,7 +6435,8 @@
       "notes": "Slimbione — bitter melon (Momordica charantia) extract. Standardized to charantin + polypeptide-p (proprietary ratio).",
       "category": "standardized_extract",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "Slippery Elm",
@@ -6520,7 +6638,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C4025984"
+      "cui": "C4025984",
+      "min_threshold": 0.5,
+      "threshold_source": "0.5% ecdysterones — Pfaffia paniculata standard"
     },
     {
       "standard_name": "SunActive Iron",
@@ -6537,7 +6657,8 @@
       "notes": "SunActive Iron — micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron.",
       "category": "mineral",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "Tart Cherry",
@@ -6558,7 +6679,9 @@
       "external_ids": {
         "unii": "1L29G6428X"
       },
-      "cui": "C0330657"
+      "cui": "C0330657",
+      "min_threshold": 1,
+      "threshold_source": "1% anthocyanins — Montmorency cherry standard"
     },
     {
       "standard_name": "Thermosil",
@@ -6575,7 +6698,8 @@
       "notes": "Thermosil — silicon/silica complex. Limited public standardization data. Requires verification.",
       "category": "mineral",
       "external_ids": {},
-      "data_quality": "requires_verification"
+      "data_quality": "requires_verification",
+      "branded_form": true
     },
     {
       "standard_name": "Thyme",
@@ -6608,7 +6732,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0697238"
+      "cui": "C0697238",
+      "min_threshold": 20,
+      "threshold_source": "20% thymol — Ph.Eur thyme oil standard"
     },
     {
       "standard_name": "Tongkat Ali",
@@ -6664,7 +6790,9 @@
       "notes": "Beauty mushroom known for skin-hydrating polysaccharides. Traditional use in Chinese medicine.",
       "last_updated": "2026-01-05",
       "external_ids": {},
-      "cui": "C3832720"
+      "cui": "C3832720",
+      "min_threshold": 10,
+      "threshold_source": "10% polysaccharides — functional mushroom standard"
     },
     {
       "standard_name": "Tribulus",
@@ -6782,7 +6910,8 @@
       "id": "turmipure_gold",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown.",
       "category": "herb",
-      "external_ids": {}
+      "external_ids": {},
+      "branded_form": true
     },
     {
       "standard_name": "Uniflex",
@@ -6799,7 +6928,8 @@
       "notes": "Uniflex (UC-II) — undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization.",
       "category": "structural_protein",
       "external_ids": {},
-      "data_quality": "complete"
+      "data_quality": "complete",
+      "branded_form": true
     },
     {
       "standard_name": "Uva Ursi",
@@ -6817,7 +6947,9 @@
       "notes": "Botanical ingredient standardized for arbutin. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {},
-      "cui": "C0770993"
+      "cui": "C0770993",
+      "min_threshold": 10,
+      "threshold_source": "10% arbutin — European Pharmacopoeia"
     },
     {
       "standard_name": "Valerian",
@@ -6974,7 +7106,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0697076"
+      "cui": "C0697076",
+      "min_threshold": 6,
+      "threshold_source": "6% diosgenin — commercial standardization"
     },
     {
       "standard_name": "Wormwood",
@@ -7009,7 +7143,9 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331308"
+      "cui": "C0331308",
+      "min_threshold": 0.03,
+      "threshold_source": "0.03% artemisinin — Artemisia annua leaf standard"
     },
     {
       "standard_name": "Yellow Dock",
