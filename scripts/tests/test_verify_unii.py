@@ -169,8 +169,8 @@ def test_verify_flat_file_apply_persists_gsrs_enrichment_and_rxcui():
 
     assert report["changes_applied"] == 1
     assert entry["external_ids"]["unii"] == "IT942ZTH98"
-    assert entry["rxcui"] == "2955"
-    assert entry["rxcui_note"] is None
+    assert entry.get("rxcui") == "2955"
+    assert entry.get("rxcui_note") is None
     assert entry["gsrs"]["cfr_sections"] == ["21 CFR 182.10"]
     assert entry["gsrs"]["dsld_count"] == 310
     assert entry["gsrs"]["dsld_info_raw"] == "310 products"
@@ -210,8 +210,8 @@ def test_verify_iqm_apply_enriches_existing_unii_record():
 
     assert len(report["verified"]) == 1
     assert report["changes_applied"] == 1
-    assert data["vitamin_a"]["rxcui"] == "11149"
-    assert data["vitamin_a"]["rxcui_note"] is None
+    assert data["vitamin_a"].get("rxcui") == "11149"
+    assert data["vitamin_a"].get("rxcui_note") is None
     assert data["vitamin_a"]["gsrs"]["substance_name"] == "Vitamin A"
 
 
@@ -344,8 +344,8 @@ def test_verify_flat_file_rejects_leaf_oil_match_for_generic_citrus_bergamot():
     assert len(report["rejected"]) == 1
     assert "name mismatch" in report["rejected"][0]["reason"].lower()
     assert entry["external_ids"] == {}
-    assert entry["rxcui"] is None
-    assert entry["gsrs"] is None
+    assert entry.get("rxcui") is None
+    assert entry.get("gsrs") is None
 
 
 def test_verify_flat_file_governs_product_recall_entry_without_lookup():

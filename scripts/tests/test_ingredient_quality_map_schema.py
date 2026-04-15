@@ -592,6 +592,153 @@ class TestBioScore:
 
 
 # =============================================================================
+# IDENTIFIER STANDARDIZATION TESTS (A-IQM-8 Enforcement)
+# =============================================================================
+
+class TestIdentifierStandardization:
+    """Enforce the IQM identifier hierarchy:
+      Parent level: cui (concept), rxcui (drug), external_ids.unii (representative)
+      Form level: forms[name].external_ids.unii (chemical substance identity)
+    No top-level leaks of chemical identifiers (unii, cas, pubchem_cid).
+    """
+
+    def test_no_top_level_unii(self, entries):
+        """UNII must be in external_ids.unii, never top-level entry.unii."""
+        leaks = [k for k, e in entries.items() if 'unii' in e and e['unii']]
+        assert len(leaks) == 0, (
+            f"Found {len(leaks)} entries with top-level 'unii' (should be in external_ids):\n"
+            + "\n".join(f"  {k}: {entries[k]['unii']}" for k in leaks[:10])
+        )
+
+    def test_no_top_level_cas(self, entries):
+        """CAS must be in external_ids.cas, never top-level."""
+        leaks = [k for k, e in entries.items() if 'cas' in e and e['cas']]
+        assert len(leaks) == 0, (
+            f"Found {len(leaks)} entries with top-level 'cas' (should be in external_ids):\n"
+            + "\n".join(f"  {k}" for k in leaks[:10])
+        )
+
+    def test_no_top_level_pubchem_cid(self, entries):
+        """PubChem CID must be in external_ids.pubchem_cid, never top-level."""
+        leaks = [k for k, e in entries.items() if 'pubchem_cid' in e and e['pubchem_cid']]
+        assert len(leaks) == 0, (
+            f"Found {len(leaks)} entries with top-level 'pubchem_cid' (should be in external_ids):\n"
+            + "\n".join(f"  {k}" for k in leaks[:10])
+        )
+
+    def test_external_ids_is_always_dict(self, entries):
+        """external_ids must be a dict on every entry (never None or missing)."""
+        invalid = []
+        for k, e in entries.items():
+            ext = e.get('external_ids')
+            if ext is None or not isinstance(ext, dict):
+                invalid.append((k, type(ext).__name__))
+        assert len(invalid) == 0, (
+            f"Found {len(invalid)} entries with non-dict external_ids:\n"
+            + "\n".join(f"  {k}: {t}" for k, t in invalid[:10])
+        )
+
+    def test_aliases_is_always_list(self, entries):
+        """aliases must be a list on every entry (never None or missing)."""
+        invalid = []
+        for k, e in entries.items():
+            aliases = e.get('aliases')
+            if aliases is None or not isinstance(aliases, list):
+                invalid.append((k, type(aliases).__name__))
+        assert len(invalid) == 0, (
+            f"Found {len(invalid)} entries with non-list aliases:\n"
+            + "\n".join(f"  {k}: {t}" for k, t in invalid[:10])
+        )
+
+    def test_no_null_valued_fields(self, entries):
+        """No field should be present with a None value. Absent is fine, None is not."""
+        violations = []
+        for k, e in entries.items():
+            for field, value in e.items():
+                if value is None:
+                    violations.append((k, field))
+        assert len(violations) == 0, (
+            f"Found {len(violations)} null-valued fields (remove the key instead):\n"
+            + "\n".join(f"  {k}.{f}" for k, f in violations[:10])
+        )
+
+    def test_cui_is_string_when_present(self, entries):
+        """CUI stays at parent level and must be a string when present."""
+        invalid = [(k, type(e['cui']).__name__) for k, e in entries.items()
+                    if 'cui' in e and not isinstance(e['cui'], str)]
+        assert len(invalid) == 0, (
+            f"Found {len(invalid)} non-string CUI values:\n"
+            + "\n".join(f"  {k}: {t}" for k, t in invalid[:10])
+        )
+
+    def test_form_external_ids_is_dict_when_present(self, entries):
+        """Form-level external_ids must be a dict when present."""
+        invalid = []
+        for k, e in entries.items():
+            for fname, fdata in e.get('forms', {}).items():
+                if not isinstance(fdata, dict):
+                    continue
+                fext = fdata.get('external_ids')
+                if fext is not None and not isinstance(fext, dict):
+                    invalid.append((k, fname, type(fext).__name__))
+        assert len(invalid) == 0, (
+            f"Found {len(invalid)} forms with non-dict external_ids:\n"
+            + "\n".join(f"  {k}/{fn}: {t}" for k, fn, t in invalid[:10])
+        )
+
+    def test_no_duplicate_form_names_across_parents(self, entries):
+        """Each form name must be unique across all parents (prevents UNII conflicts)."""
+        from collections import defaultdict
+        form_parents = defaultdict(list)
+        for k, e in entries.items():
+            for fname in e.get('forms', {}):
+                form_parents[fname.lower()].append(k)
+        dupes = {fn: parents for fn, parents in form_parents.items() if len(parents) > 1}
+        assert len(dupes) == 0, (
+            f"Found {len(dupes)} form names shared across multiple parents:\n"
+            + "\n".join(f"  '{fn}' → {parents}" for fn, parents in list(dupes.items())[:10])
+        )
+
+    def test_no_duplicate_form_uniis(self, entries):
+        """Each form UNII must be unique (one chemical substance = one location)."""
+        unii_locs = {}
+        conflicts = []
+        for k, e in entries.items():
+            for fname, fdata in e.get('forms', {}).items():
+                if not isinstance(fdata, dict):
+                    continue
+                fext = fdata.get('external_ids', {})
+                if isinstance(fext, dict) and fext.get('unii'):
+                    unii = fext['unii']
+                    loc = f"{k}/{fname}"
+                    if unii in unii_locs:
+                        conflicts.append(f"{unii}: {unii_locs[unii]} AND {loc}")
+                    unii_locs[unii] = loc
+        assert len(conflicts) == 0, (
+            f"Found {len(conflicts)} duplicate form UNIIs:\n"
+            + "\n".join(f"  {c}" for c in conflicts[:10])
+        )
+
+    def test_form_level_unii_coverage(self, entries):
+        """At least 10% of forms should have form-level UNII (currently ~12%)."""
+        total_forms = 0
+        forms_with_unii = 0
+        for e in entries.values():
+            for fname, fdata in e.get('forms', {}).items():
+                if not isinstance(fdata, dict):
+                    continue
+                total_forms += 1
+                fext = fdata.get('external_ids', {})
+                if isinstance(fext, dict) and fext.get('unii'):
+                    forms_with_unii += 1
+        rate = forms_with_unii / total_forms if total_forms else 0
+        assert rate >= 0.10, (
+            f"Form UNII coverage {rate:.1%} is below 10% threshold "
+            f"({forms_with_unii}/{total_forms})"
+        )
+
+
+# =============================================================================
 # SUMMARY TEST
 # =============================================================================
 

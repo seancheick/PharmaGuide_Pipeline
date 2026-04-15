@@ -58,7 +58,7 @@ def test_known_wrong_cuis_are_corrected():
     }
 
     for entry_id, cui in expected.items():
-        assert entries[entry_id]["cui"] == cui, f"{entry_id} expected {cui}"
+        assert entries[entry_id].get("cui") == cui, f"{entry_id} expected {cui}"
 
 
 def test_umbrella_entries_are_explicitly_structured():
@@ -67,7 +67,7 @@ def test_umbrella_entries_are_explicitly_structured():
     antioxidants = entries["ADD_SYNTHETIC_ANTIOXIDANTS"]
     assert antioxidants["entity_type"] == "class"
     assert antioxidants["match_rules"]["match_mode"] == "disabled"
-    assert antioxidants["cui"] is None
+    assert antioxidants.get("cui") is None
     assert antioxidants["cui_status"] == "no_single_umls_concept"
     assert set(antioxidants["member_ids"]) >= {"ADD_BHA", "ADD_BHT", "ADD_TBHQ"}
 
@@ -81,10 +81,10 @@ def test_umbrella_entries_are_explicitly_structured():
 def test_atomic_nitrite_children_exist():
     entries = _entries()
 
-    assert entries["ADD_SODIUM_NITRITE"]["cui"] == "C0037532"
-    assert entries["ADD_SODIUM_NITRATE"]["cui"] == "C0074748"
-    assert entries["ADD_POTASSIUM_NITRITE"]["cui"] == "C0071773"
-    assert entries["ADD_POTASSIUM_NITRATE"]["cui"] == "C0071772"
+    assert entries["ADD_SODIUM_NITRITE"].get("cui") == "C0037532"
+    assert entries["ADD_SODIUM_NITRATE"].get("cui") == "C0074748"
+    assert entries["ADD_POTASSIUM_NITRITE"].get("cui") == "C0071773"
+    assert entries["ADD_POTASSIUM_NITRATE"].get("cui") == "C0071772"
 
 
 def test_intentional_null_cuis_are_annotated():
@@ -107,6 +107,6 @@ def test_intentional_null_cuis_are_annotated():
         "ADD_PARTIALLY_HYDROGENATED_CORN_OIL",
     ]:
         entry = entries[entry_id]
-        assert entry["cui"] is None
+        assert entry.get("cui") is None
         assert entry["cui_status"] in {"no_confirmed_umls_match", "no_single_umls_concept"}
-        assert entry["cui_note"]
+        assert entry.get("cui_note")

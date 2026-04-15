@@ -42,15 +42,15 @@ def test_iqm_exact_cui_corrections_are_pinned():
     }
 
     for entry_id, cui in expected.items():
-        assert iqm[entry_id]["cui"] == cui
+        assert iqm[entry_id].get("cui") == cui
 
 
 def test_iqm_silica_identifiers_align_to_silicon_dioxide():
     iqm = load_iqm()
     silica = iqm["silica"]
 
-    assert silica["cui"] == "C0037098"
-    assert silica["rxcui"] == "9771"
+    assert silica.get("cui") == "C0037098"
+    assert silica.get("rxcui") == "9771"
     assert silica["external_ids"]["unii"] == "ETJ7Z6XBU4"
     assert silica["external_ids"]["cas"] == "7631-86-9"
 
@@ -59,8 +59,8 @@ def test_iqm_glutathione_peroxidase_does_not_borrow_glutathione_identifiers():
     iqm = load_iqm()
     entry = iqm["glutathione_peroxidase"]
 
-    assert entry["cui"] == "C0017822"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C0017822"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
 
@@ -69,8 +69,8 @@ def test_iqm_vitamin_k_parent_does_not_borrow_vitamin_k1_identifiers():
     iqm = load_iqm()
     entry = iqm["vitamin_k"]
 
-    assert entry["cui"] == "C0042878"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C0042878"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
 
@@ -79,8 +79,8 @@ def test_iqm_phosphatidylinositol_does_not_borrow_plain_inositol_identifiers():
     iqm = load_iqm()
     entry = iqm["phosphatidylinositol"]
 
-    assert entry["cui"] == "C0031621"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C0031621"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
 
@@ -90,8 +90,8 @@ def test_iqm_flower_pollen_does_not_borrow_rye_specific_identifiers_or_aliases()
     entry = iqm["flower_pollen"]
     generic_aliases = entry["forms"]["flower pollen extract"]["aliases"]
 
-    assert entry["cui"] == "C4073752"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C4073752"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
     assert "rye pollen extract" not in generic_aliases
@@ -103,7 +103,7 @@ def test_iqm_hawthorn_does_not_borrow_vitexin_identifiers_or_aliases():
     entry = iqm["hawthorn"]
     generic_aliases = entry["forms"]["hawthorn (unspecified)"]["aliases"]
 
-    assert entry["cui"] == "C0885252"
+    assert entry.get("cui") == "C0885252"
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
     assert "Vitexin" not in generic_aliases
@@ -115,8 +115,8 @@ def test_iqm_ganoderic_acids_do_not_borrow_reishi_identifiers():
     iqm = load_iqm()
     entry = iqm["ganoderic_acids"]
 
-    assert entry["cui"] == "C3180310"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C3180310"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
 
@@ -125,8 +125,8 @@ def test_iqm_glucosinolates_do_not_borrow_broccoli_identifiers():
     iqm = load_iqm()
     entry = iqm["glucosinolates"]
 
-    assert entry["cui"] == "C0017767"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C0017767"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
 
@@ -135,8 +135,8 @@ def test_iqm_isothiocyanates_do_not_borrow_broccoli_identifiers():
     iqm = load_iqm()
     entry = iqm["isothiocyanates"]
 
-    assert entry["cui"] == "C0206359"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C0206359"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
 
@@ -145,8 +145,8 @@ def test_iqm_bioflavonoids_do_not_borrow_citrus_bioflavonoids_identifiers():
     iqm = load_iqm()
     entry = iqm["bioflavonoids"]
 
-    assert entry["cui"] == "C0005492"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C0005492"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
 
@@ -155,8 +155,8 @@ def test_iqm_saccharomyces_boulardii_does_not_borrow_brewers_yeast_identifiers()
     iqm = load_iqm()
     entry = iqm["saccharomyces_boulardii"]
 
-    assert entry["cui"] == "C0772093"
-    assert entry["rxcui"] in (None, "")
+    assert entry.get("cui") == "C0772093"
+    assert entry.get("rxcui") in (None, "")
     assert (entry.get("external_ids") or {}).get("unii") in (None, "")
     assert entry.get("gsrs") is None
 
@@ -183,9 +183,9 @@ def test_iqm_null_cui_policy_entries_are_annotated():
 
     for entry_id, status in expected.items():
         entry = iqm[entry_id]
-        assert entry["cui"] in (None, "")
+        assert entry.get("cui") in (None, "")
         assert entry["cui_status"] == status
-        assert entry["cui_note"]
+        assert entry.get("cui_note")
 
 
 def test_iqm_aliases_cover_verified_common_name_variants():
