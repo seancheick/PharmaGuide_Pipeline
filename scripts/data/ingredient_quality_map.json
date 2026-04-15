@@ -1148,35 +1148,6 @@
           "notes": "good"
         }
       },
-      "niacinamide ascorbate": {
-        "bio_score": 8,
-        "natural": false,
-        "score": 8,
-        "absorption": "moderate",
-        "notes": "A combined salt of niacinamide and vitamin C (ascorbic acid). Provides both B3 and C in one molecule. The B3 component does not cause flushing. Overall bioavailability is moderate for both vitamins.",
-        "aliases": [
-          "niacinamide ascorbate",
-          "nicotinamide ascorbate",
-          "vitamin c niacinamide",
-          "ascorbate niacinamide",
-          "niacinamide ascorbate supplement",
-          "nicotinamide ascorbate supplement",
-          "vitamin c niacinamide supplement",
-          "vit c niacinamide",
-          "ascorbate niacinamide supplement"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
-        },
-        "external_ids": {
-          "unii": "JTL8B7TVW7"
-        }
-      },
       "tryptophan_derived_niacin": {
         "bio_score": 8,
         "natural": true,
@@ -3024,7 +2995,7 @@
         "natural": false,
         "score": 13,
         "absorption": "78%",
-        "notes": "A buffered form combining vitamin C with magnesium. Non-acidic and gentle on the stomach. Provides both vitamin C and a small amount of highly absorbable magnesium. Same vitamin C bioavailability as standard ascorbic acid.",
+        "notes": "A buffered form combining vitamin C with magnesium. Non-acidic and gentle on the stomach. Provides both vitamin C and a small amount of highly absorbable magnesium. Same vitamin C bioavailability as standard ascorbic acid. Also provides magnesium — see magnesium entry for that nutrient's scoring.",
         "redirect": "magnesium.forms.magnesium_ascorbate",
         "aliases": [
           "magnesium ascorbate",
@@ -5157,7 +5128,7 @@
         "natural": false,
         "score": 6,
         "absorption": "25%",
-        "notes": "A specific calcium phosphate salt (CaHPO4) commonly used as a tablet filler, binder, and flow agent in supplement manufacturing. Low bioavailability as a calcium source. If you see this on a label, the calcium is likely incidental to its tableting function.",
+        "notes": "A specific calcium phosphate salt (CaHPO4) commonly used as a tablet filler, binder, and flow agent in supplement manufacturing. Low bioavailability as a calcium source. If you see this on a label, the calcium is likely incidental to its tableting function. Also provides phosphorus — see phosphorus entry for that nutrient's scoring.",
         "aliases": [
           "dibasic calcium phosphate",
           "dicalcium phosphate supplement",
@@ -5412,7 +5383,26 @@
           "notes": "good (depends on salt, ~40–60%)"
         }
       },
-      "dicalcium phosphate": {
+      "phosphorus (unspecified)": {
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "unknown",
+        "notes": "The supplement label does not specify the phosphorus source. Most people get adequate phosphorus from diet — supplemental phosphorus is rarely needed except in specific medical conditions (renal phosphorus wasting, refeeding syndrome).",
+        "aliases": [
+          "Phosphorus",
+          "Phosphorous"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available",
+          "range_low": null,
+          "range_high": null
+        }
+      },
+      "dicalcium phosphate (as phosphorus source)": {
         "bio_score": 8,
         "natural": false,
         "score": 8,
@@ -5433,27 +5423,10 @@
           "quality": "moderate",
           "notes": "moderate (~30-40%)"
         },
-        "external_ids": {
-          "unii": "L11K75P92J"
-        }
-      },
-      "phosphorus (unspecified)": {
-        "bio_score": 6,
-        "natural": false,
-        "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify the phosphorus source. Most people get adequate phosphorus from diet — supplemental phosphorus is rarely needed except in specific medical conditions (renal phosphorus wasting, refeeding syndrome).",
-        "aliases": [
-          "Phosphorus",
-          "Phosphorous"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+        "cross_ref": {
+          "primary_parent": "calcium",
+          "primary_form": "dicalcium phosphate",
+          "note": "Same chemical substance as calcium/dicalcium phosphate. Scored here for phosphorus bioavailability."
         }
       }
     },
@@ -5577,7 +5550,7 @@
         "natural": false,
         "score": 13,
         "absorption": "high",
-        "notes": "Magnesium chelated with the amino acid taurine — both nutrients independently support cardiovascular health. The combination provides synergistic heart and blood pressure benefits. Well-absorbed and calming. A top choice for people focused on heart health.",
+        "notes": "Magnesium chelated with the amino acid taurine — both nutrients independently support cardiovascular health. The combination provides synergistic heart and blood pressure benefits. Well-absorbed and calming. A top choice for people focused on heart health. Also provides taurine — see taurine entry for that nutrient's scoring.",
         "aliases": [
           "magnesium taurate",
           "mag taurate",
@@ -5927,7 +5900,7 @@
           "range_high": null
         }
       },
-      "magnesium ascorbate": {
+      "magnesium ascorbate (as magnesium source)": {
         "bio_score": 8,
         "natural": false,
         "score": 8,
@@ -5949,8 +5922,10 @@
           "quality": "moderate",
           "notes": "30% - magnesium content is incidental to vitamin C delivery"
         },
-        "external_ids": {
-          "unii": "0N1G678593"
+        "cross_ref": {
+          "primary_parent": "vitamin_c",
+          "primary_form": "magnesium ascorbate",
+          "note": "Same chemical substance as vitamin_c/magnesium ascorbate. Scored here for magnesium bioavailability."
         }
       }
     },
@@ -8030,7 +8005,30 @@
           "notes": "good"
         }
       },
-      "(unspecified)": {
+      "dicreatine malate": {
+        "bio_score": 6,
+        "natural": false,
+        "score": 6,
+        "absorption": "~moderate (estimated from creatine class)",
+        "notes": "Di-creatine malate — 2 creatine molecules bound to 1 malic acid molecule. Theoretically combines creatine benefit with malic acid's role in Krebs cycle. Limited human PK data specific to this form; scored conservatively relative to creatine monohydrate. Found in GNC AMP branded products.",
+        "aliases": [
+          "dicreatine malate",
+          "di-creatine malate",
+          "creatine malate"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "No human PK data for dicreatine malate specifically; assumed similar to creatine monohydrate"
+        },
+        "external_ids": {
+          "unii": "VF8L36HTE0"
+        }
+      },
+      "creatine monohydrate ((unspecified))": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
@@ -8055,29 +8053,6 @@
           "range_high": null,
           "quality": "unknown",
           "notes": "Data not available"
-        }
-      },
-      "dicreatine malate": {
-        "bio_score": 6,
-        "natural": false,
-        "score": 6,
-        "absorption": "~moderate (estimated from creatine class)",
-        "notes": "Di-creatine malate — 2 creatine molecules bound to 1 malic acid molecule. Theoretically combines creatine benefit with malic acid's role in Krebs cycle. Limited human PK data specific to this form; scored conservatively relative to creatine monohydrate. Found in GNC AMP branded products.",
-        "aliases": [
-          "dicreatine malate",
-          "di-creatine malate",
-          "creatine malate"
-        ],
-        "dosage_importance": 0.5,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "No human PK data for dicreatine malate specifically; assumed similar to creatine monohydrate"
-        },
-        "external_ids": {
-          "unii": "VF8L36HTE0"
         }
       }
     },
@@ -8581,7 +8556,7 @@
           "notes": "good (~60-70%)"
         }
       },
-      "(unspecified)": {
+      "diindolylmethane ((unspecified))": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
@@ -12309,28 +12284,6 @@
           "notes": "~27x standard"
         }
       },
-      "liposomal curcumin": {
-        "bio_score": 7,
-        "natural": false,
-        "score": 7,
-        "absorption": "unknown (no oral human PK)",
-        "notes": "Curcumin encapsulated in phospholipid liposomes. Despite marketing claims, the only published human PK study used intravenous administration (PMID:25500488, Greil 2014), NOT oral dosing. No rigorous human oral pharmacokinetic data exists. 'Liposomal' covers a wide range of manufacturing quality with no standardization. Scored conservatively pending oral PK validation.",
-        "aliases": [
-          "liposomal curcumin",
-          "liposome curcumin",
-          "encapsulated curcumin",
-          "lipocurc",
-          "phospholipid curcumin liposomal"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "No oral human PK data; only IV study published (PMID:25500488)"
-        }
-      },
       "bcm-95 curcumin": {
         "bio_score": 10,
         "natural": false,
@@ -14129,29 +14082,6 @@
           "notes": "95-100% (Ghandforoush-Sattari et al. 2010, Tmax 1.5h)"
         }
       },
-      "magnesium taurate": {
-        "bio_score": 13,
-        "natural": false,
-        "score": 13,
-        "absorption": "excellent",
-        "notes": "Chelated taurine-magnesium complex. Delivers both nutrients synergistically. McCarty 1996 was a hypothesis paper, not a PK study. Cannot exceed free-form taurine's ~95-100% absorption.",
-        "aliases": [
-          "taurine with magnesium",
-          "taurine magnesium complex",
-          "taurine-magnesium chelate"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.875,
-          "range_low": 0.8,
-          "range_high": 0.95,
-          "quality": "very_good",
-          "notes": "80-95% estimated (no dedicated taurate PK study)"
-        },
-        "external_ids": {
-          "unii": "RCM1N3D968"
-        }
-      },
       "liposomal taurine": {
         "bio_score": 12,
         "natural": false,
@@ -14172,6 +14102,31 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "90-100% estimated (baseline taurine already ~95%)"
+        }
+      },
+      "magnesium taurate (as taurine source)": {
+        "bio_score": 13,
+        "natural": false,
+        "score": 13,
+        "absorption": "excellent",
+        "notes": "Chelated taurine-magnesium complex. Delivers both nutrients synergistically. McCarty 1996 was a hypothesis paper, not a PK study. Cannot exceed free-form taurine's ~95-100% absorption.",
+        "aliases": [
+          "taurine with magnesium",
+          "taurine magnesium complex",
+          "taurine-magnesium chelate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.875,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "80-95% estimated (no dedicated taurate PK study)"
+        },
+        "cross_ref": {
+          "primary_parent": "magnesium",
+          "primary_form": "magnesium taurate",
+          "note": "Same chemical substance as magnesium/magnesium taurate. Scored here for taurine bioavailability."
         }
       }
     },
@@ -37841,7 +37796,7 @@
     "cui": "C0037114",
     "rxcui": "9774",
     "forms": {
-      "standard": {
+      "silicon (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -37904,7 +37859,7 @@
     "cui": "C0016327",
     "rxcui": "196213",
     "forms": {
-      "standard": {
+      "fluoride (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -37965,7 +37920,7 @@
       "alpha-glyceryl phosphoryl choline"
     ],
     "forms": {
-      "standard": {
+      "alpha gpc (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38029,25 +37984,6 @@
     "cui": "C0359316",
     "rxcui": null,
     "forms": {
-      "standard": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
-        "absorption": "good",
-        "notes": "Generic BCAA supplement (leucine, isoleucine, valine). Ratio and form unspecified. BCAAs are rapidly absorbed (~90-95% oral F) via active amino acid transport. Support muscle protein synthesis, exercise recovery, and fatigue reduction. Specify ratio (2:1:1 or 4:1:1) for accurate scoring.",
-        "aliases": [
-          "Branch Chain Amino Acids",
-          "Branched Chain Amino Acids"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
-        }
-      },
       "bcaa 2:1:1": {
         "bio_score": 15,
         "natural": false,
@@ -38157,6 +38093,25 @@
           "quality": "excellent",
           "notes": "Free-form BCAAs rapidly absorbed via active amino acid transporters; ~90-95% oral F"
         }
+      },
+      "branched chain amino acids (standard)": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "good",
+        "notes": "Generic BCAA supplement (leucine, isoleucine, valine). Ratio and form unspecified. BCAAs are rapidly absorbed (~90-95% oral F) via active amino acid transport. Support muscle protein synthesis, exercise recovery, and fatigue reduction. Specify ratio (2:1:1 or 4:1:1) for accurate scoring.",
+        "aliases": [
+          "Branch Chain Amino Acids",
+          "Branched Chain Amino Acids"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "good",
+          "notes": "good"
+        }
       }
     },
     "match_rules": {
@@ -38185,7 +38140,7 @@
     "cui": "C0058624",
     "rxcui": null,
     "forms": {
-      "standard": {
+      "docosapentaenoic acid dpa (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38233,7 +38188,7 @@
     "cui": "C5918245",
     "rxcui": null,
     "forms": {
-      "standard": {
+      "omega 6 fatty acids (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38293,7 +38248,7 @@
     "cui": "C4056511",
     "rxcui": null,
     "forms": {
-      "standard": {
+      "omega 9 fatty acids (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38343,7 +38298,7 @@
     "cui": "C4056512",
     "rxcui": null,
     "forms": {
-      "standard": {
+      "omega 7 fatty acids (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38389,7 +38344,7 @@
     "cui": null,
     "rxcui": null,
     "forms": {
-      "standard": {
+      "other fatty acids (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38436,7 +38391,7 @@
     "cui": null,
     "rxcui": null,
     "forms": {
-      "standard": {
+      "epa dha (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38497,7 +38452,7 @@
     "cui": "C0106006",
     "rxcui": null,
     "forms": {
-      "standard": {
+      "d beta hydroxybutyrate bhb (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38571,7 +38526,7 @@
     "cui": "C0075857",
     "rxcui": "2613950",
     "forms": {
-      "standard": {
+      "tudca (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -38643,7 +38598,7 @@
     "cui": "C0525033",
     "rxcui": null,
     "forms": {
-      "standard": {
+      "probiotic unspecified (standard)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -40229,14 +40184,17 @@
           "range_high": null
         }
       },
-      "krill phospholipid": {
-        "bio_score": 13,
-        "natural": true,
-        "score": 16,
+      "DHA fish oil ethyl ester": {
+        "bio_score": 9,
+        "natural": false,
+        "score": 9,
         "absorption": "unknown",
-        "notes": "DHA bound to phospholipids from Antarctic krill (Euphausia superba). Enhanced acute absorption vs fish oil TG in some studies. Contains astaxanthin naturally. Phospholipid-bound DHA may preferentially incorporate into cell membranes. Superba Krill is a major branded source.",
+        "notes": "DHA as ethyl ester — chemically modified form with lower bioavailability than TG or rTG (~27% less than natural TG, Dyerberg 2010). Synthetic ester bond requires cleavage before absorption. Found in prescription omega-3 concentrates (Lovaza). Less efficient than triglyceride forms.",
         "aliases": [
-          "DHA krill phospholipid"
+          "DHA fish oil ethyl ester",
+          "docosahexaenoic acid ethyl ester",
+          "DHA Ethyl Esters",
+          "Ethyl Esters"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40247,28 +40205,7 @@
           "range_high": null
         }
       },
-      "fish oil rTG": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "unknown",
-        "notes": "DHA concentrated via re-esterified triglyceride processing. High bioavailability (~24% above natural TG). Enzymatic process selectively concentrates DHA content while maintaining natural triglyceride backbone for efficient lipase digestion and absorption.",
-        "aliases": [
-          "DHA fish oil rTG",
-          "docasahexaenoic acid",
-          "docosahexanoic acid",
-          "doconexent"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      },
-      "fish oil triglyceride": {
+      "DHA fish oil triglyceride": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
@@ -40291,17 +40228,14 @@
           "range_high": null
         }
       },
-      "fish oil ethyl ester": {
-        "bio_score": 9,
-        "natural": false,
-        "score": 9,
+      "DHA krill phospholipid": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
         "absorption": "unknown",
-        "notes": "DHA as ethyl ester — chemically modified form with lower bioavailability than TG or rTG (~27% less than natural TG, Dyerberg 2010). Synthetic ester bond requires cleavage before absorption. Found in prescription omega-3 concentrates (Lovaza). Less efficient than triglyceride forms.",
+        "notes": "DHA bound to phospholipids from Antarctic krill (Euphausia superba). Enhanced acute absorption vs fish oil TG in some studies. Contains astaxanthin naturally. Phospholipid-bound DHA may preferentially incorporate into cell membranes. Superba Krill is a major branded source.",
         "aliases": [
-          "DHA fish oil ethyl ester",
-          "docosahexaenoic acid ethyl ester",
-          "DHA Ethyl Esters",
-          "Ethyl Esters"
+          "DHA krill phospholipid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40312,7 +40246,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "dha (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -40322,6 +40256,27 @@
           "dha (docosahexaenoic acid)",
           "dha",
           "Docosahexaenoic Acid"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available",
+          "range_low": null,
+          "range_high": null
+        }
+      },
+      "DHA fish oil rTG": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "unknown",
+        "notes": "DHA concentrated via re-esterified triglyceride processing. High bioavailability (~24% above natural TG). Enzymatic process selectively concentrates DHA content while maintaining natural triglyceride backbone for efficient lipase digestion and absorption.",
+        "aliases": [
+          "DHA fish oil rTG",
+          "docasahexaenoic acid",
+          "docosahexanoic acid",
+          "doconexent"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40388,14 +40343,18 @@
       "epa from fish oil"
     ],
     "forms": {
-      "krill phospholipid": {
-        "bio_score": 13,
-        "natural": true,
-        "score": 16,
+      "EPA fish oil ethyl ester": {
+        "bio_score": 9,
+        "natural": false,
+        "score": 9,
         "absorption": "unknown",
-        "notes": "EPA bound to phospholipids from Antarctic krill. Enhanced bioavailability vs standard fish oil. EPA (eicosapentaenoic acid, 20:5 n-3) is the primary anti-inflammatory omega-3. Phospholipid form may improve cell membrane incorporation. Contains astaxanthin naturally.",
+        "notes": "EPA as ethyl ester — lower bioavailability than TG forms (~27% less). Vascepa (icosapent ethyl) is a prescription EPA-EE product for cardiovascular risk reduction. Synthetic ester requires lipase cleavage before absorption. Take with fat-containing meal.",
         "aliases": [
-          "EPA krill phospholipid"
+          "EPA fish oil ethyl ester",
+          "eicosapentaenoic acid ethyl ester",
+          "Ethyl-EPA Concentrate",
+          "EPA Ethyl Esters",
+          "Ethyl Esters"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40406,27 +40365,7 @@
           "range_high": null
         }
       },
-      "fish oil rTG": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "unknown",
-        "notes": "EPA in re-esterified triglyceride form. ~24% higher bioavailability than natural TG (Dyerberg 2010). Enzymatic concentration process. EPA-dominant rTG products target inflammation, cardiovascular risk, and mood support at 1-4 g/day.",
-        "aliases": [
-          "EPA fish oil rTG",
-          "icosapent",
-          "eicosapentanoic acid"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      },
-      "fish oil triglyceride": {
+      "EPA fish oil triglyceride": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
@@ -40450,18 +40389,14 @@
           "range_high": null
         }
       },
-      "fish oil ethyl ester": {
-        "bio_score": 9,
-        "natural": false,
-        "score": 9,
+      "EPA krill phospholipid": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
         "absorption": "unknown",
-        "notes": "EPA as ethyl ester — lower bioavailability than TG forms (~27% less). Vascepa (icosapent ethyl) is a prescription EPA-EE product for cardiovascular risk reduction. Synthetic ester requires lipase cleavage before absorption. Take with fat-containing meal.",
+        "notes": "EPA bound to phospholipids from Antarctic krill. Enhanced bioavailability vs standard fish oil. EPA (eicosapentaenoic acid, 20:5 n-3) is the primary anti-inflammatory omega-3. Phospholipid form may improve cell membrane incorporation. Contains astaxanthin naturally.",
         "aliases": [
-          "EPA fish oil ethyl ester",
-          "eicosapentaenoic acid ethyl ester",
-          "Ethyl-EPA Concentrate",
-          "EPA Ethyl Esters",
-          "Ethyl Esters"
+          "EPA krill phospholipid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40472,7 +40407,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "epa (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -40483,6 +40418,26 @@
           "epa",
           "KD-Pur EPA",
           "Eicosapentaenoic Acid"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available",
+          "range_low": null,
+          "range_high": null
+        }
+      },
+      "EPA fish oil rTG": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "unknown",
+        "notes": "EPA in re-esterified triglyceride form. ~24% higher bioavailability than natural TG (Dyerberg 2010). Enzymatic concentration process. EPA-dominant rTG products target inflammation, cardiovascular risk, and mood support at 1-4 g/day.",
+        "aliases": [
+          "EPA fish oil rTG",
+          "icosapent",
+          "eicosapentanoic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40627,7 +40582,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "ceramides (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -40735,7 +40690,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "bioflavonoids (unspecified)": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
@@ -40826,7 +40781,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "silk amino acids (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -40958,7 +40913,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "organ extracts (unspecified)": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
@@ -41123,7 +41078,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "hemp seed oil (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -41191,7 +41146,25 @@
       "CalaMarine Oil Concentrate"
     ],
     "forms": {
-      "triglyceride form": {
+      "calamari oil phospholipid": {
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
+        "absorption": "unknown",
+        "notes": "Calamari-derived omega-3 in phospholipid form. Enhanced bioavailability and cell membrane incorporation vs TG. Contains naturally occurring DHA-rich phospholipids. Less commonly available than TG form. Premium pricing reflects phospholipid extraction process.",
+        "aliases": [
+          "CALAMARI_OIL phospholipid form"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available",
+          "range_low": null,
+          "range_high": null
+        }
+      },
+      "calamari oil triglyceride": {
         "bio_score": 13,
         "natural": true,
         "score": 16,
@@ -41212,25 +41185,7 @@
           "range_high": null
         }
       },
-      "phospholipid form": {
-        "bio_score": 14,
-        "natural": true,
-        "score": 17,
-        "absorption": "unknown",
-        "notes": "Calamari-derived omega-3 in phospholipid form. Enhanced bioavailability and cell membrane incorporation vs TG. Contains naturally occurring DHA-rich phospholipids. Less commonly available than TG form. Premium pricing reflects phospholipid extraction process.",
-        "aliases": [
-          "CALAMARI_OIL phospholipid form"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      },
-      "unspecified": {
+      "calamari oil (unspecified)": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
@@ -41279,25 +41234,7 @@
       "bluefin tuna oil"
     ],
     "forms": {
-      "triglyceride form": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "unknown",
-        "notes": "Omega-3 oil from tuna (typically Thunnus species) in natural triglyceride form. Higher DHA:EPA ratio than most fish oils. Standard lipase-dependent absorption. Mercury content concern with tuna — molecular distillation recommended for purification.",
-        "aliases": [
-          "TUNA_OIL triglyceride form"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      },
-      "molecular distilled": {
+      "tuna oil molecular distilled": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
@@ -41315,7 +41252,25 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "tuna oil triglyceride": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "unknown",
+        "notes": "Omega-3 oil from tuna (typically Thunnus species) in natural triglyceride form. Higher DHA:EPA ratio than most fish oils. Standard lipase-dependent absorption. Mercury content concern with tuna — molecular distillation recommended for purification.",
+        "aliases": [
+          "TUNA_OIL triglyceride form"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available",
+          "range_low": null,
+          "range_high": null
+        }
+      },
+      "tuna oil (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -41404,7 +41359,7 @@
           "range_high": null
         }
       },
-      "molecular distilled": {
+      "cod liver oil molecular distilled": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
@@ -41422,7 +41377,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "cod liver oil (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -41591,7 +41546,7 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "manuka honey (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -41663,24 +41618,6 @@
           "kosher tg fish oil",
           "fish oil concentrate 10/50 tg",
           "fish oil tg"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
-        }
-      },
-      "phospholipid form": {
-        "bio_score": 13,
-        "natural": true,
-        "score": 16,
-        "absorption": "unknown",
-        "notes": "Omega-3 bound to phospholipids, primarily from krill oil (Euphausia superba). ~33% higher AUC than standard fish oil TG in single-dose crossover studies (Schuchardt et al. 2011, PMC3168413). Contains astaxanthin antioxidant naturally. Neptune Krill Oil and Superba are leading brands. May cause fewer fishy burps due to phospholipid emulsification.",
-        "aliases": [
-          "FISH_OIL phospholipid form"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -41797,7 +41734,49 @@
           "range_high": null
         }
       },
-      "unspecified": {
+      "fish liver oil": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "good",
+        "notes": "Fish liver oil contains EPA/DHA plus vitamins A and D. Cod liver oil is the most common form.",
+        "aliases": [
+          "fish liver oil",
+          "shark liver oil",
+          "halibut liver oil",
+          "ecoMarine Shark Liver Oil"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "good",
+          "notes": "good absorption",
+          "range_low": null,
+          "range_high": null
+        },
+        "external_ids": {
+          "unii": "BN5IO4652Q"
+        }
+      },
+      "fish oil phospholipid": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
+        "absorption": "unknown",
+        "notes": "Omega-3 bound to phospholipids, primarily from krill oil (Euphausia superba). ~33% higher AUC than standard fish oil TG in single-dose crossover studies (Schuchardt et al. 2011, PMC3168413). Contains astaxanthin antioxidant naturally. Neptune Krill Oil and Superba are leading brands. May cause fewer fishy burps due to phospholipid emulsification.",
+        "aliases": [
+          "FISH_OIL phospholipid form"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "quality": "unknown",
+          "notes": "Data not available",
+          "range_low": null,
+          "range_high": null
+        }
+      },
+      "fish oil (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
@@ -41851,30 +41830,6 @@
           "notes": "Data not available",
           "range_low": null,
           "range_high": null
-        }
-      },
-      "fish liver oil": {
-        "bio_score": 11,
-        "natural": true,
-        "score": 14,
-        "absorption": "good",
-        "notes": "Fish liver oil contains EPA/DHA plus vitamins A and D. Cod liver oil is the most common form.",
-        "aliases": [
-          "fish liver oil",
-          "shark liver oil",
-          "halibut liver oil",
-          "ecoMarine Shark Liver Oil"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": null,
-          "quality": "good",
-          "notes": "good absorption",
-          "range_low": null,
-          "range_high": null
-        },
-        "external_ids": {
-          "unii": "BN5IO4652Q"
         }
       }
     },
