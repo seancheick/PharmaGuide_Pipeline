@@ -5,7 +5,8 @@
     "schema_version": "5.1.0",
     "last_updated": "2026-04-14",
     "total_entries": 127,
-    "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object."
+    "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
+    "total_rules": 129
   },
   "interaction_rules": [
     {
@@ -6373,6 +6374,173 @@
       "pregnancy_lactation": null,
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_FISH_OIL_BLEEDING",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "fish_oil"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "bleeding_disorders",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Omega-3 fatty acids (EPA/DHA) prolong bleeding time by inhibiting thromboxane A2-mediated platelet aggregation and reducing platelet-activating factor. FDA drug labels for icosapent ethyl (Vascepa) and omega-3-acid ethyl esters (Lovaza) explicitly warn about increased bleeding risk. Doses >3g/day have potential antithrombotic effects per FDA labeling.",
+          "action": "Monitor for signs of bleeding. Inform prescriber if taking anticoagulants or antiplatelets. Consider dose reduction if >3g EPA+DHA/day.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/29136493/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
+            "https://www.nccih.nih.gov/health/omega-3-supplements"
+          ]
+        },
+        {
+          "condition_id": "surgery_scheduled",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Omega-3 fatty acids may increase perioperative bleeding risk due to antiplatelet effects. Multiple FDA drug labels recommend caution with concurrent anticoagulant/antiplatelet therapy.",
+          "action": "Consider discontinuing omega-3 supplements 7-10 days before planned surgery. Inform surgeon and anesthesiologist.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/29136493/",
+            "https://www.nccih.nih.gov/health/omega-3-supplements"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Omega-3 fatty acids prolong bleeding time and may potentiate anticoagulant effects. FDA labels for icosapent ethyl and omega-3-acid ethyl esters explicitly state: 'omega-3 acids may prolong bleeding time. Monitor patients receiving anticoagulants.'",
+          "action": "Monitor INR/bleeding time more frequently. Watch for signs of bruising or bleeding. Inform prescriber.",
+          "sources": [
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
+            "https://pubmed.ncbi.nlm.nih.gov/29136493/"
+          ]
+        },
+        {
+          "drug_class_id": "antiplatelet_agents",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive antiplatelet effects. Omega-3 fatty acids inhibit platelet aggregation via thromboxane A2 suppression, which may compound the effects of antiplatelet agents like aspirin or clopidogrel.",
+          "action": "Monitor for increased bruising or bleeding. Inform prescriber of omega-3 supplementation.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/29136493/",
+            "https://www.nccih.nih.gov/health/omega-3-supplements"
+          ]
+        }
+      ],
+      "dose_thresholds": [
+        {
+          "threshold_mg": 3000,
+          "unit": "mg EPA+DHA/day",
+          "severity_above": "caution",
+          "severity_below": "informational",
+          "note": "FDA labeling states >3g/day omega-3 from all sources may lead to excessive bleeding."
+        }
+      ],
+      "pregnancy_lactation": {
+        "pregnancy_category": "safe_with_limits",
+        "lactation_category": "safe_with_limits",
+        "evidence_level": "established",
+        "notes": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day."
+      },
+      "last_reviewed": "2026-04-14",
+      "review_owner": "drug_label_mining"
+    },
+    {
+      "id": "RULE_BANNED_CBD_INTERACTIONS",
+      "subject_ref": {
+        "db": "banned_recalled_ingredients",
+        "canonical_id": "BANNED_CBD_US"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "liver_disease",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "CBD is extensively metabolized by CYP3A4 and CYP2C19 in the liver. FDA drug labels for multiple medications warn that concomitant CBD causes ALT/AST elevation. In patients with pre-existing hepatic impairment, CBD may worsen liver function. The FDA-approved CBD product (Epidiolex) carries a hepatotoxicity warning.",
+          "action": "Avoid CBD supplements in liver disease. If already taking, monitor liver function tests regularly. Discontinue if ALT/AST exceed 3x upper limit of normal.",
+          "sources": [
+            "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+            "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
+          ]
+        },
+        {
+          "condition_id": "seizure_disorder",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "CBD has anticonvulsant properties (FDA-approved for Lennox-Gastaut and Dravet syndromes). However, CBD supplements are not pharmaceutical-grade and have variable potency, contaminant profiles, and dosing. Interaction with existing anticonvulsant regimens (especially valproate) may cause hepatotoxicity or alter drug levels.",
+          "action": "Use only pharmaceutical-grade CBD (Epidiolex) for seizure management. Supplement-grade CBD should not be substituted. Inform neurologist of any CBD use.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+            "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
+          ]
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "FDA strongly advises against CBD use during pregnancy. Animal studies show potential risks to the developing fetus. No adequate human safety data exists for CBD during pregnancy.",
+          "action": "Avoid CBD supplements during pregnancy. Consult healthcare provider.",
+          "sources": [
+            "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
+          ]
+        }
+      ],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticonvulsants",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "CBD inhibits CYP2C19 and CYP3A4, increasing plasma levels of clobazam, rufinamide, topiramate, and zonisamide. With valproate specifically, concomitant CBD causes ALT/AST elevation (hepatotoxicity risk). FDA drug labels for divalproex sodium explicitly warn about this interaction.",
+          "action": "Monitor liver function tests if CBD used with valproate. Monitor anticonvulsant drug levels. Dose adjustment may be needed.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
+          ]
+        },
+        {
+          "drug_class_id": "immunosuppressants",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "CBD inhibits CYP3A4, which metabolizes tacrolimus and sirolimus. FDA drug labels for both tacrolimus and sirolimus explicitly warn that CBD co-administration increases their plasma concentrations, risking nephrotoxicity and immunosuppressive toxicity.",
+          "action": "Monitor tacrolimus/sirolimus trough levels closely. Dose reduction for the immunosuppressant should be considered. Inform transplant team of CBD use.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/30417375/"
+          ]
+        },
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "CBD inhibits CYP2C9, which metabolizes warfarin. Case reports document elevated INR when CBD is added to warfarin therapy. The interaction may increase bleeding risk.",
+          "action": "Monitor INR more frequently when starting or stopping CBD. Inform prescriber.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/30417375/"
+          ]
+        },
+        {
+          "drug_class_id": "sedatives",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "CBD has CNS depressant effects and may potentiate sedation when combined with benzodiazepines, opioids, or other sedatives.",
+          "action": "Use caution with concurrent sedative medications. Monitor for excessive drowsiness.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/cannabis-marijuana-and-cannabinoids-what-you-need-to-know"
+          ]
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "avoid",
+        "lactation_category": "avoid",
+        "evidence_level": "probable",
+        "notes": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk."
+      },
+      "last_reviewed": "2026-04-14",
+      "review_owner": "drug_label_mining"
     }
   ]
 }
