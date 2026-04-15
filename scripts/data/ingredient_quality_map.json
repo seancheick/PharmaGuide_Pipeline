@@ -91,6 +91,9 @@
           "range_high": 0.9,
           "quality": "very_good",
           "notes": "70-90%"
+        },
+        "external_ids": {
+          "unii": "1D1K0N0VVC"
         }
       },
       "retinyl acetate": {
@@ -116,6 +119,9 @@
           "range_high": 0.9,
           "quality": "very_good",
           "notes": "70-90%"
+        },
+        "external_ids": {
+          "unii": "3LE3D9D6OY"
         }
       },
       "beta-carotene synthetic": {
@@ -165,6 +171,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "80-100%"
+        },
+        "external_ids": {
+          "unii": "G2SH0XKK91"
         }
       },
       "vitamin A from cod liver oil": {
@@ -354,6 +363,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "UJV8K21YKL"
         }
       },
       "benfotiamine": {
@@ -386,6 +398,9 @@
           "range_high": null,
           "quality": "unknown",
           "notes": "~5x higher plasma thiamine levels vs HCl in pharmacokinetic studies; crosses cell membranes via passive diffusion"
+        },
+        "external_ids": {
+          "unii": "Y92OUS2H9B"
         }
       },
       "thiamine mononitrate": {
@@ -416,6 +431,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "8K0I04919X"
         }
       },
       "thiamine hydrochloride": {
@@ -451,6 +469,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "M572600E5P"
         }
       },
       "allithiamine": {
@@ -480,6 +501,9 @@
           "range_high": null,
           "quality": "excellent",
           "notes": "excellent"
+        },
+        "external_ids": {
+          "unii": "83SWN21920"
         }
       },
       "thiamine pyrophosphate (TPP)": {
@@ -794,6 +818,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "TLM2976OFR"
         }
       },
       "riboflavin from yeast": {
@@ -991,6 +1018,9 @@
           "range_high": null,
           "quality": "excellent",
           "notes": "excellent"
+        },
+        "external_ids": {
+          "unii": "0I8H2M0L7N"
         }
       },
       "nicotinamide mononucleotide": {
@@ -1015,6 +1045,9 @@
           "range_high": null,
           "quality": "very_good",
           "notes": "very good"
+        },
+        "external_ids": {
+          "unii": "2KG6QX4W0V"
         }
       },
       "inositol hexanicotinate": {
@@ -1082,6 +1115,9 @@
           "range_high": null,
           "quality": "very_good",
           "notes": "very good"
+        },
+        "external_ids": {
+          "unii": "25X51I8RD4"
         }
       },
       "nicotinic acid": {
@@ -1136,6 +1172,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "JTL8B7TVW7"
         }
       },
       "tryptophan_derived_niacin": {
@@ -1403,6 +1442,9 @@
           "range_high": null,
           "quality": "very_good",
           "notes": "very good"
+        },
+        "external_ids": {
+          "unii": "568ET80C3D"
         }
       },
       "pantethine": {
@@ -1435,6 +1477,9 @@
           "range_high": null,
           "quality": "excellent",
           "notes": "excellent"
+        },
+        "external_ids": {
+          "unii": "7K81IL792L"
         }
       },
       "pantothenic acid": {
@@ -1460,6 +1505,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "19F5HK2737"
         }
       },
       "sodium pantothenate": {
@@ -1483,6 +1531,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "OES0R93F0C"
         }
       },
       "panthenol (pro-vitamin B5)": {
@@ -1729,6 +1780,9 @@
           "range_high": null,
           "quality": "very_good",
           "notes": "very good"
+        },
+        "external_ids": {
+          "unii": "6466NM3W93"
         }
       },
       "pyridoxine hydrochloride": {
@@ -1761,6 +1815,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "68Y4CF58BV"
         }
       },
       "pyridoxine glutamate": {
@@ -2394,6 +2451,9 @@
           "range_high": null,
           "quality": "variable",
           "notes": "variable"
+        },
+        "external_ids": {
+          "unii": "935E97BOY8"
         }
       },
       "food folate (polyglutamate)": {
@@ -2644,6 +2704,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "high"
+        },
+        "external_ids": {
+          "unii": "BR1SN1JS2W"
         }
       },
       "adenosylcobalamin": {
@@ -2690,6 +2753,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "high"
+        },
+        "external_ids": {
+          "unii": "Q40X8H422O"
         }
       },
       "cyanocobalamin sublingual": {
@@ -2735,6 +2801,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "P6YC3EG204"
         }
       },
       "b12 (unspecified)": {
@@ -2903,6 +2972,9 @@
           "range_high": 0.96,
           "quality": "very_good",
           "notes": "80%"
+        },
+        "external_ids": {
+          "unii": "183E4W213W"
         }
       },
       "sodium ascorbate": {
@@ -2942,6 +3014,9 @@
           "range_high": 0.936,
           "quality": "very_good",
           "notes": "78%"
+        },
+        "external_ids": {
+          "unii": "S033EH8359"
         }
       },
       "magnesium ascorbate": {
@@ -2969,6 +3044,9 @@
           "range_high": 0.936,
           "quality": "very_good",
           "notes": "78%"
+        },
+        "external_ids": {
+          "unii": "0N1G678593"
         }
       },
       "ascorbic acid": {
@@ -3000,6 +3078,9 @@
           "range_high": 0.84,
           "quality": "very_good",
           "notes": "70%"
+        },
+        "external_ids": {
+          "unii": "PQ6CK8PD0R"
         }
       },
       "ascorbyl palmitate": {
@@ -3028,6 +3109,9 @@
           "range_high": 0.5,
           "quality": "moderate",
           "notes": "40%"
+        },
+        "external_ids": {
+          "unii": "QN83US2B0N"
         }
       },
       "vitamin C with bioflavonoids": {
@@ -3147,6 +3231,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "X5523762RI"
         }
       },
       "zinc ascorbate": {
@@ -3172,6 +3259,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "9TI35313XW"
         }
       },
       "slow-release vitamin C": {
@@ -3236,6 +3326,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "poor"
+        },
+        "external_ids": {
+          "unii": "Y2Z3ZTP9UM"
         }
       },
       "vitamin C analogs (non-functional)": {
@@ -3306,6 +3399,9 @@
           "notes": "Moderate vitamin C fraction bioavailability",
           "range_low": null,
           "range_high": null
+        },
+        "external_ids": {
+          "unii": "JTL8B7TVW7"
         }
       }
     },
@@ -4052,6 +4148,9 @@
           "range_high": null,
           "quality": "excellent",
           "notes": "excellent"
+        },
+        "external_ids": {
+          "unii": "KP2MW85SSQ"
         }
       },
       "d-alpha-tocopheryl acetate": {
@@ -4784,6 +4883,9 @@
           "range_high": 0.52,
           "quality": "moderate",
           "notes": "42%"
+        },
+        "external_ids": {
+          "unii": "MLM29U2X85"
         }
       },
       "calcium malate": {
@@ -4815,6 +4917,9 @@
           "range_high": 0.5,
           "quality": "moderate",
           "notes": "40%"
+        },
+        "external_ids": {
+          "unii": "D48OP746DW"
         }
       },
       "calcium bis-glycinate": {
@@ -4880,6 +4985,9 @@
           "range_high": 0.48,
           "quality": "moderate",
           "notes": "38%"
+        },
+        "external_ids": {
+          "unii": "91D9GV0Z28"
         }
       },
       "calcium from algae": {
@@ -4951,6 +5059,9 @@
           "range_high": 0.45,
           "quality": "moderate",
           "notes": "35%"
+        },
+        "external_ids": {
+          "unii": "2URQ2N32W3"
         }
       },
       "calcium gluconate": {
@@ -4974,6 +5085,9 @@
           "range_high": 0.43,
           "quality": "moderate",
           "notes": "33%"
+        },
+        "external_ids": {
+          "unii": "SQE6VB453K"
         }
       },
       "calcium carbonate": {
@@ -5002,6 +5116,9 @@
           "range_high": 0.41,
           "quality": "moderate",
           "notes": "31%"
+        },
+        "external_ids": {
+          "unii": "H0G9379FGK"
         }
       },
       "calcium phosphate": {
@@ -5030,6 +5147,9 @@
           "range_high": 0.35,
           "quality": "poor",
           "notes": "25%"
+        },
+        "external_ids": {
+          "unii": "97Z1WI3NDX"
         }
       },
       "dicalcium phosphate": {
@@ -5052,6 +5172,9 @@
           "range_high": 0.35,
           "quality": "poor",
           "notes": "25%"
+        },
+        "external_ids": {
+          "unii": "L11K75P92J"
         }
       },
       "coral calcium": {
@@ -5103,6 +5226,9 @@
           "range_high": 0.52,
           "quality": "moderate",
           "notes": "42%"
+        },
+        "external_ids": {
+          "unii": "4BBS3A53GJ"
         }
       },
       "calcium orotate": {
@@ -5126,6 +5252,9 @@
           "range_high": 0.48,
           "quality": "moderate",
           "notes": "38%"
+        },
+        "external_ids": {
+          "unii": "990GJM86HY"
         }
       },
       "calcium oxide": {
@@ -5149,6 +5278,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "poor"
+        },
+        "external_ids": {
+          "unii": "C7X2M0VVNH"
         }
       },
       "calcium analogs (non-functional)": {
@@ -5300,6 +5432,9 @@
           "range_high": 0.4,
           "quality": "moderate",
           "notes": "moderate (~30-40%)"
+        },
+        "external_ids": {
+          "unii": "L11K75P92J"
         }
       },
       "phosphorus (unspecified)": {
@@ -5405,6 +5540,9 @@
           "range_high": 0.96,
           "quality": "very_good",
           "notes": "80%+"
+        },
+        "external_ids": {
+          "unii": "IFN18A4Y6B"
         }
       },
       "magnesium threonate": {
@@ -5456,6 +5594,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "high"
+        },
+        "external_ids": {
+          "unii": "RCM1N3D968"
         }
       },
       "magnesium acetyl-taurate": {
@@ -5508,6 +5649,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "moderate-high"
+        },
+        "external_ids": {
+          "unii": "LA9X9UJA2Z"
         }
       },
       "magnesium citrate": {
@@ -5531,6 +5675,9 @@
           "range_high": 0.4,
           "quality": "moderate",
           "notes": "30-40%"
+        },
+        "external_ids": {
+          "unii": "RHO26O1T9V"
         }
       },
       "magnesium orotate": {
@@ -5551,6 +5698,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "moderate-high"
+        },
+        "external_ids": {
+          "unii": "GI96W46M5A"
         }
       },
       "magnesium chloride": {
@@ -5576,6 +5726,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "02F3473H9O"
         }
       },
       "magnesium lactate": {
@@ -5596,6 +5749,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "MT6QI8324A"
         }
       },
       "magnesium gluconate": {
@@ -5616,6 +5772,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "T42NAD2KHC"
         }
       },
       "magnesium aspartate": {
@@ -5636,6 +5795,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "R17X820ROL"
         }
       },
       "magnesium carbonate": {
@@ -5658,6 +5820,9 @@
           "range_high": 0.25,
           "quality": "poor",
           "notes": "15-25%"
+        },
+        "external_ids": {
+          "unii": "0E53J927NA"
         }
       },
       "magnesium oxide": {
@@ -5682,6 +5847,9 @@
           "range_high": 0.15,
           "quality": "poor",
           "notes": "4-15%"
+        },
+        "external_ids": {
+          "unii": "3A3U0GI71G"
         }
       },
       "magnesium hydroxide": {
@@ -5702,6 +5870,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "poor"
+        },
+        "external_ids": {
+          "unii": "NBZ3QY004S"
         }
       },
       "magnesium sulfate": {
@@ -5724,6 +5895,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "poor oral"
+        },
+        "external_ids": {
+          "unii": "DE08037SAB"
         }
       },
       "magnesium (unspecified)": {
@@ -5774,6 +5948,9 @@
           "range_high": 0.4,
           "quality": "moderate",
           "notes": "30% - magnesium content is incidental to vitamin C delivery"
+        },
+        "external_ids": {
+          "unii": "0N1G678593"
         }
       }
     },
@@ -5884,6 +6061,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "high"
+        },
+        "external_ids": {
+          "unii": "VBJ9L90P4L"
         }
       },
       "heme iron polypeptide": {
@@ -5908,6 +6088,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "high"
+        },
+        "external_ids": {
+          "unii": "31VDO12CJY"
         }
       },
       "ferrous fumarate": {
@@ -5930,6 +6113,9 @@
           "range_high": 0.43,
           "quality": "good",
           "notes": "moderate-high (33% elemental)"
+        },
+        "external_ids": {
+          "unii": "R5L488RY0Q"
         }
       },
       "ferrous gluconate": {
@@ -5950,6 +6136,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "U1B11I423Z"
         }
       },
       "ferrous sulfate": {
@@ -5974,6 +6163,9 @@
           "range_high": 0.15,
           "quality": "moderate",
           "notes": "moderate (10-15%)"
+        },
+        "external_ids": {
+          "unii": "39R4TAN1VT"
         }
       },
       "carbonyl iron": {
@@ -6079,6 +6271,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "63G354M39Z"
         }
       },
       "ferric sulfate": {
@@ -6098,6 +6293,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "poor-moderate"
+        },
+        "external_ids": {
+          "unii": "3HWS7HF5XD"
         }
       },
       "iron amino acid chelate": {
@@ -6193,6 +6391,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "Ascorbic acid chelation enhances Fe2+ absorption 2-3x vs sulfate alone"
+        },
+        "external_ids": {
+          "unii": "DI3477D0PI"
         }
       },
       "liposomal iron": {
@@ -6241,6 +6442,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "~25-30% elemental iron estimated; picolinate chelate class"
+        },
+        "external_ids": {
+          "unii": "48VAK352CN"
         }
       }
     },
@@ -6339,6 +6543,9 @@
           "range_high": 1.0,
           "quality": "good",
           "notes": "high (87%)"
+        },
+        "external_ids": {
+          "unii": "ALO92O31SE"
         }
       },
       "zinc bisglycinate": {
@@ -6391,6 +6598,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "high"
+        },
+        "external_ids": {
+          "unii": "FM5526K07A"
         }
       },
       "zinc citrate": {
@@ -6411,6 +6621,9 @@
           "range_high": 0.732,
           "quality": "good",
           "notes": "moderate-high (61%)"
+        },
+        "external_ids": {
+          "unii": "K72I3DEX9B"
         }
       },
       "zinc gluconate": {
@@ -6432,6 +6645,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "U6WSN5SQ1Z"
         }
       },
       "zinc monomethionine": {
@@ -6476,6 +6692,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "moderate-high"
+        },
+        "external_ids": {
+          "unii": "Z722242H10"
         }
       },
       "zinc sulfate": {
@@ -6499,6 +6718,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "89DS0H96TB"
         }
       },
       "zinc oxide": {
@@ -6519,6 +6741,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "Consistently the lowest-bioavailable common zinc form in comparative studies. High elemental zinc content (80%) is misleading — poorly soluble in the GI tract."
+        },
+        "external_ids": {
+          "unii": "SOI2LOH54Z"
         }
       },
       "zinc (unspecified)": {
@@ -6563,6 +6788,9 @@
           "notes": "Higher FZA than zinc gluconate and zinc sulfate in double-blind crossover trial (PMID 37111104). Amino acid chelation mechanism.",
           "range_low": null,
           "range_high": null
+        },
+        "external_ids": {
+          "unii": "4OC7QTI23H"
         }
       },
       "zinc brown rice chelate": {
@@ -6812,6 +7040,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "90%+"
+        },
+        "external_ids": {
+          "unii": "964MRK2PEL"
         }
       },
       "selenium-methyl L-selenocysteine": {
@@ -6896,6 +7127,9 @@
           "range_high": null,
           "quality": "excellent",
           "notes": "excellent"
+        },
+        "external_ids": {
+          "unii": "0CH9049VIS"
         }
       },
       "sodium selenite": {
@@ -6921,6 +7155,9 @@
           "range_high": 0.6,
           "quality": "good",
           "notes": "50%"
+        },
+        "external_ids": {
+          "unii": "HIW548RQ3W"
         }
       },
       "sodium selenate": {
@@ -6947,6 +7184,9 @@
           "range_high": 0.55,
           "quality": "moderate",
           "notes": "45%"
+        },
+        "external_ids": {
+          "unii": "5DQP25600A"
         }
       },
       "selenium dioxide": {
@@ -6970,6 +7210,9 @@
           "range_high": 0.5,
           "quality": "moderate",
           "notes": "40%"
+        },
+        "external_ids": {
+          "unii": "9N3UK29E57"
         }
       },
       "selenium-enriched broccoli extract": {
@@ -7039,6 +7282,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "F489E6K70B"
         }
       },
       "methylseleninic acid": {
@@ -7502,6 +7748,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "E750O06Y6O"
         }
       },
       "rutin": {
@@ -7534,6 +7783,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "low"
+        },
+        "external_ids": {
+          "unii": "5G06TVY3R7"
         }
       }
     },
@@ -7622,6 +7874,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "excellent (~99%)"
+        },
+        "external_ids": {
+          "unii": "9603LN7R2Q"
         }
       },
       "buffered creatine monohydrate": {
@@ -7668,6 +7923,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "1XGV09LL9X"
         }
       },
       "creatine hydrochloride": {
@@ -7695,6 +7953,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "429W5UKC8E"
         }
       },
       "creatine ethyl ester": {
@@ -7720,6 +7981,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "poor"
+        },
+        "external_ids": {
+          "unii": "I3P1L0D47K"
         }
       },
       "creatine citrate": {
@@ -7811,6 +8075,9 @@
           "range_high": null,
           "quality": "unknown",
           "notes": "No human PK data for dicreatine malate specifically; assumed similar to creatine monohydrate"
+        },
+        "external_ids": {
+          "unii": "VF8L36HTE0"
         }
       }
     },
@@ -9438,6 +9705,9 @@
           "range_high": 0.4,
           "quality": "moderate",
           "notes": "moderate (~30–40%)"
+        },
+        "external_ids": {
+          "unii": "RV823G6G67"
         }
       },
       "copper sulfate": {
@@ -9489,6 +9759,9 @@
           "range_high": 0.2,
           "quality": "poor",
           "notes": "poor (<10%)"
+        },
+        "external_ids": {
+          "unii": "V1XJQ704R4"
         }
       },
       "copper citrate": {
@@ -9649,6 +9922,9 @@
           "range_high": 0.128,
           "quality": "poor",
           "notes": "2.8%"
+        },
+        "external_ids": {
+          "unii": "S71T8B8Z6P"
         }
       },
       "chromium polynicotinate": {
@@ -9720,6 +9996,9 @@
           "range_high": 0.143,
           "quality": "poor",
           "notes": "~4.3% (Anderson 2004, PMID 15564651)"
+        },
+        "external_ids": {
+          "unii": "1BY3EP7D99"
         }
       },
       "chromium chloride": {
@@ -9909,6 +10188,9 @@
           "range_high": 0.98,
           "quality": "excellent",
           "notes": "96-98%"
+        },
+        "external_ids": {
+          "unii": "1C4QK22F9J"
         }
       },
       "kelp iodine": {
@@ -9955,6 +10237,9 @@
           "range_high": 0.98,
           "quality": "excellent",
           "notes": "96-98%"
+        },
+        "external_ids": {
+          "unii": "F5WR8N145C"
         }
       },
       "molecular iodine": {
@@ -10147,6 +10432,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "9YY2F980SV"
         }
       },
       "manganese picolinate": {
@@ -10189,6 +10477,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "332B7O278V"
         }
       },
       "manganese aspartate": {
@@ -10251,6 +10542,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "poor"
+        },
+        "external_ids": {
+          "unii": "W00LYS4T26"
         }
       },
       "manganese chloride": {
@@ -10273,6 +10567,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "QQE170PANO"
         }
       },
       "manganese oxide": {
@@ -10294,6 +10591,9 @@
           "range_high": null,
           "quality": "poor",
           "notes": "very poor"
+        },
+        "external_ids": {
+          "unii": "64J2OA7MH3"
         }
       },
       "food-based manganese": {
@@ -10484,6 +10784,9 @@
           "range_high": 0.93,
           "quality": "good",
           "notes": "88-93% (Turnlund 1995, PMID 7572711)"
+        },
+        "external_ids": {
+          "unii": "948QAQ08I1"
         }
       },
       "molybdenum amino acid chelate": {
@@ -10547,6 +10850,9 @@
           "range_high": null,
           "quality": "very_good",
           "notes": "very good"
+        },
+        "external_ids": {
+          "unii": "4E86NC774D"
         }
       },
       "molybdenum (unspecified)": {
@@ -10593,6 +10899,9 @@
           "range_high": 0.93,
           "quality": "excellent",
           "notes": "88-93% estimated; high-class Mo chelate absorption"
+        },
+        "external_ids": {
+          "unii": "ZG8A5LS96U"
         }
       }
     },
@@ -10681,6 +10990,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": ">98% (NIH ODS: applies to all boron forms)"
+        },
+        "external_ids": {
+          "unii": "7EW2EZ38LS"
         }
       },
       "boron glycinate": {
@@ -10712,6 +11024,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": ">98% (NIH ODS: applies to all boron forms)"
+        },
+        "external_ids": {
+          "unii": "YV58Q9ER5F"
         }
       },
       "boron citrate": {
@@ -10733,6 +11048,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": ">98% (NIH ODS: applies to all boron forms)"
+        },
+        "external_ids": {
+          "unii": "S043P4DV22"
         }
       },
       "boron (unspecified)": {
@@ -10848,6 +11166,9 @@
           "range_high": 0.94,
           "quality": "excellent",
           "notes": "~90-94%"
+        },
+        "external_ids": {
+          "unii": "EE90ONI6FF"
         }
       },
       "potassium chloride": {
@@ -10875,6 +11196,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90%"
+        },
+        "external_ids": {
+          "unii": "660YQ98I10"
         }
       },
       "potassium gluconate": {
@@ -10896,6 +11220,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90%"
+        },
+        "external_ids": {
+          "unii": "12H3K5QKN9"
         }
       },
       "potassium bicarbonate": {
@@ -10918,6 +11245,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90%"
+        },
+        "external_ids": {
+          "unii": "HM5Z15LEBN"
         }
       },
       "potassium aspartate": {
@@ -10940,6 +11270,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90%"
+        },
+        "external_ids": {
+          "unii": "OC4598NZEQ"
         }
       },
       "potassium phosphate": {
@@ -10963,6 +11296,9 @@
           "range_high": 0.9,
           "quality": "excellent",
           "notes": "~85-90%"
+        },
+        "external_ids": {
+          "unii": "B7862WZ632"
         }
       },
       "potassium orotate": {
@@ -10984,6 +11320,9 @@
           "range_high": 1.0,
           "quality": "excellent",
           "notes": "~90% (absorbed like all K salts, despite marketing claims)"
+        },
+        "external_ids": {
+          "unii": "6ZDN9W1C9W"
         }
       },
       "potassium (unspecified)": {
@@ -11035,7 +11374,10 @@
           "potassium bisglycinate chelate"
         ],
         "cui_note": null,
-        "rxcui_note": null
+        "rxcui_note": null,
+        "external_ids": {
+          "unii": "041K11WT0G"
+        }
       }
     },
     "match_rules": {
@@ -11458,6 +11800,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "~1.7x higher plasma levels vs ubiquinone in older adults (Langsjoen 2014)"
+        },
+        "external_ids": {
+          "unii": "M9NL0C577Y"
         }
       },
       "ubiquinone crystal-dispersed": {
@@ -12292,6 +12637,9 @@
           "range_high": 0.12,
           "quality": "poor",
           "notes": "~2% (Hollman 1995)"
+        },
+        "external_ids": {
+          "unii": "53B03V78A6"
         }
       },
       "quercetin (unspecified)": {
@@ -13043,6 +13391,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate fermentation"
+        },
+        "external_ids": {
+          "unii": "89NA02M4RX"
         }
       },
       "mixed prebiotic blend": {
@@ -13246,6 +13597,9 @@
           "range_high": 0.95,
           "quality": "very_good",
           "notes": "80-95% (Stoll et al. 2021 — equivalent AUC to Alpha-GPC)"
+        },
+        "external_ids": {
+          "unii": "6K2W7T9V6Y"
         }
       },
       "choline citrate": {
@@ -13287,6 +13641,9 @@
           "range_high": 0.95,
           "quality": "very_good",
           "notes": "80-95% (Stoll et al. 2021)"
+        },
+        "external_ids": {
+          "unii": "45I14D8O27"
         }
       },
       "choline (unspecified)": {
@@ -13790,6 +14147,9 @@
           "range_high": 0.95,
           "quality": "very_good",
           "notes": "80-95% estimated (no dedicated taurate PK study)"
+        },
+        "external_ids": {
+          "unii": "RCM1N3D968"
         }
       },
       "liposomal taurine": {
@@ -14312,6 +14672,9 @@
           "range_high": 0.7,
           "quality": "moderate",
           "notes": "As TMG source: moderate (HCl dissociates, betaine portion absorbs); as digestive aid: direct action"
+        },
+        "external_ids": {
+          "unii": "JK8U8K4D6K"
         }
       },
       "tmg (trimethylglycine) (unspecified)": {
@@ -14615,6 +14978,9 @@
           "range_high": 0.68,
           "quality": "moderate",
           "notes": "Salt dissociates to free arginine + aspartate in GI fluid. Arginine component subject to same arginase first-pass as other forms. No direct PK comparison to HCl."
+        },
+        "external_ids": {
+          "unii": "LZB1G2I725"
         }
       },
       "nitrosigine (arginine silicate inositol)": {
@@ -15321,6 +15687,9 @@
           "range_high": 0.65,
           "quality": "moderate",
           "notes": "Absorbed via intestinal imino transporters but cannot be reincorporated into new collagen (no tRNA for hydroxyproline; hydroxylation is post-translational). Catabolized via glyoxylate/pyruvate pathway."
+        },
+        "external_ids": {
+          "unii": "RMB44WO89X"
         }
       }
     },
@@ -16610,6 +16979,9 @@
           "range_high": 0.4,
           "quality": "low",
           "notes": "Mean ~5% conversion (Egner 2011, PMC3076202); range 1-40% based on gut microbiome (PMC11847849)"
+        },
+        "external_ids": {
+          "unii": "Q86A197713"
         }
       },
       "glucoraphanin + myrosinase": {
@@ -18946,6 +19318,9 @@
           "range_high": 0.6,
           "quality": "moderate",
           "notes": "moderate (~40–60%)"
+        },
+        "external_ids": {
+          "unii": "2G86QN327L"
         }
       },
       "collagen (unspecified)": {
@@ -19271,6 +19646,9 @@
           "range_high": 0.35,
           "quality": "moderate",
           "notes": "Systemic F ~26% (PMID:8267678); GI absorption ~90% but extensive first-pass"
+        },
+        "external_ids": {
+          "unii": "750W5330FY"
         }
       },
       "glucosamine sulfate (crystalline)": {
@@ -20435,6 +20813,9 @@
           "range_high": 0.4,
           "quality": "variable",
           "notes": "Alkamides absorbed (PMID:15901750); echinacoside not systemic"
+        },
+        "external_ids": {
+          "unii": "VB06AV5US8"
         }
       },
       "whole echinacea herb": {
@@ -26707,7 +27088,10 @@
           "liquid chlorophyll",
           "chlorophyll drops",
           "chlorophyll supplement"
-        ]
+        ],
+        "external_ids": {
+          "unii": "EEM82VOY7C"
+        }
       },
       "natural chlorophyll": {
         "bio_score": 3,
@@ -30000,6 +30384,9 @@
           "range_high": 0.05,
           "quality": "poor",
           "notes": "Absolute F 0.41% (PMID 22826463); locally-acting in GI lumen"
+        },
+        "external_ids": {
+          "unii": "S347WMO6M4"
         }
       },
       "mixed phytosterols": {
@@ -30049,6 +30436,9 @@
           "range_high": 0.005,
           "quality": "poor",
           "notes": "Very low systemic F; efficacy via GI-local cholesterol competition"
+        },
+        "external_ids": {
+          "unii": "99WUK5D0Y8"
         }
       },
       "campesterol": {
@@ -30069,6 +30459,9 @@
           "range_high": 0.03,
           "quality": "poor",
           "notes": "~1.9% systemic F (higher than sitosterol but still very low)"
+        },
+        "external_ids": {
+          "unii": "5L5O665639"
         }
       },
       "phytosterols (unspecified)": {
@@ -33101,6 +33494,9 @@
           "range_high": 0.4,
           "quality": "moderate",
           "notes": "Estimated 20-40%; no published absolute oral F study; intranasal F ~23% as reference"
+        },
+        "external_ids": {
+          "unii": "73R90F7MQ8"
         }
       },
       "micronized pregnenolone": {
@@ -33417,6 +33813,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "O7TSZ97GEP"
         }
       },
       "di-calcium phosphate (unspecified)": {
@@ -35554,6 +35953,9 @@
           "range_high": 0.85,
           "quality": "good",
           "notes": "high colonization (~80%)"
+        },
+        "external_ids": {
+          "unii": "D4S8K64J5Z"
         }
       },
       "lactobacillus acidophilus ncfm": {
@@ -35576,6 +35978,9 @@
           "range_high": 0.95,
           "quality": "excellent",
           "notes": "excellent colonization (~90%)"
+        },
+        "external_ids": {
+          "unii": "RX77TZW6LH"
         }
       },
       "lactobacillus acidophilus dds-1": {
@@ -35604,6 +36009,9 @@
           "range_high": 0.85,
           "quality": "good",
           "notes": "good colonization (~80%); proven gut persistence (PMID:32019158)"
+        },
+        "external_ids": {
+          "unii": "X6JT3K37BN"
         }
       },
       "lactobacillus acidophilus (unspecified)": {
@@ -35807,6 +36215,9 @@
           "range_high": 0.8,
           "quality": "good",
           "notes": "DuPont strain; moderate-good survival"
+        },
+        "external_ids": {
+          "unii": "W5MJX9C73Y"
         }
       },
       "bifidobacterium lactis (unspecified)": {
@@ -35979,6 +36390,9 @@
           "range_high": 0.85,
           "quality": "good",
           "notes": "DuPont/IFF strain; good GI survival"
+        },
+        "external_ids": {
+          "unii": "QZY9UX6YE5"
         }
       },
       "lactobacillus rhamnosus (unspecified)": {
@@ -36283,6 +36697,9 @@
           "range_high": 0.95,
           "quality": "excellent",
           "notes": "excellent colonization (~90%)"
+        },
+        "external_ids": {
+          "unii": "VK8XA79JA3"
         }
       },
       "bifidobacterium longum 35624": {
@@ -36516,6 +36933,9 @@
           "range_high": 0.9,
           "quality": "good",
           "notes": "high colonization (~80%)"
+        },
+        "external_ids": {
+          "unii": "26GNB8XLS4"
         }
       },
       "bifidobacterium bifidum r0071": {
@@ -36535,6 +36955,9 @@
           "range_high": 0.9,
           "quality": "good",
           "notes": "high colonization (~85%)"
+        },
+        "external_ids": {
+          "unii": "ZQ2KAH6G2Q"
         }
       },
       "bifidobacterium bifidum (unspecified)": {
@@ -36822,6 +37245,9 @@
           "range_high": 0.8,
           "quality": "moderate",
           "notes": "moderate colonization (~70%)"
+        },
+        "external_ids": {
+          "unii": "44QMW224G4"
         }
       },
       "streptococcus thermophilus (unspecified)": {
@@ -38845,6 +39271,9 @@
           "range_high": null,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "XII14C5FXV"
         }
       },
       "shilajit resin": {
@@ -41443,6 +41872,9 @@
           "notes": "good absorption",
           "range_low": null,
           "range_high": null
+        },
+        "external_ids": {
+          "unii": "BN5IO4652Q"
         }
       }
     },
@@ -41582,7 +42014,10 @@
           "quality": "moderate",
           "notes": "moderate (~40-50%)"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "external_ids": {
+          "unii": "L497I37F0C"
+        }
       }
     },
     "match_rules": {
@@ -41655,7 +42090,10 @@
           "quality": "good",
           "notes": "good (~50-60%)"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "external_ids": {
+          "unii": "NU0OLX06F8"
+        }
       }
     },
     "match_rules": {
@@ -43602,6 +44040,9 @@
           "range_high": 0.8,
           "quality": "good",
           "notes": "Well-absorbed dietary oil with 20-26% GLA content"
+        },
+        "external_ids": {
+          "unii": "F8XAG1755S"
         }
       },
       "borage seed oil (unspecified)": {
@@ -44685,6 +45126,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "4V59G5UW9X"
         }
       }
     },
@@ -45603,6 +46047,9 @@
           "range_high": 0.84,
           "quality": "good",
           "notes": "good (~70%)"
+        },
+        "external_ids": {
+          "unii": "AB6MNQ6J6L"
         }
       }
     },
@@ -47548,6 +47995,9 @@
           "notes": "moderate",
           "range_low": null,
           "range_high": null
+        },
+        "external_ids": {
+          "unii": "L2N7Z24B30"
         }
       },
       "lithium (unspecified)": {
@@ -48221,6 +48671,9 @@
           "range_high": 0.6,
           "quality": "moderate",
           "notes": "moderate"
+        },
+        "external_ids": {
+          "unii": "RU0176QL8I"
         }
       },
       "agmatine (unspecified)": {
@@ -49308,6 +49761,9 @@
           "range_high": 0.65,
           "quality": "moderate",
           "notes": "moderate (~55%)"
+        },
+        "external_ids": {
+          "unii": "8RAS91C36W"
         }
       }
     },
@@ -56724,6 +57180,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "good"
+        },
+        "external_ids": {
+          "unii": "6E5QR5USSP"
         }
       }
     },
@@ -57156,6 +57615,9 @@
           "range_high": null,
           "quality": "good",
           "notes": "dietary fat absorption is generally good"
+        },
+        "external_ids": {
+          "unii": "98HPY76U4W"
         }
       }
     },
@@ -57681,7 +58143,10 @@
           "quality": "moderate",
           "notes": "Oral absorption ~50%, remainder fermented in colon"
         },
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "external_ids": {
+          "unii": "VCQ006KQ1E"
+        }
       }
     },
     "match_rules": {
@@ -59200,6 +59665,9 @@
           "range_high": 0.95,
           "quality": "high",
           "notes": "Lipase-mediated hydrolysis and efficient absorption via lymphatic system"
+        },
+        "external_ids": {
+          "unii": "2UMI9U37CP"
         }
       }
     },
@@ -59252,6 +59720,9 @@
           "range_high": 0.98,
           "quality": "high",
           "notes": "Completely absorbed; enters Krebs cycle directly"
+        },
+        "external_ids": {
+          "unii": "2968PHW8QP"
         }
       }
     },
@@ -59304,6 +59775,9 @@
           "range_high": 0.05,
           "quality": "low",
           "notes": "Extensive first-pass metabolism; glucuronidation limits systemic availability"
+        },
+        "external_ids": {
+          "unii": "731P2LE49E"
         }
       }
     },
@@ -59411,6 +59885,9 @@
           "range_high": 0.15,
           "quality": "low",
           "notes": "Heavily glucuronidated; CYP3A4 inhibition is a pharmacological concern"
+        },
+        "external_ids": {
+          "unii": "HN5425SBF2"
         }
       }
     },
@@ -59465,6 +59942,9 @@
           "range_high": 0.1,
           "quality": "low",
           "notes": "Very poor absorption; mainly excreted renally; accumulates in bone"
+        },
+        "external_ids": {
+          "unii": "6DU9Y533FA"
         }
       }
     },
@@ -59573,6 +60053,9 @@
           "range_high": 0.95,
           "quality": "high",
           "notes": "Efficiently absorbed as triglycerides via lipase hydrolysis"
+        },
+        "external_ids": {
+          "unii": "3W1JG795YI"
         }
       }
     },
@@ -59734,6 +60217,9 @@
           "range_high": 0.95,
           "quality": "high",
           "notes": "Efficiently absorbed as triglycerides"
+        },
+        "external_ids": {
+          "unii": "331KBJ17RK"
         }
       }
     },
@@ -59789,6 +60275,9 @@
           "range_high": 0.9,
           "quality": "high",
           "notes": "Orally well absorbed; rapidly converted in pyrimidine biosynthesis pathway"
+        },
+        "external_ids": {
+          "unii": "61H4T033E5"
         }
       }
     },
@@ -59899,6 +60388,9 @@
           "range_high": 0.95,
           "quality": "high",
           "notes": "Well absorbed as triglyceride via standard lipid absorption pathway"
+        },
+        "external_ids": {
+          "unii": "209B6YPZ4I"
         }
       }
     },
@@ -59950,6 +60442,9 @@
           "range_high": 0.55,
           "quality": "moderate",
           "notes": "Better BBB penetration than CoQ10; absorption improved with fat"
+        },
+        "external_ids": {
+          "unii": "HB6PN45W4J"
         }
       }
     },

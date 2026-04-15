@@ -99,28 +99,29 @@ class UniiCache:
         return {name: self.lookup(name) for name in names}
 
     def lookup_for_iqm_entry(self, canonical_id: str, entry: dict) -> Optional[str]:
-        """Try all IQM fields to resolve a UNII: existing UNII, canonical_id, aliases, form names.
+        """Resolve the PRIMARY (parent-level) UNII for an IQM entry.
 
-        Priority order (cheapest/most-reliable first):
-        1. Already-verified UNII in external_ids.unii or top-level unii
+        IQM identifier hierarchy:
+          Parent level: cui (concept), rxcui (drug mapping), external_ids.unii (representative)
+          Form level:   forms[name].external_ids.unii (form-specific chemical identity)
+
+        This method resolves the PARENT UNII. For form-specific UNIIs,
+        use lookup_for_iqm_form().
+
+        Priority order:
+        1. Already-verified UNII in parent external_ids.unii
         2. Canonical ID as readable name
         3. standard_name field
         4. Aliases (skip CUI codes)
-        5. Form names (dict keys in IQM forms)
-
-        Args:
-            canonical_id: e.g. "vitamin_c"
-            entry: IQM entry dict
+        5. First matching form name (fallback — returns the form UNII as parent)
 
         Returns:
             UNII code or None
         """
-        # 0. Already-verified UNII (360 entries have this — skip lookup entirely)
+        # 0. Already-verified parent UNII
         ext_ids = entry.get("external_ids", {})
         if isinstance(ext_ids, dict) and ext_ids.get("unii"):
             return ext_ids["unii"]
-        if entry.get("unii"):
-            return entry["unii"]
 
         # 1. Canonical ID as readable name
         readable = canonical_id.replace("_", " ")
@@ -142,15 +143,61 @@ class UniiCache:
                 if unii:
                     return unii
 
-        # 4. Form names (dict keys in IQM forms)
+        # 4. Form names (fallback — uses first matching form's UNII)
         forms = entry.get("forms", {})
         if isinstance(forms, dict):
-            for form_name in forms:
+            for form_name, form_data in forms.items():
+                # Check form's own external_ids first
+                if isinstance(form_data, dict):
+                    fext = form_data.get("external_ids", {})
+                    if isinstance(fext, dict) and fext.get("unii"):
+                        return fext["unii"]
+                # Then try cache lookup by form name
                 unii = self.lookup(form_name)
                 if unii:
                     return unii
 
         return None
+
+    def lookup_for_iqm_form(self, form_name: str, form_data: dict) -> Optional[str]:
+        """Resolve the UNII for a specific IQM form (chemical substance level).
+
+        Each form (e.g., "calcium ascorbate", "thiamine mononitrate") is a
+        distinct chemical substance with its own UNII, CAS, and PubChem CID.
+
+        Priority:
+        1. Already-verified form external_ids.unii
+        2. Cache lookup by form name
+
+        Args:
+            form_name: e.g. "calcium ascorbate"
+            form_data: the form's dict with bio_score, absorption, etc.
+
+        Returns:
+            UNII code or None
+        """
+        # 1. Already stored on form
+        if isinstance(form_data, dict):
+            fext = form_data.get("external_ids", {})
+            if isinstance(fext, dict) and fext.get("unii"):
+                return fext["unii"]
+
+        # 2. Cache lookup
+        return self.lookup(form_name)
+
+    def resolve_all_form_uniis(self, entry: dict) -> dict[str, Optional[str]]:
+        """Resolve UNIIs for all forms in an IQM entry.
+
+        Returns {form_name: unii_or_none} for every form.
+        Useful for enrichment matching — when a product ingredient name
+        matches a form, we can confirm identity via UNII.
+        """
+        result = {}
+        forms = entry.get("forms", {})
+        if isinstance(forms, dict):
+            for fname, fdata in forms.items():
+                result[fname] = self.lookup_for_iqm_form(fname, fdata)
+        return result
 
     def _gsrs_search(self, name: str) -> Optional[str]:
         """Search GSRS API for a UNII by substance name."""
