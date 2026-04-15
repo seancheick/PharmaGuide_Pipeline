@@ -3950,7 +3950,6 @@
     "standard_name": "Vitamin E",
     "category": "vitamins",
     "cui": "C0042874",
-    "rxcui": null,
     "forms": {
       "mixed tocopherols": {
         "bio_score": 12,
@@ -4390,7 +4389,6 @@
     "external_ids": {
       "unii": "KP2MW85SSQ"
     },
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": [
       "C0949647"
@@ -4400,7 +4398,6 @@
     "standard_name": "Vitamin K",
     "category": "vitamins",
     "cui": "C0042878",
-    "rxcui": null,
     "forms": {
       "menaquinone-7 (MK-7)": {
         "bio_score": 12,
@@ -4806,7 +4803,6 @@
       "K2VITAL Delta"
     ],
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "Generic vitamin K entry spans K1 and K2 vitamers; keep RxNorm null unless the record is split to a specific vitamer."
   },
   "calcium": {
@@ -5444,7 +5440,6 @@
       "confidence": "high"
     },
     "category_enum": "minerals",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -6439,7 +6434,6 @@
       "confidence": "high"
     },
     "category_enum": "minerals",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -6836,7 +6830,6 @@
     "standard_name": "Slippery Elm",
     "category": "herbs",
     "cui": "C0330532",
-    "rxcui": null,
     "forms": {
       "inner bark powder": {
         "bio_score": 12,
@@ -7772,7 +7765,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "relationships": [
       {
         "type": "category_for",
@@ -8101,7 +8093,6 @@
     "standard_name": "β-Hydroxy β-Methylbutyrate",
     "category": "amino_acids",
     "cui": "C1995592",
-    "rxcui": null,
     "aliases": [
       "HMB",
       "beta-hydroxy-beta-methylbutyrate",
@@ -8292,7 +8283,6 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -8386,7 +8376,6 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -8482,7 +8471,6 @@
       "confidence": "high"
     },
     "category_enum": "enzymes",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -8589,7 +8577,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -8715,7 +8702,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -8785,7 +8771,6 @@
     "category": "herbs",
     "cui": "C0771607",
     "rxcui": "350488",
-    "scientific_name": "Serenoa repens",
     "forms": {
       "liposomal saw palmetto": {
         "bio_score": 12,
@@ -9085,13 +9070,13 @@
       "metabolic_relationships": [],
       "metabolites": []
     },
-    "aliases": []
+    "aliases": [],
+    "notes": "Scientific name: Serenoa repens"
   },
   "stinging_nettle": {
     "standard_name": "Stinging Nettle",
     "category": "herbs",
     "cui": "C1618310",
-    "rxcui": null,
     "forms": {
       "stinging nettle root extract": {
         "bio_score": 11,
@@ -9277,7 +9262,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -10280,7 +10264,6 @@
       "confidence": "high"
     },
     "category_enum": "minerals",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -11097,7 +11080,6 @@
       "last_reviewed_at": "2026-02-27"
     },
     "aliases": [],
-    "last_updated": "2026-02-18",
     "external_ids": {
       "unii": "N9E3X5056Q"
     },
@@ -11989,8 +11971,6 @@
   "pqq": {
     "standard_name": "PQQ (Pyrroloquinoline Quinone)",
     "category": "antioxidants",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "disodium PQQ": {
         "bio_score": 12,
@@ -12117,7 +12097,6 @@
       "pyrroloquinoline quinone"
     ],
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
   },
   "curcumin": {
@@ -12434,7 +12413,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "relationships": [
       {
         "type": "active_in",
@@ -12624,7 +12602,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -12812,7 +12789,6 @@
     "standard_name": "Glutathione Peroxidase",
     "category": "enzymes",
     "cui": "C0017822",
-    "rxcui": null,
     "forms": {
       "glutathione peroxidase enzyme": {
         "bio_score": 4,
@@ -12863,14 +12839,12 @@
       }
     ],
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "probiotics": {
     "standard_name": "Probiotics",
     "category": "probiotics",
     "cui": "C0525033",
-    "rxcui": null,
     "forms": {
       "enteric coated": {
         "bio_score": 14,
@@ -13160,14 +13134,12 @@
       "last_reviewed_at": "2026-02-27"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "prebiotics": {
     "standard_name": "Prebiotics",
     "category": "other",
     "cui": "C2717875",
-    "rxcui": null,
     "forms": {
       "fructooligosaccharides (FOS)": {
         "bio_score": 12,
@@ -13804,7 +13776,6 @@
     "standard_name": "Phosphatidylserine",
     "category": "fatty_acids",
     "cui": "C0301704",
-    "rxcui": null,
     "forms": {
       "sunflower phosphatidylserine": {
         "bio_score": 12,
@@ -14001,7 +13972,6 @@
     "external_ids": {
       "unii": "394XK0IH40"
     },
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -14009,7 +13979,6 @@
     "standard_name": "Phosphatidylinositol",
     "category": "fatty_acids",
     "cui": "C0031621",
-    "rxcui": null,
     "forms": {
       "phosphatidylinositol standard": {
         "bio_score": 8,
@@ -14049,7 +14018,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "taurine": {
@@ -14240,7 +14208,6 @@
       "confidence": "high"
     },
     "category_enum": "amino_acids",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -15705,7 +15672,6 @@
     "standard_name": "L-Glycine",
     "category": "amino_acids",
     "cui": "C0017890",
-    "rxcui": null,
     "forms": {
       "l-glycine powder": {
         "bio_score": 13,
@@ -15746,7 +15712,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -16260,7 +16225,6 @@
     "standard_name": "D-Aspartic Acid",
     "category": "amino_acids",
     "cui": "C0949755",
-    "rxcui": null,
     "forms": {
       "d-aspartic acid powder": {
         "bio_score": 11,
@@ -16748,7 +16712,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -16832,7 +16795,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -17104,7 +17066,6 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -17301,7 +17262,6 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -17330,7 +17290,6 @@
     "standard_name": "Chlorella",
     "category": "other",
     "cui": "C0008190",
-    "rxcui": null,
     "forms": {
       "fermented chlorella": {
         "bio_score": 10,
@@ -17481,7 +17440,6 @@
       "last_reviewed_at": "2026-02-27"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "hyaluronic_acid": {
@@ -17711,7 +17669,6 @@
       }
     },
     "cui": "C0051336",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -18128,7 +18085,6 @@
     "standard_name": "Ashwagandha",
     "category": "herbs",
     "cui": "C0613707",
-    "rxcui": null,
     "forms": {
       "KSM-66 ashwagandha": {
         "bio_score": 11,
@@ -18400,14 +18356,12 @@
       "C2698186"
     ],
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
   },
   "rice_protein": {
     "standard_name": "Rice Protein",
     "category": "proteins",
     "cui": "C3856167",
-    "rxcui": null,
     "forms": {
       "rice protein isolate": {
         "bio_score": 8,
@@ -18474,7 +18428,6 @@
     "standard_name": "Rhodiola",
     "category": "herbs",
     "cui": "C0950013",
-    "rxcui": null,
     "forms": {
       "rhodiola rosea extract (3% rosavins)": {
         "bio_score": 11,
@@ -18581,7 +18534,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "ginkgo": {
@@ -18996,9 +18948,6 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "contains_aliases": [
-      "milk thistle"
-    ],
     "external_ids": {
       "unii": "U946SH95EE"
     },
@@ -19096,7 +19045,6 @@
       "confidence": "high"
     },
     "category_enum": "amino_acids",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -19129,7 +19077,6 @@
     "standard_name": "Collagen",
     "category": "other",
     "cui": "C0009325",
-    "rxcui": null,
     "forms": {
       "collagen tripeptides": {
         "bio_score": 12,
@@ -19318,7 +19265,6 @@
     "external_ids": {
       "unii": "2G86QN327L"
     },
-    "gsrs": null,
     "aliases": [
       "C0017237"
     ]
@@ -19767,7 +19713,6 @@
     "standard_name": "Chondroitin",
     "category": "other",
     "cui": "C0008454",
-    "rxcui": null,
     "forms": {
       "low molecular weight chondroitin": {
         "bio_score": 10,
@@ -19866,7 +19811,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -19874,7 +19818,6 @@
     "standard_name": "Green Tea Extract",
     "category": "antioxidants",
     "cui": "C1704263",
-    "rxcui": null,
     "forms": {
       "green tea phytosome": {
         "bio_score": 10,
@@ -20052,7 +19995,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C1881340"
     ]
@@ -20221,7 +20163,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "relationships": [
       {
         "type": "contains",
@@ -20253,7 +20194,6 @@
     "standard_name": "Red Wine Extract",
     "category": "antioxidants",
     "cui": "C2979647",
-    "rxcui": null,
     "forms": {
       "standardized red wine extract": {
         "bio_score": 9,
@@ -20428,7 +20368,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -21079,9 +21018,6 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "contains_aliases": [
-      "turmeric"
-    ],
     "external_ids": {
       "unii": "856YO1Z64F"
     },
@@ -21812,7 +21748,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -21842,7 +21777,6 @@
     "standard_name": "Digestive Enzymes",
     "category": "enzymes",
     "cui": "C0544420",
-    "rxcui": null,
     "forms": {
       "plant-based enzyme complex": {
         "bio_score": 10,
@@ -22229,7 +22163,6 @@
       "confidence": "high"
     },
     "category_enum": "enzymes",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -22290,7 +22223,6 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -22349,7 +22281,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -22383,8 +22314,6 @@
   "nad_precursors": {
     "standard_name": "NAD+ Precursors",
     "category": "other",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "nicotinamide riboside (NR)": {
         "bio_score": 12,
@@ -23600,7 +23529,6 @@
     "standard_name": "Synephrine",
     "category": "other",
     "cui": "C0039086",
-    "rxcui": null,
     "forms": {
       "synephrine hcl": {
         "bio_score": 7,
@@ -23667,7 +23595,6 @@
     "external_ids": {
       "unii": "PEG5DP7434"
     },
-    "gsrs": null,
     "aliases": []
   },
   "same": {
@@ -23789,8 +23716,6 @@
   "rna_dna": {
     "standard_name": "RNA/DNA (Nucleic Acids)",
     "category": "other",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "nucleic acid complex": {
         "bio_score": 4,
@@ -23924,7 +23849,6 @@
     "standard_name": "Policosanol",
     "category": "fatty_acids",
     "cui": "C0215278",
-    "rxcui": null,
     "forms": {
       "sugar cane policosanol": {
         "bio_score": 7,
@@ -23994,7 +23918,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -24002,7 +23925,6 @@
     "standard_name": "Eriocitrin",
     "category": "antioxidants",
     "cui": "C0757990",
-    "rxcui": null,
     "forms": {
       "eriocitrin extract": {
         "bio_score": 5,
@@ -24106,7 +24028,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -24170,7 +24091,6 @@
       }
     },
     "cui": "C0075197",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24269,7 +24189,6 @@
     "standard_name": "Flavones",
     "category": "antioxidants",
     "cui": "C0016219",
-    "rxcui": null,
     "forms": {
       "mixed flavones": {
         "bio_score": 11,
@@ -24323,7 +24242,6 @@
     "standard_name": "Flavonols",
     "category": "antioxidants",
     "cui": "C0060444",
-    "rxcui": null,
     "forms": {
       "mixed flavonols": {
         "bio_score": 11,
@@ -24402,7 +24320,6 @@
       }
     },
     "cui": "C4742886",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24421,7 +24338,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "4_hydroxyisoleucine": {
@@ -24456,7 +24372,6 @@
       }
     },
     "cui": "C0536390",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24521,8 +24436,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24589,7 +24502,6 @@
       }
     },
     "cui": "C0453952",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24653,8 +24565,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24706,8 +24616,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24726,7 +24634,6 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "dnj_1_deoxynojirimycin": {
@@ -24764,8 +24671,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -24830,7 +24735,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -24897,7 +24801,6 @@
     },
     "category_enum": "amino_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -24975,8 +24878,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25030,8 +24931,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25050,7 +24949,6 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "rb1": {
@@ -25084,7 +24982,6 @@
       }
     },
     "cui": "C0119192",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25148,7 +25045,6 @@
       }
     },
     "cui": "C0074018",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25214,7 +25110,6 @@
       }
     },
     "cui": "C0385181",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25279,7 +25174,6 @@
       }
     },
     "cui": "C0084440",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25344,8 +25238,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25364,7 +25256,6 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "acemannan": {
@@ -25411,7 +25302,6 @@
     },
     "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -25467,7 +25357,6 @@
       }
     },
     "cui": "C1435950",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25486,7 +25375,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "adenosine": {
@@ -25530,7 +25418,6 @@
     },
     "category_enum": "other",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -25597,7 +25484,6 @@
       }
     },
     "cui": "C1122015",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25636,7 +25522,6 @@
     "severity_level": "none",
     "category": "herbs",
     "cui": "C0002062",
-    "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
     "description": "Broad class of nitrogen-containing plant compounds. When listed generically on labels, refers to total alkaloid fraction of an herbal extract (goldenseal, barberry, cat's claw, etc.).",
@@ -25715,7 +25600,6 @@
       }
     },
     "cui": "C1720954",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -25779,7 +25663,6 @@
     },
     "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -25846,7 +25729,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -25883,7 +25765,6 @@
     "severity_level": "none",
     "category": "antioxidants",
     "cui": "C0003161",
-    "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
     "description": "Flavonoid pigments (glycosides of anthocyanidins) responsible for red/blue/purple colors in berries. Generic catch-all when source berry is not specified on label.",
@@ -25934,7 +25815,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "cyanidin_3_glucoside": {
@@ -25972,7 +25852,6 @@
       }
     },
     "cui": "C3489523",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26047,7 +25926,6 @@
       }
     },
     "cui": "C0003174",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26066,7 +25944,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "apigenin": {
@@ -26107,7 +25984,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -26175,7 +26051,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -26247,7 +26122,6 @@
       }
     },
     "cui": "C0174906",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26319,7 +26193,6 @@
       }
     },
     "cui": "C1871707",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26338,7 +26211,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "aucubin": {
@@ -26372,7 +26244,6 @@
       }
     },
     "cui": "C0052660",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26439,7 +26310,6 @@
       }
     },
     "cui": "C0600766",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26458,7 +26328,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "betulinic_acid": {
@@ -26493,7 +26362,6 @@
       }
     },
     "cui": "C0053530",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26570,7 +26438,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -26854,8 +26721,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26909,7 +26774,6 @@
       }
     },
     "cui": "C0175000",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -26990,7 +26854,6 @@
       }
     },
     "cui": "C0008240",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27009,7 +26872,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "chlorophyll": {
@@ -27099,7 +26961,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -27164,7 +27025,6 @@
       }
     },
     "cui": "C0756158",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27231,7 +27091,6 @@
       }
     },
     "cui": "C0056848",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27249,7 +27108,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "daidzein": {
@@ -27287,7 +27145,6 @@
       }
     },
     "cui": "C0057090",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27361,7 +27218,6 @@
       }
     },
     "cui": "C0057304",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27432,7 +27288,6 @@
       }
     },
     "cui": "C0012497",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27503,7 +27358,6 @@
       }
     },
     "cui": "C0013495",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27521,7 +27375,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "ellagic_acid": {
@@ -27566,7 +27419,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -27629,7 +27481,6 @@
       }
     },
     "cui": "C0013982",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27702,7 +27553,6 @@
       }
     },
     "cui": "C0598685",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27720,7 +27570,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "eugenol": {
@@ -27770,7 +27619,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -27825,7 +27673,6 @@
       }
     },
     "cui": "C0015684",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -27892,7 +27739,6 @@
     },
     "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -27984,7 +27830,6 @@
       }
     },
     "cui": "C0225326",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28011,7 +27856,6 @@
     "severity_level": "none",
     "category": "antioxidants",
     "cui": "C0596577",
-    "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
     "description": "Generic polyphenol term covering 6+ flavonoid subclasses; see specific entries for evidence-based scoring",
@@ -28088,7 +27932,6 @@
       }
     },
     "cui": "C0060656",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28166,7 +28009,6 @@
       }
     },
     "cui": "C0917964",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28184,7 +28026,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "fucoidan": {
@@ -28232,7 +28073,6 @@
       }
     },
     "cui": "C0060794",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28250,7 +28090,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "galactolipids": {
@@ -28288,7 +28127,6 @@
       }
     },
     "cui": "C0060960",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28349,7 +28187,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -28426,7 +28263,6 @@
       }
     },
     "cui": "C1143816",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28496,7 +28332,6 @@
       }
     },
     "cui": "C3180310",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28514,7 +28349,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "genistein": {
@@ -28565,7 +28399,6 @@
     },
     "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -28642,7 +28475,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -28698,7 +28530,6 @@
       }
     },
     "cui": "C0017767",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28716,7 +28547,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "glycitein": {
@@ -28751,7 +28581,6 @@
       }
     },
     "cui": "C0253391",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28822,7 +28651,6 @@
       }
     },
     "cui": "C0905527",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -28840,7 +28668,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "huperzine_a": {
@@ -28890,7 +28717,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -28976,7 +28802,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29032,7 +28857,6 @@
       }
     },
     "cui": "C1172851",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -29121,7 +28945,6 @@
     },
     "category_enum": "fibers",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29149,7 +28972,6 @@
     "severity_level": "none",
     "category": "antioxidants",
     "cui": "C0022179",
-    "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
     "description": "Generic soy isoflavone class; catch-all for non-individualized label claims (NovaSOY, SoyLife)",
@@ -29211,7 +29033,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C4076257"
     ]
@@ -29251,7 +29072,6 @@
       }
     },
     "cui": "C0206359",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -29269,7 +29089,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C0124209"
     ]
@@ -29315,7 +29134,6 @@
       }
     },
     "cui": "C5789747",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -29333,7 +29151,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "ketosteroids": {
@@ -29367,7 +29184,6 @@
       }
     },
     "cui": "C0022640",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -29385,7 +29201,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "lauric_acid": {
@@ -29428,7 +29243,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29555,7 +29369,6 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29677,7 +29490,6 @@
       }
     },
     "cui": "C0023206",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -29702,7 +29514,6 @@
     "severity_level": "none",
     "category": "antioxidants",
     "cui": "C0064971",
-    "rxcui": null,
     "source": "botanical_extract",
     "priority": "high",
     "description": "Polyphenolic plant compounds from flaxseed, sesame, and spruce with phytoestrogenic and cardiovascular effects",
@@ -29771,7 +29582,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "linalool": {
@@ -29817,7 +29627,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29881,7 +29690,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -29999,7 +29807,6 @@
       }
     },
     "cui": "C0065264",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30066,7 +29873,6 @@
       }
     },
     "cui": "C0604747",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30131,7 +29937,6 @@
       }
     },
     "cui": "C2349971",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30195,7 +30000,6 @@
     },
     "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -30252,8 +30056,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30448,7 +30250,6 @@
       }
     },
     "cui": "C0031866",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30549,7 +30350,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -30581,7 +30381,6 @@
     "severity_level": "none",
     "category": "antioxidants",
     "cui": "C0071649",
-    "rxcui": null,
     "description": "Broad umbrella class of plant secondary metabolites (flavonoids, tannins, stilbenes, phenolic acids)",
     "dosage_importance": 0.5,
     "forms": {
@@ -30660,7 +30459,6 @@
       }
     },
     "cui": "C0032594",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30714,7 +30512,6 @@
       }
     },
     "cui": "C0919289",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30732,7 +30529,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "protein": {
@@ -30787,7 +30583,6 @@
       }
     },
     "cui": "C0033684",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30805,7 +30600,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "puerarin": {
@@ -30843,7 +30637,6 @@
       }
     },
     "cui": "C0072591",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30905,8 +30698,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -30967,7 +30758,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -31036,7 +30826,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -31116,7 +30905,6 @@
       }
     },
     "cui": "C0654158",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -31154,7 +30942,6 @@
     "severity_level": "none",
     "category": "herbs",
     "cui": "C0036189",
-    "rxcui": null,
     "description": "Generic glycoside class (steroidal + triterpenoid) from diverse botanicals",
     "dosage_importance": 0.5,
     "forms": {
@@ -31235,8 +31022,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -31336,7 +31121,6 @@
     },
     "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -31436,7 +31220,6 @@
       }
     },
     "cui": "C0036847",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -31490,8 +31273,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -31596,8 +31377,6 @@
       "confidence": "high"
     },
     "category_enum": "minerals",
-    "cui_note": null,
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -31631,7 +31410,6 @@
     "severity_level": "none",
     "category": "antioxidants",
     "cui": "C1449691",
-    "rxcui": null,
     "description": "Polyphenol class (hydrolyzable + condensed); astringent plant compounds",
     "dosage_importance": 0.5,
     "forms": {
@@ -31723,7 +31501,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -31837,8 +31614,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -31894,7 +31669,6 @@
       }
     },
     "cui": "C5789744",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -31950,7 +31724,6 @@
       }
     },
     "cui": "C0041113",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -32014,7 +31787,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -32078,7 +31850,6 @@
       }
     },
     "cui": "C2002853",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -32143,7 +31914,6 @@
       }
     },
     "cui": "C0078229",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -32209,7 +31979,6 @@
       }
     },
     "cui": "C1314790",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -32276,7 +32045,6 @@
       }
     },
     "cui": "C0078388",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -32344,7 +32112,6 @@
       }
     },
     "cui": "C0028910",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -32401,7 +32168,6 @@
       }
     },
     "cui": "C0043318",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -32419,14 +32185,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "nicotinamide_riboside": {
     "standard_name": "Nicotinamide Riboside",
     "category": "other",
     "cui": "C4476285",
-    "rxcui": null,
     "forms": {
       "niagen (nicotinamide riboside chloride)": {
         "bio_score": 13,
@@ -32572,7 +32336,6 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "rxcui_note": null,
     "relationships": [
       {
         "type": "form_of",
@@ -32612,7 +32375,6 @@
     "standard_name": "Pterostilbene",
     "category": "antioxidants",
     "cui": "C0664965",
-    "rxcui": null,
     "forms": {
       "trans-pterostilbene": {
         "bio_score": 15,
@@ -32675,7 +32437,6 @@
     "standard_name": "Mullein",
     "category": "herbs",
     "cui": "C0885014",
-    "rxcui": null,
     "forms": {
       "mullein leaf extract": {
         "bio_score": 8,
@@ -32758,7 +32519,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "goldenseal": {
@@ -32844,7 +32604,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -32875,7 +32634,6 @@
     "standard_name": "Sarsaparilla",
     "category": "herbs",
     "cui": "C0771635",
-    "rxcui": null,
     "forms": {
       "sarsaparilla root extract": {
         "bio_score": 7,
@@ -32937,7 +32695,6 @@
     "external_ids": {
       "unii": "2H1576D5WG"
     },
-    "gsrs": null,
     "aliases": []
   },
   "nadh": {
@@ -33041,7 +32798,6 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -33073,7 +32829,6 @@
   "larch_arabinogalactan": {
     "standard_name": "Larch Arabinogalactan",
     "category": "fibers",
-    "cui": null,
     "rxcui": "1425353",
     "forms": {
       "larch arabinogalactan powder": {
@@ -33124,7 +32879,6 @@
       "confidence": "high"
     },
     "category_enum": "fibers",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -33213,7 +32967,6 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -33240,7 +32993,6 @@
     "standard_name": "Deer Antler Velvet",
     "category": "functional_foods",
     "cui": "C0222040",
-    "rxcui": null,
     "forms": {
       "deer antler velvet extract": {
         "bio_score": 4,
@@ -33320,7 +33072,6 @@
     "standard_name": "Gymnema Sylvestre",
     "category": "herbs",
     "cui": "C0996922",
-    "rxcui": null,
     "forms": {
       "gymnema leaf extract": {
         "bio_score": 9,
@@ -33418,7 +33169,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "pregnenolone": {
@@ -33605,7 +33355,6 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -33700,7 +33449,6 @@
   "alpha_amylase": {
     "standard_name": "Alpha-Amylase",
     "cui": "C0002712",
-    "rxcui": null,
     "forms": {
       "alpha-amylase enzyme": {
         "bio_score": 12,
@@ -33801,7 +33549,6 @@
       "confidence": "high"
     },
     "category_enum": "minerals",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -33870,7 +33617,6 @@
       "confidence": "high"
     },
     "category_enum": "amino_acids",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -33951,8 +33697,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -34066,7 +33810,6 @@
     "standard_name": "5-HTP",
     "category": "amino_acids",
     "cui": "C5815882",
-    "rxcui": null,
     "forms": {
       "5-htp extract": {
         "bio_score": 11,
@@ -34139,7 +33882,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -34574,7 +34316,6 @@
     "standard_name": "Lion's Mane",
     "category": "herbs",
     "cui": "C6011652",
-    "rxcui": null,
     "forms": {
       "lions mane fruiting body": {
         "bio_score": 8,
@@ -34666,14 +34407,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "bacopa": {
     "standard_name": "Bacopa Monnieri",
     "category": "herbs",
     "cui": "C1653429",
-    "rxcui": null,
     "forms": {
       "bacosides 45%": {
         "bio_score": 9,
@@ -34796,7 +34535,6 @@
     "standard_name": "Reishi",
     "category": "herbs",
     "cui": "C0752326",
-    "rxcui": null,
     "forms": {
       "reishi fruiting body": {
         "bio_score": 9,
@@ -34893,7 +34631,6 @@
     "standard_name": "Maitake",
     "category": "herbs",
     "cui": "C3486792",
-    "rxcui": null,
     "forms": {
       "maitake fruiting body": {
         "bio_score": 8,
@@ -35001,7 +34738,6 @@
     "standard_name": "Shiitake",
     "category": "herbs",
     "cui": "C3826070",
-    "rxcui": null,
     "forms": {
       "shiitake fruiting body": {
         "bio_score": 8,
@@ -35084,14 +34820,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "turkey_tail": {
     "standard_name": "Turkey Tail",
     "category": "herbs",
     "cui": "C6011676",
-    "rxcui": null,
     "forms": {
       "turkey tail fruiting body": {
         "bio_score": 8,
@@ -35177,14 +34911,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "chaga": {
     "standard_name": "Chaga",
     "category": "herbs",
     "cui": "C0697125",
-    "rxcui": null,
     "forms": {
       "chaga sclerotium": {
         "bio_score": 7,
@@ -35267,7 +34999,6 @@
     },
     "cui_note": "No UMLS CUI established for Inonotus obliquus as a supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "cordyceps": {
@@ -35370,7 +35101,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -35398,7 +35128,6 @@
     "standard_name": "Maca",
     "category": "herbs",
     "cui": "C0872905",
-    "rxcui": null,
     "forms": {
       "gelatinized maca": {
         "bio_score": 13,
@@ -35495,14 +35224,12 @@
     "aliases": [
       "Lepidium meyenii"
     ],
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "mct_oil": {
     "standard_name": "MCT Oil",
     "category": "fatty_acids",
     "cui": "C0361633",
-    "rxcui": null,
     "forms": {
       "mct oil c8/c10": {
         "bio_score": 13,
@@ -35593,7 +35320,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "cla": {
@@ -35690,7 +35416,6 @@
       "confidence": "high"
     },
     "category_enum": "fatty_acids",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -35719,7 +35444,6 @@
     "standard_name": "Psyllium",
     "category": "fibers",
     "cui": "C0033979",
-    "rxcui": null,
     "forms": {
       "psyllium husk powder": {
         "bio_score": 11,
@@ -35800,7 +35524,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -35808,7 +35531,6 @@
     "standard_name": "Beta-Glucan",
     "category": "fibers",
     "cui": "C1134651",
-    "rxcui": null,
     "forms": {
       "beta-glucan": {
         "bio_score": 8,
@@ -36063,17 +35785,12 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-27"
     },
-    "contains_aliases": [
-      "lactobacillus acidophilus",
-      "l. acidophilus"
-    ],
     "external_ids": {
       "unii": "1PRR1V42V5"
     },
@@ -36096,7 +35813,6 @@
     "standard_name": "Bifidobacterium Lactis",
     "category": "probiotics",
     "cui": "C1001866",
-    "rxcui": null,
     "forms": {
       "bifidobacterium lactis hn019": {
         "bio_score": 15,
@@ -36463,7 +36179,6 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -36605,7 +36320,6 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -36738,7 +36452,6 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -36841,7 +36554,6 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -36978,7 +36690,6 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -37006,7 +36717,6 @@
     "standard_name": "Saccharomyces Boulardii",
     "category": "probiotics",
     "cui": "C0772093",
-    "rxcui": null,
     "forms": {
       "saccharomyces boulardii cncm i-745": {
         "bio_score": 15,
@@ -37071,7 +36781,6 @@
       "last_reviewed_at": "2026-02-27"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C3640820"
     ]
@@ -37153,7 +36862,6 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -37232,7 +36940,6 @@
       "confidence": "high"
     },
     "category_enum": "probiotics",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -37259,7 +36966,6 @@
     "standard_name": "Feverfew",
     "category": "herbs",
     "cui": "C0376266",
-    "rxcui": null,
     "forms": {
       "feverfew extract (parthenolide)": {
         "bio_score": 11,
@@ -37375,8 +37081,6 @@
   "grass_fed_butter_powder": {
     "standard_name": "Grass-Fed Butter Powder",
     "category": "functional_foods",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "grass-fed butter powder": {
         "bio_score": 7,
@@ -37417,14 +37121,12 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "wheatgrass": {
     "standard_name": "Wheatgrass",
     "category": "functional_foods",
     "cui": "C3827474",
-    "rxcui": null,
     "forms": {
       "wheatgrass juice powder": {
         "bio_score": 7,
@@ -37487,8 +37189,6 @@
   "goat_whey_protein": {
     "standard_name": "Goat Whey Protein",
     "category": "proteins",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "fermented goat whey protein": {
         "bio_score": 8,
@@ -37536,9 +37236,7 @@
   "gamma_butyrobetaine_ethyl_ester": {
     "standard_name": "Gamma-Butyrobetaine Ethyl Ester (GBB)",
     "category": "amino_acids",
-    "cui": null,
     "cui_note": "No exact UMLS concept for gamma-butyrobetaine ethyl ester; parent GBB is C0061030 but this is the ester prodrug form.",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept; not an approved drug substance.",
     "forms": {
       "gbb ethyl ester hcl": {
@@ -37828,7 +37526,6 @@
       "confidence": "high"
     },
     "category_enum": "minerals",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -37914,7 +37611,6 @@
     "standard_name": "Alpha GPC",
     "category": "other",
     "cui": "C5762292",
-    "rxcui": null,
     "aliases": [
       "Choline alfoscerate",
       "alpha-glyceryl phosphoryl choline"
@@ -37982,7 +37678,6 @@
     "standard_name": "Branched Chain Amino Acids",
     "category": "amino_acids",
     "cui": "C0359316",
-    "rxcui": null,
     "forms": {
       "bcaa 2:1:1": {
         "bio_score": 15,
@@ -38131,14 +37826,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "docosapentaenoic_acid_dpa": {
     "standard_name": "Docosapentaenoic Acid (DPA)",
     "category": "fatty_acids",
     "cui": "C0058624",
-    "rxcui": null,
     "forms": {
       "docosapentaenoic acid dpa (standard)": {
         "bio_score": 10,
@@ -38186,7 +37879,6 @@
     "standard_name": "Omega-6 Fatty Acids",
     "category": "fatty_acids",
     "cui": "C5918245",
-    "rxcui": null,
     "forms": {
       "omega 6 fatty acids (standard)": {
         "bio_score": 10,
@@ -38246,7 +37938,6 @@
     "standard_name": "Omega-9 Fatty Acids",
     "category": "fatty_acids",
     "cui": "C4056511",
-    "rxcui": null,
     "forms": {
       "omega 9 fatty acids (standard)": {
         "bio_score": 10,
@@ -38289,14 +37980,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "omega_7_fatty_acids": {
     "standard_name": "Omega-7 Fatty Acids",
     "category": "fatty_acids",
     "cui": "C4056512",
-    "rxcui": null,
     "forms": {
       "omega 7 fatty acids (standard)": {
         "bio_score": 10,
@@ -38341,8 +38030,6 @@
   "other_fatty_acids": {
     "standard_name": "Other Fatty Acids",
     "category": "fatty_acids",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "other fatty acids (standard)": {
         "bio_score": 10,
@@ -38388,8 +38075,6 @@
   "epa_dha": {
     "standard_name": "EPA/DHA",
     "category": "fatty_acids",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "epa dha (standard)": {
         "bio_score": 10,
@@ -38450,7 +38135,6 @@
     "standard_name": "D-Beta-Hydroxybutyrate (BHB)",
     "category": "other",
     "cui": "C0106006",
-    "rxcui": null,
     "forms": {
       "d beta hydroxybutyrate bhb (standard)": {
         "bio_score": 10,
@@ -38555,7 +38239,6 @@
     },
     "category_enum": "other",
     "cui_note": "Mapped to taurursodiol, the closest ingredient-level UMLS concept for TUDCA.",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -38596,7 +38279,6 @@
     "standard_name": "Probiotic (Unspecified)",
     "category": "probiotics",
     "cui": "C0525033",
-    "rxcui": null,
     "forms": {
       "probiotic unspecified (standard)": {
         "bio_score": 10,
@@ -38817,7 +38499,6 @@
         }
       }
     },
-    "rxcui": null,
     "match_rules": {
       "priority": 1,
       "match_mode": "alias_and_fuzzy",
@@ -38995,7 +38676,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -39136,7 +38816,6 @@
         }
       }
     },
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -39153,7 +38832,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "shilajit": {
@@ -39295,7 +38973,6 @@
         }
       }
     },
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -39433,7 +39110,6 @@
         }
       }
     },
-    "rxcui": null,
     "match_rules": {
       "priority": 1,
       "match_mode": "alias_and_fuzzy",
@@ -39456,7 +39132,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C0060207"
     ]
@@ -39567,7 +39242,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -39694,7 +39368,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -39802,7 +39475,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -39919,7 +39591,6 @@
         }
       }
     },
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -39937,7 +39608,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C0872889"
     ]
@@ -40019,7 +39689,6 @@
         }
       }
     },
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -40039,8 +39708,7 @@
       "Bergavit 40",
       "C0725330"
     ],
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "guava_leaf": {
     "standard_name": "Guava Leaf Extract",
@@ -40119,7 +39787,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -40300,7 +39967,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -40461,7 +40127,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -40604,7 +40269,6 @@
     },
     "notes": "Skin lipids that support moisture barrier. Phytoceramides from plants are well-absorbed.",
     "cui": "C0007745",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -40711,7 +40375,6 @@
     },
     "notes": "Plant polyphenols that support vitamin C activity and vascular health.",
     "cui": "C0005492",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -40728,8 +40391,7 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "silk_amino_acids": {
     "standard_name": "Silk Amino Acids",
@@ -40814,7 +40476,6 @@
     },
     "category_enum": "proteins",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -40987,8 +40648,6 @@
       }
     },
     "notes": "Nutrient-dense organ meat extracts. Grass-fed sources preferred for quality.",
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -41111,7 +40770,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -41206,7 +40864,6 @@
     },
     "notes": "Sustainable omega-3 source very high in DHA. Good alternative to fish oil.",
     "cui": "C4074378",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -41291,7 +40948,6 @@
     },
     "notes": "Fish oil from tuna, high in DHA. Check for mercury testing/purification.",
     "cui": "C1509762",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -41421,7 +41077,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -41569,7 +41224,6 @@
     },
     "notes": "New Zealand honey with methylglyoxal (MGO) antibacterial activity. UMF/MGO rating indicates potency. Higher ratings = more therapeutic.",
     "cui": "C2347055",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -41845,7 +41499,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -41914,7 +41567,6 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -41983,7 +41635,6 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -42059,7 +41710,6 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -42124,7 +41774,6 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -42151,7 +41800,6 @@
     "standard_name": "Flaxseed",
     "category": "functional_foods",
     "cui": "C0995001",
-    "rxcui": null,
     "forms": {
       "flaxseed oil": {
         "bio_score": 10,
@@ -42266,13 +41914,7 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "contains_aliases": [
-      "flax",
-      "flaxseed",
-      "linseed"
-    ],
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "chamomile": {
@@ -42329,7 +41971,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -42357,7 +41998,6 @@
     "standard_name": "Lemon Balm",
     "category": "herbs",
     "cui": "C0885571",
-    "rxcui": null,
     "forms": {
       "lemon balm extract": {
         "bio_score": 8,
@@ -42415,14 +42055,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "olive_leaf": {
     "standard_name": "Olive Leaf",
     "category": "herbs",
     "cui": "C1364955",
-    "rxcui": null,
     "forms": {
       "olive leaf extract standardized": {
         "bio_score": 10,
@@ -42549,7 +42187,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "oregano": {
@@ -42670,7 +42307,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -42698,7 +42334,6 @@
     "standard_name": "Rose Hips",
     "category": "herbs",
     "cui": "C0772037",
-    "rxcui": null,
     "forms": {
       "rose hips extract": {
         "bio_score": 8,
@@ -42751,14 +42386,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "aliases": [],
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "white_willow_bark": {
     "standard_name": "White Willow Bark",
     "category": "herbs",
     "cui": "C0936557",
-    "rxcui": null,
     "forms": {
       "white willow bark standardized": {
         "bio_score": 10,
@@ -42847,7 +42480,6 @@
     "standard_name": "Astragalus",
     "category": "herbs",
     "cui": "C0330845",
-    "rxcui": null,
     "forms": {
       "astragalus extract": {
         "bio_score": 10,
@@ -42894,7 +42526,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "magnolia_bark": {
@@ -42962,7 +42593,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "relationships": [],
     "data_quality": {
       "completeness": 1.0,
@@ -42990,7 +42620,6 @@
     "standard_name": "Dandelion",
     "category": "herbs",
     "cui": "C0440015",
-    "rxcui": null,
     "forms": {
       "dandelion extract": {
         "bio_score": 6,
@@ -43059,7 +42688,6 @@
     "standard_name": "Passionflower",
     "category": "herbs",
     "cui": "C0330470",
-    "rxcui": null,
     "forms": {
       "passionflower extract": {
         "bio_score": 8,
@@ -43163,7 +42791,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -43253,7 +42880,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -43331,7 +42957,6 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -43403,7 +43028,6 @@
       "confidence": "high"
     },
     "category_enum": "functional_foods",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -43494,7 +43118,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -43559,7 +43182,6 @@
       "exclusions": []
     },
     "category_enum": "minerals",
-    "rxcui_note": null,
     "data_quality": {
       "review_status": "validated",
       "completeness": 0.7,
@@ -43586,7 +43208,6 @@
     "category": "amino_acids",
     "cui": "C0031453",
     "rxcui": "8156",
-    "rxcui_note": null,
     "forms": {
       "l-phenylalanine base": {
         "bio_score": 8,
@@ -43704,7 +43325,6 @@
     "standard_name": "Tongkat Ali",
     "category": "herbs",
     "cui": "C5781027",
-    "rxcui": null,
     "forms": {
       "tongkat ali root extract": {
         "bio_score": 10,
@@ -43817,7 +43437,6 @@
     "standard_name": "Gotu Kola",
     "category": "herbs",
     "cui": "C0772382",
-    "rxcui": null,
     "forms": {
       "gotu kola aerial extract": {
         "bio_score": 9,
@@ -43890,14 +43509,12 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "immunoglobulin": {
     "standard_name": "Immunoglobulin",
     "category": "proteins",
     "cui": "C0020852",
-    "rxcui": null,
     "forms": {
       "immunoglobulin protein isolate": {
         "bio_score": 11,
@@ -44028,7 +43645,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "UMLS CUI for Borage Seed Oil",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -44054,8 +43670,6 @@
   "herring_roe_extract": {
     "standard_name": "Herring Roe Extract",
     "category": "fatty_acids",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "herring roe extract": {
         "bio_score": 13,
@@ -44126,7 +43740,6 @@
     "standard_name": "Butterbur (Petasites hybridus)",
     "category": "herbs",
     "cui": "C0937904",
-    "rxcui": null,
     "forms": {
       "PA-free butterbur extract (Petadolex)": {
         "bio_score": 7,
@@ -44460,7 +44073,6 @@
     "standard_name": "Celadrin",
     "category": "fatty_acids",
     "cui": "C5390919",
-    "rxcui": null,
     "forms": {
       "celadrin (unspecified)": {
         "bio_score": 8,
@@ -44499,7 +44111,6 @@
     },
     "category_enum": "fatty_acids",
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -44507,7 +44118,6 @@
     "standard_name": "Green-Lipped Mussel",
     "category": "functional_foods",
     "cui": "C0873021",
-    "rxcui": null,
     "forms": {
       "green-lipped mussel oil": {
         "bio_score": 7,
@@ -44552,14 +44162,12 @@
       "green lipped mussel"
     ],
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
   },
   "lactoferrin": {
     "standard_name": "Lactoferrin",
     "category": "proteins",
     "cui": "C0022942",
-    "rxcui": null,
     "forms": {
       "lactoferrin (unspecified)": {
         "bio_score": 7,
@@ -44599,7 +44207,6 @@
     },
     "category_enum": "proteins",
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -44766,7 +44373,6 @@
     "standard_name": "Phosphatidic Acid",
     "category": "fatty_acids",
     "cui": "C0031610",
-    "rxcui": null,
     "forms": {
       "phosphatidic acid (unspecified)": {
         "bio_score": 9,
@@ -44902,7 +44508,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -44957,7 +44562,6 @@
     "standard_name": "Calanus Oil",
     "category": "fatty_acids",
     "cui": "C3709450",
-    "rxcui": null,
     "forms": {
       "calanus oil": {
         "bio_score": 10,
@@ -45005,7 +44609,6 @@
     "standard_name": "Perilla Oil",
     "category": "fatty_acids",
     "cui": "C0070421",
-    "rxcui": null,
     "forms": {
       "perilla seed oil": {
         "bio_score": 10,
@@ -45052,7 +44655,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "argan_oil": {
@@ -45096,7 +44698,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -45122,8 +44723,6 @@
   "pgx_fiber": {
     "standard_name": "PGX (PolyGlycopleX)",
     "category": "fibers",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "PGX fiber": {
         "bio_score": 8,
@@ -45211,7 +44810,6 @@
     },
     "category_enum": "other",
     "cui_note": "Corrected from inositol hexaphosphate-polyethylene glycol concept to phytic acid / IP6 ingredient concept.",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -45272,7 +44870,6 @@
     "standard_name": "Ahiflower Seed Oil",
     "category": "fatty_acids",
     "cui": "",
-    "rxcui": null,
     "forms": {
       "cold-pressed ahiflower seed oil": {
         "bio_score": 7,
@@ -45333,7 +44930,6 @@
     "cui_status": "no_confirmed_umls_match",
     "cui_note": "No confirmed exact UMLS concept found for Ahiflower seed oil.",
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -45534,7 +45130,6 @@
     "standard_name": "Common Bean Extract",
     "category": "herbs",
     "cui": "",
-    "rxcui": null,
     "forms": {
       "white kidney bean extract": {
         "bio_score": 7,
@@ -45585,7 +45180,6 @@
     "cui_status": "no_confirmed_umls_match",
     "cui_note": "No confirmed exact UMLS concept found for common bean extract.",
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -45657,7 +45251,6 @@
     "standard_name": "Horsetail",
     "category": "herbs",
     "cui": "C5564703",
-    "rxcui": null,
     "forms": {
       "horsetail extract (unspecified)": {
         "bio_score": 7,
@@ -45860,7 +45453,6 @@
     "standard_name": "Brown Kelp",
     "category": "herbs",
     "cui": "",
-    "rxcui": null,
     "forms": {
       "brown kelp powder": {
         "bio_score": 7,
@@ -45919,7 +45511,6 @@
     "cui_status": "no_confirmed_umls_match",
     "cui_note": "No confirmed exact UMLS concept found for brown kelp.",
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
@@ -45927,7 +45518,6 @@
     "standard_name": "Raspberry Ketones",
     "category": "other",
     "cui": "C0616813",
-    "rxcui": null,
     "forms": {
       "raspberry ketones": {
         "bio_score": 3,
@@ -45973,8 +45563,7 @@
     ],
     "external_ids": {
       "unii": "7QY1MH15BG"
-    },
-    "gsrs": null
+    }
   },
   "succinic_acid": {
     "standard_name": "Succinic Acid",
@@ -46016,7 +45605,6 @@
       "confidence": "high"
     },
     "category_enum": "other",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -46206,7 +45794,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -46270,7 +45857,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -46297,7 +45883,6 @@
     "standard_name": "Chia Protein",
     "category": "proteins",
     "cui": "C0910420",
-    "rxcui": null,
     "forms": {
       "chia protein": {
         "bio_score": 8,
@@ -46345,7 +45930,6 @@
     "standard_name": "Pea Protein",
     "category": "proteins",
     "cui": "C3535674",
-    "rxcui": null,
     "forms": {
       "pea protein isolate": {
         "bio_score": 8,
@@ -46428,7 +46012,6 @@
     "standard_name": "Flower Pollen Extract",
     "category": "herbs",
     "cui": "C4073752",
-    "rxcui": null,
     "forms": {
       "g63 flower pollen extract": {
         "bio_score": 10,
@@ -46493,14 +46076,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "amla": {
     "standard_name": "Amla (Phyllanthus emblica)",
     "category": "herbs",
     "cui": "C4733748",
-    "rxcui": null,
     "forms": {
       "amla extract (standardized)": {
         "bio_score": 11,
@@ -46632,7 +46213,6 @@
     "standard_name": "Fo-Ti (Polygonum multiflorum)",
     "category": "herbs",
     "cui": "C1676047",
-    "rxcui": null,
     "forms": {
       "processed fo-ti root extract": {
         "bio_score": 8,
@@ -46726,14 +46306,12 @@
       "last_reviewed_at": "2026-02-28"
     },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "dong_quai": {
     "standard_name": "Dong Quai (Angelica sinensis)",
     "category": "herbs",
     "cui": "C0950081",
-    "rxcui": null,
     "forms": {
       "dong quai root extract (standardized)": {
         "bio_score": 10,
@@ -46829,8 +46407,7 @@
       "last_reviewed_at": "2026-02-28"
     },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "rosemary": {
     "standard_name": "Rosemary",
@@ -46951,7 +46528,6 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "rxcui_note": null,
     "external_ids": {
       "unii": "IJ67X351P9"
     },
@@ -46972,7 +46548,6 @@
     "standard_name": "Holy Basil",
     "category": "herbs",
     "cui": "C4294499",
-    "rxcui": null,
     "forms": {
       "holy basil hydroethanolic extract": {
         "bio_score": 11,
@@ -47068,7 +46643,6 @@
     },
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C1483721"
     ]
@@ -47077,7 +46651,6 @@
     "standard_name": "Chinese Skullcap",
     "category": "herbs",
     "cui": "C4733783",
-    "rxcui": null,
     "forms": {
       "chinese skullcap hydroethanolic extract": {
         "bio_score": 11,
@@ -47174,7 +46747,6 @@
     },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "irish_sea_moss": {
@@ -47274,7 +46846,6 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-26"
     },
-    "rxcui_note": null,
     "aliases": [
       "Chondrus crispus"
     ],
@@ -47297,7 +46868,6 @@
     "standard_name": "Phosphatidylethanolamine",
     "category": "other",
     "cui": "C1450468",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "phosphatidylethanolamine from soy": {
@@ -47398,7 +46968,6 @@
     "category": "vitamins",
     "cui": "C0212517",
     "rxcui": "19143",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -47499,7 +47068,6 @@
     "category": "herbs",
     "cui": "C1123034",
     "rxcui": "236953",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -47583,8 +47151,6 @@
   "algae_oil": {
     "standard_name": "Algae Oil",
     "category": "fatty_acids",
-    "cui": null,
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -47665,7 +47231,6 @@
     "category": "other",
     "cui": "C1178459",
     "rxcui": "360262",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -47770,7 +47335,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for supplement-specific labeling form",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [
@@ -48121,7 +47685,6 @@
     "standard_name": "Hawthorn (Crataegus)",
     "category": "herbs",
     "cui": "C0885252",
-    "rxcui": null,
     "forms": {
       "hawthorn berry extract": {
         "bio_score": 7,
@@ -48233,7 +47796,6 @@
       "Crataegus"
     ],
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
   },
   "capsaicin": {
@@ -48919,7 +48481,6 @@
     "standard_name": "Devil's Claw (Harpagophytum procumbens)",
     "category": "herbs",
     "cui": "C0771537",
-    "rxcui": null,
     "forms": {
       "devil's claw extract": {
         "bio_score": 7,
@@ -49016,14 +48577,12 @@
       "Harpagophytum procumbens"
     ],
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
   },
   "elecampane": {
     "standard_name": "Elecampane (Inula helenium)",
     "category": "herbs",
     "cui": "C3495128",
-    "rxcui": null,
     "forms": {
       "elecampane (unspecified)": {
         "bio_score": 5,
@@ -49070,7 +48629,6 @@
       "Inula helenium"
     ],
     "external_ids": {},
-    "gsrs": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup"
   },
   "black_walnut": {
@@ -49297,7 +48855,6 @@
     "standard_name": "Neem",
     "category": "herbs",
     "cui": "C5670607",
-    "rxcui": null,
     "forms": {
       "neem (unspecified)": {
         "bio_score": 5,
@@ -49342,14 +48899,12 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "mastic_gum": {
     "standard_name": "Mastic Gum",
     "category": "herbs",
     "cui": "C5709624",
-    "rxcui": null,
     "forms": {
       "mastic gum (unspecified)": {
         "bio_score": 5,
@@ -49399,7 +48954,6 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "l_pyroglutamic_acid": {
@@ -49448,7 +49002,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "description": "Cyclic amino acid metabolite; cognition-supporting supplement",
     "dosage_importance": 0.5,
     "external_ids": {
@@ -49582,7 +49135,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "description": "Calcium salt of pyruvic acid; glycolysis intermediate",
     "dosage_importance": 0.5,
     "external_ids": {
@@ -49650,7 +49202,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "UXX2N5V39P"
     },
@@ -49737,7 +49288,6 @@
       "last_reviewed_at": "2026-02-26"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "description": "Short-chain fatty acid (SCFA) produced by gut bacterial fermentation",
     "dosage_importance": 1.0,
     "external_ids": {
@@ -49826,7 +49376,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "description": "Purine nucleoside; ATP biosynthesis intermediate",
     "dosage_importance": 0.5,
     "external_ids": {
@@ -49855,7 +49404,6 @@
     "standard_name": "Sea Cucumber",
     "category": "other",
     "cui": "C1612884",
-    "rxcui": null,
     "forms": {
       "sea cucumber (unspecified)": {
         "bio_score": 5,
@@ -49918,7 +49466,6 @@
     "standard_name": "Humic Acid",
     "category": "other",
     "cui": "C0020166",
-    "rxcui": null,
     "forms": {
       "humic acid (unspecified)": {
         "bio_score": 3,
@@ -49969,7 +49516,6 @@
     "standard_name": "Lumbrokinase",
     "category": "enzymes",
     "cui": "C0247287",
-    "rxcui": null,
     "forms": {
       "lumbrokinase (unspecified)": {
         "bio_score": 5,
@@ -50076,7 +49622,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "RUU8G67GQM"
     },
@@ -50096,7 +49641,6 @@
     "standard_name": "Acacetin",
     "category": "antioxidants",
     "cui": "C0100994",
-    "rxcui": null,
     "forms": {
       "acacetin (unspecified)": {
         "bio_score": 5,
@@ -50158,8 +49702,6 @@
     "source": "botanical_extract",
     "priority": "low",
     "description": "Agaricus blazei Murill (syn. Agaricus brasiliensis), Brazilian medicinal mushroom. Rich in beta-glucans and polysaccharides. Some human evidence for hepatoprotective effects at 1,500mg/day. Mostly preclinical immunomodulatory and antitumor data. Extract quality varies.",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "agaricus blazei fruiting body extract": {
         "bio_score": 7,
@@ -50229,14 +49771,11 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "rhaponticin": {
     "standard_name": "Rhaponticin",
     "category": "herbs",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "rhaponticin (unspecified)": {
         "bio_score": 5,
@@ -50287,7 +49826,6 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "evodiamine": {
@@ -50334,7 +49872,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "C01825BVNL"
     },
@@ -50396,7 +49933,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "description": "Trace mineral; central atom of vitamin B12 but inorganic form has no separate indication",
     "dosage_importance": 0.5,
     "external_ids": {
@@ -50421,7 +49957,6 @@
     "standard_name": "Bile Extract",
     "category": "other",
     "cui": "C0772090",
-    "rxcui": null,
     "forms": {
       "bile extract (unspecified)": {
         "bio_score": 7,
@@ -50469,14 +50004,12 @@
     "description": "Ox/bovine bile for fat digestion support in cholecystectomy/bile insufficiency",
     "dosage_importance": 1.0,
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "apoaequorin": {
     "standard_name": "Apoaequorin",
     "category": "other",
     "cui": "C0052166",
-    "rxcui": null,
     "forms": {
       "apoaequorin (unspecified)": {
         "bio_score": 2,
@@ -50526,8 +50059,6 @@
   "split_gill_polypore": {
     "standard_name": "Split Gill Polypore",
     "category": "herbs",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "split gill polypore (unspecified)": {
         "bio_score": 5,
@@ -50570,7 +50101,6 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "dimethyl_glycine": {
@@ -50627,7 +50157,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No confirmed exact UMLS concept found for dimethyl glycine; broad UMLS hits are chemically unrelated.",
-    "rxcui_note": null,
     "description": "Methylated amino acid metabolite; choline catabolism intermediate",
     "dosage_importance": 0.5,
     "cui_status": "no_confirmed_umls_match",
@@ -50695,7 +50224,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "6SMK8R7TGJ"
     },
@@ -50722,7 +50250,6 @@
     "standard_name": "Glucuronolactone",
     "category": "other",
     "cui": "C0061446",
-    "rxcui": null,
     "forms": {
       "glucuronolactone (unspecified)": {
         "bio_score": 4,
@@ -50774,7 +50301,6 @@
     "standard_name": "Methylliberine",
     "category": "other",
     "cui": "C5433892",
-    "rxcui": null,
     "forms": {
       "methylliberine (unspecified)": {
         "bio_score": 9,
@@ -50837,8 +50363,6 @@
   "meshima_mushroom": {
     "standard_name": "Meshima Mushroom",
     "category": "herbs",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "meshima mushroom (unspecified)": {
         "bio_score": 5,
@@ -50884,14 +50408,12 @@
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "bitter_melon": {
     "standard_name": "Bitter Melon",
     "category": "herbs",
     "cui": "C1509189",
-    "rxcui": null,
     "forms": {
       "bitter melon (unspecified)": {
         "bio_score": 6,
@@ -50946,14 +50468,12 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "arjuna": {
     "standard_name": "Arjuna",
     "category": "herbs",
     "cui": "C1198926",
-    "rxcui": null,
     "forms": {
       "arjuna (unspecified)": {
         "bio_score": 5,
@@ -51005,7 +50525,6 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "brewers_yeast": {
@@ -51055,7 +50574,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_note": "Corrected from a branded brewer's yeast concept to the generic Brewer's yeast concept.",
-    "rxcui_note": null,
     "aliases": [
       "Brewers' yeast",
       "Saccharomyces cerevisiae"
@@ -51079,7 +50597,6 @@
     "standard_name": "Saffron",
     "category": "herbs",
     "cui": "C0376238",
-    "rxcui": null,
     "forms": {
       "saffron (unspecified)": {
         "bio_score": 7,
@@ -51190,7 +50707,6 @@
     },
     "category_enum": "other",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -51223,8 +50739,6 @@
   "l_baiba": {
     "standard_name": "L-BAIBA",
     "category": "amino_acids",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "L-BAIBA (unspecified)": {
         "bio_score": 8,
@@ -51271,14 +50785,11 @@
     "description": "Exercise-induced myokine (beta-aminoisobutyric acid); promotes fat oxidation via PPARa",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "lychee_polyphenol": {
     "standard_name": "Lychee Polyphenol",
     "category": "antioxidants",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "lychee polyphenol (unspecified)": {
         "bio_score": 5,
@@ -51321,14 +50832,12 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "tamarind_extract": {
     "standard_name": "Tamarind Extract",
     "category": "herbs",
     "cui": "C0452261",
-    "rxcui": null,
     "forms": {
       "tamarind extract (unspecified)": {
         "bio_score": 5,
@@ -51369,7 +50878,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "jujube": {
@@ -51405,7 +50913,6 @@
       }
     },
     "standard_name": "Jujube",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -51422,7 +50929,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "threonic_acid": {
@@ -51457,7 +50963,6 @@
     },
     "standard_name": "Threonic Acid",
     "rxcui": "1547557",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -51524,7 +51029,6 @@
       }
     },
     "standard_name": "Dihydromyricetin",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -51585,7 +51089,6 @@
       }
     },
     "standard_name": "Diamine Oxidase",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -51639,7 +51142,6 @@
     },
     "standard_name": "Activated Charcoal",
     "rxcui": "272",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -51716,7 +51218,6 @@
       }
     },
     "standard_name": "Aloe Vera",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 0,
@@ -51733,7 +51234,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C0718405"
     ]
@@ -51773,7 +51273,6 @@
     },
     "standard_name": "Wild Yam",
     "rxcui": "1309690",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -51841,7 +51340,6 @@
       }
     },
     "standard_name": "Red Clover",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -51906,7 +51404,6 @@
       }
     },
     "standard_name": "Juniper",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 0,
@@ -51923,7 +51420,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "nopal": {
@@ -51965,7 +51461,6 @@
       }
     },
     "standard_name": "Nopal",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 0,
@@ -51982,7 +51477,6 @@
       "last_reviewed_at": "2026-03-09"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "cocoa": {
@@ -52018,7 +51512,6 @@
     },
     "standard_name": "Cocoa",
     "rxcui": "1373895",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -52086,7 +51579,6 @@
     },
     "standard_name": "Alfalfa",
     "rxcui": "285243",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -52119,7 +51611,6 @@
   },
   "klamath_algae": {
     "category": "herbs",
-    "cui": null,
     "cui_note": "No confirmed exact UMLS concept found for Klamath algae.",
     "forms": {
       "klamath blue-green algae (unspecified)": {
@@ -52148,7 +51639,6 @@
       }
     },
     "standard_name": "Klamath Blue-Green Algae",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 0,
@@ -52166,7 +51656,6 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "rubidium": {
@@ -52200,7 +51689,6 @@
     },
     "standard_name": "Rubidium",
     "rxcui": "1311489",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -52263,7 +51751,6 @@
     },
     "standard_name": "Theophylline",
     "rxcui": "10438",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -52345,7 +51832,6 @@
     },
     "standard_name": "Centrophenoxine",
     "rxcui": "2228",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -52416,7 +51902,6 @@
       }
     },
     "standard_name": "Rhaponticum",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -52433,7 +51918,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "birch_polypore": {
@@ -52466,7 +51950,6 @@
       }
     },
     "standard_name": "Birch Polypore",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -52521,7 +52004,6 @@
     },
     "standard_name": "Bismuth",
     "rxcui": "1599",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -52590,7 +52072,6 @@
     },
     "standard_name": "Bentonite",
     "rxcui": "1375",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -52628,7 +52109,6 @@
   },
   "grains_of_paradise": {
     "category": "herbs",
-    "cui": null,
     "cui_note": "No confirmed exact UMLS concept found for grains of paradise.",
     "forms": {
       "grains of paradise (unspecified)": {
@@ -52659,7 +52139,6 @@
       }
     },
     "standard_name": "Grains of Paradise",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -52760,7 +52239,6 @@
     "category": "herbs",
     "cui": "C1056287",
     "cui_note": "",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 1,
@@ -52805,7 +52283,6 @@
       }
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "pau_darco": {
@@ -52882,7 +52359,6 @@
     "category": "herbs",
     "cui": "C1814348",
     "cui_note": "",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 1,
@@ -52930,7 +52406,6 @@
       }
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "goji_berry": {
@@ -52938,7 +52413,6 @@
     "category": "herbs",
     "cui": "C3474499",
     "cui_note": "",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 1,
@@ -52992,15 +52466,13 @@
       "Goji Berry Fruit Extract",
       "Goji Berry Juice, Powder"
     ],
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "african_mango": {
     "standard_name": "African Mango",
     "category": "herbs",
     "cui": "",
     "cui_note": "No confirmed exact UMLS concept found for African mango extract.",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 1,
@@ -53049,7 +52521,6 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "chanca_piedra": {
@@ -53057,7 +52528,6 @@
     "category": "herbs",
     "cui": "C1135822",
     "cui_note": "Mapped to Phyllanthus nirurii, the accepted UMLS concept for chanca piedra.",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 1,
@@ -53106,8 +52576,7 @@
     "aliases": [
       "Phyllanthus nirurii"
     ],
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "l_norvaline": {
     "standard_name": "L-Norvaline",
@@ -53178,7 +52647,6 @@
     "category": "antioxidants",
     "cui": "C1515358",
     "cui_note": "",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 1,
@@ -53225,7 +52693,6 @@
       }
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "acai_berry": {
@@ -53270,7 +52737,6 @@
       }
     },
     "cui": "C2684354",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -53287,7 +52753,6 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "urolithin_a": {
@@ -53323,7 +52788,6 @@
       }
     },
     "cui": "C3827687",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -53396,7 +52860,6 @@
       }
     },
     "cui": "C1044695",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -53481,7 +52944,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
@@ -53540,7 +53002,6 @@
       }
     },
     "cui": "C1009737",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -53557,7 +53018,6 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "rye_pollen": {
@@ -53605,7 +53065,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
@@ -53667,7 +53126,6 @@
       }
     },
     "cui": "C0022564",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -53719,7 +53177,6 @@
       }
     },
     "cui": "C1999382",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -53738,8 +53195,7 @@
     "aliases": [
       "apple polyphenol extract"
     ],
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "casein_hydrolysate": {
     "standard_name": "Casein Hydrolysate",
@@ -53778,7 +53234,6 @@
       }
     },
     "cui": "C0054845",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -53795,7 +53250,6 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "coffee_fruit": {
@@ -53847,7 +53301,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
@@ -53910,8 +53363,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -53971,7 +53422,6 @@
       }
     },
     "cui": "C5982773",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54038,8 +53488,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54057,7 +53505,6 @@
     "cui_note": "No confirmed exact UMLS concept found for maqui berry.",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "mangosteen": {
@@ -54137,7 +53584,6 @@
       }
     },
     "cui": "C1815812",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54154,7 +53600,6 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "paeoniflorin": {
@@ -54190,7 +53635,6 @@
       }
     },
     "cui": "C4307864",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54251,7 +53695,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
@@ -54305,7 +53748,6 @@
       }
     },
     "cui": "C0628325",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54381,7 +53823,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
@@ -54438,7 +53879,6 @@
       }
     },
     "cui": "C0009413",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54455,7 +53895,6 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C1366263"
     ]
@@ -54503,7 +53942,6 @@
       "confidence": "high"
     },
     "category_enum": "herbs",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
@@ -54564,8 +54002,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54621,7 +54057,6 @@
       }
     },
     "cui": "C1086570",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54638,7 +54073,6 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "nobiletin": {
@@ -54673,7 +54107,6 @@
       }
     },
     "cui": "C0062638",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54737,8 +54170,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54791,7 +54222,6 @@
       }
     },
     "cui": "C4733773",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54808,7 +54238,6 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "mangiferin": {
@@ -54852,7 +54281,6 @@
       "confidence": "high"
     },
     "category_enum": "antioxidants",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
@@ -54914,7 +54342,6 @@
       }
     },
     "cui": "C4317675",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -54987,7 +54414,6 @@
       "confidence": "high"
     },
     "category_enum": "amino_acids",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.2,
       "review_status": "stub",
@@ -55063,7 +54489,6 @@
     },
     "cui": "C2348275",
     "cui_note": "No UMLS CUI for supplement ingredient",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -55079,7 +54504,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "senna": {
@@ -55121,7 +54545,6 @@
     },
     "cui": "C0330722",
     "cui_note": "No UMLS CUI for supplement ingredient",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -55137,7 +54560,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "senna extract",
       "alexandrian senna extract",
@@ -55157,7 +54579,6 @@
     "dosage_importance": 0.1,
     "cui": "C5448936",
     "cui_note": "No UMLS CUI for supplement ingredient",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "vitacherry sports extract": {
@@ -55256,7 +54677,6 @@
       "last_reviewed_at": "2026-02-25"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "spearmint": {
@@ -55271,7 +54691,6 @@
     "cui": "C1095801",
     "cui_note": "No UMLS CUI for supplement ingredient",
     "rxcui": "1372258",
-    "rxcui_note": null,
     "forms": {
       "neumentix spearmint extract": {
         "bio_score": 7,
@@ -55381,7 +54800,6 @@
     "cui": "C0872887",
     "cui_note": "No UMLS CUI for supplement ingredient",
     "rxcui": "901369",
-    "rxcui_note": null,
     "forms": {
       "button mushroom fruiting body extract": {
         "bio_score": 7,
@@ -55468,7 +54886,6 @@
     "dosage_importance": 0.1,
     "cui": "C0997521",
     "cui_note": "No UMLS CUI for supplement ingredient",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "auricularia fruiting body extract": {
@@ -55538,8 +54955,7 @@
       "Auricularia",
       "Auricularia polytricha"
     ],
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "andrographis": {
     "standard_name": "Andrographis",
@@ -55552,7 +54968,6 @@
     "dosage_importance": 0.1,
     "cui": "C5980266",
     "cui_note": "No UMLS CUI for supplement ingredient",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "forms": {
       "ap-bio andrographis extract": {
@@ -55646,7 +55061,6 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C0051821"
     ]
@@ -55663,7 +55077,6 @@
     "cui": "C3265310",
     "cui_note": "No UMLS CUI for supplement ingredient",
     "rxcui": "1011627",
-    "rxcui_note": null,
     "forms": {
       "cognivia sage extract": {
         "bio_score": 7,
@@ -55775,9 +55188,7 @@
     "priority": "low",
     "description": "Traditional fermented kefir starter culture containing a symbiotic consortium of lactic acid bacteria, acetic acid bacteria, and yeasts embedded in kefir grains. Provides diverse probiotic strains plus beta-glucan polysaccharides from kefir grain matrix. Evidence supports gut microbiome diversity, immune modulation, and lactose digestion improvement.",
     "dosage_importance": 0.1,
-    "cui": null,
     "cui_note": "Culture entry spanning multiple bacteria and yeasts. No single UMLS concept is accurate.",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "kefir culture (fermented)": {
@@ -55848,7 +55259,6 @@
     "standard_name": "Phenylethylamine",
     "category": "other",
     "cui": "C0253326",
-    "rxcui": null,
     "forms": {
       "phenylethylamine (unspecified)": {
         "bio_score": 5,
@@ -55932,7 +55342,6 @@
       }
     },
     "standard_name": "Yohimbe",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "match_rules": {
       "priority": 0,
@@ -55949,7 +55358,6 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": [
       "C0724441"
     ]
@@ -56168,7 +55576,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "NN52U3ZACZ"
     },
@@ -56300,7 +55707,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "9913I24QEE"
     },
@@ -56359,7 +55765,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "Q66E0D2443"
     },
@@ -56419,7 +55824,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "Q08Z44662J"
     },
@@ -56478,7 +55882,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "2C1F12C6AP"
     },
@@ -56557,7 +55960,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "L07O8T40TE"
     },
@@ -56727,7 +56129,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "ISK1LOY57E"
     },
@@ -56815,7 +56216,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "8CF93KW41W"
     },
@@ -56872,7 +56272,6 @@
       "review_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "KQ2N4RPK58"
     },
@@ -56893,7 +56292,6 @@
     "standard_name": "Bacillus Indicus",
     "category": "probiotics",
     "cui": "C1468787",
-    "rxcui": null,
     "forms": {
       "bacillus indicus (unspecified)": {
         "bio_score": 12,
@@ -56977,7 +56375,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "Corrected from an undecylenic acid hydrazide concept to the ingredient-level undecylenic acid concept.",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -57079,7 +56476,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -57149,7 +56545,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -57230,7 +56625,6 @@
     "standard_name": "Olive Fruit Extract",
     "category": "herbs",
     "cui": "C6017333",
-    "rxcui": null,
     "aliases": [
       "olive fruit extract",
       "olive fruit",
@@ -57302,8 +56696,7 @@
       "last_reviewed_at": "2026-03-08"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "external_ids": {},
-    "gsrs": null
+    "external_ids": {}
   },
   "coconut_water": {
     "standard_name": "Coconut Water",
@@ -57374,7 +56767,6 @@
       "last_reviewed_at": "2026-03-08"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "external_ids": {
       "unii": "267F5Y81NT"
     },
@@ -57394,7 +56786,6 @@
     "standard_name": "D-Phenylalanine",
     "category": "amino_acids",
     "cui": "C0771172",
-    "rxcui": null,
     "forms": {
       "d-phenylalanine": {
         "bio_score": 8,
@@ -57440,7 +56831,6 @@
     "severity_level": "none",
     "category": "fatty_acids",
     "cui": "C0037906",
-    "rxcui": null,
     "source": "animal_lipid",
     "priority": "medium",
     "description": "Membrane sphingophospholipid found in milk fat globule membrane and marine phospholipid preparations",
@@ -57495,7 +56885,6 @@
     "dosage_importance": 0.5,
     "cui": "C0061229",
     "cui_note": "No UMLS CUI confirmed for supplement ingredient",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
       "priority": 0,
@@ -57584,7 +56973,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS concept linked in this DB entry",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -57662,7 +57050,6 @@
     "standard_name": "Seal Oil",
     "category": "fatty_acids",
     "cui": "C5433059",
-    "rxcui": null,
     "forms": {
       "blubber oil": {
         "bio_score": 10,
@@ -57706,8 +57093,6 @@
   "milk_basic_protein": {
     "standard_name": "Milk Basic Protein",
     "category": "proteins",
-    "cui": null,
-    "rxcui": null,
     "forms": {
       "milk basic protein (unspecified)": {
         "bio_score": 7,
@@ -57769,7 +57154,6 @@
     "standard_name": "Eicosatrienoic Acid",
     "category": "fatty_acids",
     "cui": "C2348388",
-    "rxcui": null,
     "forms": {
       "mead acid (20:3n-9)": {
         "bio_score": 5,
@@ -57809,7 +57193,6 @@
       "last_reviewed_at": "2026-03-16"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "pine_nut_oil": {
@@ -57846,7 +57229,6 @@
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for supplement ingredient",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.7,
       "missing_fields": [],
@@ -57885,7 +57267,6 @@
     "cui": "C2725341",
     "rxcui": "880350",
     "cui_note": "No UMLS entry for botanical/novel compound",
-    "rxcui_note": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58022,8 +57403,6 @@
       "OpriBerry"
     ],
     "notes": "OptiBerry (originally InterHealth Nutraceuticals; now Lonza Group) is a standardized multi-berry anthocyanin blend combining wild blueberry (Vaccinium angustifolium), bilberry (V. myrtillus), cranberry (V. macrocarpon), elderberry (Sambucus nigra), raspberry seeds (Rubus idaeus), and strawberry (Fragaria × ananassa). ~60% anthocyanin phenolic content. In vitro/in vivo anti-angiogenic and antioxidant activity. 'OpriBerry' is a common OCR/label misread of OptiBerry.",
-    "cui": null,
-    "rxcui": null,
     "cui_note": "No confirmed exact UMLS concept found for the proprietary OptiBerry blend.",
     "rxcui_note": "No RxNorm concept for branded botanical blend",
     "match_rules": {
@@ -58173,7 +57552,6 @@
       }
     },
     "cui": "C0120451",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58262,8 +57640,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58343,7 +57719,6 @@
     },
     "category_enum": "fibers",
     "cui_note": "UMLS C0795649 — oat bran (Organic Chemical, Pharmacologic Substance)",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.85,
       "missing_fields": [
@@ -58402,7 +57777,6 @@
       }
     },
     "cui": "C2348459",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58485,7 +57859,6 @@
     },
     "category_enum": "amino_acids",
     "cui_note": "UMLS C0004015 — aspartic acid. Note: IQM d_aspartic_acid is the D-form used for testosterone; this is L-form.",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.95,
       "missing_fields": [],
@@ -58671,7 +58044,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "UMLS C1536546 — Yerba mate preparation (Organic Chemical, Pharmacologic Substance)",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.85,
       "missing_fields": [
@@ -58743,7 +58115,6 @@
     },
     "category_enum": "herbs",
     "cui_note": "UMLS C2713414 — Dill Weed (Plant)",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.85,
       "missing_fields": [
@@ -58810,7 +58181,6 @@
       }
     },
     "cui": "C1337406",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58876,8 +58246,6 @@
         }
       }
     },
-    "cui": null,
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -58903,7 +58271,6 @@
       "pubchem_cid": null,
       "cas": null
     },
-    "gsrs": null,
     "cui_status": "no_confirmed_umls_match"
   },
   "chitosan": {
@@ -58947,7 +58314,6 @@
     },
     "category_enum": "fibers",
     "cui_note": "UMLS C0162969 — chitosan (Organic Chemical, Pharmacologic Substance)",
-    "rxcui_note": null,
     "data_quality": {
       "completeness": 0.9,
       "missing_fields": [],
@@ -59006,7 +58372,6 @@
       }
     },
     "cui": "C1533313",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59032,7 +58397,6 @@
       "pubchem_cid": null,
       "cas": null
     },
-    "gsrs": null,
     "cui_status": "no_confirmed_umls_match"
   },
   "calcium_d_glucarate": {
@@ -59237,7 +58601,6 @@
     "external_ids": {
       "unii": "T538276W1L"
     },
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for Isatis tinctoria plant extract",
     "gsrs": {
       "substance_name": "ISATIS TINCTORIA WHOLE",
@@ -59325,7 +58688,6 @@
     "category": "herbs",
     "category_enum": "herbs",
     "cui": "C0205704",
-    "rxcui": null,
     "aliases": [
       "cascara",
       "rhamnus purshiana",
@@ -59379,7 +58741,6 @@
     "category": "herbs",
     "category_enum": "herbs",
     "cui": "C0331689",
-    "rxcui": null,
     "aliases": [
       "iris versicolor",
       "blue flag root",
@@ -59430,7 +58791,6 @@
     "category": "herbs",
     "category_enum": "herbs",
     "cui": "C1090801",
-    "rxcui": null,
     "aliases": [
       "rheum palmatum",
       "da huang",
@@ -59482,7 +58842,6 @@
     "category": "herbs",
     "category_enum": "herbs",
     "cui": "C0080354",
-    "rxcui": null,
     "rxcui_note": "No RxNorm concept for Frangula alnus botanical preparation",
     "aliases": [
       "frangula alnus",
@@ -59573,7 +58932,6 @@
       }
     },
     "cui": "C0220839",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59590,7 +58948,6 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "oleic_acid": {
@@ -59627,7 +58984,6 @@
       }
     },
     "cui": "C0028928",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59646,7 +59002,6 @@
     "external_ids": {
       "unii": "2UMI9U37CP"
     },
-    "gsrs": null,
     "aliases": []
   },
   "citric_acid": {
@@ -59682,7 +59037,6 @@
       }
     },
     "cui": "C0055819",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59701,7 +59055,6 @@
     "external_ids": {
       "unii": "2968PHW8QP"
     },
-    "gsrs": null,
     "aliases": []
   },
   "kaempferol": {
@@ -59737,7 +59090,6 @@
       }
     },
     "cui": "C0064280",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59756,7 +59108,6 @@
     "external_ids": {
       "unii": "731P2LE49E"
     },
-    "gsrs": null,
     "aliases": []
   },
   "nad": {
@@ -59793,7 +59144,6 @@
       }
     },
     "cui": "C0027270",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59810,7 +59160,6 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "naringenin": {
@@ -59847,7 +59196,6 @@
       }
     },
     "cui": "C0068450",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59866,7 +59214,6 @@
     "external_ids": {
       "unii": "HN5425SBF2"
     },
-    "gsrs": null,
     "aliases": []
   },
   "vanadium": {
@@ -59904,7 +59251,6 @@
       }
     },
     "cui": "C0042306",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59923,7 +59269,6 @@
     "external_ids": {
       "unii": "00J9J9XKDE"
     },
-    "gsrs": null,
     "aliases": []
   },
   "soybean": {
@@ -59959,7 +59304,6 @@
       }
     },
     "cui": "C1262902",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59978,7 +59322,6 @@
     "external_ids": {
       "unii": "L7HT8F1ZOD"
     },
-    "gsrs": null,
     "aliases": []
   },
   "sunflower_oil": {
@@ -60015,7 +59358,6 @@
       }
     },
     "cui": "C0075639",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60034,7 +59376,6 @@
     "external_ids": {
       "unii": "3W1JG795YI"
     },
-    "gsrs": null,
     "aliases": []
   },
   "silymarin": {
@@ -60069,7 +59410,6 @@
       }
     },
     "cui": "C0037135",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60086,7 +59426,6 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "oligosaccharides": {
@@ -60124,7 +59463,6 @@
       }
     },
     "cui": "C0028959",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60141,7 +59479,6 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   },
   "canola_oil": {
@@ -60179,7 +59516,6 @@
       }
     },
     "cui": "C0330502",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60199,7 +59535,6 @@
     "external_ids": {
       "unii": "331KBJ17RK"
     },
-    "gsrs": null,
     "aliases": []
   },
   "orotic_acid": {
@@ -60237,7 +59572,6 @@
       }
     },
     "cui": "C0029300",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60256,7 +59590,6 @@
     "external_ids": {
       "unii": "61H4T033E5"
     },
-    "gsrs": null,
     "aliases": []
   },
   "rice_bran": {
@@ -60293,7 +59626,6 @@
       }
     },
     "cui": "C0982374",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60312,7 +59644,6 @@
     "external_ids": {
       "unii": "R60QEP13IC"
     },
-    "gsrs": null,
     "aliases": []
   },
   "palmitoleic_acid": {
@@ -60350,7 +59681,6 @@
       }
     },
     "cui": "C0069966",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60369,7 +59699,6 @@
     "external_ids": {
       "unii": "209B6YPZ4I"
     },
-    "gsrs": null,
     "aliases": []
   },
   "idebenone": {
@@ -60404,7 +59733,6 @@
       }
     },
     "cui": "C0123163",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60423,7 +59751,6 @@
     "external_ids": {
       "unii": "HB6PN45W4J"
     },
-    "gsrs": null,
     "aliases": []
   },
   "lecithin": {
@@ -60458,7 +59785,6 @@
       }
     },
     "cui": "C0031617",
-    "rxcui": null,
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -60475,7 +59801,6 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null,
     "aliases": []
   }
 }
