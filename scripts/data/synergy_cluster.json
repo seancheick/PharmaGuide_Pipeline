@@ -11,7 +11,14 @@
       "total_clusters": 54,
       "clusters_with_query_placeholders": 0
     },
-    "total_clusters": 57
+    "total_clusters": 58,
+    "evidence_tier_definitions": {
+      "1": "PROVEN synergy — combination RCT or systematic review showing >additive effect vs each alone",
+      "2": "SUPPORTED co-nutrients — established biochemical co-dependence or shared pathway with human data",
+      "3": "PROMISING — mechanistic rationale + limited human data, or combo-vs-placebo only (no single-ingredient arm)",
+      "4": "POPULAR combination — each ingredient has individual evidence, but no combo-specific clinical data"
+    },
+    "evidence_source": "PMC10600480 (2023 systematic review: Synergistic Health Effects of Dietary Supplement Combinations) + individual PubMed verification"
   },
   "synergy_clusters": [
     {
@@ -49,6 +56,13 @@
           "source_type": "nccih",
           "label": "NCCIH Turmeric",
           "url": "https://www.nccih.nih.gov/health/turmeric"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "Piperine increases curcumin bioavailability by 2000% in humans",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/9619120/",
+          "pmid": "9619120",
+          "verified": true
         }
       ],
       "canonical_ids": [
@@ -75,7 +89,7 @@
         "vitamin b6": 10,
         "taurine": 500
       },
-      "evidence_tier": 1,
+      "evidence_tier": 3,
       "standard_name": "Magnesium Nervous System",
       "synergy_mechanism": "Vitamin B6 (as P5P) is required for magnesium transport into cells. Taurine stabilizes neuronal membrane potential alongside magnesium. Glycine acts as an inhibitory neurotransmitter, complementing magnesium's NMDA receptor modulation.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Magnesium Nervous System' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: magnesium >= 200, vitamin b6 >= 10, taurine >= 500. See sources for supporting references.",
@@ -89,6 +103,13 @@
           "source_type": "nih_ods",
           "label": "Magnesium - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "Magnesium + B6 for severe stress — Phase IV RCT subgroup",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/30562392/",
+          "pmid": "30562392",
+          "verified": true
         }
       ],
       "canonical_ids": [
@@ -136,7 +157,7 @@
         "glycine": 3000,
         "zinc": 10
       },
-      "evidence_tier": 1,
+      "evidence_tier": 3,
       "standard_name": "Sleep Stack",
       "synergy_mechanism": "Melatonin regulates circadian signaling; magnesium activates GABA receptors and reduces cortisol; L-theanine promotes alpha-wave relaxation; glycine lowers core body temperature to initiate sleep onset.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Sleep Stack' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: melatonin >= 0.5, magnesium >= 100, l-theanine >= 100, gaba >= 100, apigenin >= 50, glycine >= 3000, .... See sources for supporting references.",
@@ -150,6 +171,13 @@
           "source_type": "nccih",
           "label": "NCCIH Melatonin",
           "url": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "Melatonin + magnesium + zinc for insomnia in elderly — RCT",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/21226679/",
+          "pmid": "21226679",
+          "verified": true
         }
       ],
       "canonical_ids": [
@@ -205,7 +233,7 @@
         "msm": 1000,
         "omega-3": 1000
       },
-      "evidence_tier": 1,
+      "evidence_tier": 3,
       "standard_name": "Joint & Inflammation",
       "synergy_mechanism": "Glucosamine provides building blocks for glycosaminoglycan synthesis; chondroitin retains water in cartilage matrix; MSM donates sulfur for connective tissue repair; omega-3 fatty acids suppress pro-inflammatory prostaglandins via COX-2 modulation.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Joint & Inflammation' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: glucosamine >= 1500, chondroitin >= 1200, msm >= 1000, omega-3 >= 1000. See sources for supporting references.",
@@ -266,7 +294,7 @@
         "zinc": 15,
         "vitamin c": 250
       },
-      "evidence_tier": 1,
+      "evidence_tier": 2,
       "standard_name": "Eye Health",
       "synergy_mechanism": "Lutein and zeaxanthin accumulate in the macular pigment, filtering blue light and quenching reactive oxygen species. Zinc supports retinal metabolism. Vitamin C and E provide systemic antioxidant defense for ocular tissues (AREDS2 formulation basis).",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Eye Health' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: lutein >= 10, zeaxanthin >= 2, astaxanthin >= 4, zinc >= 15, vitamin c >= 250. See sources for supporting references.",
@@ -280,6 +308,13 @@
           "source_type": "nih_ods",
           "label": "Zinc - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "AREDS2: Lutein + zeaxanthin + omega-3 for age-related macular degeneration",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/23644932/",
+          "pmid": "23644932",
+          "verified": true
         }
       ],
       "canonical_ids": [
@@ -325,7 +360,7 @@
         "choline": 250,
         "vitamin b6": 10
       },
-      "evidence_tier": 1,
+      "evidence_tier": 2,
       "standard_name": "Methylation Support",
       "synergy_mechanism": "Methylcobalamin and methylfolate serve as methyl donors in the methionine cycle. TMG provides an alternative remethylation pathway via BHMT. Choline feeds into phosphatidylcholine synthesis. B6 (P5P) is required for the transsulfuration pathway converting homocysteine to cysteine.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Methylation Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: methylcobalamin >= 500, methylfolate >= 400, choline >= 250, vitamin b6 >= 10. See sources for supporting references.",
@@ -339,6 +374,13 @@
           "source_type": "nih_ods",
           "label": "Vitamin B12 - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "B12 + folate + B6 for homocysteine lowering — review of RCTs",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/36170884/",
+          "pmid": "36170884",
+          "verified": true
         }
       ],
       "canonical_ids": [
@@ -382,7 +424,7 @@
         "milk thistle": 200,
         "selenium": 100
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Detox Pathway",
       "synergy_mechanism": "NAC is the rate-limiting precursor for glutathione synthesis. Alpha-lipoic acid recycles glutathione and vitamins C/E. Selenium is required for glutathione peroxidase activity. Milk thistle (silymarin) supports hepatocyte membrane integrity and upregulates phase II conjugation enzymes.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Detox Pathway' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: nac >= 600, glutathione >= 250, milk thistle >= 200, selenium >= 100. See sources for supporting references.",
@@ -436,7 +478,7 @@
         "zinc carnosine": 75,
         "deglycyrrhizinated licorice": 380
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Gut Barrier",
       "synergy_mechanism": "L-glutamine is the primary fuel source for enterocytes and supports tight junction protein expression. Zinc carnosine stabilizes mucosal membranes. DGL soothes gastric lining. Butyrate provides short-chain fatty acid fuel for colonocytes.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Gut Barrier' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: l-glutamine >= 5000, zinc carnosine >= 75, deglycyrrhizinated licorice >= 380. See sources for supporting references.",
@@ -492,7 +534,7 @@
         "vitamin d": 1000,
         "quercetin": 500
       },
-      "evidence_tier": 1,
+      "evidence_tier": 3,
       "standard_name": "Immune Defense",
       "synergy_mechanism": "Vitamin C supports neutrophil function and acts as a cofactor for immune signaling enzymes. Zinc is required for T-cell maturation and NK cell activity. Vitamin D modulates innate immune responses through antimicrobial peptide (cathelicidin) expression. Quercetin has demonstrated ionophore activity facilitating zinc uptake into cells.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Immune Defense' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: vitamin c >= 500, zinc >= 15, vitamin d >= 1000, quercetin >= 500. See sources for supporting references.",
@@ -562,7 +604,7 @@
         "creatine": 3000,
         "rhodiola": 200
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Energy + Mitochondria",
       "synergy_mechanism": "CoQ10 is an essential electron carrier in the mitochondrial respiratory chain (Complex I to III). Acetyl-L-carnitine shuttles long-chain fatty acids across the inner mitochondrial membrane for beta-oxidation. PQQ stimulates mitochondrial biogenesis. Creatine buffers ATP through the phosphocreatine shuttle.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Energy + Mitochondria' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: coq10 >= 100, acetyl-l-carnitine >= 500, creatine >= 3000, rhodiola >= 200. See sources for supporting references.",
@@ -622,7 +664,7 @@
         "rhodiola": 200,
         "magnesium": 200
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Stress Resilience",
       "synergy_mechanism": "Ashwagandha modulates the HPA axis by attenuating cortisol release. Rhodiola activates AMPK and modulates monoamine neurotransmitters. L-theanine promotes alpha-wave brain activity without sedation. Magnesium is a cofactor for over 300 enzymatic reactions including those in the stress response.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Stress Resilience' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: ashwagandha >= 300, l-theanine >= 100, rhodiola >= 200, magnesium >= 200. See sources for supporting references.",
@@ -673,7 +715,7 @@
         "saffron": 30,
         "epa": 1000
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Mood Balance",
       "synergy_mechanism": "5-HTP is a direct serotonin precursor that crosses the blood-brain barrier. SAMe serves as a universal methyl donor affecting neurotransmitter synthesis. EPA modulates neuroinflammation and cell membrane fluidity in neural tissue. Methylfolate supports BH4 cofactor recycling needed for serotonin and dopamine synthesis.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Mood Balance' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: 5-htp >= 50, sam-e >= 200, saffron >= 30, epa >= 1000. See sources for supporting references.",
@@ -738,7 +780,7 @@
         "ginkgo biloba": 120,
         "pqq": 10
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Cognitive Performance",
       "synergy_mechanism": "Bacopa upregulates tryptophan hydroxylase and serotonin transporter expression, improving synaptic communication. Alpha-GPC provides choline for acetylcholine synthesis. Lion's mane stimulates nerve growth factor (NGF) production. DHA maintains neuronal membrane fluidity critical for synaptic transmission.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Cognitive Performance' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: bacopa >= 300, alpha-gpc >= 300, lion's mane >= 500, ginkgo biloba >= 120, pqq >= 10. See sources for supporting references.",
@@ -806,7 +848,7 @@
         "magnesium": 200,
         "garlic extract": 600
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Cardiovascular Support",
       "synergy_mechanism": "CoQ10 supports mitochondrial energy production in cardiomyocytes and acts as a lipid-soluble antioxidant. Omega-3 (EPA/DHA) reduces triglycerides and dampens vascular inflammation. Vitamin K2 (MK-7) activates matrix Gla-protein which inhibits arterial calcification. Magnesium supports vascular smooth muscle relaxation.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Cardiovascular Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: coq10 >= 100, omega-3 >= 1000, magnesium >= 200, garlic extract >= 600. See sources for supporting references.",
@@ -866,7 +908,7 @@
         "alpha-lipoic acid": 300,
         "cinnamon": 500
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Blood Sugar Regulation",
       "synergy_mechanism": "Berberine activates AMPK, increasing glucose uptake independent of insulin. Chromium enhances insulin receptor signaling. Alpha-lipoic acid improves insulin sensitivity and glucose disposal. Cinnamon contains polyphenols that mimic insulin activity at the receptor level.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Blood Sugar Regulation' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: berberine >= 500, chromium >= 200, alpha-lipoic acid >= 300, cinnamon >= 500. See sources for supporting references.",
@@ -924,7 +966,7 @@
         "vitamin d": 2000,
         "tongkat ali": 100
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Hormone Balance (Men)",
       "synergy_mechanism": "Zinc is essential for testosterone synthesis and 5-alpha-reductase regulation. Ashwagandha supports testosterone via cortisol reduction (inverse relationship). Vitamin D acts as a steroid hormone precursor. Tongkat ali may support free testosterone by reducing SHBG binding.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Hormone Balance (Men)' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: zinc >= 15, ashwagandha >= 300, vitamin d >= 2000, tongkat ali >= 100. See sources for supporting references.",
@@ -976,7 +1018,7 @@
         "black cohosh": 40,
         "maca": 1500
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Hormone Balance (Women)",
       "synergy_mechanism": "Vitex (chasteberry) modulates prolactin through dopaminergic activity. DIM promotes favorable 2-hydroxyestrone metabolism over 16-alpha-hydroxyestrone. Black cohosh acts on serotonergic receptors relevant to thermoregulation. Maca supports hormonal balance without directly altering circulating hormone levels.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Hormone Balance (Women)' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: chasteberry >= 160, dim >= 100, black cohosh >= 40, maca >= 1500. See sources for supporting references.",
@@ -1031,7 +1073,7 @@
         "collagen": 2500,
         "vitamin c": 250
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Hair & Skin Nutrition",
       "synergy_mechanism": "Biotin is a cofactor for carboxylase enzymes critical in keratin synthesis. Collagen peptides provide hydroxyproline and glycine as structural protein precursors. Vitamin C is required for procollagen hydroxylation. Zinc supports keratinocyte differentiation.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Hair & Skin Nutrition' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: biotin >= 2500, zinc >= 15, collagen >= 2500, vitamin c >= 250. See sources for supporting references.",
@@ -1085,7 +1127,7 @@
         "alpha-lipoic acid": 300,
         "tudca": 500
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Liver Support",
       "synergy_mechanism": "Silymarin stabilizes hepatocyte membranes and stimulates ribosomal RNA polymerase, promoting liver cell regeneration. NAC replenishes intracellular glutathione stores. Alpha-lipoic acid chelates metals and recycles endogenous antioxidants. TUDCA protects against bile-acid induced apoptosis.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Liver Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: milk thistle >= 200, nac >= 600, alpha-lipoic acid >= 300, tudca >= 500. See sources for supporting references.",
@@ -1139,7 +1181,7 @@
         "magnesium": 200,
         "vitamin d3": 1000
       },
-      "evidence_tier": 1,
+      "evidence_tier": 2,
       "synergy_mechanism": "Calcium provides building blocks; Vitamin D enhances absorption; K2 (MK-7) activates osteocalcin to deposit calcium in bones; Magnesium is cofactor for vitamin D activation.",
       "standard_name": "Bone Health",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Bone Health' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: calcium >= 500, vitamin d >= 1000, vitamin k2 >= 90, magnesium >= 200, vitamin d3 >= 1000. See sources for supporting references.",
@@ -1158,6 +1200,13 @@
           "source_type": "fda",
           "label": "FDA denies health claim notification for Vitamin K2 and osteoporosis",
           "url": "https://www.fda.gov/food/cfsan-constituent-updates/fda-denies-health-claim-notification-vitamin-k2-osteoporosis"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "Calcium + vitamin D for bone — RCT in vitamin D insufficient women",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/18410225/",
+          "pmid": "18410225",
+          "verified": true
         }
       ],
       "canonical_ids": [
@@ -1210,6 +1259,13 @@
           "source_type": "nih_ods",
           "label": "Vitamin C - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
+        },
+        {
+          "source_type": "pubmed",
+          "label": "Vitamin C enhances non-heme iron absorption — systematic review",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/10948381/",
+          "pmid": "10948381",
+          "verified": true
         }
       ],
       "canonical_ids": [
@@ -1250,7 +1306,7 @@
         "astaxanthin": 4,
         "coq10": 100
       },
-      "evidence_tier": 1,
+      "evidence_tier": 3,
       "standard_name": "Antioxidant Defense",
       "synergy_mechanism": "Vitamin C (aqueous phase) and vitamin E (lipid phase) form a redox couple — C regenerates oxidized E. Selenium is required for glutathione peroxidase catalytic activity. CoQ10 prevents lipid peroxidation initiation in mitochondrial membranes. NAC replenishes the glutathione pool.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Antioxidant Defense' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: vitamin c >= 500, vitamin e >= 100, astaxanthin >= 4, coq10 >= 100. See sources for supporting references.",
@@ -1309,7 +1365,7 @@
         "citrulline malate": 6000,
         "caffeine": 100
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Pre/Post Workout",
       "synergy_mechanism": "Creatine replenishes ATP via the phosphocreatine system during high-intensity efforts. Beta-alanine buffers intramuscular hydrogen ions by increasing carnosine stores. Citrulline enhances arginine-nitric oxide pathway, improving blood flow. Caffeine antagonizes adenosine receptors, reducing perceived exertion.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Pre/Post Workout' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: creatine >= 3000, beta-alanine >= 3200, citrulline malate >= 6000, caffeine >= 100. See sources for supporting references.",
@@ -1361,7 +1417,7 @@
         "papain": 100,
         "betaine hcl": 650
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Digestive Enzymes",
       "synergy_mechanism": "Comprehensive enzyme combinations target multiple macronutrient substrates: amylase for starches, protease for proteins, lipase for fats. Betaine HCl supports gastric pH for optimal pepsin activation. Ox bile emulsifies dietary fats for lipase access.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Digestive Enzymes' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: bromelain >= 500, papain >= 100, betaine hcl >= 650. See sources for supporting references.",
@@ -1406,7 +1462,7 @@
         "zinc": 15,
         "tyrosine": 500
       },
-      "evidence_tier": 2,
+      "evidence_tier": 3,
       "standard_name": "Thyroid Support",
       "synergy_mechanism": "Iodine is the essential substrate for T3 and T4 thyroid hormone synthesis. Selenium is required for deiodinase enzymes that convert T4 to active T3. Zinc supports thyroid hormone receptor binding. Tyrosine is the amino acid backbone of thyroid hormones.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Thyroid Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: iodine >= 150, selenium >= 100, zinc >= 15, tyrosine >= 500. See sources for supporting references.",
@@ -1452,7 +1508,7 @@
         "phosphatidylserine": 100,
         "lion's mane": 500
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Memory & Learning",
       "synergy_mechanism": "Bacopa enhances dendritic branching and synaptic signaling in the hippocampus. Phosphatidylserine maintains neuronal membrane fluidity and supports acetylcholine release. Lion's mane promotes NGF synthesis supporting neuroplasticity. DHA comprises ~40% of polyunsaturated fatty acids in the brain.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Memory & Learning' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: bacopa >= 300, ginkgo biloba >= 120, phosphatidylserine >= 100, lion's mane >= 500. See sources for supporting references.",
@@ -1503,7 +1559,7 @@
         "cla": 3000,
         "caffeine": 100
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Fat Metabolism",
       "synergy_mechanism": "L-carnitine shuttles long-chain fatty acids into mitochondria for beta-oxidation. EGCG (green tea) inhibits COMT, prolonging norepinephrine-mediated thermogenesis. CLA modulates PPAR-gamma activity in adipocytes. Chromium enhances insulin-mediated glucose disposal, supporting metabolic flexibility.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Fat Metabolism' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: l-carnitine >= 500, green tea extract >= 400, cla >= 3000, caffeine >= 100. See sources for supporting references.",
@@ -1552,7 +1608,7 @@
         "glutamine": 5000,
         "hmb": 3000
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Muscle Building/Recovery",
       "synergy_mechanism": "Creatine saturates intramuscular phosphocreatine stores for improved power output. BCAAs (especially leucine) activate mTOR pathway for muscle protein synthesis. HMB reduces proteasome-mediated protein degradation. Beta-alanine increases muscle carnosine for pH buffering during intense exercise.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Muscle Building/Recovery' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: creatine >= 3000, leucine >= 3000, glutamine >= 5000, hmb >= 3000. See sources for supporting references.",
@@ -1606,7 +1662,7 @@
         "boswellia": 300,
         "quercetin": 500
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Inflammation Control",
       "synergy_mechanism": "Curcumin inhibits NF-kB transcription factor, reducing pro-inflammatory cytokine expression. Boswellia (AKBA) selectively inhibits 5-lipoxygenase. Omega-3 (EPA) serves as a precursor for anti-inflammatory resolvins and protectins. Quercetin stabilizes mast cells and inhibits lipoxygenase.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Inflammation Control' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: omega-3 >= 1000, curcumin >= 500, boswellia >= 300, quercetin >= 500. See sources for supporting references.",
@@ -1662,7 +1718,7 @@
         "ashwagandha": 300,
         "rhodiola": 200
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Adrenal Support",
       "synergy_mechanism": "Ashwagandha modulates HPA axis signaling and attenuates cortisol hypersecretion. Rhodiola activates stress-protective HSP70 heat shock proteins. Pantothenic acid (B5) is a precursor to coenzyme A, essential for adrenal steroidogenesis. Magnesium is consumed during stress responses and requires repletion.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Adrenal Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: vitamin c >= 1000, pantothenic acid >= 100, ashwagandha >= 300, rhodiola >= 200. See sources for supporting references.",
@@ -1710,7 +1766,7 @@
         "quercetin": 500,
         "astaxanthin": 6
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "synergy_mechanism": "Senolytics (fisetin, quercetin) clear senescent cells. NAD+ precursors (NMN, NR) support cellular energy. Resveratrol activates sirtuins. Spermidine promotes autophagy.",
       "standard_name": "Longevity and Anti-Aging",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Longevity and Anti-Aging' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: resveratrol >= 250, nmn >= 250, fisetin >= 100, quercetin >= 500, astaxanthin >= 6. See sources for supporting references.",
@@ -1762,7 +1818,7 @@
         "saccharomyces boulardii": 5000000000,
         "inulin": 5000
       },
-      "evidence_tier": 1,
+      "evidence_tier": 3,
       "standard_name": "Probiotic and Gut Health",
       "synergy_mechanism": "Probiotics modulate gut microbial diversity and competitive exclusion of pathogens. Prebiotic fibers (FOS, GOS, inulin) selectively feed beneficial Bifidobacterium and Lactobacillus species. L-glutamine supports intestinal epithelial barrier integrity.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Probiotic and Gut Health' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: probiotics >= 1e+09, saccharomyces boulardii >= 5e+09, inulin >= 5000. See sources for supporting references.",
@@ -1808,7 +1864,7 @@
         "magnesium": 200,
         "sodium": 500
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Electrolyte Balance",
       "synergy_mechanism": "Sodium, potassium, and magnesium maintain cellular membrane potential and osmotic balance. Potassium citrate supports intracellular fluid volume. Magnesium is required for Na+/K+-ATPase pump function. Balanced electrolytes prevent exercise-induced cramping and dehydration.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Electrolyte Balance' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: potassium >= 1000, magnesium >= 200, sodium >= 500. See sources for supporting references.",
@@ -1849,7 +1905,7 @@
         "betaine": 2500,
         "caffeine": 100
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Pre-Workout Energy",
       "synergy_mechanism": "Caffeine antagonizes adenosine receptors, increasing alertness and delaying fatigue. L-citrulline enhances nitric oxide production for vasodilation. Beta-alanine increases muscle carnosine for intracellular pH buffering. Creatine provides immediate ATP regeneration during explosive movements.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Pre-Workout Energy' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: citrulline malate >= 6000, beta-alanine >= 3200, betaine >= 2500, caffeine >= 100. See sources for supporting references.",
@@ -1894,7 +1950,7 @@
         "hmb": 3000,
         "magnesium": 200
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Recovery Support",
       "synergy_mechanism": "Tart cherry concentrate provides anthocyanins that reduce exercise-induced oxidative stress and DOMS. BCAAs reduce muscle protein breakdown during recovery. Magnesium supports muscle relaxation and glycogen resynthesis. Glutamine replenishes intramuscular stores depleted during intense exercise.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Recovery Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: leucine >= 3000, glutamine >= 5000, hmb >= 3000, magnesium >= 200. See sources for supporting references.",
@@ -1931,7 +1987,7 @@
         "alpha-gpc": 300,
         "l-theanine": 100
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Cognitive Amino Acids",
       "synergy_mechanism": "L-tyrosine is the precursor for dopamine and norepinephrine synthesis. L-theanine promotes alpha-wave brain activity and modulates glutamate signaling. Taurine acts as a neuronal osmoregulator. Acetyl-L-carnitine supports mitochondrial energy in neurons and promotes acetylcholine synthesis.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Cognitive Amino Acids' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: acetyl-l-carnitine >= 500, n-acetyl l-tyrosine >= 350, alpha-gpc >= 300, l-theanine >= 100. See sources for supporting references.",
@@ -1968,7 +2024,7 @@
         "lactobacillus acidophilus": 10000000000,
         "bifidobacterium bifidum": 10000000000
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Immune Probiotic Blend",
       "synergy_mechanism": "Lactobacillus and Bifidobacterium strains enhance secretory IgA production at mucosal surfaces. Vitamin C supports immune cell function. Zinc is required for thymulin activity and T-cell maturation. Probiotic strains competitively exclude pathogens.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Immune Probiotic Blend' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: lactobacillus rhamnosus gg >= 1e+10, lactobacillus acidophilus >= 1e+10, bifidobacterium bifidum >= 1e+10. See sources for supporting references.",
@@ -2008,7 +2064,7 @@
         "saccharomyces boulardii": 5000000000,
         "lactobacillus plantarum": 10000000000
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Gut Barrier Probiotic Blend",
       "synergy_mechanism": "Specific probiotic strains (L. rhamnosus GG, S. boulardii) strengthen tight junction proteins (occludin, ZO-1). L-glutamine provides fuel for enterocyte proliferation and repair. Together they reduce intestinal permeability.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Gut Barrier Probiotic Blend' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: saccharomyces boulardii >= 5e+09, lactobacillus plantarum >= 1e+10. See sources for supporting references.",
@@ -2048,7 +2104,7 @@
         "lactobacillus helveticus": 10000000000,
         "bifidobacterium longum": 10000000000
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Mood-Gut Axis Probiotic Blend",
       "synergy_mechanism": "Psychobiotics (L. helveticus, B. longum) modulate the gut-brain axis via vagal afferent signaling and serotonin precursor production. Over 90% of serotonin is produced in enterochromaffin cells. Prebiotic fibers support these serotonin-producing bacteria.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Mood-Gut Axis Probiotic Blend' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: lactobacillus helveticus >= 1e+10, bifidobacterium longum >= 1e+10. See sources for supporting references.",
@@ -2095,7 +2151,7 @@
         "vitamin c": 250,
         "zinc": 15
       },
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Skin Health Complex",
       "synergy_mechanism": "Collagen peptides provide bioactive hydroxyproline-containing dipeptides that stimulate fibroblast activity. Hyaluronic acid supports dermal hydration. Vitamin C is required for prolyl hydroxylase in collagen cross-linking. Astaxanthin protects skin from UV-induced oxidative damage.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Skin Health Complex' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: hyaluronic acid >= 100, marine collagen >= 2500, vitamin c >= 250, zinc >= 15. See sources for supporting references.",
@@ -2135,7 +2191,7 @@
         "pine bark extract": 100,
         "pomegranate extract": 500
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Nitric Oxide & Blood Flow",
       "synergy_mechanism": "L-citrulline is converted to L-arginine in the kidneys, serving as a sustained substrate for endothelial nitric oxide synthase (eNOS). Beet root provides dietary nitrates reduced to NO via the enterosalivary pathway. Pine bark extract (pycnogenol) upregulates eNOS expression.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Nitric Oxide & Blood Flow' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: l-citrulline >= 3000, beetroot extract >= 500, pine bark extract >= 100, pomegranate extract >= 500. See sources for supporting references.",
@@ -2182,7 +2238,7 @@
         "astaxanthin": 4
       },
       "synergy_mechanism": "Phospholipid-bound omega-3s have 10x better absorption than ethyl esters. Astaxanthin protects omega-3s from oxidation. Take with fat for optimal absorption.",
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Omega-3 Absorption Enhancement",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Omega-3 Absorption Enhancement' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: omega-3 >= 1000, phosphatidylcholine >= 500, astaxanthin >= 4. See sources for supporting references.",
       "sources": [
@@ -2240,7 +2296,7 @@
         "copper": 1
       },
       "synergy_mechanism": "Vitamin C is essential cofactor for prolyl and lysyl hydroxylase (collagen synthesis enzymes). Copper enables cross-linking via lysyl oxidase. Lysine/proline are primary collagen amino acids.",
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Collagen Synthesis Support",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Collagen Synthesis Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: vitamin c >= 500, lysine >= 500, proline >= 500, copper >= 1. See sources for supporting references.",
       "sources": [
@@ -2289,7 +2345,7 @@
         "zinc": 15
       },
       "synergy_mechanism": "NAC is mucolytic and boosts glutathione. Quercetin has antiviral properties enhanced by vitamin C (which recycles quercetin). Zinc supports immune function. Bromelain reduces inflammation.",
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Respiratory Health & Lung Support",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Respiratory Health & Lung Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: nac >= 600, quercetin >= 500, vitamin c >= 500, zinc >= 15. See sources for supporting references.",
       "sources": [
@@ -2336,7 +2392,7 @@
         "vitamin c": 500
       },
       "synergy_mechanism": "D-mannose binds to E. coli preventing adhesion. Cranberry proanthocyanidins (PACs) prevent bacterial adhesion. Vitamin C acidifies urine. Probiotics support healthy urogenital flora.",
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Urinary Tract Health",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Urinary Tract Health' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: d-mannose >= 2000, cranberry extract >= 500, vitamin c >= 500. See sources for supporting references.",
       "sources": [
@@ -2384,7 +2440,7 @@
         "lycopene": 10
       },
       "synergy_mechanism": "Saw palmetto inhibits 5-alpha reductase. Beta-sitosterol supports urinary flow. Zinc is highly concentrated in prostate tissue. Lycopene is a prostate-specific antioxidant.",
-      "evidence_tier": 2,
+      "evidence_tier": 3,
       "standard_name": "Prostate Health",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Prostate Health' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: saw palmetto >= 320, beta-sitosterol >= 60, zinc >= 15, lycopene >= 10. See sources for supporting references.",
       "sources": [
@@ -2439,7 +2495,7 @@
         "iron": 10
       },
       "synergy_mechanism": "DHA is critical for brain cell membranes. Phosphatidylserine supports neurotransmitter function. Zinc and iron deficiencies are linked to attention issues. L-theanine + caffeine enhance focus synergistically.",
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Focus & Attention Support",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Focus & Attention Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: dha >= 500, phosphatidylserine >= 100, zinc >= 15, iron >= 10. See sources for supporting references.",
       "sources": [
@@ -2499,7 +2555,7 @@
         "evening primrose oil": 500
       },
       "synergy_mechanism": "Black cohosh and red clover provide phytoestrogens for hot flash relief. Evening primrose supports hormonal balance. Sage specifically targets hot flashes and night sweats. Maca supports overall hormonal adaptation.",
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Menopause & Perimenopause Support",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Menopause & Perimenopause Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: black cohosh >= 40, red clover >= 40, maca >= 2000, evening primrose oil >= 500. See sources for supporting references.",
       "sources": [
@@ -2550,7 +2606,7 @@
         "iodine": 150
       },
       "synergy_mechanism": "Folate prevents neural tube defects. Iron supports increased blood volume. DHA is critical for fetal brain/eye development. Choline supports neural development. Iodine supports thyroid and fetal brain development.",
-      "evidence_tier": 1,
+      "evidence_tier": 2,
       "standard_name": "Prenatal & Pregnancy Support",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Prenatal & Pregnancy Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: folate >= 600, iron >= 27, dha >= 200, choline >= 450, iodine >= 150. See sources for supporting references.",
       "sources": [
@@ -2611,7 +2667,7 @@
         "acetyl-l-carnitine": 500
       },
       "synergy_mechanism": "B vitamins (especially B1, B6, B12) are essential for nerve function. Alpha-lipoic acid is proven for diabetic neuropathy. Acetyl-L-carnitine supports nerve regeneration. Benfotiamine has superior bioavailability for nerve tissue.",
-      "evidence_tier": 1,
+      "evidence_tier": 3,
       "standard_name": "Nerve Health & Neuropathy Support",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Nerve Health & Neuropathy Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: benfotiamine >= 150, alpha-lipoic acid >= 300, vitamin b12 >= 1000, acetyl-l-carnitine >= 500. See sources for supporting references.",
       "sources": [
@@ -2661,7 +2717,7 @@
         "stinging nettle": 300
       },
       "synergy_mechanism": "Quercetin stabilizes mast cells and inhibits histamine release. Vitamin C is a natural antihistamine and enhances quercetin. Bromelain improves quercetin absorption. DAO enzyme breaks down dietary histamine.",
-      "evidence_tier": 2,
+      "evidence_tier": 4,
       "standard_name": "Histamine & Allergy Support",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Histamine & Allergy Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: quercetin >= 500, vitamin c >= 1000, bromelain >= 500, stinging nettle >= 300. See sources for supporting references.",
       "sources": [
@@ -2704,7 +2760,7 @@
         "vitamin d": 1000
       },
       "synergy_mechanism": "Astragalus and cordyceps have nephroprotective properties. Omega-3s reduce inflammation. CoQ10 supports mitochondrial function in kidney cells. Alpha-lipoic acid provides antioxidant protection.",
-      "evidence_tier": 2,
+      "evidence_tier": 3,
       "standard_name": "Kidney Health Support",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Kidney Health Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 2 (moderate). Anchor dose checks: astragalus >= 500, omega-3 >= 1000, coq10 >= 100, vitamin d >= 1000. See sources for supporting references.",
       "sources": [
@@ -2864,7 +2920,7 @@
         "coq10": 100,
         "feverfew": 100
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Migraine Prevention",
       "synergy_mechanism": "Magnesium blocks cortical spreading depression (the neurophysiological substrate of migraine aura) and modulates NMDA receptors. Riboflavin (B2) at high dose improves mitochondrial energy metabolism in neurons with impaired oxidative phosphorylation. CoQ10 supports mitochondrial electron transport in the trigeminovascular system. Feverfew inhibits platelet aggregation and serotonin release from platelets.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Migraine Prevention' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: magnesium >= 400, riboflavin >= 400, coq10 >= 100, feverfew >= 100. See sources for supporting references.",
@@ -2928,7 +2984,7 @@
         "garlic extract": 600,
         "omega-3": 1000
       },
-      "evidence_tier": 1,
+      "evidence_tier": 4,
       "standard_name": "Blood Pressure Support",
       "synergy_mechanism": "Magnesium promotes vascular smooth muscle relaxation and acts as a natural calcium channel blocker. CoQ10 improves endothelial function and reduces peripheral vascular resistance. Garlic (allicin) stimulates hydrogen sulfide production, a potent vasodilator. Omega-3 (EPA/DHA) improves arterial compliance and reduces systemic inflammation. Beet root nitrates are reduced to nitric oxide via the enterosalivary pathway, directly promoting vasodilation.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Blood Pressure Support' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: magnesium >= 300, coq10 >= 100, garlic extract >= 600, omega-3 >= 1000. See sources for supporting references.",
@@ -2999,7 +3055,7 @@
         "vitamin d": 1000,
         "iron": 15
       },
-      "evidence_tier": 1,
+      "evidence_tier": 3,
       "standard_name": "Fertility (Female)",
       "synergy_mechanism": "Folate (as 5-MTHF) is critical for DNA methylation during oocyte maturation and early embryogenesis. CoQ10 supports mitochondrial energy in oocytes, which declines with age and correlates with egg quality. Myo-inositol acts as a second messenger in insulin signaling and improves oocyte quality in PCOS. D-chiro-inositol restores the myo/d-chiro ratio disrupted in insulin resistance. Vitamin D receptor is expressed in ovarian tissue and supports follicular development.",
       "note": "+1 synergy bonus applies when at least 2 ingredients from 'Fertility (Female)' are matched and at least half of dose-checkable ingredients meet minimum effective doses. Evidence strength: Tier 1 (strong). Anchor dose checks: folate >= 400, coq10 >= 200, myo-inositol >= 2000, vitamin d >= 1000, iron >= 15. See sources for supporting references.",
@@ -3033,6 +3089,46 @@
         "zinc",
         "chasteberry",
         "nac"
+      ]
+    },
+    {
+      "id": "omega3_niacin_lipid",
+      "ingredients": [
+        "omega-3",
+        "fish oil",
+        "epa",
+        "dha",
+        "niacin",
+        "vitamin b3",
+        "niacinamide"
+      ],
+      "canonical_ids": [
+        "fish_oil",
+        "omega_3",
+        "epa",
+        "dha",
+        "vitamin_b3_niacin"
+      ],
+      "min_effective_doses": {
+        "omega-3": 1000,
+        "niacin": 500
+      },
+      "evidence_tier": 2,
+      "standard_name": "Omega-3 + Niacin Lipid Support",
+      "synergy_mechanism": "Omega-3 fatty acids lower triglycerides primarily via reduced hepatic VLDL production, while niacin raises HDL via inhibition of hepatic lipase and reduction of HDL catabolism. The combination addresses both legs of dyslipidemia more effectively than either alone. Human trial evidence from PMC10600480 showed stronger lipid-related effects with the combo.",
+      "note": "Supported by human trial data per PMC10600480 systematic review. Niacin may cause flushing; extended-release formulations reduce this.",
+      "sources": [
+        {
+          "source_type": "pmc",
+          "label": "PMC10600480: Synergistic Health Effects of Dietary Supplement Combinations",
+          "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10600480/",
+          "verified": true
+        },
+        {
+          "source_type": "nih_ods",
+          "label": "Omega-3 Fatty Acids - Health Professional Fact Sheet",
+          "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+        }
       ]
     }
   ]
