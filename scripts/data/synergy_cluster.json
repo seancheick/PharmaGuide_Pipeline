@@ -70,7 +70,8 @@
         "piperine",
         "curcumin",
         "ginger"
-      ]
+      ],
+      "evidence_note": "Piperine increases curcumin bioavailability by 2000% in humans (PMID: 9619120). One of the most robustly demonstrated supplement synergies."
     },
     {
       "id": "magnesium_nervous_system",
@@ -117,7 +118,8 @@
         "taurine",
         "vitamin_b6_pyridoxine",
         "l_glycine"
-      ]
+      ],
+      "evidence_note": "Mg + B6 for stress: Phase IV RCT (PMID: 30562392) showed 24% greater improvement only in severe/extremely severe stress subgroup. Not superior overall."
     },
     {
       "id": "sleep_stack",
@@ -198,7 +200,8 @@
         "tart_cherry",
         "reishi",
         "zinc"
-      ]
+      ],
+      "evidence_note": "Melatonin + Mg + Zinc for insomnia: RCT (PMID: 21226679) showed benefit vs placebo, but no single-ingredient arms to prove >additive effect."
     },
     {
       "id": "joint_inflammation",
@@ -265,7 +268,8 @@
         "same",
         "devils_claw",
         "cat_s_claw"
-      ]
+      ],
+      "evidence_note": "Glucosamine + chondroitin: GAIT trial found benefit only in moderate-to-severe pain subgroup. MSM evidence is weakest. Not clearly >additive."
     },
     {
       "id": "eye_health",
@@ -329,7 +333,8 @@
         "beta_carotene",
         "lycopene",
         "omega_3"
-      ]
+      ],
+      "evidence_note": "AREDS2 formula (lutein + zeaxanthin + zinc + omega-3) tested in 4,203-patient RCT (PMID: 23644932). Established combo for AMD, though lutein/zeaxanthin were a safer beta-carotene substitute rather than >additive."
     },
     {
       "id": "methylation_support",
@@ -392,7 +397,8 @@
         "vitamin_b2_riboflavin",
         "same",
         "methionine"
-      ]
+      ],
+      "evidence_note": "B12 + folate + B6 are co-factors in the methylation cycle. Repleting all three lowers homocysteine more effectively than individual B vitamins (PMID: 36170884). Biochemical co-dependence, not classic synergy."
     },
     {
       "id": "detox_pathway",
@@ -448,7 +454,8 @@
         "chlorella",
         "spirulina",
         "activated_charcoal"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "gut_barrier",
@@ -500,7 +507,8 @@
         "collagen",
         "l_serine",
         "butyric_acid"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "immune_defense",
@@ -567,7 +575,8 @@
         "selenium",
         "astragalus",
         "colostrum"
-      ]
+      ],
+      "evidence_note": "Vitamin C + zinc for immune support: some cold symptom relief data (PMC10600480), but no RCT proving the combo is better than each alone."
     },
     {
       "id": "energy_mitochondria",
@@ -632,7 +641,8 @@
         "d_ribose",
         "nad",
         "vitamin_b3_niacin"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "stress_resilience",
@@ -690,7 +700,8 @@
         "choline",
         "ginseng",
         "cordyceps"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "mood_balance",
@@ -740,7 +751,8 @@
         "epa",
         "st_johns_wort",
         "saffron"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "cognitive_performance",
@@ -811,7 +823,8 @@
         "uridine_monophosphate",
         "omega_3",
         "dha"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "cardiovascular_support",
@@ -879,7 +892,8 @@
         "garlic",
         "policosanol",
         "dietary_nitrate"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "blood_sugar_regulation",
@@ -936,7 +950,8 @@
         "corosolic_acid",
         "fenugreek",
         "inulin"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "hormone_balance_men",
@@ -990,7 +1005,8 @@
         "stinging_nettle",
         "diindolylmethane",
         "maca"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "hormone_balance_women",
@@ -1042,7 +1058,8 @@
         "dong_quai",
         "wild_yam",
         "shatavarin_iv"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "hair_skin_nutrition",
@@ -1098,7 +1115,8 @@
         "vitamin_e",
         "copper",
         "vitamin_a"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "liver_support",
@@ -1149,7 +1167,8 @@
         "turmeric",
         "glutathione",
         "tudca"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "bone_health",
@@ -1221,7 +1240,8 @@
         "vitamin_c",
         "ipriflavone",
         "phosphorus"
-      ]
+      ],
+      "evidence_note": "Calcium + Vitamin D is one of the most studied combos for bone health (PMID: 18410225). Vitamin D enhances intestinal calcium absorption, but benefit depends on baseline D status."
     },
     {
       "id": "iron_absorption",
@@ -1276,7 +1296,8 @@
         "copper",
         "lactoferrin",
         "l_lysine"
-      ]
+      ],
+      "evidence_note": "Vitamin C converts non-heme Fe3+ to absorbable Fe2+, proven in systematic review (PMID: 10948381). One of the most established nutritional synergies."
     },
     {
       "id": "antioxidant_defense",
@@ -1337,7 +1358,8 @@
         "pine_bark_extract",
         "astaxanthin",
         "bilberry"
-      ]
+      ],
+      "evidence_note": "Vitamin C + Vitamin E can regenerate each other (C recycles oxidized E). Mechanistic basis is strong, human combo data is moderate."
     },
     {
       "id": "pre_post_workout",
@@ -1393,7 +1415,8 @@
         "l_tyrosine",
         "branched_chain_amino_acids",
         "tmg_betaine"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "digestive_enzymes",
@@ -1437,7 +1460,8 @@
         "digestive_enzymes",
         "tmg_betaine",
         "bile_extract"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "thyroid_support",
@@ -1483,7 +1507,8 @@
         "brown_kelp",
         "copper",
         "iron"
-      ]
+      ],
+      "evidence_note": "Zinc + selenium for thyroid: some evidence of improved thyroid hormone markers together (PMC10600480). Limited RCT data."
     },
     {
       "id": "memory_learning",
@@ -1534,7 +1559,8 @@
         "dha",
         "acetyl_l_carnitine",
         "gotu_kola"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "fat_metabolism",
@@ -1582,7 +1608,8 @@
         "forskolin",
         "garcinia_cambogia",
         "capsaicin"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "muscle_building_recovery",
@@ -1633,7 +1660,8 @@
         "l_glutamine",
         "tmg_betaine",
         "taurine"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "inflammation_control",
@@ -1695,7 +1723,8 @@
         "white_willow_bark",
         "devils_claw",
         "cat_s_claw"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "adrenal_support",
@@ -1737,7 +1766,8 @@
         "licorice",
         "holy_basil",
         "ginseng"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "longevity_and_anti_aging",
@@ -1794,7 +1824,8 @@
         "coq10",
         "urolithin_a",
         "alpha_lipoic_acid"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "probiotic_and_gut_health",
@@ -1847,7 +1878,8 @@
         "oligosaccharides",
         "butyric_acid",
         "digestive_enzymes"
-      ]
+      ],
+      "evidence_note": "Synbiotic concept (probiotic + prebiotic): theoretically the prebiotic feeds the probiotic. However, meta-analysis (PMID: 38999862) found probiotics alone outperform synbiotics."
     },
     {
       "id": "electrolyte_balance",
@@ -1885,7 +1917,8 @@
         "magnesium",
         "calcium",
         "phosphorus"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "pre_workout_energy",
@@ -1929,7 +1962,8 @@
         "caffeine",
         "taurine",
         "creatine_monohydrate"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "recovery_support",
@@ -1968,7 +2002,8 @@
         "hmb",
         "taurine",
         "magnesium"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "cognitive_amino_acids",
@@ -2009,7 +2044,8 @@
         "choline",
         "alpha_gpc",
         "l_theanine"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "immune_probiotic_blend",
@@ -2050,7 +2086,8 @@
         "lactobacillus_acidophilus",
         "bifidobacterium_bifidum",
         "bifidobacterium_lactis"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "gut_barrier_probiotic_blend",
@@ -2090,7 +2127,8 @@
         "lactobacillus_plantarum",
         "lactobacillus_reuteri",
         "bifidobacterium_longum"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "mood_gut_axis_probiotic_blend",
@@ -2130,7 +2168,8 @@
         "bifidobacterium_longum",
         "lactobacillus_casei",
         "bifidobacterium_breve"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "skin_health_complex",
@@ -2170,7 +2209,8 @@
         "zinc",
         "vitamin_b7_biotin",
         "msm"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "nitric_oxide_blood_flow",
@@ -2214,7 +2254,8 @@
         "pomegranate",
         "l_arginine",
         "hawthorn"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "omega_3_absorption_enhancement",
@@ -2264,7 +2305,8 @@
         "vitamin_e",
         "lecithin",
         "digestive_enzymes"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "collagen_synthesis_support",
@@ -2317,7 +2359,8 @@
         "collagen",
         "hyaluronic_acid",
         "zinc"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "respiratory_health_lung_support",
@@ -2369,7 +2412,8 @@
         "elderberry",
         "cordyceps",
         "mullein"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "urinary_tract_health",
@@ -2411,7 +2455,8 @@
         "cranberry",
         "probiotic_unspecified",
         "vitamin_c"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "prostate_health",
@@ -2461,7 +2506,8 @@
         "selenium",
         "green_tea_extract",
         "egcg"
-      ]
+      ],
+      "evidence_note": "Saw palmetto + zinc + lycopene: each has individual prostate evidence, combo trials limited."
     },
     {
       "id": "focus_attention_support",
@@ -2523,7 +2569,8 @@
         "caffeine",
         "bacopa",
         "choline"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "menopause_perimenopause_support",
@@ -2579,7 +2626,8 @@
         "magnesium",
         "vitamin_b6_pyridoxine",
         "genistein"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "prenatal_pregnancy_support",
@@ -2634,7 +2682,8 @@
         "choline",
         "iodine",
         "zinc"
-      ]
+      ],
+      "evidence_note": "Folate + iron + DHA are co-required during pregnancy. Each addresses different fetal development needs. Established standard of care, not >additive synergy."
     },
     {
       "id": "nerve_health_neuropathy_support",
@@ -2692,7 +2741,8 @@
         "omega_3",
         "dha",
         "lions_mane"
-      ]
+      ],
+      "evidence_note": "B1 + B6 + B12 for neuropathy: co-required in nerve function, commonly co-prescribed. Limited >additive combo data."
     },
     {
       "id": "histamine_allergy_support",
@@ -2735,7 +2785,8 @@
         "butterbur",
         "nac",
         "diamine_oxidase"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "kidney_health_support",
@@ -2780,7 +2831,8 @@
         "vitamin_d",
         "probiotic_unspecified",
         "potassium"
-      ]
+      ],
+      "evidence_note": "Alpha-lipoic acid + omega-3 for renal protection: Alzheimer's trial (PMC10600480) showed slower decline with combo. Kidney-specific data limited."
     },
     {
       "id": "dental_oral_health",
@@ -2837,7 +2889,8 @@
         "probiotic_unspecified",
         "lactobacillus_reuteri",
         "green_tea_extract"
-      ]
+      ],
+      "evidence_note": "Calcium + Vitamin D + Vitamin K2 for dental mineralization. Supported by shared calcium metabolism pathway."
     },
     {
       "id": "wound_healing",
@@ -2893,7 +2946,8 @@
         "copper",
         "digestive_enzymes",
         "aloe_vera"
-      ]
+      ],
+      "evidence_note": "Vitamin C + zinc for wound healing. Vitamin C is essential for collagen synthesis, zinc for immune cell function. Established co-requirement in wound care."
     },
     {
       "id": "migraine_prevention",
@@ -2950,7 +3004,8 @@
         "alpha_lipoic_acid",
         "ginger",
         "vitamin_d"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "blood_pressure_support",
@@ -3017,7 +3072,8 @@
         "olive_leaf",
         "l_arginine",
         "hawthorn"
-      ]
+      ],
+      "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy."
     },
     {
       "id": "fertility_female",
@@ -3089,7 +3145,8 @@
         "zinc",
         "chasteberry",
         "nac"
-      ]
+      ],
+      "evidence_note": "Folate + iron + CoQ10 for fertility: each has individual evidence, CoQ10 for egg quality promising. No combo RCT."
     },
     {
       "id": "omega3_niacin_lipid",
@@ -3129,7 +3186,8 @@
           "label": "Omega-3 Fatty Acids - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
         }
-      ]
+      ],
+      "evidence_note": "Omega-3 lowers triglycerides while niacin raises HDL — addressing both legs of dyslipidemia. Human trial evidence per PMC10600480 systematic review."
     }
   ]
 }

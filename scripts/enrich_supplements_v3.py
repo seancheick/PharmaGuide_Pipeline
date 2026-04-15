@@ -5552,12 +5552,26 @@ class SupplementEnricherV3:
                 sources = cluster.get("sources", [])
                 if not isinstance(sources, list):
                     sources = []
+                # Extract PMIDs from sources for Flutter display
+                pmids = []
+                for src in sources:
+                    if isinstance(src, dict) and src.get("pmid"):
+                        pmids.append(src["pmid"])
+
                 matched_clusters.append({
                     "cluster_id": cluster.get('id', ''),
                     "cluster_name": cluster.get('standard_name', ''),
-                    "evidence_tier": cluster.get('evidence_tier', 3),
-                    "note": cluster.get("note") or cluster.get("synergy_mechanism") or "",
+                    "evidence_tier": cluster.get('evidence_tier', 4),
+                    "evidence_label": {
+                        1: "Proven synergy",
+                        2: "Supported co-nutrients",
+                        3: "Promising combination",
+                        4: "Popular combination",
+                    }.get(cluster.get('evidence_tier', 4), "Popular combination"),
+                    "synergy_mechanism": cluster.get("synergy_mechanism", ""),
+                    "note": cluster.get("note") or "",
                     "sources": sources,
+                    "pmids": pmids,
                     "matched_ingredients": matched_ings,
                     "match_count": len(matched_ings),
                     "doses_adequate": doses_adequate,

@@ -96,7 +96,13 @@
       "max": 3,
       "organic": 1,
       "standardized_botanical": 1,
-      "synergy_cluster": 1,
+      "synergy_cluster": {
+        "_description": "Tiered synergy bonus based on evidence quality. Only ingredients with 2+ matching cluster members AND adequate doses qualify.",
+        "tier_1_proven": 1.0,
+        "tier_2_supported": 0.75,
+        "tier_3_promising": 0.5,
+        "tier_4_popular": 0.25
+      },
       "non_gmo_project_verified": 0.5
     },
     "A6_single_ingredient_efficiency": {

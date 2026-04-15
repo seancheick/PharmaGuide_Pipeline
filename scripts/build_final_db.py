@@ -1593,9 +1593,38 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     formulation_data = safe_dict(enriched.get("formulation_data"))
     synergy_clusters = safe_list(formulation_data.get("synergy_clusters"))
     if synergy_clusters:
+        # Build user-friendly synergy detail for Flutter
+        synergy_display = []
+        best_tier = 4
+        for sc in synergy_clusters:
+            tier = int(safe_float(sc.get("evidence_tier"), 4))
+            best_tier = min(best_tier, tier)
+            matched = safe_list(sc.get("matched_ingredients"))
+            matched_names = [m.get("ingredient", "") for m in matched if isinstance(m, dict)]
+            synergy_display.append({
+                "id": safe_str(sc.get("cluster_id")),
+                "name": safe_str(sc.get("cluster_name")),
+                "evidence_tier": tier,
+                "evidence_label": safe_str(sc.get("evidence_label", "Popular combination")),
+                "mechanism": safe_str(sc.get("synergy_mechanism", sc.get("note", "")))[:300],
+                "matched_ingredients": matched_names,
+                "match_count": len(matched),
+                "all_adequate": safe_bool(sc.get("all_adequate")),
+                "pmids": safe_list(sc.get("pmids")),
+            })
+
+        tier_bonus_map = {1: 1.0, 2: 0.75, 3: 0.5, 4: 0.25}
         blob["synergy_detail"] = {
-            "qualified": safe_bool(enriched.get("synergy_cluster_qualified")),
-            "clusters": synergy_clusters,
+            "qualified": len(synergy_display) > 0,
+            "best_tier": best_tier,
+            "bonus_awarded": tier_bonus_map.get(best_tier, 0.25),
+            "bonus_explanation": {
+                1: "This product contains ingredients with proven synergistic effects backed by clinical trials.",
+                2: "This product combines co-dependent nutrients that work together in established biochemical pathways.",
+                3: "This product contains a promising ingredient combination with early clinical support.",
+                4: "This product combines complementary ingredients commonly used together, though clinical synergy data is limited.",
+            }.get(best_tier, ""),
+            "clusters": synergy_display,
         }
 
     # Interaction profile summary — grouped by condition and drug class

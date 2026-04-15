@@ -2595,16 +2595,16 @@ class TestSynergyClusterSpec:
         return SupplementScorer()
 
     def test_synergy_explicit_flag_respected(self, scorer):
-        """Pre-computed synergy_cluster_qualified is used when present."""
+        """Pre-computed synergy_cluster_qualified=True returns tier 2 default bonus."""
         product = make_base_product()
         product["synergy_cluster_qualified"] = True
-        assert scorer._synergy_cluster_qualified(product) is True
+        assert scorer._synergy_cluster_qualified(product) == 0.75  # legacy default
 
     def test_synergy_explicit_flag_false(self, scorer):
-        """Pre-computed False flag is respected."""
+        """Pre-computed False flag returns 0.0."""
         product = make_base_product()
         product["synergy_cluster_qualified"] = False
-        assert scorer._synergy_cluster_qualified(product) is False
+        assert scorer._synergy_cluster_qualified(product) == 0.0
 
     def test_synergy_two_ingredient_match_without_doses_does_not_qualify(self, scorer):
         """Fallback path requires at least one dose-checkable ingredient."""
@@ -2621,7 +2621,7 @@ class TestSynergyClusterSpec:
                 }
             ]
         }
-        assert scorer._synergy_cluster_qualified(product) is False
+        assert scorer._synergy_cluster_qualified(product) == 0.0
 
     def test_synergy_single_match_does_not_qualify(self, scorer):
         """Cluster with only 1 matched ingredient does not qualify."""
@@ -2635,7 +2635,7 @@ class TestSynergyClusterSpec:
                 }
             ]
         }
-        assert scorer._synergy_cluster_qualified(product) is False
+        assert scorer._synergy_cluster_qualified(product) == 0.0
 
     def test_synergy_underdosed_ingredients_no_bonus(self, scorer):
         """Cluster where none meet minimum dose does not qualify."""
@@ -2652,15 +2652,16 @@ class TestSynergyClusterSpec:
                 }
             ]
         }
-        assert scorer._synergy_cluster_qualified(product) is False
+        assert scorer._synergy_cluster_qualified(product) == 0.0
 
-    def test_synergy_half_dosed_qualifies(self, scorer):
-        """Cluster where >= half of checkable ingredients meet dose qualifies."""
+    def test_synergy_half_dosed_qualifies_with_tier(self, scorer):
+        """Cluster where >= half of checkable ingredients meet dose qualifies with tier bonus."""
         product = make_base_product()
         product["formulation_data"] = {
             "synergy_clusters": [
                 {
                     "cluster_name": "Bone Health",
+                    "evidence_tier": 2,
                     "match_count": 2,
                     "matched_ingredients": [
                         {"name": "Calcium", "min_effective_dose": 500, "meets_minimum": True},
@@ -2669,8 +2670,71 @@ class TestSynergyClusterSpec:
                 }
             ]
         }
-        # 1/2 dosed, ceil(2/2) = 1, 1 >= 1 → qualifies
-        assert scorer._synergy_cluster_qualified(product) is True
+        # 1/2 dosed, ceil(2/2) = 1, 1 >= 1 → qualifies, tier 2 = 0.75
+        assert scorer._synergy_cluster_qualified(product) == 0.75
+
+    def test_synergy_tier_1_proven_gets_full_bonus(self, scorer):
+        """Tier 1 (proven synergy) cluster awards 1.0 bonus."""
+        product = make_base_product()
+        product["formulation_data"] = {
+            "synergy_clusters": [
+                {
+                    "cluster_name": "Curcumin Absorption",
+                    "evidence_tier": 1,
+                    "match_count": 2,
+                    "matched_ingredients": [
+                        {"name": "Curcumin", "min_effective_dose": 500, "meets_minimum": True},
+                        {"name": "Piperine", "min_effective_dose": 5, "meets_minimum": True},
+                    ],
+                }
+            ]
+        }
+        assert scorer._synergy_cluster_qualified(product) == 1.0
+
+    def test_synergy_tier_4_popular_gets_quarter_bonus(self, scorer):
+        """Tier 4 (popular combination) cluster awards 0.25 bonus."""
+        product = make_base_product()
+        product["formulation_data"] = {
+            "synergy_clusters": [
+                {
+                    "cluster_name": "Stress Stack",
+                    "evidence_tier": 4,
+                    "match_count": 2,
+                    "matched_ingredients": [
+                        {"name": "Ashwagandha", "min_effective_dose": 300, "meets_minimum": True},
+                        {"name": "Rhodiola", "min_effective_dose": 200, "meets_minimum": True},
+                    ],
+                }
+            ]
+        }
+        assert scorer._synergy_cluster_qualified(product) == 0.25
+
+    def test_synergy_best_tier_wins(self, scorer):
+        """When multiple clusters match, the best tier's bonus is used."""
+        product = make_base_product()
+        product["formulation_data"] = {
+            "synergy_clusters": [
+                {
+                    "cluster_name": "Popular Stack",
+                    "evidence_tier": 4,
+                    "match_count": 2,
+                    "matched_ingredients": [
+                        {"name": "A", "min_effective_dose": 100, "meets_minimum": True},
+                        {"name": "B", "min_effective_dose": 100, "meets_minimum": True},
+                    ],
+                },
+                {
+                    "cluster_name": "Proven Synergy",
+                    "evidence_tier": 1,
+                    "match_count": 2,
+                    "matched_ingredients": [
+                        {"name": "C", "min_effective_dose": 100, "meets_minimum": True},
+                        {"name": "D", "min_effective_dose": 100, "meets_minimum": True},
+                    ],
+                },
+            ]
+        }
+        assert scorer._synergy_cluster_qualified(product) == 1.0
 
 
 class TestManufacturerViolationsSpec:

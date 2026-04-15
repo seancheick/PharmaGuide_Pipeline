@@ -692,9 +692,45 @@ class SupplementScorer:
         qualifies = bool(product.get("absorption_data", {}).get("qualifies_for_bonus", False))
         return float(points_if_paired) if qualifies else 0.0
 
-    def _synergy_cluster_qualified(self, product: Dict[str, Any]) -> bool:
+    def _synergy_cluster_qualified(self, product: Dict[str, Any]) -> float:
+        """Return the best synergy bonus based on evidence tier.
+
+        Checks all matched synergy clusters. Returns the highest tiered bonus
+        from any qualifying cluster (2+ matched ingredients with adequate doses).
+
+        Tier bonuses (from scoring_config.json):
+          Tier 1 (PROVEN synergy):       1.0
+          Tier 2 (SUPPORTED co-nutrients): 0.75
+          Tier 3 (PROMISING):            0.5
+          Tier 4 (POPULAR):              0.25
+
+        Returns 0.0 if no cluster qualifies.
+        """
+        # Legacy boolean override from enricher
         if "synergy_cluster_qualified" in product:
-            return bool(product.get("synergy_cluster_qualified"))
+            if bool(product.get("synergy_cluster_qualified")):
+                # Legacy path — no tier info, give tier 2 default
+                return 0.75
+            return 0.0
+
+        # Read tier bonuses from config
+        a5_cfg = self.config.get("section_A_ingredient_quality", {}).get(
+            "A5_formulation_excellence", {}
+        )
+        synergy_cfg = a5_cfg.get("synergy_cluster", {})
+        if isinstance(synergy_cfg, (int, float)):
+            # Old config format (single number) — use as flat bonus
+            tier_bonuses = {1: float(synergy_cfg), 2: float(synergy_cfg),
+                           3: float(synergy_cfg), 4: float(synergy_cfg)}
+        else:
+            tier_bonuses = {
+                1: as_float(synergy_cfg.get("tier_1_proven"), 1.0),
+                2: as_float(synergy_cfg.get("tier_2_supported"), 0.75),
+                3: as_float(synergy_cfg.get("tier_3_promising"), 0.5),
+                4: as_float(synergy_cfg.get("tier_4_popular"), 0.25),
+            }
+
+        best_bonus = 0.0
 
         clusters = safe_list(product.get("formulation_data", {}).get("synergy_clusters", []))
         for cluster in clusters:
@@ -709,15 +745,15 @@ class SupplementScorer:
                 if as_float(item.get("min_effective_dose"), 0.0) and as_float(item.get("min_effective_dose"), 0.0) > 0
             ]
             if not checkable:
-                # Keep scorer fallback behavior aligned with enrichment projection:
-                # cluster matches without dose-anchored evidence do not qualify for A5c.
                 continue
 
             dosed = [item for item in checkable if bool(item.get("meets_minimum", False))]
             if len(dosed) >= math.ceil(len(checkable) / 2):
-                return True
+                tier = int(as_float(cluster.get("evidence_tier"), 4))
+                bonus = tier_bonuses.get(tier, 0.25)
+                best_bonus = max(best_bonus, bonus)
 
-        return False
+        return best_bonus
 
     def _compute_formulation_bonus(self, product: Dict[str, Any]) -> Dict[str, float]:
         formulation = product.get("formulation_data", {})
@@ -741,7 +777,7 @@ class SupplementScorer:
                 for item in std
             )
 
-        has_synergy = self._synergy_cluster_qualified(product)
+        synergy_bonus = self._synergy_cluster_qualified(product)
 
         non_gmo_audit = derive_non_gmo_audit(product)
         non_gmo_verified = bool(non_gmo_audit.get("project_verified"))
@@ -751,7 +787,7 @@ class SupplementScorer:
         return {
             "A5a_organic": 1.0 if is_organic else 0.0,
             "A5b_standardized_botanical": 1.0 if has_std else 0.0,
-            "A5c_synergy_cluster": 1.0 if has_synergy else 0.0,
+            "A5c_synergy_cluster": round(synergy_bonus, 2),
             "A5d_non_gmo_verified": a5d,
         }
 
