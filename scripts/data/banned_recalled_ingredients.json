@@ -1169,7 +1169,8 @@
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0525091"
+      "cui": "C0525091",
+      "external_ids": {}
     },
     {
       "id": "BANNED_ADD_ANATABINE",
@@ -1740,7 +1741,10 @@
       "regulatory_date_label": "Federal restriction effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0136960"
+      "cui": "C0136960",
+      "external_ids": {
+        "unii": "2286E5R2KE"
+      }
     },
     {
       "id": "BANNED_ADD_POTASSIUM_BROMATE",
@@ -1975,7 +1979,10 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0014941"
+      "cui": "C0014941",
+      "external_ids": {
+        "unii": "423D2T571U"
+      }
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
@@ -2076,7 +2083,10 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Policy watchlist spans multiple synthetic food acids; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Policy watchlist spans multiple synthetic food acids; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {
+        "unii": "88XHZ13131"
+      }
     },
     {
       "id": "BANNED_ARISTOLOCHIC_ACID",
@@ -2303,7 +2313,8 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C4041589"
+      "cui": "C4041589",
+      "external_ids": {}
     },
     {
       "id": "BANNED_BVO_2024",
@@ -2871,7 +2882,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C1621344",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "M9VVZ08EKQ"
+      },
       "gsrs": null
     },
     {
@@ -2983,7 +2996,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Contamination watchlist spans multiple GLP-1 compounds and quality defects; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Contamination watchlist spans multiple GLP-1 compounds and quality defects; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "BANNED_DELTA8_THC",
@@ -3096,7 +3110,10 @@
       "regulatory_date_label": "FDA safety advisory published",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0057341"
+      "cui": "C0057341",
+      "external_ids": {
+        "unii": "B49D0HH807"
+      }
     },
     {
       "id": "BANNED_DMAA",
@@ -3274,7 +3291,10 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C3492032"
+      "cui": "C3492032",
+      "external_ids": {
+        "unii": "X49C572YQO"
+      }
     },
     {
       "id": "BANNED_DMBA",
@@ -3593,7 +3613,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0885298",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "GN83C131XS"
+      },
       "gsrs": null
     },
     {
@@ -3990,7 +4012,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0993598",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "8W94T9026R"
+      },
       "rxcui": null,
       "gsrs": null
     },
@@ -4521,7 +4545,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Contamination category covers multiple metal fiber and particle variants; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Contamination category covers multiple metal fiber and particle variants; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "BANNED_PEDIATRIC_FLUORIDE",
@@ -4654,7 +4679,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Pediatric fluoride supplement entry spans multiple salts and dosage forms; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Pediatric fluoride supplement entry spans multiple salts and dosage forms; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "BANNED_PHENIBUT",
@@ -4930,7 +4956,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Partially hydrogenated oils are a class entry and the PHO abbreviation is ambiguous; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Partially hydrogenated oils are a class entry and the PHO abbreviation is ambiguous; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "BANNED_PICAMILON",
@@ -7154,7 +7181,8 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C2354537"
+      "cui": "C2354537",
+      "external_ids": {}
     },
     {
       "id": "NOOTROPIC_ADRAFINIL",
@@ -7642,7 +7670,10 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this research-chemical nootropic name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this research-chemical nootropic name; null CUI is intentional.",
+      "external_ids": {
+        "unii": "174R2IG4T0"
+      }
     },
     {
       "id": "NOOTROPIC_MODAFINIL",
@@ -9278,7 +9309,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Analogue watchlist spans multiple cardarine derivatives; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Analogue watchlist spans multiple cardarine derivatives; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_GE_LABS_YKARINE",
@@ -9369,7 +9401,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_GOLD_STAR_DISTRIBUTION",
@@ -9452,7 +9485,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_GREEN_LUMBER",
@@ -9537,7 +9571,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_HYDROXYCUT",
@@ -9663,7 +9698,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_JACK3D",
@@ -9789,7 +9825,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_LIVE_IT_UP_SUPER_GREENS",
@@ -9882,7 +9919,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_MODERN_WARRIOR",
@@ -9967,7 +10005,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_MR7_SUPER_700000",
@@ -10075,7 +10114,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_OXYELITE_PRO",
@@ -10208,7 +10248,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_PURITY_PRODUCTS_MY_BLADDER",
@@ -10296,7 +10337,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_REBOOST_CLEARLIFE_NASAL_SPRAY",
@@ -10388,7 +10430,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_RHEUMACARE_CAPSULES",
@@ -10487,7 +10530,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_SILINTAN",
@@ -10572,7 +10616,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RECALLED_TITAN_SARMS_LLC",
@@ -10671,7 +10716,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "RISK_BITTER_ORANGE",
@@ -10902,7 +10948,10 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Inorganic germanium entry spans multiple salts and oxides; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Inorganic germanium entry spans multiple salts and oxides; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {
+        "unii": "5O6CM4W76A"
+      }
     },
     {
       "id": "RISK_GREEN_TEA_EXTRACT_HIGH",
@@ -11005,7 +11054,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Dose-conditioned green tea extract risk entry is broader than one ingredient concept; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Dose-conditioned green tea extract risk entry is broader than one ingredient concept; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "RISK_KAVA",
@@ -11223,7 +11273,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0939882",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "W1ES06373M"
+      },
       "rxcui": null,
       "gsrs": null
     },
@@ -11849,7 +11901,8 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C4550372"
+      "cui": "C4550372",
+      "external_ids": {}
     },
     {
       "id": "SARM_OSTARINE",
@@ -12079,7 +12132,8 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0601132"
+      "cui": "C0601132",
+      "external_ids": {}
     },
     {
       "id": "SCHED_AMANITA_MUSCARIA",
@@ -12537,7 +12591,10 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Policy watchlist spans many synthetic anabolic steroids; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Policy watchlist spans many synthetic anabolic steroids; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {
+        "unii": "77P0LYX19T"
+      }
     },
     {
       "id": "SPIKE_CHLOROPRETADALAFIL",
@@ -13189,7 +13246,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this kratom-derived analogue name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this kratom-derived analogue name; null CUI is intentional.",
+      "external_ids": {}
     },
     {
       "id": "SPIKE_PHENOLPHTHALEIN",
@@ -13381,7 +13439,9 @@
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional.",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "2JW56253DF"
+      },
       "rxcui": null,
       "gsrs": null
     },
@@ -13709,7 +13769,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Policy watchlist spans multiple tianeptine analogues; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Policy watchlist spans multiple tianeptine analogues; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "STIM_ALPHA_PHP",
@@ -13795,7 +13856,8 @@
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C4743057"
+      "cui": "C4743057",
+      "external_ids": {}
     },
     {
       "id": "STIM_METHYLHEXANAMINE_ANALOGS",
@@ -13914,7 +13976,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Policy watchlist spans multiple methylhexanamine analogues; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Policy watchlist spans multiple methylhexanamine analogues; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "SYNTH_CUMYL_PICA",
@@ -14130,7 +14193,8 @@
       "recall_scope": null,
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Entry combines cannabis and THC policy coverage; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Entry combines cannabis and THC policy coverage; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {}
     },
     {
       "id": "WADA_TRAMADOL",
@@ -14390,7 +14454,8 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "recall_scope": null,
-      "cui": "C0604275"
+      "cui": "C0604275",
+      "external_ids": {}
     },
     {
       "id": "SPIKE_METHOCARBAMOL",
@@ -14601,7 +14666,9 @@
       "match_mode": "active",
       "recall_scope": null,
       "cui": "C0331296",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "9PP1T3TC5U"
+      },
       "gsrs": null
     },
     {
@@ -14783,7 +14850,9 @@
         ]
       },
       "cui": "C0205704",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "3SJ3U7J6V2"
+      },
       "rxcui": null,
       "gsrs": null
     },
@@ -14990,7 +15059,8 @@
           }
         ]
       },
-      "cui": "C0891893"
+      "cui": "C0891893",
+      "external_ids": {}
     },
     {
       "id": "ADD_DOCUSATE_SODIUM",
@@ -15247,7 +15317,9 @@
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional.",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "G8WX4UG544"
+      },
       "rxcui": null,
       "gsrs": null
     },
@@ -16101,7 +16173,8 @@
       },
       "cui": null,
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed exact UMLS concept was found for this designer steroid name; null CUI is intentional."
+      "cui_note": "No confirmed exact UMLS concept was found for this designer steroid name; null CUI is intentional.",
+      "external_ids": {}
     },
     {
       "id": "BANNED_ADD_TITANIUM_DIOXIDE",
@@ -16523,7 +16596,10 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Food-color entry spans formulation and coloring variants; no single ingredient-level UMLS concept is appropriate."
+      "cui_note": "Food-color entry spans formulation and coloring variants; no single ingredient-level UMLS concept is appropriate.",
+      "external_ids": {
+        "unii": "4XYU5U00C4"
+      }
     },
     {
       "id": "BANNED_ADD_OCTOPAMINE",
@@ -17076,7 +17152,8 @@
       },
       "cui": null,
       "cui_status": "no_single_umls_concept",
-      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation."
+      "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
+      "external_ids": {}
     },
     {
       "id": "SCHED_PSILOCIN",

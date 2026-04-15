@@ -961,7 +961,8 @@
           "unii": "7N464URE7E"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "vitamin_b3_niacin": {
     "standard_name": "Vitamin B3 (Niacin)",
@@ -2140,7 +2141,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "vitamin_b9_folate": {
     "standard_name": "Vitamin B9 (Folate)",
@@ -3874,7 +3876,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "vitamin_e": {
     "standard_name": "Vitamin E",
@@ -6775,7 +6778,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "selenium": {
     "standard_name": "Selenium",
@@ -7402,7 +7406,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "citrus_bioflavonoids": {
     "standard_name": "Citrus Bioflavonoids",
@@ -8065,7 +8070,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "atp": {
     "standard_name": "ATP (Adenosine Triphosphate)",
@@ -8185,7 +8191,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lysozyme": {
     "standard_name": "Lysozyme",
@@ -8261,7 +8268,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "diindolylmethane": {
     "standard_name": "Diindolylmethane",
@@ -8359,7 +8367,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "resveratrol": {
     "standard_name": "Resveratrol",
@@ -8526,7 +8535,8 @@
           "unii": "6KS3LS0D4F"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "saw_palmetto": {
     "standard_name": "Saw Palmetto",
@@ -8832,7 +8842,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "stinging_nettle": {
     "standard_name": "Stinging Nettle",
@@ -9044,7 +9055,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "vanadyl_sulfate": {
     "standard_name": "Vanadyl Sulfate",
@@ -9252,7 +9264,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "inositol": {
     "standard_name": "Inositol",
@@ -9358,7 +9371,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "copper": {
     "standard_name": "Copper",
@@ -12335,7 +12349,8 @@
           "unii": "XSS6HSA3AJ"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "glutathione": {
     "standard_name": "Glutathione",
@@ -12489,7 +12504,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "glutathione_peroxidase": {
     "standard_name": "Glutathione Peroxidase",
@@ -12546,7 +12562,8 @@
       }
     ],
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "probiotics": {
     "standard_name": "Probiotics",
@@ -12842,7 +12859,8 @@
       "last_reviewed_at": "2026-02-27"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "prebiotics": {
     "standard_name": "Prebiotics",
@@ -13125,7 +13143,8 @@
     },
     "external_ids": {
       "unii": "89NA02M4RX"
-    }
+    },
+    "aliases": []
   },
   "choline": {
     "standard_name": "Choline",
@@ -13673,7 +13692,8 @@
       "unii": "394XK0IH40"
     },
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "phosphatidylinositol": {
     "standard_name": "Phosphatidylinositol",
@@ -13719,7 +13739,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "taurine": {
     "standard_name": "Taurine",
@@ -13855,7 +13876,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ergothioneine": {
     "standard_name": "Ergothioneine",
@@ -13929,7 +13951,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_carnitine": {
     "standard_name": "L-Carnitine",
@@ -14780,7 +14803,8 @@
           "unii": "63CV1GEK3Y"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "l_lysine": {
     "standard_name": "L-Lysine",
@@ -15021,7 +15045,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_tyrosine": {
     "standard_name": "L-Tyrosine",
@@ -15247,7 +15272,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_proline": {
     "standard_name": "L-Proline",
@@ -15348,7 +15374,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_glycine": {
     "standard_name": "L-Glycine",
@@ -15396,7 +15423,8 @@
     },
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "l_alanine": {
     "standard_name": "L-Alanine",
@@ -15466,7 +15494,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_histidine": {
     "standard_name": "L-Histidine",
@@ -15570,7 +15599,8 @@
           "unii": "EKP351892F"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "l_serine": {
     "standard_name": "L-Serine",
@@ -15634,7 +15664,8 @@
           "unii": "3LXS1M9IE5"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "l_glutamic_acid": {
     "standard_name": "L-Glutamic Acid",
@@ -15797,7 +15828,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_ornithine": {
     "standard_name": "L-Ornithine",
@@ -15948,7 +15980,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "l_tryptophan": {
     "standard_name": "L-Tryptophan",
@@ -16062,7 +16095,8 @@
           "unii": "333DO1RDJY"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "gaba": {
     "standard_name": "GABA (Gamma-Aminobutyric Acid)",
@@ -16330,7 +16364,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lutein": {
     "standard_name": "Lutein",
@@ -16493,7 +16528,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "sulforaphane": {
     "standard_name": "Sulforaphane",
@@ -17118,7 +17154,8 @@
       "last_reviewed_at": "2026-02-27"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "hyaluronic_acid": {
     "standard_name": "Hyaluronic Acid",
@@ -17317,7 +17354,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "alpha_carotene": {
     "standard_name": "Alpha-Carotene",
@@ -17362,7 +17400,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "alpha_lipoic_acid": {
     "standard_name": "Alpha Lipoic Acid",
@@ -17755,7 +17794,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ashwagandha": {
     "standard_name": "Ashwagandha",
@@ -18100,7 +18140,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "rhodiola": {
     "standard_name": "Rhodiola",
@@ -18213,7 +18254,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "ginkgo": {
     "standard_name": "Ginkgo",
@@ -18643,7 +18685,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_theanine": {
     "standard_name": "L-Theanine",
@@ -18752,7 +18795,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "collagen": {
     "standard_name": "Collagen",
@@ -19194,7 +19238,8 @@
           "unii": "S82P8JZ4YJ"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "glucosamine": {
     "standard_name": "Glucosamine",
@@ -19489,7 +19534,8 @@
     },
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "green_tea_extract": {
     "standard_name": "Green Tea Extract",
@@ -19937,7 +19983,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "pine_bark_extract": {
     "standard_name": "Pine Bark Extract",
@@ -20942,7 +20989,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "cranberry": {
     "standard_name": "Cranberry",
@@ -21078,7 +21126,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bilberry": {
     "standard_name": "Bilberry",
@@ -21232,7 +21281,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "elderberry": {
     "standard_name": "Elderberry",
@@ -21776,7 +21826,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "nattokinase": {
     "standard_name": "Nattokinase",
@@ -21862,7 +21913,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "squalene": {
     "standard_name": "Squalene",
@@ -21922,7 +21974,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "d_limonene": {
     "standard_name": "D-Limonene",
@@ -22218,7 +22271,8 @@
     },
     "cui_note": "Class entry spanning multiple NAD+ precursor compounds (NR, NMN, niacin). No single UMLS concept.",
     "cui_status": "no_single_umls_concept",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "lycopene": {
     "standard_name": "Lycopene",
@@ -22310,7 +22364,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "paba": {
     "standard_name": "PABA (Para-Aminobenzoic Acid)",
@@ -22516,7 +22571,8 @@
           "unii": "4GUJ8AH400"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "l_valine": {
     "standard_name": "L-Valine",
@@ -22596,7 +22652,8 @@
           "unii": "H1WR898GX7"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "l_isoleucine": {
     "standard_name": "L-Isoleucine",
@@ -22670,7 +22727,8 @@
           "unii": "XQL9PAO004"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "l_threonine": {
     "standard_name": "L-Threonine",
@@ -22733,7 +22791,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_citrulline": {
     "standard_name": "L-Citrulline",
@@ -22822,7 +22881,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "dmae": {
     "standard_name": "DMAE (Dimethylaminoethanol)",
@@ -23197,7 +23257,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "synephrine": {
     "standard_name": "Synephrine",
@@ -23270,7 +23331,8 @@
     "external_ids": {
       "unii": "PEG5DP7434"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "same": {
     "standard_name": "SAMe (S-Adenosyl-L-Methionine)",
@@ -23459,7 +23521,8 @@
     },
     "cui_note": "Class entry spanning RNA and DNA nucleic acid supplements. No single UMLS concept.",
     "cui_status": "no_single_umls_concept",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "octacosanol": {
     "standard_name": "Octacosanol",
@@ -23518,7 +23581,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "policosanol": {
     "standard_name": "Policosanol",
@@ -23595,7 +23659,8 @@
     },
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "eriocitrin": {
     "standard_name": "Eriocitrin",
@@ -23655,7 +23720,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "gamma_linolenic_acid": {
     "standard_name": "Gamma-Linolenic Acid",
@@ -23797,7 +23863,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "cryptoxanthin": {
     "standard_name": "Cryptoxanthin",
@@ -23913,7 +23980,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "flavonols": {
     "standard_name": "Flavonols",
@@ -23962,7 +24030,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "27_deoxyactein": {
     "standard_name": "27-Deoxyactein (Black Cohosh Triterpene)",
@@ -24016,7 +24085,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "4_hydroxyisoleucine": {
     "standard_name": "4-Hydroxyisoleucine (Fenugreek Amino Acid)",
@@ -24080,7 +24150,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "akba": {
     "standard_name": "AKBA (3-Acetyl-11-Keto-β-Boswellic Acid)",
@@ -24146,7 +24217,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "cape": {
     "standard_name": "CAPE (Caffeic Acid Phenethyl Ester)",
@@ -24211,7 +24283,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "cgf": {
     "standard_name": "CGF (Chlorella Growth Factor)",
@@ -24263,7 +24336,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "d_fraction": {
     "standard_name": "D-Fraction (Maitake Beta-Glucan)",
@@ -24316,7 +24390,8 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "dnj_1_deoxynojirimycin": {
     "standard_name": "DNJ (1-Deoxynojirimycin)",
@@ -24372,7 +24447,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "egcg": {
     "standard_name": "EGCG (Epigallocatechin Gallate)",
@@ -24438,7 +24514,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_dopa": {
     "standard_name": "L-DOPA (Levodopa)",
@@ -24526,7 +24603,8 @@
           "unii": "K59Z6Z8REF"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "opc": {
     "standard_name": "OPCs (Oligomeric Proanthocyanidins)",
@@ -24580,7 +24658,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "pac": {
     "standard_name": "PACs (Proanthocyanidins Type-A)",
@@ -24635,7 +24714,8 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "rb1": {
     "standard_name": "Ginsenoside Rb1",
@@ -24698,7 +24778,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "rg1": {
     "standard_name": "Ginsenoside Rg1",
@@ -24761,7 +24842,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "rg3": {
     "standard_name": "Ginsenoside Rg3",
@@ -24826,7 +24908,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "s_allylcysteine": {
     "standard_name": "S-Allylcysteine (Aged Garlic Compound)",
@@ -24890,7 +24973,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "tsg": {
     "standard_name": "TSG (Tetrahydroxystilbene Glucoside)",
@@ -24944,7 +25028,8 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "acemannan": {
     "standard_name": "Acemannan (Aloe Vera Polysaccharide)",
@@ -25010,7 +25095,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "acetogenins": {
     "standard_name": "Acetogenins",
@@ -25064,7 +25150,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "adenosine": {
     "standard_name": "Adenosine",
@@ -25140,7 +25227,8 @@
           "unii": "5A614L51CT"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "agnuside": {
     "standard_name": "Agnuside",
@@ -25204,7 +25292,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "alkaloids": {
     "standard_name": "Alkaloids",
@@ -25254,7 +25343,8 @@
       "last_reviewed_at": "2026-02-28",
       "last_reviewed": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "alkamides": {
     "standard_name": "Alkamides",
@@ -25307,7 +25397,8 @@
       "last_reviewed_at": "2026-02-28",
       "last_reviewed": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "aloin": {
     "standard_name": "Aloin",
@@ -25373,7 +25464,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "alpha_linolenic_acid": {
     "standard_name": "Alpha-Linolenic Acid",
@@ -25447,7 +25539,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "anthocyanins": {
     "standard_name": "Anthocyanins",
@@ -25505,7 +25598,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "cyanidin_3_glucoside": {
     "standard_name": "Cyanidin-3-Glucoside",
@@ -25636,7 +25730,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "apigenin": {
     "standard_name": "Apigenin",
@@ -25698,7 +25793,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "arbutin": {
     "standard_name": "Arbutin",
@@ -25780,7 +25876,8 @@
           "unii": "7UQ83N5MHX"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "arctiin": {
     "standard_name": "Arctiin",
@@ -25851,7 +25948,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "aspalathin": {
     "standard_name": "Aspalathin",
@@ -25904,7 +26002,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "aucubin": {
     "standard_name": "Aucubin",
@@ -25968,7 +26067,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "betalains": {
     "standard_name": "Betalains",
@@ -26022,7 +26122,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "betulinic_acid": {
     "standard_name": "Betulinic Acid",
@@ -26087,7 +26188,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bisabolol": {
     "standard_name": "Bisabolol",
@@ -26153,7 +26255,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "caffeine": {
     "standard_name": "Caffeine",
@@ -26435,7 +26538,8 @@
       "last_reviewed": "2026-02-28"
     },
     "cui_status": "no_single_umls_concept",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "catalpol": {
     "standard_name": "Catalpol",
@@ -26500,7 +26604,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "chlorogenic_acids": {
     "standard_name": "Chlorogenic Acids",
@@ -26568,7 +26673,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "chlorophyll": {
     "standard_name": "Chlorophyll",
@@ -26675,7 +26781,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "corosolic_acid": {
     "standard_name": "Corosolic Acid",
@@ -26748,7 +26855,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "cynarin": {
     "standard_name": "Cynarin",
@@ -26802,7 +26910,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "daidzein": {
     "standard_name": "Daidzein",
@@ -26875,7 +26984,8 @@
           "unii": "2T6D2HPX7Q"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "delphinidin": {
     "standard_name": "Delphinidin",
@@ -26948,7 +27058,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "diosgenin": {
     "standard_name": "Diosgenin",
@@ -27012,7 +27123,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ecdysterones": {
     "standard_name": "Ecdysterones",
@@ -27070,7 +27182,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "ellagic_acid": {
     "standard_name": "Ellagic Acid",
@@ -27140,7 +27253,8 @@
           "unii": "ILJ8NEF6DT"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "emodin": {
     "standard_name": "Emodin",
@@ -27212,7 +27326,8 @@
           "unii": "O2H2Z421AP"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "erythrina_alkaloids": {
     "standard_name": "Erythrina Alkaloids",
@@ -27266,7 +27381,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "eugenol": {
     "standard_name": "Eugenol",
@@ -27335,7 +27451,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "fatty_acids": {
     "standard_name": "Fatty Acids",
@@ -27467,7 +27584,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "fiber": {
     "standard_name": "Fiber",
@@ -27596,7 +27714,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "formononetin": {
     "standard_name": "Formononetin",
@@ -27660,7 +27779,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "forskolin": {
     "standard_name": "Forskolin",
@@ -27725,7 +27845,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "fucoidan": {
     "standard_name": "Fucoidan",
@@ -27790,7 +27911,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "galactolipids": {
     "standard_name": "Galactolipids",
@@ -27844,7 +27966,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "gallic_acid": {
     "standard_name": "Gallic Acid",
@@ -27929,7 +28052,8 @@
           "unii": "3UW7031F6P"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "gallocatechin": {
     "standard_name": "Gallocatechin",
@@ -27993,7 +28117,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ganoderic_acids": {
     "standard_name": "Ganoderic Acids",
@@ -28050,7 +28175,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "genistein": {
     "standard_name": "Genistein",
@@ -28132,7 +28258,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ginsenosides": {
     "standard_name": "Ginsenosides",
@@ -28196,7 +28323,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "glucosinolates": {
     "standard_name": "Glucosinolates",
@@ -28249,7 +28377,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "glycitein": {
     "standard_name": "Glycitein",
@@ -28313,7 +28442,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "gypenosides": {
     "standard_name": "Gypenosides",
@@ -28371,7 +28501,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "huperzine_a": {
     "standard_name": "Huperzine A",
@@ -28452,7 +28583,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "icariin": {
     "standard_name": "Icariin",
@@ -28525,7 +28657,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "indicaxanthin": {
     "standard_name": "Indicaxanthin",
@@ -28590,7 +28723,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "inulin": {
     "standard_name": "Inulin",
@@ -28668,7 +28802,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "isoflavones": {
     "standard_name": "Isoflavones",
@@ -28859,7 +28994,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "ketosteroids": {
     "standard_name": "Ketosteroids",
@@ -28910,7 +29046,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "lauric_acid": {
     "standard_name": "Lauric Acid",
@@ -29036,7 +29173,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "myristic_acid": {
     "standard_name": "Myristic Acid",
@@ -29167,7 +29305,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lectins": {
     "standard_name": "Lectins",
@@ -29216,7 +29355,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "lignans": {
     "standard_name": "Lignans",
@@ -29292,7 +29432,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "linalool": {
     "standard_name": "Linalool",
@@ -29357,7 +29498,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "linoleic_acid": {
     "standard_name": "Linoleic Acid",
@@ -29479,7 +29621,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "luteolin": {
     "standard_name": "Luteolin",
@@ -29547,7 +29690,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "mesembrine": {
     "standard_name": "Mesembrine",
@@ -29613,7 +29757,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "mucilage": {
     "standard_name": "Mucilage",
@@ -29664,7 +29809,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "naringin": {
     "standard_name": "Naringin",
@@ -29730,7 +29876,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "phenolic_acids": {
     "standard_name": "Phenolic Acids",
@@ -29785,7 +29932,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_single_umls_concept",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "phytosterols": {
     "standard_name": "Phytosterols",
@@ -30131,7 +30279,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "polysaccharides": {
     "standard_name": "Polysaccharides",
@@ -30180,7 +30329,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "proanthocyanidins": {
     "standard_name": "Proanthocyanidins",
@@ -30234,7 +30384,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "protein": {
     "standard_name": "Protein",
@@ -30306,7 +30457,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "puerarin": {
     "standard_name": "Puerarin (Kudzu Extract)",
@@ -30373,7 +30525,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "quassinoids": {
     "standard_name": "Quassinoids",
@@ -30423,7 +30576,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_single_umls_concept",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "rosmarinic_acid": {
     "standard_name": "Rosmarinic Acid",
@@ -30485,7 +30639,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ruscogenin": {
     "standard_name": "Ruscogenin (Butcher's Broom)",
@@ -30553,7 +30708,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "salvianolic_acid_b": {
     "standard_name": "Salvianolic Acid B (Danshen)",
@@ -30642,7 +30798,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "saponins": {
     "standard_name": "Saponins",
@@ -30692,7 +30849,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "schisandrin": {
     "standard_name": "Schisandrin (Schisandra chinensis)",
@@ -30897,7 +31055,8 @@
           "unii": "CLA6B4LBF3"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "sesquiterpenes": {
     "standard_name": "Sesquiterpenes",
@@ -30946,7 +31105,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "shatavarin_iv": {
     "standard_name": "Shatavarin IV (Shatavari)",
@@ -31014,7 +31174,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "silica": {
     "standard_name": "Silica",
@@ -31114,7 +31275,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "tannins": {
     "standard_name": "Tannins",
@@ -31290,7 +31452,8 @@
           "unii": "E9M81NJM6G"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "total_carotenoids": {
     "standard_name": "Total Carotenoids",
@@ -31400,7 +31563,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "triterpenes": {
     "standard_name": "Triterpenes",
@@ -31455,7 +31619,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "ursolic_acid": {
     "standard_name": "Ursolic Acid",
@@ -31527,7 +31692,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "verbascoside": {
     "standard_name": "Verbascoside",
@@ -31594,7 +31760,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "vicine": {
     "standard_name": "Vicine",
@@ -31658,7 +31825,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "viscotoxin": {
     "standard_name": "Viscotoxin",
@@ -31723,7 +31891,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "vitexin": {
     "standard_name": "Vitexin",
@@ -31789,7 +31958,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "volatile_oils": {
     "standard_name": "Volatile Oils",
@@ -31901,7 +32071,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "nicotinamide_riboside": {
     "standard_name": "Nicotinamide Riboside",
@@ -31997,7 +32168,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "nmn": {
     "standard_name": "Nicotinamide Mononucleotide",
@@ -32085,7 +32257,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "pterostilbene": {
     "standard_name": "Pterostilbene",
@@ -32147,7 +32320,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "mullein": {
     "standard_name": "Mullein",
@@ -32236,7 +32410,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "goldenseal": {
     "standard_name": "Goldenseal",
@@ -32414,7 +32589,8 @@
     "external_ids": {
       "unii": "2H1576D5WG"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "nadh": {
     "standard_name": "NADH",
@@ -32543,7 +32719,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "larch_arabinogalactan": {
     "standard_name": "Larch Arabinogalactan",
@@ -32624,7 +32801,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lactobacillus_salivarius": {
     "standard_name": "Lactobacillus Salivarius",
@@ -32707,7 +32885,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "deer_antler_velvet": {
     "standard_name": "Deer Antler Velvet",
@@ -32891,7 +33070,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "pregnenolone": {
     "standard_name": "Pregnenolone",
@@ -32982,7 +33162,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "berberine_supplement": {
     "standard_name": "Berberine",
@@ -33208,7 +33389,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "dicalcium_phosphate": {
     "standard_name": "Di-Calcium Phosphate",
@@ -33367,7 +33549,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "coenzymated_complex": {
     "standard_name": "Coenzymated Complex",
@@ -33433,7 +33616,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "vitamin_k1": {
     "standard_name": "Vitamin K1",
@@ -33521,7 +33705,8 @@
           "unii": "O8GP21P496"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "5_htp": {
     "standard_name": "5-HTP",
@@ -33601,7 +33786,8 @@
     },
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "acetyl_l_carnitine": {
     "standard_name": "Acetyl-L-Carnitine",
@@ -33723,7 +33909,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "nac": {
     "standard_name": "N-Acetyl Cysteine",
@@ -33845,7 +34032,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ginger": {
     "standard_name": "Ginger",
@@ -34025,7 +34213,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lions_mane": {
     "standard_name": "Lion's Mane",
@@ -34123,7 +34312,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "bacopa": {
     "standard_name": "Bacopa Monnieri",
@@ -34245,7 +34435,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "reishi": {
     "standard_name": "Reishi",
@@ -34341,7 +34532,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "maitake": {
     "standard_name": "Maitake",
@@ -34448,7 +34640,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "shiitake": {
     "standard_name": "Shiitake",
@@ -34537,7 +34730,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "turkey_tail": {
     "standard_name": "Turkey Tail",
@@ -34629,7 +34823,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "chaga": {
     "standard_name": "Chaga",
@@ -34718,7 +34913,8 @@
     },
     "cui_note": "No UMLS CUI established for Inonotus obliquus as a supplement ingredient",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "cordyceps": {
     "standard_name": "Cordyceps",
@@ -34841,7 +35037,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "maca": {
     "standard_name": "Maca",
@@ -35042,7 +35239,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "cla": {
     "standard_name": "CLA",
@@ -35249,7 +35447,8 @@
     },
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "beta_glucan": {
     "standard_name": "Beta-Glucan",
@@ -35324,7 +35523,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "lactobacillus_acidophilus": {
     "standard_name": "Lactobacillus Acidophilus",
@@ -35526,7 +35726,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bifidobacterium_lactis": {
     "standard_name": "Bifidobacterium Lactis",
@@ -35723,7 +35924,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lactobacillus_rhamnosus": {
     "standard_name": "Lactobacillus Rhamnosus",
@@ -35912,7 +36114,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lactobacillus_plantarum": {
     "standard_name": "Lactobacillus Plantarum",
@@ -36053,7 +36256,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bifidobacterium_longum": {
     "standard_name": "Bifidobacterium Longum",
@@ -36182,7 +36386,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lactobacillus_casei": {
     "standard_name": "Lactobacillus Casei",
@@ -36284,7 +36489,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bifidobacterium_bifidum": {
     "standard_name": "Bifidobacterium Bifidum",
@@ -36415,7 +36621,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "saccharomyces_boulardii": {
     "standard_name": "Saccharomyces Boulardii",
@@ -36588,7 +36795,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "streptococcus_thermophilus": {
     "standard_name": "Streptococcus Thermophilus",
@@ -36663,7 +36871,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "feverfew": {
     "standard_name": "Feverfew",
@@ -36827,7 +37036,8 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "wheatgrass": {
     "standard_name": "Wheatgrass",
@@ -36939,7 +37149,8 @@
       "last_reviewed_at": "2026-03-06"
     },
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "gamma_butyrobetaine_ethyl_ester": {
     "standard_name": "Gamma-Butyrobetaine Ethyl Ester (GBB)",
@@ -37315,7 +37526,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "alpha_gpc": {
     "standard_name": "Alpha GPC",
@@ -37538,7 +37750,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "docosapentaenoic_acid_dpa": {
     "standard_name": "Docosapentaenoic Acid (DPA)",
@@ -37695,7 +37908,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "omega_7_fatty_acids": {
     "standard_name": "Omega-7 Fatty Acids",
@@ -37740,7 +37954,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "other_fatty_acids": {
     "standard_name": "Other Fatty Acids",
@@ -37786,7 +38001,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_single_umls_concept",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "epa_dha": {
     "standard_name": "EPA/DHA",
@@ -37846,7 +38062,8 @@
       }
     ],
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "d_beta_hydroxybutyrate_bhb": {
     "standard_name": "D-Beta-Hydroxybutyrate (BHB)",
@@ -38418,7 +38635,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "sea_buckthorn": {
     "standard_name": "Sea Buckthorn",
@@ -38554,7 +38772,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "shilajit": {
     "standard_name": "Shilajit",
@@ -38710,7 +38929,8 @@
     },
     "external_ids": {
       "unii": "XII14C5FXV"
-    }
+    },
+    "aliases": []
   },
   "fenugreek": {
     "standard_name": "Fenugreek",
@@ -38983,7 +39203,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "st_johns_wort": {
     "standard_name": "St. John's Wort",
@@ -39109,7 +39330,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "valerian": {
     "standard_name": "Valerian",
@@ -39533,7 +39755,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "dha": {
     "standard_name": "DHA (Docosahexaenoic Acid)",
@@ -41325,7 +41548,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "royal_jelly": {
     "standard_name": "Royal Jelly",
@@ -41389,7 +41613,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "chia_seed": {
     "standard_name": "Chia Seed",
@@ -41461,7 +41686,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "papaya": {
     "standard_name": "Papaya",
@@ -41525,7 +41751,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "flaxseed": {
     "standard_name": "Flaxseed",
@@ -41652,7 +41879,8 @@
       "linseed"
     ],
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "chamomile": {
     "standard_name": "Chamomile",
@@ -41729,7 +41957,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lemon_balm": {
     "standard_name": "Lemon Balm",
@@ -41793,7 +42022,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "olive_leaf": {
     "standard_name": "Olive Leaf",
@@ -41926,7 +42156,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "oregano": {
     "standard_name": "Oregano",
@@ -42067,7 +42298,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "rose_hips": {
     "standard_name": "Rose Hips",
@@ -42215,7 +42447,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "astragalus": {
     "standard_name": "Astragalus",
@@ -42268,7 +42501,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "magnolia_bark": {
     "standard_name": "Magnolia Bark",
@@ -42356,7 +42590,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "dandelion": {
     "standard_name": "Dandelion",
@@ -42424,7 +42659,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "passionflower": {
     "standard_name": "Passionflower",
@@ -42794,7 +43030,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "licorice": {
     "standard_name": "Licorice",
@@ -42887,7 +43124,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "strontium": {
     "standard_name": "Strontium",
@@ -42947,7 +43185,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_phenylalanine": {
     "standard_name": "L-Phenylalanine",
@@ -43065,7 +43304,8 @@
           "unii": "U14A832J8D"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "tongkat_ali": {
     "standard_name": "Tongkat Ali",
@@ -43177,7 +43417,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "gotu_kola": {
     "standard_name": "Gotu Kola",
@@ -43256,7 +43497,8 @@
       "last_reviewed": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "immunoglobulin": {
     "standard_name": "Immunoglobulin",
@@ -43329,7 +43571,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "borage_seed_oil": {
     "standard_name": "Borage Seed Oil",
@@ -43409,7 +43652,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "herring_roe_extract": {
     "standard_name": "Herring Roe Extract",
@@ -43479,7 +43723,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "butterbur": {
     "standard_name": "Butterbur (Petasites hybridus)",
@@ -43635,7 +43880,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "fucoxanthin": {
     "standard_name": "Fucoxanthin",
@@ -43692,7 +43938,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "beta_caryophyllene": {
     "standard_name": "Beta-Caryophyllene",
@@ -43754,7 +44001,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "chrysin": {
     "standard_name": "Chrysin",
@@ -43809,7 +44057,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "celadrin": {
     "standard_name": "Celadrin",
@@ -43855,7 +44104,8 @@
     "category_enum": "fatty_acids",
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "green_lipped_mussel": {
     "standard_name": "Green-Lipped Mussel",
@@ -43954,7 +44204,8 @@
     "category_enum": "proteins",
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "white_tea": {
     "standard_name": "White Tea Extract",
@@ -44012,7 +44263,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "hops": {
     "standard_name": "Hops (Humulus lupulus)",
@@ -44157,7 +44409,8 @@
     },
     "category_enum": "fatty_acids",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "ahcc": {
     "standard_name": "AHCC (Active Hexose Correlated Compound)",
@@ -44213,7 +44466,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "arachidonic_acid": {
     "standard_name": "Arachidonic Acid",
@@ -44300,7 +44554,8 @@
           "unii": "AZ87DUD2Y8"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "calanus_oil": {
     "standard_name": "Calanus Oil",
@@ -44347,7 +44602,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "perilla_oil": {
     "standard_name": "Perilla Oil",
@@ -44400,7 +44656,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "argan_oil": {
     "standard_name": "Argan Oil",
@@ -44460,7 +44717,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "pgx_fiber": {
     "standard_name": "PGX (PolyGlycopleX)",
@@ -44510,7 +44768,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "inositol_hexaphosphate": {
     "standard_name": "Inositol Hexaphosphate (IP6)",
@@ -44676,7 +44935,8 @@
     "cui_note": "No confirmed exact UMLS concept found for Ahiflower seed oil.",
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "uridine_monophosphate": {
     "standard_name": "Uridine-5'-Monophosphate",
@@ -44811,7 +45071,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "polygodial": {
     "standard_name": "Polygodial",
@@ -44867,7 +45128,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "common_bean_extract": {
     "standard_name": "Common Bean Extract",
@@ -44925,7 +45187,8 @@
     "cui_note": "No confirmed exact UMLS concept found for common bean extract.",
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "corn_silk": {
     "standard_name": "Corn Silk",
@@ -44988,7 +45251,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "horsetail": {
     "standard_name": "Horsetail",
@@ -45040,7 +45304,8 @@
     },
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "thyme_extract": {
     "standard_name": "Thyme Extract",
@@ -45100,7 +45365,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "evening_primrose_oil": {
     "standard_name": "Evening Primrose Oil",
@@ -45188,7 +45454,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "brown_kelp": {
     "standard_name": "Brown Kelp",
@@ -45254,7 +45521,8 @@
     "cui_note": "No confirmed exact UMLS concept found for brown kelp.",
     "external_ids": {},
     "gsrs": null,
-    "rxcui_note": "No RxNorm concept found via GSRS lookup"
+    "rxcui_note": "No RxNorm concept found via GSRS lookup",
+    "aliases": []
   },
   "raspberry_ketones": {
     "standard_name": "Raspberry Ketones",
@@ -45445,7 +45713,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "pomegranate": {
     "standard_name": "Pomegranate",
@@ -45619,7 +45888,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "chia_protein": {
     "standard_name": "Chia Protein",
@@ -45666,7 +45936,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "pea_protein": {
     "standard_name": "Pea Protein",
@@ -45748,7 +46019,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "flower_pollen": {
     "standard_name": "Flower Pollen Extract",
@@ -45819,7 +46091,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "amla": {
     "standard_name": "Amla (Phyllanthus emblica)",
@@ -46290,7 +46563,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "holy_basil": {
     "standard_name": "Holy Basil",
@@ -46498,7 +46772,8 @@
     },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "irish_sea_moss": {
     "standard_name": "Irish Sea Moss",
@@ -46713,7 +46988,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "beta_carotene": {
     "standard_name": "Beta-Carotene",
@@ -46899,7 +47175,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "algae_oil": {
     "standard_name": "Algae Oil",
@@ -46978,7 +47255,8 @@
     "category_enum": "fatty_acids",
     "cui_note": "Product class spanning multiple microalgae-derived oils. No single UMLS concept is accurate.",
     "cui_status": "no_single_umls_concept",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "apple_cider_vinegar": {
     "standard_name": "Apple Cider Vinegar",
@@ -47042,7 +47320,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "palmitoylethanolamide": {
     "standard_name": "Palmitoylethanolamide",
@@ -47111,7 +47390,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_carnosine": {
     "standard_name": "L-Carnosine",
@@ -47180,7 +47460,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "fisetin": {
     "standard_name": "Fisetin",
@@ -47241,7 +47522,8 @@
           "unii": "2KR35TI2XV"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "lithium": {
     "standard_name": "Lithium",
@@ -47427,7 +47709,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "hawthorn": {
     "standard_name": "Hawthorn (Crataegus)",
@@ -47834,7 +48117,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "theacrine": {
     "standard_name": "Theacrine",
@@ -47910,7 +48194,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "agmatine": {
     "standard_name": "Agmatine Sulfate",
@@ -47985,7 +48270,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "watercress": {
     "standard_name": "Watercress",
@@ -48047,7 +48333,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "anise": {
     "standard_name": "Anise (Pimpinella anisum)",
@@ -48595,7 +48882,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "neem": {
     "standard_name": "Neem",
@@ -48646,7 +48934,8 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "mastic_gum": {
     "standard_name": "Mastic Gum",
@@ -48702,7 +48991,8 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "l_pyroglutamic_acid": {
     "standard_name": "L-Pyroglutamic Acid",
@@ -48837,7 +49127,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "calcium_pyruvate": {
     "standard_name": "Calcium Pyruvate",
@@ -48905,7 +49196,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ecklonia_cava": {
     "standard_name": "Ecklonia Cava",
@@ -48964,7 +49256,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "butyric_acid": {
     "standard_name": "Butyric Acid",
@@ -49075,7 +49368,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "inosine": {
     "standard_name": "Inosine",
@@ -49143,7 +49437,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "sea_cucumber": {
     "standard_name": "Sea Cucumber",
@@ -49205,7 +49500,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "humic_acid": {
     "standard_name": "Humic Acid",
@@ -49255,7 +49551,8 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Complex polycarboxylic organic acids from decomposed organic matter",
     "dosage_importance": 0.5,
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "lumbrokinase": {
     "standard_name": "Lumbrokinase",
@@ -49315,7 +49612,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "aescin": {
     "standard_name": "Aescin",
@@ -49439,7 +49737,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "royal_sun_blazei": {
     "standard_name": "Royal Sun Blazei",
@@ -49519,7 +49818,8 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "rhaponticin": {
     "standard_name": "Rhaponticin",
@@ -49576,7 +49876,8 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "evodiamine": {
     "standard_name": "Evodiamine",
@@ -49636,7 +49937,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "cobalt": {
     "standard_name": "Cobalt",
@@ -49701,7 +50003,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bile_extract": {
     "standard_name": "Bile Extract",
@@ -49755,7 +50058,8 @@
     "description": "Ox/bovine bile for fat digestion support in cholecystectomy/bile insufficiency",
     "dosage_importance": 1.0,
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "apoaequorin": {
     "standard_name": "Apoaequorin",
@@ -49805,7 +50109,8 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "description": "Recombinant jellyfish protein (Prevagen); digested orally — implausible oral bioavailability",
     "dosage_importance": 0.5,
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "split_gill_polypore": {
     "standard_name": "Split Gill Polypore",
@@ -49854,7 +50159,8 @@
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "dimethyl_glycine": {
     "standard_name": "Dimethyl Glycine",
@@ -49998,7 +50304,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "glucuronolactone": {
     "standard_name": "Glucuronolactone",
@@ -50049,7 +50356,8 @@
     "dosage_importance": 0.5,
     "external_ids": {
       "unii": "XE4Y3016M9"
-    }
+    },
+    "aliases": []
   },
   "methylliberine": {
     "standard_name": "Methylliberine",
@@ -50112,7 +50420,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "meshima_mushroom": {
     "standard_name": "Meshima Mushroom",
@@ -50164,7 +50473,8 @@
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "bitter_melon": {
     "standard_name": "Bitter Melon",
@@ -50225,7 +50535,8 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "arjuna": {
     "standard_name": "Arjuna",
@@ -50283,7 +50594,8 @@
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "brewers_yeast": {
     "standard_name": "Brewer's Yeast",
@@ -50425,7 +50737,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "ipriflavone": {
     "standard_name": "Ipriflavone",
@@ -50493,7 +50806,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_baiba": {
     "standard_name": "L-BAIBA",
@@ -50546,7 +50860,8 @@
     "description": "Exercise-induced myokine (beta-aminoisobutyric acid); promotes fat oxidation via PPARa",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "lychee_polyphenol": {
     "standard_name": "Lychee Polyphenol",
@@ -50595,7 +50910,8 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "tamarind_extract": {
     "standard_name": "Tamarind Extract",
@@ -50642,7 +50958,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "jujube": {
     "category": "herbs",
@@ -50694,7 +51011,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "threonic_acid": {
     "category": "vitamins",
@@ -50763,7 +51081,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "dihydromyricetin": {
     "category": "antioxidants",
@@ -50823,7 +51142,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "diamine_oxidase": {
     "category": "enzymes",
@@ -50870,7 +51190,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "activated_charcoal": {
     "category": "other",
@@ -50936,7 +51257,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "aloe_vera": {
     "category": "herbs",
@@ -51068,7 +51390,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "red_clover": {
     "category": "herbs",
@@ -51189,7 +51512,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "nopal": {
     "category": "herbs",
@@ -51247,7 +51571,8 @@
       "last_reviewed_at": "2026-03-09"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "cocoa": {
     "category": "herbs",
@@ -51310,7 +51635,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "alfalfa": {
     "category": "herbs",
@@ -51377,7 +51703,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "klamath_algae": {
     "category": "herbs",
@@ -51428,7 +51755,8 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "rubidium": {
     "category": "minerals",
@@ -51490,7 +51818,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "theophylline": {
     "category": "other",
@@ -51570,7 +51899,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "centrophenoxine": {
     "category": "other",
@@ -51692,7 +52022,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "birch_polypore": {
     "category": "herbs",
@@ -51810,7 +52141,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bentonite": {
     "category": "other",
@@ -51880,7 +52212,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "grains_of_paradise": {
     "category": "herbs",
@@ -51945,7 +52278,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "taxifolin": {
     "standard_name": "Taxifolin",
@@ -52007,7 +52341,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "aloe_ferox": {
     "standard_name": "Aloe Ferox",
@@ -52059,7 +52394,8 @@
       }
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "pau_darco": {
     "standard_name": "Pau D'Arco",
@@ -52127,7 +52463,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "noni": {
     "standard_name": "Noni",
@@ -52182,7 +52519,8 @@
       }
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "goji_berry": {
     "standard_name": "Goji Berry",
@@ -52300,7 +52638,8 @@
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "chanca_piedra": {
     "standard_name": "Chanca Piedra",
@@ -52420,7 +52759,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "theaflavins": {
     "standard_name": "Theaflavins",
@@ -52474,7 +52814,8 @@
       }
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "acai_berry": {
     "standard_name": "Acai Berry",
@@ -52535,7 +52876,8 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "urolithin_a": {
     "standard_name": "Urolithin A",
@@ -52605,7 +52947,8 @@
           "unii": "19YRN3ZS9P"
         }
       ]
-    }
+    },
+    "aliases": []
   },
   "kaempferia_parviflora": {
     "standard_name": "Kaempferia Parviflora",
@@ -52671,7 +53014,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "cat_s_claw": {
     "standard_name": "Cat's Claw",
@@ -52746,7 +53090,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "tinospora": {
     "standard_name": "Tinospora",
@@ -52801,7 +53146,8 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "rye_pollen": {
     "standard_name": "Rye Pollen Extract",
@@ -52868,7 +53214,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "keratin": {
     "standard_name": "Keratin",
@@ -52925,7 +53272,8 @@
       "review_status": "stub"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "apple_polyphenols": {
     "standard_name": "Apple Polyphenols",
@@ -53036,7 +53384,8 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "coffee_fruit": {
     "standard_name": "Coffee Fruit Extract",
@@ -53168,7 +53517,8 @@
     },
     "cui_note": "No confirmed ingredient-level UMLS concept for yeast fermentate; UMLS hits skew to device terms.",
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "picrorhiza": {
     "standard_name": "Picrorhiza Kurroa",
@@ -53239,7 +53589,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "maqui_berry": {
     "standard_name": "Maqui Berry",
@@ -53295,7 +53646,8 @@
     "cui_note": "No confirmed exact UMLS concept found for maqui berry.",
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "mangosteen": {
     "standard_name": "Mangosteen",
@@ -53391,7 +53743,8 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "paeoniflorin": {
     "standard_name": "Paeoniflorin",
@@ -53442,7 +53795,8 @@
       "review_status": "stub"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "phlorizin": {
     "standard_name": "Phlorizin",
@@ -53506,7 +53860,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "isovitexin": {
     "standard_name": "Isovitexin",
@@ -53568,7 +53923,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "diosmin": {
     "standard_name": "Diosmin",
@@ -53634,7 +53990,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "colostrum": {
     "standard_name": "Colostrum",
@@ -53814,7 +54171,8 @@
     },
     "cui_note": "No confirmed exact UMLS concept found for French oak extract.",
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "angelica_gigas": {
     "standard_name": "Angelica Gigas",
@@ -53869,7 +54227,8 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "nobiletin": {
     "standard_name": "Nobiletin",
@@ -53932,7 +54291,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "purple_tea": {
     "standard_name": "Purple Tea Extract",
@@ -53984,7 +54344,8 @@
     },
     "cui_note": "No confirmed exact UMLS concept found for purple tea extract.",
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "cabbage_extract": {
     "standard_name": "Cabbage Extract",
@@ -54036,7 +54397,8 @@
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "mangiferin": {
     "standard_name": "Mangiferin",
@@ -54099,7 +54461,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "oat_straw": {
     "standard_name": "Oat Straw Extract",
@@ -54169,7 +54532,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "l_asparagine": {
     "standard_name": "L-Asparagine",
@@ -54244,7 +54608,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "dietary_nitrate": {
     "standard_name": "Dietary Nitrate",
@@ -54303,7 +54668,8 @@
       "last_reviewed_at": "2026-02-28"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "senna": {
     "standard_name": "Senna",
@@ -54479,7 +54845,8 @@
       "last_reviewed_at": "2026-02-25"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "spearmint": {
     "standard_name": "Spearmint",
@@ -54588,7 +54955,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "button_mushroom": {
     "standard_name": "Button Mushroom",
@@ -54675,7 +55043,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "auricularia": {
     "standard_name": "Wood Ear Mushroom",
@@ -54983,7 +55352,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "kefir_culture": {
     "standard_name": "Kefir Culture",
@@ -55060,7 +55430,8 @@
       "last_reviewed_at": "2026-02-25"
     },
     "cui_status": "no_single_umls_concept",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "phenylethylamine": {
     "standard_name": "Phenylethylamine",
@@ -55293,7 +55664,8 @@
         }
       ],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "streptococcus_salivarius": {
     "standard_name": "Streptococcus Salivarius",
@@ -55399,7 +55771,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lactobacillus_reuteri": {
     "standard_name": "Lactobacillus Reuteri",
@@ -55530,7 +55903,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lactobacillus_gasseri": {
     "standard_name": "Lactobacillus Gasseri",
@@ -55588,7 +55962,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lactobacillus_helveticus": {
     "standard_name": "Lactobacillus Helveticus",
@@ -55647,7 +56022,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "lactobacillus_fermentum": {
     "standard_name": "Lactobacillus Fermentum",
@@ -55705,7 +56081,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bifidobacterium_breve": {
     "standard_name": "Bifidobacterium Breve",
@@ -55783,7 +56160,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bacillus_coagulans": {
     "standard_name": "Bacillus Coagulans",
@@ -55952,7 +56330,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bacillus_subtilis": {
     "standard_name": "Bacillus Subtilis",
@@ -56039,7 +56418,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bacillus_clausii": {
     "standard_name": "Bacillus Clausii",
@@ -56095,7 +56475,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "bacillus_indicus": {
     "standard_name": "Bacillus Indicus",
@@ -56138,7 +56519,8 @@
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "rxcui_note": "No RxNorm concept for probiotic species",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "undecylenic_acid": {
     "standard_name": "10-Undecenoic Acid (Undecylenic Acid)",
@@ -56247,7 +56629,8 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "sesame_seed_oil": {
     "standard_name": "Sesame Seed Oil",
@@ -56375,7 +56758,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "extra_virgin_olive_oil": {
     "standard_name": "Extra Virgin Olive Oil",
@@ -56634,7 +57018,8 @@
     },
     "cui_note": "No dedicated UMLS entry used for supplement stereoisomer mapping",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "sphingomyelin": {
     "standard_name": "Sphingomyelin",
@@ -56682,7 +57067,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-03-13"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "geranylgeraniol": {
     "standard_name": "Geranylgeraniol",
@@ -56745,7 +57131,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "beef_tallow": {
     "standard_name": "Beef Tallow",
@@ -56807,7 +57194,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "shuddha_laksha": {
     "standard_name": "Shuddha Laksha",
@@ -56850,7 +57238,8 @@
       "confidence": "high"
     },
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "seal_oil": {
     "standard_name": "Seal Oil",
@@ -56894,7 +57283,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-03-16"
     },
-    "external_ids": {}
+    "external_ids": {},
+    "aliases": []
   },
   "milk_basic_protein": {
     "standard_name": "Milk Basic Protein",
@@ -56955,7 +57345,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "eicosatrienoic_acid": {
     "standard_name": "Eicosatrienoic Acid",
@@ -57001,7 +57392,8 @@
       "last_reviewed_at": "2026-03-16"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "pine_nut_oil": {
     "standard_name": "Pine Nut Oil",
@@ -57057,7 +57449,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "aliases": []
   },
   "krill_oil": {
     "standard_name": "Krill Oil",
@@ -58226,8 +58619,6 @@
     "standard_name": "Calcium D-Glucarate",
     "category": "other",
     "cui": "C0006698",
-    "cas": "5793-88-4",
-    "pubchem_cid": 154911,
     "aliases": [
       "calcium glucarate",
       "calcium saccharate",
@@ -58274,7 +58665,9 @@
       "review_status": "stub"
     },
     "external_ids": {
-      "unii": "SST07NLK7J"
+      "unii": "SST07NLK7J",
+      "cas": "5793-88-4",
+      "pubchem_cid": 154911
     },
     "rxcui": "1907",
     "gsrs": {
@@ -58299,8 +58692,6 @@
     "standard_name": "Artemisinin",
     "category": "herbs",
     "cui": "C0052430",
-    "cas": "63968-64-9",
-    "pubchem_cid": 68827,
     "aliases": [
       "sweet wormwood",
       "artemisia annua",
@@ -58347,7 +58738,9 @@
       "review_status": "stub"
     },
     "external_ids": {
-      "unii": "9RMU91N5K2"
+      "unii": "9RMU91N5K2",
+      "cas": "63968-64-9",
+      "pubchem_cid": 68827
     },
     "rxcui": "2367409",
     "gsrs": {
@@ -58442,8 +58835,6 @@
     "standard_name": "7-Keto DHEA",
     "category": "other",
     "cui": "C0525091",
-    "cas": "566-19-8",
-    "pubchem_cid": 193313,
     "aliases": [
       "7-oxodehydroepiandrosterone",
       "7-oxo-DHEA",
@@ -58492,7 +58883,9 @@
       "review_status": "stub"
     },
     "external_ids": {
-      "unii": "2334LJD2E9"
+      "unii": "2334LJD2E9",
+      "cas": "566-19-8",
+      "pubchem_cid": 193313
     },
     "rxcui": "1427084",
     "gsrs": {
@@ -58513,7 +58906,6 @@
     "category_enum": "herbs",
     "cui": "C0205704",
     "rxcui": null,
-    "cas": "8015-89-2",
     "aliases": [
       "cascara",
       "rhamnus purshiana",
@@ -58525,7 +58917,8 @@
       "review_status": "stub"
     },
     "external_ids": {
-      "unii": "4VBP01X99F"
+      "unii": "4VBP01X99F",
+      "cas": "8015-89-2"
     },
     "forms": {
       "cascara sagrada bark extract": {
@@ -58777,7 +59170,8 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "oleic_acid": {
     "standard_name": "Oleic Acid",
@@ -58829,7 +59223,8 @@
     "external_ids": {
       "unii": "2UMI9U37CP"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "citric_acid": {
     "standard_name": "Citric Acid",
@@ -58880,7 +59275,8 @@
     "external_ids": {
       "unii": "2968PHW8QP"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "kaempferol": {
     "standard_name": "Kaempferol",
@@ -58931,7 +59327,8 @@
     "external_ids": {
       "unii": "731P2LE49E"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "nad": {
     "standard_name": "NAD+ (Nicotinamide Adenine Dinucleotide)",
@@ -58984,7 +59381,8 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "naringenin": {
     "standard_name": "Naringenin",
@@ -59036,7 +59434,8 @@
     "external_ids": {
       "unii": "HN5425SBF2"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "vanadium": {
     "standard_name": "Vanadium",
@@ -59089,7 +59488,8 @@
     "external_ids": {
       "unii": "00J9J9XKDE"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "soybean": {
     "standard_name": "Soybean (Glycine Max)",
@@ -59143,7 +59543,8 @@
     "external_ids": {
       "unii": "L7HT8F1ZOD"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "sunflower_oil": {
     "standard_name": "Sunflower Oil",
@@ -59195,7 +59596,8 @@
     "external_ids": {
       "unii": "3W1JG795YI"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "silymarin": {
     "standard_name": "Silymarin",
@@ -59246,7 +59648,8 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "oligosaccharides": {
     "standard_name": "Oligosaccharides",
@@ -59300,7 +59703,8 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "canola_oil": {
     "standard_name": "Canola Oil (Brassica napus)",
@@ -59354,7 +59758,8 @@
     "external_ids": {
       "unii": "331KBJ17RK"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "orotic_acid": {
     "standard_name": "Orotic Acid",
@@ -59407,7 +59812,8 @@
     "external_ids": {
       "unii": "61H4T033E5"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "rice_bran": {
     "standard_name": "Rice Bran",
@@ -59462,7 +59868,8 @@
     "external_ids": {
       "unii": "R60QEP13IC"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "palmitoleic_acid": {
     "standard_name": "Palmitoleic Acid",
@@ -59515,7 +59922,8 @@
     "external_ids": {
       "unii": "209B6YPZ4I"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "idebenone": {
     "standard_name": "Idebenone",
@@ -59565,7 +59973,8 @@
     "external_ids": {
       "unii": "HB6PN45W4J"
     },
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   },
   "lecithin": {
     "standard_name": "Lecithin",
@@ -59616,6 +60025,7 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "gsrs": null
+    "gsrs": null,
+    "aliases": []
   }
 }

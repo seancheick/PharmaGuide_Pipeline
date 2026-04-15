@@ -781,7 +781,8 @@
       ],
       "external_ids": {
         "cas": "7440-36-0",
-        "pubchem_cid": 5354495
+        "pubchem_cid": 5354495,
+        "unii": "9IT35J3UV3"
       },
       "jurisdictional_statuses": [
         {
@@ -1063,7 +1064,8 @@
       "severity_level": "moderate",
       "dose_thresholds": null,
       "entity_relationships": null,
-      "cui": "C0982157"
+      "cui": "C0982157",
+      "external_ids": {}
     },
     {
       "id": "ADD_ASPARTAME",
@@ -3128,7 +3130,10 @@
         }
       ],
       "entity_relationships": null,
-      "cui": "C0108509"
+      "cui": "C0108509",
+      "external_ids": {
+        "unii": "T9D99G2B1R"
+      }
     },
     {
       "id": "ADD_CARBOXYMETHYLCELLULOSE",
@@ -4426,7 +4431,8 @@
       "entity_relationships": null,
       "cui": "C0728803",
       "external_ids": {
-        "cas": "9003-39-8"
+        "cas": "9003-39-8",
+        "unii": "2S7830E561"
       }
     },
     {
@@ -7424,7 +7430,8 @@
       "cui": "C0038179",
       "external_ids": {
         "cas": null,
-        "pubchem_cid": null
+        "pubchem_cid": null,
+        "unii": "9M44R3409A"
       },
       "rxcui": null,
       "gsrs": null,
@@ -8707,7 +8714,8 @@
       "cui": "C0032483",
       "external_ids": {
         "cas": "25322-68-3",
-        "pubchem_cid": null
+        "pubchem_cid": null,
+        "unii": "B697894SGQ"
       },
       "gsrs": null
     },
@@ -11684,7 +11692,8 @@
       ],
       "external_ids": {
         "cas": "10124-56-8",
-        "pubchem_cid": 24968
+        "pubchem_cid": 24968,
+        "unii": "P1BM4ZH95L"
       },
       "jurisdictional_statuses": [
         {
@@ -12989,7 +12998,7 @@
       "external_ids": {
         "cas": "68554-09-6",
         "pubchem_cid": null,
-        "unii": null
+        "unii": "230OU9XXE4"
       },
       "jurisdictional_statuses": [
         {
@@ -14296,7 +14305,7 @@
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
-        "unii": null
+        "unii": "9G5L16BK6N"
       }
     },
     {
@@ -15033,7 +15042,7 @@
       "external_ids": {
         "cas": "7440-31-5",
         "pubchem_cid": null,
-        "unii": null
+        "unii": "387GMG9FH5"
       }
     },
     {
@@ -16530,7 +16539,7 @@
       "external_ids": {
         "cas": null,
         "pubchem_cid": null,
-        "unii": null
+        "unii": "9T1410R4OR"
       },
       "population_warnings": [
         "See individual entries: ADD_BHA (IARC 2B, Prop 65), ADD_BHT (IARC Group 3), ADD_TBHQ (banned in Japan)"
@@ -18184,7 +18193,9 @@
             "reason": "unmapped_resolution_equate_batch"
           }
         ]
-      }
+      },
+      "mechanism_of_harm": "Aluminum lake dyes contain aluminum substrate bonded to synthetic colorants. Aluminum is a known neurotoxicant at high doses. The specific color additive is unspecified, preventing targeted safety assessment.",
+      "confidence": "medium"
     },
     {
       "id": "ADD_POLYSORBATE_20",
@@ -18243,7 +18254,8 @@
             "reason": "unmapped_resolution_remaining_brands_batch"
           }
         ]
-      }
+      },
+      "confidence": "medium"
     }
   ]
 }
