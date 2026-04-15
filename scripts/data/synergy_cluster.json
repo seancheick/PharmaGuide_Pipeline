@@ -10,7 +10,8 @@
       "clusters_with_sources": 54,
       "total_clusters": 54,
       "clusters_with_query_placeholders": 0
-    }
+    },
+    "total_clusters": 57
   },
   "synergy_clusters": [
     {
@@ -49,6 +50,12 @@
           "label": "NCCIH Turmeric",
           "url": "https://www.nccih.nih.gov/health/turmeric"
         }
+      ],
+      "canonical_ids": [
+        "turmeric",
+        "piperine",
+        "curcumin",
+        "ginger"
       ]
     },
     {
@@ -83,6 +90,12 @@
           "label": "Magnesium - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "magnesium",
+        "taurine",
+        "vitamin_b6_pyridoxine",
+        "l_glycine"
       ]
     },
     {
@@ -138,6 +151,25 @@
           "label": "NCCIH Melatonin",
           "url": "https://www.nccih.nih.gov/health/melatonin-what-you-need-to-know"
         }
+      ],
+      "canonical_ids": [
+        "melatonin",
+        "magnesium",
+        "l_theanine",
+        "gaba",
+        "5_htp",
+        "chamomile",
+        "valerian",
+        "magnolia_bark",
+        "passionflower",
+        "lemon_balm",
+        "ashwagandha",
+        "l_tryptophan",
+        "apigenin",
+        "l_glycine",
+        "tart_cherry",
+        "reishi",
+        "zinc"
       ]
     },
     {
@@ -188,6 +220,23 @@
           "label": "Omega-3 Fatty Acids - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "glucosamine",
+        "chondroitin",
+        "msm",
+        "boswellia",
+        "turmeric",
+        "hyaluronic_acid",
+        "ginger",
+        "omega_3",
+        "fish_oil",
+        "epa",
+        "dha",
+        "collagen",
+        "same",
+        "devils_claw",
+        "cat_s_claw"
       ]
     },
     {
@@ -232,6 +281,19 @@
           "label": "Zinc - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "lutein",
+        "zeaxanthin",
+        "astaxanthin",
+        "bilberry",
+        "saffron",
+        "vitamin_c",
+        "vitamin_e",
+        "zinc",
+        "beta_carotene",
+        "lycopene",
+        "omega_3"
       ]
     },
     {
@@ -278,6 +340,16 @@
           "label": "Vitamin B12 - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_b12_cobalamin",
+        "vitamin_b9_folate",
+        "tmg_betaine",
+        "choline",
+        "vitamin_b6_pyridoxine",
+        "vitamin_b2_riboflavin",
+        "same",
+        "methionine"
       ]
     },
     {
@@ -320,6 +392,20 @@
           "label": "NIH ODS Selenium Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "nac",
+        "glutathione",
+        "alpha_lipoic_acid",
+        "selenium",
+        "milk_thistle",
+        "silymarin",
+        "l_cysteine",
+        "turmeric",
+        "sulforaphane",
+        "chlorella",
+        "spirulina",
+        "activated_charcoal"
       ]
     },
     {
@@ -360,6 +446,18 @@
           "label": "NIH ODS Zinc Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "l_glutamine",
+        "zinc",
+        "slippery_elm",
+        "licorice",
+        "inulin",
+        "psyllium",
+        "aloe_vera",
+        "collagen",
+        "l_serine",
+        "butyric_acid"
       ]
     },
     {
@@ -414,6 +512,19 @@
           "label": "Zinc - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_c",
+        "zinc",
+        "quercetin",
+        "elderberry",
+        "echinacea",
+        "vitamin_d",
+        "beta_glucan",
+        "vitamin_a",
+        "selenium",
+        "astragalus",
+        "colostrum"
       ]
     },
     {
@@ -466,6 +577,19 @@
           "label": "NCCIH Rhodiola",
           "url": "https://www.nccih.nih.gov/health/rhodiola"
         }
+      ],
+      "canonical_ids": [
+        "acetyl_l_carnitine",
+        "l_carnitine",
+        "coq10",
+        "pqq",
+        "rhodiola",
+        "creatine_monohydrate",
+        "vitamin_b2_riboflavin",
+        "magnesium",
+        "d_ribose",
+        "nad",
+        "vitamin_b3_niacin"
       ]
     },
     {
@@ -513,6 +637,17 @@
           "label": "NCCIH Ashwagandha",
           "url": "https://www.nccih.nih.gov/health/ashwagandha"
         }
+      ],
+      "canonical_ids": [
+        "ashwagandha",
+        "rhodiola",
+        "l_theanine",
+        "phosphatidylserine",
+        "magnesium",
+        "holy_basil",
+        "choline",
+        "ginseng",
+        "cordyceps"
       ]
     },
     {
@@ -553,6 +688,16 @@
           "label": "Omega-3 Fatty Acids - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "5_htp",
+        "same",
+        "l_tyrosine",
+        "vitamin_b9_folate",
+        "l_tryptophan",
+        "epa",
+        "st_johns_wort",
+        "saffron"
       ]
     },
     {
@@ -608,6 +753,22 @@
           "label": "NCCIH Ginkgo",
           "url": "https://www.nccih.nih.gov/health/ginkgo"
         }
+      ],
+      "canonical_ids": [
+        "bacopa",
+        "choline",
+        "alpha_gpc",
+        "l_theanine",
+        "rhodiola",
+        "lions_mane",
+        "ginkgo",
+        "phosphatidylserine",
+        "huperzine_a",
+        "caffeine",
+        "pqq",
+        "uridine_monophosphate",
+        "omega_3",
+        "dha"
       ]
     },
     {
@@ -660,6 +821,22 @@
           "label": "Omega-3 Fatty Acids - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "coq10",
+        "omega_3",
+        "fish_oil",
+        "epa",
+        "dha",
+        "vitamin_k",
+        "magnesium",
+        "taurine",
+        "l_arginine",
+        "l_citrulline",
+        "hawthorn",
+        "garlic",
+        "policosanol",
+        "dietary_nitrate"
       ]
     },
     {
@@ -704,6 +881,19 @@
           "label": "Chromium - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "berberine_supplement",
+        "chromium",
+        "alpha_lipoic_acid",
+        "cinnamon",
+        "magnesium",
+        "gymnema_sylvestre",
+        "bitter_melon",
+        "vanadium",
+        "corosolic_acid",
+        "fenugreek",
+        "inulin"
       ]
     },
     {
@@ -744,6 +934,20 @@
           "label": "NIH ODS Vitamin D Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "zinc",
+        "ashwagandha",
+        "vitamin_d",
+        "boron",
+        "tongkat_ali",
+        "fenugreek",
+        "d_aspartic_acid",
+        "tribulus",
+        "saw_palmetto",
+        "stinging_nettle",
+        "diindolylmethane",
+        "maca"
       ]
     },
     {
@@ -782,6 +986,20 @@
           "label": "NIH ODS Vitamin B6 Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "chasteberry",
+        "diindolylmethane",
+        "calcium_d_glucarate",
+        "vitamin_b6_pyridoxine",
+        "magnesium",
+        "evening_primrose_oil",
+        "black_cohosh",
+        "red_clover",
+        "maca",
+        "dong_quai",
+        "wild_yam",
+        "shatavarin_iv"
       ]
     },
     {
@@ -823,6 +1041,21 @@
           "label": "NIH ODS Vitamin A Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_b7_biotin",
+        "silica",
+        "zinc",
+        "collagen",
+        "hyaluronic_acid",
+        "vitamin_c",
+        "msm",
+        "keratin",
+        "saw_palmetto",
+        "iron",
+        "vitamin_e",
+        "copper",
+        "vitamin_a"
       ]
     },
     {
@@ -862,6 +1095,18 @@
           "label": "NIH ODS Selenium Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "milk_thistle",
+        "silymarin",
+        "nac",
+        "alpha_lipoic_acid",
+        "cynarin",
+        "selenium",
+        "dandelion",
+        "turmeric",
+        "glutathione",
+        "tudca"
       ]
     },
     {
@@ -914,6 +1159,19 @@
           "label": "FDA denies health claim notification for Vitamin K2 and osteoporosis",
           "url": "https://www.fda.gov/food/cfsan-constituent-updates/fda-denies-health-claim-notification-vitamin-k2-osteoporosis"
         }
+      ],
+      "canonical_ids": [
+        "calcium",
+        "vitamin_d",
+        "vitamin_k",
+        "magnesium",
+        "boron",
+        "strontium",
+        "silicon",
+        "silica",
+        "vitamin_c",
+        "ipriflavone",
+        "phosphorus"
       ]
     },
     {
@@ -953,6 +1211,15 @@
           "label": "Vitamin C - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "iron",
+        "vitamin_c",
+        "vitamin_b9_folate",
+        "vitamin_b12_cobalamin",
+        "copper",
+        "lactoferrin",
+        "l_lysine"
       ]
     },
     {
@@ -998,6 +1265,22 @@
           "label": "Vitamin E - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_c",
+        "vitamin_e",
+        "selenium",
+        "glutathione",
+        "nac",
+        "alpha_lipoic_acid",
+        "coq10",
+        "resveratrol",
+        "green_tea_extract",
+        "egcg",
+        "grape_seed_extract",
+        "pine_bark_extract",
+        "astaxanthin",
+        "bilberry"
       ]
     },
     {
@@ -1041,6 +1324,19 @@
           "label": "NIH ODS Dietary Supplement Fact Sheets",
           "url": "https://ods.od.nih.gov/factsheets/list-all/"
         }
+      ],
+      "canonical_ids": [
+        "creatine_monohydrate",
+        "beta-alanine",
+        "l_citrulline",
+        "l_arginine",
+        "caffeine",
+        "l_carnitine",
+        "acetyl_l_carnitine",
+        "taurine",
+        "l_tyrosine",
+        "branched_chain_amino_acids",
+        "tmg_betaine"
       ]
     },
     {
@@ -1080,6 +1376,11 @@
           "label": "NIH ODS Dietary Supplement Fact Sheets",
           "url": "https://ods.od.nih.gov/factsheets/list-all/"
         }
+      ],
+      "canonical_ids": [
+        "digestive_enzymes",
+        "tmg_betaine",
+        "bile_extract"
       ]
     },
     {
@@ -1115,6 +1416,17 @@
           "label": "NIH ODS Zinc Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "iodine",
+        "l_tyrosine",
+        "selenium",
+        "zinc",
+        "ashwagandha",
+        "guggul",
+        "brown_kelp",
+        "copper",
+        "iron"
       ]
     },
     {
@@ -1155,6 +1467,17 @@
           "label": "NCCIH Ginkgo",
           "url": "https://www.nccih.nih.gov/health/ginkgo"
         }
+      ],
+      "canonical_ids": [
+        "bacopa",
+        "phosphatidylserine",
+        "choline",
+        "huperzine_a",
+        "lions_mane",
+        "omega_3",
+        "dha",
+        "acetyl_l_carnitine",
+        "gotu_kola"
       ]
     },
     {
@@ -1190,6 +1513,19 @@
           "label": "NIH ODS Chromium Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "l_carnitine",
+        "acetyl_l_carnitine",
+        "green_tea_extract",
+        "egcg",
+        "cla",
+        "chromium",
+        "caffeine",
+        "yohimbe",
+        "forskolin",
+        "garcinia_cambogia",
+        "capsaicin"
       ]
     },
     {
@@ -1231,6 +1567,16 @@
           "label": "NIH ODS Dietary Supplement Fact Sheets",
           "url": "https://ods.od.nih.gov/factsheets/list-all/"
         }
+      ],
+      "canonical_ids": [
+        "protein",
+        "creatine_monohydrate",
+        "hmb",
+        "branched_chain_amino_acids",
+        "l_leucine",
+        "l_glutamine",
+        "tmg_betaine",
+        "taurine"
       ]
     },
     {
@@ -1275,6 +1621,24 @@
           "label": "NCCIH Turmeric",
           "url": "https://www.nccih.nih.gov/health/turmeric"
         }
+      ],
+      "canonical_ids": [
+        "omega_3",
+        "epa",
+        "dha",
+        "fish_oil",
+        "turmeric",
+        "boswellia",
+        "ginger",
+        "quercetin",
+        "resveratrol",
+        "green_tea_extract",
+        "egcg",
+        "digestive_enzymes",
+        "tart_cherry",
+        "white_willow_bark",
+        "devils_claw",
+        "cat_s_claw"
       ]
     },
     {
@@ -1308,6 +1672,15 @@
           "label": "NIH ODS Vitamin C Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_c",
+        "vitamin_b5_pantothenic",
+        "ashwagandha",
+        "rhodiola",
+        "licorice",
+        "holy_basil",
+        "ginseng"
       ]
     },
     {
@@ -1352,6 +1725,19 @@
           "label": "NIH ODS Dietary Supplement Fact Sheets",
           "url": "https://ods.od.nih.gov/factsheets/list-all/"
         }
+      ],
+      "canonical_ids": [
+        "astaxanthin",
+        "pterostilbene",
+        "quercetin",
+        "nad",
+        "ergothioneine",
+        "resveratrol",
+        "fisetin",
+        "spermidine",
+        "coq10",
+        "urolithin_a",
+        "alpha_lipoic_acid"
       ]
     },
     {
@@ -1396,6 +1782,15 @@
           "label": "NCCIH Probiotics: Usefulness and Safety",
           "url": "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety"
         }
+      ],
+      "canonical_ids": [
+        "probiotic_unspecified",
+        "saccharomyces_boulardii",
+        "prebiotics",
+        "inulin",
+        "oligosaccharides",
+        "butyric_acid",
+        "digestive_enzymes"
       ]
     },
     {
@@ -1428,6 +1823,12 @@
           "label": "Potassium - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "potassium",
+        "magnesium",
+        "calcium",
+        "phosphorus"
       ]
     },
     {
@@ -1463,6 +1864,15 @@
           "label": "NIH ODS Dietary Supplement Fact Sheets",
           "url": "https://ods.od.nih.gov/factsheets/list-all/"
         }
+      ],
+      "canonical_ids": [
+        "l_citrulline",
+        "beta-alanine",
+        "tmg_betaine",
+        "l_tyrosine",
+        "caffeine",
+        "taurine",
+        "creatine_monohydrate"
       ]
     },
     {
@@ -1494,6 +1904,14 @@
           "label": "NIH ODS Magnesium Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "branched_chain_amino_acids",
+        "l_leucine",
+        "l_glutamine",
+        "hmb",
+        "taurine",
+        "magnesium"
       ]
     },
     {
@@ -1528,6 +1946,13 @@
           "label": "NIH ODS Dietary Supplement Fact Sheets",
           "url": "https://ods.od.nih.gov/factsheets/list-all/"
         }
+      ],
+      "canonical_ids": [
+        "acetyl_l_carnitine",
+        "l_tyrosine",
+        "choline",
+        "alpha_gpc",
+        "l_theanine"
       ]
     },
     {
@@ -1563,6 +1988,12 @@
           "label": "NCCIH Probiotics: Usefulness and Safety",
           "url": "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety"
         }
+      ],
+      "canonical_ids": [
+        "lactobacillus_rhamnosus",
+        "lactobacillus_acidophilus",
+        "bifidobacterium_bifidum",
+        "bifidobacterium_lactis"
       ]
     },
     {
@@ -1597,6 +2028,12 @@
           "label": "NCCIH Probiotics: Usefulness and Safety",
           "url": "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety"
         }
+      ],
+      "canonical_ids": [
+        "saccharomyces_boulardii",
+        "lactobacillus_plantarum",
+        "lactobacillus_reuteri",
+        "bifidobacterium_longum"
       ]
     },
     {
@@ -1631,6 +2068,12 @@
           "label": "NCCIH Probiotics: Usefulness and Safety",
           "url": "https://www.nccih.nih.gov/health/probiotics-usefulness-and-safety"
         }
+      ],
+      "canonical_ids": [
+        "lactobacillus_helveticus",
+        "bifidobacterium_longum",
+        "lactobacillus_casei",
+        "bifidobacterium_breve"
       ]
     },
     {
@@ -1662,6 +2105,15 @@
           "label": "NIH ODS Vitamin C Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "hyaluronic_acid",
+        "ceramides",
+        "collagen",
+        "vitamin_c",
+        "zinc",
+        "vitamin_b7_biotin",
+        "msm"
       ]
     },
     {
@@ -1698,6 +2150,14 @@
           "label": "NIH ODS Dietary Supplement Fact Sheets",
           "url": "https://ods.od.nih.gov/factsheets/list-all/"
         }
+      ],
+      "canonical_ids": [
+        "l_citrulline",
+        "dietary_nitrate",
+        "pine_bark_extract",
+        "pomegranate",
+        "l_arginine",
+        "hawthorn"
       ]
     },
     {
@@ -1736,6 +2196,18 @@
           "label": "Omega-3 Fatty Acids - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "omega_3",
+        "fish_oil",
+        "epa",
+        "dha",
+        "krill_oil",
+        "choline",
+        "astaxanthin",
+        "vitamin_e",
+        "lecithin",
+        "digestive_enzymes"
       ]
     },
     {
@@ -1777,6 +2249,18 @@
           "label": "NIH ODS Vitamin C Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_c",
+        "l_lysine",
+        "l_proline",
+        "l_glycine",
+        "copper",
+        "silica",
+        "silicon",
+        "collagen",
+        "hyaluronic_acid",
+        "zinc"
       ]
     },
     {
@@ -1819,6 +2303,16 @@
           "label": "NCCIH Quercetin",
           "url": "https://www.nccih.nih.gov/health/quercetin"
         }
+      ],
+      "canonical_ids": [
+        "nac",
+        "quercetin",
+        "vitamin_c",
+        "zinc",
+        "digestive_enzymes",
+        "elderberry",
+        "cordyceps",
+        "mullein"
       ]
     },
     {
@@ -1856,6 +2350,11 @@
           "label": "NCCIH Cranberry",
           "url": "https://www.nccih.nih.gov/health/cranberry"
         }
+      ],
+      "canonical_ids": [
+        "cranberry",
+        "probiotic_unspecified",
+        "vitamin_c"
       ]
     },
     {
@@ -1894,6 +2393,18 @@
           "label": "NIH ODS Zinc Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "saw_palmetto",
+        "phytosterols",
+        "pygeum",
+        "stinging_nettle",
+        "lycopene",
+        "pumpkin_seed_oil",
+        "zinc",
+        "selenium",
+        "green_tea_extract",
+        "egcg"
       ]
     },
     {
@@ -1942,6 +2453,20 @@
           "label": "NCCIH Rhodiola",
           "url": "https://www.nccih.nih.gov/health/rhodiola"
         }
+      ],
+      "canonical_ids": [
+        "omega_3",
+        "dha",
+        "epa",
+        "fish_oil",
+        "phosphatidylserine",
+        "zinc",
+        "iron",
+        "magnesium",
+        "l_theanine",
+        "caffeine",
+        "bacopa",
+        "choline"
       ]
     },
     {
@@ -1983,6 +2508,21 @@
           "label": "NIH ODS Vitamin B6 Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "black_cohosh",
+        "red_clover",
+        "isoflavones",
+        "evening_primrose_oil",
+        "gamma_linolenic_acid",
+        "maca",
+        "sage",
+        "dong_quai",
+        "shatavarin_iv",
+        "vitamin_e",
+        "magnesium",
+        "vitamin_b6_pyridoxine",
+        "genistein"
       ]
     },
     {
@@ -2029,6 +2569,15 @@
           "label": "Iron - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_b9_folate",
+        "iron",
+        "vitamin_b12_cobalamin",
+        "dha",
+        "choline",
+        "iodine",
+        "zinc"
       ]
     },
     {
@@ -2076,6 +2625,17 @@
           "label": "Vitamin B12 - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_b1_thiamine",
+        "vitamin_b6_pyridoxine",
+        "vitamin_b12_cobalamin",
+        "alpha_lipoic_acid",
+        "acetyl_l_carnitine",
+        "magnesium",
+        "omega_3",
+        "dha",
+        "lions_mane"
       ]
     },
     {
@@ -2110,6 +2670,15 @@
           "label": "NIH ODS Vitamin C Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "quercetin",
+        "vitamin_c",
+        "digestive_enzymes",
+        "stinging_nettle",
+        "butterbur",
+        "nac",
+        "diamine_oxidase"
       ]
     },
     {
@@ -2144,6 +2713,17 @@
           "label": "NIH ODS Vitamin D Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "astragalus",
+        "cordyceps",
+        "alpha_lipoic_acid",
+        "omega_3",
+        "fish_oil",
+        "coq10",
+        "vitamin_d",
+        "probiotic_unspecified",
+        "potassium"
       ]
     },
     {
@@ -2189,6 +2769,18 @@
           "label": "Vitamin C - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "coq10",
+        "vitamin_d",
+        "vitamin_c",
+        "zinc",
+        "vitamin_k",
+        "calcium",
+        "xylitol",
+        "probiotic_unspecified",
+        "lactobacillus_reuteri",
+        "green_tea_extract"
       ]
     },
     {
@@ -2233,6 +2825,18 @@
           "label": "Vitamin C - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "zinc",
+        "vitamin_c",
+        "collagen",
+        "vitamin_a",
+        "beta_carotene",
+        "vitamin_e",
+        "l_arginine",
+        "copper",
+        "digestive_enzymes",
+        "aloe_vera"
       ]
     },
     {
@@ -2280,6 +2884,16 @@
           "label": "Riboflavin - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Riboflavin-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "magnesium",
+        "vitamin_b2_riboflavin",
+        "coq10",
+        "feverfew",
+        "butterbur",
+        "alpha_lipoic_acid",
+        "ginger",
+        "vitamin_d"
       ]
     },
     {
@@ -2334,6 +2948,19 @@
           "label": "Omega-3 Fatty Acids - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "magnesium",
+        "coq10",
+        "potassium",
+        "garlic",
+        "omega_3",
+        "fish_oil",
+        "epa",
+        "dha",
+        "olive_leaf",
+        "l_arginine",
+        "hawthorn"
       ]
     },
     {
@@ -2392,6 +3019,20 @@
           "label": "Vitamin D - Health Professional Fact Sheet",
           "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
+      ],
+      "canonical_ids": [
+        "vitamin_b9_folate",
+        "coq10",
+        "inositol",
+        "iron",
+        "vitamin_d",
+        "vitamin_e",
+        "selenium",
+        "omega_3",
+        "dha",
+        "zinc",
+        "chasteberry",
+        "nac"
       ]
     }
   ]
