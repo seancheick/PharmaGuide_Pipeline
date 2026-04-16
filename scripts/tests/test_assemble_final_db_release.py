@@ -44,6 +44,7 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
                 None, None, None, None,  # dosing_summary, servings_per_container, net_contents_quantity, net_contents_unit
                 None,  # allergen_summary
                 None,  # calories_per_serving (v1.3.2)
+                None,  # image_thumbnail_url (v1.4.0)
                 "3.4.0", "5.0.0", "3.4.0", "2026-03-29T00:00:00Z", "1.3.2", "2026-03-29T00:00:00Z",
             ),
         )

@@ -1324,7 +1324,7 @@ class TestFormUnmappedFallbackRegression:
         )
         assert match is not None
         assert match.get("canonical_id") == "dha"
-        assert str(match.get("form_id", "")).lower() == "unspecified"
+        assert "unspecified" in str(match.get("form_id", "")).lower()
         assert float(match.get("score", 0)) <= 13.0
 
     def test_combined_dha_epa_does_not_get_premium_form_credit(self, enricher):

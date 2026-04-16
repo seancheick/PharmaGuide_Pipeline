@@ -136,7 +136,7 @@ def _has_strong_supplement_signal(record: dict) -> bool:
             record.get("description") or "",
         ]
     ).lower()
-    normalized = f" {re.sub(r'\s+', ' ', text)} "
+    normalized = " " + re.sub(r'\s+', ' ', text) + " "
 
     if any(term in normalized for term in SUPPLEMENT_FORM_TERMS):
         return True
@@ -165,7 +165,7 @@ def is_eligible_manufacturer_record(record: dict) -> tuple[bool, str]:
             record.get("description") or "",
         ]
     ).lower()
-    normalized = f" {re.sub(r'\s+', ' ', text)} "
+    normalized = " " + re.sub(r'\s+', ' ', text) + " "
 
     if _has_strong_supplement_signal(record):
         return True, ""

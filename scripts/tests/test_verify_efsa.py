@@ -37,7 +37,7 @@ def test_validate_harmful_additives_uses_runtime_year_for_stale_opinion_check():
     class FakeDateTime(datetime):
         @classmethod
         def now(cls, tz=None):
-            return datetime(2030, 1, 1, tzinfo=UTC)
+            return datetime(2030, 1, 1, tzinfo=timezone.utc)
 
     with patch("api_audit.verify_efsa.datetime", FakeDateTime):
         results = validate_harmful_additives(data, lookup)

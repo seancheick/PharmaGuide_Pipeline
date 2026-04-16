@@ -39,7 +39,7 @@ MONTH_MAP = {
 }
 
 
-@dataclass(slots=True)
+@dataclass
 class PubMedConfig:
     api_key: str = DEFAULT_API_KEY
     tool: str = DEFAULT_TOOL

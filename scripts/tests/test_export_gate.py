@@ -180,6 +180,7 @@ COLUMNS = [
     "net_contents_quantity", "net_contents_unit",
     "allergen_summary",
     "calories_per_serving",  # v1.3.2
+    "image_thumbnail_url",  # v1.4.0
     "scoring_version", "output_schema_version", "enrichment_version", "scored_date",
     "export_version", "exported_at",
 ]

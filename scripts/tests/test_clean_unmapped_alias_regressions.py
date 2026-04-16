@@ -71,12 +71,25 @@ def test_ingredient_group_fallback_uses_exact_normalized_lookup(normalizer):
 
 
 def test_banned_ingredient_group_fallback_respects_negative_match_terms(normalizer):
+    """Sodium Borate with ingredient_group=Borax must NEVER route to banned_recalled
+    (negative_match_terms prevents false-positive banned match).
+
+    Updated 2026-04-16: After batch48, "sodium borate" is now aliased under
+    boron.forms["boron (unspecified)"] (cross_db_overlap_allowlist authorizes
+    this as harmful:iqm context-dependent routing). So it now correctly resolves
+    to Boron as a trace mineral source. The safety invariant — that it does
+    NOT match Sodium Tetraborate (Borax) banned entry — still holds.
+    """
     standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
         "Sodium Borate", [], ingredient_group="Borax"
     )
 
+    # Safety invariant: negative_match_terms blocks banned match regardless of context
     assert standard_name != "Sodium Tetraborate (Borax)"
-    assert mapped is False
+    # New behavior: IQM alias now correctly routes to Boron (preserves previous
+    # "not banned" guarantee while eliminating the unmapped gap in 4 CVS Spectravite products)
+    assert mapped is True
+    assert str(standard_name).lower() == "boron"
 
 
 @pytest.mark.parametrize(
@@ -2546,3 +2559,229 @@ def test_batch47_enrichment_unmapped_form_aliases_map(normalizer, name, expected
 
     assert mapped is True, f"{name!r} should map but did not"
     assert expected_substring.lower() in str(standard_name).lower()
+
+
+# ── Batch 48: Form-fallback alias gaps (2026-04-16) ──────────────────────
+# Fixes Surface C form_fallback_audit `action_needed_differs` entries where the
+# form text did not match any IQM form alias, forcing parent-fallback to an
+# unspecified form. Source: fresh pipeline on 15 brands / 7,942 products.
+#
+# Boron inorganic borate forms: "Sodium Borate" and "Boric Acid, Sodium Borate"
+# appear as DSLD forms[].name for CVS Spectravite and Nature Made multivitamins.
+# Legitimate trace boron mineral sources — chemically equivalent in vivo to
+# boric acid (already aliased under boron (unspecified)).
+# Note: "Sodium Tetraborate" is NOT added — the banned-overlap test
+# (test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classification)
+# restricts IQM↔banned overlaps to a strict whitelist. Pure sodium tetraborate
+# continues to route to banned_recalled.ADD_SODIUM_TETRABORATE as intended.
+# Evidence: EFSA Journal 2013;11(10):3407; NIH ODS Boron Fact Sheet; GSRS shows
+# all three compounds share active moiety BORATE ION (UNII 44OAE30D22).
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("Sodium Borate", "Boron", "Boron"),
+        ("Boric Acid, Sodium Borate", "Boron", "Boron"),
+    ],
+)
+def test_batch48_boron_inorganic_borate_form_aliases_map(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True, f"{name!r} should map but did not"
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+# Brown Rice Chelate systematic gap — 8 minerals, all Garden of Life (295+
+# products). Precedent: zinc brown rice chelate (bio=11) and manganese brown
+# rice chelate (bio=11) already in IQM; "positioned within the amino acid
+# chelate class" per Anderson (1995). Rice protein hydrolysate = organic amino
+# acid chelate class; bioavailability estimated 60-70% (better than inorganic
+# oxide/sulfate, below dedicated bisglycinates).
+@pytest.mark.parametrize(
+    "name,ingredient_group,expected_substring",
+    [
+        ("Brown Rice Chelate", "Chromium", "Chromium"),
+        ("Brown Rice Chelate", "Iron", "Iron"),
+        ("Brown Rice Chelate", "Molybdenum", "Molybdenum"),
+        ("Brown Rice Chelate", "Boron", "Boron"),
+        ("Brown Rice Chelate", "Magnesium", "Magnesium"),
+        ("Brown Rice Chelate", "Selenium", "Selenium"),
+        ("Brown Rice Chelate", "Copper", "Copper"),
+        ("Brown Rice Chelate", "Potassium", "Potassium"),
+    ],
+)
+def test_batch48_brown_rice_chelate_mineral_forms_map(normalizer, name, ingredient_group, expected_substring):
+    standard_name, mapped, _ = normalizer._enhanced_ingredient_mapping(
+        name, [], ingredient_group=ingredient_group
+    )
+
+    assert mapped is True, f"{name!r} should map but did not"
+    assert expected_substring.lower() in str(standard_name).lower()
+
+
+@pytest.mark.parametrize(
+    "mineral_key,form_name",
+    [
+        ("chromium", "chromium brown rice chelate"),
+        ("iron", "iron brown rice chelate"),
+        ("molybdenum", "molybdenum brown rice chelate"),
+        ("boron", "boron brown rice chelate"),
+        ("magnesium", "magnesium brown rice chelate"),
+        ("selenium", "selenium brown rice chelate"),
+        ("copper", "copper brown rice chelate"),
+        ("potassium", "potassium brown rice chelate"),
+    ],
+)
+def test_batch48_brown_rice_chelate_forms_exist_in_iqm(mineral_key, form_name):
+    import json as _json
+    from pathlib import Path
+
+    iqm_path = Path(__file__).resolve().parent.parent / "data" / "ingredient_quality_map.json"
+    iqm = _json.loads(iqm_path.read_text())
+
+    entry = iqm.get(mineral_key)
+    assert entry is not None, f"IQM parent {mineral_key!r} missing"
+    forms = entry.get("forms") or {}
+    assert form_name in forms, f"IQM form {form_name!r} missing from {mineral_key!r}"
+
+    form = forms[form_name]
+    # Parallel structure with zinc/manganese brown rice chelate
+    assert form.get("bio_score") == 11, f"{form_name} bio_score must be 11 (zn/mn BRC precedent)"
+    assert form.get("score") == 11
+    assert form.get("natural") is False
+    assert isinstance(form.get("aliases"), list) and len(form["aliases"]) >= 3
+    struct = form.get("absorption_structured") or {}
+    assert struct.get("quality") == "good"
+
+
+@pytest.mark.parametrize("mineral_key,form_name", [
+    ("chromium", "chromium brown rice chelate"),
+    ("iron", "iron brown rice chelate"),
+    ("molybdenum", "molybdenum brown rice chelate"),
+    ("boron", "boron brown rice chelate"),
+    ("magnesium", "magnesium brown rice chelate"),
+    ("selenium", "selenium brown rice chelate"),
+    ("copper", "copper brown rice chelate"),
+    ("potassium", "potassium brown rice chelate"),
+])
+def test_batch48_brown_rice_protein_mineral_middle_alias_present(mineral_key, form_name):
+    """Pin that 'brown rice protein {mineral} chelate' alias is present.
+    Covers DSLD labels like 'Brown Rice Protein Magnesium Chelate' where mineral is in the middle.
+    """
+    import json as _json
+    from pathlib import Path
+
+    iqm_path = Path(__file__).resolve().parent.parent / "data" / "ingredient_quality_map.json"
+    iqm = _json.loads(iqm_path.read_text())
+
+    mineral = mineral_key
+    form = iqm[mineral]["forms"][form_name]
+    aliases_lc = [a.lower() for a in form.get("aliases", [])]
+    expected = f"brown rice protein {mineral} chelate"
+    assert expected in aliases_lc, (
+        f"Missing alias '{expected}' in {form_name} — "
+        f"needed for DSLD labels like 'Brown Rice Protein {mineral.title()} Chelate'"
+    )
+
+
+def test_batch48_boron_unspecified_has_inorganic_borate_aliases():
+    """Pin that the new sodium borate + combo aliases land on boron (unspecified)."""
+    import json as _json
+    from pathlib import Path
+
+    iqm_path = Path(__file__).resolve().parent.parent / "data" / "ingredient_quality_map.json"
+    iqm = _json.loads(iqm_path.read_text())
+
+    form = iqm["boron"]["forms"]["boron (unspecified)"]
+    aliases_lc = [a.lower() for a in form.get("aliases", [])]
+
+    assert "sodium borate" in aliases_lc, "sodium borate alias missing from boron (unspecified)"
+    assert "boric acid, sodium borate" in aliases_lc, (
+        "combo 'boric acid, sodium borate' alias missing from boron (unspecified)"
+    )
+    # Safety: sodium tetraborate must NOT be added here (banned-overlap test)
+    assert "sodium tetraborate" not in aliases_lc, (
+        "sodium tetraborate must NOT be in IQM aliases — would collide with banned_recalled"
+    )
+
+
+def test_bug10_green_tea_phytosome_extract_alias_present():
+    """BUG-10: 'Green Tea Phytosome extract' ingredient label (Thorne) must resolve
+    to green tea phytosome form (bio=10), not unspecified (bio=5).
+    Fix: 'green tea phytosome extract' alias added to green_tea_extract/green tea phytosome."""
+    import json as _json
+    from pathlib import Path
+
+    iqm_path = Path(__file__).resolve().parent.parent / "data" / "ingredient_quality_map.json"
+    iqm = _json.loads(iqm_path.read_text())
+
+    form = iqm["green_tea_extract"]["forms"]["green tea phytosome"]
+    aliases_lc = [a.lower() for a in form.get("aliases", [])]
+
+    assert "green tea phytosome extract" in aliases_lc, (
+        "green tea phytosome extract alias missing — Thorne 'Green Tea Phytosome extract' products would fall back to bio=5"
+    )
+
+
+def test_bug10_green_tea_phytosome_phospholipid_complex_alias_present():
+    """BUG-10: 'Phospholipid complex' form text (Thorne DSLD) must be an alias
+    for green tea phytosome so form_text matching succeeds."""
+    import json as _json
+    from pathlib import Path
+
+    iqm_path = Path(__file__).resolve().parent.parent / "data" / "ingredient_quality_map.json"
+    iqm = _json.loads(iqm_path.read_text())
+
+    form = iqm["green_tea_extract"]["forms"]["green tea phytosome"]
+    aliases_lc = [a.lower() for a in form.get("aliases", [])]
+
+    assert "phospholipid complex" in aliases_lc, (
+        "phospholipid complex alias missing from green tea phytosome — form_text 'Phospholipid complex' won't match"
+    )
+
+
+def test_bug10_phospholipid_complex_not_in_grape_seed_phytosome():
+    """BUG-10 uniqueness guard: 'phospholipid complex' must NOT also appear in
+    grape_seed_extract phytosome (alias uniqueness invariant)."""
+    import json as _json
+    from pathlib import Path
+
+    iqm_path = Path(__file__).resolve().parent.parent / "data" / "ingredient_quality_map.json"
+    iqm = _json.loads(iqm_path.read_text())
+
+    form = iqm["grape_seed_extract"]["forms"]["grape seed phytosome"]
+    aliases_lc = [a.lower() for a in form.get("aliases", [])]
+
+    assert "phospholipid complex" not in aliases_lc, (
+        "phospholipid complex must not be in grape_seed phytosome — would collide with green_tea_extract alias"
+    )
+
+
+@pytest.mark.parametrize("parent_key", [
+    "vitamin_b1_thiamine",
+    "vitamin_b2_riboflavin",
+    "vitamin_b9_folate",
+    "vitamin_b6_pyridoxine",
+    "vitamin_c",
+])
+def test_bug11_cerevisiae_alias_absent_cross_parent_constraint(parent_key):
+    """BUG-11 CONSTRAINT guard: 'S. cerevisiae culture' MUST NOT be added as a
+    form alias in any vitamin parent. It appears in 5 parents (B1, B2, B9, B6, C)
+    which violates the cross-ingredient alias uniqueness invariant enforced by
+    test_no_cross_ingredient_duplicate_aliases. Resolution requires an enricher
+    code fix (not an IQM alias fix) to handle this processing-method form text."""
+    import json as _json
+    from pathlib import Path
+
+    iqm_path = Path(__file__).resolve().parent.parent / "data" / "ingredient_quality_map.json"
+    iqm = _json.loads(iqm_path.read_text())
+
+    all_aliases_lc = []
+    for form_data in iqm[parent_key]["forms"].values():
+        all_aliases_lc.extend(a.lower() for a in form_data.get("aliases", []))
+
+    assert "s. cerevisiae culture" not in all_aliases_lc, (
+        f"'S. cerevisiae culture' must NOT be in {parent_key} form aliases — "
+        f"cross-parent uniqueness invariant: alias appears in 5 vitamin parents"
+    )

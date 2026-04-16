@@ -171,12 +171,16 @@ def test_run_mode_and_main_do_not_mutate_canonical_files(monkeypatch, tmp_path):
     sys.modules.pop("api_audit.valyu_evidence_discovery", None)
     module = importlib.import_module("api_audit.valyu_evidence_discovery")
 
+    # Resolve canonical files relative to the repo root so this test
+    # works regardless of pytest's CWD (previously hardcoded a path
+    # that only resolved when run from the repo root).
+    repo_root = Path(__file__).resolve().parents[2]
     before = {}
     canonical_files = [
-        Path("scripts/data/backed_clinical_studies.json"),
-        Path("scripts/data/ingredient_quality_map.json"),
-        Path("scripts/data/harmful_additives.json"),
-        Path("scripts/data/banned_recalled_ingredients.json"),
+        repo_root / "scripts/data/backed_clinical_studies.json",
+        repo_root / "scripts/data/ingredient_quality_map.json",
+        repo_root / "scripts/data/harmful_additives.json",
+        repo_root / "scripts/data/banned_recalled_ingredients.json",
     ]
     for path in canonical_files:
         before[str(path)] = path.read_text(encoding="utf-8")

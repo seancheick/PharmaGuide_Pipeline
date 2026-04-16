@@ -120,6 +120,8 @@ PRODUCTS_CORE_COLUMNS = [
     "allergen_summary",
     # v1.3.2 additions (1 new column)
     "calories_per_serving",
+    # v1.4.0 additions (1 new column)
+    "image_thumbnail_url",
     # metadata
     "scoring_version",
     "output_schema_version",
@@ -1134,8 +1136,8 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_90_columns():
-    # Tuple emitted by build_core_row must match the 90-column schema (v1.3.2).
+def test_final_db_has_91_columns():
+    # Tuple emitted by build_core_row must match the 91-column schema (v1.4.0).
     enriched = make_enriched()
     enriched["servingsPerContainer"] = 60
     enriched["servingSizes"] = [
@@ -1151,8 +1153,8 @@ def test_final_db_has_90_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 90
-    assert len(PRODUCTS_CORE_COLUMNS) == 90
+    assert len(row) == 91
+    assert len(PRODUCTS_CORE_COLUMNS) == 91
 
 
 def test_dosing_summary_not_empty_for_real_product():
@@ -1274,13 +1276,13 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_90(self):
+    def test_core_row_column_count_is_91(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 90
-        assert CORE_COLUMN_COUNT == 90
+        assert len(row) == 91
+        assert CORE_COLUMN_COUNT == 91
 
-    def test_schema_version_bumped_to_132(self):
-        assert EXPORT_SCHEMA_VERSION == "1.3.2"
+    def test_schema_version_bumped_to_140(self):
+        assert EXPORT_SCHEMA_VERSION == "1.4.0"
 
     def test_end_to_end_nutrition_and_unmapped_both_populate(self):
         """Smoke: realistic enriched with calories + unmapped actives → column and blob both correct."""

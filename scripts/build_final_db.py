@@ -55,7 +55,7 @@ from supplement_type_utils import infer_supplement_type
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "1.3.2"  # v1.3.2 adds calories_per_serving (90 cols)
+EXPORT_SCHEMA_VERSION = "1.4.0"  # v1.4.0 adds image_thumbnail_url (91 cols)
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -123,6 +123,21 @@ def safe_str(value: Any, default: str = "") -> str:
     if value is None:
         return default
     return str(value).strip()
+
+
+def normalize_upc(value: Any) -> str:
+    """Normalize a UPC/EAN barcode to digits-only.
+
+    Returns empty string for missing, garbage, or invalid-length barcodes.
+    Accepts 12-digit UPC-A and 13-digit EAN-13 only.
+    """
+    if value is None:
+        return ""
+    import re
+    digits = re.sub(r"[^0-9]", "", str(value))
+    if len(digits) not in (12, 13):
+        return ""
+    return digits
 
 
 def safe_list(value: Any) -> list:
@@ -662,6 +677,12 @@ CREATE TABLE IF NOT EXISTS products_core (
     -- ====================================================================
     calories_per_serving          REAL,  -- kcal per serving (from nutritionalInfo.calories.amount)
 
+    -- ====================================================================
+    -- EXPORT SCHEMA V1.4.0 ADDITIONS (2026-04-15)
+    -- Product label thumbnail (WebP from DSLD PDF, fallback for OFF images)
+    -- ====================================================================
+    image_thumbnail_url           TEXT,  -- Supabase Storage path: "product-images/{dsld_id}.webp"
+
     scoring_version               TEXT,
     output_schema_version         TEXT,
     enrichment_version            TEXT,
@@ -729,13 +750,15 @@ def dedup_by_upc(conn, detail_index: Dict[str, Any]) -> Dict[str, Any]:
 
     # Find all UPC groups with more than one product.
     # NULL / empty UPCs are excluded — they have nothing to dedup on.
+    # UPCs are now stored as digits-only (normalize_upc), but keep the
+    # REPLACE for backward compat with any pre-normalized rows.
     rows = c.execute("""
         SELECT REPLACE(upc_sku, ' ', '') AS upc_norm,
                GROUP_CONCAT(dsld_id, '|') AS ids,
                COUNT(*) AS cnt
           FROM products_core
          WHERE upc_sku IS NOT NULL
-           AND REPLACE(upc_sku, ' ', '') != ''
+           AND upc_sku != ''
          GROUP BY upc_norm
         HAVING cnt > 1
          ORDER BY upc_norm
@@ -2439,7 +2462,7 @@ def build_core_row(
         safe_str(enriched.get("dsld_id")),
         safe_str(enriched.get("product_name")),
         safe_str(enriched.get("brandName")),
-        safe_str(enriched.get("upcSku")),
+        normalize_upc(enriched.get("upcSku")),
         safe_str(enriched.get("imageUrl")),
         image_url_is_pdf(enriched.get("imageUrl")),
         None,  # thumbnail_key — populated at runtime
@@ -2536,6 +2559,8 @@ def build_core_row(
         allergen_summ,
         # v1.3.2: Nutrition column
         safe_float(safe_dict(enriched.get("nutrition_summary")).get("calories_per_serving")),
+        # v1.4.0: Image thumbnail URL (populated post-build via backfill)
+        None,  # image_thumbnail_url
         # Metadata
         safe_str(sm.get("scoring_version")),
         safe_str(sm.get("output_schema_version", scored.get("output_schema_version"))),
@@ -2546,7 +2571,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 90  # Must match the tuple above and SCHEMA_SQL
+CORE_COLUMN_COUNT = 91  # Must match the tuple above and SCHEMA_SQL
 
 
 # ─── Reference Data Loader ───
@@ -2694,6 +2719,45 @@ def write_audit_report(
                 audit_path, products_with_warnings_count, contract_failures_count)
 
     return {"audit_path": audit_path, "report": report}
+
+
+# ─── Image Thumbnail Backfill ───
+
+
+def backfill_image_thumbnails(db_path: str, image_dir: str) -> dict:
+    """Populate image_thumbnail_url for products with extracted WebP thumbnails.
+
+    Called after extract_product_images.py produces the product_images/ directory.
+    Safe to call multiple times (idempotent UPDATE).
+
+    Returns dict with updated and missing counts.
+    """
+    index_path = os.path.join(image_dir, "product_image_index.json")
+    if not os.path.exists(index_path):
+        logger.info("No product_image_index.json found at %s — skipping thumbnail backfill", image_dir)
+        return {"updated": 0, "missing": 0}
+
+    with open(index_path, "r", encoding="utf-8") as f:
+        index = json.load(f)
+
+    conn = sqlite3.connect(db_path)
+    try:
+        updated = 0
+        for dsld_id, entry in index.items():
+            webp_file = os.path.join(image_dir, entry["filename"])
+            if os.path.exists(webp_file):
+                conn.execute(
+                    "UPDATE products_core SET image_thumbnail_url = ? WHERE dsld_id = ?",
+                    (f"product-images/{dsld_id}.webp", str(dsld_id)),
+                )
+                updated += 1
+        conn.commit()
+    finally:
+        conn.close()
+
+    missing = len(index) - updated
+    logger.info("Thumbnail backfill: %d updated, %d missing files", updated, missing)
+    return {"updated": updated, "missing": missing}
 
 
 # ─── Main Builder ───

@@ -445,6 +445,148 @@ def validate_build_output(build_dir, manifest):
 
 
 # ---------------------------------------------------------------------------
+# Product image upload
+# ---------------------------------------------------------------------------
+
+PRODUCT_IMAGE_BUCKET = "product-images"
+
+
+def load_product_image_index(build_dir):
+    """Load product_image_index.json from the product_images subdirectory."""
+    for candidate in [
+        os.path.join(build_dir, "product_images", "product_image_index.json"),
+        os.path.join(build_dir, "product_image_index.json"),
+    ]:
+        if os.path.exists(candidate):
+            with open(candidate) as f:
+                return json.load(f), os.path.dirname(candidate)
+    return None, None
+
+
+def _upload_image_task(client, upload_fn, bucket, local_path, remote_path, retries, base_delay):
+    """Upload a single .webp image to Supabase Storage."""
+    try:
+        upload_with_retries(
+            lambda: upload_fn(client, bucket, remote_path, local_path, content_type="image/webp"),
+            retries=retries,
+            base_delay=base_delay,
+        )
+        return None
+    except Exception as exc:
+        return {"remote_path": remote_path, "error": str(exc)}
+
+
+def _upload_image_task_with_factory(client_getter, upload_fn, bucket, local_path, remote_path, retries, base_delay):
+    return _upload_image_task(
+        client_getter(), upload_fn, bucket, local_path, remote_path, retries, base_delay,
+    )
+
+
+def upload_product_images(
+    client,
+    build_dir,
+    upload_fn,
+    list_fn,
+    max_workers=DEFAULT_MAX_WORKERS,
+    retries=DEFAULT_UPLOAD_RETRIES,
+    base_delay=DEFAULT_RETRY_BASE_DELAY,
+    client_factory=None,
+    dry_run=False,
+):
+    """Upload product_images/*.webp to Supabase Storage bucket.
+
+    Skips files that already exist remotely with matching size.
+    Returns dict with uploaded, skipped, failed counts.
+    """
+    index, image_dir = load_product_image_index(build_dir)
+    if index is None:
+        print("  No product_image_index.json found — skipping image upload")
+        return {"uploaded": 0, "skipped": 0, "failed": 0}
+
+    total = len(index)
+    print(f"  Found {total} images in index")
+
+    if dry_run:
+        print(f"  [DRY RUN] Would upload {total} product images to {PRODUCT_IMAGE_BUCKET}")
+        return {"uploaded": 0, "skipped": total, "failed": 0}
+
+    # Discover existing remote images to skip re-uploads
+    existing_sizes = {}
+    try:
+        page = list_fn(client, PRODUCT_IMAGE_BUCKET, "", limit=10000, offset=0)
+        if page:
+            for item in page:
+                name = item.get("name", "")
+                metadata = item.get("metadata", {}) or {}
+                size = metadata.get("size") or metadata.get("contentLength") or 0
+                if name:
+                    existing_sizes[name] = int(size) if size else 0
+    except Exception:
+        pass  # Bucket may not exist yet — upload all
+
+    # Build upload list
+    uploads = []
+    skipped = 0
+    for dsld_id, entry in sorted(index.items()):
+        filename = entry["filename"]
+        local_path = os.path.join(image_dir, filename)
+        remote_path = filename  # flat: {dsld_id}.webp
+        local_size = entry.get("size_bytes", 0)
+
+        if not os.path.exists(local_path):
+            continue
+
+        if filename in existing_sizes and existing_sizes[filename] > 0 and abs(existing_sizes[filename] - local_size) < 1024:
+            skipped += 1
+            continue
+
+        uploads.append({"local_path": local_path, "remote_path": remote_path})
+
+    errors = []
+    uploaded = 0
+    start = time.time()
+
+    if not uploads:
+        print(f"  All {skipped} images already uploaded — nothing to do")
+        return {"uploaded": 0, "skipped": skipped, "failed": 0}
+
+    client_getter = make_thread_local_client_factory(client_factory) if client_factory else (lambda: client)
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = [
+            executor.submit(
+                _upload_image_task_with_factory,
+                client_getter, upload_fn, PRODUCT_IMAGE_BUCKET,
+                u["local_path"], u["remote_path"], retries, base_delay,
+            )
+            for u in uploads
+        ]
+        for future in as_completed(futures):
+            error = future.result()
+            if error:
+                errors.append(error)
+            else:
+                uploaded += 1
+            done = uploaded + len(errors)
+            if done % 500 == 0 or done == len(uploads):
+                elapsed = time.time() - start
+                print(f"  Images: {done + skipped}/{total} ({elapsed:.1f}s)")
+
+    elapsed = time.time() - start
+    print(
+        f"  Image upload done: {uploaded} uploaded, {skipped} skipped, "
+        f"{len(errors)} failed ({elapsed:.1f}s)"
+    )
+
+    if errors:
+        for err in errors[:5]:
+            print(f"    FAIL: {err['remote_path']}: {err['error']}")
+        if len(errors) > 5:
+            print(f"    ... and {len(errors) - 5} more")
+
+    return {"uploaded": uploaded, "skipped": skipped, "failed": len(errors)}
+
+
+# ---------------------------------------------------------------------------
 # Supabase operations (require real client)
 # ---------------------------------------------------------------------------
 
@@ -488,6 +630,9 @@ def sync(
         print(f"  - pharmaguide_core.db ({build_stats['db_size_mb']:.1f} MB)")
         print(f"  - detail_index.json")
         print(f"  - {build_stats['unique_blob_count']} unique detail blobs ({build_stats['blob_count']} product mappings)")
+        img_index, _ = load_product_image_index(build_dir)
+        if img_index:
+            print(f"  - {len(img_index)} product images to {PRODUCT_IMAGE_BUCKET}")
         print(f"  - New manifest row (version {version})")
         return {"status": "dry_run", "version": version, "blob_count": build_stats["blob_count"]}
 
@@ -558,6 +703,19 @@ def sync(
     print(
         f"  Done ({unique_blob_count} unique blobs in {blob_time:.1f}s, "
         f"{uploaded_count} uploaded, {skipped_count} skipped, {len(errors)} errors)"
+    )
+
+    # Upload product images (non-blocking — image failures don't abort sync)
+    print("\nUploading product images...")
+    image_result = upload_product_images(
+        client=client,
+        build_dir=build_dir,
+        upload_fn=upload_file,
+        list_fn=list_storage_paths,
+        max_workers=max_workers,
+        retries=retry_count,
+        base_delay=retry_base_delay,
+        client_factory=get_supabase_client,
     )
 
     # Abort manifest rotation if any blobs failed — prevents clients from
