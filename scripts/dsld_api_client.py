@@ -109,7 +109,7 @@ _DICT_KEYS = frozenset({
 # ---------------------------------------------------------------------------
 
 
-@dataclass(slots=True)
+@dataclass
 class DSLDApiConfig:
     api_key: str = ""
     base_url: str = DEFAULT_BASE_URL

@@ -1026,7 +1026,7 @@ class TestCompoundParentDisambiguation:
         result = enricher._match_quality_map("Niacinamide Ascorbate", "Niacin", quality_map)
         assert result is not None
         assert result["canonical_id"] == "vitamin_b3_niacin"
-        assert result["form_id"] == "niacinamide ascorbate"
+        assert result["form_id"] == "niacinamide ascorbate (b3)"
 
     @pytest.mark.parametrize(
         "label,expected_parent,expected_form",
@@ -3007,3 +3007,145 @@ class TestNutritionSummaryCollection:
         assert dsd is not None, "dietary_sensitivity_data must still be populated"
         assert "sugar" in dsd
         assert "sodium" in dsd
+
+
+class TestFromPrefixChelateGate:
+    """
+    BUG-1 fix: _should_keep_from_prefixed_form_as_actual must recognize chelate
+    delivery forms so DSLD forms like {name: "Brown Rice Chelate", prefix: "from"}
+    are treated as real forms rather than source-material descriptors.
+
+    Without this fix, Garden of Life RAW mineral products fall back to
+    "<mineral> (unspecified)" bio=5 instead of the correct chelate bio=11.
+    """
+
+    @pytest.fixture(scope="class")
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    # --- Positive cases: chelate forms must be kept ---
+
+    @pytest.mark.parametrize("form_name", [
+        "Brown Rice Chelate",
+        "brown rice chelate",
+        "Amino Acid Chelate",
+        "Rice Protein Chelate",
+        "Bisglycinate Chelate",
+        "Chelated Chromium",
+        "chelated",
+        "Mineral Chelate",
+    ])
+    def test_chelate_form_names_are_kept_as_forms(self, enricher, form_name):
+        """Any form whose name contains 'chelate' must not be skipped as a source-descriptor."""
+        result = enricher._should_keep_from_prefixed_form_as_actual(form_name)
+        assert result is True, (
+            f"Expected '{form_name}' to be kept as a form (contains chelate class), "
+            f"but _should_keep_from_prefixed_form_as_actual returned False"
+        )
+
+    # --- Negative cases: true source materials must still be skipped ---
+
+    @pytest.mark.parametrize("form_name", [
+        "Pineapple",
+        "Brown Rice",
+        "Glucosamine Salt",
+        "Yeast",
+        "Pea Protein",
+        "Sunflower Seeds",
+    ])
+    def test_source_material_names_are_skipped(self, enricher, form_name):
+        """True source-material forms (no chelate token) must still return False."""
+        result = enricher._should_keep_from_prefixed_form_as_actual(form_name)
+        assert result is False, (
+            f"Expected '{form_name}' to be skipped as a source-descriptor, "
+            f"but _should_keep_from_prefixed_form_as_actual returned True"
+        )
+
+    # --- Pre-existing delivery tokens must still work ---
+
+    @pytest.mark.parametrize("form_name", [
+        "MicroActive Q10-Cyclodextrin Complex",
+        "Phytosome",
+        "Liposomal Vitamin C",
+        "Sustained Release Matrix",
+    ])
+    def test_existing_delivery_tokens_still_work(self, enricher, form_name):
+        """Regression guard: pre-existing delivery-system tokens must still return True."""
+        result = enricher._should_keep_from_prefixed_form_as_actual(form_name)
+        assert result is True, (
+            f"Pre-existing delivery token in '{form_name}' should still return True"
+        )
+
+
+class TestCerevisiaeYeastFormInjection:
+    """BUG-11: S. cerevisiae culture form text must route to yeast IQM forms.
+
+    GoL RAW vitamins encode whole-food yeast source as "from S. cerevisiae culture".
+    The enricher must translate this to the vitamin-specific yeast IQM alias so
+    products score at the yeast form bio_score instead of the unspecified fallback.
+    Cross-parent alias uniqueness prevents fixing this via IQM alias addition.
+    """
+
+    @pytest.fixture
+    def enricher(self):
+        return SupplementEnricherV3()
+
+    @pytest.mark.parametrize("ing_name,expected_form_id_fragment", [
+        ("Thiamine", "brewer"),           # → thiamine from brewer's yeast
+        ("Riboflavin", "yeast"),          # → riboflavin from yeast
+        ("Biotin", "yeast"),              # → biotin from yeast (BUG-11 gap fix)
+        ("Folate", "yeast"),              # → folate from yeast
+        ("Vitamin B1", "brewer"),
+        ("Vitamin B2", "yeast"),
+        ("Vitamin B7", "yeast"),          # biotin alias
+        ("Vitamin B9", "yeast"),
+        ("Vitamin K", "yeast"),           # → vitamin K2 from yeast (BUG-11 gap fix)
+        ("Vitamin K2", "yeast"),
+    ])
+    def test_cerevisiae_culture_routes_to_yeast_form(
+        self, enricher, ing_name, expected_form_id_fragment
+    ):
+        """Ingredient with 'from S. cerevisiae culture' form must reach yeast IQM form."""
+        import json, os
+        iqm_path = os.path.join(
+            os.path.dirname(__file__), '..', 'data', 'ingredient_quality_map.json'
+        )
+        quality_map = json.load(open(iqm_path))
+        cleaned_forms = [{"name": "S. cerevisiae culture", "prefix": "from", "order": 1}]
+        result = enricher._match_quality_map(
+            ing_name, ing_name, quality_map, cleaned_forms=cleaned_forms
+        )
+        assert result is not None, f"No match returned for '{ing_name}' with cerevisiae culture form"
+        form_id = result.get('form_id', '')
+        assert expected_form_id_fragment in form_id.lower(), (
+            f"'{ing_name}' with cerevisiae culture → form_id={form_id!r}, "
+            f"expected it to contain {expected_form_id_fragment!r}"
+        )
+
+    @pytest.mark.parametrize("ing_name", [
+        "Vitamin B6",    # no specific yeast form → should still match (unspecified ok)
+        "Vitamin C",
+        "Magnesium",     # unrelated mineral — must NOT accidentally route to yeast
+    ])
+    def test_cerevisiae_culture_non_yeast_vitamins_do_not_crash(
+        self, enricher, ing_name
+    ):
+        """For vitamins without a specific yeast form, enricher must not crash."""
+        import json, os
+        iqm_path = os.path.join(
+            os.path.dirname(__file__), '..', 'data', 'ingredient_quality_map.json'
+        )
+        quality_map = json.load(open(iqm_path))
+        cleaned_forms = [{"name": "S. cerevisiae culture", "prefix": "from", "order": 1}]
+        # Must not raise; result may be any match or None
+        result = enricher._match_quality_map(
+            ing_name, ing_name, quality_map, cleaned_forms=cleaned_forms
+        )
+        # Magnesium with a cerevisiae culture form has no form info → base match
+        # Vitamins B6/C fall back to unspecified — form_id must not contain "yeast"
+        if result:
+            form_id = result.get('form_id', '')
+            if ing_name == "Magnesium":
+                assert 'yeast' not in form_id.lower(), (
+                    f"Magnesium must not route to a yeast form, got form_id={form_id!r}"
+                )

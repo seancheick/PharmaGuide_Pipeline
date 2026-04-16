@@ -3919,6 +3919,31 @@ class SupplementEnricherV3:
             'derived from',
         })
 
+        # YEAST-CULTURE FORM INJECTION: "Thiamine from S. cerevisiae culture"
+        # encodes the fermentation organism as a form descriptor. Cross-parent
+        # alias uniqueness prevents IQM alias addition for this text, so the
+        # enricher injects the ingredient-specific IQM yeast alias as a virtual
+        # form. Only covers vitamins with a known yeast IQM form (B1, B2, B9).
+        _CEREVISIAE_CULTURE_RE = re.compile(
+            r'\b(?:S\.?\s*cerevisiae|Saccharomyces\s+cerevisiae)'
+            r'(?:\s+(?:culture|extract))?\b',
+            re.IGNORECASE,
+        )
+        # ing_name substring (lower) → IQM alias string in the yeast form
+        _CEREVISIAE_YEAST_ALIAS: Dict[str, str] = {
+            'thiamine':   "brewer's yeast thiamine",
+            'vitamin b1': "brewer's yeast thiamine",
+            'riboflavin': 'yeast riboflavin',
+            'vitamin b2': 'yeast riboflavin',
+            'biotin':     'yeast biotin',
+            'vitamin b7': 'yeast biotin',
+            'folate':     'yeast folate',
+            'vitamin b9': 'yeast folate',
+            'folic acid': 'yeast folate',
+            'vitamin k':  'yeast vitamin k2',
+            'vitamin k2': 'yeast vitamin k2',
+        }
+
         # Chemical salt/chelate qualifier words: when DSLD forms[] provides only
         # a bare qualifier (e.g., {name: "citrate"} from "Magnesium Citrate"),
         # the full ingredient label IS the form descriptor.  Prepend ing_name as
@@ -3966,6 +3991,25 @@ class SupplementEnricherV3:
             # their names are already inserted as priority candidates for the
             # preceding form via from_source_map.
             if prefix in _FROM_PREFIXES and not keep_from_prefixed_form:
+                # YEAST-CULTURE INJECTION: if this "from"-sourced form names a
+                # S. cerevisiae culture, translate it to the ingredient-specific
+                # IQM yeast alias so the yeast form is reached without violating
+                # cross-parent alias uniqueness.
+                candidate_name = (form.get('name') or '').strip()
+                if candidate_name and _CEREVISIAE_CULTURE_RE.search(candidate_name):
+                    ing_lower = ing_name.lower()
+                    yeast_alias = next(
+                        (alias for key, alias in _CEREVISIAE_YEAST_ALIAS.items()
+                         if key in ing_lower),
+                        None,
+                    )
+                    if yeast_alias:
+                        extracted_forms.append({
+                            'raw_form_text': candidate_name,
+                            'match_candidates': [yeast_alias],
+                            'display_form': candidate_name,
+                            'percent_share': None,
+                        })
                 continue
 
             form_name = form.get('name', '')
@@ -4094,6 +4138,10 @@ class SupplementEnricherV3:
             'sustained release',
             'sustained-release',
             'phospholipid complex',
+            # Chelate delivery class: DSLD tags mineral chelate forms with prefix='from'
+            # (e.g. "Chromium (from Brown Rice Chelate)") — the chelate IS the form,
+            # not a source material.  Matches "chelate", "chelated", "chelation", etc.
+            'chelate',
         )
         return any(token in normalized for token in delivery_tokens)
 
@@ -4301,10 +4349,14 @@ class SupplementEnricherV3:
             # Also strip trailing dosage/percentage patterns if base_name still has them
             # Patterns like "250mg", "500 mg", "1000mcg", "5g", "98%", "10 Billion CFU", etc.
             if base_name:
-                # First strip dosage with units
+                # First strip dosage with units (including probiotic CFU counts like "10 Billion CFU")
                 stripped = re.sub(
-                    r'\s+\d+(?:\.\d+)?\s*(?:mg|mcg|ug|µg|g|kg|ml|l|iu|billion|million|cfu)\s*$',
+                    r'\s+\d+(?:\.\d+)?\s*(?:billion|million)\s*(?:cfu|cfus|organisms|live\s+cultures?)?\s*$',
                     '', base_name, flags=re.IGNORECASE
+                ).strip()
+                stripped = re.sub(
+                    r'\s+\d+(?:\.\d+)?\s*(?:mg|mcg|ug|µg|g|kg|ml|l|iu|cfu)\s*$',
+                    '', stripped, flags=re.IGNORECASE
                 ).strip()
                 # Also strip trailing percentage (e.g., "98%", "80%")
                 stripped = re.sub(r'\s+\d+(?:\.\d+)?\s*%\s*$', '', stripped).strip()
