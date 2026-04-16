@@ -61,3 +61,4 @@ scripts/reports/
 .pytest_cache/
 .gstack/
 .kilo/
+.agents/
