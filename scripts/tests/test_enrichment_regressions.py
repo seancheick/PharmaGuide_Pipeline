@@ -887,6 +887,33 @@ class TestBrandedFormMatching:
         assert result.get("form_id") == "brandx form"
         assert result.get("branded_token_fallback_used") is True
 
+    def test_branded_token_beats_dsld_subform_when_bio_score_is_higher(self, enricher, quality_map):
+        """KSM-66 branded token should win over DSLD sub-form 'Ashwagandha Root Extract'.
+
+        PE product structure: ing_name='KSM-66', branded_token='KSM-66',
+        cleaned_forms=[{"name": "Ashwagandha Root Extract", "ingredientId": 304396}]
+
+        The DSLD sub-form 'Ashwagandha Root Extract' matches 'standard ashwagandha extract'
+        (bio=9), but branded_token 'KSM-66' resolves to 'KSM-66 ashwagandha' (bio=11).
+        The higher bio_score form should win.
+        """
+        result = enricher._match_quality_map(
+            "KSM-66",
+            "Ashwagandha",
+            quality_map,
+            cleaned_forms=[{"name": "Ashwagandha Root Extract", "ingredientId": 304396}],
+            branded_token="KSM-66",
+        )
+
+        assert result is not None, "KSM-66 should match"
+        assert result.get("form_id") == "KSM-66 ashwagandha", (
+            f"Expected 'KSM-66 ashwagandha' (bio=11), got '{result.get('form_id')}' "
+            f"(bio={result.get('bio_score')}). Branded token should beat DSLD sub-form."
+        )
+        assert result.get("bio_score", 0) >= 11, (
+            f"Expected bio_score >= 11, got {result.get('bio_score')}"
+        )
+
 
 class TestMatchRulesBehavior:
     """Test that match_rules from ingredient_quality_map.json affect matching."""

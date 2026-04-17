@@ -2724,9 +2724,12 @@ def test_bug10_green_tea_phytosome_extract_alias_present():
     )
 
 
-def test_bug10_green_tea_phytosome_phospholipid_complex_alias_present():
-    """BUG-10: 'Phospholipid complex' form text (Thorne DSLD) must be an alias
-    for green tea phytosome so form_text matching succeeds."""
+def test_bug10_green_tea_phytosome_standalone_phospholipid_complex_removed():
+    """BUG-10 / alias-collision fix: standalone 'Phospholipid complex' must NOT
+    be an alias for green tea phytosome — it is far too generic and causes
+    cross-ingredient collisions (e.g., Meriva turmeric phytosome matching green
+    tea).  Compound aliases that include Camellia sinensis terms are still
+    permitted and are verified separately."""
     import json as _json
     from pathlib import Path
 
@@ -2736,14 +2739,22 @@ def test_bug10_green_tea_phytosome_phospholipid_complex_alias_present():
     form = iqm["green_tea_extract"]["forms"]["green tea phytosome"]
     aliases_lc = [a.lower() for a in form.get("aliases", [])]
 
-    assert "phospholipid complex" in aliases_lc, (
-        "phospholipid complex alias missing from green tea phytosome — form_text 'Phospholipid complex' won't match"
+    assert "phospholipid complex" not in aliases_lc, (
+        "standalone 'phospholipid complex' alias must be absent from green tea phytosome — "
+        "it is too generic and causes cross-ingredient form collisions"
+    )
+
+    # Compound aliases that include Camellia sinensis terms must still be present
+    camellia_aliases = [a for a in aliases_lc if "camellia sinensis" in a and "phospholipid" in a]
+    assert camellia_aliases, (
+        "at least one 'Camellia sinensis … Phospholipid complex' compound alias must remain "
+        "in green tea phytosome — these are specific enough to be safe"
     )
 
 
 def test_bug10_phospholipid_complex_not_in_grape_seed_phytosome():
-    """BUG-10 uniqueness guard: 'phospholipid complex' must NOT also appear in
-    grape_seed_extract phytosome (alias uniqueness invariant)."""
+    """BUG-10 uniqueness guard: standalone 'phospholipid complex' must not appear in
+    grape_seed_extract phytosome aliases."""
     import json as _json
     from pathlib import Path
 
@@ -2754,7 +2765,7 @@ def test_bug10_phospholipid_complex_not_in_grape_seed_phytosome():
     aliases_lc = [a.lower() for a in form.get("aliases", [])]
 
     assert "phospholipid complex" not in aliases_lc, (
-        "phospholipid complex must not be in grape_seed phytosome — would collide with green_tea_extract alias"
+        "phospholipid complex must not be in grape_seed phytosome — generic alias would cause cross-ingredient collisions"
     )
 
 

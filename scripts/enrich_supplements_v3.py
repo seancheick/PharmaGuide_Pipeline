@@ -4238,6 +4238,16 @@ class SupplementEnricherV3:
                     multi_form_result = self._match_multi_form(form_info, quality_map)
                     if multi_form_result:
                         if not multi_form_result.get('all_forms_generic'):
+                            # Branded tokens (KSM-66, Sensoril, etc.) are more specific than
+                            # DSLD sub-form labels like "Ashwagandha Root Extract". If the
+                            # branded token resolves to a higher bio_score form, prefer it.
+                            if branded_token:
+                                branded_match = _try_branded_token_fallback()
+                                if (branded_match
+                                        and branded_match.get('form_id')
+                                        and 'unspecified' not in branded_match.get('form_id', '').lower()
+                                        and branded_match.get('bio_score', 0) > multi_form_result.get('bio_score', 0)):
+                                    return branded_match
                             return multi_form_result
 
                     # If form evidence exists but ALL forms failed to match
@@ -4269,6 +4279,14 @@ class SupplementEnricherV3:
                             fallback_base, std_name, quality_map, _form_extraction_attempt=True
                         )
                         if fallback_match:
+                            # Try branded token before accepting a conservative (unspecified) match.
+                            # This fixes branded extracts like Sensoril/KSM-66 whose form aliases
+                            # exist in IQM but are never reached because the base parent match
+                            # (→ unspecified) returns first.
+                            branded_match = _try_branded_token_fallback()
+                            if (branded_match and branded_match.get('form_id')
+                                    and 'unspecified' not in branded_match.get('form_id', '').lower()):
+                                return branded_match
                             fallback = dict(fallback_match)
                             fallback['match_status'] = 'FORM_UNMAPPED_FALLBACK'
                             fallback['has_form_evidence'] = True
@@ -4298,6 +4316,15 @@ class SupplementEnricherV3:
                 multi_form_result = self._match_multi_form(form_info, quality_map)
                 if multi_form_result:
                     if not multi_form_result.get('all_forms_generic'):
+                        # Branded tokens are more specific than label-extracted form text.
+                        # If branded token resolves to a higher bio_score form, prefer it.
+                        if branded_token:
+                            branded_match = _try_branded_token_fallback()
+                            if (branded_match
+                                    and branded_match.get('form_id')
+                                    and 'unspecified' not in branded_match.get('form_id', '').lower()
+                                    and branded_match.get('bio_score', 0) > multi_form_result.get('bio_score', 0)):
+                                return branded_match
                         return multi_form_result
 
                 # If form evidence exists but ALL forms failed to match, mark as FORM_UNMAPPED
@@ -4309,6 +4336,11 @@ class SupplementEnricherV3:
                         fallback_base, std_name, quality_map, _form_extraction_attempt=True
                     )
                     if fallback_match:
+                        # Try branded token before accepting a conservative (unspecified) match.
+                        branded_match = _try_branded_token_fallback()
+                        if (branded_match and branded_match.get('form_id')
+                                and 'unspecified' not in branded_match.get('form_id', '').lower()):
+                            return branded_match
                         fallback = dict(fallback_match)
                         fallback['match_status'] = 'FORM_UNMAPPED_FALLBACK'
                         fallback['has_form_evidence'] = True
