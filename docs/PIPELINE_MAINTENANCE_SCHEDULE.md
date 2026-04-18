@@ -48,6 +48,8 @@ Start solo. Add roles as needed.
 | **Pipeline operator** — runs builds, approves PRs, deploys | Sean | Sean | Sean + 1 engineer |
 | **Clinical author** — authors safety/bonus copy | Dr. Pham | Dr. Pham | Dr. Pham + CSO |
 | **Safety reviewer** — final approve on clinical-copy PRs | Sean | Sean | CSO |
+| **Safety-alert refiner** — refines auto-drafted FDA alert copy within 24–48 hrs (Phase 1.5) | n/a | Dr. Pham | Dr. Pham + CSO |
+| **Safety-alert watcher** — monitors `#safety-alerts` for bad auto-drafts (Phase 1.5) | n/a | Sean | On-call rotation |
 | **Data curator** — watches DSLD intake, flags bad products | Sean | Sean | Ops contractor (part-time) |
 | **Science reviewer** — validates new PMIDs, evidence levels | Sean | Sean | Dr. Pham / CSO |
 
@@ -57,12 +59,20 @@ Start solo. Add roles as needed.
 
 ## Cadence — what happens, how often, by whom
 
+### Continuous (every 15 min — Phase 1.5)
+
+| Task | Who | What | Tooling |
+|---|---|---|---|
+| **FDA safety-alert poll** | **Automated** | Cloudflare Cron Worker hits openFDA + FDA RSS; new recalls/enforcement → auto-drafted entry in `safety_alerts` table → Flutter clients notified via Supabase Realtime within minutes | Cloudflare Workers + Supabase Edge Functions + FCM |
+| **Safety-alert watch** | **Pipeline operator (ambient)** | Slack `#safety-alerts` channel — eyeball each auto-draft; manually override any obvious misclassification | Slack webhook |
+
 ### Daily (automated)
 
 | Task | Who | What | Tooling |
 |---|---|---|---|
 | CI status check | Automated | Every PR gets `validate_safety_copy.py --strict` + `pytest` run | GitHub Actions |
 | Uptime monitor | Automated | Supabase + Flutter endpoints pinged every 5 min | UptimeRobot (free) |
+| Safety-alert queue check | **Safety-alert refiner (Dr. Pham)** | Open dashboard → `#safety-alerts-queue` → refine auto-drafted copy for yesterday's alerts (~5 min/day typical) | Dashboard web editor |
 
 ### Weekly (partly automated, light human)
 
@@ -111,9 +121,31 @@ Start solo. Add roles as needed.
 
 ---
 
-## Continuous refresh — the three flywheels
+## Continuous refresh — the four flywheels
 
-Beyond scheduled tasks, three continuous flywheels keep the pipeline fresh between scheduled ticks.
+Beyond scheduled tasks, four continuous flywheels keep the pipeline fresh between scheduled ticks.
+
+### Flywheel 0 — Instant Safety Alerts (Phase 1.5 unlocks this) — **highest priority**
+
+**How it works:**
+
+1. Cloudflare Cron Worker polls openFDA + FDA RSS every 15 minutes.
+2. New recall / enforcement action detected → Supabase Edge Function auto-drafts conservative safety_warning + classifies tier (CRITICAL / HIGH / CATALOG).
+3. Row inserted into `safety_alerts` Supabase table.
+4. Flutter clients subscribed via Supabase Realtime receive the new row within seconds.
+5. Each client runs a local stack-match (no PII leaves the device).
+6. Tier 1 CRITICAL match → FCM push notification fires instantly.
+7. Tier 2 HIGH match → in-app banner next app open.
+8. Tier 3 CATALOG → silent refresh on next app launch.
+
+**Time from FDA publishing a recall to affected user seeing a notification:** 15 minutes worst case, 5 minutes typical.
+
+**What teammates do:**
+- **Automated:** the whole path runs without human intervention for the initial alert.
+- **Safety reviewer (Dr. Pham):** refines auto-drafted copy within 24-48 hrs via the dashboard's safety-alerts queue. Refinement updates the same Supabase row → Realtime pushes the improved text to clients.
+- **Pipeline operator:** monitors Slack channel `#safety-alerts` for every auto-draft. Any obviously-wrong classification (e.g., non-supplement FDA item tagged as Tier 1) gets manually overridden.
+
+
 
 ### Flywheel 1 — Reference-data hot-refresh (Phase 4 unlocks this)
 
@@ -168,16 +200,22 @@ Beyond scheduled tasks, three continuous flywheels keep the pipeline fresh betwe
 
 Honest consequences, so the cadence doesn't feel arbitrary:
 
-| Skipped task | 1 week overdue | 1 month overdue | 3 months overdue |
-|---|---|---|---|
-| FDA recall sync | User might buy a recalled product — medically serious | Legal liability exposure | Regulatory flag; clinical-trust damage |
-| Monthly DSLD intake | Missing ~50–200 new products | Noticeable catalog gap | Catalog feels stale to users |
-| Clinical-copy review | Probably fine | A few entries drift from evidence base | Dated voice; some entries wrong |
-| CAERS refresh | Fine | Some new AE signals missed | Safety score confidence drops |
-| Citation content verification | Fine | Fine | Risk of hallucinated citations reaching production |
-| Rollback drill | Fine | Fine | When you need to rollback in anger, you won't remember how |
+| Skipped task | 1 hour overdue | 1 week overdue | 1 month overdue | 3 months overdue |
+|---|---|---|---|---|
+| **Safety-alert poller down** (Phase 1.5) | Users with recalled products may continue taking them — medical failure + liability | Multiple missed alerts compound; trust damage | Unacceptable — app should not ship in this state | Unacceptable |
+| **Safety-alert copy refinement** (Phase 1.5) | Fine — auto-draft already shipped | Users see conservative-but-accurate copy; no medical harm, slight UX fade | Dr. Pham's voice absent from safety rails | Consistent regression to auto-draft voice |
+| Weekly FDA recall sync (legacy slow path) | — | User might buy a recalled product | Legal liability exposure | Regulatory flag; clinical-trust damage |
+| Monthly DSLD intake | — | Fine | Missing ~50–200 new products | Catalog feels stale |
+| Clinical-copy review | — | Fine | A few entries drift from evidence base | Dated voice; some entries wrong |
+| CAERS refresh | — | Fine | Some new AE signals missed | Safety score confidence drops |
+| Citation content verification | — | Fine | Fine | Risk of hallucinated citations reaching production |
+| Rollback drill | — | Fine | Fine | When you need to rollback in anger, you won't remember how |
 
-**The critical tasks are weekly FDA sync and monthly DSLD intake.** Everything else has a longer tolerance.
+**The critical tasks in priority order:**
+1. **Safety-alert poller** (Phase 1.5) — continuous, must not go down. Monitor via UptimeRobot + Cloudflare Workers dashboard.
+2. **Weekly FDA recall sync** (legacy slow path) — belt-and-suspenders backup for the poller.
+3. **Monthly DSLD intake** — catalog freshness.
+4. Everything else has longer tolerance.
 
 ---
 

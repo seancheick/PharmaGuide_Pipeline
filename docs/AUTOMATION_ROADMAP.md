@@ -47,15 +47,26 @@ Before any new work, it helps to be honest about what exists.
 5. **No "reference data changed → rebuild" signal.** Change a safety warning, the existing blobs still carry the old text until you remember to rebuild + resync.
 6. **Flutter app updates are manual.** Push to Supabase, hope the app picks it up.
 
-### The 3 separable problems
+### The 4 separable problems
 
-Everything below untangles these three:
+Everything below untangles these four:
 
 | Problem | Current state | Target state |
 |---|---|---|
 | **Data intake** (new products from NIH) | Manual, laptop | Scheduled, cloud |
 | **Pipeline execution** (clean/enrich/score/build) | Local laptop | GitHub Actions or cloud runner |
 | **Clinical-copy authoring** (Dr. Pham's work) | Files over Slack | Web UI → PR → auto-validate |
+| **Safety alerts** (FDA recalls/bans, same-day) | Not built | 15-min poller + Supabase Realtime + FCM push |
+
+### Scale trajectory
+
+| Stage | Product count | What ships | Storage model |
+|---|---|---|---|
+| **Beta** | 10k popular brands | Hand-curated top brands | Full blob bundle in app OR Supabase on-demand (either works at this size) |
+| **V1** | ~50k top categories | Gummies, capsules, softgels, then softgels, liquids, etc. | Reference data in app; **product blobs fetched on-demand from Supabase** |
+| **Full** | 250k (all DSLD) | Whole DSLD catalog | Reference data in app (<10 MB); all product blobs on Supabase; aggressive caching + prefetch |
+
+**Confirmed architecture decision:** at V1+, Flutter **does not** ship with every product blob in its offline bundle. Only the reference-data layer (banned, harmful additives, interactions, depletions, synergy clusters, violations) stays on-device. Product detail blobs fetch from Supabase on-demand when a user scans or searches. This keeps the app install size flat as the catalog grows from 10k → 250k.
 
 ---
 
@@ -146,6 +157,200 @@ All referenced in the workflow as `${{ secrets.DSLD_API_KEY }}`.
 ### Effort
 
 **15–25 hours** part-time. The DSLD intake is already built, so this is mostly YAML + storage glue.
+
+---
+
+## Phase 1.5 — Safety Alert Short Path (same-day FDA recall / ban alerts)
+
+**Timeline:** 2–3 weeks part-time.
+**Cost:** $0/month.
+**Depends on Phase 1 (needs Supabase connection in CI).**
+**Critical for shipping at all — do this before public beta.**
+
+### What it is
+
+A dedicated, sub-hour lane for FDA recalls and emergency safety alerts that **bypasses the full pipeline rebuild.** When the FDA publishes a Class I recall at 9am, a user with that product in their stack gets a push notification within minutes — not the next monthly build.
+
+The existing pipeline is the *slow lane* (accurate, thorough, rebuilt monthly). Phase 1.5 builds the *fast lane* (opinionated, conservative, live in minutes) alongside it. Both stay in sync because they share the same `banned_recalled_ingredients.json` source of truth; the fast lane just reaches users a week earlier.
+
+### Why it matters
+
+- **User safety.** If a user takes a supplement that was recalled yesterday morning, a weekly build is a clinical failure. Minutes matter.
+- **Regulatory posture.** Demonstrating a same-day safety-alert path is a differentiator versus apps that rebuild monthly. It's also defensive against liability.
+- **Trust.** Users who get a "your supplement was just recalled — stop using it" push build long-term confidence in the app's safety signal.
+- **Scales for free.** The whole architecture below runs on free-tier Cloudflare + Supabase + FCM.
+
+### Three-tier alert model
+
+Not every alert needs a push notification. Tier the response to the severity:
+
+| Tier | Triggers | UX | Latency target |
+|---|---|---|---|
+| **1 — CRITICAL** | FDA Class I recall, DEA Schedule I substance, undeclared controlled drug, emergency use authorization withdrawal | Push notification + red banner on app open | <15 min FDA publish → user |
+| **2 — HIGH** | Class II/III recall, FDA warning letter, CAERS adverse-event cluster, manufacturer criminal prosecution | In-app banner on next open, no push | <4 hours |
+| **3 — CATALOG** | New products, copy refinements, ingredient metadata, non-urgent reference data | Silent refresh on next app launch | <24 hours |
+
+### How it works — architecture
+
+```
+FDA openFDA API + FDA RSS              NIH DSLD updates
+         │                                     │
+         ▼                                     ▼
+Cloudflare Cron Worker                 Weekly/monthly
+(polls every 15 min, free)             intake (Phase 3)
+         │                                     │
+         ▼                                     ▼
+  Delta detection                       Full pipeline rebuild
+  (new recalls since last poll)
+         │
+         ▼
+Supabase Edge Function:                Supabase safety_alerts table
+  1. Write row to safety_alerts        (new row per alert, tier column)
+     with auto-drafted conservative            │
+     copy + tier classification                │
+  2. Match against reference DB                ▼
+     to tag affected products           Flutter clients subscribe via
+         │                              Supabase Realtime (websocket)
+         ▼                                     │
+  Open PR: "FDA alert YYYY-MM-DD:             │
+  +X Tier-1 recalls. Dr. Pham to              ▼
+  refine copy within 24hrs"            Client-side stack match
+                                       (product in user's stack?)
+  (Dr. Pham refines within 24-48hrs           │
+   → same row updates in Supabase              │
+   → clients pull refined copy on              ▼
+   next Realtime update)                 ─ Tier 1: FCM push
+                                         ─ Tier 2: banner next open
+                                         ─ Tier 3: silent refresh
+```
+
+### The critical concept — **auto-drafted conservative copy**
+
+Dr. Pham cannot be in the loop for the first-minute alert; she's asleep, the FDA doesn't wait. But we can't show users unstructured raw FDA text either (it's clinician-voiced, often alarmist, sometimes confusing).
+
+**Solution:** Supabase Edge Function auto-generates a conservative fallback copy that ships with the alert immediately:
+
+```
+FDA published: "Voluntary Class I Recall of [Brand X Product Y], Lot #12345,
+due to undeclared sibutramine, a prescription drug removed from the US market."
+
+Auto-drafted safety_warning (Tier 1 copy, ships in <15 min):
+"FDA recall: this product was recalled due to an undeclared prescription drug.
+Stop using any bottles you have and talk to your doctor if you've been taking it.
+Dr. Pham will post a fuller clinical note within 24 hours."
+
+safety_warning_one_liner:
+"FDA Class I recall — stop use immediately."
+```
+
+The auto-draft follows a strict template (no SCREAM words, no encyclopedic openers, standard Dr. Pham tone rules) and is generated by a small rules engine, not an LLM. Deterministic, testable, clinically safe.
+
+Dr. Pham refines the copy within 24–48 hours (Phase 2 web editor makes this one click); users get the refined version on the next app open.
+
+### Privacy-preserving stack match
+
+The server never sees which products a user has in their stack. Architecture:
+
+1. Server broadcasts **every** safety alert to **all** subscribed clients.
+2. Each Flutter client checks locally: "does this alert affect any product in my stack?"
+3. Only matching clients fire the push notification.
+
+At 100k users with ~10 alerts/month, each client processes ~10 websocket messages/month. Bandwidth cost per user: negligible. Privacy: complete — we never know which users got alerted.
+
+### How to do it
+
+**Step 1.5.1 — Supabase schema:**
+
+```sql
+CREATE TABLE safety_alerts (
+  id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  tier          TEXT NOT NULL CHECK (tier IN ('CRITICAL', 'HIGH', 'CATALOG')),
+  source        TEXT NOT NULL,            -- 'openfda_food', 'openfda_drug', 'fda_rss', 'dea'
+  source_id     TEXT NOT NULL,            -- FDA recall number / enforcement ID
+  published_at  TIMESTAMPTZ NOT NULL,
+  ingested_at   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  canonical_ids JSONB NOT NULL,           -- array of banned_recalled_ingredients.json IDs this maps to
+  upc_codes     JSONB,                    -- UPC/SKU list for targeted match
+  brand_match   TEXT,                     -- brand name for alternate match
+  product_match TEXT,                     -- product name for alternate match
+  safety_warning TEXT NOT NULL,           -- auto-drafted initially, Dr. Pham refines
+  safety_warning_one_liner TEXT NOT NULL,
+  status        TEXT NOT NULL DEFAULT 'auto_drafted' CHECK (status IN ('auto_drafted', 'reviewed', 'superseded')),
+  refined_by    TEXT,                     -- username of clinical reviewer
+  refined_at    TIMESTAMPTZ
+);
+
+CREATE INDEX safety_alerts_published_idx ON safety_alerts (published_at DESC);
+CREATE INDEX safety_alerts_canonical_ids_idx ON safety_alerts USING GIN (canonical_ids);
+```
+
+**Step 1.5.2 — Cloudflare Cron Worker** (`workers/safety-alert-poller.ts`):
+
+- Runs every 15 minutes.
+- Hits `https://api.fda.gov/food/enforcement.json?search=report_date:[last_poll_ts TO NOW]`.
+- Parses new recalls, deduplicates against `safety_alerts` table.
+- For each new recall, calls Supabase Edge Function to insert + draft copy.
+
+**Step 1.5.3 — Supabase Edge Function** (`supabase/functions/draft-safety-alert/index.ts`):
+
+- Input: raw FDA payload.
+- Classifies tier (Class I → CRITICAL; Class II/III → HIGH; anything else → CATALOG).
+- Matches against `banned_recalled_ingredients.json` canonical IDs (product name / UPC / ingredient).
+- Generates conservative safety_warning + one_liner using a template engine.
+- Inserts row into `safety_alerts`.
+- Opens a GitHub PR (via GitHub API) proposing to add this to `banned_recalled_ingredients.json` with Dr. Pham's editorial queue.
+
+**Step 1.5.4 — Flutter Realtime subscription:**
+
+- On app launch, subscribe to `safety_alerts` table via Supabase Realtime.
+- Cache all alerts locally.
+- Match against user's stack (local only).
+- For Tier 1 matches: `FirebaseMessaging.instance.showNotification(...)`.
+- For Tier 2/3 matches: banner badge on main nav.
+
+**Step 1.5.5 — Dr. Pham refinement flow:**
+
+- Dr. Pham visits `#safety-alerts-queue` in the dashboard.
+- Sees all auto-drafted alerts awaiting refinement.
+- Edits the safety_warning in-line (inherits the Phase 2 web editor pattern).
+- Save → updates the Supabase row + marks `status='reviewed'` → Realtime pushes update to clients.
+
+**Step 1.5.6 — Push notifications via Firebase:**
+
+- Flutter already supports FCM; add the Tier-1 match trigger.
+- Notification body: `safety_warning_one_liner`.
+- Tap → opens to the product detail in the app.
+
+### Free options
+
+| Tool | Free tier | Notes |
+|---|---|---|
+| **Cloudflare Workers** | 100k requests/day | 15-min polling = 96 requests/day, 99.9% headroom |
+| **Supabase Realtime** | Unlimited channels, free tier | Already in Supabase setup |
+| **Supabase Edge Functions** | 500k invocations/month | 1–5 alerts/day, well under cap |
+| **Firebase Cloud Messaging (FCM)** | Unlimited free | Standard push-notification provider |
+| **openFDA API** | Free, rate-limited 1000 req/min | Cloudflare Worker respects rate limit |
+| **FDA RSS feed** | Free, unlimited | Backup polling channel |
+
+**Total monthly cost at 100k users: $0.**
+
+### Definition of done
+
+- FDA publishes a recall at 9:00 am.
+- At 9:14 am (next poll), Cloudflare Worker detects it.
+- At 9:15 am, Supabase Edge Function writes an auto-drafted row; affected products flagged.
+- At 9:15 am, Flutter users with the affected product in their stack get a push notification.
+- By 9:17 am, a user opens the app and sees the red-banner Tier-1 alert with clear guidance.
+- By Tuesday next day, Dr. Pham refines the copy; users see the refined version on their next app open.
+
+### Effort
+
+**30–50 hours** over 2–3 weeks. The architecture is simple; the work is writing the Cloudflare Worker + Edge Function + auto-draft template + Flutter subscription handler.
+
+### What this changes about Phase 2+ / Phase 4
+
+- **Phase 2** gains a "safety alerts queue" view for Dr. Pham's refinement work.
+- **Phase 4** (reference-data hot-refresh) is the *catalog* fast-refresh path. Phase 1.5 is the *alerts* fast-refresh path. Both coexist; they're different problem shapes.
 
 ---
 
@@ -515,24 +720,52 @@ That's it. Tomorrow you already have a config file, which is the scaffolding for
 |---|---|---|---|---|
 | **0** | Stage 0 audit (read this doc, understand current state) | 1 hour | $0 | — |
 | **1** | Pipeline runs in GitHub Actions from cloud storage | 2–3 weeks | $0 | — |
+| **1.5** | **Safety Alert Short Path — <15 min FDA-recall → user** | **2–3 weeks** | **$0** | **Phase 1 (ship before public beta)** |
 | **2** | Dr. Pham edits clinical copy via web UI → PR | 3–4 weeks | $0 | Phase 1 (recommended) |
 | **3** | Monthly scheduled DSLD intake by category with delta detection | 2 months | $0 | Phase 1 |
 | **4** | Reference-data changes auto-propagate to affected products + Flutter | 2–3 months | $0 | Phase 1 |
 | **5** | Full observability, alerting, audit trail, staging | ongoing | $0–$25/mo | Phases 1–4 |
 
-**6 months from today:** a teammate adds a new brand by making a one-line PR; intake runs monthly without you; Dr. Pham's typo fix reaches users within an hour of her saving; you can take a week off and nothing breaks.
+**6 months from today:** a teammate adds a new brand by making a one-line PR; intake runs monthly without you; Dr. Pham's typo fix reaches users within an hour of her saving; FDA recalls hit affected users' phones in under 15 minutes; the app scales from 10k → 250k products without changing the architecture; you can take a week off and nothing breaks.
+
+### Scaling to 250k — what stays, what changes
+
+**What stays the same:**
+- The 3-stage pipeline (clean → enrich → score) — same code, just runs on more data.
+- The validator + test suite — unchanged.
+- The dashboard — adds pagination and deeper filtering, but architecture holds.
+- Dr. Pham's review flow — she authors *reference data* (banned, harmful additives, interactions), not per-product copy. Her work scales independently of product count.
+
+**What must be right before 250k:**
+- **Product blobs fetch from Supabase on-demand.** Flutter ships only reference data locally (~10 MB). Scan/search queries Supabase for the product blob; cached locally for a session.
+- **Aggressive reference-data reverse indexes.** When Dr. Pham changes a harmful_additive at 250k scale, the "affected products" lookup must be indexed (Phase 4). A naive scan at 250k would be minutes, not seconds.
+- **Tiered push-alert routing.** Broadcast-to-all-clients scales to ~1M users on Supabase Realtime's free tier. Beyond that, shard by region or topic.
+- **CDN-cached product blobs.** Add Cloudflare or Supabase's built-in CDN on blob fetches; drops latency from ~200ms to ~30ms at 250k scale.
+
+**What doesn't need to be built until later:**
+- Full-text search engine (ElasticSearch etc.) — defer until the catalog is big enough that SQL LIKE queries hurt.
+- Multi-region deploy — defer until user count warrants it.
+- ML-driven recommendations — defer indefinitely unless product direction requires it.
 
 ---
 
 ## My honest recommendation
 
-**Do Phase 1 now. Pause. See if the business needs justify Phase 2/3.**
+**Do Phase 1 + Phase 1.5 before public beta launch. Everything else can wait.**
 
-Phase 1 alone solves 80% of your collaboration pain. The others are polish layers that matter once you have real multi-person workflows and real user volume. Don't build complexity you don't need yet.
+Reasoning:
+- **Phase 1** removes the "only Sean can build" bottleneck.
+- **Phase 1.5** is the safety-critical fast lane. A public app without same-day recall alerts is a clinical-trust liability. If a user's supplement got recalled yesterday and our monthly build hasn't run yet, that's not an inconvenience — that's a user-safety failure.
+- **Phase 2** (Dr. Pham web editor) is a productivity upgrade, not a safety blocker. Nice-to-have for beta; must-have for V1.
+- **Phase 3–5** follow as the business grows.
 
-When you're ready to start Phase 1, I can:
+**Minimum-viable-safe shippable beta = Phase 1 + Phase 1.5.** Total time: 4–6 weeks of focused work.
+
+When you're ready, I can:
 - Draft `.github/workflows/build-db.yml` based on your actual `run_pipeline.py` signature.
 - Write the `scripts/storage_client.py` abstraction so the pipeline can read from R2 or Supabase Storage interchangeably.
 - Migrate one brand's raw JSON to the bucket as a proof-of-concept.
+- Draft the Cloudflare Worker `safety-alert-poller.ts` + Supabase Edge Function `draft-safety-alert/index.ts` + the `safety_alerts` table migration.
+- Write the Flutter Realtime subscription + FCM trigger.
 
 Just say when.
