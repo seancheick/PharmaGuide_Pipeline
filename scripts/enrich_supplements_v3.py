@@ -10432,6 +10432,9 @@ class SupplementEnricherV3:
                         "action": cond_rule.get("action"),
                         "sources": sources,
                         "dose_threshold_evaluation": threshold_eval,
+                        "alert_headline": cond_rule.get("alert_headline"),
+                        "alert_body": cond_rule.get("alert_body"),
+                        "informational_note": cond_rule.get("informational_note"),
                     })
 
                 if pregnancy_block:
@@ -10448,6 +10451,9 @@ class SupplementEnricherV3:
                                 "mechanism": pregnancy_block.get("mechanism"),
                                 "action": pregnancy_block.get("notes"),
                                 "sources": sources,
+                                "alert_headline": pregnancy_block.get("alert_headline"),
+                                "alert_body": pregnancy_block.get("alert_body"),
+                                "informational_note": pregnancy_block.get("informational_note"),
                             })
 
                 for drug_rule in rule.get("drug_class_rules", []) or []:
@@ -10481,6 +10487,9 @@ class SupplementEnricherV3:
                         "action": drug_rule.get("action"),
                         "sources": sources,
                         "dose_threshold_evaluation": threshold_eval,
+                        "alert_headline": drug_rule.get("alert_headline"),
+                        "alert_body": drug_rule.get("alert_body"),
+                        "informational_note": drug_rule.get("informational_note"),
                     })
 
                 if not condition_hits and not drug_hits and not pregnancy_block:
