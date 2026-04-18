@@ -1,21 +1,24 @@
 # DATABASE_SCHEMA.md — Master Schema Reference
 
-> Reference data schema: **5.0.0 / 5.1.0** | Export schema: **v1.3.2 (90 columns)** | Last updated: 2026-04-10 | 33 database files
+> Reference data schema: **5.0.0 / 5.1.0 / 5.2.0 / 5.3.0** | Export schema: **v1.4.0 (91 columns)** | Last updated: 2026-04-16 | 39 database files
 >
 > ## Two schemas, one document
 >
 > This file covers two related but distinct schemas:
 >
-> 1. **Reference data files** (`scripts/data/*.json`) — version 5.0.0 / 5.1.0. These are the input data the enricher consumes.
-> 2. **Final DB export** (`pharmaguide_core.db` + `detail_blobs/*.json`) — version 1.3.2. This is what the mobile app consumes. Runtime source of truth: `CORE_COLUMN_COUNT` and `EXPORT_SCHEMA_VERSION` in `build_final_db.py`. Per-column contract: `FINAL_EXPORT_SCHEMA_V1.md`.
+> 1. **Reference data files** (`scripts/data/*.json`) — version 5.0.0 / 5.1.0 / 5.2.0 / 5.3.0. These are the input data the enricher consumes.
+> 2. **Final DB export** (`pharmaguide_core.db` + `detail_blobs/*.json`) — version 1.4.0. This is what the mobile app consumes. Runtime source of truth: `CORE_COLUMN_COUNT` and `EXPORT_SCHEMA_VERSION` in `build_final_db.py`. Per-column contract: `FINAL_EXPORT_SCHEMA_V1.md`.
 >
 > The reference data schema drives what the enricher CAN compute. The export schema drives what the mobile app CAN query. They evolve independently.
 >
-> ## Export schema v1.3.2 quick summary (2026-04-10)
+> ## Export schema version summary
 >
 > - **v1.3.1** added `net_contents_quantity` (REAL) and `net_contents_unit` (TEXT) for the refill-reminder feature, and fixed the `serving_info` phantom-key bug that left `dosing_summary` and `servings_per_container` empty for every product.
-> - **v1.3.2** added `calories_per_serving` (REAL) as a filter column and introduced the `nutrition_detail` and `unmapped_actives` subkeys in `detail_blobs/*.json`.
-> - Total column count: **90**. Flutter `products_core_table.dart` in the mobile repo is synced one-for-one. Supabase Postgres needs no migration because `products_core` is in the SQLite storage blob, not in Postgres.
+> - **v1.3.2** added `calories_per_serving` (REAL) as a filter column and introduced the `nutrition_detail` and `unmapped_actives` subkeys in `detail_blobs/*.json`. (90 columns)
+> - **v1.3.3** expanded interaction safety: 129 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM expanded to 588 entries. (90 columns)
+> - **v1.3.4** added CAERS B8 penalty scoring (159 adverse event signals), offline UNII cache (172K substances), IQM UNII standardization (66%), drug label interaction mining. (90 columns)
+> - **v1.4.0** added `image_thumbnail_url` TEXT column and `normalize_upc` field; image upload pipeline. (91 columns)
+> - Total column count: **91**. Runtime source of truth: `CORE_COLUMN_COUNT = 91` in `build_final_db.py`. Flutter `products_core_table.dart` in the mobile repo is synced one-for-one. Supabase Postgres needs no migration because `products_core` is in the SQLite storage blob, not in Postgres.
 
 ## Metadata Contract
 
@@ -88,8 +91,10 @@ Every database file MUST include a `_metadata` object as its first key:
 | `id_redirect` | id_redirects.json | Enrichment |
 | `clinical_risk_taxonomy` | clinical_risk_taxonomy.json | Enrichment, Export |
 | `interaction_rules` | ingredient_interaction_rules.json | Enrichment, Export |
+| `drug_class_definitions` | drug_classes.json | Enrichment, Export |
 | `cross_db_overlap_guard` | cross_db_overlap_allowlist.json | Enrichment |
 | `percentile_categories` | percentile_categories.json | Scoring |
+| `unii_lookup_cache` | fda_unii_cache.json | Enrichment |
 | `migration_audit` | migration_report.json | Internal |
 
 ---
@@ -234,7 +239,7 @@ Core fields (always present):
 ---
 
 ### 6. botanical_ingredients.json
-**Purpose:** `ingredient_mapping` | **Entries:** 428
+**Purpose:** `ingredient_mapping` | **Entries:** 433
 
 Primary key: `botanical_ingredients` (array)
 
@@ -250,7 +255,7 @@ Primary key: `botanical_ingredients` (array)
 ---
 
 ### 7. cert_claim_rules.json
-**Purpose:** `claims_scoring` | **Entries:** 45
+**Purpose:** `claims_scoring` | **Entries:** 58
 
 Primary keys: `config` (object), `rules` (object)
 
@@ -261,7 +266,7 @@ Each rule entry contains pattern-matching criteria and scoring weights for claim
 ---
 
 ### 8. clinical_risk_taxonomy.json
-**Purpose:** `clinical_risk_taxonomy` | **Entries:** 36 | **Schema:** 5.1.0
+**Purpose:** `clinical_risk_taxonomy` | **Entries:** 41 | **Schema:** 5.1.0
 
 Controlled enums for the interaction rule system:
 
@@ -304,7 +309,7 @@ Primary keys (all string arrays):
 ---
 
 ### 11. cross_db_overlap_allowlist.json
-**Purpose:** `cross_db_overlap_guard` | **Entries:** 23
+**Purpose:** `cross_db_overlap_guard` | **Entries:** 31
 
 Allowlist for ingredients that legitimately appear in multiple databases (e.g., an ingredient in both IQM and botanical_ingredients). Prevents false-positive overlap warnings during enrichment.
 
@@ -430,7 +435,7 @@ Used to classify ingredients as active vs inactive.
 ---
 
 ### 17. ingredient_interaction_rules.json
-**Purpose:** `interaction_rules` | **Entries:** 45 | **Schema:** 5.1.0
+**Purpose:** `interaction_rules` | **Entries:** 129 | **Schema:** 5.1.0
 
 Primary key: `interaction_rules` (array)
 
@@ -453,7 +458,7 @@ Supported `subject_ref.db` values: `ingredient_quality_map`, `other_ingredients`
 ---
 
 ### 18. ingredient_quality_map.json
-**Purpose:** `quality_scoring` | **549 ingredient parents** | **~550 total entries**
+**Purpose:** `quality_scoring` | **588 ingredient parents** | **588 total entries**
 
 Structure: Object keyed by ingredient slug (e.g., `vitamin_a`, `omega_3`, `ashwagandha`)
 
@@ -561,7 +566,7 @@ Defines product category assignments for percentile ranking. Used by the scorer 
 ---
 
 ### 25. proprietary_blends.json
-**Purpose:** `blend_detection` | **Entries:** 14
+**Purpose:** `blend_detection` | **Entries:** 19
 
 Primary key: `proprietary_blend_concerns` (array)
 
@@ -629,7 +634,7 @@ Primary key: `standardized_botanicals` (array)
 ---
 
 ### 29. synergy_cluster.json
-**Purpose:** `synergy_bonuses` | **Entries:** 54
+**Purpose:** `synergy_bonuses` | **Entries:** 58
 
 Primary key: `synergy_clusters` (array)
 
@@ -681,7 +686,7 @@ Each entry maps dosage forms (capsule, softgel, tablet, powder) to `{amount, uni
 ---
 
 ### 33. user_goals_to_clusters.json
-**Purpose:** `goal_mapping` | **Entries:** 16
+**Purpose:** `goal_mapping` | **Entries:** 18
 
 Primary key: `user_goal_mappings` (array)
 
@@ -691,6 +696,33 @@ Primary key: `user_goal_mappings` (array)
 | `user_facing_goal` | string | YES | Goal displayed to user |
 | `primary_clusters` | string[] | YES | Main synergy cluster IDs |
 | `secondary_clusters` | string[] | YES | Supporting cluster IDs |
+
+---
+
+### 34. drug_classes.json
+**Purpose:** `drug_class_definitions` | **Entries:** 28 | **Schema:** 1.0.0
+
+Primary key: `drug_classes` (array)
+
+Canonical drug class definitions used by `ingredient_interaction_rules.json` and the Flutter interaction layer. Each entry defines a drug class ID, label, description, and example drugs.
+
+---
+
+### 35. fda_unii_cache.json
+**Purpose:** `unii_lookup_cache` | **Substances:** 172,431 | **Schema:** 1.0.0 | **Source:** FDA OpenFDA UNII bulk download
+
+Structure: Object keyed by UNII code (e.g., `"GAN16C9B8O"`)
+
+Offline cache of the FDA UNII substance registry. Enables enrichment to resolve ingredient identities without live API calls. Managed by `scripts/unii_cache.py`.
+
+| Field | Description |
+|-------|-------------|
+| `unii` | FDA Unique Ingredient Identifier |
+| `pt` | Preferred term (canonical substance name) |
+| `rn` | CAS Registry Number (when available) |
+| `inchikey` | InChI key for chemical identity (when available) |
+
+Updated from `https://download.open.fda.gov/other/unii/other-unii-0001-of-0001.json.zip`.
 
 ---
 
@@ -721,16 +753,16 @@ Primary key: `user_goal_mappings` (array)
 ## Cross-File Relationships
 
 ```
-ingredient_quality_map.json (549 parents)
+ingredient_quality_map.json (588 parents)
   ├── forms[].aliases → enhanced_normalizer alias lookup
   ├── standard_name → enrichment ingredient matching
   ├── category → supplement type classification
   └── canonical_id → ingredient_interaction_rules.json subject_ref
 
-clinical_risk_taxonomy.json (14 conditions, 9 drug classes)
+clinical_risk_taxonomy.json (41 entries: 14 conditions, 9 drug classes, severity/evidence enums)
   └── enum definitions → ingredient_interaction_rules.json validation
 
-ingredient_interaction_rules.json (45 rules)
+ingredient_interaction_rules.json (129 rules)
   ├── subject_ref.canonical_id → IQM / botanical / banned / harmful / other
   ├── condition_rules[].condition_id → clinical_risk_taxonomy.conditions
   ├── drug_class_rules[].drug_class_id → clinical_risk_taxonomy.drug_classes
@@ -740,7 +772,7 @@ clinically_relevant_strains.json (42 strains)
   ├── aliases → enhanced_normalizer strain bypass
   └── evidence_level → scoring probiotic bonus
 
-banned_recalled_ingredients.json (139)
+banned_recalled_ingredients.json (143)
   ├── supersedes_ids → id_redirects.json
   ├── aliases → enrichment banned matching
   └── match_rules → banned_match_allowlist.json
@@ -748,7 +780,7 @@ banned_recalled_ingredients.json (139)
 standardized_botanicals.json (239)
   └── markers → enrichment standardized botanical bonus
 
-synergy_cluster.json (54)
+synergy_cluster.json (58)
   ├── ingredients → enrichment synergy detection
   └── ← user_goals_to_clusters.json
 
@@ -762,4 +794,10 @@ manufacturer_violations.json (67)
 
 top_manufacturers_data.json (77)
   └── aliases → enrichment manufacturer matching
+
+caers_adverse_event_signals.json
+  └── canonical_id → scoring B8 penalty lookup (per active ingredient)
+
+fda_unii_cache.json (172K substances)
+  └── unii lookup → enrichment identity resolution (offline, via unii_cache.py)
 ```

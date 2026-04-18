@@ -1,4 +1,6 @@
-# PharmaGuide Unmapped Ingredient Resolution — v3.0 Batch Protocol
+# PharmaGuide Unmapped Ingredient Resolution — v3.1 Batch Protocol
+
+Updated: 2026-04-16
 
 ## Role
 
@@ -42,10 +44,26 @@ If current code behavior contradicts stale documentation, code wins.
 If identity is uncertain, do not add the alias or entry.
 Mark it `needs_verification` and explain exactly what evidence is missing.
 
+**UNII lookups are now offline-first via the local cache (172K substances):**
+
+```bash
+# The unii_cache.py module is used automatically by verify_unii.py
+# To rebuild/refresh the local cache from FDA bulk download:
+python3 scripts/api_audit/build_unii_cache.py
+
+# Direct lookup (offline, instant for ~172K known substances):
+python3 -c "
+from scripts.unii_cache import UniiCache
+cache = UniiCache()
+print(cache.lookup('ascorbic acid'))       # → 'PQ6CK8PD0R' (offline)
+print(cache.reverse_lookup('PQ6CK8PD0R')) # → 'ASCORBIC ACID'
+"
+```
+
 Use API verification whenever adding or changing:
 
 - CUI → `python3 scripts/api_audit/verify_cui.py --search "<name>"` or `--cui <CUI>`
-- UNII → `python3 scripts/api_audit/verify_unii.py --search "<name>"`
+- UNII → `python3 scripts/api_audit/verify_unii.py --search "<name>"` (uses offline cache first, falls back to GSRS)
 - CAS → `python3 scripts/api_audit/verify_pubchem.py --search "<name>"` or `--cid <CID>`
 - RDA/UL → `python3 scripts/api_audit/verify_rda_uls.py`
 - PubMed citations → `python3 scripts/api_audit/verify_pubmed_references.py`
@@ -101,7 +119,7 @@ This is a medical-grade product.
 
 Before adding ANY alias or new entry, search ALL routing databases:
 
-- `ingredient_quality_map.json` (588 IQM parents)
+- `ingredient_quality_map.json` (588 IQM parents — read `_metadata.total_entries` for live count)
 - `other_ingredients.json` (662 entries)
 - `harmful_additives.json` (115 entries)
 - `banned_recalled_ingredients.json` (143 entries)
@@ -110,7 +128,7 @@ Before adding ANY alias or new entry, search ALL routing databases:
 - `proprietary_blends.json` (19 entries)
 - `cross_db_overlap_allowlist.json` (31 entries)
 
-Do not rely on hard-coded entry counts in this prompt; counts may change as the databases evolve. Always read the `_metadata.total_entries` from the live file.
+Do not rely on hard-coded entry counts in this prompt; counts evolve. Always read `_metadata.total_entries` from the live file.
 
 If the ingredient already exists in another file, do NOT create a duplicate. Either:
 
@@ -122,7 +140,7 @@ If the ingredient already exists in another file, do NOT create a duplicate. Eit
 Before adding an alias to an existing entry, verify the alias actually refers to the **same compound**:
 
 1. Search the alias in UMLS → does it resolve to the same CUI as the target entry?
-2. Search the alias in GSRS → does it resolve to the same UNII?
+2. Search the alias in GSRS (offline cache first, then API) → does it resolve to the same UNII?
 3. Search the alias in PubChem → does it resolve to the same CAS/CID?
 
 If ANY identifier disagrees → **do not add the alias**. Instead:
@@ -138,10 +156,13 @@ If ANY identifier disagrees → **do not add the alias**. Instead:
 - "Magnesium" vs "Magnesium Oxide" vs "Magnesium Glycinate" → different compounds entirely
 - Plant common name vs latin binomial → same plant, OK as aliases
 - Branded name vs generic → OK if same compound (verify via UNII)
+- `from S. cerevisiae` source text → triggers cerevisiae yeast aliases in `_CEREVISIAE_YEAST_ALIAS` dict in `enrich_supplements_v3.py`; missing alias = bio_score fallback, not a true new entry
 
 ### 9. Shadow-run after code fixes
 
 If you change cleaner, normalizer, enricher, batch processor, scorer contract, or matching logic, you must run a small shadow verification on an affected dataset slice and compare before/after.
+
+Use `scripts/shadow_score_comparison.py` and `scripts/regression_snapshot.py` for automated before/after diffing.
 
 ### 10. Verification loop is mandatory
 
@@ -196,7 +217,7 @@ Never promote Lane B or Lane C items into production data just to clear backlog 
 1. Run the dynamic scan
 2. Inspect the relevant raw DSLD source files
 3. Inspect current DB coverage across all routing targets
-4. **API-verify identifiers** for each candidate (CUI, UNII, CAS)
+4. **API-verify identifiers** for each candidate (CUI, UNII via offline cache, CAS)
 5. Classify each unmapped case by root cause
 6. Identify code bugs separately from data gaps
 7. For alias additions: verify the alias resolves to the same CUI/UNII/CAS as the target entry
@@ -316,6 +337,10 @@ Required check:
    - the fallback chose the wrong form
    - the parent match itself may be wrong
 
+**Cerevisiae yeast enricher trap:** When raw label text contains "from S. cerevisiae culture" or similar, the enricher's `_CEREVISIAE_YEAST_ALIAS` dict maps the ingredient to a yeast-specific form. If the alias is missing, the ingredient falls back to `(unspecified)` form losing the bio_score bonus — this is an alias gap, not a form fallback bug.
+
+**`prefix='from'` enricher trap:** Forms whose text begins with "from" are treated as source-descriptors and skipped by the enricher. If a chelate-class form name begins with "from", it will not match even if an alias exists. This requires a narrow code fix in the enricher, not just an alias addition.
+
 If the fallback-selected form is wrong, do not treat the case as resolved.
 Classify it as either:
 
@@ -337,7 +362,6 @@ print('=' * 72)
 print('UNMAPPED / FALLBACK SCAN — CURRENT STATE')
 print('=' * 72)
 
-# Layout: scripts/products/output_<Brand>/unmapped/ and scripts/products/output_<Brand>_enriched/
 active_files = sorted(glob.glob('products/output_*/unmapped/unmapped_active_ingredients.json'))
 inactive_files = sorted(glob.glob('products/output_*/unmapped/unmapped_inactive_ingredients.json'))
 needs_active_files = sorted(glob.glob('products/output_*/unmapped/needs_verification_active_ingredients.json'))
@@ -346,7 +370,6 @@ enriched_files = sorted(glob.glob('products/output_*_enriched/enriched/enriched_
 parent_fallback_files = sorted(glob.glob('products/output_*_enriched/reports/parent_fallback_report.json'))
 form_audit_files = sorted(glob.glob('products/output_*_enriched/reports/form_fallback_audit_report.json'))
 
-# --- Helpers ---
 def safe_load(fp):
     try:
         with open(fp) as f:
@@ -356,14 +379,12 @@ def safe_load(fp):
         return {}
 
 def brand_from_path(fp):
-    """Extract brand name from output path for reporting."""
     parts = fp.replace('\\', '/').split('/')
     for p in parts:
         if p.startswith('output_') and not p.endswith('_enriched') and not p.endswith('_scored'):
             return p.replace('output_', '')
     return 'unknown'
 
-# --- Surface A: Cleaning unmapped ---
 clean_active = {}
 clean_inactive = {}
 needs_active = {}
@@ -393,7 +414,6 @@ for fp in needs_inactive_files:
         name = row.get('label_text', 'UNKNOWN')
         needs_inactive[name] = needs_inactive.get(name, 0) + row.get('occurrences', 0)
 
-# --- Surface B: Enrichment unmapped ---
 enrich_unmapped = {}
 products = 0
 scorable = 0
@@ -411,7 +431,6 @@ for fp in enriched_files:
                 name = ing.get('name', 'UNKNOWN')
                 enrich_unmapped[name] = enrich_unmapped.get(name, 0) + 1
 
-# --- Surface C: Fallbacks ---
 fallbacks = {}
 for fp in parent_fallback_files:
     data = safe_load(fp)
@@ -426,7 +445,6 @@ for fp in form_audit_files:
         key = row.get('ingredient_normalized') or row.get('ingredient_raw') or 'UNKNOWN'
         form_fallbacks[key] = form_fallbacks.get(key, 0) + row.get('occurrence_count', row.get('count', 0))
 
-# --- Database stats ---
 db_files = {
     'IQM': 'data/ingredient_quality_map.json',
     'Other Ingredients': 'data/other_ingredients.json',
@@ -444,9 +462,22 @@ for label, fp in db_files.items():
         d = json.load(open(fp))
         total = d.get('_metadata', {}).get('total_entries', '?')
         ver = d.get('_metadata', {}).get('schema_version', '?')
-        print(f'  {label:20s}: {total:>5} entries (schema {ver})')
+        updated = d.get('_metadata', {}).get('last_updated', '?')
+        print(f'  {label:20s}: {total:>5} entries (schema {ver}, updated {updated})')
     except Exception as e:
         print(f'  {label:20s}: ERROR - {e}')
+
+# UNII cache status
+try:
+    import json as _json
+    uc = _json.load(open('data/fda_unii_cache.json'))
+    m = uc.get('_metadata', {})
+    n = len([k for k in uc if k != '_metadata'])
+    print(f'\n[UNII CACHE]: {n:,} substances loaded (source: {m.get("source","?")})')
+    if n < 1000:
+        print('  WARNING: Cache appears empty — run: python3 api_audit/build_unii_cache.py')
+except Exception as e:
+    print(f'\n[UNII CACHE]: not found or error ({e}) — run: python3 api_audit/build_unii_cache.py')
 
 print(f'\n[BRANDS SCANNED]: {sorted(brands_scanned) if brands_scanned else "NONE — run pipeline first"}')
 print(f'  Output folders found: {len(active_files)} clean, {len(enriched_files)} enriched, {len(parent_fallback_files)} fallback reports')
@@ -536,12 +567,13 @@ Important subpaths:
 
 | Path                                 | Purpose                                                                           |
 | ------------------------------------ | --------------------------------------------------------------------------------- |
-| `scripts/`                           | All pipeline scripts (46 Python files)                                            |
-| `scripts/data/`                      | 39 reference JSON databases                                                       |
+| `scripts/`                           | All pipeline scripts (~50 Python files)                                           |
+| `scripts/data/`                      | 39+ reference JSON databases                                                      |
+| `scripts/data/fda_unii_cache.json`   | Offline UNII substance cache (172K substances, built by `build_unii_cache.py`)    |
 | `scripts/data/curated_overrides/`    | Manual CUI/PubChem/GSRS policy overrides                                          |
 | `scripts/data/curated_interactions/` | Drug-supplement interaction data                                                  |
-| `scripts/data/fda_caers/`            | FDA CAERS adverse event data                                                      |
-| `scripts/data/fda_drug_labels/`      | FDA drug label data (13 parts)                                                    |
+| `scripts/data/fda_caers/`            | FDA CAERS adverse event data (159 scored signals in B8)                           |
+| `scripts/data/fda_drug_labels/`      | FDA drug label data (13 parts, 40 supplements, 90% coverage)                     |
 | `scripts/data/suppai_import/`        | SuppAI import data                                                                |
 | `scripts/api_audit/`                 | 30+ API verification scripts                                                      |
 | `scripts/tests/`                     | 81+ test files, 3065+ test functions                                              |
@@ -612,34 +644,37 @@ The batch runner uses `PYTHON="${PYTHON:-python3}"` — override with `PYTHON=py
 | Proprietary Blends     | `proprietary_blends.json`          | 19      | 5.0.0  | Descriptor-level mapping (scorer handles penalty) |
 | Cross-DB Overlap       | `cross_db_overlap_allowlist.json`  | 31      | 5.1.0  | Legitimate multi-file entries                     |
 
+Always read `_metadata.total_entries` from the live file — these counts reflect the current repo state as of 2026-04-16.
+
 ### Supporting data files (not routing targets, but referenced during resolution)
 
-| File                                   | Entries | Purpose                               |
-| -------------------------------------- | ------- | ------------------------------------- |
-| `absorption_enhancers.json`            | 23      | Absorption enhancer classification    |
-| `allergens.json`                       | 17      | Big 8 allergen classification         |
-| `backed_clinical_studies.json`         | 197     | PMID-backed clinical evidence bonuses |
-| `synergy_cluster.json`                 | 58      | Ingredient synergy bonuses            |
-| `rda_optimal_uls.json`                 | 47      | RDA/AI/UL dosing benchmarks           |
-| `medication_depletions.json`           | 68      | Drug-induced nutrient depletions      |
-| `ingredient_classification.json`       | 34      | Active/inactive classification rules  |
-| `ingredient_interaction_rules.json`    | 129     | Interaction rule engine               |
-| `drug_classes.json`                    | 28      | Drug class definitions                |
-| `timing_rules.json`                    | 42      | Dosing timing guidance                |
-| `clinically_relevant_strains.json`     | 42      | Probiotic strain specificity          |
-| `color_indicators.json`                | 66      | Color additive classification         |
-| `enhanced_delivery.json`               | 78      | Enhanced delivery system bonuses      |
-| `functional_ingredient_groupings.json` | 8       | Functional grouping definitions       |
-| `manufacturer_violations.json`         | —       | Brand trust penalties                 |
-| `rda_therapeutic_dosing.json`          | —       | Therapeutic dosing ranges             |
+| File                                   | Entries | Purpose                                                      |
+| -------------------------------------- | ------- | ------------------------------------------------------------ |
+| `absorption_enhancers.json`            | 23      | Absorption enhancer classification                           |
+| `allergens.json`                       | 17      | Big 8 allergen classification                                |
+| `backed_clinical_studies.json`         | 197     | PMID-backed clinical evidence bonuses (all content-verified) |
+| `synergy_cluster.json`                 | 58      | Tiered synergy bonuses with canonical_ids for IQM matching   |
+| `rda_optimal_uls.json`                 | 47      | RDA/AI/UL dosing benchmarks                                  |
+| `medication_depletions.json`           | 68      | Drug-induced nutrient depletions                             |
+| `ingredient_classification.json`       | 34      | Active/inactive classification rules                         |
+| `ingredient_interaction_rules.json`    | 129     | Interaction rule engine (127 rules + 4 drug classes as of v1.3.3) |
+| `drug_classes.json`                    | 28      | Drug class definitions                                       |
+| `timing_rules.json`                    | 42      | Dosing timing guidance                                       |
+| `clinically_relevant_strains.json`     | 42      | Probiotic strain specificity                                 |
+| `color_indicators.json`                | 66      | Color additive classification                                |
+| `enhanced_delivery.json`               | 78      | Enhanced delivery system bonuses                             |
+| `functional_ingredient_groupings.json` | 8       | Functional grouping definitions                              |
+| `manufacturer_violations.json`         | —       | Brand trust penalties                                        |
+| `rda_therapeutic_dosing.json`          | —       | Therapeutic dosing ranges                                    |
+| `fda_unii_cache.json`                  | ~172K   | Offline UNII substance cache — instant lookup, no API call   |
 
 ### Curated override files (prevent known bad auto-matches)
 
-| File                                      | Content                           |
-| ----------------------------------------- | --------------------------------- |
-| `curated_overrides/cui_overrides.json`    | 66 CUI override entries           |
-| `curated_overrides/gsrs_policies.json`    | 88 entry policies + 24 skip names |
-| `curated_overrides/pubchem_policies.json` | 17 entry policies + 23 skip names |
+| File                                      | Content                                   |
+| ----------------------------------------- | ----------------------------------------- |
+| `curated_overrides/cui_overrides.json`    | 66 CUI override entries                   |
+| `curated_overrides/gsrs_policies.json`    | 24 skip names (GSRS lookup suppression)   |
+| `curated_overrides/pubchem_policies.json` | 23 skip names (PubChem lookup suppression)|
 
 ### Default routing rule
 
@@ -693,17 +728,17 @@ Action: Do not add to DB. Fix cleaner/header logic if needed.
 ### Bucket 2: Parser / normalizer bug
 
 Examples: Punctuation drift, bracket bleed, dosage text in name, apostrophe variants
-Action: Patch code, add regression test, shadow-run.
+Action: Patch code, add regression test, shadow-run via `shadow_score_comparison.py`.
 
 ### Bucket 3: Routing / precedence bug
 
-Examples: Cleaner maps but enricher misses, IQM beats harmful when harmful should win
+Examples: Cleaner maps but enricher misses, IQM beats harmful when harmful should win, `prefix='from'` blocking a chelate form
 Action: Patch code, add regression test, shadow-run.
 
 ### Bucket 4: True alias gap (MOST COMMON)
 
 Meaning: The identity already exists in the correct DB, but the exact raw label text is not covered.
-Action: Add alias only — **after identifier verification confirms same compound**.
+Action: Add alias only — **after identifier verification confirms same compound** (use offline UNII cache first).
 
 ### Bucket 5: True new canonical entry
 
@@ -750,12 +785,11 @@ Action: Do not write. Report what must be verified.
 
 ## Identifier Verification for Alias Additions
 
-**This is the critical step.** Before adding any alias, run this checklist:
+**This is the critical step.** Before adding any alias, run this checklist.
 
 ### Step 1: Find the target entry
 
 ```bash
-# Search all DBs for the canonical ingredient
 python3 -c "
 import json, sys, os
 os.chdir(os.path.expanduser('~/Downloads/dsld_clean'))
@@ -807,13 +841,16 @@ for fpath, key in files:
 ### Step 2: Verify the alias resolves to the same substance
 
 ```bash
+# Check UNII (offline cache first — no API call needed for ~172K known substances)
+python3 scripts/api_audit/verify_unii.py --search "<alias_text>"
+# Compare UNII with the target entry's external_ids.unii
+
+# If not in cache, rebuild the cache first:
+# python3 scripts/api_audit/build_unii_cache.py
+
 # Check UMLS
 python3 scripts/api_audit/verify_cui.py --search "<alias_text>"
 # Compare CUI with the target entry's CUI
-
-# Check GSRS
-python3 scripts/api_audit/verify_unii.py --search "<alias_text>"
-# Compare UNII with the target entry's external_ids.unii
 
 # Check PubChem
 python3 scripts/api_audit/verify_pubchem.py --search "<alias_text>"
@@ -833,7 +870,6 @@ python3 scripts/api_audit/verify_pubchem.py --search "<alias_text>"
 ### Step 4: Check for cross-DB collisions
 
 ```bash
-# Verify the alias doesn't already exist in another DB file
 python3 -c "
 import json, sys, os
 os.chdir(os.path.expanduser('~/Downloads/dsld_clean'))
@@ -900,14 +936,23 @@ Prefer the exact current run folder first, because that is the operator's workin
 | `enhanced_normalizer.py`           | Core text normalization engine (~6K lines)    | Investigate normalization bugs   |
 | `constants.py`                     | Shared constants and mappings (~1.5K lines)   | Check canonical aliases/mappings |
 | `fuzzy_matcher.py`                 | Fuzzy string matching                         | Investigate match failures       |
+| `unii_cache.py`                    | Local-first UNII lookup (172K offline)        | Fast UNII resolution without API |
+| `unmapped_ingredient_tracker.py`   | Track unmapped ingredient state               | Audit unmapped backlogs          |
 | `functional_grouping_handler.py`   | Functional grouping logic                     | Investigate grouping bugs        |
 | `proprietary_blend_detector.py`    | Blend detection                               | Investigate blend routing        |
 | `rda_ul_calculator.py`             | RDA/UL dose calculations                      | Investigate dose scoring         |
 | `dosage_normalizer.py`             | Dose normalization                            | Investigate dose parsing         |
 | `match_ledger.py`                  | Match tracking/auditing                       | Trace match decisions            |
+| `shadow_score_comparison.py`       | Before/after scoring diff                     | Verify shadow-run deltas         |
+| `regression_snapshot.py`           | Regression baseline snapshots                 | Guard against regressions        |
 | `db_integrity_sanity_check.py`     | Schema and data validation (~1.5K lines)      | Mandatory after every edit       |
 | `coverage_gate.py`                 | Quality/coverage threshold enforcement        | Quality gate checking            |
 | `enrichment_contract_validator.py` | Enrichment output validation                  | Verify enrichment contracts      |
+| `build_final_db.py`                | Final export for Flutter app                  | Build release SQLite DB          |
+| `build_interaction_db.py`          | Build drug-supplement interaction DB          | Interaction data releases        |
+| `preflight.py`                     | Pre-pipeline validation checks                | Catch data issues before run     |
+| `backfill_upc.py`                  | UPC backfilling for products                  | UPC normalization tasks          |
+| `extract_product_images.py`        | Product image URL extraction                  | Image asset pipeline             |
 
 ---
 
@@ -919,13 +964,14 @@ When answering from this prompt, structure the response like this:
    - Which raw source folder was inspected
    - Which pipeline output folders were inspected
    - Counts for unmapped, needs-verification, and fallback surfaces
+   - UNII cache status (populated or needs rebuild)
 2. **High-confidence fixes (Lane A)**
    - exact aliases, misspellings, form aliases, or obvious DB-entry gaps
-   - each with raw evidence, DB target, and identifier evidence
+   - each with raw evidence, DB target, and identifier evidence (UNII offline verified where possible)
 3. **Needs verification (Lane B)**
    - ambiguous identity, mixed API evidence, or cross-DB collision risk
 4. **Likely code bugs (Lane C)**
-   - parser/header/precedence/normalization/routing issues
+   - parser/header/precedence/normalization/routing issues (including `prefix='from'` or cerevisiae alias gaps)
 5. **Recommended next actions**
    - approved JSON edits
    - required tests
@@ -954,7 +1000,7 @@ For each fallback item, report:
 Use at least one of:
 
 - NIH ODS fact sheet, NCCIH monograph, FDA/USDA/regulator source
-- PubChem / FDA UNII / NCBI reference
+- PubChem / FDA UNII (offline cache sufficient for known substances) / NCBI reference
 - API verification (CUI, UNII, CAS cross-match)
 
 ### Clinical notes
@@ -976,7 +1022,7 @@ Use at least one of:
 | Script                             | API                             | What it checks                                            | Key flags                           |
 | ---------------------------------- | ------------------------------- | --------------------------------------------------------- | ----------------------------------- |
 | `verify_cui.py`                    | UMLS                            | CUI validity, concept name                                | `--cui C0000000`, `--search "name"` |
-| `verify_unii.py`                   | FDA GSRS                        | UNII, CFR, DSLD, metabolic relationships                  | `--search "name"`                   |
+| `verify_unii.py`                   | FDA GSRS + offline cache        | UNII, CFR, DSLD, metabolic relationships (cache-first)    | `--search "name"`                   |
 | `verify_pubchem.py`                | PubChem                         | CAS, PubChem CID, molecular identity                      | `--search "name"`, `--cid 12345`    |
 | `verify_rda_uls.py`                | USDA FoodData Central + NAM DRI | RDA/AI/UL values                                          | —                                   |
 | `verify_efsa.py`                   | EFSA OpenFoodTox                | EU regulatory ADI/opinion                                 | —                                   |
@@ -991,6 +1037,7 @@ Use at least one of:
 
 | Script                                          | Purpose                                           |
 | ----------------------------------------------- | ------------------------------------------------- |
+| `api_audit/build_unii_cache.py`                 | Build/refresh local UNII cache from FDA bulk (run before UNII lookups) |
 | `api_audit/enrich_botanicals.py`                | Botanical enrichment with standardization markers |
 | `api_audit/enrich_chembl_bioactivity.py`        | ChEMBL mechanism of action enrichment             |
 | `api_audit/audit_alias_accuracy.py`             | Alias accuracy audit                              |
@@ -1000,18 +1047,22 @@ Use at least one of:
 | `api_audit/audit_notes_alignment.py`            | Notes alignment check                             |
 | `api_audit/discover_clinical_evidence.py`       | Clinical evidence discovery                       |
 | `api_audit/normalize_clinical_pubmed.py`        | PubMed citation normalization                     |
-| `api_audit/build_unii_cache.py`                 | Build local UNII cache from FDA bulk              |
-| `api_audit/ingest_caers.py`                     | Ingest FDA CAERS adverse event data               |
+| `api_audit/pubmed_client.py`                    | PubMed API client (used by citation verify tools) |
+| `api_audit/ingest_caers.py`                     | Ingest FDA CAERS adverse event data (159 signals) |
 | `api_audit/mine_drug_label_interactions.py`     | Mine FDA drug labels for interactions             |
 | `api_audit/seed_drug_classes.py`                | Seed drug class definitions                       |
 | `api_audit/fda_weekly_sync.py`                  | FDA recall tracking (openFDA, RSS, DEA)           |
 | `api_audit/fda_manufacturer_violations_sync.py` | Manufacturer violation sync                       |
+| `api_audit/valyu_evidence_discovery.py`         | Valyu-powered evidence discovery for ingredients  |
+| `api_audit/valyu_domain_targets.py`             | Valyu domain target extraction                    |
+| `api_audit/valyu_query_planner.py`              | Valyu query planning for evidence search          |
+| `api_audit/valyu_report_writer.py`              | Valyu evidence report generation                  |
 
 Curated override files (prevent known bad auto-matches):
 
-- `scripts/data/curated_overrides/cui_overrides.json` (66 entries)
-- `scripts/data/curated_overrides/gsrs_policies.json` (88 entry policies, 24 skip names)
-- `scripts/data/curated_overrides/pubchem_policies.json` (17 entry policies, 23 skip names)
+- `scripts/data/curated_overrides/cui_overrides.json` (66 CUI override entries)
+- `scripts/data/curated_overrides/gsrs_policies.json` (24 GSRS skip names)
+- `scripts/data/curated_overrides/pubchem_policies.json` (23 PubChem skip names)
 
 **NEVER use `--apply` in bulk.** Dry-run only, verify each result individually.
 
@@ -1068,13 +1119,14 @@ Code bugs found:        XX
 Misspellings:           XX
 Deferred:               XX
 Cross-DB collisions:    XX (prevented)
+UNII cache hits:        XX (no API call needed)
 ```
 
 ### Phase 2 Outputs (after approval)
 
 1. Files changed (exact list)
 2. Tests run (integrity + targeted)
-3. Shadow-run verification (before/after unmapped deltas)
+3. Shadow-run verification (before/after unmapped deltas via `shadow_score_comparison.py`)
 4. Residual risk (anything still deferred)
 
 ---
@@ -1111,12 +1163,22 @@ If enrichment fallback resolves something weakly, it can still be a clean-stage 
 
 Rows that are label-visible but should not score: keep in display ledger, mark non-scoring, preserve real mapped/scorable children separately.
 
+### UNII cache hygiene
+
+The `fda_unii_cache.json` contains ~172K substances but must be rebuilt periodically to stay current.
+Run `python3 scripts/api_audit/build_unii_cache.py` before any large batch session if the cache is stale or has fewer than 10K entries.
+The `unii_cache.py` module logs a warning when a lookup misses the cache and falls back to the GSRS API.
+
+### Cerevisiae yeast routing rule
+
+When a label contains "from S. cerevisiae" or "from Saccharomyces cerevisiae" source language, the enricher uses `_CEREVISIAE_YEAST_ALIAS` to route to a yeast-specific IQM form. If the route fails and the ingredient falls to `(unspecified)`, first check whether the alias exists in `_CEREVISIAE_YEAST_ALIAS` before assuming an IQM form gap.
+
 ---
 
 ## Critical Rules
 
 1. **No batch fixes.** 8-12 items per batch. Verify each individually. Test-pin before editing data.
-2. **API-verify all identifiers** before adding aliases or new entries. CUI via UMLS, UNII via GSRS, CAS via PubChem.
+2. **API-verify all identifiers** before adding aliases or new entries. UNII via offline cache first (172K fast), then GSRS API. CUI via UMLS. CAS via PubChem.
 3. **No alias should match a different compound** — verify via CUI/UNII/CAS. If identifiers disagree, decouple.
 4. **No duplicate entries across files.** Search all 7+ routing databases before adding anything.
 5. **No hallucinated references.** If you can't find a real source, write "needs verification."
@@ -1125,3 +1187,4 @@ Rows that are label-visible but should not score: keep in display ledger, mark n
 8. **Cross-check CAS numbers** — wrong CAS = wrong substance = patient safety risk.
 9. **When in doubt → defer, don't guess.** A larger unmapped list with clean logic is better than a smaller list with bad aliases.
 10. **The goal is correct identity resolution, not fewer unmapped names.**
+11. **Rebuild the UNII cache** (`build_unii_cache.py`) before any large batch if cache entries < 10K or cache is older than 30 days.

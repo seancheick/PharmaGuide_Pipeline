@@ -18,7 +18,8 @@
       "3": "PROMISING — mechanistic rationale + limited human data, or combo-vs-placebo only (no single-ingredient arm)",
       "4": "POPULAR combination — each ingredient has individual evidence, but no combo-specific clinical data"
     },
-    "evidence_source": "PMC10600480 (2023 systematic review: Synergistic Health Effects of Dietary Supplement Combinations) + individual PubMed verification"
+    "evidence_source": "PMC10600480 (2023 systematic review: Synergistic Health Effects of Dietary Supplement Combinations) + individual PubMed verification",
+    "flutter_top_level_key": "clusters"
   },
   "synergy_clusters": [
     {

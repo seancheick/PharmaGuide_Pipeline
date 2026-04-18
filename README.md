@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white" />
-  <img src="https://img.shields.io/badge/Tests-3066+-4CAF50?style=for-the-badge&logo=pytest&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tests-3906+-4CAF50?style=for-the-badge&logo=pytest&logoColor=white" />
   <img src="https://img.shields.io/badge/Scoring-v3.4-FF6B35?style=for-the-badge" />
   <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" />
 </p>
@@ -15,7 +15,7 @@ A production-grade data pipeline that transforms raw NIH Dietary Supplement Labe
 
 ## Why This Exists
 
-The dietary supplement market is a **$60B industry** with minimal consumer transparency. Labels don't tell you if a form is bioavailable, if an ingredient has been recalled by the FDA, or if clinical evidence actually supports the claimed benefits. PharmaGuide Pipeline bridges that gap by scoring every product against 37 curated reference databases, real clinical evidence, and active FDA safety data.
+The dietary supplement market is a **$60B industry** with minimal consumer transparency. Labels don't tell you if a form is bioavailable, if an ingredient has been recalled by the FDA, or if clinical evidence actually supports the claimed benefits. PharmaGuide Pipeline bridges that gap by scoring every product against 39 curated reference databases, real clinical evidence, and active FDA safety data.
 
 ---
 
@@ -69,7 +69,7 @@ An 80-point arithmetic model with deterministic, auditable scoring:
 **Final Score:** `(raw_80 / 80) * 100` displayed as a 0-100 scale
 
 **Verdicts** (deterministic precedence):
-`BLOCKED` > `UNSAFE` > `MODERATE` > `REVIEW` > `RECOMMENDED`
+`BLOCKED` > `UNSAFE` > `NOT_SCORED` > `CAUTION` > `POOR` > `SAFE`
 
 A product with a banned substance is **always** BLOCKED -- no amount of quality points overrides safety.
 
@@ -77,20 +77,22 @@ A product with a banned substance is **always** BLOCKED -- no amount of quality 
 
 ## Reference Databases
 
-37 curated JSON databases power the scoring engine:
+39 curated JSON databases power the scoring engine:
 
 | Database | Entries | Purpose |
 |----------|---------|---------|
-| `ingredient_quality_map.json` | 563 | Quality scoring for bioavailable forms, premium ingredients |
+| `ingredient_quality_map.json` | 588 | Quality scoring for bioavailable forms, premium ingredients |
 | `backed_clinical_studies.json` | 197 | PMID-backed clinical evidence with endpoint classifications |
 | `banned_recalled_ingredients.json` | 143 | FDA-sourced regulatory disqualifications |
 | `harmful_additives.json` | 115 | Penalty scoring for harmful additives and excipients |
-| `rda_optimal_uls.json` | -- | RDA/AI/UL dosing adequacy benchmarks |
-| `allergens.json` | -- | Big 8 allergen classification |
-| `synergy_cluster.json` | -- | Ingredient combination bonus scoring |
+| `caers_adverse_event_signals.json` | -- | FDA CAERS pharmacovigilance signals (B8 penalty scoring) |
+| `fda_unii_cache.json` | 172K | Offline FDA UNII substance registry for identity resolution |
+| `rda_optimal_uls.json` | 47 | RDA/AI/UL dosing adequacy benchmarks |
+| `allergens.json` | 17 | Big 8 allergen classification |
+| `synergy_cluster.json` | 58 | Ingredient combination bonus scoring |
 | `manufacturer_violations.json` | -- | Brand trust penalties from FDA warning letters |
 
-All files follow a strict schema contract (`v5.0/5.1`) with `_metadata` blocks for versioning and audit trails.
+All files follow a strict schema contract (`v5.0/5.1/5.2/5.3`) with `_metadata` blocks for versioning and audit trails.
 
 ---
 
@@ -130,7 +132,7 @@ python3 scripts/sync_to_supabase.py <build_output_dir>
 ### Run Tests
 
 ```bash
-# All 3066+ tests
+# All 3906+ tests
 python3 -m pytest scripts/tests/
 
 # Specific module
@@ -157,11 +159,19 @@ scripts/
   constants.py                 # Shared constants and mappings
   coverage_gate.py             # Quality threshold enforcement
   db_integrity_sanity_check.py # Schema and data validation
+  backfill_upc.py              # UPC backfilling for existing products
+  extract_product_images.py    # Product image extraction and upload
+  build_interaction_db.py      # Interaction rules DB assembly
+  unii_cache.py                # FDA UNII offline cache management
+  shadow_score_comparison.py   # Shadow scoring comparison tool
+  regression_snapshot.py       # Scoring regression snapshots
+  preflight.py                 # Pre-pipeline validation checks
+  unmapped_ingredient_tracker.py # Unmapped ingredient diagnostics
   config/
     cleaning_config.json       # Stage 1 configuration
     enrichment_config.json     # Stage 2 configuration
     scoring_config.json        # Stage 3 configuration (100+ tunable params)
-  data/                        # 37 reference JSON databases
+  data/                        # 39 reference JSON databases
     curated_overrides/         # Manual CUI/PubChem/GSRS policy overrides
   api_audit/                   # External API verification tools
     verify_cui.py              # UMLS CUI verification
@@ -170,7 +180,7 @@ scripts/
     verify_rda_uls.py          # RDA/UL verification against DRI tables
     verify_clinical_trials.py  # ClinicalTrials.gov NCT verification
     fda_weekly_sync.py         # FDA recall tracking (openFDA, RSS, DEA)
-  tests/                       # 81 test files, 3066+ test functions
+  tests/                       # 81 test files, 3906+ test functions
   logs/                        # Runtime logs
   reports/                     # Generated audit reports
 docs/                          # Technical documentation

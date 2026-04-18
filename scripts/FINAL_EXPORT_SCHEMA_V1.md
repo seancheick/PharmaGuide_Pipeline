@@ -1,9 +1,9 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 1.3.2 — 2026-04-10
+> Version: 1.4.0 — 2026-04-16
 > Consumes: current scorer output (v3.4.0 as of 2026-04-05), enrichment schema v5.1.0
-> Status: ACTIVE — v1.3.2 enhancements approved
-> Updated: **v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` (now read the real cleaner-emitted `servingSizes` + `servingsPerContainer` fields) and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 90 columns (up from 89 in v1.3.1, 87 in v1.3.0, 65 in v1.2.x); `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
+> Status: ACTIVE — v1.4.0 enhancements approved
+> Updated: **v1.4.0 adds `image_thumbnail_url` TEXT column (91 cols) and `normalize_upc` field; image upload pipeline via `extract_product_images.py`. v1.3.4 added CAERS B8 penalty scoring (159 adverse event signals) and offline UNII cache (172K substances). v1.3.3 expanded interaction rules to 129 (was 98) and added 4 new drug classes. v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 91 columns (up from 90 in v1.3.2–v1.3.4, 87 in v1.3.0, 65 in v1.2.x); `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
 >
 > Previous updates: scoring v3.4 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
 

@@ -1324,6 +1324,30 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         })
 
     # Warnings
+    #
+    # Every warning now carries a `display_mode_default` enum that tells
+    # the Flutter app how to render it when the user has NO matching
+    # profile (no declared condition / drug class / pregnancy). Flutter
+    # is expected to promote the display mode on-device when the user's
+    # profile DOES match the warning's `condition_id` / `drug_class_id` /
+    # ban_context. Values:
+    #
+    #   - "critical"      — always show. Substance-level hazard (banned,
+    #                        adulterant, contaminant) OR severity ==
+    #                        contraindicated. User profile is irrelevant.
+    #   - "informational" — show as neutral note regardless of profile.
+    #                        Used for rules that are material but not
+    #                        alarming without matching profile (e.g.,
+    #                        berberine + hypoglycemics when user has no
+    #                        declared diabetes meds).
+    #   - "suppress"      — do not render without profile match. On-device
+    #                        filter promotes to "alert" if profile
+    #                        matches.
+    #
+    # The pipeline also emits `warnings_profile_gated[]` = subset where
+    # display_mode_default != "suppress" — apps that don't yet filter
+    # client-side can render this directly without scaring the user with
+    # unmatched conditional warnings.
     warnings = []
     for sub in contaminant_matches(enriched):
         status = normalize_text(sub.get("status"))
@@ -1357,6 +1381,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                         "type": ref.get("type", ""),
                         "evidence_grade": ref.get("evidence_grade", ""),
                     })
+        # Substance-level banned/recalled/high-risk hazards are always
+        # critical — the user is exposed regardless of their profile.
+        # Watchlist items are informational until a profile rule upgrades
+        # them.
+        ban_ctx = safe_str(sub.get("ban_context"))
+        dm_default = "critical" if status in ("banned", "recalled", "high_risk") else "informational"
         warnings.append({
             "type": warning_type,
             "severity": severity,
@@ -1368,6 +1398,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "clinical_risk": safe_str(sub.get("clinical_risk_enum")),
             "identifiers": extract_identifiers(sub),
             "source_urls": source_urls,
+            # Path C authored fields (optional during authoring transition).
+            "ban_context": ban_ctx or None,
+            "safety_warning": sub.get("safety_warning"),
+            "safety_warning_one_liner": sub.get("safety_warning_one_liner"),
+            "display_mode_default": dm_default,
         })
 
     for h in safe_list(enriched.get("harmful_additives")):
@@ -1389,6 +1424,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "category": safe_str(h.get("category")),
             "source": "harmful_additives_db",
             "identifiers": extract_identifiers(h_ref),
+            # Harmful additives are substance-level hazards — always show.
+            "display_mode_default": "critical",
         })
 
     for a in safe_list(enriched.get("allergen_hits")):
@@ -1402,8 +1439,42 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "notes": safe_str(a.get("notes")),
             "supplement_context": safe_str(a.get("supplement_context")),
             "prevalence": safe_str(a.get("prevalence")),
+            "allergen_id": safe_str(a.get("allergen_id") or a.get("canonical_id")),
             "source": "allergen_db",
+            # Allergen presence is informational by default — only becomes
+            # critical when Flutter sees a match against user's declared
+            # allergens[] profile array.
+            "display_mode_default": "informational",
         })
+
+    # Interaction-rule warnings — profile-gating metadata added here.
+    #
+    # Each hit carries `display_mode_default` derived from rule severity:
+    #   contraindicated → "critical"    (always show, profile irrelevant)
+    #   avoid           → "informational" (show as neutral note without
+    #                                       profile; Flutter promotes to
+    #                                       "alert" if profile matches)
+    #   caution/monitor → "suppress"    (do not show without profile)
+    #   info            → "suppress"
+    #
+    # `severity_contextual` is the severity the app should render when NO
+    # profile matches — downgraded to "informational" for avoid/caution
+    # rules, untouched for contraindicated (still alarming without
+    # profile because the chemistry is dangerous regardless).
+    _INTERACTION_DISPLAY_MODE = {
+        "contraindicated": "critical",
+        "avoid": "informational",
+        "caution": "suppress",
+        "monitor": "suppress",
+        "info": "suppress",
+    }
+    _INTERACTION_CONTEXTUAL_SEVERITY = {
+        "contraindicated": "contraindicated",
+        "avoid": "informational",
+        "caution": "informational",
+        "monitor": "informational",
+        "info": "info",
+    }
 
     for alert in safe_list(safe_dict(enriched.get("interaction_profile")).get("ingredient_alerts")):
         if not isinstance(alert, dict):
@@ -1412,12 +1483,24 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         for ch in safe_list(alert.get("condition_hits")):
             if isinstance(ch, dict):
                 dose_eval = ch.get("dose_threshold_evaluation")
+                raw_sev = safe_str(ch.get("severity"), "moderate").lower()
                 warnings.append({
                     "type": "interaction",
-                    "severity": safe_str(ch.get("severity"), "moderate"),
+                    "severity": raw_sev,
+                    "severity_contextual": _INTERACTION_CONTEXTUAL_SEVERITY.get(
+                        raw_sev, raw_sev
+                    ),
+                    "display_mode_default": _INTERACTION_DISPLAY_MODE.get(
+                        raw_sev, "suppress"
+                    ),
                     "title": f"{ing_name} / {safe_str(ch.get('condition_id'))}",
                     "detail": safe_str(ch.get("mechanism")),
                     "action": safe_str(ch.get("action")),
+                    # Authored copy passthrough (optional during
+                    # authoring transition).
+                    "alert_headline": ch.get("alert_headline"),
+                    "alert_body": ch.get("alert_body"),
+                    "informational_note": ch.get("informational_note"),
                     "condition_id": safe_str(ch.get("condition_id")),
                     "ingredient_name": ing_name,
                     "evidence_level": safe_str(ch.get("evidence_level")),
@@ -1428,12 +1511,22 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         for dh in safe_list(alert.get("drug_class_hits")):
             if isinstance(dh, dict):
                 dose_eval = dh.get("dose_threshold_evaluation")
+                raw_sev = safe_str(dh.get("severity"), "moderate").lower()
                 warnings.append({
                     "type": "drug_interaction",
-                    "severity": safe_str(dh.get("severity"), "moderate"),
+                    "severity": raw_sev,
+                    "severity_contextual": _INTERACTION_CONTEXTUAL_SEVERITY.get(
+                        raw_sev, raw_sev
+                    ),
+                    "display_mode_default": _INTERACTION_DISPLAY_MODE.get(
+                        raw_sev, "suppress"
+                    ),
                     "title": f"{ing_name} / {safe_str(dh.get('drug_class_id'))}",
                     "detail": safe_str(dh.get("mechanism")),
                     "action": safe_str(dh.get("action")),
+                    "alert_headline": dh.get("alert_headline"),
+                    "alert_body": dh.get("alert_body"),
+                    "informational_note": dh.get("informational_note"),
                     "drug_class_id": safe_str(dh.get("drug_class_id")),
                     "ingredient_name": ing_name,
                     "evidence_level": safe_str(dh.get("evidence_level")),
@@ -1453,6 +1546,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "title": safe_str(warning.get("type"), "dietary").replace("_", " ").title(),
             "detail": safe_str(warning.get("message") or warning.get("recommendation")),
             "source": "dietary_sensitivity_data",
+            # Dietary warnings are profile-gated by diet preferences /
+            # conditions (e.g., diabetic users care about sugar). Default
+            # to informational; Flutter can promote based on user diet.
+            "display_mode_default": "informational",
         })
     if not dietary_warnings:
         sugar = safe_dict(ds.get("sugar"))
@@ -1464,6 +1561,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "title": "Sugar Content",
                 "detail": f"{sugar.get('amount_g', 0)}g sugar per serving ({safe_str(sugar.get('level_display'))})",
                 "source": "dietary_sensitivity_data",
+                "display_mode_default": "informational",
             })
         if sodium.get("level") in ("moderate", "high"):
             warnings.append({
@@ -1472,6 +1570,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "title": "Sodium Content",
                 "detail": f"{sodium.get('amount_mg', 0)}mg sodium per serving ({safe_str(sodium.get('level_display'))})",
                 "source": "dietary_sensitivity_data",
+                "display_mode_default": "informational",
             })
 
     product_status = normalize_text(enriched.get("status"))
@@ -1482,6 +1581,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "title": "Discontinued Product",
             "detail": safe_str(enriched.get("discontinuedDate"))[:10],
             "source": "dsld",
+            "display_mode_default": "informational",
         })
     elif product_status == "off_market":
         warnings.append({
@@ -1490,7 +1590,19 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "title": "Off-Market Product",
             "detail": "Product is no longer marketed.",
             "source": "dsld",
+            "display_mode_default": "informational",
         })
+
+    # Build the profile-gated subset — warnings whose default treatment is
+    # NOT "suppress". This is what Flutter should render by default when
+    # the user has no declared profile; items with display_mode_default ==
+    # "suppress" are held back until Flutter's on-device filter finds a
+    # matching condition_id / drug_class_id in the user's profile and
+    # promotes them to "alert".
+    warnings_profile_gated = [
+        w for w in warnings
+        if w.get("display_mode_default", "critical") != "suppress"
+    ]
 
     # Section breakdown — rename to descriptive, preserve all sub-scores
     breakdown_raw = safe_dict(scored.get("breakdown"))
@@ -1536,6 +1648,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "ingredients": ingredients,
         "inactive_ingredients": inactive,
         "warnings": warnings,
+        # Profile-gated subset — see build logic above. Flutter should
+        # render this by default to avoid firing scary-looking rules at
+        # users who have no matching profile (e.g., berberine +
+        # hypoglycemics surfacing to a user who isn't on diabetes meds).
+        # Apps that have implemented on-device profile filtering can read
+        # `warnings` and apply their own filter instead.
+        "warnings_profile_gated": warnings_profile_gated,
         "section_breakdown": section_breakdown,
         "compliance_detail": safe_dict(enriched.get("compliance_data")),
         "certification_detail": {

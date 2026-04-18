@@ -52,7 +52,8 @@
       "Garlic (ingredient-human × systematic_review_meta)": "6 × 0.65 = 3.9 pts → tier_1",
       "LGG (strain-clinical × clinical_strain)": "4 × 0.6 = 2.4 pts → tier_2",
       "Fisetin (preclinical × animal_study)": "2 × 0.3 = 0.6 pts → tier_3"
-    }
+    },
+    "flutter_top_level_key": "backed_clinical_studies"
   },
   "backed_clinical_studies": [
     {

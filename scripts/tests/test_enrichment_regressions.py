@@ -1065,7 +1065,7 @@ class TestCompoundParentDisambiguation:
             ("MaquiBright", "maqui_berry", "maqui berry (unspecified)"),
             ("Vitexin", "vitexin", "vitexin (unspecified)"),
             ("Life's DHA", "dha", "algal triglyceride"),
-            ("Concentrated Fish Oil", "fish_oil", "molecularly distilled"),
+            ("Concentrated Fish Oil", "fish_oil", "fish oil (unspecified)"),
         ],
     )
     def test_dangerous_or_dual_identity_aliases_route_to_expected_parent(

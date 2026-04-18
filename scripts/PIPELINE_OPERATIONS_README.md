@@ -1,17 +1,19 @@
 # Pipeline Operations README
 
-Updated: 2026-04-14
+Updated: 2026-04-17
 Owner: Sean Cheick Baradji
 
-This file is a practical command guide for the pipeline work added and updated today.
+This file is a practical command guide for running and releasing the PharmaGuide pipeline.
 
 It covers:
 
-- final DB build
+- full pipeline run (Clean → Enrich → Score)
+- final DB build (per-pair + assembled release)
 - incremental pair builds
 - pair change-journal generation
 - assembled release creation
-- Supabase sync
+- Supabase sync and `--cleanup`
+- Flutter artifact import and release gate
 - DSLD API tooling status and commands
 
 ## Schema version history
@@ -23,6 +25,7 @@ It covers:
 | v1.3.2  | 2026-04-10 | 90      | Nutrition hybrid (`calories_per_serving` column + `nutrition_detail` blob) + `unmapped_actives` blob transparency                                                                                            |
 | v1.3.3  | 2026-04-14 | 90      | Interaction safety expansion: 127 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM 588 entries (was 571)                                                                |
 | v1.3.4  | 2026-04-14 | 90      | CAERS B8 scoring (159 adverse event signals), UNII offline cache (172K substances), IQM UNII standardization (66%), drug label interaction mining (40 supplements, 90% coverage), CAERS dashboard audit view |
+| v1.4.0  | 2026-04-15 | 91      | `image_thumbnail_url` column added; IQM expanded to 589 entries; branded ingredient bio-score prioritization fix (KSM-66, Sensoril, Bergavit); 31 new IQM aliases; normalize_upc pipeline step               |
 
 Runtime source of truth: `CORE_COLUMN_COUNT` in `build_final_db.py` plus `EXPORT_SCHEMA_VERSION`. See `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
 
@@ -40,20 +43,21 @@ The 2026-04 audit traced every field across Clean → Enrich → Score → Final
 
 ## Supabase deployment checklist
 
-The pipeline targets an **offline-first architecture**: the products table lives inside the SQLite file (`pharmaguide_core.db`) that ships as a Supabase Storage blob, NOT in the Supabase Postgres layer. This means **v1.3.2 needs no SQL migration on Supabase** — the Postgres tables (`export_manifest`, `user_stacks`, `user_usage`, `pending_products`) are unchanged.
+The pipeline targets an **offline-first architecture**: the products table lives inside the SQLite file (`pharmaguide_core.db`) that ships as a Supabase Storage blob, NOT in the Supabase Postgres layer. Schema bumps to the SQLite columns require no Postgres migration — the Postgres tables (`export_manifest`, `user_stacks`, `user_usage`, `pending_products`) are unchanged.
 
 What actually moves:
 
-- `pharmaguide_core.db` → uploaded verbatim to `pharmaguide/v{db_version}/pharmaguide_core.db` in Storage. Contains the full 90-column `products_core` table.
-- `detail_blobs/*.json` → uploaded to `pharmaguide/shared/details/sha256/{prefix}/{hash}.json` in Storage. Each blob now has `nutrition_detail` and `unmapped_actives` subkeys added by v1.3.2.
-- `export_manifest.json` → insert-new-row via `rotate_manifest(p_schema_version='1.3.2', ...)` RPC. The `schema_version` column on the Postgres manifest table is already present; the RPC just receives `'1.3.2'` as the string value.
+- `pharmaguide_core.db` → uploaded to `pharmaguide/v{db_version}/pharmaguide_core.db` in Storage. Contains the full 91-column `products_core` table (as of v1.4.0).
+- `detail_blobs/*.json` → uploaded to `pharmaguide/shared/details/sha256/{prefix}/{hash}.json` in Storage.
+- `export_manifest.json` → insert-new-row via `rotate_manifest(p_schema_version='1.4.0', ...)` RPC.
 
 **Rollout checks** (run before a production sync):
 
-1. Local build produces `export_manifest.json` with `schema_version: "1.3.2"`, `pipeline_version: "3.4.0"`, `scoring_version: "3.4.0"`
-2. Parity tests green: `python3 -m pytest scripts/tests/test_release_export_parity.py -q`
-3. Dry-run sync: `python3 scripts/sync_to_supabase.py <build_dir> --dry-run`
-4. Verify no Flutter consumer is pinned to `schema_version < 1.3.2` in the app — bumping the minor version is non-breaking for older apps (new columns are `.nullable()`) but the Flutter Drift regen is still needed for the app to READ the new columns.
+1. Local build produces `export_manifest.json` with `schema_version: "1.4.0"`, `pipeline_version: "3.4.0"`, `scoring_version: "3.4.0"`
+2. Full test suite green: `python3 -m pytest scripts/tests/ -q`
+3. Dry-run sync: `python3 scripts/sync_to_supabase.py ~/Documents/DataSetDsld/builds/release_output --dry-run`
+4. Flutter release gate passes: `flutter test test/release_gate/bundled_catalog_test.dart`
+5. If schema version changed, regen Drift: `dart run build_runner build --delete-conflicting-outputs`
 
 ## Release playbook — bundling the catalog into the Flutter app
 
@@ -77,52 +81,60 @@ git add .gitattributes
 
 ### Every release
 
-```bash
-# Pipeline side (this repo):
-# 1. Build the latest final DB from the current enriched + scored outputs.
-python3 scripts/build_final_db.py \
-  --enriched-dir scripts/products/output_Thorne_enriched/enriched ... \
-  --scored-dir   scripts/products/output_Thorne_scored/scored   ... \
-  --output-dir   scripts/final_db_output
+> **Critical:** `--assemble-release-output` MUST be on the same command line as
+> `build_all_final_dbs.py`. If you paste it as a second shell line, zsh treats it
+> as a separate command (error: `command not found: --assemble-release-output`) and
+> the release_output directory is never updated — you silently release stale data.
 
-# 2. Run full parity + regression suite.
+```bash
+# ── Pipeline side (dsld_clean repo) ──────────────────────────────────────────
+
+# 1. Build all 15 brand DBs AND assemble the release in one command.
+#    Both flags MUST be on the same line.
+python3 scripts/build_all_final_dbs.py \
+  --scan-dir scripts/products \
+  --per-pair-output-root ~/Documents/DataSetDsld/builds/pair_outputs \
+  --assemble-release-output ~/Documents/DataSetDsld/builds/release_output
+
+# 2. Run full test suite (3894+ tests).
 python3 -m pytest scripts/tests/ -q
 
-# 3. Stage the release artifact. This validates the final DB + manifest,
-#    bumps checksum formats, writes RELEASE_NOTES.md, and produces a clean
-#    scripts/dist/ directory atomically.
-python3 scripts/release_catalog_artifact.py
+# 3. Package the catalog artifact (validates DB + manifest + checksum,
+#    writes scripts/dist/ atomically). Requires --input-dir.
+python3 scripts/release_catalog_artifact.py \
+  --input-dir ~/Documents/DataSetDsld/builds/release_output
 
-# Exit 0 means dist/ is ready. Any validation failure aborts with a clear
-# error; dist/ is left untouched so a bad build never replaces a good one.
+# 4. Package the interaction artifact.
+python3 scripts/release_interaction_artifact.py
 
-# Flutter side (the PharmaGuide-ai repo):
-# 4. Run the bridge script with the pipeline dist/ path. It re-validates
-#    every gate locally (SHA-256, integrity, row count, version alignment)
-#    before copying artifacts into assets/db/.
-cd "/path/to/PharmaGuide ai"
+# Exit 0 on both means scripts/dist/ is ready.
+# Any validation failure aborts with a clear error; dist/ is left untouched.
+
+# 5. Dry-run Supabase sync to confirm what would upload.
+python3 scripts/sync_to_supabase.py \
+  ~/Documents/DataSetDsld/builds/release_output \
+  --dry-run
+
+# 6. Real sync. Add --cleanup to prune old Supabase versions (see §7B).
+python3 scripts/sync_to_supabase.py \
+  ~/Documents/DataSetDsld/builds/release_output
+
+# ── Flutter side (PharmaGuide-ai repo) ───────────────────────────────────────
+
+# 7. Import artifacts. Re-validates every gate (SHA-256, integrity, row count,
+#    version alignment) before copying into assets/db/.
+cd "/Users/seancheick/PharmaGuide ai"
 ./scripts/import_catalog_artifact.sh \
-  /path/to/dsld_clean/peaceful-ritchie/scripts/dist
+  /Users/seancheick/Downloads/dsld_clean/scripts/dist
 
-# 5. Verify the bundled DB shows as an LFS pointer (not a 5 MiB blob).
-git lfs ls-files | grep pharmaguide_core
-
-# 6. Run the release gate test — this opens the bundled SQLite via the
-#    production CoreDatabase wrapper and asserts every invariant:
-#      - asset declared in pubspec.yaml and loadable
-#      - bundle size ≥ 1 MiB (catches fixture-accidentally-shipped)
-#      - PRAGMA integrity_check = ok
-#      - product count ≥ 2000
-#      - at least one row has export_version populated
-#      - embedded export_manifest.db_version matches JSON manifest
-#      - validateCatalogSnapshot() returns db_version (freshness contract)
+# 8. Run the Flutter release gate test.
 flutter test test/release_gate/bundled_catalog_test.dart
 
-# 7. Regenerate Drift + Riverpod code if the schema changed since last build.
+# 9. Regenerate Drift code only if the schema version changed.
 dart run build_runner build --delete-conflicting-outputs
 
-# 8. Commit the new bundle and push.
-git add .gitattributes pubspec.yaml assets/db/ scripts/import_catalog_artifact.sh
+# 10. Commit and push.
+git add assets/db/
 git commit -m "chore(catalog): bundle v<db_version> (schema <schema_version>, <product_count> products)"
 git push origin main
 ```
@@ -139,7 +151,7 @@ Any failure at any step aborts the release with a clear error. The Flutter bridg
 
 ### Git LFS quota notes
 
-The SQLite file currently ships at ~5.5 MiB (2284 products, schema v1.3.2). Free GitHub LFS quota is 1 GB storage + 1 GB/month bandwidth, which easily accommodates thousands of releases. If the DB grows past ~50 MiB, plan for an LFS quota bump on the Flutter repo before the release that ships it.
+The SQLite file currently ships at ~5.9 MiB (4240 products, schema v1.4.0, 91 columns). Free GitHub LFS quota is 1 GB storage + 1 GB/month bandwidth, which easily accommodates thousands of releases. If the DB grows past ~50 MiB, plan for an LFS quota bump on the Flutter repo before the release that ships it.
 
 ### Rollback
 
@@ -278,107 +290,122 @@ python3 scripts/build_all_final_dbs.py \
 
 ## 7. Sync build output to Supabase
 
-Dry run:
+Always point at the assembled `release_output` directory, not a single-brand output.
+
+Dry run (confirm what would upload before touching Supabase):
 
 ```bash
-python3 scripts/sync_to_supabase.py /Users/seancheick/Documents/DataSetDsld/final_db_output_olly_2026-03-30T01-49-58 --dry-run
+python3 scripts/sync_to_supabase.py \
+  ~/Documents/DataSetDsld/builds/release_output \
+  --dry-run
 ```
 
 Real sync:
 
 ```bash
-python3 scripts/sync_to_supabase.py /Users/seancheick/Documents/DataSetDsld/final_db_output_olly_2026-03-30T01-49-58
+python3 scripts/sync_to_supabase.py \
+  ~/Documents/DataSetDsld/builds/release_output
 ```
 
 Tune upload concurrency and retries:
 
 ```bash
-python3 scripts/sync_to_supabase.py /Users/seancheick/Documents/DataSetDsld/final_db_output_olly_2026-03-30T01-49-58 \
+python3 scripts/sync_to_supabase.py \
+  ~/Documents/DataSetDsld/builds/release_output \
   --max-workers 8 \
   --retry-count 3 \
   --retry-base-delay 1.0
 ```
 
-Current sync behavior:
+What the sync does:
 
-- uploads `pharmaguide_core.db`
+- uploads `pharmaguide_core.db` to `pharmaguide/v{db_version}/`
 - uploads `detail_index.json`
-- uploads hashed detail blobs under shared storage paths
-- skips unchanged hashed blobs when already present remotely
-- uses retry/backoff for uploads
+- uploads hashed detail blobs to `pharmaguide/shared/details/sha256/{prefix}/{hash}.json`
+- skips unchanged hashed blobs already present remotely
+- inserts a new `export_manifest` row; if the version already exists, exits "Already up to date"
 
 ## 7A. Recommended release pattern
 
-For local QA, it is fine to build dataset-specific final DB outputs such as:
+Always sync the assembled release, never a single-brand output. The app reads one coherent product universe; a single-brand sync would replace the entire catalog with just that brand.
 
-- `final_db_output_hum_...`
-- `final_db_output_gummies_...`
-
-These are useful for:
-
-- reviewing one brand or one form/category in isolation
-- validating one new batch before release
-- debugging export issues without rebuilding everything
-
-For the actual app-facing Supabase release, the recommended default is:
-
-1. Build per-pair outputs for the brand(s) or form/category set you want to review
-2. QA those per-pair outputs
-3. Assemble one combined release artifact
-4. Sync that one combined release artifact to Supabase
-
-Reason:
-
-- `sync_to_supabase.py` pushes one build directory and one active manifest/version at a time
-- the app should usually read one coherent product universe, not a rotating slice like only one brand or only one form
-- hashed detail blobs are still deduped remotely, so merged releases do not lose the blob-sync efficiency improvements
-
-Example production flow:
+Standard flow (all-brands full release):
 
 ```bash
-# 1. Build per-pair outputs for selected datasets
+# Build + assemble (one command)
 python3 scripts/build_all_final_dbs.py \
-  --scan-dir scripts \
-  --include-prefix Transparent_Labs \
-  --include-prefix gummies \
-  --per-pair-output-root /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs
+  --scan-dir scripts/products \
+  --per-pair-output-root ~/Documents/DataSetDsld/builds/pair_outputs \
+  --assemble-release-output ~/Documents/DataSetDsld/builds/release_output
 
-# 2. Assemble one combined release artifact
-python3 scripts/assemble_final_db_release.py \
-  --input-root /Users/seancheick/Documents/DataSetDsld/builds/pair_outputs \
-  --output-dir /Users/seancheick/Documents/DataSetDsld/builds/release_output_2026-03-30T18-30-00
+# Package artifacts
+python3 scripts/release_catalog_artifact.py \
+  --input-dir ~/Documents/DataSetDsld/builds/release_output
+python3 scripts/release_interaction_artifact.py
 
-# 3. Dry-run the Supabase sync
+# Sync
 python3 scripts/sync_to_supabase.py \
-  /Users/seancheick/Documents/DataSetDsld/builds/release_output_2026-03-30T18-30-00 \
-  --dry-run
-
-# 4. Real sync
+  ~/Documents/DataSetDsld/builds/release_output --dry-run
 python3 scripts/sync_to_supabase.py \
-  /Users/seancheick/Documents/DataSetDsld/builds/release_output_2026-03-30T18-30-00
+  ~/Documents/DataSetDsld/builds/release_output
 ```
 
-So the flow is:
+Partial release (one or two brands only, then re-assemble everything):
 
-python3 scripts/build_all_final_dbs.py ...
-python3 scripts/assemble_final_db_release.py ...
-python3 scripts/sync_to_supabase.py ...
-Or in one integrated step for build + assemble:
-
+```bash
+# Rebuild just the changed brands
 python3 scripts/build_all_final_dbs.py \
- --scan-dir scripts/products \
- --per-pair-output-root /path/to/pair_outputs \
- --assemble-release-output /path/to/release_output
-Then:
+  --scan-dir scripts/products \
+  --include-prefix Thorne \
+  --include-prefix Nutricost \
+  --per-pair-output-root ~/Documents/DataSetDsld/builds/pair_outputs \
+  --assemble-release-output ~/Documents/DataSetDsld/builds/release_output
+# Assembly reads ALL pair_outputs (not just the two rebuilt), so the release
+# still contains all 15 brands.
+```
 
-python3 scripts/sync_to_supabase.py /path/to/release_output --dry-run
-python3 scripts/sync_to_supabase.py /path/to/release_output --cleanup
-Why:
+## 7B. When to use `--cleanup`
 
-the app should read one coherent release
-Supabase sync rotates one active manifest/version at a time
-unchanged pair outputs are reused during assembly
-unchanged hashed detail blobs are skipped during upload when already present remotely
+`--cleanup` runs immediately after a successful sync and prunes old Supabase Storage versions.
+
+```bash
+python3 scripts/sync_to_supabase.py \
+  ~/Documents/DataSetDsld/builds/release_output \
+  --cleanup
+```
+
+What it does:
+
+1. Lists all versions in the `export_manifest` table (newest first)
+2. Keeps the last **2** versions by default (current + one rollback)
+3. Deletes Storage objects under `pharmaguide/v{old_version}/` for anything older
+4. Detects and deletes **orphaned detail blobs** — hashed blobs in `shared/details/` that are no longer referenced by the current `detail_index.json`
+5. Optionally prunes the manifest table rows (`--cleanup-db` flag)
+
+Keep more versions (e.g. 3) if you want a wider rollback window:
+
+```bash
+python3 scripts/sync_to_supabase.py \
+  ~/Documents/DataSetDsld/builds/release_output \
+  --cleanup --cleanup-keep 3
+```
+
+**When to use it:**
+
+| Situation | Use `--cleanup`? |
+|-----------|-----------------|
+| Regular release (every pipeline run) | Yes — keeps Storage tidy |
+| After a schema bump (many new blobs) | Yes — orphan blobs from old schema get removed |
+| Debugging / uncertain about the release | No — run without first, verify app works, then run with `--cleanup` |
+| Rollback scenario | No — you want the old version still in Storage |
+
+Run `cleanup_old_versions.py` standalone for a dry-run preview without syncing:
+
+```bash
+python3 scripts/cleanup_old_versions.py          # dry-run, keep 2
+python3 scripts/cleanup_old_versions.py --execute # actually delete
+python3 scripts/cleanup_old_versions.py --execute --cleanup-db  # also prune manifest rows
+```
 
 ## 8. DSLD API tooling
 

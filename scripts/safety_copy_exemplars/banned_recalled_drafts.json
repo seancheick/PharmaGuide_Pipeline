@@ -1,0 +1,80 @@
+{
+  "_metadata": {
+    "purpose": "DRAFT authored exemplars for Path C banned_recalled fields",
+    "status": "pending_safety_team_review",
+    "authoring_rule": "Every entry must pass scripts/validate_safety_copy.py --strict before merge into scripts/data/banned_recalled_ingredients.json",
+    "origin": "Seed drafts from pipeline maintainer — not yet clinician-reviewed",
+    "related": [
+      "HANDOFF_PIPELINE_SAFETY_DATA.md",
+      "scripts/SAFETY_DATA_PATH_C_PLAN.md",
+      "scripts/safety_copy_exemplars/AUTHORING_SOP.md"
+    ],
+    "review_checklist": [
+      "Copy accurately reflects the cited reason / regulatory basis",
+      "Adulterant entries clearly say 'in supplement' or equivalent",
+      "No encyclopedic openers, no 'X is...' derivation shape",
+      "Tone is user-directed, not clinician-directed",
+      "Length within [50,200] / [20,80]",
+      "References the scientific sources already in the entry"
+    ]
+  },
+  "drafts": [
+    {
+      "_target": "ADULTERANT_METFORMIN",
+      "ban_context": "adulterant_in_supplements",
+      "safety_warning": "A prescription diabetes drug found undeclared in weight-loss supplements — risk of dangerous low blood sugar. Stop the supplement and talk to your doctor. Does not affect prescribed metformin.",
+      "safety_warning_one_liner": "Prescription drug hidden in supplements. Stop and consult your doctor.",
+      "authoring_notes": "Handoff §1: this is the clinical-incident case. The 'in supplement' guardrail and 'does not affect prescribed' framing are both required — a patient on prescribed metformin must not read this as a ban on their med."
+    },
+    {
+      "_target": "ADULTERANT_SIBUTRAMINE",
+      "ban_context": "adulterant_in_supplements",
+      "safety_warning": "A withdrawn weight-loss drug found as an undeclared adulterant in supplements. FDA removed it from the US market in 2010 after it was linked to heart attack and stroke risk. Stop and consult a doctor.",
+      "safety_warning_one_liner": "FDA-withdrawn drug hidden in supplements. Stop and consult a doctor.",
+      "authoring_notes": "Handoff §1: sibutramine was the visible Flutter bug. Body cites the actual regulatory action (2010 withdrawal + CV outcomes trial) instead of textbook pharmacology."
+    },
+    {
+      "_target": "ADULTERANT_MELOXICAM",
+      "ban_context": "adulterant_in_supplements",
+      "safety_warning": "A prescription NSAID found undeclared in some supplements — risk includes kidney damage and GI bleeding. Stop the supplement and consult your doctor. Does not affect prescribed Mobic.",
+      "safety_warning_one_liner": "Prescription painkiller hidden in supplements. Stop the supplement.",
+      "authoring_notes": "Handoff §2: Mobic is NOT banned. Copy must separate adulterant-context ban from prescribed-medication context."
+    },
+    {
+      "_target": "BANNED_EPHEDRA",
+      "ban_context": "substance",
+      "safety_warning": "FDA banned ephedra in dietary supplements in 2004 after it was linked to strokes, heart attacks, and over 155 deaths — many in otherwise healthy users. Stop and consult a doctor.",
+      "safety_warning_one_liner": "FDA-banned stimulant linked to strokes and heart attacks. Stop immediately.",
+      "authoring_notes": "Handoff §4: buries-the-lead case. Lead with the FDA action + outcome, not the pharmacology."
+    },
+    {
+      "_target": "BANNED_DMAA",
+      "ban_context": "substance",
+      "safety_warning": "An unapproved synthetic stimulant that raises blood pressure acutely and has been linked to strokes and cardiac arrests in healthy users. FDA enforcement active since 2012. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Unapproved stimulant linked to strokes and cardiac arrests. Stop immediately.",
+      "authoring_notes": "Handoff §5: replace encyclopedic description with clinical consequence. Opens with 'An unapproved...' so it doesn't match the '{name} is ...' template."
+    },
+    {
+      "_target": "BANNED_ADD_ORANGE_B",
+      "ban_context": "watchlist",
+      "safety_warning": "A synthetic dye FDA-approved only for hot dog and sausage casings — not for dietary supplements. Its presence in a supplement is associated with undisclosed colorant use and possible mislabeling.",
+      "safety_warning_one_liner": "Synthetic dye not approved for supplements. Possible mislabeling risk.",
+      "authoring_notes": "Handoff §3: useless-blurb case. Replace 'Synthetic orange dye' with the actionable regulatory framing."
+    },
+    {
+      "_target": "WADA_CANNABIS",
+      "ban_context": "substance",
+      "pattern_class": "athlete_audience_framing",
+      "safety_warning": "Prohibited in competition by the World Anti-Doping Agency. Competitive athletes should avoid cannabis and THC products to prevent failed drug tests; talk to your team physician.",
+      "safety_warning_one_liner": "WADA-prohibited in competition. Talk to your team physician.",
+      "authoring_notes": "FOURTH EXEMPLAR PATTERN (athlete-audience framing). Clinical review round 1 (Dr. Pham): for WADA-prohibited substances the primary user concern is competition-legal status, NOT acute health harm. Cannabis/THC is clinically benign for most adults but catastrophic for an athlete facing a drug test — so the copy frames risk around 'failed drug tests' instead of 'adverse effects'. The 'talk to your team physician' guidance respects that these users already have a care team with specific expertise in banned-list compliance. Use this template for any entry where the primary risk surface is regulatory / competition status rather than health (other WADA entries, sport-specific restrictions)."
+    },
+    {
+      "_target": "BANNED_7_HYDROXYMITRAGYNINE",
+      "ban_context": "substance",
+      "safety_warning": "A kratom alkaloid with mu-opioid receptor activity estimated at 13 times morphine potency. Associated with dependence, respiratory depression, and overdose risk. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Opioid-potent kratom alkaloid. Associated with dependence and overdose.",
+      "authoring_notes": "Substance-level banned entry — alarming framing acceptable, backed by cited potency data."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # PIPELINE_ARCHITECTURE.md
 
-> Last updated: 2026-04-10 | Export schema: v1.3.2 (90 columns)
+> Last updated: 2026-04-16 | Export schema: v1.4.0 (91 columns)
 
 ## Overview
 
@@ -24,10 +24,10 @@ output_*_enriched/enriched/*.json
 output_*_scored/scored/*.json
   -> [BUILD FINAL DB] build_final_db.py
 final_db_output/
-  ├── pharmaguide_core.db        (SQLite, 90-col products_core)
+  ├── pharmaguide_core.db        (SQLite, 91-col products_core)
   ├── detail_blobs/*.json        (per-product JSON blobs)
   ├── detail_index.json
-  ├── export_manifest.json       (schema_version="1.3.2")
+  ├── export_manifest.json       (schema_version="1.4.0")
   └── export_audit_report.json
   -> [SUPABASE SYNC] sync_to_supabase.py
 Supabase Storage: pharmaguide/v{version}/pharmaguide_core.db
@@ -97,6 +97,7 @@ Default DB set loaded by enrichment:
 
 Additional detector-backed data used in enrichment:
 - `proprietary_blends.json` via `proprietary_blend_detector.py`
+- `fda_unii_cache.json` via `unii_cache.py` — offline UNII identity resolution (172K substances, avoids live FDA API calls during enrichment)
 
 ### Stage 2.5: Coverage Gate (Optional but recommended)
 
@@ -233,6 +234,36 @@ python scripts/sync_to_supabase.py <build_output_dir> --dry-run # Preview only
 ```
 
 **Safety:** Uses upsert mode. Re-running is idempotent. The Flutter app reads the manifest to detect new versions and downloads in background — never blocks the user.
+
+## Export Schema Version History
+
+| Version | Date | Columns | Changes |
+|---------|------|---------|---------|
+| v1.3.2 | 2026-04-10 | 90 | `calories_per_serving` column + `nutrition_detail` / `unmapped_actives` blob subkeys |
+| v1.3.3 | 2026-04-14 | 90 | Interaction safety expansion: 129 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM 588 entries (was 571) |
+| v1.3.4 | 2026-04-14 | 90 | CAERS B8 scoring (159 adverse event signals), UNII offline cache (172K substances), IQM UNII standardization (66%), drug label interaction mining |
+| v1.4.0 | 2026-04-15 | 91 | `image_thumbnail_url` column added; `normalize_upc` field added; image upload pipeline |
+
+Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`. Per-column contract: `FINAL_EXPORT_SCHEMA_V1.md`.
+
+## Utility Scripts
+
+New scripts added to `scripts/` beyond the core pipeline stages:
+
+| Script | Purpose |
+|--------|---------|
+| `backfill_upc.py` | UPC backfilling for existing products |
+| `extract_product_images.py` | Product image extraction and Supabase upload |
+| `build_interaction_db.py` | Assembles interaction rules reference DB for Flutter export |
+| `unii_cache.py` | Manages `fda_unii_cache.json` offline UNII registry |
+| `shadow_score_comparison.py` | Compares two scored outputs for regression detection |
+| `regression_snapshot.py` | Takes a scoring baseline snapshot for regression testing |
+| `preflight.py` | Pre-pipeline data contract validation |
+| `unmapped_ingredient_tracker.py` | Tracks and reports unmapped ingredient trends |
+| `release_catalog_artifact.py` | Assembles release artifacts for catalog deploys |
+| `release_interaction_artifact.py` | Assembles interaction rule artifacts for release |
+| `assemble_final_db_release.py` | Packages final DB release artifacts |
+| `build_all_final_dbs.py` | Runs `build_final_db.py` across multiple dataset directories |
 
 ## CLI Quick Reference
 

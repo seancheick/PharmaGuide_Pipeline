@@ -2,11 +2,28 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "5.1.0",
-    "last_updated": "2026-04-14",
+    "schema_version": "5.2.0",
+    "last_updated": "2026-04-17",
     "total_entries": 129,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
-    "total_rules": 129
+    "total_rules": 129,
+    "flutter_top_level_key": "interaction_rules",
+    "flutter_schema_version": "5.2.0",
+    "migration": {
+      "completed_migrations": [
+        {
+          "from": "5.1.0",
+          "to": "5.2.0",
+          "date": "2026-04-17",
+          "summary": "Path C authored safety copy fields + flutter_top_level_key invariant"
+        }
+      ]
+    },
+    "v52_added_fields": {
+      "alert_headline": "authored string per sub-rule, 20-60 chars",
+      "alert_body": "authored string per sub-rule, 60-200 chars",
+      "informational_note": "authored string per sub-rule, 40-120 chars (required when severity in {avoid, contraindicated})"
+    }
   },
   "interaction_rules": [
     {

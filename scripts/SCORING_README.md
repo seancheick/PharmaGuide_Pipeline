@@ -1,6 +1,6 @@
 # PharmaGuide Scoring README (v3.4.0 / Data Schema 5.1.0)
 
-> Last updated: 2026-04-10
+> Last updated: 2026-04-16
 
 This document is the implementation-facing guide for the current scorer:
 
@@ -74,7 +74,7 @@ Section caps:
 | B: Safety & Purity     | 30     |                                                                     |
 | C: Evidence & Research | 20     |                                                                     |
 | D: Brand Trust         | 5      |                                                                     |
-| E: Dose Adequacy       | 2      | Legacy output only; score contribution is now folded into Section A |
+| E: Dose Adequacy       | 3      | Legacy output only; score contribution is now folded into Section A |
 | **Total ceiling**      | **80** | All sections clamped together at 80                                 |
 
 Omega-3 dose adequacy is now a category bonus inside Section A. `E_dose_adequacy`
@@ -118,7 +118,7 @@ A = min(25, core_quality + category_bonus_total)
   - extended mode max 10 (gated)
   - non-probiotic strict-gate path enabled by config.
 - Omega-3 dose bonus:
-  - current config max 2
+  - current config max 3
   - only for products with explicit labelled EPA/DHA amounts
   - contributes through the Section A category bonus pool
 
@@ -232,9 +232,9 @@ Band table (highest matching threshold wins):
 
 | Threshold (mg/day EPA+DHA) | Score | Label               | Clinical Anchor                                                                     |
 | -------------------------- | ----- | ------------------- | ----------------------------------------------------------------------------------- |
-| ≥ 4000                     | 2.0   | `prescription_dose` | AHA/ACC Rx dose for hypertriglyceridemia; also adds `PRESCRIPTION_DOSE_OMEGA3` flag |
-| ≥ 2000                     | 2.0   | `high_clinical`     | EFSA health claim for blood triglycerides                                           |
-| ≥ 1000                     | 1.5   | `aha_cvd`           | AHA recommendation for CVD patients                                                 |
+| ≥ 4000                     | 3.0   | `prescription_dose` | AHA/ACC Rx dose for hypertriglyceridemia; also adds `PRESCRIPTION_DOSE_OMEGA3` flag |
+| ≥ 2000                     | 2.5   | `high_clinical`     | EFSA health claim for blood triglycerides                                           |
+| ≥ 1000                     | 2.0   | `aha_cvd`           | AHA recommendation for CVD patients                                                 |
 | ≥ 500                      | 1.0   | `general_health`    | FDA qualified health claim minimum                                                  |
 | ≥ 250                      | 0.5   | `efsa_ai_zone`      | EFSA Adequate Intake for general population                                         |
 | ≥ 0                        | 0.0   | `below_efsa_ai`     | Below EFSA AI                                                                       |
@@ -398,6 +398,6 @@ This separation ensures the quality score (A/B/C/D plus legacy E compatibility o
 # Score tests only
 cd scripts && python3 -m pytest tests/test_score_supplements.py -q
 
-# Full suite (3065+ tests)
+# Full suite (3906+ tests)
 cd scripts && python3 -m pytest tests/ -q
 ```

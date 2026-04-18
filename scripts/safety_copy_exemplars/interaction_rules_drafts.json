@@ -1,0 +1,87 @@
+{
+  "_metadata": {
+    "purpose": "DRAFT authored exemplars for Path C interaction-rule fields",
+    "status": "pending_safety_team_review",
+    "authoring_rule": "Every sub-rule must pass scripts/validate_safety_copy.py --strict before merge into scripts/data/ingredient_interaction_rules.json",
+    "related": [
+      "HANDOFF_PIPELINE_SAFETY_DATA.md",
+      "scripts/SAFETY_DATA_PATH_C_PLAN.md",
+      "scripts/safety_copy_exemplars/AUTHORING_SOP.md"
+    ],
+    "review_checklist": [
+      "alert_headline reads as a calm headline, not a command",
+      "alert_body uses conditional framing (if you take, talk to, etc.) for severe rules",
+      "informational_note never uses imperative verbs (stop, avoid, do not)",
+      "Copy matches the cited mechanism — no claims beyond sources",
+      "Length bounds: headline 20-60, body 60-200, note 40-120"
+    ]
+  },
+  "drafts": [
+    {
+      "_target": "RULE_IQM_BERBERINE_DIABETES/drug_class_rule/hypoglycemics",
+      "rule_id": "RULE_IQM_BERBERINE_DIABETES",
+      "sub_rule_kind": "drug_class_rule",
+      "target_id": "hypoglycemics",
+      "severity": "avoid",
+      "alert_headline": "May boost your diabetes medication",
+      "alert_body": "Berberine lowers blood sugar with effects comparable to metformin. If you take a diabetes medication, monitor glucose closely and talk to your prescriber before adding berberine.",
+      "informational_note": "Berberine has blood-sugar-lowering effects relevant to people on diabetes medications.",
+      "authoring_notes": "Canonical example from user conversation. Old copy read as a clinician directive — new headline is gentle, body is conditional, note is neutral for users with no matching profile."
+    },
+    {
+      "_target": "RULE_IQM_BERBERINE_DIABETES/drug_class_rule/maois",
+      "rule_id": "RULE_IQM_BERBERINE_DIABETES",
+      "sub_rule_kind": "drug_class_rule",
+      "target_id": "maois",
+      "severity": "avoid",
+      "alert_headline": "Potential interaction with MAOI antidepressants",
+      "alert_body": "Berberine has shown MAO-inhibiting activity. If you take an MAOI antidepressant, talk to your prescriber before adding berberine.",
+      "informational_note": "Berberine has theoretical MAO-inhibiting activity relevant to people on MAOI antidepressants.",
+      "authoring_notes": "MAO inhibition in berberine is in-vitro only — 'theoretical' is a more accurate framing than 'established clinical risk'."
+    },
+    {
+      "_target": "RULE_IQM_ST_JOHNS_WORT_IMMUNOSUPPRESSANTS/drug_class_rule/immunosuppressants",
+      "rule_id": "RULE_IQM_ST_JOHNS_WORT_CONTRA",
+      "sub_rule_kind": "drug_class_rule",
+      "target_id": "immunosuppressants",
+      "severity": "contraindicated",
+      "alert_headline": "Do not combine with transplant medications",
+      "alert_body": "St Johns Wort lowers blood levels of immunosuppressants like cyclosporine and tacrolimus, risking transplant rejection. If you take these medications, do not combine.",
+      "informational_note": "St Johns Wort strongly affects drug metabolism — relevant to people on transplant or immunosuppressant medications.",
+      "authoring_notes": "Contraindicated severity — directive body is acceptable (transplant rejection is severe). Note preserves conditional framing."
+    },
+    {
+      "_target": "RULE_IQM_5_HTP_MAOIS/drug_class_rule/maois",
+      "rule_id": "RULE_IQM_5_HTP_CONTRA",
+      "sub_rule_kind": "drug_class_rule",
+      "target_id": "maois",
+      "severity": "contraindicated",
+      "alert_headline": "Do not combine with MAOI antidepressants",
+      "alert_body": "5-HTP raises serotonin levels directly. If you take an MAOI antidepressant, combining with 5-HTP carries serotonin syndrome risk. Do not combine.",
+      "informational_note": "5-HTP raises serotonin — relevant to people on MAOI or SSRI antidepressants.",
+      "authoring_notes": "Classic contraindicated pair. Body is directive; informational_note preserves neutral framing."
+    },
+    {
+      "_target": "RULE_BANNED_EPHEDRA_PREGNANCY/condition_rule/pregnancy",
+      "rule_id": "RULE_BANNED_EPHEDRA_PREGNANCY",
+      "sub_rule_kind": "condition_rule",
+      "target_id": "pregnancy",
+      "severity": "contraindicated",
+      "alert_headline": "Do not use during pregnancy",
+      "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. If you are pregnant, do not use ephedra-containing products.",
+      "informational_note": "Ephedra is an FDA-banned ingredient with cardiovascular risks relevant to anyone pregnant or planning pregnancy.",
+      "authoring_notes": "Substance banned + pregnancy rule — both directive. informational_note preserves conditional framing."
+    },
+    {
+      "_target": "RULE_IQM_VITAMIN_K_ANTICOAGULANTS/drug_class_rule/anticoagulants",
+      "rule_id": "RULE_IQM_VITAMIN_K_ANTICOAGULANTS",
+      "sub_rule_kind": "drug_class_rule",
+      "target_id": "anticoagulants",
+      "severity": "avoid",
+      "alert_headline": "May reduce blood thinner effectiveness",
+      "alert_body": "Vitamin K directly antagonizes warfarin. If you take warfarin, changes in vitamin K intake can destabilize your INR — talk to your prescriber before adding or stopping.",
+      "informational_note": "Vitamin K can change how warfarin works — relevant to people on warfarin or related blood thinners.",
+      "authoring_notes": "Classic warfarin-diet interaction. Body uses 'talk to your prescriber' — the actually-correct clinical guidance."
+    }
+  ]
+}

@@ -363,10 +363,7 @@
       "ban_context": "enum: substance | adulterant_in_supplements | watchlist | export_restricted",
       "safety_warning": "authored string, 50-200 chars (validator enforced)",
       "safety_warning_one_liner": "authored string, 20-80 chars (validator enforced)"
-    },
-    "reviewed_by": "Lead Clinician (PharmaGuide)",
-    "reviewed_date": "2026-04-17",
-    "review_round": "full_authoring_pass_v1"
+    }
   },
   "ingredients": [
     {
@@ -478,10 +475,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription NSAID found undeclared in some supplements — risk includes kidney injury and GI bleeding. Stop the supplement and consult your doctor. Does not affect prescribed Mobic.",
-      "safety_warning_one_liner": "Prescription NSAID hidden in supplements. Stop and consult your doctor."
+      }
     },
     {
       "id": "ADULTERANT_METFORMIN",
@@ -593,10 +587,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription diabetes drug found undeclared in weight-loss supplements — risk of dangerous low blood sugar. Stop the supplement and talk to your doctor. Does not affect prescribed metformin.",
-      "safety_warning_one_liner": "Prescription drug hidden in supplements. Stop and consult your doctor."
+      }
     },
     {
       "id": "ADULTERANT_RIMONABANT",
@@ -721,10 +712,7 @@
             "unii": "KT68RW59G8"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A rejected weight-loss drug found undeclared in supplements. Associated with severe depression and suicidal thoughts in clinical trials — never FDA-approved. Stop the supplement and consult a doctor.",
-      "safety_warning_one_liner": "Rejected drug hidden in supplements. Stop and consult a doctor."
+      }
     },
     {
       "id": "BANNED_14_BUTANEDIOL",
@@ -862,10 +850,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An industrial solvent that the body converts into the controlled substance GHB. Linked to unconsciousness and overdose; not lawful as a supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Industrial solvent that converts to GHB. Stop."
+      }
     },
     {
       "id": "BANNED_7_HYDROXYMITRAGYNINE",
@@ -1030,10 +1015,7 @@
             "unii": "EP479K822J"
           }
         ]
-      },
-      "ban_context": "substance",
-      "safety_warning": "A potent kratom alkaloid with opioid-like activity estimated around 13 times morphine potency. Associated with dependence, breathing suppression, and overdose risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Opioid-potent kratom alkaloid. Risk of dependence and overdose."
+      }
     },
     {
       "id": "BANNED_7_KETO_DHEA",
@@ -1189,10 +1171,7 @@
       "regulatory_date_label": "Regulatory restriction effective",
       "match_mode": "active",
       "cui": "C0525091",
-      "external_ids": {},
-      "ban_context": "export_restricted",
-      "safety_warning": "A steroid precursor banned as a supplement ingredient in the UK, Canada, Australia, and New Zealand, though still sold in the US. Consult your doctor before use.",
-      "safety_warning_one_liner": "Steroid precursor banned abroad. Consult a doctor."
+      "external_ids": {}
     },
     {
       "id": "BANNED_ADD_ANATABINE",
@@ -1303,10 +1282,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "A tobacco alkaloid voluntarily withdrawn from the US market after FDA questioned its supplement claims. Its presence in products now is associated with past mislabeling and should be avoided.",
-      "safety_warning_one_liner": "Tobacco alkaloid withdrawn after FDA concerns. Avoid."
+      }
     },
     {
       "id": "BANNED_ADD_CITRUS_RED_2",
@@ -1411,10 +1387,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "A synthetic dye approved only for coloring orange peels in the US — classified as a possible human carcinogen. Its presence in a supplement is associated with labeling problems and should be avoided.",
-      "safety_warning_one_liner": "Synthetic dye not approved for supplements. Avoid."
+      }
     },
     {
       "id": "BANNED_ADD_FORMALDEHYDE",
@@ -1527,10 +1500,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A preservative classified as a known human carcinogen (IARC Group 1). Banned as a food additive in most countries; presence in a supplement is linked to contamination. Stop.",
-      "safety_warning_one_liner": "Known carcinogen. Stop and consult a doctor."
+      }
     },
     {
       "id": "BANNED_ADD_ORANGE_B",
@@ -1641,10 +1611,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "A synthetic dye FDA-approved only for hot dog and sausage casings — not for dietary supplements. Its presence in a supplement is associated with undisclosed colorant use and possible mislabeling.",
-      "safety_warning_one_liner": "Synthetic dye not approved for supplements. Possible mislabeling risk."
+      }
     },
     {
       "id": "BANNED_ADD_PHTHALATES",
@@ -1773,10 +1740,7 @@
       "cui": "C0136960",
       "external_ids": {
         "unii": "2286E5R2KE"
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "Packaging contaminants that leach from plastic into supplements — linked to endocrine disruption and reproductive harm. Presence reflects contamination rather than an added ingredient.",
-      "safety_warning_one_liner": "Endocrine-disrupting contaminants linked to plastics. Avoid."
+      }
     },
     {
       "id": "BANNED_ADD_POTASSIUM_BROMATE",
@@ -1887,10 +1851,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "A flour-treatment agent classified as possibly carcinogenic (IARC Group 2B). Banned as a food additive in the EU and Canada; presence in a US supplement is associated with poor sourcing.",
-      "safety_warning_one_liner": "Possible carcinogen banned abroad. Avoid."
+      }
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_ESTROGENS",
@@ -2015,10 +1976,7 @@
       "cui": "C0014941",
       "external_ids": {
         "unii": "423D2T571U"
-      },
-      "ban_context": "substance",
-      "safety_warning": "Synthetic hormones that can disrupt the endocrine system and have been linked to reproductive problems and cancer risk. They can accumulate in body fat and are not lawful supplement ingredients. Stop.",
-      "safety_warning_one_liner": "Endocrine-disrupting synthetic hormones. Stop and consult."
+      }
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
@@ -2120,10 +2078,7 @@
       "cui_note": "Policy watchlist spans multiple synthetic food acids; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
         "unii": "88XHZ13131"
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "Synthetic food acids on a regulatory watchlist — presence in a supplement is associated with labeling and tolerability concerns. Avoid products that list these as ingredients.",
-      "safety_warning_one_liner": "Watchlist food acids in supplements. Avoid."
+      }
     },
     {
       "id": "BANNED_ARISTOLOCHIC_ACID",
@@ -2255,10 +2210,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A plant compound linked to rapidly progressive kidney failure and urinary-tract cancers. FDA banned it in supplements; stop and consult a doctor if you have used a product containing it.",
-      "safety_warning_one_liner": "Banned kidney toxin linked to cancer. Stop and consult."
+      }
     },
     {
       "id": "BANNED_BMPEA",
@@ -2350,10 +2302,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C4041589",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "An amphetamine-like synthetic compound found as an undeclared ingredient in supplements labeled as acacia. Linked to cardiovascular risk; FDA banned it in supplements. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Amphetamine-like compound banned by FDA. Stop."
+      "external_ids": {}
     },
     {
       "id": "BANNED_BVO_2024",
@@ -2485,10 +2434,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C1654882",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A food additive formerly used to stabilize citrus flavor. FDA revoked its authorization in 2024 after reviews linked it to thyroid and nervous-system concerns. Avoid products still containing it.",
-      "safety_warning_one_liner": "Food additive revoked by FDA in 2024. Avoid."
+      "external_ids": {}
     },
     {
       "id": "BANNED_CBD_US",
@@ -2786,10 +2732,7 @@
             "unii": "MK7IHZ7MIM"
           }
         ]
-      },
-      "ban_context": "substance",
-      "safety_warning": "Under US law, CBD cannot lawfully be sold as a dietary supplement because it was first investigated as a drug. Presence in a supplement is associated with non-compliance; talk to your doctor.",
-      "safety_warning_one_liner": "Not lawful as a US dietary supplement. Talk to your doctor."
+      }
     },
     {
       "id": "BANNED_COMFREY_INTERNAL",
@@ -2921,10 +2864,7 @@
       "cui": "C1621344",
       "external_ids": {
         "unii": "M9VVZ08EKQ"
-      },
-      "ban_context": "substance",
-      "safety_warning": "A botanical containing pyrrolizidine alkaloids linked to liver injury and veno-occlusive disease. FDA banned internal use in supplements; stop any oral product containing it and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic botanical banned for internal use. Stop."
+      }
     },
     {
       "id": "BANNED_CONTAMINATED_GLP1",
@@ -3033,10 +2973,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Contamination watchlist spans multiple GLP-1 compounds and quality defects; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "Compounded GLP-1 drugs sold outside the prescription system or mislabeled in supplement products carry risks of contamination, wrong potency, and unsafe dosing. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Compounded GLP-1 drugs in gray-market products. Stop."
+      "external_ids": {}
     },
     {
       "id": "BANNED_DELTA8_THC",
@@ -3151,10 +3088,7 @@
       "cui": "C0057341",
       "external_ids": {
         "unii": "B49D0HH807"
-      },
-      "ban_context": "substance",
-      "safety_warning": "A psychoactive cannabinoid usually synthesized from CBD. Linked to intoxication-related poison control calls and banned as a supplement in multiple US states. Avoid products marketed for wellness use.",
-      "safety_warning_one_liner": "Psychoactive cannabinoid restricted in many states. Avoid."
+      }
     },
     {
       "id": "BANNED_DMAA",
@@ -3334,10 +3268,7 @@
       "cui": "C3492032",
       "external_ids": {
         "unii": "X49C572YQO"
-      },
-      "ban_context": "substance",
-      "safety_warning": "An unapproved synthetic stimulant that raises blood pressure and has been linked to strokes and cardiac events in healthy users. FDA enforcement active since 2012. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved stimulant linked to strokes and cardiac events. Stop."
+      }
     },
     {
       "id": "BANNED_DMBA",
@@ -3429,10 +3360,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A DMAA-successor synthetic stimulant. FDA has stated it is not a lawful dietary ingredient; associated with cardiovascular risk similar to DMAA. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unlawful DMAA-like stimulant. Stop and consult."
+      }
     },
     {
       "id": "BANNED_DMHA",
@@ -3552,10 +3480,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic sympathomimetic stimulant with DMAA-like effects. FDA warning letters flagged it; associated with elevated blood pressure and cardiovascular risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "DMAA-like stimulant flagged by FDA. Stop and consult."
+      }
     },
     {
       "id": "BANNED_EPHEDRA",
@@ -3657,10 +3582,7 @@
       "cui": "C0885298",
       "external_ids": {
         "unii": "GN83C131XS"
-      },
-      "ban_context": "substance",
-      "safety_warning": "FDA banned ephedra in supplements in 2004 after it was linked to strokes, heart attacks, and over 155 deaths — many in otherwise healthy users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "FDA-banned stimulant linked to strokes and heart attacks. Stop."
+      }
     },
     {
       "id": "BANNED_FASORACETAM",
@@ -3766,10 +3688,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An investigational ADHD drug that failed clinical trials and was never approved. FDA does not recognize it as a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Failed investigational drug sold unlawfully. Stop."
+      }
     },
     {
       "id": "BANNED_FDC_RED_2_AMARANTH",
@@ -3939,10 +3858,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic food dye FDA revoked in 1976 after animal studies raised cancer concerns. Any product containing it is associated with unlawful colorant use. Avoid.",
-      "safety_warning_one_liner": "FDA-revoked dye linked to cancer concerns. Avoid."
+      }
     },
     {
       "id": "RISK_GARCINIA_CAMBOGIA",
@@ -4058,10 +3974,7 @@
       "cui": "C0993598",
       "external_ids": {
         "unii": "8W94T9026R"
-      },
-      "ban_context": "substance",
-      "safety_warning": "A weight-loss botanical linked to severe liver injury, including deaths and liver transplants. France banned it in 2025; Australia and Japan issued warnings. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic weight-loss botanical. Stop and consult."
+      }
     },
     {
       "id": "BANNED_HIGENAMINE",
@@ -4181,10 +4094,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A beta-agonist plant alkaloid. FDA has stated it is not a lawful dietary supplement ingredient; linked to cardiovascular stimulation risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful supplement ingredient. Stop and consult."
+      }
     },
     {
       "id": "BANNED_IBUTAMOREN_MK677",
@@ -4300,10 +4210,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An investigational growth-hormone secretagogue drug — never approved and not a lawful supplement ingredient. Associated with insulin resistance and fluid retention. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved investigational drug. Stop and consult."
+      }
     },
     {
       "id": "BANNED_IGF1",
@@ -4412,10 +4319,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C5674892",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A synthetic growth-factor drug that is not a dietary ingredient under US law. Use is associated with hypoglycemia, tumor growth, and acromegaly risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved drug, not a supplement. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "BANNED_IGF1_LR3",
@@ -4509,10 +4413,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A long-acting synthetic IGF-1 analog — unapproved, not a dietary ingredient, and associated with hypoglycemia, tumor growth, and cardiovascular strain. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved peptide drug. Stop and consult."
+      }
     },
     {
       "id": "BANNED_METAL_FIBERS",
@@ -4591,10 +4492,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Contamination category covers multiple metal fiber and particle variants; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Metallic particles from manufacturing equipment found in some supplements — linked to GI irritation and long-term accumulation concerns. Avoid products with recalls flagged for metal contamination.",
-      "safety_warning_one_liner": "Manufacturing contaminant. Avoid affected products."
+      "external_ids": {}
     },
     {
       "id": "BANNED_PEDIATRIC_FLUORIDE",
@@ -4725,10 +4623,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Pediatric fluoride supplement entry spans multiple salts and dosage forms; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "Fluoride drops and tablets for children are prescription drug products — found in supplement products, they raise dosing and safety concerns. Talk to your pediatrician about the right form.",
-      "safety_warning_one_liner": "Prescription drug sold as supplement. Talk to your pediatrician."
+      "external_ids": {}
     },
     {
       "id": "BANNED_PHENIBUT",
@@ -4887,10 +4782,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A CNS depressant developed outside the US that FDA does not recognize as a supplement ingredient. Linked to dependence, withdrawal, and overdose. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful supplement, risk of dependence. Stop and consult."
+      }
     },
     {
       "id": "BANNED_PHO",
@@ -5003,10 +4895,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Partially hydrogenated oils are a class entry and the PHO abbreviation is ambiguous; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Partially hydrogenated oils — the primary source of industrial trans fats. FDA removed their GRAS status in 2018 after clear evidence of cardiovascular risk. Avoid products still listing them.",
-      "safety_warning_one_liner": "FDA-banned trans-fat source linked to heart disease. Avoid."
+      "external_ids": {}
     },
     {
       "id": "BANNED_PICAMILON",
@@ -5108,10 +4997,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A Soviet-era prescription drug that FDA has stated is not a lawful supplement ingredient. Associated with unstudied effects on blood pressure. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful supplement ingredient. Stop."
+      }
     },
     {
       "id": "BANNED_RED_YEAST_RICE",
@@ -5254,10 +5140,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "Contains monacolin K, chemically identical to the prescription statin lovastatin. FDA treats standardized products as unapproved drugs. Talk to your doctor before using, especially if on a statin.",
-      "safety_warning_one_liner": "Natural statin — talk to your doctor before use."
+      }
     },
     {
       "id": "BANNED_S23",
@@ -5371,10 +5254,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An investigational SARM-class drug — unapproved and not a lawful supplement. Linked to testicular suppression, liver strain, and cardiovascular risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM drug. Stop and consult."
+      }
     },
     {
       "id": "BANNED_SIBUTRAMINE",
@@ -5522,10 +5402,7 @@
             "unii": "889I657R9P"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A withdrawn weight-loss drug found as an undeclared adulterant in supplements. FDA removed it from the US market in 2010 after it was linked to heart attack and stroke risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "FDA-withdrawn drug hidden in supplements. Stop and consult."
+      }
     },
     {
       "id": "BANNED_SR9009",
@@ -5623,10 +5500,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An experimental research compound — never approved for human use and not a lawful supplement ingredient. Poor oral bioavailability plus safety unknowns. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved research compound. Stop and consult."
+      }
     },
     {
       "id": "BANNED_SUNIFIRAM",
@@ -5713,10 +5587,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic nootropic never tested in human trials. FDA does not accept it as a lawful supplement ingredient. Stop and consult a doctor before continuing use.",
-      "safety_warning_one_liner": "Untested synthetic nootropic. Stop and consult."
+      }
     },
     {
       "id": "BANNED_TIANEPTINE",
@@ -6036,10 +5907,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An atypical antidepressant that acts as an opioid-receptor agonist at the doses found in US gas-station products. FDA banned it; linked to dependence and overdose. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Opioid-like substance banned by FDA. Stop and consult."
+      }
     },
     {
       "id": "BANNED_YELLOW_OLEANDER_RECENT",
@@ -6142,10 +6010,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C0331122",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A plant containing cardiac glycosides that cause life-threatening heart-rhythm problems; multiple US recalls in 2025. Stop any product containing it and consult a doctor right away.",
-      "safety_warning_one_liner": "Cardiotoxic plant linked to 2025 recalls. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "BANNED_YK11",
@@ -6234,10 +6099,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic steroidal SARM-like compound linked to liver toxicity and hormone suppression. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Steroidal SARM with liver risk. Stop and consult."
+      }
     },
     {
       "id": "HIGH_RISK_CHAPARRAL",
@@ -6326,10 +6188,7 @@
       "regulatory_date_label": "First regulatory safety alert",
       "match_mode": "active",
       "cui": "C1050700",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A botanical linked to at least 18 reported cases of severe liver injury, including transplants. Not a lawful supplement ingredient; stop and consult a doctor if you have used a product containing it.",
-      "safety_warning_one_liner": "Liver-toxic botanical. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "HIGH_RISK_GERMANDER",
@@ -6459,10 +6318,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A weight-loss botanical withdrawn in Europe after over 30 hepatitis cases and several deaths from liver failure. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic botanical withdrawn in Europe. Stop."
+      }
     },
     {
       "id": "HIGH_RISK_PENNYROYAL",
@@ -6578,10 +6434,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An essential oil and high-dose extract associated with severe liver injury and deaths, particularly when taken internally. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic essential oil. Stop and consult."
+      }
     },
     {
       "id": "HM_ARSENIC",
@@ -6742,10 +6595,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A heavy-metal contaminant classified as a known human carcinogen linked to skin, lung, bladder, and kidney cancers at chronic levels. Avoid supplements sourced without tested contaminant limits.",
-      "safety_warning_one_liner": "Carcinogenic heavy-metal contaminant. Avoid untested products."
+      }
     },
     {
       "id": "HM_CADMIUM",
@@ -6877,10 +6727,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A heavy-metal contaminant that accumulates in the kidneys and is linked to long-term kidney damage and bone loss. Avoid supplements without verified contaminant testing.",
-      "safety_warning_one_liner": "Heavy-metal contaminant linked to kidney damage. Avoid."
+      }
     },
     {
       "id": "HM_LEAD",
@@ -7015,10 +6862,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A cumulative neurotoxin with no safe blood level, especially for children. Linked to cognitive, kidney, and cardiovascular harm. Avoid supplements without verified lead-limit testing.",
-      "safety_warning_one_liner": "Neurotoxic contaminant with no safe level. Avoid untested products."
+      }
     },
     {
       "id": "HM_MERCURY",
@@ -7153,10 +6997,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A neurotoxin that crosses the placenta and blood-brain barrier. Linked to irreversible neurological harm, especially in fetuses and young children. Avoid supplements without verified mercury testing.",
-      "safety_warning_one_liner": "Neurotoxic heavy metal. Avoid untested products."
+      }
     },
     {
       "id": "NOOTROPIC_9MEBC",
@@ -7242,10 +7083,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C2354537",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A synthetic compound studied only in preclinical research — no human safety data. FDA does not recognize it as a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Untested synthetic compound. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "NOOTROPIC_ADRAFINIL",
@@ -7372,10 +7210,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A prodrug that converts to modafinil, a DEA Schedule IV controlled prescription drug. Selling it as a supplement is associated with regulatory violation. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Converts to controlled prescription drug. Stop."
+      }
     },
     {
       "id": "NOOTROPIC_ANIRACETAM",
@@ -7520,10 +7355,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic racetam-class compound. FDA does not recognize it as a lawful supplement ingredient and has issued enforcement letters. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved synthetic nootropic. Stop and consult."
+      }
     },
     {
       "id": "NOOTROPIC_BROMANTANE",
@@ -7638,10 +7470,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A Soviet-era stimulant-anxiolytic drug that FDA has stated is not a lawful supplement ingredient. Safety in US consumers is poorly characterized. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful US supplement ingredient. Stop."
+      }
     },
     {
       "id": "NOOTROPIC_FLMODAFINIL",
@@ -7736,10 +7565,7 @@
       "cui_note": "No confirmed exact UMLS concept was found for this research-chemical nootropic name; null CUI is intentional.",
       "external_ids": {
         "unii": "174R2IG4T0"
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic analog of modafinil — the controlled prescription drug. Not a lawful supplement ingredient; sold through gray-market channels. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Designer drug analog of a controlled substance. Stop."
+      }
     },
     {
       "id": "NOOTROPIC_MODAFINIL",
@@ -7877,10 +7703,7 @@
             "unii": "54N37HN7N4"
           }
         ]
-      },
-      "ban_context": "substance",
-      "safety_warning": "A DEA Schedule IV controlled prescription stimulant. Its presence in a supplement is associated with illegal drug inclusion — talk to your doctor if you have been taking it.",
-      "safety_warning_one_liner": "Controlled prescription drug. Talk to your doctor."
+      }
     },
     {
       "id": "NOOTROPIC_OMBERACETAM",
@@ -8000,10 +7823,7 @@
             "unii": "W7O69J5F2B"
           }
         ]
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic dipeptide nootropic that FDA does not recognize as a lawful supplement ingredient. Safety in US consumers is not established. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved synthetic nootropic. Stop."
+      }
     },
     {
       "id": "NOOTROPIC_PHENYLPIRACETAM",
@@ -8116,10 +7936,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C0618539",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A synthetic psychostimulant sold as a prescription drug in Russia and banned in competitive sport by WADA. Not a lawful US supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved psychostimulant, WADA-banned. Stop."
+      "external_ids": {}
     },
     {
       "id": "NOOTROPIC_PIRACETAM",
@@ -8234,10 +8051,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A prescription drug in Europe — FDA does not recognize it as a dietary ingredient. Its sale as a US supplement is associated with regulatory violation. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Prescription drug abroad, not a US supplement. Stop."
+      }
     },
     {
       "id": "NOOTROPIC_SULBUTIAMINE",
@@ -8367,10 +8181,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic thiamine analog that FDA does not recognize as a dietary ingredient. Long-term safety and dose thresholds are not established. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Synthetic drug sold as supplement. Stop."
+      }
     },
     {
       "id": "NOOTROPIC_VINPOCETINE",
@@ -8527,10 +8338,7 @@
             "unii": "ZD6ZF4C86Q"
           }
         ]
-      },
-      "ban_context": "substance",
-      "safety_warning": "An FDA statement in 2019 concluded vinpocetine is not a lawful supplement ingredient, and it is associated with miscarriage risk in pregnancy. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful US supplement with pregnancy risk. Stop."
+      }
     },
     {
       "id": "PEPTIDE_BPC157",
@@ -8655,10 +8463,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An unapproved synthetic peptide studied only in animal models. Not a lawful US dietary ingredient; long-term human safety is unknown. Stop and consult a doctor before continuing use.",
-      "safety_warning_one_liner": "Unapproved experimental peptide. Stop and consult."
+      }
     },
     {
       "id": "PEPTIDE_MELANOTAN_II",
@@ -8825,10 +8630,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An unapproved synthetic peptide linked to nausea, unusual mole changes, and rare cases of rhabdomyolysis. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved peptide with serious adverse reports. Stop."
+      }
     },
     {
       "id": "PEPTIDE_TB500",
@@ -8943,10 +8745,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An unapproved synthetic peptide. Not a lawful US dietary ingredient; safety and purity of gray-market products are unverified. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved synthetic peptide. Stop and consult."
+      }
     },
     {
       "id": "PHARMA_DAPOXETINE",
@@ -9034,10 +8833,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription SSRI found undeclared in supplements, mainly sexual-performance products — linked to serotonin syndrome risk and dizziness. Stop the supplement and consult a doctor.",
-      "safety_warning_one_liner": "Prescription SSRI hidden in supplements. Stop and consult a doctor."
+      }
     },
     {
       "id": "PHARMA_LORCASERIN",
@@ -9281,10 +9077,7 @@
             "unii": "NJZ27SG33S"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A withdrawn prescription weight-loss drug found undeclared in supplements. FDA pulled it from the US market in 2020 after a study linked it to cancer risk. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Withdrawn prescription drug hidden in supplements. Stop and consult."
+      }
     },
     {
       "id": "RC_CARDARINE_ANALOGS",
@@ -9384,10 +9177,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Analogue watchlist spans multiple cardarine derivatives; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Designer derivatives of cardarine — whose parent compound caused rapid multi-tissue cancer in animal studies. Not lawful as supplements; avoid any product labeled with these analogs.",
-      "safety_warning_one_liner": "Cancer-linked designer drug family. Avoid."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_GE_LABS_YKARINE",
@@ -9477,10 +9267,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A recalled product found to contain an undeclared designer anabolic steroid (trendione) in the supplement — linked in one case to a consumer stroke. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled product with hidden steroid. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_GOLD_STAR_DISTRIBUTION",
@@ -9562,10 +9349,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Products from this brand faced FDA enforcement for serious manufacturing violations — linked to Salmonella contamination and sanitation issues. Stop and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled for Salmonella and manufacturing issues. Stop."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_GREEN_LUMBER",
@@ -9649,10 +9433,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A recalled sexual-enhancement supplement found to contain undeclared tadalafil in the product — risk of blood-pressure drops for users on nitrate heart medications. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled product hidden prescription drug. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_HYDROXYCUT",
@@ -9777,10 +9558,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Hydroxycut was recalled in 2009 after being linked to 23 reports of severe liver injury and one death. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled product linked to liver injury. Stop."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_JACK3D",
@@ -9905,10 +9683,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Jack3d was recalled after its DMAA content was linked to two deaths in US military personnel. Stop any remaining product and consult a doctor.",
-      "safety_warning_one_liner": "Recalled DMAA product linked to deaths. Stop."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_LIVE_IT_UP_SUPER_GREENS",
@@ -10000,10 +9775,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Live it Up Super Greens was recalled after tests flagged potential Salmonella contamination. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled for potential Salmonella. Stop."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_MODERN_WARRIOR",
@@ -10087,10 +9859,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A recalled product found to contain undeclared stimulants and nootropics in the supplement, including a DMAA variant. Stop the supplement and consult a doctor if you have been using it.",
-      "safety_warning_one_liner": "Recalled product with hidden stimulants. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_MR7_SUPER_700000",
@@ -10197,10 +9966,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A recalled product found to contain undeclared sildenafil and tadalafil in the supplement — risk of severe blood-pressure drops with nitrate heart medications. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled product hidden two prescription drugs. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_OXYELITE_PRO",
@@ -10332,10 +10098,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "OxyElite Pro was linked to a 2013 outbreak of acute liver injury with 97 cases, three liver transplants, and one death. Stop any remaining product and consult a doctor.",
-      "safety_warning_one_liner": "Recalled product linked to liver transplants. Stop."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_PURITY_PRODUCTS_MY_BLADDER",
@@ -10422,10 +10185,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Purity Products My Bladder was recalled after tests found E. coli contamination, a concern for urinary tract and kidney infections. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled for E. coli contamination. Stop."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_REBOOST_CLEARLIFE_NASAL_SPRAY",
@@ -10516,10 +10276,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "These nasal sprays were recalled after tests flagged yeast, mold, and Achromobacter — associated with respiratory infection risk, particularly in immunocompromised users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled for microbial contamination. Stop."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_RHEUMACARE_CAPSULES",
@@ -10617,10 +10374,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Rheumacare Capsules were recalled after tests found extreme lead levels — thousands of times above any safe threshold. Stop any remaining product and consult a doctor to check blood lead.",
-      "safety_warning_one_liner": "Recalled for extreme lead levels. Stop and test."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_SILINTAN",
@@ -10704,10 +10458,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A recalled supplement found to contain undeclared meloxicam — a prescription NSAID in the product. Users may be exposed to GI and kidney risks without oversight. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled product hidden prescription NSAID. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_TITAN_SARMS_LLC",
@@ -10805,10 +10556,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "Recalled products from this brand were marketed as supplements but contained unapproved SARMs in the product — linked to liver injury and hormone suppression. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Recalled products sold SARMs as supplements. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "RISK_BITTER_ORANGE",
@@ -10919,10 +10667,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A citrus extract containing synephrine, with ephedrine-like cardiovascular effects. Linked to blood-pressure elevation and heart events, especially when combined with caffeine. Stop and consult.",
-      "safety_warning_one_liner": "Ephedrine-like stimulant, cardiovascular risk. Stop."
+      }
     },
     {
       "id": "RISK_GERMANIUM",
@@ -11040,10 +10785,7 @@
       "cui_note": "Inorganic germanium entry spans multiple salts and oxides; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
         "unii": "5O6CM4W76A"
-      },
-      "ban_context": "substance",
-      "safety_warning": "Inorganic germanium compounds marketed in the 1980s as immune tonics — associated with fatal kidney failure in case reports. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Associated with fatal kidney failure. Stop."
+      }
     },
     {
       "id": "RISK_GREEN_TEA_EXTRACT_HIGH",
@@ -11144,10 +10886,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Dose-conditioned green tea extract risk entry is broader than one ingredient concept; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "watchlist",
-      "safety_warning": "High-dose green tea extract standardized to concentrated EGCG has been linked to drug-induced liver injury, particularly above 800 mg EGCG per day. Talk to your doctor before using concentrated forms.",
-      "safety_warning_one_liner": "High-dose EGCG linked to liver injury. Talk to your doctor."
+      "external_ids": {}
     },
     {
       "id": "RISK_KAVA",
@@ -11365,10 +11104,7 @@
       "cui": "C0939882",
       "external_ids": {
         "unii": "W1ES06373M"
-      },
-      "ban_context": "substance",
-      "safety_warning": "Kava root extracts have been linked to over 100 cases of severe liver injury globally, including transplants. Restricted or banned in several countries. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Botanical associated with liver injury. Stop and consult."
+      }
     },
     {
       "id": "RISK_KRATOM_NATURAL",
@@ -11529,10 +11265,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "Kratom leaf contains opioid-receptor alkaloids and has been linked to over 44 reported deaths and dependence risk. FDA does not recognize it as a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Opioid-like botanical linked to deaths. Stop."
+      }
     },
     {
       "id": "RISK_YOHIMBE",
@@ -11656,10 +11389,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "Yohimbe bark contains yohimbine, a stimulant alkaloid associated with anxiety, high blood pressure, and heart-rhythm changes. Not safe as a supplement for most users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Stimulant alkaloid with cardiovascular risk. Stop."
+      }
     },
     {
       "id": "SARM_ANDARINE",
@@ -11779,10 +11509,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An unapproved investigational SARM. Not a lawful US supplement; linked to vision disturbances and hormonal suppression. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM drug. Stop and consult."
+      }
     },
     {
       "id": "SARM_CARDARINE",
@@ -11888,10 +11615,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An experimental drug whose trials were halted after it caused rapid multi-tissue cancer in animal studies. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Experimental drug linked to animal cancers. Stop."
+      }
     },
     {
       "id": "SARM_LIGANDROL",
@@ -11996,10 +11720,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C4550372",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "An investigational SARM never approved for any medical use. Linked to liver injury and hormonal suppression. Not a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop."
+      "external_ids": {}
     },
     {
       "id": "SARM_OSTARINE",
@@ -12125,10 +11846,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An investigational SARM that failed cancer-cachexia trials. Linked to liver injury and hormonal suppression. Not a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver risk. Stop."
+      }
     },
     {
       "id": "SARM_RAD140",
@@ -12229,10 +11947,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C0601132",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "An investigational SARM linked to liver injury, cardiovascular strain, and hormonal suppression. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unapproved SARM with liver and heart risks. Stop."
+      "external_ids": {}
     },
     {
       "id": "SCHED_AMANITA_MUSCARIA",
@@ -12379,10 +12094,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A psychoactive mushroom associated with a 2024 multi-state outbreak of serious illness. Not a lawful supplement ingredient; linked to hallucinations and seizures. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Psychoactive mushroom linked to 2024 outbreak. Stop."
+      }
     },
     {
       "id": "SCHED_PSILOCYBIN",
@@ -12541,10 +12253,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A DEA Schedule I controlled substance. Its presence in a supplement is associated with illegal drug inclusion. Stop and consult a doctor if you have used a product containing it.",
-      "safety_warning_one_liner": "DEA Schedule I controlled substance. Stop."
+      }
     },
     {
       "id": "SPIKE_ANABOLIC_STEROIDS",
@@ -12690,10 +12399,7 @@
       "cui_note": "Policy watchlist spans many synthetic anabolic steroids; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
         "unii": "77P0LYX19T"
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "Designer anabolic-androgenic steroids found undeclared in bodybuilding supplements — linked to liver injury, cardiovascular risk, and hormone suppression. Stop the product and consult a doctor.",
-      "safety_warning_one_liner": "Hidden anabolic steroids in supplements. Stop."
+      }
     },
     {
       "id": "SPIKE_CHLOROPRETADALAFIL",
@@ -12789,10 +12495,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A designer tadalafil analog found undeclared in sexual-enhancement supplements, engineered to evade testing. Risk of dangerous blood-pressure drops with nitrates. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Designer ED drug hidden in supplements. Stop."
+      }
     },
     {
       "id": "SPIKE_DEXAMETHASONE",
@@ -12927,10 +12630,7 @@
             "unii": "8S6G45GU49"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription corticosteroid found undeclared in joint and arthritis supplements — risk includes blood-sugar spikes, mood changes, and adrenal suppression. Stop and consult your doctor.",
-      "safety_warning_one_liner": "Prescription steroid hidden in supplements. Stop and consult."
+      }
     },
     {
       "id": "SPIKE_DICLOFENAC",
@@ -13118,10 +12818,7 @@
             "unii": "FM2TC9S77N"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription NSAID found undeclared in pain and joint supplements — risk of GI bleeding, kidney injury, and heart events with chronic unintended use. Stop the supplement and consult a doctor.",
-      "safety_warning_one_liner": "Prescription NSAID hidden in supplements. Stop and consult."
+      }
     },
     {
       "id": "SPIKE_FLUOXETINE",
@@ -13264,10 +12961,7 @@
             "unii": "K8D70XE2F4"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription antidepressant found undeclared in supplements — risk of serotonin syndrome and unsafe drug interactions without clinical oversight. Stop the supplement and consult a doctor.",
-      "safety_warning_one_liner": "Prescription antidepressant hidden in supplements. Stop and consult."
+      }
     },
     {
       "id": "SPIKE_METHYL7K",
@@ -13346,10 +13040,7 @@
       "match_mode": "active",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this kratom-derived analogue name; null CUI is intentional.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A semi-synthetic kratom alkaloid engineered for greater potency at opioid receptors. Associated with overdose risk and dependence. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Potent semi-synthetic opioid-like compound. Stop."
+      "external_ids": {}
     },
     {
       "id": "SPIKE_PHENOLPHTHALEIN",
@@ -13459,10 +13150,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A removed laxative drug found undeclared in weight-loss supplements. FDA withdrew it from the US OTC market after animal studies raised cancer concerns. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Removed laxative drug hidden in supplements. Stop and consult."
+      }
     },
     {
       "id": "SPIKE_PROPOXYPHENYLSILDENAFIL",
@@ -13541,10 +13229,7 @@
       "cui_note": "No confirmed exact UMLS concept was found for this undeclared PDE-5 analogue name; null CUI is intentional.",
       "external_ids": {
         "unii": "2JW56253DF"
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A designer sildenafil analog found undeclared in sexual-enhancement supplements, engineered to evade testing. Risk of dangerous blood-pressure drops for users on nitrates. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Designer ED drug hidden in supplements. Stop."
+      }
     },
     {
       "id": "SPIKE_SILDENAFIL",
@@ -13662,10 +13347,7 @@
             "unii": "3Q43L9B5T3"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription ED drug found undeclared in sexual-enhancement supplements — risk of dangerous blood-pressure drops with nitrate heart medications. Stop the supplement and consult your doctor.",
-      "safety_warning_one_liner": "Prescription drug hidden in supplements. Stop and consult your doctor."
+      }
     },
     {
       "id": "SPIKE_TADALAFIL",
@@ -13770,10 +13452,7 @@
             "unii": "58GD22EV9S"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription ED drug found undeclared in sexual-enhancement supplements — long half-life raises interaction risk with nitrate heart medications. Stop the supplement and consult your doctor.",
-      "safety_warning_one_liner": "Prescription drug hidden in supplements. Stop and consult your doctor."
+      }
     },
     {
       "id": "SPIKE_TIANEPTINE_ANALOGUES",
@@ -13870,10 +13549,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Policy watchlist spans multiple tianeptine analogues; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Designer tianeptine analogs with opioid-receptor activity, found in gray-market supplements. Associated with dependence and withdrawal. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Designer opioid-like substances. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "STIM_ALPHA_PHP",
@@ -13958,10 +13634,7 @@
       "regulatory_date_label": "DEA scheduling effective",
       "match_mode": "active",
       "cui": "C4743057",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A Schedule I synthetic cathinone (bath-salt class) with stimulant effects comparable to methamphetamine. Associated with cardiovascular and psychiatric emergencies. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Schedule I synthetic stimulant. Stop."
+      "external_ids": {}
     },
     {
       "id": "STIM_METHYLHEXANAMINE_ANALOGS",
@@ -14078,10 +13751,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Policy watchlist spans multiple methylhexanamine analogues; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Designer DMAA-family stimulants engineered to evade enforcement. Linked to the same cardiovascular risks as DMAA. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Designer DMAA-class stimulants. Stop."
+      "external_ids": {}
     },
     {
       "id": "SYNTH_CUMYL_PICA",
@@ -14186,10 +13856,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic cannabinoid linked to acute psychiatric emergencies, seizures, and deaths. Not a lawful supplement ingredient; stop any product containing it and consult a doctor.",
-      "safety_warning_one_liner": "Synthetic cannabinoid linked to deaths. Stop."
+      }
     },
     {
       "id": "WADA_CANNABIS",
@@ -14296,10 +13963,7 @@
       "match_mode": "active",
       "cui_status": "no_single_umls_concept",
       "cui_note": "Entry combines cannabis and THC policy coverage; no single ingredient-level UMLS concept is appropriate.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Prohibited in competition by the World Anti-Doping Agency. Competitive athletes should avoid cannabis and THC products to prevent failed drug tests; talk to your team physician.",
-      "safety_warning_one_liner": "WADA-prohibited in competition. Talk to your team physician."
+      "external_ids": {}
     },
     {
       "id": "WADA_TRAMADOL",
@@ -14469,10 +14133,7 @@
             "unii": "XDX4ZNH4WE"
           }
         ]
-      },
-      "ban_context": "substance",
-      "safety_warning": "A prescription opioid added to the WADA in-competition prohibited list in 2024. Competitive athletes should talk to their physician about alternatives and testing windows.",
-      "safety_warning_one_liner": "WADA-prohibited in competition since 2024. Talk to your physician."
+      }
     },
     {
       "id": "BANNED_DYMETHAZINE",
@@ -14560,10 +14221,7 @@
       "regulatory_date_label": "FDA ban effective",
       "match_mode": "active",
       "cui": "C0604275",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "An anabolic-steroid prohormone banned under US law. Linked to liver injury, hormone suppression, and cardiovascular strain. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Banned steroid prohormone. Stop and consult."
+      "external_ids": {}
     },
     {
       "id": "SPIKE_METHOCARBAMOL",
@@ -14666,10 +14324,7 @@
             "unii": "9P9G9DSF2I"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription muscle relaxant found undeclared in pain and sleep supplements — risk of excessive sedation, especially with alcohol or other CNS depressants. Stop the supplement and consult.",
-      "safety_warning_one_liner": "Prescription muscle relaxant hidden in supplements. Stop."
+      }
     },
     {
       "id": "RISK_LOBELIA",
@@ -14775,10 +14430,7 @@
       "cui": "C0331296",
       "external_ids": {
         "unii": "9PP1T3TC5U"
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "A botanical with a narrow window between useful and toxic dose. Banned in OTC drug products since 1993 and placed on FDA's poisonous-plant watchlist. Avoid use in supplements.",
-      "safety_warning_one_liner": "Watchlist botanical with narrow safety margin. Avoid."
+      }
     },
     {
       "id": "ADD_5A_HYDROXY_LAXOGENIN",
@@ -14863,10 +14515,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A steroidal plant compound marketed for muscle building. FDA has issued warning letters and does not accept it as a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful supplement ingredient. Stop."
+      }
     },
     {
       "id": "ADD_CASCARA_SAGRADA",
@@ -14955,10 +14604,7 @@
       "cui": "C0205704",
       "external_ids": {
         "unii": "3SJ3U7J6V2"
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "A stimulant laxative whose GRASE status FDA stripped in 2002 after safety data was not provided. Its presence in supplements is associated with regulatory gaps. Avoid long-term use.",
-      "safety_warning_one_liner": "FDA stripped safety status in 2002. Avoid."
+      }
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
@@ -15081,10 +14727,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "FDA has ruled colloidal silver products are not generally recognized as safe. Linked to permanent blue-gray skin discoloration (argyria) and kidney and neurological harm. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not recognized as safe by FDA. Stop."
+      }
     },
     {
       "id": "ADD_DIIODOTHYRONINE_T2",
@@ -15159,10 +14802,7 @@
         ]
       },
       "cui": "C0891893",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A thyroid-hormone analog found on supplement labels. Associated with unpredictable thyroid effects and cardiovascular strain; not a lawful supplement ingredient. Stop and consult your doctor.",
-      "safety_warning_one_liner": "Thyroid hormone analog, not a supplement. Stop."
+      "external_ids": {}
     },
     {
       "id": "ADD_DOCUSATE_SODIUM",
@@ -15243,10 +14883,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "An OTC stool-softener drug appearing as an undisclosed ingredient in supplements. Its presence reflects a labeling issue — talk to your doctor before continuing the product.",
-      "safety_warning_one_liner": "OTC drug found in supplements. Talk to your doctor."
+      }
     },
     {
       "id": "ADD_HORDENINE",
@@ -15336,10 +14973,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A plant alkaloid sold in supplement products at pharmacological doses. Linked to blood-pressure elevation and cardiovascular strain, especially when stacked with other stimulants. Stop.",
-      "safety_warning_one_liner": "Stimulant at supplement doses. Stop."
+      }
     },
     {
       "id": "ADD_N_PHENETHYL_DIMETHYLAMINE",
@@ -15414,10 +15048,7 @@
       "cui_note": "No confirmed exact UMLS concept was found for this stimulant analogue name; null CUI is intentional.",
       "external_ids": {
         "unii": "G8WX4UG544"
-      },
-      "ban_context": "substance",
-      "safety_warning": "A designer phenethylamine-class stimulant found in weight-loss and pre-workout products. Associated with cardiovascular strain; not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Designer stimulant. Stop and consult."
+      }
     },
     {
       "id": "ADD_RED3",
@@ -15542,10 +15173,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A synthetic food dye FDA revoked in January 2025 over thyroid-tumor findings in animal studies. Manufacturers have until 2027 to remove it; avoid products still listing it.",
-      "safety_warning_one_liner": "Dye revoked by FDA in 2025. Avoid."
+      }
     },
     {
       "id": "BANNED_DMSA_SUCCIMER",
@@ -15631,10 +15259,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription chelation drug found in some supplements labeled for detox — risks include mineral depletion and kidney strain. Stop the supplement and talk to your doctor.",
-      "safety_warning_one_liner": "Prescription chelator hidden in supplements. Stop."
+      }
     },
     {
       "id": "BANNED_DNP",
@@ -15716,10 +15341,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An industrial chemical misused for rapid weight loss. Narrow margin between effect and fatal overheating; linked to deaths. Stop and consult a doctor if you have used a product containing it.",
-      "safety_warning_one_liner": "Industrial chemical linked to deaths. Stop."
+      }
     },
     {
       "id": "BANNED_USNIC_ACID",
@@ -15801,10 +15423,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A lichen-derived compound linked to severe liver injury in weight-loss and energy products. Not a lawful supplement ingredient in this use profile. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic compound. Stop and consult."
+      }
     },
     {
       "id": "BANNED_CLENBUTEROL",
@@ -15902,10 +15521,7 @@
             "unii": "BIK7NS3B2F"
           }
         ]
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A beta-agonist drug found undeclared in performance and weight-loss supplements — risk of rapid heart rate, tremor, and dangerous blood-pressure changes. Stop the supplement and consult a doctor.",
-      "safety_warning_one_liner": "Illicit drug found in supplements. Stop and consult a doctor."
+      }
     },
     {
       "id": "BANNED_ACONITE",
@@ -15975,10 +15591,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A botanical containing aconitine toxins linked to life-threatening heart-rhythm and nervous-system effects. Raw or misprocessed forms are not appropriate for supplements. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Cardiotoxic botanical. Stop and consult."
+      }
     },
     {
       "id": "ADD_SODIUM_TETRABORATE",
@@ -16068,10 +15681,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "Borax — an EU-banned food additive classified as a reproductive toxicant. Folk remedy claims do not justify its use; it is not a lawful supplement. Stop and consult a doctor.",
-      "safety_warning_one_liner": "EU-banned reproductive toxicant. Stop."
+      }
     },
     {
       "id": "ADD_THYROGEN",
@@ -16138,10 +15748,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "A prescription thyroid-cancer biologic found in some products labeled as supplements. Its presence indicates unlawful drug inclusion; stop the supplement and consult a doctor.",
-      "safety_warning_one_liner": "Prescription biologic hidden in supplements. Stop and consult."
+      }
     },
     {
       "id": "ADD_SIMETHICONE",
@@ -16196,10 +15803,7 @@
         ]
       },
       "cui": "C0037138",
-      "external_ids": {},
-      "ban_context": "adulterant_in_supplements",
-      "safety_warning": "An OTC anti-gas drug appearing as an undisclosed ingredient in supplements. Generally low risk, but its presence signals labeling concerns — talk to your doctor if you have been using it.",
-      "safety_warning_one_liner": "OTC drug found in supplements. Talk to your doctor."
+      "external_ids": {}
     },
     {
       "id": "ADD_HEXADRONE",
@@ -16255,10 +15859,7 @@
       },
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed exact UMLS concept was found for this designer steroid name; null CUI is intentional.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A Schedule III designer anabolic steroid. Supplement products containing it are adulterated under US law and are linked to liver injury. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Schedule III designer steroid. Stop."
+      "external_ids": {}
     },
     {
       "id": "BANNED_ADD_TITANIUM_DIOXIDE",
@@ -16420,10 +16021,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "A white-pigment additive EFSA ruled in 2021 could no longer be considered safe due to possible genotoxicity. Banned in EU food since 2022; still permitted in US supplements. Avoid when possible.",
-      "safety_warning_one_liner": "EU-banned white pigment. Avoid when possible."
+      }
     },
     {
       "id": "BANNED_ADD_TALC",
@@ -16566,10 +16164,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "Talc used in consumer products can be contaminated with asbestos, a known human carcinogen. Presence in supplements is associated with contamination risk. Avoid affected products.",
-      "safety_warning_one_liner": "Possible asbestos contamination. Avoid."
+      }
     },
     {
       "id": "BANNED_ADD_CAROB_COLOR",
@@ -16683,10 +16278,7 @@
       "cui_note": "Food-color entry spans formulation and coloring variants; no single ingredient-level UMLS concept is appropriate.",
       "external_ids": {
         "unii": "4XYU5U00C4"
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "Vegetable-carbon color is permitted in the EU but not approved by FDA as a food color. Presence in a US supplement is associated with labeling inconsistency. Avoid.",
-      "safety_warning_one_liner": "Not FDA-approved color in supplements. Avoid."
+      }
     },
     {
       "id": "BANNED_ADD_OCTOPAMINE",
@@ -16812,10 +16404,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "watchlist",
-      "safety_warning": "A sympathomimetic stimulant flagged by FDA as a new dietary ingredient without a lawful safety submission. Associated with blood-pressure elevation; avoid products containing it.",
-      "safety_warning_one_liner": "FDA-flagged stimulant. Avoid."
+      }
     },
     {
       "id": "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
@@ -16909,10 +16498,7 @@
         ],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A beta-adrenergic stimulant found in weight-loss products. Associated with cardiovascular risk; not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Unlawful stimulant linked to heart risk. Stop."
+      }
     },
     {
       "id": "BANNED_CALAMUS_ACORUS_CALAMUS",
@@ -17015,10 +16601,7 @@
         "salt_parents": [],
         "metabolic_relationships": [],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "An oil and extract prohibited in human food under US regulation due to beta-asarone content, which is linked to cancer in animal studies. Stop and consult a doctor.",
-      "safety_warning_one_liner": "US-prohibited botanical linked to cancer concerns. Stop."
+      }
     },
     {
       "id": "HM_CHROMIUM_HEXAVALENT",
@@ -17156,10 +16739,7 @@
         ]
       },
       "cui": "C1707393",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "A known human carcinogen via inhalation, with clear oral carcinogenicity in rodent studies. Avoid supplements without verified chromium-speciation testing.",
-      "safety_warning_one_liner": "Carcinogenic form of chromium. Avoid untested products."
+      "external_ids": {}
     },
     {
       "id": "RECALLED_ROSABELLA_MORINGA",
@@ -17242,10 +16822,7 @@
       },
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
-      "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "Rosabella Moringa capsules were recalled after tests flagged potential Salmonella contamination. Stop any remaining product and consult a doctor if symptoms develop.",
-      "safety_warning_one_liner": "Recalled for potential Salmonella. Stop."
+      "external_ids": {}
     },
     {
       "id": "SCHED_PSILOCIN",
@@ -17398,10 +16975,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "The pharmacologically active metabolite of psilocybin and a DEA Schedule I substance. Its presence in a supplement is associated with illegal drug inclusion. Stop and consult a doctor.",
-      "safety_warning_one_liner": "DEA Schedule I substance. Stop."
+      }
     },
     {
       "id": "BANNED_MUSCIMOL",
@@ -17558,10 +17132,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A potent GABA-A agonist from Amanita mushrooms — associated with sedation, altered perception, and at higher doses seizures. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Psychoactive mushroom compound. Stop."
+      }
     },
     {
       "id": "BANNED_IBOTENIC_ACID",
@@ -17705,10 +17276,7 @@
           }
         ],
         "metabolites": []
-      },
-      "ban_context": "substance",
-      "safety_warning": "A neurotoxic amino acid in Amanita mushrooms that acts on NMDA receptors and can cause excitotoxic brain injury. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Neurotoxic mushroom compound. Stop."
+      }
     }
   ]
 }

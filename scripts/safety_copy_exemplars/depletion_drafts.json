@@ -1,0 +1,139 @@
+{
+  "_metadata": {
+    "purpose": "Authored exemplars for medication_depletions schema v5.2 layperson copy",
+    "status": "clinician_reviewed_round_1",
+    "authoring_rule": "Every entry must pass scripts/validate_safety_copy.py --strict before merge into scripts/data/medication_depletions.json",
+    "origin": "Seeded by pipeline maintainer; refined by Dr. Pham (clinical review round 1) with nocebo-safe, patient-centered phrasing",
+    "related": [
+      "HANDOFF_PIPELINE_SAFETY_DATA.md",
+      "scripts/SAFETY_DATA_PATH_C_PLAN.md",
+      "scripts/safety_copy_exemplars/AUTHORING_SOP.md",
+      "scripts/safety_copy_exemplars/QUICKSTART_FOR_DR_PHAM.md"
+    ],
+    "tone_reminders": [
+      "Calm, sharing — not alarming. Depletion is chronic (onset months-years), not acute.",
+      "alert_headline: no 'Depleted by X' framing; prefer 'May lower X over time' / 'Can affect X long-term'.",
+      "alert_body: must include onset framing (over time, long-term, gradually, years, months). No numeric stats (30%, 1 in 3). No absolute claims (will cause, leads to). No acute framing (suddenly, immediately). Max 2 symptom terms (nocebo cap).",
+      "acknowledgement_note: pure validation. No 'risk', 'deficiency', 'avoid', 'worry' — user is already covering.",
+      "monitoring_tip_short: soft action verbs only (check, consider, monitor, watch, discuss). Never urgent/stop/immediately.",
+      "Catastrophizing modifiers (severe, serious, dangerous, major, significant, critical) warn in copy — they prime threat response in mobile UI."
+    ]
+  },
+  "drafts": [
+    {
+      "_target": "DEP_METFORMIN_VITAMINB12",
+      "drug_display_name": "Metformin",
+      "nutrient_name": "Vitamin B12",
+      "severity": "significant",
+      "alert_headline": "May lower vitamin B12 over time",
+      "alert_body": "With long-term use, metformin can reduce how well vitamin B12 is absorbed. Some people develop lower levels over years, which may show up as fatigue or tingling in the hands and feet.",
+      "acknowledgement_note": "Nice — you're taking B12, which aligns with guidance for long-term metformin use.",
+      "monitoring_tip_short": "Consider checking B12 levels every 2-3 years; easy to review at a routine visit.",
+      "adequacy_threshold_mcg": 500,
+      "food_sources_short": "Because metformin reduces B12 absorption, food sources may not be enough on their own — a supplement is often more reliable.",
+      "authoring_notes": "Clinical review round 1 (Dr. Pham): removed '30%' (accurate but alarm-forward for mobile UI — stat lives in clinical_impact for detail expander). Softened symptom phrasing from 'tingling in hands or fatigue' to the more natural 'fatigue or tingling in the hands and feet'. Acknowledgement cites 'guidance' generically rather than naming the ADA — keeps tone warmer without dropping authority. ABSORPTION-BLOCKED: food_sources_short uses the explicit hint pattern — metformin blocks the intrinsic-factor-B12 pathway, so food B12 alone isn't clinically reliable."
+    },
+    {
+      "_target": "DEP_PPI_VITAMINB12",
+      "drug_display_name": "PPIs",
+      "nutrient_name": "Vitamin B12",
+      "severity": "moderate",
+      "alert_headline": "Can affect vitamin B12 absorption long-term",
+      "alert_body": "By lowering stomach acid, these medications can gradually reduce how well vitamin B12 is absorbed from food. Over years of use, some people develop lower levels.",
+      "acknowledgement_note": "You're taking B12 — a helpful way to support levels while using acid-reducing medication.",
+      "monitoring_tip_short": "Consider asking about a B12 check if you've been using these medications long-term.",
+      "adequacy_threshold_mcg": 250,
+      "food_sources_short": "Because these medications can limit B12 absorption, food sources may not be enough on their own — a supplement is often more reliable.",
+      "authoring_notes": "Clinical review round 1 (Dr. Pham): tightened from 'most people notice nothing' filler → cleaner clinical clarity. Body stays under 2 sentences; onset framing via 'Over years of use'. ABSORPTION-BLOCKED: PPIs lower stomach acid needed for B12 separation from food proteins — food B12 is also affected."
+    },
+    {
+      "_target": "DEP_PPI_MAGNESIUM",
+      "drug_display_name": "PPIs",
+      "nutrient_name": "Magnesium",
+      "severity": "moderate",
+      "alert_headline": "May lower magnesium with long-term use",
+      "alert_body": "Over time, long-term PPI use can gradually reduce magnesium levels. This develops slowly over months to years and may be subtle at first.",
+      "acknowledgement_note": "Good — your magnesium intake supports maintaining levels while using this medication.",
+      "monitoring_tip_short": "Consider checking magnesium if you've been on this medication long-term.",
+      "adequacy_threshold_mg": 200,
+      "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate.",
+      "authoring_notes": "Clinical review round 1 (Dr. Pham): removed the symptom list ('fatigue, muscle cramps, or mood changes') — symptom priming in mobile UI creates nocebo; clinical_impact holds the symptom detail for the expandable section. Food-first is clinically reasonable here (unlike B12 with PPIs) — magnesium absorption is not blocked by acid suppression."
+    },
+    {
+      "_target": "DEP_STATINS_COQ10",
+      "drug_display_name": "Statins",
+      "nutrient_name": "Coenzyme Q10",
+      "severity": "moderate",
+      "alert_headline": "May lower CoQ10 levels over time",
+      "alert_body": "Statins can gradually reduce the body's natural production of CoQ10 over time. Some people notice lower energy or muscle fatigue with long-term use.",
+      "acknowledgement_note": "You're taking CoQ10 — a common and reasonable addition for people on statins.",
+      "monitoring_tip_short": "Consider mentioning any muscle symptoms at your next visit; this often guides next steps.",
+      "adequacy_threshold_mg": 100,
+      "food_sources_short": "Dietary CoQ10 is minimal — organ meats and fatty fish contain small amounts, but a supplement is usually the practical route.",
+      "authoring_notes": "Clinical review round 1 (Dr. Pham): removed 'link is debated' — internal clinical nuance doesn't help the user decide anything, and hedging undermines app trust. Tone smoothed. FOOD-MINIMAL: CoQ10 in food is very low; supplement is the practical path (authored honestly, not as a sales pitch)."
+    },
+    {
+      "_target": "DEP_DIURETICS_POTASSIUM",
+      "drug_display_name": "Diuretics",
+      "nutrient_name": "Potassium",
+      "severity": "significant",
+      "alert_headline": "Can lower potassium with regular use",
+      "alert_body": "Certain diuretics increase potassium loss through urine. With ongoing use over weeks to months, levels may gradually decline.",
+      "acknowledgement_note": "Good — potassium is typically monitored closely with these medications, and your care plan helps keep levels on track.",
+      "monitoring_tip_short": "Ask about periodic potassium checks; this is a standard part of follow-up.",
+      "food_sources_short": "Food sources of potassium include bananas, oranges, potatoes, beans, yogurt, and tomatoes.",
+      "authoring_notes": "Clinical review round 1 (Dr. Pham): removed 'irregular heartbeat' from the body. Rationale: diuretic users are already under doctor monitoring (severity is 'significant' on the entry, which drives UI color), and naming arrhythmia in the main body creates worry that doesn't drive any user action. The detail expander still shows the full clinical_impact + mechanism for users who want it. Acknowledgement is now purely validating (no instruction tone). Intentionally no adequacy_threshold — potassium dosing is tightly doctor-managed. Food sources included — dietary potassium is the standard care-plan path when levels drift."
+    },
+    {
+      "_target": "DEP_CORTICOSTEROIDS_CALCIUM",
+      "drug_display_name": "Corticosteroids",
+      "nutrient_name": "Calcium",
+      "severity": "significant",
+      "alert_headline": "Can affect calcium balance with long-term use",
+      "alert_body": "With ongoing use over months, corticosteroids can gradually reduce calcium absorption and affect bone strength.",
+      "acknowledgement_note": "Good — calcium is part of standard support for long-term corticosteroid use.",
+      "monitoring_tip_short": "Consider discussing bone health and screening if use continues over time.",
+      "adequacy_threshold_mg": 500,
+      "food_sources_short": "Food sources of calcium include dairy products, fortified plant milks, leafy greens, almonds, and canned sardines or salmon with bones.",
+      "authoring_notes": "Clinical review round 1 (Dr. Pham): 'reduce calcium levels' → 'affect calcium balance' (more accurate — steroids cause absorption reduction, urinary loss, AND bone turnover changes; 'balance' captures all three). Removed the short-course contrast — one body sentence is enough. Food sources are clinically meaningful — dietary calcium remains useful even with corticosteroid use (unlike metformin/B12)."
+    },
+    {
+      "_target": "DEP_ORAL_CONTRACEPTIVES_FOLATE",
+      "drug_display_name": "Oral contraceptives",
+      "nutrient_name": "Folate (B9)",
+      "severity": "mild",
+      "alert_headline": "May slightly lower folate over time",
+      "alert_body": "With regular use, oral contraceptives can modestly reduce folate levels over time. Most people remain within range, but folate becomes more important when planning for pregnancy.",
+      "acknowledgement_note": "Nice — maintaining folate intake is a thoughtful step, especially if pregnancy may be a future consideration.",
+      "monitoring_tip_short": "Consider discussing folate intake during routine visits, particularly when planning ahead.",
+      "adequacy_threshold_mcg": 400,
+      "food_sources_short": "Food sources of folate include leafy greens, lentils, chickpeas, asparagus, avocado, and fortified grains and cereals.",
+      "authoring_notes": "Clinical review round 1 (Dr. Pham): cleaned phrasing, removed redundancy. Keeps pregnancy relevance as an affirmative planning cue rather than a consequence. Food-first is clinically reasonable here; supplementation becomes especially important pre-conception."
+    },
+    {
+      "_target": "DEP_ANTICOAGULANTS_VITAMINK",
+      "drug_display_name": "Warfarin (anticoagulant / blood thinner)",
+      "nutrient_name": "Vitamin K",
+      "severity": "significant",
+      "pattern_class": "bespoke_drug_mechanism",
+      "alert_headline": "Warfarin changes how vitamin K works",
+      "alert_body": "Warfarin works by blocking vitamin K's role in clotting — this is long-term by design. Changes in vitamin K intake can shift your INR over weeks.",
+      "acknowledgement_note": "Good — steady vitamin K intake supports consistent INR during warfarin therapy.",
+      "monitoring_tip_short": "Consider keeping your vitamin K intake steady day to day; discuss changes with your prescriber.",
+      "authoring_notes": "FOURTH EXEMPLAR PATTERN (bespoke drug-mechanism framing). Clinical review round 1 (Dr. Pham): this entry intentionally departs from the standard 'X can lower Y over time' depletion template because warfarin + vitamin K is NOT a depletion in the usual sense — it's the drug's intended mechanism. Headline reframes as 'changes how it works' rather than 'lowers', body calls the long-term effect out as 'by design', and the actionable signal is INR stability rather than a supplement dose. NO food_sources_short (dietary K management isn't 'eat more' or 'eat less' — it's 'keep it steady'; a food list would be actively misleading). NO adequacy_threshold (warfarin patients don't have a supplement target; their INR is the target). Use this template for any future rule where the 'depletion' is actually the drug's mechanism of action, e.g., anticonvulsants-vitamin-K, methotrexate-folate."
+    },
+    {
+      "_target": "DEP_SSRI_MAGNESIUM",
+      "drug_display_name": "SSRIs",
+      "nutrient_name": "Magnesium",
+      "severity": "mild",
+      "alert_headline": "May modestly affect magnesium over time",
+      "alert_body": "Some SSRIs may gradually influence magnesium levels with long-term use. Research is still evolving, but the effect appears mild for most people.",
+      "acknowledgement_note": "You're taking magnesium — a well-tolerated addition that can support overall balance.",
+      "monitoring_tip_short": "Consider asking whether magnesium testing would be useful in your situation.",
+      "adequacy_threshold_mg": 200,
+      "food_sources_short": "Food sources of magnesium include leafy greens, nuts, seeds, whole grains, beans, and dark chocolate.",
+      "authoring_notes": "Clinical review round 1 (Dr. Pham): removed unsupported mood/sleep claim — not strongly supported causally. Epistemic humility preserved via 'Research is still evolving' for this emerging area. Food sources are appropriate — no absorption block with SSRIs."
+    }
+  ]
+}
