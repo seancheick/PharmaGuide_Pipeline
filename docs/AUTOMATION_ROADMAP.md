@@ -352,6 +352,12 @@ CREATE INDEX safety_alerts_canonical_ids_idx ON safety_alerts USING GIN (canonic
 - **Phase 2** gains a "safety alerts queue" view for Dr. Pham's refinement work.
 - **Phase 4** (reference-data hot-refresh) is the *catalog* fast-refresh path. Phase 1.5 is the *alerts* fast-refresh path. Both coexist; they're different problem shapes.
 
+### Safety alerts are tier-agnostic — never Pro-gated
+
+Important constraint for the future monetization layer (detailed in Phase 4.5): **Tier 1 CRITICAL safety alerts must fire for every user, free or Pro, no exceptions.** Push notifications for FDA Class I recalls, undeclared controlled substances, and acute hazards are a clinical-trust obligation, not a premium feature. Cheaper to send for free than to defend in court after a gated recall alert fails to reach a free user.
+
+What *can* be Pro-gated: HIGH-tier advisories, deeper "why this was flagged" explanations, stack-level alert history, bulk-export of alert history.
+
 ---
 
 ## Phase 2 — Dr. Pham (and any reviewer) edits clinical copy without git
@@ -804,6 +810,49 @@ Goal: keep offline-miss rate under 5% of total scans. If it creeps up, the Tier 
 ### Effort
 
 **60–80 hours** over 4–6 weeks. Bulk of the work is in Flutter (ODR / Play Asset Delivery integration), not the pipeline. Pipeline-side: ~2 days to add `build_verdict_shard.py` + sqlite-zstd integration + manifest publication.
+
+### Monetization layer — Pro-tier offline gating
+
+**Free tier (default):**
+- Tier 1 shard (top 50k in app binary) — always available, including offline
+- Tier 3 (Supabase on-demand) — works when online
+- Full safety alerts (Phase 1.5, CRITICAL tier) — **always on, never gated**
+- Basic interactions + stack function — on-device, always on
+
+**Pro tier (paid):**
+- Everything above, PLUS:
+- Tier 2 post-install pack download (top 150k offline) — the big expansion
+- Unlimited offline detail blob caching (free tier capped at ~50 cached products)
+- Full push-notification tier (free tier gets only CRITICAL, Pro gets HIGH too)
+- Optional: family-plan stack sharing, export features, advanced dashboards
+
+This mirrors Yuka's approach exactly: their free tier is online-only; their Premium unlocks the 100k offline pack. Proven model in the same vertical.
+
+#### The critical ethical constraint — safety alerts are never Pro-gated
+
+Tier 1 CRITICAL safety alerts (FDA Class I recalls, undeclared controlled substances, acute health hazards) **must never be Pro-gated.** Reasoning:
+
+- A free user who bought a now-recalled supplement needs that push notification regardless of subscription tier.
+- Charging for the "will this kill me" signal is a clinical-trust failure and creates liability exposure.
+- Practically: the marginal cost of a push notification is $0; there's no business reason to gate it.
+
+What *can* be Pro-gated: HIGH tier (class II/III recalls, warning letters), CATALOG tier (copy refinements), and richer explanations of why a product is flagged.
+
+What *cannot* be gated: the actual recall notification for products in a user's stack.
+
+This aligns with the FDA's own consumer protection guidance and keeps the app defensible against "they gated a safety feature" user stories.
+
+#### Infrastructure implications
+
+Build the tier gate into the architecture from day one so we don't retrofit later:
+
+1. **User tier field** in Supabase `auth.users` metadata: `tier: 'free' | 'pro'`.
+2. **Client checks tier** before offering Tier 2 download. Free users see a "Upgrade to Pro for offline mode on 150k products" CTA.
+3. **Manifest endpoint** validates tier for Tier 2 pack URL signing — even if a free user bypasses the client check, the signed URL rejects them.
+4. **Safety alerts subscription** is tier-agnostic — all users subscribe to the `safety_alerts` Realtime channel, and Tier 1 CRITICAL fires for everyone.
+5. **Telemetry dimension** added — scan coverage segmented by tier to track Pro-value delivery.
+
+Implementation cost: small (~1 week of extra Flutter work on top of Phase 4.5), done as part of Phase 4.5 rather than deferred.
 
 ---
 
