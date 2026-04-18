@@ -620,6 +620,193 @@ Keep the previous Supabase DB snapshot for 30 days. If a bad change ships, one-c
 
 ---
 
+## Phase 4.5 — Tiered Offline Architecture
+
+**Timeline:** 4–6 weeks part-time.
+**Cost:** $0/month.
+**Depends on Phase 4 (hot-refresh) + Phase 1 (pipeline in CI).**
+**Trigger:** cross 50k products in catalog, or Flutter bundle exceeds 60 MB.
+
+### What it is
+
+The architectural transition that keeps the Flutter app bundle size flat as the catalog grows from 10k → 250k. Based on Yuka's proven pattern (ship 1.6% locally, fetch the rest) adapted to our scale and offline requirements.
+
+Three tiers of data, three delivery mechanisms:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  TIER 1 — App binary (<25 MB compressed)                    │
+│  - Reference data (banned, harmful, interactions, etc.)     │
+│  - Verdict shard: ~50k most-scanned products (~3 MB)        │
+│  - Minimum offline UX: name, photo-thumbnail-pointer,       │
+│    verdict, score, safe/not-safe                            │
+└─────────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│  TIER 2 — Post-install downloadable shard                   │
+│  (iOS ODR / Android Play Asset Delivery — both free)        │
+│  - Top 150k products, verdict + basic safety flags          │
+│  - ~15 MB zstd-compressed                                   │
+│  - Triggers: first launch background download OR            │
+│    explicit user opt-in ("Enable offline mode")             │
+└─────────────────────────────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────┐
+│  TIER 3 — Supabase on-demand (all 250k + detail blobs)      │
+│  - Full ingredient list, detailed warnings, evidence        │
+│  - Fetched on scan/search when online                       │
+│  - 24h local cache (existing detailBlobProvider pattern)    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### The offline UX contract — "minimum viable safety"
+
+Per your existing requirement: when a user is fully offline and scans a product in Tier 1 or 2, they see:
+
+- **Product identity:** name, brand, photo-thumbnail (cached if seen before, or a placeholder)
+- **Verdict:** SAFE / CAUTION / POOR / UNSAFE / BLOCKED / NOT_SCORED
+- **Score:** /100 equivalent + grade letter
+- **Hard safety flags:** has_banned_substance, has_recalled_ingredient, has_harmful_additives (boolean, rendered as badges)
+- **Interactions + stack function:** work entirely on-device because they use the local reference data + user's local stack
+
+They do NOT see (requires network):
+- Full ingredient breakdown
+- Detailed warnings with clinical copy
+- Evidence / PMID citations
+- Formulation detail (proprietary blends, certification detail, proprietary_blend_audit)
+
+This matches Yuka's offline contract and sets clear user expectations via an offline banner: *"Full details available when online."*
+
+### Why it matters
+
+- **Install size stays flat.** App bundle targets <80 MB forever, regardless of catalog size.
+- **Offline scan still works** for the 90th-percentile product (top 150k is a huge practical majority).
+- **Clinical-trust safety signal is offline-first.** Users never walk into a store, scan a product, and see "error, please connect to internet" for the top 150k products.
+- **Network cost scales linearly with usage**, not with catalog size. User only pays bandwidth for products they actually scan.
+
+### How to do it
+
+**Step 4.5.1 — Identify the "most-scanned 50k" (Tier 1 shard).**
+
+- Wait until Phase 5 observability gives you real scan analytics.
+- Until then, proxy by: top brands + top 5 categories (gummies, capsules, softgels, powders, liquids) by product count.
+- Rebuild the shard monthly — popularity shifts over time.
+
+**Step 4.5.2 — Build the verdict-shard emitter in the pipeline.**
+
+New pipeline stage: `build_verdict_shard.py` — reads the final DB and emits a compact SQLite file with just:
+
+```sql
+CREATE TABLE verdict_shard (
+  dsld_id          TEXT PRIMARY KEY,
+  barcode          TEXT,
+  product_name     TEXT,
+  brand_name       TEXT,
+  photo_thumb_url  TEXT,       -- CDN URL, image cached client-side separately
+  verdict          TEXT NOT NULL,
+  score            REAL,
+  grade            TEXT,
+  has_banned       INTEGER,
+  has_recalled     INTEGER,
+  has_harmful      INTEGER,
+  has_allergen     INTEGER,
+  schema_version   TEXT NOT NULL,
+  last_updated     TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX verdict_shard_barcode_idx ON verdict_shard (barcode);
+```
+
+Emit three versions per build:
+- `verdict_shard_tier1.sqlite` — top 50k (shipped in app binary)
+- `verdict_shard_tier2.sqlite` — top 150k (ODR / Play Asset Delivery pack)
+- `verdict_shard_tier3.sqlite` — full catalog (optional power-user download)
+
+**Step 4.5.3 — Apply sqlite-zstd compression.**
+
+Run each shard through `sqlite-zstd` row-level compression. Real-world results: 6.5x reduction. Our 150-byte/row schema should compress to ~25–30 bytes/row effective.
+
+Target sizes post-compression:
+- Tier 1 (50k): <5 MB
+- Tier 2 (150k): <15 MB
+- Tier 3 (250k): <25 MB
+
+**Step 4.5.4 — iOS On-Demand Resources + Android Play Asset Delivery.**
+
+- iOS: tag the Tier 2 shard as an ODR tag. Flutter plugin `flutter_on_demand_resources` or native Swift code triggers the download on first launch.
+- Android: create a Play Asset Delivery on-demand pack. Flutter plugin `play_asset_delivery` triggers the download.
+
+Both are free. Both download over WiFi by default.
+
+**Step 4.5.5 — Snapshot + delta sync (not Supabase Realtime).**
+
+For Tier 1 and Tier 2 shards, use HTTP-based snapshot + delta:
+
+- Pipeline nightly builds both shards, uploads to R2 with version hash: `verdict_shard_tier1_v2026-04-19.sqlite.zstd`.
+- `verdict_shard_manifest.json` on R2 tracks current version + SHA-256 + download URL per tier.
+- Client checks manifest daily (if online). If version drift detected, downloads the new shard (background, WiFi-only).
+- No Supabase Realtime websocket for product data. Only safety_alerts table uses Realtime (Phase 1.5) because those are time-critical small-volume events.
+
+**Step 4.5.6 — Update Flutter data layer.**
+
+Modify Flutter's CoreDatabase lookup logic:
+
+```dart
+// Pseudo-code
+Future<Product?> findById(String dsldId) async {
+  // 1. Try Tier 1 + Tier 2 local shards (single UNION query).
+  final local = await _localVerdictDb.query(dsldId);
+  if (local != null) return local;
+
+  // 2. Online: query Supabase for the product row.
+  if (await connectivity.isOnline) {
+    final remote = await supabase.from('products').select().eq('dsld_id', dsldId).single();
+    return remote;
+  }
+
+  // 3. Offline and not in local shards → return null with "offline miss" marker.
+  return null;
+}
+```
+
+Then update `detailBlobProvider` (already exists) to gracefully render the local verdict if the blob fetch fails offline.
+
+**Step 4.5.7 — Offline-capability telemetry.**
+
+Ship a telemetry event: every scan tagged as `{tier1_hit, tier2_hit, remote_online, remote_offline_miss}`. Phase 5 dashboards show:
+- % of scans served by tier 1 (install-bundle)
+- % by tier 2 (post-install pack)
+- % by remote
+- % that hit offline miss (product wasn't in any tier, no network)
+
+Goal: keep offline-miss rate under 5% of total scans. If it creeps up, the Tier 1/2 selection is wrong — adjust the "most-scanned" algorithm.
+
+### Free options
+
+| Component | Free option | Notes |
+|---|---|---|
+| Storage for shards | Cloudflare R2 (10 GB free, zero egress) | Already used in Phase 1 |
+| Post-install delivery | iOS ODR + Android Play Asset Delivery | Free, native platform features |
+| Compression | sqlite-zstd (MIT license) | Free open-source SQLite extension |
+| Sync layer | Snapshot + delta via HTTP Range | Free; no PowerSync subscription needed |
+
+### Definition of done
+
+- Flutter app binary stays under 60 MB at 250k catalog scale.
+- Tier 2 pack downloads on first launch (WiFi-only), ~15 MB, takes <30s on typical broadband.
+- Offline scan of any product in top 150k returns verdict + safe/not-safe + basic identity in <50ms.
+- Offline scan of a product beyond 150k returns a clean "product not available offline" message with the option to save for later.
+- Online scan of any 250k product returns full detail blob in <300ms.
+- Telemetry confirms offline-miss rate <5%.
+
+### Effort
+
+**60–80 hours** over 4–6 weeks. Bulk of the work is in Flutter (ODR / Play Asset Delivery integration), not the pipeline. Pipeline-side: ~2 days to add `build_verdict_shard.py` + sqlite-zstd integration + manifest publication.
+
+---
+
 ## Phase 5 — Full automation & observability
 
 **Timeline:** 6 months from start, ongoing.
@@ -724,11 +911,12 @@ That's it. Tomorrow you already have a config file, which is the scaffolding for
 | **2** | Dr. Pham edits clinical copy via web UI → PR | 3–4 weeks | $0 | Phase 1 (recommended) |
 | **3** | Monthly scheduled DSLD intake by category with delta detection | 2 months | $0 | Phase 1 |
 | **4** | Reference-data changes auto-propagate to affected products + Flutter | 2–3 months | $0 | Phase 1 |
+| **4.5** | **Tiered offline architecture (Yuka-style) — app stays <60 MB at 250k products** | **4–6 weeks** | **$0** | **Phase 4, triggered when catalog > 50k** |
 | **5** | Full observability, alerting, audit trail, staging | ongoing | $0–$25/mo | Phases 1–4 |
 
 **6 months from today:** a teammate adds a new brand by making a one-line PR; intake runs monthly without you; Dr. Pham's typo fix reaches users within an hour of her saving; FDA recalls hit affected users' phones in under 15 minutes; the app scales from 10k → 250k products without changing the architecture; you can take a week off and nothing breaks.
 
-### Scaling to 250k — what stays, what changes
+### Scaling to 250k — the tiered offline architecture
 
 **What stays the same:**
 - The 3-stage pipeline (clean → enrich → score) — same code, just runs on more data.
@@ -736,16 +924,60 @@ That's it. Tomorrow you already have a config file, which is the scaffolding for
 - The dashboard — adds pagination and deeper filtering, but architecture holds.
 - Dr. Pham's review flow — she authors *reference data* (banned, harmful additives, interactions), not per-product copy. Her work scales independently of product count.
 
-**What must be right before 250k:**
-- **Product blobs fetch from Supabase on-demand.** Flutter ships only reference data locally (~10 MB). Scan/search queries Supabase for the product blob; cached locally for a session.
-- **Aggressive reference-data reverse indexes.** When Dr. Pham changes a harmful_additive at 250k scale, the "affected products" lookup must be indexed (Phase 4). A naive scan at 250k would be minutes, not seconds.
-- **Tiered push-alert routing.** Broadcast-to-all-clients scales to ~1M users on Supabase Realtime's free tier. Beyond that, shard by region or topic.
-- **CDN-cached product blobs.** Add Cloudflare or Supabase's built-in CDN on blob fetches; drops latency from ~200ms to ~30ms at 250k scale.
+**What must be right before 250k — and this is its own phase (Phase 4.5).** See [Phase 4.5](#phase-45--tiered-offline-architecture) below.
 
-**What doesn't need to be built until later:**
-- Full-text search engine (ElasticSearch etc.) — defer until the catalog is big enough that SQL LIKE queries hurt.
+### How comparable apps solve this
+
+The problem "scanning app with millions of products + offline capability" has been solved in the market. Quick competitive scan:
+
+| App | Products | App binary | Offline strategy |
+|---|---|---|---|
+| **Yuka** | ~6M food+cosmetics | 75–126 MB | Top **100k** scanned locally (post-install download, Premium-only); free tier online-only |
+| **Open Food Facts** (smooth-app) | ~3M | — | Top 1k + recently-viewed cached; full 7GB dump never bundled |
+| **MyFitnessPal** | ~14M foods | — | Recently-logged cache only; new search needs network |
+| **Cronometer** | ~15k curated | — | Effectively online-only; long-standing user complaint thread since 2022 |
+| **EWG Healthy Living** | 200k | — | Online-first (not documented offline) |
+
+**Two lessons from this:**
+
+1. **Nobody ships the whole database.** Yuka ships only **1.6%** of their catalog on-device, and they're at 6M products. At 250k we could ship more, but there's no need.
+2. **"No offline scan" is the clinical-trust failure mode.** Cronometer's forum thread is the canonical warning — health-scanner users *really* notice when the app fails at the grocery store. Even a degraded-but-present offline mode (verdict + score only) beats an error message.
+
+### Platform constraints (2025–2026)
+
+- **iOS cellular-download soft ceiling:** apps >200 MB prompt the user before downloading on cellular. Apps >150 MB see meaningful conversion loss.
+- **iOS On-Demand Resources:** individual tags ≤ 512 MB (ideal <64 MB); asset packs up to 8 GB on iOS 18+; total budget per app up to 20 GB.
+- **Android Play Asset Delivery:** install-time packs ≤ 1 GB; on-demand/fast-follow up to 30 GB total.
+- **Practical install-size sweet spot for a consumer health app: under 80 MB.** Beyond that, conversion drops.
+
+### SQLite compression math
+
+- Naive: **250k rows × ~2.5 KB ≈ 625 MB.** Non-shippable.
+- But ~2.5 KB includes ingredients + detailed warnings + evidence — content we explicitly want *online*.
+- **Verdict-only shard** (dsld_id + barcode + verdict + score + score_version + timestamp): ~40 bytes/row.
+  - 50k × 40 bytes = **2 MB raw, ~1 MB zstd**.
+  - 150k × 40 bytes = **6 MB raw, ~3 MB zstd**.
+  - 250k × 40 bytes = **10 MB raw, ~5 MB zstd**.
+- **Verdict + basic safety flags + brand/product name** (~150 bytes/row, what's needed for offline "photo/score/name/safe/not-safe" UI):
+  - 50k × 150 bytes ≈ **7.5 MB raw, ~2–3 MB zstd**.
+  - 250k × 150 bytes ≈ **37.5 MB raw, ~10–15 MB zstd** using sqlite-zstd row-level compression (real-world benchmarks show 6.5x reduction).
+
+**Conclusion:** even at full 250k, a meaningfully-useful offline shard fits in <20 MB compressed. The 575 MB number from my earlier note was wrong because it assumed full detail locally. The right architecture ships minimal rows locally and fetches detail on-demand — exactly what you described.
+
+### What must be right before 250k
+
+- **Product detail blobs always fetch from Supabase on-demand.** Flutter ships only reference data (~10 MB) and a verdict shard (~15 MB compressed). Total ~25 MB for the "offline scorecard."
+- **Tiered local shard strategy** (see Phase 4.5 for details).
+- **Aggressive reference-data reverse indexes.** When Dr. Pham changes a harmful_additive at 250k scale, the "affected products" lookup must be indexed (Phase 4). A naive scan at 250k would be minutes, not seconds.
+- **Snapshot+delta sync** (not Supabase Realtime) for the verdict shard. Nightly compressed SQLite snapshot on R2 + daily delta patches; client fetches via HTTP Range requests.
+- **CDN-cached product blobs.** Cloudflare CDN on Supabase Storage drops latency from ~200ms to ~30ms for the on-demand detail fetch.
+
+### What doesn't need to be built until later
+
+- Full-text search engine (ElasticSearch etc.) — SQLite FTS5 handles up to 10M rows fine with ~30% overhead. Deferred indefinitely.
 - Multi-region deploy — defer until user count warrants it.
 - ML-driven recommendations — defer indefinitely unless product direction requires it.
+- **PowerSync** (a commercial Postgres↔SQLite sync engine many apps use) — adds cost and complexity we don't need. Our snapshot+delta pattern is simpler and fits our weekly pipeline cadence.
 
 ---
 
