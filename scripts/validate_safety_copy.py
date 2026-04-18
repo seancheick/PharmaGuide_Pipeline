@@ -473,6 +473,126 @@ def validate_harmful_additives_file(path: Path, strict: bool) -> ValidationResul
 
 
 # ---------------------------------------------------------------------------
+# synergy_cluster.json per-entry validator
+#
+# Each cluster carries a user-facing synergy_benefit_short (40-160 chars)
+# that describes the stack-level benefit in layperson terms. Bonus /
+# positive framing — NOT a warning. Tone is "these work together" not
+# "missing one is dangerous."
+# ---------------------------------------------------------------------------
+
+
+def validate_synergy_cluster_entry(
+    entry: Dict[str, Any],
+    strict: bool = False,
+) -> ValidationResult:
+    """Apply authored-copy contract to a single synergy_cluster entry."""
+    res = ValidationResult()
+    cid = str(entry.get("id") or entry.get("cluster_id") or "")
+    sbs = entry.get("synergy_benefit_short")
+
+    if sbs is None:
+        msg = f"{cid}: missing synergy_benefit_short"
+        (res.fail if strict else res.warn)(msg)
+        return res
+    if not isinstance(sbs, str):
+        res.fail(f"{cid}: synergy_benefit_short must be string")
+        return res
+    s = sbs.strip()
+    if not (40 <= len(s) <= 160):
+        res.fail(
+            f"{cid}: synergy_benefit_short length {len(s)} outside [40, 160]"
+        )
+    # Bonus messaging — no alarm words, no nocebo vocabulary.
+    banned = re.compile(
+        r"\b(deficiency|dangerous|severe|urgent|stop|avoid|warning|"
+        r"danger|critical|at risk|harm)\b",
+        re.IGNORECASE,
+    )
+    if banned.search(s):
+        res.fail(
+            f"{cid}: synergy_benefit_short contains alarm/nocebo word — "
+            f"synergy is positive/bonus messaging"
+        )
+    # SCREAM check.
+    screaming = re.compile(r"\b(STOP|AVOID|NEVER|ALWAYS|DANGER|WARNING)\b")
+    if screaming.search(s):
+        res.fail(f"{cid}: synergy_benefit_short contains SCREAM word")
+    return res
+
+
+def validate_synergy_cluster_file(path: Path, strict: bool) -> ValidationResult:
+    res = ValidationResult()
+    with path.open() as f:
+        doc = json.load(f)
+    entries = doc.get("synergy_clusters", []) or []
+    for entry in entries:
+        if isinstance(entry, dict):
+            res.extend(validate_synergy_cluster_entry(entry, strict))
+    return res
+
+
+# ---------------------------------------------------------------------------
+# manufacturer_violations.json per-entry validator
+#
+# Each violation carries a brand_trust_summary (40-120 chars) with
+# uniform structure: "[Action type] for [issue]. [User takeaway]."
+# Severity-matched voice: critical → directive ("Stop use"); high →
+# advisory ("Review your lot"); moderate → soft ("Low risk but worth
+# knowing"). Unlike other safety files, alarming language is
+# appropriate here — serious recalls deserve serious voice. The
+# validator enforces shape + uniformity, not tone-softening.
+# ---------------------------------------------------------------------------
+
+
+def validate_manufacturer_violation_entry(
+    entry: Dict[str, Any],
+    strict: bool = False,
+) -> ValidationResult:
+    """Apply authored-copy contract to a manufacturer_violations entry."""
+    res = ValidationResult()
+    vid = str(entry.get("id") or "")
+    bts = entry.get("brand_trust_summary")
+
+    if bts is None:
+        msg = f"{vid}: missing brand_trust_summary"
+        (res.fail if strict else res.warn)(msg)
+        return res
+    if not isinstance(bts, str):
+        res.fail(f"{vid}: brand_trust_summary must be string")
+        return res
+    s = bts.strip()
+    if not (40 <= len(s) <= 120):
+        res.fail(
+            f"{vid}: brand_trust_summary length {len(s)} outside [40, 120]"
+        )
+    if not s.endswith((".", "!")):
+        res.fail(f"{vid}: brand_trust_summary must end with . or !")
+    if ";" in s:
+        res.fail(f"{vid}: brand_trust_summary contains semicolon")
+    # SCREAM check. (Actual directive words like "Stop use" and "Avoid"
+    # are lowercase / sentence-case and clinically appropriate here.)
+    screaming = re.compile(
+        r"\b(STOP|AVOID|NEVER|ALWAYS|DANGER|WARNING|URGENT|CRITICAL|"
+        r"DO NOT|DON'T)\b"
+    )
+    if screaming.search(s):
+        res.fail(f"{vid}: brand_trust_summary contains SCREAM word")
+    return res
+
+
+def validate_manufacturer_violations_file(path: Path, strict: bool) -> ValidationResult:
+    res = ValidationResult()
+    with path.open() as f:
+        doc = json.load(f)
+    entries = doc.get("manufacturer_violations", []) or []
+    for entry in entries:
+        if isinstance(entry, dict):
+            res.extend(validate_manufacturer_violation_entry(entry, strict))
+    return res
+
+
+# ---------------------------------------------------------------------------
 # medication_depletions.json per-entry validator (v5.2)
 #
 # Depletion copy MUST land softer than interaction-rule copy because
@@ -901,6 +1021,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--interaction-rules-only", action="store_true")
     ap.add_argument("--depletions-only", action="store_true")
     ap.add_argument("--harmful-additives-only", action="store_true")
+    ap.add_argument("--synergy-only", action="store_true")
+    ap.add_argument("--violations-only", action="store_true")
     ap.add_argument(
         "--strict",
         action="store_true",
@@ -921,6 +1043,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         or args.interaction_rules_only
         or args.depletions_only
         or args.harmful_additives_only
+        or args.synergy_only
+        or args.violations_only
     )
 
     if not any_single_flag or args.banned_recalled_only:
@@ -945,6 +1069,18 @@ def main(argv: Optional[List[str]] = None) -> int:
         p = DATA_DIR / "medication_depletions.json"
         if p.exists():
             total.extend(validate_depletions_file(p, args.strict))
+            did_run_any = True
+
+    if not any_single_flag or args.synergy_only:
+        p = DATA_DIR / "synergy_cluster.json"
+        if p.exists():
+            total.extend(validate_synergy_cluster_file(p, args.strict))
+            did_run_any = True
+
+    if not any_single_flag or args.violations_only:
+        p = DATA_DIR / "manufacturer_violations.json"
+        if p.exists():
+            total.extend(validate_manufacturer_violations_file(p, args.strict))
             did_run_any = True
 
     # Cross-file canonical_id lowercase invariant.

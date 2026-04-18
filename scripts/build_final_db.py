@@ -1753,6 +1753,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "evidence_tier": tier,
                 "evidence_label": safe_str(sc.get("evidence_label", "Popular combination")),
                 "mechanism": safe_str(sc.get("synergy_mechanism", sc.get("note", "")))[:300],
+                # Path C authored field — layperson synergy framing for Flutter.
+                "benefit_short": safe_str(sc.get("synergy_benefit_short")),
                 "matched_ingredients": matched_names,
                 "match_count": len(matched),
                 "all_adequate": safe_bool(sc.get("all_adequate")),

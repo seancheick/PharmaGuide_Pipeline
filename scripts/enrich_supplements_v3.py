@@ -5677,6 +5677,7 @@ class SupplementEnricherV3:
                         4: "Popular combination",
                     }.get(cluster.get('evidence_tier', 4), "Popular combination"),
                     "synergy_mechanism": cluster.get("synergy_mechanism", ""),
+                    "synergy_benefit_short": cluster.get("synergy_benefit_short", ""),
                     "note": cluster.get("note") or "",
                     "sources": sources,
                     "pmids": pmids,
@@ -8545,6 +8546,10 @@ class SupplementEnricherV3:
                 "match_source": match_source,
                 "matched_manufacturer": mfr_name,
                 "matched_alias": matched_candidate if matched_candidate and matched_candidate != mfr_name else None,
+                # Path C authored field — user-facing brand-trust summary.
+                "brand_trust_summary": violation.get("brand_trust_summary"),
+                "reason": violation.get("reason"),
+                "user_facing_note": violation.get("user_facing_note"),
                 "manufacturer_id": violation.get('manufacturer_id', ''),
                 "manufacturer_family_id": violation.get('manufacturer_family_id', ''),
                 "manufacturer_family_name": violation.get('manufacturer_family_name', ''),
