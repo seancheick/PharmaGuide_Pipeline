@@ -60,11 +60,44 @@ Everything below untangles these four:
 
 ### Scale trajectory
 
-| Stage | Product count | What ships | Storage model |
-|---|---|---|---|
-| **Beta** | 10k popular brands | Hand-curated top brands | Full blob bundle in app OR Supabase on-demand (either works at this size) |
-| **V1** | ~50k top categories | Gummies, capsules, softgels, then softgels, liquids, etc. | Reference data in app; **product blobs fetched on-demand from Supabase** |
-| **Full** | 250k (all DSLD) | Whole DSLD catalog | Reference data in app (<10 MB); all product blobs on Supabase; aggressive caching + prefetch |
+| Stage | Product count | What ships | Storage model | Monetization |
+|---|---|---|---|---|
+| **Beta** (Month 0-6) | 10k popular brands | Hand-curated top brands | Full blob bundle in app OR Supabase on-demand (either works at this size) | **Free for everyone** — acquisition phase, no paywall |
+| **V1 post-beta** (Month 6-12) | ~50k top categories | Gummies, capsules, softgels, then liquids, etc. | Reference data in app; **product blobs fetched on-demand from Supabase** | **Pro tier activates** — free tier becomes limited; Pro unlocks full features |
+| **Full** (Month 12+) | 250k (all DSLD) | Whole DSLD catalog | Reference data in app (<10 MB); all product blobs on Supabase; aggressive caching + prefetch | Pro tier enforced across all Phase 4.5 gates |
+
+### Monetization timeline & free-tier limits
+
+**Month 0–6 (beta):** everything free. No gating. Goal = acquire users, validate product-market fit, learn which features users actually use. Telemetry runs throughout so we have usage data to inform the free/pro line.
+
+**Month 6+ (Pro paywall activates):** the free tier becomes limited. Specific limits (to be calibrated from beta telemetry, but planned scope):
+
+| Feature | Free tier (post-beta) | Pro tier |
+|---|---|---|
+| Daily scans | Limited (e.g., 10/day) | Unlimited |
+| Stack size | Limited (e.g., 5 products) | Unlimited |
+| Stack-level interaction checking | Basic (pairwise, top severity only) | Full (multi-way, all severities, timing guidance) |
+| Offline product DB | Top 50k (Tier 1 shard only) | Top 150k (Tier 2 post-install pack) |
+| Detail blob cache | ~50 products rolling window | Unlimited |
+| FDA CRITICAL push alerts | **Always on (never gated)** | Always on |
+| FDA HIGH/CATALOG push alerts | Not included | Included |
+| Alert history / export | Current session only | Full history, CSV/PDF export |
+| Depletion tracking | View only | Monitoring tips, food-source suggestions |
+| Family sharing | Single user | Up to 5 family members |
+
+**What gates get enforced:** per-feature counters on the client, validated server-side on sensitive calls (detail blob fetches, Tier 2 pack download signing).
+
+**What never gates:** CRITICAL safety alerts (non-negotiable), basic verdict/score/safe-not-safe (the core trust signal).
+
+### Infrastructure consequences
+
+The paywall activation in Month 6 means we need to build two things during beta that **don't gate anything yet** but capture the data and enforce the plumbing:
+
+1. **Usage telemetry from Phase 1 onwards.** Track: scans/day/user, stack size, cached-blob count, feature-area activity. Stored in Supabase `usage_events` table. Enables calibrating the free-tier limits from real data before Month 6, not from guessing.
+
+2. **Tier-aware client scaffolding.** Flutter checks `currentUser.tier` before every gate-able action, even during beta when `tier` is always 'pro'. This way, flipping the paywall switch at Month 6 is a one-line change, not a refactor.
+
+Both are small additions to existing phase work, not their own phases. Documented here so we don't forget.
 
 **Confirmed architecture decision:** at V1+, Flutter **does not** ship with every product blob in its offline bundle. Only the reference-data layer (banned, harmful additives, interactions, depletions, synergy clusters, violations) stays on-device. Product detail blobs fetch from Supabase on-demand when a user scans or searches. This keeps the app install size flat as the catalog grows from 10k → 250k.
 
