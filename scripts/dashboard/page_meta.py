@@ -98,6 +98,20 @@ PAGE_META: dict[str, dict[str, Any]] = {
             "Use this for run-to-run comparison within the current pipeline activity timeline.",
         ],
     },
+    "clinical-copy": {
+        "page_title": "Clinical Copy Coverage",
+        "page_summary": "Dr. Pham-authored safety / bonus copy across six data files. Shows per-file field coverage, Flutter asset sync, and staleness alerts. Spot missing authored fields the moment they appear.",
+        "data_planes": ["Data Source (scripts/data/)", "Flutter Asset (reference_data/)"],
+        "source_paths": ["data/banned_recalled_ingredients.json", "data/medication_depletions.json", "data/ingredient_interaction_rules.json", "data/harmful_additives.json", "data/synergy_cluster.json", "data/manufacturer_violations.json"],
+        "freshness_fields": [],
+        "mixed_plane_warning": "",
+        "related_views": ["Product Inspector", "Data Quality"],
+        "usage_notes": [
+            "Run the validator command shown at the bottom after every authoring change.",
+            "Flutter sync stale means the app's offline cache won't see the latest authored copy — do a sync before release.",
+            "Use the spot-check picker for random sanity review before shipping a pipeline build.",
+        ],
+    },
     "intelligence": {
         "page_title": "Intelligence",
         "page_summary": "Explore product, ingredient, and brand intelligence derived from the current release snapshot and detail blobs.",

@@ -174,21 +174,81 @@ def render_drill_down(dsld_id, data):
     else:
         st.caption("Ingredient details unavailable without detail blob.")
 
-    # 6. Warnings
+    # 6. Warnings — prefer Path C authored copy, fall back to derived detail.
     st.write("### ⚠️ Warnings")
     if blob and blob.get("warnings"):
         for w in blob["warnings"]:
             severity = w.get("severity", "info").lower()
-            title = w.get("title", w.get("type", "Warning"))
-            detail = w.get("detail", "")
+            wtype = w.get("type", "")
+            title = w.get("title", wtype or "Warning")
+
+            # Pick the best user-facing string the authored schema offers;
+            # if none exists we fall back to the legacy `detail` field.
+            one_liner = (
+                w.get("safety_warning_one_liner")
+                or w.get("safety_summary_one_liner")
+                or w.get("alert_headline")
+                or w.get("brand_trust_summary")
+            )
+            body = (
+                w.get("safety_warning")
+                or w.get("safety_summary")
+                or w.get("alert_body")
+                or w.get("detail", "")
+            )
+            info_note = w.get("informational_note")
+            display_mode = w.get("display_mode_default")
+            ban_ctx = w.get("ban_context")
+
+            header = f"**{one_liner or title}**"
+            if ban_ctx:
+                header = f"{header}  `ban_context={ban_ctx}`"
+            if display_mode:
+                header = f"{header}  `display={display_mode}`"
+
             if severity in ("high", "critical", "avoid", "contraindicated"):
-                st.error(f"**{title}**: {detail}")
+                st.error(f"{header}\n\n{body}")
             elif severity in ("medium", "moderate", "caution"):
-                st.warning(f"**{title}**: {detail}")
+                st.warning(f"{header}\n\n{body}")
             else:
-                st.info(f"**{title}**: {detail}")
+                st.info(f"{header}\n\n{body}")
+            if info_note:
+                st.caption(f"*Informational note (no profile match):* {info_note}")
     else:
         st.caption("No warnings for this product.")
+
+    # 6b. Synergy — surface the layperson benefit_short next to the mechanism.
+    sd = (blob or {}).get("synergy_detail") or {}
+    clusters = sd.get("clusters") or sd.get("synergy_display") or []
+    if clusters:
+        st.write("### ✨ Synergy")
+        for c in clusters:
+            name = c.get("name") or c.get("id") or ""
+            benefit = c.get("benefit_short")
+            mech = c.get("mechanism") or ""
+            tier = c.get("evidence_tier")
+            label = c.get("evidence_label") or ""
+            st.success(
+                f"**{name}** &nbsp; `tier={tier}` &nbsp; {label}\n\n"
+                f"{benefit or mech}"
+            )
+
+    # 6c. Manufacturer violations — show brand_trust_summary per hit.
+    md = (blob or {}).get("manufacturer_detail") or {}
+    vio = (md.get("violations") or {}).get("violations") or []
+    if vio:
+        st.write("### 🏢 Manufacturer Violations")
+        for v in vio:
+            sev = (v.get("severity_level") or "").lower()
+            summary = v.get("brand_trust_summary") or v.get("reason") or ""
+            vid = v.get("violation_id") or ""
+            header = f"**{vid}** · severity=`{sev}` · {v.get('violation_type', '')}"
+            if sev == "critical":
+                st.error(f"{header}\n\n{summary}")
+            elif sev == "high":
+                st.warning(f"{header}\n\n{summary}")
+            else:
+                st.info(f"{header}\n\n{summary}")
 
     # 7. Score Trace
     with st.expander("🧭 Audit Evidence"):

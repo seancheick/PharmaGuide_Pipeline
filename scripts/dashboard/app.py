@@ -34,6 +34,7 @@ from scripts.dashboard.views import (
     render_audit_section_c,
     render_audit_section_d,
     render_audit_caers,
+    render_safety_copy,
 )
 
 # --- Page Setup ---
@@ -169,6 +170,8 @@ def _render_current_view() -> None:
         render_audit_section_d(data)
     elif view == "CAERS Audit":
         render_audit_caers(data)
+    elif view == "Clinical Copy":
+        render_safety_copy(data)
     elif view == "Observability":
         render_observability(data)
     elif view == "Release Diff":
