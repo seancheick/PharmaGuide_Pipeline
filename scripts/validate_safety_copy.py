@@ -131,16 +131,10 @@ def validate_banned_recalled_entry(
     sw = entry.get("safety_warning")
     swol = entry.get("safety_warning_one_liner")
 
-    if canonical_id and canonical_id != canonical_id.lower():
-        # Path C §Footgun C — lowercase invariant for canonical_id.
-        # Banned/recalled uses UPPER historically across 143 entries.
-        # Changing the casing would cascade into Flutter joins and the
-        # cross-references in ingredient_interaction_rules.json's
-        # subject_ref blocks, so this stays a WARN even under strict
-        # mode — authoring work shouldn't be blocked on migration debt
-        # that belongs to a separate cleanup pass. Strict mode on the
-        # NEWLY authored copy fields is still enforced below.
-        res.warn(f"{canonical_id}: canonical_id is not lowercase")
+    # Uppercase canonical_id is the intentional convention here —
+    # prefixes (BANNED_, ADULTERANT_, RECALLED_, RISK_, SCHED_, WADA_,
+    # SUBSTANCE_) self-document the source DB / classification.
+    # See Path B decision in SAFETY_DATA_PATH_C_PLAN.md.
 
     # ban_context is required in strict mode, optional during authoring.
     if ban_context is None:
@@ -320,19 +314,13 @@ def validate_interaction_rule(
     res = ValidationResult()
     rule_id = str(rule.get("id") or "")
 
-    subject_ref = rule.get("subject_ref") or {}
-    cid = str(subject_ref.get("canonical_id") or "")
-    if cid and cid != cid.lower() and (subject_ref.get("db") or "") not in (
-        "banned_recalled_ingredients",
-        "harmful_additives",
-        "other_ingredients",
-    ):
-        # Only enforce lowercase on DBs that have converted to lowercase
-        # IDs. Legacy uppercase prefixes (BANNED_, ADD_, NHA_, RISK_) stay
-        # WARN-only because changing casing would cascade into
-        # cross-file references. See Footgun C in the handoff doc.
-        msg = f"{rule_id}: subject canonical_id is not lowercase ({cid})"
-        res.warn(msg)
+    # Uppercase namespace prefixes (BANNED_, ADD_, NHA_, OI_, RISK_,
+    # SCHED_, WADA_, RULE_, ADULTERANT_, RECALLED_, SUBSTANCE_) are the
+    # intentional convention — they self-document which source DB an ID
+    # belongs to. No lowercase enforcement. See the namespace-prefix
+    # decision notes in SAFETY_DATA_PATH_C_PLAN.md (Path B: retire the
+    # earlier "migration debt" framing).
+    _ = rule.get("subject_ref") or {}  # subject_ref kept available for future contract checks
 
     for sub in rule.get("condition_rules") or []:
         if isinstance(sub, dict):
@@ -375,6 +363,112 @@ def validate_banned_recalled_file(path: Path, strict: bool) -> ValidationResult:
             f"'recalled_ingredients'"
         )
         (res.fail if strict else res.warn)(msg)
+    return res
+
+
+# ---------------------------------------------------------------------------
+# harmful_additives.json per-entry validator (v5.1+)
+#
+# Each entry carries two user-facing copy fields:
+#   - safety_summary (50–200 chars) — "why this lost points" body copy
+#   - safety_summary_one_liner (20–80 chars) — banner / card summary
+# Same tone contract as banned_recalled safety_warning (no SCREAM, no
+# derivation openers, no catastrophizing). Severity-appropriate voice:
+# high → "linked to / associated with X — worth avoiding"; moderate →
+# "may / can affect X — worth noting"; low → "worth moderating / low
+# overall concern".
+# ---------------------------------------------------------------------------
+
+
+def validate_harmful_additive_entry(
+    entry: Dict[str, Any],
+    strict: bool = False,
+) -> ValidationResult:
+    """Apply authored-copy contract to a single harmful_additive entry."""
+    res = ValidationResult()
+    canonical_id = str(entry.get("id") or entry.get("canonical_id") or "")
+    std_name = str(entry.get("standard_name") or "").strip()
+    ss = entry.get("safety_summary")
+    ssol = entry.get("safety_summary_one_liner")
+
+    # safety_summary contract.
+    if ss is None:
+        msg = f"{canonical_id}: missing safety_summary"
+        (res.fail if strict else res.warn)(msg)
+    elif not isinstance(ss, str):
+        res.fail(
+            f"{canonical_id}: safety_summary must be string, got "
+            f"{type(ss).__name__}"
+        )
+    else:
+        s = ss.strip()
+        if std_name and s.startswith(f"{std_name} is "):
+            res.fail(
+                f"{canonical_id}: safety_summary starts with derivation "
+                f"template '{std_name} is ...'"
+            )
+        if BAD_OPENERS.match(s):
+            res.fail(
+                f"{canonical_id}: safety_summary uses encyclopedic opener "
+                f"('is a prescription/synthetic/FDA ...')"
+            )
+        if not (50 <= len(s) <= 200):
+            res.fail(
+                f"{canonical_id}: safety_summary length {len(s)} outside [50, 200]"
+            )
+        # SCREAM words blocked — same set as interaction-rule headlines.
+        screaming = re.compile(
+            r"\b(STOP|AVOID|NEVER|ALWAYS|DANGER|WARNING|URGENT|CRITICAL|"
+            r"DO NOT|DON'T)\b"
+        )
+        if screaming.search(s):
+            res.fail(
+                f"{canonical_id}: safety_summary contains SCREAM word "
+                f"(STOP/AVOID/NEVER/ALWAYS/DANGER/WARNING/URGENT/CRITICAL/"
+                f"DO NOT/DON'T)"
+            )
+
+    # safety_summary_one_liner contract.
+    if ssol is None:
+        msg = f"{canonical_id}: missing safety_summary_one_liner"
+        (res.fail if strict else res.warn)(msg)
+    elif not isinstance(ssol, str):
+        res.fail(
+            f"{canonical_id}: safety_summary_one_liner must be string, got "
+            f"{type(ssol).__name__}"
+        )
+    else:
+        s = ssol.strip()
+        if std_name and s.startswith(f"{std_name} is "):
+            res.fail(
+                f"{canonical_id}: safety_summary_one_liner starts with "
+                f"derivation template"
+            )
+        if not (20 <= len(s) <= 80):
+            res.fail(
+                f"{canonical_id}: safety_summary_one_liner length {len(s)} "
+                f"outside [20, 80]"
+            )
+        if not s.endswith((".", "!")):
+            res.fail(
+                f"{canonical_id}: safety_summary_one_liner must end with . or !"
+            )
+        if ";" in s:
+            res.fail(
+                f"{canonical_id}: safety_summary_one_liner contains semicolon"
+            )
+
+    return res
+
+
+def validate_harmful_additives_file(path: Path, strict: bool) -> ValidationResult:
+    res = ValidationResult()
+    with path.open() as f:
+        doc = json.load(f)
+    entries = doc.get("harmful_additives", []) or []
+    for entry in entries:
+        if isinstance(entry, dict):
+            res.extend(validate_harmful_additive_entry(entry, strict))
     return res
 
 
@@ -772,6 +866,13 @@ BUNDLED_CANONICAL_ID_PATHS: List[Tuple[str, str, str]] = [
 
 
 def validate_canonical_id_lowercase(strict: bool) -> ValidationResult:
+    """Canonical-id invariants. Uppercase prefixes are the intentional
+    convention across the data DBs — self-documenting namespaces
+    (BANNED_, ADD_, NHA_, OI_, RISK_, SCHED_, WADA_, ADULTERANT_,
+    RECALLED_, SUBSTANCE_). Path B decision in
+    SAFETY_DATA_PATH_C_PLAN.md retires the earlier lowercase-migration
+    framing. Only whitespace is still invalid.
+    """
     res = ValidationResult()
     for fname, list_key, id_field in BUNDLED_CANONICAL_ID_PATHS:
         p = DATA_DIR / fname
@@ -784,11 +885,7 @@ def validate_canonical_id_lowercase(strict: bool) -> ValidationResult:
             if not isinstance(e, dict):
                 continue
             cid = str(e.get(id_field) or "")
-            if cid and cid != cid.lower():
-                msg = f"{fname}: {id_field}={cid!r} is not lowercase"
-                (res.fail if strict else res.warn)(msg)
-            # whitespace check
-            if cid and cid != cid.strip() or (cid and " " in cid):
+            if cid and (cid != cid.strip() or " " in cid):
                 res.fail(f"{fname}: {id_field}={cid!r} contains whitespace")
     return res
 
@@ -803,6 +900,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--banned-recalled-only", action="store_true")
     ap.add_argument("--interaction-rules-only", action="store_true")
     ap.add_argument("--depletions-only", action="store_true")
+    ap.add_argument("--harmful-additives-only", action="store_true")
     ap.add_argument(
         "--strict",
         action="store_true",
@@ -822,6 +920,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         args.banned_recalled_only
         or args.interaction_rules_only
         or args.depletions_only
+        or args.harmful_additives_only
     )
 
     if not any_single_flag or args.banned_recalled_only:
@@ -834,6 +933,12 @@ def main(argv: Optional[List[str]] = None) -> int:
         p = DATA_DIR / "ingredient_interaction_rules.json"
         if p.exists():
             total.extend(validate_interaction_rules_file(p, args.strict))
+            did_run_any = True
+
+    if not any_single_flag or args.harmful_additives_only:
+        p = DATA_DIR / "harmful_additives.json"
+        if p.exists():
+            total.extend(validate_harmful_additives_file(p, args.strict))
             did_run_any = True
 
     if not any_single_flag or args.depletions_only:

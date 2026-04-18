@@ -1424,6 +1424,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "category": safe_str(h.get("category")),
             "source": "harmful_additives_db",
             "identifiers": extract_identifiers(h_ref),
+            # Path C authored fields (user-facing calm copy; 115 entries).
+            "safety_summary": h_ref.get("safety_summary"),
+            "safety_summary_one_liner": h_ref.get("safety_summary_one_liner"),
             # Harmful additives are substance-level hazards — always show.
             "display_mode_default": "critical",
         })
