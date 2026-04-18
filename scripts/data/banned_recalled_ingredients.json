@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
-    "schema_version": "5.2.0",
+    "schema_version": "5.3.0",
     "last_updated": "2026-04-17",
     "total_entries": 143,
     "data_source_metadata": {
@@ -9563,7 +9563,7 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
+      "ban_context": "contamination_recall",
       "safety_warning": "Products from this brand faced FDA enforcement for serious manufacturing violations — linked to Salmonella contamination and sanitation issues. Stop and consult a doctor if symptoms develop.",
       "safety_warning_one_liner": "Recalled for Salmonella and manufacturing issues. Stop."
     },
@@ -9778,7 +9778,7 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
+      "ban_context": "contamination_recall",
       "safety_warning": "Hydroxycut was recalled in 2009 after being linked to 23 reports of severe liver injury and one death. Stop any remaining product and consult a doctor if symptoms develop.",
       "safety_warning_one_liner": "Recalled product linked to liver injury. Stop."
     },
@@ -9906,7 +9906,7 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
+      "ban_context": "contamination_recall",
       "safety_warning": "Jack3d was recalled after its DMAA content was linked to two deaths in US military personnel. Stop any remaining product and consult a doctor.",
       "safety_warning_one_liner": "Recalled DMAA product linked to deaths. Stop."
     },
@@ -10001,7 +10001,7 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
+      "ban_context": "contamination_recall",
       "safety_warning": "Live it Up Super Greens was recalled after tests flagged potential Salmonella contamination. Stop any remaining product and consult a doctor if symptoms develop.",
       "safety_warning_one_liner": "Recalled for potential Salmonella. Stop."
     },
@@ -10333,8 +10333,8 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
-      "safety_warning": "OxyElite Pro was linked to a 2013 outbreak of acute liver injury with 97 cases, three liver transplants, and one death. Stop any remaining product and consult a doctor.",
+      "ban_context": "contamination_recall",
+      "safety_warning": "OxyElite Pro was recalled in 2013 after being linked to an acute liver injury outbreak with 97 cases, three liver transplants, and one death. Stop any remaining product and consult a doctor.",
       "safety_warning_one_liner": "Recalled product linked to liver transplants. Stop."
     },
     {
@@ -10423,7 +10423,7 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
+      "ban_context": "contamination_recall",
       "safety_warning": "Purity Products My Bladder was recalled after tests found E. coli contamination, a concern for urinary tract and kidney infections. Stop any remaining product and consult a doctor if symptoms develop.",
       "safety_warning_one_liner": "Recalled for E. coli contamination. Stop."
     },
@@ -10517,7 +10517,7 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
+      "ban_context": "contamination_recall",
       "safety_warning": "These nasal sprays were recalled after tests flagged yeast, mold, and Achromobacter — associated with respiratory infection risk, particularly in immunocompromised users. Stop and consult a doctor.",
       "safety_warning_one_liner": "Recalled for microbial contamination. Stop."
     },
@@ -10618,7 +10618,7 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
+      "ban_context": "contamination_recall",
       "safety_warning": "Rheumacare Capsules were recalled after tests found extreme lead levels — thousands of times above any safe threshold. Stop any remaining product and consult a doctor to check blood lead.",
       "safety_warning_one_liner": "Recalled for extreme lead levels. Stop and test."
     },
@@ -17243,7 +17243,7 @@
       "cui_status": "no_single_umls_concept",
       "cui_note": "Product recall record is intentionally null-CUI because a single UMLS ingredient or product concept would misrepresent this recalled branded product/formulation.",
       "external_ids": {},
-      "ban_context": "substance",
+      "ban_context": "contamination_recall",
       "safety_warning": "Rosabella Moringa capsules were recalled after tests flagged potential Salmonella contamination. Stop any remaining product and consult a doctor if symptoms develop.",
       "safety_warning_one_liner": "Recalled for potential Salmonella. Stop."
     },

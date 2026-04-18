@@ -47,7 +47,17 @@ VALID_BAN_CONTEXTS = {
     "adulterant_in_supplements",
     "watchlist",
     "export_restricted",
+    "contamination_recall",
 }
+
+# contamination_recall entries describe a branded-product recall (not a
+# substance-level ban). Copy must mention an administrative action, not
+# just a chemistry concern. See ADR_contamination_recall_ban_context.md.
+CONTAMINATION_RECALL_VERBS = re.compile(
+    r"\b(recalled|withdrawn|removed from (?:market|circulation|sale)|"
+    r"FDA enforcement|FDA action)\b",
+    re.IGNORECASE,
+)
 
 # Opener patterns the old derivation template produced. If authored copy
 # starts with these, the author likely pasted a derived string unchanged.
@@ -175,6 +185,13 @@ def validate_banned_recalled_entry(
                     f"{canonical_id}: adulterant_in_supplements entry must contain "
                     f"'in supplement/product/dietary' clinical guardrail in "
                     f"safety_warning — users on prescribed versions must not panic"
+                )
+        if ban_context == "contamination_recall":
+            if not CONTAMINATION_RECALL_VERBS.search(sw_s):
+                res.fail(
+                    f"{canonical_id}: contamination_recall entry must describe a "
+                    f"regulatory action in safety_warning — use 'recalled', "
+                    f"'withdrawn', 'removed from market', or 'FDA enforcement'"
                 )
 
     # safety_warning_one_liner contract.
