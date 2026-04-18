@@ -23,7 +23,10 @@
       "alert_headline": "authored string per sub-rule, 20-60 chars",
       "alert_body": "authored string per sub-rule, 60-200 chars",
       "informational_note": "authored string per sub-rule, 40-120 chars (required when severity in {avoid, contraindicated})"
-    }
+    },
+    "reviewed_by": "Lead Clinician (PharmaGuide)",
+    "reviewed_date": "2026-04-18",
+    "review_round": "full_authoring_pass_v1"
   },
   "interaction_rules": [
     {
@@ -42,7 +45,10 @@
           "sources": [
             "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
             "https://www.fda.gov/food/hfp-constituent-updates/fda-launches-new-directory-ingredients-used-products-marketed"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "7-Keto DHEA has hormone-active properties and is not established as safe in pregnancy. If you are pregnant, talk to your obstetrician before using any product containing it.",
+          "informational_note": "7-Keto DHEA is hormonally active — relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -76,7 +82,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/ephedra",
             "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances"
-          ]
+          ],
+          "alert_headline": "Do not use during pregnancy",
+          "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. If you are pregnant, do not use ephedra-containing products.",
+          "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -88,7 +97,10 @@
           "action": "Avoid use with antihypertensives.",
           "sources": [
             "https://www.nccih.nih.gov/health/ephedra"
-          ]
+          ],
+          "alert_headline": "May work against blood-pressure medication",
+          "alert_body": "Ephedra's stimulant effects can counteract blood-pressure-lowering therapy. If you take antihypertensive medication, talk to your prescriber before any product containing ephedra.",
+          "informational_note": "Ephedra raises blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "dose_thresholds": [],
@@ -120,7 +132,10 @@
           "action": "Avoid bitter orange / synephrine supplements. Commonly found in weight-loss and pre-workout products as an ephedra substitute.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23397375/"
-          ]
+          ],
+          "alert_headline": "May raise blood pressure",
+          "alert_body": "Bitter orange (synephrine) has ephedrine-like effects. If you have high blood pressure, talk to your clinician before using it, especially combined with caffeine.",
+          "informational_note": "Bitter orange has stimulant effects relevant to people with high blood pressure."
         }
       ],
       "drug_class_rules": [
@@ -132,7 +147,10 @@
           "action": "Avoid combination with antihypertensive medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23397375/"
-          ]
+          ],
+          "alert_headline": "May reduce blood-pressure medication effect",
+          "alert_body": "Bitter orange's stimulant effects can work against blood-pressure-lowering drugs. If you take antihypertensive medication, talk to your prescriber before using it.",
+          "informational_note": "Bitter orange is a stimulant — relevant to people on antihypertensive medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -155,7 +173,10 @@
           "action": "Do not use in hypertension or cardiovascular risk settings.",
           "sources": [
             "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
-          ]
+          ],
+          "alert_headline": "Not recommended with high blood pressure",
+          "alert_body": "Yohimbe raises blood pressure and heart rate. If you have high blood pressure or cardiovascular risk, talk to your clinician and do not use yohimbe products.",
+          "informational_note": "Yohimbe is a stimulant relevant to people with high blood pressure or heart concerns."
         },
         {
           "condition_id": "pregnancy",
@@ -165,7 +186,10 @@
           "action": "Do not use during pregnancy.",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "Do not use during pregnancy",
+          "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
+          "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -177,7 +201,10 @@
           "action": "Avoid combination with antihypertensive medications.",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "May reduce blood-pressure medication effect",
+          "alert_body": "Yohimbe's stimulant activity can work against blood-pressure-lowering drugs. If you take antihypertensive medication, talk to your prescriber before using it.",
+          "informational_note": "Yohimbe is a stimulant — relevant to people on antihypertensive medications."
         }
       ],
       "pregnancy_lactation": {
@@ -233,7 +260,10 @@
           "action": "Avoid oral aloe supplements during pregnancy.",
           "sources": [
             "https://www.nccih.nih.gov/health/aloe-vera"
-          ]
+          ],
+          "alert_headline": "Oral aloe not recommended in pregnancy",
+          "alert_body": "Oral aloe products (gel, latex, whole-leaf) raise safety concerns in pregnancy. If you are pregnant, talk to your obstetrician before using any oral aloe supplement.",
+          "informational_note": "Oral aloe has safety concerns relevant to anyone pregnant."
         },
         {
           "condition_id": "diabetes",
@@ -335,7 +365,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know",
             "https://pubmed.ncbi.nlm.nih.gov/26312811/"
-          ]
+          ],
+          "alert_headline": "May lower blood sugar in diabetes",
+          "alert_body": "Berberine lowers blood sugar with effects comparable to metformin. If you have diabetes, talk to your prescriber before adding berberine and monitor glucose closely.",
+          "informational_note": "Berberine lowers blood sugar — relevant to people with diabetes."
         },
         {
           "condition_id": "high_cholesterol",
@@ -358,7 +391,10 @@
           "action": "Avoid unsupervised co-administration. Requires clinician-guided glucose monitoring and potential dose adjustment.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
-          ]
+          ],
+          "alert_headline": "May boost your diabetes medication",
+          "alert_body": "Berberine lowers blood sugar with effects comparable to metformin. If you take a diabetes medication, monitor glucose closely and talk to your prescriber before adding berberine.",
+          "informational_note": "Berberine has blood-sugar-lowering effects relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "statins",
@@ -380,7 +416,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
             "https://pubmed.ncbi.nlm.nih.gov/26312811/"
-          ]
+          ],
+          "alert_headline": "Potential interaction with MAOI antidepressants",
+          "alert_body": "Berberine has shown MAO-inhibiting activity in laboratory studies. If you take an MAOI antidepressant, talk to your prescriber before adding berberine.",
+          "informational_note": "Berberine has theoretical MAO-inhibiting activity relevant to people on MAOI antidepressants."
         }
       ],
       "pregnancy_lactation": {
@@ -461,7 +500,10 @@
           "action": "Avoid use during pregnancy unless explicitly directed by obstetric care team.",
           "sources": [
             "https://www.nccih.nih.gov/health/black-cohosh"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Black cohosh may have uterotonic and hormone-active effects. If you are pregnant, do not use black cohosh unless specifically directed by your obstetrician.",
+          "informational_note": "Black cohosh is hormone-active — relevant to anyone pregnant or planning pregnancy."
         },
         {
           "condition_id": "liver_disease",
@@ -472,7 +514,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24657312/",
             "https://pubmed.ncbi.nlm.nih.gov/17928951/"
-          ]
+          ],
+          "alert_headline": "Not recommended with liver disease",
+          "alert_body": "Black cohosh has been linked to rare idiosyncratic liver injury. If you have liver disease, talk to your clinician before using it, and monitor liver enzymes.",
+          "informational_note": "Black cohosh has hepatic safety signals relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -650,7 +695,10 @@
           "action": "Avoid during pregnancy unless specifically directed by obstetric clinician.",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Dong quai has traditional uterine and hormone-active effects with no established pregnancy safety. If you are pregnant, talk to your obstetrician before any use.",
+          "informational_note": "Dong quai is hormone-active — relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -752,7 +800,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/feverfew",
             "https://pubmed.ncbi.nlm.nih.gov/25630523/"
-          ]
+          ],
+          "alert_headline": "Do not use during pregnancy",
+          "alert_body": "Feverfew inhibits platelets and shows uterine-stimulating activity. If you are pregnant, do not use feverfew — Cochrane and ACOG both advise against it.",
+          "informational_note": "Feverfew has uterotonic activity relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -847,7 +898,10 @@
           "action": "Stop before elective surgery unless clinician directs otherwise.",
           "sources": [
             "https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/some-medication-supplement-interactions-can-be-serious"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Garlic can reduce platelet activity and raise bleeding risk around procedures. If you have surgery scheduled, talk to your surgeon about pausing garlic supplements.",
+          "informational_note": "Garlic affects platelet function — relevant to anyone preparing for surgery."
         },
         {
           "condition_id": "hypertension",
@@ -1013,7 +1067,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15764334/",
             "https://www.nccih.nih.gov/health/ginkgo"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Ginkgo reduces platelet function and has been reported in rare spontaneous bleeding events. If you have a bleeding disorder, talk to your clinician before use.",
+          "informational_note": "Ginkgo affects platelet function — relevant to people with bleeding disorders."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -1023,7 +1080,10 @@
           "action": "Discontinue ginkgo at least 14 days before surgery.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11302778/"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Ginkgo increases bleeding risk around procedures. If you have surgery scheduled, discuss pausing ginkgo at least two weeks beforehand with your surgeon.",
+          "informational_note": "Ginkgo affects platelet function — relevant to anyone preparing for surgery."
         }
       ],
       "drug_class_rules": [
@@ -1154,7 +1214,10 @@
           "action": "Avoid goldenseal during pregnancy.",
           "sources": [
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Goldenseal contains berberine and raises newborn jaundice concerns. If you are pregnant, talk to your obstetrician and do not use goldenseal.",
+          "informational_note": "Goldenseal has neonatal safety concerns relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -1198,7 +1261,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32140423/",
             "https://pubmed.ncbi.nlm.nih.gov/36178169/"
-          ]
+          ],
+          "alert_headline": "Not recommended with liver disease",
+          "alert_body": "High-dose green tea extract has been linked to liver injury. If you have liver disease, talk to your clinician before using concentrated EGCG supplements.",
+          "informational_note": "Concentrated green tea extract has hepatic safety signals relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [
@@ -1475,7 +1541,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/licorice-root"
           ],
-          "form_exclusion": "DGL (deglycyrrhizinated licorice)"
+          "form_exclusion": "DGL (deglycyrrhizinated licorice)",
+          "alert_headline": "May raise blood pressure",
+          "alert_body": "Whole licorice (with glycyrrhizin) can raise blood pressure through sodium retention. If you have high blood pressure, talk to your clinician; DGL licorice does not carry this concern.",
+          "informational_note": "Licorice with glycyrrhizin raises blood pressure — relevant to people with hypertension."
         }
       ],
       "drug_class_rules": [
@@ -1542,7 +1611,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25747286/",
             "https://www.kidney.org/atoz/content/potassium"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "In advanced kidney disease (eGFR below 30), supplemental magnesium can build up to risky levels. If you have CKD, talk to your nephrologist before adding magnesium.",
+          "informational_note": "Magnesium excretion depends on kidney function — relevant to people with kidney disease."
         }
       ],
       "drug_class_rules": [
@@ -1598,7 +1670,10 @@
           "action": "Avoid potassium supplements with kidney disease unless directed by nephrologist.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "Supplemental potassium can accumulate to dangerous levels in kidney disease. If you have CKD, talk to your nephrologist before using potassium supplements.",
+          "informational_note": "Potassium excretion depends on kidney function — relevant to people with kidney disease."
         },
         {
           "condition_id": "heart_disease",
@@ -1678,7 +1753,10 @@
           "action": "Avoid St. John’s wort during pregnancy unless specialist-supervised.",
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "St John's Wort has been flagged for possible birth-defect risk and major drug interactions. If you are pregnant, talk to a specialist before any use.",
+          "informational_note": "St John's Wort has pregnancy safety concerns relevant to anyone pregnant or planning pregnancy."
         },
         {
           "condition_id": "hypertension",
@@ -1702,7 +1780,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort",
             "https://pubmed.ncbi.nlm.nih.gov/24472406/"
-          ]
+          ],
+          "alert_headline": "May reduce blood-pressure medication effect",
+          "alert_body": "St John's Wort speeds up drug metabolism via CYP3A4 and can lower levels of blood-pressure drugs. If you take antihypertensive medication, talk to your prescriber before use.",
+          "informational_note": "St John's Wort induces CYP3A4 — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "anticoagulants",
@@ -1713,7 +1794,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort",
             "https://pubmed.ncbi.nlm.nih.gov/24472406/"
-          ]
+          ],
+          "alert_headline": "Can weaken blood thinners",
+          "alert_body": "St John's Wort reduces warfarin levels and can destabilize INR. If you take warfarin or another anticoagulant, talk to your prescriber before using it.",
+          "informational_note": "St John's Wort induces CYP3A4 — relevant to people on warfarin or other anticoagulants."
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -1723,7 +1807,10 @@
           "action": "Do not use with immunosuppressants. Risk of organ transplant rejection.",
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
-          ]
+          ],
+          "alert_headline": "Do not combine with transplant medications",
+          "alert_body": "St John's Wort lowers blood levels of immunosuppressants like cyclosporine and tacrolimus, risking transplant rejection. If you take these medications, do not combine.",
+          "informational_note": "St John's Wort strongly affects drug metabolism — relevant to people on transplant or immunosuppressant medications."
         },
         {
           "drug_class_id": "statins",
@@ -1754,7 +1841,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort",
             "https://pubmed.ncbi.nlm.nih.gov/17868285/"
-          ]
+          ],
+          "alert_headline": "Do not combine with SSRIs or SNRIs",
+          "alert_body": "St John's Wort raises serotonin activity. If you take an SSRI or SNRI antidepressant, do not combine — the combination can cause serotonin syndrome.",
+          "informational_note": "St John's Wort raises serotonin — relevant to people on SSRI or SNRI antidepressants."
         },
         {
           "drug_class_id": "maois",
@@ -1764,7 +1854,10 @@
           "action": "Do NOT combine St John's Wort with MAOIs. Life-threatening interaction.",
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
-          ]
+          ],
+          "alert_headline": "Do not combine with MAOI antidepressants",
+          "alert_body": "St John's Wort has weak MAOI activity. If you take an MAOI antidepressant, do not combine — the combination risks serotonin syndrome and hypertensive crisis.",
+          "informational_note": "St John's Wort has MAOI-like activity — relevant to people on MAOI antidepressants."
         }
       ],
       "dose_thresholds": [],
@@ -2077,7 +2170,10 @@
           "action": "Coordinate supplement use with surgeon and stop unless explicitly instructed to continue.",
           "sources": [
             "https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/some-medication-supplement-interactions-can-be-serious"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Vitamin K affects coagulation and may complicate perioperative anticoagulation plans. If you have surgery scheduled, talk to your surgeon about supplement timing.",
+          "informational_note": "Vitamin K affects clotting — relevant to anyone preparing for surgery."
         }
       ],
       "drug_class_rules": [
@@ -2089,7 +2185,10 @@
           "action": "Do not start/stop without clinician-guided anticoagulation monitoring.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Can change how warfarin works",
+          "alert_body": "Vitamin K can change INR on warfarin. If you take warfarin, talk to your prescriber before starting or stopping any vitamin K supplement.",
+          "informational_note": "Vitamin K affects warfarin levels — relevant to people on warfarin or other anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -2116,7 +2215,10 @@
           "action": "Escalate anticoagulant interaction warning for MK-7 forms.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "MK-7 may prolong warfarin interaction",
+          "alert_body": "The MK-7 form of vitamin K has a longer half-life than other forms. If you take warfarin, talk to your prescriber before adding MK-7.",
+          "informational_note": "MK-7 affects warfarin levels — relevant to people on warfarin or other anticoagulants."
         }
       ],
       "pregnancy_lactation": null,
@@ -2140,7 +2242,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/safety",
             "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
-          ]
+          ],
+          "alert_headline": "Do not use during pregnancy",
+          "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
+          "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy."
         },
         {
           "condition_id": "hypertension",
@@ -2150,7 +2255,10 @@
           "action": "Do not use in hypertension or cardiovascular risk settings.",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "Not recommended with high blood pressure",
+          "alert_body": "Yohimbe's stimulant activity can raise blood pressure and heart rate. If you have high blood pressure, talk to your clinician and do not use it.",
+          "informational_note": "Yohimbe is a stimulant — relevant to people with high blood pressure."
         }
       ],
       "drug_class_rules": [
@@ -2162,7 +2270,10 @@
           "action": "Avoid co-use with antihypertensive medications.",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "May reduce blood-pressure medication effect",
+          "alert_body": "Yohimbe's stimulant activity can work against blood-pressure-lowering drugs. If you take antihypertensive medication, talk to your prescriber before using it.",
+          "informational_note": "Yohimbe is a stimulant — relevant to people on antihypertensive medications."
         }
       ],
       "dose_thresholds": [],
@@ -2231,7 +2342,10 @@
             "https://www.nccih.nih.gov/health/blue-cohosh",
             "https://pubmed.ncbi.nlm.nih.gov/9600579/",
             "https://pubmed.ncbi.nlm.nih.gov/15070161/"
-          ]
+          ],
+          "alert_headline": "Do not use during pregnancy",
+          "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
+          "informational_note": "Blue cohosh stimulates contractions — relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -2267,7 +2381,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/safety",
             "https://pubmed.ncbi.nlm.nih.gov/16236036/"
-          ]
+          ],
+          "alert_headline": "Do not use during pregnancy",
+          "alert_body": "Mugwort contains compounds with uterine-stimulating and historical abortifacient activity. If you are pregnant, do not use mugwort-containing products.",
+          "informational_note": "Mugwort has uterotonic activity relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -2303,7 +2420,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12495553/",
             "https://pubmed.ncbi.nlm.nih.gov/19146936/"
-          ]
+          ],
+          "alert_headline": "Do not use during pregnancy",
+          "alert_body": "Rue has established abortifacient activity and teratogenic effects in animal studies. If you are pregnant, do not use rue-containing products.",
+          "informational_note": "Rue has abortifacient activity — relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -2339,7 +2459,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27092496/",
             "https://pubmed.ncbi.nlm.nih.gov/19943335/"
-          ]
+          ],
+          "alert_headline": "Not recommended with liver disease",
+          "alert_body": "Kava has been linked to serious liver injury. If you have any chronic liver condition, do not use kava; also avoid with alcohol or other hepatotoxic agents.",
+          "informational_note": "Kava has hepatic safety signals relevant to people with liver conditions."
         },
         {
           "severity": "caution",
@@ -2363,7 +2486,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12383029/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Do not combine with sedatives",
+          "alert_body": "Kavalactones add to the effects of sedatives, benzodiazepines, alcohol, and opioids. If you take sedating medications, do not combine with kava.",
+          "informational_note": "Kava adds to sedation — relevant to people on sedatives, benzodiazepines, or opioids."
         }
       ],
       "dose_thresholds": [],
@@ -3408,7 +3534,10 @@
           "evidence_level": "probable",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "Not recommended in autoimmune conditions",
+          "alert_body": "Cat's claw stimulates immune activity. If you have an autoimmune condition, talk to your clinician before use — it may worsen immune activation.",
+          "informational_note": "Cat's claw is immune-stimulating — relevant to people with autoimmune conditions."
         }
       ],
       "drug_class_rules": [
@@ -3452,7 +3581,10 @@
           "evidence_level": "probable",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "Do not combine with immunosuppressants",
+          "alert_body": "Cat's claw stimulates immune pathways that immunosuppressants are designed to calm. If you take transplant or autoimmune medications, do not combine.",
+          "informational_note": "Cat's claw is immune-stimulating — relevant to people on immunosuppressant medications."
         }
       ],
       "dose_thresholds": [],
@@ -3734,7 +3866,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/21726792/",
             "https://pubmed.ncbi.nlm.nih.gov/15115689/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Not recommended in autoimmune conditions",
+          "alert_body": "Echinacea stimulates immune activity. If you have lupus, rheumatoid arthritis, MS, or IBD, talk to your clinician before use — it may trigger flares.",
+          "informational_note": "Echinacea is immune-stimulating — relevant to people with autoimmune conditions."
         }
       ],
       "drug_class_rules": [
@@ -3748,7 +3883,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/18989760/",
             "https://pubmed.ncbi.nlm.nih.gov/15115689/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Do not combine with immunosuppressants",
+          "alert_body": "Echinacea's immune-stimulating effects work against immunosuppressive drugs. If you take transplant or autoimmune medications, do not combine.",
+          "informational_note": "Echinacea is immune-stimulating — relevant to people on immunosuppressant medications."
         }
       ],
       "dose_thresholds": [],
@@ -3772,7 +3910,10 @@
           "evidence_level": "probable",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "Not recommended in autoimmune conditions",
+          "alert_body": "Elderberry boosts inflammatory cytokine production. If you have an autoimmune condition, talk to your clinician before use — it may worsen activity.",
+          "informational_note": "Elderberry is immune-stimulating — relevant to people with autoimmune conditions."
         }
       ],
       "drug_class_rules": [
@@ -3785,7 +3926,10 @@
           "evidence_level": "probable",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "Do not combine with immunosuppressants",
+          "alert_body": "Elderberry's cytokine-stimulating effects work against immunosuppressive therapy. If you take transplant or autoimmune medications, do not combine.",
+          "informational_note": "Elderberry is immune-stimulating — relevant to people on immunosuppressant medications."
         }
       ],
       "dose_thresholds": [],
@@ -3809,7 +3953,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32190660/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Not recommended in autoimmune conditions",
+          "alert_body": "Astragalus enhances T-cell, B-cell, and NK cell activity. If you have an autoimmune condition, talk to your clinician before use — it may worsen immune activity.",
+          "informational_note": "Astragalus is immune-stimulating — relevant to people with autoimmune conditions."
         }
       ],
       "drug_class_rules": [
@@ -3822,7 +3969,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32190660/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Do not combine with immunosuppressants",
+          "alert_body": "Astragalus stimulates the exact immune pathways immunosuppressants calm. If you take transplant or autoimmune medications, do not combine.",
+          "informational_note": "Astragalus is immune-stimulating — relevant to people on immunosuppressant medications."
         }
       ],
       "dose_thresholds": [],
@@ -4040,7 +4190,10 @@
           "sources": [
             "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances",
             "https://www.efsa.europa.eu/en/efsajournal/pub/e08085"
-          ]
+          ],
+          "alert_headline": "Not recommended for cholesterol management",
+          "alert_body": "Red yeast rice contains monacolin K, the same molecule as the prescription statin lovastatin. If you have high cholesterol, talk to your prescriber about approved statin options.",
+          "informational_note": "Red yeast rice contains a natural statin — relevant to people managing cholesterol."
         }
       ],
       "drug_class_rules": [
@@ -4053,7 +4206,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12622602/",
             "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances"
-          ]
+          ],
+          "alert_headline": "Do not combine with statins",
+          "alert_body": "Red yeast rice contains the same molecule as lovastatin. If you take a statin, do not combine — total statin exposure becomes unpredictable and muscle or liver injury risk rises.",
+          "informational_note": "Red yeast rice contains a natural statin — relevant to people on statin therapy."
         }
       ],
       "dose_thresholds": [],
@@ -4534,7 +4690,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30735081/",
             "https://pubmed.ncbi.nlm.nih.gov/21800902/"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Wild yam contains diosgenin, a phytoestrogen with hormone-active effects. If you are pregnant, do not use wild yam unless directed by your obstetrician.",
+          "informational_note": "Wild yam is hormone-active — relevant to anyone pregnant or planning pregnancy."
         },
         {
           "condition_id": "lactation",
@@ -4544,7 +4703,10 @@
           "action": "Do not use wild yam supplements during breastfeeding due to insufficient safety data and estrogenic activity profile.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30735081/"
-          ]
+          ],
+          "alert_headline": "Not recommended while breastfeeding",
+          "alert_body": "Wild yam's estrogenic activity has no safety data in lactation and can transfer via breast milk. If you are breastfeeding, talk to your clinician before use.",
+          "informational_note": "Wild yam is hormone-active — relevant to anyone breastfeeding."
         },
         {
           "condition_id": "ttc",
@@ -4681,7 +4843,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/31605160/",
             "https://pubmed.ncbi.nlm.nih.gov/28617146/",
             "https://pubmed.ncbi.nlm.nih.gov/3808407/"
-          ]
+          ],
+          "alert_headline": "May raise blood pressure",
+          "alert_body": "Whole licorice (with glycyrrhizin) can drive sodium retention and raise blood pressure. If you have hypertension, talk to your clinician; DGL licorice does not carry this concern.",
+          "informational_note": "Licorice with glycyrrhizin raises blood pressure — relevant to people with hypertension."
         },
         {
           "condition_id": "heart_disease",
@@ -4716,7 +4881,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/31605160/",
             "https://pubmed.ncbi.nlm.nih.gov/28617146/"
-          ]
+          ],
+          "alert_headline": "May reduce blood-pressure medication effect",
+          "alert_body": "Licorice's sodium-retaining effect works against antihypertensive therapy. If you take a blood-pressure medication, talk to your prescriber; DGL licorice is unaffected.",
+          "informational_note": "Licorice with glycyrrhizin raises blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "dose_thresholds": [
@@ -5146,7 +5314,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/5-htp",
             "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "5-HTP raises serotonin and has no human pregnancy safety data. If you are pregnant, talk to your obstetrician before any 5-HTP use.",
+          "informational_note": "5-HTP raises serotonin — relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -5159,7 +5330,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/5-htp",
             "https://pubmed.ncbi.nlm.nih.gov/9861593/"
-          ]
+          ],
+          "alert_headline": "Do not combine with SSRIs or SNRIs",
+          "alert_body": "5-HTP raises serotonin directly. If you take an SSRI or SNRI antidepressant, do not combine — the pairing can cause serotonin syndrome.",
+          "informational_note": "5-HTP raises serotonin — relevant to people on SSRI or SNRI antidepressants."
         },
         {
           "drug_class_id": "maois",
@@ -5170,7 +5344,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/5-htp",
             "https://pubmed.ncbi.nlm.nih.gov/9861593/"
-          ]
+          ],
+          "alert_headline": "Do not combine with MAOIs",
+          "alert_body": "5-HTP raises serotonin while MAOIs block its breakdown. If you take an MAOI, do not combine — this pairing is life-threatening.",
+          "informational_note": "5-HTP raises serotonin — relevant to people on MAOI antidepressants."
         }
       ],
       "dose_thresholds": [],
@@ -5218,7 +5395,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/senna",
             "https://pubmed.ncbi.nlm.nih.gov/10940988/"
-          ]
+          ],
+          "alert_headline": "Can increase digoxin toxicity",
+          "alert_body": "Senna-induced potassium loss makes digoxin more toxic. If you take digoxin or another cardiac glycoside, talk to your prescriber and discuss a gentler laxative instead.",
+          "informational_note": "Senna lowers potassium — relevant to people on digoxin or other cardiac glycosides."
         }
       ],
       "dose_thresholds": [],
@@ -5242,7 +5422,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/chasteberry",
             "https://pubmed.ncbi.nlm.nih.gov/23136064/"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Chasteberry influences pituitary hormones and is not recommended in pregnancy. If pregnancy is confirmed, talk to your obstetrician about discontinuing.",
+          "informational_note": "Chasteberry affects pituitary hormones — relevant to anyone pregnant or planning pregnancy."
         },
         {
           "condition_id": "ttc",
@@ -5315,7 +5498,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/butterbur",
             "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Raw butterbur contains liver-toxic alkaloids. If you are pregnant, do not use butterbur — even PA-free extracts lack pregnancy safety data.",
+          "informational_note": "Butterbur contains hepatotoxic alkaloids — relevant to anyone pregnant or planning pregnancy."
         },
         {
           "condition_id": "liver_disease",
@@ -5326,7 +5512,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/butterbur",
             "https://pubmed.ncbi.nlm.nih.gov/22566672/"
-          ]
+          ],
+          "alert_headline": "Not recommended with liver disease",
+          "alert_body": "Butterbur alkaloids are direct liver toxins. If you have liver disease, talk to your clinician; even PA-free products carry some hepatotoxicity risk.",
+          "informational_note": "Butterbur has hepatic safety signals — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -5351,7 +5540,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/cascara-sagrada",
             "https://pubmed.ncbi.nlm.nih.gov/10940988/"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Cascara sagrada stimulates colonic muscle and passes into breast milk. If you are pregnant, talk to your obstetrician about a gentler laxative instead.",
+          "informational_note": "Cascara sagrada is a stimulant laxative — relevant to anyone pregnant."
         },
         {
           "condition_id": "liver_disease",
@@ -5362,7 +5554,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/cascara-sagrada",
             "https://pubmed.ncbi.nlm.nih.gov/16923387/"
-          ]
+          ],
+          "alert_headline": "Not recommended with liver disease",
+          "alert_body": "Long-term cascara use has been linked to liver injury, and FDA withdrew it from OTC monographs in 2002. If you have liver disease, talk to your clinician about alternatives.",
+          "informational_note": "Cascara sagrada has hepatic safety signals relevant to people with liver conditions."
         },
         {
           "condition_id": "kidney_disease",
@@ -5386,7 +5581,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/cascara-sagrada",
             "https://pubmed.ncbi.nlm.nih.gov/10940988/"
-          ]
+          ],
+          "alert_headline": "Can increase digoxin toxicity",
+          "alert_body": "Cascara-induced potassium loss makes digoxin more toxic. If you take digoxin or another cardiac glycoside, talk to your prescriber about a gentler laxative.",
+          "informational_note": "Cascara lowers potassium — relevant to people on digoxin or other cardiac glycosides."
         }
       ],
       "dose_thresholds": [],
@@ -5410,7 +5608,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/32444096/"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Chinese skullcap lacks human pregnancy safety data and animal studies suggest teratogenic signals. If you are pregnant, talk to your obstetrician before any use.",
+          "informational_note": "Chinese skullcap lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy."
         },
         {
           "condition_id": "liver_disease",
@@ -5468,7 +5669,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed",
             "https://pubmed.ncbi.nlm.nih.gov/21537493/"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Black seed oil has demonstrated uterine-stimulating activity in animal studies. If you are pregnant, talk to your obstetrician before use, especially in the first and third trimesters.",
+          "informational_note": "Black seed oil has uterotonic activity relevant to anyone pregnant."
         }
       ],
       "drug_class_rules": [
@@ -5828,7 +6032,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/white-willow-bark",
             "https://pubmed.ncbi.nlm.nih.gov/12197782/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "White willow bark acts like aspirin on platelets. If you have a bleeding disorder, talk to your clinician before use — it carries the same bleeding risk as aspirin.",
+          "informational_note": "White willow bark is aspirin-like — relevant to people with bleeding disorders."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -5839,7 +6046,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/white-willow-bark",
             "https://pubmed.ncbi.nlm.nih.gov/12197782/"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "White willow bark inhibits platelets for the life of the platelet. If you have surgery scheduled, talk to your surgeon about pausing it 7-10 days beforehand.",
+          "informational_note": "White willow bark is aspirin-like — relevant to anyone preparing for surgery."
         }
       ],
       "drug_class_rules": [
@@ -5852,7 +6062,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/white-willow-bark",
             "https://pubmed.ncbi.nlm.nih.gov/12197782/"
-          ]
+          ],
+          "alert_headline": "Can add to blood-thinner effect",
+          "alert_body": "White willow bark adds to warfarin's effect and raises bleeding risk. If you take an anticoagulant, talk to your prescriber about a different pain option.",
+          "informational_note": "White willow bark is aspirin-like — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -5863,7 +6076,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/white-willow-bark",
             "https://pubmed.ncbi.nlm.nih.gov/12197782/"
-          ]
+          ],
+          "alert_headline": "Do not combine with antiplatelet medications",
+          "alert_body": "White willow bark adds to aspirin and clopidogrel platelet effects. If you take antiplatelet therapy, do not combine — talk to your prescriber for alternatives.",
+          "informational_note": "White willow bark is aspirin-like — relevant to people on antiplatelet medications."
         },
         {
           "drug_class_id": "nsaids",
@@ -5874,7 +6090,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/white-willow-bark",
             "https://pubmed.ncbi.nlm.nih.gov/12197782/"
-          ]
+          ],
+          "alert_headline": "Can add to NSAID side-effect risk",
+          "alert_body": "White willow bark combined with NSAIDs increases GI bleeding and kidney strain. If you take NSAIDs regularly, talk to your prescriber about a safer pain option.",
+          "informational_note": "White willow bark is aspirin-like — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -5911,7 +6130,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/huperzine-a",
             "https://pubmed.ncbi.nlm.nih.gov/24573804/"
-          ]
+          ],
+          "alert_headline": "Works against anticholinergic medications",
+          "alert_body": "Huperzine A boosts acetylcholine while anticholinergics block it — these effects cancel. If you take an anticholinergic medication, talk to your prescriber before use.",
+          "informational_note": "Huperzine A boosts acetylcholine — relevant to people on anticholinergic medications."
         }
       ],
       "dose_thresholds": [],
@@ -5973,7 +6195,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11869656/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "Do not combine with MAOIs",
+          "alert_body": "L-tyrosine converts to tyramine, which MAOIs prevent the body from breaking down. If you take an MAOI, do not combine — this pairing risks a hypertensive crisis.",
+          "informational_note": "L-tyrosine converts to tyramine — relevant to people on MAOI antidepressants."
         },
         {
           "drug_class_id": "thyroid_medications",
@@ -6263,7 +6488,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/15857459/"
-          ]
+          ],
+          "alert_headline": "Do not combine with immunosuppressants",
+          "alert_body": "Cordyceps stimulates NK and T-cell activity, working against immunosuppressants. If you take transplant or autoimmune medications, do not combine.",
+          "informational_note": "Cordyceps is immune-stimulating — relevant to people on immunosuppressant medications."
         },
         {
           "drug_class_id": "anticoagulants",
@@ -6486,7 +6714,10 @@
             "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
             "https://pubmed.ncbi.nlm.nih.gov/30417375/",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
-          ]
+          ],
+          "alert_headline": "Not recommended with liver disease",
+          "alert_body": "CBD is heavily metabolized in the liver and can elevate liver enzymes. If you have liver disease, talk to your clinician and monitor liver function labs.",
+          "informational_note": "CBD is liver-metabolized — relevant to people with liver conditions."
         },
         {
           "condition_id": "seizure_disorder",
@@ -6507,7 +6738,10 @@
           "action": "Avoid CBD supplements during pregnancy. Consult healthcare provider.",
           "sources": [
             "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+          "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [
