@@ -25,6 +25,22 @@ All three sit in `/Users/seancheick/Downloads/dsld_clean/scripts/data/`.
 Edit with any text editor. Commit by batch (one medication family at a
 time is ideal).
 
+**Round 1 complete.** Files 1, 2, and the 77 severe sub-rules in File 3
+are authored, validated, and shipped (2026-04-17/18).
+
+**Round 2a is open** — 39 `pregnancy_lactation` blocks (a 3rd structural
+type found during end-to-end verification). See
+[`ROUND_2_PREGNANCY_LACTATION_INSTRUCTIONS.md`](ROUND_2_PREGNANCY_LACTATION_INSTRUCTIONS.md)
+and the pre-populated workspace
+[`round_2_pregnancy_lactation_shell.json`](round_2_pregnancy_lactation_shell.json).
+~2.5 hours. 15 of the 39 copy verbatim from your round-1 condition_rules
+work (already pre-filled in the shell); 24 need fresh writes across 5
+exemplar patterns.
+
+**Round 2b is backlogged** — 297 non-severe sub-rules (caution/monitor/
+info) across File 3. These are suppressed without a profile match, so
+lower-urgency; opens after 2a lands.
+
 ---
 
 ## Universal tone rules (all three files)

@@ -1,0 +1,904 @@
+{
+  "_metadata": {
+    "purpose": "Round 2a authoring workspace — pregnancy_lactation blocks (39 total)",
+    "round": "2a_pregnancy_lactation",
+    "status": "authored_ready_for_merge",
+    "total_blocks": 39,
+    "shortcut_reusable_from_round_1": 15,
+    "fresh_writes_needed": 24,
+    "field_contracts": {
+      "alert_headline": "20-60 chars, no screaming, no trailing !",
+      "alert_body": "60-200 chars, conditional framing for avoid/contraindicated (if you|when you|talk to|discuss with|monitor|ask your)",
+      "informational_note": "40-120 chars, no imperative verbs (stop|avoid|do not|never|always)"
+    },
+    "workflow_options": [
+      "Option A (shell-first): fill fields_to_author in this file; a merge script applies them to ingredient_interaction_rules.json.",
+      "Option B (direct-edit): open ingredient_interaction_rules.json, add alert_headline / alert_body / informational_note to each pregnancy_lactation block directly."
+    ],
+    "related": [
+      "scripts/safety_copy_exemplars/ROUND_2_PREGNANCY_LACTATION_INSTRUCTIONS.md",
+      "scripts/safety_copy_exemplars/AUTHORING_SOP.md",
+      "scripts/safety_copy_exemplars/QUICKSTART_FOR_DR_PHAM.md"
+    ],
+    "authored_by": "Lead Clinician (PharmaGuide)",
+    "authored_date": "2026-04-18"
+  },
+  "blocks": [
+    {
+      "_target": "RULE_BANNED_7KETO_DHEA_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_BANNED_7KETO_DHEA_PREGNANCY",
+      "subject_canonical_id": "BANNED_7_KETO_DHEA",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Hormonal activity and limited lactation safety data support avoiding use.",
+      "notes": "Avoid during lactation due to insufficient safety evidence and endocrine-active profile.",
+      "sources": [
+        "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_BANNED_7KETO_DHEA_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "7-Keto DHEA has hormone-active properties and is not established as safe in pregnancy. If you are pregnant, talk to your obstetrician before using any product containing it.",
+        "informational_note": "7-Keto DHEA is hormonally active — relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "7-Keto DHEA has hormone-active properties and is not established as safe in pregnancy. If you are pregnant, talk to your obstetrician before using any product containing it.",
+        "informational_note": "7-Keto DHEA is hormonally active — relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_BANNED_EPHEDRA_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_BANNED_EPHEDRA_PREGNANCY",
+      "subject_canonical_id": "BANNED_EPHEDRA",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "avoid",
+      "evidence_level": "established",
+      "mechanism": "Serious toxicity risk profile and regulatory prohibition for supplement use.",
+      "notes": "Ephedra-containing supplements should not be used.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/ephedra"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_BANNED_EPHEDRA_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. If you are pregnant, do not use ephedra-containing products.",
+        "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. If you are pregnant, do not use ephedra-containing products.",
+        "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_BANNED_YOHIMBE_CONTRA/pregnancy_lactation",
+      "rule_id": "RULE_BANNED_YOHIMBE_CONTRA",
+      "subject_canonical_id": "RISK_YOHIMBE",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Safety data are limited and stimulant effects are concerning.",
+      "notes": "Avoid in pregnancy and lactation.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/safety"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[1] on RULE_BANNED_YOHIMBE_CONTRA",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
+        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
+        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_INGREDIENT_ALOE_VERA/pregnancy_lactation",
+      "rule_id": "RULE_INGREDIENT_ALOE_VERA",
+      "subject_canonical_id": "aloe_vera",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "established",
+      "mechanism": "NCCIH indicates oral aloe may be unsafe in pregnancy and breastfeeding.",
+      "notes": "This rule is intended for oral/systemic supplement use, not topical-only products.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/aloe-vera"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_INGREDIENT_ALOE_VERA",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Oral aloe not recommended in pregnancy",
+        "alert_body": "Oral aloe products (gel, latex, whole-leaf) raise safety concerns in pregnancy. If you are pregnant, talk to your obstetrician before using any oral aloe supplement.",
+        "informational_note": "Oral aloe has safety concerns relevant to anyone pregnant."
+      },
+      "fields_to_author": {
+        "alert_headline": "Oral aloe not recommended in pregnancy",
+        "alert_body": "Oral aloe products (gel, latex, whole-leaf) raise safety concerns in pregnancy. If you are pregnant, talk to your obstetrician before using any oral aloe supplement.",
+        "informational_note": "Oral aloe has safety concerns relevant to anyone pregnant."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_IQM_BERBERINE_DIABETES/pregnancy_lactation",
+      "rule_id": "RULE_IQM_BERBERINE_DIABETES",
+      "subject_canonical_id": "berberine_supplement",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "established",
+      "mechanism": "Berberine (as in goldenseal) has documented neonatal bilirubin/kernicterus risk concerns.",
+      "notes": "Avoid berberine-containing supplements during pregnancy and lactation.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended in pregnancy or breastfeeding",
+        "alert_body": "Berberine carries neonatal bilirubin and kernicterus concerns. If you are pregnant or breastfeeding, do not use berberine-containing supplements unless specifically directed by your clinician.",
+        "informational_note": "Berberine has neonatal safety concerns — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 1 (teratogen/neonatal safety). Aligns with goldenseal framing since berberine is the shared active."
+    },
+    {
+      "_target": "RULE_IQM_BITTER_MELON_DIABETES/pregnancy_lactation",
+      "rule_id": "RULE_IQM_BITTER_MELON_DIABETES",
+      "subject_canonical_id": "bitter_melon",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Animal studies suggest abortifacient and embryotoxic effects.",
+      "notes": "Avoid during pregnancy and lactation.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/safety"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended in pregnancy or breastfeeding",
+        "alert_body": "Bitter melon shows abortifacient and embryotoxic signals in animal studies. If you are pregnant or breastfeeding, do not use bitter melon supplements unless directed by your clinician.",
+        "informational_note": "Bitter melon has abortifacient signals — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 1. Animal-study evidence only — body avoids overstating human risk."
+    },
+    {
+      "_target": "RULE_IQM_BLACK_COHOSH_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_IQM_BLACK_COHOSH_PREGNANCY",
+      "subject_canonical_id": "black_cohosh",
+      "pregnancy_category": "avoid",
+      "lactation_category": "caution",
+      "evidence_level": "probable",
+      "mechanism": "Pregnancy safety is uncertain and potential adverse effects are described in safety guidance.",
+      "notes": "Avoid in pregnancy; lactation evidence is limited.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/black-cohosh"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_IQM_BLACK_COHOSH_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Black cohosh may have uterotonic and hormone-active effects. If you are pregnant, do not use black cohosh unless specifically directed by your obstetrician.",
+        "informational_note": "Black cohosh is hormone-active — relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Black cohosh may have uterotonic and hormone-active effects. If you are pregnant, do not use black cohosh unless specifically directed by your obstetrician.",
+        "informational_note": "Black cohosh is hormone-active — relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_INGREDIENT_CAFFEINE/pregnancy_lactation",
+      "rule_id": "RULE_INGREDIENT_CAFFEINE",
+      "subject_canonical_id": "caffeine",
+      "pregnancy_category": "monitor",
+      "lactation_category": "caution",
+      "evidence_level": "established",
+      "mechanism": "High caffeine exposure can affect maternal-fetal and infant outcomes.",
+      "notes": "This threshold applies to supplemental caffeine only; total daily caffeine from beverages/foods should be considered.",
+      "sources": [
+        "https://www.acog.org/womens-health/experts-and-stories/ask-acog/how-much-coffee-can-i-drink-while-pregnant"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Caffeine adds up — watch total intake",
+        "alert_body": "Caffeine crosses the placenta and passes into breast milk. If you are pregnant or nursing, monitor total caffeine from coffee, tea, chocolate, and supplements against a 200 mg/day ceiling.",
+        "informational_note": "Caffeine crosses the placenta and reaches breast milk — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Special. Sum-all-sources framing (per edge-case 1)."
+    },
+    {
+      "_target": "RULE_IQM_DONG_QUAI_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_IQM_DONG_QUAI_PREGNANCY",
+      "subject_canonical_id": "dong_quai",
+      "pregnancy_category": "avoid",
+      "lactation_category": "caution",
+      "evidence_level": "probable",
+      "mechanism": "Clinical pregnancy/lactation safety data are limited and precautionary avoidance is recommended.",
+      "notes": "Use only with clinician oversight during pregnancy or lactation.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/safety"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_IQM_DONG_QUAI_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Dong quai has traditional uterine and hormone-active effects with no established pregnancy safety. If you are pregnant, talk to your obstetrician before any use.",
+        "informational_note": "Dong quai is hormone-active — relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Dong quai has traditional uterine and hormone-active effects with no established pregnancy safety. If you are pregnant, talk to your obstetrician before any use.",
+        "informational_note": "Dong quai is hormone-active — relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_IQM_FENUGREEK_DIABETES/pregnancy_lactation",
+      "rule_id": "RULE_IQM_FENUGREEK_DIABETES",
+      "subject_canonical_id": "fenugreek",
+      "pregnancy_category": "avoid",
+      "lactation_category": "caution",
+      "evidence_level": "probable",
+      "mechanism": "Traditional concern for uterotonic effects. May also lower blood sugar in pregnant women on glucose management.",
+      "notes": "Avoid during pregnancy.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/safety"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Fenugreek has uterotonic activity and can lower maternal blood sugar. If you are pregnant, talk to your obstetrician; during breastfeeding, use under clinician guidance for milk-supply support.",
+        "informational_note": "Fenugreek has uterotonic activity — relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": "Special. Pregnancy-avoid / lactation-sometimes-used split (per edge-case)."
+    },
+    {
+      "_target": "RULE_IQM_FEVERFEW_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_IQM_FEVERFEW_PREGNANCY",
+      "subject_canonical_id": "feverfew",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "avoid",
+      "evidence_level": "established",
+      "mechanism": "Parthenolide crosses biological membranes and has uterotonic and anti-platelet effects. No safety data in lactation.",
+      "notes": "Feverfew is contraindicated in pregnancy per NCCIH and traditional classification as emmenagogue. Avoid during lactation due to insufficient safety data.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/feverfew",
+        "https://pubmed.ncbi.nlm.nih.gov/25630523/"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_IQM_FEVERFEW_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Feverfew inhibits platelets and shows uterine-stimulating activity. If you are pregnant, do not use feverfew — Cochrane and ACOG both advise against it.",
+        "informational_note": "Feverfew has uterotonic activity relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Feverfew inhibits platelets and shows uterine-stimulating activity. If you are pregnant, do not use feverfew — Cochrane and ACOG both advise against it.",
+        "informational_note": "Feverfew has uterotonic activity relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_INGREDIENT_GINSENG/pregnancy_lactation",
+      "rule_id": "RULE_INGREDIENT_GINSENG",
+      "subject_canonical_id": "ginseng",
+      "pregnancy_category": "caution",
+      "lactation_category": "caution",
+      "evidence_level": "probable",
+      "mechanism": "Pregnancy/lactation safety data are limited and concerns are noted in safety reviews.",
+      "notes": "Prefer avoidance unless obstetric team approves.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/asian-ginseng"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Limited pregnancy safety data",
+        "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use — safer alternatives may be available.",
+        "informational_note": "Ginseng has limited pregnancy data — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 2 (caution-caution). Softer headline — evidence is limited rather than established risk."
+    },
+    {
+      "_target": "RULE_IQM_GOLDENSEAL_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_IQM_GOLDENSEAL_PREGNANCY",
+      "subject_canonical_id": "goldenseal",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "established",
+      "mechanism": "NCCIH safety summary advises against use in pregnancy and breastfeeding.",
+      "notes": "Avoid use in pregnancy and breastfeeding.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_IQM_GOLDENSEAL_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Goldenseal contains berberine and raises newborn jaundice concerns. If you are pregnant, talk to your obstetrician and do not use goldenseal.",
+        "informational_note": "Goldenseal has neonatal safety concerns relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Goldenseal contains berberine and raises newborn jaundice concerns. If you are pregnant, talk to your obstetrician and do not use goldenseal.",
+        "informational_note": "Goldenseal has neonatal safety concerns relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_IQM_IODINE_PREGNANCY_EXCESS/pregnancy_lactation",
+      "rule_id": "RULE_IQM_IODINE_PREGNANCY_EXCESS",
+      "subject_canonical_id": "iodine",
+      "pregnancy_category": "monitor",
+      "lactation_category": "monitor",
+      "evidence_level": "established",
+      "mechanism": "Both deficiency and excess can be harmful; UL and recommended intake should guide use.",
+      "notes": "Threshold escalates only on excess; baseline reflects required-but-dose-sensitive nutrient status.",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Keep iodine within prenatal range",
+        "alert_body": "Iodine is required during pregnancy, but excess can affect maternal and fetal thyroid function. If you are pregnant or nursing, monitor total iodine intake and talk to your clinician if in doubt.",
+        "informational_note": "Iodine is dose-sensitive — both deficiency and excess matter for pregnancy and lactation."
+      },
+      "authoring_notes": "Pattern 3. Validates the required-nutrient status; flags excess only."
+    },
+    {
+      "_target": "RULE_IQM_LICORICE_HYPERTENSION/pregnancy_lactation",
+      "rule_id": "RULE_IQM_LICORICE_HYPERTENSION",
+      "subject_canonical_id": "licorice",
+      "pregnancy_category": "avoid",
+      "lactation_category": "caution",
+      "evidence_level": "established",
+      "mechanism": "Glycyrrhizin inhibits placental 11-beta-HSD2, allowing excess maternal cortisol to reach the fetus. Finnish cohort studies documented >2-fold preterm delivery risk and neurodevelopmental harm (IQ reduction, ADHD risk) with heavy glycyrrhizin exposure.",
+      "notes": "Avoid during pregnancy. Even confectionery licorice at sustained intake poses risk.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/licorice-root",
+        "https://pubmed.ncbi.nlm.nih.gov/28133296/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Whole licorice's glycyrrhizin can raise maternal cortisol reaching the fetus, linked to preterm delivery. If you are pregnant, talk to your obstetrician; DGL licorice does not carry this concern.",
+        "informational_note": "Licorice with glycyrrhizin affects fetal cortisol exposure — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Pattern 2. Explicit DGL carve-out prevents unnecessary alarm for users of DGL products."
+    },
+    {
+      "_target": "RULE_INGREDIENT_ST_JOHNS_WORT/pregnancy_lactation",
+      "rule_id": "RULE_INGREDIENT_ST_JOHNS_WORT",
+      "subject_canonical_id": "st_johns_wort",
+      "pregnancy_category": "avoid",
+      "lactation_category": "caution",
+      "evidence_level": "probable",
+      "mechanism": "Potential fetal risk and broad CYP/P-gp interactions.",
+      "notes": "Use in pregnancy should be avoided outside specialist care.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/st-johns-wort"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_INGREDIENT_ST_JOHNS_WORT",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "St John's Wort has been flagged for possible birth-defect risk and major drug interactions. If you are pregnant, talk to a specialist before any use.",
+        "informational_note": "St John's Wort has pregnancy safety concerns relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "St John's Wort has been flagged for possible birth-defect risk and major drug interactions. If you are pregnant, talk to a specialist before any use.",
+        "informational_note": "St John's Wort has pregnancy safety concerns relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_IQM_VANADIUM_DIABETES/pregnancy_lactation",
+      "rule_id": "RULE_IQM_VANADIUM_DIABETES",
+      "subject_canonical_id": "vanadyl_sulfate",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Limited safety data and insulin-mimetic activity present risk concerns.",
+      "notes": "Avoid during pregnancy and lactation.",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Vanadium-HealthProfessional/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended in pregnancy or breastfeeding",
+        "alert_body": "Vanadyl sulfate has insulin-mimetic activity with limited human safety data. If you are pregnant or breastfeeding, do not use vanadium supplements unless directed by your clinician.",
+        "informational_note": "Vanadium has limited pregnancy data — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 1 (absent data). Body stays honest about the 'limited data' framing from the mechanism field."
+    },
+    {
+      "_target": "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE/pregnancy_lactation",
+      "rule_id": "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE",
+      "subject_canonical_id": "vitamin_a",
+      "pregnancy_category": "caution",
+      "lactation_category": "monitor",
+      "evidence_level": "established",
+      "mechanism": "Dose and form dependent risk is primarily tied to preformed retinoids.",
+      "notes": "Applies to preformed vitamin A forms; carotenoids are not handled by this threshold rule.",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Keep preformed vitamin A within prenatal range",
+        "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
+        "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Pattern 3 + preformed-vs-carotenoid distinction (per the rule's notes). Validates prenatal-range intake."
+    },
+    {
+      "_target": "RULE_IQM_VITAMIN_C_PREGNANCY_EXCESS/pregnancy_lactation",
+      "rule_id": "RULE_IQM_VITAMIN_C_PREGNANCY_EXCESS",
+      "subject_canonical_id": "vitamin_c",
+      "pregnancy_category": "monitor",
+      "lactation_category": "monitor",
+      "evidence_level": "established",
+      "mechanism": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
+      "notes": "Threshold escalates only when intake exceeds adult UL.",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Keep vitamin C within prenatal range",
+        "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+        "informational_note": "Vitamin C is dose-sensitive at high intake — higher doses warrant clinician review."
+      },
+      "authoring_notes": "Pattern 3. Escalates only above UL per the rule's notes."
+    },
+    {
+      "_target": "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS/pregnancy_lactation",
+      "rule_id": "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS",
+      "subject_canonical_id": "vitamin_e",
+      "pregnancy_category": "monitor",
+      "lactation_category": "monitor",
+      "evidence_level": "established",
+      "mechanism": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
+      "notes": "Threshold escalates only when intake exceeds adult UL.",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Keep vitamin E within prenatal range",
+        "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+        "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review."
+      },
+      "authoring_notes": "Pattern 3. Mirror of vitamin C approach."
+    },
+    {
+      "_target": "RULE_IQM_YOHIMBE_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_IQM_YOHIMBE_PREGNANCY",
+      "subject_canonical_id": "yohimbe",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Safety data are limited and stimulant effects raise risk concerns.",
+      "notes": "Avoid in pregnancy and lactation.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/safety"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_IQM_YOHIMBE_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
+        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
+        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_BOTAN_BLUE_COHOSH_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_BOTAN_BLUE_COHOSH_PREGNANCY",
+      "subject_canonical_id": "blue_cohosh",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "avoid",
+      "evidence_level": "established",
+      "mechanism": "Uterotonic glycosides (caulosaponin) and nicotinic alkaloids (methylcytisine) pose direct fetal risk including cardiac toxicity and CNS injury.",
+      "notes": "Multiple case reports of serious neonatal adverse events. ACOG and NCCIH advise against use in pregnancy.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/blue-cohosh",
+        "https://pubmed.ncbi.nlm.nih.gov/9600579/"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_BOTAN_BLUE_COHOSH_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
+        "informational_note": "Blue cohosh stimulates contractions — relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
+        "informational_note": "Blue cohosh stimulates contractions — relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_BOTAN_MUGWORT_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_BOTAN_MUGWORT_PREGNANCY",
+      "subject_canonical_id": "mugwort",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Thujone-containing Artemisia species have documented emmenagogue activity. Traditional abortifacient use is well-described historically.",
+      "notes": "Avoid all Artemisia vulgaris preparations during pregnancy and lactation.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/safety",
+        "https://pubmed.ncbi.nlm.nih.gov/16236036/"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_BOTAN_MUGWORT_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Mugwort contains compounds with uterine-stimulating and historical abortifacient activity. If you are pregnant, do not use mugwort-containing products.",
+        "informational_note": "Mugwort has uterotonic activity relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Mugwort contains compounds with uterine-stimulating and historical abortifacient activity. If you are pregnant, do not use mugwort-containing products.",
+        "informational_note": "Mugwort has uterotonic activity relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_BOTAN_RUE_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_BOTAN_RUE_PREGNANCY",
+      "subject_canonical_id": "rue",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Ruta alkaloids cause uterine smooth muscle contraction and have embryotoxic effects demonstrated in animal models.",
+      "notes": "Rue is a well-documented traditional abortifacient. Avoid all preparations during pregnancy and lactation.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/12495553/",
+        "https://pubmed.ncbi.nlm.nih.gov/19146936/"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_BOTAN_RUE_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Rue has established abortifacient activity and teratogenic effects in animal studies. If you are pregnant, do not use rue-containing products.",
+        "informational_note": "Rue has abortifacient activity — relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Do not use during pregnancy",
+        "alert_body": "Rue has established abortifacient activity and teratogenic effects in animal studies. If you are pregnant, do not use rue-containing products.",
+        "informational_note": "Rue has abortifacient activity — relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_IQM_KAVALACTONES_LIVER/pregnancy_lactation",
+      "rule_id": "RULE_IQM_KAVALACTONES_LIVER",
+      "subject_canonical_id": "kavalactones",
+      "pregnancy_category": "contraindicated",
+      "lactation_category": "contraindicated",
+      "evidence_level": "probable",
+      "mechanism": "Kava has CNS-active constituents and documented hepatotoxic potential. No safe dose in pregnancy or lactation has been established.",
+      "notes": "Avoid kava supplements entirely during pregnancy and lactation.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/27092496/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended in pregnancy or breastfeeding",
+        "alert_body": "Kava has CNS-active compounds and no established safe dose in pregnancy or breastfeeding. If you are pregnant or nursing, do not use kava supplements.",
+        "informational_note": "Kava has CNS and hepatic safety concerns — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 1 (contraindicated-contraindicated). Body cites the no-safe-dose finding without catastrophizing."
+    },
+    {
+      "_target": "RULE_IQM_VALERIAN_LIVER/pregnancy_lactation",
+      "rule_id": "RULE_IQM_VALERIAN_LIVER",
+      "subject_canonical_id": "valerian",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "theoretical",
+      "mechanism": "Insufficient safety data for use during pregnancy and lactation; valerian's valepotriates have shown cytotoxic potential in vitro.",
+      "notes": "Avoid valerian during pregnancy and breastfeeding due to insufficient safety data.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/18431248/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended in pregnancy or breastfeeding",
+        "alert_body": "Valerian's safety in pregnancy and breastfeeding is not established, and its valepotriates have shown cytotoxic activity in laboratory studies. If you are pregnant or nursing, do not use valerian.",
+        "informational_note": "Valerian lacks pregnancy safety data — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 1 (theoretical evidence). Body mirrors the data we have without extrapolating."
+    },
+    {
+      "_target": "RULE_IQM_SAW_PALMETTO_LIVER/pregnancy_lactation",
+      "rule_id": "RULE_IQM_SAW_PALMETTO_LIVER",
+      "subject_canonical_id": "saw_palmetto",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "theoretical",
+      "mechanism": "Saw palmetto has antiandrogenic activity; safety data in pregnancy and lactation are absent.",
+      "notes": "Not recommended during pregnancy or breastfeeding.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/16800417/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended in pregnancy or breastfeeding",
+        "alert_body": "Saw palmetto has antiandrogenic activity with no pregnancy or lactation safety data. If you are pregnant or breastfeeding, do not use saw palmetto supplements.",
+        "informational_note": "Saw palmetto is antiandrogenic — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 1 (hormonal mechanism + absent data). Avoids framing as 'fetal harm' since evidence is theoretical."
+    },
+    {
+      "_target": "RULE_IQM_VITAMIN_B6_LACTATION/pregnancy_lactation",
+      "rule_id": "RULE_IQM_VITAMIN_B6_LACTATION",
+      "subject_canonical_id": "vitamin_b6_pyridoxine",
+      "pregnancy_category": "monitor",
+      "lactation_category": "caution",
+      "evidence_level": "probable",
+      "mechanism": "Normal doses of B6 are essential in pregnancy. High pharmacologic doses during lactation may suppress milk production via dopaminergic inhibition of prolactin.",
+      "notes": "This rule applies to supplemental/pharmacologic doses. Prenatal vitamin levels of B6 are appropriate and encouraged.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/28425124/",
+        "https://pubmed.ncbi.nlm.nih.gov/569255/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "High-dose B6 may affect milk supply",
+        "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
+        "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding."
+      },
+      "authoring_notes": "Pattern 4. Explicit prenatal-dose carve-out prevents suppressing normal prenatal supplementation."
+    },
+    {
+      "_target": "RULE_IQM_SAGE_LACTATION/pregnancy_lactation",
+      "rule_id": "RULE_IQM_SAGE_LACTATION",
+      "subject_canonical_id": "sage",
+      "pregnancy_category": "avoid",
+      "lactation_category": "caution",
+      "evidence_level": "probable",
+      "mechanism": "Sage contains thujone and other terpenes with potential uterotonic effects (avoid in pregnancy). During lactation, may suppress milk production via antilactogenic mechanisms.",
+      "notes": "Avoid supplemental/concentrated sage in pregnancy and during active breastfeeding. Culinary use is generally considered safe at typical food amounts.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/safety"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Concentrated sage may affect milk supply",
+        "alert_body": "Sage at supplement or concentrated doses may reduce milk supply. If you are breastfeeding, talk to your clinician before using concentrated forms; culinary use at typical amounts is fine.",
+        "informational_note": "Concentrated sage can affect lactation — culinary amounts are appropriate for anyone breastfeeding."
+      },
+      "authoring_notes": "Pattern 4 + culinary carve-out (per the rule's notes)."
+    },
+    {
+      "_target": "RULE_IQM_DHEA_TTC/pregnancy_lactation",
+      "rule_id": "RULE_IQM_DHEA_TTC",
+      "subject_canonical_id": "dhea",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "established",
+      "mechanism": "DHEA has significant androgenic/hormonal activity and is contraindicated once pregnancy is achieved and during lactation.",
+      "notes": "Discontinue DHEA immediately upon confirmed pregnancy.",
+      "sources": [
+        "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Discontinue once pregnancy is confirmed",
+        "alert_body": "DHEA has androgenic and hormonal activity that is not recommended once pregnancy is achieved. If pregnancy is confirmed, talk to your obstetrician about discontinuing DHEA.",
+        "informational_note": "DHEA is hormonally active — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 1 / TTC transition. The TTC use-case matters — headline respects that DHEA may have been intentional pre-conception."
+    },
+    {
+      "_target": "RULE_IQM_FOLATE_TTC/pregnancy_lactation",
+      "rule_id": "RULE_IQM_FOLATE_TTC",
+      "subject_canonical_id": "vitamin_b9_folate",
+      "pregnancy_category": "monitor",
+      "lactation_category": "monitor",
+      "evidence_level": "established",
+      "mechanism": "Folate is essential throughout pregnancy and lactation for maternal and fetal/infant cell synthesis. The TTC rule transitions to ongoing pregnancy/lactation supplementation guidance.",
+      "notes": "Folate supplementation started periconceptionally should continue throughout pregnancy as part of prenatal vitamin regimen.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/26662928/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Continue folate under prenatal care",
+        "alert_body": "Folate started before pregnancy should continue through pregnancy and breastfeeding as part of prenatal support. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+        "informational_note": "Folate is part of standard prenatal support — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Pattern 5 (continue-under-care). Reassuring — folate cessation at conception would be harmful."
+    },
+    {
+      "_target": "RULE_IQM_INOSITOL_TTC/pregnancy_lactation",
+      "rule_id": "RULE_IQM_INOSITOL_TTC",
+      "subject_canonical_id": "inositol",
+      "pregnancy_category": "monitor",
+      "lactation_category": "monitor",
+      "evidence_level": "probable",
+      "mechanism": "Myo-inositol is a naturally occurring compound and generally considered safe in pregnancy. Some evidence supports its use to reduce gestational diabetes risk in PCOS pregnancies. Standard monitoring is appropriate.",
+      "notes": "Transition to clinician-supervised use once pregnancy is confirmed if continuing supplementation.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30614289/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Continue inositol under prenatal care",
+        "alert_body": "Myo-inositol is generally considered safe in pregnancy, and use may continue under clinician supervision. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+        "informational_note": "Inositol is continued under clinician supervision — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Pattern 5. The PCOS / gestational diabetes use-case is continued under care, not stopped."
+    },
+    {
+      "_target": "RULE_IQM_WILD_YAM_PREGNANCY/pregnancy_lactation",
+      "rule_id": "RULE_IQM_WILD_YAM_PREGNANCY",
+      "subject_canonical_id": "wild_yam",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Diosgenin (steroidal sapogenin) in wild yam has documented phytoestrogenic activity. Human conversion to progesterone does not occur in vivo. Safety during pregnancy and lactation is not established. Estrogenic activity may disrupt hormonal balance.",
+      "notes": "Wild yam is sometimes marketed as a 'natural progesterone' but this claim is not supported by human pharmacokinetics. Avoid during pregnancy and lactation.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30735081/",
+        "https://pubmed.ncbi.nlm.nih.gov/21800902/"
+      ],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[0] on RULE_IQM_WILD_YAM_PREGNANCY",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Wild yam contains diosgenin, a phytoestrogen with hormone-active effects. If you are pregnant, do not use wild yam unless directed by your obstetrician.",
+        "informational_note": "Wild yam is hormone-active — relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Wild yam contains diosgenin, a phytoestrogen with hormone-active effects. If you are pregnant, do not use wild yam unless directed by your obstetrician.",
+        "informational_note": "Wild yam is hormone-active — relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    },
+    {
+      "_target": "RULE_IQM_VITAMIN_B12_COBALAMIN_TTC/pregnancy_lactation",
+      "rule_id": "RULE_IQM_VITAMIN_B12_COBALAMIN_TTC",
+      "subject_canonical_id": "vitamin_b12_cobalamin",
+      "pregnancy_category": "monitor",
+      "lactation_category": "monitor",
+      "evidence_level": "established",
+      "mechanism": "B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomocysteinemia. Standard prenatal vitamins contain B12; supplementation should continue throughout pregnancy and during breastfeeding.",
+      "notes": "B12 supplementation during pregnancy is part of standard prenatal care. Vegans and those with malabsorption (pernicious anemia, gastric surgery, metformin use) need higher supplemental doses.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/34036101/",
+        "https://pubmed.ncbi.nlm.nih.gov/18636794/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Continue B12 under prenatal care",
+        "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+        "informational_note": "B12 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Pattern 5. Vegans and people on metformin need higher supplemental doses — flagged in rule notes, captured in body via 'discuss dosing'."
+    },
+    {
+      "_target": "RULE_BOTANICAL_LICORICE_ROOT/pregnancy_lactation",
+      "rule_id": "RULE_BOTANICAL_LICORICE_ROOT",
+      "subject_canonical_id": "licorice_root",
+      "pregnancy_category": "avoid",
+      "lactation_category": "caution",
+      "evidence_level": "established",
+      "mechanism": "Glycyrrhizin inhibits placental 11β-HSD2, allowing excess maternal cortisol to cross to the fetus. Finnish cohort data document >2-fold increased preterm delivery and neurodevelopmental harm (reduced IQ, ADHD risk) with sustained glycyrrhizin exposure in pregnancy.",
+      "notes": "Avoid during pregnancy. DGL form may be used under clinical supervision. Lactation evidence is limited.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/28133296/"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "Licorice root's glycyrrhizin can allow excess maternal cortisol to reach the fetus. If you are pregnant, talk to your obstetrician; DGL licorice may be used under clinical supervision.",
+        "informational_note": "Licorice root with glycyrrhizin affects fetal cortisol — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Pattern 2. Parallel to RULE_IQM_LICORICE_HYPERTENSION — same active, separate rule ID."
+    },
+    {
+      "_target": "RULE_IQM_RED_CLOVER/pregnancy_lactation",
+      "rule_id": "RULE_IQM_RED_CLOVER",
+      "subject_canonical_id": "red_clover",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "Red clover isoflavones are phytoestrogens with ERα/ERβ agonist activity. Estrogenic stimulation during organogenesis and fetal development is a recognized safety concern. Animal studies demonstrate adverse reproductive outcomes with high phytoestrogen exposure. Clinical safety data in human pregnancy are absent.",
+      "notes": "Avoid red clover isoflavone supplements during pregnancy and lactation. Occasional culinary intake (e.g., sprouts) is not subject to this restriction.",
+      "sources": [
+        "https://www.nccih.nih.gov/health/red-clover"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Not recommended in pregnancy or breastfeeding",
+        "alert_body": "Red clover contains phytoestrogens with estrogen-receptor activity. If you are pregnant or breastfeeding, do not use red clover isoflavone supplements — culinary sprouts are not subject to this.",
+        "informational_note": "Red clover contains phytoestrogens — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
+      },
+      "authoring_notes": "Pattern 1 + culinary carve-out (per the rule's notes). Supplement-form only."
+    },
+    {
+      "_target": "RULE_IQM_GUARANA/pregnancy_lactation",
+      "rule_id": "RULE_IQM_GUARANA",
+      "subject_canonical_id": "guarana",
+      "pregnancy_category": "monitor",
+      "lactation_category": "caution",
+      "evidence_level": "established",
+      "mechanism": "Guarana's caffeine content carries the same pregnancy risk as dietary caffeine. Caffeine crosses the placenta; fetal caffeine clearance is slow due to immature cytochrome P450 1A2. Total caffeine should be kept below 200 mg/day in pregnancy.",
+      "notes": "Total caffeine from all sources (including guarana) must be summed against the 200 mg/day pregnancy limit.",
+      "sources": [
+        "https://www.acog.org/womens-health/experts-and-stories/ask-acog/how-much-coffee-can-i-drink-while-pregnant"
+      ],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Guarana caffeine counts toward daily total",
+        "alert_body": "Guarana contains caffeine that adds to your total daily intake. If you are pregnant or nursing, sum caffeine from all sources (including guarana) against a 200 mg/day ceiling.",
+        "informational_note": "Guarana caffeine adds to the daily total — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Special. Ties guarana into the same caffeine budget as RULE_INGREDIENT_CAFFEINE."
+    },
+    {
+      "_target": "RULE_IQM_FISH_OIL_BLEEDING/pregnancy_lactation",
+      "rule_id": "RULE_IQM_FISH_OIL_BLEEDING",
+      "subject_canonical_id": "fish_oil",
+      "pregnancy_category": "monitor",
+      "lactation_category": "monitor",
+      "evidence_level": "established",
+      "mechanism": "",
+      "notes": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
+      "sources": [],
+      "shortcut_from_round_1": null,
+      "fields_to_author": {
+        "alert_headline": "Continue omega-3 under prenatal care",
+        "alert_body": "Omega-3 (especially DHA) is recommended during pregnancy for fetal brain development. If you are pregnant or nursing, discuss dosing with your clinician and keep total omega-3 under 3 g per day.",
+        "informational_note": "Omega-3 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding."
+      },
+      "authoring_notes": "Pattern 5. FDA's 3 g/day ceiling is cited explicitly per the rule's notes."
+    },
+    {
+      "_target": "RULE_BANNED_CBD_INTERACTIONS/pregnancy_lactation",
+      "rule_id": "RULE_BANNED_CBD_INTERACTIONS",
+      "subject_canonical_id": "BANNED_CBD_US",
+      "pregnancy_category": "avoid",
+      "lactation_category": "avoid",
+      "evidence_level": "probable",
+      "mechanism": "",
+      "notes": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
+      "sources": [],
+      "shortcut_from_round_1": {
+        "source": "condition_rules[2] on RULE_BANNED_CBD_INTERACTIONS",
+        "rationale": "Round-1 pregnancy condition_rule already authored for this subject — copy verbatim into the PL block fields.",
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+        "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy."
+      },
+      "fields_to_author": {
+        "alert_headline": "Not recommended during pregnancy",
+        "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+        "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy."
+      },
+      "authoring_notes": ""
+    }
+  ]
+}
