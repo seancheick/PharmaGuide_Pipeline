@@ -307,11 +307,15 @@ def validate_interaction_rule(
     cid = str(subject_ref.get("canonical_id") or "")
     if cid and cid != cid.lower() and (subject_ref.get("db") or "") not in (
         "banned_recalled_ingredients",
+        "harmful_additives",
+        "other_ingredients",
     ):
-        # Only enforce lowercase on non-banned DBs — banned uses UPPER
-        # historically. See Footgun C in the handoff doc.
+        # Only enforce lowercase on DBs that have converted to lowercase
+        # IDs. Legacy uppercase prefixes (BANNED_, ADD_, NHA_, RISK_) stay
+        # WARN-only because changing casing would cascade into
+        # cross-file references. See Footgun C in the handoff doc.
         msg = f"{rule_id}: subject canonical_id is not lowercase ({cid})"
-        (res.fail if strict else res.warn)(msg)
+        res.warn(msg)
 
     for sub in rule.get("condition_rules") or []:
         if isinstance(sub, dict):

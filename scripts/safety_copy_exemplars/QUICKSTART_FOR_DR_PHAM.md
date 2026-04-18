@@ -15,11 +15,11 @@ entry.
 
 ## The three files
 
-| # | File | Entries | Fields per entry | Time | Priority |
-|---|---|---|---|---|---|
-| 1 | `scripts/data/medication_depletions.json` | 68 | 4 | ~4 h | **Start here — fastest, highest UX win** |
-| 2 | `scripts/data/banned_recalled_ingredients.json` | 139 | 3 | ~35 h | Medical-incident risk — metformin-banned case |
-| 3 | `scripts/data/ingredient_interaction_rules.json` | 59 severe sub-rules | 3 each | ~20 h | Biggest "scary-for-everyone" win |
+| #   | File                                             | Entries             | Fields per entry | Time  | Priority                                      |
+| --- | ------------------------------------------------ | ------------------- | ---------------- | ----- | --------------------------------------------- |
+| 1   | `scripts/data/medication_depletions.json`        | 68                  | 4                | ~4 h  | **Start here — fastest, highest UX win**      |
+| 2   | `scripts/data/banned_recalled_ingredients.json`  | 139                 | 3                | ~35 h | Medical-incident risk — metformin-banned case |
+| 3   | `scripts/data/ingredient_interaction_rules.json` | 59 severe sub-rules | 3 each           | ~20 h | Biggest "scary-for-everyone" win              |
 
 All three sit in `/Users/seancheick/Downloads/dsld_clean/scripts/data/`.
 Edit with any text editor. Commit by batch (one medication family at a
@@ -28,18 +28,23 @@ time is ideal).
 **Round 1 complete.** Files 1, 2, and the 77 severe sub-rules in File 3
 are authored, validated, and shipped (2026-04-17/18).
 
-**Round 2a is open** — 39 `pregnancy_lactation` blocks (a 3rd structural
-type found during end-to-end verification). See
-[`ROUND_2_PREGNANCY_LACTATION_INSTRUCTIONS.md`](ROUND_2_PREGNANCY_LACTATION_INSTRUCTIONS.md)
-and the pre-populated workspace
-[`round_2_pregnancy_lactation_shell.json`](round_2_pregnancy_lactation_shell.json).
-~2.5 hours. 15 of the 39 copy verbatim from your round-1 condition_rules
-work (already pre-filled in the shell); 24 need fresh writes across 5
-exemplar patterns.
+**Round 2a complete.** 39 `pregnancy_lactation` blocks authored and
+shipped (2026-04-18).
 
-**Round 2b is backlogged** — 297 non-severe sub-rules (caution/monitor/
-info) across File 3. These are suppressed without a profile match, so
-lower-urgency; opens after 2a lands.
+**Round 2b-full is open** — **all 297 non-severe sub-rules** across
+File 3. This supersedes the earlier 2b-α / 2b-β split: we're authoring
+everything for catalog-growth safety and UX consistency for
+profile-matched users. See
+[`ROUND_2B_FULL_INSTRUCTIONS.md`](ROUND_2B_FULL_INSTRUCTIONS.md) and the
+pre-populated workspace
+[`round_2b_full_shell.json`](round_2b_full_shell.json).
+~4–6 hours. 297 slots but only 25 unique targets across 8 clinical
+families, so work is template-driven — design ~12 templates, substitute
+ingredients. Bleeding family alone is 107 sub-rules under one mechanism.
+9 direct shortcuts pre-filled from existing authored copy.
+
+After 2b-full: File 3 is fully clinical-reviewed end-to-end, no
+deferred slice.
 
 ---
 
@@ -51,12 +56,12 @@ These apply to every string you write, regardless of file:
    ordering the user to act.
 2. **No SCREAMING.** No `STOP`, `DANGER`, `URGENT`, `CRITICAL`, `NEVER`.
    Medical acronyms (`MAOI`, `FDA`, `NSAID`, `SSRI`) are fine.
-3. **No encyclopedic openers.** No *"X is a prescription drug that…"*,
-   *"X is a synthetic stimulant that…"*. Lead with what the user needs
+3. **No encyclopedic openers.** No _"X is a prescription drug that…"_,
+   _"X is a synthetic stimulant that…"_. Lead with what the user needs
    to know, not a pharmacology definition.
 4. **Conditional framing when the rule depends on user state.**
-   *"If you take X…"* / *"When you…"* / *"People on X…"* — not
-   *"Do not combine"* barked at every user.
+   _"If you take X…"_ / _"When you…"_ / _"People on X…"_ — not
+   _"Do not combine"_ barked at every user.
 5. **No unsupported claims.** Every copy must match the existing
    `mechanism` / `reason` / cited sources. If it says more than the
    source proves, cut or add a source.
@@ -70,20 +75,20 @@ These apply to every string you write, regardless of file:
 
 ### 4 required fields + 1 optional copy field per entry
 
-| Field | Length | Shown when |
-|---|---|---|
-| `alert_headline` | 20–60 chars | Always (item title) |
-| `alert_body` | 60–200 chars | Nutrient NOT in user's stack |
-| `acknowledgement_note` | 40–120 chars | Nutrient IS in user's stack |
-| `monitoring_tip_short` | 40–120 chars | Always |
+| Field                               | Length       | Shown when                    |
+| ----------------------------------- | ------------ | ----------------------------- |
+| `alert_headline`                    | 20–60 chars  | Always (item title)           |
+| `alert_body`                        | 60–200 chars | Nutrient NOT in user's stack  |
+| `acknowledgement_note`              | 40–120 chars | Nutrient IS in user's stack   |
+| `monitoring_tip_short`              | 40–120 chars | Always                        |
 | `food_sources_short` **(optional)** | 40–160 chars | Detail expander + nudge sheet |
 
 ### Optional numeric thresholds
 
-| Field | Type | When to set |
-|---|---|---|
+| Field                    | Type   | When to set                            |
+| ------------------------ | ------ | -------------------------------------- |
 | `adequacy_threshold_mcg` | number | Nutrients normally dosed in micrograms |
-| `adequacy_threshold_mg` | number | Nutrients normally dosed in milligrams |
+| `adequacy_threshold_mg`  | number | Nutrients normally dosed in milligrams |
 
 **Pick exactly one threshold field per entry** (validator FAILS if both
 are set). Skip thresholds entirely for doctor-managed nutrients
@@ -95,12 +100,12 @@ This trips people up. The checker compares doses to thresholds — it
 has to know the unit. You pick the one that matches the nutrient's
 conventional label unit:
 
-| Nutrient | Label unit | Use field | Example value |
-|---|---|---|---|
-| Vitamin B12, folate, biotin, iodine, selenium, vitamin K | mcg (μg) | `adequacy_threshold_mcg` | `500` means 500 mcg |
-| Magnesium, calcium, zinc, iron, potassium, CoQ10, vitamin C | mg | `adequacy_threshold_mg` | `200` means 200 mg |
-| Vitamin D, vitamin A | IU on label, but pipeline stores mass | `adequacy_threshold_mcg` | vitamin D: `25` means 25 mcg (≈ 1000 IU) |
-| Vitamin E | IU on label, but pipeline stores mass | `adequacy_threshold_mg` | `15` means 15 mg α-tocopherol |
+| Nutrient                                                    | Label unit                            | Use field                | Example value                            |
+| ----------------------------------------------------------- | ------------------------------------- | ------------------------ | ---------------------------------------- |
+| Vitamin B12, folate, biotin, iodine, selenium, vitamin K    | mcg (μg)                              | `adequacy_threshold_mcg` | `500` means 500 mcg                      |
+| Magnesium, calcium, zinc, iron, potassium, CoQ10, vitamin C | mg                                    | `adequacy_threshold_mg`  | `200` means 200 mg                       |
+| Vitamin D, vitamin A                                        | IU on label, but pipeline stores mass | `adequacy_threshold_mcg` | vitamin D: `25` means 25 mcg (≈ 1000 IU) |
+| Vitamin E                                                   | IU on label, but pipeline stores mass | `adequacy_threshold_mg`  | `15` means 15 mg α-tocopherol            |
 
 **Why not IU directly?** IU-to-mass conversion depends on the nutrient
 form (vitamin D: 1 mcg = 40 IU; vitamin A: 1 mcg RAE = 3.33 IU retinol
@@ -118,29 +123,32 @@ The validator enforces 4 original rules plus 6 clinical-UX / nocebo rules
 you (Dr. Pham) added in round 1 review. All are automatic.
 
 **Original 4 (hard FAIL):**
-- **No "Depleted by X" openers.** Reads as damage. Use *"May lower X
-  over time"* or *"Can affect X long-term"*.
+
+- **No "Depleted by X" openers.** Reads as damage. Use _"May lower X
+  over time"_ or _"Can affect X long-term"_.
 - **Body must contain onset language:** `over time | long-term | chronic
-  | gradually | years | months | with regular use`. Depletion is chronic.
+| gradually | years | months | with regular use`. Depletion is chronic.
 - **Acknowledgement is PURE validation.** No `risk | deficiency | avoid
-  | worry | concern | danger | harm`. User already took care of this.
+| worry | concern | danger | harm`. User already took care of this.
 - **Tip uses soft verbs only:** `check | consider | monitor | watch |
-  ask | discuss`. Never `stop | urgent | immediately | emergency`.
+ask | discuss`. Never `stop | urgent | immediately | emergency`.
 
 **Nocebo-safe additions (round 1 — hard FAIL):**
+
 - **No numeric stats in body copy.** Percentages (`30%`) or ratios
   (`1 in 3`) read as "you're at significant risk" on a mobile card.
   Move them to `clinical_impact` — the expandable detail.
 - **No absolute causal claims in body.** `will cause | always causes |
-  leads to | results in` — depletion is probabilistic; prefer
-  *"can lower"* / *"may reduce"*.
+leads to | results in` — depletion is probabilistic; prefer
+  _"can lower"_ / _"may reduce"_.
 - **No acute-tense framing in body.** `suddenly | immediately |
-  rapidly | quickly | acute | acutely` — depletion is chronic by
+rapidly | quickly | acute | acutely` — depletion is chronic by
   definition.
 
 **Nocebo-safe additions (round 1 — WARN, you should still resolve):**
+
 - **Catastrophizing modifiers** in body/headline/tip: `severe | serious
-  | dangerous | major | significant | critical`. Prime threat response.
+| dangerous | major | significant | critical`. Prime threat response.
   Note: `"significant"` is fine as the severity-tier **value** in the
   entry; avoid it in the user-facing copy fields.
 - **Symptom list >2 terms in body.** Listing many symptoms primes users
@@ -152,10 +160,10 @@ you (Dr. Pham) added in round 1 review. All are automatic.
 ### Food-sources rules (v5.2.1 — optional field)
 
 - **Inclusive framing only** — `"Food sources include…"`, `"Found
-  in…"`, `"Good sources are…"`. No imperative verbs (`eat`, `consume`,
+in…"`, `"Good sources are…"`. No imperative verbs (`eat`, `consume`,
   `increase`, `boost`, `incorporate`).
 - **No alarm words** — the field is positive/affirmative. `deficiency |
-  dangerous | severe | urgent | stop | avoid | at risk` all FAIL.
+dangerous | severe | urgent | stop | avoid | at risk` all FAIL.
 - **Length 40–160 chars** — slightly more room than the other fields
   because food lists run long.
 - **Skip the field entirely** when food isn't a meaningful path
@@ -192,7 +200,7 @@ You add:
 "adequacy_threshold_mcg": 500
 ```
 
-Notice what's *not* there — it went to the `clinical_impact` expander:
+Notice what's _not_ there — it went to the `clinical_impact` expander:
 
 - ❌ "Up to 30% of long-term users" — numeric stat, alarm-forward
 - ❌ "peripheral neuropathy, megaloblastic anemia, cognitive changes" —
@@ -217,6 +225,7 @@ even when the nutrient is plentiful in the diet.
 > be enough on their own — a supplement is often more reliable."
 
 Use for:
+
 - Metformin + B12 — blocks intrinsic-factor/B12 receptor on ileal mucosa
 - PPI + B12 — low stomach acid; B12 not freed from food proteins
 
@@ -227,6 +236,7 @@ food alone rarely reaches meaningful doses regardless of absorption.
 > amounts, but a supplement is usually the practical route."
 
 Use for:
+
 - Statin + CoQ10 — dietary CoQ10 (organ meats, fatty fish) is minimal
 
 **Depletions where a normal inclusive food list IS appropriate:**
@@ -238,21 +248,22 @@ Use for:
 - SSRI + magnesium — same magnesium-rich foods
 
 **Pattern C — Bespoke drug-mechanism framing.** The "depletion" is
-actually the drug's *intended* mechanism of action, not a side effect.
+actually the drug's _intended_ mechanism of action, not a side effect.
 Standard "X can lower Y" copy misrepresents the clinical reality. Use
-reframed copy that treats the effect as designed, and signal *stability*
+reframed copy that treats the effect as designed, and signal _stability_
 rather than supplementation.
 
-> Headline: *"Warfarin changes how vitamin K works"*
-> Body: *"Warfarin works by blocking vitamin K's role in clotting — this
+> Headline: _"Warfarin changes how vitamin K works"_
+> Body: _"Warfarin works by blocking vitamin K's role in clotting — this
 > is long-term by design. Changes in vitamin K intake can shift your
-> INR over weeks."*
-> Tip: *"Consider keeping your vitamin K intake steady day to day;
-> discuss changes with your prescriber."*
+> INR over weeks."_
+> Tip: _"Consider keeping your vitamin K intake steady day to day;
+> discuss changes with your prescriber."_
 
 Use for:
+
 - Warfarin + vitamin K (canonical example)
-- Any future rule where the drug is *supposed* to modulate the
+- Any future rule where the drug is _supposed_ to modulate the
   nutrient: methotrexate + folate rescue dosing, enzyme-inducing
   anticonvulsants + vitamin K, etc.
 
@@ -276,11 +287,10 @@ python3 scripts/validate_safety_copy.py --depletions-only
 
 ## File 2 — `banned_recalled_ingredients.json` (143 entries)
 
-*Status: clinical review round 1 complete (Dr. Pham, 2026-04-17). All
+_Status: clinical review round 1 complete (Dr. Pham, 2026-04-17). All
 143 entries authored; 0 errors under strict validator (except 143
 pre-existing `canonical_id` uppercase warnings — migration debt, not
-part of this authoring pass and exempted from strict failure).*
-
+part of this authoring pass and exempted from strict failure)._
 
 **Purpose:** Fix medically-wrong derived warnings. The old copy told
 patients their prescribed metformin was "banned" — it's only banned as
@@ -289,11 +299,11 @@ to happen. This authoring closes that gap permanently.
 
 ### 3 fields to add per entry
 
-| Field | Length | Purpose |
-|---|---|---|
-| `ban_context` | enum | `substance` / `adulterant_in_supplements` / `watchlist` / `export_restricted` |
-| `safety_warning` | 50–200 chars | Detail-pane warning copy |
-| `safety_warning_one_liner` | 20–80 chars | Banner copy (one sentence) |
+| Field                      | Length       | Purpose                                                                       |
+| -------------------------- | ------------ | ----------------------------------------------------------------------------- |
+| `ban_context`              | enum         | `substance` / `adulterant_in_supplements` / `watchlist` / `export_restricted` |
+| `safety_warning`           | 50–200 chars | Detail-pane warning copy                                                      |
+| `safety_warning_one_liner` | 20–80 chars  | Banner copy (one sentence)                                                    |
 
 ### `ban_context` — pick one
 
@@ -312,11 +322,11 @@ to happen. This authoring closes that gap permanently.
 - **NEVER** start `safety_warning` with `"{standard_name} is …"` —
   that's the old derivation template that caused the bug.
 - For `adulterant_in_supplements`: the warning MUST contain text like
-  *"in supplement"*, *"within supplement"*, *"found in supplement"*, or
-  *"as an adulterant in dietary…"*. This guardrail protects patients on
+  _"in supplement"_, _"within supplement"_, _"found in supplement"_, or
+  _"as an adulterant in dietary…"_. This guardrail protects patients on
   prescribed versions of the drug.
 - `safety_warning` must contain a risk/action verb: `stop | avoid |
-  consult | risk | linked | caused | associated | do not | talk to`.
+consult | risk | linked | caused | associated | do not | talk to`.
 - `safety_warning_one_liner` must end with `.` or `!` and contain no
   semicolons.
 
@@ -384,20 +394,20 @@ Each rule has `condition_rules[]` and/or `drug_class_rules[]` sub-rules.
 Author these fields on each sub-rule with severity in
 {`avoid`, `contraindicated`}:
 
-| Field | Length | Shown when |
-|---|---|---|
-| `alert_headline` | 20–60 chars | Always (item title) |
-| `alert_body` | 60–200 chars | User's profile matches (condition/drug) |
-| `informational_note` | 40–120 chars | Profile does NOT match (silent-label) |
+| Field                | Length       | Shown when                              |
+| -------------------- | ------------ | --------------------------------------- |
+| `alert_headline`     | 20–60 chars  | Always (item title)                     |
+| `alert_body`         | 60–200 chars | User's profile matches (condition/drug) |
+| `informational_note` | 40–120 chars | Profile does NOT match (silent-label)   |
 
 ### Interaction-rule-specific rules (on top of universal)
 
 - `alert_headline` has no trailing `!`.
 - `alert_body` for `avoid` / `contraindicated` MUST contain conditional
   framing: `if you | when you | people who | do not combine | talk to |
-  discuss with | monitor | ask your`.
+discuss with | monitor | ask your`.
 - `informational_note` MUST NOT contain imperative verbs: `stop | avoid |
-  do not | never | always`. The user is not on the triggering profile —
+do not | never | always`. The user is not on the triggering profile —
   this reads as context, not a command.
 
 ### Example — Berberine + diabetes meds

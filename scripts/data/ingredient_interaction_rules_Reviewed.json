@@ -245,7 +245,10 @@
           "action": "Prefer products without propylene glycol when chronic kidney disease is present.",
           "sources": [
             "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "Propylene glycol is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of propylene glycol.",
+          "informational_note": "Propylene glycol depends on kidney clearance — relevant to people with kidney conditions."
         }
       ],
       "drug_class_rules": [],
@@ -282,7 +285,10 @@
           "action": "Monitor glucose if combining oral aloe supplements with diabetes medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36220193/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Aloe vera can lower blood sugar. If you have diabetes, talk to your clinician before adding aloe vera and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Aloe vera affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -294,7 +300,10 @@
           "action": "Monitor glucose and GI symptoms.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36220193/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Aloe vera can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding aloe vera and monitor your glucose more closely at first.",
+          "informational_note": "Aloe vera affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [],
@@ -330,7 +339,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know",
             "https://pubmed.ncbi.nlm.nih.gov/34853508/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Alpha-lipoic acid can lower blood sugar. If you have diabetes, talk to your clinician before adding Alpha-lipoic acid and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Alpha-lipoic acid affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -342,7 +354,10 @@
           "action": "Monitor glucose and adjust medication only under clinician supervision.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Alpha-lipoic acid can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Alpha-lipoic acid and monitor your glucose more closely at first.",
+          "informational_note": "Alpha-lipoic acid affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [
@@ -391,7 +406,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/26312811/",
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
-          ]
+          ],
+          "alert_headline": "Consult on cholesterol management",
+          "alert_body": "Berberine can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding berberine — it may change your lipid-therapy plan.",
+          "informational_note": "Berberine affects lipid pathways — relevant to people managing high cholesterol."
         }
       ],
       "drug_class_rules": [
@@ -417,7 +435,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
             "https://pubmed.ncbi.nlm.nih.gov/26312811/"
-          ]
+          ],
+          "alert_headline": "May affect statin tolerability",
+          "alert_body": "Berberine shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding berberine and watch for new muscle aches.",
+          "informational_note": "Berberine affects statin pathways — relevant to people on statin therapy."
         },
         {
           "drug_class_id": "maois",
@@ -471,7 +492,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32750587/",
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Bitter melon can lower blood sugar. If you have diabetes, talk to your clinician before adding bitter melon and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Bitter melon affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -483,7 +507,10 @@
           "action": "Monitor for hypoglycemia and coordinate with prescriber.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Bitter melon can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding bitter melon and monitor your glucose more closely at first.",
+          "informational_note": "Bitter melon affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": {
@@ -571,7 +598,10 @@
           "action": "Keep supplemental caffeine low and account for all dietary caffeine sources.",
           "sources": [
             "https://www.acog.org/womens-health/experts-and-stories/ask-acog/how-much-coffee-can-i-drink-while-pregnant"
-          ]
+          ],
+          "alert_headline": "Caffeine adds up — watch total intake",
+          "alert_body": "Caffeine crosses the placenta and passes into breast milk. If you are pregnant or nursing, monitor total caffeine from coffee, tea, chocolate, and supplements against a 200 mg/day ceiling.",
+          "informational_note": "Caffeine crosses the placenta and reaches breast milk — relevant to anyone pregnant or breastfeeding."
         },
         {
           "condition_id": "hypertension",
@@ -581,7 +611,10 @@
           "action": "Limit caffeine-containing supplements. Monitor BP when starting caffeine supplements.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23871889/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Caffeine can influence blood pressure. If you have high blood pressure, talk to your clinician before adding caffeine and monitor your readings.",
+          "informational_note": "Caffeine can affect blood pressure — relevant to people with high blood pressure."
         }
       ],
       "drug_class_rules": [],
@@ -638,7 +671,10 @@
           "action": "Use with glucose monitoring if on diabetes treatment.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Chromium can lower blood sugar. If you have diabetes, talk to your clinician before adding chromium and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Chromium affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -650,7 +686,10 @@
           "action": "Adjust medication only under clinician supervision.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Chromium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding chromium and monitor your glucose more closely at first.",
+          "informational_note": "Chromium affects glycemic control — relevant to people on diabetes medications."
         },
         {
           "severity": "caution",
@@ -661,7 +700,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33584551/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Chromium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing chromium away from your dose.",
+          "informational_note": "Chromium affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "pregnancy_lactation": null,
@@ -684,7 +726,10 @@
           "action": "Track glucose trends when adding supplemental cinnamon.",
           "sources": [
             "https://www.nccih.nih.gov/health/cinnamon"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Cinnamon can lower blood sugar. If you have diabetes, talk to your clinician before adding cinnamon and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Cinnamon affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -696,7 +741,10 @@
           "action": "Monitor for hypoglycemia and coordinate with prescriber.",
           "sources": [
             "https://www.nccih.nih.gov/health/cinnamon"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Cinnamon can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding cinnamon and monitor your glucose more closely at first.",
+          "informational_note": "Cinnamon affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -735,7 +783,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10417036/",
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Dong quai has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding dong quai and ask about INR or bleeding checks.",
+          "informational_note": "Dong quai can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -771,7 +822,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24378636/",
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Fenugreek can lower blood sugar. If you have diabetes, talk to your clinician before adding fenugreek and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Fenugreek affects glycemic control — relevant to people with diabetes."
         },
         {
           "condition_id": "lactation",
@@ -782,7 +836,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/35236166/",
             "https://pubmed.ncbi.nlm.nih.gov/12192964/"
-          ]
+          ],
+          "alert_headline": "Not recommended during pregnancy",
+          "alert_body": "Fenugreek has uterotonic activity and can lower maternal blood sugar. If you are pregnant, talk to your obstetrician; during breastfeeding, use under clinician guidance for milk-supply support.",
+          "informational_note": "Fenugreek has uterotonic activity — relevant to anyone pregnant or planning pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -794,7 +851,10 @@
           "action": "Separate dosing from oral hypoglycemics by 2 hours. Monitor for hypoglycemia.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24378636/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Fenugreek can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fenugreek and monitor your glucose more closely at first.",
+          "informational_note": "Fenugreek affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": {
@@ -845,7 +905,10 @@
           "action": "Monitor for increased bleeding tendency.",
           "sources": [
             "https://www.nccih.nih.gov/health/feverfew"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Feverfew has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding feverfew and ask about INR or bleeding checks.",
+          "informational_note": "Feverfew can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -885,7 +948,10 @@
           "action": "Separate from oral diabetes medications by at least 2 hours (fiber delays drug absorption). Take with adequate water.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36771367/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Fiber can lower blood sugar. If you have diabetes, talk to your clinician before adding fiber and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Fiber affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -897,7 +963,10 @@
           "action": "Separate glucomannan from oral diabetes medications by at least 2 hours.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36771367/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Fiber can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fiber and monitor your glucose more closely at first.",
+          "informational_note": "Fiber affects glycemic control — relevant to people on diabetes medications."
         },
         {
           "severity": "caution",
@@ -908,7 +977,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33584551/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Fiber can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing fiber away from your dose.",
+          "informational_note": "Fiber affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "pregnancy_lactation": null,
@@ -945,7 +1017,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/garlic",
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Garlic can influence blood pressure. If you have high blood pressure, talk to your clinician before adding garlic and monitor your readings.",
+          "informational_note": "Garlic can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "high_cholesterol",
@@ -956,7 +1031,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/38659110/",
             "https://www.nccih.nih.gov/health/garlic"
-          ]
+          ],
+          "alert_headline": "Consult on cholesterol management",
+          "alert_body": "Garlic can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding garlic — it may change your lipid-therapy plan.",
+          "informational_note": "Garlic affects lipid pathways — relevant to people managing high cholesterol."
         }
       ],
       "drug_class_rules": [
@@ -968,7 +1046,10 @@
           "action": "Use only with clinician monitoring for bleeding signs.",
           "sources": [
             "https://www.nccih.nih.gov/health/garlic"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Garlic has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding garlic and ask about INR or bleeding checks.",
+          "informational_note": "Garlic can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -978,7 +1059,10 @@
           "action": "Monitor for bruising or bleeding.",
           "sources": [
             "https://www.nccih.nih.gov/health/garlic"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Garlic has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding garlic.",
+          "informational_note": "Garlic can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "antihypertensives",
@@ -988,7 +1072,10 @@
           "action": "Monitor BP when combining garlic supplements with antihypertensive medications.",
           "sources": [
             "https://www.nccih.nih.gov/health/garlic"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Garlic can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding garlic.",
+          "informational_note": "Garlic can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "statins",
@@ -999,7 +1086,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/garlic",
             "https://pubmed.ncbi.nlm.nih.gov/38659110/"
-          ]
+          ],
+          "alert_headline": "May affect statin tolerability",
+          "alert_body": "Garlic shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding garlic and watch for new muscle aches.",
+          "informational_note": "Garlic affects statin pathways — relevant to people on statin therapy."
         }
       ],
       "dose_thresholds": [],
@@ -1022,7 +1112,10 @@
           "action": "Discuss use before surgery.",
           "sources": [
             "https://www.nccih.nih.gov/health/ginger"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Ginger can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing ginger about two weeks before the procedure.",
+          "informational_note": "Ginger can affect perioperative bleeding — relevant to anyone preparing for surgery."
         },
         {
           "condition_id": "bleeding_disorders",
@@ -1032,7 +1125,10 @@
           "action": "Use ginger supplements with caution in bleeding disorders. Monitor for bruising or prolonged bleeding.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25230580/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Ginger has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding ginger.",
+          "informational_note": "Ginger can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -1044,7 +1140,10 @@
           "action": "Use with monitoring and clinician input.",
           "sources": [
             "https://www.nccih.nih.gov/health/ginger"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Ginger has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding ginger and ask about INR or bleeding checks.",
+          "informational_note": "Ginger can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -1054,7 +1153,10 @@
           "action": "Monitor for increased bleeding risk when combining ginger with antiplatelet drugs.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25230580/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Ginger has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding ginger.",
+          "informational_note": "Ginger can affect platelet function — relevant to people on antiplatelets."
         }
       ],
       "pregnancy_lactation": null,
@@ -1078,7 +1180,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/ginkgo",
             "https://pubmed.ncbi.nlm.nih.gov/14598602/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Ginkgo can influence blood pressure. If you have high blood pressure, talk to your clinician before adding ginkgo and monitor your readings.",
+          "informational_note": "Ginkgo can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "severity": "caution",
@@ -1089,7 +1194,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/22736461/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with seizure disorder",
+          "alert_body": "Ginkgo may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding ginkgo.",
+          "informational_note": "Ginkgo may affect seizure threshold — relevant to people with a seizure disorder."
         },
         {
           "condition_id": "bleeding_disorders",
@@ -1128,7 +1236,10 @@
           "action": "Monitor BP control when combining with calcium channel blockers.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/14598602/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Ginkgo can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding ginkgo.",
+          "informational_note": "Ginkgo can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "anticoagulants",
@@ -1139,7 +1250,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15764334/",
             "https://www.nccih.nih.gov/health/ginkgo"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Ginkgo has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding ginkgo and ask about INR or bleeding checks.",
+          "informational_note": "Ginkgo can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -1149,7 +1263,10 @@
           "action": "Monitor for increased bruising or bleeding. Inform prescriber.",
           "sources": [
             "https://www.nccih.nih.gov/health/ginkgo"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Ginkgo has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding ginkgo.",
+          "informational_note": "Ginkgo can affect platelet function — relevant to people on antiplatelets."
         }
       ],
       "pregnancy_lactation": null,
@@ -1172,7 +1289,10 @@
           "action": "Avoid routine use during pregnancy unless clinician-directed.",
           "sources": [
             "https://www.nccih.nih.gov/health/asian-ginseng"
-          ]
+          ],
+          "alert_headline": "Limited pregnancy safety data",
+          "alert_body": "Ginseng's pregnancy and breastfeeding safety data are limited. If you are pregnant or nursing, talk to your obstetric team before use — safer alternatives may be available.",
+          "informational_note": "Ginseng has limited pregnancy data — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
         },
         {
           "condition_id": "diabetes",
@@ -1182,7 +1302,10 @@
           "action": "Monitor glucose levels when combining with diabetes medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25063071/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Ginseng can lower blood sugar. If you have diabetes, talk to your clinician before adding ginseng and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Ginseng affects glycemic control — relevant to people with diabetes."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -1193,7 +1316,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/asian-ginseng",
             "https://pubmed.ncbi.nlm.nih.gov/15266021/"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Ginseng can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing ginseng about two weeks before the procedure.",
+          "informational_note": "Ginseng can affect perioperative bleeding — relevant to anyone preparing for surgery."
         }
       ],
       "drug_class_rules": [
@@ -1205,7 +1331,10 @@
           "action": "Monitor for hypoglycemia symptoms.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25063071/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
+          "informational_note": "Ginseng affects glycemic control — relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "anticoagulants",
@@ -1215,7 +1344,10 @@
           "action": "Monitor INR closely if combining with warfarin. Inform prescriber.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15266021/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Ginseng has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding ginseng and ask about INR or bleeding checks.",
+          "informational_note": "Ginseng can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -1289,7 +1421,10 @@
           "action": "Avoid taking green tea extract supplements close in time to beta-blockers. Separate doses by several hours.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25312732/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Green tea extract can influence blood pressure. If you have high blood pressure, talk to your clinician before adding green tea extract and monitor your readings.",
+          "informational_note": "Green tea extract can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "liver_disease",
@@ -1315,7 +1450,10 @@
           "action": "Separate green tea extract from beta-blocker dosing by at least 2-3 hours.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25312732/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Green tea extract can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding green tea extract.",
+          "informational_note": "Green tea extract can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -1338,7 +1476,10 @@
           "action": "Additive hypoglycemia risk with oral hypoglycemics and insulin. Dose adjustments may be necessary. Monitor glucose.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Gymnema can lower blood sugar. If you have diabetes, talk to your clinician before adding gymnema and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Gymnema affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -1350,7 +1491,10 @@
           "action": "Monitor blood glucose closely when combining with diabetes medications.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Gymnema can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding gymnema and monitor your glucose more closely at first.",
+          "informational_note": "Gymnema affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -1374,7 +1518,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/hawthorn",
             "https://pubmed.ncbi.nlm.nih.gov/11807965/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Hawthorn can influence blood pressure. If you have high blood pressure, talk to your clinician before adding hawthorn and monitor your readings.",
+          "informational_note": "Hawthorn can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "heart_disease",
@@ -1385,7 +1532,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12817526/",
             "https://www.nccih.nih.gov/health/hawthorn"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Hawthorn can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding hawthorn.",
+          "informational_note": "Hawthorn can affect cardiovascular pathways — relevant to people with heart conditions."
         }
       ],
       "drug_class_rules": [
@@ -1397,7 +1547,10 @@
           "action": "Monitor BP regularly during concurrent use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11807965/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Hawthorn can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding hawthorn.",
+          "informational_note": "Hawthorn can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -1420,7 +1573,10 @@
           "action": "Keep total iodine intake within guideline ranges; avoid excess supplementation.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Keep iodine within prenatal range",
+          "alert_body": "Iodine is required during pregnancy, but excess can affect maternal and fetal thyroid function. If you are pregnant or nursing, monitor total iodine intake and talk to your clinician if in doubt.",
+          "informational_note": "Iodine is dose-sensitive — both deficiency and excess matter for pregnancy and lactation."
         },
         {
           "severity": "caution",
@@ -1431,7 +1587,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/29791909/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Iodine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding iodine and monitor your labs.",
+          "informational_note": "Iodine affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [
@@ -1443,7 +1602,10 @@
           "action": "Coordinate iodine supplements with thyroid medication management.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Iodine can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing iodine away from your dose.",
+          "informational_note": "Iodine affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "dose_thresholds": [
@@ -1490,7 +1652,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12957292/",
             "https://pubmed.ncbi.nlm.nih.gov/33676282/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Iron is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of iron.",
+          "informational_note": "Iron depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [
@@ -1502,7 +1667,10 @@
           "action": "Separate iron supplement from methyldopa or captopril by at least 2 hours.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Iron can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding iron.",
+          "informational_note": "Iron can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "severity": "caution",
@@ -1513,7 +1681,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33584551/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Iron can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing iron away from your dose.",
+          "informational_note": "Iron affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "pregnancy_lactation": null,
@@ -1536,7 +1707,10 @@
           "action": "Use with caution alongside antihypertensives. Start low and monitor BP.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "L-arginine can influence blood pressure. If you have high blood pressure, talk to your clinician before adding L-arginine and monitor your readings.",
+          "informational_note": "L-arginine can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "heart_disease",
@@ -1547,7 +1721,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/16894152/",
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "L-arginine can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding L-arginine.",
+          "informational_note": "L-arginine can affect cardiovascular pathways — relevant to people with heart conditions."
         }
       ],
       "drug_class_rules": [
@@ -1559,7 +1736,10 @@
           "action": "Monitor for dizziness or lightheadedness. Discuss with prescriber.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "L-arginine can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding L-arginine.",
+          "informational_note": "L-arginine can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -1598,7 +1778,10 @@
           "action": "Monitor blood pressure and review supplement use with clinician.",
           "sources": [
             "https://www.nccih.nih.gov/health/licorice-root"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Licorice can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding licorice.",
+          "informational_note": "Licorice can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "pregnancy_lactation": {
@@ -1634,7 +1817,10 @@
           "action": "Generally safe at recommended doses. Inform prescriber if supplementing alongside calcium channel blockers. Monitor for dizziness.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Magnesium can influence blood pressure. If you have high blood pressure, talk to your clinician before adding magnesium and monitor your readings.",
+          "informational_note": "Magnesium can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "heart_disease",
@@ -1645,7 +1831,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25864370/",
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Magnesium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding magnesium.",
+          "informational_note": "Magnesium can affect cardiovascular pathways — relevant to people with heart conditions."
         },
         {
           "condition_id": "kidney_disease",
@@ -1671,7 +1860,10 @@
           "action": "Monitor BP when supplementing alongside antihypertensives.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Magnesium can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding magnesium.",
+          "informational_note": "Magnesium can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "severity": "caution",
@@ -1682,7 +1874,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33584551/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Magnesium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing magnesium away from your dose.",
+          "informational_note": "Magnesium affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "pregnancy_lactation": null,
@@ -1705,7 +1900,10 @@
           "action": "Do not take potassium supplements without physician approval if on ACE inhibitors, ARBs, or potassium-sparing diuretics.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Potassium can influence blood pressure. If you have high blood pressure, talk to your clinician before adding potassium and monitor your readings.",
+          "informational_note": "Potassium can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "kidney_disease",
@@ -1728,7 +1926,10 @@
           "action": "Do not take potassium supplements without physician approval and serum potassium monitoring if on ACE inhibitors, ARBs, or potassium-sparing diuretics. This is especially critical in heart failure management.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Potassium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding potassium.",
+          "informational_note": "Potassium can affect cardiovascular pathways — relevant to people with heart conditions."
         }
       ],
       "drug_class_rules": [
@@ -1740,7 +1941,10 @@
           "action": "Requires serum potassium monitoring. Do not supplement without clinician supervision.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Potassium can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding potassium.",
+          "informational_note": "Potassium can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -1763,7 +1967,10 @@
           "action": "Separate dosing from oral diabetes medications by at least 2 hours (fiber delays drug absorption). Monitor glucose.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10479204/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Psyllium can lower blood sugar. If you have diabetes, talk to your clinician before adding psyllium and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Psyllium affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -1775,7 +1982,10 @@
           "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10479204/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Psyllium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding psyllium and monitor your glucose more closely at first.",
+          "informational_note": "Psyllium affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -1812,7 +2022,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort",
             "https://pubmed.ncbi.nlm.nih.gov/24472406/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "St John's Wort can influence blood pressure. If you have high blood pressure, talk to your clinician before adding St John's Wort and monitor your readings.",
+          "informational_note": "St John's Wort can affect blood pressure — relevant to people with high blood pressure."
         }
       ],
       "drug_class_rules": [
@@ -1865,7 +2078,10 @@
           "action": "Avoid with CYP3A4-metabolized statins or monitor lipid levels closely.",
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
-          ]
+          ],
+          "alert_headline": "May affect statin tolerability",
+          "alert_body": "St John's Wort shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding St John's Wort and watch for new muscle aches.",
+          "informational_note": "St John's Wort affects statin pathways — relevant to people on statin therapy."
         },
         {
           "drug_class_id": "sedatives",
@@ -1875,7 +2091,10 @@
           "action": "Avoid unsupervised combination with sedatives or antidepressants.",
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
-          ]
+          ],
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "St John's Wort has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding St John's Wort — the combination can increase drowsiness.",
+          "informational_note": "St John's Wort has sedative activity — relevant to people on sedatives or sleep medications."
         },
         {
           "drug_class_id": "antidepressants_ssri_snri",
@@ -1937,7 +2156,10 @@
           "action": "Additive hypoglycemia risk with insulin and oral hypoglycemics. GI side effects common. Use only under medical supervision.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11176247/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Vanadium can lower blood sugar. If you have diabetes, talk to your clinician before adding vanadium and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Vanadium affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -1949,7 +2171,10 @@
           "action": "Use only under clinician supervision with glucose monitoring.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11176247/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Vanadium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding vanadium and monitor your glucose more closely at first.",
+          "informational_note": "Vanadium affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": {
@@ -1994,7 +2219,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
             "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Keep preformed vitamin A within prenatal range",
+          "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
+          "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding."
         },
         {
           "condition_id": "liver_disease",
@@ -2005,7 +2233,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/2103414/",
             "https://pubmed.ncbi.nlm.nih.gov/12579996/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Vitamin A is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Vitamin A.",
+          "informational_note": "Vitamin A depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -2052,7 +2283,10 @@
           "action": "Can worsen glycemic control. Monitor glucose after initiating niacin or increasing dose. Low-dose niacin in multivitamins is not a concern.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18381752/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Niacin can lower blood sugar. If you have diabetes, talk to your clinician before adding Niacin and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Niacin affects glycemic control — relevant to people with diabetes."
         },
         {
           "condition_id": "liver_disease",
@@ -2063,7 +2297,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/39416578/",
             "https://pubmed.ncbi.nlm.nih.gov/27402097/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Niacin is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Niacin.",
+          "informational_note": "Niacin depends on liver clearance — relevant to people with liver conditions."
         },
         {
           "condition_id": "high_cholesterol",
@@ -2074,7 +2311,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18381752/",
             "https://pubmed.ncbi.nlm.nih.gov/17466224/"
-          ]
+          ],
+          "alert_headline": "Consult on cholesterol management",
+          "alert_body": "Niacin can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding Niacin — it may change your lipid-therapy plan.",
+          "informational_note": "Niacin affects lipid pathways — relevant to people managing high cholesterol."
         }
       ],
       "drug_class_rules": [
@@ -2086,7 +2326,10 @@
           "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18381752/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Niacin can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Niacin and monitor your glucose more closely at first.",
+          "informational_note": "Niacin affects glycemic control — relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "statins",
@@ -2098,7 +2341,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/12622602/",
             "https://pubmed.ncbi.nlm.nih.gov/11485144/",
             "https://pubmed.ncbi.nlm.nih.gov/17466224/"
-          ]
+          ],
+          "alert_headline": "May affect statin tolerability",
+          "alert_body": "Niacin shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding Niacin and watch for new muscle aches.",
+          "informational_note": "Niacin affects statin pathways — relevant to people on statin therapy."
         }
       ],
       "dose_thresholds": [
@@ -2133,7 +2379,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
             "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Keep vitamin C within prenatal range",
+          "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
+          "informational_note": "Vitamin C is dose-sensitive at high intake — higher doses warrant clinician review."
         }
       ],
       "drug_class_rules": [],
@@ -2182,7 +2431,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
             "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Keep vitamin E within prenatal range",
+          "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+          "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review."
         }
       ],
       "drug_class_rules": [],
@@ -2368,7 +2620,10 @@
           "action": "Review pre-op supplement use.",
           "sources": [
             "https://www.nccih.nih.gov/health/ginger"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Ginger extract can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing ginger extract about two weeks before the procedure.",
+          "informational_note": "Ginger extract can affect perioperative bleeding — relevant to anyone preparing for surgery."
         }
       ],
       "drug_class_rules": [
@@ -2380,7 +2635,10 @@
           "action": "Monitor with clinician guidance.",
           "sources": [
             "https://www.nccih.nih.gov/health/ginger"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Ginger extract has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding ginger extract and ask about INR or bleeding checks.",
+          "informational_note": "Ginger extract can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "pregnancy_lactation": null,
@@ -2545,7 +2803,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12383029/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with seizure disorder",
+          "alert_body": "Kava may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding kava.",
+          "informational_note": "Kava may affect seizure threshold — relevant to people with a seizure disorder."
         }
       ],
       "drug_class_rules": [
@@ -2597,7 +2858,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18431248/",
             "https://pubmed.ncbi.nlm.nih.gov/19138557/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Valerian is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of valerian.",
+          "informational_note": "Valerian depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [
@@ -2610,7 +2874,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27110643/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Valerian has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding valerian — the combination can increase drowsiness.",
+          "informational_note": "Valerian has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -2646,7 +2913,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/16800417/",
             "https://pubmed.ncbi.nlm.nih.gov/16854576/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Saw palmetto is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of saw palmetto.",
+          "informational_note": "Saw palmetto depends on liver clearance — relevant to people with liver conditions."
         },
         {
           "condition_id": "bleeding_disorders",
@@ -2657,7 +2927,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11489067/",
             "https://pubmed.ncbi.nlm.nih.gov/18090773/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Saw palmetto has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding saw palmetto.",
+          "informational_note": "Saw palmetto can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -2668,7 +2941,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11489067/",
             "https://pubmed.ncbi.nlm.nih.gov/15195032/"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Saw palmetto can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing saw palmetto about two weeks before the procedure.",
+          "informational_note": "Saw palmetto can affect perioperative bleeding — relevant to anyone preparing for surgery."
         },
         {
           "condition_id": "ttc",
@@ -2679,7 +2955,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30980598/",
             "https://www.nccih.nih.gov/health/saw-palmetto"
-          ]
+          ],
+          "alert_headline": "Stop if you become pregnant",
+          "alert_body": "Saw palmetto has antiandrogenic activity and no established fetal safety. If you are trying to conceive, discuss dosing with your clinician and plan to stop saw palmetto at confirmed pregnancy.",
+          "informational_note": "Saw palmetto is typically discontinued at confirmed pregnancy — relevant to people trying to conceive."
         }
       ],
       "drug_class_rules": [
@@ -2692,7 +2971,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11489067/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Saw palmetto has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding saw palmetto and ask about INR or bleeding checks.",
+          "informational_note": "Saw palmetto can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -2703,7 +2985,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11489067/",
             "https://pubmed.ncbi.nlm.nih.gov/18090773/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Saw palmetto has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding saw palmetto.",
+          "informational_note": "Saw palmetto can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -2713,7 +2998,10 @@
           "action": "No specific dose adjustment required. Inform your healthcare provider if combining these agents.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18090773/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Saw palmetto has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding saw palmetto.",
+          "informational_note": "Saw palmetto can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -2749,7 +3037,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/41255460/",
             "https://pubmed.ncbi.nlm.nih.gov/41281037/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Turmeric is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of turmeric.",
+          "informational_note": "Turmeric depends on liver clearance — relevant to people with liver conditions."
         },
         {
           "condition_id": "bleeding_disorders",
@@ -2760,7 +3051,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10484074/",
             "https://pubmed.ncbi.nlm.nih.gov/7784468/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Turmeric has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding turmeric.",
+          "informational_note": "Turmeric can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -2773,7 +3067,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32478963/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Turmeric has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding turmeric and ask about INR or bleeding checks.",
+          "informational_note": "Turmeric can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -2784,7 +3081,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10484074/",
             "https://pubmed.ncbi.nlm.nih.gov/19501497/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Turmeric has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding turmeric.",
+          "informational_note": "Turmeric can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -2794,7 +3094,10 @@
           "action": "Monitor for GI symptoms when combining turmeric/curcumin supplements with NSAIDs. Take NSAIDs with food.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/8510458/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Turmeric has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding turmeric.",
+          "informational_note": "Turmeric can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [
@@ -2829,7 +3132,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23801821/",
             "https://pubmed.ncbi.nlm.nih.gov/15072439/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Milk thistle is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of milk thistle.",
+          "informational_note": "Milk thistle depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -2854,7 +3160,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
             "https://pubmed.ncbi.nlm.nih.gov/14742793/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Omega-3 has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Omega-3.",
+          "informational_note": "Omega-3 can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -2865,7 +3174,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30571332/",
             "https://pubmed.ncbi.nlm.nih.gov/17192169/"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Omega-3 can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing Omega-3 about two weeks before the procedure.",
+          "informational_note": "Omega-3 can affect perioperative bleeding — relevant to anyone preparing for surgery."
         },
         {
           "condition_id": "heart_disease",
@@ -2876,7 +3188,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36103100/",
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Omega-3 can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Omega-3.",
+          "informational_note": "Omega-3 can affect cardiovascular pathways — relevant to people with heart conditions."
         }
       ],
       "drug_class_rules": [
@@ -2890,7 +3205,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/14742793/",
             "https://pubmed.ncbi.nlm.nih.gov/17923275/",
             "https://pubmed.ncbi.nlm.nih.gov/28033135/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Omega-3 has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Omega-3 and ask about INR or bleeding checks.",
+          "informational_note": "Omega-3 can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -2900,7 +3218,10 @@
           "action": "Avoid high-dose fish oil (>3 g/day) when combined with antiplatelet medications unless under medical supervision. Monitor for signs of unusual bleeding or bruising.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Omega-3 has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Omega-3.",
+          "informational_note": "Omega-3 can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -2910,7 +3231,10 @@
           "action": "Monitor for GI symptoms (stomach pain, dark stools) when combining fish oil with NSAIDs. Take NSAIDs with food.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Omega-3 has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Omega-3.",
+          "informational_note": "Omega-3 can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [
@@ -2965,7 +3289,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
             "https://pubmed.ncbi.nlm.nih.gov/14742793/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
+          "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -2976,7 +3303,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30571332/",
             "https://pubmed.ncbi.nlm.nih.gov/17192169/"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
+          "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery."
         }
       ],
       "drug_class_rules": [
@@ -2990,7 +3320,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/14742793/",
             "https://pubmed.ncbi.nlm.nih.gov/17923275/",
             "https://pubmed.ncbi.nlm.nih.gov/28033135/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Fish oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding fish oil and ask about INR or bleeding checks.",
+          "informational_note": "Fish oil can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3000,7 +3333,10 @@
           "action": "Avoid high-dose fish oil (>3 g/day) when combined with antiplatelet medications unless under medical supervision. Monitor for unusual bleeding or bruising.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17192169/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Fish oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding fish oil.",
+          "informational_note": "Fish oil can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3010,7 +3346,10 @@
           "action": "Monitor for GI symptoms when combining fish oil with NSAIDs. Take NSAIDs with food.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Fish oil has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding fish oil.",
+          "informational_note": "Fish oil can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [
@@ -3056,7 +3395,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/10484074/",
             "https://pubmed.ncbi.nlm.nih.gov/25572959/",
             "https://pubmed.ncbi.nlm.nih.gov/7784468/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Curcumin has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding curcumin.",
+          "informational_note": "Curcumin can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -3069,7 +3411,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32478963/",
             "https://pubmed.ncbi.nlm.nih.gov/10484074/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Curcumin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding curcumin and ask about INR or bleeding checks.",
+          "informational_note": "Curcumin can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3081,7 +3426,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/10484074/",
             "https://pubmed.ncbi.nlm.nih.gov/19501497/",
             "https://pubmed.ncbi.nlm.nih.gov/25572959/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Curcumin has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding curcumin.",
+          "informational_note": "Curcumin can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3092,7 +3440,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/8510458/",
             "https://pubmed.ncbi.nlm.nih.gov/19501497/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Curcumin has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding curcumin.",
+          "informational_note": "Curcumin can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -3117,7 +3468,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/17945191/",
             "https://pubmed.ncbi.nlm.nih.gov/1602379/",
             "https://pubmed.ncbi.nlm.nih.gov/8510458/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Boswellia has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding boswellia.",
+          "informational_note": "Boswellia can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -3129,7 +3483,10 @@
           "action": "Inform your prescriber if using Boswellia supplements while on anticoagulant therapy. Monitor for unusual bruising or bleeding.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17945191/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Boswellia has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding boswellia and ask about INR or bleeding checks.",
+          "informational_note": "Boswellia can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3140,7 +3497,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17945191/",
             "https://pubmed.ncbi.nlm.nih.gov/8510458/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Boswellia has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding boswellia.",
+          "informational_note": "Boswellia can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3151,7 +3511,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/8510458/",
             "https://pubmed.ncbi.nlm.nih.gov/34224069/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Boswellia has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding boswellia.",
+          "informational_note": "Boswellia can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -3175,7 +3538,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/19783511/",
             "https://pubmed.ncbi.nlm.nih.gov/21499116/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Evening primrose oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding evening primrose oil.",
+          "informational_note": "Evening primrose oil can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "severity": "caution",
@@ -3186,7 +3552,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17764919/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with seizure disorder",
+          "alert_body": "Evening primrose oil may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding evening primrose oil.",
+          "informational_note": "Evening primrose oil may affect seizure threshold — relevant to people with a seizure disorder."
         }
       ],
       "drug_class_rules": [
@@ -3199,7 +3568,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/19783511/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Evening primrose oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding evening primrose oil and ask about INR or bleeding checks.",
+          "informational_note": "Evening primrose oil can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3210,7 +3582,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21499116/",
             "https://pubmed.ncbi.nlm.nih.gov/3660347/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Evening primrose oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding evening primrose oil.",
+          "informational_note": "Evening primrose oil can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3220,7 +3595,10 @@
           "action": "No specific dose adjustment required. Inform your healthcare provider if combining EPO with NSAIDs, especially at high doses.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21499116/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Evening primrose oil has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding evening primrose oil.",
+          "informational_note": "Evening primrose oil can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -3244,7 +3622,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21155624/",
             "https://pubmed.ncbi.nlm.nih.gov/32486167/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Vitamin D has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Vitamin D.",
+          "informational_note": "Vitamin D can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "severity": "caution",
@@ -3255,7 +3636,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/41717291/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with autoimmune conditions",
+          "alert_body": "Vitamin D has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding Vitamin D.",
+          "informational_note": "Vitamin D affects immune function — relevant to people with autoimmune conditions."
         },
         {
           "condition_id": "heart_disease",
@@ -3266,7 +3650,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/21505219/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Vitamin D can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Vitamin D.",
+          "informational_note": "Vitamin D can affect cardiovascular pathways — relevant to people with heart conditions."
         },
         {
           "condition_id": "ttc",
@@ -3277,7 +3664,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/28500824/",
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Continue under prenatal care",
+          "alert_body": "Vitamin D used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin D with your clinician.",
+          "informational_note": "Vitamin D is continued under clinician guidance — relevant to people planning pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -3290,7 +3680,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21155624/",
             "https://pubmed.ncbi.nlm.nih.gov/8983860/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about INR or bleeding checks.",
+          "informational_note": "Vitamin D can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3300,7 +3693,10 @@
           "action": "No specific action required at standard supplemental doses. Monitor for unusual bleeding if taking high-dose vitamin D with antiplatelet medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21155624/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Vitamin D has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Vitamin D.",
+          "informational_note": "Vitamin D can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3310,7 +3706,10 @@
           "action": "No specific action required at standard supplemental doses.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21155624/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Vitamin D has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Vitamin D.",
+          "informational_note": "Vitamin D can affect platelet function — relevant to people on NSAIDs."
         },
         {
           "severity": "info",
@@ -3321,7 +3720,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/41717291/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with immunosuppressants",
+          "alert_body": "Vitamin D has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding Vitamin D.",
+          "informational_note": "Vitamin D affects immune function — relevant to people on immunosuppressants."
         }
       ],
       "dose_thresholds": [
@@ -3365,7 +3767,10 @@
           "action": "Glucosamine at standard doses (1500 mg/day) is not a direct bleeding risk for most patients with bleeding disorders. Use caution if also taking anticoagulants.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Glucosamine has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding glucosamine.",
+          "informational_note": "Glucosamine can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -3379,7 +3784,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/18363538/",
             "https://pubmed.ncbi.nlm.nih.gov/14986566/",
             "https://pubmed.ncbi.nlm.nih.gov/23946031/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Glucosamine has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding glucosamine and ask about INR or bleeding checks.",
+          "informational_note": "Glucosamine can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3389,7 +3797,10 @@
           "action": "No specific dose adjustment required. Inform prescriber of glucosamine use if on antiplatelet therapy.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Glucosamine has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding glucosamine.",
+          "informational_note": "Glucosamine can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3399,7 +3810,10 @@
           "action": "No specific action required. Glucosamine may allow dose reduction of NSAIDs in osteoarthritis management.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Glucosamine has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding glucosamine.",
+          "informational_note": "Glucosamine can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -3423,7 +3837,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32478963/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Chamomile has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding chamomile.",
+          "informational_note": "Chamomile can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -3436,7 +3853,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32478963/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Chamomile has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding chamomile and ask about INR or bleeding checks.",
+          "informational_note": "Chamomile can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3446,7 +3866,10 @@
           "action": "Moderate chamomile tea consumption is unlikely to cause clinically significant interaction with antiplatelet drugs. Monitor for unusual bleeding with concentrated extracts.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Chamomile has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding chamomile.",
+          "informational_note": "Chamomile can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3456,7 +3879,10 @@
           "action": "No specific action required.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Chamomile has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding chamomile.",
+          "informational_note": "Chamomile can affect platelet function — relevant to people on NSAIDs."
         },
         {
           "severity": "caution",
@@ -3467,7 +3893,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10751547/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Chamomile has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding chamomile — the combination can increase drowsiness.",
+          "informational_note": "Chamomile has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -3490,7 +3919,10 @@
           "action": "Cranberry at typical dietary amounts is unlikely to cause clinically significant bleeding. Use caution with concentrated cranberry supplements in patients with bleeding disorders, especially if also taking warfarin.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17322161/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Cranberry has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding cranberry.",
+          "informational_note": "Cranberry can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -3503,7 +3935,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17322161/",
             "https://pubmed.ncbi.nlm.nih.gov/32478963/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Cranberry has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding cranberry and ask about INR or bleeding checks.",
+          "informational_note": "Cranberry can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3513,7 +3948,10 @@
           "action": "No specific action required for antiplatelet combinations at dietary cranberry amounts.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17322161/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Cranberry has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding cranberry.",
+          "informational_note": "Cranberry can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3523,7 +3961,10 @@
           "action": "No specific action required.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17322161/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Cranberry has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding cranberry.",
+          "informational_note": "Cranberry can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -3547,7 +3988,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/7774533/",
             "https://pubmed.ncbi.nlm.nih.gov/25808116/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Flaxseed has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding flaxseed.",
+          "informational_note": "Flaxseed can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -3560,7 +4004,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18689552/",
             "https://pubmed.ncbi.nlm.nih.gov/7774533/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Flaxseed has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding flaxseed and ask about INR or bleeding checks.",
+          "informational_note": "Flaxseed can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3571,7 +4018,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/7774533/",
             "https://pubmed.ncbi.nlm.nih.gov/25808116/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Flaxseed has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding flaxseed.",
+          "informational_note": "Flaxseed can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3581,7 +4031,10 @@
           "action": "No specific action required at typical dietary flaxseed amounts. Monitor for GI symptoms with high-dose flaxseed oil combined with NSAIDs.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/7774533/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Flaxseed has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding flaxseed.",
+          "informational_note": "Flaxseed can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -3604,7 +4057,10 @@
           "action": "Use with caution in patients with bleeding disorders. Cat's claw extracts have demonstrated antiplatelet and thrombin-inhibiting activity in vitro. Consult a healthcare provider before use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33091497/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Cat's claw has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding cat's claw.",
+          "informational_note": "Cat's claw can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "severity": "avoid",
@@ -3631,7 +4087,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33091497/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Cat's claw has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding cat's claw and ask about INR or bleeding checks.",
+          "informational_note": "Cat's claw can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3641,7 +4100,10 @@
           "action": "Monitor for signs of increased bleeding when combining cat's claw with antiplatelet medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33091497/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Cat's claw has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding cat's claw.",
+          "informational_note": "Cat's claw can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3651,7 +4113,10 @@
           "action": "Monitor for GI symptoms when combining cat's claw with NSAIDs.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33091497/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Cat's claw has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding cat's claw.",
+          "informational_note": "Cat's claw can affect platelet function — relevant to people on NSAIDs."
         },
         {
           "severity": "avoid",
@@ -3688,7 +4153,10 @@
           "action": "Use with caution in patients with bleeding disorders. Devil's claw may affect platelet function and coagulation. Consult a healthcare provider before use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Devil's claw has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding devil's claw.",
+          "informational_note": "Devil's claw can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -3700,7 +4168,10 @@
           "action": "Inform your prescriber if taking devil's claw while on warfarin or other anticoagulants. Monitor INR if starting or stopping devil's claw supplementation.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Devil's claw has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding devil's claw and ask about INR or bleeding checks.",
+          "informational_note": "Devil's claw can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -3710,7 +4181,10 @@
           "action": "Monitor for signs of increased bleeding when combining devil's claw with antiplatelet medications.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Devil's claw has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding devil's claw.",
+          "informational_note": "Devil's claw can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "nsaids",
@@ -3720,7 +4194,10 @@
           "action": "Monitor for GI symptoms when combining devil's claw with NSAIDs.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Devil's claw has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding devil's claw.",
+          "informational_note": "Devil's claw can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -3745,7 +4222,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/30368654/",
             "https://pubmed.ncbi.nlm.nih.gov/33584551/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Calcium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing calcium away from your dose.",
+          "informational_note": "Calcium affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "dose_thresholds": [
@@ -3774,7 +4254,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/21505219/",
             "https://pubmed.ncbi.nlm.nih.gov/23951541/",
             "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Calcium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding calcium.",
+          "informational_note": "Calcium can affect cardiovascular pathways — relevant to people with heart conditions."
         }
       ]
     },
@@ -3794,7 +4277,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23960398/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Zinc can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing zinc away from your dose.",
+          "informational_note": "Zinc affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "dose_thresholds": [],
@@ -3819,7 +4305,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36017706/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Genistein can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding genistein and monitor your labs.",
+          "informational_note": "Genistein affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [
@@ -3832,7 +4321,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36017706/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Genistein can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing genistein away from your dose.",
+          "informational_note": "Genistein affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "dose_thresholds": [],
@@ -3856,7 +4348,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/41717291/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Selenium can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding selenium and monitor your labs.",
+          "informational_note": "Selenium affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [],
@@ -3882,7 +4377,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/38003702/",
             "https://pubmed.ncbi.nlm.nih.gov/31203475/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Ashwagandha can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding ashwagandha and monitor your labs.",
+          "informational_note": "Ashwagandha affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [
@@ -3895,7 +4393,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/38003702/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Ashwagandha has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding ashwagandha — the combination can increase drowsiness.",
+          "informational_note": "Ashwagandha has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -3920,7 +4421,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/40417451/",
             "https://pubmed.ncbi.nlm.nih.gov/37988295/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Biotin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding Biotin and monitor your labs.",
+          "informational_note": "Biotin affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [],
@@ -4077,7 +4581,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/37670115/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with autoimmune conditions",
+          "alert_body": "Reishi has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding reishi.",
+          "informational_note": "Reishi affects immune function — relevant to people with autoimmune conditions."
         }
       ],
       "drug_class_rules": [
@@ -4090,7 +4597,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/37670115/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with immunosuppressants",
+          "alert_body": "Reishi has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding reishi.",
+          "informational_note": "Reishi affects immune function — relevant to people on immunosuppressants."
         }
       ],
       "dose_thresholds": [],
@@ -4114,7 +4624,10 @@
           "evidence_level": "probable",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "Caution with seizure disorder",
+          "alert_body": "Melatonin may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding melatonin.",
+          "informational_note": "Melatonin may affect seizure threshold — relevant to people with a seizure disorder."
         }
       ],
       "drug_class_rules": [
@@ -4127,7 +4640,10 @@
           "evidence_level": "probable",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
-          ]
+          ],
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Melatonin has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding melatonin — the combination can increase drowsiness.",
+          "informational_note": "Melatonin has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -4151,7 +4667,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17764919/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "Caution with seizure disorder",
+          "alert_body": "Borage seed oil may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding borage seed oil.",
+          "informational_note": "Borage seed oil may affect seizure threshold — relevant to people with a seizure disorder."
         }
       ],
       "drug_class_rules": [],
@@ -4176,7 +4695,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/7906886/"
           ],
-          "evidence_level": "probable"
+          "evidence_level": "probable",
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Passionflower has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding passionflower — the combination can increase drowsiness.",
+          "informational_note": "Passionflower has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -4201,7 +4723,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/12083489/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "CoQ10 can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding CoQ10.",
+          "informational_note": "CoQ10 can affect cardiovascular pathways — relevant to people with heart conditions."
         },
         {
           "condition_id": "high_cholesterol",
@@ -4212,7 +4737,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/19528564/",
             "https://pubmed.ncbi.nlm.nih.gov/12622602/"
-          ]
+          ],
+          "alert_headline": "Consult on cholesterol management",
+          "alert_body": "CoQ10 can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding CoQ10 — it may change your lipid-therapy plan.",
+          "informational_note": "CoQ10 affects lipid pathways — relevant to people managing high cholesterol."
         },
         {
           "condition_id": "ttc",
@@ -4223,7 +4751,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/26111777/",
             "https://pubmed.ncbi.nlm.nih.gov/39019217/"
-          ]
+          ],
+          "alert_headline": "Continue under prenatal care",
+          "alert_body": "CoQ10 used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of CoQ10 with your clinician.",
+          "informational_note": "CoQ10 is continued under clinician guidance — relevant to people planning pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -4236,7 +4767,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/12083489/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "CoQ10 has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding CoQ10 and ask about INR or bleeding checks.",
+          "informational_note": "CoQ10 can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "statins",
@@ -4247,7 +4781,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/19528564/",
             "https://pubmed.ncbi.nlm.nih.gov/12622602/"
-          ]
+          ],
+          "alert_headline": "May affect statin tolerability",
+          "alert_body": "CoQ10 shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding CoQ10 and watch for new muscle aches.",
+          "informational_note": "CoQ10 affects statin pathways — relevant to people on statin therapy."
         }
       ],
       "dose_thresholds": [],
@@ -4313,7 +4850,10 @@
           "action": "May provide additive cholesterol-lowering benefit when used alongside dietary modifications. If combined with statin therapy, monitor lipid levels and be alert to additive LDL-lowering. Dose adjustment of statin may be needed if cholesterol falls excessively low.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32441543/"
-          ]
+          ],
+          "alert_headline": "Consult on cholesterol management",
+          "alert_body": "Citrus bergamot can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding citrus bergamot — it may change your lipid-therapy plan.",
+          "informational_note": "Citrus bergamot affects lipid pathways — relevant to people managing high cholesterol."
         }
       ],
       "drug_class_rules": [
@@ -4326,7 +4866,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32441543/",
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
-          ]
+          ],
+          "alert_headline": "May affect statin tolerability",
+          "alert_body": "Citrus bergamot shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding citrus bergamot and watch for new muscle aches.",
+          "informational_note": "Citrus bergamot affects statin pathways — relevant to people on statin therapy."
         }
       ],
       "dose_thresholds": [],
@@ -4351,7 +4894,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/28425124/",
             "https://pubmed.ncbi.nlm.nih.gov/569255/",
             "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "High-dose B6 may affect milk supply",
+          "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
+          "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding."
         }
       ],
       "drug_class_rules": [],
@@ -4400,7 +4946,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/safety",
             "https://www.drugs.com/npp/sage.html"
-          ]
+          ],
+          "alert_headline": "Concentrated sage may affect milk supply",
+          "alert_body": "Sage at supplement or concentrated doses may reduce milk supply. If you are breastfeeding, talk to your clinician before using concentrated forms; culinary use at typical amounts is fine.",
+          "informational_note": "Concentrated sage can affect lactation — culinary amounts are appropriate for anyone breastfeeding."
         }
       ],
       "drug_class_rules": [],
@@ -4437,7 +4986,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/16997936/",
             "https://pubmed.ncbi.nlm.nih.gov/25296654/"
-          ]
+          ],
+          "alert_headline": "Continue under prenatal care",
+          "alert_body": "DHEA used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of DHEA with your clinician.",
+          "informational_note": "DHEA is continued under clinician guidance — relevant to people planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -4474,7 +5026,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/26662928/",
             "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Continue under prenatal care",
+          "alert_body": "Folate used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Folate with your clinician.",
+          "informational_note": "Folate is continued under clinician guidance — relevant to people planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -4511,7 +5066,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30614289/",
             "https://pubmed.ncbi.nlm.nih.gov/29183107/"
-          ]
+          ],
+          "alert_headline": "Continue under prenatal care",
+          "alert_body": "Inositol used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of inositol with your clinician.",
+          "informational_note": "Inositol is continued under clinician guidance — relevant to people planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -4548,7 +5106,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15801887/",
             "https://pubmed.ncbi.nlm.nih.gov/21334992/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Gotu kola is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of gotu kola.",
+          "informational_note": "Gotu kola depends on liver clearance — relevant to people with liver conditions."
         },
         {
           "condition_id": "bleeding_disorders",
@@ -4559,7 +5120,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15801887/",
             "https://pubmed.ncbi.nlm.nih.gov/23653088/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Gotu kola has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding gotu kola.",
+          "informational_note": "Gotu kola can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -4572,7 +5136,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/20677602/",
             "https://pubmed.ncbi.nlm.nih.gov/23653088/"
           ],
-          "drug_class_id": "sedatives"
+          "drug_class_id": "sedatives",
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Gotu kola has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding gotu kola — the combination can increase drowsiness.",
+          "informational_note": "Gotu kola has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -4595,7 +5162,10 @@
           "action": "Avoid in patients with active autoimmune disease (lupus, MS, rheumatoid arthritis) or those on immunosuppressive therapy. Consult prescribing physician before use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27176566/"
-          ]
+          ],
+          "alert_headline": "Caution with autoimmune conditions",
+          "alert_body": "Rhodiola has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding rhodiola.",
+          "informational_note": "Rhodiola affects immune function — relevant to people with autoimmune conditions."
         },
         {
           "condition_id": "hypertension",
@@ -4605,7 +5175,10 @@
           "action": "Monitor blood pressure when initiating rhodiola in hypertensive patients on antihypertensive medications. May have additive effect.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23192943/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Rhodiola can influence blood pressure. If you have high blood pressure, talk to your clinician before adding rhodiola and monitor your readings.",
+          "informational_note": "Rhodiola can affect blood pressure — relevant to people with high blood pressure."
         }
       ],
       "drug_class_rules": [
@@ -4617,7 +5190,10 @@
           "action": "Caution with concurrent sedative use. Monitor for altered drug levels if co-administered with CYP2C9-metabolized medications. Avoid high-dose combination.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/26613955/"
-          ]
+          ],
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Rhodiola has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding rhodiola — the combination can increase drowsiness.",
+          "informational_note": "Rhodiola has sedative activity — relevant to people on sedatives or sleep medications."
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -4628,7 +5204,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27176566/",
             "https://pubmed.ncbi.nlm.nih.gov/26613955/"
-          ]
+          ],
+          "alert_headline": "Caution with immunosuppressants",
+          "alert_body": "Rhodiola has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding rhodiola.",
+          "informational_note": "Rhodiola affects immune function — relevant to people on immunosuppressants."
         },
         {
           "drug_class_id": "antihypertensives",
@@ -4638,7 +5217,10 @@
           "action": "Monitor blood pressure when combining with antihypertensive therapy. Dose adjustment may be needed.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23192943/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Rhodiola can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding rhodiola.",
+          "informational_note": "Rhodiola can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "dose_thresholds": [],
@@ -4661,7 +5243,10 @@
           "action": "Monitor blood glucose when combining with insulin or oral hypoglycemic agents. Dose adjustment of diabetes medications may be required. Caution in patients prone to hypoglycemia.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27840471/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Tribulus can lower blood sugar. If you have diabetes, talk to your clinician before adding tribulus and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Tribulus affects glycemic control — relevant to people with diabetes."
         },
         {
           "condition_id": "hypertension",
@@ -4671,7 +5256,10 @@
           "action": "Monitor blood pressure when using tribulus alongside antihypertensive therapy. Report unusual dizziness or postural hypotension.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/34144527/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Tribulus can influence blood pressure. If you have high blood pressure, talk to your clinician before adding tribulus and monitor your readings.",
+          "informational_note": "Tribulus can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "liver_disease",
@@ -4681,7 +5269,10 @@
           "action": "Avoid in patients with active hepatic disease. If used, monitor liver function tests. Discontinue at the first sign of hepatic adverse effects.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/20667992/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Tribulus is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of tribulus.",
+          "informational_note": "Tribulus depends on liver clearance — relevant to people with liver conditions."
         },
         {
           "condition_id": "kidney_disease",
@@ -4691,7 +5282,10 @@
           "action": "Avoid in patients with chronic kidney disease or impaired renal function. If used in otherwise healthy individuals, limit duration and monitor serum creatinine.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/20667992/"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "Tribulus is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of tribulus.",
+          "informational_note": "Tribulus depends on kidney clearance — relevant to people with kidney conditions."
         }
       ],
       "drug_class_rules": [
@@ -4703,7 +5297,10 @@
           "action": "Monitor blood glucose closely. Advise patient to watch for hypoglycemia symptoms (shakiness, sweating, confusion).",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27840471/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Tribulus can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding tribulus and monitor your glucose more closely at first.",
+          "informational_note": "Tribulus affects glycemic control — relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "antihypertensives",
@@ -4713,7 +5310,10 @@
           "action": "Monitor blood pressure. Report excessive dizziness or postural hypotension to healthcare provider.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/34144527/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Tribulus can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding tribulus.",
+          "informational_note": "Tribulus can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "dose_thresholds": [],
@@ -4738,7 +5338,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/33802239/",
             "https://pubmed.ncbi.nlm.nih.gov/32250458/",
             "https://pubmed.ncbi.nlm.nih.gov/24131672/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Schisandra is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of schisandra.",
+          "informational_note": "Schisandra depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [
@@ -4751,7 +5354,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32250458/",
             "https://pubmed.ncbi.nlm.nih.gov/33802239/"
-          ]
+          ],
+          "alert_headline": "Caution with immunosuppressants",
+          "alert_body": "Schisandra has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding schisandra.",
+          "informational_note": "Schisandra affects immune function — relevant to people on immunosuppressants."
         },
         {
           "severity": "monitor",
@@ -4762,7 +5368,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/21130851/",
             "https://pubmed.ncbi.nlm.nih.gov/32250458/"
           ],
-          "drug_class_id": "sedatives"
+          "drug_class_id": "sedatives",
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Schisandra has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding schisandra — the combination can increase drowsiness.",
+          "informational_note": "Schisandra has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -4812,7 +5421,10 @@
           "action": "Caution is warranted when trying to conceive. Consult a reproductive endocrinologist or OB-GYN before using wild yam supplements periconceptionally.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30735081/"
-          ]
+          ],
+          "alert_headline": "Continue under prenatal care",
+          "alert_body": "Wild yam used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of wild yam with your clinician.",
+          "informational_note": "Wild yam is continued under clinician guidance — relevant to people planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -4849,7 +5461,10 @@
           "action": "Patients with hypertension should limit or avoid yerba mate due to stimulant caffeine content. Monitor blood pressure. Avoid high-dose or frequent consumption.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/39708247/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Yerba mate can influence blood pressure. If you have high blood pressure, talk to your clinician before adding yerba mate and monitor your readings.",
+          "informational_note": "Yerba mate can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "heart_disease",
@@ -4859,7 +5474,10 @@
           "action": "Caution in patients with established heart disease, arrhythmias, or heart failure. Avoid high-dose yerba mate. Seek cardiologist guidance before regular use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/26661577/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Yerba mate can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding yerba mate.",
+          "informational_note": "Yerba mate can affect cardiovascular pathways — relevant to people with heart conditions."
         }
       ],
       "drug_class_rules": [
@@ -4871,7 +5489,10 @@
           "action": "Monitor INR closely in patients on warfarin or other vitamin K antagonists who consume yerba mate regularly. Advise consistent intake rather than irregular use to minimize INR fluctuation.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/39708247/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Yerba mate has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding yerba mate and ask about INR or bleeding checks.",
+          "informational_note": "Yerba mate can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antihypertensives",
@@ -4881,7 +5502,10 @@
           "action": "Advise patients on antihypertensive therapy to limit or eliminate yerba mate consumption. Monitor blood pressure response. Avoid high-caffeine doses.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/39708247/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Yerba mate can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding yerba mate.",
+          "informational_note": "Yerba mate can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "dose_thresholds": [],
@@ -4906,7 +5530,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/18636794/",
             "https://pubmed.ncbi.nlm.nih.gov/17693963/",
             "https://pubmed.ncbi.nlm.nih.gov/34036101/"
-          ]
+          ],
+          "alert_headline": "Continue under prenatal care",
+          "alert_body": "Vitamin B12 used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin B12 with your clinician.",
+          "informational_note": "Vitamin B12 is continued under clinician guidance — relevant to people planning pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -4959,7 +5586,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/28981338/",
             "https://pubmed.ncbi.nlm.nih.gov/21954510/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Licorice root can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding licorice root.",
+          "informational_note": "Licorice root can affect cardiovascular pathways — relevant to people with heart conditions."
         },
         {
           "condition_id": "kidney_disease",
@@ -4970,7 +5600,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/31605160/",
             "https://pubmed.ncbi.nlm.nih.gov/393503/"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "Licorice root is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of licorice root.",
+          "informational_note": "Licorice root depends on kidney clearance — relevant to people with kidney conditions."
         }
       ],
       "drug_class_rules": [
@@ -5035,7 +5668,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/35225182/",
             "https://pubmed.ncbi.nlm.nih.gov/27885969/",
             "https://pubmed.ncbi.nlm.nih.gov/24859749/"
-          ]
+          ],
+          "alert_headline": "Caution with autoimmune conditions",
+          "alert_body": "Probiotics has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding probiotics.",
+          "informational_note": "Probiotics affects immune function — relevant to people with autoimmune conditions."
         }
       ],
       "drug_class_rules": [
@@ -5049,7 +5685,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/35225182/",
             "https://pubmed.ncbi.nlm.nih.gov/31927673/",
             "https://pubmed.ncbi.nlm.nih.gov/18312197/"
-          ]
+          ],
+          "alert_headline": "Caution with immunosuppressants",
+          "alert_body": "Probiotics has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding probiotics.",
+          "informational_note": "Probiotics affects immune function — relevant to people on immunosuppressants."
         }
       ],
       "dose_thresholds": [],
@@ -5074,7 +5713,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/30174700/",
             "https://pubmed.ncbi.nlm.nih.gov/23292890/",
             "https://pubmed.ncbi.nlm.nih.gov/22771630/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Andrographis has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding andrographis.",
+          "informational_note": "Andrographis can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "condition_id": "autoimmune",
@@ -5085,7 +5727,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/28745507/",
             "https://pubmed.ncbi.nlm.nih.gov/21822619/"
-          ]
+          ],
+          "alert_headline": "Caution with autoimmune conditions",
+          "alert_body": "Andrographis has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding andrographis.",
+          "informational_note": "Andrographis affects immune function — relevant to people with autoimmune conditions."
         },
         {
           "condition_id": "liver_disease",
@@ -5097,7 +5742,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/26929570/",
             "https://pubmed.ncbi.nlm.nih.gov/29953177/",
             "https://pubmed.ncbi.nlm.nih.gov/25336950/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Andrographis is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of andrographis.",
+          "informational_note": "Andrographis depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [
@@ -5110,7 +5758,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30174700/",
             "https://pubmed.ncbi.nlm.nih.gov/23292890/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Andrographis has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding andrographis and ask about INR or bleeding checks.",
+          "informational_note": "Andrographis can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -5121,7 +5772,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30174700/",
             "https://pubmed.ncbi.nlm.nih.gov/22771630/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Andrographis has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding andrographis.",
+          "informational_note": "Andrographis can affect platelet function — relevant to people on antiplatelets."
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -5131,7 +5785,10 @@
           "action": "Avoid use in transplant recipients or patients on immunosuppressive therapy for serious autoimmune conditions without specialist guidance.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/28745507/"
-          ]
+          ],
+          "alert_headline": "Caution with immunosuppressants",
+          "alert_body": "Andrographis has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding andrographis.",
+          "informational_note": "Andrographis affects immune function — relevant to people on immunosuppressants."
         }
       ],
       "dose_thresholds": [],
@@ -5154,7 +5811,10 @@
           "action": "Use caution in patients with bleeding disorders. Avoid high-dose red clover isoflavone extracts (>160 mg/day) in active bleeding. Disclose use to clinician.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/9464451/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Red clover has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding red clover.",
+          "informational_note": "Red clover can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "condition_id": "thyroid_disorder",
@@ -5164,7 +5824,10 @@
           "action": "Use caution in patients with hypothyroidism or those on levothyroxine. Separate red clover isoflavone supplements from thyroid medications by at least 4 hours. Monitor thyroid function (TSH) if initiating high-dose red clover supplements.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/9464451/"
-          ]
+          ],
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Red clover can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding red clover and monitor your labs.",
+          "informational_note": "Red clover affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [
@@ -5176,7 +5839,10 @@
           "action": "Inform prescriber of red clover supplement use while on anticoagulant therapy. Consider periodic INR monitoring in warfarin users taking red clover supplements.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/9464451/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Red clover has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding red clover and ask about INR or bleeding checks.",
+          "informational_note": "Red clover can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -5212,7 +5878,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/14986566/",
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Chondroitin has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding chondroitin.",
+          "informational_note": "Chondroitin can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -5223,7 +5892,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/26949700/",
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Chondroitin can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing chondroitin about two weeks before the procedure.",
+          "informational_note": "Chondroitin can affect perioperative bleeding — relevant to anyone preparing for surgery."
         }
       ],
       "drug_class_rules": [
@@ -5236,7 +5908,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/",
             "https://pubmed.ncbi.nlm.nih.gov/14986566/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Chondroitin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding chondroitin and ask about INR or bleeding checks.",
+          "informational_note": "Chondroitin can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -5260,7 +5935,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21676849/",
             "https://pubmed.ncbi.nlm.nih.gov/15961987/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Guarana can influence blood pressure. If you have high blood pressure, talk to your clinician before adding guarana and monitor your readings.",
+          "informational_note": "Guarana can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "heart_disease",
@@ -5271,7 +5949,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21676849/",
             "https://pubmed.ncbi.nlm.nih.gov/15961987/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Guarana can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding guarana.",
+          "informational_note": "Guarana can affect cardiovascular pathways — relevant to people with heart conditions."
         },
         {
           "condition_id": "seizure_disorder",
@@ -5281,7 +5962,10 @@
           "action": "Use caution with guarana in patients with seizure disorders or epilepsy. Limit total daily caffeine from all sources. Inform neurologist of guarana supplement use. Avoid energy drink and pre-workout products containing guarana.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12609386/"
-          ]
+          ],
+          "alert_headline": "Caution with seizure disorder",
+          "alert_body": "Guarana may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding guarana.",
+          "informational_note": "Guarana may affect seizure threshold — relevant to people with a seizure disorder."
         }
       ],
       "drug_class_rules": [
@@ -5293,7 +5977,10 @@
           "action": "Limit guarana supplement use in patients on antihypertensive medications. Monitor blood pressure trends. Account for total caffeine burden including dietary sources.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21676849/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Guarana can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding guarana.",
+          "informational_note": "Guarana can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "sedatives",
@@ -5304,7 +5991,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21676849/",
             "https://pubmed.ncbi.nlm.nih.gov/15961987/"
-          ]
+          ],
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Guarana has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding guarana — the combination can increase drowsiness.",
+          "informational_note": "Guarana has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [
@@ -5352,7 +6042,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/36992844/",
             "https://pubmed.ncbi.nlm.nih.gov/29806946/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Copper is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of copper.",
+          "informational_note": "Copper depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -5389,7 +6082,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/17301931/",
             "https://pubmed.ncbi.nlm.nih.gov/9875025/",
             "https://pubmed.ncbi.nlm.nih.gov/9002084/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Manganese is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of manganese.",
+          "informational_note": "Manganese depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -5482,7 +6178,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/senna",
             "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
-          ]
+          ],
+          "alert_headline": "Consult during pregnancy",
+          "alert_body": "Senna has limited pregnancy safety data. If you are pregnant, talk to your obstetrician before adding senna to your supplement routine.",
+          "informational_note": "Senna has limited pregnancy data — relevant to people who are pregnant or planning pregnancy."
         },
         {
           "condition_id": "kidney_disease",
@@ -5493,7 +6192,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/senna",
             "https://pubmed.ncbi.nlm.nih.gov/10940988/"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "Senna is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of senna.",
+          "informational_note": "Senna depends on kidney clearance — relevant to people with kidney conditions."
         }
       ],
       "drug_class_rules": [
@@ -5547,7 +6249,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/chasteberry",
             "https://pubmed.ncbi.nlm.nih.gov/23136064/"
-          ]
+          ],
+          "alert_headline": "Stop if you become pregnant",
+          "alert_body": "Chasteberry has hormonal activity and no established pregnancy safety data. If you are trying to conceive, discuss dosing with your clinician and plan to stop chasteberry at confirmed pregnancy.",
+          "informational_note": "Chasteberry is typically discontinued at confirmed pregnancy — relevant to people trying to conceive."
         }
       ],
       "drug_class_rules": [],
@@ -5572,7 +6277,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/nac-n-acetyl-cysteine",
             "https://pubmed.ncbi.nlm.nih.gov/8298118/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "NAC has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding NAC.",
+          "informational_note": "NAC can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -5585,7 +6293,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/nac-n-acetyl-cysteine",
             "https://pubmed.ncbi.nlm.nih.gov/8298118/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "NAC has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding NAC and ask about INR or bleeding checks.",
+          "informational_note": "NAC can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -5679,7 +6390,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/cascara-sagrada",
             "https://pubmed.ncbi.nlm.nih.gov/10940988/"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "Cascara sagrada is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of cascara sagrada.",
+          "informational_note": "Cascara sagrada depends on kidney clearance — relevant to people with kidney conditions."
         }
       ],
       "drug_class_rules": [
@@ -5733,7 +6447,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/32444096/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Chinese skullcap is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of chinese skullcap.",
+          "informational_note": "Chinese skullcap depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -5758,7 +6475,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed",
             "https://pubmed.ncbi.nlm.nih.gov/21537493/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Black seed oil can lower blood sugar. If you have diabetes, talk to your clinician before adding black seed oil and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Black seed oil affects glycemic control — relevant to people with diabetes."
         },
         {
           "condition_id": "hypertension",
@@ -5769,7 +6489,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed",
             "https://pubmed.ncbi.nlm.nih.gov/21537493/"
-          ]
+          ],
+          "alert_headline": "Caution with high blood pressure",
+          "alert_body": "Black seed oil can influence blood pressure. If you have high blood pressure, talk to your clinician before adding black seed oil and monitor your readings.",
+          "informational_note": "Black seed oil can affect blood pressure — relevant to people with high blood pressure."
         },
         {
           "condition_id": "pregnancy",
@@ -5796,7 +6519,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed",
             "https://pubmed.ncbi.nlm.nih.gov/21537493/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Black seed oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding black seed oil and ask about INR or bleeding checks.",
+          "informational_note": "Black seed oil can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "hypoglycemics",
@@ -5807,7 +6533,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed",
             "https://pubmed.ncbi.nlm.nih.gov/21537493/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Black seed oil can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding black seed oil and monitor your glucose more closely at first.",
+          "informational_note": "Black seed oil affects glycemic control — relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "antihypertensives",
@@ -5818,7 +6547,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed",
             "https://pubmed.ncbi.nlm.nih.gov/21537493/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Black seed oil can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding black seed oil.",
+          "informational_note": "Black seed oil can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "dose_thresholds": [],
@@ -5842,7 +6574,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "DHA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding DHA.",
+          "informational_note": "DHA can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -5855,7 +6590,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about INR or bleeding checks.",
+          "informational_note": "DHA can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -5866,7 +6604,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "DHA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding DHA.",
+          "informational_note": "DHA can affect platelet function — relevant to people on antiplatelets."
         }
       ],
       "dose_thresholds": [],
@@ -5890,7 +6631,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "EPA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding EPA.",
+          "informational_note": "EPA can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -5903,7 +6647,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "EPA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding EPA and ask about INR or bleeding checks.",
+          "informational_note": "EPA can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -5914,7 +6661,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
+          "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets."
         }
       ],
       "dose_thresholds": [],
@@ -5939,7 +6689,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18296328/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "L-theanine can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding L-theanine.",
+          "informational_note": "L-theanine can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "sedatives",
@@ -5950,7 +6703,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18296328/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "L-theanine has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding L-theanine — the combination can increase drowsiness.",
+          "informational_note": "L-theanine has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -5974,7 +6730,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/bacopa",
             "https://pubmed.ncbi.nlm.nih.gov/12162764/"
-          ]
+          ],
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Bacopa can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding bacopa and monitor your labs.",
+          "informational_note": "Bacopa affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [
@@ -5987,7 +6746,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/bacopa",
             "https://pubmed.ncbi.nlm.nih.gov/12162764/"
-          ]
+          ],
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Bacopa can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing bacopa away from your dose.",
+          "informational_note": "Bacopa affects thyroid pathways — relevant to people on thyroid medication."
         },
         {
           "drug_class_id": "sedatives",
@@ -5998,7 +6760,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/bacopa",
             "https://pubmed.ncbi.nlm.nih.gov/12162764/"
-          ]
+          ],
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "Bacopa has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding bacopa — the combination can increase drowsiness.",
+          "informational_note": "Bacopa has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
@@ -6022,7 +6787,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/12701816/"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "Creatine is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of creatine.",
+          "informational_note": "Creatine depends on kidney clearance — relevant to people with kidney conditions."
         }
       ],
       "drug_class_rules": [],
@@ -6047,7 +6815,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion",
             "https://pubmed.ncbi.nlm.nih.gov/21538168/"
-          ]
+          ],
+          "alert_headline": "Caution with kidney disease",
+          "alert_body": "Dandelion is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of dandelion.",
+          "informational_note": "Dandelion depends on kidney clearance — relevant to people with kidney conditions."
         }
       ],
       "drug_class_rules": [
@@ -6060,7 +6831,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion",
             "https://pubmed.ncbi.nlm.nih.gov/21538168/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Dandelion can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding dandelion.",
+          "informational_note": "Dandelion can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "hypoglycemics",
@@ -6071,7 +6845,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion",
             "https://pubmed.ncbi.nlm.nih.gov/21538168/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Dandelion can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding dandelion and monitor your glucose more closely at first.",
+          "informational_note": "Dandelion affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [],
@@ -6095,7 +6872,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15470137/",
             "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Acetyl-L-carnitine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding Acetyl-L-carnitine and monitor your labs.",
+          "informational_note": "Acetyl-L-carnitine affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [
@@ -6108,7 +6888,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15470137/",
             "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "Acetyl-L-carnitine can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing Acetyl-L-carnitine away from your dose.",
+          "informational_note": "Acetyl-L-carnitine affects thyroid pathways — relevant to people on thyroid medication."
         },
         {
           "drug_class_id": "anticoagulants",
@@ -6119,7 +6902,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/15470137/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Acetyl-L-carnitine has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Acetyl-L-carnitine and ask about INR or bleeding checks.",
+          "informational_note": "Acetyl-L-carnitine can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -6228,7 +7014,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/huperzine-a",
             "https://pubmed.ncbi.nlm.nih.gov/24573804/"
-          ]
+          ],
+          "alert_headline": "Caution with seizure disorder",
+          "alert_body": "Huperzine A may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding Huperzine A.",
+          "informational_note": "Huperzine A may affect seizure threshold — relevant to people with a seizure disorder."
         }
       ],
       "drug_class_rules": [
@@ -6269,7 +7058,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/8247568/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "May affect anticholinergic medications",
+          "alert_body": "Alpha-GPC can influence cholinergic balance. If you take an anticholinergic medication, talk to your prescriber before adding Alpha-GPC.",
+          "informational_note": "Alpha-GPC affects cholinergic balance — relevant to people on anticholinergic medications."
         }
       ],
       "dose_thresholds": [],
@@ -6293,7 +7085,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/DietarySupplements-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/11869656/"
-          ]
+          ],
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "L-tyrosine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding L-tyrosine and monitor your labs.",
+          "informational_note": "L-tyrosine affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [
@@ -6320,7 +7115,10 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/DietarySupplements-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/11869656/"
-          ]
+          ],
+          "alert_headline": "May affect thyroid medication",
+          "alert_body": "L-tyrosine can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing L-tyrosine away from your dose.",
+          "informational_note": "L-tyrosine affects thyroid pathways — relevant to people on thyroid medication."
         }
       ],
       "dose_thresholds": [],
@@ -6344,7 +7142,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/milk-thistle",
             "https://pubmed.ncbi.nlm.nih.gov/17569230/"
-          ]
+          ],
+          "alert_headline": "Caution with liver disease",
+          "alert_body": "Silymarin is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of silymarin.",
+          "informational_note": "Silymarin depends on liver clearance — relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [
@@ -6357,7 +7158,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/milk-thistle",
             "https://pubmed.ncbi.nlm.nih.gov/17569230/"
-          ]
+          ],
+          "alert_headline": "Caution with immunosuppressants",
+          "alert_body": "Silymarin has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding silymarin.",
+          "informational_note": "Silymarin affects immune function — relevant to people on immunosuppressants."
         },
         {
           "drug_class_id": "statins",
@@ -6368,7 +7172,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/milk-thistle",
             "https://pubmed.ncbi.nlm.nih.gov/17569230/"
-          ]
+          ],
+          "alert_headline": "May affect statin tolerability",
+          "alert_body": "Silymarin shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding silymarin and watch for new muscle aches.",
+          "informational_note": "Silymarin affects statin pathways — relevant to people on statin therapy."
         }
       ],
       "dose_thresholds": [],
@@ -6393,7 +7200,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/11507730/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Forskolin can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding forskolin.",
+          "informational_note": "Forskolin can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "anticoagulants",
@@ -6404,7 +7214,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/11507730/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Forskolin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding forskolin and ask about INR or bleeding checks.",
+          "informational_note": "Forskolin can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -6428,7 +7241,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/16112024/"
-          ]
+          ],
+          "alert_headline": "Caution with heart conditions",
+          "alert_body": "Icariin can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding icariin.",
+          "informational_note": "Icariin can affect cardiovascular pathways — relevant to people with heart conditions."
         }
       ],
       "drug_class_rules": [
@@ -6441,7 +7257,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/16112024/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Icariin can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding icariin.",
+          "informational_note": "Icariin can affect blood pressure — relevant to people on antihypertensive medications."
         }
       ],
       "dose_thresholds": [],
@@ -6465,7 +7284,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/stinging-nettle",
             "https://pubmed.ncbi.nlm.nih.gov/23098397/"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Stinging nettle can lower blood sugar. If you have diabetes, talk to your clinician before adding stinging nettle and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Stinging nettle affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -6478,7 +7300,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/stinging-nettle",
             "https://pubmed.ncbi.nlm.nih.gov/23098397/"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Stinging nettle can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding stinging nettle.",
+          "informational_note": "Stinging nettle can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "hypoglycemics",
@@ -6489,7 +7314,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/stinging-nettle",
             "https://pubmed.ncbi.nlm.nih.gov/23098397/"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Stinging nettle can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding stinging nettle and monitor your glucose more closely at first.",
+          "informational_note": "Stinging nettle affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [],
@@ -6514,7 +7342,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/pygeum",
             "https://pubmed.ncbi.nlm.nih.gov/9161097/"
-          ]
+          ],
+          "alert_headline": "May add to NSAID bleeding risk",
+          "alert_body": "Pygeum has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding pygeum.",
+          "informational_note": "Pygeum can affect platelet function — relevant to people on NSAIDs."
         }
       ],
       "dose_thresholds": [],
@@ -6538,7 +7369,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24130475/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "Caution with diabetes",
+          "alert_body": "Olive leaf can lower blood sugar. If you have diabetes, talk to your clinician before adding olive leaf and monitor your glucose, especially in the first weeks.",
+          "informational_note": "Olive leaf affects glycemic control — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -6551,7 +7385,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24130475/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "May affect blood-pressure control",
+          "alert_body": "Olive leaf can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding olive leaf.",
+          "informational_note": "Olive leaf can affect blood pressure — relevant to people on antihypertensive medications."
         },
         {
           "drug_class_id": "hypoglycemics",
@@ -6562,7 +7399,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/24130475/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Olive leaf can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding olive leaf and monitor your glucose more closely at first.",
+          "informational_note": "Olive leaf affects glycemic control — relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [],
@@ -6586,7 +7426,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/15857459/"
-          ]
+          ],
+          "alert_headline": "Caution with autoimmune conditions",
+          "alert_body": "Cordyceps has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding cordyceps.",
+          "informational_note": "Cordyceps affects immune function — relevant to people with autoimmune conditions."
         }
       ],
       "drug_class_rules": [
@@ -6613,7 +7456,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance",
             "https://pubmed.ncbi.nlm.nih.gov/15857459/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Cordyceps has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding cordyceps and ask about INR or bleeding checks.",
+          "informational_note": "Cordyceps can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -6638,7 +7484,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/20109089/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Lion's mane has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding lion's mane and ask about INR or bleeding checks.",
+          "informational_note": "Lion's mane can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -6662,7 +7511,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12065157/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "Caution with thyroid conditions",
+          "alert_body": "Quercetin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding quercetin and monitor your labs.",
+          "informational_note": "Quercetin affects thyroid pathways — relevant to people with thyroid conditions."
         }
       ],
       "drug_class_rules": [
@@ -6675,7 +7527,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/12065157/",
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Quercetin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding quercetin and ask about INR or bleeding checks.",
+          "informational_note": "Quercetin can affect clotting — relevant to people on anticoagulants."
         }
       ],
       "dose_thresholds": [],
@@ -6699,7 +7554,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/16243026/",
             "https://www.nccih.nih.gov/health/resveratrol"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Resveratrol has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding resveratrol.",
+          "informational_note": "Resveratrol can affect platelet function — relevant to people with a bleeding disorder."
         }
       ],
       "drug_class_rules": [
@@ -6712,7 +7570,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/16243026/",
             "https://www.nccih.nih.gov/health/resveratrol"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Resveratrol has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding resveratrol and ask about INR or bleeding checks.",
+          "informational_note": "Resveratrol can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -6723,7 +7584,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/16243026/",
             "https://www.nccih.nih.gov/health/resveratrol"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Resveratrol has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding resveratrol.",
+          "informational_note": "Resveratrol can affect platelet function — relevant to people on antiplatelets."
         }
       ],
       "dose_thresholds": [],
@@ -6748,7 +7612,10 @@
             "https://pubmed.ncbi.nlm.nih.gov/29136493/",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
             "https://www.nccih.nih.gov/health/omega-3-supplements"
-          ]
+          ],
+          "alert_headline": "Caution with bleeding disorders",
+          "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
+          "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -6759,7 +7626,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/29136493/",
             "https://www.nccih.nih.gov/health/omega-3-supplements"
-          ]
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
+          "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery."
         }
       ],
       "drug_class_rules": [
@@ -6772,7 +7642,10 @@
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
             "https://pubmed.ncbi.nlm.nih.gov/29136493/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "Fish oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding fish oil and ask about INR or bleeding checks.",
+          "informational_note": "Fish oil can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "antiplatelets",
@@ -6783,7 +7656,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/29136493/",
             "https://www.nccih.nih.gov/health/omega-3-supplements"
-          ]
+          ],
+          "alert_headline": "May add to antiplatelet effects",
+          "alert_body": "Fish oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding fish oil.",
+          "informational_note": "Fish oil can affect platelet function — relevant to people on antiplatelets."
         }
       ],
       "dose_thresholds": [
@@ -6842,7 +7718,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30417375/",
             "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
-          ]
+          ],
+          "alert_headline": "Caution with seizure disorder",
+          "alert_body": "CBD may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding CBD.",
+          "informational_note": "CBD may affect seizure threshold — relevant to people with a seizure disorder."
         },
         {
           "condition_id": "pregnancy",
@@ -6868,7 +7747,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30417375/",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
-          ]
+          ],
+          "alert_headline": "May affect seizure medication",
+          "alert_body": "CBD can influence how seizure medications work. If you take an anticonvulsant, talk to your neurologist before adding CBD.",
+          "informational_note": "CBD may affect anticonvulsant therapy — relevant to people on seizure medications."
         },
         {
           "drug_class_id": "immunosuppressants",
@@ -6878,7 +7760,10 @@
           "action": "Monitor tacrolimus/sirolimus trough levels closely. Dose reduction for the immunosuppressant should be considered. Inform transplant team of CBD use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30417375/"
-          ]
+          ],
+          "alert_headline": "Caution with immunosuppressants",
+          "alert_body": "CBD has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding CBD.",
+          "informational_note": "CBD affects immune function — relevant to people on immunosuppressants."
         },
         {
           "drug_class_id": "anticoagulants",
@@ -6888,7 +7773,10 @@
           "action": "Monitor INR more frequently when starting or stopping CBD. Inform prescriber.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30417375/"
-          ]
+          ],
+          "alert_headline": "May add to blood-thinner effects",
+          "alert_body": "CBD has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding CBD and ask about INR or bleeding checks.",
+          "informational_note": "CBD can affect clotting — relevant to people on anticoagulants."
         },
         {
           "drug_class_id": "sedatives",
@@ -6898,7 +7786,10 @@
           "action": "Use caution with concurrent sedative medications. Monitor for excessive drowsiness.",
           "sources": [
             "https://www.nccih.nih.gov/health/cannabis-marijuana-and-cannabinoids-what-you-need-to-know"
-          ]
+          ],
+          "alert_headline": "May add to sedative drowsiness",
+          "alert_body": "CBD has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding CBD — the combination can increase drowsiness.",
+          "informational_note": "CBD has sedative activity — relevant to people on sedatives or sleep medications."
         }
       ],
       "dose_thresholds": [],
