@@ -258,7 +258,13 @@ python3 scripts/validate_safety_copy.py --depletions-only
 
 ---
 
-## File 2 — `banned_recalled_ingredients.json` (139 entries)
+## File 2 — `banned_recalled_ingredients.json` (143 entries)
+
+*Status: clinical review round 1 complete (Dr. Pham, 2026-04-17). All
+143 entries authored; 0 errors under strict validator (except 143
+pre-existing `canonical_id` uppercase warnings — migration debt, not
+part of this authoring pass and exempted from strict failure).*
+
 
 **Purpose:** Fix medically-wrong derived warnings. The old copy told
 patients their prescribed metformin was "banned" — it's only banned as
