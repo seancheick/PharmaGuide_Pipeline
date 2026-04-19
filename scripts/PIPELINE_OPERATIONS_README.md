@@ -143,11 +143,67 @@ git push origin main
 
 | Step                 | Gate                                                               | Where                                                     |
 | -------------------- | ------------------------------------------------------------------ | --------------------------------------------------------- |
+| Clinical-copy gate   | Path C authored-field contract across 6 reference files            | `scripts/validate_safety_copy.py --strict`                |
 | Pipeline validation  | SQLite integrity + row count + embedded manifest + checksum        | `release_catalog_artifact.py::validate_release_candidate` |
 | Flutter bridge       | SHA-256 match, schema allowlist, split-brain check                 | `scripts/import_catalog_artifact.sh`                      |
 | Flutter release gate | Bundle-load via rootBundle, CoreDatabase open, version cross-check | `test/release_gate/bundled_catalog_test.dart`             |
 
 Any failure at any step aborts the release with a clear error. The Flutter bridge script intentionally leaves `assets/db/` untouched on failure so a broken build never replaces a good bundled DB.
+
+### Clinical-copy validator (`validate_safety_copy.py`)
+
+Release gate for Dr. Pham's authored clinical copy across six data files. Enforces length bounds, tone rules (no SCREAM words, no encyclopedic openers, no catastrophizing), conditional-framing requirements, and per-file structural contracts (e.g., `adequacy_threshold_mcg` XOR `adequacy_threshold_mg`).
+
+**Run all files:**
+
+```bash
+python3 scripts/validate_safety_copy.py --strict
+```
+
+**Run a single file (faster during authoring):**
+
+```bash
+python3 scripts/validate_safety_copy.py --banned-recalled-only --strict
+python3 scripts/validate_safety_copy.py --interaction-rules-only --strict
+python3 scripts/validate_safety_copy.py --depletions-only --strict
+python3 scripts/validate_safety_copy.py --harmful-additives-only --strict
+python3 scripts/validate_safety_copy.py --synergy-only --strict
+python3 scripts/validate_safety_copy.py --violations-only --strict
+```
+
+**Modes:**
+
+- **Authoring (default)** — missing authored fields are warnings. Use while Dr. Pham is still working.
+- **`--strict`** — missing authored fields are errors. Use as the release gate.
+- **`--quiet`** — suppress warnings; only errors print. Use in CI output.
+
+**What it checks (summary by file):**
+
+| Reference file                      | Required authored fields                                                                            | Extra contract                                                                               |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `banned_recalled_ingredients.json`  | `ban_context` (enum), `safety_warning` (50-200), `safety_warning_one_liner` (20-80)                 | Adulterant entries must contain "in supplement" guardrail; contamination_recall must use regulatory verb |
+| `ingredient_interaction_rules.json` | `alert_headline` (20-60), `alert_body` (60-200), `informational_note` (40-120)                      | Avoid/contraindicated severity requires conditional framing ("if you take", "talk to")      |
+| `medication_depletions.json`        | `alert_headline`, `alert_body`, `acknowledgement_note`, `monitoring_tip_short`, optional `food_sources_short` | No acute-tense framing; no numeric stats in body; exactly one of `adequacy_threshold_mcg`/`_mg` |
+| `harmful_additives.json`            | `safety_summary` (50-200), `safety_summary_one_liner` (20-80)                                       | No SCREAM words; terminal punctuation on one-liner                                           |
+| `synergy_cluster.json`              | `synergy_benefit_short` (40-160)                                                                    | No alarm/nocebo words (synergy is positive framing)                                          |
+| `manufacturer_violations.json`      | `brand_trust_summary` (40-120)                                                                      | No semicolons; terminal punctuation; SCREAM words blocked (but alarming adjectives allowed — serious recalls deserve serious voice) |
+
+**Failure output:** each violation prints the exact entry ID + field + reason. Fix the offender and re-run; no explicit "fix this" tooling yet — the messages point at the file and field directly.
+
+### Reference-data schema versions
+
+The `EXPORT_SCHEMA_VERSION` above tracks the product-core DB. Each reference data file has its own `_metadata.schema_version` that advances independently:
+
+| File                                | Current | Notes                                                                    |
+| ----------------------------------- | ------- | ------------------------------------------------------------------------ |
+| `banned_recalled_ingredients.json`  | 5.3.0   | Added `contamination_recall` as 5th `ban_context` enum value (2026-04-18) |
+| `ingredient_interaction_rules.json` | 5.2.0   | All severe sub-rules + pregnancy_lactation blocks + non-severe sub-rules authored |
+| `medication_depletions.json`        | 5.2.1   | `food_sources_short` optional field added; 68 entries authored            |
+| `harmful_additives.json`            | 5.1.0   | `safety_summary` + `safety_summary_one_liner` fields added; 115 authored |
+| `synergy_cluster.json`              | 5.0.0   | `synergy_benefit_short` field added (Dr. Pham, 2026-04-18); 58 authored  |
+| `manufacturer_violations.json`      | 5.0.0   | `brand_trust_summary` field added; 79 authored                           |
+
+Schema bumps cascade into Flutter's reference-data asset sync — see "Flutter asset sync status" in the Clinical Copy dashboard to spot drift the moment it happens.
 
 ### Git LFS quota notes
 
@@ -392,12 +448,12 @@ python3 scripts/sync_to_supabase.py \
 
 **When to use it:**
 
-| Situation | Use `--cleanup`? |
-|-----------|-----------------|
-| Regular release (every pipeline run) | Yes — keeps Storage tidy |
-| After a schema bump (many new blobs) | Yes — orphan blobs from old schema get removed |
+| Situation                               | Use `--cleanup`?                                                    |
+| --------------------------------------- | ------------------------------------------------------------------- |
+| Regular release (every pipeline run)    | Yes — keeps Storage tidy                                            |
+| After a schema bump (many new blobs)    | Yes — orphan blobs from old schema get removed                      |
 | Debugging / uncertain about the release | No — run without first, verify app works, then run with `--cleanup` |
-| Rollback scenario | No — you want the old version still in Storage |
+| Rollback scenario                       | No — you want the old version still in Storage                      |
 
 Run `cleanup_old_versions.py` standalone for a dry-run preview without syncing:
 
