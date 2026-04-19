@@ -730,7 +730,11 @@ CREATE VIRTUAL TABLE IF NOT EXISTS products_fts USING fts5(
 """
 
 
-def dedup_by_upc(conn, detail_index: Dict[str, Any]) -> Dict[str, Any]:
+def dedup_by_upc(
+    conn,
+    detail_index: Dict[str, Any],
+    detail_blobs_dir: Optional[Path] = None,
+) -> Dict[str, Any]:
     """Remove duplicate products that share the same UPC barcode.
 
     DSLD registers the same physical product multiple times across years
@@ -741,8 +745,12 @@ def dedup_by_upc(conn, detail_index: Dict[str, Any]) -> Dict[str, Any]:
       1. GROUP BY normalised UPC (spaces stripped).
       2. Keep the **best** row per group: active > discontinued, then
          highest score_quality_80, then newest dsld_id (lexicographic).
-      3. DELETE the losers from products_core and remove them from
-         the detail_index dict.
+      3. DELETE the losers from products_core, remove them from the
+         detail_index dict, and unlink the corresponding blob file from
+         detail_blobs_dir if provided — so the downstream sync never sees
+         orphan blobs that no product references. (Pre-2026-04-18 builds
+         skipped the file unlink, leaving thousands of unreferenced blobs
+         on disk that the sync gate then rejected.)
 
     Returns a summary dict for the audit report.
     """
@@ -767,6 +775,7 @@ def dedup_by_upc(conn, detail_index: Dict[str, Any]) -> Dict[str, Any]:
     total_removed = 0
     groups_deduped = 0
     removed_ids = []
+    orphan_files_removed = 0
 
     for upc_norm, id_csv, cnt in rows:
         dsld_ids = id_csv.split("|")
@@ -806,6 +815,16 @@ def dedup_by_upc(conn, detail_index: Dict[str, Any]) -> Dict[str, Any]:
             )
             # Remove from detail_index so the sync doesn't upload orphan blobs
             detail_index.pop(str(loser_id), None)
+            # Remove the physical blob file from disk so the sync gate's
+            # file-count check (len(blobs) == product_count) holds. Without
+            # this, the enrichment stage's 7k+ blob files stay on disk even
+            # though only ~4k survive the dedup, and sync aborts with
+            # "Build output blob mismatch."
+            if detail_blobs_dir is not None:
+                blob_path = detail_blobs_dir / f"{loser_id}.json"
+                if blob_path.exists():
+                    blob_path.unlink()
+                    orphan_files_removed += 1
             removed_ids.append(loser_id)
 
         total_removed += len(losers)
@@ -817,6 +836,7 @@ def dedup_by_upc(conn, detail_index: Dict[str, Any]) -> Dict[str, Any]:
     return {
         "upc_groups_deduped": groups_deduped,
         "duplicates_removed": total_removed,
+        "orphan_blob_files_removed": orphan_files_removed,
         "removed_ids_sample": removed_ids[:20],
     }
 
@@ -3067,13 +3087,17 @@ def build_final_db(
     # ── UPC dedup: collapse same-barcode duplicates ──
     # DSLD registers the same physical product multiple times across years.
     # Keep the best row per UPC (active, highest score, newest id).
-    dedup_result = dedup_by_upc(conn, detail_index)
+    # Passing detail_dir lets dedup unlink the losers' blob files so the
+    # Supabase sync gate's len(blobs)==product_count invariant holds.
+    dedup_result = dedup_by_upc(conn, detail_index, Path(detail_dir))
     if dedup_result["duplicates_removed"]:
         inserted -= dedup_result["duplicates_removed"]
         logger.info(
-            "UPC dedup: removed %d duplicates across %d UPC groups (kept best per group)",
+            "UPC dedup: removed %d duplicates across %d UPC groups "
+            "(kept best per group); %d orphan blob files unlinked",
             dedup_result["duplicates_removed"],
             dedup_result["upc_groups_deduped"],
+            dedup_result.get("orphan_blob_files_removed", 0),
         )
     audit_counts["upc_dedup"] = dedup_result
 
