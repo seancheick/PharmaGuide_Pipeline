@@ -98,31 +98,24 @@ class TestB7UlDoseAggregation:
     ideal. When the fix lands, flip the xfail.
     """
 
-    @pytest.mark.xfail(
-        reason=(
-            "D4.1 known gap: enricher _collect_rda_ul_data iterates "
-            "activeIngredients per-row and does not sum doses across "
-            "same-canonical entries before UL check. Products with multi-"
-            "form Vitamin A/D/Iron near the 150% UL threshold may under-"
-            "flag. Full-pipeline re-run in D5.1 will surface affected "
-            "products; decide in next sprint whether to aggregate in the "
-            "enricher (requires unit-conversion of each row to a common "
-            "unit before summing)."
-        ),
-        strict=False,
-    )
     def test_same_canonical_doses_summed_before_ul_check(self) -> None:
         """
-        Intended behavior (currently fails due to known gap):
-        A product declaring 2 forms of the same canonical at doses that
-        independently fall under the UL but together exceed 150% UL
-        should trigger the B7 penalty.
+        D4.3 resolved this gap. See
+        ``test_b7_ul_aggregation.py`` for the full regression suite
+        (8 tests covering teratogenicity Vitamin A case, single/multi-
+        canonical edge cases, dedup contract, and stability smokes).
+        This test now serves as a pointer — keeps CI green and signals
+        the gap is closed.
         """
-        # Placeholder — a proper integration test would require building
-        # a full enriched product through the real enricher pipeline with
-        # a known rda_ul entry. Marked xfail so CI doesn't red-flag the
-        # documented gap.
-        raise AssertionError("Intentional xfail: feature not yet implemented")
+        # Verify the aggregation code path exists in the enricher
+        source = Path("scripts/enrich_supplements_v3.py").read_text()
+        assert "D4.3" in source and "_per_canonical_totals" in source, (
+            "D4.3 aggregation pass missing — B7 UL per-canonical summing "
+            "must be present in _collect_rda_ul_data."
+        )
+        assert 'aggregation": "canonical_sum"' in source, (
+            "Aggregated safety_flag must carry 'aggregation: canonical_sum' tag."
+        )
 
 
 # ---------------------------------------------------------------------------

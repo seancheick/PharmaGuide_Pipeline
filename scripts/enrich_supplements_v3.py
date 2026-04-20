@@ -11093,6 +11093,18 @@ class SupplementEnricherV3:
         if servings_max is None or servings_max <= 0:
             servings_max = servings_min
 
+        # D4.3: per-canonical aggregation buckets. A product declaring
+        # multiple forms of the same nutrient (e.g., Vitamin A from
+        # Beta-Carotene + Retinyl Palmitate) exposes the consumer to the
+        # SUM of those rows. Per-row UL checks alone miss this
+        # aggregation risk — a 200% UL exposure split across two rows
+        # at 100% UL each would clear per-row checks and never flag.
+        # After the main per-row pass, we re-check the UL on the summed
+        # total per canonical_id and emit an aggregated safety_flag,
+        # suppressing the per-row flags that would otherwise double-count.
+        _staged_row_flags: List[Tuple[Optional[str], Dict[str, Any]]] = []
+        _per_canonical_totals: Dict[str, Dict[str, Any]] = {}
+
         # Use new modules if available
         if self.unit_converter and self.rda_calculator:
             try:
@@ -11194,20 +11206,59 @@ class SupplementEnricherV3:
                     adequacy_dict["is_servings_estimated"] = servings_estimated
                     adequacy_results.append(adequacy_dict)
 
-                    # Collect safety flags
+                    # D4.3: STAGE safety flags for later aggregation pass.
+                    # Don't append directly — we may replace per-row flags
+                    # with a single aggregated flag if multiple forms of
+                    # the same canonical combine to exceed UL.
+                    _row_canonical = ingredient.get('canonical_id')
                     if not skip_ul_check and adequacy.over_ul:
                         pct_ul_val = adequacy.pct_ul or 0
                         over_ul_amount = adequacy.over_ul_amount or 0
-                        safety_flags.append({
-                            "nutrient": ing_name,
-                            "amount": amount_for_ul,
-                            "unit": converted_unit,
-                            "ul": adequacy.ul,
-                            "pct_ul": pct_ul_val,
-                            "over_amount": over_ul_amount,
-                            "warning": f"Exceeds UL by {over_ul_amount:.1f}",
-                            "severity": "critical" if pct_ul_val >= 200 else "warning"
-                        })
+                        _staged_row_flags.append((
+                            _row_canonical,
+                            {
+                                "nutrient": ing_name,
+                                "amount": amount_for_ul,
+                                "unit": converted_unit,
+                                "ul": adequacy.ul,
+                                "pct_ul": pct_ul_val,
+                                "over_amount": over_ul_amount,
+                                "warning": f"Exceeds UL by {over_ul_amount:.1f}",
+                                "severity": "critical" if pct_ul_val >= 200 else "warning",
+                            }
+                        ))
+
+                    # D4.3: Track per-canonical totals for aggregation pass.
+                    # Only track rows that were actually UL-checked (skip
+                    # unknown-form / conversion-failed rows). Requires a
+                    # canonical_id; rows without one can't be grouped.
+                    if not skip_ul_check and _row_canonical:
+                        group = _per_canonical_totals.setdefault(
+                            _row_canonical,
+                            {
+                                "std_name": std_name,
+                                "unit": converted_unit,
+                                "total_amount": 0.0,
+                                "rows": [],
+                                "incompatible_units": False,
+                                "ul": adequacy.ul,  # from first row; all rows share canonical so UL is same
+                            },
+                        )
+                        if group["unit"] != converted_unit:
+                            # Two rows for the same canonical but the
+                            # unit_converter produced different units
+                            # (e.g., one IU-based, one mg-based). Cannot
+                            # safely sum — skip aggregation for this
+                            # canonical; per-row flags will still emit.
+                            group["incompatible_units"] = True
+                        else:
+                            group["total_amount"] += amount_for_ul
+                            group["rows"].append({
+                                "ingredient": ing_name,
+                                "amount": amount_for_ul,
+                                "unit": converted_unit,
+                                "pct_ul_individual": adequacy.pct_ul,
+                            })
 
                     # Legacy format for backward compatibility
                     rda_data.append({
@@ -11233,6 +11284,71 @@ class SupplementEnricherV3:
                         "conversion_evidence": conv_evidence,  # Per-item evidence for coverage gate
                         "is_servings_estimated": servings_estimated,
                     })
+
+                # D4.3 AGGREGATION PASS: per-canonical dose summing + UL check.
+                # When a product declares multiple forms of the same nutrient,
+                # per-row UL checks miss the aggregate exposure. Re-check each
+                # canonical's TOTAL dose against its UL; emit one aggregated
+                # safety_flag when the sum exceeds UL. Per-row flags for that
+                # canonical are suppressed to prevent double-penalty in B7.
+                _aggregated_canonicals: set = set()
+                for cid, group in _per_canonical_totals.items():
+                    if group.get("incompatible_units"):
+                        # Unit mismatch within canonical — per-row flags
+                        # still emit below; log for audit.
+                        self.logger.debug(
+                            "UL aggregation skipped for canonical %r: "
+                            "incompatible converted units across rows",
+                            cid,
+                        )
+                        continue
+                    if len(group["rows"]) < 2:
+                        # Single-row canonical — no aggregation needed, per-row
+                        # flag (if any) is sufficient.
+                        continue
+                    try:
+                        agg_adequacy = self.rda_calculator.compute_nutrient_adequacy(
+                            nutrient=group["std_name"],
+                            amount=group["total_amount"],
+                            unit=group["unit"],
+                        )
+                    except Exception as agg_err:
+                        self.logger.debug(
+                            "UL aggregation re-check failed for %r: %s",
+                            cid, agg_err,
+                        )
+                        continue
+
+                    if agg_adequacy.over_ul:
+                        pct_ul_val = agg_adequacy.pct_ul or 0.0
+                        over_ul_amount = agg_adequacy.over_ul_amount or 0.0
+                        safety_flags.append({
+                            "nutrient": group["std_name"],
+                            "amount": group["total_amount"],
+                            "unit": group["unit"],
+                            "ul": agg_adequacy.ul,
+                            "pct_ul": pct_ul_val,
+                            "over_amount": over_ul_amount,
+                            "warning": (
+                                f"Aggregated across {len(group['rows'])} forms "
+                                f"exceeds UL by {over_ul_amount:.1f} {group['unit']} "
+                                f"({pct_ul_val:.0f}% UL)"
+                            ),
+                            "severity": "critical" if pct_ul_val >= 200 else "warning",
+                            "aggregation": "canonical_sum",
+                            "canonical_id": cid,
+                            "contributing_rows": group["rows"],
+                        })
+                        _aggregated_canonicals.add(cid)
+
+                # D4.3: Emit per-row flags ONLY for canonicals that were NOT
+                # aggregated (dedup). A canonical whose sum exceeded UL already
+                # has an aggregated flag above; adding per-row flags for the
+                # same canonical would double-count the B7 penalty.
+                for row_cid, row_flag in _staged_row_flags:
+                    if row_cid and row_cid in _aggregated_canonicals:
+                        continue
+                    safety_flags.append(row_flag)
 
                 return {
                     "ingredients_with_rda": rda_data,
