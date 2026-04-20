@@ -1,4 +1,32 @@
-# Pipeline Refactor Handoff — 2026-04-20 (Phase 3 + 6 landed)
+# Pipeline Refactor Handoff — 2026-04-20 (Sprint D complete through D4.3)
+
+---
+
+## Period D — Sprint D1 through D4.3 COMPLETE · D5.1 pipeline running
+
+**State at close of D4.3**: Every medical-grade accuracy bug found in the deep audit is fixed, test-validated, committed, and pushed. Full suite **4,373 tests passing, 12 skipped, 0 failed, 0 xfail** under `PG_ENFORCE_CLEANER_CONTRACT=1`. 306 new Sprint D regression tests guard every invariant at code + data + test layer. User kicked off D5.1 full pipeline run on all 20 brands shortly after D4.3 landed.
+
+### Commit trail
+
+| Commit | Scope | Tests | Status |
+|---|---|---|---|
+| `10d54a6` | Period C + Sprint D1 — 4 critical verdict bugs | +91 | pushed |
+| `c0e1450` | Sprint D2 — silent-mapping contract + alias/DB expansion (6 sub-tasks) | +167 | pushed |
+| `7e47b3a` | Sprint D3 + D4 — form coverage + scorer dedup verified | +34 | pushed |
+| `ef8335f` | Sprint D4.3 — B7 UL canonical-level dose aggregation (pre-D5.1 gate) | +8 | pushed |
+
+Baseline: 4,105 tests → D4.3 close: **4,373 tests (+268 net)**.
+
+### D4.3 — B7 UL teratogenicity fix (pre-D5.1 gate)
+
+Added after D4 discovered the enricher's `_collect_rda_ul_data` iterated active_ingredients per-row and never summed same-canonical doses before the UL check. Medical-safety bomb: a pregnant user seeing "SAFE" on a product exposing them to 20,000 IU Vitamin A (200% UL / known teratogenicity risk, Rothman 1995 NEJM) split across two forms at 100% UL each.
+
+**Fix**: two-pass enricher.
+1. Per-row pass preserved for display/evidence (staged, not emitted).
+2. New aggregation pass: groups by `canonical_id`, sums compatible-unit doses, re-checks UL on the SUM, emits ONE aggregated `safety_flag` with `aggregation: "canonical_sum"` + `contributing_rows` list when sum exceeds UL.
+3. Dedup: per-row flags for any canonical with an aggregated flag are suppressed. Prevents B7 double-penalty.
+
+8 regression tests (`test_b7_ul_aggregation.py`) cover the motivating teratogenicity case, single/multi-canonical edge cases, dedup contract, and enricher stability smokes.
 
 ---
 
@@ -19,12 +47,60 @@
 - Existing suites including IQM schema, xylitol routing, and snapshot stay green
 - Full suite pending (running alongside Phase 7 pipeline)
 
-### Remaining sprint D work
+---
 
-- **D2**: contract fix (is_mapped ⇒ canonical_id) + alias/DB expansion for ~833 silently-mapped rows
-- **D3**: form-specificity (30,807 unspecified forms)
-- **D4**: scorer dedup verification
-- **D5**: full pipeline re-run + release gate
+## Sprint D2 — silent-mapping contract + alias/DB expansion (COMPLETE)
+
+**State**: 6 sub-tasks shipped, 167 new tests, 4,330 full suite green at commit `c0e1450`.
+
+| Sub-task | Delivered | Tests |
+|---|---|---|
+| **D2.1** Cleaner contract fix | `is_mapped ⇒ canonical_id` enforced at 3 row-builder sites (`enhanced_normalizer.py:4357/4742/4891`). Silent-mapping rows downgrade to `mapped=False` + unmapped tracker notified. Env-var gated brand-wide scan (`PG_ENFORCE_CLEANER_CONTRACT=1`). 4,011 pre-D2.1 stale-data rows retro-fixed via `apply_d2_1_contract_retro.py`. | 10 |
+| **D2.2** Qualifier-suffix strip | `_strip_qualifier_suffixes` + fallback in `_resolve_canonical_identity` strips ", Micronized" / ", Organic" / ", Freeze-Dried" etc. from the tail before giving up. Anchored end-of-string + leading comma — no mid-name false positives. | 34 |
+| **D2.3** Blend header expansion | 39 blend_terms added across BLEND_PROTEIN / BLEND_GENERAL / BLEND_SUPERFOOD / BLEND_ENZYME; Vitaberry Plus(TM) / ActivAIT Mustard branded-blend entries in other_ingredients. 2,735 retro-upgrades. | 57 |
+| **D2.4** Branded compounds | Covered by D2.3 — Velositol/MyoTor/Tesnor/Metabolaid already in proprietary_blends. | — |
+| **D2.5** Whole-food + uncommon plants | 19 new aliases on existing botanicals; 6 new entries (tamarind, green_bean, lima_bean, 3 Ecklonia/Alaria kelp species); 3 protein-isolate entries (beef / chicken / chickpea). | 23 |
+| **D2.6** Parser artifact skip | `_is_nutrition_fact` extended to drop `less than 0.1%` / `<0.5%` / `5%` / `10 mg` standalone-only rows + bare joiners. Embedded numbers preserved. | 43 |
+
+**Invariants locked in**:
+1. Zero silently-mapped rows under enforcement mode (mechanically tested)
+2. Every form entry is either DSLD-structured (100% field preservation) or `source='name_extraction'` (marker)
+
+---
+
+## Sprint D3 — form specificity investigation (COMPLETE)
+
+**State**: 3 sub-tasks shipped, 32 new tests. Commit `7e47b3a`.
+
+Investigation outcome: the "30,807 unspecified form landings" flagged in the deep audit are **legitimate**, not a pipeline bug.
+
+| Sub-task | Finding |
+|---|---|
+| **D3.1** Cleaner forms[] preservation | Brand-wide audit 94,477 forms: 80.6% DSLD-structured (100% field preservation), 19.4% name-extracted (marker present), 0% partial. No fix needed; tests lock the invariant. |
+| **D3.2** Enricher form-match verification | Sampled 30,807 "unspecified" scored rows: **100% had EMPTY `cleaner_forms[]`**. Labels genuinely don't specify chemical form. Unspecified-form bio_score=5 is the correct conservative default. Enricher already reads `form.get('name')` as primary via salt-qualifier + branded-prefix logic. No fix needed. |
+| **D3.3** IQM alias coverage | Direct-match testing on 20 common DSLD forms (Calcium Carbonate, Ferrous Bisglycinate, Ascorbic Acid, Cholecalciferol, Zinc Picolinate, Magnesium Glycinate, etc.) — all resolve to specific IQM forms at bio_score 8-14. IQM coverage is adequate. |
+
+**Conclusion**: the 29% unspecified-form rate reflects real-world supplement-label gaps, not a scoring bug. If a label says "Vitamin C 500 mg" without specifying Ascorbic Acid / Calcium Ascorbate / etc., bio_score=5 is the correct conservative default.
+
+---
+
+## Sprint D4 — scorer dedup audit (COMPLETE)
+
+**State**: 2 sub-tasks shipped + D4.3 follow-up, 16 new tests (8 + 8). Commits `7e47b3a` + `ef8335f`.
+
+| Sub-task | Finding / Fix |
+|---|---|
+| **D4.1** A1/A2 dedup verification | A1 (bioavailability) uses weighted average, skips `is_proprietary_blend` + `is_parent_total` rows. A2 (premium forms) uses set-based dedup keyed by `canonical_id` — duplicates count once. Live-data sample: no product exceeds A2 config max (5.0). Verified working. |
+| **D4.2** Blend header + member dedup | A1 + A2 skip blend containers (header can't pollute weighted average). B5 blend-penalty fires on `has_proprietary_blends=True`. Live sample: every scored product's Section A stays within 25.0 cap. Verified working. |
+| **D4.3** B7 UL canonical-level aggregation | **Fixed** (pre-D5.1 gate). Enricher `_collect_rda_ul_data` now runs a two-pass pipeline: per-row (for display) + per-canonical aggregation (sums compatible-unit doses across forms of the same nutrient before the UL check). Emits ONE aggregated `safety_flag` with `aggregation: canonical_sum` + `contributing_rows` when sum exceeds UL; per-row flags for that canonical are suppressed (prevents B7 double-penalty). Medical-safety impact: pregnant user no longer sees SAFE verdict on a product with 10k + 10k IU Vitamin A summing to 200% UL. |
+
+---
+
+## Sprint D5 — release gate (PENDING — pipeline running)
+
+**State at D4.3 close**: User about to run (or just running) the full pipeline on all 20 brands with D1 + D2 + D3 + D4.3 fixes live. This is the compute-heavy step.
+
+See the **"What's next"** section below for the D5.1-D5.4 sequence + post-D5 roadmap.
 
 See docs/SPRINT_D_ACCURACY_100.md for the full sprint plan.
 
@@ -558,4 +634,122 @@ Reproducibility: every API-derived identifier can be re-verified by re-running t
 
 ---
 
-*End of handoff. Next agent: start with Phase 7 (full pipeline + release gate).*
+## What's next — after the D5.1 pipeline run finishes
+
+### D5.2 — Deep accuracy audit v2 (≤ 5 min)
+
+Re-run the diagnostic from D4:
+
+```bash
+python3 scripts/tests/deep_accuracy_audit.py
+```
+
+**Expected post-Sprint-D deltas vs pre-Sprint-D audit**:
+
+| Metric | Pre-Sprint-D | Expected post-D5.1 |
+|---|---:|---:|
+| Silently-mapped active rows | 833 | **0** |
+| Cross-DB leak (active → harmful_additives) | 396 | ≤ ~50 (legit D-Mannose / MCC / dual-nature entries) |
+| Cross-DB leak (active → banned_recalled) | 259 | ≤ ~120 (legitimate CBD / 7-Keto / Vinpocetine / Yohimbe etc.) |
+| False-positive BLOCKED verdicts (Amaranth plant) | 66 | **0** |
+| Matcha / Orange-peel false-banned | ~30 | **0** |
+| Nutrition-Facts panel leak (sugars) | ~150 | **0** |
+| D-Mannose misclass | 19 | **0** |
+| Parser artifacts | 1+ | **0** |
+| Duplicate canonicals (legit multi-form) | 13,753 | ~same (these are mostly legitimate) |
+| Unspecified form rate | 29% | ~same (legitimate, see D3.2 finding) |
+| Total scorable actives | 106,336 | similar (±5% drift from D2.1 contract cleaning) |
+
+If any metric goes the wrong direction, stop and investigate before D5.3.
+
+### D5.3 — Snapshot shadow-diff + fixture regeneration (0.5 session)
+
+Run the snapshot-test suite against fresh scored data:
+
+```bash
+python3 -m pytest scripts/tests/test_scoring_snapshot_v1.py -v
+```
+
+**Expected drift** on the 30 frozen snapshot products:
+
+| Product | Expected change | Why |
+|---|---|---|
+| Thorne Planti-Oxidants (16037, silybin phytosome) | score +0.3 | Phase 3 Silybin→milk_thistle fix |
+| Pure Athletic Pure Pack (182730, phosphorus) | score ±0.1 | Phase 3 phosphorus canonical + raw-name fix |
+| CVS Spectravite (12012, phosphorus + MCC) | score ~ −0.5 | MCC harmful-additive detection via Cellulose alias (Period B) |
+| Any amaranth-grain product (if in snapshot) | BLOCKED → actual score | D1.1 fix |
+| Any Matcha / Orange peel oil product | BLOCKED → actual score | D1.2 fix |
+| Any sugar-heavy gummy | B1 penalty ↓ | D1.3 NF-leak fix |
+| Any D-Mannose product | score ↑ (IQM scoring, was penalty-only) | D1.4 fix |
+| Multi-form Vitamin A/D/Iron products near UL | B7 penalty may trigger where it didn't before | D4.3 aggregation |
+
+For each drift:
+1. Review the diff — is the change medically-correct?
+2. If yes → `python3 scripts/tests/freeze_contract_snapshots.py <dsld_id>` to update the fixture
+3. Add a changelog entry to `scripts/tests/fixtures/contract_snapshots/_manifest.json` documenting the rationale
+
+Any UNEXPECTED drift (not in the table above) → investigate before proceeding.
+
+### D5.4 — Release gate + build + Supabase dry-run (0.5 session)
+
+Sequence (each must pass before proceeding):
+
+```bash
+# 1. Full test suite with enforcement ON
+PG_ENFORCE_CLEANER_CONTRACT=1 python3 -m pytest scripts/tests/ -q
+#    Expected: 4,373 + 30 snapshot = ~4,403 pass, 12 skipped, 0 failed
+
+# 2. Contract validator
+python3 scripts/enrichment_contract_validator.py scripts/products/output_<brand>_enriched/enriched/
+#    Expected: 0 errors per brand
+
+# 3. Coverage gate (any brand)
+python3 scripts/coverage_gate.py scripts/products/output_<brand>_scored/scored/
+#    Expected: products_blocked=0 per brand
+
+# 4. DB integrity (strict)
+python3 scripts/db_integrity_sanity_check.py --strict
+#    Expected: clean
+
+# 5. Final DB export
+python3 scripts/build_final_db.py <scored_root> <out>
+#    Expected: pharmaguide_core.db produced cleanly
+
+# 6. Supabase dry-run diff
+python3 scripts/sync_to_supabase.py <build_out> --dry-run
+#    Expected: diff size reasonable; any mass score change > 3 pts investigated
+```
+
+All-green on steps 1-6 → safe to ship.
+
+---
+
+## Post-D5 roadmap (beyond this session)
+
+**Immediate next sprint (Sprint E) — deployment**:
+
+1. **Flutter asset refresh** — regenerate `pharmaguide_core.db` + `interaction_db.sqlite`; deploy to `/Users/seancheick/PharmaGuide ai` assets; run Flutter's 478+ tests; smoke-test on Silybin Phytosome + Phosphorus + Multi-form Vitamin A products (scores must visibly change and be correct).
+2. **Supabase sync** — full production sync with `cleanup_keep=5`; 48-hour canary monitoring for safety alerts + score-distribution shift.
+3. **Release documentation** — new handoff doc capturing Sprint D final state + any Sprint E learnings.
+
+**Medium-term (Sprints F-G) — operational hardening**:
+
+4. **Automated brand ingest CLI** (`scripts/ingest_brand.py`) — one-command DSLD staging → clean → gap report → human approval → score → commit. Halts on new canonicals per protocol rule #2.
+5. **FDA weekly sync automation** — schedule `run_fda_sync.sh` via GitHub Actions; auto-PR on new recalls; human-approved merge.
+6. **Clinical evidence freshness** — quarterly `verify_all_citations_content.py` across PMID citations in `backed_clinical_studies.json`, `medication_depletions.json`, `curated_interactions.json`. Flag evidence drift.
+
+**Long-term (post-launch)**:
+
+7. **Post-launch analytics** — track which canonicals users most often scan; prioritize their alias coverage + evidence depth.
+8. **International expansion** — beyond USA DSLD: EFSA / TGA / Health Canada regulatory overlays.
+9. **Interaction DB expansion** — beyond the current curated set; active ingestion from DrugBank + NCCIH + PubMed.
+
+---
+
+## Known follow-ups surfaced during Sprint D (non-blocking for D5)
+
+None — all issues identified during the sprint were either fixed (D4.3) or verified as legitimate behavior (D3.2 unspecified-form rate, D4.1 A1/A2 dedup). Clean exit.
+
+---
+
+*End of Sprint D handoff. Next agent (or future-you): run D5.2 deep audit v2 as soon as the pipeline finishes, then D5.3 snapshot shadow-diff, then D5.4 release gate.*
