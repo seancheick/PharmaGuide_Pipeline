@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.0.0",
     "last_updated": "2026-04-20",
-    "total_entries": 668
+    "total_entries": 672
   },
   "other_ingredients": [
     {
@@ -20053,7 +20053,12 @@
       "id": "PII_VITABERRY_BRANDED_BLEND",
       "standard_name": "VitaBerry",
       "aliases": [
-        "vitaberry"
+        "vitaberry",
+        "vitaberry plus",
+        "vitaberry plus(tm)",
+        "vitaberry plus tm",
+        "vitaberry(tm)",
+        "vitaberry tm"
       ],
       "category": "branded_botanical_complex",
       "is_additive": false,
@@ -20063,7 +20068,7 @@
       "common_uses": [
         "polyphenol blend"
       ],
-      "last_updated": "2026-02-23",
+      "last_updated": "2026-04-20",
       "external_ids": {}
     },
     {
@@ -21514,6 +21519,105 @@
       "cui_status": "governed_null",
       "cui_note": "Branded cellulose product; generic parent is MCC (UMLS C0007797).",
       "added_by": "sprint_d1.4",
+      "last_updated": "2026-04-20",
+      "external_ids": {}
+    },
+    {
+      "id": "NHA_ACTIVAIT_MUSTARD_EO",
+      "standard_name": "ActivAIT Mustard Essential Oil",
+      "aliases": [
+        "activait",
+        "activait mustard",
+        "activait mustard essential oil",
+        "activait mustard oil"
+      ],
+      "category": "essential_oil",
+      "is_additive": true,
+      "additive_type": "essential_oil",
+      "allergen": false,
+      "notes": "ActivAIT \u2014 branded mustard seed essential oil standardised for allyl isothiocyanate (AITC). Used as a thermogenic / metabolism-support active in weight-management supplements. GRAS for flavor use; tracked here as non-scoring branded ingredient with documented but low-dose active (AITC).",
+      "common_uses": [
+        "thermogenic support",
+        "flavor",
+        "AITC delivery"
+      ],
+      "cui_status": "governed_null",
+      "cui_note": "Branded mustard-seed essential oil; generic mustard-seed EO has no single UMLS concept at the branded level.",
+      "added_by": "sprint_d2.3",
+      "last_updated": "2026-04-20",
+      "external_ids": {}
+    },
+    {
+      "id": "NHA_BEEF_PROTEIN_ISOLATE",
+      "standard_name": "Beef Protein Isolate",
+      "aliases": [
+        "beef protein isolate",
+        "beef protein",
+        "hydrolyzed beef protein",
+        "beef protein hydrolysate",
+        "beef isolate"
+      ],
+      "category": "protein_animal",
+      "is_additive": true,
+      "additive_type": "protein_source",
+      "allergen": false,
+      "notes": "Bovine-derived protein isolate. Complete amino acid profile. Tracked as non-IQM protein source for transparency; scoring goes through protein-blend canonicals if declared at panel level.",
+      "common_uses": [
+        "protein source",
+        "lactose-free protein alternative"
+      ],
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Beef protein isolate is a processing-defined substance, not a single UMLS concept.",
+      "added_by": "sprint_d2.5",
+      "last_updated": "2026-04-20",
+      "external_ids": {}
+    },
+    {
+      "id": "NHA_CHICKEN_PROTEIN_ISOLATE",
+      "standard_name": "Chicken Protein Isolate",
+      "aliases": [
+        "chicken protein isolate",
+        "chicken protein",
+        "chicken bone broth protein",
+        "chicken bone broth"
+      ],
+      "category": "protein_animal",
+      "is_additive": true,
+      "additive_type": "protein_source",
+      "allergen": false,
+      "notes": "Gallus gallus-derived protein isolate, often from bone-broth or hydrolyzed tissue. Lactose-free complete protein.",
+      "common_uses": [
+        "protein source",
+        "bone-broth blends"
+      ],
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Chicken protein isolate is a processing-defined substance, not a single UMLS concept.",
+      "added_by": "sprint_d2.5",
+      "last_updated": "2026-04-20",
+      "external_ids": {}
+    },
+    {
+      "id": "NHA_CHICKPEA_PROTEIN",
+      "standard_name": "Chickpea Protein",
+      "aliases": [
+        "chickpea protein",
+        "chickpea protein isolate",
+        "chickpea protein concentrate",
+        "garbanzo protein",
+        "cicer arietinum protein"
+      ],
+      "category": "protein_plant",
+      "is_additive": true,
+      "additive_type": "protein_source",
+      "allergen": false,
+      "notes": "Chickpea (Cicer arietinum) protein isolate/concentrate. Plant-based protein source, generally hypoallergenic.",
+      "common_uses": [
+        "plant protein source",
+        "vegan protein blends"
+      ],
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Chickpea protein isolate is a processing-defined substance, not a single UMLS concept.",
+      "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {}
     }

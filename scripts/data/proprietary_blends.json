@@ -3,9 +3,9 @@
     "description": "Proprietary blend recognition database for supplement label mapping",
     "purpose": "blend_recognition_mapping",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-20T12:55:57Z",
+    "last_updated": "2026-04-20",
     "total_entries": 19,
-    "schema_notes": "This file is for MAPPING only. It identifies and categorizes proprietary blend names found on supplement labels. Penalty scoring is handled entirely by the scorer (B5 engine) based on disclosure_level (full/partial/none) — NOT by this file. Each entry has: id, standard_name, blend_terms (label text patterns), risk_factors (safety concerns for user-facing notes), notes (user-facing explanation shown in product detail view)."
+    "schema_notes": "This file is for MAPPING only. It identifies and categorizes proprietary blend names found on supplement labels. Penalty scoring is handled entirely by the scorer (B5 engine) based on disclosure_level (full/partial/none) \u2014 NOT by this file. Each entry has: id, standard_name, blend_terms (label text patterns), risk_factors (safety concerns for user-facing notes), notes (user-facing explanation shown in product detail view)."
   },
   "proprietary_blend_concerns": [
     {
@@ -208,14 +208,25 @@
         "berry antioxidant blend",
         "organic mushroom complex",
         "nutrient-dense superfood complex",
-        "Green Food Supplement"
+        "Green Food Supplement",
+        "Salad Extract",
+        "Salad Blend",
+        "Vegetable Extract Blend",
+        "Veggie Blend",
+        "Organic Vegetable Blend",
+        "Green Blend",
+        "Whole Foods Blend",
+        "Whole Food Blend"
       ],
       "risk_factors": [
-        "Individual ingredient amounts unknown — therapeutic doses unlikely",
+        "Individual ingredient amounts unknown \u2014 therapeutic doses unlikely",
         "Herbal adulterant risk in multi-herb blends (Botanical Adulterants Prevention Program)",
         "Potential heavy metal accumulation from mixed botanical sources"
       ],
-      "notes": "Superfood and herbal blends typically contain many ingredients in amounts too small for therapeutic effect. Without individual doses, it is impossible to determine whether any component reaches a clinically meaningful level. Multi-herb blends also carry higher contamination risk per the Botanical Adulterants Prevention Program."
+      "notes": "Superfood and herbal blends typically contain many ingredients in amounts too small for therapeutic effect. Without individual doses, it is impossible to determine whether any component reaches a clinically meaningful level. Multi-herb blends also carry higher contamination risk per the Botanical Adulterants Prevention Program.",
+      "audit_trail": [
+        "Sprint D2.3 (2026-04-20): added 8 blend_terms to close silently-mapped rows surfaced in the deep accuracy audit."
+      ]
     },
     {
       "id": "BLEND_PROBIOTIC",
@@ -241,11 +252,11 @@
         "Oral Prebiotic Blend"
       ],
       "risk_factors": [
-        "Individual strain CFU counts unknown — efficacy is strain-specific and dose-dependent",
+        "Individual strain CFU counts unknown \u2014 efficacy is strain-specific and dose-dependent",
         "Total CFU may be dominated by one cheap filler strain",
         "Strain ratios affect competitive exclusion and colonization success"
       ],
-      "notes": "Probiotic efficacy is strain-specific and dose-dependent (e.g., L. rhamnosus GG requires ≥10B CFU). When blends disclose only total CFU without per-strain breakdown, it is impossible to verify whether any strain reaches its clinically studied dose. Some blends use high-count filler strains to inflate total CFU."
+      "notes": "Probiotic efficacy is strain-specific and dose-dependent (e.g., L. rhamnosus GG requires \u226510B CFU). When blends disclose only total CFU without per-strain breakdown, it is impossible to verify whether any strain reaches its clinically studied dose. Some blends use high-count filler strains to inflate total CFU."
     },
     {
       "id": "BLEND_ENZYME",
@@ -265,14 +276,24 @@
         "Dual-Protease Blend",
         "protease blend",
         "dual protease blend",
-        "proteolytic enzyme blend"
+        "proteolytic enzyme blend",
+        "Protease SP",
+        "Protease Aminogen",
+        "Aminogen",
+        "Enzyme Mix",
+        "Enzyme Blend",
+        "Enzyme Activity Blend",
+        "Digestive Aid Blend"
       ],
       "risk_factors": [
         "Enzyme activity levels (FCC/USP units) not disclosed per enzyme",
         "Unknown ratios of protease, lipase, amylase prevent dosing assessment",
         "Enteric coating claims unverifiable without composition data"
       ],
-      "notes": "Digestive enzyme blends should disclose individual enzyme activity levels in standardized units (FCC or USP). Without per-enzyme activity data, it is impossible to assess whether the blend provides clinically meaningful digestive support. Enzyme activity varies dramatically by source and processing."
+      "notes": "Digestive enzyme blends should disclose individual enzyme activity levels in standardized units (FCC or USP). Without per-enzyme activity data, it is impossible to assess whether the blend provides clinically meaningful digestive support. Enzyme activity varies dramatically by source and processing.",
+      "audit_trail": [
+        "Sprint D2.3 (2026-04-20): added 7 blend_terms to close silently-mapped rows surfaced in the deep accuracy audit."
+      ]
     },
     {
       "id": "BLEND_BEAUTY",
@@ -288,7 +309,7 @@
         "dermal support blend"
       ],
       "risk_factors": [
-        "Unknown collagen peptide dosages — clinical doses are 2.5-15g/day",
+        "Unknown collagen peptide dosages \u2014 clinical doses are 2.5-15g/day",
         "Hidden hormones or growth factors in anti-aging formulas",
         "Biotin mega-doses can interfere with lab test results"
       ],
@@ -309,7 +330,7 @@
         "performance hydration complex"
       ],
       "risk_factors": [
-        "Sodium/potassium ratios unknown — critical for cardiac and renal patients",
+        "Sodium/potassium ratios unknown \u2014 critical for cardiac and renal patients",
         "Hidden stimulants in recovery products",
         "Electrolyte imbalance risk without individual mineral amounts"
       ],
@@ -377,11 +398,11 @@
         "Metabolic GlycoPlex",
         "Cardio Support Blend",
         "Metabolism Support",
-        "proprietary blend™",
-        "exclusive formula®",
-        "patent-pending complex™",
-        "signature blend®",
-        "registered formula™",
+        "proprietary blend\u2122",
+        "exclusive formula\u00ae",
+        "patent-pending complex\u2122",
+        "signature blend\u00ae",
+        "registered formula\u2122",
         "Proprietary Premium Herbal Blend",
         "BreastHealth Plus",
         "EyeProtect Complex",
@@ -420,14 +441,32 @@
         "Antioxidant Fruit & Vegetable Blend",
         "Superfoods Fruit & Vegetable Blend",
         "Fatty Acid Blend",
-        "Athletic Blend"
+        "Athletic Blend",
+        "Eye Health Support",
+        "Eye Health Support Blend",
+        "Joint Cushion Support Blend",
+        "Joint Support Complex",
+        "Joint Support Blend",
+        "Joint & Mobility Blend",
+        "Cognitive Support Blend",
+        "Memory Support Blend",
+        "Skin Support Blend",
+        "Hair Support Blend",
+        "Nail Support Blend",
+        "Heart Health Blend",
+        "Cardiovascular Support Blend",
+        "Bone Health Blend",
+        "Hormone Support Blend"
       ],
       "risk_factors": [
         "Complete lack of ingredient-level transparency",
         "Unknown ratios make efficacy assessment impossible",
         "Ineffective micro-dosing hidden behind blend totals"
       ],
-      "notes": "General proprietary blends hide individual ingredient amounts behind a single total weight. This makes it impossible to verify whether any ingredient reaches a clinically effective dose or to assess safety for individuals with specific health conditions or medication interactions."
+      "notes": "General proprietary blends hide individual ingredient amounts behind a single total weight. This makes it impossible to verify whether any ingredient reaches a clinically effective dose or to assess safety for individuals with specific health conditions or medication interactions.",
+      "audit_trail": [
+        "Sprint D2.3 (2026-04-20): added 15 blend_terms to close silently-mapped rows surfaced in the deep accuracy audit."
+      ]
     },
     {
       "id": "BLEND_PROTEIN",
@@ -440,14 +479,26 @@
         "protein complex",
         "muscle support blend",
         "amino blend",
-        "performance protein matrix"
+        "performance protein matrix",
+        "Amino Acid Blend",
+        "Amino Acceleration System",
+        "Branched Chain Amino Acid Blend",
+        "Natural Amino Complex",
+        "Amino Complex",
+        "Essential Amino Acid Blend",
+        "EAA Blend",
+        "EAA Complex",
+        "Full-Spectrum Amino Complex"
       ],
       "risk_factors": [
         "Protein spiking with cheap amino acids (glycine, taurine) to inflate protein content",
         "Unknown whey/casein/soy ratios in multi-source blends",
         "Amino acid profiles unverifiable without individual amounts"
       ],
-      "notes": "Protein blends may use amino acid spiking (adding cheap free-form amino acids like glycine or taurine) to inflate nitrogen content and apparent protein percentage. Without individual protein source amounts, consumers cannot verify protein quality or detect spiking. Third-party tested products with full disclosure are preferred."
+      "notes": "Protein blends may use amino acid spiking (adding cheap free-form amino acids like glycine or taurine) to inflate nitrogen content and apparent protein percentage. Without individual protein source amounts, consumers cannot verify protein quality or detect spiking. Third-party tested products with full disclosure are preferred.",
+      "audit_trail": [
+        "Sprint D2.3 (2026-04-20): added 9 blend_terms to close silently-mapped rows surfaced in the deep accuracy audit."
+      ]
     },
     {
       "id": "BLEND_VELOSITOL",
@@ -462,7 +513,7 @@
       "risk_factors": [
         "Amylopectin + chromium picolinate/histidinate complex",
         "Chromium component is separately scorable via IQM",
-        "Proprietary ratio — individual amounts undisclosed"
+        "Proprietary ratio \u2014 individual amounts undisclosed"
       ],
       "severity_level": "low",
       "category": "sports_performance",
@@ -483,7 +534,7 @@
         "ripfactor"
       ],
       "risk_factors": [
-        "Dual botanical extract — individual amounts undisclosed",
+        "Dual botanical extract \u2014 individual amounts undisclosed",
         "Sphaeranthus indicus + Mangifera indica bark extract",
         "Mechanism: mTOR pathway activation"
       ],
@@ -505,7 +556,7 @@
         "fit-nox"
       ],
       "risk_factors": [
-        "Triple botanical extract — individual amounts undisclosed",
+        "Triple botanical extract \u2014 individual amounts undisclosed",
         "Moringa oleifera + Punica granatum + Kaempferia parviflora"
       ],
       "severity_level": "low",
@@ -526,7 +577,7 @@
         "tesnor"
       ],
       "risk_factors": [
-        "Dual botanical extract — individual amounts undisclosed",
+        "Dual botanical extract \u2014 individual amounts undisclosed",
         "Pomegranate rind + cocoa bean (4:1 ratio)"
       ],
       "severity_level": "low",
@@ -537,7 +588,7 @@
         "theobroma cacao seed extract"
       ],
       "disclosure_level": "partial",
-      "notes": "Standardized to ≥3.5% punicalagins + ≥0.5% theobromine. Testosterone support claim."
+      "notes": "Standardized to \u22653.5% punicalagins + \u22650.5% theobromine. Testosterone support claim."
     },
     {
       "id": "BLEND_METABOLAID",
@@ -546,7 +597,7 @@
         "metabolaid"
       ],
       "risk_factors": [
-        "Dual botanical extract — individual amounts undisclosed",
+        "Dual botanical extract \u2014 individual amounts undisclosed",
         "Lemon verbena + hibiscus (65:35 ratio)"
       ],
       "severity_level": "low",
@@ -557,7 +608,7 @@
         "hibiscus sabdariffa flower extract"
       ],
       "disclosure_level": "partial",
-      "notes": "500 mg dose. Standardized to ≥25% verbascosides + ≥10% anthocyanins. AMPK activation."
+      "notes": "500 mg dose. Standardized to \u226525% verbascosides + \u226510% anthocyanins. AMPK activation."
     }
   ]
 }

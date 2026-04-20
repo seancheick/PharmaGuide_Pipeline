@@ -2448,6 +2448,31 @@ class EnhancedDSLDNormalizer:
             "Built canonical_id reverse index with %d entries", len(idx)
         )
 
+    # D2.2: common qualifier tokens that describe PREPARATION or processing,
+    # not ingredient identity. Stripping them from the tail of a name
+    # recovers the canonical form — "Phenylalanine, Micronized" resolves
+    # to the same canonical as "Phenylalanine", "Quercetin, Organic" to
+    # "Quercetin", etc.
+    _QUALIFIER_SUFFIX_RE = re.compile(
+        r",\s*("
+        r"micronized|organic|natural|freeze[- ]dried|raw|fermented|vegan|"
+        r"non[- ]gmo|usp|pharmaceutical[- ]grade|food[- ]grade|"
+        r"certified[- ]organic|whole[- ]leaf|kosher|halal"
+        r")\s*$",
+        re.IGNORECASE,
+    )
+
+    def _strip_qualifier_suffixes(self, name: str) -> str:
+        """
+        Remove trailing preparation/processing qualifier tokens from an
+        ingredient name (D2.2). These are not identity markers — they
+        describe HOW the ingredient is processed, not WHAT it is.
+        Leaves the name unchanged if no recognized suffix matches.
+        """
+        if not name:
+            return name
+        return self._QUALIFIER_SUFFIX_RE.sub("", name).strip()
+
     def _resolve_canonical_identity(
         self, standard_name: str, raw_name: Optional[str] = None
     ) -> "Tuple[Optional[str], Optional[str]]":
@@ -2456,26 +2481,42 @@ class EnhancedDSLDNormalizer:
         ``(None, None)`` if unmapped. This is the row-builder's authoritative
         lookup for the cleaner's canonical_id field.
 
-        When ``raw_name`` is supplied, try it first — the raw label text is
-        more specific than the fuzzy-resolved ``standard_name`` in cases
-        where the matcher maps a sharply-defined source (e.g., "Fish Oil
-        concentrate") to a broader umbrella parent ("Omega-3 Fatty Acids").
-        The reverse index exact-matches "fish oil concentrate" to
-        ``fish_oil`` (bio_score 10), which is a more accurate canonical
-        than omega_3 (bio_score 8) for a product whose DSLD
-        ingredientGroup is "Fish Oil". Standard_name fallback preserves
-        the prior behavior for rows where raw_name itself isn't an index
-        key.
+        Lookup order:
+          1. raw_name exact (handles fish_oil vs omega_3 specificity)
+          2. standard_name exact (fuzzy-resolved canonical)
+          3. raw_name with qualifier suffix stripped (D2.2 —
+             "Phenylalanine, Micronized" → "Phenylalanine")
+          4. standard_name with qualifier suffix stripped
+
+        raw_name is tried first because the raw label text is more specific
+        than the fuzzy-resolved ``standard_name`` in cases where the matcher
+        maps a sharply-defined source to a broader umbrella parent (fish_oil
+        vs omega_3). Qualifier-stripped variants are tried only as a
+        fallback after both exact lookups miss, so they never override a
+        legitimate exact match.
         """
+        # 1 + 2: exact lookups
         if raw_name:
             hit = self._canonical_id_by_std_name.get(raw_name.lower().strip())
             if hit:
                 return hit
-        if not standard_name:
-            return (None, None)
-        hit = self._canonical_id_by_std_name.get(standard_name.lower().strip())
-        if hit:
-            return hit
+        if standard_name:
+            hit = self._canonical_id_by_std_name.get(standard_name.lower().strip())
+            if hit:
+                return hit
+        # 3 + 4: qualifier-stripped fallback (D2.2)
+        if raw_name:
+            stripped = self._strip_qualifier_suffixes(raw_name)
+            if stripped and stripped.lower().strip() != (raw_name or "").lower().strip():
+                hit = self._canonical_id_by_std_name.get(stripped.lower().strip())
+                if hit:
+                    return hit
+        if standard_name:
+            stripped = self._strip_qualifier_suffixes(standard_name)
+            if stripped and stripped.lower().strip() != (standard_name or "").lower().strip():
+                hit = self._canonical_id_by_std_name.get(stripped.lower().strip())
+                if hit:
+                    return hit
         return (None, None)
 
     def _enhanced_ingredient_mapping(
@@ -4354,9 +4395,23 @@ class EnhancedDSLDNormalizer:
         canonical_id, canonical_source_db = self._resolve_canonical_identity(
             standard_name, raw_name=raw_name,
         )
+        # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
+        # Two directions handled atomically:
+        #   (a) is_mapped=False → force canonical to None + "unmapped" source.
+        #   (b) is_mapped=True but canonical_id=None → the cascade (mapped OR
+        #       harmful OR allergen OR banned OR passive OR proprietary) set
+        #       is_mapped=True even though the reverse index couldn't resolve
+        #       a canonical. That's the silent-mapping state the deep audit
+        #       flagged (833 rows in Sprint D). Downgrade to unmapped and
+        #       track so the gap report drives alias/DB expansion.
         if not is_mapped:
             canonical_id = None
             canonical_source_db = "unmapped"
+        elif canonical_id is None:
+            is_mapped = False
+            canonical_source_db = "unmapped"
+            if not self._is_nutrition_fact(name):
+                self._record_unmapped_ingredient(name, forms, is_active=is_active)
 
         # LABEL NUTRIENT CONTEXT (refactor Phase 1c — cross-alias disambiguator).
         # For DSLD rows tagged as a vitamin or mineral, the row's `name` IS the
@@ -4722,9 +4777,16 @@ class EnhancedDSLDNormalizer:
         canonical_id, canonical_source_db = self._resolve_canonical_identity(
             standard_name, raw_name=name,
         )
+        # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
+        # See primary site in active-ingredient builder for rationale.
         if not is_mapped:
             canonical_id = None
             canonical_source_db = "unmapped"
+        elif canonical_id is None:
+            is_mapped = False
+            canonical_source_db = "unmapped"
+            if not self._is_nutrition_fact(name):
+                self._record_unmapped_ingredient(name, forms, is_active=False)
         raw_category_i = ingredient_data.get("category") or ""
         label_nutrient_context = None
         if raw_category_i in {"vitamin", "mineral"}:
@@ -4920,9 +4982,16 @@ class EnhancedDSLDNormalizer:
             canonical_id_f, canonical_source_db_f = self._resolve_canonical_identity(
                 standard_name, raw_name=name,
             )
+            # D2.1 CONTRACT (protocol rule #4): is_mapped ⇒ canonical_id.
+            # See primary site in active-ingredient builder for rationale.
             if not is_mapped:
                 canonical_id_f = None
                 canonical_source_db_f = "unmapped"
+            elif canonical_id_f is None:
+                is_mapped = False
+                canonical_source_db_f = "unmapped"
+                if not self._is_nutrition_fact(name):
+                    self._record_unmapped_ingredient(name, forms, is_active=False)
             raw_category_f = ing.get("category") or ""
             label_nutrient_context_f = None
             if raw_category_f in {"vitamin", "mineral"}:
@@ -6336,6 +6405,23 @@ class EnhancedDSLDNormalizer:
         ):
             logger.debug("Excluding dose-provenance row: %s", name)
             return True
+
+        # D2.6 parser-artifact detection: rows whose entire content is a
+        # standalone percentage, dose token, or "less than X%" phrase are
+        # DSLD extraction leftovers — NOT real ingredient declarations.
+        # Drop them before any downstream matcher / tracker sees them.
+        _name_trim = name.strip()
+        _PARSER_ARTIFACT_PATTERNS = (
+            r"^\s*(?:less\s+than|≤|<|greater\s+than|≥|>)\s*[\d.]+\s*%?\s*$",   # "less than 0.1%" / "<0.5%"
+            r"^\s*[\d.]+\s*%\s*$",                                               # "5%"
+            r"^\s*[\d.]+\s*(?:mg|mcg|ug|g|iu|units?|cfu|billion|million)\s*$",   # "10mg" / "500 mg"
+            r"^\s*(?:and|or|plus|with|from|of)\s*$",                             # bare joiner
+            r"^\s*[+*\-\u2022\u00b7]+\s*$",                                      # bullet-only
+        )
+        for _pat in _PARSER_ARTIFACT_PATTERNS:
+            if re.match(_pat, _name_trim, re.IGNORECASE):
+                logger.debug("Excluding parser artifact: %r", name)
+                return True
 
         # If DSLD itself tags this row as a supplement-ingredient category,
         # it is a real supplement ingredient by definition — do not exclude
