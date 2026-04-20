@@ -3781,7 +3781,8 @@
         "red 2",
         "red no. 2",
         "amaranth dye",
-        "amaranth",
+        "amaranth red dye",
+        "amaranth colorant",
         "E123",
         "C.I. 16185",
         "food red 9",
@@ -3790,6 +3791,7 @@
         "naphthalene red",
         "fd&c red no. 2 (amaranth)"
       ],
+      "disambiguation_note": "The bare alias 'amaranth' was REMOVED on 2026-04-20 because it collided with the edible Amaranthus grain (a botanical_ingredients entry). 66 GNC/Nature_Made/Vitafusion/GoL products labeled with amaranth grain protein/flour were being BLOCKED by this collision. Only dye-specific aliases remain. The grain routes correctly via botanical_ingredients.amaranth_grain.",
       "reason": "FD&C Red No. 2 (Amaranth) was revoked by FDA in January 1976 after studies submitted to the agency raised concerns about carcinogenicity — specifically bladder and mammary tumors in animal studies, though the data were considered inconclusive by some scientists. The EU banned it (prohibited from the approved list). Despite being revoked for over 45 years in the US, Amaranth dye has occasionally been found in imported products. Any US food or supplement product containing FD&C Red No. 2 / Amaranth is non-compliant and subject to regulatory action.",
       "status": "banned",
       "class_tags": [
@@ -10839,7 +10841,21 @@
           "orange peel",
           "sweet orange",
           "orange oil",
-          "citrus sinensis"
+          "citrus sinensis",
+          "orange peel oil",
+          "orange essence",
+          "orange flavor",
+          "orange flavoring",
+          "orange essential oil",
+          "essence of orange",
+          "essence of organic orange",
+          "orange (peel)",
+          "orange (peel) oil",
+          "orange fruit",
+          "navel orange",
+          "valencia orange",
+          "mandarin orange",
+          "blood orange"
         ]
       },
       "legal_status_enum": "high_risk",
@@ -11067,7 +11083,18 @@
         "confidence": "high",
         "negative_match_terms": [
           "decaffeinated green tea",
-          "green tea polyphenols"
+          "green tea polyphenols",
+          "matcha",
+          "matcha green tea",
+          "matcha green tea leaf",
+          "matcha leaf",
+          "matcha powder",
+          "green tea leaf powder",
+          "green tea leaf",
+          "green tea powder",
+          "tea leaf",
+          "culinary",
+          "whole leaf"
         ]
       },
       "legal_status_enum": "lawful",

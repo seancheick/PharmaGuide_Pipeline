@@ -573,7 +573,7 @@ Important subpaths:
 | `scripts/data/curated_overrides/`    | Manual CUI/PubChem/GSRS policy overrides                                          |
 | `scripts/data/curated_interactions/` | Drug-supplement interaction data                                                  |
 | `scripts/data/fda_caers/`            | FDA CAERS adverse event data (159 scored signals in B8)                           |
-| `scripts/data/fda_drug_labels/`      | FDA drug label data (13 parts, 40 supplements, 90% coverage)                     |
+| `scripts/data/fda_drug_labels/`      | FDA drug label data (13 parts, 40 supplements, 90% coverage)                      |
 | `scripts/data/suppai_import/`        | SuppAI import data                                                                |
 | `scripts/api_audit/`                 | 30+ API verification scripts                                                      |
 | `scripts/tests/`                     | 81+ test files, 3065+ test functions                                              |
@@ -648,33 +648,33 @@ Always read `_metadata.total_entries` from the live file — these counts reflec
 
 ### Supporting data files (not routing targets, but referenced during resolution)
 
-| File                                   | Entries | Purpose                                                      |
-| -------------------------------------- | ------- | ------------------------------------------------------------ |
-| `absorption_enhancers.json`            | 23      | Absorption enhancer classification                           |
-| `allergens.json`                       | 17      | Big 8 allergen classification                                |
-| `backed_clinical_studies.json`         | 197     | PMID-backed clinical evidence bonuses (all content-verified) |
-| `synergy_cluster.json`                 | 58      | Tiered synergy bonuses with canonical_ids for IQM matching   |
-| `rda_optimal_uls.json`                 | 47      | RDA/AI/UL dosing benchmarks                                  |
-| `medication_depletions.json`           | 68      | Drug-induced nutrient depletions                             |
-| `ingredient_classification.json`       | 34      | Active/inactive classification rules                         |
+| File                                   | Entries | Purpose                                                           |
+| -------------------------------------- | ------- | ----------------------------------------------------------------- |
+| `absorption_enhancers.json`            | 23      | Absorption enhancer classification                                |
+| `allergens.json`                       | 17      | Big 8 allergen classification                                     |
+| `backed_clinical_studies.json`         | 197     | PMID-backed clinical evidence bonuses (all content-verified)      |
+| `synergy_cluster.json`                 | 58      | Tiered synergy bonuses with canonical_ids for IQM matching        |
+| `rda_optimal_uls.json`                 | 47      | RDA/AI/UL dosing benchmarks                                       |
+| `medication_depletions.json`           | 68      | Drug-induced nutrient depletions                                  |
+| `ingredient_classification.json`       | 34      | Active/inactive classification rules                              |
 | `ingredient_interaction_rules.json`    | 129     | Interaction rule engine (127 rules + 4 drug classes as of v1.3.3) |
-| `drug_classes.json`                    | 28      | Drug class definitions                                       |
-| `timing_rules.json`                    | 42      | Dosing timing guidance                                       |
-| `clinically_relevant_strains.json`     | 42      | Probiotic strain specificity                                 |
-| `color_indicators.json`                | 66      | Color additive classification                                |
-| `enhanced_delivery.json`               | 78      | Enhanced delivery system bonuses                             |
-| `functional_ingredient_groupings.json` | 8       | Functional grouping definitions                              |
-| `manufacturer_violations.json`         | —       | Brand trust penalties                                        |
-| `rda_therapeutic_dosing.json`          | —       | Therapeutic dosing ranges                                    |
-| `fda_unii_cache.json`                  | ~172K   | Offline UNII substance cache — instant lookup, no API call   |
+| `drug_classes.json`                    | 28      | Drug class definitions                                            |
+| `timing_rules.json`                    | 42      | Dosing timing guidance                                            |
+| `clinically_relevant_strains.json`     | 42      | Probiotic strain specificity                                      |
+| `color_indicators.json`                | 66      | Color additive classification                                     |
+| `enhanced_delivery.json`               | 78      | Enhanced delivery system bonuses                                  |
+| `functional_ingredient_groupings.json` | 8       | Functional grouping definitions                                   |
+| `manufacturer_violations.json`         | —       | Brand trust penalties                                             |
+| `rda_therapeutic_dosing.json`          | —       | Therapeutic dosing ranges                                         |
+| `fda_unii_cache.json`                  | ~172K   | Offline UNII substance cache — instant lookup, no API call        |
 
 ### Curated override files (prevent known bad auto-matches)
 
-| File                                      | Content                                   |
-| ----------------------------------------- | ----------------------------------------- |
-| `curated_overrides/cui_overrides.json`    | 66 CUI override entries                   |
-| `curated_overrides/gsrs_policies.json`    | 24 skip names (GSRS lookup suppression)   |
-| `curated_overrides/pubchem_policies.json` | 23 skip names (PubChem lookup suppression)|
+| File                                      | Content                                    |
+| ----------------------------------------- | ------------------------------------------ |
+| `curated_overrides/cui_overrides.json`    | 66 CUI override entries                    |
+| `curated_overrides/gsrs_policies.json`    | 24 skip names (GSRS lookup suppression)    |
+| `curated_overrides/pubchem_policies.json` | 23 skip names (PubChem lookup suppression) |
 
 ### Default routing rule
 
@@ -1035,28 +1035,28 @@ Use at least one of:
 
 ### Enrichment/audit scripts
 
-| Script                                          | Purpose                                           |
-| ----------------------------------------------- | ------------------------------------------------- |
+| Script                                          | Purpose                                                                |
+| ----------------------------------------------- | ---------------------------------------------------------------------- |
 | `api_audit/build_unii_cache.py`                 | Build/refresh local UNII cache from FDA bulk (run before UNII lookups) |
-| `api_audit/enrich_botanicals.py`                | Botanical enrichment with standardization markers |
-| `api_audit/enrich_chembl_bioactivity.py`        | ChEMBL mechanism of action enrichment             |
-| `api_audit/audit_alias_accuracy.py`             | Alias accuracy audit                              |
-| `api_audit/audit_banned_recalled_accuracy.py`   | Release gate for banned/recalled data             |
-| `api_audit/audit_clinical_evidence_strength.py` | Evidence strength classification                  |
-| `api_audit/audit_clinical_sources.py`           | Clinical source validation                        |
-| `api_audit/audit_notes_alignment.py`            | Notes alignment check                             |
-| `api_audit/discover_clinical_evidence.py`       | Clinical evidence discovery                       |
-| `api_audit/normalize_clinical_pubmed.py`        | PubMed citation normalization                     |
-| `api_audit/pubmed_client.py`                    | PubMed API client (used by citation verify tools) |
-| `api_audit/ingest_caers.py`                     | Ingest FDA CAERS adverse event data (159 signals) |
-| `api_audit/mine_drug_label_interactions.py`     | Mine FDA drug labels for interactions             |
-| `api_audit/seed_drug_classes.py`                | Seed drug class definitions                       |
-| `api_audit/fda_weekly_sync.py`                  | FDA recall tracking (openFDA, RSS, DEA)           |
-| `api_audit/fda_manufacturer_violations_sync.py` | Manufacturer violation sync                       |
-| `api_audit/valyu_evidence_discovery.py`         | Valyu-powered evidence discovery for ingredients  |
-| `api_audit/valyu_domain_targets.py`             | Valyu domain target extraction                    |
-| `api_audit/valyu_query_planner.py`              | Valyu query planning for evidence search          |
-| `api_audit/valyu_report_writer.py`              | Valyu evidence report generation                  |
+| `api_audit/enrich_botanicals.py`                | Botanical enrichment with standardization markers                      |
+| `api_audit/enrich_chembl_bioactivity.py`        | ChEMBL mechanism of action enrichment                                  |
+| `api_audit/audit_alias_accuracy.py`             | Alias accuracy audit                                                   |
+| `api_audit/audit_banned_recalled_accuracy.py`   | Release gate for banned/recalled data                                  |
+| `api_audit/audit_clinical_evidence_strength.py` | Evidence strength classification                                       |
+| `api_audit/audit_clinical_sources.py`           | Clinical source validation                                             |
+| `api_audit/audit_notes_alignment.py`            | Notes alignment check                                                  |
+| `api_audit/discover_clinical_evidence.py`       | Clinical evidence discovery                                            |
+| `api_audit/normalize_clinical_pubmed.py`        | PubMed citation normalization                                          |
+| `api_audit/pubmed_client.py`                    | PubMed API client (used by citation verify tools)                      |
+| `api_audit/ingest_caers.py`                     | Ingest FDA CAERS adverse event data (159 signals)                      |
+| `api_audit/mine_drug_label_interactions.py`     | Mine FDA drug labels for interactions                                  |
+| `api_audit/seed_drug_classes.py`                | Seed drug class definitions                                            |
+| `api_audit/fda_weekly_sync.py`                  | FDA recall tracking (openFDA, RSS, DEA)                                |
+| `api_audit/fda_manufacturer_violations_sync.py` | Manufacturer violation sync                                            |
+| `api_audit/valyu_evidence_discovery.py`         | Valyu-powered evidence discovery for ingredients                       |
+| `api_audit/valyu_domain_targets.py`             | Valyu domain target extraction                                         |
+| `api_audit/valyu_query_planner.py`              | Valyu query planning for evidence search                               |
+| `api_audit/valyu_report_writer.py`              | Valyu evidence report generation                                       |
 
 Curated override files (prevent known bad auto-matches):
 

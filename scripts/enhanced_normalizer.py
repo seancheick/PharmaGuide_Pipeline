@@ -815,6 +815,11 @@ class EnhancedDSLDNormalizer:
     """Enhanced DSLD normalizer with improved matching and preprocessing"""
     
     def __init__(self):
+        # Reverse index: lowercased standard_name → (canonical_id, source_db).
+        # Populated by _build_canonical_id_reverse_index() after fast lookups
+        # are built. Guarded to an empty dict here so any early access is safe.
+        self._canonical_id_by_std_name: Dict[str, Tuple[str, str]] = {}
+
         # Load reference data
         self.ingredient_map = self._load_json(INGREDIENT_QUALITY_MAP)
         self.harmful_additives = self._load_json(HARMFUL_ADDITIVES)
@@ -2293,7 +2298,186 @@ class EnhancedDSLDNormalizer:
 
         # Build optimized fast lookups
         self._build_fast_lookups_impl()
-    
+
+        # Build reverse index: lowercased standard_name → (canonical_id, source_db).
+        # Used by the row builder to emit canonical_id alongside standardName so
+        # the enricher can trust the cleaner's parent-canonical decision instead
+        # of re-deriving it from ingredient text / forms[0].
+        # See refactor plan Phase 1b.
+        self._build_canonical_id_reverse_index()
+
+    def _build_canonical_id_reverse_index(self) -> None:
+        """
+        Populate ``self._canonical_id_by_std_name`` mapping
+        ``lower(standard_name) → (canonical_id, source_db)``.
+
+        Priority order (higher wins on collisions):
+          1. banned_recalled
+          2. allergens
+          3. harmful_additives
+          4. ingredient_quality_map (IQM)
+          5. standardized_botanicals
+          6. botanical_ingredients
+          7. other_ingredients
+
+        The ``canonical_id`` is the stable DB key used by the enricher:
+          - IQM / botanicals / other_ingredients: the dict key (e.g., ``silymarin``)
+          - harmful / banned / allergens: the entry's ``id`` field (e.g., ``ADD_XXX``)
+            or a slugified fallback when absent.
+        """
+        from typing import Tuple as _Tuple
+        idx: Dict[str, _Tuple[str, str]] = {}
+
+        def _put(std_name: str, canonical_id: str, source_db: str) -> None:
+            if not std_name or not canonical_id:
+                return
+            key = std_name.lower().strip()
+            if not key or key in idx:
+                return
+            idx[key] = (canonical_id, source_db)
+
+        # 1) banned_recalled — iterate all section lists; use 'id' then standard_name
+        for _section, _value in (self.banned_recalled or {}).items():
+            if not isinstance(_value, list):
+                continue
+            for item in _value:
+                if not isinstance(item, dict):
+                    continue
+                std = item.get("standard_name") or ""
+                cid = item.get("id") or std.lower().replace(" ", "_")
+                _put(std, cid, "banned_recalled")
+                for alias in item.get("aliases", []) or []:
+                    if isinstance(alias, str):
+                        _put(alias, cid, "banned_recalled")
+
+        # 2) allergens — allergens data lives in self.allergen_lookup (already normalized)
+        #    but we need the original allergens file for stable IDs. Use standard_name as key.
+        for _key, _val in (self.allergen_lookup or {}).items():
+            if not isinstance(_val, dict):
+                continue
+            std = _val.get("standard_name") or ""
+            cid = _val.get("id") or std.lower().replace(" ", "_")
+            _put(std, cid, "allergens")
+
+        # 3) harmful_additives — index standard_name AND aliases so that
+        # cleaner resolutions like "Cellulose" (an alias of Microcrystalline
+        # Cellulose) also produce a canonical_id for downstream.
+        for _key, _val in (self.harmful_lookup or {}).items():
+            if not isinstance(_val, dict):
+                continue
+            std = _val.get("standard_name") or ""
+            cid = _val.get("id") or std.lower().replace(" ", "_")
+            _put(std, cid, "harmful_additives")
+            for alias in _val.get("aliases", []) or []:
+                if isinstance(alias, str):
+                    _put(alias, cid, "harmful_additives")
+
+        # 4) IQM — iterate self.ingredient_map; key IS canonical_id. Index
+        # every path a cleaner standardName could follow back to its IQM parent:
+        # top-level standard_name, top-level aliases, form names, form aliases.
+        for _iqm_key, _val in (self.ingredient_map or {}).items():
+            if _iqm_key.startswith("_") or not isinstance(_val, dict):
+                continue
+            std = _val.get("standard_name") or _iqm_key
+            _put(std, _iqm_key, "ingredient_quality_map")
+            # Top-level aliases
+            for alias in _val.get("aliases", []) or []:
+                if isinstance(alias, str):
+                    _put(alias, _iqm_key, "ingredient_quality_map")
+            # Form-level names + aliases — when the cleaner returns a form
+            # name as standardName (e.g. "KSM-66 Ashwagandha"), resolve it to
+            # the parent IQM key.
+            for _form_name, _form_data in (_val.get("forms", {}) or {}).items():
+                if not isinstance(_form_data, dict):
+                    continue
+                _put(_form_name, _iqm_key, "ingredient_quality_map")
+                for form_alias in _form_data.get("aliases", []) or []:
+                    if isinstance(form_alias, str):
+                        _put(form_alias, _iqm_key, "ingredient_quality_map")
+
+        # 5) standardized_botanicals
+        for item in (self.standardized_botanicals or {}).get("standardized_botanicals", []):
+            if not isinstance(item, dict):
+                continue
+            std = item.get("standard_name") or ""
+            cid = item.get("id") or std.lower().replace(" ", "_")
+            _put(std, cid, "standardized_botanicals")
+            for alias in item.get("aliases", []) or []:
+                if isinstance(alias, str):
+                    _put(alias, cid, "standardized_botanicals")
+
+        # 6) botanical_ingredients
+        for item in (self.botanical_ingredients or {}).get("botanical_ingredients", []):
+            if not isinstance(item, dict):
+                continue
+            std = item.get("standard_name") or ""
+            cid = item.get("id") or std.lower().replace(" ", "_")
+            _put(std, cid, "botanical_ingredients")
+            for alias in item.get("aliases", []) or []:
+                if isinstance(alias, str):
+                    _put(alias, cid, "botanical_ingredients")
+
+        # 7) other_ingredients — index standard_name + aliases so labels
+        # matching OI aliases (e.g. bare "Natural Colors" → NHA_NATURAL_COLORS)
+        # resolve to a canonical_id.
+        for _key, _val in (self.other_ingredients_lookup or {}).items():
+            if not isinstance(_val, dict):
+                continue
+            std = _val.get("standard_name") or ""
+            cid = _val.get("id") or std.lower().replace(" ", "_")
+            _put(std, cid, "other_ingredients")
+            for alias in _val.get("aliases", []) or []:
+                if isinstance(alias, str):
+                    _put(alias, cid, "other_ingredients")
+
+        # 8) proprietary_blends — blend-concern canonicals (BLEND_PROBIOTIC,
+        # BLEND_GENERAL, etc.). Index standard_name + blend_terms so labels
+        # using generic blend names resolve to a canonical_id.
+        for item in (self.proprietary_blends or {}).get("proprietary_blend_concerns", []):
+            if not isinstance(item, dict):
+                continue
+            std = item.get("standard_name") or ""
+            cid = item.get("id") or std.lower().replace(" ", "_")
+            _put(std, cid, "proprietary_blends")
+            for term in item.get("blend_terms", []) or []:
+                if isinstance(term, str):
+                    _put(term, cid, "proprietary_blends")
+
+        self._canonical_id_by_std_name = idx
+        logger.info(
+            "Built canonical_id reverse index with %d entries", len(idx)
+        )
+
+    def _resolve_canonical_identity(
+        self, standard_name: str, raw_name: Optional[str] = None
+    ) -> "Tuple[Optional[str], Optional[str]]":
+        """
+        Return ``(canonical_id, source_db)`` for a resolved standard_name, or
+        ``(None, None)`` if unmapped. This is the row-builder's authoritative
+        lookup for the cleaner's canonical_id field.
+
+        When ``raw_name`` is supplied, try it first — the raw label text is
+        more specific than the fuzzy-resolved ``standard_name`` in cases
+        where the matcher maps a sharply-defined source (e.g., "Fish Oil
+        concentrate") to a broader umbrella parent ("Omega-3 Fatty Acids").
+        The reverse index exact-matches "fish oil concentrate" to
+        ``fish_oil`` (bio_score 10), which is a more accurate canonical
+        than omega_3 (bio_score 8) for a product whose DSLD
+        ingredientGroup is "Fish Oil". Standard_name fallback preserves
+        the prior behavior for rows where raw_name itself isn't an index
+        key.
+        """
+        if raw_name:
+            hit = self._canonical_id_by_std_name.get(raw_name.lower().strip())
+            if hit:
+                return hit
+        if not standard_name:
+            return (None, None)
+        hit = self._canonical_id_by_std_name.get(standard_name.lower().strip())
+        if hit:
+            return hit
+        return (None, None)
+
     def _enhanced_ingredient_mapping(
         self,
         name: str,
@@ -2636,10 +2820,37 @@ class EnhancedDSLDNormalizer:
                         (group_result.get("match_rules", {}) or {}).get("negative_match_terms", [])
                     )
                     if negative_terms:
-                        lowered_name = (name or "").lower()
-                        if any(str(term).lower() in lowered_name for term in negative_terms):
+                        # D1.2: normalize before substring check so that
+                        # parentheticals and trademark symbols can't break
+                        # the veto. Example: label text "Essence of organic
+                        # Orange (peel) oil" must match negative term
+                        # "orange peel" — the `(` `)` and spacing shouldn't
+                        # hide the match. Same for ™, ®, punctuation.
+                        def _norm_for_negmatch(s: str) -> str:
+                            s = (s or "").lower()
+                            # Strip parenthetical characters but keep the
+                            # inner content, so "orange (peel) oil" ->
+                            # "orange peel oil".
+                            s = re.sub(r"[()\[\]{}]", " ", s)
+                            # Strip trademark symbols.
+                            s = re.sub(r"[\u00ae\u2122\u00a9]", " ", s)
+                            # Collapse whitespace.
+                            s = re.sub(r"\s+", " ", s).strip()
+                            return s
+
+                        lowered_name = _norm_for_negmatch(name)
+                        veto_hit = next(
+                            (
+                                term for term in negative_terms
+                                if _norm_for_negmatch(str(term)) in lowered_name
+                            ),
+                            None,
+                        )
+                        if veto_hit:
                             logger.debug(
-                                "ingredientGroup fallback vetoed by negative_match_terms: '%s' via '%s'",
+                                "ingredientGroup fallback vetoed by negative_match_terms "
+                                "(term=%r): '%s' via '%s'",
+                                veto_hit,
                                 name,
                                 ingredient_group,
                             )
@@ -2651,6 +2862,45 @@ class EnhancedDSLDNormalizer:
                         name, ingredient_group, standard_name, result_type
                     )
                     return standard_name, True, forms
+
+        # Generic-suffix fallback (Phase 5 fix).
+        # Supplement labels routinely append marketing suffixes like "Complex",
+        # "Formula", "Blend" to otherwise-known ingredient names. When all
+        # prior lookup paths have missed on the raw label text, strip one of
+        # these suffixes and retry. Gated on allow_descriptor_fallback so we
+        # never recurse more than one level. Only fires when the suffix-less
+        # candidate differs from the original (avoids no-op recursion).
+        _GENERIC_MARKETING_SUFFIXES = (
+            " complex formula",
+            " complex blend",
+            " formula blend",
+            " proprietary blend",
+            " proprietary complex",
+            " complex",
+            " formula",
+            " blend",
+            " matrix",
+        )
+        if allow_descriptor_fallback:
+            stripped = name
+            name_lower_full = name.lower().rstrip()
+            for suffix in _GENERIC_MARKETING_SUFFIXES:
+                if name_lower_full.endswith(suffix):
+                    stripped = name[: -len(suffix)].rstrip(" ,-")
+                    break
+            if stripped and stripped.lower() != name.lower():
+                sub_std, sub_mapped, sub_forms = self._perform_ingredient_mapping(
+                    stripped,
+                    forms,
+                    ingredient_group=ingredient_group,
+                    allow_descriptor_fallback=False,  # prevent deeper recursion
+                )
+                if sub_mapped:
+                    logger.debug(
+                        "generic-suffix fallback: '%s' -> '%s' -> '%s'",
+                        name, stripped, sub_std
+                    )
+                    return sub_std, True, sub_forms
 
         # Don't track as unmapped here - will be handled at higher level
         # after all database checks (harmful, allergen, etc.) are complete
@@ -3921,8 +4171,18 @@ class EnhancedDSLDNormalizer:
         # Skip nutritional facts - these are not supplement ingredients
         # Note: Harmful nutrition facts (trans fat, sugar, sodium) are captured by
         # _extract_nutritional_warnings() which runs before ingredient processing
-        # A9: Also check ingredientGroup and unit patterns
-        if self._is_nutrition_fact(name, ingredient_group, unit_raw):
+        # A9: Also check ingredientGroup and unit patterns.
+        # DSLD raw ``category`` is threaded through so vitamin/mineral rows
+        # (Chloride, Sodium on Supplement Facts panel, etc.) bypass the name
+        # exclusion list.
+        # has_forms: flag real supplement-source salts (e.g. "Sodium as
+        # Sodium Chloride") vs Nutrition-Facts-panel disclosure (bare "Sodium").
+        _raw_has_forms = bool(ing.get("forms"))
+        if self._is_nutrition_fact(
+            name, ingredient_group, unit_raw,
+            dsld_category=ing.get("category"),
+            has_forms=_raw_has_forms,
+        ):
             logger.debug(f"Skipping nutrition fact: {name} (group: {ingredient_group}, unit: {unit_raw})")
             return None
         
@@ -4012,7 +4272,17 @@ class EnhancedDSLDNormalizer:
         if not is_mapped and not self._is_nutrition_fact(name):
             self._record_unmapped_ingredient(name, forms, is_active=is_active)
 
-        # Preserve forms with full structure (including IDs if available)
+        # Preserve forms with full structure from DSLD (PRESERVE EVERYTHING).
+        # Schematic fields are required for downstream enrichment:
+        #   category            — classifies form role: "animal part or source",
+        #                         "botanical", "blend", "mineral", "vitamin",
+        #                         "non-nutrient/non-botanical" (markers), etc.
+        #                         This is the primary signal for source-descriptor
+        #                         vs real-form disambiguation.
+        #   ingredientGroup     — DSLD's grouping label (e.g., "Pancreas",
+        #                         "Curcuminoid"). Preserved for provenance.
+        #   uniiCode            — FDA UNII identifier, when available. Preserved
+        #                         for cross-identity verification by the enricher.
         forms_structured = []
         raw_forms = ing.get("forms", []) or []
         for form in raw_forms:
@@ -4022,7 +4292,10 @@ class EnhancedDSLDNormalizer:
                     "ingredientId": form.get("ingredientId"),
                     "order": form.get("order"),
                     "prefix": form.get("prefix"),
-                    "percent": form.get("percent")
+                    "percent": form.get("percent"),
+                    "category": form.get("category"),
+                    "ingredientGroup": form.get("ingredientGroup"),
+                    "uniiCode": form.get("uniiCode"),
                 })
             elif isinstance(form, str):
                 cleaned_form = self._strip_duplicate_label_artifacts(form)
@@ -4042,6 +4315,17 @@ class EnhancedDSLDNormalizer:
         # Parse botanical details from notes (plantPart, genus, species, harvestMethod, form)
         botanical_details = self._parse_botanical_details(notes)
 
+        # Phase 6: plant-part fallback. When DSLD's notes doesn't carry
+        # structured ``PlantPart: <x>`` metadata but the ingredient name
+        # embeds a plant-part token (e.g., "KSM-66 Ashwagandha root
+        # extract" from GNC/Goli), recover the qualifier so tissue-level
+        # bioactivity is preserved for enrichment & scoring.
+        if not botanical_details.get("plantPart"):
+            inferred_part = self._infer_plant_part_from_name(raw_name or name)
+            if inferred_part:
+                botanical_details["plantPart"] = inferred_part
+                botanical_details["plantPart_source"] = "name_inference"
+
         # Check if this ingredient is an additive (add metadata flag for enrichment phase)
         processed_name_check = self.matcher.preprocess_text(name)
         is_additive = False
@@ -4056,12 +4340,43 @@ class EnhancedDSLDNormalizer:
         # This enables correct matching to branded forms in the quality map
         branded_token = self._extract_branded_token(name)
 
+        # CANONICAL IDENTITY (refactor Phase 1b — authoritative for enricher).
+        # When the cleaner resolved the ingredient to a standard_name via any
+        # reference DB, emit the stable parent key (canonical_id) and the
+        # source DB so the enricher can trust this decision directly instead
+        # of re-deriving parent from ingredient text / forms[0].
+        #
+        # raw_name goes first because the fuzzy matcher sometimes collapses a
+        # sharply-defined source ("Fish Oil concentrate") into a broader
+        # umbrella parent ("Omega-3 Fatty Acids") as its standard_name, and
+        # the reverse index can still recover the specific parent from the
+        # original label text (fish_oil vs omega_3).
+        canonical_id, canonical_source_db = self._resolve_canonical_identity(
+            standard_name, raw_name=raw_name,
+        )
+        if not is_mapped:
+            canonical_id = None
+            canonical_source_db = "unmapped"
+
+        # LABEL NUTRIENT CONTEXT (refactor Phase 1c — cross-alias disambiguator).
+        # For DSLD rows tagged as a vitamin or mineral, the row's `name` IS the
+        # nutrient declaration (e.g., "Phosphorus 20mg (Dicalcium Phosphate)").
+        # Emitting the normalized nutrient name lets the enricher break ties
+        # on aliases shared across parents (e.g., dicalcium phosphate →
+        # phosphorus vs calcium).
+        raw_category = ing.get("category") or ""
+        label_nutrient_context = None
+        if raw_category in {"vitamin", "mineral"}:
+            label_nutrient_context = norm_module.normalize_text(raw_name or name)
+
         # Build base ingredient structure
         result = {
             # Original DSLD identifiers (PRESERVE)
             "ingredientId": ing.get("ingredientId"),
             "uniiCode": ing.get("uniiCode"),
             "order": ing.get("order", 0),
+            # Preserve raw DSLD schema fields that downstream may want.
+            "raw_category": raw_category or None,
 
             # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
             # raw_source_text: Exact substring from DSLD, set once, never modified
@@ -4069,6 +4384,11 @@ class EnhancedDSLDNormalizer:
             # branded_token_extracted: If present, use for quality map matching instead of raw_source_text
             # This enables "KSM-66 Ashwagandha Root Extract" to match "KSM-66 ashwagandha" form
             "branded_token_extracted": branded_token,
+            # CANONICAL IDENTITY (Phase 1b)
+            "canonical_id": canonical_id,
+            "canonical_source_db": canonical_source_db,
+            # LABEL NUTRIENT CONTEXT (Phase 1c)
+            "label_nutrient_context": label_nutrient_context,
             # raw_source_path: Source section (active/inactive), enrichment adds full path
             "raw_source_path": "activeIngredients" if is_active else "inactiveIngredients",
             # normalized_key: Stable key for dedup/tracking, computed ONCE
@@ -4115,6 +4435,8 @@ class EnhancedDSLDNormalizer:
         # Add botanical details if present
         if botanical_details.get("plantPart"):
             result["plantPart"] = botanical_details["plantPart"]
+            if botanical_details.get("plantPart_source"):
+                result["plantPart_source"] = botanical_details["plantPart_source"]
         if botanical_details.get("genus"):
             result["genus"] = botanical_details["genus"]
         if botanical_details.get("species"):
@@ -4364,7 +4686,8 @@ class EnhancedDSLDNormalizer:
                 "is_active": False  # Other ingredients
             }
 
-        # Preserve forms with full structure (including IDs if available)
+        # Preserve forms with full DSLD schema (category/ingredientGroup/uniiCode).
+        # See primary site above for field semantics.
         forms_structured = []
         raw_forms = ingredient_data.get("forms", []) or []
         for form in raw_forms:
@@ -4374,7 +4697,10 @@ class EnhancedDSLDNormalizer:
                     "ingredientId": form.get("ingredientId"),
                     "order": form.get("order"),
                     "prefix": form.get("prefix"),
-                    "percent": form.get("percent")
+                    "percent": form.get("percent"),
+                    "category": form.get("category"),
+                    "ingredientGroup": form.get("ingredientGroup"),
+                    "uniiCode": form.get("uniiCode"),
                 })
             elif isinstance(form, str):
                 forms_structured.append({"name": form})
@@ -4389,12 +4715,28 @@ class EnhancedDSLDNormalizer:
             if is_additive:
                 additive_type = additive_data.get("additive_type")
 
+        # CANONICAL IDENTITY + NUTRIENT CONTEXT (Phase 1b/1c, inactive path).
+        # Prefer raw_name for the reverse-index lookup — see primary site
+        # in the active-ingredient builder for the fish-oil-vs-omega-3
+        # rationale.
+        canonical_id, canonical_source_db = self._resolve_canonical_identity(
+            standard_name, raw_name=name,
+        )
+        if not is_mapped:
+            canonical_id = None
+            canonical_source_db = "unmapped"
+        raw_category_i = ingredient_data.get("category") or ""
+        label_nutrient_context = None
+        if raw_category_i in {"vitamin", "mineral"}:
+            label_nutrient_context = norm_module.normalize_text(name)
+
         # Build result - CLEANING ONLY (no enrichment)
         result = {
             # Original DSLD identifiers (PRESERVE)
             "ingredientId": ingredient_data.get("ingredientId"),
             "uniiCode": ingredient_data.get("uniiCode"),
             "order": ingredient_data.get("order", 0),
+            "raw_category": raw_category_i or None,
 
             # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
             # raw_source_text: Exact substring from DSLD, set once, never modified
@@ -4403,6 +4745,11 @@ class EnhancedDSLDNormalizer:
             "raw_source_path": "inactiveIngredients",
             # normalized_key: Stable key for dedup/tracking, computed ONCE
             "normalized_key": norm_module.make_normalized_key(name),
+            # CANONICAL IDENTITY (Phase 1b)
+            "canonical_id": canonical_id,
+            "canonical_source_db": canonical_source_db,
+            # LABEL NUTRIENT CONTEXT (Phase 1c)
+            "label_nutrient_context": label_nutrient_context,
 
             # Basic ingredient info
             "name": name,
@@ -4538,7 +4885,8 @@ class EnhancedDSLDNormalizer:
             if not is_mapped and not self._is_nutrition_fact(name):
                 self._record_unmapped_ingredient(name, forms, is_active=False)
 
-            # Preserve forms with full structure (including IDs if available)
+            # Preserve forms with full DSLD schema (category/ingredientGroup/uniiCode).
+            # See primary site above for field semantics.
             forms_structured = []
             raw_forms = ing.get("forms", []) or []
             for form in raw_forms:
@@ -4548,7 +4896,10 @@ class EnhancedDSLDNormalizer:
                         "ingredientId": form.get("ingredientId"),
                         "order": form.get("order"),
                         "prefix": form.get("prefix"),
-                        "percent": form.get("percent")
+                        "percent": form.get("percent"),
+                        "category": form.get("category"),
+                        "ingredientGroup": form.get("ingredientGroup"),
+                        "uniiCode": form.get("uniiCode"),
                     })
                 elif isinstance(form, str):
                     forms_structured.append({"name": form})
@@ -4563,12 +4914,27 @@ class EnhancedDSLDNormalizer:
                 if is_additive:
                     additive_type = additive_data.get("additive_type")
 
+            # CANONICAL IDENTITY + NUTRIENT CONTEXT (Phase 1b/1c, inactive-fallback path).
+            # raw_name first so the reverse index recovers specific parents
+            # that the fuzzy matcher collapsed (fish_oil vs omega_3 etc.).
+            canonical_id_f, canonical_source_db_f = self._resolve_canonical_identity(
+                standard_name, raw_name=name,
+            )
+            if not is_mapped:
+                canonical_id_f = None
+                canonical_source_db_f = "unmapped"
+            raw_category_f = ing.get("category") or ""
+            label_nutrient_context_f = None
+            if raw_category_f in {"vitamin", "mineral"}:
+                label_nutrient_context_f = norm_module.normalize_text(name)
+
             # Build result - CLEANING ONLY (no enrichment)
             result = {
                 # Original DSLD identifiers (PRESERVE)
                 "ingredientId": ing.get("ingredientId"),
                 "uniiCode": ing.get("uniiCode"),
                 "order": ing.get("order", 0),
+                "raw_category": raw_category_f or None,
 
                 # PROVENANCE FIELDS (Pipeline Hardening Phase 2)
                 # raw_source_text: Exact substring from DSLD, set once, never modified
@@ -4577,6 +4943,11 @@ class EnhancedDSLDNormalizer:
                 "raw_source_path": "inactiveIngredients",
                 # normalized_key: Stable key for dedup/tracking, computed ONCE
                 "normalized_key": norm_module.make_normalized_key(name),
+                # CANONICAL IDENTITY (Phase 1b)
+                "canonical_id": canonical_id_f,
+                "canonical_source_db": canonical_source_db_f,
+                # LABEL NUTRIENT CONTEXT (Phase 1c)
+                "label_nutrient_context": label_nutrient_context_f,
 
                 # Basic ingredient info
                 "name": name,
@@ -5456,6 +5827,61 @@ class EnhancedDSLDNormalizer:
 
         return details
 
+    # Ordered longest-first so "aerial parts" beats "aerial" etc.
+    _PLANT_PART_TOKENS = (
+        "aerial parts", "whole plant", "whole herb",
+        "root and rhizome", "leaf and stem",
+        "rhizome", "root", "leaves", "leaf", "bark", "seed", "seeds",
+        "flower", "flowers", "fruit", "fruits", "berry", "berries",
+        "stem", "stems", "needle", "needles", "hull", "hulls",
+        "peel", "peels", "pod", "pods", "twig", "twigs", "sprout",
+        "bulb", "tuber", "resin", "wood", "whole", "herb",
+    )
+
+    def _infer_plant_part_from_name(self, ingredient_name: str) -> Optional[str]:
+        """
+        Fallback plant-part extractor for botanical rows where DSLD's
+        ``notes`` field doesn't declare ``PlantPart: <x>`` but the
+        ingredient name embeds it (e.g., "KSM-66 Ashwagandha root
+        extract" from GNC/Goli, vs Nutricost which provides the
+        structured notes metadata).
+
+        Phase 6 (branded-token + plant-part tissue fidelity): preserving
+        plant-part enables downstream enricher to distinguish root vs
+        leaf vs aerial parts — tissue-specific bioactivity matters for
+        clinical scoring (ashwagandha root ≠ ashwagandha leaf
+        withanolide profile).
+
+        Returns the matched plant-part token (lower-cased, normalized
+        singular where obvious) or None when no recognized token
+        appears.
+        """
+        if not ingredient_name:
+            return None
+        normalized = ingredient_name.lower()
+        for token in self._PLANT_PART_TOKENS:
+            # Require word-boundary match so "root" inside "rooster"
+            # doesn't match. "aerial parts" is matched as a phrase.
+            pattern = r"\b" + re.escape(token) + r"\b"
+            if re.search(pattern, normalized):
+                # Normalize simple plurals back to canonical singular form
+                # so downstream comparisons are stable.
+                canonical = {
+                    "leaves": "leaf",
+                    "seeds": "seed",
+                    "flowers": "flower",
+                    "fruits": "fruit",
+                    "berries": "berry",
+                    "stems": "stem",
+                    "needles": "needle",
+                    "hulls": "hull",
+                    "peels": "peel",
+                    "pods": "pod",
+                    "twigs": "twig",
+                }.get(token, token)
+                return canonical
+        return None
+
     def _calculate_transparency_metrics(self, proprietary_blends: List[Dict], active_ingredients: List[Dict]) -> Dict[str, Any]:
         """
         Calculate transparency metrics for product metadata.
@@ -5867,14 +6293,31 @@ class EnhancedDSLDNormalizer:
             "total_count": len(unmapped_data)
         }
     
-    def _is_nutrition_fact(self, name: str, ingredient_group: str = None, unit: str = None) -> bool:
+    def _is_nutrition_fact(
+        self,
+        name: str,
+        ingredient_group: str = None,
+        unit: str = None,
+        dsld_category: str = None,
+        has_forms: bool = False,
+    ) -> bool:
         """
         Check if ingredient name is a label phrase or nutrition fact to exclude.
 
         Args:
             name: The ingredient name
-            ingredient_group: The ingredientGroup field from DSLD (e.g., "Calories")
+            ingredient_group: The ingredientGroup field from DSLD
             unit: The unit field (e.g., "{Calories}", "{Gram(s)}")
+            dsld_category: The raw DSLD ``category`` field.
+            has_forms: True if the DSLD row carries explicit ``forms[]`` data
+                identifying a supplement-source salt (e.g., "as Sodium
+                Chloride, Disodium Phosphate"). Used to disambiguate
+                Nutrition-Facts-panel disclosure from real supplementation
+                for minerals that appear in both contexts (Sodium, Chloride,
+                Potassium, Cholesterol). When has_forms=False AND the name
+                matches a known Nutrition-Facts-panel mineral, we treat it
+                as disclosure-only and route to nutritionalInfo rather than
+                activeIngredients.
 
         Returns:
             True if this should be excluded from ingredient processing
@@ -5882,29 +6325,188 @@ class EnhancedDSLDNormalizer:
         if not name:
             return False
 
+        # Dose-provenance rows: names shaped like "from 45 mcg of MenaQ7®"
+        # are nested provenance attachments to a parent active ingredient
+        # (the parent Vitamin K2 row already carries the dose). They are
+        # never discrete supplements — the embedded dose makes that
+        # unambiguous. Exclude regardless of DSLD category bypass.
+        if re.match(
+            r"^from\s+\d+(?:\.\d+)?\s*(?:mcg|ug|mg|g|iu|units?|billion|million|cfu)\b\s+of\s+",
+            name.lower().strip(),
+        ):
+            logger.debug("Excluding dose-provenance row: %s", name)
+            return True
+
+        # If DSLD itself tags this row as a supplement-ingredient category,
+        # it is a real supplement ingredient by definition — do not exclude
+        # regardless of name collisions with the nutrition-facts allowlist.
+        # Example: Caprylic Acid (category='fatty acid') is a discrete MCT
+        # supplement, not a Total Fat rollup. Chloride (category='mineral')
+        # is a real mineral, not a sodium-chloride nutrition-panel entry.
+        # The unit-based {Calories}/{Gram(s)} check below still runs because
+        # those units are unambiguous label-panel indicators.
+        _cat_lower = (dsld_category or "").lower().strip()
+        _SUPPLEMENT_INGREDIENT_CATEGORIES = {
+            "vitamin",
+            "mineral",
+            "botanical",
+            "amino acid",
+            "fatty acid",
+            "enzyme",
+            "non-nutrient/non-botanical",
+            "animal part or source",  # glandular supplements
+        }
+        _bypass_name_match = _cat_lower in _SUPPLEMENT_INGREDIENT_CATEGORIES
+
+        # Dual-context minerals: Sodium and Chloride appear on BOTH the
+        # Supplement Facts panel (real supplementation, with explicit form
+        # source) and the Nutrition Facts panel (incidental disclosure from
+        # other ingredients — whey protein, fish oil, etc.). Without an
+        # explicit forms[] source they are almost certainly the latter and
+        # should be routed to nutritionalInfo rather than activeIngredients.
+        _DUAL_CONTEXT_MINERALS = {
+            "sodium",
+            "salt",
+            "sodium chloride",
+            "chloride",
+            "total chloride",
+        }
+        _name_lower = name.lower().strip()
+        if (
+            _bypass_name_match
+            and _cat_lower == "mineral"
+            and _name_lower in _DUAL_CONTEXT_MINERALS
+            and not has_forms
+        ):
+            # Treat as Nutrition-Facts-only disclosure
+            logger.debug(
+                "Routing unsourced %s to nutritionalInfo (no forms[] — disclosure only)",
+                name,
+            )
+            return True
+
+        # Rollup override: names starting with "total"/"other"/"typical"/"all other"
+        # are summary/aggregate rows (e.g., "Total Omega-6 Fatty Acids",
+        # "Total Turmerones") — NOT discrete supplement ingredients — even when
+        # DSLD tags the row as vitamin/mineral/fatty-acid. If the preprocessed
+        # name is in EXCLUDED_NUTRITION_FACTS, honor that exclusion regardless
+        # of category bypass.
+        if _bypass_name_match:
+            _rollup_prefixes = ("total ", "other ", "typical ", "all other ")
+            if any(_name_lower.startswith(p) for p in _rollup_prefixes):
+                _processed_rollup = self.matcher.preprocess_text(name)
+                if _processed_rollup in self._preprocessed_excluded_nutrition:
+                    logger.debug(
+                        "Excluding rollup under category bypass: %s (cat: %s)",
+                        name, _cat_lower,
+                    )
+                    return True
+
+            # Standardization-marker override: rows like
+            # "Standardized to >95% Curcuminoids", "Supplying 8% Cordycepic Acid",
+            # "6% Terpene Lactones", "Supplying: 24% Flavone Glycosides" are
+            # potency/standardization descriptors attached to botanical parents —
+            # never discrete supplements. They carry DSLD category
+            # "non-nutrient/non-botanical" which triggers bypass, so we need an
+            # explicit pattern check here.
+            _STANDARDIZATION_MARKER_PATTERNS = (
+                r"^standardized\s+to\b",
+                r"^supplying\b",
+                r"^contains?\s+\d+(?:\.\d+)?\s*%",
+                r"^\d+(?:\.\d+)?\s*%\s+",
+                r"^(?:min\.?|minimum)\s+\d+(?:\.\d+)?\s*%",
+            )
+            for _pat in _STANDARDIZATION_MARKER_PATTERNS:
+                if re.match(_pat, _name_lower):
+                    logger.debug(
+                        "Excluding standardization marker under category bypass: %s",
+                        name,
+                    )
+                    return True
+
+            # Bypass-exclusion set: names that MUST be excluded even under
+            # category bypass. Includes bare standardization-marker words
+            # without structure (e.g., "Flavonol Glycosides" on Ginkgo
+            # labels, "Terpene Lactones") and source-descriptor rows
+            # misclassified as parent actives (e.g., "Rooster Comb
+            # Cartilage" — a hyaluronic-acid source, not the nutrient).
+            _BYPASS_EXCLUDE_NAMES = {
+                "flavonol glycosides",
+                "terpene lactones",
+                "animal proteins", "animal protein", "plant proteins",
+                "rooster comb cartilage", "chicken comb cartilage",
+            }
+            if _name_lower in _BYPASS_EXCLUDE_NAMES:
+                logger.debug(
+                    "Excluding bypass-override name: %s (cat: %s)",
+                    name, _cat_lower,
+                )
+                return True
+
         # A9: Check ingredientGroup - if it matches nutrition patterns, skip
-        if ingredient_group:
+        if ingredient_group and not _bypass_name_match:
             group_lower = ingredient_group.lower().strip()
             if group_lower in self._preprocessed_excluded_nutrition:
                 logger.debug(f"Excluding via ingredientGroup: {name} (group: {ingredient_group})")
                 return True
 
-        # A9: Check unit patterns like {Calories}, {Gram(s)} - these indicate nutrition facts
+        # A9: Check unit patterns like {Calories}, {Gram(s)} - these indicate nutrition facts.
+        # D1.3: accept both braced and bare renderings of these units. DSLD is
+        # inconsistent ("{Gram(s)}" vs "Gram(s)"). Also treat sugar/fat/calorie
+        # category rows as Nutrition-Facts-panel disclosures when the unit is
+        # a panel-scale unit.
+        # Only panel-explicit units (DSLD convention). Bare "g", "mg", "mcg",
+        # "iu" are normal supplement units and must NOT appear here.
+        _NUTRITION_PANEL_UNITS = {
+            "calories", "calorie", "kcal", "cal",
+            "gram", "grams", "gram(s)",
+        }
+        _NUTRITION_FACTS_CATEGORIES = {
+            "calorie", "calories",
+            "carbohydrate", "complex carbohydrate", "total carbohydrate", "total carbohydrates",
+            "fat", "total fat", "saturated fat", "trans fat",
+            "cholesterol",
+            "sugar", "sugars", "total sugars", "added sugars", "sugar (added)",
+            "fiber", "total fiber", "dietary fiber", "soluble fiber", "insoluble fiber",
+            "protein",  # handled carefully — see below
+        }
         if unit:
             unit_lower = unit.lower().strip()
-            # Units in curly braces are typically nutrition fact indicators
+            # Strip braces if present so we accept both forms.
             if unit_lower.startswith("{") and unit_lower.endswith("}"):
-                # Extract the content inside braces
-                inner_unit = unit_lower[1:-1].strip()
-                if inner_unit in ["calories", "calorie", "kcal", "cal", "gram", "grams", "gram(s)"]:
-                    logger.debug(f"Excluding via unit pattern: {name} (unit: {unit})")
-                    return True
+                unit_lower = unit_lower[1:-1].strip()
+            # Exclude if the unit itself is a panel-scale unit — these are
+            # Nutrition Facts disclosures (Calories, total Gram weights).
+            if unit_lower in _NUTRITION_PANEL_UNITS:
+                logger.debug(f"Excluding via unit pattern: {name} (unit: {unit})")
+                return True
+            # D1.3: Sugar/Fat/Carb rows with Gram-scale unit are Nutrition
+            # Facts panel disclosures regardless of category bypass. Protein
+            # is special — protein powders legitimately declare total protein
+            # in grams, so only apply when we also see a panel-explicit marker
+            # (ingredientGroup containing "Total" prefix). Avoid false
+            # positives on legitimate fatty-acid / MCT supplements by
+            # requiring DSLD category to be a macro-nutrient class (fat,
+            # sugar, carbohydrate), not "fatty acid".
+            if _cat_lower in _NUTRITION_FACTS_CATEGORIES and _cat_lower not in {
+                "protein",  # handled below
+                "fiber", "total fiber", "dietary fiber", "soluble fiber", "insoluble fiber",
+                # Fiber can be a real active ingredient (psyllium, inulin).
+                # We do NOT auto-filter fiber rows — let them route normally.
+            }:
+                logger.debug(
+                    "D1.3: routing sugar/fat/carb disclosure to nutritionalInfo: %s "
+                    "(cat=%s, unit=%s)",
+                    name, _cat_lower, unit,
+                )
+                return True
 
         # Preprocess the name for comparison
         processed_name = self.matcher.preprocess_text(name)
 
-        # Check against preprocessed excluded nutrition facts
-        if processed_name in self._preprocessed_excluded_nutrition:
+        # Name-based exclusion for nutrition facts — bypassed when DSLD itself
+        # tagged the row as vitamin/mineral (they are real supplement ingredients).
+        if not _bypass_name_match and processed_name in self._preprocessed_excluded_nutrition:
             return True
 
         # Check against preprocessed label phrases

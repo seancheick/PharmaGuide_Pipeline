@@ -4,9 +4,9 @@
     "schema_version": "5.1.0",
     "purpose": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
     "description": "Explicitly allowed normalized term overlaps across routing databases. Any new overlap must be reviewed before scoring deployment.",
-    "last_updated": "2026-04-14",
-    "total_entries": 31,
-    "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches — the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
+    "last_updated": "2026-04-20",
+    "total_entries": 39,
+    "routing_policy": "Context-aware since v5.0.0: the enricher tags each harmful additive match with source_section (active/inactive). The scorer suppresses low/moderate penalties for active-source matches \u2014 the IQM quality score is the correct signal for Supplement Facts ingredients. High/critical severity fires regardless of source. This allowlist now serves as documentation of known overlaps, not as a scoring router.",
     "reviewed_at": "2026-04-14"
   },
   "allowed_overlaps": [
@@ -226,6 +226,62 @@
         "harmful:iqm"
       ],
       "reason": "MSG abbreviation; same dual-listing rationale as monosodium glutamate."
+    },
+    {
+      "term_normalized": "d-mannose",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
+    },
+    {
+      "term_normalized": "d mannose",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
+    },
+    {
+      "term_normalized": "mannose",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
+    },
+    {
+      "term_normalized": "d-mannose powder",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
+    },
+    {
+      "term_normalized": "d mannose powder",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
+    },
+    {
+      "term_normalized": "mannose powder",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
+    },
+    {
+      "term_normalized": "pure d-mannose",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
+    },
+    {
+      "term_normalized": "pure d mannose",
+      "db_pairs": [
+        "harmful:iqm"
+      ],
+      "reason": "D-Mannose is a legitimate UTI-prevention active (IQM bio_score=9, Kranjcec 2014 RCT) that also appears in harmful_additives as a severity_level='low' bulk-sweetener quality signal. Cross-DB presence is intentional; enricher's active-source penalty suppression policy (_recognition_blocks_scoring) handles both paths correctly. Added by Sprint D1.4 (2026-04-20)."
     }
   ]
 }

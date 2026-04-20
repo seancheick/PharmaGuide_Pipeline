@@ -127,6 +127,11 @@ class TestAliasQuality:
             # Lecithin / choline / phosphatidylserine / soy overlap
             'lecithin', 'soy lecithin', 'sunflower lecithin',
             'soy', 'soybean',
+            # Phytosome delivery technology — phospholipid/phosphatidylcholine
+            # complex binds multiple botanical actives (grape seed, green tea,
+            # curcumin, etc.). Shared alias is safe because form lookup is
+            # parent-scoped after parent resolution.
+            'phospholipid complex', 'phosphatidylcholine complex',
             # Glutamate / glutamic acid overlap
             'glutamic acid', 'l-glutamic acid',
             # Orotate mineral salts — shared between mineral + orotic_acid

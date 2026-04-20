@@ -1,0 +1,194 @@
+"""
+Phase 3 regression tests — enricher honors the cleaner's canonical_id as
+a hard constraint on IQM parent selection.
+
+Context: the cleaner emits ``canonical_id`` on every active ingredient via
+its 17k-entry reverse index. Before Phase 3 the enricher re-derived the
+parent by text matching, which caused medical-accuracy bugs:
+
+- "Silybin Phytosome (Siliphos)" labels resolved to the ``lecithin`` parent
+  because "phospholipid complex" is an alias there, even though the cleaner
+  correctly flagged ``canonical_id='milk_thistle'``.
+- "Dicalcium Phosphate" in a phosphorus-bearing multivitamin resolved to
+  ``calcium`` because DCP is an alias on both calcium and phosphorus, even
+  though the cleaner correctly flagged ``canonical_id='phosphorus'``
+  (via DSLD ingredientGroup=Phosphorus).
+
+After Phase 3, ``_match_quality_map(... cleaner_canonical_id=<parent>)``
+filters the candidate pool to that parent only, so text-inferred
+cross-parent matches cannot win. If no form under the constrained parent
+matches, we fall back to a parent-level (unspecified-form) match under
+the cleaner's canonical rather than returning a wrong-parent match.
+
+See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 3.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from enrich_supplements_v3 import SupplementEnricherV3
+
+IQM_PATH = Path(__file__).parent.parent / "data" / "ingredient_quality_map.json"
+
+
+@pytest.fixture(scope="module")
+def enricher() -> SupplementEnricherV3:
+    return SupplementEnricherV3()
+
+
+@pytest.fixture(scope="module")
+def iqm() -> dict:
+    return json.loads(IQM_PATH.read_text())
+
+
+# ---------------------------------------------------------------------------
+# Silybin Phytosome — the canonical Phase 3 target
+# ---------------------------------------------------------------------------
+
+
+class TestSilybinPhytosomeConstraint:
+    """When cleaner says milk_thistle, enricher must not route to lecithin."""
+
+    def test_silybin_phytosome_honors_cleaner_milk_thistle(self, enricher, iqm) -> None:
+        # Simulating the failure pattern: label text includes phospholipid
+        # complex cues that would otherwise text-match to lecithin.
+        result = enricher._match_quality_map(
+            ing_name="Silybin Phytosome (Siliphos)",
+            std_name="Milk Thistle",
+            quality_map=iqm,
+            cleaner_canonical_id="milk_thistle",
+        )
+        assert result is not None
+        assert result.get("canonical_id") == "milk_thistle", (
+            f"Expected milk_thistle, got {result.get('canonical_id')}. "
+            f"form_id={result.get('form_id')}, matched_alias={result.get('matched_alias')}"
+        )
+
+    def test_cleaner_canonical_enforced_flag_set(self, enricher, iqm) -> None:
+        result = enricher._match_quality_map(
+            ing_name="Silybin Phytosome (Siliphos)",
+            std_name="Silymarin",
+            quality_map=iqm,
+            cleaner_canonical_id="milk_thistle",
+        )
+        assert result is not None
+        # Flag is attached to every match the cleaner-canonical constraint touches,
+        # whether or not it actually filtered anything out.
+        assert result.get("cleaner_canonical_id") == "milk_thistle"
+
+
+# ---------------------------------------------------------------------------
+# Phosphorus / DCP — the other Phase 3 target
+# ---------------------------------------------------------------------------
+
+
+class TestPhosphorusDCPConstraint:
+    """When cleaner says phosphorus, enricher must not route DCP to calcium."""
+
+    def test_dcp_with_cleaner_phosphorus_resolves_phosphorus(self, enricher, iqm) -> None:
+        result = enricher._match_quality_map(
+            ing_name="Dicalcium Phosphate",
+            std_name="Phosphorus",
+            quality_map=iqm,
+            cleaner_canonical_id="phosphorus",
+        )
+        assert result is not None
+        assert result.get("canonical_id") == "phosphorus", (
+            f"Expected phosphorus, got {result.get('canonical_id')}. "
+            f"Cleaner constraint must beat text-inferred calcium alias."
+        )
+
+    def test_dcp_with_cleaner_calcium_resolves_calcium(self, enricher, iqm) -> None:
+        # The 1 legitimate DCP-as-calcium row in production: DSLD's
+        # ingredientGroup is Calcium and the product supplements calcium
+        # via DCP. The cleaner canonical wins here too.
+        result = enricher._match_quality_map(
+            ing_name="Dicalcium Phosphate",
+            std_name="Calcium",
+            quality_map=iqm,
+            cleaner_canonical_id="calcium",
+        )
+        assert result is not None
+        assert result.get("canonical_id") == "calcium"
+
+
+# ---------------------------------------------------------------------------
+# Graceful fallback when the constrained parent has no matching form
+# ---------------------------------------------------------------------------
+
+
+class TestParentFallbackWhenConstrainedPoolEmpty:
+    """Constraint to a real IQM parent with zero candidate matches returns a parent-level match."""
+
+    def test_unknown_form_under_cleaner_canonical_falls_back_to_parent(self, enricher, iqm) -> None:
+        # Text that would never match anything meaningful under milk_thistle,
+        # but the cleaner has flagged milk_thistle via an earlier reverse-index
+        # hit (e.g., a branded token cleaned away before the enricher sees it).
+        result = enricher._match_quality_map(
+            ing_name="xyzzy_nonsense_token_12345",
+            std_name="xyzzy_nonsense_token_12345",
+            quality_map=iqm,
+            cleaner_canonical_id="milk_thistle",
+        )
+        assert result is not None
+        assert result.get("canonical_id") == "milk_thistle"
+        # Falling back to a parent-level match (may be unspecified form).
+        assert result.get("cleaner_canonical_fallback") is True
+        assert result.get("cleaner_canonical_enforced") is True
+
+
+# ---------------------------------------------------------------------------
+# Legacy path remains intact when cleaner_canonical_id is absent / non-IQM
+# ---------------------------------------------------------------------------
+
+
+class TestLegacyBehaviorPreserved:
+    """Calls without cleaner_canonical_id behave exactly as before Phase 3."""
+
+    def test_no_cleaner_canonical_uses_text_inference(self, enricher, iqm) -> None:
+        # Classic cross-parent case; without a cleaner canonical the existing
+        # preferred_parent inference decides (vitamin_c via std_name).
+        result = enricher._match_quality_map(
+            ing_name="Calcium Ascorbate",
+            std_name="Vitamin C",
+            quality_map=iqm,
+        )
+        assert result is not None
+        assert result.get("canonical_id") == "vitamin_c"
+        assert "cleaner_canonical_enforced" not in result
+
+    def test_non_iqm_canonical_id_ignored_as_hard_filter(self, enricher, iqm) -> None:
+        # If the cleaner resolved to a botanical (not in IQM), we must NOT
+        # hard-filter IQM candidates — the enricher's non-IQM fallback chain
+        # should still route the ingredient normally. Passing a canonical
+        # that is NOT an IQM key simulates the call-site's own guard returning
+        # something truthy-but-external: this must be harmless.
+        result = enricher._match_quality_map(
+            ing_name="Ashwagandha Root Extract",
+            std_name="Ashwagandha",
+            quality_map=iqm,
+            cleaner_canonical_id="ashwagandha_not_in_iqm_sentinel",
+        )
+        # Whether or not IQM produces a match, the non-IQM canonical should
+        # not leak into the enforcement telemetry.
+        if result is not None:
+            assert result.get("cleaner_canonical_enforced") is not True
+            assert result.get("cleaner_canonical_fallback") is not True
+
+    def test_none_canonical_no_telemetry_leak(self, enricher, iqm) -> None:
+        result = enricher._match_quality_map(
+            ing_name="Vitamin D3",
+            std_name="Vitamin D",
+            quality_map=iqm,
+            cleaner_canonical_id=None,
+        )
+        assert result is not None
+        assert "cleaner_canonical_enforced" not in result
+        assert "cleaner_canonical_fallback" not in result

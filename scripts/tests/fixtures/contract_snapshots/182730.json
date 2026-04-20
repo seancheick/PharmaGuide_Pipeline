@@ -1,0 +1,223 @@
+{
+  "badges": [],
+  "brand_name": "Pure Encapsulations",
+  "breakdown": {
+    "A": {
+      "A1": 10.65,
+      "A2": 3.5,
+      "A3": 2.0,
+      "A4": 3.0,
+      "A5": 1.75,
+      "A5a": 0.0,
+      "A5b": 1.0,
+      "A5c": 0.75,
+      "A5d": 0.0,
+      "A6": 0.0,
+      "category_bonus_pool_cap": 5.0,
+      "category_bonus_total": 1.0,
+      "core_quality": 20.9,
+      "max": 25.0,
+      "omega3_breakdown": {
+        "applicable": true,
+        "dha_mg_per_unit": 200.0,
+        "dose_band": "general_health",
+        "epa_mg_per_unit": 300.0,
+        "omega3_dose_bonus": 1.0,
+        "per_day_max_mg": 500.0,
+        "per_day_mid_mg": 500.0,
+        "per_day_min_mg": 500.0,
+        "prescription_dose": false
+      },
+      "omega3_dose_bonus": 1.0,
+      "probiotic_bonus": 0.0,
+      "probiotic_breakdown": {
+        "cfu": 0.0,
+        "clinical_strains": 0.0,
+        "diversity": 0.0,
+        "eligibility": {
+          "eligible": false,
+          "mode": "non_probiotic",
+          "reason": "no_probiotic_signal"
+        },
+        "prebiotic": 0.0,
+        "probiotic_bonus": 0.0,
+        "survivability": 0.0
+      },
+      "score": 21.9
+    },
+    "B": {
+      "B0_moderate_penalty": 0.0,
+      "B1_evidence": [],
+      "B1_penalty": 0.0,
+      "B2_penalty": 1.5,
+      "B3": 2.0,
+      "B4a": 0.0,
+      "B4b": 4.0,
+      "B4c": 0.0,
+      "B5_blend_evidence": [
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Proprietary Mixed Carotenoid Blend",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 3,
+          "computed_blend_penalty": -2.3125,
+          "computed_blend_penalty_magnitude": 2.3125,
+          "dedupe_fingerprint": "proprietary mixed carotenoid blend|lutein,lycopene,zeaxanthin|0.000|activeingredients[26]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.0625,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[26]",
+          "unit_conversion_failed": false
+        },
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Superfruit Antioxidant Blend",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 6,
+          "computed_blend_penalty": -2.625,
+          "computed_blend_penalty_magnitude": 2.625,
+          "dedupe_fingerprint": "superfruit antioxidant blend|acai,acerola,camu camu,green coffee whole fruit concentrate,mangosteen,quercetin|0.000|activeingredients[38]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.125,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[38]",
+          "unit_conversion_failed": false
+        }
+      ],
+      "B5_penalty": 4.94,
+      "B6_penalty": 0.0,
+      "B7_dose_safety_evidence": [],
+      "B7_penalty": 0.0,
+      "B8_caers_evidence": [],
+      "B8_penalty": 0.0,
+      "B_hypoallergenic": 0.0,
+      "bonuses": 5.0,
+      "max": 30.0,
+      "penalties": 6.44,
+      "raw": 23.56,
+      "score": 23.56
+    },
+    "C": {
+      "depth_bonus": 0.5,
+      "ingredient_points": {
+        "alpha ketoglutarate": 0.51,
+        "biotin": 3.12,
+        "boron": 0.33,
+        "calcium": 4.68,
+        "chromium picolinate": 2.57,
+        "coenzyme q10": 3.9,
+        "copper": 1.1,
+        "creatine monohydrate": 3.9,
+        "grape seed extract": 3.25,
+        "green tea extract": 3.98,
+        "iodine": 2.21,
+        "lutein": 4.68,
+        "magnesium generic": 4.68,
+        "manganese": 1.1,
+        "omega 3 fatty acids": 3.98,
+        "pantothenic acid vitamin b5": 1.1,
+        "potassium": 4.68,
+        "quercetin": 3.32,
+        "selenium": 4.68,
+        "vitamin a beta carotene": 4.68,
+        "vitamin b1 thiamine": 1.87,
+        "vitamin b12": 0.98,
+        "vitamin b2 riboflavin": 4.68,
+        "vitamin b3 niacin": 3.12,
+        "vitamin b6": 3.9,
+        "vitamin c": 3.98,
+        "vitamin d3": 4.29,
+        "vitamin e": 2.81,
+        "zinc picolinate": 4.29
+      },
+      "matched_entries": 29,
+      "max": 20.0,
+      "score": 8.69,
+      "top_n_applied": 3
+    },
+    "D": {
+      "D1": 2.0,
+      "D2": 0.0,
+      "D3": 0.0,
+      "D4": 0.0,
+      "D5": 0.0,
+      "max": 5.0,
+      "score": 2.0
+    },
+    "E": {
+      "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
+      "applicable": true,
+      "dha_mg_per_unit": 200.0,
+      "dose_band": "general_health",
+      "epa_mg_per_unit": 300.0,
+      "max": 2.0,
+      "per_day_max_mg": 500.0,
+      "per_day_mid_mg": 500.0,
+      "per_day_min_mg": 500.0,
+      "prescription_dose": false,
+      "score": 1.0
+    },
+    "quality_raw": 56.15,
+    "violation_penalty": 0.0
+  },
+  "dsld_id": "182730",
+  "evaluation_stage": "scoring",
+  "flags": [
+    "PROPRIETARY_BLEND_PRESENT",
+    "SUPPLEMENT_TYPE_REINFERRED"
+  ],
+  "grade": "Good",
+  "mapped_coverage": 1.0,
+  "output_schema_version": "3.4.0",
+  "product_name": "Athletic Pure Pack",
+  "safety_verdict": "SAFE",
+  "score_100_equivalent": 70.2,
+  "score_80": 56.1,
+  "score_basis": "bioactives_scored",
+  "scoring_status": "scored",
+  "section_scores": {
+    "A_ingredient_quality": {
+      "category_bonus_pool_cap": 5.0,
+      "category_bonus_total": 1.0,
+      "core_quality": 20.9,
+      "max": 25.0,
+      "score": 21.9
+    },
+    "B_safety_purity": {
+      "max": 30.0,
+      "score": 23.56
+    },
+    "C_evidence_research": {
+      "max": 20.0,
+      "score": 8.69
+    },
+    "D_brand_trust": {
+      "max": 5.0,
+      "score": 2.0
+    },
+    "E_dose_adequacy": {
+      "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",
+      "applicable": true,
+      "max": 3.0,
+      "score": 1.0
+    }
+  },
+  "supp_type": "multivitamin",
+  "unmapped_actives_excluding_banned_exact_alias": 0,
+  "unmapped_actives_total": 0,
+  "verdict": "SAFE"
+}

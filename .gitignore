@@ -62,3 +62,10 @@ scripts/reports/
 .gstack/
 .kilo/
 .agents/
+
+# Local backups / scheduled-task runtime state
+*.bak
+*.bak.json
+scripts/data/*.json.bak
+.claude/scheduled_tasks.lock
+.claude/

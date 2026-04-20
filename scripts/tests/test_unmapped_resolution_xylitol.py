@@ -17,7 +17,15 @@ def test_xylitol_in_harmful_additives():
     x = rows["ADD_XYLITOL"]
     assert x["standard_name"] == "Xylitol"
     assert x["category"] == "sweetener_sugar_alcohol"
-    assert x["severity_level"] == "moderate"
+    # Sprint D1.3: sugar alcohols downgraded to severity_level='low' —
+    # they deserve a small penalty (quality signal), not the full harmful-
+    # additive hammer. Nutrition-Facts-panel rows no longer reach the
+    # scorer at all (filtered by _is_nutrition_fact); only formulation-use
+    # Xylitol rows land here, and those get the small 'low' penalty.
+    assert x["severity_level"] == "low", (
+        "D1.3 policy: formulation-use sugar alcohols carry severity_level='low' "
+        "so the scorer applies a reduced B1 penalty. See docs/SPRINT_D_ACCURACY_100.md."
+    )
     assert x["cui"] == "C0043369"
     ext = x.get("external_ids", {})
     assert ext.get("unii") == "VCQ006KQ1E"

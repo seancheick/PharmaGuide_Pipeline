@@ -86,6 +86,11 @@ def build_cache():
             "last_updated": now,
             "total_substances": len(name_to_unii),
             "total_uniis": len(unii_to_name),
+            "purpose": (
+                "Offline FDA UNII substance registry cache for fast identity "
+                "resolution during ingredient enrichment. Used by unii_cache.py "
+                "and verify_unii.py to avoid GSRS API calls."
+            ),
             "description": (
                 "Offline UNII substance registry. "
                 "name_to_unii: lowercased substance name → UNII code. "

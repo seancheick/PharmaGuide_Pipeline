@@ -179,14 +179,14 @@ python3 scripts/validate_safety_copy.py --violations-only --strict
 
 **What it checks (summary by file):**
 
-| Reference file                      | Required authored fields                                                                            | Extra contract                                                                               |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `banned_recalled_ingredients.json`  | `ban_context` (enum), `safety_warning` (50-200), `safety_warning_one_liner` (20-80)                 | Adulterant entries must contain "in supplement" guardrail; contamination_recall must use regulatory verb |
-| `ingredient_interaction_rules.json` | `alert_headline` (20-60), `alert_body` (60-200), `informational_note` (40-120)                      | Avoid/contraindicated severity requires conditional framing ("if you take", "talk to")      |
-| `medication_depletions.json`        | `alert_headline`, `alert_body`, `acknowledgement_note`, `monitoring_tip_short`, optional `food_sources_short` | No acute-tense framing; no numeric stats in body; exactly one of `adequacy_threshold_mcg`/`_mg` |
-| `harmful_additives.json`            | `safety_summary` (50-200), `safety_summary_one_liner` (20-80)                                       | No SCREAM words; terminal punctuation on one-liner                                           |
-| `synergy_cluster.json`              | `synergy_benefit_short` (40-160)                                                                    | No alarm/nocebo words (synergy is positive framing)                                          |
-| `manufacturer_violations.json`      | `brand_trust_summary` (40-120)                                                                      | No semicolons; terminal punctuation; SCREAM words blocked (but alarming adjectives allowed — serious recalls deserve serious voice) |
+| Reference file                      | Required authored fields                                                                                      | Extra contract                                                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `banned_recalled_ingredients.json`  | `ban_context` (enum), `safety_warning` (50-200), `safety_warning_one_liner` (20-80)                           | Adulterant entries must contain "in supplement" guardrail; contamination_recall must use regulatory verb                            |
+| `ingredient_interaction_rules.json` | `alert_headline` (20-60), `alert_body` (60-200), `informational_note` (40-120)                                | Avoid/contraindicated severity requires conditional framing ("if you take", "talk to")                                              |
+| `medication_depletions.json`        | `alert_headline`, `alert_body`, `acknowledgement_note`, `monitoring_tip_short`, optional `food_sources_short` | No acute-tense framing; no numeric stats in body; exactly one of `adequacy_threshold_mcg`/`_mg`                                     |
+| `harmful_additives.json`            | `safety_summary` (50-200), `safety_summary_one_liner` (20-80)                                                 | No SCREAM words; terminal punctuation on one-liner                                                                                  |
+| `synergy_cluster.json`              | `synergy_benefit_short` (40-160)                                                                              | No alarm/nocebo words (synergy is positive framing)                                                                                 |
+| `manufacturer_violations.json`      | `brand_trust_summary` (40-120)                                                                                | No semicolons; terminal punctuation; SCREAM words blocked (but alarming adjectives allowed — serious recalls deserve serious voice) |
 
 **Failure output:** each violation prints the exact entry ID + field + reason. Fix the offender and re-run; no explicit "fix this" tooling yet — the messages point at the file and field directly.
 
@@ -194,14 +194,14 @@ python3 scripts/validate_safety_copy.py --violations-only --strict
 
 The `EXPORT_SCHEMA_VERSION` above tracks the product-core DB. Each reference data file has its own `_metadata.schema_version` that advances independently:
 
-| File                                | Current | Notes                                                                    |
-| ----------------------------------- | ------- | ------------------------------------------------------------------------ |
-| `banned_recalled_ingredients.json`  | 5.3.0   | Added `contamination_recall` as 5th `ban_context` enum value (2026-04-18) |
+| File                                | Current | Notes                                                                             |
+| ----------------------------------- | ------- | --------------------------------------------------------------------------------- |
+| `banned_recalled_ingredients.json`  | 5.3.0   | Added `contamination_recall` as 5th `ban_context` enum value (2026-04-18)         |
 | `ingredient_interaction_rules.json` | 5.2.0   | All severe sub-rules + pregnancy_lactation blocks + non-severe sub-rules authored |
-| `medication_depletions.json`        | 5.2.1   | `food_sources_short` optional field added; 68 entries authored            |
-| `harmful_additives.json`            | 5.1.0   | `safety_summary` + `safety_summary_one_liner` fields added; 115 authored |
-| `synergy_cluster.json`              | 5.0.0   | `synergy_benefit_short` field added (Dr. Pham, 2026-04-18); 58 authored  |
-| `manufacturer_violations.json`      | 5.0.0   | `brand_trust_summary` field added; 79 authored                           |
+| `medication_depletions.json`        | 5.2.1   | `food_sources_short` optional field added; 68 entries authored                    |
+| `harmful_additives.json`            | 5.1.0   | `safety_summary` + `safety_summary_one_liner` fields added; 115 authored          |
+| `synergy_cluster.json`              | 5.0.0   | `synergy_benefit_short` field added (Dr. Pham, 2026-04-18); 58 authored           |
+| `manufacturer_violations.json`      | 5.0.0   | `brand_trust_summary` field added; 79 authored                                    |
 
 Schema bumps cascade into Flutter's reference-data asset sync — see "Flutter asset sync status" in the Clinical Copy dashboard to spot drift the moment it happens.
 

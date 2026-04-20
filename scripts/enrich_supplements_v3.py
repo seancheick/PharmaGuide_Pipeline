@@ -2049,8 +2049,18 @@ class SupplementEnricherV3:
             # Scorable ingredient - try to match against quality map
             # Pass cleaned forms[] to enable form-aware matching (P0 form-loss fix)
             ingredient_forms = ingredient.get('forms') or []
+            # Phase 3: forward the cleaner's IQM canonical_id as a hard
+            # constraint so text-inferred cross-parent matches cannot win.
+            # Only passed when the cleaner resolved via IQM — botanical /
+            # other / harmful canonicals route through their own DBs.
+            _cleaner_iqm_cid = (
+                ingredient.get('canonical_id')
+                if ingredient.get('canonical_source_db') == 'ingredient_quality_map'
+                else None
+            )
             match_result = self._match_quality_map(
-                ing_name, std_name, quality_map, cleaned_forms=ingredient_forms, branded_token=_bte
+                ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
+                branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
             )
             quality_entry = self._build_quality_entry(
                 ingredient, match_result, hierarchy_type, source_section="active"
@@ -2130,8 +2140,15 @@ class SupplementEnricherV3:
                 dose_present = bool(quantity and unit)
 
                 ingredient_forms = ingredient.get('forms') or []
+                # Phase 3: propagate cleaner IQM canonical_id (see Pass 1 note above).
+                _cleaner_iqm_cid = (
+                    ingredient.get('canonical_id')
+                    if ingredient.get('canonical_source_db') == 'ingredient_quality_map'
+                    else None
+                )
                 match_result = self._match_quality_map(
-                    ing_name, std_name, quality_map, cleaned_forms=ingredient_forms, branded_token=_bte
+                    ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
+                    branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
                 )
                 quality_entry = self._build_quality_entry(
                     ingredient, match_result, hierarchy_type,
@@ -3513,34 +3530,250 @@ class SupplementEnricherV3:
         normalized = re.sub(r"\s+", " ", normalized).strip(" ,")
         return normalized
 
+    # Known source-material terms — animal tissues, plant species, yeast cultures,
+    # marine species, mineral-source claims, and marketing blend labels that
+    # DSLD surfaces as form text but are NOT actual IQM form aliases. These
+    # correspond to DSLD forms[].category values like "animal part or source",
+    # or to raw label text that names the ORIGIN of the nutrient rather than
+    # its chemical form.
+    _SOURCE_MATERIAL_TERMS: frozenset = frozenset({
+        # Legacy marine/animal species
+        "anchovy", "anchovies", "bamboo", "bovine", "chicken sternal cartilage",
+        "crab", "herring", "jack", "mackerel", "pineapple", "salmon",
+        "sardine", "sardines", "shrimp", "smelt", "squid", "tuna",
+        # Animal tissues / glandular parts (pancreatin, glandular supplements)
+        "pancreas", "pancreas extract", "pancreatic tissue", "pancreatic gland",
+        "liver", "thymus", "spleen", "adrenal", "kidney", "heart",
+        # Fish / marine species descriptors
+        "fish", "cod", "cod fish", "pollock", "alaska pollock", "alaskan pollock",
+        "wild-caught alaska pollock", "usa wild-caught alaska pollock",
+        "wild-caught", "wild caught",
+        # Plant / fruit whole-food sources surfaced as forms
+        "cantaloupe", "cantaloupe melon", "melon",
+        "amla", "emblic", "emblic fruit", "emblic fruit extract",
+        "moringa",
+        "broccoli", "broccoli flower", "broccoli stem", "broccoli sprout",
+        "broccoli flower juice", "broccoli stem juice", "broccoli sprout concentrate",
+        "broccoli whole plant concentrate",
+        "peach", "peach fruit extract",
+        "organic black elderberry juice concentrate",
+        "eggshell",
+        # Mineral-source marketing claims
+        "algae", "algae minerals", "sea minerals", "sea mineral salt",
+        "dead sea minerals", "algae dead sea minerals",
+        "ionic minerals", "ionic plant based minerals", "plant based minerals",
+        "plant minerals",
+        "mineral complex", "trace mineral complex", "trace minerals",
+        # Marketing blends that get surfaced as form text
+        "organic immune blend", "organic food blend", "beauty blend",
+        "organic immune system blend", "immune blend", "food blend",
+        # Vitamin / mineral "complex" marketing labels — hybrid blends with no
+        # single specific IQM form. Fallback to parent-unspecified is the
+        # correct conservative answer.
+        "vitamin k complex", "k complex", "k2 vitamin k complex",
+        "vitamin b complex", "b complex", "vitamin d complex", "d complex",
+        "vitamin e complex", "e complex",
+        # Marker compounds / constituents (nutrient indicators, not forms)
+        "polyphenols", "punicalagin", "polyphenols, punicalagin",
+        "terpenes", "phytocannabinoids", "beta-caryophyllene",
+        "beta-caryophyllene, phytocannabinoids, terpenes",
+        "spm", "resolvins", "protectins", "spm, resolvins, protectins",
+        "resolvins, protectins",
+        "biologically active sterols", "biologically active sterols, fatty acids",
+        "organic acids", "sterols", "fatty acids", "omega-3 fatty acids",
+        "omega-6 fatty acids", "essential fatty acids",
+    })
+
+    # Known genus names for Latin binomial source descriptors. These prefix
+    # two-or-more-word Latin species names in DSLD label text (e.g.
+    # "Sus scrofa pancreas", "Carica papaya extract, dried, purified").
+    _LATIN_GENUS_NAMES: frozenset = frozenset({
+        # Animal genera
+        "sus", "bos", "gallus",
+        # Plant genera commonly used as DSLD source species
+        "carica", "ananas", "brassica", "vitis", "panax", "camellia",
+        "phyllanthus", "emblica", "moringa", "rosa", "sambucus", "cimicifuga",
+        "paullinia", "withania", "lepidium", "cerasus", "vaccinium",
+        "matricaria", "harpagophytum", "astragalus", "ginkgo", "echinacea",
+        "curcuma", "zingiber", "allium", "trigonella", "silybum",
+        "actaea", "rhodiola", "bacopa", "centella", "mentha", "passiflora",
+        "scutellaria", "valeriana", "eleutherococcus", "paeonia", "crataegus",
+        "hypericum", "tribulus", "foeniculum", "salvia", "ocimum",
+        # Probiotic / yeast genera (strain-level source descriptors)
+        "lactobacillus", "bifidobacterium", "streptococcus", "lactococcus",
+        "saccharomyces", "bacillus",
+    })
+
+    # Tissue / plant-part suffix tokens that, when combined with a genus or
+    # known plant name, indicate source material rather than a nutrient form.
+    _SOURCE_PART_SUFFIXES: frozenset = frozenset({
+        "root", "leaf", "seed", "fruit", "flower", "stem", "bark", "bulb",
+        "rhizome", "whole plant", "sprout", "peel", "aerial parts",
+        "pancreas", "liver", "tissue",
+        "extract", "concentrate", "juice", "powder",
+        "culture", "fermentation",
+    })
+
+    # Individual tokens that, when ALL words of a normalized text are drawn
+    # from this set (plus prep qualifiers), indicate a source/marker descriptor.
+    # This handles the reality that `_normalize_form_fallback_audit_text` loses
+    # commas (the shared `_normalize_text` converts comma → space), so
+    # multi-term phrases like "polyphenols, punicalagin" arrive here as
+    # "polyphenols punicalagin".
+    _SOURCE_WORD_TOKENS: frozenset = frozenset({
+        # Marker constituents
+        "polyphenols", "punicalagin", "terpenes", "phytocannabinoids",
+        "beta-caryophyllene", "spm", "resolvins", "protectins",
+        "sterols", "biologically", "active", "fatty", "acids",
+        "omega-3", "omega-6", "essential",
+        # Plant parts / preparations
+        "flower", "stem", "leaf", "root", "seed", "fruit", "bark", "sprout",
+        "juice", "concentrate", "extract", "powder", "whole", "plant",
+        "culture", "fermentation", "dried", "purified", "aqueous",
+        "liquid", "fresh", "standardized",
+        # Whole-food sources
+        "broccoli", "cantaloupe", "melon", "amla", "emblic", "moringa",
+        "peach", "elderberry", "black",
+        # Species / source descriptors
+        "fish", "cod", "salmon", "sardine", "sardines", "anchovy", "anchovies",
+        "pollock", "alaska", "alaskan", "wild-caught", "wild", "caught",
+        "usa", "mackerel", "herring", "jack", "smelt", "squid", "crab",
+        "shrimp", "tuna", "pineapple", "bamboo", "bovine",
+        "pancreas", "pancreatic", "tissue", "gland",
+        "liver", "thymus", "spleen", "adrenal", "kidney", "heart",
+        "eggshell",
+        # Mineral source claims — generic words only, not specific mineral names
+        "algae", "sea", "dead", "ionic", "trace",
+        "mineral", "minerals", "complex", "salt",
+        # Dairy protein sources used as calcium carriers
+        "casein", "whey", "protein",
+        # Marketing blend words
+        "immune", "food", "beauty", "system", "blend", "organic",
+    })
+
     def _is_source_material_descriptor_for_fallback_audit(self, normalized_text: str) -> bool:
-        """Return True when fallback text names a source material, not a missing IQM form."""
+        """
+        Return True when fallback text names a source material, not a missing
+        IQM form.
+
+        Covers four detection paths:
+        1. Static allowlist (_SOURCE_MATERIAL_TERMS) — exact-match phrase or
+           comma-separated tokens that are all source terms.
+        2. Latin binomial genus-species pattern (_LATIN_GENUS_NAMES) — any
+           comma-separated token starting with a known genus name is treated
+           as a Linnaean source descriptor.
+        3. Yeast culture pattern — "<genus-abbrev> cerevisiae culture" etc.
+        4. Whitespace-token coverage — covers comma-lost phrases like
+           "polyphenols punicalagin" (originally "polyphenols, punicalagin")
+           by checking if every whitespace token is a known source/marker
+           word in `_SOURCE_WORD_TOKENS`.
+
+        Non-source forms (e.g. "calcium citrate", "phospholipid complex",
+        "ferric saccharate") must NOT match any of these paths; they are real
+        alias gaps handled elsewhere.
+        """
         if not normalized_text:
             return False
 
-        source_terms = {
-            "anchovy",
-            "anchovies",
-            "bamboo",
-            "bovine",
-            "chicken sternal cartilage",
-            "crab",
-            "herring",
-            "jack",
-            "mackerel",
-            "pineapple",
-            "salmon",
-            "sardine",
-            "sardines",
-            "shrimp",
-            "smelt",
-            "squid",
-            "tuna",
-        }
-        split_tokens = [part.strip() for part in normalized_text.split(",") if part.strip()]
-        if split_tokens and all(token in source_terms for token in split_tokens):
+        # Path 1: exact-phrase allowlist
+        if normalized_text in self._SOURCE_MATERIAL_TERMS:
             return True
-        return normalized_text in source_terms
+
+        # Path 1b: comma-separated tokens all in allowlist (preserved for
+        # slash-originated inputs like "fish/salmon" → "fish, salmon")
+        split_tokens = [part.strip() for part in normalized_text.split(",") if part.strip()]
+        if split_tokens and all(
+            token in self._SOURCE_MATERIAL_TERMS for token in split_tokens
+        ):
+            return True
+
+        # Path 2 & 3: Latin binomial / genus-species in any comma-delimited token
+        if split_tokens and all(
+            self._token_is_latin_source_descriptor(token) for token in split_tokens
+        ):
+            return True
+
+        # Path 4: every whitespace-token is a known source/marker word.
+        # Requires ≥2 tokens to avoid matching generic single words like
+        # "extract" (handled separately as generic_extract_token).
+        whitespace_tokens = normalized_text.split()
+        if (
+            len(whitespace_tokens) >= 2
+            and all(tok in self._SOURCE_WORD_TOKENS for tok in whitespace_tokens)
+        ):
+            return True
+
+        return False
+
+    def _token_is_latin_source_descriptor(self, token: str) -> bool:
+        """
+        Return True if a single comma-delimited token looks like a Latin
+        binomial source descriptor (genus species [part] [preparation]).
+
+        Examples that match:
+            "sus scrofa pancreas extract"
+            "carica papaya extract, dried, purified"  (as a single token:
+             "carica papaya extract" — the comma-split handles the rest)
+            "s. cerevisiae culture"
+            "saccharomyces cerevisiae"
+            "withania somnifera root extract"
+
+        Examples that do NOT match:
+            "calcium citrate"       (no genus token)
+            "phospholipid complex"  (no genus token)
+            "ferric saccharate"     (no genus token)
+        """
+        if not token:
+            return False
+
+        t = token.strip().lower()
+
+        # Allow preparation qualifiers alone (dried, purified, aqueous, concentrate)
+        # because they appear as trailing comma-split pieces next to a binomial.
+        prep_words = {
+            "dried", "purified", "aqueous", "concentrate", "extract",
+            "powder", "juice", "culture", "fermentation", "liquid",
+            "fresh", "whole", "standardized",
+        }
+        words = t.replace(".", " ").split()
+        if not words:
+            return False
+
+        # Pure preparation-qualifier token (e.g. "dried", "purified")
+        if all(w in prep_words for w in words):
+            return True
+
+        # Yeast-culture abbreviation pattern: "s cerevisiae culture",
+        # "s. cerevisiae culture" → after "." removal words = ["s","cerevisiae","culture"]
+        if len(words) >= 2 and len(words[0]) == 1 and words[1] in {
+            "cerevisiae", "boulardii", "scrofa", "taurus",
+        }:
+            return True
+
+        # Full genus in _LATIN_GENUS_NAMES
+        if words[0] in self._LATIN_GENUS_NAMES:
+            return True
+
+        # Genus single-letter abbrev followed by a KNOWN species-name.
+        # Narrow allowlist prevents false positives on vitamin/form shorthand
+        # like "K Complex" or "D Supplement" that share the single-letter
+        # prefix pattern but are not Linnaean names.
+        known_species = {
+            "subtilis", "coagulans", "clausii",
+            "plantarum", "bulgaricus", "acidophilus", "casei", "rhamnosus",
+            "reuteri", "fermentum", "paracasei", "brevis", "helveticus",
+            "gasseri", "johnsonii", "salivarius",
+            "lactis", "bifidum", "longum", "breve", "infantis", "animalis",
+            "thermophilus",
+        }
+        if (
+            len(words) >= 2
+            and len(words[0]) == 1
+            and words[1] in known_species
+        ):
+            return True
+
+        return False
 
     def _is_standardization_marker_for_fallback_audit(self, normalized_text: str) -> bool:
         """Return True for standardized active-marker text that is not itself an IQM form."""
@@ -3687,7 +3920,8 @@ class SupplementEnricherV3:
                 if ing_name and ing_name in parent_blend_names:
                     ing["is_parent_total"] = True
 
-    def _match_multi_form(self, form_info: Dict, quality_map: Dict) -> Optional[Dict]:
+    def _match_multi_form(self, form_info: Dict, quality_map: Dict,
+                          cleaner_canonical_id: Optional[str] = None) -> Optional[Dict]:
         """
         Match multiple extracted forms and aggregate scores using weighted average.
 
@@ -3697,6 +3931,12 @@ class SupplementEnricherV3:
         - unmapped_forms: list of raw strings that failed to match
         - aggregation_method: 'weighted' | 'equal' | 'single'
         - final_form_bio_score: numeric (0-15) - the aggregated score
+
+        Phase 3: when ``cleaner_canonical_id`` names an IQM parent, each
+        per-form recursive lookup is constrained to that parent so a form
+        alias (e.g., "phospholipid complex" → lecithin) cannot win over
+        the cleaner's parent decision (milk_thistle via the silybin /
+        siliphos / silipide reverse-index hit).
 
         Returns None if no forms match successfully.
         """
@@ -3713,6 +3953,15 @@ class SupplementEnricherV3:
             preferred_parent = self._infer_preferred_parent_from_context_cached(
                 base_name, quality_map
             )
+        # If the cleaner has already resolved an IQM parent, it beats the
+        # base-name inference (Phase 3 authority).
+        if (
+            cleaner_canonical_id
+            and isinstance(cleaner_canonical_id, str)
+            and cleaner_canonical_id in quality_map
+            and not cleaner_canonical_id.startswith("_")
+        ):
+            preferred_parent = cleaner_canonical_id
 
         matched_forms = []
         unmapped_forms = []
@@ -3723,6 +3972,45 @@ class SupplementEnricherV3:
             percent_share = form_data.get('percent_share', 1.0 / max(1, len(extracted_forms)))
             raw_form_text = form_data.get('raw_form_text', '')
 
+            # Phase 2: Short-circuit on DSLD structural signals.
+            # When the cleaner preserved `forms[].category` from raw DSLD and
+            # it indicates a SOURCE DESCRIPTOR (animal tissue, plant part) or
+            # the prefix marks the form as a source/culture reference, skip
+            # the form-alias match entirely. These forms name the ORIGIN of
+            # the nutrient, not its chemical form — forcing them through the
+            # matcher produces false fallbacks and audit noise.
+            _dsld_category = (form_data.get('dsld_category') or '').lower().strip()
+            _dsld_prefix = (form_data.get('dsld_prefix') or '').lower().strip()
+            _SOURCE_CATEGORIES = {
+                'animal part or source',
+                'plant part',
+                'source material',
+            }
+            _SOURCE_PREFIXES = {
+                'from',
+                'culture of',
+                'and culture of',
+                'naturally occurring from',
+                'derived from',
+            }
+            # Exception: "from"-prefix forms that are actually DELIVERY
+            # TECHNOLOGIES (MicroActive cyclodextrin, phytosome, liposome,
+            # chelate, etc.) are real form identifiers even though DSLD
+            # tagged them with prefix="from". Don't short-circuit those.
+            _is_delivery_tech_from_prefix = (
+                _dsld_prefix == 'from'
+                and self._should_keep_from_prefixed_form_as_actual(raw_form_text)
+            )
+            if (
+                (_dsld_category in _SOURCE_CATEGORIES or _dsld_prefix in _SOURCE_PREFIXES)
+                and not _is_delivery_tech_from_prefix
+            ):
+                # Treat as a generic/source descriptor — do not enter the
+                # unmapped_forms pool; this prevents the form_fallback_audit
+                # from flagging it as actionable.
+                generic_form_tokens.append(raw_form_text)
+                continue
+
             # Try each match candidate until one succeeds
             form_match = None
             matched_candidate = None
@@ -3730,7 +4018,8 @@ class SupplementEnricherV3:
             for candidate in match_candidates:
                 form_match = self._match_quality_map(
                     candidate, candidate, quality_map, _form_extraction_attempt=True,
-                    preferred_parent=preferred_parent
+                    preferred_parent=preferred_parent,
+                    cleaner_canonical_id=cleaner_canonical_id,
                 )
                 if form_match:
                     form_id = form_match.get('form_id', '')
@@ -4091,6 +4380,13 @@ class SupplementEnricherV3:
                 'match_candidates': match_candidates,
                 'display_form': form_name,
                 'percent_share': percent_share,
+                # Phase 2: preserve DSLD structural signals from the cleaner
+                # so `_match_multi_form` can short-circuit source descriptors
+                # without relying on text heuristics.
+                'dsld_category': form.get('category'),
+                'dsld_prefix': form.get('prefix'),
+                'dsld_ingredient_group': form.get('ingredientGroup'),
+                'dsld_unii_code': form.get('uniiCode'),
             })
 
         if not extracted_forms:
@@ -4149,7 +4445,8 @@ class SupplementEnricherV3:
                            _form_extraction_attempt: bool = False,
                            cleaned_forms: Optional[List[Dict]] = None,
                            preferred_parent: Optional[str] = None,
-                           branded_token: Optional[str] = None) -> Optional[Dict]:
+                           branded_token: Optional[str] = None,
+                           cleaner_canonical_id: Optional[str] = None) -> Optional[Dict]:
         """
         Match ingredient against quality map using explicit precedence rules.
 
@@ -4185,6 +4482,21 @@ class SupplementEnricherV3:
             branded_token: Optional branded token extracted at cleaning stage
                            (e.g., "KSM-66", "Leucoselect") used as final
                            fallback when form extraction fails
+            cleaner_canonical_id: Authoritative IQM parent key resolved by the
+                           cleaner (via the 17k-entry reverse index). When
+                           supplied AND it's a top-level key in quality_map,
+                           it HARD-CONSTRAINS the candidate pool to that parent
+                           — text-inferred cross-parent matches can no longer
+                           win. If the constrained pool is empty, we fall
+                           back to a parent-level (unspecified-form) match
+                           under the cleaner's canonical rather than silently
+                           choosing the wrong parent. This is the Phase 3
+                           medical-accuracy fix: Silybin Phytosome products
+                           score as milk_thistle (not lecithin via the
+                           "phospholipid complex" alias), and DCP-sourced
+                           Phosphorus rows score as phosphorus (not calcium
+                           via the DCP alias). Pass None for rows with no
+                           cleaner-resolved IQM canonical.
 
         Logs structured warnings when multiple candidates exist in the winning tier.
         """
@@ -4226,6 +4538,21 @@ class SupplementEnricherV3:
         if ing_norm in generic_form_only_descriptors and std_norm in generic_form_only_descriptors:
             return None
 
+        # Phase 3: resolve the cleaner's IQM canonical_id up-front so every
+        # downstream branch (multi-form fast-path, combined-forms lookup,
+        # parent fallback, final tier sort) can reference it without having
+        # to pass the raw arg through every code path. The variable is None
+        # when the cleaner did not resolve an IQM parent (e.g., botanical
+        # canonicals, unresolved rows, or internal recursive calls).
+        cleaner_iqm_canonical: Optional[str] = None
+        if (
+            cleaner_canonical_id
+            and isinstance(cleaner_canonical_id, str)
+            and cleaner_canonical_id in quality_map
+            and not cleaner_canonical_id.startswith("_")
+        ):
+            cleaner_iqm_canonical = cleaner_canonical_id
+
         # MULTI-FORM MATCHING: Try structured cleaned_forms first, then fall back
         # to label text extraction. This fixes the "form loss" issue where cleaning
         # already parsed "Vitamin A (as Retinyl Palmitate)" into forms[] but the
@@ -4235,7 +4562,10 @@ class SupplementEnricherV3:
             if cleaned_forms and isinstance(cleaned_forms, list) and len(cleaned_forms) > 0:
                 form_info = self._build_form_info_from_cleaned(ing_name, cleaned_forms)
                 if form_info and form_info.get('form_extraction_success'):
-                    multi_form_result = self._match_multi_form(form_info, quality_map)
+                    multi_form_result = self._match_multi_form(
+                        form_info, quality_map,
+                        cleaner_canonical_id=cleaner_iqm_canonical,
+                    )
                     if multi_form_result:
                         if not multi_form_result.get('all_forms_generic'):
                             # Branded tokens (KSM-66, Sensoril, etc.) are more specific than
@@ -4265,7 +4595,8 @@ class SupplementEnricherV3:
                         if combined_forms:
                             combined_match = self._match_quality_map(
                                 combined_forms, std_name, quality_map, _form_extraction_attempt=True,
-                                preferred_parent=preferred_parent if 'preferred_parent' in dir() else None
+                                preferred_parent=preferred_parent if 'preferred_parent' in dir() else None,
+                                cleaner_canonical_id=cleaner_iqm_canonical,
                             )
                             if combined_match and combined_match.get('form_id') and 'unspecified' not in combined_match.get('form_id', '').lower():
                                 combined_match['combined_form_match'] = True
@@ -4276,7 +4607,8 @@ class SupplementEnricherV3:
                         # conservatively while preserving form-unmapped telemetry.
                         fallback_base = form_info.get('base_name') or ing_name
                         fallback_match = self._match_quality_map(
-                            fallback_base, std_name, quality_map, _form_extraction_attempt=True
+                            fallback_base, std_name, quality_map, _form_extraction_attempt=True,
+                            cleaner_canonical_id=cleaner_iqm_canonical,
                         )
                         if fallback_match:
                             # Try branded token before accepting a conservative (unspecified) match.
@@ -4313,7 +4645,10 @@ class SupplementEnricherV3:
             # PRIORITY 2: Fall back to label text extraction (for labels with "(as ...)")
             form_info = self._extract_form_from_label(ing_name)
             if form_info['form_extraction_success']:
-                multi_form_result = self._match_multi_form(form_info, quality_map)
+                multi_form_result = self._match_multi_form(
+                    form_info, quality_map,
+                    cleaner_canonical_id=cleaner_iqm_canonical,
+                )
                 if multi_form_result:
                     if not multi_form_result.get('all_forms_generic'):
                         # Branded tokens are more specific than label-extracted form text.
@@ -4333,7 +4668,8 @@ class SupplementEnricherV3:
                 ):
                     fallback_base = form_info.get('base_name') or ing_name
                     fallback_match = self._match_quality_map(
-                        fallback_base, std_name, quality_map, _form_extraction_attempt=True
+                        fallback_base, std_name, quality_map, _form_extraction_attempt=True,
+                        cleaner_canonical_id=cleaner_iqm_canonical,
                     )
                     if fallback_match:
                         # Try branded token before accepting a conservative (unspecified) match.
@@ -4431,6 +4767,16 @@ class SupplementEnricherV3:
                 return "fish_oil"
 
             return None
+
+        # Phase 3: the cleaner's authoritative IQM parent (resolved up-front
+        # as ``cleaner_iqm_canonical``) beats text-inferred parent context —
+        # it saw the DSLD ingredientGroup, full raw text, and
+        # label_nutrient_context. Below, after candidates are built, it
+        # also acts as a hard filter on the candidate pool so aliases
+        # that cross parents (silybin phytosome → lecithin, DCP → calcium)
+        # cannot win.
+        if cleaner_iqm_canonical and not preferred_parent:
+            preferred_parent = cleaner_iqm_canonical
 
         # If caller didn't pass a parent context, infer from standardized/base names.
         # This prevents deterministic-but-wrong alphabetical picks when one form exists
@@ -4991,7 +5337,46 @@ class SupplementEnricherV3:
                         "match_data": match_data,
                     })
 
+        # Phase 3 hard constraint — the cleaner's reverse-index decision wins.
+        # Filter to candidates under the cleaner's IQM canonical_id so
+        # text-inferred cross-parent matches (e.g., "phospholipid complex"
+        # under lecithin when the cleaner resolved milk_thistle via the
+        # silybin/siliphos/silipide aliases) are dropped before sort.
+        cleaner_canonical_enforced = False
+        cleaner_canonical_fallback = False
+        if cleaner_iqm_canonical and candidates:
+            constrained = [c for c in candidates if c["parent_key"] == cleaner_iqm_canonical]
+            if constrained:
+                # Drop off-canonical candidates so they cannot win the tie-break.
+                if len(constrained) != len(candidates):
+                    cleaner_canonical_enforced = True
+                candidates = constrained
+
         if not candidates:
+            # Cleaner emitted an IQM canonical but text match produced zero
+            # candidates (or the hard-filter eliminated all) — fall back to a
+            # parent-level match under the cleaner's canonical rather than
+            # letting branded-token-fallback or FORM_UNMAPPED win. Prevents
+            # the regression where a cleaner-resolved silybin row would
+            # degrade to branded fallback if no silybin form matched.
+            if cleaner_iqm_canonical:
+                parent_data = quality_map.get(cleaner_iqm_canonical) or {}
+                parent_match, fallback_selected, fallback_form = build_parent_match_data(
+                    cleaner_iqm_canonical, parent_data
+                )
+                parent_match["canonical_id"] = cleaner_iqm_canonical
+                parent_match["form_id"] = fallback_form
+                parent_match["match_tier"] = "cleaner_canonical_parent"
+                parent_match["matched_alias"] = cleaner_iqm_canonical
+                parent_match["matched_target"] = "cleaner_canonical_id"
+                parent_match["match_ambiguity_candidates"] = []
+                parent_match["cleaner_canonical_enforced"] = True
+                parent_match["cleaner_canonical_fallback"] = True
+                parent_match["cleaner_canonical_id"] = cleaner_iqm_canonical
+                parent_match["fallback_form_selected"] = fallback_selected
+                parent_match["fallback_form_name"] = fallback_form
+                return parent_match
+
             branded_match = _try_branded_token_fallback()
             if branded_match:
                 return branded_match
@@ -5117,6 +5502,11 @@ class SupplementEnricherV3:
         best["match_data"]["match_ambiguity_candidates"] = ambiguity_candidates
         best["match_data"]["fallback_form_selected"] = best["fallback_form_selected"]
         best["match_data"]["fallback_form_name"] = best["fallback_form_name"]
+        if cleaner_iqm_canonical:
+            best["match_data"]["cleaner_canonical_id"] = cleaner_iqm_canonical
+            best["match_data"]["cleaner_canonical_enforced"] = cleaner_canonical_enforced
+            if cleaner_canonical_fallback:
+                best["match_data"]["cleaner_canonical_fallback"] = True
 
         if match_tier == "pattern":
             self.match_counters["pattern_match_wins_count"] += 1

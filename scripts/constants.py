@@ -97,6 +97,14 @@ EXCLUDED_NUTRITION_FACTS = {
     # Other nutritional labels
     "serving size", "servings per container", "amount per serving",
 
+    # Probiotic culture totals (label rollups, not discrete strains)
+    "total bifido cultures", "total lacto cultures", "total probiotic cultures",
+    "typical fatty acid composition", "typical fatty acid", "typical amino acid amounts", "typical amino acid",
+    "total cfu", "total probiotic cfu", "probiotic cfu total",
+
+    # Fatty acid category totals (label rollups)
+    "total docosapentaenoic acid", "total dpa",
+
     # Omega fatty acid totals (label rollups, not discrete ingredients)
     "total omega-3 fatty acids", "total omega-6 fatty acids", "total omega-9 fatty acids",
     "total omega-5 fatty acids", "total omega-7 fatty acids", "total omega-11 fatty acids",
@@ -146,6 +154,9 @@ EXCLUDED_NUTRITION_FACTS = {
     "total omega-3 ethyl esters",
     # Generic botanical compound descriptors (label markers, not distinct ingredients)
     "pungent compounds",
+    "flavonol glycosides", "terpene lactones",
+    # Generic protein/animal descriptors (summary rows, not discrete supplements)
+    "animal proteins", "animal protein", "plant proteins",
 
     # Mineral component descriptors (listed as separate active but just a salt component)
     "sulfate", "sulfate ion",

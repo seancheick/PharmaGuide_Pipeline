@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-03",
-    "total_entries": 433,
+    "last_updated": "2026-04-20T16:18:46Z",
+    "total_entries": 453,
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
@@ -1531,7 +1531,9 @@
       "aliases": [
         "brassica oleracea var. gemmifera",
         "brussels sprout powder",
-        "brussels sprouts"
+        "brussels sprouts",
+        "organic Brussels Sprout juice",
+        "brussels sprout juice"
       ],
       "category": "vegetable",
       "notes": "Brassica oleracea var. gemmifera (Brassicaceae) axillary bud. Cruciferous vegetable rich in glucosinolates (sinigrin, glucobrassicin) and vitamin K. Used in whole-food supplement blends.",
@@ -6078,7 +6080,10 @@
         "sceletium tortuosum",
         "sceletium tortuosum extract",
         "kanna",
-        "zembrin"
+        "zembrin",
+        "zembrin (sceletium tortuosum) aerial parts extract",
+        "zembrin aerial parts extract",
+        "sceletium tortuosum aerial parts extract"
       ],
       "category": "herb",
       "notes": "Sceletium tortuosum (Aizoaceae) aerial parts. South African succulent (Kanna) containing mesembrine alkaloids. SRI (serotonin reuptake inhibitor) and PDE4 inhibitor activity. Traditional mood-elevating herb.",
@@ -11410,6 +11415,526 @@
         "review_status": "validated"
       },
       "external_ids": {}
+    },
+    {
+      "id": "quinoa",
+      "standard_name": "Quinoa",
+      "latin_name": "Chenopodium quinoa",
+      "aliases": [
+        "Quinoa",
+        "quinoa",
+        "organic Quinoa",
+        "organic quinoa",
+        "Chenopodium quinoa",
+        "chenopodium quinoa",
+        "quinoa grain",
+        "quinoa seed"
+      ],
+      "category": "grain",
+      "notes": "Chenopodium quinoa — pseudocereal grain. Complete protein with all 9 essential amino acids. Rich in manganese, phosphorus, magnesium, folate. Gluten-free. Commonly featured in whole-food supplement blends.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "9KMA964L92",
+        "cui": "C0453354"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Chenopodium quinoa whole",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "adzuki_bean",
+      "standard_name": "Adzuki Bean",
+      "latin_name": "Vigna angularis",
+      "aliases": [
+        "Adzuki Bean",
+        "adzuki bean",
+        "organic Adzuki Bean",
+        "organic adzuki bean",
+        "Vigna angularis",
+        "vigna angularis",
+        "azuki bean",
+        "red bean"
+      ],
+      "category": "legume",
+      "notes": "Vigna angularis — East Asian legume, rich in protein, fiber, and flavonoids.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "IO64JGK313",
+        "cui": "C0996863"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Vigna angularis whole",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "amaranth_grain",
+      "standard_name": "Amaranth Grain",
+      "latin_name": "Amaranthus",
+      "aliases": [
+        "Amaranth",
+        "amaranth",
+        "organic Amaranth",
+        "organic amaranth",
+        "Amaranthus",
+        "amaranthus",
+        "amaranth grain",
+        "amaranth seed"
+      ],
+      "category": "grain",
+      "notes": "Amaranthus spp. — pseudocereal grain, gluten-free complete protein. Distinct from FD&C Red #2 artificial dye (also named \"amaranth\").",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "07L86FJ69J",
+        "cui": "C0330370"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Amaranthus hybridus leaf",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "kamut",
+      "standard_name": "Kamut",
+      "latin_name": "Triticum turgidum ssp. turanicum",
+      "aliases": [
+        "Kamut",
+        "kamut",
+        "organic Kamut",
+        "organic kamut",
+        "Kamut Grass",
+        "kamut grass",
+        "organic Kamut Grass",
+        "organic kamut grass",
+        "khorasan wheat"
+      ],
+      "category": "grain",
+      "notes": "Khorasan wheat — ancient wheat variety. Higher protein and selenium than common wheat. Contains gluten.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "cui": "C1440855"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Kamut flour",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "curry_leaf",
+      "standard_name": "Curry Leaf",
+      "latin_name": "Murraya koenigii",
+      "aliases": [
+        "Curry",
+        "curry",
+        "organic Curry",
+        "organic curry",
+        "curry leaf",
+        "Murraya koenigii",
+        "murraya koenigii",
+        "Murraya koenigii leaf extract",
+        "murraya koenigii extract",
+        "curry leaf extract"
+      ],
+      "category": "herb",
+      "notes": "Murraya koenigii — Indian aromatic herb. Traditional uses for digestion; antioxidant compounds.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "cui": "C1440524"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Curry antigen",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "hemp_protein",
+      "standard_name": "Hemp Protein",
+      "latin_name": "Cannabis sativa",
+      "aliases": [
+        "Hemp Protein",
+        "hemp protein",
+        "organic Hemp Protein",
+        "organic hemp protein",
+        "hemp seed protein",
+        "Cannabis sativa protein"
+      ],
+      "category": "protein",
+      "notes": "Hemp seed protein — complete plant protein, ~50% protein by weight, rich in arginine.",
+      "last_updated": "2026-04-20",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Cannabis sativa seed protein",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "betel_leaf",
+      "standard_name": "Betel Leaf",
+      "latin_name": "Piper betle",
+      "aliases": [
+        "Betel (Piper betle) extract",
+        "betel (piper betle) extract",
+        "piper betle extract",
+        "betel leaf extract",
+        "Piper betle leaf extract",
+        "betel"
+      ],
+      "category": "leaf",
+      "notes": "Piper betle leaf — traditional Ayurvedic botanical. Modern formulas use leaf extract (not betel quid with areca).",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "NT24A1359E",
+        "cui": "C1000595"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Piper betle leaf",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "catjang_cowpea",
+      "standard_name": "Catjang Cowpea",
+      "latin_name": "Vigna unguiculata",
+      "aliases": [
+        "Catjang Cowpea (Dolichos biflorus) extract",
+        "catjang cowpea extract",
+        "Dolichos biflorus extract",
+        "Vigna unguiculata extract",
+        "horse gram extract",
+        "kulthi extract"
+      ],
+      "category": "legume",
+      "notes": "Vigna unguiculata / Dolichos biflorus — Ayurvedic legume extract used for kidney/urinary support.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "A15VFT1NFM",
+        "cui": "C0058663"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Vigna unguiculata whole",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "king_trumpet",
+      "standard_name": "King Trumpet Mushroom",
+      "latin_name": "Pleurotus eryngii",
+      "aliases": [
+        "King Trumpet",
+        "king trumpet",
+        "king trumpet mushroom",
+        "king oyster mushroom",
+        "Pleurotus eryngii",
+        "eryngii mushroom"
+      ],
+      "category": "fungus",
+      "notes": "Pleurotus eryngii — gourmet edible mushroom with beta-glucan content.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "2WGH02ZJ1G",
+        "cui": "C0997569"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Pleurotus eryngii whole",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "black_raspberry",
+      "standard_name": "Black Raspberry",
+      "latin_name": "Rubus occidentalis",
+      "aliases": [
+        "Black Raspberry",
+        "black raspberry",
+        "organic Black Raspberry",
+        "Rubus occidentalis",
+        "black raspberry extract",
+        "black raspberry powder",
+        "wild black raspberry"
+      ],
+      "category": "fruit",
+      "notes": "Rubus occidentalis — distinct from red raspberry. Rich in anthocyanins and ellagitannins.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "QEN9684SNX",
+        "cui": "C1031004"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Rubus occidentalis whole",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "kombu",
+      "standard_name": "Kombu",
+      "latin_name": "Laminaria japonica",
+      "aliases": [
+        "Kombu",
+        "kombu",
+        "Kombu Seaweed",
+        "kombu seaweed",
+        "Laminaria japonica",
+        "Saccharina japonica",
+        "dashi kombu",
+        "kelp kombu",
+        "dried kombu"
+      ],
+      "category": "seaweed",
+      "notes": "Laminaria japonica / Saccharina japonica — edible brown seaweed. Richest natural iodine source.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "WE98HW412B",
+        "cui": "C0696815"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Laminaria japonica",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "navy_bean",
+      "standard_name": "Navy Bean",
+      "latin_name": "Phaseolus vulgaris",
+      "aliases": [
+        "Navy Bean",
+        "navy bean",
+        "navy bean powder",
+        "Navy Bean powder",
+        "Phaseolus vulgaris",
+        "phaseolus vulgaris",
+        "haricot bean",
+        "white bean"
+      ],
+      "category": "legume",
+      "notes": "Navy bean (Phaseolus vulgaris) — small white bean, common in whole-food supplement matrices. Rich in protein, fiber, folate.",
+      "last_updated": "2026-04-20",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Phaseolus vulgaris seed",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "lavandin",
+      "standard_name": "Lavandin",
+      "latin_name": "Lavandula x intermedia",
+      "aliases": [
+        "Lavandin",
+        "lavandin",
+        "Lavandula x intermedia",
+        "lavandula x intermedia",
+        "Lavandula intermedia",
+        "lavandin oil",
+        "lavandin essential oil",
+        "Essence of organic Lavandin (flower & stem) oil",
+        "essence of organic lavandin oil"
+      ],
+      "category": "herb",
+      "notes": "Lavandula x intermedia (Lavandin) — hybrid of true lavender and spike lavender. Essential oil used for fragrance and aromatherapy.",
+      "last_updated": "2026-04-20",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Lavandula intermedia",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "sacha_inchi",
+      "standard_name": "Sacha Inchi",
+      "latin_name": "Plukenetia volubilis",
+      "aliases": [
+        "Sacha Inchi",
+        "sacha inchi",
+        "organic Sacha Inchi",
+        "organic sacha inchi",
+        "Plukenetia volubilis",
+        "plukenetia volubilis",
+        "Inca peanut",
+        "sacha inchi seed"
+      ],
+      "category": "seed",
+      "notes": "Plukenetia volubilis — Amazonian vine producing edible seeds. Richest plant source of omega-3 ALA (~50% of seed oil), plus protein and tocopherols.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "cui": "C1640937"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Plukenetia volubilis seed",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "lantana_camara",
+      "standard_name": "Lantana Camara",
+      "latin_name": "Lantana camara",
+      "aliases": [
+        "Lantana camara",
+        "lantana camara",
+        "organic Lantana camara",
+        "Lantana",
+        "lantana"
+      ],
+      "category": "herb",
+      "notes": "Lantana camara — traditional South Asian medicinal plant. Caution: known phototoxicity; supplement-grade use limited.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "cui": "C0331282"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Lantana camara",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "wrightia_tinctoria",
+      "standard_name": "Wrightia Tinctoria",
+      "latin_name": "Wrightia tinctoria",
+      "aliases": [
+        "Wrightia tinctoria",
+        "wrightia tinctoria",
+        "organic Wrightia tinctoria",
+        "sweet indrajao",
+        "pala indigo plant"
+      ],
+      "category": "herb",
+      "notes": "Wrightia tinctoria — Ayurvedic botanical from India. Traditional uses for skin conditions.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "cui": "C2785511"
+      },
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Wrightia tinctoria",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "collard_greens",
+      "standard_name": "Collard Greens",
+      "latin_name": "Brassica oleracea var. acephala",
+      "aliases": [
+        "Collard Greens",
+        "collard greens",
+        "organic Collard Greens",
+        "organic collard greens",
+        "collards",
+        "Brassica oleracea acephala"
+      ],
+      "category": "vegetable",
+      "notes": "Brassica oleracea var. acephala — cruciferous leafy green. Vitamin K, A, C source; glucosinolate content.",
+      "last_updated": "2026-04-20",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Brassica oleracea acephala",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "sweet_orange",
+      "standard_name": "Sweet Orange",
+      "latin_name": "Citrus sinensis",
+      "aliases": [
+        "Sweet Orange",
+        "sweet orange",
+        "Sweet Orange extract",
+        "sweet orange extract",
+        "Citrus sinensis",
+        "citrus sinensis",
+        "orange peel extract"
+      ],
+      "category": "fruit",
+      "notes": "Citrus sinensis (Sweet Orange) — flavor/aromatic botanical. Peel contains limonene; fruit vitamin C and bioflavonoids.",
+      "last_updated": "2026-04-20",
+      "external_ids": {},
+      "rxcui": null,
+      "gsrs": {
+        "substance_name": "Citrus sinensis",
+        "substance_class": "structurally diverse"
+      }
+    },
+    {
+      "id": "cynanchum_wilfordii",
+      "standard_name": "Cynanchum wilfordii",
+      "latin_name": "Cynanchum wilfordii",
+      "aliases": [
+        "cynanchum wilfordii",
+        "cynanchum wilfordii (root) extract",
+        "cynanchum wilfordii root extract",
+        "cynanchum wilfordii root",
+        "baek-su-o",
+        "baekseoo",
+        "baek soo o",
+        "wilford's swallowwort"
+      ],
+      "category": "herb",
+      "notes": "Cynanchum wilfordii (Apocynaceae) root. Korean traditional herb used in women's health / menopause formulations (component of Estromon). Contains cynandione A, gagaminine, acetophenones. IMPORTANT: adulteration risk — historically confused/substituted with Polygonum multiflorum (He Shou Wu, hepatotoxic) on US market. Verify binomial on label.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "0YW1513318"
+      },
+      "gsrs": {
+        "substance_name": "CYNANCHUM WILFORDII WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "cui": "C1463421"
+    },
+    {
+      "id": "phlomoides_umbrosa",
+      "standard_name": "Phlomoides umbrosa",
+      "latin_name": "Phlomoides umbrosa",
+      "aliases": [
+        "phlomoides umbrosa",
+        "phlomis umbrosa",
+        "phlomis umbrosa (root) extract",
+        "phlomis umbrosa root extract",
+        "phlomoides umbrosa root",
+        "phlomis umbrosa root",
+        "han-sok-dan",
+        "hansokdan",
+        "korean phlomis root"
+      ],
+      "category": "herb",
+      "notes": "Phlomoides umbrosa (Lamiaceae; formerly Phlomis umbrosa) root. Korean traditional herb, component of Estromon women's-health formulation. Contains iridoid glycosides (shanzhiside methyl ester, sesamoside, phlomiol). Note: Korean vernacular 'Sok-Dan' overlaps with TCM Xu Duan (Dipsacus) — verify binomial, not common name.",
+      "last_updated": "2026-04-20",
+      "external_ids": {
+        "unii": "8J1RE3K5G5"
+      },
+      "gsrs": {
+        "substance_name": "PHLOMOIDES UMBROSA WHOLE",
+        "substance_class": "structurallyDiverse",
+        "cfr_sections": [],
+        "dsld_count": null,
+        "dsld_info_raw": null,
+        "active_moiety": null,
+        "salt_parents": [],
+        "metabolic_relationships": [],
+        "metabolites": []
+      },
+      "cui": "C4576738"
     }
   ]
 }
