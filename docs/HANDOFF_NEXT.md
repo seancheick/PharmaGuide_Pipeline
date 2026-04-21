@@ -3,6 +3,7 @@
 > **Purpose:** thin tactical doc. "Where we stand + what's the resumed trajectory."
 > The authoritative plan is [`docs/AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md).
 > Session journals (archived, don't edit):
+>
 > - [HANDOFF_2026-04-18.md](HANDOFF_2026-04-18.md) — Dr Pham clinical review + roadmap authoring
 > - [HANDOFF_2026-04-20_PIPELINE_REFACTOR.md](HANDOFF_2026-04-20_PIPELINE_REFACTOR.md) — Sprint D accuracy sprint (SHIPPED)
 
@@ -20,34 +21,34 @@ D1→D5.4, shipped 2026-04-21:
 - Pipeline main HEAD: `8bf65d5`
 - **4,479 tests** passing, 374 net new Sprint D regression tests
 
-**Sprint D is now CLOSED.** Next session **resumes the AUTOMATION_ROADMAP trajectory** — the roadmap explicitly says *"Phase 1 — pipeline in CI (next agent starts here)"*.
+**Sprint D is now CLOSED.** Next session **resumes the AUTOMATION_ROADMAP trajectory** — the roadmap explicitly says _"Phase 1 — pipeline in CI (next agent starts here)"_.
 
 ---
 
 ## Current baseline
 
-| Layer | State | Evidence |
-|---|---|---|
-| Pipeline | 20 brands → 13,236 enriched → 13,236 scored → 8,288 unique | Git `8bf65d5` on main |
-| Supabase | `is_current=true` on v2026.04.21.164306 | MCP query confirmed |
-| Flutter | `assets/db/` bundled, checksum matches manifest | Git `6e6a692` on main |
-| Tests | 4,479 pipeline + 56 Flutter test files | `pytest scripts/tests/` |
-| Disk | `~/Documents/DataSetDsld/builds/release_output/` retained as rollback | 1 GB |
+| Layer    | State                                                                 | Evidence                |
+| -------- | --------------------------------------------------------------------- | ----------------------- |
+| Pipeline | 20 brands → 13,236 enriched → 13,236 scored → 8,288 unique            | Git `8bf65d5` on main   |
+| Supabase | `is_current=true` on v2026.04.21.164306                               | MCP query confirmed     |
+| Flutter  | `assets/db/` bundled, checksum matches manifest                       | Git `6e6a692` on main   |
+| Tests    | 4,479 pipeline + 56 Flutter test files                                | `pytest scripts/tests/` |
+| Disk     | `~/Documents/DataSetDsld/builds/release_output/` retained as rollback | 1 GB                    |
 
 ---
 
 ## Medical-accuracy invariants (verified live; do not regress)
 
-| Invariant | Coverage |
-|---|---|
-| `rda_ul_data.collection_enabled=true` | 13,236 / 13,236 (100%) |
-| B7 OVER-UL safety_flags firing | 1,929 products (D4.3 teratogenicity LIVE) |
-| Dr Pham `safety_warning` on banned entries | 2,413 / 2,413 (100%) |
-| Dr Pham `ban_context` on banned entries | 2,413 / 2,413 (100%) |
-| No silent mapping (`mapped=True ⇒ canonical_id != None`) | D2.1 contract enforced |
-| No "from X" source-descriptor rows unmapped | D2.10 routing |
-| Proprietary-blend rows → recognized_non_scorable | D2.7.1 |
-| Every frozen snapshot matches scored output | 30 / 30 |
+| Invariant                                                | Coverage                                  |
+| -------------------------------------------------------- | ----------------------------------------- |
+| `rda_ul_data.collection_enabled=true`                    | 13,236 / 13,236 (100%)                    |
+| B7 OVER-UL safety_flags firing                           | 1,929 products (D4.3 teratogenicity LIVE) |
+| Dr Pham `safety_warning` on banned entries               | 2,413 / 2,413 (100%)                      |
+| Dr Pham `ban_context` on banned entries                  | 2,413 / 2,413 (100%)                      |
+| No silent mapping (`mapped=True ⇒ canonical_id != None`) | D2.1 contract enforced                    |
+| No "from X" source-descriptor rows unmapped              | D2.10 routing                             |
+| Proprietary-blend rows → recognized_non_scorable         | D2.7.1                                    |
+| Every frozen snapshot matches scored output              | 30 / 30                                   |
 
 ---
 
@@ -60,11 +61,11 @@ flutter test test/release_gate/bundled_catalog_test.dart
 
 Then open the app and spot-check 3 products:
 
-| Product | Expected signal |
-|---|---|
-| Thorne Silybin Phytosome (dsld 16037) | Score ~52/80, evidence card shows milk_thistle canonical |
-| Any multivitamin with 10k+ IU Vitamin A across forms | B7 banner: *"Vitamin A exceeds UL (X%) — summed across N forms"* |
-| Any product with Titanium Dioxide | Layperson-facing banner (not technical jargon) |
+| Product                                              | Expected signal                                                  |
+| ---------------------------------------------------- | ---------------------------------------------------------------- |
+| Thorne Silybin Phytosome (dsld 16037)                | Score ~52/80, evidence card shows milk_thistle canonical         |
+| Any multivitamin with 10k+ IU Vitamin A across forms | B7 banner: _"Vitamin A exceeds UL (X%) — summed across N forms"_ |
+| Any product with Titanium Dioxide                    | Layperson-facing banner (not technical jargon)                   |
 
 Roll back via `python3 scripts/sync_to_supabase.py --force <prev_version>` if any fail.
 
@@ -75,15 +76,15 @@ Roll back via `python3 scripts/sync_to_supabase.py --force <prev_version>` if an
 The roadmap is the authoritative source for "what to build next." Read
 [`docs/AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md) top to bottom, then pick a phase:
 
-| Phase | What | When | Effort | Roadmap § |
-|---|---|---|---|---|
-| **Phase 1** | Pipeline runs in CI (GitHub Actions + cloud storage) | **Start here** | 2–3 weeks | § "Phase 1 — Pipeline runs without your laptop" |
-| **Phase 1.5** | Safety Alert Short Path (FDA recall < 15 min → user push) | **Ship before public beta** | 2–3 weeks | § "Phase 1.5 — Safety Alert Short Path" |
-| Phase 2 | Dr. Pham web editor (PR via UI) | Nice-to-have for beta | 3–4 weeks | § "Phase 2" |
-| Phase 3 | Scheduled monthly DSLD category delta | V1 phase | 2 months | § "Phase 3" |
-| Phase 4 | Reference-data hot-refresh | V1 phase | 2–3 months | § "Phase 4" |
-| Phase 4.5 | Tiered offline architecture (Yuka-style) | Triggered at 50k products | 4–6 weeks | § "Phase 4.5" |
-| Phase 5 | Full observability / staging / audit | V1 onward | Ongoing | § "Phase 5" |
+| Phase         | What                                                      | When                        | Effort     | Roadmap §                                       |
+| ------------- | --------------------------------------------------------- | --------------------------- | ---------- | ----------------------------------------------- |
+| **Phase 1**   | Pipeline runs in CI (GitHub Actions + cloud storage)      | **Start here**              | 2–3 weeks  | § "Phase 1 — Pipeline runs without your laptop" |
+| **Phase 1.5** | Safety Alert Short Path (FDA recall < 15 min → user push) | **Ship before public beta** | 2–3 weeks  | § "Phase 1.5 — Safety Alert Short Path"         |
+| Phase 2       | Dr. Pham web editor (PR via UI)                           | Nice-to-have for beta       | 3–4 weeks  | § "Phase 2"                                     |
+| Phase 3       | Scheduled monthly DSLD category delta                     | V1 phase                    | 2 months   | § "Phase 3"                                     |
+| Phase 4       | Reference-data hot-refresh                                | V1 phase                    | 2–3 months | § "Phase 4"                                     |
+| Phase 4.5     | Tiered offline architecture (Yuka-style)                  | Triggered at 50k products   | 4–6 weeks  | § "Phase 4.5"                                   |
+| Phase 5       | Full observability / staging / audit                      | V1 onward                   | Ongoing    | § "Phase 5"                                     |
 
 ### Phase 1 prep checklist (from roadmap)
 
@@ -127,4 +128,4 @@ These emerged from Sprint D work and **belong in the roadmap** — add them when
 
 ---
 
-*Pick up [`AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md) → Phase 1. The plan already exists; do not reinvent it.*
+_Pick up [`AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md) → Phase 1. The plan already exists; do not reinvent it._
