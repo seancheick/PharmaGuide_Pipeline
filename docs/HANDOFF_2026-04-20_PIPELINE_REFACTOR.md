@@ -1,21 +1,49 @@
-# Pipeline Refactor Handoff — 2026-04-20 (Sprint D complete through D4.3)
+# Pipeline Refactor Handoff — 2026-04-20 (Sprint D COMPLETE — D1 through D5.4)
 
 ---
 
-## Period D — Sprint D1 through D4.3 COMPLETE · D5.1 pipeline running
+## Period D — Sprint D1-D5.4 ALL COMPLETE · Release-ready
 
-**State at close of D4.3**: Every medical-grade accuracy bug found in the deep audit is fixed, test-validated, committed, and pushed. Full suite **4,373 tests passing, 12 skipped, 0 failed, 0 xfail** under `PG_ENFORCE_CLEANER_CONTRACT=1`. 306 new Sprint D regression tests guard every invariant at code + data + test layer. User kicked off D5.1 full pipeline run on all 20 brands shortly after D4.3 landed.
+**State (updated 2026-04-21)**: Every medical-grade accuracy bug found in the deep audit is fixed, test-validated, committed, and pushed. Post-D5.1 pipeline run on all 20 brands surfaced 1 more edge case (GNC 31147 'from X' source-descriptor) and 1 build-manifest bug (post-UPC-dedup count) — both fixed in D2.10 + D5.1 build-fix. Full suite **4,466 tests passing, 12 skipped, 0 failed, 0 xfail** under `PG_ENFORCE_CLEANER_CONTRACT=1`. 361 new Sprint D regression tests guard every invariant at code + data + test layer. Release gate (D5.4) all-green: build + Supabase dry-run clean.
 
 ### Commit trail
 
 | Commit | Scope | Tests | Status |
 |---|---|---|---|
 | `10d54a6` | Period C + Sprint D1 — 4 critical verdict bugs | +91 | pushed |
-| `c0e1450` | Sprint D2 — silent-mapping contract + alias/DB expansion (6 sub-tasks) | +167 | pushed |
+| `c0e1450` | Sprint D2.1-D2.6 — silent-mapping contract + alias/DB expansion | +167 | pushed |
 | `7e47b3a` | Sprint D3 + D4 — form coverage + scorer dedup verified | +34 | pushed |
 | `ef8335f` | Sprint D4.3 — B7 UL canonical-level dose aggregation (pre-D5.1 gate) | +8 | pushed |
+| `4a5e569` | Handoff updated through D4.3 + post-D5 roadmap | — | pushed |
+| `83b3542` | **Sprint D2.7/D2.9 — fallback-audit closures + snapshot re-freeze** | +53 | pushed |
+| `c2a1ef0` | **Sprint D2.10 — source-descriptor child row routing (GNC 31147)** | +6 | pushed |
+| `4c28262` | **D5.1 fix — post-UPC-dedup manifest detail_blob_unique_count** | +2 | pushed |
 
-Baseline: 4,105 tests → D4.3 close: **4,373 tests (+268 net)**.
+Baseline: 4,105 tests → D5.4 close: **4,466 tests (+361 net)**.
+
+### Post-D4.3 additions (D2.7 / D2.9 / D2.10 / D5.1-build)
+
+**D2.7 coverage-gate policy + blend/alias expansion** (`83b3542`)
+- D2.7.1 — enricher routes `canonical_source_db='proprietary_blends'` rows through `recognized_non_scorable` (Velositol / MyoTor / Tesnor / Metabolaid branded matrices no longer block coverage gate)
+- D2.7.2 — BLEND_PROTEIN +6 aliases (100% Whey Protein Blend / Matrix / Complex)
+- D2.7.3 — qualifier-strip extended (trailing "Powder", leading "N%", leading adjectives "organic/whole leaf/raw"). "Hawthorn, Powder" and "88% organic whole leaf Aloe vera" now resolve.
+- D3.4 — 15 form aliases across ginger (gingerol), piperine (bioperinie OCR typo), curcumin (meriva/phytosome) + PAC architecture cleanup
+- D3.6 — Doctor's Best: serrapeptase/glycolipids/lutein 2020
+
+**D2.9 fallback-audit closures** (`83b3542`)
+- D2.9.1 — cranberry proanthocyanidin form alias restored (PAC is cranberry's standardization marker; allowlist permits pac↔cranberry cross-link)
+- D2.9.2 — cascara sagrada bark POWDER new dedicated form (bio=4) so powder labels score conservatively vs extract form (bio=6)
+- D2.9.3 — piperine OCR full-string aliases (Bioperinie Black Pepper Extract + variants)
+- D2.9.4 — Lactobacillus brevis strain codes (Lbr-35, UALbr-02)
+
+**D2.10 source-descriptor child routing** (`c2a1ef0`)
+- DSLD sometimes emits sibling activeIngredient rows whose name literally starts with "from " to annotate the SOURCE of the preceding active. GNC 31147 (Beyond Raw Re-Comp) was the 1 remaining blocked product post-D5.1.
+- Fix: in the enricher's no-quality-match branch, detect `raw_source_text.startswith('from ')` and route to `recognized_non_scorable` with `recognition_reason='source_descriptor_child_row'`. No quantity gate (GNC's row had qty=56mg parent-extract).
+- Safety-invariant: only fires in the no-match branch → zero A1/A2 scoring impact; only exempts from coverage-gate denominator.
+
+**D5.1 build manifest fix** (`4c28262`)
+- Supabase sync contract check `len(unique_blob_uploads) == manifest.detail_blob_unique_count` failed on first release-gate pass: manifest emitted 13,236 (pre-dedup) but surviving blobs were 8,287 (post-UPC-dedup).
+- Fix: recompute from surviving `detail_index.values()` so the unique-hash count reflects post-dedup state.
 
 ### D4.3 — B7 UL teratogenicity fix (pre-D5.1 gate)
 
@@ -96,11 +124,18 @@ Investigation outcome: the "30,807 unspecified form landings" flagged in the dee
 
 ---
 
-## Sprint D5 — release gate (PENDING — pipeline running)
+## Sprint D5 — release gate (COMPLETE — all 4 sub-stages green)
 
-**State at D4.3 close**: User about to run (or just running) the full pipeline on all 20 brands with D1 + D2 + D3 + D4.3 fixes live. This is the compute-heavy step.
+**State (updated 2026-04-21)**: Full pipeline ran on all 20 brands with D1-D4.3 fixes live. D5.1 surfaced 1 last edge case (GNC 31147 'from X' source-descriptor child row) — closed in D2.10. D5.2/D5.3/D5.4 all green.
 
-See the **"What's next"** section below for the D5.1-D5.4 sequence + post-D5 roadmap.
+| Sub-stage | Status | Evidence |
+|---|---|---|
+| **D5.1** Full pipeline on 20 brands | ✅ GREEN | 13,236 products enriched + scored. Final state post-D2.10: 20/20 brands pass coverage gate, **0 blocked products across all brands**. Enrichment 100% coverage. |
+| **D5.2** Deep accuracy audit v2 | ✅ GREEN | silently-mapped=**0** (expected 0), parser_artifacts=**0** (expected 0), parent_fallback_count=**0**, unmapped_scorable_active=**0**, branded_token_fallback=**0**, cleaner_canonical_enforced=**0**. Cross-DB "leaks" 212 harmful + 162 banned — **all legitimate** dual-nature entries (Nickel/Tin trace minerals with toxicity limits, CBD/Red-Yeast-Rice/7-Keto products correctly flagged by banned_recalled). Unspecified-form rate 30% — confirmed legitimate per D3.2 (labels genuinely don't specify chemical form). |
+| **D5.3** Snapshot shadow-diff | ✅ GREEN | 30/30 frozen products **UNCHANGED**, 0 UNEXPECTED, 0 MISSING across 9 manifest brands (Thorne, Garden_of_life, Nutricost, Pure_Encapsulations, CVS, Goli, Spring_Valley, Ritual, Nature_Made). 15 drifted products re-frozen against post-Sprint-D scored output with changelog entry documenting D2-D4.3+D2.9 legitimate drift. |
+| **D5.4** Release gate | ✅ GREEN | (1) DB integrity --strict: 0 findings. (2) Coverage gate 20 brands: 13,236/13,236 can-score, 0 blocked. (3) Enrichment contract validator: 0 critical / 0 errors / 11 minor warnings (color evidence metadata — classification correct). (4) `build_final_db.py --strict`: 8,287 unique products after UPC dedup (4,949 dupes removed), 0 errors, 0 contract failures, 26.17 MB SQLite. (5) `sync_to_supabase.py --dry-run`: CLEAN — 8,287 blobs ↔ 8,287 products, all invariants hold. (6) Full test suite: 4,466 passed, 12 skipped, 0 failed. |
+
+**Release status: SHIP-READY.** Build artifacts at `/tmp/pharmaguide_release_build/`.
 
 See docs/SPRINT_D_ACCURACY_100.md for the full sprint plan.
 
@@ -746,10 +781,37 @@ All-green on steps 1-6 → safe to ship.
 
 ---
 
-## Known follow-ups surfaced during Sprint D (non-blocking for D5)
+## Known follow-ups surfaced during Sprint D — all resolved
 
-None — all issues identified during the sprint were either fixed (D4.3) or verified as legitimate behavior (D3.2 unspecified-form rate, D4.1 A1/A2 dedup). Clean exit.
+| Found during | Issue | Resolution |
+|---|---|---|
+| D5.1 initial pipeline | 9 GNC products blocked (Velositol/MyoTor/Tesnor/Metabolaid proprietary-blend rows counted as unmapped) | D2.7.1 routing policy fix — `canonical_source_db='proprietary_blends'` → `recognized_non_scorable` |
+| D5.1 initial pipeline | Whey blend OCR ("100% Whey Protein Blend") unmapped | D2.7.2 — +6 BLEND_PROTEIN aliases |
+| D5.1 initial pipeline | "Hawthorn, Powder" / "88% organic whole leaf Aloe vera" unmapped (qualifier-strip gaps) | D2.7.3 — extended strip (trailing Powder, leading %, leading adjectives) |
+| D5.1 form-fallback audit | "Ginger root extract — Gingerol" falling to unspecified (bio=5 instead of 11) | D3.4 — 15 form aliases (gingerol variants, bioperinie OCR, meriva/phytosome curcumin) |
+| D5.1 Doctor's Best specific | Serrapeptase Enzyme / Glycolipids / Lutein 2020 unmapped | D3.6 — targeted DB entries + aliases (NHA_GLYCOLIPIDS new in other_ingredients) |
+| D5.1b fallback audit | "Cranberry + Proanthocyanidin" fell to unspecified (PAC aliases had been moved to dedicated `pac` canonical in D3.4) | D2.9.1 — re-add generic proanthocyanidin/s to cranberry standardized form (allowlist permits pac↔cranberry cross-link; parent-scoped form lookup makes it safe) |
+| D5.1b fallback audit | "Cascara Sagrada bark powder" mapped to extract form (bio=6, overstating absorption) | D2.9.2 — new dedicated powder form (bio=4, conservative) |
+| D5.1b fallback audit | "Bioperinie(R) Black Pepper Extract" OCR didn't canonicalize | D2.9.3 — +7 full-string OCR variants on piperine |
+| D5.1b fallback audit | L. brevis strain codes (Lbr-35, UALbr-02) unmapped | D2.9.4 — strain aliases added for traceability |
+| D5.1 final pass | GNC 31147 'from Green Tea Leaf Extract' source-descriptor row (qty=56mg) fell to unmapped — blocked product | D2.10 — `raw_source_text.startswith('from ')` routes to `recognized_non_scorable` (parent-scoped safety invariant: only fires in no-match branch) |
+| D5.4 release gate | `sync_to_supabase.py` contract check failed: manifest's `detail_blob_unique_count=13236` vs actual post-UPC-dedup blobs 8287 | D5.1 build fix — recompute unique count from surviving `detail_index.values()` |
+
+All 11 follow-ups resolved, each with a targeted regression test. Full suite 4,466 passing.
 
 ---
 
-*End of Sprint D handoff. Next agent (or future-you): run D5.2 deep audit v2 as soon as the pipeline finishes, then D5.3 snapshot shadow-diff, then D5.4 release gate.*
+## Post-D5 roadmap status (Sprint E+)
+
+| Item | Status |
+|---|---|
+| **Flutter asset refresh** | NOT STARTED. `/Users/seancheick/PharmaGuide ai/lib/data/database/tables/products_core_table.dart` has 91 columns matching the pipeline DB exactly (verified by diff). Detail-blob consumer layer still needs wiring — no `nutrition_detail` / `unmapped_actives` / `interaction_summary` references found in Flutter lib yet. |
+| **Supabase full production sync** | READY. Dry-run CLEAN. Awaiting user decision to drop `--dry-run`. |
+| **Release documentation** | THIS DOC. Sprint D complete. |
+| **Ingest CLI** | Not yet scoped. |
+| **FDA weekly sync automation** | Already has `run_fda_sync.sh`. Not yet wired to GitHub Actions. |
+| **Evidence freshness** | `verify_all_citations_content.py` exists; quarterly schedule not yet automated. |
+
+---
+
+*End of Sprint D handoff (updated 2026-04-21). Release-ready. Next: Sprint E Flutter asset refresh + detail-blob wiring.*
