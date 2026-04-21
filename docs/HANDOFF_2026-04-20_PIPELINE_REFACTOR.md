@@ -1,8 +1,55 @@
-# Pipeline Refactor Handoff — 2026-04-20 (Sprint D COMPLETE — D1 through D5.4)
+# Pipeline Refactor Handoff — 2026-04-20 (Sprint D SHIPPED)
+
+> **FINAL STATUS** (updated 2026-04-21): Sprint D is CLOSED. All work from
+> D1 through D5.4 is committed, tested, built, synced to Supabase, and
+> bundled into the Flutter app. Production catalog is
+> **v2026.04.21.164306** (schema 1.4.0, 8,288 products). Next session can
+> skip the whole Sprint D recap below and go straight to
+> [docs/HANDOFF_NEXT.md](HANDOFF_NEXT.md) for Sprint E kickoff.
 
 ---
 
-## Period D — Sprint D1-D5.4 ALL COMPLETE · Release-ready
+## Release manifest (shipped 2026-04-21)
+
+| Artifact | Value |
+|---|---|
+| `db_version` | `2026.04.21.164306` |
+| `schema_version` | `1.4.0` (unchanged from prior) |
+| `pipeline_version` | `3.4.0` |
+| `product_count` | **8,288** unique (UPC deduped from 13,236 enriched) |
+| `checksum_sha256` | `2429f1087a4faf748b6f3587b352134458237f15bf04558ac0588613a4d58b38` |
+| `interaction_db_version` | `1.0.0` (136 interactions, 28 drug classes) |
+| Supabase status | `is_current=true` on `export_manifest`; 12,131 orphan blobs purged during sync |
+| Flutter bundled | [Pharmaguide.ai 6e6a692](https://github.com/seancheick/Pharmaguide.ai/commit/6e6a692) — `assets/db/pharmaguide_core.db` via Git LFS |
+
+### End-to-end integrity (verified 2026-04-21 post-ship)
+
+```
+  20 raw brand folders
+    → 20 cleaned/ directories
+    → 13,236 enriched products across 20 brands
+    → 13,236 scored products across 20 brands
+    → 8,288 unique after UPC dedup in final DB (4,948 duplicate UPCs collapsed)
+    → 7,897 carry score_quality_80 (others are not-scored: insufficient ingredient coverage / no scorable actives)
+    → Supabase is_current=true
+    → Flutter assets/db/ matches exact checksum
+```
+
+### Medical-accuracy verification (live in production)
+
+| Invariant | Coverage | Notes |
+|---|---:|---|
+| `rda_ul_data.collection_enabled` | **13,236/13,236 (100%)** | D5.2 fix — B7 penalty path now active on every product |
+| B7 OVER-UL safety_flags firing | **1,929 products (14.6%)** | D4.3 teratogenicity aggregation LIVE (Vitamin A case catches multi-form summed doses) |
+| Dr Pham `safety_warning` on banned entries | **2,413/2,413 (100%)** | D5.4 enricher propagation fix |
+| Dr Pham `ban_context` on banned entries | **2,413/2,413 (100%)** | D5.4 enricher propagation fix |
+| Coverage gate | **0 blocked across 20 brands** | All products can score |
+| Deep audit v2 | silently-mapped=0, parser_artifacts=0, unmapped_scorable=0 | All Sprint D gaps closed |
+| Full test suite | **4,479 passed, 12 skipped, 0 failed** | 374 net new regression tests across Sprint D |
+
+---
+
+## Period D — Sprint D1-D5.4 ALL COMPLETE · SHIPPED
 
 **State (updated 2026-04-21)**: Every medical-grade accuracy bug found in the deep audit is fixed, test-validated, committed, and pushed. Post-D5.1 pipeline run on all 20 brands surfaced 1 more edge case (GNC 31147 'from X' source-descriptor) and 1 build-manifest bug (post-UPC-dedup count) — both fixed in D2.10 + D5.1 build-fix. Full suite **4,466 tests passing, 12 skipped, 0 failed, 0 xfail** under `PG_ENFORCE_CLEANER_CONTRACT=1`. 361 new Sprint D regression tests guard every invariant at code + data + test layer. Release gate (D5.4) all-green: build + Supabase dry-run clean.
 
