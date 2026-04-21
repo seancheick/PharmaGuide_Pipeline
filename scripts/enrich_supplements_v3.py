@@ -2109,6 +2109,42 @@ class SupplementEnricherV3:
                     all_quality_data.append(quality_entry)
                     continue
 
+                # D2.10 (medical-grade): source-descriptor child rows. DSLD
+                # sometimes emits a separate row whose ingredientName starts
+                # with "from " to describe the source of the preceding actual
+                # active (e.g. GNC Beyond Raw Re-Comp: a real "EGCG" row
+                # followed by a "from Green Tea Leaf Extract" row). These are
+                # NOT distinct actives — they annotate provenance of the row
+                # above (the quantity may be nonzero and represents the
+                # parent-extract amount that contains the upstream active's
+                # stated dose). Route through recognized_non_scorable so the
+                # coverage gate doesn't punish the product for a provenance
+                # marker. Rationale: same as the proprietary-blend policy
+                # above — the row is recognized as non-scorable metadata,
+                # not unmapped. Safety: we only reach this branch when the
+                # row already failed canonical/form quality-match, so
+                # re-tagging as recognized_non_scorable has no effect on
+                # A1/A2 scoring — it only exempts this provenance marker
+                # from the coverage-gate denominator.
+                _raw_text_lower = (ingredient.get('raw_source_text') or ing_name or '').strip().lower()
+                if _raw_text_lower.startswith('from '):
+                    quality_entry['recognized_non_scorable'] = True
+                    quality_entry['recognition_source'] = 'dsld_schema'
+                    quality_entry['recognition_reason'] = 'source_descriptor_child_row'
+                    quality_entry['recognition_type'] = 'provenance_annotation'
+                    quality_entry['matched_entry_id'] = None
+                    quality_entry['matched_entry_name'] = ing_name
+                    quality_entry['mapped'] = True
+                    quality_entry['mapped_identity'] = True
+                    quality_entry['scoreable_identity'] = False
+                    quality_entry['role_classification'] = 'recognized_non_scorable'
+                    quality_entry['identity_confidence'] = 1.0
+                    quality_entry['identity_decision_reason'] = 'source_descriptor_child_row'
+                    recognized_non_scorable_count += 1
+                    ingredients_scorable.append(quality_entry)
+                    all_quality_data.append(quality_entry)
+                    continue
+
                 # TIERED MATCHING (per dev feedback):
                 # Before marking as unmapped, check if recognized in other databases
                 recognition = self._is_recognized_non_scorable(ing_name, std_name)
