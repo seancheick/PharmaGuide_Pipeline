@@ -1,179 +1,130 @@
-# Handoff — Post-Sprint D (Sprint E starting line)
+# Handoff — Next Session Starting Line
 
-> Sprint D is SHIPPED. Bundled catalog `v2026.04.21.164306` (schema 1.4.0,
-> 8,288 products) is live on Supabase + bundled in the Flutter app.
-> See [HANDOFF_2026-04-20_PIPELINE_REFACTOR.md](HANDOFF_2026-04-20_PIPELINE_REFACTOR.md)
-> for the complete Sprint D record.
-
----
-
-## Where things stand (entry conditions for next session)
-
-### Pipeline
-- Full test suite: **4,479 passed, 12 skipped, 0 failed**
-- 20 brands end-to-end clean: **13,236 enriched → 13,236 scored → 8,288 unique**
-- Deep accuracy audit v2: **silently-mapped=0, parser_artifacts=0, unmapped_scorable=0**
-- All 11 known Sprint D follow-ups CLOSED (see handoff doc § Known follow-ups)
-- Git main HEAD: `3fefd54` — snapshot refreeze for D5.2/D5.4 activation drift
-
-### Supabase
-- `export_manifest.is_current=true` on `v2026.04.21.164306` · 8,288 products · schema 1.4.0
-- Storage: 8,288 unique detail blobs uploaded, 12,131 orphan blobs purged
-- 4 public tables align with `scripts/sql/supabase_schema.sql` — no drift
-
-### Flutter
-- Git main HEAD: [`6e6a692`](https://github.com/seancheick/Pharmaguide.ai/commit/6e6a692) — bundled catalog refreshed via LFS
-- `assets/db/pharmaguide_core.db` checksum matches pipeline manifest
-- `assets/db/interaction_db.sqlite` at v1.0.0 (136 interactions, 28 drug classes)
-- Schema version 1.4.0 = no Drift codegen needed
-- Sprint D wiring live: B7 UL aggregation renderer, `warnings_profile_gated`, +10 Dr Pham fields on `InteractionWarning`
-
-### Local disk state
-- `~/Documents/DataSetDsld/builds/release_output/` — kept as rollback safety net (1 GB)
-- `~/Documents/DataSetDsld/builds/pair_outputs/` — kept for incremental diffs (1 GB)
-- `scripts/dist/` — CLEARED (was staging area; artifacts shipped)
-- `/tmp/pharmaguide_release_build/` — CLEARED
+> **Purpose:** thin tactical doc. "Where we stand + what's the resumed trajectory."
+> The authoritative plan is [`docs/AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md).
+> Session journals (archived, don't edit):
+> - [HANDOFF_2026-04-18.md](HANDOFF_2026-04-18.md) — Dr Pham clinical review + roadmap authoring
+> - [HANDOFF_2026-04-20_PIPELINE_REFACTOR.md](HANDOFF_2026-04-20_PIPELINE_REFACTOR.md) — Sprint D accuracy sprint (SHIPPED)
 
 ---
 
-## Medical-accuracy invariants (verified live)
+## What just happened
 
-| Invariant | Status |
+Sprint D was an **accuracy-work detour off the AUTOMATION_ROADMAP**. It was
+triggered by a deep audit that found 833 silently-mapped rows + amaranth
+plant/dye confusion + B7 UL teratogenicity gap. Completed in 5 days across
+D1→D5.4, shipped 2026-04-21:
+
+- Bundled catalog **v2026.04.21.164306** (schema 1.4.0, **8,288 products**) live on Supabase
+- Flutter bundled at [Pharmaguide.ai `6e6a692`](https://github.com/seancheick/Pharmaguide.ai/commit/6e6a692)
+- Pipeline main HEAD: `8bf65d5`
+- **4,479 tests** passing, 374 net new Sprint D regression tests
+
+**Sprint D is now CLOSED.** Next session **resumes the AUTOMATION_ROADMAP trajectory** — the roadmap explicitly says *"Phase 1 — pipeline in CI (next agent starts here)"*.
+
+---
+
+## Current baseline
+
+| Layer | State | Evidence |
+|---|---|---|
+| Pipeline | 20 brands → 13,236 enriched → 13,236 scored → 8,288 unique | Git `8bf65d5` on main |
+| Supabase | `is_current=true` on v2026.04.21.164306 | MCP query confirmed |
+| Flutter | `assets/db/` bundled, checksum matches manifest | Git `6e6a692` on main |
+| Tests | 4,479 pipeline + 56 Flutter test files | `pytest scripts/tests/` |
+| Disk | `~/Documents/DataSetDsld/builds/release_output/` retained as rollback | 1 GB |
+
+---
+
+## Medical-accuracy invariants (verified live; do not regress)
+
+| Invariant | Coverage |
 |---|---|
-| `rda_ul_data.collection_enabled=true` on every product | ✅ 13,236 / 13,236 |
-| B7 OVER-UL safety_flags firing where applicable | ✅ 1,929 products (D4.3 teratogenicity protection LIVE) |
-| Dr Pham `safety_warning` on every banned entry | ✅ 2,413 / 2,413 |
-| Dr Pham `ban_context` on every banned entry | ✅ 2,413 / 2,413 |
-| No silent mapping (mapped=True ⇒ canonical_id ≠ None) | ✅ D2.1 contract |
-| No "from X" source-descriptor rows escaping as unmapped | ✅ D2.10 routing |
-| Proprietary-blend rows routed to recognized_non_scorable | ✅ D2.7.1 |
-| Every frozen snapshot matches current scored output | ✅ 30 / 30 |
+| `rda_ul_data.collection_enabled=true` | 13,236 / 13,236 (100%) |
+| B7 OVER-UL safety_flags firing | 1,929 products (D4.3 teratogenicity LIVE) |
+| Dr Pham `safety_warning` on banned entries | 2,413 / 2,413 (100%) |
+| Dr Pham `ban_context` on banned entries | 2,413 / 2,413 (100%) |
+| No silent mapping (`mapped=True ⇒ canonical_id != None`) | D2.1 contract enforced |
+| No "from X" source-descriptor rows unmapped | D2.10 routing |
+| Proprietary-blend rows → recognized_non_scorable | D2.7.1 |
+| Every frozen snapshot matches scored output | 30 / 30 |
 
 ---
 
-## Sprint E candidates (pick one, two, or three)
-
-Prioritized by ROI × operational value. Each has a crisp "Done" criterion.
-
-### E1 — Release operations hardening (1 session)
-
-**Why:** Right now a release is a 10-step manual recipe. One missed flag = stale
-data in production. Automate the playbook.
-
-**Done when:**
-- `make release` runs steps 1→10 with a single human gate (post-sync canary yes/no)
-- `build_all_final_dbs` + `release_catalog_artifact` + `release_interaction_artifact` chained with exit-code guards
-- Post-sync verification reads Supabase `export_manifest` and confirms `is_current=true` matches local manifest
-- Release manifest appended to a `docs/RELEASES.md` ledger automatically
-
-**Files to touch:** `Makefile` (or new `scripts/release.sh`), `docs/RELEASES.md` (new)
-
-### E2 — FDA weekly sync automation (0.5 session)
-
-**Why:** `run_fda_sync.sh` exists and is reliable but runs manually. A week of
-missed recalls = a week where the app's banned_recalled_ingredients.json
-is stale.
-
-**Done when:**
-- GitHub Actions workflow runs `run_fda_sync.sh` weekly (Sundays 02:00 UTC)
-- On new recalls, workflow opens a PR with the diff
-- PR description summarizes: # new recalls, ingredient names, source URLs
-- Human merge required (protocol rule #2 — no auto-commit of safety data)
-
-**Files to touch:** `.github/workflows/fda-weekly-sync.yml` (new)
-
-### E3 — Automated brand ingest CLI (1 session)
-
-**Why:** Currently adding a new brand means: manually drop files in
-staging/brands/, run pipeline, read coverage report, hand-check gaps. A CLI
-makes this a 1-command flow with a human checkpoint.
-
-**Done when:**
-- `python3 scripts/ingest_brand.py <staging_dir>` runs: clean → enrich
-- Prints coverage gap report + new canonical list
-- Halts with a "human review required" prompt (protocol rule #2)
-- After human approval, runs score + commits the new brand's output
-
-**Files to touch:** `scripts/ingest_brand.py` (new), `scripts/tests/test_ingest_brand.py` (new)
-
-### E4 — Clinical evidence freshness (0.5 session)
-
-**Why:** PMIDs in `backed_clinical_studies.json` / `medication_depletions.json`
-/ `curated_interactions.json` go stale. The user rule is: never ship
-unverified claims. We need a quarterly drumbeat.
-
-**Done when:**
-- `scripts/api_audit/verify_all_citations_content.py` runs on schedule
-- Flags any PMID where article title no longer matches claimed topic
-- Produces a "clinical evidence drift report" PR quarterly
-
-**Files to touch:** Extend existing `verify_all_citations_content.py`, add workflow.
-
-### E5 — Sentry integration (0.5 session)
-
-**Why:** Flutter `pubspec.yaml` already has `sentry_flutter: ^9.18.0` staged
-(uncommitted in user's local workspace). Wiring it up catches prod crashes +
-detail_blob_sha256 fetch failures before users complain.
-
-**Done when:**
-- Sentry DSN configured
-- Crash reporting active on iOS + Android release builds
-- Custom breadcrumbs on: product scan, detail blob fetch, interaction rule eval
-- PII-sanitized (no user email / health profile in crash reports)
-
-**Files to touch:** `main.dart` wrapper, `pubspec.yaml` commit, Sentry dashboard config.
-
-### E6 — Phase 4.5 tiered offline architecture (Flutter, multi-session)
-
-From `project_flutter_roadmap_v2` memory. Yuka-style tiered offline:
-- Tier 1: always-available bundled ~2k most-scanned products
-- Tier 2: on-demand Supabase fetch for long-tail
-- Tier 3: AI-estimate fallback for unknowns
-
-**Done when:** See roadmap memory. This is a multi-session Sprint, likely its own handoff.
-
----
-
-## Non-blocking but worth doing
-
-1. **Commit Sentry pubspec.yaml changes** the user had staged (uncommitted). If they don't want them yet, add to `.gitignore`.
-2. **Prune `~/Documents/DataSetDsld/builds/`** older than 2 weeks. Current state: ~2 GB. Keep last 2 releases for rollback; delete older.
-3. **Update `reference_supabase_project.md`** memory to reflect schema 1.4.0 + 8,288-product baseline (memory is 12 days stale as of this handoff).
-4. **Dashboard / analytics wiring** — no mention of per-brand scan analytics anywhere. Without this, canary monitoring in Sprint E1 is blind.
-
----
-
-## Canary checklist (do this before next sprint starts)
-
-On your machine:
+## Canary before next sprint starts
 
 ```bash
 cd "/Users/seancheick/PharmaGuide ai"
 flutter test test/release_gate/bundled_catalog_test.dart
 ```
 
-Then open the app and spot-check 3 products where Sprint D was expected to move the needle:
+Then open the app and spot-check 3 products:
 
-| Product | Expected change | Dr Pham signal |
-|---|---|---|
-| Thorne Silybin Phytosome (dsld 16037) | Score close to ~52/80 (Phase 3 fix) | Evidence card shows milk_thistle canonical |
-| Any multivitamin with 10k+ IU Vitamin A across multiple forms | B7 banner: "Vitamin A exceeds safe upper limit (X% UL) — summed across N forms" | D4.3 aggregation rendering |
-| Any product with Titanium Dioxide | Layperson-facing banner: "EU-banned white pigment. Avoid when possible." — not technical jargon | D5.4 Dr Pham copy visible |
+| Product | Expected signal |
+|---|---|
+| Thorne Silybin Phytosome (dsld 16037) | Score ~52/80, evidence card shows milk_thistle canonical |
+| Any multivitamin with 10k+ IU Vitamin A across forms | B7 banner: *"Vitamin A exceeds UL (X%) — summed across N forms"* |
+| Any product with Titanium Dioxide | Layperson-facing banner (not technical jargon) |
 
-If all 3 check out, Sprint D ships cleanly. If any fails, file a bug and roll back the
-Supabase manifest via `sync_to_supabase.py --force` on the previous version.
-
----
-
-## Non-negotiable protocol rules (carry forward, do not break)
-
-1. Every identifier (PMID, CUI, RXCUI) must be API-verified before shipping
-2. Every new canonical or data-file entry requires human approval — no auto-commits of safety data
-3. `mapped=True ⇒ canonical_id ≠ None` — enforced mechanically
-4. The coverage gate's 99.5% threshold is the medical-safety floor; never bypass
-5. Every code change ships with a regression test in `scripts/tests/`
-6. Snapshot drifts require a changelog entry in `_manifest.json` + medically-reviewed justification
+Roll back via `python3 scripts/sync_to_supabase.py --force <prev_version>` if any fail.
 
 ---
 
-*This is the starting line for the next session. Sprint D is done.*
+## Resumed trajectory — defer to AUTOMATION_ROADMAP
+
+The roadmap is the authoritative source for "what to build next." Read
+[`docs/AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md) top to bottom, then pick a phase:
+
+| Phase | What | When | Effort | Roadmap § |
+|---|---|---|---|---|
+| **Phase 1** | Pipeline runs in CI (GitHub Actions + cloud storage) | **Start here** | 2–3 weeks | § "Phase 1 — Pipeline runs without your laptop" |
+| **Phase 1.5** | Safety Alert Short Path (FDA recall < 15 min → user push) | **Ship before public beta** | 2–3 weeks | § "Phase 1.5 — Safety Alert Short Path" |
+| Phase 2 | Dr. Pham web editor (PR via UI) | Nice-to-have for beta | 3–4 weeks | § "Phase 2" |
+| Phase 3 | Scheduled monthly DSLD category delta | V1 phase | 2 months | § "Phase 3" |
+| Phase 4 | Reference-data hot-refresh | V1 phase | 2–3 months | § "Phase 4" |
+| Phase 4.5 | Tiered offline architecture (Yuka-style) | Triggered at 50k products | 4–6 weeks | § "Phase 4.5" |
+| Phase 5 | Full observability / staging / audit | V1 onward | Ongoing | § "Phase 5" |
+
+### Phase 1 prep checklist (from roadmap)
+
+Before opening the next PR:
+
+1. Read [`AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md) § "Phase 1" top-to-bottom.
+2. Read [`PIPELINE_OPERATIONS_README.md`](PIPELINE_OPERATIONS_README.md) § Playbooks (understand what must survive CI).
+3. Read [`PIPELINE_MAINTENANCE_SCHEDULE.md`](PIPELINE_MAINTENANCE_SCHEDULE.md) (roles + cadence).
+4. Run the full test suite (`python3 -m pytest scripts/tests/ -q`) — 4,479 is your known-green baseline.
+5. Start with **one brand** (e.g., Nature_Made). Prove the CI path end-to-end before scaling.
+
+---
+
+## Net-new items surfaced during Sprint D (not in AUTOMATION_ROADMAP yet)
+
+These emerged from Sprint D work and **belong in the roadmap** — add them when you next edit `AUTOMATION_ROADMAP.md`:
+
+1. **Release-ops automation** (`make release` one-command sequence). Not explicitly in roadmap but reduces manual 10-step recipe → 1 command. Add to Phase 1 as scaffolding.
+2. **Post-sync Supabase verification** (query `export_manifest` after sync, confirm `is_current=true` matches local). Belongs in Phase 1 CI workflow.
+3. **Sentry integration** (pubspec.yaml staged, uncommitted). Belongs in Phase 5 observability.
+4. **Release ledger** (`docs/RELEASES.md` append-only log of each shipped version). Not in roadmap. Suggest adding to Phase 1.
+
+---
+
+## Non-blocking cleanup (do when convenient)
+
+1. Commit or discard Sentry pubspec.yaml + .gitignore WIP in Flutter repo (user had staged locally, uncommitted).
+2. Prune `~/Documents/DataSetDsld/builds/` older than 2 weeks (keep last 2 for rollback).
+3. Refresh the stale `reference_supabase_project.md` memory to note schema 1.4.0 + 8,288-product baseline.
+
+---
+
+## Non-negotiable protocol rules
+
+1. Every identifier (PMID, CUI, RXCUI) must be API-verified before shipping.
+2. Every new canonical or data-file entry requires human approval — **no auto-commits of safety data.**
+3. `mapped=True ⇒ canonical_id != None` — enforced mechanically.
+4. Coverage gate 99.5% is the medical-safety floor — never bypass.
+5. Every code change ships with a regression test in `scripts/tests/`.
+6. Snapshot drifts require a changelog entry in `_manifest.json` + medically-reviewed justification.
+
+---
+
+*Pick up [`AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md) → Phase 1. The plan already exists; do not reinvent it.*
