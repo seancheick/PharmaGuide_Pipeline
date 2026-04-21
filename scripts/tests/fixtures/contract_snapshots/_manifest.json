@@ -232,6 +232,20 @@
         "D4.3 B7 UL canonical-level aggregation (teratogenicity safety)"
       ],
       "notes": "Accumulated drift from Sprint D1\u2192D4.3+D2.9 medical-grade accuracy work. All 15 products re-frozen against post-sprint-D scored output. Drift categories: B1 penalty shifts (banned/recalled re-classification), B3 dose adequacy (canonical dedup changes contribution math), A1/A2 ingredient quality (new aliases route previously-unmapped rows through proper IQM forms), B7 UL aggregation (same-canonical doses now summed for safety threshold check \u2014 Vitamin A teratogenicity fix). All drifts verified as legitimate scoring improvements, not regressions."
+    },
+    {
+      "date": "2026-04-21",
+      "action": "refrozen_d52_d54_activation_drift",
+      "products": [
+        12012,
+        15805
+      ],
+      "sprints_covered": [
+        "D5.2 rda_ul_data collection enabled",
+        "D4.3 B7 UL teratogenicity aggregation now firing on multi-form UL products",
+        "D5.4 Dr Pham safety_warning / ban_context propagation"
+      ],
+      "notes": "CVS Spectravite (12012): B7_dose_safety_evidence LEN 0->1, B7_penalty 0->2, score_80 31.0->29.0. Thorne Iron Citrate (15805): similar B7 activation. Drift is the intended result of flipping collect_rda_ul_data to true \u2014 the scorer now actually sees safety_flags on products that exceed 150%+ UL, and the D4.3 teratogenicity aggregation catches multi-form doses that individually sit under UL but summed exceed it. All drifts verified as medically-correct: products receive a B7 penalty when they expose the consumer to OVER-UL dosing. Fixtures re-frozen against post-D5.2 scored output."
     }
   ]
 }
