@@ -3156,7 +3156,14 @@ def build_final_db(
         "product_count": inserted,
         "checksum": f"sha256:{db_checksum}",
         "detail_blob_count": inserted,
-        "detail_blob_unique_count": len(unique_blob_hashes),
+        # Post-dedup unique hash count. `unique_blob_hashes` was built during
+        # staging (pre UPC dedup) so it includes hashes for products that
+        # were later removed as duplicates. Recompute from the surviving
+        # detail_index so the Supabase sync's len(unique_blobs)==manifest
+        # invariant holds.
+        "detail_blob_unique_count": len({
+            entry["blob_sha256"] for entry in detail_index.values()
+        }),
         "detail_index_checksum": f"sha256:{detail_index_checksum}",
         "min_app_version": MIN_APP_VERSION,
         "schema_version": EXPORT_SCHEMA_VERSION,
