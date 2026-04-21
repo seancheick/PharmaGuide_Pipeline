@@ -6406,6 +6406,17 @@ class SupplementEnricherV3:
                         "regulatory_date": banned_item.get('regulatory_date'),
                         "regulatory_date_label": banned_item.get('regulatory_date_label'),
                         "references_structured": banned_item.get('references_structured'),
+                        # D5.4: Dr Pham's user-facing authored copy must
+                        # propagate from the banned_recalled data file
+                        # through to the detail-blob warning so the
+                        # Flutter InteractionWarning.fromJson fallback chain
+                        # picks them up as alertHeadline/alertBody. Without
+                        # these, high_risk_ingredient / banned_substance
+                        # / recalled_ingredient / watchlist_substance
+                        # warnings render with technical jargon only.
+                        "safety_warning": banned_item.get('safety_warning'),
+                        "safety_warning_one_liner": banned_item.get('safety_warning_one_liner'),
+                        "ban_context": banned_item.get('ban_context'),
                     })
 
         return {

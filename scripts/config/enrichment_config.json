@@ -62,8 +62,8 @@
   "processing_config": {
     "batch_size": 100,
     "max_workers": 4,
-    "collect_rda_ul_data": false,
-    "_collect_rda_ul_data_help": "Set true only when you need device-side Section E reference payload in enriched output",
+    "collect_rda_ul_data": true,
+    "_collect_rda_ul_data_help": "MUST be true: the scorer's B7 dose-safety penalty (OVER-150%-UL teratogenicity check, incl. D4.3 canonical-sum aggregation) reads from enriched.rda_ul_data.safety_flags. When false, B7 silently returns 0 for every product \u2014 medical-safety gap. The Flutter detail blob also surfaces rda_ul_data for the aggregated UL warning card.",
     "enable_fuzzy_matching": true,
     "fuzzy_threshold": 85,
     "enable_logging": true,
