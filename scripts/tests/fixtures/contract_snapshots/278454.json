@@ -9,7 +9,7 @@
   "brand_name": "Ritual",
   "breakdown": {
     "A": {
-      "A1": 12.31,
+      "A1": 14.44,
       "A2": 2.0,
       "A3": 2.0,
       "A4": 3.0,
@@ -21,7 +21,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 20.06,
+      "core_quality": 22.19,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -42,7 +42,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 20.06
+      "score": 22.19
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -72,15 +72,14 @@
       "ingredient_points": {
         "boron": 0.33,
         "magnesium generic": 4.68,
-        "omega 3 fatty acids": 3.98,
         "vitamin b12": 0.98,
         "vitamin d3": 4.29,
         "vitamin e": 2.81,
         "vitamin k2 mk 7": 1.95
       },
-      "matched_entries": 7,
+      "matched_entries": 6,
       "max": 20.0,
-      "score": 7.82,
+      "score": 7.53,
       "top_n_applied": 3
     },
     "D": {
@@ -98,30 +97,28 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 60.38,
+    "quality_raw": 62.22,
     "violation_penalty": 0.0
   },
   "dsld_id": "278454",
   "evaluation_stage": "scoring",
-  "flags": [
-    "SUPPLEMENT_TYPE_REINFERRED"
-  ],
+  "flags": [],
   "grade": "Good",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",
   "product_name": "Essential for Women Mint Essenced",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 75.5,
-  "score_80": 60.4,
+  "score_100_equivalent": 77.8,
+  "score_80": 62.2,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 20.06,
+      "core_quality": 22.19,
       "max": 25.0,
-      "score": 20.06
+      "score": 22.19
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -129,7 +126,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 7.82
+      "score": 7.53
     },
     "D_brand_trust": {
       "max": 5.0,
@@ -142,7 +139,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "multivitamin",
+  "supp_type": "specialty",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

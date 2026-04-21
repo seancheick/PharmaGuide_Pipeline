@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.0.0",
     "last_updated": "2026-04-20",
-    "total_entries": 672
+    "total_entries": 673
   },
   "other_ingredients": [
     {
@@ -21618,6 +21618,32 @@
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "Chickpea protein isolate is a processing-defined substance, not a single UMLS concept.",
       "added_by": "sprint_d2.5",
+      "last_updated": "2026-04-20",
+      "external_ids": {}
+    },
+    {
+      "id": "NHA_GLYCOLIPIDS",
+      "standard_name": "Glycolipids",
+      "aliases": [
+        "glycolipid",
+        "glycolipids",
+        "glycolipid complex",
+        "membrane glycolipids",
+        "glycosphingolipids",
+        "glycoglycerolipids"
+      ],
+      "category": "lipid_structural",
+      "is_additive": true,
+      "additive_type": "structural_lipid",
+      "allergen": false,
+      "notes": "Glycolipids \u2014 carbohydrate-linked lipid class forming part of cell membranes. Appear as structural components in whole-food / marine-source supplements; minor caloric contribution, no scorable bioactivity on their own (the parent lipid extract carries the quality signal).",
+      "common_uses": [
+        "membrane component in whole-food extracts",
+        "marine-source lipid fraction"
+      ],
+      "cui_status": "no_confirmed_umls_match",
+      "cui_note": "Glycolipid is a chemical class (many compounds); no single UMLS concept covers the ingredient-level label.",
+      "added_by": "sprint_d3.6",
       "last_updated": "2026-04-20",
       "external_ids": {}
     }

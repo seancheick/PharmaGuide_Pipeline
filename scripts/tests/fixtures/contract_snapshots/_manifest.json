@@ -1,5 +1,5 @@
 {
-  "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md § Phase 0.",
+  "_comment": "Phase 0 scoring-snapshot fixtures. Each entry freezes the scoring-critical fields of one scored product so we can detect drift across pipeline runs (especially during Phase 3 enricher canonical_id work). See docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md \u00a7 Phase 0.",
   "schema_version": "1.0.0",
   "frozen_on": "2026-04-20",
   "fixture_schema": {
@@ -39,36 +39,156 @@
     "excluded_rationale": "Percentiles recompute dataset-wide and drift with brand additions. Scoring metadata carries timestamps. Match ledger is a diagnostic trail. None of these affect user-visible correctness when the score_80 and verdict are stable."
   },
   "products": [
-    {"dsld_id": 16037,  "brand_source": "Thorne",              "label": "Thorne Silybin Phytosome (Planti-Oxidants) — Phase 3 canonical_id target"},
-    {"dsld_id": 182730, "brand_source": "Pure_Encapsulations", "label": "Pure Encapsulations Athletic Pure Pack — Phase 3 phosphorus target"},
-    {"dsld_id": 12012,  "brand_source": "CVS",                 "label": "CVS Spectravite Advanced Formula — Phase 3 phosphorus target + mainstream multi"},
-    {"dsld_id": 64058,  "brand_source": "Thorne",              "label": "Thorne Catalyte Lemon Lime — Sodium/Chloride dual-context routing"},
-    {"dsld_id": 288344, "brand_source": "Garden_of_life",      "label": "Garden of Life Vitamin Code Men — whole-food multi"},
-    {"dsld_id": 241306, "brand_source": "Garden_of_life",      "label": "Garden of Life Joint Health — glandular/source-descriptor"},
-    {"dsld_id": 245156, "brand_source": "Goli",                "label": "Goli Ashwagandha Gummies — branded-token + plant-part"},
-    {"dsld_id": 182805, "brand_source": "Pure_Encapsulations", "label": "Pure CoQ10 120 mg — Period B MicroActive fix coverage"},
-    {"dsld_id": 183275, "brand_source": "Pure_Encapsulations", "label": "Pure Silymarin — milk thistle baseline"},
-    {"dsld_id": 12131,  "brand_source": "Spring_Valley",       "label": "Spring Valley Korean Panax Ginseng — standardized extract"},
-    {"dsld_id": 278454, "brand_source": "Ritual",              "label": "Ritual Essential for Women — mainstream multivitamin"},
-    {"dsld_id": 16008,  "brand_source": "Thorne",              "label": "Thorne Green Tea Phytosome — phytosome delivery tech"},
-    {"dsld_id": 16125,  "brand_source": "Thorne",              "label": "Thorne FloraMend Prime Probiotic — probiotic strain claims"},
-    {"dsld_id": 270831, "brand_source": "Nutricost",           "label": "Nutricost Yohimbe Bark Extract — banned/recalled trigger"},
-    {"dsld_id": 222842, "brand_source": "Garden_of_life",      "label": "Garden of Life Multivitamin Liquid — whole-food liquid multi"},
-    {"dsld_id": 173734, "brand_source": "Garden_of_life",      "label": "Garden of Life Perfect Food Berry — yeast/greens-fermented"},
-    {"dsld_id": 180417, "brand_source": "Nature_Made",         "label": "Nature Made Ginkgo Biloba 30 mg — standardized botanical"},
-    {"dsld_id": 221671, "brand_source": "Nutricost",           "label": "Nutricost Arginine AKG 3 g — AAKG release variants"},
-    {"dsld_id": 223319, "brand_source": "Nutricost",           "label": "Nutricost KSM-66 600 mg — branded ashwagandha"},
-    {"dsld_id": 182800, "brand_source": "Pure_Encapsulations", "label": "Pure Calcium Magnesium (Citrate/Malate) — dual-mineral form"},
-    {"dsld_id": 183317, "brand_source": "Pure_Encapsulations", "label": "Pure Zinc 15 — single mineral baseline"},
-    {"dsld_id": 15756,  "brand_source": "Thorne",              "label": "Thorne Vitamin D — single-ingredient vitamin"},
-    {"dsld_id": 15805,  "brand_source": "Thorne",              "label": "Thorne Iron Citrate — iron form"},
-    {"dsld_id": 18141,  "brand_source": "CVS",                 "label": "CVS Omega-3 100 mg — fish oil EPA/DHA"},
-    {"dsld_id": 239600, "brand_source": "CVS",                 "label": "CVS Men's Daily Gummies Multivitamin — gummy mainstream"},
-    {"dsld_id": 173893, "brand_source": "Garden_of_life",      "label": "Garden of Life Organic Plant Collagen Builder — collagen precursor"},
-    {"dsld_id": 204571, "brand_source": "Garden_of_life",      "label": "Garden of Life Adrenal Daily Balance — proprietary-blend-heavy"},
-    {"dsld_id": 223084, "brand_source": "Nutricost",           "label": "Nutricost Creatine Ethyl Ester 3 g — creatine form"},
-    {"dsld_id": 270256, "brand_source": "Nutricost",           "label": "Nutricost Beta-Alanine 3,400 mg — sports active"},
-    {"dsld_id": 306381, "brand_source": "Nutricost",           "label": "Nutricost PRE Pre-Workout Complex — blend-heavy pre-workout"}
+    {
+      "dsld_id": 16037,
+      "brand_source": "Thorne",
+      "label": "Thorne Silybin Phytosome (Planti-Oxidants) \u2014 Phase 3 canonical_id target"
+    },
+    {
+      "dsld_id": 182730,
+      "brand_source": "Pure_Encapsulations",
+      "label": "Pure Encapsulations Athletic Pure Pack \u2014 Phase 3 phosphorus target"
+    },
+    {
+      "dsld_id": 12012,
+      "brand_source": "CVS",
+      "label": "CVS Spectravite Advanced Formula \u2014 Phase 3 phosphorus target + mainstream multi"
+    },
+    {
+      "dsld_id": 64058,
+      "brand_source": "Thorne",
+      "label": "Thorne Catalyte Lemon Lime \u2014 Sodium/Chloride dual-context routing"
+    },
+    {
+      "dsld_id": 288344,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Vitamin Code Men \u2014 whole-food multi"
+    },
+    {
+      "dsld_id": 241306,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Joint Health \u2014 glandular/source-descriptor"
+    },
+    {
+      "dsld_id": 245156,
+      "brand_source": "Goli",
+      "label": "Goli Ashwagandha Gummies \u2014 branded-token + plant-part"
+    },
+    {
+      "dsld_id": 182805,
+      "brand_source": "Pure_Encapsulations",
+      "label": "Pure CoQ10 120 mg \u2014 Period B MicroActive fix coverage"
+    },
+    {
+      "dsld_id": 183275,
+      "brand_source": "Pure_Encapsulations",
+      "label": "Pure Silymarin \u2014 milk thistle baseline"
+    },
+    {
+      "dsld_id": 12131,
+      "brand_source": "Spring_Valley",
+      "label": "Spring Valley Korean Panax Ginseng \u2014 standardized extract"
+    },
+    {
+      "dsld_id": 278454,
+      "brand_source": "Ritual",
+      "label": "Ritual Essential for Women \u2014 mainstream multivitamin"
+    },
+    {
+      "dsld_id": 16008,
+      "brand_source": "Thorne",
+      "label": "Thorne Green Tea Phytosome \u2014 phytosome delivery tech"
+    },
+    {
+      "dsld_id": 16125,
+      "brand_source": "Thorne",
+      "label": "Thorne FloraMend Prime Probiotic \u2014 probiotic strain claims"
+    },
+    {
+      "dsld_id": 270831,
+      "brand_source": "Nutricost",
+      "label": "Nutricost Yohimbe Bark Extract \u2014 banned/recalled trigger"
+    },
+    {
+      "dsld_id": 222842,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Multivitamin Liquid \u2014 whole-food liquid multi"
+    },
+    {
+      "dsld_id": 173734,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Perfect Food Berry \u2014 yeast/greens-fermented"
+    },
+    {
+      "dsld_id": 180417,
+      "brand_source": "Nature_Made",
+      "label": "Nature Made Ginkgo Biloba 30 mg \u2014 standardized botanical"
+    },
+    {
+      "dsld_id": 221671,
+      "brand_source": "Nutricost",
+      "label": "Nutricost Arginine AKG 3 g \u2014 AAKG release variants"
+    },
+    {
+      "dsld_id": 223319,
+      "brand_source": "Nutricost",
+      "label": "Nutricost KSM-66 600 mg \u2014 branded ashwagandha"
+    },
+    {
+      "dsld_id": 182800,
+      "brand_source": "Pure_Encapsulations",
+      "label": "Pure Calcium Magnesium (Citrate/Malate) \u2014 dual-mineral form"
+    },
+    {
+      "dsld_id": 183317,
+      "brand_source": "Pure_Encapsulations",
+      "label": "Pure Zinc 15 \u2014 single mineral baseline"
+    },
+    {
+      "dsld_id": 15756,
+      "brand_source": "Thorne",
+      "label": "Thorne Vitamin D \u2014 single-ingredient vitamin"
+    },
+    {
+      "dsld_id": 15805,
+      "brand_source": "Thorne",
+      "label": "Thorne Iron Citrate \u2014 iron form"
+    },
+    {
+      "dsld_id": 18141,
+      "brand_source": "CVS",
+      "label": "CVS Omega-3 100 mg \u2014 fish oil EPA/DHA"
+    },
+    {
+      "dsld_id": 239600,
+      "brand_source": "CVS",
+      "label": "CVS Men's Daily Gummies Multivitamin \u2014 gummy mainstream"
+    },
+    {
+      "dsld_id": 173893,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Organic Plant Collagen Builder \u2014 collagen precursor"
+    },
+    {
+      "dsld_id": 204571,
+      "brand_source": "Garden_of_life",
+      "label": "Garden of Life Adrenal Daily Balance \u2014 proprietary-blend-heavy"
+    },
+    {
+      "dsld_id": 223084,
+      "brand_source": "Nutricost",
+      "label": "Nutricost Creatine Ethyl Ester 3 g \u2014 creatine form"
+    },
+    {
+      "dsld_id": 270256,
+      "brand_source": "Nutricost",
+      "label": "Nutricost Beta-Alanine 3,400 mg \u2014 sports active"
+    },
+    {
+      "dsld_id": 306381,
+      "brand_source": "Nutricost",
+      "label": "Nutricost PRE Pre-Workout Complex \u2014 blend-heavy pre-workout"
+    }
   ],
   "changelog": [
     {
@@ -77,6 +197,41 @@
       "coverage": "99.998%",
       "tests": "baseline green",
       "notes": "Initial Phase 0 snapshot. Frozen from scored/ output on main @ uncommitted Period B changes. Silybin Phytosome score_80=51.8 and Phosphorus products are the Phase 3 canonical_id authoritative fix targets; their scores WILL change after Phase 3 and fixtures will be regenerated with a reviewed changelog entry."
+    },
+    {
+      "date": "2026-04-20",
+      "action": "refrozen_sprint_d_accumulated_drift",
+      "products": [
+        16037,
+        182730,
+        12012,
+        64058,
+        288344,
+        241306,
+        245156,
+        278454,
+        173734,
+        180417,
+        221671,
+        18141,
+        239600,
+        223084,
+        270256
+      ],
+      "sprints_covered": [
+        "D2.1 silent-mapping contract",
+        "D2.2 qualifier strip",
+        "D2.6 parser artifact filter",
+        "D2.7 coverage-gate policy",
+        "D2.7 blend aliases",
+        "D2.7 extended qualifier strip",
+        "D2.9 fallback-audit closures",
+        "D3.4 form aliases (gingerol/PAC/bioperinie/phytosome curcuminoids)",
+        "D3.6 Doctor's Best (serrapeptase/glycolipids/lutein 2020)",
+        "D4.1 scorer dedup verified",
+        "D4.3 B7 UL canonical-level aggregation (teratogenicity safety)"
+      ],
+      "notes": "Accumulated drift from Sprint D1\u2192D4.3+D2.9 medical-grade accuracy work. All 15 products re-frozen against post-sprint-D scored output. Drift categories: B1 penalty shifts (banned/recalled re-classification), B3 dose adequacy (canonical dedup changes contribution math), A1/A2 ingredient quality (new aliases route previously-unmapped rows through proper IQM forms), B7 UL aggregation (same-canonical doses now summed for safety threshold check \u2014 Vitamin A teratogenicity fix). All drifts verified as legitimate scoring improvements, not regressions."
     }
   ]
 }

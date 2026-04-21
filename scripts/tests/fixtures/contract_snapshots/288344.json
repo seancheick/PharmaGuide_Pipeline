@@ -151,7 +151,6 @@
         "coenzyme q10": 3.9,
         "digestive enzyme complex": 2.08,
         "iodine": 2.21,
-        "lactobacillus and bifidobacterium strains": 4.29,
         "manganese": 1.1,
         "molybdenum": 2.08,
         "pantothenic acid vitamin b5": 1.1,
@@ -169,7 +168,7 @@
         "vitamin k2 mk 7": 1.95,
         "zinc picolinate": 4.29
       },
-      "matched_entries": 24,
+      "matched_entries": 23,
       "max": 20.0,
       "score": 8.69,
       "top_n_applied": 3

@@ -47,7 +47,7 @@
     "B": {
       "B0_moderate_penalty": 0.0,
       "B1_evidence": [],
-      "B1_penalty": 1.5,
+      "B1_penalty": 1.0,
       "B2_penalty": 0.0,
       "B3": 3.0,
       "B4a": 0.0,
@@ -63,9 +63,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 3.0,
       "max": 30.0,
-      "penalties": 1.5,
-      "raw": 26.5,
-      "score": 26.5
+      "penalties": 1.0,
+      "raw": 27.0,
+      "score": 27.0
     },
     "C": {
       "depth_bonus": 0.0,
@@ -92,7 +92,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 49.4,
+    "quality_raw": 49.9,
     "violation_penalty": 0.0
   },
   "dsld_id": "270256",
@@ -103,8 +103,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "Beta-Alanine 3,400 mg",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 61.7,
-  "score_80": 49.4,
+  "score_100_equivalent": 62.4,
+  "score_80": 49.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -117,7 +117,7 @@
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 26.5
+      "score": 27.0
     },
     "C_evidence_research": {
       "max": 20.0,

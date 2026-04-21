@@ -47,7 +47,7 @@
     "B": {
       "B0_moderate_penalty": 0.0,
       "B1_evidence": [],
-      "B1_penalty": 1.0,
+      "B1_penalty": 0.5,
       "B2_penalty": 0.0,
       "B3": 3.0,
       "B4a": 0.0,
@@ -63,9 +63,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 3.0,
       "max": 30.0,
-      "penalties": 1.0,
-      "raw": 27.0,
-      "score": 27.0
+      "penalties": 0.5,
+      "raw": 27.5,
+      "score": 27.5
     },
     "C": {
       "depth_bonus": 0.0,
@@ -102,7 +102,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 48.07,
+    "quality_raw": 48.57,
     "violation_penalty": 0.0
   },
   "dsld_id": "239600",
@@ -115,8 +115,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "Men's Daily Gummies Complete Multivitamin",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 60.1,
-  "score_80": 48.1,
+  "score_100_equivalent": 60.7,
+  "score_80": 48.6,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -129,7 +129,7 @@
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 27.0
+      "score": 27.5
     },
     "C_evidence_research": {
       "max": 20.0,

@@ -47,7 +47,7 @@
     "B": {
       "B0_moderate_penalty": 0.0,
       "B1_evidence": [],
-      "B1_penalty": 1.5,
+      "B1_penalty": 1.0,
       "B2_penalty": 0.0,
       "B3": 4.0,
       "B4a": 0.0,
@@ -63,9 +63,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 5.0,
       "max": 30.0,
-      "penalties": 1.5,
-      "raw": 28.5,
-      "score": 28.5
+      "penalties": 1.0,
+      "raw": 29.0,
+      "score": 29.0
     },
     "C": {
       "depth_bonus": 0.0,
@@ -93,7 +93,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 45.89,
+    "quality_raw": 46.39,
     "violation_penalty": -1.5
   },
   "dsld_id": "245156",
@@ -106,8 +106,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "Ashwagandha Gummies Mixed Berry",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 57.4,
-  "score_80": 45.9,
+  "score_100_equivalent": 58.0,
+  "score_80": 46.4,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -120,7 +120,7 @@
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 28.5
+      "score": 29.0
     },
     "C_evidence_research": {
       "max": 20.0,

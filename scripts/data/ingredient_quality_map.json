@@ -12489,7 +12489,11 @@
           "Meriva Turmeric Phytosome Curcuma longa Root Extract",
           "Curcuma longa Root Extract, Phospholipid Complex",
           "Phospholipid-Curcuminoids Complex",
-          "phospholipid curcuminoids complex"
+          "phospholipid curcuminoids complex",
+          "phytosome curcuminoids",
+          "curcuminoid phytosome",
+          "phytosomes curcumin",
+          "soy lecithin curcumin complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12498,7 +12502,10 @@
           "range_high": null,
           "quality": "good",
           "notes": "~29x standard (35+ human RCTs)"
-        }
+        },
+        "audit_trail": [
+          "D3.4 (2026-04-20): Phytosome Curcuminoids + related variants added to meriva form."
+        ]
       },
       "theracurmin": {
         "bio_score": 11,
@@ -16917,7 +16924,11 @@
           "organic Lutein",
           "MacularSynergy Complex",
           "macular synergy complex",
-          "macularsynergy"
+          "macularsynergy",
+          "lutein 2020",
+          "lutein 2020 marigold",
+          "lutein 2020 marigold flower extract",
+          "2020 marigold flower extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -16926,7 +16937,10 @@
           "range_high": 0.5,
           "quality": "moderate",
           "notes": "Fat-dependent carotenoid; <5% fasted, 10-50% with fat (PMC5306026, PMC6054194); free and ester forms equivalent (PMID:21677121)"
-        }
+        },
+        "audit_trail": [
+          "D3.6 (2026-04-20): added marigold-source lutein variants (Doctor's Best Lutein 2020 product line)."
+        ]
       }
     },
     "match_rules": {
@@ -21491,7 +21505,9 @@
           "UTI support cranberry",
           "cranberry PAC extract",
           "high-potency cranberry",
-          "Vaccinium macrocarpon Fruit Extract"
+          "Vaccinium macrocarpon Fruit Extract",
+          "proanthocyanidin",
+          "proanthocyanidins"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21500,7 +21516,11 @@
           "range_high": 0.02,
           "quality": "poor",
           "notes": "Intact PACs <1% absorbed; urinary metabolites ~6.2% (PMID:25172705)"
-        }
+        },
+        "audit_trail": [
+          "D3.4 (2026-04-20): PAC/proanthocyanidin aliases added \u2014 key cranberry active.",
+          "D3.4 (2026-04-20) revised: generic PAC/proanthocyanidin aliases already live under the dedicated 'pac' IQM canonical \u2014 removed from cranberry form to avoid cross-canonical collision. Cranberry-specific PAC context handled via raw_source_text at enricher matching time."
+        ]
       },
       "whole cranberry powder": {
         "bio_score": 6,
@@ -22210,7 +22230,10 @@
           "proteolytic enzyme blend",
           "Neutral Protease",
           "Aminopeptidase",
-          "Protease S"
+          "Protease S",
+          "serrapeptase enzyme",
+          "serratia enzyme",
+          "serrapeptidase"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22219,7 +22242,10 @@
           "range_high": 0.5,
           "quality": "moderate",
           "notes": "Represents GI enzyme activity survival, NOT systemic absorption; stomach acid denatures unprotected enzymes"
-        }
+        },
+        "audit_trail": [
+          "D3.6 (2026-04-20): added serrapeptase enzyme variants (Doctor's Best label)."
+        ]
       },
       "enteric-coated enzymes": {
         "bio_score": 12,
@@ -30613,7 +30639,19 @@
           "piperine beadlets",
           "piperine extract",
           "bioperine(r) black pepper extract",
-          "black pepper"
+          "black pepper",
+          "bioperinie",
+          "bioperinie(r)",
+          "bioperinie (r)",
+          "bio-perine",
+          "bioperinie black pepper extract",
+          "bioperinie(r) black pepper extract",
+          "bioperinie black pepper fruit extract",
+          "bioperine black pepper ext",
+          "bioperine black pepper ext.",
+          "bioperinie black pepper ext.",
+          "bioperine(r) black pepper ext.",
+          "bioperine black pepper"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -30622,7 +30660,10 @@
           "range_high": 0.95,
           "quality": "good",
           "notes": "High apparent permeability in Caco-2 (PMID 9536651); Tmax ~15 min rats; human t1/2 13-16h (PMC8796742)"
-        }
+        },
+        "audit_trail": [
+          "D3.4 (2026-04-20): OCR-typo Bioperinie variant added."
+        ]
       }
     },
     "match_rules": {
@@ -34466,7 +34507,8 @@
           "8-gingerol",
           "10-gingerol",
           "gingerol extract",
-          "Ginger Rhizome Extract, Ginger Root Extract"
+          "Ginger Rhizome Extract, Ginger Root Extract",
+          "gingerol"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -34476,7 +34518,10 @@
           "range_high": 0.9,
           "quality": "good",
           "notes": "Rapid GI absorption but complete first-pass conjugation; 0% free gingerol systemically"
-        }
+        },
+        "audit_trail": [
+          "D3.4 (2026-04-20): gingerol-family aliases added \u2014 main bioactive of standardized ginger extract."
+        ]
       },
       "ginger supercritical extract": {
         "bio_score": 9,
@@ -59045,6 +59090,29 @@
           "quality": "unknown",
           "notes": "Prodrug; cascarosides activated by colonic bacteria"
         }
+      },
+      "cascara sagrada bark powder": {
+        "bio_score": 4,
+        "natural": true,
+        "score": 7,
+        "absorption": "Whole bark powder — cascarosides must be released from plant matrix before bacterial hydrolysis in colon. Less concentrated than standardized extract.",
+        "notes": "Whole Cascara Sagrada bark powder. Lower potency than standardized extract; cascarosides A-D not concentrated. D2.9.2 (2026-04-20): added to prevent 'Cascara Sagrada bark powder' labels falling to extract form, which overstates absorption.",
+        "aliases": [
+          "cascara sagrada powder",
+          "cascara sagrada bark powder",
+          "cascara powder",
+          "frangula purshiana bark powder",
+          "rhamnus purshiana powder",
+          "whole cascara sagrada bark"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "poor",
+          "notes": "Whole-bark powder; less concentrated than standardized extract"
+        }
       }
     },
     "match_rules": {
@@ -60362,7 +60430,13 @@
           "Levilactobacillus brevis",
           "L. brevis KB290",
           "L. brevis SBC8803",
-          "Lactobacillus brevis KB290"
+          "Lactobacillus brevis KB290",
+          "L. brevis Lbr-35",
+          "Lactobacillus brevis Lbr-35",
+          "Lbr-35",
+          "L. brevis UALbr-02",
+          "Lactobacillus brevis UALbr-02",
+          "UALbr-02"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

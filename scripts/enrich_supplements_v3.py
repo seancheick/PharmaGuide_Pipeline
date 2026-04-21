@@ -2080,6 +2080,35 @@ class SupplementEnricherV3:
                 if match_result.get('bio_score', 0) > 12:
                     premium_form_count += 1
             else:
+                # D2.7.1 (medical-grade): when the cleaner resolved this row to
+                # proprietary_blends.json (Velositol, MyoTor, Tesnor, Metabolaid,
+                # etc. — branded matrices with no individual-component evidence),
+                # treat it as RECOGNIZED-BUT-NOT-SCORABLE rather than unmapped.
+                # The blend-transparency penalty (B5) still tracks it; but it
+                # no longer blocks the coverage gate on products that happen to
+                # contain one exotic branded blend alongside otherwise-scorable
+                # vitamins/minerals. Matches the existing policy for
+                # oils/fibers/excipients in other_ingredients.
+                _canonical_src = ingredient.get('canonical_source_db')
+                _canonical_id = ingredient.get('canonical_id')
+                if _canonical_src == 'proprietary_blends' and _canonical_id:
+                    quality_entry['recognized_non_scorable'] = True
+                    quality_entry['recognition_source'] = 'proprietary_blends'
+                    quality_entry['recognition_reason'] = 'proprietary_blend_member'
+                    quality_entry['recognition_type'] = 'blend_class'
+                    quality_entry['matched_entry_id'] = _canonical_id
+                    quality_entry['matched_entry_name'] = std_name or ing_name
+                    quality_entry['mapped'] = True
+                    quality_entry['mapped_identity'] = True
+                    quality_entry['scoreable_identity'] = False
+                    quality_entry['role_classification'] = 'recognized_non_scorable'
+                    quality_entry['identity_confidence'] = 1.0
+                    quality_entry['identity_decision_reason'] = 'proprietary_blend_member'
+                    recognized_non_scorable_count += 1
+                    ingredients_scorable.append(quality_entry)
+                    all_quality_data.append(quality_entry)
+                    continue
+
                 # TIERED MATCHING (per dev feedback):
                 # Before marking as unmapped, check if recognized in other databases
                 recognition = self._is_recognized_non_scorable(ing_name, std_name)

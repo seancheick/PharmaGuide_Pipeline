@@ -98,6 +98,7 @@ class TestAliasQuality:
             # Constituent stubs — aliases shared with parent botanical extract
             'green tea egcg',           # egcg stub + green_tea_extract
             'cranberry pacs',           # pac stub + cranberry
+            'proanthocyanidin',         # D2.9.1: pac stub + cranberry form (singular)
             'epigallocatechin gallate', # egcg stub + epigallocatechin_gallate
             'proanthocyanidins',        # pac stub + proanthocyanidins
             'ginsenoside rg3',          # rg3 stub + ginsenosides

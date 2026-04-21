@@ -3,63 +3,263 @@
   "brand_name": "Garden Of Life",
   "breakdown": {
     "A": {
+      "A1": 7.73,
+      "A2": 0.0,
+      "A3": 1.0,
+      "A4": 3.0,
+      "A5": 0.75,
+      "A5a": 0.0,
+      "A5b": 0.0,
+      "A5c": 0.75,
+      "A5d": 0.0,
+      "A6": 0.0,
+      "category_bonus_pool_cap": 5.0,
+      "category_bonus_total": 2.0,
+      "core_quality": 12.48,
       "max": 25.0,
-      "score": 0.0
+      "omega3_breakdown": {
+        "applicable": false,
+        "omega3_dose_bonus": 0.0
+      },
+      "omega3_dose_bonus": 0.0,
+      "probiotic_bonus": 2.0,
+      "probiotic_breakdown": {
+        "cfu": 0.0,
+        "clinical_strains": 1.0,
+        "diversity": 1.0,
+        "eligibility": {
+          "eligible": true,
+          "mode": "probiotic",
+          "reason": "supplement_type_probiotic"
+        },
+        "prebiotic": 0.0,
+        "probiotic_bonus": 2.0,
+        "survivability": 0.0
+      },
+      "score": 14.48
     },
     "B": {
-      "B0": "BLOCKED",
+      "B0_moderate_penalty": 0.0,
+      "B1_evidence": [],
+      "B1_penalty": 0.5,
+      "B2_penalty": 2.0,
+      "B3": 1.0,
+      "B4a": 0.0,
+      "B4b": 0.0,
+      "B4c": 0.0,
+      "B5_blend_evidence": [
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Perfect Green Juice Blend",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 4,
+          "computed_blend_penalty": -2.3226,
+          "computed_blend_penalty_magnitude": 2.3226,
+          "dedupe_fingerprint": "perfect green juice blend|organic alfalfa,organic barley,organic oat,organic wheat grass|0.000|activeingredients[5]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.064516,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[5]",
+          "unit_conversion_failed": false
+        },
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Perfect Protein Mineral Matrix (Combination)",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 5,
+          "computed_blend_penalty": -2.4032,
+          "computed_blend_penalty_magnitude": 2.4032,
+          "dedupe_fingerprint": "perfect protein mineral matrix combination|calcified red algae,chlorella,kelp blend,rice bran soluble extract,spirulina|0.000|activeingredients[10]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.080645,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[10]",
+          "unit_conversion_failed": false
+        },
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Proprietary Whole Food Berry Antioxidant Blend (Combination)",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 7,
+          "computed_blend_penalty": -2.5645,
+          "computed_blend_penalty_magnitude": 2.5645,
+          "dedupe_fingerprint": "proprietary whole food berry antioxidant blend combination|acerola cherry extract,blackberry,blueberry,cherry,citrus bioflavonoids,raspberry,strawberry|0.000|activeingredients[14]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.112903,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[14]",
+          "unit_conversion_failed": false
+        },
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Perfect Veggie Blend",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 17,
+          "computed_blend_penalty": -3.371,
+          "computed_blend_penalty_magnitude": 3.371,
+          "dedupe_fingerprint": "perfect veggie blend|asparagus,beet,bell pepper,brussels sprout,cabbage,cauliflower,celery,cucumber,garlic,ginger,onion,organic broccoli,organic carrot,organic kale,organic spinach,organic tomato,parsley|0.000|activeingredients[21]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.274194,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[21]",
+          "unit_conversion_failed": false
+        },
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Poten-Zyme Fermented Whole Food Matrix (Herb/Botanical)",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 14,
+          "computed_blend_penalty": -3.129,
+          "computed_blend_penalty_magnitude": 3.129,
+          "dedupe_fingerprint": "poten zyme fermented whole food matrix herb botanical|adzuki bean,amaranth,barley grass,chia,garbanzo bean,lentil,millet,organic buckwheat,organic flax seed,organic oat grass,pumpkin,quinoa,sesame,sunflower|0.000|activeingredients[38]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.225806,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[38]",
+          "unit_conversion_failed": false
+        },
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Probiotic Blend",
+          "blend_total_mg": null,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 10,
+          "computed_blend_penalty": -2.8065,
+          "computed_blend_penalty_magnitude": 2.8065,
+          "dedupe_fingerprint": "probiotic blend|bifidobacterium animalis lactis,bifidobacterium bifidum,bifidobacterium breve,bifidobacterium longum,lactobacillus acidophilus,lactobacillus casei,lactobacillus paracasei,lactobacillus plantarum,lactobacillus rhamnosus,lactobacillus salivarius|0.000|activeingredients[52]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.16129,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[52]",
+          "unit_conversion_failed": false
+        }
+      ],
+      "B5_penalty": 10.0,
+      "B6_penalty": 0.0,
+      "B7_dose_safety_evidence": [],
+      "B7_penalty": 0.0,
+      "B8_caers_evidence": [],
+      "B8_penalty": 0.0,
+      "B_hypoallergenic": 0.0,
+      "bonuses": 1.0,
       "max": 30.0,
-      "reason": "Banned substance (FD&C Red No. 2 (Amaranth))",
-      "score": 0.0
+      "penalties": 12.5,
+      "raw": 13.5,
+      "score": 13.5
     },
     "C": {
+      "depth_bonus": 0.5,
+      "ingredient_points": {
+        "bifidobacterium bifidum": 3.58,
+        "bifidobacterium longum": 2.86,
+        "calcium": 4.68,
+        "chlorella": 2.08,
+        "iodine": 2.21,
+        "lactobacillus acidophilus": 3.25,
+        "potassium": 4.68,
+        "spirulina": 2.08,
+        "sulforaphane": 3.12,
+        "vitamin a beta carotene": 4.68,
+        "vitamin c": 3.98
+      },
+      "matched_entries": 11,
       "max": 20.0,
-      "score": 0.0
+      "score": 8.69,
+      "top_n_applied": 3
     },
     "D": {
+      "D1": 2.0,
+      "D2": 0.0,
+      "D3": 0.0,
+      "D4": 0.0,
+      "D5": 0.5,
       "max": 5.0,
-      "score": 0.0
+      "score": 2.5
     },
     "E": {
+      "_note": "Legacy compat \u2014 omega-3 dose is now a category bonus inside Ingredient Quality",
       "applicable": false,
       "max": 0.0,
       "score": 0.0
     },
+    "quality_raw": 39.17,
     "violation_penalty": 0.0
   },
   "dsld_id": "173734",
-  "evaluation_stage": "safety",
+  "evaluation_stage": "scoring",
   "flags": [
+    "PROPRIETARY_BLEND_PRESENT",
     "SUPPLEMENT_TYPE_REINFERRED"
   ],
-  "grade": null,
+  "grade": "Low",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",
   "product_name": "Perfect Food Berry Super Green Fruit & Veggie Formula",
-  "safety_verdict": "BLOCKED",
-  "score_100_equivalent": null,
-  "score_80": null,
-  "score_basis": "safety_block",
-  "scoring_status": "blocked",
+  "safety_verdict": "SAFE",
+  "score_100_equivalent": 49.0,
+  "score_80": 39.2,
+  "score_basis": "bioactives_scored",
+  "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
-      "category_bonus_pool_cap": null,
-      "category_bonus_total": null,
-      "core_quality": null,
+      "category_bonus_pool_cap": 5.0,
+      "category_bonus_total": 2.0,
+      "core_quality": 12.48,
       "max": 25.0,
-      "score": 0.0
+      "score": 14.48
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 0.0
+      "score": 13.5
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 0.0
+      "score": 8.69
     },
     "D_brand_trust": {
       "max": 5.0,
-      "score": 0.0
+      "score": 2.5
     },
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",
@@ -71,5 +271,5 @@
   "supp_type": "probiotic",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
-  "verdict": "BLOCKED"
+  "verdict": "SAFE"
 }
