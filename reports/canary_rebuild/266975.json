@@ -377,12 +377,14 @@
       "adequacy_tier": null,
       "bio_score": 7.0,
       "category": "vitamins",
+      "cfu_confidence": null,
       "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "180 mg",
       "display_label": "Vitamin E (DL-Alpha-Tocopheryl Acetate)",
       "dosage": 180.0,
       "dosage_unit": "mg",
+      "dose_basis": null,
       "extracted_forms": [
         {
           "display_form": "DL-Alpha-Tocopheryl Acetate",
@@ -539,6 +541,7 @@
       "standardName": "Vitamin E",
       "standard_name": "Vitamin E",
       "standardization_note": null,
+      "ui_copy_hint": null,
       "unit": "mg"
     }
   ],

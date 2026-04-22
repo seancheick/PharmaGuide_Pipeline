@@ -754,12 +754,14 @@
       "adequacy_tier": null,
       "bio_score": 12.0,
       "category": "vitamins",
+      "cfu_confidence": null,
       "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "3000 IU",
       "display_label": "Vitamin D (Cholecalciferol)",
       "dosage": 3000.0,
       "dosage_unit": "IU",
+      "dose_basis": null,
       "extracted_forms": [
         {
           "display_form": "Cholecalciferol",
@@ -994,18 +996,21 @@
       "standardName": "Vitamin D",
       "standard_name": "Vitamin D",
       "standardization_note": null,
+      "ui_copy_hint": null,
       "unit": "IU"
     },
     {
       "adequacy_tier": null,
       "bio_score": 6.0,
       "category": "minerals",
+      "cfu_confidence": null,
       "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "80 mg",
       "display_label": "Calcium (Tricalcium Phosphate)",
       "dosage": 80.0,
       "dosage_unit": "mg",
+      "dose_basis": null,
       "extracted_forms": [
         {
           "display_form": "Tricalcium Phosphate",
@@ -1138,6 +1143,7 @@
       "standardName": "Calcium",
       "standard_name": "Calcium",
       "standardization_note": null,
+      "ui_copy_hint": null,
       "unit": "mg"
     }
   ],

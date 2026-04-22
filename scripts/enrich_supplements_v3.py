@@ -157,6 +157,79 @@ def _compute_strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> Optional[str]:
     return None
 
 
+# Sprint E1.3.2.b — probiotic confidence hybrid (descriptive layer).
+# Deterministic mapping from adequacy signals to three controlled-
+# vocabulary fields that surface evidence honesty without inventing
+# clinician-final prose. Dev rule (external review 2026-04-22):
+# ``dose_basis="clinical"`` is RESERVED — current cfu_thresholds blocks
+# use industry-standard 1B/10B/50B bands, not per-strain trial arms,
+# so today's pipeline never emits "clinical".
+_CFU_CONFIDENCE_VALUES = ("high", "moderate", "low")
+_DOSE_BASIS_VALUES = ("clinical", "industry_standard", "inferred")
+_UI_COPY_HINT_VALUES = (
+    "studied_range",
+    "limited_evidence",
+    "label_disclosed_no_threshold",
+    "blend_not_individually_disclosed",
+)
+
+
+def _compute_probiotic_confidence_hybrid(
+    cfu_per_day, adequacy_tier, clinical_support_level,
+) -> Dict[str, str]:
+    """Derive (cfu_confidence, dose_basis, ui_copy_hint) deterministically
+    from the upstream adequacy signal.
+
+    Precedence (first match wins):
+      1. ``cfu_per_day is None`` → multi-strain blend, per-member CFU
+         not knowable. ``ui_copy_hint="blend_not_individually_disclosed"``,
+         ``cfu_confidence="low"``, ``dose_basis="industry_standard"`` (the
+         strain's threshold block itself is industry-standard).
+      2. ``adequacy_tier is None`` (but cfu known) — dose disclosed but
+         no matching tier band. ``ui_copy_hint="label_disclosed_no_threshold"``,
+         ``cfu_confidence="low"``, ``dose_basis="inferred"``.
+      3. tier-matched: ``cfu_confidence`` mirrors ``clinical_support_level``
+         with "weak" → "low"; ``ui_copy_hint="studied_range"`` on
+         high/moderate, ``"limited_evidence"`` on weak; ``dose_basis=
+         "industry_standard"`` (current threshold source).
+
+    The output enums are the only allowed values; anything else is a
+    programming error and should fail tests immediately.
+    """
+    # Case 1 — multi-strain blend (per-member CFU unknown)
+    if cfu_per_day is None:
+        return {
+            "cfu_confidence": "low",
+            "dose_basis": "industry_standard",
+            "ui_copy_hint": "blend_not_individually_disclosed",
+        }
+
+    # Case 2 — dose disclosed but no tier match
+    if adequacy_tier is None:
+        return {
+            "cfu_confidence": "low",
+            "dose_basis": "inferred",
+            "ui_copy_hint": "label_disclosed_no_threshold",
+        }
+
+    # Case 3 — tier-matched
+    support = (clinical_support_level or "weak").strip().lower()
+    if support == "high":
+        cfu_conf = "high"
+        hint = "studied_range"
+    elif support == "moderate":
+        cfu_conf = "moderate"
+        hint = "studied_range"
+    else:  # weak or unknown
+        cfu_conf = "low"
+        hint = "limited_evidence"
+    return {
+        "cfu_confidence": cfu_conf,
+        "dose_basis": "industry_standard",
+        "ui_copy_hint": hint,
+    }
+
+
 def _derive_clinical_support_level(strain_entry) -> str:
     """Resolve ``clinical_support_level`` with a fallback chain:
 
@@ -9359,6 +9432,10 @@ class SupplementEnricherV3:
                         tiers = thresholds.get("tiers_cfu_per_day") or {}
                         adequacy_tier = _compute_strain_cfu_tier(per_strain_cfu, tiers)
                         support_level = _derive_clinical_support_level(clinical)
+                        # Sprint E1.3.2.b — hybrid confidence layer.
+                        hybrid = _compute_probiotic_confidence_hybrid(
+                            per_strain_cfu, adequacy_tier, support_level,
+                        )
                         found_clinical_strains.append({
                             "strain": strain,
                             "clinical_id": clinical.get('id', ''),
@@ -9370,6 +9447,10 @@ class SupplementEnricherV3:
                             "adequacy_tier": adequacy_tier,
                             "clinical_support_level": support_level,
                             "indication_primary": thresholds.get("indication_primary"),
+                            # E1.3.2.b descriptive-only fields.
+                            "cfu_confidence": hybrid["cfu_confidence"],
+                            "dose_basis": hybrid["dose_basis"],
+                            "ui_copy_hint": hybrid["ui_copy_hint"],
                         })
                         break
 

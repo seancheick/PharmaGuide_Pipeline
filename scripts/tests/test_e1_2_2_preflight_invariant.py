@@ -46,6 +46,9 @@ E1_2_2_NEW_INGREDIENT_FIELDS = {
     "standardization_note",    # E1.2.2.c
     "adequacy_tier",           # E1.3.2 per-strain adequacy
     "clinical_support_level",  # E1.3.2 per-strain adequacy
+    "cfu_confidence",          # E1.3.2.b hybrid confidence
+    "dose_basis",              # E1.3.2.b hybrid confidence
+    "ui_copy_hint",            # E1.3.2.b hybrid confidence
 }
 
 # Baseline rolls forward sub-task by sub-task. As each field lands, move

@@ -1942,6 +1942,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "clinical_support_level": fc.get("clinical_support_level"),
             "cfu_per_day": fc.get("cfu_per_day"),
             "clinical_id": fc.get("clinical_id"),
+            # Sprint E1.3.2.b — hybrid confidence descriptors.
+            "cfu_confidence": fc.get("cfu_confidence"),
+            "dose_basis": fc.get("dose_basis"),
+            "ui_copy_hint": fc.get("ui_copy_hint"),
         }
 
     # Build ingredients
@@ -2030,6 +2034,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # knowable e.g. multi-strain blend).
             "adequacy_tier": _strain_adequacy.get("adequacy_tier"),
             "clinical_support_level": _strain_adequacy.get("clinical_support_level"),
+            # Sprint E1.3.2.b — hybrid confidence descriptors (controlled
+            # enums; None on non-probiotic ingredients so this stays off
+            # generic ingredient surfaces).
+            "cfu_confidence": _strain_adequacy.get("cfu_confidence"),
+            "dose_basis": _strain_adequacy.get("dose_basis"),
+            "ui_copy_hint": _strain_adequacy.get("ui_copy_hint"),
             # Sprint E1.2.2.d — quality-tier badge (adapter — conservative).
             # Reads adequacy_tier above, so must come AFTER the E1.3.2 fields.
             "display_badge": _compute_display_badge({**ing, "adequacy_tier": _strain_adequacy.get("adequacy_tier")}),
