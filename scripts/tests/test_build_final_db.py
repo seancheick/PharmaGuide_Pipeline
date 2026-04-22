@@ -740,6 +740,9 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
             "banned_name": "Vitamin A Palmitate",
             "status": "banned",
             "match_type": "exact",
+            # Sprint E1.1.3: realistic fixture matches Dr Pham's 143/143
+            # authored-copy coverage; validator requires at least one copy field.
+            "reason": "Test regulatory context.",
         }
     ]
 

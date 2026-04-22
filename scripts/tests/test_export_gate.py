@@ -561,7 +561,8 @@ class TestGoldenProducts:
         """Product with banned + allergen + harmful: all coexist correctly."""
         e = _base_enriched(dsld_id="GOLDEN_MULTI")
         e["contaminant_data"]["banned_substances"]["substances"] = [
-            {"ingredient": "DMAA", "banned_name": "DMAA", "status": "banned", "match_type": "exact"}
+            {"ingredient": "DMAA", "banned_name": "DMAA", "status": "banned", "match_type": "exact",
+             "reason": "FDA-banned stimulant; removed from lawful supplements."}
         ]
         e["allergen_hits"] = [
             {"allergen_id": "WHEAT", "allergen_name": "Wheat", "presence_type": "contains",

@@ -1005,6 +1005,51 @@ _WARNING_AUTHORED_COPY_FIELDS = (
 )
 
 
+# Sprint E1.1.3 — every warning MUST carry at least one populated authored-
+# copy field. A warning where only the machine-readable ``type`` enum is
+# populated renders as raw text in Flutter (user sees "ban_ingredient"
+# instead of authored safety copy). The validator protects the build path
+# against regressions from any new warning-emission site that forgets to
+# populate authored copy.
+#
+# The 5 fields mirror the sprint §E1.0.2 invariant #3 set.
+_WARNING_REQUIRED_COPY_FIELDS = (
+    "alert_headline",
+    "alert_body",
+    "safety_warning",
+    "safety_warning_one_liner",
+    "detail",
+)
+
+
+def _validate_warning_has_authored_copy(
+    warnings_list: List[Dict[str, Any]], dsld_id: str
+) -> None:
+    """Raise ``ValueError`` if any warning has all 5 required authored-copy
+    fields empty. Invoked for every product at build time.
+
+    Emits ``dsld_id + warning_type`` in the error message so Dr Pham's
+    authoring queue can be populated from build-failure triage.
+    """
+    for w in warnings_list or []:
+        if not isinstance(w, dict):
+            continue
+        populated = False
+        for field in _WARNING_REQUIRED_COPY_FIELDS:
+            text = w.get(field)
+            if isinstance(text, str) and text.strip():
+                populated = True
+                break
+        if not populated:
+            raise ValueError(
+                f"[{dsld_id}] warning type={w.get('type')!r} has no authored "
+                f"copy in any of {_WARNING_REQUIRED_COPY_FIELDS}. Raw enum "
+                f"leak — this would render as machine text in Flutter. "
+                f"Populate at least one of those fields (Sprint E1.1.3). "
+                f"Add to Dr Pham authoring queue."
+            )
+
+
 def _validate_warning_display_mode_consistency(
     warnings_list: List[Dict[str, Any]], dsld_id: str
 ) -> None:
@@ -1750,9 +1795,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     ]
 
     # Sprint E1.1.2 — critical-mode warnings must be profile-agnostic.
+    # Sprint E1.1.3 — every warning must carry at least one authored-copy field.
     dsld_id_for_validation = safe_str(enriched.get("dsld_id"))
     _validate_warning_display_mode_consistency(warnings, dsld_id_for_validation)
     _validate_warning_display_mode_consistency(warnings_profile_gated, dsld_id_for_validation)
+    _validate_warning_has_authored_copy(warnings, dsld_id_for_validation)
+    _validate_warning_has_authored_copy(warnings_profile_gated, dsld_id_for_validation)
 
     # Section breakdown — rename to descriptive, preserve all sub-scores
     breakdown_raw = safe_dict(scored.get("breakdown"))
