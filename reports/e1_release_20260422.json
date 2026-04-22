@@ -1,0 +1,70 @@
+{
+  "label_fidelity": {
+    "A_prop_blend_mass_recovery": {
+      "count": 0,
+      "samples": []
+    },
+    "B_branded_identity_preserved": {
+      "count": 2,
+      "samples": [
+        "('16024', 'Silybin Phytosome', 'Silybin Phytosome')",
+        "('16037', 'Silybin Phytosome', 'Silybin Phytosome')"
+      ]
+    },
+    "C_plant_part_preserved": {
+      "count": 86,
+      "samples": [
+        "('1060', 'leaf', 'Antioxidant Fruit & Vegetable Blend')",
+        "('1061', 'leaf', 'Antioxidant Fruit & Vegetable Blend')",
+        "('1062', 'leaf', 'Antioxidant Fruit & Vegetable Blend')",
+        "('1063', 'leaf', 'Antioxidant Fruit & Vegetable Blend')",
+        "('11521', 'leaves', 'Beauty Blend')",
+        "('11522', 'seed', 'EFA Powder Blend')",
+        "('11523', 'leaves', 'Beauty Blend')",
+        "('11523', 'seed', 'Heart Health Blend')",
+        "('11528', 'seed', 'Heart Health Blend')",
+        "('11601', 'bark', 'Greens Blend')"
+      ]
+    },
+    "D_standardization_note_preserved": {
+      "count": 0,
+      "samples": []
+    },
+    "E_inactive_ingredients_complete": {
+      "count": 0,
+      "samples": []
+    },
+    "F_active_count_reconciled": {
+      "count": 0,
+      "samples": []
+    },
+    "G_display_not_canonical": {
+      "count": 0,
+      "samples": []
+    }
+  },
+  "safety_copy": {
+    "S1_no_danger_in_positives": {
+      "count": 0,
+      "samples": []
+    },
+    "S2_critical_profile_agnostic": {
+      "count": 0,
+      "samples": []
+    },
+    "S3_no_raw_enum_leaks": {
+      "count": 0,
+      "samples": []
+    },
+    "S4_banned_substance_preflight": {
+      "count": 0,
+      "samples": []
+    },
+    "S5_no_duplicate_warnings": {
+      "count": 0,
+      "samples": []
+    }
+  },
+  "scanned_products": 8268,
+  "total_violations": 88
+}

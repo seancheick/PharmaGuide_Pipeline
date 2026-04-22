@@ -80,6 +80,7 @@ After applying changes to each batch, run ALL 8 checks before reporting done:
 6. **Schema fields:** cui_note when CUI is null, rxcui_note when RxCUI is null, match_rules complete (priority, match_mode, exclusions, parent_id, confidence)
 7. **Alias integrity:** No cross-parent conflicts (check ALLOWED_CROSS_ALIASES whitelist in test_ingredient_quality_map_schema.py), no intra-parent duplicates, no typos
 8. **Run test suite:** `python -m pytest scripts/tests/ -x -q` — ALL tests must pass
+9. **Internal consistency (Vit E pattern check):** For every form, verify the triple (`notes`, `absorption` string, `absorption_structured.value`) tells the same story within ±5%. Verify `absorption_structured.quality` enum matches its `value` band per the mapping table (value < 0.3 → poor/low; 0.3-0.6 → moderate; 0.6-0.8 → good; 0.8-0.95 → very_good; > 0.95 → excellent). Verify branded/natural-indicator aliases (Ester-E, RRR-, d-alpha-, naturally-derived tokens) sit under the NATURAL form entry, not the synthetic one. Verify notes reflect current scientific framing (post-2015 standards, e.g., Vit E 2R-isomer bioactivity per IOM 2000, not pre-2000 12.5% convention).
 
 ### Step 5: Batch Summary
 Report a table of changes: form, old_bio, new_bio, reason (with citation).
@@ -224,6 +225,11 @@ Run ONCE at the start of the audit before batch work begins:
 | Duplicate/scattered parents | `beta_glucan` as standalone AND as a form under `prebiotics` | Merge into one canonical parent; delete from the other |
 | Umbrella vs. species score mismatch | B. bifidum bio=5 in species parent but bio=12 in umbrella `probiotics` | Merge down to species parent keeping higher bio_score |
 | Vague/unverifiable notes | "May support cognitive function" | Replace with specific RCT citation or delete the claim entirely |
+| Alias misclassified across natural/synthetic forms | `"Ester-E d-Alpha Tocopheryl Acetate"` placed under `dl-alpha-tocopheryl acetate` (Ester-E is a proprietary NATURAL form) | Move branded/natural-indicator tokens (Ester-E, RRR-, d-alpha-, -succinate from natural source) to the natural entry; branded token → natural parent is the default when the brand markets natural chirality |
+| Outdated scientific framing in notes | Vit E dl-alpha notes: "only ~12.5% being the natural RRR form" (pre-2000 USP single-stereoisomer convention) | Rewrite to current standard. For Vit E: IOM DRI 2000 / FDA 2016 USP update — synthetic dl-alpha is ~50% bioactive (the 2R family: RRR + RSR + RRS + RSS = 4 of 8 stereoisomers). Check every parent for notes written before 2015 |
+| quality label contradicts numeric value | `absorption_structured: {value: 0.5, quality: "good"}` — 50% is "moderate" not "good" | Enforce mapping: value < 0.3 → "poor" / "low"; 0.3-0.6 → "moderate"; 0.6-0.8 → "good"; 0.8-0.95 → "very_good"; > 0.95 → "excellent". Add contract test `test_absorption_quality_value_consistency` |
+| `value: null` on premium entry | `d-alpha-tocopheryl acetate.absorption_structured.value = null` (natural reference form missing its baseline 1.0) | Premium/reference forms must carry a numeric value. If it's THE reference form, `value: 1.0`. If unknown, research citation — never leave null when the entry exists as the natural gold-standard |
+| Self-contradicting entry | dl-alpha notes claim "12.5%" but same entry has `absorption: "50%"` string AND `absorption_structured.value: 0.5` | Scan for triples of (notes, absorption string, absorption_structured.value) — all three must tell the same story within ±5% |
 
 ## FINAL DELIVERABLE
 

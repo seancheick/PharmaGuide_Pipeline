@@ -114,6 +114,9 @@ cd /Users/seancheick/Downloads/dsld_clean
 streamlit run scripts/dashboard/app.py
 ```
 
+bash scripts/rebuild_dashboard_snapshot.sh
+streamlit run scripts/dashboard/app.py
+
 Run with explicit scan/build roots:
 
 ```bash

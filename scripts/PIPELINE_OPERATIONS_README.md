@@ -1,6 +1,6 @@
 # Pipeline Operations README
 
-Updated: 2026-04-17
+Updated: 2026-04-22
 Owner: Sean Cheick Baradji
 
 This file is a practical command guide for running and releasing the PharmaGuide pipeline.
@@ -8,13 +8,172 @@ This file is a practical command guide for running and releasing the PharmaGuide
 It covers:
 
 - full pipeline run (Clean → Enrich → Score)
-- final DB build (per-pair + assembled release)
-- incremental pair builds
+- dashboard snapshot rebuild (final DB build + release staging in one step)
+- final DB build (per-pair + assembled release, alternative incremental path)
 - pair change-journal generation
 - assembled release creation
 - Supabase sync and `--cleanup`
 - Flutter artifact import and release gate
 - DSLD API tooling status and commands
+
+---
+
+## 🟢 Canonical Operations — START HERE
+
+> **If you have N brand folders under `$HOME/Documents/DataSetDsld/staging/brands/` and want a fresh `scripts/dist/` ready to sync — run this one command.**
+>
+> Works the same for 10 brands, 20 brands, or 30+ brands.
+
+```bash
+# From repo root
+cd /Users/seancheick/Downloads/dsld_clean
+
+# ONE command — does everything below in order
+bash batch_run_all_datasets.sh
+```
+
+### What actually runs (and in what order)
+
+The batch driver `batch_run_all_datasets.sh` is the canonical entry point. It orchestrates two phases:
+
+**Phase 1 — Per-brand pipeline (repeats × N brands, sequentially, smallest first):**
+
+| Step | Script | Reads | Writes |
+|---:|---|---|---|
+| 1.1 | `clean_dsld_data.py` | `staging/brands/<brand>/` raw DSLD JSON | `scripts/products/output_<brand>_cleaned/` |
+| 1.2 | `enrich_supplements_v3.py` | cleaned | `scripts/products/output_<brand>_enriched/enriched/` |
+| 1.3 | `score_supplements.py` | enriched | `scripts/products/output_<brand>_scored/scored/` |
+
+Each brand runs through all three stages before the next brand starts. Brand outputs are independent — a failure in one brand doesn't stop the others (tracked, reported in summary).
+
+**Phase 2 — Catalog-wide build + dashboard snapshot (runs once, after all brands complete):**
+
+Triggered automatically at end of Phase 1 **only if every brand succeeded** (see "Guards" below). Calls `rebuild_dashboard_snapshot.sh`, which executes:
+
+| Step | Script | Reads | Writes |
+|---:|---|---|---|
+| 2.1 | `build_final_db.py` | **every** `*_enriched/enriched` + `*_scored/scored` pair across all brands | `/tmp/pg_dashboard_snapshot_<pid>/` — staging dir with `pharmaguide_core.db`, `detail_blobs/`, `detail_index.json`, `export_manifest.json`, `export_audit_report.json` |
+| 2.2 | `release_catalog_artifact.py` | `/tmp/pg_dashboard_snapshot_<pid>/` | `scripts/dist/pharmaguide_core.db`, `scripts/dist/export_manifest.json`, `scripts/dist/RELEASE_NOTES.md` — validates + stages atomically |
+| 2.3 | bash copy | `/tmp/…/detail_blobs/` + `/tmp/…/detail_index.json` + `/tmp/…/export_audit_report.json` | `scripts/dist/detail_blobs/`, `scripts/dist/detail_index.json`, `scripts/dist/export_audit_report.json` — these are dashboard-only (Flutter bundle doesn't need them, but the Streamlit dashboard does) |
+
+**Phase 2 answers the "dashboard before or after final build DB?" question directly:**
+
+> The dashboard snapshot **IS** the final build-db step. Step 2.1 (`build_final_db.py`) produces the catalog DB; step 2.2 stages the Flutter bundle; step 2.3 adds the dashboard-only artifacts on top. All three are part of the same automated `rebuild_dashboard_snapshot.sh` run. There is no separate "dashboard update" that happens later.
+
+### End-state after a clean run
+
+```
+scripts/dist/
+├── RELEASE_NOTES.md               ← auto-generated
+├── pharmaguide_core.db            ← Flutter catalog (ships with app)
+├── export_manifest.json           ← schema + version + integrity + errors
+├── export_audit_report.json       ← warnings + counts (dashboard-only)
+├── detail_index.json              ← id → sha256 lookup (dashboard-only)
+└── detail_blobs/<id>.json         ← per-product full detail JSON (dashboard-only)
+```
+
+The Flutter import script (`PharmaGuide ai/scripts/import_catalog_artifact.sh`) pulls only the 3 artifacts it needs (`pharmaguide_core.db`, `export_manifest.json`, `RELEASE_NOTES.md`). The dashboard and Supabase sync read everything in `scripts/dist/`.
+
+### Running with fewer brands / specific brands
+
+```bash
+# Process one brand only (e.g., while iterating on enricher)
+bash batch_run_all_datasets.sh --targets Olly
+
+# Process a subset
+bash batch_run_all_datasets.sh --targets Olly,Thorne,Pure
+
+# Use a different brands root
+bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
+
+# Score-only on all brands (skip clean + enrich — requires prior cleaned+enriched)
+bash batch_run_all_datasets.sh score
+
+# Specific stages + specific brands
+bash batch_run_all_datasets.sh --stages enrich,score --targets Nature_Made
+```
+
+### Skipping the automated snapshot rebuild
+
+```bash
+# Skip the Phase 2 snapshot rebuild (useful for single-brand iteration loops)
+SKIP_SNAPSHOT=1 bash batch_run_all_datasets.sh --targets Olly
+
+# Later, rebuild the snapshot manually when you're ready
+bash scripts/rebuild_dashboard_snapshot.sh
+```
+
+### Guards (when Phase 2 is skipped automatically)
+
+Phase 2 does **not** run if:
+
+1. **Any brand failed in Phase 1** — a partial catalog snapshot would be misleading. You'll see: `Dashboard snapshot NOT rebuilt because some brands failed.`
+2. **`SKIP_SNAPSHOT=1`** — caller opted out.
+3. **`rebuild_dashboard_snapshot.sh` is not executable** — fix with `chmod +x scripts/rebuild_dashboard_snapshot.sh`.
+
+If Phase 2 is skipped and you later want the snapshot, run `bash scripts/rebuild_dashboard_snapshot.sh` manually. It is idempotent and safe to rerun.
+
+### What gets written to `scripts/products/reports/`
+
+Every batch run writes a summary file: `scripts/products/reports/batch_run_summary_YYYYMMDD_HHMMSS.txt`
+
+Contains the full per-brand pipeline log + the Phase 2 snapshot log. Useful for release ledgers and post-run diagnostics.
+
+### After a successful batch run
+
+1. **Verify** — check `scripts/dist/export_audit_report.json` for `contract_failures: 0` and review the `counts.total_errors` value
+2. **Scope-report** (optional, E1+) — see the command below
+3. **Canary shadow-diff** (optional, E1+) — see the command below
+4. **Dry-run sync** — `python3 scripts/sync_to_supabase.py scripts/dist --dry-run`
+5. **Real sync** — `python3 scripts/sync_to_supabase.py scripts/dist`
+6. **Flutter bundle** — see `§ Release playbook` below for the Flutter side
+
+### Useful post-run commands
+
+```bash
+# Label-fidelity + safety-copy scope report (Sprint E1+)
+python3 scripts/reports/label_fidelity_scope_report.py \
+    --blobs scripts/dist/detail_blobs/ \
+    --out reports/ \
+    --prefix release_$(date +%Y%m%d)
+
+# 9-canary shadow-diff (requires reports/canary_rebuild/<id>.json baselines)
+for id in 35491 306237 246324 1002 19067 1036 176872 266975 19055; do
+  diff <(python3 -c "import json; print(json.dumps(json.load(open('reports/canary_rebuild/$id.json')), sort_keys=True, indent=2))") \
+       <(python3 -c "import json; print(json.dumps(json.load(open('scripts/dist/detail_blobs/$id.json')), sort_keys=True, indent=2))") \
+    | head -5
+done
+
+# Streamlit dashboard (requires scripts/dist/ populated)
+streamlit run scripts/dashboard/app.py
+```
+
+### Runtime expectations
+
+- **All-local, no external API calls in the main pipeline** — runs as fast as your SSD + CPU allow
+- **20 brands / ~8–13K products** — ~15 min per brand end-to-end (clean+enrich+score), plus ~1 min for Phase 2 snapshot
+- **No network required** — everything reads local data and local reference JSON
+
+### Mental model
+
+```
+staging/brands/<brand>/  ──clean──▶  *_cleaned/  ──enrich──▶  *_enriched/  ──score──▶  *_scored/
+      (× N brands)                                                              │
+                                                                                ▼
+                                                         rebuild_dashboard_snapshot.sh
+                                                                                │
+                                                          build_final_db.py (all brands merged)
+                                                                                │
+                                                                                ▼
+                                                                /tmp/staging/
+                                                                      │
+                                                       release_catalog_artifact.py
+                                                                      │
+                                                                      ▼
+                                                               scripts/dist/  ← consumed by Supabase sync + Flutter + dashboard
+```
+
+---
 
 ## Schema version history
 
@@ -89,7 +248,7 @@ git add .gitattributes
 ```bash
 # ── Pipeline side (dsld_clean repo) ──────────────────────────────────────────
 
-# 1. Build all 15 brand DBs AND assemble the release in one command.
+# 1. Build all brand DBs AND assemble the release in one command.
 #    Both flags MUST be on the same line.
 python3 scripts/build_all_final_dbs.py \
   --scan-dir scripts/products \

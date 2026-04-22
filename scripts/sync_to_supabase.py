@@ -380,10 +380,29 @@ def upload_detail_blobs(
 
 def validate_build_output(build_dir, manifest):
     """Validate local build output before any upload begins."""
+    # Sprint E1.5 — gate reads the BLOCKING bucket only. The build tool
+    # now splits export failures into three manifest lists:
+    #   errors[]             — catastrophic (schema drift, unknown enum,
+    #                          column mismatch). BLOCKS sync.
+    #   excluded_by_gate[]   — by-design coverage gate (E1.2.5). Logged.
+    #   warnings[]           — authoring backlog (tone sweep). Logged.
+    # See build_final_db.py _EXPORT_ERROR_TAXONOMY for the classifier.
     build_errors = manifest.get("errors") or []
     if build_errors:
         raise ValueError(
-            f"Build output contains {len(build_errors)} export errors; refusing to sync partial artifact"
+            f"Build output contains {len(build_errors)} export errors; "
+            f"refusing to sync partial artifact"
+        )
+    excluded = manifest.get("excluded_by_gate") or []
+    warnings = manifest.get("warnings") or []
+    if excluded or warnings:
+        # Surface non-blocking classification counts so the operator sees
+        # what the gate consciously let through.
+        print(
+            f"  [info] non-blocking exclusions: "
+            f"excluded_by_gate={len(excluded)}, "
+            f"warnings={len(warnings)} "
+            f"(see export_manifest.json for per-product detail)"
         )
 
     db_path = os.path.join(build_dir, "pharmaguide_core.db")

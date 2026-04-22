@@ -1,6 +1,7 @@
 # SCORING_ENGINE_SPEC.md
 
-> Scoring version: **3.4.0** / Data schema: **5.1.0** — aligned to current `score_supplements.py` and `config/scoring_config.json`.
+> Scoring version: **3.4.0** / Data schema: **5.1.0** / Last updated: **2026-04-22**
+> Aligned to current `score_supplements.py` and `config/scoring_config.json`.
 
 ## Scope
 
@@ -13,9 +14,40 @@ This document specifies the current server-side scoring behavior implemented in:
 Scorer is arithmetic-only. Matching and NLP are performed in enrichment. The scorer
 consumes fully-enriched products and computes scores from their canonical fields.
 
-All section caps and point values are config-driven via `scoring_config.json`. The scorer
-reads caps through `_section_max()` helper and individual config lookups with hardcoded
-defaults as fallback only when config keys are absent.
+### Config-Driven Design
+
+The scorer is **almost fully config-driven**. Every numeric value the scorer uses —
+section caps, subsection caps, tier points, thresholds, multipliers, bands,
+penalties, bonuses, gate toggles, dedupe constants, and accepted-value lists —
+lives in `config/scoring_config.json`. Hardcoded literals in the Python remain
+**only as last-resort defaults** when a config key is missing (e.g.
+`as_float(cfg.get("max"), 15.0)`). Changing scoring behavior does not require
+code edits for:
+
+- All section maxes (A 25 / B 30 / C 20 / D 5) via `_section_max()`
+- All subsection caps (`A1.max`, `A2.max`, `B1.cap`, `B5.cap`, `B7.cap`, `B8.cap`, `C.cap_total`, `C.cap_per_ingredient`, ...)
+- All point values, tier points, penalty magnitudes, band thresholds
+- Feature gates (`require_full_mapping`, `probiotic_extended_scoring`, `enable_non_gmo_bonus`, `enable_hypoallergenic_bonus`, `enable_d1_middle_tier`)
+- Category bonus pool cap (`category_bonus_pool.max_contribution`)
+- Section C diminishing-returns weights (`top_n_weights`), evidence multipliers, effect-direction multipliers, enrollment and depth bonus bands
+- B5 count-share denominator constant (`count_share_min_denominator_constant`)
+- B8 CAERS data file path (`B8_caers_adverse_events.data_file`)
+- D4 accepted regions list, probiotic prebiotic-term list, probiotic strict-gate parameters
+- Omega-3 EPA/DHA bands, parent-mass-fallback fraction, eligible parent blends
+- Enzyme recognition gating + per-enzyme points + activity-unit allow-list
+- Probiotic CFU adequacy tier points and clinical-support-level caps
+- B1 dietary sugar level penalty magnitudes
+- Grade-scale cutoffs, verdict POOR threshold
+
+What is **not** config-driven (structural behavior, not tunable values):
+
+- Final-score formula shape (`quality_raw = A + B + C + D + violation_penalty`)
+- Verdict precedence order and safety-verdict back-compat mapping
+- Gate ordering (B0 → mapping gate → regression guard → sections)
+- Output payload shape, flag names, badge structure
+- Per-section aggregation algorithms (e.g. the mg-share-before-count-share B5 fallback)
+
+In short: **point values and gates live in config; the scorer performs arithmetic only.**
 
 Required product-level fields:
 - `dsld_id`
@@ -124,10 +156,20 @@ Purpose: avoid labeling safety-caught unmatched actives as mapping misses; enfor
 ## Section A: Ingredient Quality (max 25)
 
 ```text
-A = min(25, A1 + A2 + A3 + A4 + A5 + A6 + probiotic_bonus)
+core_quality         = A1 + A2 + A3 + A4 + A5 + A6
+category_bonus_total = min(category_bonus_pool.max_contribution,   # default 5
+                           probiotic_bonus
+                         + omega3_dose_bonus
+                         + enzyme_recognition_bonus
+                         + probiotic_cfu_adequacy_uplift)
+A                    = min(25, core_quality + category_bonus_total)
 ```
 
-### A1 Bioavailability Form (max 15)
+Design intent: core quality (A1–A6) always dominates. Niche category bonuses
+(probiotic, omega-3 dose adequacy, enzyme recognition, CFU adequacy) are pooled
+under a shared cap so they enhance, not define, ingredient-quality differentiation.
+
+### A1 Bioavailability Form (max 18)
 
 Input:
 - `ingredient_quality_data.ingredients_scorable` fallback `ingredient_quality_data.ingredients`
@@ -152,18 +194,30 @@ Supplement-type effects:
 - `single` / `single_nutrient`: all weights forced to `1.0`
 - `multivitamin`: smoothing applied — `avg = 0.7*avg + 0.3*9.0`
 
-Final:
+**Dose-anchored rule:** rows without a usable individual dose (`_has_usable_individual_dose`)
+are skipped. This prevents opaque blend children without per-item amounts from contributing
+to A1.
+
+Final (both cap and range driven by `A1_bioavailability_form.max` / `range_score_field`):
 ```text
-A1 = clamp(0, 15, (weighted_avg / 18) * 15)
+A1 = clamp(0, max_points, (weighted_avg / range_max) * max_points)
+# current config: max_points = 18, range_max = 18 (from "0-18")
 ```
 
-### A2 Premium Forms (max 3)
+### A2 Premium Forms (max 5)
 
-Rule:
-- Count unique canonical ingredients with `score >= 14`
-- Excludes `is_proprietary_blend` and `is_parent_total` rows (consistent with A1)
-- Deduplicated by `canon_key(canonical_id)` via set
-- `A2 = clamp(0, 3, 0.5 * max(0, count - 1))`
+Config: `A2_premium_forms.{max, threshold_score, points_per_additional_premium_form, skip_first_premium_form}`.
+
+Rule (fully config-driven):
+- Count unique canonical ingredients with `score >= threshold_score` (default 14)
+- Excludes `is_proprietary_blend`, `is_parent_total`, and rows without a usable
+  individual dose (same dose-anchored rule as A1/A6)
+- Deduplicated by `canon_key(canonical_id or standard_name)` via set
+- `effective = max(0, count - 1)` when `skip_first_premium_form: true`, else `count`
+- `A2 = clamp(0, max, points_per_additional_premium_form * effective)`
+- Current config: `max=5`, `points_per_additional_premium_form=0.5`, `skip_first=true`
+  → stacking 4+ premium forms (e.g. chelated Mg + methylated B12 + K2-MK7 + D3)
+  can reach the full 5 pts.
 
 ### A3 Delivery System (max 3)
 
@@ -245,6 +299,67 @@ Gate: `feature_gates.probiotic_extended_scoring` — current config state: `fals
 Known clinical strain tokens: `lgg`, `bb-12`, `ncfm`, `reuteri`, `k12`, `m18`,
 `coagulans`, `shirota`.
 
+### Probiotic CFU Adequacy Uplift (category bonus, max 5)
+
+Config: `section_A_ingredient_quality.probiotic_cfu_adequacy`. Config-driven
+per-strain CFU adequacy credit layered on top of `probiotic_bonus`. Points follow
+confidence — only single-strain blends with knowable per-strain CFU receive
+points; multi-strain blends and `tier=None` always contribute 0.
+
+- `tier_points`: `low=0`, `adequate=1`, `good=2`, `excellent=3`
+- `support_level_caps` (by `clinical_support_level`): `high=1.0x`, `moderate=0.75x`, `weak=0.5x`
+- `per_product_max_uplift`: 5.0
+- Hard gates (non-negotiable): blend-member without individual dose → 0;
+  `adequacy_tier=None` → 0; blend-total inference → forbidden.
+
+Feeds the Section A category bonus pool (not standalone).
+
+### Omega-3 Dose Bonus (category bonus, max 3)
+
+Config: `section_A_ingredient_quality.omega3_dose_bonus`. EPA+DHA daily dose
+adequacy bonus for products with explicit labelled EPA and/or DHA amounts.
+Formerly standalone Section E; now a Section A category bonus.
+
+- Applicable when `ingredient_quality_data.ingredients` contains `canonical_id in {epa, dha, epa_dha}` with a usable quantity field
+- Lookup: `per_day_mid = ((min_serving/day + max_serving/day) / 2) * (EPA + DHA mg per unit)`
+- Highest-matching band wins (config-driven, current bands):
+
+| min_mg_day | score | label | flag |
+|---|---|---|---|
+| ≥ 4000 | 3.0 | prescription_dose | `PRESCRIPTION_DOSE_OMEGA3` |
+| ≥ 2000 | 2.5 | high_clinical | — |
+| ≥ 1000 | 2.0 | aha_cvd | — |
+| ≥ 500  | 1.0 | general_health | — |
+| ≥ 250  | 0.5 | efsa_ai_zone | — |
+| ≥ 0    | 0.0 | below_efsa_ai | — |
+
+**Parent-mass fallback** (`fish_oil_parent_mass_fallback`, enabled): when EPA
+and DHA are individually NP but the parent fish-oil / krill-oil row carries a
+total mass, infer `EPA+DHA = parent_mass_mg * epa_dha_fraction_of_parent`
+(default 0.5). Adds `omega3_dose_source="inferred_from_parent_mass"` for
+transparency. `eligible_parent_blends` list is config-driven.
+
+### Enzyme Recognition Bonus (category bonus, max 2.5)
+
+Config: `section_A_ingredient_quality.enzyme_recognition` (enabled). Small
+recognition credit for enzyme-containing products whose individual enzyme doses
+are labelled NP, preventing misleading Section A = 0 on enzyme-dominated
+formulas.
+
+- `per_enzyme_points`: 0.5 (deduped by canonical enzyme name)
+- `max_points`: 2.5
+- `require_named_enzyme`: true
+- `min_activity_gate`: currently `enabled=false` (placeholder). When flipped on,
+  only enzymes with activity values ≥ `min_value` in `allowed_units`
+  (`DU, HUT, FIP, ALU, CU, SKB, FCC-PU, HCU, BGU, GalU`) are credited.
+
+### Category Bonus Pool (`category_bonus_pool.max_contribution`, default 5)
+
+All four category bonuses above (`probiotic_bonus`, `probiotic_cfu_adequacy`,
+`omega3_dose_bonus`, `enzyme_recognition`) are summed then clamped to
+`max_contribution` before being added to `core_quality`. Prevents niche bonuses
+from dominating ingredient quality.
+
 ---
 
 ## Section B: Safety & Purity (max 30)
@@ -263,22 +378,39 @@ penalties = B0_moderate + B1 + B2 + B5 + B6 + B7 + B8
 - `base_score` (25) and `bonus_pool_cap` (5) are read from config
 - Optional `B_hypoallergenic` (+0.5) feeds into the bonus pool (gated — requires `enable_hypoallergenic_bonus: true`; also requires zero allergen penalty, no "may contain" text, no contradictions, and at least one validated allergen-free/gluten-free claim)
 
-### B1 Harmful Additives (max penalty 8)
+### B1 Harmful Additives (max penalty 15)
+
+Config: `section_B_safety_purity.B1_harmful_additives` + `B1_dietary_sugar_penalty`.
 
 Input:
-- `contaminant_data.harmful_additives.additives[]`
+- `contaminant_data.harmful_additives.additives[]` (named-sweetener / additive path)
+- `dietary_sensitivity_data.sugar.{level, amount_g}` (amount-based sugar path)
 
-Severity map (config-overridable):
+**Named-additive severity map** (config-overridable, `risk_points`):
+- critical: 3.0  *(accepted for backward compat; no entries use it in schema 5.1)*
 - high: 2.0
 - moderate: 1.0
 - low: 0.5
 - none: 0.0
 
-Note: No `critical` tier in harmful_additives (schema 5.1.0). Substances posing immediate
-hazards are in `banned_recalled_ingredients.json` and handled by B0 gate instead.
-The code still accepts `critical: 3.0` for backward compatibility with pre-5.1 enriched data.
+Source-aware suppression: low/moderate additives sourced from the
+Supplement Facts active panel are suppressed (already captured via IQM
+quality scoring). High/critical still fire for actives (genuine safety).
 
-Deduplicated by `additive_id` (highest severity wins per ID). Summed and capped at 8.
+Deduplicated by `additive_id` (highest severity wins per ID).
+
+**Dietary sugar amount penalty** (`B1_dietary_sugar_penalty`, enabled, layered
+on top of the named path):
+- `moderate` level (3g < sugar_g ≤ 5g) → `-0.5`
+- `high` level (sugar_g > 5g) → `-1.5`
+- `sugar_free` / `low` / missing → 0
+- Emits `SUGAR_LEVEL_MODERATE` / `SUGAR_LEVEL_HIGH` + evidence entry
+- Config-driven magnitudes enable future per-profile personalization (e.g.
+  stronger penalty for diabetic users) without code change.
+
+Total B1 = clamp(0, `B1_harmful_additives.cap`, named_penalty + sugar_level_penalty).
+Current cap = **15** (raised from 8 so products stacking 5+ critical additives
+take the full penalty without being compressed).
 
 ### B2 Allergen Presence (max penalty 2)
 
@@ -583,16 +715,60 @@ Evidence multipliers:
 | unknown | 0.0 |
 
 Dose guard: when `min_clinical_dose` is present and the product dose (after unit conversion)
-is below that threshold, `raw` is multiplied by `0.25`. Adds `SUB_CLINICAL_DOSE_DETECTED`.
+is below `sub_clinical_dose_guard_multiplier * min_clinical_dose` (default 0.25), `raw` is
+multiplied by that same factor. Adds `SUB_CLINICAL_DOSE_DETECTED`.
 Unit conversion supports mass units (g / mg / mcg / ug) only; IU and CFU conversions are
 skipped (returns None = no dose guard applied).
 
-Supra-clinical flag: adds `SUPRA_CLINICAL_DOSE` when product dose > 3x max studied dose
-(informational only, no scoring impact). Multiplier configurable via `supra_clinical_multiple`.
+Supra-clinical flag: adds `SUPRA_CLINICAL_DOSE` when product dose > `supra_clinical_multiple`
+× max studied dose (default 3.0, informational only, no scoring impact).
 
-Capping:
-- max 7 points per canonical ingredient
-- `C = clamp(0, 20, sum(per_ingredient_points))`
+**Effect-direction multiplier** (config: `effect_direction_multipliers`, new in v3.4):
+
+| effect_direction | multiplier |
+|---|---|
+| positive_strong (default) | 1.0 |
+| positive_weak | 0.85 |
+| mixed | 0.6 |
+| null | 0.25 |
+| negative | 0.0 |
+
+Applied as `raw *= effect_direction_multiplier`. Entries without `effect_direction`
+default to `positive_strong (1.0x)` for backward compatibility.
+
+**Enrollment quality bands** (config: `enrollment_quality_bands`, RCT / meta only):
+
+| enrollment | multiplier |
+|---|---|
+| < 50 | 0.6x |
+| 50 – 199 | 0.8x |
+| 200 – 499 | 1.0x |
+| 500 – 999 | 1.1x |
+| ≥ 1000 | 1.2x (default) |
+
+Observational / preclinical entries bypass enrollment quality adjustment.
+
+**Top-N diminishing-returns aggregation** (config: `top_n_weights`, default
+`[1.0, 0.5, 0.25]`): after per-ingredient caps, the per-ingredient scores are
+sorted descending and each rank is multiplied by its positional weight before
+summing. Prevents multivitamin inflation — the best ingredient scores at 100%,
+2nd at 50%, 3rd at 25%, 4th+ at 0% (truncated to weights list length).
+
+**Depth bonus** (config: `depth_bonus_bands`, discrete thresholds):
+
+| published_studies_count | bonus |
+|---|---|
+| 0 – 19 | +0.0 |
+| 20 – 39 | +0.25 |
+| ≥ 40 | +0.5 |
+
+Uses `published_studies_count` from the matched reference entry (not the
+human-readable `published_studies` text). Added after top-N aggregation and
+before the section cap.
+
+Capping (config-driven):
+- max `cap_per_ingredient` points per canonical ingredient (default 7)
+- `C = clamp(0, cap_total, sum(top_n_weighted_per_ingredient_points) + depth_bonus)` (default cap_total 20)
 
 ---
 
@@ -714,8 +890,18 @@ Section scores shorthand (`section_scores`):
 | `shadow_mode` | true | **DEPRECATED / UNUSED.** Present in `scoring_config.json.feature_gates` for historical reasons but never read by the scoring engine. If shadow-mode publication gating is needed in the future, enforce it in `sync_to_supabase.py` or `build_final_db.py`, not here. |
 | `enable_non_gmo_bonus` | true | A5d: +0.5 for Non-GMO Project Verified products |
 | `enable_hypoallergenic_bonus` | false | B bonus pool: +0.5 for hypoallergenic products with zero allergen penalty |
-| `enable_d1_middle_tier` | true | D1: +1 for manufacturers with verifiable mid-tier evidence (NSF GMP, FDA registered, USP, named GMP cert) |
-| `enable_d1_middle_tier` | false | D1: +1.0 for manufacturers with verifiable GMP/NSF/USP evidence (non-exact match) |
+| `enable_d1_middle_tier` | **true** | D1: +1 for manufacturers with verifiable mid-tier evidence (NSF GMP, FDA registered, USP, named GMP cert) |
+
+Non-gate configurable switches (same file, different sections):
+
+| Config path | Current | Effect |
+|---|---|---|
+| `section_A_ingredient_quality.enzyme_recognition.enabled` | true | Enzyme recognition bonus active (max 2.5) |
+| `section_A_ingredient_quality.enzyme_recognition.min_activity_gate.enabled` | false | When true, only enzymes with valid activity units + values credit |
+| `section_A_ingredient_quality.probiotic_cfu_adequacy.enabled` | true | Per-strain CFU adequacy uplift active (max 5) |
+| `section_A_ingredient_quality.omega3_dose_bonus.fish_oil_parent_mass_fallback.enabled` | true | Infer EPA+DHA from parent fish/krill oil mass when individual NP |
+| `section_B_safety_purity.B1_dietary_sugar_penalty.enabled` | true | Amount-based sugar penalty layered on B1 |
+| `section_B_safety_purity.B8_caers_adverse_events.enabled` | true | FDA CAERS pharmacovigilance penalty active |
 
 ---
 
@@ -790,6 +976,26 @@ without `is_parent_total` retain old A1 behavior.
 | B1 cap | 5 | 8 |
 | B1 dedup | none | by `additive_id` (highest severity wins) |
 | Subsection caps | hardcoded | all config-driven |
+
+## v3.2 / v3.3 / v3.4 Change Summary
+
+| Area | Pre-3.2 | v3.2 | v3.3 | v3.4 |
+|---|---|---|---|---|
+| A1 max | 15 | 15 | 15 | **18** (plus range anchored to `range_score_field`) |
+| A2 max | 3 | 3 | 3 | **5** (stacking 4+ premium forms reaches full) |
+| B1 cap | 8 | 8 | 8 | **15** |
+| Section E (EPA/DHA) | separate standalone bonus | introduced, max 2.0 | folded into Section A as `omega3_dose_bonus`; legacy output preserved | max raised to 3.0 |
+| Category bonus pool | n/a | n/a | introduced (`max_contribution`, default 5) | unchanged |
+| `is_parent_total` dedup | not applied | A1/A2 skip parent-total rows | unchanged | unchanged |
+| `B1_dietary_sugar_penalty` | n/a | n/a | n/a | added — amount-based sugar penalty layered on B1 |
+| `enzyme_recognition` bonus | n/a | n/a | n/a | added — max 2.5 (Sprint E1.3.4) |
+| `probiotic_cfu_adequacy` uplift | n/a | n/a | n/a | added — per-strain CFU adequacy, max 5 (Sprint E1.3.2.c) |
+| `fish_oil_parent_mass_fallback` | n/a | n/a | n/a | added — infer EPA+DHA from parent mass (Sprint E1.3.3) |
+| Section C aggregation | simple sum of per-ingredient points | same | same | **Top-N diminishing returns** (`top_n_weights`, default `[1.0, 0.5, 0.25]`) |
+| Section C effect direction | ignored | ignored | ignored | **`effect_direction_multipliers`** applied per match |
+| Section C enrollment quality | ignored | ignored | ignored | **`enrollment_quality_bands`** (RCT / meta only) |
+| Section C depth bonus | n/a | n/a | n/a | **`depth_bonus_bands`** from `published_studies_count` |
+| B8 CAERS pharmacovigilance | n/a | n/a | n/a | added — per-ingredient FDA adverse-event penalty, max 5 |
 
 ---
 

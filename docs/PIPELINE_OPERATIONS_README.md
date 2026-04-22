@@ -86,17 +86,43 @@ Each stage has different owners, different tooling, different failure modes. Und
 
 **Who owns it:** automated (CI) via `.github/workflows/build-db.yml` (Phase 1).
 
+**Local canonical command (any N brands):**
+
+```bash
+# From repo root — runs Phase 1 (per-brand clean→enrich→score × N) and
+# Phase 2 (final-DB build + dashboard snapshot staging) in one command.
+bash batch_run_all_datasets.sh
+```
+
+**Important ordering clarification** — the dashboard snapshot rebuild **IS the final-DB build step**, not a separate action that happens afterward. The flow is:
+
+```
+Phase 1 (per-brand × N):  clean → enrich → score
+Phase 2 (catalog-wide):   build_final_db → release_catalog_artifact → dashboard artifacts copied
+                                    └── all three run inside rebuild_dashboard_snapshot.sh
+```
+
+End-state: `scripts/dist/` contains `pharmaguide_core.db` (Flutter catalog) + `detail_blobs/` (dashboard-only) + manifest + audit report — all ready to sync.
+
+Skip the auto-rebuild for single-brand iteration with `SKIP_SNAPSHOT=1 bash batch_run_all_datasets.sh --targets Olly`.
+
+For the full technical command reference, options, and runtime expectations, see [`scripts/PIPELINE_OPERATIONS_README.md § Canonical Operations`](../scripts/PIPELINE_OPERATIONS_README.md).
+
 **Tools:**
-- `scripts/run_pipeline.py`
-- `scripts/build_final_db.py`
+- `batch_run_all_datasets.sh` — canonical Phase 1 + Phase 2 driver (N brands, sequential, smallest first)
+- `scripts/rebuild_dashboard_snapshot.sh` — Phase 2 standalone (manual reruns, idempotent)
+- `scripts/run_pipeline.py` — single-brand orchestrator (used internally by the batch driver)
+- `scripts/build_final_db.py` — catalog-wide build (runs inside Phase 2)
+- `scripts/release_catalog_artifact.py` — validates + stages `scripts/dist/` atomically
 - Cloud storage bucket (for raw data input + build artifact caching)
 
 **Failure modes:**
 - Enrichment exception on one product → product goes to `errors/` folder, build continues with 99% coverage, ops reviews
+- Brand failure during Phase 1 → `batch_run_all_datasets.sh` marks it failed, skips Phase 2 (partial snapshot would mislead), exits non-zero
 - Out-of-memory on CI → split build into batches, add retry
 - Schema drift → `db_integrity_sanity_check.py` fails the build
 
-**Guardrail:** coverage gate requires >95% of products to score successfully. A build with <95% coverage doesn't deploy.
+**Guardrail:** coverage gate requires >95% of products to score successfully. A build with <95% coverage doesn't deploy. Phase 2 is **automatically skipped** if any brand failed in Phase 1 — run it manually with `bash scripts/rebuild_dashboard_snapshot.sh` once the failures are resolved.
 
 ### Stage 5 — DEPLOY (Supabase → Flutter)
 

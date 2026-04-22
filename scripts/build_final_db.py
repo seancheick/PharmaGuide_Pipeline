@@ -43,7 +43,7 @@ import sqlite3
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 from audit_evidence_utils import (
@@ -1177,6 +1177,60 @@ def _compute_ingredients_dropped_reasons(enriched: Dict[str, Any]) -> List[str]:
     # (Note: unmapped_actives is attached in build_detail_blob after
     # scored data is merged; we accept the caller to layer it in.)
     return sorted(reasons)
+
+
+# Sprint E1.5 — Export-error classification taxonomy.
+#
+# Before E1, every ValueError raised during product export was bucketed
+# as a hard "error" — and the Supabase sync gate refused any non-empty
+# errors[] list. That gate was correct when errors == "catastrophic
+# pipeline bug", but E1 added validators that *intentionally* exclude
+# products to prevent shipping bad data (E1.2.5 coverage-gap gates) or
+# to surface authoring issues (E1.1.2 tone checks). Those are by-design
+# exclusions, not failures — the sync gate shouldn't block on them.
+#
+# This classifier splits the raised-ValueError stream into three buckets:
+#
+#   - 'error'             → catastrophic (schema drift, column count
+#                            mismatch, unknown enum leak). BLOCKS sync.
+#   - 'excluded_by_gate'  → by-design coverage gate (E1.2.5 unexplained
+#                            drop, filter regression detected). Product
+#                            excluded from catalog but pipeline is
+#                            working as intended. Does NOT block sync.
+#   - 'warning'           → content-quality issue (tone sweep gap,
+#                            Dr Pham authoring backlog). Does NOT block.
+#
+# Patterns are ordered: first match wins. Everything unmatched defaults
+# to 'error' so the gate fails-safe — new validator messages need an
+# explicit taxonomy entry before they become non-blocking.
+_EXPORT_ERROR_TAXONOMY: List[Tuple[str, "re.Pattern[str]"]] = [
+    (
+        "excluded_by_gate",
+        re.compile(
+            r"raw DSLD disclosed \d+ real (active|inactive)\(s\) but blob"
+            r"|filter regression — inspect"
+            r"|Unexplained drop — inspect normalize_product"
+        ),
+    ),
+    (
+        "warning",
+        re.compile(
+            r"critical-mode warning .* carries condition-specific copy"
+        ),
+    ),
+]
+
+
+def _classify_export_error(msg: str) -> str:
+    """Classify an export-validator error message into one of:
+    'error', 'excluded_by_gate', 'warning'. See ``_EXPORT_ERROR_TAXONOMY``
+    above for pattern definitions. Unknown patterns fail-safe to 'error'
+    so that new validator messages don't silently become non-blocking.
+    """
+    for bucket, pattern in _EXPORT_ERROR_TAXONOMY:
+        if pattern.search(msg or ""):
+            return bucket
+    return "error"
 
 
 def _validate_active_count_reconciliation(
@@ -3816,6 +3870,14 @@ def build_final_db(
         inserted = 0
         errors = 0
         error_details: List[Dict[str, str]] = []
+        # Sprint E1.5 — split export-failure streams so the Supabase sync
+        # gate only blocks on catastrophic failures (errors[]) and not on
+        # by-design exclusions (excluded_by_gate[]) or authoring
+        # backlog (warnings[]). See _classify_export_error above.
+        excluded_by_gate_count = 0
+        excluded_by_gate_details: List[Dict[str, str]] = []
+        export_warning_count = 0
+        export_warning_details: List[Dict[str, str]] = []
         detail_index: Dict[str, Dict[str, Any]] = {}
         unique_blob_hashes = set()
         since_commit = 0
@@ -3892,12 +3954,27 @@ def build_final_db(
                 if os.path.exists(blob_path):
                     os.remove(blob_path)
                 c.execute("DELETE FROM products_core WHERE dsld_id = ?", (str(pid),))
-                logger.error("Product %s failed: %s", pid, e, exc_info=True)
-                errors += 1
-                error_details.append({
-                    "dsld_id": str(pid),
-                    "error": str(e),
-                })
+                msg = str(e)
+                bucket = _classify_export_error(msg)
+                entry = {"dsld_id": str(pid), "error": msg}
+                if bucket == "excluded_by_gate":
+                    # By-design coverage gate (E1.2.5). Product correctly
+                    # excluded; pipeline is working as intended.
+                    logger.warning("Product %s excluded by gate: %s", pid, msg)
+                    excluded_by_gate_count += 1
+                    excluded_by_gate_details.append(entry)
+                elif bucket == "warning":
+                    # Content-quality issue (tone authoring backlog).
+                    # Product excluded but flagged for Dr Pham, not a bug.
+                    logger.warning("Product %s quality warning: %s", pid, msg)
+                    export_warning_count += 1
+                    export_warning_details.append(entry)
+                else:
+                    # Catastrophic — schema drift, unknown enum leak, etc.
+                    # BLOCKS the Supabase sync gate. Must be fixed.
+                    logger.error("Product %s failed: %s", pid, e, exc_info=True)
+                    errors += 1
+                    error_details.append(entry)
 
         scored_only_rows = stage_conn.execute(
             "SELECT dsld_id FROM scored_stage WHERE matched = 0 ORDER BY dsld_id LIMIT 5"
@@ -4033,10 +4110,23 @@ def build_final_db(
             "enriched_input_count": enriched_unique,
             "scored_input_count": scored_unique,
             "exported_count": inserted,
+            # Sprint E1.5 — split error classification. `error_count` is
+            # the BLOCKING count (catastrophic failures); sync gate reads
+            # manifest["errors"] which mirrors this. Excluded-by-gate and
+            # warnings are non-blocking, tracked separately for audit.
             "error_count": errors,
+            "excluded_by_gate_count": excluded_by_gate_count,
+            "warning_count": export_warning_count,
+            "total_skipped": errors + excluded_by_gate_count + export_warning_count,
             "enriched_only_count": audit_counts.get("enriched_only", 0),
             "scored_only_count": audit_counts.get("scored_only", 0),
-            "skipped_count": audit_counts.get("enriched_only", 0) + audit_counts.get("scored_only", 0) + errors,
+            "skipped_count": (
+                audit_counts.get("enriched_only", 0)
+                + audit_counts.get("scored_only", 0)
+                + errors
+                + excluded_by_gate_count
+                + export_warning_count
+            ),
             "coverage_pct": round((inserted / enriched_unique * 100) if enriched_unique else 0, 2),
             "strict_mode": strict,
             "verdict_blocked": audit_counts.get("verdict_blocked", 0),
@@ -4047,7 +4137,12 @@ def build_final_db(
             "contract_failures": audit_counts.get("export_contract_invalid", 0),
             "scoring_config_checksum": scoring_config_checksum,
         },
+        # Sprint E1.5 — three-bucket error classification. Sync gate
+        # reads `errors[]` only. See _EXPORT_ERROR_TAXONOMY for the
+        # pattern-matching rules that route raised ValueErrors here.
         "errors": error_details,
+        "excluded_by_gate": excluded_by_gate_details,
+        "warnings": export_warning_details,
     }
     manifest_path = os.path.join(output_dir, "export_manifest.json")
     with open(manifest_path, "w", encoding="utf-8") as f:

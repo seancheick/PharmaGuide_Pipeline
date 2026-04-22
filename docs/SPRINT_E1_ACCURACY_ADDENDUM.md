@@ -763,6 +763,29 @@ Sprint F draft (`docs/SPRINT_F_INTERACTION_RULES_TIGHTENING.md`) can be stubbed 
 - Pre-Sprint F: 8.5/10 clinical / 9.5/10 architecture / 10/10 product (operational, production-shippable)
 - Post-Sprint F: 10/10 / 10/10 / 10/10 (clinical decision layer, competitive moat)
 
+### Post-sprint backlog — IQM Accuracy Sweep (added 2026-04-22)
+
+Internal-testing phase reveals `ingredient_quality_map.json` carries legacy accuracy debt that pre-dates Sprint E1. Not a release blocker — E1 work was on scoring *math*, not IQM *content*. These surfaced during a spot-audit of Vitamin E entries and likely recur across the 549 parents. Deferred to a dedicated audit sprint ("Sprint G — IQM Accuracy Sweep") so super-Claude agents can run the full master prompt against the file systematically.
+
+**Concrete findings from Vit E spot-audit (to be folded into Sprint G canary set):**
+
+| ID | Parent / Form | Issue | Evidence | Fix |
+|---|---|---|---|---|
+| **IQM-1a** | `dl-alpha-tocopheryl acetate` aliases | Ester-E tokens placed in synthetic entry — Ester-E is a proprietary NATURAL d-alpha form | `"Ester-E d-Alpha Tocopheryl Acetate"` + `"Ester-E(R) d-Alpha Tocopheryl Acetate"` in dl-alpha aliases | Move both tokens to `d-alpha-tocopheryl acetate.aliases`; under-scored products jump bio=7 → bio=10 |
+| **IQM-1b** | `dl-alpha-tocopheryl acetate.notes` | Outdated pre-2000 USP framing: "only ~12.5% being the natural RRR form" | IOM 2000 / FDA 2016 USP update: synthetic dl-alpha is ~50% bioactive (the 2R family — RRR + RSR + RRS + RSS = 4 of 8 stereoisomers). Current text conflicts with the entry's own `absorption: "50%"` | Rewrite notes to reflect 2R-isomer bioactivity standard; cite IOM DRI 2000 ch. 6 |
+| **IQM-1c** | `dl-alpha-tocopheryl acetate.absorption_structured` | `quality: "good"` contradicts `value: 0.5` | 50% biological activity is "moderate", not "good". Scorer risk: quality-label lookups may falsely promote | Change `quality` to `"moderate"`; add note that biological activity ≠ absorption |
+| **IQM-1d** | `d-alpha-tocopheryl acetate.absorption_structured` | `value: null` on premium natural form — missing quantitative baseline | RRR-α-tocopherol is the reference standard (1.0) vs synthetic's 0.5 | Populate `value: 1.0`, `range_low: 0.9`, `range_high: 1.0`, `quality: "very_good"`; cite NIH ODS Vitamin E fact sheet |
+| **IQM-1e** | All parents | Run full master-prompt audit across 549 parents looking for same patterns: alias misclassification across natural/synthetic forms, outdated scientific framing in notes, quality-label ↔ numeric-value inconsistencies, null `value` on premium entries | Vit E case is almost certainly not isolated — scattered legacy state from pre-audit era | Sprint G: batch-audit every parent per master-prompt 8-point self-check, fold findings into rebuild + rerun |
+
+**Canary impact for E1 release:** DSLD 266975 (Nature Made Vit E 400 IU) correctly matches dl-alpha (bio=7) per current IQM — unchanged. E1 release proceeds as planned; Sprint G runs on next accuracy cycle.
+
+**Sprint G entry criteria:**
+- E1.5 in production ≥ 7 days without incident (rollback window closed)
+- Master prompt updated with findings above so super-agents audit against known patterns (see `scripts/IQM_AUDIT_MASTER_PROMPT.md` §Task 1 error patterns)
+- Run per-parent in batches of 3-4, each batch: API-verify citations → apply fixes → full test suite green → shadow-diff 9 canaries → commit
+
+**Projected effort:** ~3-5 days focused audit. Bulk of time is clinical verification, not code changes.
+
 ---
 
 _Last updated: 2026-04-22 (Sprint F backlog added during E1 execution)_
