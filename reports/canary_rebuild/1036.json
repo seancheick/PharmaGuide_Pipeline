@@ -105,18 +105,18 @@
     "section_a_audit": {
       "category_bonus_total": 0.0,
       "ceiling_hit": false,
-      "core_quality": 17.44,
+      "core_quality": 17.5,
       "max": 25.0,
-      "score": 17.44
+      "score": 17.5
     },
     "supplement_type": {
-      "active_count": 37,
+      "active_count": 38,
       "category_breakdown": {
         "antioxidant": 8,
         "enzyme": 4,
         "mineral": 11,
         "other": 2,
-        "vitamin": 12
+        "vitamin": 13
       },
       "enriched_type": "specialty",
       "export_type": "multivitamin",
@@ -4205,14 +4205,28 @@
       "unit": "IU"
     },
     {
-      "bio_score": null,
+      "bio_score": 10.0,
       "category": "vitamins",
       "display_badge": "no_data",
       "display_dose_label": "100 IU",
       "display_label": "Vitamin E (D-Alpha-Tocopheryl Succinate)",
       "dosage": 100.0,
       "dosage_unit": "IU",
-      "extracted_forms": [],
+      "extracted_forms": [
+        {
+          "display_form": "D-Alpha-Tocopheryl Succinate",
+          "dsld_category": "vitamin",
+          "dsld_ingredient_group": "Vitamin E",
+          "dsld_prefix": null,
+          "dsld_unii_code": "LU4B53JYVE",
+          "match_candidates": [
+            "D-Alpha-Tocopheryl Succinate",
+            "Vitamin E D-Alpha-Tocopheryl Succinate"
+          ],
+          "percent_share": 1.0,
+          "raw_form_text": "D-Alpha-Tocopheryl Succinate"
+        }
+      ],
       "form": "",
       "forms": [
         {
@@ -4237,21 +4251,120 @@
       "is_harmful": false,
       "is_mapped": 1,
       "mapped": 1,
-      "matched_form": "",
-      "matched_forms": [],
+      "matched_form": "d-alpha-tocopheryl succinate",
+      "matched_forms": [
+        {
+          "bio_score": 10.0,
+          "canonical_id": "vitamin_e",
+          "form_key": "d-alpha-tocopheryl succinate",
+          "match_method": "exact",
+          "matched_candidate": "D-Alpha-Tocopheryl Succinate",
+          "natural": true,
+          "percent_share": 1.0,
+          "raw_form_text": "D-Alpha-Tocopheryl Succinate",
+          "score": 13.0
+        }
+      ],
       "name": "Vitamin E",
-      "natural": false,
+      "natural": true,
       "normalized_amount": 45.0,
       "normalized_key": "vitamin_e",
       "normalized_unit": "mg",
       "normalized_value": 45.0,
-      "notes": "",
+      "notes": "The natural alpha-tocopherol esterified with succinic acid. Water-dispersible, making it useful for dry formulations and for people with fat absorption issues. Also studied for unique anticancer properties in vitro.",
       "parent_key": "vitamin_e",
       "quantity": 100.0,
       "raw_source_text": "Vitamin E",
       "role": "active",
-      "safety_hits": [],
-      "score": null,
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "Keep total daily vitamin E intake within guideline ranges and avoid megadosing.",
+              "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+              "alert_headline": "Keep vitamin E within prenatal range",
+              "condition_id": "pregnancy",
+              "dose_threshold_evaluation": {
+                "evaluated": true,
+                "matched_threshold": false,
+                "selected_from": "severity_if_not_met",
+                "selected_severity": "monitor",
+                "thresholds_checked": [
+                  {
+                    "basis": "per_day",
+                    "comparator": ">",
+                    "computed_amount": 45.0,
+                    "computed_unit": "mg",
+                    "evaluated": true,
+                    "matched": false,
+                    "threshold_unit": "mg",
+                    "threshold_value": 1000.0
+                  }
+                ]
+              },
+              "evidence_level": "established",
+              "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
+              "mechanism": "Vitamin E is essential, but excessive supplemental intake above established UL is not recommended in pregnancy.",
+              "severity": "monitor",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+                "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+              ]
+            },
+            {
+              "action": "Threshold escalates only when intake exceeds adult UL.",
+              "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+              "alert_headline": "Keep vitamin E within prenatal range",
+              "condition_id": "pregnancy",
+              "evidence_level": "established",
+              "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
+              "mechanism": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
+              "severity": "monitor",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+                "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+              ]
+            },
+            {
+              "action": "Threshold escalates only when intake exceeds adult UL.",
+              "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+              "alert_headline": "Keep vitamin E within prenatal range",
+              "condition_id": "lactation",
+              "evidence_level": "established",
+              "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
+              "mechanism": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
+              "severity": "monitor",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+                "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+              ]
+            }
+          ],
+          "drug_class_hits": [],
+          "last_reviewed": "2026-02-28",
+          "pregnancy_lactation": {
+            "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+            "alert_headline": "Keep vitamin E within prenatal range",
+            "evidence_level": "established",
+            "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
+            "lactation_category": "monitor",
+            "mechanism": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
+            "notes": "Threshold escalates only when intake exceeds adult UL.",
+            "pregnancy_category": "monitor",
+            "sources": [
+              "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+              "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+            ]
+          },
+          "rule_id": "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS",
+          "source_bucket": "ingredients",
+          "subject_ref": {
+            "canonical_id": "vitamin_e",
+            "db": "ingredient_quality_map"
+          }
+        }
+      ],
+      "score": 13.0,
       "standardName": "Vitamin E",
       "standard_name": "Vitamin E",
       "standardization_note": null,
@@ -7597,7 +7710,7 @@
           "Transition to clinician-supervised use once pregnancy is confirmed if continuing supplementation."
         ],
         "highest_severity": "avoid",
-        "ingredient_count": 8,
+        "ingredient_count": 9,
         "ingredients": [
           "Folic Acid",
           "Inositol",
@@ -7606,7 +7719,8 @@
           "Vitamin A",
           "Vitamin B12",
           "Vitamin B6",
-          "Vitamin C"
+          "Vitamin C",
+          "Vitamin E"
         ],
         "label": "Breastfeeding",
         "rule_ids": [
@@ -7664,7 +7778,7 @@
           "Transition to clinician-supervised use once pregnancy is confirmed if continuing supplementation."
         ],
         "highest_severity": "caution",
-        "ingredient_count": 8,
+        "ingredient_count": 9,
         "ingredients": [
           "Folic Acid",
           "Inositol",
@@ -7673,7 +7787,8 @@
           "Vitamin A",
           "Vitamin B12",
           "Vitamin B6",
-          "Vitamin C"
+          "Vitamin C",
+          "Vitamin E"
         ],
         "label": "Pregnancy",
         "rule_ids": [
@@ -13163,9 +13278,9 @@
     },
     "ingredient_quality": {
       "max": 25.0,
-      "score": 17.44,
+      "score": 17.5,
       "sub": {
-        "A1": 10.19,
+        "A1": 10.25,
         "A2": 1.5,
         "A3": 1.0,
         "A4": 3.0,
@@ -13177,7 +13292,7 @@
         "A6": 0.0,
         "category_bonus_pool_cap": 5.0,
         "category_bonus_total": 0.0,
-        "core_quality": 17.44,
+        "core_quality": 17.5,
         "omega3_breakdown": {
           "applicable": false,
           "omega3_dose_bonus": 0.0
@@ -13304,13 +13419,13 @@
     "min_servings_per_day": 1
   },
   "supplement_type_audit": {
-    "active_count": 37,
+    "active_count": 38,
     "category_breakdown": {
       "antioxidant": 8,
       "enzyme": 4,
       "mineral": 11,
       "other": 2,
-      "vitamin": 12
+      "vitamin": 13
     },
     "enriched_type": "specialty",
     "export_type": "multivitamin",

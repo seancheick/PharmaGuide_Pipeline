@@ -2410,14 +2410,34 @@ class SupplementEnricherV3:
         return unit_normalized
 
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
-        """Determine excipient status for ingredient-level signals."""
-        ing_name = (ingredient.get('name', '') or '').strip().lower()
+        """Determine excipient status for ingredient-level signals.
 
-        if ingredient.get('isAdditive', False):
+        Sprint E1.3.1 — honors the active-context therapeutic override:
+        dual-use compounds (tocopherols, lecithin) that land here with
+        isAdditive=True but carry a valid therapeutic dose AND are IQM-
+        known should not be flagged excipient.
+        """
+        ing_name_raw = (ingredient.get('name', '') or '')
+        ing_name = ing_name_raw.strip().lower()
+        std_name = (ingredient.get('standardName', '') or ing_name_raw)
+        quality_map = self.databases.get('ingredient_quality_map', {})
+        botanicals_db = self.databases.get('botanical_ingredients', {})
+
+        has_dose_for_override, _ = self._has_valid_therapeutic_dose(ingredient)
+        active_context_override = (
+            has_dose_for_override
+            and self._is_known_therapeutic(ing_name_raw, std_name, quality_map, botanicals_db)
+        )
+
+        if ingredient.get('isAdditive', False) and not active_context_override:
             return True, SKIP_REASON_ADDITIVE
 
         additive_type = ingredient.get('additiveType', '')
-        if additive_type and additive_type.lower() in ADDITIVE_TYPES_SKIP_SCORING:
+        if (
+            additive_type
+            and additive_type.lower() in ADDITIVE_TYPES_SKIP_SCORING
+            and not active_context_override
+        ):
             return True, SKIP_REASON_ADDITIVE_TYPE
 
         # Check ingredient name only — DSLD standardName can misclassify active botanicals
@@ -2635,18 +2655,33 @@ class SupplementEnricherV3:
         # =================================================================
         # GROUP A: Structural flags from cleaning
         # These are product-level signals (isAdditive, additiveType) that
-        # reflect how the ingredient is USED in this product.  They take
-        # precedence over IQM presence because the label explicitly says
-        # "this is an additive here" (e.g., xylitol as sweetener).
+        # reflect how the ingredient is USED in this product.
+        #
+        # Sprint E1.3.1 (context-aware classifier): dual-use compounds
+        # (tocopherols, lecithin, fatty acids) carry isAdditive=True by
+        # default because DSLD hints at common additive usage. When the
+        # same compound appears in the ACTIVE panel AND has a valid
+        # therapeutic dose AND is IQM-known, the label itself is treating
+        # it as an active — override the additive gate. Trace-dose or
+        # inactive-panel variants still skip as additive.
         # =================================================================
+        has_dose_for_override, _ = self._has_valid_therapeutic_dose(ingredient)
+        active_context_override = (
+            has_dose_for_override
+            and self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db)
+        )
 
-        # A1: Check isAdditive flag
-        if ingredient.get('isAdditive', False):
+        # A1: Check isAdditive flag (unless overridden by active-panel therapeutic context)
+        if ingredient.get('isAdditive', False) and not active_context_override:
             return SKIP_REASON_ADDITIVE
 
-        # A2: Check additiveType
+        # A2: Check additiveType (same override)
         additive_type = ingredient.get('additiveType', '')
-        if additive_type and additive_type.lower() in ADDITIVE_TYPES_SKIP_SCORING:
+        if (
+            additive_type
+            and additive_type.lower() in ADDITIVE_TYPES_SKIP_SCORING
+            and not active_context_override
+        ):
             return SKIP_REASON_ADDITIVE_TYPE
 
         # =================================================================
