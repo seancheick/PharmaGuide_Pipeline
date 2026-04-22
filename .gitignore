@@ -48,8 +48,10 @@ scripts/data/fda_drug_labels/
 # Logs (regenerated each run)
 scripts/logs/
 
-# Reports (regenerated each run)
-scripts/reports/
+# Reports (regenerated each run) — but keep Python tool sources tracked
+scripts/reports/*
+!scripts/reports/*.py
+!scripts/reports/__init__.py
 
 # IDE / OS
 .DS_Store
