@@ -7,7 +7,7 @@
 # Creates separate output directories for each dataset
 #
 # Usage:
-#   bash batch_run_all_datasets.sh                          # Full pipeline on all brands
+#   bash batch_run_all_datasets.sh                          # Full pipeline on all brands + dashboard snapshot
 #   bash batch_run_all_datasets.sh score                    # Score-only on all brands
 #   bash batch_run_all_datasets.sh --stages enrich,score    # Enrich + score only
 #   bash batch_run_all_datasets.sh --targets Thorne,Olly    # Specific brands only
@@ -17,6 +17,11 @@
 #bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
 # Environment:
 #   PYTHON=python3.13 bash batch_run_all_datasets.sh        # Use specific python
+#   SKIP_SNAPSHOT=1 bash batch_run_all_datasets.sh          # Skip auto-snapshot at end
+#
+# After every successful run, the dashboard snapshot is rebuilt automatically
+# (scripts/dist/ gets the fresh pharmaguide_core.db + detail_blobs/). Set
+# SKIP_SNAPSHOT=1 to skip that step (e.g., when iterating on one brand).
 ###############################################################################
 
 set -e -o pipefail  # Exit on error and fail pipelines when any segment fails
@@ -197,11 +202,37 @@ fi
 echo "Summary written to: $SUMMARY_FILE"
 echo ""
 
+# Rebuild dashboard snapshot automatically after a clean run.
+# Skip when any brand failed (snapshot from a partial catalog is misleading)
+# or when the caller opts out via SKIP_SNAPSHOT=1.
+SKIP_SNAPSHOT="${SKIP_SNAPSHOT:-0}"
+SNAPSHOT_SCRIPT="$SCRIPTS_DIR/rebuild_dashboard_snapshot.sh"
+if [ ${#FAILED[@]} -eq 0 ] && [ "$SKIP_SNAPSHOT" != "1" ] && [ -x "$SNAPSHOT_SCRIPT" ]; then
+    echo -e "${BLUE}=========================================="
+    echo "REBUILDING DASHBOARD SNAPSHOT"
+    echo "==========================================${NC}"
+    echo ""
+    if bash "$SNAPSHOT_SCRIPT" 2>&1 | tee -a "$SUMMARY_FILE"; then
+        echo -e "${GREEN}✓ Snapshot rebuilt: scripts/dist/ is up to date${NC}"
+    else
+        echo -e "${RED}✗ Snapshot rebuild failed — pipeline outputs are fresh but scripts/dist/ may be stale${NC}"
+        echo -e "${RED}  Rerun manually: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
+        # Don't fail the whole batch for snapshot issues; pipeline stages succeeded.
+    fi
+    echo ""
+elif [ "$SKIP_SNAPSHOT" = "1" ]; then
+    echo -e "${YELLOW}Snapshot rebuild skipped (SKIP_SNAPSHOT=1)${NC}"
+    echo -e "${YELLOW}  Run manually when ready: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
+    echo ""
+fi
+
 # Exit with appropriate code
 if [ ${#FAILED[@]} -eq 0 ]; then
     echo -e "${GREEN}All datasets processed successfully!${NC}"
     exit 0
 else
     echo -e "${RED}Some datasets failed processing.${NC}"
+    echo -e "${YELLOW}Dashboard snapshot NOT rebuilt because some brands failed.${NC}"
+    echo -e "${YELLOW}  Fix failures + rerun, or force with: SKIP_SNAPSHOT=0 bash scripts/rebuild_dashboard_snapshot.sh${NC}"
     exit 1
 fi
