@@ -71,22 +71,31 @@ Roll back via `python3 scripts/sync_to_supabase.py --force <prev_version>` if an
 
 ---
 
-## Resumed trajectory — defer to AUTOMATION_ROADMAP
+## Resumed trajectory — **Sprint E1 first, then AUTOMATION_ROADMAP**
 
-The roadmap is the authoritative source for "what to build next." Read
-[`docs/AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md) top to bottom, then pick a phase:
+**2026-04-21 update:** A dual audit (pipeline-side label-fidelity scan + Flutter device-testing handoff) surfaced 10 accuracy/safety defects affecting ~60% of the catalog. Cannot ship public beta in current state. See [`SPRINT_E1_ACCURACY_ADDENDUM.md`](SPRINT_E1_ACCURACY_ADDENDUM.md) — prerequisite addendum, not a detour.
 
-| Phase         | What                                                      | When                        | Effort     | Roadmap §                                       |
+| Checkpoint    | What                                                      | When                        | Effort     | Reference                                       |
 | ------------- | --------------------------------------------------------- | --------------------------- | ---------- | ----------------------------------------------- |
-| **Phase 1**   | Pipeline runs in CI (GitHub Actions + cloud storage)      | **Start here**              | 2–3 weeks  | § "Phase 1 — Pipeline runs without your laptop" |
-| **Phase 1.5** | Safety Alert Short Path (FDA recall < 15 min → user push) | **Ship before public beta** | 2–3 weeks  | § "Phase 1.5 — Safety Alert Short Path"         |
+| **Sprint E1** | Accuracy addendum (label-fidelity + safety-copy)          | **START HERE**              | ~14 days   | [`SPRINT_E1_ACCURACY_ADDENDUM.md`](SPRINT_E1_ACCURACY_ADDENDUM.md) |
+| Phase 1       | Pipeline runs in CI (GitHub Actions + cloud storage)      | After Sprint E1 ships       | 2–3 weeks  | § "Phase 1 — Pipeline runs without your laptop" |
+| Phase 1.5     | Safety Alert Short Path (FDA recall < 15 min → user push) | **Ship before public beta** | 2–3 weeks  | § "Phase 1.5 — Safety Alert Short Path"         |
 | Phase 2       | Dr. Pham web editor (PR via UI)                           | Nice-to-have for beta       | 3–4 weeks  | § "Phase 2"                                     |
 | Phase 3       | Scheduled monthly DSLD category delta                     | V1 phase                    | 2 months   | § "Phase 3"                                     |
 | Phase 4       | Reference-data hot-refresh                                | V1 phase                    | 2–3 months | § "Phase 4"                                     |
 | Phase 4.5     | Tiered offline architecture (Yuka-style)                  | Triggered at 50k products   | 4–6 weeks  | § "Phase 4.5"                                   |
 | Phase 5       | Full observability / staging / audit                      | V1 onward                   | Ongoing    | § "Phase 5"                                     |
 
-### Phase 1 prep checklist (from roadmap)
+### Sprint E1 rationale (read before skipping)
+
+The roadmap's Phase 1 (CI automation) assumes the current data content is correct. Two independent audits on 2026-04-21 proved it isn't:
+
+- Pipeline scan: ~1,158 products with stripped proprietary-blend masses; ~460 with branded names dropped (KSM-66 class); ~4,812 with active-count drift; ~118 with silently-dropped inactive ingredients (silica class).
+- Flutter device testing: danger strings landing in `decision_highlights.positive` (green thumbs-up on "Not lawful"); pregnancy warnings shown to male users; raw enum `ban_ingredient` leaking to UI; 6× duplicate warnings; no authored copy for banned-substance stack-add preflight.
+
+If we run Phase 1 CI on top of these defects, we automate the propagation of the bugs. Sprint E1 fixes the content first.
+
+### Phase 1 prep checklist (from roadmap) — after E1 ships
 
 Before opening the next PR:
 
