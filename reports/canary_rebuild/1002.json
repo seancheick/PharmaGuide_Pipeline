@@ -326,8 +326,10 @@
   ],
   "ingredients": [
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "fatty_acids",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "360 mg",
       "display_label": "Eicosapentaenoic Acid",
@@ -425,8 +427,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "fatty_acids",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "240 mg",
       "display_label": "Docosahexaenoic Acid",

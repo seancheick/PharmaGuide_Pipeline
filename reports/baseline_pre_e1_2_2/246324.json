@@ -543,8 +543,10 @@
   ],
   "ingredients": [
     {
+      "adequacy_tier": null,
       "bio_score": null,
       "category": "unknown",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "6 mg",
       "display_label": "Hemp extract",
@@ -587,8 +589,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": null,
       "category": "unknown",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "5 mg",
       "display_label": "Cannabidiol",

@@ -115,6 +115,80 @@ from match_ledger import (
 )
 
 
+# Sprint E1.3.2 — probiotic CFU adequacy helpers.
+# Pure module-level functions (testable in isolation, no SupplementEnricherV3
+# state). Used by _collect_probiotic_data to attach per-strain adequacy
+# tiers from Dr Pham's cfu_thresholds blocks onto found_clinical_strains.
+
+_EVIDENCE_STRENGTH_TO_SUPPORT_LEVEL = {
+    "strong": "high",
+    "medium": "moderate",
+    "weak": "weak",
+}
+
+
+def _compute_strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> Optional[str]:
+    """Map a per-strain CFU count to its adequacy tier using Dr Pham's
+    authored ``tiers_cfu_per_day`` band dict.
+
+    Returns one of ``"low" | "adequate" | "good" | "excellent"`` or
+    ``None`` when the dose is zero/missing or the bands dict is empty.
+    Tolerates band-key order and missing ``upper_exclusive`` (treats it
+    as +infinity) / missing ``lower_inclusive`` (treats it as 0).
+    """
+    if not isinstance(cfu_per_day, (int, float)) or cfu_per_day <= 0:
+        return None
+    if not isinstance(tiers_cfu_per_day, dict) or not tiers_cfu_per_day:
+        return None
+
+    for tier_name in ("low", "adequate", "good", "excellent"):
+        band = tiers_cfu_per_day.get(tier_name)
+        if not isinstance(band, dict):
+            continue
+        lower = band.get("lower_inclusive", 0)
+        upper = band.get("upper_exclusive")
+        lower_ok = cfu_per_day >= (lower if isinstance(lower, (int, float)) else 0)
+        upper_ok = (
+            upper is None
+            or (isinstance(upper, (int, float)) and cfu_per_day < upper)
+        )
+        if lower_ok and upper_ok:
+            return tier_name
+    return None
+
+
+def _derive_clinical_support_level(strain_entry) -> str:
+    """Resolve ``clinical_support_level`` with a fallback chain:
+
+      1. explicit ``cfu_thresholds.evidence.clinical_support_level``
+      2. mapped from ``cfu_thresholds.evidence.evidence_strength``
+         (strong→high, medium→moderate, weak→weak)
+      3. conservative default ``"weak"`` (protects against overclaim)
+
+    Returns exactly one of ``"high" | "moderate" | "weak"``.
+    """
+    if not isinstance(strain_entry, dict):
+        return "weak"
+    thresholds = strain_entry.get("cfu_thresholds") or {}
+    evidence = (thresholds.get("evidence") or {}) if isinstance(thresholds, dict) else {}
+    if not isinstance(evidence, dict):
+        return "weak"
+
+    explicit = evidence.get("clinical_support_level") or thresholds.get("clinical_support_level")
+    if isinstance(explicit, str):
+        lower = explicit.strip().lower()
+        if lower in ("high", "moderate", "weak"):
+            return lower
+
+    strength = evidence.get("evidence_strength")
+    if isinstance(strength, str):
+        mapped = _EVIDENCE_STRENGTH_TO_SUPPORT_LEVEL.get(strength.strip().lower())
+        if mapped:
+            return mapped
+
+    return "weak"
+
+
 class SupplementEnricherV3:
     """
     Lean enrichment system focused on data collection for scoring.
@@ -9262,19 +9336,42 @@ class SupplementEnricherV3:
         clinical_strains = strains_db.get('clinically_relevant_strains', [])
 
         found_clinical_strains = []
-        for strain in all_nested_strains:
-            for clinical in clinical_strains:
-                clin_name = clinical.get('standard_name', '')
-                clin_aliases = clinical.get('aliases', [])
-
-                # Use strain-specific matching for probiotic strain names
-                if self._strain_match(strain, clin_name, clin_aliases):
-                    found_clinical_strains.append({
-                        "strain": strain,
-                        "clinical_id": clinical.get('id', ''),
-                        "evidence_level": clinical.get('evidence_level', 'moderate')
-                    })
-                    break
+        # Sprint E1.3.2 — iterate blends instead of flat strain list so we
+        # can attach per-strain CFU context to each match. Single-strain
+        # blends use the blend's CFU directly; multi-strain blends don't
+        # attach a per-strain CFU (per dev rule: "No blend-total inference
+        # for probiotics"). When cfu_per_day is None the adequacy tier is
+        # also None — downstream downgrade handles it gracefully.
+        for blend in probiotic_blends:
+            blend_strains = blend.get("strains") or []
+            blend_cfu = (blend.get("cfu_data") or {}).get("cfu_count")
+            per_strain_cfu = (
+                float(blend_cfu)
+                if isinstance(blend_cfu, (int, float)) and blend_cfu > 0 and len(blend_strains) == 1
+                else None
+            )
+            for strain in blend_strains:
+                for clinical in clinical_strains:
+                    clin_name = clinical.get('standard_name', '')
+                    clin_aliases = clinical.get('aliases', [])
+                    if self._strain_match(strain, clin_name, clin_aliases):
+                        thresholds = clinical.get("cfu_thresholds") or {}
+                        tiers = thresholds.get("tiers_cfu_per_day") or {}
+                        adequacy_tier = _compute_strain_cfu_tier(per_strain_cfu, tiers)
+                        support_level = _derive_clinical_support_level(clinical)
+                        found_clinical_strains.append({
+                            "strain": strain,
+                            "clinical_id": clinical.get('id', ''),
+                            "evidence_level": clinical.get('evidence_level', 'moderate'),
+                            # Sprint E1.3.2 additions — carry per-strain
+                            # adequacy data for the build-time ingredient
+                            # adapter to attach to the blob ingredient.
+                            "cfu_per_day": per_strain_cfu,
+                            "adequacy_tier": adequacy_tier,
+                            "clinical_support_level": support_level,
+                            "indication_primary": thresholds.get("indication_primary"),
+                        })
+                        break
 
         # Check for prebiotic pairing
         prebiotics_data = strains_db.get('prebiotics', {}).get('ingredients', [])

@@ -601,8 +601,10 @@
   ],
   "ingredients": [
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "not_disclosed",
       "display_dose_label": "Amount not disclosed",
       "display_label": "Amylase",
@@ -640,8 +642,10 @@
       "unit": "NP"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "not_disclosed",
       "display_dose_label": "Amount not disclosed",
       "display_label": "Protease",
@@ -679,8 +683,10 @@
       "unit": "NP"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "not_disclosed",
       "display_dose_label": "Amount not disclosed",
       "display_label": "Lipase",
@@ -718,8 +724,10 @@
       "unit": "NP"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "not_disclosed",
       "display_dose_label": "Amount not disclosed",
       "display_label": "Cellulase",
@@ -757,8 +765,10 @@
       "unit": "NP"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "not_disclosed",
       "display_dose_label": "Amount not disclosed",
       "display_label": "Lactase",

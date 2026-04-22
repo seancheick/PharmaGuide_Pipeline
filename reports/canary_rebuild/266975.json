@@ -374,8 +374,10 @@
   ],
   "ingredients": [
     {
+      "adequacy_tier": null,
       "bio_score": 7.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "180 mg",
       "display_label": "Vitamin E (DL-Alpha-Tocopheryl Acetate)",

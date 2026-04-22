@@ -421,9 +421,11 @@
   ],
   "ingredients": [
     {
+      "adequacy_tier": "good",
       "bio_score": 13.0,
       "category": "probiotics",
-      "display_badge": "no_data",
+      "clinical_support_level": "high",
+      "display_badge": "well_dosed",
       "display_dose_label": "10 billion CFU",
       "display_label": "Lactobacillus plantarum 299v",
       "dosage": 10000000000.0,
@@ -540,8 +542,12 @@
     "clinical_strain_count": 1,
     "clinical_strains": [
       {
+        "adequacy_tier": "good",
+        "cfu_per_day": 10000000000.0,
         "clinical_id": "STRAIN_PLANTARUM_299V",
+        "clinical_support_level": "high",
         "evidence_level": "high",
+        "indication_primary": "relief of irritable bowel syndrome symptoms",
         "strain": "Lactobacillus plantarum 299v"
       }
     ],

@@ -1926,6 +1926,24 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     elif isinstance(norm_raw, dict):
         norm_data = norm_raw
 
+    # Sprint E1.3.2 — per-strain probiotic adequacy lookup, keyed by the
+    # strain name as matched in the enricher. Build-time adapter attaches
+    # ``adequacy_tier`` + ``clinical_support_level`` onto the ingredient
+    # dict so ``_compute_display_badge`` wakes up naturally.
+    probiotic_strain_adequacy: Dict[str, Dict[str, Any]] = {}
+    for fc in safe_list(safe_dict(enriched.get("probiotic_data")).get("clinical_strains")):
+        if not isinstance(fc, dict):
+            continue
+        strain_name = safe_str(fc.get("strain"))
+        if not strain_name:
+            continue
+        probiotic_strain_adequacy[strain_name.strip().lower()] = {
+            "adequacy_tier": fc.get("adequacy_tier"),
+            "clinical_support_level": fc.get("clinical_support_level"),
+            "cfu_per_day": fc.get("cfu_per_day"),
+            "clinical_id": fc.get("clinical_id"),
+        }
+
     # Build ingredients
     ingredients = []
     for ing in safe_list(enriched.get("activeIngredients")):
@@ -1954,6 +1972,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         )
 
         qty = ing.get("quantity")
+        # Sprint E1.3.2 — look up adequacy by strain name (case-insensitive).
+        _strain_adequacy = probiotic_strain_adequacy.get(name.strip().lower()) or {}
         ingredients.append({
             "raw_source_text": raw,
             "name": name,
@@ -2005,8 +2025,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "notes": m.get("notes") or ing.get("notes"),
                 "raw_source_text": ing.get("raw_source_text"),
             }),
-            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative)
-            "display_badge": _compute_display_badge(ing),
+            # Sprint E1.3.2 — per-strain adequacy (None when not a
+            # matched clinical strain OR when per-strain CFU isn't
+            # knowable e.g. multi-strain blend).
+            "adequacy_tier": _strain_adequacy.get("adequacy_tier"),
+            "clinical_support_level": _strain_adequacy.get("clinical_support_level"),
+            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative).
+            # Reads adequacy_tier above, so must come AFTER the E1.3.2 fields.
+            "display_badge": _compute_display_badge({**ing, "adequacy_tier": _strain_adequacy.get("adequacy_tier")}),
         })
 
     # Inactive ingredients

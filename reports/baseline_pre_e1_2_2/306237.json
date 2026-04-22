@@ -580,8 +580,10 @@
   ],
   "ingredients": [
     {
+      "adequacy_tier": null,
       "bio_score": 11.0,
       "category": "herbs",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "600 mg",
       "display_label": "KSM-66 Ashwagandha Root Extract",
@@ -674,8 +676,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 9.0,
       "category": "herbs",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "5 mg",
       "display_label": "BioPerine Black Pepper Fruit Extract",

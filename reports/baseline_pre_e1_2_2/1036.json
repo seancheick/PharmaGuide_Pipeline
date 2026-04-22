@@ -3582,8 +3582,10 @@
   ],
   "ingredients": [
     {
+      "adequacy_tier": null,
       "bio_score": 13.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "5000 IU",
       "display_label": "Vitamin A (Acetate)",
@@ -3761,8 +3763,10 @@
       "unit": "IU"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 13.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "500 mg",
       "display_label": "Vitamin C (Ascorbic Acid)",
@@ -3927,8 +3931,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 12.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "600 IU",
       "display_label": "Vitamin D (Cholecalciferol)",
@@ -4205,8 +4211,10 @@
       "unit": "IU"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "100 IU",
       "display_label": "Vitamin E (D-Alpha-Tocopheryl Succinate)",
@@ -4371,8 +4379,10 @@
       "unit": "IU"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "100 mg",
       "display_label": "Thiamine Mononitrate",
@@ -4470,8 +4480,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "100 mg",
       "display_label": "Riboflavin",
@@ -4509,8 +4521,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 11.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "100 mg",
       "display_label": "Niacin (Niacinamide)",
@@ -4691,8 +4705,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 9.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "100 mg",
       "display_label": "Vitamin B6 (Pyridoxine Hydrochloride)",
@@ -4855,8 +4871,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 6.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "600 mcg",
       "display_label": "Folic Acid",
@@ -4961,8 +4979,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "150 mcg",
       "display_label": "Vitamin B12 (Cyanocobalamin)",
@@ -5108,8 +5128,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 12.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "300 mcg",
       "display_label": "Biotin",
@@ -5176,8 +5198,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 12.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "100 mg",
       "display_label": "Pantothenic Acid (Calcium D-Pantothenate)",
@@ -5252,8 +5276,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 8.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "100 mg",
       "display_label": "Calcium Carbonate",
@@ -5394,8 +5420,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 11.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "18 mg",
       "display_label": "Iron (Ferrous Fumarate)",
@@ -5531,8 +5559,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 11.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "150 mcg",
       "display_label": "Iodine (Kelp)",
@@ -5722,8 +5752,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 4.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "50 mcg",
       "display_label": "Magnesium Oxide",
@@ -5888,8 +5920,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 5.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "15 mg",
       "display_label": "Zinc Oxide",
@@ -5995,8 +6029,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 12.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "200 mcg",
       "display_label": "Selenium (L-Selenomethionine)",
@@ -6102,8 +6138,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 4.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "2 mg",
       "display_label": "Copper (Cupric Oxide)",
@@ -6227,8 +6265,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 8.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "2 mg",
       "display_label": "Manganese Sulfate",
@@ -6353,8 +6393,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 5.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "120 mcg",
       "display_label": "hydrolyzed Protein Chromium Chelate",
@@ -6463,8 +6505,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 12.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "75 mcg",
       "display_label": "Molybdenum (Sodium Molybdate)",
@@ -6542,8 +6586,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "other",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "55 mg",
       "display_label": "Choline Bitartrate",
@@ -6621,8 +6667,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 9.0,
       "category": "antioxidants",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "50 mg",
       "display_label": "Alpha-Lipoic Acid",
@@ -6724,8 +6772,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "other",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "25 mg",
       "display_label": "Inositol",
@@ -6833,8 +6883,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "20 mg",
       "display_label": "Amylase",
@@ -6872,8 +6924,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 9.0,
       "category": "antioxidants",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "15 mg",
       "display_label": "Green Tea leaf extract",
@@ -6974,8 +7028,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 9.0,
       "category": "antioxidants",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "12.5 mg",
       "display_label": "Citrus Bioflavonoids Complex",
@@ -7013,8 +7069,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "antioxidants",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "12.5 mg",
       "display_label": "Hesperidin Complex",
@@ -7052,8 +7110,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 6.0,
       "category": "antioxidants",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "12.5 mg",
       "display_label": "Quercetin Dihydrate",
@@ -7150,8 +7210,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 9.0,
       "category": "antioxidants",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "12.5 mg",
       "display_label": "Rutin powder",
@@ -7189,8 +7251,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "12 mg",
       "display_label": "Cellulase",
@@ -7228,8 +7292,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "12 mg",
       "display_label": "Lipase",
@@ -7267,8 +7333,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 10.0,
       "category": "enzymes",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "6 mg",
       "display_label": "Protease",
@@ -7306,8 +7374,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 5.0,
       "category": "minerals",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "1 mg",
       "display_label": "Boron Hydrolyzed Protein Chelate",
@@ -7359,8 +7429,10 @@
       "unit": "mg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 8.0,
       "category": "antioxidants",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "950 mcg",
       "display_label": "Lutein Esters",
@@ -7412,8 +7484,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 9.0,
       "category": "antioxidants",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "950 mcg",
       "display_label": "Lycopene",
@@ -7454,8 +7528,10 @@
       "unit": "mcg"
     },
     {
+      "adequacy_tier": null,
       "bio_score": 6.0,
       "category": "vitamins",
+      "clinical_support_level": null,
       "display_badge": "no_data",
       "display_dose_label": "900 mcg",
       "display_label": "Tocotrienol Complex",
