@@ -3272,6 +3272,24 @@ class EnhancedDSLDNormalizer:
             }
         }
     
+    @staticmethod
+    def _extract_primary_mass_unit(raw_ingredient: Dict) -> tuple:
+        """Sprint E1.2.1 — extract (mass, unit) from a DSLD-raw ingredient
+        dict. DSLD stores quantity as a list of ``{quantity, unit}`` dicts
+        (first entry is the primary dose); fall back to scalar + separate
+        ``unit`` key for post-normalized shapes. Returns ``(None, "")``
+        when no measurable mass is present."""
+        q = raw_ingredient.get("quantity")
+        if isinstance(q, list) and q:
+            first = q[0]
+            if isinstance(first, dict):
+                val = first.get("quantity")
+                if isinstance(val, (int, float)) and val > 0:
+                    return val, first.get("unit", "") or ""
+        elif isinstance(q, (int, float)) and q > 0:
+            return q, raw_ingredient.get("unit", "") or ""
+        return None, ""
+
     def _flatten_nested_ingredients(self, ingredient_rows: List[Dict], _depth: int = 0) -> List[Dict]:
         """Flatten nested ingredients from blends for better scoring, preserving blend structure"""
         MAX_FLATTEN_DEPTH = 5
@@ -3312,12 +3330,19 @@ class EnhancedDSLDNormalizer:
                         ni.get("name", "") for ni in nested if ni.get("name")
                     ],
                 )
+                # Sprint E1.2.1: stash parent's mass/unit so the enricher
+                # can recover total_weight without re-reading the dropped
+                # parent row.
+                parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
                 for nested_ing in nested:
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name):
                         continue
                     nested_ing["parentBlend"] = name or "Unknown Blend"
                     nested_ing["isNestedIngredient"] = True
+                    if parent_mass is not None:
+                        nested_ing["parentBlendMass"] = parent_mass
+                        nested_ing["parentBlendUnit"] = parent_unit
                     if nested_ing.get("nestedRows"):
                         sub_flattened = self._flatten_nested_ingredients([nested_ing], _depth=_depth + 1)
                         flattened.extend(sub_flattened)
@@ -3336,12 +3361,17 @@ class EnhancedDSLDNormalizer:
                     score_included=False,
                     children=[nested_ing.get("name", "") for nested_ing in nested if nested_ing.get("name")],
                 )
+                # Sprint E1.2.1: same parent-mass propagation as above.
+                parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
                 for nested_ing in nested:
                     nested_name = nested_ing.get("name", "")
                     if self._should_skip_ingredient(nested_name):
                         continue
                     nested_ing["parentBlend"] = name or "Unknown Blend"
                     nested_ing["isNestedIngredient"] = True
+                    if parent_mass is not None:
+                        nested_ing["parentBlendMass"] = parent_mass
+                        nested_ing["parentBlendUnit"] = parent_unit
                     if nested_ing.get("nestedRows"):
                         sub_flattened = self._flatten_nested_ingredients([nested_ing], _depth=_depth + 1)
                         flattened.extend(sub_flattened)
@@ -3390,12 +3420,17 @@ class EnhancedDSLDNormalizer:
                 # BUT: Still extract nestedRows from skipped parents (e.g., "Total Omega Oil")
                 if nested:
                     logger.debug(f"Extracting {len(nested)} nestedRows from skipped parent: {name}")
+                    # Sprint E1.2.1: same parent-mass stamp.
+                    parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
                     for nested_ing in nested:
                         nested_name = nested_ing.get("name", "")
                         if self._should_skip_ingredient(nested_name):
                             continue
                         nested_ing["parentBlend"] = name
                         nested_ing["isNestedIngredient"] = True
+                        if parent_mass is not None:
+                            nested_ing["parentBlendMass"] = parent_mass
+                            nested_ing["parentBlendUnit"] = parent_unit
                         if nested_ing.get("nestedRows"):
                             sub_flattened = self._flatten_nested_ingredients([nested_ing])
                             flattened.extend(sub_flattened)
@@ -3414,6 +3449,11 @@ class EnhancedDSLDNormalizer:
             flattened.append(flattened_parent)
 
             if nested and not is_proprietary_blend:
+                # Sprint E1.2.1: parent mass/unit stashed onto children so the
+                # enricher can recover total_weight even though this branch
+                # keeps the parent row in the flattened output (via
+                # _nested_rows_flattened) — downstream may still discard it.
+                parent_mass, parent_unit = self._extract_primary_mass_unit(ing)
                 for nested_ing in nested:
                     nested_name = nested_ing.get("name", "")
 
@@ -3437,6 +3477,9 @@ class EnhancedDSLDNormalizer:
                     # Mark as part of a blend
                     nested_ing["parentBlend"] = name or "Unknown Blend"
                     nested_ing["isNestedIngredient"] = True
+                    if parent_mass is not None:
+                        nested_ing["parentBlendMass"] = parent_mass
+                        nested_ing["parentBlendUnit"] = parent_unit
 
                     # Recursively flatten if there are more levels
                     if nested_ing.get("nestedRows"):
@@ -4322,10 +4365,18 @@ class EnhancedDSLDNormalizer:
         # Process nested ingredients regardless of proprietary status
         # Non-blend parents (e.g., "Total Omega Oil") can have real sub-components (Omega-3, Omega-6, etc.)
         if nested_rows and not ing.get("_nested_rows_flattened"):
+            # Sprint E1.2.1: capture parent's measured mass so downstream
+            # enricher aggregation can recover total_weight. A unit of "NP"
+            # (not provided) is treated as "no measurable parent mass".
+            _parent_blend_mass = quantity if isinstance(quantity, (int, float)) and quantity > 0 and unit not in ("", "NP") else None
+            _parent_blend_unit = unit if _parent_blend_mass is not None else None
             for nested_ing in nested_rows:
                 nested_ing_for_processing = dict(nested_ing)
                 nested_ing_for_processing.setdefault("parentBlend", name)
                 nested_ing_for_processing.setdefault("isNestedIngredient", True)
+                if _parent_blend_mass is not None:
+                    nested_ing_for_processing.setdefault("parentBlendMass", _parent_blend_mass)
+                    nested_ing_for_processing.setdefault("parentBlendUnit", _parent_blend_unit)
                 nested_processed = self._process_single_ingredient_enhanced(nested_ing_for_processing, is_active)
                 if nested_processed:
                     # Handle list returns (from nested skipped parents with their own nestedRows)
@@ -4336,6 +4387,9 @@ class EnhancedDSLDNormalizer:
                             item["quantityProvided"] = (
                                 item.get("quantity", 0) > 0 and item.get("unit", "") != "NP"
                             )
+                            if _parent_blend_mass is not None:
+                                item.setdefault("parentBlendMass", _parent_blend_mass)
+                                item.setdefault("parentBlendUnit", _parent_blend_unit)
                         nested_ingredients_processed.extend(nested_processed)
                     else:
                         nested_processed["parentBlend"] = name
@@ -4344,6 +4398,9 @@ class EnhancedDSLDNormalizer:
                         nested_qty = nested_processed.get("quantity", 0)
                         nested_unit = nested_processed.get("unit", "")
                         nested_processed["quantityProvided"] = nested_qty > 0 and nested_unit != "NP"
+                        if _parent_blend_mass is not None:
+                            nested_processed.setdefault("parentBlendMass", _parent_blend_mass)
+                            nested_processed.setdefault("parentBlendUnit", _parent_blend_unit)
                         nested_ingredients_processed.append(nested_processed)
 
         # An ingredient is considered "mapped" if it's found in ANY reference database
@@ -4524,6 +4581,10 @@ class EnhancedDSLDNormalizer:
             "parentBlend": ing.get("parentBlend", None),
             "isNestedIngredient": ing.get("isNestedIngredient", False),
             "nestedIngredients": nested_ingredients_processed,
+            # Sprint E1.2.1: preserve parent container mass/unit carried in
+            # by the flatten pass so the enricher can recover total_weight.
+            "parentBlendMass": ing.get("parentBlendMass", None),
+            "parentBlendUnit": ing.get("parentBlendUnit", None),
 
             # Hierarchy classification for scoring (source/summary/component)
             "hierarchyType": self._classify_hierarchy_type(name)

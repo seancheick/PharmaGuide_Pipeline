@@ -8176,6 +8176,21 @@ class SupplementEnricherV3:
                     elif child_name:
                         group["_children_without_amounts"].add(child_name)
 
+                    # Sprint E1.2.1: when the cleaner flattened a parent
+                    # container, it stashed the parent's mass onto each
+                    # child as parentBlendMass / parentBlendUnit. Recover
+                    # total_weight from there — member quantities on
+                    # flattened NP children are almost always zero.
+                    parent_blend_mass = ingredient.get("parentBlendMass")
+                    parent_blend_unit = ingredient.get("parentBlendUnit") or ""
+                    if (
+                        isinstance(parent_blend_mass, (int, float))
+                        and parent_blend_mass > 0
+                        and parent_blend_mass > group["total_weight"]
+                    ):
+                        group["total_weight"] = float(parent_blend_mass)
+                        group["unit"] = parent_blend_unit
+
                     # Preserve any measured parent quantity if it exists on nested rows.
                     if isinstance(quantity, (int, float)) and quantity > group["total_weight"]:
                         group["total_weight"] = float(quantity)
