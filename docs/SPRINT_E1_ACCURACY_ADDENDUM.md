@@ -739,6 +739,30 @@ On sprint close:
 3. Update `HANDOFF_NEXT.md` to point back at Phase 1 (pipeline CI)
 4. Retro: capture any new net-new items in `AUTOMATION_ROADMAP.md` backlog
 
+### Post-sprint backlog — Interaction Rules Tightening (added 2026-04-22)
+
+Separate clinical reviewer audited `scripts/data/ingredient_interaction_rules.json` during E1 execution. Architecture grade: 9.5/10. Clinical accuracy grade: 8.5/10. Product readiness: 10/10. Five concrete tightening items surfaced — none are E1 blockers (audit done while E1.4 was closing); they belong in a follow-up sprint ("Sprint F — Interaction Rules Tightening").
+
+Two items (IIR-2, IIR-3) are small and fit naturally into Sprint E1 if time permits before E1.5 ships; otherwise roll to Sprint F.
+
+| ID | Item | Scope | Effort | Sprint |
+|---|---|---|---|---|
+| **IIR-1** | Tighten evidence-level taxonomy | Reclassify `evidence_level` across all rules per strict hierarchy: `established` (guideline consensus — rare for supplements), `strong` (multiple RCTs / meta-analysis), `moderate` (some human data), `limited` (theoretical / animal / in-vitro). Migrate existing tags. Dr Pham authoring pass. | ~3 days | **Sprint F** |
+| **IIR-2** | Split `mechanism` into `internal_mechanism` + `user_mechanism` | Full scientific detail stays pipeline-side; user-facing simplified text computed pipeline-side, rendered Flutter-side. Prevents `4-hydroxynonenal / troxis necrosis` leaking to phone screens. | ~1 day stub + Dr Pham authoring | **E1.2.2 add-on OR Sprint F** |
+| **IIR-3** | Severity enum + consistency validator | Hard-define `contraindicated` / `avoid` / `caution` / `monitor` with enforcement rules. Build-time validator: severity value matches authored alert_body tone (no "contraindicated" language in a "caution"-severity rule). | ~4 hours | **E1.0.2 add-on OR Sprint F** |
+| **IIR-4** | Expand `dose_thresholds` coverage | Currently populated on caffeine and a handful; missing on berberine, magnesium, vitamin D, and ~25 other ingredients where dose drives safety. Dr Pham authoring with API-verified clinical thresholds. | ~5 days | **Sprint F** |
+| **IIR-5** | Soften overreaching claims (tone sweep) | Examples: "berberine comparable to metformin" → "has shown glucose-lowering effects comparable in some studies". Same methodology as Dr Pham's banned + depletion tone passes. | ~2 days | **Sprint F** |
+
+**Decision rule for IIR-2 + IIR-3 inclusion in current E1:**
+- If E1.5.1 (full pipeline rerun) is > 2 days out and E1.0/E1.2 task owners have bandwidth → fold in as small add-ons
+- If E1.5 release prep is imminent → defer both to Sprint F (do NOT destabilize release)
+
+Sprint F draft (`docs/SPRINT_F_INTERACTION_RULES_TIGHTENING.md`) can be stubbed immediately after E1 ships. Same sprint-doc template as E1: atomic tasks, Karpathy DoD, contract tests, cross-team asks (Dr Pham authoring), shadow-diff gates.
+
+**Grade trajectory (mirrors probiotic pattern):**
+- Pre-Sprint F: 8.5/10 clinical / 9.5/10 architecture / 10/10 product (operational, production-shippable)
+- Post-Sprint F: 10/10 / 10/10 / 10/10 (clinical decision layer, competitive moat)
+
 ---
 
-_Last updated: 2026-04-21 (sprint-planning)_
+_Last updated: 2026-04-22 (Sprint F backlog added during E1 execution)_
