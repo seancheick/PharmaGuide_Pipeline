@@ -6,8 +6,8 @@
     "last_updated": "2026-04-21",
     "total_entries": 42,
     "data_source": null,
-    "version": "2.2.4",
-    "signoff_status_note": "32/42 strains flipped to dr_pham_signoff=true (28 agent-verified + 4 clinical-reviewer-approved swaps executed 2026-04-21). 10 remain false: 7 weak-evidence (no stronger candidate found OR reviewer kept at weak), 1 reviewer-reversed (B. breve M-16V), 2 medium flagged for Dr Pham re-citation (Lpc-37: attribution gap, Nissle 1917: mechanism paper only).",
+    "version": "2.2.5",
+    "signoff_status_note": "42/42 strains fully signed off (dr_pham_signoff: true). Dr Pham completed post-verification async pass on 2026-04-21: 3 strains downgraded (B. clausii strong→medium; 2 L. paracasei strong→weak), 2 citations swapped (Lpc-37 → PMID 33385020; Nissle 1917 → PMID 15479682 [Kruis 2004 gold-standard RCT]), 8 weak strains confirmed honest. All 42 PMIDs API-verified. Zero hallucinated citations.",
     "clinical_validation_note": "14 non-flipped strains now carry clinical_support_level per 4-question framework (strain-explicit / outcome-relevant / human-clinical / dose-mentioned). All 14 score 'weak' at abstract level; 5 have stronger swap candidates identified. Dr Pham review required before any PMID swap.",
     "reviewer_note_2026_04_21": "Clinical reviewer cited PMID 25727267 as additional support for L. reuteri Prodentis (peri-implant mucositis RCT). API verification on 2026-04-21 shows PMID 25727267 is a chemistry paper on ethylene effect screening — likely a typo in reviewer's notes. The primary swap PMID 23176716 is independently verified and sufficient."
   },
@@ -824,13 +824,19 @@
           "pmid": "36741903",
           "url": "https://pubmed.ncbi.nlm.nih.gov/36741903/",
           "verified_date": "2026-04-21",
-          "evidence_strength": "strong"
+          "evidence_strength": "weak",
+          "previous_evidence_strength": "strong",
+          "previous_clinical_support_level": null,
+          "clinical_support_level": "weak",
+          "downgrade_note": "Dr Pham 2026-04-21: downgraded strong → weak. Animal-model evidence type does not support strong classification.",
+          "downgrade_date": "2026-04-21",
+          "downgrade_by": "Dr Pham"
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain-specific RCT or meta-analysis.",
         "dr_pham_signoff": true,
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
-        "dr_pham_signoff_verification_note": "PMID 36741903 verified, title-match=YES"
+        "dr_pham_signoff_verification_note": "PMID 36741903 verified, title-match=YES | 2026-04-21: Dr Pham reviewed + downgraded evidence to weak."
       }
     },
     {
@@ -947,7 +953,10 @@
           }
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
       }
     },
     {
@@ -1223,7 +1232,10 @@
           "clinical_reviewer_note": "Clinical reviewer (2026-04-21): PMID 36790091 swap candidate focuses on ileostomy patients — niche model, not generalizable. KEEP current PMID 39631408; weak classification justified."
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
       }
     },
     {
@@ -1268,13 +1280,19 @@
           "pmid": "36018495",
           "url": "https://pubmed.ncbi.nlm.nih.gov/36018495/",
           "verified_date": "2026-04-21",
-          "evidence_strength": "strong"
+          "evidence_strength": "medium",
+          "previous_evidence_strength": "strong",
+          "previous_clinical_support_level": null,
+          "clinical_support_level": "moderate",
+          "downgrade_note": "Dr Pham 2026-04-21: downgraded strong → medium. Narrative review evidence type does not support strong classification per evidence hierarchy.",
+          "downgrade_date": "2026-04-21",
+          "downgrade_by": "Dr Pham"
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain-specific RCT or meta-analysis.",
         "dr_pham_signoff": true,
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
-        "dr_pham_signoff_verification_note": "PMID 36018495 verified, title-match=YES"
+        "dr_pham_signoff_verification_note": "PMID 36018495 verified, title-match=YES | 2026-04-21: Dr Pham reviewed + downgraded evidence to medium."
       }
     },
     {
@@ -1501,7 +1519,10 @@
           }
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
       }
     },
     {
@@ -1545,13 +1566,19 @@
           "pmid": "25926507",
           "url": "https://pubmed.ncbi.nlm.nih.gov/25926507/",
           "verified_date": "2026-04-21",
-          "evidence_strength": "strong"
+          "evidence_strength": "weak",
+          "previous_evidence_strength": "strong",
+          "previous_clinical_support_level": null,
+          "clinical_support_level": "weak",
+          "downgrade_note": "Dr Pham 2026-04-21: downgraded strong → weak. Animal-model evidence type does not support strong classification.",
+          "downgrade_date": "2026-04-21",
+          "downgrade_by": "Dr Pham"
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain-specific RCT or meta-analysis.",
         "dr_pham_signoff": true,
         "dr_pham_signoff_verified_by": "agent:claude-code",
         "dr_pham_signoff_verified_date": "2026-04-21",
-        "dr_pham_signoff_verification_note": "PMID 25926507 verified, title-match=YES"
+        "dr_pham_signoff_verification_note": "PMID 25926507 verified, title-match=YES | 2026-04-21: Dr Pham reviewed + downgraded evidence to weak."
       }
     },
     {
@@ -1661,7 +1688,10 @@
           "clinical_reviewer_note": "Clinical reviewer (2026-04-21): Similar to NCFM — studied in blends. KEEP; weak classification justified."
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
       }
     },
     {
@@ -1892,7 +1922,10 @@
           }
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
       }
     },
     {
@@ -2050,7 +2083,10 @@
           }
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
       }
     },
     {
@@ -2109,7 +2145,10 @@
           }
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
       }
     },
     {
@@ -2198,13 +2237,13 @@
           }
         },
         "evidence": {
-          "type": "strain_specific_rct",
-          "source_short": "Clinical nutrition (Edinburgh, Scotland) — Effect of caloric restriction with probiotic supplementation on body composition, quality of life, and psychobiological factors of obese men: A randomized, d",
-          "pmid": "39842252",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/39842252/",
+          "type": "strain_specific_clinical_evidence",
+          "source_short": "Neurobiology of Stress (2020) — The Sisu Study: probiotic effects on stress/mood; strain-specific clinical evidence",
+          "pmid": "33385020",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/33385020/",
           "verified_date": "2026-04-21",
           "evidence_strength": "medium",
-          "clinical_support_level": "weak",
+          "clinical_support_level": "moderate",
           "clinical_validation": {
             "q1_strain_explicit": "NO",
             "q2_outcome_relevant": "YES",
@@ -2216,13 +2255,21 @@
             "validated_date": "2026-04-21",
             "framework": "4-question clinical validation (strain-explicit / outcome-relevant / human-clinical / dose-mentioned)"
           },
-          "abstract_review_note": "PMID 39842252 is a genuine RCT (randomized, double-blind, placebo-controlled) in obese men (n=25), BUT the abstract does not name the specific strain Lpc-37 and the study endpoint (anxiety/depression improvement) is not the same as our claimed indication. Strain attribution requires full-text verification. Conclusion from abstract: 'Probiotic supplementation did not enhance the effects of caloric restriction on body composition, QoL-, or sleep-related parameters.' RECOMMENDATION: Dr Pham to verify full-text explicitly uses Lpc-37 + specifies CFU dose, OR find a more strain-specific citation. Keep dr_pham_signoff=false until resolved.",
-          "recommended_action": "FIND_BETTER_CITATION",
-          "abstract_reviewed_date": "2026-04-21",
-          "abstract_reviewed_by": "agent:claude-code"
+          "previous_citation": {
+            "pmid": "39842252",
+            "source_short": "Clinical nutrition (Edinburgh, Scotland) — Effect of caloric restriction with probiotic supplementation on body composition, quality of life, and psychobiological factors of obese men: A randomized, d",
+            "type": "strain_specific_rct",
+            "evidence_strength": "medium",
+            "clinical_support_level": "weak",
+            "swap_reason": "Dr Pham 2026-04-21: citation swap. PMID 39842252 (abstract didn't name Lpc-37) → PMID 33385020 (Sisu Study, strain-specific clinical evidence per Dr Pham's selection).",
+            "swapped_date": "2026-04-21"
+          }
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain referenced but evidence is adjacent (review / co-studied paper). Dr Pham may upgrade citation when signing off.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (authored swap) + agent:claude-code (API-verified 2026-04-21)",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: citation swap. PMID 39842252 (abstract didn't name Lpc-37) → PMID 33385020 (Sisu Study, strain-specific clinical evidence per Dr Pham's selection)."
       }
     },
     {
@@ -2310,13 +2357,13 @@
           }
         },
         "evidence": {
-          "type": "strain_referenced_clinical_study",
-          "source_short": "Nature communications — Programmable probiotics modulate inflammation and gut microbiota for inflammatory bowel disease treatment after effective oral delivery.",
-          "pmid": "35701435",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/35701435/",
+          "type": "strain_specific_rct",
+          "source_short": "Gut (2004) Kruis et al. — Maintaining remission of ulcerative colitis with Escherichia coli Nissle 1917 is as effective as standard mesalazine (RCT, multicenter, n=327)",
+          "pmid": "15479682",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/15479682/",
           "verified_date": "2026-04-21",
-          "evidence_strength": "medium",
-          "clinical_support_level": "weak",
+          "evidence_strength": "strong",
+          "clinical_support_level": "high",
           "clinical_validation": {
             "q1_strain_explicit": "YES",
             "q2_outcome_relevant": "YES",
@@ -2328,13 +2375,21 @@
             "validated_date": "2026-04-21",
             "framework": "4-question clinical validation (strain-explicit / outcome-relevant / human-clinical / dose-mentioned)"
           },
-          "abstract_review_note": "PMID 35701435 is a synthetic-biology / mechanism paper using a genetically-engineered Nissle 1917 variant (ECN-pE overexpressing catalase + superoxide dismutase) in a mouse IBD model. It does NOT support a CFU-dose claim for wild-type Nissle 1917 in human use. PubTypes lack RCT/Clinical Trial designation. Nissle 1917 has extensive human clinical evidence (UC maintenance remission vs mesalamine — e.g. PMID 15043499, PMID 10406200) that would be more appropriate. RECOMMENDATION: Dr Pham to swap to a clinical citation for wild-type Nissle in IBD/UC maintenance. Keep dr_pham_signoff=false until swap.",
-          "recommended_action": "SWAP_CITATION_REQUIRED",
-          "abstract_reviewed_date": "2026-04-21",
-          "abstract_reviewed_by": "agent:claude-code"
+          "previous_citation": {
+            "pmid": "35701435",
+            "source_short": "Nature communications — Programmable probiotics modulate inflammation and gut microbiota for inflammatory bowel disease treatment after effective oral delivery.",
+            "type": "strain_referenced_clinical_study",
+            "evidence_strength": "medium",
+            "clinical_support_level": "weak",
+            "swap_reason": "Dr Pham 2026-04-21: citation swap. PMID 35701435 (engineered-variant mouse IBD paper) → PMID 15479682 (Kruis 2004 gold-standard UC maintenance RCT vs mesalazine, Gut).",
+            "swapped_date": "2026-04-21"
+          }
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Strain referenced but evidence is adjacent (review / co-studied paper). Dr Pham may upgrade citation when signing off.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (authored swap) + agent:claude-code (API-verified 2026-04-21)",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: citation swap. PMID 35701435 (engineered-variant mouse IBD paper) → PMID 15479682 (Kruis 2004 gold-standard UC maintenance RCT vs mesalazine, Gut)."
       }
     },
     {
@@ -2439,7 +2494,10 @@
           }
         },
         "notes": "Tier cutoffs are industry convention (1B / 10B / 50B CFU/day). Best-available PubMed hit is animal-model / narrative / mixed-strain. Dr Pham should replace with a stronger strain-specific RCT if one exists.",
-        "dr_pham_signoff": false
+        "dr_pham_signoff": true,
+        "dr_pham_signoff_verified_by": "Dr Pham (2026-04-21 weak-is-honest confirmation) + agent:claude-code",
+        "dr_pham_signoff_verified_date": "2026-04-21",
+        "dr_pham_signoff_verification_note": "Dr Pham 2026-04-21: 'weak is honest' — no stronger citation available; retain weak evidence classification. Scorer caps contribution at 50% per E1.3.2 tier rules."
       }
     }
   ],
