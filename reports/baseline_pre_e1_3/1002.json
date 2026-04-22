@@ -1,0 +1,1291 @@
+{
+  "audit": {
+    "gate_audit": {
+      "blocking_reason": null,
+      "probiotic_eligibility": {
+        "eligible": false,
+        "mode": "non_probiotic",
+        "reason": "no_probiotic_signal"
+      },
+      "verdict": "SAFE"
+    },
+    "non_gmo": {
+      "all_signals": [],
+      "claim_present": false,
+      "generic_signals": [],
+      "project_verified": false,
+      "reason": "no_non_gmo_signal",
+      "score_eligible": false,
+      "verified_signals": []
+    },
+    "omega3": {
+      "applicable_for_dose_bonus": true,
+      "bonus_score": 1.0,
+      "contains_omega3": true,
+      "dha_mg_per_unit": 240.0,
+      "dose_band": "general_health",
+      "epa_dha_mg_per_unit": null,
+      "epa_mg_per_unit": 360.0,
+      "matched_ingredients": [
+        {
+          "canonical_id": "epa",
+          "category": "fatty_acids",
+          "name": "EPA (Eicosapentaenoic Acid)",
+          "raw_source_text": "Eicosapentaenoic Acid"
+        },
+        {
+          "canonical_id": "dha",
+          "category": "fatty_acids",
+          "name": "DHA (Docosahexaenoic Acid)",
+          "raw_source_text": "Docosahexaenoic Acid"
+        },
+        {
+          "canonical_id": "fish_oil",
+          "category": "fatty_acids",
+          "name": "Fish Oil",
+          "raw_source_text": "Fish Body Oil"
+        }
+      ],
+      "per_day_max_mg": 600.0,
+      "per_day_mid_mg": 600.0,
+      "per_day_min_mg": 600.0,
+      "reason": "omega3_bonus_awarded"
+    },
+    "proprietary_blend": {
+      "blend_count": 0,
+      "evidence": [],
+      "has_proprietary_blends": false,
+      "penalty_score": 0.0
+    },
+    "section_a_audit": {
+      "category_bonus_total": 1.0,
+      "ceiling_hit": false,
+      "core_quality": 13.0,
+      "max": 25.0,
+      "score": 14.0
+    },
+    "supplement_type": {
+      "active_count": 4,
+      "category_breakdown": {
+        "fatty_acid": 3,
+        "herb": 1
+      },
+      "enriched_type": "targeted",
+      "export_type": "targeted",
+      "inferred_type": "targeted",
+      "probiotic_signal": 0,
+      "scored_type": "targeted",
+      "source": "ingredient_quality_data"
+    }
+  },
+  "banned_substance_detail": null,
+  "blob_version": 1,
+  "brand_name": "GNC",
+  "certification_detail": {
+    "gmp": {
+      "claimed": false,
+      "fda_registered": false,
+      "nsf_gmp": false,
+      "text_matched": ""
+    },
+    "heavy_metal_tested": 0,
+    "label_accuracy_verified": 0,
+    "purity_verified": 0,
+    "third_party_programs": {
+      "count": 0,
+      "has_generic_claim_only": false,
+      "programs": []
+    }
+  },
+  "compliance_detail": {
+    "allergen_free_claims": [],
+    "conflicts": [],
+    "dairy_free": false,
+    "evidence_based": {
+      "allergen_free_claims": [],
+      "rules_db_version": "5.0.0"
+    },
+    "gluten_free": false,
+    "has_may_contain_warning": false,
+    "soy_free": false,
+    "vegan": false,
+    "vegetarian": false,
+    "verified": true
+  },
+  "dietary_sensitivity_detail": {
+    "sodium": {
+      "amount_mg": 0.0,
+      "exceeds_aha_threshold": false,
+      "level": "sodium_free",
+      "level_display": "Sodium-Free",
+      "percent_daily_value": 0,
+      "sodium_sources": [],
+      "unit": "mg"
+    },
+    "sugar": {
+      "amount_g": 0.0,
+      "contains_sugar": false,
+      "exceeds_diabetic_threshold": false,
+      "has_added_sugar": false,
+      "level": "sugar_free",
+      "level_display": "Sugar-Free",
+      "sugar_sources": [],
+      "unit": "g"
+    },
+    "sweeteners": {
+      "artificial": [],
+      "has_artificial": false,
+      "has_high_glycemic": false,
+      "has_sugar_alcohols": false,
+      "high_glycemic": [],
+      "safer_alternatives": [],
+      "sugar_alcohols": [],
+      "uses_safer_alternatives": false
+    }
+  },
+  "dsld_id": "1002",
+  "evidence_data": {
+    "clinical_matches": [],
+    "match_count": 0,
+    "unsubstantiated_claims": []
+  },
+  "formulation_detail": {
+    "absorption_enhancer_paired": 0,
+    "absorption_enhancers": [],
+    "claim_non_gmo_present": false,
+    "claim_non_gmo_verified": false,
+    "delivery_form": "",
+    "delivery_tier": "",
+    "is_certified_organic": 0,
+    "organic_verification": "",
+    "standardized_botanicals": [],
+    "synergy_cluster_qualified": 0
+  },
+  "inactive_ingredients": [
+    {
+      "additive_type": "",
+      "category": "",
+      "common_uses": [],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_additive": 0,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Fish Body Oil",
+      "normalized_key": "fish_body_oil",
+      "notes": "",
+      "population_warnings": [],
+      "raw_source_text": "Fish Body Oil",
+      "severity_level": "",
+      "standardName": "Fish Oil",
+      "standard_name": ""
+    },
+    {
+      "additive_type": "gelatin_capsule",
+      "category": "capsule_material",
+      "common_uses": [
+        "capsule shell",
+        "softgel encapsulation"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0017237",
+        "unii": "2G86QN327L"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Gelatin",
+      "normalized_key": "gelatin",
+      "notes": "Derived from animal collagen, forming the shell of traditional capsules and softgels. Provides a protective casing. While animal-derived (not vegan/vegetarian), it is generally considered safe and inert in its role as a capsule material.",
+      "population_warnings": [],
+      "raw_source_text": "Gelatin",
+      "severity_level": "",
+      "standardName": "Gelatin Capsule",
+      "standard_name": "Gelatin Capsule"
+    },
+    {
+      "additive_type": "processing_aid",
+      "category": "humectant_solvent",
+      "common_uses": [
+        "moisture retention",
+        "solvent",
+        "texture improvement",
+        "humectant",
+        "sweetener",
+        "texture modifier"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0017861",
+        "unii": "PDC6A3C0OX"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Glycerin",
+      "normalized_key": "glycerin",
+      "notes": "Plant-derived glycerol (1,2,3-propanetriol, E422) used as humectant, solvent, and sweetener in supplement formulations. FDA GRAS. Essential for gummy texture and shelf life. Acts as carrier for flavors and herbal extracts. ADI: not specified (JECFA — acceptable for food use).",
+      "population_warnings": [],
+      "raw_source_text": "Glycerin",
+      "severity_level": "",
+      "standardName": "Vegetable Glycerin",
+      "standard_name": "Vegetable Glycerin"
+    },
+    {
+      "additive_type": "natural_flavor",
+      "category": "flavor_natural",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "aroma improvement"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C1365470"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "natural Lemon flavor",
+      "normalized_key": "natural_lemon_flavor",
+      "notes": "Flavoring substances derived from plant or animal sources. While generally recognized as safe, the term can encompass hundreds of compounds. Must be derived from natural sources per FDA regulations. Good clean label choice.",
+      "population_warnings": [],
+      "raw_source_text": "natural Lemon flavor",
+      "severity_level": "",
+      "standardName": "Natural Flavors",
+      "standard_name": "Natural Flavors"
+    },
+    {
+      "additive_type": "preservative_natural",
+      "category": "preservative_natural",
+      "common_uses": [
+        "antioxidant protection",
+        "shelf life extension",
+        "rancidity prevention"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0049690",
+        "unii": "QN83US2B0N"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Vitamin E",
+      "normalized_key": "vitamin_e",
+      "notes": "Antioxidants used to prevent spoilage, such as fat-soluble Vitamin C (ascorbyl palmitate) or Vitamin E (tocopherols). Generally recognized as safe (GRAS) and beneficial. Premium clean label choice.",
+      "population_warnings": [],
+      "raw_source_text": "Vitamin E",
+      "severity_level": "",
+      "standardName": "Natural Preservatives",
+      "standard_name": "Natural Preservatives"
+    },
+    {
+      "additive_type": "",
+      "category": "",
+      "common_uses": [],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_additive": 0,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Rosemary leaves extract",
+      "normalized_key": "rosemary_leaves_extract",
+      "notes": "",
+      "population_warnings": [],
+      "raw_source_text": "Rosemary leaves extract",
+      "severity_level": "",
+      "standardName": "Rosemary",
+      "standard_name": ""
+    }
+  ],
+  "ingredients": [
+    {
+      "bio_score": 10.0,
+      "category": "fatty_acids",
+      "display_badge": "no_data",
+      "display_dose_label": "360 mg",
+      "display_label": "Eicosapentaenoic Acid",
+      "dosage": 360.0,
+      "dosage_unit": "mg",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "epa (unspecified)",
+      "matched_forms": [],
+      "name": "Eicosapentaenoic Acid",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "eicosapentaenoic_acid",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "EPA form not specified. Conservative scoring. EPA (eicosapentaenoic acid) is the primary anti-inflammatory omega-3 fatty acid. Form affects bioavailability — check product label.",
+      "parent_key": "eicosapentaenoic_acid",
+      "quantity": 360.0,
+      "raw_source_text": "Eicosapentaenoic Acid",
+      "role": "active",
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "Use with caution in bleeding disorders. Limit EPA intake to under 2 g/day without physician oversight. Disclose use to any treating surgeon.",
+              "alert_body": "EPA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding EPA.",
+              "alert_headline": "Caution with bleeding disorders",
+              "condition_id": "bleeding_disorders",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "established",
+              "informational_note": "EPA can affect platelet function — relevant to people with a bleeding disorder.",
+              "mechanism": "EPA (eicosapentaenoic acid) competitively inhibits arachidonic acid conversion to thromboxane A2 via cyclooxygenase, and generates thromboxane A3 (a much weaker platelet aggregator) instead. This antiplatelet mechanism prolongs bleeding time, particularly at doses above 2 g/day.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            }
+          ],
+          "drug_class_hits": [
+            {
+              "action": "Monitor INR when starting or stopping high-dose EPA (>2 g/day) in patients on warfarin or other anticoagulants.",
+              "alert_body": "EPA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding EPA and ask about INR or bleeding checks.",
+              "alert_headline": "May add to blood-thinner effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "anticoagulants",
+              "evidence_level": "established",
+              "informational_note": "EPA can affect clotting — relevant to people on anticoagulants.",
+              "mechanism": "EPA reduces platelet TXA2 synthesis and may affect the vitamin K-dependent coagulation cascade. Clinical studies with high-dose fish oil (containing EPA) and warfarin show small but consistent INR elevations.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            },
+            {
+              "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
+              "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
+              "alert_headline": "May add to antiplatelet effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "antiplatelets",
+              "evidence_level": "probable",
+              "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
+              "mechanism": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            }
+          ],
+          "last_reviewed": "2026-04-14",
+          "pregnancy_lactation": {},
+          "rule_id": "RULE_IQM_EPA_BLEEDING",
+          "source_bucket": "ingredients",
+          "subject_ref": {
+            "canonical_id": "epa",
+            "db": "ingredient_quality_map"
+          }
+        }
+      ],
+      "score": 13.0,
+      "standardName": "EPA (Eicosapentaenoic Acid)",
+      "standard_name": "EPA (Eicosapentaenoic Acid)",
+      "standardization_note": null,
+      "unit": "mg"
+    },
+    {
+      "bio_score": 10.0,
+      "category": "fatty_acids",
+      "display_badge": "no_data",
+      "display_dose_label": "240 mg",
+      "display_label": "Docosahexaenoic Acid",
+      "dosage": 240.0,
+      "dosage_unit": "mg",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "dha (unspecified)",
+      "matched_forms": [],
+      "name": "Docosahexaenoic Acid",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "docosahexaenoic_acid",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "DHA form not specified. Conservative scoring. DHA (docosahexaenoic acid, 22:6 n-3) is critical for brain, retina, and cardiovascular health. Form significantly affects absorption — check product label.",
+      "parent_key": "docosahexaenoic_acid",
+      "quantity": 240.0,
+      "raw_source_text": "Docosahexaenoic Acid",
+      "role": "active",
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
+              "alert_body": "DHA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding DHA.",
+              "alert_headline": "Caution with bleeding disorders",
+              "condition_id": "bleeding_disorders",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "established",
+              "informational_note": "DHA can affect platelet function — relevant to people with a bleeding disorder.",
+              "mechanism": "DHA (docosahexaenoic acid) is incorporated into platelet phospholipid membranes, displacing arachidonic acid and reducing thromboxane A2 (TXA2) synthesis. TXA2 is the primary platelet aggregation amplifier; reduced TXA2 production measurably prolongs bleeding time at doses above 2 g/day.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            }
+          ],
+          "drug_class_hits": [
+            {
+              "action": "Monitor INR when adding or removing high-dose DHA (>2 g/day) in patients on warfarin. Alert prescriber to use.",
+              "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about INR or bleeding checks.",
+              "alert_headline": "May add to blood-thinner effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "anticoagulants",
+              "evidence_level": "established",
+              "informational_note": "DHA can affect clotting — relevant to people on anticoagulants.",
+              "mechanism": "DHA reduces platelet TXA2 synthesis and may weakly inhibit vitamin K-dependent coagulation factor synthesis. Combined with warfarin, a small but clinically relevant INR elevation has been observed in controlled studies.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            },
+            {
+              "action": "Advise prescriber of DHA use when on antiplatelet therapy. Avoid high-dose supplements (>3 g/day) without haematology guidance.",
+              "alert_body": "DHA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding DHA.",
+              "alert_headline": "May add to antiplatelet effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "antiplatelets",
+              "evidence_level": "probable",
+              "informational_note": "DHA can affect platelet function — relevant to people on antiplatelets.",
+              "mechanism": "Additive antiplatelet effect via independent mechanisms: clopidogrel blocks P2Y12 receptor while DHA reduces TXA2 production. The combination further impairs platelet aggregation beyond either agent alone.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            }
+          ],
+          "last_reviewed": "2026-04-14",
+          "pregnancy_lactation": {},
+          "rule_id": "RULE_IQM_DHA_BLEEDING",
+          "source_bucket": "ingredients",
+          "subject_ref": {
+            "canonical_id": "dha",
+            "db": "ingredient_quality_map"
+          }
+        }
+      ],
+      "score": 13.0,
+      "standardName": "DHA (Docosahexaenoic Acid)",
+      "standard_name": "DHA (Docosahexaenoic Acid)",
+      "standardization_note": null,
+      "unit": "mg"
+    }
+  ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE"
+  ],
+  "interaction_summary": {
+    "condition_summary": {
+      "bleeding_disorders": {
+        "actions": [
+          "Monitor for signs of bleeding. Inform prescriber if taking anticoagulants or antiplatelets. Consider dose reduction if >3g EPA+DHA/day.",
+          "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
+          "Use with caution in bleeding disorders. Limit EPA intake to under 2 g/day without physician oversight. Disclose use to any treating surgeon.",
+          "Use with caution in patients with bleeding disorders. Doses above 3 g/day of EPA+DHA may significantly increase bleeding risk. Consult a healthcare provider before use."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 3,
+        "ingredients": [
+          "Docosahexaenoic Acid",
+          "Eicosapentaenoic Acid",
+          "Fish Body Oil"
+        ],
+        "label": "Bleeding Disorders",
+        "rule_ids": [
+          "RULE_INGREDIENT_FISH_OIL",
+          "RULE_IQM_DHA_BLEEDING",
+          "RULE_IQM_EPA_BLEEDING",
+          "RULE_IQM_FISH_OIL_BLEEDING"
+        ]
+      },
+      "lactation": {
+        "actions": [
+          "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Fish Body Oil"
+        ],
+        "label": "Breastfeeding",
+        "rule_ids": [
+          "RULE_IQM_FISH_OIL_BLEEDING"
+        ]
+      },
+      "pregnancy": {
+        "actions": [
+          "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Fish Body Oil"
+        ],
+        "label": "Pregnancy",
+        "rule_ids": [
+          "RULE_IQM_FISH_OIL_BLEEDING"
+        ]
+      },
+      "surgery_scheduled": {
+        "actions": [
+          "Consider discontinuing omega-3 supplements 7-10 days before planned surgery. Inform surgeon and anesthesiologist.",
+          "Inform your surgeon of fish oil use before planned procedures. High-dose fish oil (>3 g/day) combined with other anticoagulants or antiplatelets warrants discussion with the surgical team."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Fish Body Oil"
+        ],
+        "label": "Upcoming Surgery",
+        "rule_ids": [
+          "RULE_INGREDIENT_FISH_OIL",
+          "RULE_IQM_FISH_OIL_BLEEDING"
+        ]
+      }
+    },
+    "drug_class_summary": {
+      "anticoagulants": {
+        "actions": [
+          "Monitor INR more frequently when starting, stopping, or changing fish oil dose during warfarin therapy. Inform prescriber. At doses >2 g/day, closer INR surveillance is warranted.",
+          "Monitor INR when adding or removing high-dose DHA (>2 g/day) in patients on warfarin. Alert prescriber to use.",
+          "Monitor INR when starting or stopping high-dose EPA (>2 g/day) in patients on warfarin or other anticoagulants.",
+          "Monitor INR/bleeding time more frequently. Watch for signs of bruising or bleeding. Inform prescriber."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 3,
+        "ingredients": [
+          "Docosahexaenoic Acid",
+          "Eicosapentaenoic Acid",
+          "Fish Body Oil"
+        ],
+        "label": "Anticoagulants",
+        "rule_ids": [
+          "RULE_INGREDIENT_FISH_OIL",
+          "RULE_IQM_DHA_BLEEDING",
+          "RULE_IQM_EPA_BLEEDING",
+          "RULE_IQM_FISH_OIL_BLEEDING"
+        ]
+      },
+      "antiplatelets": {
+        "actions": [
+          "Advise prescriber of DHA use when on antiplatelet therapy. Avoid high-dose supplements (>3 g/day) without haematology guidance.",
+          "Avoid high-dose fish oil (>3 g/day) when combined with antiplatelet medications unless under medical supervision. Monitor for unusual bleeding or bruising.",
+          "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
+          "Monitor for increased bruising or bleeding. Inform prescriber of omega-3 supplementation."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 3,
+        "ingredients": [
+          "Docosahexaenoic Acid",
+          "Eicosapentaenoic Acid",
+          "Fish Body Oil"
+        ],
+        "label": "Antiplatelet Agents",
+        "rule_ids": [
+          "RULE_INGREDIENT_FISH_OIL",
+          "RULE_IQM_DHA_BLEEDING",
+          "RULE_IQM_EPA_BLEEDING",
+          "RULE_IQM_FISH_OIL_BLEEDING"
+        ]
+      },
+      "nsaids": {
+        "actions": [
+          "Monitor for GI symptoms when combining fish oil with NSAIDs. Take NSAIDs with food."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Fish Body Oil"
+        ],
+        "label": "NSAIDs",
+        "rule_ids": [
+          "RULE_INGREDIENT_FISH_OIL"
+        ]
+      }
+    },
+    "highest_severity": "caution"
+  },
+  "manufacturer_detail": {
+    "brand_name": "GNC",
+    "is_trusted": 1,
+    "manufacturing_region": "",
+    "violations": {
+      "found": false,
+      "total_deduction_applied": 0.0,
+      "violations": []
+    }
+  },
+  "non_gmo_audit": {
+    "all_signals": [],
+    "claim_present": false,
+    "generic_signals": [],
+    "project_verified": false,
+    "reason": "no_non_gmo_signal",
+    "score_eligible": false,
+    "verified_signals": []
+  },
+  "nutrition_detail": {
+    "calories_per_serving": 10.0,
+    "dietary_fiber_g": null,
+    "protein_g": null,
+    "total_carbohydrates_g": null,
+    "total_fat_g": 1.0
+  },
+  "omega3_audit": {
+    "applicable_for_dose_bonus": true,
+    "bonus_score": 1.0,
+    "contains_omega3": true,
+    "dha_mg_per_unit": 240.0,
+    "dose_band": "general_health",
+    "epa_dha_mg_per_unit": null,
+    "epa_mg_per_unit": 360.0,
+    "matched_ingredients": [
+      {
+        "canonical_id": "epa",
+        "category": "fatty_acids",
+        "name": "EPA (Eicosapentaenoic Acid)",
+        "raw_source_text": "Eicosapentaenoic Acid"
+      },
+      {
+        "canonical_id": "dha",
+        "category": "fatty_acids",
+        "name": "DHA (Docosahexaenoic Acid)",
+        "raw_source_text": "Docosahexaenoic Acid"
+      },
+      {
+        "canonical_id": "fish_oil",
+        "category": "fatty_acids",
+        "name": "Fish Oil",
+        "raw_source_text": "Fish Body Oil"
+      }
+    ],
+    "per_day_max_mg": 600.0,
+    "per_day_mid_mg": 600.0,
+    "per_day_min_mg": 600.0,
+    "reason": "omega3_bonus_awarded"
+  },
+  "product_name": "Double Strength Fish Oil",
+  "proprietary_blend_audit": {
+    "blend_count": 0,
+    "evidence": [],
+    "has_proprietary_blends": false,
+    "penalty_score": 0.0
+  },
+  "proprietary_blend_detail": {
+    "blends": [],
+    "has_proprietary_blends": 0
+  },
+  "raw_actives_count": 5,
+  "raw_inactives_count": 6,
+  "rda_ul_data": {
+    "adequacy_results": [
+      {
+        "adequacy_band": "unknown",
+        "age_group": "19-30",
+        "amount": 360.0,
+        "conversion_applied": false,
+        "is_servings_estimated": false,
+        "notes": [
+          "Nutrient 'EPA (Eicosapentaenoic Acid)' not found in RDA database"
+        ],
+        "nutrient": "EPA (Eicosapentaenoic Acid)",
+        "optimal_max": null,
+        "optimal_min": null,
+        "original_quantity": 360.0,
+        "original_unit": "mg",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": null,
+        "pct_ul": null,
+        "per_day_max": 360.0,
+        "per_day_min": 360.0,
+        "point_recommendation": 0,
+        "rda_ai": null,
+        "rda_ai_source": "unknown",
+        "scoring_eligible": false,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": false,
+        "ul": null,
+        "ul_status": "unknown",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "age_group": "19-30",
+        "amount": 240.0,
+        "conversion_applied": false,
+        "is_servings_estimated": false,
+        "notes": [
+          "Nutrient 'DHA (Docosahexaenoic Acid)' not found in RDA database"
+        ],
+        "nutrient": "DHA (Docosahexaenoic Acid)",
+        "optimal_max": null,
+        "optimal_min": null,
+        "original_quantity": 240.0,
+        "original_unit": "mg",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": null,
+        "pct_ul": null,
+        "per_day_max": 240.0,
+        "per_day_min": 240.0,
+        "point_recommendation": 0,
+        "rda_ai": null,
+        "rda_ai_source": "unknown",
+        "scoring_eligible": false,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": false,
+        "ul": null,
+        "ul_status": "unknown",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "analyzed_ingredients": [
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: EPA (Eicosapentaenoic Acid)",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Eicosapentaenoic Acid",
+          "notes": [],
+          "nutrient_detected": "EPA (Eicosapentaenoic Acid)",
+          "original_unit": "mg",
+          "original_value": 360.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 360.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Eicosapentaenoic Acid",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 360.0,
+        "per_day_min": 360.0,
+        "quantity": 360.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "EPA (Eicosapentaenoic Acid)",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: DHA (Docosahexaenoic Acid)",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Docosahexaenoic Acid",
+          "notes": [],
+          "nutrient_detected": "DHA (Docosahexaenoic Acid)",
+          "original_unit": "mg",
+          "original_value": 240.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 240.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Docosahexaenoic Acid",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 240.0,
+        "per_day_min": 240.0,
+        "quantity": 240.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "DHA (Docosahexaenoic Acid)",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "collection_enabled": true,
+    "collection_reason": null,
+    "conversion_evidence": [
+      {
+        "confidence": "failed",
+        "conversion_factor": null,
+        "conversion_rule_id": null,
+        "converted_unit": null,
+        "converted_value": null,
+        "error": "No conversion rule found for nutrient: EPA (Eicosapentaenoic Acid)",
+        "form_detected": null,
+        "form_detection_source": null,
+        "ingredient": "Eicosapentaenoic Acid",
+        "notes": [],
+        "nutrient_detected": "EPA (Eicosapentaenoic Acid)",
+        "original_unit": "mg",
+        "original_value": 360.0,
+        "success": false,
+        "warnings": []
+      },
+      {
+        "confidence": "failed",
+        "conversion_factor": null,
+        "conversion_rule_id": null,
+        "converted_unit": null,
+        "converted_value": null,
+        "error": "No conversion rule found for nutrient: DHA (Docosahexaenoic Acid)",
+        "form_detected": null,
+        "form_detection_source": null,
+        "ingredient": "Docosahexaenoic Acid",
+        "notes": [],
+        "nutrient_detected": "DHA (Docosahexaenoic Acid)",
+        "original_unit": "mg",
+        "original_value": 240.0,
+        "success": false,
+        "warnings": []
+      }
+    ],
+    "count": 2,
+    "has_over_ul": false,
+    "ingredients_with_rda": [
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: EPA (Eicosapentaenoic Acid)",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Eicosapentaenoic Acid",
+          "notes": [],
+          "nutrient_detected": "EPA (Eicosapentaenoic Acid)",
+          "original_unit": "mg",
+          "original_value": 360.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 360.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Eicosapentaenoic Acid",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 360.0,
+        "per_day_min": 360.0,
+        "quantity": 360.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "EPA (Eicosapentaenoic Acid)",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: DHA (Docosahexaenoic Acid)",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Docosahexaenoic Acid",
+          "notes": [],
+          "nutrient_detected": "DHA (Docosahexaenoic Acid)",
+          "original_unit": "mg",
+          "original_value": 240.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 240.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Docosahexaenoic Acid",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 240.0,
+        "per_day_min": 240.0,
+        "quantity": 240.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "DHA (Docosahexaenoic Acid)",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "safety_flags": []
+  },
+  "score_bonuses": [
+    {
+      "detail": "general health",
+      "id": "omega3",
+      "label": "Omega-3 dose bonus",
+      "score": 1.0
+    }
+  ],
+  "score_penalties": [],
+  "section_breakdown": {
+    "brand_trust": {
+      "max": 5.0,
+      "score": 2.0,
+      "sub": {
+        "D1": 2.0,
+        "D2": 0.0,
+        "D3": 0.0,
+        "D4": 0.0,
+        "D5": 0.0
+      }
+    },
+    "evidence_research": {
+      "ingredient_points": {},
+      "matched_entries": 0,
+      "max": 20.0,
+      "score": 0.0
+    },
+    "ingredient_quality": {
+      "max": 25.0,
+      "score": 14.0,
+      "sub": {
+        "A1": 13.0,
+        "A2": 0.0,
+        "A3": 0.0,
+        "A4": 0.0,
+        "A5": 0.0,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 0.0,
+        "A5d": 0.0,
+        "A6": 0.0,
+        "category_bonus_pool_cap": 5.0,
+        "category_bonus_total": 1.0,
+        "core_quality": 13.0,
+        "omega3_breakdown": {
+          "applicable": true,
+          "dha_mg_per_unit": 240.0,
+          "dose_band": "general_health",
+          "epa_mg_per_unit": 360.0,
+          "omega3_dose_bonus": 1.0,
+          "per_day_max_mg": 600.0,
+          "per_day_mid_mg": 600.0,
+          "per_day_min_mg": 600.0,
+          "prescription_dose": false
+        },
+        "omega3_dose_bonus": 1.0,
+        "probiotic_bonus": 0.0,
+        "probiotic_breakdown": {
+          "cfu": 0.0,
+          "clinical_strains": 0.0,
+          "diversity": 0.0,
+          "eligibility": {
+            "eligible": false,
+            "mode": "non_probiotic",
+            "reason": "no_probiotic_signal"
+          },
+          "prebiotic": 0.0,
+          "probiotic_bonus": 0.0,
+          "survivability": 0.0
+        }
+      }
+    },
+    "safety_purity": {
+      "max": 30.0,
+      "score": 25.0,
+      "sub": {
+        "B0_moderate_penalty": 0.0,
+        "B1_evidence": [],
+        "B1_penalty": 0.0,
+        "B2_penalty": 0.0,
+        "B3": 0.0,
+        "B4a": 0.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B5_blend_evidence": [],
+        "B5_penalty": 0.0,
+        "B6_penalty": 0.0,
+        "B7_dose_safety_evidence": [],
+        "B7_penalty": 0.0,
+        "B8_caers_evidence": [],
+        "B8_penalty": 0.0,
+        "B_hypoallergenic": 0.0,
+        "bonuses": 0.0,
+        "penalties": 0.0
+      }
+    },
+    "violation_penalty": 0.0
+  },
+  "serving_info": {
+    "basis_count": 3.0,
+    "basis_unit": "softgel",
+    "max_servings_per_day": 1,
+    "min_servings_per_day": 1
+  },
+  "supplement_type_audit": {
+    "active_count": 4,
+    "category_breakdown": {
+      "fatty_acid": 3,
+      "herb": 1
+    },
+    "enriched_type": "targeted",
+    "export_type": "targeted",
+    "inferred_type": "targeted",
+    "probiotic_signal": 0,
+    "scored_type": "targeted",
+    "source": "ingredient_quality_data"
+  },
+  "unmapped_actives": {
+    "excluding_banned_exact_alias": 0,
+    "names": [],
+    "total": 0
+  },
+  "warnings": [
+    {
+      "action": "Monitor for signs of bleeding. Inform prescriber if taking anticoagulants or antiplatelets. Consider dose reduction if >3g EPA+DHA/day.",
+      "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
+      "alert_headline": "Caution with bleeding disorders",
+      "condition_id": "bleeding_disorders",
+      "detail": "Omega-3 fatty acids (EPA/DHA) prolong bleeding time by inhibiting thromboxane A2-mediated platelet aggregation and reducing platelet-activating factor. FDA drug labels for icosapent ethyl (Vascepa) and omega-3-acid ethyl esters (Lovaza) explicitly warn about increased bleeding risk. Doses >3g/day have potential antithrombotic effects per FDA labeling.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "established",
+      "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder.",
+      "ingredient_name": "Fish Body Oil",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/29136493/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
+        "https://www.nccih.nih.gov/health/omega-3-supplements"
+      ],
+      "title": "Fish Body Oil / bleeding_disorders",
+      "type": "interaction"
+    },
+    {
+      "action": "Monitor INR more frequently when starting, stopping, or changing fish oil dose during warfarin therapy. Inform prescriber. At doses >2 g/day, closer INR surveillance is warranted.",
+      "alert_body": "Fish oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding fish oil and ask about INR or bleeding checks.",
+      "alert_headline": "May add to blood-thinner effects",
+      "detail": "Fish oil (EPA+DHA) may enhance warfarin's anticoagulant effect via additive antiplatelet activity and possible reduction of factor VII. Multiple case reports document INR elevation (to >4 or 8) when fish oil was added or dose-escalated during stable warfarin therapy. One fatal case involved warfarin-induced coagulopathy that could not be reversed after head trauma in a patient also taking fish oil.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": {
+        "evaluated": false,
+        "reason": "missing_or_invalid_dose"
+      },
+      "drug_class_id": "anticoagulants",
+      "evidence_level": "established",
+      "informational_note": "Fish oil can affect clotting — relevant to people on anticoagulants.",
+      "ingredient_name": "Fish Body Oil",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/14742793/",
+        "https://pubmed.ncbi.nlm.nih.gov/17923275/",
+        "https://pubmed.ncbi.nlm.nih.gov/28033135/"
+      ],
+      "title": "Fish Body Oil / anticoagulants",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
+      "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
+      "alert_headline": "May add to antiplatelet effects",
+      "detail": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "antiplatelets",
+      "evidence_level": "probable",
+      "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
+      "ingredient_name": "Eicosapentaenoic Acid",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+      ],
+      "title": "Eicosapentaenoic Acid / antiplatelets",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Inform your surgeon of fish oil use before planned procedures. High-dose fish oil (>3 g/day) combined with other anticoagulants or antiplatelets warrants discussion with the surgical team.",
+      "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
+      "alert_headline": "Pause before scheduled surgery",
+      "condition_id": "surgery_scheduled",
+      "detail": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. A large RCT (OPERA, n=1516) found no significant increase in surgical bleeding at standard doses; however, high-dose use (6 g/day) combined with anticoagulants has produced serious hemorrhagic events.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery.",
+      "ingredient_name": "Fish Body Oil",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30571332/",
+        "https://pubmed.ncbi.nlm.nih.gov/17192169/"
+      ],
+      "title": "Fish Body Oil / surgery_scheduled",
+      "type": "interaction"
+    },
+    {
+      "action": "Monitor for GI symptoms when combining fish oil with NSAIDs. Take NSAIDs with food.",
+      "alert_body": "Fish oil has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding fish oil.",
+      "alert_headline": "May add to NSAID bleeding risk",
+      "detail": "Both fish oil and NSAIDs affect prostaglandin synthesis via COX pathway modulation. Combined use may modestly increase GI bleeding risk through additive reduction in mucosal protective prostaglandins.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "nsaids",
+      "evidence_level": "probable",
+      "informational_note": "Fish oil can affect platelet function — relevant to people on NSAIDs.",
+      "ingredient_name": "Fish Body Oil",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/10902065/"
+      ],
+      "title": "Fish Body Oil / nsaids",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
+      "alert_body": "Omega-3 (especially DHA) is recommended during pregnancy for fetal brain development. If you are pregnant or nursing, discuss dosing with your clinician and keep total omega-3 under 3 g per day.",
+      "alert_headline": "Continue omega-3 under prenatal care",
+      "condition_id": "pregnancy",
+      "detail": "",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "established",
+      "informational_note": "Omega-3 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
+      "ingredient_name": "Fish Body Oil",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [],
+      "title": "Fish Body Oil / pregnancy",
+      "type": "interaction"
+    },
+    {
+      "action": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
+      "alert_body": "Omega-3 (especially DHA) is recommended during pregnancy for fetal brain development. If you are pregnant or nursing, discuss dosing with your clinician and keep total omega-3 under 3 g per day.",
+      "alert_headline": "Continue omega-3 under prenatal care",
+      "condition_id": "lactation",
+      "detail": "",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "established",
+      "informational_note": "Omega-3 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
+      "ingredient_name": "Fish Body Oil",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [],
+      "title": "Fish Body Oil / lactation",
+      "type": "interaction"
+    },
+    {
+      "detail": "2022-12-13",
+      "display_mode_default": "informational",
+      "severity": "info",
+      "source": "dsld",
+      "title": "Discontinued Product",
+      "type": "status"
+    }
+  ],
+  "warnings_profile_gated": [
+    {
+      "detail": "2022-12-13",
+      "display_mode_default": "informational",
+      "severity": "info",
+      "source": "dsld",
+      "title": "Discontinued Product",
+      "type": "status"
+    }
+  ]
+}

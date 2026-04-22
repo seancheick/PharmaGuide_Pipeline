@@ -1,0 +1,1236 @@
+{
+  "audit": {
+    "gate_audit": {
+      "blocking_reason": null,
+      "probiotic_eligibility": {
+        "eligible": false,
+        "mode": "non_probiotic",
+        "reason": "no_probiotic_signal"
+      },
+      "verdict": "POOR"
+    },
+    "non_gmo": {
+      "all_signals": [
+        {
+          "source": "named_cert_programs",
+          "text": "NSF Sport"
+        },
+        {
+          "source": "named_cert_programs",
+          "text": "USP Verified"
+        },
+        {
+          "source": "third_party_programs",
+          "text": "NSF Sport"
+        },
+        {
+          "source": "third_party_programs",
+          "text": "USP Verified"
+        }
+      ],
+      "claim_present": false,
+      "generic_signals": [],
+      "project_verified": false,
+      "reason": "no_non_gmo_signal",
+      "score_eligible": false,
+      "verified_signals": []
+    },
+    "omega3": {
+      "applicable_for_dose_bonus": false,
+      "bonus_score": 0.0,
+      "contains_omega3": false,
+      "dha_mg_per_unit": null,
+      "dose_band": "",
+      "epa_dha_mg_per_unit": null,
+      "epa_mg_per_unit": null,
+      "matched_ingredients": [],
+      "per_day_max_mg": null,
+      "per_day_mid_mg": null,
+      "per_day_min_mg": null,
+      "reason": "no_omega3_signal"
+    },
+    "proprietary_blend": {
+      "blend_count": 1,
+      "evidence": [
+        {
+          "base_penalty_formula": "none: -(2 + 5*impact)",
+          "blend_name": "Proprietary Blend",
+          "blend_total_mg": 850.0,
+          "children_with_amount_count": 0,
+          "children_without_amount_count": 5,
+          "computed_blend_penalty": -5.125,
+          "computed_blend_penalty_magnitude": 5.125,
+          "dedupe_fingerprint": "proprietary blend|amylase,cellulase,lactase,lipase,protease|850.000|activeingredients[0]",
+          "disclosed_child_mg_sum": 0.0,
+          "disclosure_tier": "none",
+          "hidden_mass_mg": null,
+          "impact_floor_applied": false,
+          "impact_ratio": 0.625,
+          "impact_source": "count_share",
+          "presence_penalty": 2.0,
+          "proportional_coef": 5.0,
+          "source_field": "activeIngredients",
+          "source_path": "activeIngredients[0]",
+          "unit_conversion_failed": false
+        }
+      ],
+      "has_proprietary_blends": true,
+      "penalty_score": 5.12
+    },
+    "section_a_audit": {
+      "category_bonus_total": 0.0,
+      "ceiling_hit": false,
+      "core_quality": 0.0,
+      "max": 25.0,
+      "score": 0.0
+    },
+    "supplement_type": {
+      "active_count": 6,
+      "category_breakdown": {
+        "amino_acid": 1,
+        "enzyme": 5
+      },
+      "enriched_type": "targeted",
+      "export_type": "targeted",
+      "inferred_type": "specialty",
+      "probiotic_signal": 0,
+      "scored_type": "targeted",
+      "source": "ingredient_quality_data"
+    }
+  },
+  "banned_substance_detail": null,
+  "blob_version": 1,
+  "brand_name": "Thorne Research",
+  "certification_detail": {
+    "gmp": {
+      "claimed": false,
+      "fda_registered": false,
+      "nsf_gmp": false,
+      "text_matched": ""
+    },
+    "heavy_metal_tested": 1,
+    "label_accuracy_verified": 1,
+    "purity_verified": 1,
+    "third_party_programs": {
+      "count": 2,
+      "has_generic_claim_only": false,
+      "programs": [
+        {
+          "name": "NSF Sport",
+          "source": "manufacturer_evidence",
+          "verified": true
+        },
+        {
+          "name": "USP Verified",
+          "source": "manufacturer_evidence",
+          "verified": true
+        }
+      ]
+    }
+  },
+  "compliance_detail": {
+    "allergen_free_claims": [],
+    "conflicts": [],
+    "dairy_free": false,
+    "evidence_based": {
+      "allergen_free_claims": [],
+      "rules_db_version": "5.0.0"
+    },
+    "gluten_free": false,
+    "has_may_contain_warning": false,
+    "soy_free": false,
+    "vegan": false,
+    "vegetarian": false,
+    "verified": true
+  },
+  "dietary_sensitivity_detail": {
+    "sodium": {
+      "amount_mg": 0.0,
+      "exceeds_aha_threshold": false,
+      "level": "sodium_free",
+      "level_display": "Sodium-Free",
+      "percent_daily_value": 0,
+      "sodium_sources": [],
+      "unit": "mg"
+    },
+    "sugar": {
+      "amount_g": 0.0,
+      "contains_sugar": false,
+      "exceeds_diabetic_threshold": false,
+      "has_added_sugar": false,
+      "level": "sugar_free",
+      "level_display": "Sugar-Free",
+      "sugar_sources": [],
+      "unit": "g"
+    },
+    "sweeteners": {
+      "artificial": [],
+      "has_artificial": false,
+      "has_high_glycemic": false,
+      "has_sugar_alcohols": false,
+      "high_glycemic": [],
+      "safer_alternatives": [],
+      "sugar_alcohols": [],
+      "uses_safer_alternatives": false
+    }
+  },
+  "dsld_id": "35491",
+  "evidence_data": {
+    "clinical_matches": [
+      {
+        "effect_direction": "positive_strong",
+        "effect_direction_confidence": "medium",
+        "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT,clinical; registry_completed_trials_count=7; total_enrollment=168; endpoint_tags=digestive_health; notes/citations contain no automated downgrade signals.",
+        "endpoint_relevance_tags": [
+          "digestive_health"
+        ],
+        "evidence_level": "ingredient-human",
+        "health_goals_supported": [
+          "Digestive Health"
+        ],
+        "id": "INGR_DIGESTIVE_ENZYMES",
+        "ingredient": "Amylase",
+        "key_endpoints": [
+          "digestion ↑",
+          "bloating ↓",
+          "nutrient absorption ↑"
+        ],
+        "match_method": "alias",
+        "matched_term": "amylase",
+        "notable_studies": "Pancreatic-enzyme replacement evidence is well established in pancreatic insufficiency and summarized in guidance and reviews such as PMID 33931040. Over-the-counter multi-enzyme blends have much less robust support; one placebo-controlled dyspepsia trial is indexed as PMID 37976892, but no broad general-population meta-analysis exists.",
+        "notes": "Human evidence for digestive enzymes is strong in exocrine pancreatic insufficiency, but evidence for broad over-the-counter digestive support in otherwise healthy adults remains limited and product-specific.",
+        "primary_outcome": "Digestive Health",
+        "published_studies": [
+          "RCT",
+          "clinical"
+        ],
+        "references_structured": [
+          {
+            "authority": "NCBI PubMed",
+            "citation": "BMC public health (2021-04-30)",
+            "doi": "10.1186/s12889-021-10873-y",
+            "evidence_grade": "journal_article",
+            "mesh_terms": [
+              "Adult",
+              "COVID-19",
+              "Fear",
+              "Female",
+              "Humans",
+              "Male",
+              "Pakistan",
+              "Pandemics",
+              "Phobic Disorders",
+              "SARS-CoV-2",
+              "Workplace"
+            ],
+            "pmid": "33931040",
+            "publication_types": [
+              "Journal Article"
+            ],
+            "published_date": "2021-04-30",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Fear of COVID-19 and workplace phobia among Pakistani doctors: A survey study.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/33931040/",
+            "verification_source": "pubmed_eutils"
+          },
+          {
+            "authority": "NCBI PubMed",
+            "citation": "Biomedicine & pharmacotherapy = Biomedecine & pharmacotherapie (2023-12-31)",
+            "doi": "10.1016/j.biopha.2023.115858",
+            "evidence_grade": "rct",
+            "mesh_terms": [
+              "Female",
+              "Humans",
+              "Male",
+              "Abdominal Pain",
+              "Dietary Supplements",
+              "Double-Blind Method",
+              "Dyspepsia",
+              "Gastrointestinal Agents",
+              "Quality of Life",
+              "Treatment Outcome",
+              "Adolescent",
+              "Young Adult",
+              "Adult",
+              "Middle Aged"
+            ],
+            "pmid": "37976892",
+            "publication_types": [
+              "Randomized Controlled Trial",
+              "Journal Article"
+            ],
+            "published_date": "2023-12-31",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Efficacy of digestive enzyme supplementation in functional dyspepsia: A monocentric, randomized, double-blind, placebo-controlled, clinical trial.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/37976892/",
+            "verification_source": "pubmed_eutils"
+          }
+        ],
+        "registry_completed_trials_count": 7,
+        "score_contribution": "tier_2",
+        "standard_name": "Digestive Enzyme Complex",
+        "study_id": "INGR_DIGESTIVE_ENZYMES",
+        "study_name": "Digestive Enzyme Complex",
+        "study_type": "rct_single",
+        "total_enrollment": 168
+      },
+      {
+        "effect_direction": "positive_strong",
+        "effect_direction_confidence": "medium",
+        "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT,clinical; registry_completed_trials_count=7; total_enrollment=168; endpoint_tags=digestive_health; notes/citations contain no automated downgrade signals.",
+        "endpoint_relevance_tags": [
+          "digestive_health"
+        ],
+        "evidence_level": "ingredient-human",
+        "health_goals_supported": [
+          "Digestive Health"
+        ],
+        "id": "INGR_DIGESTIVE_ENZYMES",
+        "ingredient": "Protease",
+        "key_endpoints": [
+          "digestion ↑",
+          "bloating ↓",
+          "nutrient absorption ↑"
+        ],
+        "match_method": "alias",
+        "matched_term": "protease",
+        "notable_studies": "Pancreatic-enzyme replacement evidence is well established in pancreatic insufficiency and summarized in guidance and reviews such as PMID 33931040. Over-the-counter multi-enzyme blends have much less robust support; one placebo-controlled dyspepsia trial is indexed as PMID 37976892, but no broad general-population meta-analysis exists.",
+        "notes": "Human evidence for digestive enzymes is strong in exocrine pancreatic insufficiency, but evidence for broad over-the-counter digestive support in otherwise healthy adults remains limited and product-specific.",
+        "primary_outcome": "Digestive Health",
+        "published_studies": [
+          "RCT",
+          "clinical"
+        ],
+        "references_structured": [
+          {
+            "authority": "NCBI PubMed",
+            "citation": "BMC public health (2021-04-30)",
+            "doi": "10.1186/s12889-021-10873-y",
+            "evidence_grade": "journal_article",
+            "mesh_terms": [
+              "Adult",
+              "COVID-19",
+              "Fear",
+              "Female",
+              "Humans",
+              "Male",
+              "Pakistan",
+              "Pandemics",
+              "Phobic Disorders",
+              "SARS-CoV-2",
+              "Workplace"
+            ],
+            "pmid": "33931040",
+            "publication_types": [
+              "Journal Article"
+            ],
+            "published_date": "2021-04-30",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Fear of COVID-19 and workplace phobia among Pakistani doctors: A survey study.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/33931040/",
+            "verification_source": "pubmed_eutils"
+          },
+          {
+            "authority": "NCBI PubMed",
+            "citation": "Biomedicine & pharmacotherapy = Biomedecine & pharmacotherapie (2023-12-31)",
+            "doi": "10.1016/j.biopha.2023.115858",
+            "evidence_grade": "rct",
+            "mesh_terms": [
+              "Female",
+              "Humans",
+              "Male",
+              "Abdominal Pain",
+              "Dietary Supplements",
+              "Double-Blind Method",
+              "Dyspepsia",
+              "Gastrointestinal Agents",
+              "Quality of Life",
+              "Treatment Outcome",
+              "Adolescent",
+              "Young Adult",
+              "Adult",
+              "Middle Aged"
+            ],
+            "pmid": "37976892",
+            "publication_types": [
+              "Randomized Controlled Trial",
+              "Journal Article"
+            ],
+            "published_date": "2023-12-31",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Efficacy of digestive enzyme supplementation in functional dyspepsia: A monocentric, randomized, double-blind, placebo-controlled, clinical trial.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/37976892/",
+            "verification_source": "pubmed_eutils"
+          }
+        ],
+        "registry_completed_trials_count": 7,
+        "score_contribution": "tier_2",
+        "standard_name": "Digestive Enzyme Complex",
+        "study_id": "INGR_DIGESTIVE_ENZYMES",
+        "study_name": "Digestive Enzyme Complex",
+        "study_type": "rct_single",
+        "total_enrollment": 168
+      },
+      {
+        "effect_direction": "positive_strong",
+        "effect_direction_confidence": "medium",
+        "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=ingredient-human; primary_outcome=Digestive Health; published_tags=RCT,clinical; registry_completed_trials_count=7; total_enrollment=168; endpoint_tags=digestive_health; notes/citations contain no automated downgrade signals.",
+        "endpoint_relevance_tags": [
+          "digestive_health"
+        ],
+        "evidence_level": "ingredient-human",
+        "health_goals_supported": [
+          "Digestive Health"
+        ],
+        "id": "INGR_DIGESTIVE_ENZYMES",
+        "ingredient": "Lipase",
+        "key_endpoints": [
+          "digestion ↑",
+          "bloating ↓",
+          "nutrient absorption ↑"
+        ],
+        "match_method": "alias",
+        "matched_term": "lipase",
+        "notable_studies": "Pancreatic-enzyme replacement evidence is well established in pancreatic insufficiency and summarized in guidance and reviews such as PMID 33931040. Over-the-counter multi-enzyme blends have much less robust support; one placebo-controlled dyspepsia trial is indexed as PMID 37976892, but no broad general-population meta-analysis exists.",
+        "notes": "Human evidence for digestive enzymes is strong in exocrine pancreatic insufficiency, but evidence for broad over-the-counter digestive support in otherwise healthy adults remains limited and product-specific.",
+        "primary_outcome": "Digestive Health",
+        "published_studies": [
+          "RCT",
+          "clinical"
+        ],
+        "references_structured": [
+          {
+            "authority": "NCBI PubMed",
+            "citation": "BMC public health (2021-04-30)",
+            "doi": "10.1186/s12889-021-10873-y",
+            "evidence_grade": "journal_article",
+            "mesh_terms": [
+              "Adult",
+              "COVID-19",
+              "Fear",
+              "Female",
+              "Humans",
+              "Male",
+              "Pakistan",
+              "Pandemics",
+              "Phobic Disorders",
+              "SARS-CoV-2",
+              "Workplace"
+            ],
+            "pmid": "33931040",
+            "publication_types": [
+              "Journal Article"
+            ],
+            "published_date": "2021-04-30",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Fear of COVID-19 and workplace phobia among Pakistani doctors: A survey study.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/33931040/",
+            "verification_source": "pubmed_eutils"
+          },
+          {
+            "authority": "NCBI PubMed",
+            "citation": "Biomedicine & pharmacotherapy = Biomedecine & pharmacotherapie (2023-12-31)",
+            "doi": "10.1016/j.biopha.2023.115858",
+            "evidence_grade": "rct",
+            "mesh_terms": [
+              "Female",
+              "Humans",
+              "Male",
+              "Abdominal Pain",
+              "Dietary Supplements",
+              "Double-Blind Method",
+              "Dyspepsia",
+              "Gastrointestinal Agents",
+              "Quality of Life",
+              "Treatment Outcome",
+              "Adolescent",
+              "Young Adult",
+              "Adult",
+              "Middle Aged"
+            ],
+            "pmid": "37976892",
+            "publication_types": [
+              "Randomized Controlled Trial",
+              "Journal Article"
+            ],
+            "published_date": "2023-12-31",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Efficacy of digestive enzyme supplementation in functional dyspepsia: A monocentric, randomized, double-blind, placebo-controlled, clinical trial.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/37976892/",
+            "verification_source": "pubmed_eutils"
+          }
+        ],
+        "registry_completed_trials_count": 7,
+        "score_contribution": "tier_2",
+        "standard_name": "Digestive Enzyme Complex",
+        "study_id": "INGR_DIGESTIVE_ENZYMES",
+        "study_name": "Digestive Enzyme Complex",
+        "study_type": "rct_single",
+        "total_enrollment": 168
+      }
+    ],
+    "match_count": 3,
+    "unsubstantiated_claims": []
+  },
+  "formulation_detail": {
+    "absorption_enhancer_paired": 0,
+    "absorption_enhancers": [],
+    "claim_non_gmo_present": false,
+    "claim_non_gmo_verified": false,
+    "delivery_form": "",
+    "delivery_tier": "",
+    "is_certified_organic": 0,
+    "organic_verification": "",
+    "standardized_botanicals": [],
+    "synergy_cluster_qualified": 0
+  },
+  "inactive_ingredients": [
+    {
+      "additive_type": "capsule_coating",
+      "category": "capsule_shell",
+      "common_uses": [
+        "vegetarian capsule shell",
+        "tablet coating",
+        "controlled release"
+      ],
+      "forms": [
+        {
+          "category": "fiber",
+          "ingredientGroup": "Cellulose",
+          "ingredientId": 9747,
+          "name": "Cellulose",
+          "order": 1,
+          "percent": null,
+          "prefix": "derived from",
+          "uniiCode": null
+        }
+      ],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0063242",
+        "unii": "3NXW29V3WO"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Hypromellose",
+      "normalized_key": "hypromellose",
+      "notes": "Hydroxypropyl methylcellulose (hypromellose, E464) — plant-derived cellulose ether used as vegetarian/vegan capsule shell material and tablet coating agent. FDA GRAS. Inert, non-toxic, and non-allergenic. Provides moisture barrier and controlled-release properties. Brand names include Vcaps, Caplique.",
+      "population_warnings": [],
+      "raw_source_text": "Hypromellose",
+      "severity_level": "",
+      "standardName": "Hydroxypropyl Methylcellulose",
+      "standard_name": "Hydroxypropyl Methylcellulose"
+    },
+    {
+      "additive_type": "",
+      "category": "",
+      "common_uses": [],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_additive": 0,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Leucine",
+      "normalized_key": "leucine",
+      "notes": "",
+      "population_warnings": [],
+      "raw_source_text": "Leucine",
+      "severity_level": "",
+      "standardName": "L-Leucine",
+      "standard_name": ""
+    },
+    {
+      "additive_type": "anti_caking_agent",
+      "category": "flow_agent_anticaking",
+      "common_uses": [
+        "flow agent",
+        "anti-caking",
+        "tablet glidant"
+      ],
+      "forms": [],
+      "harmful_notes": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+      "harmful_severity": "low",
+      "identifiers": {
+        "cas": "7631-86-9",
+        "cui": "C0037098",
+        "pubchem_cid": 24261,
+        "unii": "ETJ7Z6XBU4"
+      },
+      "is_additive": 1,
+      "is_harmful": true,
+      "match_method": "alias",
+      "matched_alias": "silicon dioxide",
+      "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+      "name": "Silicon Dioxide",
+      "normalized_key": "silicon_dioxide",
+      "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
+      "population_warnings": [
+        "No specific population concerns at anti-caking agent levels (<2% w/w)"
+      ],
+      "raw_source_text": "Silicon Dioxide",
+      "severity_level": "low",
+      "standardName": "Silicon Dioxide",
+      "standard_name": "Silicon Dioxide (E551)"
+    }
+  ],
+  "ingredients": [
+    {
+      "bio_score": 10.0,
+      "category": "enzymes",
+      "display_badge": "not_disclosed",
+      "display_dose_label": "Amount not disclosed",
+      "display_label": "Amylase",
+      "dosage": 0.0,
+      "dosage_unit": "NP",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "specific enzymes",
+      "matched_forms": [],
+      "name": "Amylase",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "amylase",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, serrapeptase, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally — systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency.",
+      "parent_key": "amylase",
+      "quantity": 0.0,
+      "raw_source_text": "Amylase",
+      "role": "active",
+      "safety_hits": [],
+      "score": 13.0,
+      "standardName": "Digestive Enzymes",
+      "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
+      "unit": "NP"
+    },
+    {
+      "bio_score": 10.0,
+      "category": "enzymes",
+      "display_badge": "not_disclosed",
+      "display_dose_label": "Amount not disclosed",
+      "display_label": "Protease",
+      "dosage": 0.0,
+      "dosage_unit": "NP",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "specific enzymes",
+      "matched_forms": [],
+      "name": "Protease",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "protease",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, serrapeptase, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally — systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency.",
+      "parent_key": "protease",
+      "quantity": 0.0,
+      "raw_source_text": "Protease",
+      "role": "active",
+      "safety_hits": [],
+      "score": 13.0,
+      "standardName": "Digestive Enzymes",
+      "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
+      "unit": "NP"
+    },
+    {
+      "bio_score": 10.0,
+      "category": "enzymes",
+      "display_badge": "not_disclosed",
+      "display_dose_label": "Amount not disclosed",
+      "display_label": "Lipase",
+      "dosage": 0.0,
+      "dosage_unit": "NP",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "specific enzymes",
+      "matched_forms": [],
+      "name": "Lipase",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "lipase",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, serrapeptase, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally — systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency.",
+      "parent_key": "lipase",
+      "quantity": 0.0,
+      "raw_source_text": "Lipase",
+      "role": "active",
+      "safety_hits": [],
+      "score": 13.0,
+      "standardName": "Digestive Enzymes",
+      "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
+      "unit": "NP"
+    },
+    {
+      "bio_score": 10.0,
+      "category": "enzymes",
+      "display_badge": "not_disclosed",
+      "display_dose_label": "Amount not disclosed",
+      "display_label": "Cellulase",
+      "dosage": 0.0,
+      "dosage_unit": "NP",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "specific enzymes",
+      "matched_forms": [],
+      "name": "Cellulase",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "cellulase",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, serrapeptase, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally — systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency.",
+      "parent_key": "cellulase",
+      "quantity": 0.0,
+      "raw_source_text": "Cellulase",
+      "role": "active",
+      "safety_hits": [],
+      "score": 13.0,
+      "standardName": "Digestive Enzymes",
+      "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
+      "unit": "NP"
+    },
+    {
+      "bio_score": 10.0,
+      "category": "enzymes",
+      "display_badge": "not_disclosed",
+      "display_dose_label": "Amount not disclosed",
+      "display_label": "Lactase",
+      "dosage": 0.0,
+      "dosage_unit": "NP",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "specific enzymes",
+      "matched_forms": [],
+      "name": "Lactase",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "lactase",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, serrapeptase, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally — systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency.",
+      "parent_key": "lactase",
+      "quantity": 0.0,
+      "raw_source_text": "Lactase",
+      "role": "active",
+      "safety_hits": [],
+      "score": 13.0,
+      "standardName": "Digestive Enzymes",
+      "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
+      "unit": "NP"
+    }
+  ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE",
+    "DROPPED_STRUCTURAL_HEADER"
+  ],
+  "manufacturer_detail": {
+    "brand_name": "Thorne Research",
+    "is_trusted": 1,
+    "manufacturing_region": "USA",
+    "violations": {
+      "found": false,
+      "total_deduction_applied": 0.0,
+      "violations": []
+    }
+  },
+  "non_gmo_audit": {
+    "all_signals": [
+      {
+        "source": "named_cert_programs",
+        "text": "NSF Sport"
+      },
+      {
+        "source": "named_cert_programs",
+        "text": "USP Verified"
+      },
+      {
+        "source": "third_party_programs",
+        "text": "NSF Sport"
+      },
+      {
+        "source": "third_party_programs",
+        "text": "USP Verified"
+      }
+    ],
+    "claim_present": false,
+    "generic_signals": [],
+    "project_verified": false,
+    "reason": "no_non_gmo_signal",
+    "score_eligible": false,
+    "verified_signals": []
+  },
+  "nutrition_detail": {
+    "calories_per_serving": null,
+    "dietary_fiber_g": null,
+    "protein_g": null,
+    "total_carbohydrates_g": null,
+    "total_fat_g": null
+  },
+  "omega3_audit": {
+    "applicable_for_dose_bonus": false,
+    "bonus_score": 0.0,
+    "contains_omega3": false,
+    "dha_mg_per_unit": null,
+    "dose_band": "",
+    "epa_dha_mg_per_unit": null,
+    "epa_mg_per_unit": null,
+    "matched_ingredients": [],
+    "per_day_max_mg": null,
+    "per_day_mid_mg": null,
+    "per_day_min_mg": null,
+    "reason": "no_omega3_signal"
+  },
+  "product_name": "Plantizyme",
+  "proprietary_blend_audit": {
+    "blend_count": 1,
+    "evidence": [
+      {
+        "base_penalty_formula": "none: -(2 + 5*impact)",
+        "blend_name": "Proprietary Blend",
+        "blend_total_mg": 850.0,
+        "children_with_amount_count": 0,
+        "children_without_amount_count": 5,
+        "computed_blend_penalty": -5.125,
+        "computed_blend_penalty_magnitude": 5.125,
+        "dedupe_fingerprint": "proprietary blend|amylase,cellulase,lactase,lipase,protease|850.000|activeingredients[0]",
+        "disclosed_child_mg_sum": 0.0,
+        "disclosure_tier": "none",
+        "hidden_mass_mg": null,
+        "impact_floor_applied": false,
+        "impact_ratio": 0.625,
+        "impact_source": "count_share",
+        "presence_penalty": 2.0,
+        "proportional_coef": 5.0,
+        "source_field": "activeIngredients",
+        "source_path": "activeIngredients[0]",
+        "unit_conversion_failed": false
+      }
+    ],
+    "has_proprietary_blends": true,
+    "penalty_score": 5.12
+  },
+  "proprietary_blend_detail": {
+    "blends": [
+      {
+        "blend_total_mg": 850.0,
+        "child_ingredients": [
+          {
+            "amount": null,
+            "name": "Amylase",
+            "unit": ""
+          },
+          {
+            "amount": null,
+            "name": "Cellulase",
+            "unit": ""
+          },
+          {
+            "amount": null,
+            "name": "Lactase",
+            "unit": ""
+          },
+          {
+            "amount": null,
+            "name": "Lipase",
+            "unit": ""
+          },
+          {
+            "amount": null,
+            "name": "Protease",
+            "unit": ""
+          }
+        ],
+        "detector_group": null,
+        "disclosure_level": "none",
+        "evidence": {
+          "ingredients_with_amounts": [],
+          "ingredients_without_amounts": [
+            "Amylase",
+            "Cellulase",
+            "Lactase",
+            "Lipase",
+            "Protease"
+          ],
+          "source_field": "activeIngredients[0]",
+          "source_fields": [
+            "activeIngredients[0]",
+            "activeIngredients[1]",
+            "activeIngredients[2]",
+            "activeIngredients[3]",
+            "activeIngredients[4]"
+          ]
+        },
+        "hidden_count": 5,
+        "name": "Proprietary Blend",
+        "nested_count": 5,
+        "source_field": "activeIngredients[0]",
+        "source_fields": [
+          "activeIngredients[0]",
+          "activeIngredients[1]",
+          "activeIngredients[2]",
+          "activeIngredients[3]",
+          "activeIngredients[4]"
+        ],
+        "source_path": "activeIngredients[0]",
+        "sources": [
+          "cleaning"
+        ],
+        "total_weight": 850.0,
+        "unit": "mg"
+      }
+    ],
+    "has_proprietary_blends": 1
+  },
+  "raw_actives_count": 6,
+  "raw_inactives_count": 3,
+  "rda_ul_data": {
+    "adequacy_results": [],
+    "analyzed_ingredients": [],
+    "collection_enabled": true,
+    "collection_reason": null,
+    "conversion_evidence": [],
+    "count": 0,
+    "has_over_ul": false,
+    "ingredients_with_rda": [],
+    "safety_flags": []
+  },
+  "score_bonuses": [
+    {
+      "id": "B4a",
+      "label": "Third-party purity testing",
+      "score": 10.0
+    }
+  ],
+  "score_penalties": [
+    {
+      "id": "B1",
+      "label": "Harmful additive: Silicon Dioxide (E551)",
+      "reason": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to ins",
+      "score": 0.5,
+      "severity": "low"
+    },
+    {
+      "blend_count": 1,
+      "id": "B5",
+      "label": "Proprietary blend opacity",
+      "score": 5.12
+    }
+  ],
+  "section_breakdown": {
+    "brand_trust": {
+      "max": 5.0,
+      "score": 3.0,
+      "sub": {
+        "D1": 2.0,
+        "D2": 0.0,
+        "D3": 0.0,
+        "D4": 1.0,
+        "D5": 0.0
+      }
+    },
+    "evidence_research": {
+      "ingredient_points": {
+        "digestive enzyme complex": 2.08
+      },
+      "matched_entries": 1,
+      "max": 20.0,
+      "score": 2.08
+    },
+    "ingredient_quality": {
+      "max": 25.0,
+      "score": 0.0,
+      "sub": {
+        "A1": 0.0,
+        "A2": 0.0,
+        "A3": 0.0,
+        "A4": 0.0,
+        "A5": 0.0,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 0.0,
+        "A5d": 0.0,
+        "A6": 0.0,
+        "category_bonus_pool_cap": 5.0,
+        "category_bonus_total": 0.0,
+        "core_quality": 0.0,
+        "omega3_breakdown": {
+          "applicable": false,
+          "omega3_dose_bonus": 0.0
+        },
+        "omega3_dose_bonus": 0.0,
+        "probiotic_bonus": 0.0,
+        "probiotic_breakdown": {
+          "cfu": 0.0,
+          "clinical_strains": 0.0,
+          "diversity": 0.0,
+          "eligibility": {
+            "eligible": false,
+            "mode": "non_probiotic",
+            "reason": "no_probiotic_signal"
+          },
+          "prebiotic": 0.0,
+          "probiotic_bonus": 0.0,
+          "survivability": 0.0
+        },
+        "zero_score_diagnostic": {
+          "no_dose_scorable": [
+            {
+              "name": "Amylase",
+              "quantity": 0.0,
+              "reason": "no_usable_individual_dose",
+              "unit": "np"
+            },
+            {
+              "name": "Protease",
+              "quantity": 0.0,
+              "reason": "no_usable_individual_dose",
+              "unit": "np"
+            },
+            {
+              "name": "Lipase",
+              "quantity": 0.0,
+              "reason": "no_usable_individual_dose",
+              "unit": "np"
+            },
+            {
+              "name": "Cellulase",
+              "quantity": 0.0,
+              "reason": "no_usable_individual_dose",
+              "unit": "np"
+            },
+            {
+              "name": "Lactase",
+              "quantity": 0.0,
+              "reason": "no_usable_individual_dose",
+              "unit": "np"
+            },
+            {
+              "name": "Leucine",
+              "quantity": 0,
+              "reason": "no_usable_individual_dose",
+              "unit": ""
+            }
+          ],
+          "no_dose_scorable_count": 6,
+          "scorable_count": 6,
+          "skipped_count": 0,
+          "skipped_ingredients": [],
+          "summary": "6 scorable, 0 skipped, 6 scorable but no usable dose",
+          "total_active_ingredients": 5
+        }
+      }
+    },
+    "safety_purity": {
+      "max": 30.0,
+      "score": 24.38,
+      "sub": {
+        "B0_moderate_penalty": 0.0,
+        "B1_evidence": [],
+        "B1_penalty": 0.5,
+        "B2_penalty": 0.0,
+        "B3": 0.0,
+        "B4a": 10.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B5_blend_evidence": [
+          {
+            "base_penalty_formula": "none: -(2 + 5*impact)",
+            "blend_name": "Proprietary Blend",
+            "blend_total_mg": 850.0,
+            "children_with_amount_count": 0,
+            "children_without_amount_count": 5,
+            "computed_blend_penalty": -5.125,
+            "computed_blend_penalty_magnitude": 5.125,
+            "dedupe_fingerprint": "proprietary blend|amylase,cellulase,lactase,lipase,protease|850.000|activeingredients[0]",
+            "disclosed_child_mg_sum": 0.0,
+            "disclosure_tier": "none",
+            "hidden_mass_mg": null,
+            "impact_floor_applied": false,
+            "impact_ratio": 0.625,
+            "impact_source": "count_share",
+            "presence_penalty": 2.0,
+            "proportional_coef": 5.0,
+            "source_field": "activeIngredients",
+            "source_path": "activeIngredients[0]",
+            "unit_conversion_failed": false
+          }
+        ],
+        "B5_penalty": 5.12,
+        "B6_penalty": 0.0,
+        "B7_dose_safety_evidence": [],
+        "B7_penalty": 0.0,
+        "B8_caers_evidence": [],
+        "B8_penalty": 0.0,
+        "B_hypoallergenic": 0.0,
+        "bonuses": 5.0,
+        "penalties": 5.62
+      }
+    },
+    "violation_penalty": 0.0
+  },
+  "serving_info": {
+    "basis_count": 2.0,
+    "basis_unit": "capsule",
+    "max_servings_per_day": 3,
+    "min_servings_per_day": 1
+  },
+  "supplement_type_audit": {
+    "active_count": 6,
+    "category_breakdown": {
+      "amino_acid": 1,
+      "enzyme": 5
+    },
+    "enriched_type": "targeted",
+    "export_type": "targeted",
+    "inferred_type": "specialty",
+    "probiotic_signal": 0,
+    "scored_type": "targeted",
+    "source": "ingredient_quality_data"
+  },
+  "unmapped_actives": {
+    "excluding_banned_exact_alias": 0,
+    "names": [],
+    "total": 0
+  },
+  "warnings": [
+    {
+      "category": "excipient",
+      "detail": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "cas": "7631-86-9",
+        "cui": "C0037098",
+        "pubchem_cid": 24261,
+        "unii": "ETJ7Z6XBU4"
+      },
+      "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+      "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
+      "population_warnings": [
+        "No specific population concerns at anti-caking agent levels (<2% w/w)"
+      ],
+      "safety_summary": "An inert anti-caking agent used in tablets and capsules. FDA- and EFSA-approved at the levels used — low overall concern.",
+      "safety_summary_one_liner": "Anti-caking agent — low overall concern.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Silicon Dioxide (E551)",
+      "type": "harmful_additive"
+    },
+    {
+      "detail": "2018-03-19",
+      "display_mode_default": "informational",
+      "severity": "info",
+      "source": "dsld",
+      "title": "Discontinued Product",
+      "type": "status"
+    }
+  ],
+  "warnings_profile_gated": [
+    {
+      "category": "excipient",
+      "detail": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "cas": "7631-86-9",
+        "cui": "C0037098",
+        "pubchem_cid": 24261,
+        "unii": "ETJ7Z6XBU4"
+      },
+      "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+      "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
+      "population_warnings": [
+        "No specific population concerns at anti-caking agent levels (<2% w/w)"
+      ],
+      "safety_summary": "An inert anti-caking agent used in tablets and capsules. FDA- and EFSA-approved at the levels used — low overall concern.",
+      "safety_summary_one_liner": "Anti-caking agent — low overall concern.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Silicon Dioxide (E551)",
+      "type": "harmful_additive"
+    },
+    {
+      "detail": "2018-03-19",
+      "display_mode_default": "informational",
+      "severity": "info",
+      "source": "dsld",
+      "title": "Discontinued Product",
+      "type": "status"
+    }
+  ]
+}

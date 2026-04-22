@@ -1,0 +1,1638 @@
+{
+  "audit": {
+    "gate_audit": {
+      "blocking_reason": "banned_ingredient",
+      "probiotic_eligibility": null,
+      "verdict": "BLOCKED"
+    },
+    "non_gmo": {
+      "all_signals": [
+        {
+          "source": "clean_label_claims",
+          "text": "Dairy Free"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Artificial Colors"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Artificial Flavors"
+        }
+      ],
+      "claim_present": false,
+      "generic_signals": [],
+      "project_verified": false,
+      "reason": "no_non_gmo_signal",
+      "score_eligible": false,
+      "verified_signals": []
+    },
+    "omega3": {
+      "applicable_for_dose_bonus": false,
+      "bonus_score": 0.0,
+      "contains_omega3": false,
+      "dha_mg_per_unit": null,
+      "dose_band": "",
+      "epa_dha_mg_per_unit": null,
+      "epa_mg_per_unit": null,
+      "matched_ingredients": [],
+      "per_day_max_mg": null,
+      "per_day_mid_mg": null,
+      "per_day_min_mg": null,
+      "reason": "no_omega3_signal"
+    },
+    "proprietary_blend": {
+      "blend_count": 0,
+      "evidence": [],
+      "has_proprietary_blends": false,
+      "penalty_score": 0.0
+    },
+    "section_a_audit": {
+      "category_bonus_total": 0,
+      "ceiling_hit": false,
+      "core_quality": 0,
+      "max": 25.0,
+      "score": 0.0
+    },
+    "supplement_type": {
+      "active_count": 2,
+      "category_breakdown": {
+        "uncategorized": 2
+      },
+      "enriched_type": "targeted",
+      "export_type": "targeted",
+      "inferred_type": "targeted",
+      "probiotic_signal": 0,
+      "scored_type": "targeted",
+      "source": "activeIngredients"
+    }
+  },
+  "banned_substance_detail": {
+    "safety_warning": "Under US law, CBD cannot lawfully be sold as a dietary supplement because it was first investigated as a drug. Presence in a supplement is associated with non-compliance; talk to your doctor.",
+    "safety_warning_one_liner": "Not lawful as a US dietary supplement. Talk to your doctor.",
+    "substance_name": "Cannabidiol"
+  },
+  "blob_version": 1,
+  "brand_name": "vitafusion",
+  "certification_detail": {
+    "gmp": {
+      "claimed": false,
+      "fda_registered": false,
+      "nsf_gmp": false,
+      "text_matched": ""
+    },
+    "heavy_metal_tested": 0,
+    "label_accuracy_verified": 0,
+    "purity_verified": 0,
+    "third_party_programs": {
+      "count": 0,
+      "has_generic_claim_only": false,
+      "programs": []
+    }
+  },
+  "compliance_detail": {
+    "allergen_free_claims": [
+      "dairy",
+      "gluten"
+    ],
+    "conflicts": [],
+    "dairy_free": true,
+    "evidence_based": {
+      "allergen_free_claims": [
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "Dairy Free",
+          "dedupe_key": "allergen_free:dairy",
+          "display_name": "Dairy-Free",
+          "evidence_strength": "medium",
+          "ineligibility_reason": "scope_violation",
+          "matched_text": "Dairy Free",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "pattern_id": "CLAIM_DAIRY_FREE_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_DAIRY_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": true,
+          "score_eligible": false,
+          "source_field": "labelText.parsed.cleanLabelClaims[0]"
+        }
+      ],
+      "rules_db_version": "5.0.0"
+    },
+    "gluten_free": true,
+    "has_may_contain_warning": false,
+    "soy_free": false,
+    "vegan": false,
+    "vegetarian": false,
+    "verified": true
+  },
+  "dietary_sensitivity_detail": {
+    "sodium": {
+      "amount_mg": 0.0,
+      "exceeds_aha_threshold": false,
+      "level": "sodium_free",
+      "level_display": "Sodium-Free",
+      "percent_daily_value": 0,
+      "sodium_sources": [],
+      "unit": "mg"
+    },
+    "sugar": {
+      "amount_g": 0.0,
+      "contains_sugar": true,
+      "exceeds_diabetic_threshold": false,
+      "has_added_sugar": true,
+      "level": "low",
+      "level_display": "Low Sugar",
+      "sugar_sources": [
+        "Glucose Syrup",
+        "Sugar"
+      ],
+      "unit": "g"
+    },
+    "sweeteners": {
+      "artificial": [],
+      "has_artificial": false,
+      "has_high_glycemic": true,
+      "has_sugar_alcohols": false,
+      "high_glycemic": [
+        "Glucose Syrup"
+      ],
+      "safer_alternatives": [],
+      "sugar_alcohols": [],
+      "uses_safer_alternatives": false
+    }
+  },
+  "dsld_id": "246324",
+  "evidence_data": {
+    "clinical_matches": [],
+    "match_count": 0,
+    "unsubstantiated_claims": []
+  },
+  "formulation_detail": {
+    "absorption_enhancer_paired": 0,
+    "absorption_enhancers": [],
+    "claim_non_gmo_present": false,
+    "claim_non_gmo_verified": false,
+    "delivery_form": "",
+    "delivery_tier": "3",
+    "is_certified_organic": 0,
+    "organic_verification": "",
+    "standardized_botanicals": [],
+    "synergy_cluster_qualified": 0
+  },
+  "inactive_ingredients": [
+    {
+      "additive_type": "natural_sugar",
+      "category": "sweetener_natural",
+      "common_uses": [
+        "binding agent",
+        "sweetening",
+        "texture enhancement"
+      ],
+      "forms": [],
+      "harmful_notes": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",
+      "harmful_severity": "low",
+      "identifiers": {
+        "unii": "9G5L16BK6N"
+      },
+      "is_additive": 1,
+      "is_harmful": true,
+      "match_method": "alias",
+      "matched_alias": "glucose syrup",
+      "mechanism_of_harm": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",
+      "name": "Glucose Syrup",
+      "normalized_key": "glucose_syrup",
+      "notes": "Concentrated liquid sugars used as sweeteners. They have the same metabolic effects as solid sugars, contributing to blood sugar spikes and related health issues. Brown rice syrup has additional concerns due to potential arsenic contamination. NOTE: Category corrected from 'sweetener_artificial' to 'sweetener_natural' — corn syrup and rice syrup are not synthetic/artificial sweeteners.",
+      "population_warnings": [
+        "Diabetes/insulin resistance — high GI causes rapid blood glucose spikes",
+        "Children — rice syrup may contain inorganic arsenic; FDA monitors but no specific limit for supplements",
+        "Calorie-conscious consumers — concentrated sugar adds significant calories"
+      ],
+      "raw_source_text": "Glucose Syrup",
+      "severity_level": "low",
+      "standardName": "Glucose (Liquid)",
+      "standard_name": "Sugar Syrups"
+    },
+    {
+      "additive_type": "natural_sweetener",
+      "category": "sweetener_natural",
+      "common_uses": [
+        "sweetening",
+        "flavor enhancement",
+        "palatability improvement",
+        "masking bitter tastes"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0038636",
+        "unii": "ED959S6ACY"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Sugar",
+      "normalized_key": "sugar",
+      "notes": "Natural sugars used for sweetening and palatability. Generally recognized as safe but should be consumed in moderation.",
+      "population_warnings": [],
+      "raw_source_text": "Sugar",
+      "severity_level": "",
+      "standardName": "Sugar & Natural Sweeteners",
+      "standard_name": "Sugar & Natural Sweeteners"
+    },
+    {
+      "additive_type": "solvent",
+      "category": "solvent",
+      "common_uses": [
+        "solvent",
+        "diluent",
+        "processing aid"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "7732-18-5",
+        "cui": "C0790233",
+        "pubchem_cid": 962,
+        "unii": "059QF0KO0R"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Water",
+      "normalized_key": "water",
+      "notes": "A fundamental solvent and diluent used in liquid formulations, suspensions, and as a component in the manufacturing of capsules and tablets. Considered entirely inert and safe.",
+      "population_warnings": [],
+      "raw_source_text": "Water",
+      "severity_level": "",
+      "standardName": "Purified Water",
+      "standard_name": "Purified Water"
+    },
+    {
+      "additive_type": "gelatin_capsule",
+      "category": "capsule_material",
+      "common_uses": [
+        "capsule shell",
+        "softgel encapsulation"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0017237",
+        "unii": "2G86QN327L"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Gelatin",
+      "normalized_key": "gelatin",
+      "notes": "Derived from animal collagen, forming the shell of traditional capsules and softgels. Provides a protective casing. While animal-derived (not vegan/vegetarian), it is generally considered safe and inert in its role as a capsule material.",
+      "population_warnings": [],
+      "raw_source_text": "Gelatin",
+      "severity_level": "",
+      "standardName": "Gelatin Capsule",
+      "standard_name": "Gelatin Capsule"
+    },
+    {
+      "additive_type": "emulsifier",
+      "category": "emulsifier",
+      "common_uses": [
+        "emulsifier",
+        "texture improvement"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Canola Lecithin",
+      "normalized_key": "canola_lecithin",
+      "notes": "Natural emulsifier from canola/rapeseed. Alternative to soy lecithin. GRAS approved.",
+      "population_warnings": [],
+      "raw_source_text": "Canola Lecithin",
+      "severity_level": "",
+      "standardName": "Canola Lecithin",
+      "standard_name": "Canola Lecithin"
+    },
+    {
+      "additive_type": "preservative_natural",
+      "category": "preservative_acidity_regulator",
+      "common_uses": [
+        "preservation",
+        "pH adjustment",
+        "flavor enhancement"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "77-92-9",
+        "cui": "C0055819",
+        "pubchem_cid": 311,
+        "unii": "2968PHW8QP"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Citric Acid",
+      "normalized_key": "citric_acid",
+      "notes": "Natural preservative and pH adjuster. While naturally found in citrus, commercial form is typically derived from fermented sources. Generally recognized as safe (GRAS). Clean label preservative option.",
+      "population_warnings": [],
+      "raw_source_text": "Citric Acid",
+      "severity_level": "",
+      "standardName": "Citric Acid",
+      "standard_name": "Citric Acid"
+    },
+    {
+      "additive_type": "",
+      "category": "",
+      "common_uses": [],
+      "forms": [],
+      "harmful_notes": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "harmful_severity": "low",
+      "identifiers": null,
+      "is_additive": 0,
+      "is_harmful": true,
+      "match_method": "alias",
+      "matched_alias": "color",
+      "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "name": "Color",
+      "normalized_key": "color",
+      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
+      "population_warnings": [
+        "Dye-sensitive individuals — cannot assess risk without knowing which colorant is used",
+        "Children — if undisclosed colorant is an azo dye, hyperactivity concern applies"
+      ],
+      "raw_source_text": "Color",
+      "severity_level": "low",
+      "standardName": "colors (unspecified)",
+      "standard_name": "Unspecified Colors"
+    },
+    {
+      "additive_type": "acidity_regulator",
+      "category": "acidulant",
+      "common_uses": [
+        "acidity regulator",
+        "flavor balancing",
+        "pH control"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "110-17-8",
+        "cui": "C0060825",
+        "pubchem_cid": 444972,
+        "unii": "88XHZ13131"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Fumaric Acid",
+      "normalized_key": "fumaric_acid",
+      "notes": "Acidulant used for tartness and pH control in gummies/tablets. Common food-grade additive; treated as non-scorable formulation excipient.",
+      "population_warnings": [],
+      "raw_source_text": "Fumaric Acid",
+      "severity_level": "",
+      "standardName": "Fumaric Acid",
+      "standard_name": "Fumaric Acid"
+    },
+    {
+      "additive_type": "acidity_regulator",
+      "category": "ph_adjuster",
+      "common_uses": [
+        "pH adjustment",
+        "preservative"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "50-21-5",
+        "cui": "C0064582",
+        "pubchem_cid": 612,
+        "unii": "3B8D35Y7S4"
+      },
+      "is_additive": 0,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Lactic Acid",
+      "normalized_key": "lactic_acid",
+      "notes": "Organic acid used as pH adjuster and preservative in supplement formulations. Naturally occurring in fermented foods and muscle tissue. Generally recognized as safe.",
+      "population_warnings": [],
+      "raw_source_text": "Lactic Acid",
+      "severity_level": "",
+      "standardName": "Lactic Acid",
+      "standard_name": "Lactic Acid"
+    },
+    {
+      "additive_type": "lipid_carrier",
+      "category": "oil_carrier",
+      "common_uses": [
+        "lipid carrier",
+        "rapid energy source",
+        "solubilizer"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0724624",
+        "unii": "C9H2L21V7U"
+      },
+      "is_additive": 0,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Medium Chain Triglycerides",
+      "normalized_key": "medium_chain_triglycerides",
+      "notes": "Easily absorbed fatty acids derived from coconut or palm kernel oil. Used as carrier for fat-soluble vitamins and active ingredients. Generally well-tolerated.",
+      "population_warnings": [],
+      "raw_source_text": "Medium Chain Triglycerides",
+      "severity_level": "",
+      "standardName": "MCT Oil",
+      "standard_name": "Medium Chain Triglycerides"
+    },
+    {
+      "additive_type": "natural_flavor",
+      "category": "flavor_natural",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "aroma improvement"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C1365470"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Natural Flavors",
+      "normalized_key": "natural_flavors",
+      "notes": "Flavoring substances derived from plant or animal sources. While generally recognized as safe, the term can encompass hundreds of compounds. Must be derived from natural sources per FDA regulations. Good clean label choice.",
+      "population_warnings": [],
+      "raw_source_text": "Natural Flavors",
+      "severity_level": "",
+      "standardName": "Natural Flavors",
+      "standard_name": "Natural Flavors"
+    },
+    {
+      "additive_type": "natural_fiber",
+      "category": "gelling_agent_natural",
+      "common_uses": [
+        "gelling",
+        "thickening",
+        "fiber addition",
+        "gut health"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "9000-69-5",
+        "cui": "C0070203",
+        "pubchem_cid": 441476,
+        "unii": "89NA02M4RX"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Pectin",
+      "normalized_key": "pectin",
+      "notes": "Natural fiber from fruits, excellent for gelling and thickening. Provides additional health benefits including cholesterol support.",
+      "population_warnings": [],
+      "raw_source_text": "Pectin",
+      "severity_level": "",
+      "standardName": "Prebiotics",
+      "standard_name": "Pectin"
+    }
+  ],
+  "ingredients": [
+    {
+      "bio_score": null,
+      "category": "unknown",
+      "display_badge": "no_data",
+      "display_dose_label": "6 mg",
+      "display_label": "Hemp extract",
+      "dosage": 6.0,
+      "dosage_unit": "mg",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [
+        {
+          "name": "extract",
+          "source": "name_extraction"
+        }
+      ],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "",
+      "matched_forms": [],
+      "name": "Hemp extract",
+      "natural": false,
+      "normalized_amount": null,
+      "normalized_key": "hemp_extract",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "",
+      "parent_key": "hemp_extract",
+      "quantity": 6.0,
+      "raw_source_text": "Hemp extract",
+      "role": "active",
+      "safety_hits": [],
+      "score": null,
+      "standardName": "Hemp Extract",
+      "standard_name": "Hemp Extract",
+      "standardization_note": null,
+      "unit": "mg"
+    },
+    {
+      "bio_score": null,
+      "category": "unknown",
+      "display_badge": "no_data",
+      "display_dose_label": "5 mg",
+      "display_label": "Cannabidiol",
+      "dosage": 5.0,
+      "dosage_unit": "mg",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": true,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "",
+      "matched_forms": [],
+      "name": "Cannabidiol",
+      "natural": false,
+      "normalized_amount": null,
+      "normalized_key": "cannabidiol",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "",
+      "parent_key": "cannabidiol",
+      "quantity": 5.0,
+      "raw_source_text": "Cannabidiol",
+      "role": "active",
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "Avoid CBD supplements in liver disease. If already taking, monitor liver function tests regularly. Discontinue if ALT/AST exceed 3x upper limit of normal.",
+              "alert_body": "CBD is heavily metabolized in the liver and can elevate liver enzymes. If you have liver disease, talk to your clinician and monitor liver function labs.",
+              "alert_headline": "Not recommended with liver disease",
+              "condition_id": "liver_disease",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "established",
+              "informational_note": "CBD is liver-metabolized — relevant to people with liver conditions.",
+              "mechanism": "CBD is extensively metabolized by CYP3A4 and CYP2C19 in the liver. FDA drug labels for multiple medications warn that concomitant CBD causes ALT/AST elevation. In patients with pre-existing hepatic impairment, CBD may worsen liver function. The FDA-approved CBD product (Epidiolex) carries a hepatotoxicity warning.",
+              "severity": "avoid",
+              "sources": [
+                "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+                "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+                "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
+              ]
+            },
+            {
+              "action": "Use only pharmaceutical-grade CBD (Epidiolex) for seizure management. Supplement-grade CBD should not be substituted. Inform neurologist of any CBD use.",
+              "alert_body": "CBD may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding CBD.",
+              "alert_headline": "Caution with seizure disorder",
+              "condition_id": "seizure_disorder",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "established",
+              "informational_note": "CBD may affect seizure threshold — relevant to people with a seizure disorder.",
+              "mechanism": "CBD has anticonvulsant properties (FDA-approved for Lennox-Gastaut and Dravet syndromes). However, CBD supplements are not pharmaceutical-grade and have variable potency, contaminant profiles, and dosing. Interaction with existing anticonvulsant regimens (especially valproate) may cause hepatotoxicity or alter drug levels.",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+                "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
+              ]
+            },
+            {
+              "action": "Avoid CBD supplements during pregnancy. Consult healthcare provider.",
+              "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+              "alert_headline": "Not recommended during pregnancy",
+              "condition_id": "pregnancy",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "probable",
+              "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
+              "mechanism": "FDA strongly advises against CBD use during pregnancy. Animal studies show potential risks to the developing fetus. No adequate human safety data exists for CBD during pregnancy.",
+              "severity": "avoid",
+              "sources": [
+                "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
+              ]
+            },
+            {
+              "action": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
+              "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+              "alert_headline": "Not recommended during pregnancy",
+              "condition_id": "pregnancy",
+              "evidence_level": "probable",
+              "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
+              "mechanism": null,
+              "severity": "avoid",
+              "sources": []
+            },
+            {
+              "action": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
+              "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+              "alert_headline": "Not recommended during pregnancy",
+              "condition_id": "lactation",
+              "evidence_level": "probable",
+              "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
+              "mechanism": null,
+              "severity": "avoid",
+              "sources": []
+            }
+          ],
+          "drug_class_hits": [
+            {
+              "action": "Monitor liver function tests if CBD used with valproate. Monitor anticonvulsant drug levels. Dose adjustment may be needed.",
+              "alert_body": "CBD can influence how seizure medications work. If you take an anticonvulsant, talk to your neurologist before adding CBD.",
+              "alert_headline": "May affect seizure medication",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "anticonvulsants",
+              "evidence_level": "established",
+              "informational_note": "CBD may affect anticonvulsant therapy — relevant to people on seizure medications.",
+              "mechanism": "CBD inhibits CYP2C19 and CYP3A4, increasing plasma levels of clobazam, rufinamide, topiramate, and zonisamide. With valproate specifically, concomitant CBD causes ALT/AST elevation (hepatotoxicity risk). FDA drug labels for divalproex sodium explicitly warn about this interaction.",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+                "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
+              ]
+            },
+            {
+              "action": "Monitor tacrolimus/sirolimus trough levels closely. Dose reduction for the immunosuppressant should be considered. Inform transplant team of CBD use.",
+              "alert_body": "CBD has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding CBD.",
+              "alert_headline": "Caution with immunosuppressants",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "immunosuppressants",
+              "evidence_level": "established",
+              "informational_note": "CBD affects immune function — relevant to people on immunosuppressants.",
+              "mechanism": "CBD inhibits CYP3A4, which metabolizes tacrolimus and sirolimus. FDA drug labels for both tacrolimus and sirolimus explicitly warn that CBD co-administration increases their plasma concentrations, risking nephrotoxicity and immunosuppressive toxicity.",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/30417375/"
+              ]
+            },
+            {
+              "action": "Monitor INR more frequently when starting or stopping CBD. Inform prescriber.",
+              "alert_body": "CBD has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding CBD and ask about INR or bleeding checks.",
+              "alert_headline": "May add to blood-thinner effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "anticoagulants",
+              "evidence_level": "probable",
+              "informational_note": "CBD can affect clotting — relevant to people on anticoagulants.",
+              "mechanism": "CBD inhibits CYP2C9, which metabolizes warfarin. Case reports document elevated INR when CBD is added to warfarin therapy. The interaction may increase bleeding risk.",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/30417375/"
+              ]
+            },
+            {
+              "action": "Use caution with concurrent sedative medications. Monitor for excessive drowsiness.",
+              "alert_body": "CBD has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding CBD — the combination can increase drowsiness.",
+              "alert_headline": "May add to sedative drowsiness",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "sedatives",
+              "evidence_level": "probable",
+              "informational_note": "CBD has sedative activity — relevant to people on sedatives or sleep medications.",
+              "mechanism": "CBD has CNS depressant effects and may potentiate sedation when combined with benzodiazepines, opioids, or other sedatives.",
+              "severity": "caution",
+              "sources": [
+                "https://www.nccih.nih.gov/health/cannabis-marijuana-and-cannabinoids-what-you-need-to-know"
+              ]
+            }
+          ],
+          "last_reviewed": "2026-04-14",
+          "pregnancy_lactation": {
+            "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+            "alert_headline": "Not recommended during pregnancy",
+            "evidence_level": "probable",
+            "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
+            "lactation_category": "avoid",
+            "notes": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
+            "pregnancy_category": "avoid"
+          },
+          "rule_id": "RULE_BANNED_CBD_INTERACTIONS",
+          "source_bucket": "ingredients_skipped",
+          "subject_ref": {
+            "canonical_id": "BANNED_CBD_US",
+            "db": "banned_recalled_ingredients"
+          }
+        },
+        {
+          "ingredient": "Cannabidiol",
+          "kind": "contaminant",
+          "match_type": "exact",
+          "reason": "Under the FD&C Act's drug exclusion rule, CBD (cannabidiol) cannot lawfully be marketed as a dietary supplement because it was first investigated as a drug (clinical trials pre-dated any supplement marketing) and is now an approved drug ingredient in Epidiolex (approved by FDA in 2018 for epilepsy). FDA has consistently stated that CBD is excluded from the dietary supplement definition under 21 U.S.C. §321(ff)(3)(B). Despite widespread US market presence, CBD supplement products are technically unlawful. FDA has exercised enforcement discretion but this legal status remains unchanged as of 2026.",
+          "severity_level": "critical",
+          "status": "banned"
+        }
+      ],
+      "score": null,
+      "standardName": "CBD (Cannabidiol)",
+      "standard_name": "CBD (Cannabidiol)",
+      "standardization_note": null,
+      "unit": "mg"
+    }
+  ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE"
+  ],
+  "interaction_summary": {
+    "condition_summary": {
+      "lactation": {
+        "actions": [
+          "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk."
+        ],
+        "highest_severity": "avoid",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Cannabidiol"
+        ],
+        "label": "Breastfeeding",
+        "rule_ids": [
+          "RULE_BANNED_CBD_INTERACTIONS"
+        ]
+      },
+      "liver_disease": {
+        "actions": [
+          "Avoid CBD supplements in liver disease. If already taking, monitor liver function tests regularly. Discontinue if ALT/AST exceed 3x upper limit of normal."
+        ],
+        "highest_severity": "avoid",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Cannabidiol"
+        ],
+        "label": "Liver Disease",
+        "rule_ids": [
+          "RULE_BANNED_CBD_INTERACTIONS"
+        ]
+      },
+      "pregnancy": {
+        "actions": [
+          "Avoid CBD supplements during pregnancy. Consult healthcare provider.",
+          "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk."
+        ],
+        "highest_severity": "avoid",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Cannabidiol"
+        ],
+        "label": "Pregnancy",
+        "rule_ids": [
+          "RULE_BANNED_CBD_INTERACTIONS"
+        ]
+      },
+      "seizure_disorder": {
+        "actions": [
+          "Use only pharmaceutical-grade CBD (Epidiolex) for seizure management. Supplement-grade CBD should not be substituted. Inform neurologist of any CBD use."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Cannabidiol"
+        ],
+        "label": "Epilepsy/Seizures",
+        "rule_ids": [
+          "RULE_BANNED_CBD_INTERACTIONS"
+        ]
+      }
+    },
+    "drug_class_summary": {
+      "anticoagulants": {
+        "actions": [
+          "Monitor INR more frequently when starting or stopping CBD. Inform prescriber."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Cannabidiol"
+        ],
+        "label": "Anticoagulants",
+        "rule_ids": [
+          "RULE_BANNED_CBD_INTERACTIONS"
+        ]
+      },
+      "anticonvulsants": {
+        "actions": [
+          "Monitor liver function tests if CBD used with valproate. Monitor anticonvulsant drug levels. Dose adjustment may be needed."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Cannabidiol"
+        ],
+        "label": "Anticonvulsants (Anti-Seizure Medications)",
+        "rule_ids": [
+          "RULE_BANNED_CBD_INTERACTIONS"
+        ]
+      },
+      "immunosuppressants": {
+        "actions": [
+          "Monitor tacrolimus/sirolimus trough levels closely. Dose reduction for the immunosuppressant should be considered. Inform transplant team of CBD use."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Cannabidiol"
+        ],
+        "label": "Immunosuppressants",
+        "rule_ids": [
+          "RULE_BANNED_CBD_INTERACTIONS"
+        ]
+      },
+      "sedatives": {
+        "actions": [
+          "Use caution with concurrent sedative medications. Monitor for excessive drowsiness."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Cannabidiol"
+        ],
+        "label": "Sedatives",
+        "rule_ids": [
+          "RULE_BANNED_CBD_INTERACTIONS"
+        ]
+      }
+    },
+    "highest_severity": "avoid"
+  },
+  "manufacturer_detail": {
+    "brand_name": "vitafusion",
+    "is_trusted": 0,
+    "manufacturing_region": "USA",
+    "violations": {
+      "found": false,
+      "total_deduction_applied": 0.0,
+      "violations": []
+    }
+  },
+  "non_gmo_audit": {
+    "all_signals": [
+      {
+        "source": "clean_label_claims",
+        "text": "Dairy Free"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Artificial Colors"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Artificial Flavors"
+      }
+    ],
+    "claim_present": false,
+    "generic_signals": [],
+    "project_verified": false,
+    "reason": "no_non_gmo_signal",
+    "score_eligible": false,
+    "verified_signals": []
+  },
+  "nutrition_detail": {
+    "calories_per_serving": 10.0,
+    "dietary_fiber_g": null,
+    "protein_g": null,
+    "total_carbohydrates_g": 2.0,
+    "total_fat_g": null
+  },
+  "omega3_audit": {
+    "applicable_for_dose_bonus": false,
+    "bonus_score": 0.0,
+    "contains_omega3": false,
+    "dha_mg_per_unit": null,
+    "dose_band": "",
+    "epa_dha_mg_per_unit": null,
+    "epa_mg_per_unit": null,
+    "matched_ingredients": [],
+    "per_day_max_mg": null,
+    "per_day_mid_mg": null,
+    "per_day_min_mg": null,
+    "reason": "no_omega3_signal"
+  },
+  "product_name": "CBD Mixed Berry",
+  "proprietary_blend_audit": {
+    "blend_count": 0,
+    "evidence": [],
+    "has_proprietary_blends": false,
+    "penalty_score": 0.0
+  },
+  "proprietary_blend_detail": {
+    "blends": [],
+    "has_proprietary_blends": 0
+  },
+  "raw_actives_count": 6,
+  "raw_inactives_count": 5,
+  "rda_ul_data": {
+    "adequacy_results": [
+      {
+        "adequacy_band": "unknown",
+        "age_group": "19-30",
+        "amount": 18.0,
+        "conversion_applied": false,
+        "is_servings_estimated": false,
+        "notes": [
+          "Nutrient 'Hemp Extract' not found in RDA database"
+        ],
+        "nutrient": "Hemp Extract",
+        "optimal_max": null,
+        "optimal_min": null,
+        "original_quantity": 6.0,
+        "original_unit": "mg",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": null,
+        "pct_ul": null,
+        "per_day_max": 18.0,
+        "per_day_min": 6.0,
+        "point_recommendation": 0,
+        "rda_ai": null,
+        "rda_ai_source": "unknown",
+        "scoring_eligible": false,
+        "servings_per_day_max": 3.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": false,
+        "ul": null,
+        "ul_status": "unknown",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "age_group": "19-30",
+        "amount": 15.0,
+        "conversion_applied": false,
+        "is_servings_estimated": false,
+        "notes": [
+          "Nutrient 'CBD (Cannabidiol)' not found in RDA database"
+        ],
+        "nutrient": "CBD (Cannabidiol)",
+        "optimal_max": null,
+        "optimal_min": null,
+        "original_quantity": 5.0,
+        "original_unit": "mg",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": null,
+        "pct_ul": null,
+        "per_day_max": 15.0,
+        "per_day_min": 5.0,
+        "point_recommendation": 0,
+        "rda_ai": null,
+        "rda_ai_source": "unknown",
+        "scoring_eligible": false,
+        "servings_per_day_max": 3.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": false,
+        "ul": null,
+        "ul_status": "unknown",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "analyzed_ingredients": [
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Hemp Extract",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Hemp extract",
+          "notes": [],
+          "nutrient_detected": "Hemp Extract",
+          "original_unit": "mg",
+          "original_value": 6.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 6.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Hemp extract",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 18.0,
+        "per_day_min": 6.0,
+        "quantity": 6.0,
+        "servings_per_day_max": 3.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Hemp Extract",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: CBD (Cannabidiol)",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Cannabidiol",
+          "notes": [],
+          "nutrient_detected": "CBD (Cannabidiol)",
+          "original_unit": "mg",
+          "original_value": 5.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 5.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Cannabidiol",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 15.0,
+        "per_day_min": 5.0,
+        "quantity": 5.0,
+        "servings_per_day_max": 3.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "CBD (Cannabidiol)",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "collection_enabled": true,
+    "collection_reason": null,
+    "conversion_evidence": [
+      {
+        "confidence": "failed",
+        "conversion_factor": null,
+        "conversion_rule_id": null,
+        "converted_unit": null,
+        "converted_value": null,
+        "error": "No conversion rule found for nutrient: Hemp Extract",
+        "form_detected": null,
+        "form_detection_source": null,
+        "ingredient": "Hemp extract",
+        "notes": [],
+        "nutrient_detected": "Hemp Extract",
+        "original_unit": "mg",
+        "original_value": 6.0,
+        "success": false,
+        "warnings": []
+      },
+      {
+        "confidence": "failed",
+        "conversion_factor": null,
+        "conversion_rule_id": null,
+        "converted_unit": null,
+        "converted_value": null,
+        "error": "No conversion rule found for nutrient: CBD (Cannabidiol)",
+        "form_detected": null,
+        "form_detection_source": null,
+        "ingredient": "Cannabidiol",
+        "notes": [],
+        "nutrient_detected": "CBD (Cannabidiol)",
+        "original_unit": "mg",
+        "original_value": 5.0,
+        "success": false,
+        "warnings": []
+      }
+    ],
+    "count": 2,
+    "has_over_ul": false,
+    "ingredients_with_rda": [
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Hemp Extract",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Hemp extract",
+          "notes": [],
+          "nutrient_detected": "Hemp Extract",
+          "original_unit": "mg",
+          "original_value": 6.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 6.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Hemp extract",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 18.0,
+        "per_day_min": 6.0,
+        "quantity": 6.0,
+        "servings_per_day_max": 3.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Hemp Extract",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: CBD (Cannabidiol)",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Cannabidiol",
+          "notes": [],
+          "nutrient_detected": "CBD (Cannabidiol)",
+          "original_unit": "mg",
+          "original_value": 5.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 5.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Cannabidiol",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 15.0,
+        "per_day_min": 5.0,
+        "quantity": 5.0,
+        "servings_per_day_max": 3.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "CBD (Cannabidiol)",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "safety_flags": []
+  },
+  "score_bonuses": [],
+  "score_penalties": [],
+  "section_breakdown": {
+    "brand_trust": {
+      "max": 5.0,
+      "score": 0.0,
+      "sub": {}
+    },
+    "evidence_research": {
+      "ingredient_points": null,
+      "matched_entries": null,
+      "max": 20.0,
+      "score": 0.0
+    },
+    "ingredient_quality": {
+      "max": 25.0,
+      "score": 0.0,
+      "sub": {}
+    },
+    "safety_purity": {
+      "max": 30.0,
+      "score": 0.0,
+      "sub": {
+        "B0": "BLOCKED",
+        "reason": "Banned substance (CBD (Cannabidiol))"
+      }
+    },
+    "violation_penalty": 0.0
+  },
+  "serving_info": {
+    "basis_count": 1.0,
+    "basis_unit": "gummy",
+    "max_servings_per_day": 3,
+    "min_servings_per_day": 1
+  },
+  "supplement_type_audit": {
+    "active_count": 2,
+    "category_breakdown": {
+      "uncategorized": 2
+    },
+    "enriched_type": "targeted",
+    "export_type": "targeted",
+    "inferred_type": "targeted",
+    "probiotic_signal": 0,
+    "scored_type": "targeted",
+    "source": "activeIngredients"
+  },
+  "unmapped_actives": {
+    "excluding_banned_exact_alias": 0,
+    "names": [],
+    "total": 0
+  },
+  "warnings": [
+    {
+      "ban_context": "substance",
+      "clinical_risk": "high",
+      "date": "2018-12-20",
+      "detail": "Under the FD&C Act's drug exclusion rule, CBD (cannabidiol) cannot lawfully be marketed as a dietary supplement because it was first investigated as a drug (clinical trials pre-dated any supplement marketing) and is now an approved drug ingredient in Epidiolex (approved by FDA in 2018 for epilepsy). FDA has consistently stated that CBD is excluded from the dietary supplement definition under 21 U.S.C. §321(ff)(3)(B). Despite widespread US market presence, CBD supplement products are technically unlawful. FDA has exercised enforcement discretion but this legal status remains unchanged as of 2026.",
+      "display_mode_default": "critical",
+      "identifiers": null,
+      "regulatory_date_label": "FDA ban effective",
+      "safety_warning": "Under US law, CBD cannot lawfully be sold as a dietary supplement because it was first investigated as a drug. Presence in a supplement is associated with non-compliance; talk to your doctor.",
+      "safety_warning_one_liner": "Not lawful as a US dietary supplement. Talk to your doctor.",
+      "severity": "critical",
+      "source": "banned_recalled_ingredients",
+      "source_urls": [
+        {
+          "evidence_grade": "B",
+          "title": "CBD hepatotoxicity",
+          "type": "doi",
+          "url": "https://doi.org/10.1002/hep.30525"
+        },
+        {
+          "evidence_grade": "R",
+          "title": "FDA Regulation of Cannabis and Cannabis-Derived Products, Including CBD",
+          "type": "fda_guidance",
+          "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
+        }
+      ],
+      "title": "Banned substance: Cannabidiol",
+      "type": "banned_substance"
+    },
+    {
+      "category": "sweetener_natural",
+      "detail": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "unii": "9G5L16BK6N"
+      },
+      "mechanism_of_harm": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",
+      "notes": "Concentrated liquid sugars used as sweeteners. They have the same metabolic effects as solid sugars, contributing to blood sugar spikes and related health issues. Brown rice syrup has additional concerns due to potential arsenic contamination. NOTE: Category corrected from 'sweetener_artificial' to 'sweetener_natural' — corn syrup and rice syrup are not synthetic/artificial sweeteners.",
+      "population_warnings": [
+        "Diabetes/insulin resistance — high GI causes rapid blood glucose spikes",
+        "Children — rice syrup may contain inorganic arsenic; FDA monitors but no specific limit for supplements",
+        "Calorie-conscious consumers — concentrated sugar adds significant calories"
+      ],
+      "safety_summary": "Concentrated liquid added sugars (rice syrup, brown rice syrup, etc.). Rice syrups in particular can carry trace arsenic — worth limiting daily intake.",
+      "safety_summary_one_liner": "Concentrated added sugar, some can carry trace arsenic.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Sugar Syrups",
+      "type": "harmful_additive"
+    },
+    {
+      "action": "Avoid CBD supplements in liver disease. If already taking, monitor liver function tests regularly. Discontinue if ALT/AST exceed 3x upper limit of normal.",
+      "alert_body": "CBD is heavily metabolized in the liver and can elevate liver enzymes. If you have liver disease, talk to your clinician and monitor liver function labs.",
+      "alert_headline": "Not recommended with liver disease",
+      "condition_id": "liver_disease",
+      "detail": "CBD is extensively metabolized by CYP3A4 and CYP2C19 in the liver. FDA drug labels for multiple medications warn that concomitant CBD causes ALT/AST elevation. In patients with pre-existing hepatic impairment, CBD may worsen liver function. The FDA-approved CBD product (Epidiolex) carries a hepatotoxicity warning.",
+      "display_mode_default": "informational",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "established",
+      "informational_note": "CBD is liver-metabolized — relevant to people with liver conditions.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "avoid",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+        "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
+      ],
+      "title": "Cannabidiol / liver_disease",
+      "type": "interaction"
+    },
+    {
+      "action": "Use only pharmaceutical-grade CBD (Epidiolex) for seizure management. Supplement-grade CBD should not be substituted. Inform neurologist of any CBD use.",
+      "alert_body": "CBD may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding CBD.",
+      "alert_headline": "Caution with seizure disorder",
+      "condition_id": "seizure_disorder",
+      "detail": "CBD has anticonvulsant properties (FDA-approved for Lennox-Gastaut and Dravet syndromes). However, CBD supplements are not pharmaceutical-grade and have variable potency, contaminant profiles, and dosing. Interaction with existing anticonvulsant regimens (especially valproate) may cause hepatotoxicity or alter drug levels.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "established",
+      "informational_note": "CBD may affect seizure threshold — relevant to people with a seizure disorder.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+        "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
+      ],
+      "title": "Cannabidiol / seizure_disorder",
+      "type": "interaction"
+    },
+    {
+      "action": "Avoid CBD supplements during pregnancy. Consult healthcare provider.",
+      "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+      "alert_headline": "Not recommended during pregnancy",
+      "condition_id": "pregnancy",
+      "detail": "FDA strongly advises against CBD use during pregnancy. Animal studies show potential risks to the developing fetus. No adequate human safety data exists for CBD during pregnancy.",
+      "display_mode_default": "informational",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "avoid",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
+      ],
+      "title": "Cannabidiol / pregnancy",
+      "type": "interaction"
+    },
+    {
+      "action": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
+      "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+      "alert_headline": "Not recommended during pregnancy",
+      "condition_id": "lactation",
+      "detail": "",
+      "display_mode_default": "informational",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "avoid",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [],
+      "title": "Cannabidiol / lactation",
+      "type": "interaction"
+    },
+    {
+      "action": "Monitor liver function tests if CBD used with valproate. Monitor anticonvulsant drug levels. Dose adjustment may be needed.",
+      "alert_body": "CBD can influence how seizure medications work. If you take an anticonvulsant, talk to your neurologist before adding CBD.",
+      "alert_headline": "May affect seizure medication",
+      "detail": "CBD inhibits CYP2C19 and CYP3A4, increasing plasma levels of clobazam, rufinamide, topiramate, and zonisamide. With valproate specifically, concomitant CBD causes ALT/AST elevation (hepatotoxicity risk). FDA drug labels for divalproex sodium explicitly warn about this interaction.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "anticonvulsants",
+      "evidence_level": "established",
+      "informational_note": "CBD may affect anticonvulsant therapy — relevant to people on seizure medications.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
+      ],
+      "title": "Cannabidiol / anticonvulsants",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Monitor tacrolimus/sirolimus trough levels closely. Dose reduction for the immunosuppressant should be considered. Inform transplant team of CBD use.",
+      "alert_body": "CBD has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding CBD.",
+      "alert_headline": "Caution with immunosuppressants",
+      "detail": "CBD inhibits CYP3A4, which metabolizes tacrolimus and sirolimus. FDA drug labels for both tacrolimus and sirolimus explicitly warn that CBD co-administration increases their plasma concentrations, risking nephrotoxicity and immunosuppressive toxicity.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "immunosuppressants",
+      "evidence_level": "established",
+      "informational_note": "CBD affects immune function — relevant to people on immunosuppressants.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30417375/"
+      ],
+      "title": "Cannabidiol / immunosuppressants",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Monitor INR more frequently when starting or stopping CBD. Inform prescriber.",
+      "alert_body": "CBD has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding CBD and ask about INR or bleeding checks.",
+      "alert_headline": "May add to blood-thinner effects",
+      "detail": "CBD inhibits CYP2C9, which metabolizes warfarin. Case reports document elevated INR when CBD is added to warfarin therapy. The interaction may increase bleeding risk.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "anticoagulants",
+      "evidence_level": "probable",
+      "informational_note": "CBD can affect clotting — relevant to people on anticoagulants.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30417375/"
+      ],
+      "title": "Cannabidiol / anticoagulants",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Use caution with concurrent sedative medications. Monitor for excessive drowsiness.",
+      "alert_body": "CBD has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding CBD — the combination can increase drowsiness.",
+      "alert_headline": "May add to sedative drowsiness",
+      "detail": "CBD has CNS depressant effects and may potentiate sedation when combined with benzodiazepines, opioids, or other sedatives.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "sedatives",
+      "evidence_level": "probable",
+      "informational_note": "CBD has sedative activity — relevant to people on sedatives or sleep medications.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://www.nccih.nih.gov/health/cannabis-marijuana-and-cannabinoids-what-you-need-to-know"
+      ],
+      "title": "Cannabidiol / sedatives",
+      "type": "drug_interaction"
+    },
+    {
+      "detail": "Contains high-glycemic sweeteners: Glucose Syrup",
+      "display_mode_default": "informational",
+      "severity": "moderate",
+      "source": "dietary_sensitivity_data",
+      "title": "Diabetes",
+      "type": "dietary"
+    }
+  ],
+  "warnings_profile_gated": [
+    {
+      "ban_context": "substance",
+      "clinical_risk": "high",
+      "date": "2018-12-20",
+      "detail": "Under the FD&C Act's drug exclusion rule, CBD (cannabidiol) cannot lawfully be marketed as a dietary supplement because it was first investigated as a drug (clinical trials pre-dated any supplement marketing) and is now an approved drug ingredient in Epidiolex (approved by FDA in 2018 for epilepsy). FDA has consistently stated that CBD is excluded from the dietary supplement definition under 21 U.S.C. §321(ff)(3)(B). Despite widespread US market presence, CBD supplement products are technically unlawful. FDA has exercised enforcement discretion but this legal status remains unchanged as of 2026.",
+      "display_mode_default": "critical",
+      "identifiers": null,
+      "regulatory_date_label": "FDA ban effective",
+      "safety_warning": "Under US law, CBD cannot lawfully be sold as a dietary supplement because it was first investigated as a drug. Presence in a supplement is associated with non-compliance; talk to your doctor.",
+      "safety_warning_one_liner": "Not lawful as a US dietary supplement. Talk to your doctor.",
+      "severity": "critical",
+      "source": "banned_recalled_ingredients",
+      "source_urls": [
+        {
+          "evidence_grade": "B",
+          "title": "CBD hepatotoxicity",
+          "type": "doi",
+          "url": "https://doi.org/10.1002/hep.30525"
+        },
+        {
+          "evidence_grade": "R",
+          "title": "FDA Regulation of Cannabis and Cannabis-Derived Products, Including CBD",
+          "type": "fda_guidance",
+          "url": "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
+        }
+      ],
+      "title": "Banned substance: Cannabidiol",
+      "type": "banned_substance"
+    },
+    {
+      "category": "sweetener_natural",
+      "detail": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "unii": "9G5L16BK6N"
+      },
+      "mechanism_of_harm": "Concentrated liquid sugars with high glycemic index (GI 60-100+). Rapidly absorbed, causing blood glucose spikes. Rice syrup specifically may contain inorganic arsenic from rice cultivation. Used as sweetener/binder in gummies and liquid supplements.",
+      "notes": "Concentrated liquid sugars used as sweeteners. They have the same metabolic effects as solid sugars, contributing to blood sugar spikes and related health issues. Brown rice syrup has additional concerns due to potential arsenic contamination. NOTE: Category corrected from 'sweetener_artificial' to 'sweetener_natural' — corn syrup and rice syrup are not synthetic/artificial sweeteners.",
+      "population_warnings": [
+        "Diabetes/insulin resistance — high GI causes rapid blood glucose spikes",
+        "Children — rice syrup may contain inorganic arsenic; FDA monitors but no specific limit for supplements",
+        "Calorie-conscious consumers — concentrated sugar adds significant calories"
+      ],
+      "safety_summary": "Concentrated liquid added sugars (rice syrup, brown rice syrup, etc.). Rice syrups in particular can carry trace arsenic — worth limiting daily intake.",
+      "safety_summary_one_liner": "Concentrated added sugar, some can carry trace arsenic.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Sugar Syrups",
+      "type": "harmful_additive"
+    },
+    {
+      "action": "Avoid CBD supplements in liver disease. If already taking, monitor liver function tests regularly. Discontinue if ALT/AST exceed 3x upper limit of normal.",
+      "alert_body": "CBD is heavily metabolized in the liver and can elevate liver enzymes. If you have liver disease, talk to your clinician and monitor liver function labs.",
+      "alert_headline": "Not recommended with liver disease",
+      "condition_id": "liver_disease",
+      "detail": "CBD is extensively metabolized by CYP3A4 and CYP2C19 in the liver. FDA drug labels for multiple medications warn that concomitant CBD causes ALT/AST elevation. In patients with pre-existing hepatic impairment, CBD may worsen liver function. The FDA-approved CBD product (Epidiolex) carries a hepatotoxicity warning.",
+      "display_mode_default": "informational",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "established",
+      "informational_note": "CBD is liver-metabolized — relevant to people with liver conditions.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "avoid",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
+        "https://pubmed.ncbi.nlm.nih.gov/30417375/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
+      ],
+      "title": "Cannabidiol / liver_disease",
+      "type": "interaction"
+    },
+    {
+      "action": "Avoid CBD supplements during pregnancy. Consult healthcare provider.",
+      "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+      "alert_headline": "Not recommended during pregnancy",
+      "condition_id": "pregnancy",
+      "detail": "FDA strongly advises against CBD use during pregnancy. Animal studies show potential risks to the developing fetus. No adequate human safety data exists for CBD during pregnancy.",
+      "display_mode_default": "informational",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "avoid",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
+      ],
+      "title": "Cannabidiol / pregnancy",
+      "type": "interaction"
+    },
+    {
+      "action": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
+      "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
+      "alert_headline": "Not recommended during pregnancy",
+      "condition_id": "lactation",
+      "detail": "",
+      "display_mode_default": "informational",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
+      "ingredient_name": "Cannabidiol",
+      "severity": "avoid",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [],
+      "title": "Cannabidiol / lactation",
+      "type": "interaction"
+    },
+    {
+      "detail": "Contains high-glycemic sweeteners: Glucose Syrup",
+      "display_mode_default": "informational",
+      "severity": "moderate",
+      "source": "dietary_sensitivity_data",
+      "title": "Diabetes",
+      "type": "dietary"
+    }
+  ]
+}

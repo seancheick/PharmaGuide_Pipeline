@@ -1,0 +1,1410 @@
+{
+  "audit": {
+    "gate_audit": {
+      "blocking_reason": null,
+      "probiotic_eligibility": {
+        "eligible": false,
+        "mode": "non_probiotic",
+        "reason": "no_probiotic_signal"
+      },
+      "verdict": "SAFE"
+    },
+    "non_gmo": {
+      "all_signals": [
+        {
+          "source": "label_certifications",
+          "text": "GMP-General"
+        },
+        {
+          "source": "label_certifications",
+          "text": "Non-GMO-General"
+        },
+        {
+          "source": "label_certifications",
+          "text": "Third-Party-Tested"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "Gluten Free"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "Non-GMO"
+        }
+      ],
+      "claim_present": true,
+      "generic_signals": [
+        {
+          "source": "label_certifications",
+          "text": "Non-GMO-General"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "Non-GMO"
+        }
+      ],
+      "project_verified": false,
+      "reason": "generic_claim_only",
+      "score_eligible": false,
+      "verified_signals": []
+    },
+    "omega3": {
+      "applicable_for_dose_bonus": false,
+      "bonus_score": 0.0,
+      "contains_omega3": false,
+      "dha_mg_per_unit": null,
+      "dose_band": "",
+      "epa_dha_mg_per_unit": null,
+      "epa_mg_per_unit": null,
+      "matched_ingredients": [],
+      "per_day_max_mg": null,
+      "per_day_mid_mg": null,
+      "per_day_min_mg": null,
+      "reason": "no_omega3_signal"
+    },
+    "proprietary_blend": {
+      "blend_count": 0,
+      "evidence": [],
+      "has_proprietary_blends": false,
+      "penalty_score": 0.0
+    },
+    "section_a_audit": {
+      "category_bonus_total": 0.0,
+      "ceiling_hit": false,
+      "core_quality": 18.08,
+      "max": 25.0,
+      "score": 18.08
+    },
+    "supplement_type": {
+      "active_count": 2,
+      "category_breakdown": {
+        "herb": 2
+      },
+      "enriched_type": "targeted",
+      "export_type": "targeted",
+      "inferred_type": "herbal_blend",
+      "probiotic_signal": 0,
+      "scored_type": "targeted",
+      "source": "ingredient_quality_data"
+    }
+  },
+  "banned_substance_detail": null,
+  "blob_version": 1,
+  "brand_name": "Nutricost",
+  "certification_detail": {
+    "gmp": {
+      "claimed": true,
+      "fda_registered": false,
+      "nsf_gmp": false,
+      "text_matched": "GMP"
+    },
+    "heavy_metal_tested": 0,
+    "label_accuracy_verified": 0,
+    "purity_verified": 0,
+    "third_party_programs": {
+      "count": 0,
+      "has_generic_claim_only": true,
+      "programs": []
+    }
+  },
+  "compliance_detail": {
+    "allergen_free_claims": [
+      "gluten"
+    ],
+    "conflicts": [],
+    "dairy_free": false,
+    "evidence_based": {
+      "allergen_free_claims": [
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "Gluten-free",
+          "dedupe_key": "allergen_free:gluten",
+          "display_name": "Gluten-Free",
+          "duplicate_count": 3,
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "Gluten-free",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "labelText.raw",
+            "labelText.parsed.cleanLabelClaims[0]"
+          ],
+          "pattern_id": "CLAIM_GLUTEN_FREE_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_GLUTEN_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[2].notes"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "dietary_claim",
+          "context_snippet": "Formulation re: Vegetarian/Vegan",
+          "dedupe_key": "dietary:vegan",
+          "display_name": "Vegan",
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "Vegan",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "pattern_id": "CLAIM_VEGAN_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_VEGAN",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[14].type"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "dietary_claim",
+          "context_snippet": "Vegetarian product",
+          "dedupe_key": "dietary:vegetarian",
+          "display_name": "Vegetarian",
+          "duplicate_count": 4,
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "Vegetarian",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "statements[14].type",
+            "labelText.raw",
+            "labelText.parsed.qualityFeatures[1]"
+          ],
+          "pattern_id": "CLAIM_VEGETARIAN_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_VEGETARIAN",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[14].notes"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "dietary_claim",
+          "context_snippet": "Non-GMO product",
+          "dedupe_key": "dietary:non_gmo",
+          "display_name": "Non-GMO",
+          "duplicate_count": 4,
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "Non-GMO",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "labelText.raw",
+            "labelText.parsed.certifications[1]",
+            "labelText.parsed.cleanLabelClaims[1]"
+          ],
+          "pattern_id": "CLAIM_NON_GMO_positive_0",
+          "points_if_eligible": 0,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_NON_GMO",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[15].notes"
+        }
+      ],
+      "rules_db_version": "5.0.0"
+    },
+    "gluten_free": true,
+    "has_may_contain_warning": false,
+    "soy_free": false,
+    "vegan": true,
+    "vegetarian": true,
+    "verified": true
+  },
+  "dietary_sensitivity_detail": {
+    "sodium": {
+      "amount_mg": 0.0,
+      "exceeds_aha_threshold": false,
+      "level": "sodium_free",
+      "level_display": "Sodium-Free",
+      "percent_daily_value": 0,
+      "sodium_sources": [],
+      "unit": "mg"
+    },
+    "sugar": {
+      "amount_g": 0.0,
+      "contains_sugar": false,
+      "exceeds_diabetic_threshold": false,
+      "has_added_sugar": false,
+      "level": "sugar_free",
+      "level_display": "Sugar-Free",
+      "sugar_sources": [],
+      "unit": "g"
+    },
+    "sweeteners": {
+      "artificial": [],
+      "has_artificial": false,
+      "has_high_glycemic": false,
+      "has_sugar_alcohols": false,
+      "high_glycemic": [],
+      "safer_alternatives": [],
+      "sugar_alcohols": [],
+      "uses_safer_alternatives": false
+    }
+  },
+  "dsld_id": "306237",
+  "evidence_data": {
+    "clinical_matches": [
+      {
+        "effect_direction": "positive_strong",
+        "effect_direction_confidence": "high",
+        "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_multiple; evidence_level=branded-rct; primary_outcome=Reduce Stress/Anxiety; published_tags=RCT,brand; registry_completed_trials_count=7; total_enrollment=200; endpoint_tags=stress_mood,sleep,muscle_recovery; notes/citations contain no automated downgrade signals.",
+        "endpoint_relevance_tags": [
+          "stress_mood",
+          "sleep",
+          "muscle_recovery"
+        ],
+        "evidence_level": "branded-rct",
+        "health_goals_supported": [
+          "Reduce Stress/Anxiety",
+          "Increase Energy",
+          "Focus & Mental Clarity"
+        ],
+        "id": "BRAND_KSM66",
+        "ingredient": "KSM-66",
+        "key_endpoints": [
+          "cortisol ↓",
+          "strength ↑",
+          "libido ↑",
+          "stress ↓"
+        ],
+        "match_method": "standard_name",
+        "matched_term": "KSM-66",
+        "notable_studies": "Chandrasekhar et al. (2012, PMID 23439798) randomized chronically stressed adults and reported lower stress scores and serum cortisol with a high-concentration full-spectrum root extract commonly mapped to KSM-66. Salve et al. (2020, PMID 32021735) reported additional randomized evidence for stress, anxiety, and sleep-quality improvement with standardized ashwagandha root extract.",
+        "notes": "High-concentration full-spectrum ashwagandha root extract with explicit randomized evidence for stress reduction and supportive human data for sleep and quality-of-life outcomes.",
+        "primary_outcome": "Reduce Stress/Anxiety",
+        "published_studies": [
+          "RCT",
+          "brand"
+        ],
+        "references_structured": [
+          {
+            "authority": "NCBI PubMed",
+            "citation": "Indian journal of psychological medicine (2012-07-01)",
+            "doi": "10.4103/0253-7176.106022",
+            "evidence_grade": "journal_article",
+            "mesh_terms": [],
+            "pmid": "23439798",
+            "publication_types": [
+              "Journal Article"
+            ],
+            "published_date": "2012-07-01",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "A prospective, randomized double-blind, placebo-controlled study of safety and efficacy of a high-concentration full-spectrum extract of ashwagandha root in reducing stress and anxiety in adults.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/23439798/",
+            "verification_source": "pubmed_eutils"
+          },
+          {
+            "authority": "NCBI PubMed",
+            "citation": "Cureus (2019-12-25)",
+            "doi": "10.7759/cureus.6466",
+            "evidence_grade": "journal_article",
+            "mesh_terms": [],
+            "pmid": "32021735",
+            "publication_types": [
+              "Journal Article"
+            ],
+            "published_date": "2019-12-25",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Adaptogenic and Anxiolytic Effects of Ashwagandha Root Extract in Healthy Adults: A Double-blind, Randomized, Placebo-controlled Clinical Study.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/32021735/",
+            "verification_source": "pubmed_eutils"
+          }
+        ],
+        "registry_completed_trials_count": 7,
+        "score_contribution": "tier_1",
+        "standard_name": "KSM-66",
+        "study_id": "BRAND_KSM66",
+        "study_name": "KSM-66",
+        "study_type": "rct_multiple",
+        "total_enrollment": 200
+      },
+      {
+        "effect_direction": "positive_strong",
+        "effect_direction_confidence": "medium",
+        "effect_direction_rationale": "Retained positive_strong classification; study_type=rct_single; evidence_level=product-human; primary_outcome=Increase Energy; published_tags=clinical trial; registry_completed_trials_count=1; total_enrollment=40; endpoint_tags=digestive_health; notes/citations contain no automated downgrade signals.",
+        "endpoint_relevance_tags": [
+          "digestive_health"
+        ],
+        "evidence_level": "product-human",
+        "health_goals_supported": [
+          "Increase Energy",
+          "Healthy Aging/Longevity"
+        ],
+        "id": "BRAND_BIOPERINE",
+        "ingredient": "Bioperine",
+        "key_endpoints": [
+          "nutrient absorption ↑",
+          "bioavailability ↑"
+        ],
+        "match_method": "alias",
+        "matched_term": "bioperine",
+        "notable_studies": "Shoba et al. (1998, PMID 9619120) remains the central human BioPerine pharmacokinetic trial, showing a marked curcumin exposure increase with piperine co-administration. That is meaningful interventional evidence, but it does not justify treating BioPerine as if it has a broad efficacy RCT portfolio across endpoints. Later skepticism such as Verhoeven 2025 should be read as a caution against over-claiming PK superiority, not as proof that the original interventional signal never existed.",
+        "notes": "Patented black pepper extract with human bioavailability studies, but the magnitude and generalizability of its absorption effects remain disputed.",
+        "primary_outcome": "Increase Energy",
+        "published_studies": [
+          "clinical trial"
+        ],
+        "references_structured": [
+          {
+            "authority": "NCBI PubMed",
+            "citation": "Planta medica (1998-05-01)",
+            "doi": "10.1055/s-2006-957450",
+            "evidence_grade": "journal_article",
+            "mesh_terms": [
+              "Adult",
+              "Alkaloids",
+              "Animals",
+              "Area Under Curve",
+              "Benzodioxoles",
+              "Chromatography, High Pressure Liquid",
+              "Curcumin",
+              "Drug Interactions",
+              "Female",
+              "Humans",
+              "Male",
+              "Piperidines",
+              "Polyunsaturated Alkamides",
+              "Rats",
+              "Rats, Wistar",
+              "Spectrophotometry, Ultraviolet"
+            ],
+            "pmid": "9619120",
+            "publication_types": [
+              "Clinical Trial",
+              "Journal Article"
+            ],
+            "published_date": "1998-05-01",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Influence of piperine on the pharmacokinetics of curcumin in animals and human volunteers.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/9619120/",
+            "verification_source": "pubmed_eutils"
+          }
+        ],
+        "registry_completed_trials_count": 1,
+        "score_contribution": "tier_1",
+        "standard_name": "BioPerine Black Pepper Extract",
+        "study_id": "BRAND_BIOPERINE",
+        "study_name": "BioPerine Black Pepper Extract",
+        "study_type": "rct_single",
+        "total_enrollment": 40
+      }
+    ],
+    "match_count": 2,
+    "unsubstantiated_claims": []
+  },
+  "formulation_detail": {
+    "absorption_enhancer_paired": 0,
+    "absorption_enhancers": [],
+    "claim_non_gmo_present": true,
+    "claim_non_gmo_verified": false,
+    "delivery_form": "",
+    "delivery_tier": "1",
+    "is_certified_organic": 0,
+    "organic_verification": "",
+    "standardized_botanicals": [
+      {
+        "botanical_id": "ashwagandha",
+        "evidence_source": "percentage_local",
+        "markers": [
+          "withanolides",
+          "withaferin A",
+          "withanolide A"
+        ],
+        "meets_threshold": true,
+        "min_threshold": 2.5,
+        "name": "KSM-66",
+        "percentage_found": 5.0,
+        "percentage_source": "local",
+        "standard_name": "Ashwagandha"
+      },
+      {
+        "botanical_id": "black_pepper_extract",
+        "evidence_source": "percentage_local",
+        "markers": [
+          "piperine"
+        ],
+        "meets_threshold": true,
+        "min_threshold": 95,
+        "name": "Bioperine",
+        "percentage_found": 95.0,
+        "percentage_source": "local",
+        "standard_name": "Black Pepper Extract"
+      }
+    ],
+    "synergy_cluster_qualified": 1
+  },
+  "inactive_ingredients": [
+    {
+      "additive_type": "capsule_coating",
+      "category": "capsule_shell",
+      "common_uses": [
+        "vegetarian capsule shell",
+        "tablet coating",
+        "controlled release"
+      ],
+      "forms": [
+        {
+          "category": "fiber",
+          "ingredientGroup": "Cellulose",
+          "ingredientId": 9747,
+          "name": "Cellulose",
+          "order": 1,
+          "percent": null,
+          "prefix": null,
+          "uniiCode": null
+        }
+      ],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0063242",
+        "unii": "3NXW29V3WO"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Hypromellose",
+      "normalized_key": "hypromellose",
+      "notes": "Hydroxypropyl methylcellulose (hypromellose, E464) — plant-derived cellulose ether used as vegetarian/vegan capsule shell material and tablet coating agent. FDA GRAS. Inert, non-toxic, and non-allergenic. Provides moisture barrier and controlled-release properties. Brand names include Vcaps, Caplique.",
+      "population_warnings": [],
+      "raw_source_text": "Hypromellose",
+      "severity_level": "",
+      "standardName": "Hydroxypropyl Methylcellulose",
+      "standard_name": "Hydroxypropyl Methylcellulose"
+    },
+    {
+      "additive_type": "anti_caking_agent",
+      "category": "flow_agent_anticaking",
+      "common_uses": [
+        "flow agent",
+        "anti-caking",
+        "tablet glidant"
+      ],
+      "forms": [],
+      "harmful_notes": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+      "harmful_severity": "low",
+      "identifiers": {
+        "cas": "7631-86-9",
+        "cui": "C0037098",
+        "pubchem_cid": 24261,
+        "unii": "ETJ7Z6XBU4"
+      },
+      "is_additive": 1,
+      "is_harmful": true,
+      "match_method": "alias_via_std",
+      "matched_alias": "silicon dioxide",
+      "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
+      "name": "Silica",
+      "normalized_key": "silica",
+      "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
+      "population_warnings": [
+        "No specific population concerns at anti-caking agent levels (<2% w/w)"
+      ],
+      "raw_source_text": "Silica",
+      "severity_level": "low",
+      "standardName": "Silicon Dioxide",
+      "standard_name": "Silicon Dioxide (E551)"
+    },
+    {
+      "additive_type": "processing_aid",
+      "category": "tablet_lubricant",
+      "common_uses": [
+        "tablet lubrication",
+        "flow aid",
+        "manufacturing aid"
+      ],
+      "forms": [],
+      "harmful_notes": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "harmful_severity": "low",
+      "identifiers": {
+        "cas": "557-04-0",
+        "cui": "C0126791",
+        "pubchem_cid": 11177,
+        "unii": "70097M6I30"
+      },
+      "is_additive": 1,
+      "is_harmful": true,
+      "match_method": "exact",
+      "matched_alias": "",
+      "mechanism_of_harm": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "name": "Magnesium Stearate",
+      "normalized_key": "magnesium_stearate",
+      "notes": "Magnesium stearate is an FDA GRAS flow agent present in the vast majority of supplement tablets and capsules. It prevents powders from sticking to manufacturing equipment. Internet claims that it blocks nutrient absorption are not supported by clinical evidence — the single study cited used unrealistic concentrations. Stearic acid (its main component) is a natural fatty acid found in chocolate, meat, and dairy. Penalized at low severity only as a non-nutritive processing aid, not as a health concern.",
+      "population_warnings": [
+        "No specific population warnings — safe at typical supplement levels"
+      ],
+      "raw_source_text": "Magnesium Stearate",
+      "severity_level": "low",
+      "standardName": "Magnesium Stearate",
+      "standard_name": "Magnesium Stearate"
+    }
+  ],
+  "ingredients": [
+    {
+      "bio_score": 11.0,
+      "category": "herbs",
+      "display_badge": "no_data",
+      "display_dose_label": "600 mg",
+      "display_label": "KSM-66 Ashwagandha Root Extract",
+      "dosage": 600.0,
+      "dosage_unit": "mg",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [
+        {
+          "category": "botanical",
+          "ingredientGroup": "Ashwagandha",
+          "ingredientId": 337016,
+          "name": "Ashwagandha Root Extract",
+          "order": 1,
+          "percent": null,
+          "prefix": null,
+          "uniiCode": "V038D626IF"
+        }
+      ],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "KSM-66 ashwagandha",
+      "matched_forms": [],
+      "name": "KSM-66",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "ksm_66",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Patented full-spectrum root-only extract with ~5% withanolides (Ixoreal Biomed). Clinically validated for cortisol, stress, testosterone in 20+ RCTs. However, human PK (PMID:34254920) showed very low plasma withanolide A (Cmax 0.09 ng/mL, t1/2 0.74h). Clinical efficacy may be driven by gut-level or metabolite effects rather than systemic withanolide exposure.",
+      "parent_key": "ksm_66",
+      "quantity": 600.0,
+      "raw_source_text": "KSM-66",
+      "role": "active",
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "Use with caution in thyroid disorders. Monitor thyroid function tests (TSH, T3, T4) during use. Contraindicated in hyperthyroidism without physician oversight.",
+              "alert_body": "Ashwagandha can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding ashwagandha and monitor your labs.",
+              "alert_headline": "Caution with thyroid conditions",
+              "condition_id": "thyroid_disorder",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "probable",
+              "informational_note": "Ashwagandha affects thyroid pathways — relevant to people with thyroid conditions.",
+              "mechanism": "Ashwagandha (Withania somnifera) root extract increases serum T3 and T4 levels and decreases TSH, with pro-thyroid effects demonstrated in both animal hypothyroidism models and human endocrine reviews. This can alter thyroid function test results and may be inappropriate in hyperthyroid states.",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/38003702/",
+                "https://pubmed.ncbi.nlm.nih.gov/31203475/"
+              ]
+            }
+          ],
+          "drug_class_hits": [
+            {
+              "action": "Advise patients taking CNS depressants or sedatives to use ashwagandha with caution and to monitor for excessive sedation.",
+              "alert_body": "Ashwagandha has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding ashwagandha — the combination can increase drowsiness.",
+              "alert_headline": "May add to sedative drowsiness",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "sedatives",
+              "evidence_level": "probable",
+              "informational_note": "Ashwagandha has sedative activity — relevant to people on sedatives or sleep medications.",
+              "mechanism": "Ashwagandha has demonstrated GABAergic activity via withanolides and sitoindosides. Concomitant use with CNS sedatives may result in additive CNS depression, enhanced drowsiness, and impaired psychomotor performance.",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/38003702/"
+              ]
+            }
+          ],
+          "last_reviewed": "2026-04-09",
+          "pregnancy_lactation": {},
+          "rule_id": "RULE_IQM_ASHWAGANDHA",
+          "source_bucket": "ingredients",
+          "subject_ref": {
+            "canonical_id": "ashwagandha",
+            "db": "ingredient_quality_map"
+          }
+        }
+      ],
+      "score": 14.0,
+      "standardName": "Ashwagandha",
+      "standard_name": "Ashwagandha",
+      "standardization_note": "5% withanolides",
+      "unit": "mg"
+    },
+    {
+      "bio_score": 9.0,
+      "category": "herbs",
+      "display_badge": "no_data",
+      "display_dose_label": "5 mg",
+      "display_label": "BioPerine Black Pepper Fruit Extract",
+      "dosage": 5.0,
+      "dosage_unit": "mg",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [
+        {
+          "category": "botanical",
+          "ingredientGroup": "Black Pepper",
+          "ingredientId": 299568,
+          "name": "Black Pepper Fruit Extract",
+          "order": 1,
+          "percent": null,
+          "prefix": null,
+          "uniiCode": "KM66971LVF"
+        }
+      ],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "piperine (unspecified)",
+      "matched_forms": [],
+      "name": "Bioperine",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "bioperine",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Primary pungent alkaloid of black pepper (Piper nigrum). BioPerine (Sabinsa, 95%+ piperine) is the patented standardized form. Inhibits CYP3A4, CYP1A2, P-glycoprotein, and UGTs — increases curcumin AUC ~20-fold (PMID 9619120). Enhances beta-carotene absorption ~2x at 5 mg (PMC7353321). Rapid transcellular passive diffusion; high Caco-2 permeability (PMID 9536651). Standard dose: 5-20 mg as adjuvant.",
+      "parent_key": "bioperine",
+      "quantity": 5.0,
+      "raw_source_text": "Bioperine",
+      "role": "active",
+      "safety_hits": [],
+      "score": 12.0,
+      "standardName": "Piperine (Black Pepper Extract)",
+      "standard_name": "Piperine (Black Pepper Extract)",
+      "standardization_note": "95% piperine",
+      "unit": "mg"
+    }
+  ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE"
+  ],
+  "interaction_summary": {
+    "condition_summary": {
+      "thyroid_disorder": {
+        "actions": [
+          "Use with caution in thyroid disorders. Monitor thyroid function tests (TSH, T3, T4) during use. Contraindicated in hyperthyroidism without physician oversight."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "KSM-66"
+        ],
+        "label": "Thyroid Condition",
+        "rule_ids": [
+          "RULE_IQM_ASHWAGANDHA"
+        ]
+      }
+    },
+    "drug_class_summary": {
+      "sedatives": {
+        "actions": [
+          "Advise patients taking CNS depressants or sedatives to use ashwagandha with caution and to monitor for excessive sedation."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "KSM-66"
+        ],
+        "label": "Sedatives",
+        "rule_ids": [
+          "RULE_IQM_ASHWAGANDHA"
+        ]
+      }
+    },
+    "highest_severity": "caution"
+  },
+  "manufacturer_detail": {
+    "brand_name": "Nutricost",
+    "is_trusted": 1,
+    "manufacturing_region": "",
+    "violations": {
+      "found": false,
+      "total_deduction_applied": 0.0,
+      "violations": []
+    }
+  },
+  "non_gmo_audit": {
+    "all_signals": [
+      {
+        "source": "label_certifications",
+        "text": "GMP-General"
+      },
+      {
+        "source": "label_certifications",
+        "text": "Non-GMO-General"
+      },
+      {
+        "source": "label_certifications",
+        "text": "Third-Party-Tested"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "Gluten Free"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "Non-GMO"
+      }
+    ],
+    "claim_present": true,
+    "generic_signals": [
+      {
+        "source": "label_certifications",
+        "text": "Non-GMO-General"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "Non-GMO"
+      }
+    ],
+    "project_verified": false,
+    "reason": "generic_claim_only",
+    "score_eligible": false,
+    "verified_signals": []
+  },
+  "nutrition_detail": {
+    "calories_per_serving": null,
+    "dietary_fiber_g": null,
+    "protein_g": null,
+    "total_carbohydrates_g": null,
+    "total_fat_g": null
+  },
+  "omega3_audit": {
+    "applicable_for_dose_bonus": false,
+    "bonus_score": 0.0,
+    "contains_omega3": false,
+    "dha_mg_per_unit": null,
+    "dose_band": "",
+    "epa_dha_mg_per_unit": null,
+    "epa_mg_per_unit": null,
+    "matched_ingredients": [],
+    "per_day_max_mg": null,
+    "per_day_mid_mg": null,
+    "per_day_min_mg": null,
+    "reason": "no_omega3_signal"
+  },
+  "product_name": "KSM-66 600 mg",
+  "proprietary_blend_audit": {
+    "blend_count": 0,
+    "evidence": [],
+    "has_proprietary_blends": false,
+    "penalty_score": 0.0
+  },
+  "proprietary_blend_detail": {
+    "blends": [],
+    "has_proprietary_blends": 0
+  },
+  "raw_actives_count": 2,
+  "raw_inactives_count": 3,
+  "rda_ul_data": {
+    "adequacy_results": [
+      {
+        "adequacy_band": "unknown",
+        "age_group": "19-30",
+        "amount": 600.0,
+        "conversion_applied": false,
+        "is_servings_estimated": false,
+        "notes": [
+          "Nutrient 'Ashwagandha' not found in RDA database"
+        ],
+        "nutrient": "Ashwagandha",
+        "optimal_max": null,
+        "optimal_min": null,
+        "original_quantity": 600.0,
+        "original_unit": "mg",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": null,
+        "pct_ul": null,
+        "per_day_max": 600.0,
+        "per_day_min": 600.0,
+        "point_recommendation": 0,
+        "rda_ai": null,
+        "rda_ai_source": "unknown",
+        "scoring_eligible": false,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": false,
+        "ul": null,
+        "ul_status": "unknown",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "age_group": "19-30",
+        "amount": 5.0,
+        "conversion_applied": false,
+        "is_servings_estimated": false,
+        "notes": [
+          "Nutrient 'Piperine (Black Pepper Extract)' not found in RDA database"
+        ],
+        "nutrient": "Piperine (Black Pepper Extract)",
+        "optimal_max": null,
+        "optimal_min": null,
+        "original_quantity": 5.0,
+        "original_unit": "mg",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": null,
+        "pct_ul": null,
+        "per_day_max": 5.0,
+        "per_day_min": 5.0,
+        "point_recommendation": 0,
+        "rda_ai": null,
+        "rda_ai_source": "unknown",
+        "scoring_eligible": false,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": false,
+        "ul": null,
+        "ul_status": "unknown",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "analyzed_ingredients": [
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Ashwagandha",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "KSM-66",
+          "notes": [],
+          "nutrient_detected": "Ashwagandha",
+          "original_unit": "mg",
+          "original_value": 600.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 600.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "KSM-66",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 600.0,
+        "per_day_min": 600.0,
+        "quantity": 600.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Ashwagandha",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Piperine (Black Pepper Extract)",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Bioperine",
+          "notes": [],
+          "nutrient_detected": "Piperine (Black Pepper Extract)",
+          "original_unit": "mg",
+          "original_value": 5.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 5.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Bioperine",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 5.0,
+        "per_day_min": 5.0,
+        "quantity": 5.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Piperine (Black Pepper Extract)",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "collection_enabled": true,
+    "collection_reason": null,
+    "conversion_evidence": [
+      {
+        "confidence": "failed",
+        "conversion_factor": null,
+        "conversion_rule_id": null,
+        "converted_unit": null,
+        "converted_value": null,
+        "error": "No conversion rule found for nutrient: Ashwagandha",
+        "form_detected": null,
+        "form_detection_source": null,
+        "ingredient": "KSM-66",
+        "notes": [],
+        "nutrient_detected": "Ashwagandha",
+        "original_unit": "mg",
+        "original_value": 600.0,
+        "success": false,
+        "warnings": []
+      },
+      {
+        "confidence": "failed",
+        "conversion_factor": null,
+        "conversion_rule_id": null,
+        "converted_unit": null,
+        "converted_value": null,
+        "error": "No conversion rule found for nutrient: Piperine (Black Pepper Extract)",
+        "form_detected": null,
+        "form_detection_source": null,
+        "ingredient": "Bioperine",
+        "notes": [],
+        "nutrient_detected": "Piperine (Black Pepper Extract)",
+        "original_unit": "mg",
+        "original_value": 5.0,
+        "success": false,
+        "warnings": []
+      }
+    ],
+    "count": 2,
+    "has_over_ul": false,
+    "ingredients_with_rda": [
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Ashwagandha",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "KSM-66",
+          "notes": [],
+          "nutrient_detected": "Ashwagandha",
+          "original_unit": "mg",
+          "original_value": 600.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 600.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "KSM-66",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 600.0,
+        "per_day_min": 600.0,
+        "quantity": 600.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Ashwagandha",
+        "unit": "mg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Piperine (Black Pepper Extract)",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Bioperine",
+          "notes": [],
+          "nutrient_detected": "Piperine (Black Pepper Extract)",
+          "original_unit": "mg",
+          "original_value": 5.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 5.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Bioperine",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 5.0,
+        "per_day_min": 5.0,
+        "quantity": 5.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Piperine (Black Pepper Extract)",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "safety_flags": []
+  },
+  "score_bonuses": [
+    {
+      "detail": "1",
+      "id": "A3",
+      "label": "Advanced delivery system",
+      "score": 3.0
+    },
+    {
+      "id": "A5b",
+      "label": "Standardized botanicals",
+      "score": 1.0
+    },
+    {
+      "id": "A5c",
+      "label": "Synergy cluster qualified",
+      "score": 0.75
+    },
+    {
+      "id": "B4b",
+      "label": "GMP certified facility",
+      "score": 4.0
+    }
+  ],
+  "score_penalties": [
+    {
+      "id": "B1",
+      "label": "Harmful additive: Silicon Dioxide (E551)",
+      "reason": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to ins",
+      "score": 1.0,
+      "severity": "low"
+    },
+    {
+      "id": "B1",
+      "label": "Harmful additive: Magnesium Stearate",
+      "reason": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro di",
+      "score": 1.0,
+      "severity": "low"
+    },
+    {
+      "id": "B2",
+      "label": "Allergen: Milk",
+      "presence": "contains",
+      "severity": "moderate"
+    }
+  ],
+  "section_breakdown": {
+    "brand_trust": {
+      "max": 5.0,
+      "score": 3.0,
+      "sub": {
+        "D1": 2.0,
+        "D2": 1.0,
+        "D3": 0.0,
+        "D4": 0.0,
+        "D5": 0.0
+      }
+    },
+    "evidence_research": {
+      "ingredient_points": {
+        "bioperine black pepper extract": 2.4,
+        "ksm 66": 4.0
+      },
+      "matched_entries": 2,
+      "max": 20.0,
+      "score": 5.2
+    },
+    "ingredient_quality": {
+      "max": 25.0,
+      "score": 18.08,
+      "sub": {
+        "A1": 13.33,
+        "A2": 0.0,
+        "A3": 3.0,
+        "A4": 0.0,
+        "A5": 1.75,
+        "A5a": 0.0,
+        "A5b": 1.0,
+        "A5c": 0.75,
+        "A5d": 0.0,
+        "A6": 0.0,
+        "category_bonus_pool_cap": 5.0,
+        "category_bonus_total": 0.0,
+        "core_quality": 18.08,
+        "omega3_breakdown": {
+          "applicable": false,
+          "omega3_dose_bonus": 0.0
+        },
+        "omega3_dose_bonus": 0.0,
+        "probiotic_bonus": 0.0,
+        "probiotic_breakdown": {
+          "cfu": 0.0,
+          "clinical_strains": 0.0,
+          "diversity": 0.0,
+          "eligibility": {
+            "eligible": false,
+            "mode": "non_probiotic",
+            "reason": "no_probiotic_signal"
+          },
+          "prebiotic": 0.0,
+          "probiotic_bonus": 0.0,
+          "survivability": 0.0
+        }
+      }
+    },
+    "safety_purity": {
+      "max": 30.0,
+      "score": 27.5,
+      "sub": {
+        "B0_moderate_penalty": 0.0,
+        "B1_evidence": [],
+        "B1_penalty": 1.0,
+        "B2_penalty": 1.5,
+        "B3": 2.0,
+        "B4a": 0.0,
+        "B4b": 4.0,
+        "B4c": 0.0,
+        "B5_blend_evidence": [],
+        "B5_penalty": 0.0,
+        "B6_penalty": 0.0,
+        "B7_dose_safety_evidence": [],
+        "B7_penalty": 0.0,
+        "B8_caers_evidence": [],
+        "B8_penalty": 0.0,
+        "B_hypoallergenic": 0.0,
+        "bonuses": 5.0,
+        "penalties": 2.5
+      }
+    },
+    "violation_penalty": 0.0
+  },
+  "serving_info": {
+    "basis_count": 1.0,
+    "basis_unit": "capsule",
+    "max_servings_per_day": 1,
+    "min_servings_per_day": 1
+  },
+  "supplement_type_audit": {
+    "active_count": 2,
+    "category_breakdown": {
+      "herb": 2
+    },
+    "enriched_type": "targeted",
+    "export_type": "targeted",
+    "inferred_type": "herbal_blend",
+    "probiotic_signal": 0,
+    "scored_type": "targeted",
+    "source": "ingredient_quality_data"
+  },
+  "synergy_detail": {
+    "best_tier": 1,
+    "bonus_awarded": 1.0,
+    "bonus_explanation": "This product contains ingredients with proven synergistic effects backed by clinical trials.",
+    "clusters": [
+      {
+        "all_adequate": 1,
+        "benefit_short": "Turmeric or curcumin paired with black pepper (piperine) is absorbed up to 20× better — the pair unlocks the anti-inflammatory benefit together.",
+        "evidence_label": "Proven synergy",
+        "evidence_tier": 1,
+        "id": "curcumin_absorption",
+        "match_count": 2,
+        "matched_ingredients": [
+          "Bioperine",
+          "Bioperine"
+        ],
+        "mechanism": "Piperine inhibits hepatic and intestinal glucuronidation of curcumin, increasing its bioavailability up to 20-fold. Ginger shares overlapping metabolic pathways and may further enhance absorption.",
+        "name": "Curcumin Absorption",
+        "pmids": [
+          "9619120"
+        ]
+      }
+    ],
+    "qualified": true
+  },
+  "unmapped_actives": {
+    "excluding_banned_exact_alias": 0,
+    "names": [],
+    "total": 0
+  },
+  "warnings": [
+    {
+      "category": "excipient",
+      "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "cas": "557-04-0",
+        "cui": "C0126791",
+        "pubchem_cid": 11177,
+        "unii": "70097M6I30"
+      },
+      "mechanism_of_harm": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "notes": "Magnesium stearate is an FDA GRAS flow agent present in the vast majority of supplement tablets and capsules. It prevents powders from sticking to manufacturing equipment. Internet claims that it blocks nutrient absorption are not supported by clinical evidence — the single study cited used unrealistic concentrations. Stearic acid (its main component) is a natural fatty acid found in chocolate, meat, and dairy. Penalized at low severity only as a non-nutritive processing aid, not as a health concern.",
+      "population_warnings": [
+        "No specific population warnings — safe at typical supplement levels"
+      ],
+      "safety_summary": "A widely-used flow agent in supplement manufacturing. Claims of harm at the amounts used are not supported by evidence — low overall concern.",
+      "safety_summary_one_liner": "Common flow agent — low overall concern.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Magnesium Stearate",
+      "type": "harmful_additive"
+    },
+    {
+      "allergen_id": "ALLERGEN_MILK",
+      "detail": "Presence: contains. labelText.parsed.allergens: milk",
+      "display_mode_default": "informational",
+      "notes": "FDA major allergen (FALCPA). Severity moderate: milk is the 3rd most common cause of pediatric food anaphylaxis (after peanut and tree nuts). Casein and whey are the two primary allergenic protein fractions; casein allergy tends to be more persistent and severe. Lactose intolerance (non-immune) is distinct from milk allergy (IgE-mediated) but both require flagging. Probiotic strains grown on milk media may carry trace proteins.",
+      "prevalence": "high",
+      "severity": "moderate",
+      "source": "allergen_db",
+      "supplement_context": "Common in protein supplements, some probiotics, and tablets/capsules (lactose).",
+      "title": "Allergen: Milk",
+      "type": "allergen"
+    },
+    {
+      "action": "Use with caution in thyroid disorders. Monitor thyroid function tests (TSH, T3, T4) during use. Contraindicated in hyperthyroidism without physician oversight.",
+      "alert_body": "Ashwagandha can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding ashwagandha and monitor your labs.",
+      "alert_headline": "Caution with thyroid conditions",
+      "condition_id": "thyroid_disorder",
+      "detail": "Ashwagandha (Withania somnifera) root extract increases serum T3 and T4 levels and decreases TSH, with pro-thyroid effects demonstrated in both animal hypothyroidism models and human endocrine reviews. This can alter thyroid function test results and may be inappropriate in hyperthyroid states.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "Ashwagandha affects thyroid pathways — relevant to people with thyroid conditions.",
+      "ingredient_name": "KSM-66",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/38003702/",
+        "https://pubmed.ncbi.nlm.nih.gov/31203475/"
+      ],
+      "title": "KSM-66 / thyroid_disorder",
+      "type": "interaction"
+    },
+    {
+      "action": "Advise patients taking CNS depressants or sedatives to use ashwagandha with caution and to monitor for excessive sedation.",
+      "alert_body": "Ashwagandha has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding ashwagandha — the combination can increase drowsiness.",
+      "alert_headline": "May add to sedative drowsiness",
+      "detail": "Ashwagandha has demonstrated GABAergic activity via withanolides and sitoindosides. Concomitant use with CNS sedatives may result in additive CNS depression, enhanced drowsiness, and impaired psychomotor performance.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "sedatives",
+      "evidence_level": "probable",
+      "informational_note": "Ashwagandha has sedative activity — relevant to people on sedatives or sleep medications.",
+      "ingredient_name": "KSM-66",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/38003702/"
+      ],
+      "title": "KSM-66 / sedatives",
+      "type": "drug_interaction"
+    }
+  ],
+  "warnings_profile_gated": [
+    {
+      "category": "excipient",
+      "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "cas": "557-04-0",
+        "cui": "C0126791",
+        "pubchem_cid": 11177,
+        "unii": "70097M6I30"
+      },
+      "mechanism_of_harm": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "notes": "Magnesium stearate is an FDA GRAS flow agent present in the vast majority of supplement tablets and capsules. It prevents powders from sticking to manufacturing equipment. Internet claims that it blocks nutrient absorption are not supported by clinical evidence — the single study cited used unrealistic concentrations. Stearic acid (its main component) is a natural fatty acid found in chocolate, meat, and dairy. Penalized at low severity only as a non-nutritive processing aid, not as a health concern.",
+      "population_warnings": [
+        "No specific population warnings — safe at typical supplement levels"
+      ],
+      "safety_summary": "A widely-used flow agent in supplement manufacturing. Claims of harm at the amounts used are not supported by evidence — low overall concern.",
+      "safety_summary_one_liner": "Common flow agent — low overall concern.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Magnesium Stearate",
+      "type": "harmful_additive"
+    },
+    {
+      "allergen_id": "ALLERGEN_MILK",
+      "detail": "Presence: contains. labelText.parsed.allergens: milk",
+      "display_mode_default": "informational",
+      "notes": "FDA major allergen (FALCPA). Severity moderate: milk is the 3rd most common cause of pediatric food anaphylaxis (after peanut and tree nuts). Casein and whey are the two primary allergenic protein fractions; casein allergy tends to be more persistent and severe. Lactose intolerance (non-immune) is distinct from milk allergy (IgE-mediated) but both require flagging. Probiotic strains grown on milk media may carry trace proteins.",
+      "prevalence": "high",
+      "severity": "moderate",
+      "source": "allergen_db",
+      "supplement_context": "Common in protein supplements, some probiotics, and tablets/capsules (lactose).",
+      "title": "Allergen: Milk",
+      "type": "allergen"
+    }
+  ]
+}
