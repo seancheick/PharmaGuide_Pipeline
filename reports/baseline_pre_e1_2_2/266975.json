@@ -934,7 +934,9 @@
       "action": "Keep total daily vitamin E intake within guideline ranges and avoid megadosing.",
       "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
       "alert_headline": "Keep vitamin E within prenatal range",
-      "condition_id": "pregnancy",
+      "condition_ids": [
+        "pregnancy"
+      ],
       "detail": "Vitamin E is essential, but excessive supplemental intake above established UL is not recommended in pregnancy.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -955,6 +957,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
       "ingredient_name": "Vitamin E",
@@ -972,10 +975,13 @@
       "action": "Threshold escalates only when intake exceeds adult UL.",
       "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
       "alert_headline": "Keep vitamin E within prenatal range",
-      "condition_id": "lactation",
+      "condition_ids": [
+        "lactation"
+      ],
       "detail": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
       "ingredient_name": "Vitamin E",

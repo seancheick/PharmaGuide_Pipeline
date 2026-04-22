@@ -1246,6 +1246,51 @@ def _validate_inactive_preservation(
         )
 
 
+# Sprint E1.4.1 — plural-array normalization for condition_ids /
+# drug_class_ids. Every warning entry emits the plural array only;
+# legacy singular keys are migrated then dropped. Arrays are sorted
+# + deduped for determinism. Applied to both warnings[] and
+# warnings_profile_gated[] independently.
+_WARNING_ID_KEY_PAIRS = (
+    ("condition_id", "condition_ids"),
+    ("drug_class_id", "drug_class_ids"),
+)
+
+
+def _normalize_warning_condition_keys(w: Dict[str, Any]) -> Dict[str, Any]:
+    """Return a shallow copy of ``w`` with ``condition_id`` /
+    ``drug_class_id`` migrated into their plural-array counterparts.
+    Arrays are sorted + deduplicated with blank / None entries dropped.
+    Idempotent on already-plural shape.
+    """
+    if not isinstance(w, dict):
+        return w
+
+    out = dict(w)
+    for singular, plural in _WARNING_ID_KEY_PAIRS:
+        collected: List[str] = []
+
+        arr_val = out.get(plural)
+        if isinstance(arr_val, list):
+            collected.extend(arr_val)
+
+        scalar_val = out.get(singular)
+        if isinstance(scalar_val, str) and scalar_val:
+            collected.append(scalar_val)
+        elif scalar_val and not isinstance(scalar_val, (list, dict)):
+            # Belt-and-suspenders: coerce non-string scalars to str.
+            collected.append(str(scalar_val))
+
+        cleaned = sorted({
+            str(x).strip() for x in collected
+            if x is not None and str(x).strip()
+        })
+        out[plural] = cleaned
+        out.pop(singular, None)
+
+    return out
+
+
 # Sprint E1.2.3 — warning dedup at build time.
 # Collapses semantically identical warnings within a single list while
 # preserving the most-informative copy. NEVER merges across the two
@@ -2406,6 +2451,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # Sprint E1.2.3 — collapse duplicates WITHIN each list independently.
     warnings = _dedup_warnings(warnings)
     warnings_profile_gated = _dedup_warnings(warnings_profile_gated)
+
+    # Sprint E1.4.1 — migrate singular condition_id / drug_class_id to
+    # plural arrays. Applied AFTER dedup so the dedup key doesn't have
+    # to know about shape migration.
+    warnings = [_normalize_warning_condition_keys(w) for w in warnings]
+    warnings_profile_gated = [_normalize_warning_condition_keys(w) for w in warnings_profile_gated]
 
     # Sprint E1.1.2 — critical-mode warnings must be profile-agnostic.
     # Sprint E1.1.3 — every warning must carry at least one authored-copy field.

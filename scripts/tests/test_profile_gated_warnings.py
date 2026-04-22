@@ -286,10 +286,11 @@ def test_pipeline_passes_through_authored_fields_when_present():
         ]
     }
     blob = build_detail_blob(enriched, make_scored())
+    # Sprint E1.4.1 — blob carries plural drug_class_ids array.
     matches = [
         w for w in blob["warnings"]
         if w.get("source") == "interaction_rules"
-        and w.get("drug_class_id") == "hypoglycemics"
+        and "hypoglycemics" in (w.get("drug_class_ids") or [])
     ]
     assert matches
     w = matches[0]

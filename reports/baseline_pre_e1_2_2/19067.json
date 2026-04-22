@@ -884,8 +884,10 @@
   "warnings": [
     {
       "category": "excipient",
+      "condition_ids": [],
       "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "557-04-0",
         "cui": "C0126791",
@@ -906,8 +908,10 @@
     },
     {
       "allergen_id": "ALLERGEN_SOY",
+      "condition_ids": [],
       "detail": "Presence: contains. labelText.parsed.allergens: soy",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "notes": "FDA major allergen (FALCPA). Soy lecithin is the most common form in supplements, used as emulsifier in softgels and powders. Highly refined soy oil may not trigger reactions but must still be labeled. Cross-reactivity with other legumes (peanut, lupin) occurs in 5-10% of soy-allergic individuals. Fermented soy (natto) retains allergenic proteins.",
       "prevalence": "high",
       "severity": "low",
@@ -920,8 +924,10 @@
   "warnings_profile_gated": [
     {
       "category": "excipient",
+      "condition_ids": [],
       "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "557-04-0",
         "cui": "C0126791",
@@ -942,8 +948,10 @@
     },
     {
       "allergen_id": "ALLERGEN_SOY",
+      "condition_ids": [],
       "detail": "Presence: contains. labelText.parsed.allergens: soy",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "notes": "FDA major allergen (FALCPA). Soy lecithin is the most common form in supplements, used as emulsifier in softgels and powders. Highly refined soy oil may not trigger reactions but must still be labeled. Cross-reactivity with other legumes (peanut, lupin) occurs in 5-10% of soy-allergic individuals. Fermented soy (natto) retains allergenic proteins.",
       "prevalence": "high",
       "severity": "low",

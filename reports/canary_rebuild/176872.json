@@ -1880,8 +1880,10 @@
   "warnings": [
     {
       "category": "colorant_artificial",
+      "condition_ids": [],
       "detail": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": null,
       "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
       "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
@@ -1900,10 +1902,13 @@
       "action": "Vitamin D at standard supplemental doses (up to 4000 IU/day) is not a clinically significant bleeding risk on its own. Monitor if taking high-dose vitamin D (>10,000 IU/day) with anticoagulants.",
       "alert_body": "Vitamin D has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Vitamin D.",
       "alert_headline": "Caution with bleeding disorders",
-      "condition_id": "bleeding_disorders",
+      "condition_ids": [
+        "bleeding_disorders"
+      ],
       "detail": "Vitamin D does not directly affect platelet aggregation at physiological or supplemental doses. However, high-dose vitamin D supplementation may interact with warfarin sensitivity in patients with concurrent vitamin K deficiency by affecting the vitamin K-dependent carboxylation of coagulation factors (II, VII, IX, X). The vitamin D endocrine system and vitamin K share overlapping roles in gamma-carboxylation of hepatic Gla-proteins.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "theoretical",
       "informational_note": "Vitamin D can affect platelet function — relevant to people with a bleeding disorder.",
       "ingredient_name": "Vitamin D",
@@ -1921,10 +1926,13 @@
       "action": "Vitamin D supplementation at standard doses (1000–4000 IU/day) is generally safe in autoimmune conditions. High-dose vitamin D requires physician-monitored 25-OH vitamin D levels to avoid toxicity.",
       "alert_body": "Vitamin D has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding Vitamin D.",
       "alert_headline": "Caution with autoimmune conditions",
-      "condition_id": "autoimmune",
+      "condition_ids": [
+        "autoimmune"
+      ],
       "detail": "Vitamin D exerts broad immunomodulatory effects, generally shifting immune responses toward tolerance via Treg cell upregulation and Th17 suppression. Low vitamin D status is associated with increased autoimmune risk. Supplementation may be beneficial in Hashimoto thyroiditis and multiple sclerosis, but high doses in active autoimmune disease require monitoring.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Vitamin D affects immune function — relevant to people with autoimmune conditions.",
       "ingredient_name": "Vitamin D",
@@ -1941,7 +1949,9 @@
       "action": "Target serum 25(OH)D levels of 30–60 ng/mL. Avoid high-dose supplementation (>4000 IU/day) without clinical monitoring of calcium and 25(OH)D levels.",
       "alert_body": "Vitamin D can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Vitamin D.",
       "alert_headline": "Caution with heart conditions",
-      "condition_id": "heart_disease",
+      "condition_ids": [
+        "heart_disease"
+      ],
       "detail": "Vitamin D deficiency is associated with increased cardiovascular risk, and moderate supplementation is generally considered beneficial. However, pharmacologic doses (>4000 IU/day chronically) can cause hypercalcemia, which promotes vascular calcification and may worsen coronary artery disease. The benefit-risk ratio is dose-dependent.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -1962,6 +1972,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Vitamin D can affect cardiovascular pathways — relevant to people with heart conditions.",
       "ingredient_name": "Vitamin D",
@@ -1979,10 +1990,13 @@
       "action": "Check 25(OH)D levels prior to or during TTC. Correct deficiency (<20 ng/mL) with supplementation (1000–2000 IU/day) under clinician guidance. Achieving sufficiency (30–60 ng/mL) is recommended before and during early pregnancy. Standard prenatal vitamins provide ~400–1000 IU/day.",
       "alert_body": "Vitamin D used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin D with your clinician.",
       "alert_headline": "Continue under prenatal care",
-      "condition_id": "ttc",
+      "condition_ids": [
+        "ttc"
+      ],
       "detail": "Vitamin D receptors (VDR) are expressed in ovarian granulosa cells, endometrium, and placenta. A 2017 review (Voulgaris et al., Hormones) summarized strong associations between vitamin D status and PCOS metabolic parameters, endometriosis, and IVF outcomes, with deficiency linked to lower clinical pregnancy rates. Meta-analyses of IVF studies suggest women with 25(OH)D >20 ng/mL have significantly better outcomes, though causality is not fully established.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Vitamin D is continued under clinician guidance — relevant to people planning pregnancy.",
       "ingredient_name": "Vitamin D",
@@ -2000,6 +2014,7 @@
       "action": "Monitor INR stability when significantly changing vitamin D supplementation dose, particularly at high doses (>10,000 IU/day). Routine supplementation doses (1000-4000 IU/day) typically do not require INR monitoring changes.",
       "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about INR or bleeding checks.",
       "alert_headline": "May add to blood-thinner effects",
+      "condition_ids": [],
       "detail": "High-dose vitamin D (>10,000 IU/day) has been associated with altered warfarin sensitivity in some patients. The proposed mechanism involves shared metabolic pathways with vitamin K: vitamin D may modulate hepatic expression of vitamin K-dependent coagulation factors (II, VII, IX, X), and vitamin D deficiency itself affects coagulation factor synthesis. Vitamin D and K have documented synergistic effects on Gla-protein carboxylation, and disruption of this balance at supraphysiological vitamin D doses may affect INR stability in warfarin patients.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -2020,7 +2035,9 @@
           }
         ]
       },
-      "drug_class_id": "anticoagulants",
+      "drug_class_ids": [
+        "anticoagulants"
+      ],
       "evidence_level": "theoretical",
       "informational_note": "Vitamin D can affect clotting — relevant to people on anticoagulants.",
       "ingredient_name": "Vitamin D",
@@ -2038,10 +2055,13 @@
       "action": "No specific action required at standard supplemental doses. Monitor for unusual bleeding if taking high-dose vitamin D with antiplatelet medications.",
       "alert_body": "Vitamin D has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Vitamin D.",
       "alert_headline": "May add to antiplatelet effects",
+      "condition_ids": [],
       "detail": "No established direct interaction between vitamin D supplementation and antiplatelet drug activity. Monitoring recommended at high doses due to broader hemostatic pathway involvement.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "antiplatelets",
+      "drug_class_ids": [
+        "antiplatelets"
+      ],
       "evidence_level": "theoretical",
       "informational_note": "Vitamin D can affect platelet function — relevant to people on antiplatelets.",
       "ingredient_name": "Vitamin D",
@@ -2058,10 +2078,13 @@
       "action": "No specific action required at standard supplemental doses.",
       "alert_body": "Vitamin D has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Vitamin D.",
       "alert_headline": "May add to NSAID bleeding risk",
+      "condition_ids": [],
       "detail": "No established pharmacokinetic or pharmacodynamic interaction between vitamin D and NSAIDs on platelet or coagulation pathways. Theoretical concern at high doses given shared anti-inflammatory regulatory roles.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "nsaids",
+      "drug_class_ids": [
+        "nsaids"
+      ],
       "evidence_level": "theoretical",
       "informational_note": "Vitamin D can affect platelet function — relevant to people on NSAIDs.",
       "ingredient_name": "Vitamin D",
@@ -2078,10 +2101,13 @@
       "action": "Standard vitamin D supplementation is appropriate alongside immunosuppressants. Monitor 25-OH vitamin D levels annually. High-dose supplementation (>4000 IU/day) requires physician oversight.",
       "alert_body": "Vitamin D has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding Vitamin D.",
       "alert_headline": "Caution with immunosuppressants",
+      "condition_ids": [],
       "detail": "Vitamin D has additive immunomodulatory effects that may complement immunosuppressant therapy. Standard-dose supplementation is generally considered safe alongside immunosuppressants and may reduce corticosteroid-induced bone loss.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "immunosuppressants",
+      "drug_class_ids": [
+        "immunosuppressants"
+      ],
       "evidence_level": "probable",
       "informational_note": "Vitamin D affects immune function — relevant to people on immunosuppressants.",
       "ingredient_name": "Vitamin D",
@@ -2098,7 +2124,9 @@
       "action": "In individuals with existing heart disease, prefer dietary calcium over supplements. If supplementation is necessary, use the lowest effective dose and split doses to blunt calcium spikes. Discuss with cardiologist.",
       "alert_body": "Calcium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding calcium.",
       "alert_headline": "Caution with heart conditions",
-      "condition_id": "heart_disease",
+      "condition_ids": [
+        "heart_disease"
+      ],
       "detail": "Calcium supplements (not dietary calcium) are associated with a modestly increased risk of myocardial infarction. Bolland et al. WHI reanalysis found RR 1.24 (95% CI 1.07–1.45) for MI with supplemental calcium. Proposed mechanism: acute hypercalcemia following bolus supplementation may promote coronary arterial calcification and thrombosis. Risk may be attenuated by co-administration with vitamin D.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -2119,6 +2147,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Calcium can affect cardiovascular pathways — relevant to people with heart conditions.",
       "ingredient_name": "Calcium",
@@ -2137,10 +2166,13 @@
       "action": "Separate calcium supplementation from levothyroxine by at least 4 hours to prevent absorption interference.",
       "alert_body": "Calcium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing calcium away from your dose.",
       "alert_headline": "May affect thyroid medication",
+      "condition_ids": [],
       "detail": "Calcium forms insoluble chelate complexes with levothyroxine in the gastrointestinal tract, reducing oral absorption by 20–25%. Effect is dose-dependent and clinically significant at standard supplementation doses (600–1000 mg/day).",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "thyroid_medications",
+      "drug_class_ids": [
+        "thyroid_medications"
+      ],
       "evidence_level": "probable",
       "informational_note": "Calcium affects thyroid pathways — relevant to people on thyroid medication.",
       "ingredient_name": "Calcium",
@@ -2158,8 +2190,10 @@
   "warnings_profile_gated": [
     {
       "category": "colorant_artificial",
+      "condition_ids": [],
       "detail": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": null,
       "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
       "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",

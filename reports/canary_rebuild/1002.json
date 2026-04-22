@@ -1138,10 +1138,13 @@
       "action": "Monitor for signs of bleeding. Inform prescriber if taking anticoagulants or antiplatelets. Consider dose reduction if >3g EPA+DHA/day.",
       "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
       "alert_headline": "Caution with bleeding disorders",
-      "condition_id": "bleeding_disorders",
+      "condition_ids": [
+        "bleeding_disorders"
+      ],
       "detail": "Omega-3 fatty acids (EPA/DHA) prolong bleeding time by inhibiting thromboxane A2-mediated platelet aggregation and reducing platelet-activating factor. FDA drug labels for icosapent ethyl (Vascepa) and omega-3-acid ethyl esters (Lovaza) explicitly warn about increased bleeding risk. Doses >3g/day have potential antithrombotic effects per FDA labeling.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder.",
       "ingredient_name": "Fish Body Oil",
@@ -1160,13 +1163,16 @@
       "action": "Monitor INR more frequently when starting, stopping, or changing fish oil dose during warfarin therapy. Inform prescriber. At doses >2 g/day, closer INR surveillance is warranted.",
       "alert_body": "Fish oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding fish oil and ask about INR or bleeding checks.",
       "alert_headline": "May add to blood-thinner effects",
+      "condition_ids": [],
       "detail": "Fish oil (EPA+DHA) may enhance warfarin's anticoagulant effect via additive antiplatelet activity and possible reduction of factor VII. Multiple case reports document INR elevation (to >4 or 8) when fish oil was added or dose-escalated during stable warfarin therapy. One fatal case involved warfarin-induced coagulopathy that could not be reversed after head trauma in a patient also taking fish oil.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
         "evaluated": false,
         "reason": "missing_or_invalid_dose"
       },
-      "drug_class_id": "anticoagulants",
+      "drug_class_ids": [
+        "anticoagulants"
+      ],
       "evidence_level": "established",
       "informational_note": "Fish oil can affect clotting — relevant to people on anticoagulants.",
       "ingredient_name": "Fish Body Oil",
@@ -1185,10 +1191,13 @@
       "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
       "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
       "alert_headline": "May add to antiplatelet effects",
+      "condition_ids": [],
       "detail": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "antiplatelets",
+      "drug_class_ids": [
+        "antiplatelets"
+      ],
       "evidence_level": "probable",
       "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
       "ingredient_name": "Eicosapentaenoic Acid",
@@ -1206,10 +1215,13 @@
       "action": "Inform your surgeon of fish oil use before planned procedures. High-dose fish oil (>3 g/day) combined with other anticoagulants or antiplatelets warrants discussion with the surgical team.",
       "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
       "alert_headline": "Pause before scheduled surgery",
-      "condition_id": "surgery_scheduled",
+      "condition_ids": [
+        "surgery_scheduled"
+      ],
       "detail": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. A large RCT (OPERA, n=1516) found no significant increase in surgical bleeding at standard doses; however, high-dose use (6 g/day) combined with anticoagulants has produced serious hemorrhagic events.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery.",
       "ingredient_name": "Fish Body Oil",
@@ -1227,10 +1239,13 @@
       "action": "Monitor for GI symptoms when combining fish oil with NSAIDs. Take NSAIDs with food.",
       "alert_body": "Fish oil has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding fish oil.",
       "alert_headline": "May add to NSAID bleeding risk",
+      "condition_ids": [],
       "detail": "Both fish oil and NSAIDs affect prostaglandin synthesis via COX pathway modulation. Combined use may modestly increase GI bleeding risk through additive reduction in mucosal protective prostaglandins.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "nsaids",
+      "drug_class_ids": [
+        "nsaids"
+      ],
       "evidence_level": "probable",
       "informational_note": "Fish oil can affect platelet function — relevant to people on NSAIDs.",
       "ingredient_name": "Fish Body Oil",
@@ -1247,10 +1262,13 @@
       "action": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
       "alert_body": "Omega-3 (especially DHA) is recommended during pregnancy for fetal brain development. If you are pregnant or nursing, discuss dosing with your clinician and keep total omega-3 under 3 g per day.",
       "alert_headline": "Continue omega-3 under prenatal care",
-      "condition_id": "pregnancy",
+      "condition_ids": [
+        "pregnancy"
+      ],
       "detail": "",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Omega-3 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
       "ingredient_name": "Fish Body Oil",
@@ -1265,10 +1283,13 @@
       "action": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
       "alert_body": "Omega-3 (especially DHA) is recommended during pregnancy for fetal brain development. If you are pregnant or nursing, discuss dosing with your clinician and keep total omega-3 under 3 g per day.",
       "alert_headline": "Continue omega-3 under prenatal care",
-      "condition_id": "lactation",
+      "condition_ids": [
+        "lactation"
+      ],
       "detail": "",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Omega-3 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
       "ingredient_name": "Fish Body Oil",
@@ -1280,8 +1301,10 @@
       "type": "interaction"
     },
     {
+      "condition_ids": [],
       "detail": "2022-12-13",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "severity": "info",
       "source": "dsld",
       "title": "Discontinued Product",
@@ -1290,8 +1313,10 @@
   ],
   "warnings_profile_gated": [
     {
+      "condition_ids": [],
       "detail": "2022-12-13",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "severity": "info",
       "source": "dsld",
       "title": "Discontinued Product",

@@ -183,13 +183,23 @@ def test_score_arrays_unchanged(canary_pair) -> None:
 # ---------------------------------------------------------------------------
 
 def _warning_fingerprint(w: dict) -> tuple:
-    """Stable identity for a warning independent of field-addition churn."""
+    """Stable identity for a warning independent of field-addition churn.
+    Sprint E1.4.1: condition_ids / drug_class_ids are plural arrays;
+    fall back to legacy singular for baselines taken pre-E1.4.1."""
+    def _norm_ids(plural_key, singular_key):
+        v = w.get(plural_key)
+        if isinstance(v, list):
+            return tuple(sorted(str(x) for x in v if x))
+        v = w.get(singular_key)
+        if v is None or v == "":
+            return ()
+        return (str(v),)
     return (
         w.get("type"),
         w.get("severity"),
         w.get("canonical_id") or w.get("title"),
-        w.get("condition_id"),
-        w.get("drug_class_id"),
+        _norm_ids("condition_ids", "condition_id"),
+        _norm_ids("drug_class_ids", "drug_class_id"),
     )
 
 

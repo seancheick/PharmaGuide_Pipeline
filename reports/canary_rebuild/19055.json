@@ -1100,8 +1100,10 @@
   "warnings": [
     {
       "category": "emulsifier",
+      "condition_ids": [],
       "detail": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "9005-65-6",
         "cui": "C0032601",
@@ -1123,8 +1125,10 @@
     },
     {
       "allergen_id": "ALLERGEN_FISH",
+      "condition_ids": [],
       "detail": "Presence: contains. labelText.parsed.allergens: fish",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "notes": "FDA major allergen (FALCPA). Parvalbumin is the major fish allergen; it is heat-stable and present across most bony fish species. Fish collagen/gelatin retains allergenic potential. IQM-scored fish derivatives (fish oil, cod liver oil, salmon oil, marine collagen) are excluded from aliases to preserve IQM identity — they are flagged via the enricher's allergen cross-reference, not normalizer interception.",
       "prevalence": "high",
       "severity": "moderate",
@@ -1137,10 +1141,13 @@
       "action": "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
       "alert_body": "DHA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding DHA.",
       "alert_headline": "Caution with bleeding disorders",
-      "condition_id": "bleeding_disorders",
+      "condition_ids": [
+        "bleeding_disorders"
+      ],
       "detail": "DHA (docosahexaenoic acid) is incorporated into platelet phospholipid membranes, displacing arachidonic acid and reducing thromboxane A2 (TXA2) synthesis. TXA2 is the primary platelet aggregation amplifier; reduced TXA2 production measurably prolongs bleeding time at doses above 2 g/day.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "DHA can affect platelet function — relevant to people with a bleeding disorder.",
       "ingredient_name": "Docosahexaenoic Acid",
@@ -1158,10 +1165,13 @@
       "action": "Monitor INR when adding or removing high-dose DHA (>2 g/day) in patients on warfarin. Alert prescriber to use.",
       "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about INR or bleeding checks.",
       "alert_headline": "May add to blood-thinner effects",
+      "condition_ids": [],
       "detail": "DHA reduces platelet TXA2 synthesis and may weakly inhibit vitamin K-dependent coagulation factor synthesis. Combined with warfarin, a small but clinically relevant INR elevation has been observed in controlled studies.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "anticoagulants",
+      "drug_class_ids": [
+        "anticoagulants"
+      ],
       "evidence_level": "established",
       "informational_note": "DHA can affect clotting — relevant to people on anticoagulants.",
       "ingredient_name": "Docosahexaenoic Acid",
@@ -1179,10 +1189,13 @@
       "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
       "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
       "alert_headline": "May add to antiplatelet effects",
+      "condition_ids": [],
       "detail": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "antiplatelets",
+      "drug_class_ids": [
+        "antiplatelets"
+      ],
       "evidence_level": "probable",
       "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
       "ingredient_name": "Eicosapentaenoic Acid",
@@ -1200,13 +1213,16 @@
       "action": "Keep total daily vitamin E intake within guideline ranges and avoid megadosing.",
       "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
       "alert_headline": "Keep vitamin E within prenatal range",
-      "condition_id": "pregnancy",
+      "condition_ids": [
+        "pregnancy"
+      ],
       "detail": "Vitamin E is essential, but excessive supplemental intake above established UL is not recommended in pregnancy.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
         "evaluated": false,
         "reason": "missing_or_invalid_dose"
       },
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
       "ingredient_name": "Mixed Tocopherols",
@@ -1224,10 +1240,13 @@
       "action": "Threshold escalates only when intake exceeds adult UL.",
       "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
       "alert_headline": "Keep vitamin E within prenatal range",
-      "condition_id": "lactation",
+      "condition_ids": [
+        "lactation"
+      ],
       "detail": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
       "ingredient_name": "Mixed Tocopherols",
@@ -1245,8 +1264,10 @@
   "warnings_profile_gated": [
     {
       "category": "emulsifier",
+      "condition_ids": [],
       "detail": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "9005-65-6",
         "cui": "C0032601",
@@ -1268,8 +1289,10 @@
     },
     {
       "allergen_id": "ALLERGEN_FISH",
+      "condition_ids": [],
       "detail": "Presence: contains. labelText.parsed.allergens: fish",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "notes": "FDA major allergen (FALCPA). Parvalbumin is the major fish allergen; it is heat-stable and present across most bony fish species. Fish collagen/gelatin retains allergenic potential. IQM-scored fish derivatives (fish oil, cod liver oil, salmon oil, marine collagen) are excluded from aliases to preserve IQM identity — they are flagged via the enricher's allergen cross-reference, not normalizer interception.",
       "prevalence": "high",
       "severity": "moderate",

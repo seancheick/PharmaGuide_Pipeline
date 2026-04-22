@@ -14311,9 +14311,11 @@
     {
       "ban_context": "watchlist",
       "clinical_risk": "high",
+      "condition_ids": [],
       "date": "2022-08-07",
       "detail": "In 2021, EFSA concluded that a concern for genotoxicity of titanium dioxide (E171) particles 'cannot be ruled out' and that E171 'can no longer be considered safe when used as a food additive,' so no ADI could be established (EFSA Journal 2021;19(5):e06585). On this basis, the European Commission adopted Commission Regulation (EU) 2022/63 banning E171 as a food additive; from August 7 2022 it may no longer be added to foods or food supplements in the EU. FDA still permits TiO2 at ≤1% of food weight (21 CFR 73.575) but initiated reassessment following the EFSA opinion. IARC Group 2B (possibly carcinogenic by inhalation). Nanoparticle form (<100nm) shows greater intestinal absorption and genotoxic concern.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": null,
       "regulatory_date_label": "EU ban effective date",
       "safety_warning": "A white-pigment additive EFSA ruled in 2021 could no longer be considered safe due to possible genotoxicity. Banned in EU food since 2022; still permitted in US supplements. Avoid when possible.",
@@ -14339,8 +14341,10 @@
     },
     {
       "category": "filler",
+      "condition_ids": [],
       "detail": "Highly processed glucose polymer (DE 3-20) with glycemic index 85-105, comparable to pure glucose. Rapidly digested to glucose in the small intestine. In vitro studies suggest maltodextrin may suppress antimicrobial defense mechanisms and promote E. coli adhesion to intestinal epithelial cells (PMID 22394256). Used as cheap filler/binder in supplements with no nutritional benefit.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "9050-36-6",
         "cui": "C0065601",
@@ -14362,8 +14366,10 @@
     },
     {
       "category": "sweetener_artificial",
+      "condition_ids": [],
       "detail": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120°C (248°F).",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "56038-13-2",
         "cui": "C0077046",
@@ -14386,8 +14392,10 @@
     },
     {
       "allergen_id": "ALLERGEN_MILK",
+      "condition_ids": [],
       "detail": "Presence: contains. labelText.parsed.allergens: milk",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "notes": "FDA major allergen (FALCPA). Severity moderate: milk is the 3rd most common cause of pediatric food anaphylaxis (after peanut and tree nuts). Casein and whey are the two primary allergenic protein fractions; casein allergy tends to be more persistent and severe. Lactose intolerance (non-immune) is distinct from milk allergy (IgE-mediated) but both require flagging. Probiotic strains grown on milk media may carry trace proteins.",
       "prevalence": "high",
       "severity": "moderate",
@@ -14400,7 +14408,9 @@
       "action": "Avoid high-dose preformed vitamin A in pregnancy unless clinician-directed.",
       "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
       "alert_headline": "Keep preformed vitamin A within prenatal range",
-      "condition_id": "pregnancy",
+      "condition_ids": [
+        "pregnancy"
+      ],
       "detail": "Excess preformed vitamin A intake in pregnancy is associated with teratogenic risk.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -14421,6 +14431,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding.",
       "ingredient_name": "Vitamin A",
@@ -14438,10 +14449,13 @@
       "action": "Limit supplemental preformed vitamin A (retinol/retinyl esters) to ≤5,000 IU/day in patients with liver disease. Beta-carotene is preferred. Monitor LFTs and clinical signs of hypervitaminosis (hepatomegaly, ascites). Avoid multivitamins with high retinol doses.",
       "alert_body": "Vitamin A is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Vitamin A.",
       "alert_headline": "Caution with liver disease",
-      "condition_id": "liver_disease",
+      "condition_ids": [
+        "liver_disease"
+      ],
       "detail": "Retinol (preformed vitamin A) is stored in hepatic stellate cells (Ito cells) as retinyl esters. Chronic liver disease impairs retinol clearance and stellate cell function, causing accumulation even at doses below standard UL. Hypervitaminosis A induces stellate cell hypertrophy and proliferation, leading to progressive fibrosis, non-cirrhotic portal hypertension, and eventual cirrhosis. CYP2E1 induction (common in alcoholic liver disease) enhances retinol hepatotoxicity via microsomal oxidative activation. Clinically relevant injury has been reported at supplemental doses ≥25,000 IU/day in individuals with underlying liver disease.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Vitamin A depends on liver clearance — relevant to people with liver conditions.",
       "ingredient_name": "Vitamin A",
@@ -14459,10 +14473,13 @@
       "action": "B12 supplementation during pregnancy is part of standard prenatal care. Vegans and those with malabsorption (pernicious anemia, gastric surgery, metformin use) need higher supplemental doses.",
       "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
       "alert_headline": "Continue B12 under prenatal care",
-      "condition_id": "lactation",
+      "condition_ids": [
+        "lactation"
+      ],
       "detail": "B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomocysteinemia. Standard prenatal vitamins contain B12; supplementation should continue throughout pregnancy and during breastfeeding.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "B12 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
       "ingredient_name": "Vitamin B12",
@@ -14480,10 +14497,13 @@
       "action": "B12 supplementation during pregnancy is part of standard prenatal care. Vegans and those with malabsorption (pernicious anemia, gastric surgery, metformin use) need higher supplemental doses.",
       "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
       "alert_headline": "Continue B12 under prenatal care",
-      "condition_id": "pregnancy",
+      "condition_ids": [
+        "pregnancy"
+      ],
       "detail": "B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomocysteinemia. Standard prenatal vitamins contain B12; supplementation should continue throughout pregnancy and during breastfeeding.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "B12 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
       "ingredient_name": "Vitamin B12",
@@ -14501,10 +14521,13 @@
       "action": "Vitamin D at standard supplemental doses (up to 4000 IU/day) is not a clinically significant bleeding risk on its own. Monitor if taking high-dose vitamin D (>10,000 IU/day) with anticoagulants.",
       "alert_body": "Vitamin D has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Vitamin D.",
       "alert_headline": "Caution with bleeding disorders",
-      "condition_id": "bleeding_disorders",
+      "condition_ids": [
+        "bleeding_disorders"
+      ],
       "detail": "Vitamin D does not directly affect platelet aggregation at physiological or supplemental doses. However, high-dose vitamin D supplementation may interact with warfarin sensitivity in patients with concurrent vitamin K deficiency by affecting the vitamin K-dependent carboxylation of coagulation factors (II, VII, IX, X). The vitamin D endocrine system and vitamin K share overlapping roles in gamma-carboxylation of hepatic Gla-proteins.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "theoretical",
       "informational_note": "Vitamin D can affect platelet function — relevant to people with a bleeding disorder.",
       "ingredient_name": "Vitamin D",
@@ -14522,10 +14545,13 @@
       "action": "Vitamin D supplementation at standard doses (1000–4000 IU/day) is generally safe in autoimmune conditions. High-dose vitamin D requires physician-monitored 25-OH vitamin D levels to avoid toxicity.",
       "alert_body": "Vitamin D has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding Vitamin D.",
       "alert_headline": "Caution with autoimmune conditions",
-      "condition_id": "autoimmune",
+      "condition_ids": [
+        "autoimmune"
+      ],
       "detail": "Vitamin D exerts broad immunomodulatory effects, generally shifting immune responses toward tolerance via Treg cell upregulation and Th17 suppression. Low vitamin D status is associated with increased autoimmune risk. Supplementation may be beneficial in Hashimoto thyroiditis and multiple sclerosis, but high doses in active autoimmune disease require monitoring.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Vitamin D affects immune function — relevant to people with autoimmune conditions.",
       "ingredient_name": "Vitamin D",
@@ -14542,10 +14568,13 @@
       "action": "Use magnesium supplements with caution in heart disease patients, especially those with reduced kidney function. Do not exceed recommended doses without renal function assessment. Monitor for signs of hypermagnesemia (weakness, bradycardia).",
       "alert_body": "Magnesium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding magnesium.",
       "alert_headline": "Caution with heart conditions",
-      "condition_id": "heart_disease",
+      "condition_ids": [
+        "heart_disease"
+      ],
       "detail": "Magnesium plays a critical role in cardiac electrophysiology, stabilizing cardiac membranes and modulating ion channels. Hypomagnesemia is associated with cardiac arrhythmias. However, in patients with heart disease who also have renal impairment (common comorbidity), magnesium supplements can accumulate and cause hypermagnesemia, leading to bradycardia, cardiac conduction block, and potentially cardiac arrest.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Magnesium can affect cardiovascular pathways — relevant to people with heart conditions.",
       "ingredient_name": "Magnesium",
@@ -14563,10 +14592,13 @@
       "action": "Check 25(OH)D levels prior to or during TTC. Correct deficiency (<20 ng/mL) with supplementation (1000–2000 IU/day) under clinician guidance. Achieving sufficiency (30–60 ng/mL) is recommended before and during early pregnancy. Standard prenatal vitamins provide ~400–1000 IU/day.",
       "alert_body": "Vitamin D used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin D with your clinician.",
       "alert_headline": "Continue under prenatal care",
-      "condition_id": "ttc",
+      "condition_ids": [
+        "ttc"
+      ],
       "detail": "Vitamin D receptors (VDR) are expressed in ovarian granulosa cells, endometrium, and placenta. A 2017 review (Voulgaris et al., Hormones) summarized strong associations between vitamin D status and PCOS metabolic parameters, endometriosis, and IVF outcomes, with deficiency linked to lower clinical pregnancy rates. Meta-analyses of IVF studies suggest women with 25(OH)D >20 ng/mL have significantly better outcomes, though causality is not fully established.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Vitamin D is continued under clinician guidance — relevant to people planning pregnancy.",
       "ingredient_name": "Vitamin D",
@@ -14584,6 +14616,7 @@
       "action": "Monitor INR stability when significantly changing vitamin D supplementation dose, particularly at high doses (>10,000 IU/day). Routine supplementation doses (1000-4000 IU/day) typically do not require INR monitoring changes.",
       "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about INR or bleeding checks.",
       "alert_headline": "May add to blood-thinner effects",
+      "condition_ids": [],
       "detail": "High-dose vitamin D (>10,000 IU/day) has been associated with altered warfarin sensitivity in some patients. The proposed mechanism involves shared metabolic pathways with vitamin K: vitamin D may modulate hepatic expression of vitamin K-dependent coagulation factors (II, VII, IX, X), and vitamin D deficiency itself affects coagulation factor synthesis. Vitamin D and K have documented synergistic effects on Gla-protein carboxylation, and disruption of this balance at supraphysiological vitamin D doses may affect INR stability in warfarin patients.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -14604,7 +14637,9 @@
           }
         ]
       },
-      "drug_class_id": "anticoagulants",
+      "drug_class_ids": [
+        "anticoagulants"
+      ],
       "evidence_level": "theoretical",
       "informational_note": "Vitamin D can affect clotting — relevant to people on anticoagulants.",
       "ingredient_name": "Vitamin D",
@@ -14622,10 +14657,13 @@
       "action": "No specific action required at standard supplemental doses. Monitor for unusual bleeding if taking high-dose vitamin D with antiplatelet medications.",
       "alert_body": "Vitamin D has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Vitamin D.",
       "alert_headline": "May add to antiplatelet effects",
+      "condition_ids": [],
       "detail": "No established direct interaction between vitamin D supplementation and antiplatelet drug activity. Monitoring recommended at high doses due to broader hemostatic pathway involvement.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "antiplatelets",
+      "drug_class_ids": [
+        "antiplatelets"
+      ],
       "evidence_level": "theoretical",
       "informational_note": "Vitamin D can affect platelet function — relevant to people on antiplatelets.",
       "ingredient_name": "Vitamin D",
@@ -14642,10 +14680,13 @@
       "action": "No specific action required at standard supplemental doses.",
       "alert_body": "Vitamin D has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Vitamin D.",
       "alert_headline": "May add to NSAID bleeding risk",
+      "condition_ids": [],
       "detail": "No established pharmacokinetic or pharmacodynamic interaction between vitamin D and NSAIDs on platelet or coagulation pathways. Theoretical concern at high doses given shared anti-inflammatory regulatory roles.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "nsaids",
+      "drug_class_ids": [
+        "nsaids"
+      ],
       "evidence_level": "theoretical",
       "informational_note": "Vitamin D can affect platelet function — relevant to people on NSAIDs.",
       "ingredient_name": "Vitamin D",
@@ -14662,10 +14703,13 @@
       "action": "Standard vitamin D supplementation is appropriate alongside immunosuppressants. Monitor 25-OH vitamin D levels annually. High-dose supplementation (>4000 IU/day) requires physician oversight.",
       "alert_body": "Vitamin D has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding Vitamin D.",
       "alert_headline": "Caution with immunosuppressants",
+      "condition_ids": [],
       "detail": "Vitamin D has additive immunomodulatory effects that may complement immunosuppressant therapy. Standard-dose supplementation is generally considered safe alongside immunosuppressants and may reduce corticosteroid-induced bone loss.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "immunosuppressants",
+      "drug_class_ids": [
+        "immunosuppressants"
+      ],
       "evidence_level": "probable",
       "informational_note": "Vitamin D affects immune function — relevant to people on immunosuppressants.",
       "ingredient_name": "Vitamin D",
@@ -14682,7 +14726,9 @@
       "action": "Can worsen glycemic control. Monitor glucose after initiating niacin or increasing dose. Low-dose niacin in multivitamins is not a concern.",
       "alert_body": "Niacin can lower blood sugar. If you have diabetes, talk to your clinician before adding Niacin and monitor your glucose, especially in the first weeks.",
       "alert_headline": "Caution with diabetes",
-      "condition_id": "diabetes",
+      "condition_ids": [
+        "diabetes"
+      ],
       "detail": "At pharmacologic doses (>=1g/day), niacin increases hepatic glucose output and decreases insulin sensitivity. FPG increases of 4-5% and HbA1c increases up to 0.3% documented.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -14703,6 +14749,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Niacin affects blood sugar — relevant to people with diabetes.",
       "ingredient_name": "Niacin",
@@ -14719,10 +14766,13 @@
       "action": "High-dose niacin for cholesterol management has fallen out of favor due to lack of incremental cardiovascular benefit on top of statin therapy and significant side effects. Consult prescriber before initiating pharmacologic niacin for lipid management.",
       "alert_body": "Niacin can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding Niacin — it may change your lipid-therapy plan.",
       "alert_headline": "Consult on cholesterol management",
-      "condition_id": "high_cholesterol",
+      "condition_ids": [
+        "high_cholesterol"
+      ],
       "detail": "Pharmacologic-dose niacin (≥1g/day) raises HDL-C and lowers triglycerides and LDL-C, but large RCTs (AIM-HIGH, HPS2-THRIVE) failed to show cardiovascular benefit when added to statin therapy, and HPS2-THRIVE found excess serious adverse events with niacin. Extended-release niacin combined with laropiprant was withdrawn in Europe. At doses ≥1g/day, niacin also impairs glucose tolerance.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Niacin affects lipid pathways — relevant to people managing high cholesterol.",
       "ingredient_name": "Niacin",
@@ -14740,10 +14790,13 @@
       "action": "Monitor glucose and adjust medication only under clinician supervision.",
       "alert_body": "Alpha-lipoic acid can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Alpha-lipoic acid and monitor your glucose more closely at first.",
       "alert_headline": "May add to diabetes-med effects",
+      "condition_ids": [],
       "detail": "Additive insulin-sensitizing effect may increase hypoglycemia risk, especially with insulin and sulfonylureas.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "hypoglycemics",
+      "drug_class_ids": [
+        "hypoglycemics"
+      ],
       "evidence_level": "probable",
       "informational_note": "Alpha-lipoic acid affects blood sugar — relevant to people on diabetes medications.",
       "ingredient_name": "Alpha-Lipoic Acid",
@@ -14760,10 +14813,13 @@
       "action": "If high-dose niacin (≥1g/day) is co-prescribed with statins, monitor for myopathy symptoms (muscle pain, weakness, dark urine). Obtain baseline and periodic CK levels. Avoid high-intensity statin doses in this combination.",
       "alert_body": "Niacin shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding Niacin and watch for new muscle aches.",
       "alert_headline": "May affect statin tolerability",
+      "condition_ids": [],
       "detail": "High-dose niacin combined with statins increases the risk of myopathy and rhabdomyolysis beyond that of statin monotherapy. This risk is particularly elevated with gemfibrozil-statin combinations, but niacin-statin combinations also carry increased myopathy risk, estimated at approximately 0.12% incidence in combination therapy trials. The mechanism involves pharmacodynamic additive muscle toxicity.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "statins",
+      "drug_class_ids": [
+        "statins"
+      ],
       "evidence_level": "established",
       "informational_note": "Niacin affects statin pathways — relevant to people on statin therapy.",
       "ingredient_name": "Niacin",
@@ -14782,7 +14838,9 @@
       "action": "Standard prenatal vitamin doses of B6 are safe during lactation. High-dose B6 supplementation (>50 mg/day) during established breastfeeding may suppress milk production. Avoid high-dose B6 if breastfeeding is intended. Consult lactation specialist before use.",
       "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
       "alert_headline": "High-dose B6 may affect milk supply",
-      "condition_id": "lactation",
+      "condition_ids": [
+        "lactation"
+      ],
       "detail": "High-dose pyridoxine (vitamin B6) has been investigated as a pharmacologic agent to suppress postpartum lactation. At doses of 450–600 mg/day for 5–7 days, two trials found ~95% inhibition of lactation, though four other studies failed to demonstrate efficacy by prolactin measurement or clinical assessment. The proposed mechanism is dopaminergic: pyridoxine is a cofactor in dopamine synthesis; elevated dopamine tonically inhibits prolactin release from the anterior pituitary. A 1979 NEJM case report warned of dangers of vitamin B6 in nursing mothers at high doses. Normal multivitamin doses (1.9 mg/day recommended for lactation) are not a concern.",
       "display_mode_default": "informational",
       "dose_threshold_evaluation": {
@@ -14803,6 +14861,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding.",
       "ingredient_name": "Vitamin B6",
@@ -14821,10 +14880,13 @@
       "action": "This rule applies to supplemental/pharmacologic doses. Prenatal vitamin levels of B6 are appropriate and encouraged.",
       "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
       "alert_headline": "High-dose B6 may affect milk supply",
-      "condition_id": "lactation",
+      "condition_ids": [
+        "lactation"
+      ],
       "detail": "Normal doses of B6 are essential in pregnancy. High pharmacologic doses during lactation may suppress milk production via dopaminergic inhibition of prolactin.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding.",
       "ingredient_name": "Vitamin B6",
@@ -14842,10 +14904,13 @@
       "action": "Ensure adequate vitamin B12 status (serum B12 >400 pg/mL is optimal preconceptionally) when trying to conceive. Standard preconception supplementation: 2.4–6 mcg/day (adequate intake) up to higher doses if deficient. B12 supplementation is recommended as part of a comprehensive preconception vitamin regimen for all women TTC, and is particularly important for vegans, vegetarians, those with gastric conditions, or those on metformin (which reduces B12 absorption).",
       "alert_body": "Vitamin B12 used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin B12 with your clinician.",
       "alert_headline": "Continue under prenatal care",
-      "condition_id": "ttc",
+      "condition_ids": [
+        "ttc"
+      ],
       "detail": "Vitamin B12 (cobalamin) is essential for DNA synthesis, cell division, and one-carbon metabolism. B12 deficiency elevates homocysteine via impaired methionine synthase activity, and hyperhomocysteinemia is associated with recurrent pregnancy loss (RPL), implantation failure, and embryotoxicity. Case-control studies document significantly lower serum B12 in women with recurrent miscarriage vs. controls (mean 197 vs 300 pg/mL, p=0.004 in one Syrian cohort; 178 vs 269 pg/mL, p<0.001 in a Polish cohort). B12 is a standard component of preconception care and prenatal vitamins. Optimizing B12 status before conception is associated with improved fertility outcomes and reduced RPL risk via homocysteine normalization.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Vitamin B12 is continued under clinician guidance — relevant to people planning pregnancy.",
       "ingredient_name": "Vitamin B12",
@@ -14864,10 +14929,13 @@
       "action": "Stop biotin supplements at least 2 days before thyroid function testing to prevent assay interference. Inform your healthcare provider about biotin use if thyroid tests are planned.",
       "alert_body": "Biotin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding Biotin and monitor your labs.",
       "alert_headline": "Caution with thyroid conditions",
-      "condition_id": "thyroid_disorder",
+      "condition_ids": [
+        "thyroid_disorder"
+      ],
       "detail": "High-dose biotin (>5 mg/day, common in hair/nail supplements) interferes with biotin-streptavidin immunoassay platforms used for TSH, free T4, free T3, and thyroglobulin measurement. Causes false-low TSH and false-high free thyroid hormone results, mimicking hyperthyroidism. Does not alter actual thyroid function.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Biotin affects thyroid pathways — relevant to people with thyroid conditions.",
       "ingredient_name": "Biotin",
@@ -14885,7 +14953,9 @@
       "action": "In individuals with existing heart disease, prefer dietary calcium over supplements. If supplementation is necessary, use the lowest effective dose and split doses to blunt calcium spikes. Discuss with cardiologist.",
       "alert_body": "Calcium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding calcium.",
       "alert_headline": "Caution with heart conditions",
-      "condition_id": "heart_disease",
+      "condition_ids": [
+        "heart_disease"
+      ],
       "detail": "Calcium supplements (not dietary calcium) are associated with a modestly increased risk of myocardial infarction. Bolland et al. WHI reanalysis found RR 1.24 (95% CI 1.07–1.45) for MI with supplemental calcium. Proposed mechanism: acute hypercalcemia following bolus supplementation may promote coronary arterial calcification and thrombosis. Risk may be attenuated by co-administration with vitamin D.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -14906,6 +14976,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Calcium can affect cardiovascular pathways — relevant to people with heart conditions.",
       "ingredient_name": "Calcium",
@@ -14924,10 +14995,13 @@
       "action": "Separate calcium supplementation from levothyroxine by at least 4 hours to prevent absorption interference.",
       "alert_body": "Calcium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing calcium away from your dose.",
       "alert_headline": "May affect thyroid medication",
+      "condition_ids": [],
       "detail": "Calcium forms insoluble chelate complexes with levothyroxine in the gastrointestinal tract, reducing oral absorption by 20–25%. Effect is dose-dependent and clinically significant at standard supplementation doses (600–1000 mg/day).",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "thyroid_medications",
+      "drug_class_ids": [
+        "thyroid_medications"
+      ],
       "evidence_level": "probable",
       "informational_note": "Calcium affects thyroid pathways — relevant to people on thyroid medication.",
       "ingredient_name": "Calcium",
@@ -14945,10 +15019,13 @@
       "action": "Separate green tea extract from beta-blocker dosing by at least 2-3 hours.",
       "alert_body": "Green tea extract can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding green tea extract.",
       "alert_headline": "May affect blood-pressure control",
+      "condition_ids": [],
       "detail": "EGCG inhibits OATP transporters, reducing beta-blocker absorption and potentially compromising BP control.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "antihypertensives",
+      "drug_class_ids": [
+        "antihypertensives"
+      ],
       "evidence_level": "probable",
       "informational_note": "Green tea extract can affect blood pressure — relevant to people on antihypertensive medications.",
       "ingredient_name": "Green Tea leaf extract",
@@ -14965,10 +15042,13 @@
       "action": "Avoid high-dose iodine or kelp/seaweed supplements in thyroid disorders without physician oversight. Routine supplementation above the RDA (150 mcg/day) is not recommended.",
       "alert_body": "Iodine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding iodine and monitor your labs.",
       "alert_headline": "Caution with thyroid conditions",
-      "condition_id": "thyroid_disorder",
+      "condition_ids": [
+        "thyroid_disorder"
+      ],
       "detail": "Excess iodine triggers the Wolff-Chaikoff effect, acutely suppressing thyroid hormone synthesis. Individuals with pre-existing thyroid disease (Hashimoto thyroiditis, Graves disease) are particularly susceptible to iodine-induced hypothyroidism or hyperthyroidism. Kelp/seaweed products contain highly variable iodine loads (50–500% of stated dose) and carry additional risk.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Iodine affects thyroid pathways — relevant to people with thyroid conditions.",
       "ingredient_name": "Iodine",
@@ -14985,10 +15065,13 @@
       "action": "Coordinate iodine supplements with thyroid medication management.",
       "alert_body": "Iodine can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing iodine away from your dose.",
       "alert_headline": "May affect thyroid medication",
+      "condition_ids": [],
       "detail": "High iodine intake can alter thyroid physiology and therapy response.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "thyroid_medications",
+      "drug_class_ids": [
+        "thyroid_medications"
+      ],
       "evidence_level": "probable",
       "informational_note": "Iodine affects thyroid pathways — relevant to people on thyroid medication.",
       "ingredient_name": "Iodine",
@@ -15005,10 +15088,13 @@
       "action": "Generally safe at recommended doses. Inform prescriber if supplementing alongside calcium channel blockers. Monitor for dizziness.",
       "alert_body": "Magnesium can influence blood pressure. If you have high blood pressure, talk to your clinician before adding magnesium and monitor your readings.",
       "alert_headline": "Caution with high blood pressure",
-      "condition_id": "hypertension",
+      "condition_ids": [
+        "hypertension"
+      ],
       "detail": "Magnesium acts as a natural calcium channel blocker, producing modest BP reductions (2-4 mmHg systolic). Additive effect with pharmaceutical calcium channel blockers may enhance hypotensive action.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Magnesium can affect blood pressure — relevant to people with high blood pressure.",
       "ingredient_name": "Magnesium",
@@ -15025,10 +15111,13 @@
       "action": "Avoid magnesium supplementation in severe CKD (eGFR <30) without nephrologist guidance. In mild-moderate CKD, use with caution and monitor serum Mg levels.",
       "alert_body": "In advanced kidney disease (eGFR below 30), supplemental magnesium can build up to risky levels. If you have CKD, talk to your nephrologist before adding magnesium.",
       "alert_headline": "Caution with kidney disease",
-      "condition_id": "kidney_disease",
+      "condition_ids": [
+        "kidney_disease"
+      ],
       "detail": "Impaired renal magnesium excretion in CKD (especially eGFR <30) leads to hypermagnesemia accumulation. Supplemental magnesium doses safe in healthy adults can cause life-threatening hypermagnesemia in CKD patients (cardiac arrest, respiratory failure).",
       "display_mode_default": "informational",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Magnesium excretion depends on kidney function — relevant to people with kidney disease.",
       "ingredient_name": "Magnesium",
@@ -15046,10 +15135,13 @@
       "action": "Monitor BP when supplementing alongside antihypertensives.",
       "alert_body": "Magnesium can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding magnesium.",
       "alert_headline": "May affect blood-pressure control",
+      "condition_ids": [],
       "detail": "Additive blood pressure lowering from natural calcium channel blocking activity.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "antihypertensives",
+      "drug_class_ids": [
+        "antihypertensives"
+      ],
       "evidence_level": "probable",
       "informational_note": "Magnesium can affect blood pressure — relevant to people on antihypertensive medications.",
       "ingredient_name": "Magnesium",
@@ -15066,10 +15158,13 @@
       "action": "Adjust medication only under clinician supervision.",
       "alert_body": "Chromium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding chromium and monitor your glucose more closely at first.",
       "alert_headline": "May add to diabetes-med effects",
+      "condition_ids": [],
       "detail": "Potential additive glucose-lowering effect.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "hypoglycemics",
+      "drug_class_ids": [
+        "hypoglycemics"
+      ],
       "evidence_level": "probable",
       "informational_note": "Chromium affects blood sugar — relevant to people on diabetes medications.",
       "ingredient_name": "Chromium",
@@ -15086,7 +15181,9 @@
       "action": "Monitor blood glucose when initiating ALA at doses >= 600 mg/day alongside diabetes medications.",
       "alert_body": "Alpha-lipoic acid can lower blood sugar. If you have diabetes, talk to your clinician before adding Alpha-lipoic acid and monitor your glucose, especially in the first weeks.",
       "alert_headline": "Caution with diabetes",
-      "condition_id": "diabetes",
+      "condition_ids": [
+        "diabetes"
+      ],
       "detail": "Enhances insulin-stimulated glucose uptake via GLUT4 translocation and reduces oxidative stress-mediated insulin resistance. May potentiate glucose-lowering effects of diabetes medications.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": {
@@ -15107,6 +15204,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Alpha-lipoic acid affects blood sugar — relevant to people with diabetes.",
       "ingredient_name": "Alpha-Lipoic Acid",
@@ -15124,10 +15222,13 @@
       "action": "Avoid taking green tea extract supplements close in time to beta-blockers. Separate doses by several hours.",
       "alert_body": "Green tea extract can influence blood pressure. If you have high blood pressure, talk to your clinician before adding green tea extract and monitor your readings.",
       "alert_headline": "Caution with high blood pressure",
-      "condition_id": "hypertension",
+      "condition_ids": [
+        "hypertension"
+      ],
       "detail": "Green tea catechins (EGCG) inhibit intestinal OATP transporters, reducing oral bioavailability of nadolol and potentially other beta-blockers, diminishing BP control.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Green tea extract can affect blood pressure — relevant to people with high blood pressure.",
       "ingredient_name": "Green Tea leaf extract",
@@ -15144,10 +15245,13 @@
       "action": "Avoid concentrated green tea extract supplements (standardized EGCG ≥400 mg/dose) in patients with liver disease. Brewed green tea is not implicated. Recommend liver function monitoring if use cannot be avoided.",
       "alert_body": "High-dose green tea extract has been linked to liver injury. If you have liver disease, talk to your clinician before using concentrated EGCG supplements.",
       "alert_headline": "Not recommended with liver disease",
-      "condition_id": "liver_disease",
+      "condition_ids": [
+        "liver_disease"
+      ],
       "detail": "EGCG (epigallocatechin gallate), the principal catechin in green tea extract, undergoes hepatic first-pass metabolism. At supplemental doses (≥800 mg EGCG/day), EGCG saturates first-pass elimination and reaches hepatotoxic concentrations, inducing mitochondrial oxidative stress, hepatocellular pattern of liver injury, and transaminase elevations. The United States Pharmacopeia 2020 comprehensive review confirmed dose-dependent hepatocellular toxicity with adverse events reported from 140 mg to ~1,000 mg EGCG/day. Pre-existing liver disease impairs EGCG clearance and lowers the threshold for injury.",
       "display_mode_default": "informational",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Concentrated green tea extract has liver safety signals relevant to people with liver conditions.",
       "ingredient_name": "Green Tea leaf extract",
@@ -15165,10 +15269,13 @@
       "action": "Monitor INR frequently when starting or stopping quercetin supplementation in patients on warfarin. Alert prescriber to dose and any INR changes.",
       "alert_body": "Quercetin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding quercetin and ask about INR or bleeding checks.",
       "alert_headline": "May add to blood-thinner effects",
+      "condition_ids": [],
       "detail": "Quercetin inhibits CYP2C9 (the primary metabolic enzyme for S-warfarin) and inhibits P-glycoprotein. Both mechanisms reduce warfarin clearance, potentially increasing plasma warfarin concentration and INR. Quercetin also inhibits platelet aggregation independently.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "anticoagulants",
+      "drug_class_ids": [
+        "anticoagulants"
+      ],
       "evidence_level": "probable",
       "informational_note": "Quercetin can affect clotting — relevant to people on anticoagulants.",
       "ingredient_name": "Quercetin",
@@ -15183,16 +15290,20 @@
       "type": "drug_interaction"
     },
     {
+      "condition_ids": [],
       "detail": "Contains high-glycemic sweeteners: Maltodextrin",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "severity": "moderate",
       "source": "dietary_sensitivity_data",
       "title": "Diabetes",
       "type": "dietary"
     },
     {
+      "condition_ids": [],
       "detail": "2023-12-19",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "severity": "info",
       "source": "dsld",
       "title": "Discontinued Product",
@@ -15203,9 +15314,11 @@
     {
       "ban_context": "watchlist",
       "clinical_risk": "high",
+      "condition_ids": [],
       "date": "2022-08-07",
       "detail": "In 2021, EFSA concluded that a concern for genotoxicity of titanium dioxide (E171) particles 'cannot be ruled out' and that E171 'can no longer be considered safe when used as a food additive,' so no ADI could be established (EFSA Journal 2021;19(5):e06585). On this basis, the European Commission adopted Commission Regulation (EU) 2022/63 banning E171 as a food additive; from August 7 2022 it may no longer be added to foods or food supplements in the EU. FDA still permits TiO2 at ≤1% of food weight (21 CFR 73.575) but initiated reassessment following the EFSA opinion. IARC Group 2B (possibly carcinogenic by inhalation). Nanoparticle form (<100nm) shows greater intestinal absorption and genotoxic concern.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": null,
       "regulatory_date_label": "EU ban effective date",
       "safety_warning": "A white-pigment additive EFSA ruled in 2021 could no longer be considered safe due to possible genotoxicity. Banned in EU food since 2022; still permitted in US supplements. Avoid when possible.",
@@ -15231,8 +15344,10 @@
     },
     {
       "category": "filler",
+      "condition_ids": [],
       "detail": "Highly processed glucose polymer (DE 3-20) with glycemic index 85-105, comparable to pure glucose. Rapidly digested to glucose in the small intestine. In vitro studies suggest maltodextrin may suppress antimicrobial defense mechanisms and promote E. coli adhesion to intestinal epithelial cells (PMID 22394256). Used as cheap filler/binder in supplements with no nutritional benefit.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "9050-36-6",
         "cui": "C0065601",
@@ -15254,8 +15369,10 @@
     },
     {
       "category": "sweetener_artificial",
+      "condition_ids": [],
       "detail": "Chlorinated artificial sweetener that disrupts gut microbiome composition and diversity. Inhibits farnesoid X receptor signaling and disrupts bile acid metabolism. May induce glucose intolerance and affect insulin response. Releases potentially harmful chlorinated compounds when heated above 120°C (248°F).",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "56038-13-2",
         "cui": "C0077046",
@@ -15278,8 +15395,10 @@
     },
     {
       "allergen_id": "ALLERGEN_MILK",
+      "condition_ids": [],
       "detail": "Presence: contains. labelText.parsed.allergens: milk",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "notes": "FDA major allergen (FALCPA). Severity moderate: milk is the 3rd most common cause of pediatric food anaphylaxis (after peanut and tree nuts). Casein and whey are the two primary allergenic protein fractions; casein allergy tends to be more persistent and severe. Lactose intolerance (non-immune) is distinct from milk allergy (IgE-mediated) but both require flagging. Probiotic strains grown on milk media may carry trace proteins.",
       "prevalence": "high",
       "severity": "moderate",
@@ -15292,7 +15411,9 @@
       "action": "Standard prenatal vitamin doses of B6 are safe during lactation. High-dose B6 supplementation (>50 mg/day) during established breastfeeding may suppress milk production. Avoid high-dose B6 if breastfeeding is intended. Consult lactation specialist before use.",
       "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
       "alert_headline": "High-dose B6 may affect milk supply",
-      "condition_id": "lactation",
+      "condition_ids": [
+        "lactation"
+      ],
       "detail": "High-dose pyridoxine (vitamin B6) has been investigated as a pharmacologic agent to suppress postpartum lactation. At doses of 450–600 mg/day for 5–7 days, two trials found ~95% inhibition of lactation, though four other studies failed to demonstrate efficacy by prolactin measurement or clinical assessment. The proposed mechanism is dopaminergic: pyridoxine is a cofactor in dopamine synthesis; elevated dopamine tonically inhibits prolactin release from the anterior pituitary. A 1979 NEJM case report warned of dangers of vitamin B6 in nursing mothers at high doses. Normal multivitamin doses (1.9 mg/day recommended for lactation) are not a concern.",
       "display_mode_default": "informational",
       "dose_threshold_evaluation": {
@@ -15313,6 +15434,7 @@
           }
         ]
       },
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding.",
       "ingredient_name": "Vitamin B6",
@@ -15331,10 +15453,13 @@
       "action": "Avoid magnesium supplementation in severe CKD (eGFR <30) without nephrologist guidance. In mild-moderate CKD, use with caution and monitor serum Mg levels.",
       "alert_body": "In advanced kidney disease (eGFR below 30), supplemental magnesium can build up to risky levels. If you have CKD, talk to your nephrologist before adding magnesium.",
       "alert_headline": "Caution with kidney disease",
-      "condition_id": "kidney_disease",
+      "condition_ids": [
+        "kidney_disease"
+      ],
       "detail": "Impaired renal magnesium excretion in CKD (especially eGFR <30) leads to hypermagnesemia accumulation. Supplemental magnesium doses safe in healthy adults can cause life-threatening hypermagnesemia in CKD patients (cardiac arrest, respiratory failure).",
       "display_mode_default": "informational",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Magnesium excretion depends on kidney function — relevant to people with kidney disease.",
       "ingredient_name": "Magnesium",
@@ -15352,10 +15477,13 @@
       "action": "Avoid concentrated green tea extract supplements (standardized EGCG ≥400 mg/dose) in patients with liver disease. Brewed green tea is not implicated. Recommend liver function monitoring if use cannot be avoided.",
       "alert_body": "High-dose green tea extract has been linked to liver injury. If you have liver disease, talk to your clinician before using concentrated EGCG supplements.",
       "alert_headline": "Not recommended with liver disease",
-      "condition_id": "liver_disease",
+      "condition_ids": [
+        "liver_disease"
+      ],
       "detail": "EGCG (epigallocatechin gallate), the principal catechin in green tea extract, undergoes hepatic first-pass metabolism. At supplemental doses (≥800 mg EGCG/day), EGCG saturates first-pass elimination and reaches hepatotoxic concentrations, inducing mitochondrial oxidative stress, hepatocellular pattern of liver injury, and transaminase elevations. The United States Pharmacopeia 2020 comprehensive review confirmed dose-dependent hepatocellular toxicity with adverse events reported from 140 mg to ~1,000 mg EGCG/day. Pre-existing liver disease impairs EGCG clearance and lowers the threshold for injury.",
       "display_mode_default": "informational",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "established",
       "informational_note": "Concentrated green tea extract has liver safety signals relevant to people with liver conditions.",
       "ingredient_name": "Green Tea leaf extract",
@@ -15370,16 +15498,20 @@
       "type": "interaction"
     },
     {
+      "condition_ids": [],
       "detail": "Contains high-glycemic sweeteners: Maltodextrin",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "severity": "moderate",
       "source": "dietary_sensitivity_data",
       "title": "Diabetes",
       "type": "dietary"
     },
     {
+      "condition_ids": [],
       "detail": "2023-12-19",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "severity": "info",
       "source": "dsld",
       "title": "Discontinued Product",

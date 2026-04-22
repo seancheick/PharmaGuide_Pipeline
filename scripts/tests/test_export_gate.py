@@ -813,21 +813,25 @@ class TestInteractionProfileExport:
         assert ret["highest_severity"] == "avoid"
 
     def test_interaction_warnings_carry_condition_id(self):
-        """Each interaction warning must have condition_id for user-profile matching."""
+        """Sprint E1.4.1 — each interaction warning must carry plural
+        condition_ids[] for user-profile matching."""
         blob = build_detail_blob(self._enriched_with_interactions(), _base_scored())
         condition_warnings = [w for w in blob["warnings"] if w["type"] == "interaction"]
         assert condition_warnings
         w = condition_warnings[0]
-        assert w["condition_id"] == "pregnancy"
+        assert "pregnancy" in (w.get("condition_ids") or [])
+        assert "condition_id" not in w  # legacy key removed
         assert w["ingredient_name"] == "Vitamin A Palmitate"
         assert w["action"]
 
     def test_interaction_warnings_carry_drug_class_id(self):
+        """Sprint E1.4.1 — plural drug_class_ids[]."""
         blob = build_detail_blob(self._enriched_with_interactions(), _base_scored())
         drug_warnings = [w for w in blob["warnings"] if w["type"] == "drug_interaction"]
         assert drug_warnings
         w = drug_warnings[0]
-        assert w["drug_class_id"] == "retinoids"
+        assert "retinoids" in (w.get("drug_class_ids") or [])
+        assert "drug_class_id" not in w
         assert w["ingredient_name"] == "Vitamin A Palmitate"
 
     def test_dose_threshold_evaluation_exported(self):
@@ -848,12 +852,16 @@ class TestInteractionProfileExport:
         user_conditions = {"pregnancy"}
         user_drug_classes = {"retinoids"}
 
-        # Filter warnings relevant to this user
+        # Filter warnings relevant to this user.
+        # Sprint E1.4.1: warnings carry plural condition_ids / drug_class_ids
+        # arrays; check set intersection.
         relevant = []
         for w in blob["warnings"]:
-            if w["type"] == "interaction" and w.get("condition_id") in user_conditions:
+            w_conditions = set(w.get("condition_ids") or [])
+            w_drug_classes = set(w.get("drug_class_ids") or [])
+            if w["type"] == "interaction" and w_conditions & user_conditions:
                 relevant.append(w)
-            elif w["type"] == "drug_interaction" and w.get("drug_class_id") in user_drug_classes:
+            elif w["type"] == "drug_interaction" and w_drug_classes & user_drug_classes:
                 relevant.append(w)
 
         assert len(relevant) == 2

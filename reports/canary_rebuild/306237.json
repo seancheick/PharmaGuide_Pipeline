@@ -1307,8 +1307,10 @@
   "warnings": [
     {
       "category": "excipient",
+      "condition_ids": [],
       "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "557-04-0",
         "cui": "C0126791",
@@ -1329,8 +1331,10 @@
     },
     {
       "allergen_id": "ALLERGEN_MILK",
+      "condition_ids": [],
       "detail": "Presence: contains. labelText.parsed.allergens: milk",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "notes": "FDA major allergen (FALCPA). Severity moderate: milk is the 3rd most common cause of pediatric food anaphylaxis (after peanut and tree nuts). Casein and whey are the two primary allergenic protein fractions; casein allergy tends to be more persistent and severe. Lactose intolerance (non-immune) is distinct from milk allergy (IgE-mediated) but both require flagging. Probiotic strains grown on milk media may carry trace proteins.",
       "prevalence": "high",
       "severity": "moderate",
@@ -1343,10 +1347,13 @@
       "action": "Use with caution in thyroid disorders. Monitor thyroid function tests (TSH, T3, T4) during use. Contraindicated in hyperthyroidism without physician oversight.",
       "alert_body": "Ashwagandha can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding ashwagandha and monitor your labs.",
       "alert_headline": "Caution with thyroid conditions",
-      "condition_id": "thyroid_disorder",
+      "condition_ids": [
+        "thyroid_disorder"
+      ],
       "detail": "Ashwagandha (Withania somnifera) root extract increases serum T3 and T4 levels and decreases TSH, with pro-thyroid effects demonstrated in both animal hypothyroidism models and human endocrine reviews. This can alter thyroid function test results and may be inappropriate in hyperthyroid states.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
+      "drug_class_ids": [],
       "evidence_level": "probable",
       "informational_note": "Ashwagandha affects thyroid pathways — relevant to people with thyroid conditions.",
       "ingredient_name": "KSM-66",
@@ -1364,10 +1371,13 @@
       "action": "Advise patients taking CNS depressants or sedatives to use ashwagandha with caution and to monitor for excessive sedation.",
       "alert_body": "Ashwagandha has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding ashwagandha — the combination can increase drowsiness.",
       "alert_headline": "May add to sedative drowsiness",
+      "condition_ids": [],
       "detail": "Ashwagandha has demonstrated GABAergic activity via withanolides and sitoindosides. Concomitant use with CNS sedatives may result in additive CNS depression, enhanced drowsiness, and impaired psychomotor performance.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
-      "drug_class_id": "sedatives",
+      "drug_class_ids": [
+        "sedatives"
+      ],
       "evidence_level": "probable",
       "informational_note": "Ashwagandha has sedative activity — relevant to people on sedatives or sleep medications.",
       "ingredient_name": "KSM-66",
@@ -1384,8 +1394,10 @@
   "warnings_profile_gated": [
     {
       "category": "excipient",
+      "condition_ids": [],
       "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "557-04-0",
         "cui": "C0126791",
@@ -1406,8 +1418,10 @@
     },
     {
       "allergen_id": "ALLERGEN_MILK",
+      "condition_ids": [],
       "detail": "Presence: contains. labelText.parsed.allergens: milk",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "notes": "FDA major allergen (FALCPA). Severity moderate: milk is the 3rd most common cause of pediatric food anaphylaxis (after peanut and tree nuts). Casein and whey are the two primary allergenic protein fractions; casein allergy tends to be more persistent and severe. Lactose intolerance (non-immune) is distinct from milk allergy (IgE-mediated) but both require flagging. Probiotic strains grown on milk media may carry trace proteins.",
       "prevalence": "high",
       "severity": "moderate",

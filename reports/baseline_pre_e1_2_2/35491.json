@@ -1151,8 +1151,10 @@
   "warnings": [
     {
       "category": "excipient",
+      "condition_ids": [],
       "detail": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "7631-86-9",
         "cui": "C0037098",
@@ -1172,8 +1174,10 @@
       "type": "harmful_additive"
     },
     {
+      "condition_ids": [],
       "detail": "2018-03-19",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "severity": "info",
       "source": "dsld",
       "title": "Discontinued Product",
@@ -1183,8 +1187,10 @@
   "warnings_profile_gated": [
     {
       "category": "excipient",
+      "condition_ids": [],
       "detail": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
       "display_mode_default": "critical",
+      "drug_class_ids": [],
       "identifiers": {
         "cas": "7631-86-9",
         "cui": "C0037098",
@@ -1204,8 +1210,10 @@
       "type": "harmful_additive"
     },
     {
+      "condition_ids": [],
       "detail": "2018-03-19",
       "display_mode_default": "informational",
+      "drug_class_ids": [],
       "severity": "info",
       "source": "dsld",
       "title": "Discontinued Product",
