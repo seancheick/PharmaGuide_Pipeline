@@ -103,11 +103,11 @@
       "penalty_score": 7.5
     },
     "section_a_audit": {
-      "category_bonus_total": 0.0,
+      "category_bonus_total": 2.0,
       "ceiling_hit": false,
       "core_quality": 17.5,
       "max": 25.0,
-      "score": 17.5
+      "score": 19.5
     },
     "supplement_type": {
       "active_count": 38,
@@ -13468,7 +13468,7 @@
     },
     "ingredient_quality": {
       "max": 25.0,
-      "score": 17.5,
+      "score": 19.5,
       "sub": {
         "A1": 10.25,
         "A2": 1.5,
@@ -13481,7 +13481,7 @@
         "A5d": 0.0,
         "A6": 0.0,
         "category_bonus_pool_cap": 5.0,
-        "category_bonus_total": 0.0,
+        "category_bonus_total": 2.0,
         "core_quality": 17.5,
         "omega3_breakdown": {
           "applicable": false,

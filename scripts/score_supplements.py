@@ -90,6 +90,98 @@ def safe_list(value: Any) -> List[Any]:
     return value if isinstance(value, list) else []
 
 
+# Sprint E1.3.4 — enzyme recognition credit.
+# Known enzyme names for the `require_named_enzyme` gate. Case-folded
+# substrings; an ingredient qualifies when any entry is a whole-word
+# match in its name or standard_name.
+_KNOWN_ENZYMES = frozenset({
+    "amylase", "protease", "lipase", "cellulase", "lactase",
+    "bromelain", "papain", "pepsin", "rennin", "trypsin", "chymotrypsin",
+    "serrapeptase", "alpha-galactosidase", "alpha galactosidase",
+    "hemicellulase", "invertase", "maltase", "sucrase",
+    "xylanase", "beta-glucanase", "phytase", "pectinase",
+    "catalase", "superoxide dismutase", "sod",
+    "nattokinase",
+})
+
+
+def _is_known_enzyme_name(ing: Dict[str, Any]) -> Optional[str]:
+    """Return a canonical enzyme key if the ingredient matches one from
+    _KNOWN_ENZYMES; else None. Case-insensitive whole-word match over
+    name and standard_name. Also accepts category == 'enzyme' only as a
+    secondary signal when combined with a matched name — category alone
+    does NOT qualify (dev rule: require named enzyme)."""
+    name = (ing.get("name") or "").strip().lower()
+    std = (ing.get("standard_name") or "").strip().lower()
+    for enzyme in _KNOWN_ENZYMES:
+        if re.search(r"\b" + re.escape(enzyme) + r"\b", name) or \
+           re.search(r"\b" + re.escape(enzyme) + r"\b", std):
+            return enzyme
+    return None
+
+
+def _has_valid_enzyme_activity(ing: Dict[str, Any], gate_cfg: Dict[str, Any]) -> bool:
+    """Check if enzyme ingredient has a numeric activity value in an
+    allowed unit (DU, HUT, FIP, ALU, CU, SKB, etc.). Used only when
+    min_activity_gate.enabled is True."""
+    allowed = [u.upper() for u in (gate_cfg.get("allowed_units") or [])]
+    min_value = float(gate_cfg.get("min_value") or 0.0)
+    unit = (ing.get("unit") or "").strip().upper()
+    if unit not in allowed:
+        return False
+    try:
+        qty = float(ing.get("quantity") or 0)
+    except (TypeError, ValueError):
+        return False
+    return qty >= min_value
+
+
+def _compute_enzyme_recognition_bonus(
+    ingredients: List[Dict[str, Any]],
+    cfg: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Config-gated enzyme recognition credit. Conservative, capped,
+    deduplicated by canonical enzyme name. No credit when config is
+    disabled / missing. Does not mutate input.
+    """
+    if not cfg or not cfg.get("enabled", False):
+        return {
+            "enzyme_recognition_points": 0.0,
+            "recognized_enzymes_count": 0,
+            "recognized_enzymes": [],
+        }
+
+    per_enzyme = float(cfg.get("per_enzyme_points", 0.0) or 0.0)
+    max_points = float(cfg.get("max_points", 0.0) or 0.0)
+    require_named = bool(cfg.get("require_named_enzyme", True))
+    gate_cfg = cfg.get("min_activity_gate") or {}
+    gate_enabled = bool(gate_cfg.get("enabled", False))
+
+    seen: set = set()
+    recognized_names: List[str] = []
+    for ing in ingredients or []:
+        if not isinstance(ing, dict):
+            continue
+        canonical = _is_known_enzyme_name(ing) if require_named else (
+            (ing.get("name") or "").strip().lower() or None
+        )
+        if not canonical:
+            continue
+        if gate_enabled and not _has_valid_enzyme_activity(ing, gate_cfg):
+            continue
+        if canonical in seen:
+            continue
+        seen.add(canonical)
+        recognized_names.append(canonical)
+
+    total = min(max_points, per_enzyme * len(seen)) if max_points > 0 else per_enzyme * len(seen)
+    return {
+        "enzyme_recognition_points": total,
+        "recognized_enzymes_count": len(seen),
+        "recognized_enzymes": sorted(recognized_names),
+    }
+
+
 # Sprint E1.3.2.c — probiotic CFU-adequacy point uplift.
 # Config-driven (section_A_ingredient_quality.probiotic_cfu_adequacy):
 #   tier_points           {low,adequate,good,excellent}   → base points
@@ -1418,9 +1510,19 @@ class SupplementScorer:
         omega3_result = self._compute_omega3_dose_bonus(product, flags if flags is not None else [])
         omega3_bonus = omega3_result["omega3_dose_bonus"]
 
+        # Sprint E1.3.4 — enzyme recognition credit.
+        enzyme_cfg = a_cfg.get("enzyme_recognition", {}) or {}
+        enzyme_result = _compute_enzyme_recognition_bonus(
+            self._get_active_ingredients(product), enzyme_cfg,
+        )
+        enzyme_bonus = enzyme_result.get("enzyme_recognition_points", 0.0) or 0.0
+
         pool_cfg = a_cfg.get("category_bonus_pool", {})
         max_bonus_contribution = as_float(pool_cfg.get("max_contribution"), 5.0)
-        category_bonus_total = min(max_bonus_contribution, probiotic_bonus + omega3_bonus)
+        category_bonus_total = min(
+            max_bonus_contribution,
+            probiotic_bonus + omega3_bonus + enzyme_bonus,
+        )
 
         core_quality = a1 + a2 + a3 + a4 + a5 + a6
         total = min(section_max, core_quality + category_bonus_total)

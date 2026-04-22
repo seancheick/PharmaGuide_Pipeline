@@ -117,6 +117,19 @@
         ">=12": 1
       }
     },
+    "enzyme_recognition": {
+      "_description": "Sprint E1.3.4 — small recognition credit for enzyme-containing products whose individual enzyme doses are labelled NP. Prevents misleading Section A = 0 on enzyme-dominated formulas while staying conservative. Deduplicated by canonical enzyme name; capped at max_points.",
+      "_philosophy": "We reward verifiable enzyme activity, not just ingredient names. Activity-unit gate is disabled today (no upstream audit data yet) but can be flipped on once Dr Pham verifies DU/HUT/FIP values per product.",
+      "enabled": true,
+      "per_enzyme_points": 0.5,
+      "max_points": 2.5,
+      "require_named_enzyme": true,
+      "min_activity_gate": {
+        "enabled": false,
+        "allowed_units": ["DU", "HUT", "FIP", "ALU", "CU", "SKB", "FCC-PU", "HCU", "BGU", "GalU"],
+        "min_value": 1
+      }
+    },
     "category_bonus_pool": {
       "max_contribution": 5,
       "_description": "Maximum total points from all category bonuses (probiotic, omega-3 dose, future). Core quality always dominates; bonuses enhance, not define.",

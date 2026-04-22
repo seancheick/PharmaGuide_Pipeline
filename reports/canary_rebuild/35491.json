@@ -78,11 +78,11 @@
       "penalty_score": 5.12
     },
     "section_a_audit": {
-      "category_bonus_total": 0.0,
+      "category_bonus_total": 2.5,
       "ceiling_hit": false,
       "core_quality": 0.0,
       "max": 25.0,
-      "score": 0.0
+      "score": 2.5
     },
     "supplement_type": {
       "active_count": 6,
@@ -1040,7 +1040,7 @@
     },
     "ingredient_quality": {
       "max": 25.0,
-      "score": 0.0,
+      "score": 2.5,
       "sub": {
         "A1": 0.0,
         "A2": 0.0,
@@ -1053,7 +1053,7 @@
         "A5d": 0.0,
         "A6": 0.0,
         "category_bonus_pool_cap": 5.0,
-        "category_bonus_total": 0.0,
+        "category_bonus_total": 2.5,
         "core_quality": 0.0,
         "omega3_breakdown": {
           "applicable": false,
@@ -1073,52 +1073,6 @@
           "prebiotic": 0.0,
           "probiotic_bonus": 0.0,
           "survivability": 0.0
-        },
-        "zero_score_diagnostic": {
-          "no_dose_scorable": [
-            {
-              "name": "Amylase",
-              "quantity": 0.0,
-              "reason": "no_usable_individual_dose",
-              "unit": "np"
-            },
-            {
-              "name": "Protease",
-              "quantity": 0.0,
-              "reason": "no_usable_individual_dose",
-              "unit": "np"
-            },
-            {
-              "name": "Lipase",
-              "quantity": 0.0,
-              "reason": "no_usable_individual_dose",
-              "unit": "np"
-            },
-            {
-              "name": "Cellulase",
-              "quantity": 0.0,
-              "reason": "no_usable_individual_dose",
-              "unit": "np"
-            },
-            {
-              "name": "Lactase",
-              "quantity": 0.0,
-              "reason": "no_usable_individual_dose",
-              "unit": "np"
-            },
-            {
-              "name": "Leucine",
-              "quantity": 0,
-              "reason": "no_usable_individual_dose",
-              "unit": ""
-            }
-          ],
-          "no_dose_scorable_count": 6,
-          "scorable_count": 6,
-          "skipped_count": 0,
-          "skipped_ingredients": [],
-          "summary": "6 scorable, 0 skipped, 6 scorable but no usable dose",
-          "total_active_ingredients": 5
         }
       }
     },
