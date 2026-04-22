@@ -1045,6 +1045,85 @@ def build_banned_substance_detail(
     return None
 
 
+# Sprint E1.2.2.a — display_label (Brand + Base + Form).
+# Branded tokens mirror the set in label_fidelity_scope_report.py /
+# test_label_fidelity_contract.py. Keep these in sync across the 3
+# call sites manually — centralizing at import time adds churn for
+# each sub-task without improving guarantees.
+_BRANDED_TOKENS = (
+    "KSM-66", "Meriva", "BioPerine", "Bioperine", "Ferrochel", "Sensoril",
+    "Phytosome", "Silybin Phytosome", "Pycnogenol", "Setria", "Albion",
+    "TRAACS", "Chromax", "Curcumin C3", "Longvida", "Wellmune", "CurcuWIN",
+    "LJ100", "enXtra", "AstraGin", "Venetron",
+)
+
+
+def _compute_display_label(ingredient: Dict[str, Any]) -> str:
+    """Produce the user-facing ingredient label string for Flutter.
+
+    Format: ``Brand Base Form``. Preserves branded tokens (KSM-66,
+    BioPerine, Ferrochel) and the DSLD-authored descriptive form phrase
+    (typically ``Base PlantPart Form``, e.g. "Ashwagandha Root Extract").
+
+    Sprint E1.2.2 invariants this satisfies:
+      #1 display_name_never_canonical — base phrase prefers the DSLD
+         descriptive form over the scoring-group canonical, so we never
+         collapse e.g. "KSM-66 Ashwagandha Root Extract" → "Ashwagandha".
+      #4 branded_identity_preserved — if the source label carries a
+         branded token (KSM-66, BioPerine, etc.) the output carries it.
+      #5 plant_part_preserved — plant-part words land in ``forms[0].name``
+         on DSLD data and therefore survive into the base phrase.
+    """
+    name = safe_str(ingredient.get("name"))
+    forms = ingredient.get("forms") or []
+    first_form_name = ""
+    if forms and isinstance(forms[0], dict):
+        first_form_name = safe_str(forms[0].get("name"))
+
+    name_lower = name.lower()
+    form_lower = first_form_name.lower()
+    is_branded_name = any(t.lower() in name_lower for t in _BRANDED_TOKENS)
+
+    # Word-boundary substring match so "Calcium" does NOT claim to be
+    # contained in "Tricalcium Phosphate" (the user would see "Tricalcium
+    # Phosphate" and not know it's Calcium).
+    def _contains_word(haystack: str, needle: str) -> bool:
+        if not needle:
+            return False
+        return bool(re.search(r"\b" + re.escape(needle) + r"\b", haystack, re.IGNORECASE))
+
+    # Build the base phrase. Four subtypes:
+    #   a) name ⊂ form (word-boundary) — form is already descriptive → use form
+    #   b) form ⊂ name (word-boundary) — form is redundant             → use name
+    #   c) name is brand — form carries generic base                  → use form, brand prefix below
+    #   d) disjoint — chemical descriptor alone                       → composite "name (form)"
+    if first_form_name and name:
+        if _contains_word(first_form_name, name):
+            base_phrase = first_form_name
+        elif _contains_word(name, first_form_name):
+            base_phrase = name
+        elif is_branded_name:
+            base_phrase = first_form_name
+        else:
+            base_phrase = f"{name} ({first_form_name})"
+    elif first_form_name:
+        base_phrase = first_form_name
+    else:
+        base_phrase = name or safe_str(ingredient.get("standard_name"))
+
+    # Branded prefix — only when brand is on name but missing from base.
+    branded = None
+    base_lower = base_phrase.lower()
+    for token in _BRANDED_TOKENS:
+        t = token.lower()
+        if t in name_lower and t not in base_lower:
+            branded = token
+            break
+
+    result = f"{branded} {base_phrase}".strip() if branded else base_phrase
+    return result.strip() or name
+
+
 def _validate_banned_preflight_propagation(
     blob: Dict[str, Any], enriched: Dict[str, Any], dsld_id: str
 ) -> None:
@@ -1517,6 +1596,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})
             ),
+            # Sprint E1.2.2.a — pre-computed Flutter display label
+            "display_label": _compute_display_label(ing),
         })
 
     # Inactive ingredients

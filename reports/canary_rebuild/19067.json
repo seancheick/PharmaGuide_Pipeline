@@ -1,0 +1,927 @@
+{
+  "audit": {
+    "gate_audit": {
+      "blocking_reason": null,
+      "probiotic_eligibility": {
+        "eligible": true,
+        "mode": "probiotic",
+        "reason": "supplement_type_probiotic"
+      },
+      "verdict": "SAFE"
+    },
+    "non_gmo": {
+      "all_signals": [
+        {
+          "source": "clean_label_claims",
+          "text": "Dairy Free"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "Gluten Free"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Artificial Colors"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Artificial Flavors"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Preservatives"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "Yeast Free"
+        },
+        {
+          "source": "named_cert_programs",
+          "text": "USP Verified"
+        },
+        {
+          "source": "third_party_programs",
+          "text": "USP Verified"
+        }
+      ],
+      "claim_present": false,
+      "generic_signals": [],
+      "project_verified": false,
+      "reason": "no_non_gmo_signal",
+      "score_eligible": false,
+      "verified_signals": []
+    },
+    "omega3": {
+      "applicable_for_dose_bonus": false,
+      "bonus_score": 0.0,
+      "contains_omega3": false,
+      "dha_mg_per_unit": null,
+      "dose_band": "",
+      "epa_dha_mg_per_unit": null,
+      "epa_mg_per_unit": null,
+      "matched_ingredients": [],
+      "per_day_max_mg": null,
+      "per_day_mid_mg": null,
+      "per_day_min_mg": null,
+      "reason": "no_omega3_signal"
+    },
+    "proprietary_blend": {
+      "blend_count": 0,
+      "evidence": [],
+      "has_proprietary_blends": false,
+      "penalty_score": 0.0
+    },
+    "section_a_audit": {
+      "category_bonus_total": 2.0,
+      "ceiling_hit": false,
+      "core_quality": 16.0,
+      "max": 25.0,
+      "score": 18.0
+    },
+    "supplement_type": {
+      "active_count": 1,
+      "category_breakdown": {
+        "probiotic": 1
+      },
+      "enriched_type": "probiotic",
+      "export_type": "probiotic",
+      "inferred_type": "probiotic",
+      "probiotic_signal": 1,
+      "scored_type": "probiotic",
+      "source": "ingredient_quality_data"
+    }
+  },
+  "banned_substance_detail": null,
+  "blob_version": 1,
+  "brand_name": "Nature Made",
+  "certification_detail": {
+    "gmp": {
+      "claimed": false,
+      "fda_registered": false,
+      "nsf_gmp": false,
+      "text_matched": ""
+    },
+    "heavy_metal_tested": 1,
+    "label_accuracy_verified": 1,
+    "purity_verified": 1,
+    "third_party_programs": {
+      "count": 1,
+      "has_generic_claim_only": false,
+      "programs": [
+        {
+          "name": "USP Verified",
+          "source": "manufacturer_evidence",
+          "verified": true
+        }
+      ]
+    }
+  },
+  "compliance_detail": {
+    "allergen_free_claims": [
+      "dairy",
+      "gluten"
+    ],
+    "conflicts": [],
+    "dairy_free": true,
+    "evidence_based": {
+      "allergen_free_claims": [
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "gluten free - dairy free",
+          "dedupe_key": "allergen_free:gluten",
+          "display_name": "Gluten-Free",
+          "duplicate_count": 4,
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "gluten free",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "statements[14].notes",
+            "labelText.raw",
+            "labelText.parsed.cleanLabelClaims[1]"
+          ],
+          "pattern_id": "CLAIM_GLUTEN_FREE_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_GLUTEN_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[21].notes"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "gluten free - dairy free",
+          "dedupe_key": "allergen_free:dairy",
+          "display_name": "Dairy-Free",
+          "duplicate_count": 3,
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "dairy free",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "labelText.raw",
+            "labelText.parsed.cleanLabelClaims[0]"
+          ],
+          "pattern_id": "CLAIM_DAIRY_FREE_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_DAIRY_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[21].notes"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "- No Artificial Colors - No Artificial Flavors - No Preservatives - No Yeast - No Gluten",
+          "dedupe_key": "allergen_free:yeast",
+          "display_name": "Yeast-Free",
+          "duplicate_count": 3,
+          "evidence_strength": "medium",
+          "ineligibility_reason": "proximity_conflict:yeast",
+          "matched_text": "No Yeast",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "labelText.raw",
+            "labelText.parsed.cleanLabelClaims[5]"
+          ],
+          "pattern_id": "CLAIM_YEAST_FREE_positive_1",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [
+            "yeast"
+          ],
+          "rule_id": "CLAIM_YEAST_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": false,
+          "source_field": "statements[14].notes"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "dietary_claim",
+          "context_snippet": "Formulation re: Vegetarian/Vegan",
+          "dedupe_key": "dietary:vegan",
+          "display_name": "Vegan",
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "Vegan",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "pattern_id": "CLAIM_VEGAN_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_VEGAN",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[22].type"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "dietary_claim",
+          "context_snippet": "- 100% vegetarian",
+          "dedupe_key": "dietary:vegetarian",
+          "display_name": "Vegetarian",
+          "duplicate_count": 4,
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "vegetarian",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "statements[22].type",
+            "labelText.raw",
+            "labelText.parsed.qualityFeatures[0]"
+          ],
+          "pattern_id": "CLAIM_VEGETARIAN_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_VEGETARIAN",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[22].notes"
+        }
+      ],
+      "rules_db_version": "5.0.0"
+    },
+    "gluten_free": true,
+    "has_may_contain_warning": false,
+    "soy_free": false,
+    "vegan": true,
+    "vegetarian": true,
+    "verified": true
+  },
+  "dietary_sensitivity_detail": {
+    "sodium": {
+      "amount_mg": 0.0,
+      "exceeds_aha_threshold": false,
+      "level": "sodium_free",
+      "level_display": "Sodium-Free",
+      "percent_daily_value": 0,
+      "sodium_sources": [],
+      "unit": "mg"
+    },
+    "sugar": {
+      "amount_g": 0.0,
+      "contains_sugar": false,
+      "exceeds_diabetic_threshold": false,
+      "has_added_sugar": false,
+      "level": "sugar_free",
+      "level_display": "Sugar-Free",
+      "sugar_sources": [],
+      "unit": "g"
+    },
+    "sweeteners": {
+      "artificial": [],
+      "has_artificial": false,
+      "has_high_glycemic": false,
+      "has_sugar_alcohols": false,
+      "high_glycemic": [],
+      "safer_alternatives": [],
+      "sugar_alcohols": [],
+      "uses_safer_alternatives": false
+    }
+  },
+  "dsld_id": "19067",
+  "evidence_data": {
+    "clinical_matches": [],
+    "match_count": 0,
+    "unsubstantiated_claims": []
+  },
+  "formulation_detail": {
+    "absorption_enhancer_paired": 0,
+    "absorption_enhancers": [],
+    "claim_non_gmo_present": false,
+    "claim_non_gmo_verified": false,
+    "delivery_form": "",
+    "delivery_tier": "",
+    "is_certified_organic": 0,
+    "organic_verification": "",
+    "standardized_botanicals": [],
+    "synergy_cluster_qualified": 0
+  },
+  "inactive_ingredients": [
+    {
+      "additive_type": "starch_filler",
+      "category": "filler_binder",
+      "common_uses": [
+        "filler",
+        "binder",
+        "disintegrant"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0772411"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Potato Starch",
+      "normalized_key": "potato_starch",
+      "notes": "Natural starch from potatoes, used as a binder and thickener. Gluten-free and generally hypoallergenic.",
+      "population_warnings": [],
+      "raw_source_text": "Potato Starch",
+      "severity_level": "",
+      "standardName": "Potato Starch",
+      "standard_name": "Potato Starch"
+    },
+    {
+      "additive_type": "capsule_coating",
+      "category": "capsule_material",
+      "common_uses": [
+        "delivery format"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C1704652",
+        "pubchem_cid": 57503849,
+        "unii": "3NXW29V3WO"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Hydroxypropyl Methylcellulose",
+      "normalized_key": "hydroxypropyl_methylcellulose",
+      "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation.",
+      "population_warnings": [],
+      "raw_source_text": "Hydroxypropyl Methylcellulose",
+      "severity_level": "",
+      "standardName": "Capsule",
+      "standard_name": "Capsule"
+    },
+    {
+      "additive_type": "processing_aid",
+      "category": "tablet_lubricant",
+      "common_uses": [
+        "tablet lubrication",
+        "flow aid",
+        "manufacturing aid"
+      ],
+      "forms": [],
+      "harmful_notes": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "harmful_severity": "low",
+      "identifiers": {
+        "cas": "557-04-0",
+        "cui": "C0126791",
+        "pubchem_cid": 11177,
+        "unii": "70097M6I30"
+      },
+      "is_additive": 1,
+      "is_harmful": true,
+      "match_method": "exact",
+      "matched_alias": "",
+      "mechanism_of_harm": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "name": "Magnesium Stearate",
+      "normalized_key": "magnesium_stearate",
+      "notes": "Magnesium stearate is an FDA GRAS flow agent present in the vast majority of supplement tablets and capsules. It prevents powders from sticking to manufacturing equipment. Internet claims that it blocks nutrient absorption are not supported by clinical evidence — the single study cited used unrealistic concentrations. Stearic acid (its main component) is a natural fatty acid found in chocolate, meat, and dairy. Penalized at low severity only as a non-nutritive processing aid, not as a health concern.",
+      "population_warnings": [
+        "No specific population warnings — safe at typical supplement levels"
+      ],
+      "raw_source_text": "Magnesium Stearate",
+      "severity_level": "low",
+      "standardName": "Magnesium Stearate",
+      "standard_name": "Magnesium Stearate"
+    }
+  ],
+  "ingredients": [
+    {
+      "bio_score": 13.0,
+      "category": "probiotics",
+      "display_label": "Lactobacillus plantarum 299v",
+      "dosage": 10000000000.0,
+      "dosage_unit": "CFU",
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "lactobacillus plantarum (unspecified)",
+      "matched_forms": [],
+      "name": "Lactobacillus plantarum 299v",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "lactobacillus_plantarum_299v",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Lactobacillus plantarum — versatile probiotic species with strong GI colonization. Specific strain (LP299v, DR7) yields higher scoring.",
+      "parent_key": "lactobacillus_plantarum_299v",
+      "quantity": 10000000000.0,
+      "raw_source_text": "Lactobacillus plantarum 299v",
+      "role": "active",
+      "safety_hits": [],
+      "score": 16.0,
+      "standardName": "Lactobacillus plantarum 299v",
+      "standard_name": "Lactobacillus Plantarum",
+      "unit": "CFU"
+    }
+  ],
+  "manufacturer_detail": {
+    "brand_name": "Nature Made",
+    "is_trusted": 1,
+    "manufacturing_region": "",
+    "violations": {
+      "found": false,
+      "total_deduction_applied": 0.0,
+      "violations": []
+    }
+  },
+  "non_gmo_audit": {
+    "all_signals": [
+      {
+        "source": "clean_label_claims",
+        "text": "Dairy Free"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "Gluten Free"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Artificial Colors"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Artificial Flavors"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Preservatives"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "Yeast Free"
+      },
+      {
+        "source": "named_cert_programs",
+        "text": "USP Verified"
+      },
+      {
+        "source": "third_party_programs",
+        "text": "USP Verified"
+      }
+    ],
+    "claim_present": false,
+    "generic_signals": [],
+    "project_verified": false,
+    "reason": "no_non_gmo_signal",
+    "score_eligible": false,
+    "verified_signals": []
+  },
+  "nutrition_detail": {
+    "calories_per_serving": null,
+    "dietary_fiber_g": null,
+    "protein_g": null,
+    "total_carbohydrates_g": null,
+    "total_fat_g": null
+  },
+  "omega3_audit": {
+    "applicable_for_dose_bonus": false,
+    "bonus_score": 0.0,
+    "contains_omega3": false,
+    "dha_mg_per_unit": null,
+    "dose_band": "",
+    "epa_dha_mg_per_unit": null,
+    "epa_mg_per_unit": null,
+    "matched_ingredients": [],
+    "per_day_max_mg": null,
+    "per_day_mid_mg": null,
+    "per_day_min_mg": null,
+    "reason": "no_omega3_signal"
+  },
+  "probiotic_detail": {
+    "clinical_strain_count": 1,
+    "clinical_strains": [
+      {
+        "clinical_id": "STRAIN_PLANTARUM_299V",
+        "evidence_level": "high",
+        "strain": "Lactobacillus plantarum 299v"
+      }
+    ],
+    "guarantee_type": null,
+    "has_cfu": true,
+    "has_survivability_coating": false,
+    "is_probiotic": true,
+    "prebiotic_name": "",
+    "prebiotic_present": false,
+    "probiotic_blends": [
+      {
+        "cfu_data": {
+          "billion_count": 10.0,
+          "cfu_count": 10000000000.0,
+          "guarantee_type": null,
+          "has_cfu": true
+        },
+        "name": "Lactobacillus plantarum 299v",
+        "strain_count": 1,
+        "strains": [
+          "Lactobacillus plantarum 299v"
+        ]
+      }
+    ],
+    "survivability_reason": "",
+    "total_billion_count": 10.0,
+    "total_cfu": 10000000000.0,
+    "total_strain_count": 1
+  },
+  "product_name": "Digestive Health Probiotic",
+  "proprietary_blend_audit": {
+    "blend_count": 0,
+    "evidence": [],
+    "has_proprietary_blends": false,
+    "penalty_score": 0.0
+  },
+  "proprietary_blend_detail": {
+    "blends": [],
+    "has_proprietary_blends": 0
+  },
+  "rda_ul_data": {
+    "adequacy_results": [
+      {
+        "adequacy_band": "unknown",
+        "age_group": "19-30",
+        "amount": 10000000000.0,
+        "conversion_applied": false,
+        "is_servings_estimated": false,
+        "notes": [
+          "UL check skipped: conversion_failed"
+        ],
+        "nutrient": "Lactobacillus plantarum 299v",
+        "optimal_max": null,
+        "optimal_min": null,
+        "original_quantity": 10000000000.0,
+        "original_unit": "CFU",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": null,
+        "pct_ul": null,
+        "per_day_max": 10000000000.0,
+        "per_day_min": 10000000000.0,
+        "point_recommendation": 0,
+        "rda_ai": null,
+        "rda_ai_source": "unknown",
+        "scoring_eligible": false,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": true,
+        "skip_ul_reason": "conversion_failed",
+        "ul": null,
+        "ul_status": "skipped_conversion_failed",
+        "unit": "CFU",
+        "warnings": []
+      }
+    ],
+    "analyzed_ingredients": [
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Lactobacillus plantarum 299v",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Lactobacillus plantarum 299v",
+          "notes": [],
+          "nutrient_detected": "Lactobacillus plantarum 299v",
+          "original_unit": "CFU",
+          "original_value": 10000000000.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 10000000000.0,
+        "converted_unit": "CFU",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Lactobacillus plantarum 299v",
+        "is_servings_estimated": false,
+        "nutrient_unit": "CFU",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 10000000000.0,
+        "per_day_min": 10000000000.0,
+        "quantity": 10000000000.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": true,
+        "skip_ul_reason": "conversion_failed",
+        "standard_name": "Lactobacillus plantarum 299v",
+        "unit": "CFU",
+        "warnings": []
+      }
+    ],
+    "collection_enabled": true,
+    "collection_reason": null,
+    "conversion_evidence": [
+      {
+        "confidence": "failed",
+        "conversion_factor": null,
+        "conversion_rule_id": null,
+        "converted_unit": null,
+        "converted_value": null,
+        "error": "No conversion rule found for nutrient: Lactobacillus plantarum 299v",
+        "form_detected": null,
+        "form_detection_source": null,
+        "ingredient": "Lactobacillus plantarum 299v",
+        "notes": [],
+        "nutrient_detected": "Lactobacillus plantarum 299v",
+        "original_unit": "CFU",
+        "original_value": 10000000000.0,
+        "success": false,
+        "warnings": []
+      }
+    ],
+    "count": 1,
+    "has_over_ul": false,
+    "ingredients_with_rda": [
+      {
+        "adequacy_band": "unknown",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Lactobacillus plantarum 299v",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Lactobacillus plantarum 299v",
+          "notes": [],
+          "nutrient_detected": "Lactobacillus plantarum 299v",
+          "original_unit": "CFU",
+          "original_value": 10000000000.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 10000000000.0,
+        "converted_unit": "CFU",
+        "data_by_group": [],
+        "highest_ul": null,
+        "ingredient": "Lactobacillus plantarum 299v",
+        "is_servings_estimated": false,
+        "nutrient_unit": "CFU",
+        "optimal_range": "",
+        "pct_rda": null,
+        "per_day_max": 10000000000.0,
+        "per_day_min": 10000000000.0,
+        "quantity": 10000000000.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": true,
+        "skip_ul_reason": "conversion_failed",
+        "standard_name": "Lactobacillus plantarum 299v",
+        "unit": "CFU",
+        "warnings": []
+      }
+    ],
+    "safety_flags": []
+  },
+  "score_bonuses": [
+    {
+      "id": "probiotic",
+      "label": "Probiotic quality bonus",
+      "score": 2.0
+    },
+    {
+      "id": "B4a",
+      "label": "Third-party purity testing",
+      "score": 5.0
+    }
+  ],
+  "score_penalties": [
+    {
+      "id": "B1",
+      "label": "Harmful additive: Magnesium Stearate",
+      "reason": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro di",
+      "score": 0.5,
+      "severity": "low"
+    },
+    {
+      "id": "B2",
+      "label": "Allergen: Soy & Soy Lecithin",
+      "presence": "contains",
+      "severity": "low"
+    }
+  ],
+  "section_breakdown": {
+    "brand_trust": {
+      "max": 5.0,
+      "score": 3.0,
+      "sub": {
+        "D1": 2.0,
+        "D2": 1.0,
+        "D3": 0.0,
+        "D4": 0.0,
+        "D5": 0.0
+      }
+    },
+    "evidence_research": {
+      "ingredient_points": {},
+      "matched_entries": 0,
+      "max": 20.0,
+      "score": 0.0
+    },
+    "ingredient_quality": {
+      "max": 25.0,
+      "score": 18.0,
+      "sub": {
+        "A1": 16.0,
+        "A2": 0.0,
+        "A3": 0.0,
+        "A4": 0.0,
+        "A5": 0.0,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 0.0,
+        "A5d": 0.0,
+        "A6": 0.0,
+        "category_bonus_pool_cap": 5.0,
+        "category_bonus_total": 2.0,
+        "core_quality": 16.0,
+        "omega3_breakdown": {
+          "applicable": false,
+          "omega3_dose_bonus": 0.0
+        },
+        "omega3_dose_bonus": 0.0,
+        "probiotic_bonus": 2.0,
+        "probiotic_breakdown": {
+          "cfu": 1.0,
+          "clinical_strains": 1.0,
+          "diversity": 0.0,
+          "eligibility": {
+            "eligible": true,
+            "mode": "probiotic",
+            "reason": "supplement_type_probiotic"
+          },
+          "prebiotic": 0.0,
+          "probiotic_bonus": 2.0,
+          "survivability": 0.0
+        }
+      }
+    },
+    "safety_purity": {
+      "max": 30.0,
+      "score": 28.5,
+      "sub": {
+        "B0_moderate_penalty": 0.0,
+        "B1_evidence": [],
+        "B1_penalty": 0.5,
+        "B2_penalty": 1.0,
+        "B3": 2.0,
+        "B4a": 5.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B5_blend_evidence": [],
+        "B5_penalty": 0.0,
+        "B6_penalty": 0.0,
+        "B7_dose_safety_evidence": [],
+        "B7_penalty": 0.0,
+        "B8_caers_evidence": [],
+        "B8_penalty": 0.0,
+        "B_hypoallergenic": 0.0,
+        "bonuses": 5.0,
+        "penalties": 1.5
+      }
+    },
+    "violation_penalty": 0.0
+  },
+  "serving_info": {
+    "basis_count": 1.0,
+    "basis_unit": "capsule",
+    "max_servings_per_day": 1,
+    "min_servings_per_day": 1
+  },
+  "supplement_type_audit": {
+    "active_count": 1,
+    "category_breakdown": {
+      "probiotic": 1
+    },
+    "enriched_type": "probiotic",
+    "export_type": "probiotic",
+    "inferred_type": "probiotic",
+    "probiotic_signal": 1,
+    "scored_type": "probiotic",
+    "source": "ingredient_quality_data"
+  },
+  "unmapped_actives": {
+    "excluding_banned_exact_alias": 0,
+    "names": [],
+    "total": 0
+  },
+  "warnings": [
+    {
+      "category": "excipient",
+      "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "cas": "557-04-0",
+        "cui": "C0126791",
+        "pubchem_cid": 11177,
+        "unii": "70097M6I30"
+      },
+      "mechanism_of_harm": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "notes": "Magnesium stearate is an FDA GRAS flow agent present in the vast majority of supplement tablets and capsules. It prevents powders from sticking to manufacturing equipment. Internet claims that it blocks nutrient absorption are not supported by clinical evidence — the single study cited used unrealistic concentrations. Stearic acid (its main component) is a natural fatty acid found in chocolate, meat, and dairy. Penalized at low severity only as a non-nutritive processing aid, not as a health concern.",
+      "population_warnings": [
+        "No specific population warnings — safe at typical supplement levels"
+      ],
+      "safety_summary": "A widely-used flow agent in supplement manufacturing. Claims of harm at the amounts used are not supported by evidence — low overall concern.",
+      "safety_summary_one_liner": "Common flow agent — low overall concern.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Magnesium Stearate",
+      "type": "harmful_additive"
+    },
+    {
+      "allergen_id": "ALLERGEN_SOY",
+      "detail": "Presence: contains. labelText.parsed.allergens: soy",
+      "display_mode_default": "informational",
+      "notes": "FDA major allergen (FALCPA). Soy lecithin is the most common form in supplements, used as emulsifier in softgels and powders. Highly refined soy oil may not trigger reactions but must still be labeled. Cross-reactivity with other legumes (peanut, lupin) occurs in 5-10% of soy-allergic individuals. Fermented soy (natto) retains allergenic proteins.",
+      "prevalence": "high",
+      "severity": "low",
+      "source": "allergen_db",
+      "supplement_context": "Common emulsifier/excipient and in protein products.",
+      "title": "Allergen: Soy & Soy Lecithin",
+      "type": "allergen"
+    }
+  ],
+  "warnings_profile_gated": [
+    {
+      "category": "excipient",
+      "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "cas": "557-04-0",
+        "cui": "C0126791",
+        "pubchem_cid": 11177,
+        "unii": "70097M6I30"
+      },
+      "mechanism_of_harm": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
+      "notes": "Magnesium stearate is an FDA GRAS flow agent present in the vast majority of supplement tablets and capsules. It prevents powders from sticking to manufacturing equipment. Internet claims that it blocks nutrient absorption are not supported by clinical evidence — the single study cited used unrealistic concentrations. Stearic acid (its main component) is a natural fatty acid found in chocolate, meat, and dairy. Penalized at low severity only as a non-nutritive processing aid, not as a health concern.",
+      "population_warnings": [
+        "No specific population warnings — safe at typical supplement levels"
+      ],
+      "safety_summary": "A widely-used flow agent in supplement manufacturing. Claims of harm at the amounts used are not supported by evidence — low overall concern.",
+      "safety_summary_one_liner": "Common flow agent — low overall concern.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Magnesium Stearate",
+      "type": "harmful_additive"
+    },
+    {
+      "allergen_id": "ALLERGEN_SOY",
+      "detail": "Presence: contains. labelText.parsed.allergens: soy",
+      "display_mode_default": "informational",
+      "notes": "FDA major allergen (FALCPA). Soy lecithin is the most common form in supplements, used as emulsifier in softgels and powders. Highly refined soy oil may not trigger reactions but must still be labeled. Cross-reactivity with other legumes (peanut, lupin) occurs in 5-10% of soy-allergic individuals. Fermented soy (natto) retains allergenic proteins.",
+      "prevalence": "high",
+      "severity": "low",
+      "source": "allergen_db",
+      "supplement_context": "Common emulsifier/excipient and in protein products.",
+      "title": "Allergen: Soy & Soy Lecithin",
+      "type": "allergen"
+    }
+  ]
+}
