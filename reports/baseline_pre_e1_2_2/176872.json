@@ -1,0 +1,2155 @@
+{
+  "audit": {
+    "gate_audit": {
+      "blocking_reason": null,
+      "probiotic_eligibility": {
+        "eligible": false,
+        "mode": "non_probiotic",
+        "reason": "no_probiotic_signal"
+      },
+      "verdict": "SAFE"
+    },
+    "non_gmo": {
+      "all_signals": [
+        {
+          "source": "clean_label_claims",
+          "text": "Gluten Free"
+        }
+      ],
+      "claim_present": false,
+      "generic_signals": [],
+      "project_verified": false,
+      "reason": "no_non_gmo_signal",
+      "score_eligible": false,
+      "verified_signals": []
+    },
+    "omega3": {
+      "applicable_for_dose_bonus": false,
+      "bonus_score": 0.0,
+      "contains_omega3": false,
+      "dha_mg_per_unit": null,
+      "dose_band": "",
+      "epa_dha_mg_per_unit": null,
+      "epa_mg_per_unit": null,
+      "matched_ingredients": [],
+      "per_day_max_mg": null,
+      "per_day_mid_mg": null,
+      "per_day_min_mg": null,
+      "reason": "no_omega3_signal"
+    },
+    "proprietary_blend": {
+      "blend_count": 0,
+      "evidence": [],
+      "has_proprietary_blends": false,
+      "penalty_score": 0.0
+    },
+    "section_a_audit": {
+      "category_bonus_total": 0.0,
+      "ceiling_hit": false,
+      "core_quality": 15.25,
+      "max": 25.0,
+      "score": 15.25
+    },
+    "supplement_type": {
+      "active_count": 2,
+      "category_breakdown": {
+        "mineral": 1,
+        "vitamin": 1
+      },
+      "enriched_type": "targeted",
+      "export_type": "targeted",
+      "inferred_type": "targeted",
+      "probiotic_signal": 0,
+      "scored_type": "targeted",
+      "source": "ingredient_quality_data"
+    }
+  },
+  "banned_substance_detail": null,
+  "blob_version": 1,
+  "brand_name": "vitafusion",
+  "certification_detail": {
+    "gmp": {
+      "claimed": false,
+      "fda_registered": false,
+      "nsf_gmp": false,
+      "text_matched": ""
+    },
+    "heavy_metal_tested": 0,
+    "label_accuracy_verified": 0,
+    "purity_verified": 0,
+    "third_party_programs": {
+      "count": 0,
+      "has_generic_claim_only": false,
+      "programs": []
+    }
+  },
+  "compliance_detail": {
+    "allergen_free_claims": [
+      "gluten"
+    ],
+    "conflicts": [],
+    "dairy_free": false,
+    "evidence_based": {
+      "allergen_free_claims": [
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "GF Gluten free",
+          "dedupe_key": "allergen_free:gluten",
+          "display_name": "Gluten-Free",
+          "duplicate_count": 4,
+          "evidence_strength": "medium",
+          "ineligibility_reason": null,
+          "matched_text": "Gluten free",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "statements[17].notes",
+            "labelText.raw",
+            "labelText.parsed.cleanLabelClaims[0]"
+          ],
+          "pattern_id": "CLAIM_GLUTEN_FREE_positive_0",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [],
+          "rule_id": "CLAIM_GLUTEN_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": true,
+          "source_field": "statements[16].notes"
+        }
+      ],
+      "rules_db_version": "5.0.0"
+    },
+    "gluten_free": true,
+    "has_may_contain_warning": false,
+    "soy_free": false,
+    "vegan": false,
+    "vegetarian": false,
+    "verified": true
+  },
+  "dietary_sensitivity_detail": {
+    "sodium": {
+      "amount_mg": 0.0,
+      "exceeds_aha_threshold": false,
+      "level": "sodium_free",
+      "level_display": "Sodium-Free",
+      "percent_daily_value": 0,
+      "sodium_sources": [
+        "Sodium Citrate (trace)"
+      ],
+      "unit": "mg"
+    },
+    "sugar": {
+      "amount_g": 0.0,
+      "contains_sugar": true,
+      "exceeds_diabetic_threshold": false,
+      "has_added_sugar": true,
+      "level": "low",
+      "level_display": "Low Sugar",
+      "sugar_sources": [
+        "Honey",
+        "Sugar"
+      ],
+      "unit": "g"
+    },
+    "sweeteners": {
+      "artificial": [],
+      "has_artificial": false,
+      "has_high_glycemic": false,
+      "has_sugar_alcohols": false,
+      "high_glycemic": [],
+      "safer_alternatives": [],
+      "sugar_alcohols": [],
+      "uses_safer_alternatives": false
+    }
+  },
+  "dsld_id": "176872",
+  "evidence_data": {
+    "clinical_matches": [
+      {
+        "effect_direction": "positive_strong",
+        "effect_direction_confidence": "high",
+        "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=2067; total_enrollment=576; endpoint_tags=immune_support; notes/citations contain no automated downgrade signals.",
+        "endpoint_relevance_tags": [
+          "immune_support"
+        ],
+        "evidence_level": "ingredient-human",
+        "health_goals_supported": [
+          "Immune Support",
+          "Reduce Stress/Anxiety",
+          "Healthy Aging/Longevity",
+          "Joint & Bone Health"
+        ],
+        "id": "INGR_VITAMIN_D3",
+        "ingredient": "Vitamin D",
+        "key_endpoints": [
+          "bone health ↑",
+          "immunity ↑",
+          "mood ↑",
+          "upper respiratory infection risk ↓"
+        ],
+        "match_method": "alias",
+        "matched_term": "vitamin d",
+        "notable_studies": "Bolland et al. (2018, PMID 30293909) systematic review/meta-analysis of 81 RCTs found that vitamin D did not prevent fractures or falls or meaningfully improve BMD. Martineau et al. (2017, PMID 28202713) individual-participant-data meta-analysis found vitamin D reduced acute respiratory infections overall, with the clearest benefit in deficient individuals.",
+        "notes": "Extensive evidence from systematic reviews and meta-analyses (2024-2025) supports vitamin D3 for bone health, immune function, and mood. 2024 Endocrine Society guidelines recommend empiric supplementation for specific populations.",
+        "primary_outcome": "Immune Support",
+        "published_studies": [
+          "RCT",
+          "meta-analysis",
+          "systematic_review"
+        ],
+        "references_structured": [
+          {
+            "authority": "NCBI PubMed",
+            "citation": "The lancet. Diabetes & endocrinology (2018-11-01)",
+            "doi": "10.1016/S2213-8587(18)30265-1",
+            "evidence_grade": "systematic_review",
+            "mesh_terms": [
+              "Accidental Falls",
+              "Bone Density",
+              "Dietary Supplements",
+              "Fractures, Bone",
+              "Humans",
+              "Treatment Outcome",
+              "Vitamin D"
+            ],
+            "pmid": "30293909",
+            "publication_types": [
+              "Journal Article",
+              "Meta-Analysis",
+              "Research Support, Non-U.S. Gov't",
+              "Systematic Review"
+            ],
+            "published_date": "2018-11-01",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Effects of vitamin D supplementation on musculoskeletal health: a systematic review, meta-analysis, and trial sequential analysis.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/30293909/",
+            "verification_source": "pubmed_eutils"
+          },
+          {
+            "authority": "NCBI PubMed",
+            "citation": "BMJ (Clinical research ed.) (2017-02-15)",
+            "doi": "10.1136/bmj.i6583",
+            "evidence_grade": "systematic_review",
+            "mesh_terms": [
+              "Dietary Supplements",
+              "Humans",
+              "Randomized Controlled Trials as Topic",
+              "Respiratory Tract Infections",
+              "Vitamin D"
+            ],
+            "pmid": "28202713",
+            "publication_types": [
+              "Journal Article",
+              "Meta-Analysis",
+              "Systematic Review"
+            ],
+            "published_date": "2017-02-15",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Vitamin D supplementation to prevent acute respiratory tract infections: systematic review and meta-analysis of individual participant data.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/28202713/",
+            "verification_source": "pubmed_eutils"
+          }
+        ],
+        "registry_completed_trials_count": 2067,
+        "score_contribution": "tier_1",
+        "standard_name": "Vitamin D3",
+        "study_id": "INGR_VITAMIN_D3",
+        "study_name": "Vitamin D3",
+        "study_type": "systematic_review_meta",
+        "total_enrollment": 576
+      },
+      {
+        "effect_direction": "positive_strong",
+        "effect_direction_confidence": "high",
+        "effect_direction_rationale": "Retained positive_strong classification; study_type=systematic_review_meta; evidence_level=ingredient-human; primary_outcome=Joint & Bone Health; published_tags=RCT,meta-analysis,systematic_review; registry_completed_trials_count=3121; total_enrollment=36282; endpoint_tags=cardiovascular; notes/citations contain no automated downgrade signals.",
+        "endpoint_relevance_tags": [
+          "cardiovascular"
+        ],
+        "evidence_level": "ingredient-human",
+        "health_goals_supported": [
+          "Joint & Bone Health",
+          "Healthy Aging/Longevity"
+        ],
+        "id": "INGR_CALCIUM",
+        "ingredient": "Calcium",
+        "key_endpoints": [
+          "bone mineral density maintenance ↑",
+          "fracture risk support (population dependent)"
+        ],
+        "match_method": "standard_name",
+        "matched_term": "Calcium",
+        "notable_studies": "Updated pooled evidence (PMID 26510847) supports calcium plus vitamin D for fracture-risk reduction in selected older or at-risk populations, while earlier meta-analytic work (PMID 17720017) also found support for fracture and bone-loss prevention in adults over 50 when intake and adherence are adequate.",
+        "notes": "Broad human evidence base in bone-health settings, especially when paired with vitamin D and adequate baseline intake assessment.",
+        "primary_outcome": "Joint & Bone Health",
+        "published_studies": [
+          "RCT",
+          "meta-analysis",
+          "systematic_review"
+        ],
+        "references_structured": [
+          {
+            "authority": "NCBI PubMed",
+            "citation": "Osteoporosis international : a journal established as result of cooperation between the European Foundation for Osteoporosis and the National Osteoporosis Foundation of the USA (2016-01-01)",
+            "doi": "10.1007/s00198-015-3386-5",
+            "evidence_grade": "meta_analysis",
+            "mesh_terms": [
+              "Bone Density Conservation Agents",
+              "Calcium",
+              "Dietary Supplements",
+              "Drug Therapy, Combination",
+              "Humans",
+              "Osteoporosis, Postmenopausal",
+              "Osteoporotic Fractures",
+              "Randomized Controlled Trials as Topic",
+              "Risk Assessment",
+              "Vitamin D"
+            ],
+            "pmid": "26510847",
+            "publication_types": [
+              "Journal Article",
+              "Meta-Analysis",
+              "Research Support, Non-U.S. Gov't"
+            ],
+            "published_date": "2016-01-01",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Calcium plus vitamin D supplementation and risk of fractures: an updated meta-analysis from the National Osteoporosis Foundation.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/26510847/",
+            "verification_source": "pubmed_eutils"
+          },
+          {
+            "authority": "NCBI PubMed",
+            "citation": "Lancet (London, England) (2007-08-25)",
+            "doi": "10.1016/S0140-6736(07)61342-7",
+            "evidence_grade": "meta_analysis",
+            "mesh_terms": [
+              "Aged",
+              "Aged, 80 and over",
+              "Bone Density",
+              "Calcium",
+              "Dose-Response Relationship, Drug",
+              "Drug Therapy, Combination",
+              "Female",
+              "Fractures, Spontaneous",
+              "Humans",
+              "Male",
+              "Middle Aged",
+              "Osteoporosis",
+              "Patient Compliance",
+              "Regression Analysis",
+              "Risk",
+              "Vitamin D"
+            ],
+            "pmid": "17720017",
+            "publication_types": [
+              "Journal Article",
+              "Meta-Analysis",
+              "Research Support, Non-U.S. Gov't",
+              "Review"
+            ],
+            "published_date": "2007-08-25",
+            "retracted": false,
+            "supplementary_concepts": [],
+            "supports_claims": [],
+            "title": "Use of calcium or calcium in combination with vitamin D supplementation to prevent fractures and bone loss in people aged 50 years and older: a meta-analysis.",
+            "type": "pubmed",
+            "url": "https://pubmed.ncbi.nlm.nih.gov/17720017/",
+            "verification_source": "pubmed_eutils"
+          }
+        ],
+        "registry_completed_trials_count": 3121,
+        "score_contribution": "tier_1",
+        "standard_name": "Calcium",
+        "study_id": "INGR_CALCIUM",
+        "study_name": "Calcium",
+        "study_type": "systematic_review_meta",
+        "total_enrollment": 36282
+      }
+    ],
+    "match_count": 2,
+    "unsubstantiated_claims": []
+  },
+  "formulation_detail": {
+    "absorption_enhancer_paired": 1,
+    "absorption_enhancers": [],
+    "claim_non_gmo_present": false,
+    "claim_non_gmo_verified": false,
+    "delivery_form": "",
+    "delivery_tier": "3",
+    "is_certified_organic": 0,
+    "organic_verification": "",
+    "standardized_botanicals": [],
+    "synergy_cluster_qualified": 1
+  },
+  "inactive_ingredients": [
+    {
+      "additive_type": "natural_sweetener",
+      "category": "sweetener_natural",
+      "common_uses": [
+        "natural sweetener",
+        "antimicrobial"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0019906",
+        "unii": "Y9H1V576FH"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Honey",
+      "normalized_key": "honey",
+      "notes": "Natural sweetener produced by bees from flower nectar. Used as a sweetener, binder, or flavor in supplements. Generally safe but can cause allergic reactions in sensitive individuals. Not recommended for infants under 1 year.",
+      "population_warnings": [],
+      "raw_source_text": "Honey",
+      "severity_level": "",
+      "standardName": "Honey",
+      "standard_name": "Honey"
+    },
+    {
+      "additive_type": "natural_sweetener",
+      "category": "sweetener_natural",
+      "common_uses": [
+        "sweetening",
+        "flavor enhancement",
+        "palatability improvement",
+        "masking bitter tastes"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0038636",
+        "unii": "ED959S6ACY"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Sugar",
+      "normalized_key": "sugar",
+      "notes": "Natural sugars used for sweetening and palatability. Generally recognized as safe but should be consumed in moderation.",
+      "population_warnings": [],
+      "raw_source_text": "Sugar",
+      "severity_level": "",
+      "standardName": "Sugar & Natural Sweeteners",
+      "standard_name": "Sugar & Natural Sweeteners"
+    },
+    {
+      "additive_type": "natural_colorant",
+      "category": "colorant_flavoring_natural",
+      "common_uses": [
+        "natural coloring",
+        "flavoring"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "unii": "3O1G4G4DIR"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Pear juice concentrate",
+      "normalized_key": "pear_juice_concentrate",
+      "notes": "Natural fruit juice concentrates used for color and flavor. Clean label ingredients. GRAS approved.",
+      "population_warnings": [],
+      "raw_source_text": "Pear juice concentrate",
+      "severity_level": "",
+      "standardName": "Fruit Juice Concentrates",
+      "standard_name": "Fruit Juice Concentrates"
+    },
+    {
+      "additive_type": "gelatin_capsule",
+      "category": "capsule_material",
+      "common_uses": [
+        "capsule shell",
+        "softgel encapsulation"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0017237",
+        "unii": "2G86QN327L"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Gelatin",
+      "normalized_key": "gelatin",
+      "notes": "Derived from animal collagen, forming the shell of traditional capsules and softgels. Provides a protective casing. While animal-derived (not vegan/vegetarian), it is generally considered safe and inert in its role as a capsule material.",
+      "population_warnings": [],
+      "raw_source_text": "Gelatin",
+      "severity_level": "",
+      "standardName": "Gelatin Capsule",
+      "standard_name": "Gelatin Capsule"
+    },
+    {
+      "additive_type": "solvent",
+      "category": "solvent",
+      "common_uses": [
+        "solvent",
+        "diluent",
+        "processing aid"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "7732-18-5",
+        "cui": "C0790233",
+        "pubchem_cid": 962,
+        "unii": "059QF0KO0R"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Water",
+      "normalized_key": "water",
+      "notes": "A fundamental solvent and diluent used in liquid formulations, suspensions, and as a component in the manufacturing of capsules and tablets. Considered entirely inert and safe.",
+      "population_warnings": [],
+      "raw_source_text": "Water",
+      "severity_level": "",
+      "standardName": "Purified Water",
+      "standard_name": "Purified Water"
+    },
+    {
+      "additive_type": "preservative_natural",
+      "category": "preservative_acidity_regulator",
+      "common_uses": [
+        "preservation",
+        "pH adjustment",
+        "flavor enhancement"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "77-92-9",
+        "cui": "C0055819",
+        "pubchem_cid": 311,
+        "unii": "2968PHW8QP"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Citric Acid",
+      "normalized_key": "citric_acid",
+      "notes": "Natural preservative and pH adjuster. While naturally found in citrus, commercial form is typically derived from fermented sources. Generally recognized as safe (GRAS). Clean label preservative option.",
+      "population_warnings": [],
+      "raw_source_text": "Citric Acid",
+      "severity_level": "",
+      "standardName": "Citric Acid",
+      "standard_name": "Citric Acid"
+    },
+    {
+      "additive_type": "",
+      "category": "",
+      "common_uses": [],
+      "forms": [],
+      "harmful_notes": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "harmful_severity": "low",
+      "identifiers": null,
+      "is_additive": 0,
+      "is_harmful": true,
+      "match_method": "alias",
+      "matched_alias": "colors",
+      "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "name": "Colors",
+      "normalized_key": "colors",
+      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
+      "population_warnings": [
+        "Dye-sensitive individuals — cannot assess risk without knowing which colorant is used",
+        "Children — if undisclosed colorant is an azo dye, hyperactivity concern applies"
+      ],
+      "raw_source_text": "Colors",
+      "severity_level": "low",
+      "standardName": "colors (unspecified)",
+      "standard_name": "Unspecified Colors"
+    },
+    {
+      "additive_type": "acidity_regulator",
+      "category": "acidulant",
+      "common_uses": [
+        "acidity regulator",
+        "flavor balancing",
+        "pH control"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "110-17-8",
+        "cui": "C0060825",
+        "pubchem_cid": 444972,
+        "unii": "88XHZ13131"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Fumaric Acid",
+      "normalized_key": "fumaric_acid",
+      "notes": "Acidulant used for tartness and pH control in gummies/tablets. Common food-grade additive; treated as non-scorable formulation excipient.",
+      "population_warnings": [],
+      "raw_source_text": "Fumaric Acid",
+      "severity_level": "",
+      "standardName": "Fumaric Acid",
+      "standard_name": "Fumaric Acid"
+    },
+    {
+      "additive_type": "acidity_regulator",
+      "category": "ph_adjuster",
+      "common_uses": [
+        "pH adjustment",
+        "preservative"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "50-21-5",
+        "cui": "C0064582",
+        "pubchem_cid": 612,
+        "unii": "3B8D35Y7S4"
+      },
+      "is_additive": 0,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Lactic Acid",
+      "normalized_key": "lactic_acid",
+      "notes": "Organic acid used as pH adjuster and preservative in supplement formulations. Naturally occurring in fermented foods and muscle tissue. Generally recognized as safe.",
+      "population_warnings": [],
+      "raw_source_text": "Lactic Acid",
+      "severity_level": "",
+      "standardName": "Lactic Acid",
+      "standard_name": "Lactic Acid"
+    },
+    {
+      "additive_type": "natural_flavor",
+      "category": "flavor_natural",
+      "common_uses": [
+        "flavor enhancement",
+        "taste masking",
+        "aroma improvement"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C1365470"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Natural flavor",
+      "normalized_key": "natural_flavor",
+      "notes": "Flavoring substances derived from plant or animal sources. While generally recognized as safe, the term can encompass hundreds of compounds. Must be derived from natural sources per FDA regulations. Good clean label choice.",
+      "population_warnings": [],
+      "raw_source_text": "Natural flavor",
+      "severity_level": "",
+      "standardName": "Natural Flavors",
+      "standard_name": "Natural Flavors"
+    },
+    {
+      "additive_type": "natural_fiber",
+      "category": "gelling_agent_natural",
+      "common_uses": [
+        "gelling",
+        "thickening",
+        "fiber addition",
+        "gut health"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "9000-69-5",
+        "cui": "C0070203",
+        "pubchem_cid": 441476,
+        "unii": "89NA02M4RX"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Pectin",
+      "normalized_key": "pectin",
+      "notes": "Natural fiber from fruits, excellent for gelling and thickening. Provides additional health benefits including cholesterol support.",
+      "population_warnings": [],
+      "raw_source_text": "Pectin",
+      "severity_level": "",
+      "standardName": "Prebiotics",
+      "standard_name": "Pectin"
+    },
+    {
+      "additive_type": "ph_adjuster",
+      "category": "buffer_acidity_regulator",
+      "common_uses": [
+        "pH buffering",
+        "acidity regulation",
+        "stabilizer",
+        "emulsifier"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cas": "68-04-2",
+        "cui": "C0142825",
+        "pubchem_cid": 6224,
+        "unii": "1Q73Q2JULR"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Sodium Citrate",
+      "normalized_key": "sodium_citrate",
+      "notes": "FDA GRAS-approved buffer and acidity regulator widely used safely in foods and supplements. Helps stabilize pH and acts as natural preservative. Consolidates two previous duplicate entries (Sodium Citrate and Trisodium Citrate - they are the same compound). Only consideration is moderate sodium content for sodium-restricted diets.",
+      "population_warnings": [],
+      "raw_source_text": "Sodium Citrate",
+      "severity_level": "",
+      "standardName": "Sodium Citrate (Trisodium Citrate)",
+      "standard_name": "Sodium Citrate (Trisodium Citrate)"
+    }
+  ],
+  "ingredients": [
+    {
+      "bio_score": 12.0,
+      "category": "vitamins",
+      "dosage": 3000.0,
+      "dosage_unit": "IU",
+      "extracted_forms": [
+        {
+          "display_form": "Cholecalciferol",
+          "dsld_category": "vitamin",
+          "dsld_ingredient_group": "Vitamin D",
+          "dsld_prefix": null,
+          "dsld_unii_code": "1C6V77QF41",
+          "match_candidates": [
+            "Cholecalciferol",
+            "Vitamin D Cholecalciferol"
+          ],
+          "percent_share": 1.0,
+          "raw_form_text": "Cholecalciferol"
+        }
+      ],
+      "form": "",
+      "forms": [
+        {
+          "category": "vitamin",
+          "ingredientGroup": "Vitamin D",
+          "ingredientId": 280176,
+          "name": "Cholecalciferol",
+          "order": 1,
+          "percent": null,
+          "prefix": null,
+          "uniiCode": "1C6V77QF41"
+        }
+      ],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0042866",
+        "unii": "9VU1KI44GP"
+      },
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "cholecalciferol (D3)",
+      "matched_forms": [
+        {
+          "bio_score": 12.0,
+          "canonical_id": "vitamin_d",
+          "form_key": "cholecalciferol (D3)",
+          "match_method": "exact",
+          "matched_candidate": "Cholecalciferol",
+          "natural": true,
+          "percent_share": 1.0,
+          "raw_form_text": "Cholecalciferol",
+          "score": 15.0
+        }
+      ],
+      "name": "Vitamin D",
+      "natural": true,
+      "normalized_amount": 75.0,
+      "normalized_key": "vitamin_d",
+      "normalized_unit": "mcg",
+      "normalized_value": 75.0,
+      "notes": "The gold standard form of vitamin D — identical to what your skin produces from sunlight. D3 raises and maintains blood 25(OH)D levels significantly better than D2. The most studied and recommended form by clinical guidelines worldwide.",
+      "parent_key": "vitamin_d",
+      "quantity": 3000.0,
+      "raw_source_text": "Vitamin D",
+      "role": "active",
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "Vitamin D at standard supplemental doses (up to 4000 IU/day) is not a clinically significant bleeding risk on its own. Monitor if taking high-dose vitamin D (>10,000 IU/day) with anticoagulants.",
+              "alert_body": "Vitamin D has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Vitamin D.",
+              "alert_headline": "Caution with bleeding disorders",
+              "condition_id": "bleeding_disorders",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "theoretical",
+              "informational_note": "Vitamin D can affect platelet function — relevant to people with a bleeding disorder.",
+              "mechanism": "Vitamin D does not directly affect platelet aggregation at physiological or supplemental doses. However, high-dose vitamin D supplementation may interact with warfarin sensitivity in patients with concurrent vitamin K deficiency by affecting the vitamin K-dependent carboxylation of coagulation factors (II, VII, IX, X). The vitamin D endocrine system and vitamin K share overlapping roles in gamma-carboxylation of hepatic Gla-proteins.",
+              "severity": "monitor",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/21155624/",
+                "https://pubmed.ncbi.nlm.nih.gov/32486167/"
+              ]
+            },
+            {
+              "action": "Vitamin D supplementation at standard doses (1000–4000 IU/day) is generally safe in autoimmune conditions. High-dose vitamin D requires physician-monitored 25-OH vitamin D levels to avoid toxicity.",
+              "alert_body": "Vitamin D has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding Vitamin D.",
+              "alert_headline": "Caution with autoimmune conditions",
+              "condition_id": "autoimmune",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "probable",
+              "informational_note": "Vitamin D affects immune function — relevant to people with autoimmune conditions.",
+              "mechanism": "Vitamin D exerts broad immunomodulatory effects, generally shifting immune responses toward tolerance via Treg cell upregulation and Th17 suppression. Low vitamin D status is associated with increased autoimmune risk. Supplementation may be beneficial in Hashimoto thyroiditis and multiple sclerosis, but high doses in active autoimmune disease require monitoring.",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/41717291/"
+              ]
+            },
+            {
+              "action": "Target serum 25(OH)D levels of 30–60 ng/mL. Avoid high-dose supplementation (>4000 IU/day) without clinical monitoring of calcium and 25(OH)D levels.",
+              "alert_body": "Vitamin D can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Vitamin D.",
+              "alert_headline": "Caution with heart conditions",
+              "condition_id": "heart_disease",
+              "dose_threshold_evaluation": {
+                "evaluated": true,
+                "matched_threshold": false,
+                "selected_from": "severity_if_not_met",
+                "selected_severity": "monitor",
+                "thresholds_checked": [
+                  {
+                    "basis": "per_day",
+                    "comparator": ">",
+                    "computed_amount": 3000.0,
+                    "computed_unit": "iu",
+                    "evaluated": true,
+                    "matched": false,
+                    "threshold_unit": "iu",
+                    "threshold_value": 4000.0
+                  }
+                ]
+              },
+              "evidence_level": "probable",
+              "informational_note": "Vitamin D can affect cardiovascular pathways — relevant to people with heart conditions.",
+              "mechanism": "Vitamin D deficiency is associated with increased cardiovascular risk, and moderate supplementation is generally considered beneficial. However, pharmacologic doses (>4000 IU/day chronically) can cause hypercalcemia, which promotes vascular calcification and may worsen coronary artery disease. The benefit-risk ratio is dose-dependent.",
+              "severity": "monitor",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/21505219/"
+              ]
+            },
+            {
+              "action": "Check 25(OH)D levels prior to or during TTC. Correct deficiency (<20 ng/mL) with supplementation (1000–2000 IU/day) under clinician guidance. Achieving sufficiency (30–60 ng/mL) is recommended before and during early pregnancy. Standard prenatal vitamins provide ~400–1000 IU/day.",
+              "alert_body": "Vitamin D used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin D with your clinician.",
+              "alert_headline": "Continue under prenatal care",
+              "condition_id": "ttc",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "probable",
+              "informational_note": "Vitamin D is continued under clinician guidance — relevant to people planning pregnancy.",
+              "mechanism": "Vitamin D receptors (VDR) are expressed in ovarian granulosa cells, endometrium, and placenta. A 2017 review (Voulgaris et al., Hormones) summarized strong associations between vitamin D status and PCOS metabolic parameters, endometriosis, and IVF outcomes, with deficiency linked to lower clinical pregnancy rates. Meta-analyses of IVF studies suggest women with 25(OH)D >20 ng/mL have significantly better outcomes, though causality is not fully established.",
+              "severity": "monitor",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/28500824/",
+                "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
+              ]
+            }
+          ],
+          "drug_class_hits": [
+            {
+              "action": "Monitor INR stability when significantly changing vitamin D supplementation dose, particularly at high doses (>10,000 IU/day). Routine supplementation doses (1000-4000 IU/day) typically do not require INR monitoring changes.",
+              "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about INR or bleeding checks.",
+              "alert_headline": "May add to blood-thinner effects",
+              "dose_threshold_evaluation": {
+                "evaluated": true,
+                "matched_threshold": false,
+                "selected_from": "severity_if_not_met",
+                "selected_severity": "monitor",
+                "thresholds_checked": [
+                  {
+                    "basis": "per_day",
+                    "comparator": ">",
+                    "computed_amount": 3000.0,
+                    "computed_unit": "iu",
+                    "evaluated": true,
+                    "matched": false,
+                    "threshold_unit": "iu",
+                    "threshold_value": 10000.0
+                  }
+                ]
+              },
+              "drug_class_id": "anticoagulants",
+              "evidence_level": "theoretical",
+              "informational_note": "Vitamin D can affect clotting — relevant to people on anticoagulants.",
+              "mechanism": "High-dose vitamin D (>10,000 IU/day) has been associated with altered warfarin sensitivity in some patients. The proposed mechanism involves shared metabolic pathways with vitamin K: vitamin D may modulate hepatic expression of vitamin K-dependent coagulation factors (II, VII, IX, X), and vitamin D deficiency itself affects coagulation factor synthesis. Vitamin D and K have documented synergistic effects on Gla-protein carboxylation, and disruption of this balance at supraphysiological vitamin D doses may affect INR stability in warfarin patients.",
+              "severity": "monitor",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/21155624/",
+                "https://pubmed.ncbi.nlm.nih.gov/8983860/"
+              ]
+            },
+            {
+              "action": "No specific action required at standard supplemental doses. Monitor for unusual bleeding if taking high-dose vitamin D with antiplatelet medications.",
+              "alert_body": "Vitamin D has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Vitamin D.",
+              "alert_headline": "May add to antiplatelet effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "antiplatelets",
+              "evidence_level": "theoretical",
+              "informational_note": "Vitamin D can affect platelet function — relevant to people on antiplatelets.",
+              "mechanism": "No established direct interaction between vitamin D supplementation and antiplatelet drug activity. Monitoring recommended at high doses due to broader hemostatic pathway involvement.",
+              "severity": "monitor",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/21155624/"
+              ]
+            },
+            {
+              "action": "No specific action required at standard supplemental doses.",
+              "alert_body": "Vitamin D has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Vitamin D.",
+              "alert_headline": "May add to NSAID bleeding risk",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "nsaids",
+              "evidence_level": "theoretical",
+              "informational_note": "Vitamin D can affect platelet function — relevant to people on NSAIDs.",
+              "mechanism": "No established pharmacokinetic or pharmacodynamic interaction between vitamin D and NSAIDs on platelet or coagulation pathways. Theoretical concern at high doses given shared anti-inflammatory regulatory roles.",
+              "severity": "monitor",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/21155624/"
+              ]
+            },
+            {
+              "action": "Standard vitamin D supplementation is appropriate alongside immunosuppressants. Monitor 25-OH vitamin D levels annually. High-dose supplementation (>4000 IU/day) requires physician oversight.",
+              "alert_body": "Vitamin D has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding Vitamin D.",
+              "alert_headline": "Caution with immunosuppressants",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "immunosuppressants",
+              "evidence_level": "probable",
+              "informational_note": "Vitamin D affects immune function — relevant to people on immunosuppressants.",
+              "mechanism": "Vitamin D has additive immunomodulatory effects that may complement immunosuppressant therapy. Standard-dose supplementation is generally considered safe alongside immunosuppressants and may reduce corticosteroid-induced bone loss.",
+              "severity": "info",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/41717291/"
+              ]
+            }
+          ],
+          "last_reviewed": "2026-04-09",
+          "pregnancy_lactation": {},
+          "rule_id": "RULE_INGREDIENT_VITAMIN_D",
+          "source_bucket": "ingredients",
+          "subject_ref": {
+            "canonical_id": "vitamin_d",
+            "db": "ingredient_quality_map"
+          }
+        }
+      ],
+      "score": 15.0,
+      "standardName": "Vitamin D",
+      "standard_name": "Vitamin D",
+      "unit": "IU"
+    },
+    {
+      "bio_score": 6.0,
+      "category": "minerals",
+      "dosage": 80.0,
+      "dosage_unit": "mg",
+      "extracted_forms": [
+        {
+          "display_form": "Tricalcium Phosphate",
+          "dsld_category": "mineral",
+          "dsld_ingredient_group": "Calcium",
+          "dsld_prefix": "as",
+          "dsld_unii_code": "K4C08XP666",
+          "match_candidates": [
+            "Tricalcium Phosphate",
+            "Calcium Tricalcium Phosphate"
+          ],
+          "percent_share": 1.0,
+          "raw_form_text": "Tricalcium Phosphate"
+        }
+      ],
+      "form": "",
+      "forms": [
+        {
+          "category": "mineral",
+          "ingredientGroup": "Calcium",
+          "ingredientId": 286382,
+          "name": "Tricalcium Phosphate",
+          "order": 1,
+          "percent": null,
+          "prefix": "as",
+          "uniiCode": "K4C08XP666"
+        }
+      ],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0006675",
+        "unii": "SY7Q814VUP"
+      },
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "calcium phosphate",
+      "matched_forms": [
+        {
+          "bio_score": 6.0,
+          "canonical_id": "calcium",
+          "form_key": "calcium phosphate",
+          "match_method": "exact",
+          "matched_candidate": "Tricalcium Phosphate",
+          "natural": false,
+          "percent_share": 1.0,
+          "raw_form_text": "Tricalcium Phosphate",
+          "score": 6.0
+        }
+      ],
+      "name": "Calcium",
+      "natural": false,
+      "normalized_amount": null,
+      "normalized_key": "calcium",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Calcium combined with phosphate — provides both minerals. Poor solubility limits absorption (~25%). Commonly used as a tablet filler and binder rather than a primary calcium source. Tricalcium phosphate (TCP) is the most common form.",
+      "parent_key": "calcium",
+      "quantity": 80.0,
+      "raw_source_text": "Calcium",
+      "role": "active",
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "In individuals with existing heart disease, prefer dietary calcium over supplements. If supplementation is necessary, use the lowest effective dose and split doses to blunt calcium spikes. Discuss with cardiologist.",
+              "alert_body": "Calcium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding calcium.",
+              "alert_headline": "Caution with heart conditions",
+              "condition_id": "heart_disease",
+              "dose_threshold_evaluation": {
+                "evaluated": true,
+                "matched_threshold": false,
+                "selected_from": "severity_if_not_met",
+                "selected_severity": "caution",
+                "thresholds_checked": [
+                  {
+                    "basis": "per_day",
+                    "comparator": ">",
+                    "computed_amount": 80.0,
+                    "computed_unit": "mg",
+                    "evaluated": true,
+                    "matched": false,
+                    "threshold_unit": "mg",
+                    "threshold_value": 1000.0
+                  }
+                ]
+              },
+              "evidence_level": "probable",
+              "informational_note": "Calcium can affect cardiovascular pathways — relevant to people with heart conditions.",
+              "mechanism": "Calcium supplements (not dietary calcium) are associated with a modestly increased risk of myocardial infarction. Bolland et al. WHI reanalysis found RR 1.24 (95% CI 1.07–1.45) for MI with supplemental calcium. Proposed mechanism: acute hypercalcemia following bolus supplementation may promote coronary arterial calcification and thrombosis. Risk may be attenuated by co-administration with vitamin D.",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/21505219/",
+                "https://pubmed.ncbi.nlm.nih.gov/23951541/",
+                "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+              ]
+            }
+          ],
+          "drug_class_hits": [
+            {
+              "action": "Separate calcium supplementation from levothyroxine by at least 4 hours to prevent absorption interference.",
+              "alert_body": "Calcium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing calcium away from your dose.",
+              "alert_headline": "May affect thyroid medication",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "thyroid_medications",
+              "evidence_level": "probable",
+              "informational_note": "Calcium affects thyroid pathways — relevant to people on thyroid medication.",
+              "mechanism": "Calcium forms insoluble chelate complexes with levothyroxine in the gastrointestinal tract, reducing oral absorption by 20–25%. Effect is dose-dependent and clinically significant at standard supplementation doses (600–1000 mg/day).",
+              "severity": "caution",
+              "sources": [
+                "https://pubmed.ncbi.nlm.nih.gov/30368654/",
+                "https://pubmed.ncbi.nlm.nih.gov/33584551/"
+              ]
+            }
+          ],
+          "last_reviewed": "2026-04-09",
+          "pregnancy_lactation": {},
+          "rule_id": "RULE_IQM_CALCIUM",
+          "source_bucket": "ingredients",
+          "subject_ref": {
+            "canonical_id": "calcium",
+            "db": "ingredient_quality_map"
+          }
+        }
+      ],
+      "score": 6.0,
+      "standardName": "Calcium",
+      "standard_name": "Calcium",
+      "unit": "mg"
+    }
+  ],
+  "interaction_summary": {
+    "condition_summary": {
+      "autoimmune": {
+        "actions": [
+          "Vitamin D supplementation at standard doses (1000–4000 IU/day) is generally safe in autoimmune conditions. High-dose vitamin D requires physician-monitored 25-OH vitamin D levels to avoid toxicity."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Vitamin D"
+        ],
+        "label": "Autoimmune Condition",
+        "rule_ids": [
+          "RULE_INGREDIENT_VITAMIN_D"
+        ]
+      },
+      "bleeding_disorders": {
+        "actions": [
+          "Vitamin D at standard supplemental doses (up to 4000 IU/day) is not a clinically significant bleeding risk on its own. Monitor if taking high-dose vitamin D (>10,000 IU/day) with anticoagulants."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Vitamin D"
+        ],
+        "label": "Bleeding Disorders",
+        "rule_ids": [
+          "RULE_INGREDIENT_VITAMIN_D"
+        ]
+      },
+      "heart_disease": {
+        "actions": [
+          "In individuals with existing heart disease, prefer dietary calcium over supplements. If supplementation is necessary, use the lowest effective dose and split doses to blunt calcium spikes. Discuss with cardiologist.",
+          "Target serum 25(OH)D levels of 30–60 ng/mL. Avoid high-dose supplementation (>4000 IU/day) without clinical monitoring of calcium and 25(OH)D levels."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 2,
+        "ingredients": [
+          "Calcium",
+          "Vitamin D"
+        ],
+        "label": "Heart Disease",
+        "rule_ids": [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "RULE_IQM_CALCIUM"
+        ]
+      },
+      "ttc": {
+        "actions": [
+          "Check 25(OH)D levels prior to or during TTC. Correct deficiency (<20 ng/mL) with supplementation (1000–2000 IU/day) under clinician guidance. Achieving sufficiency (30–60 ng/mL) is recommended before and during early pregnancy. Standard prenatal vitamins provide ~400–1000 IU/day."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Vitamin D"
+        ],
+        "label": "Trying to Conceive",
+        "rule_ids": [
+          "RULE_INGREDIENT_VITAMIN_D"
+        ]
+      }
+    },
+    "drug_class_summary": {
+      "anticoagulants": {
+        "actions": [
+          "Monitor INR stability when significantly changing vitamin D supplementation dose, particularly at high doses (>10,000 IU/day). Routine supplementation doses (1000-4000 IU/day) typically do not require INR monitoring changes."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Vitamin D"
+        ],
+        "label": "Anticoagulants",
+        "rule_ids": [
+          "RULE_INGREDIENT_VITAMIN_D"
+        ]
+      },
+      "antiplatelets": {
+        "actions": [
+          "No specific action required at standard supplemental doses. Monitor for unusual bleeding if taking high-dose vitamin D with antiplatelet medications."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Vitamin D"
+        ],
+        "label": "Antiplatelet Agents",
+        "rule_ids": [
+          "RULE_INGREDIENT_VITAMIN_D"
+        ]
+      },
+      "immunosuppressants": {
+        "actions": [
+          "Standard vitamin D supplementation is appropriate alongside immunosuppressants. Monitor 25-OH vitamin D levels annually. High-dose supplementation (>4000 IU/day) requires physician oversight."
+        ],
+        "highest_severity": "info",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Vitamin D"
+        ],
+        "label": "Immunosuppressants",
+        "rule_ids": [
+          "RULE_INGREDIENT_VITAMIN_D"
+        ]
+      },
+      "nsaids": {
+        "actions": [
+          "No specific action required at standard supplemental doses."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Vitamin D"
+        ],
+        "label": "NSAIDs",
+        "rule_ids": [
+          "RULE_INGREDIENT_VITAMIN_D"
+        ]
+      },
+      "thyroid_medications": {
+        "actions": [
+          "Separate calcium supplementation from levothyroxine by at least 4 hours to prevent absorption interference."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Calcium"
+        ],
+        "label": "Thyroid Medications",
+        "rule_ids": [
+          "RULE_IQM_CALCIUM"
+        ]
+      }
+    },
+    "highest_severity": "caution"
+  },
+  "manufacturer_detail": {
+    "brand_name": "vitafusion",
+    "is_trusted": 0,
+    "manufacturing_region": "USA",
+    "violations": {
+      "found": false,
+      "total_deduction_applied": 0.0,
+      "violations": []
+    }
+  },
+  "non_gmo_audit": {
+    "all_signals": [
+      {
+        "source": "clean_label_claims",
+        "text": "Gluten Free"
+      }
+    ],
+    "claim_present": false,
+    "generic_signals": [],
+    "project_verified": false,
+    "reason": "no_non_gmo_signal",
+    "score_eligible": false,
+    "verified_signals": []
+  },
+  "nutrition_detail": {
+    "calories_per_serving": 15.0,
+    "dietary_fiber_g": null,
+    "protein_g": null,
+    "total_carbohydrates_g": 4.0,
+    "total_fat_g": null
+  },
+  "omega3_audit": {
+    "applicable_for_dose_bonus": false,
+    "bonus_score": 0.0,
+    "contains_omega3": false,
+    "dha_mg_per_unit": null,
+    "dose_band": "",
+    "epa_dha_mg_per_unit": null,
+    "epa_mg_per_unit": null,
+    "matched_ingredients": [],
+    "per_day_max_mg": null,
+    "per_day_mid_mg": null,
+    "per_day_min_mg": null,
+    "reason": "no_omega3_signal"
+  },
+  "product_name": "Vitamin D3 3000 IU Natural Blueberry Flavor",
+  "proprietary_blend_audit": {
+    "blend_count": 0,
+    "evidence": [],
+    "has_proprietary_blends": false,
+    "penalty_score": 0.0
+  },
+  "proprietary_blend_detail": {
+    "blends": [],
+    "has_proprietary_blends": 0
+  },
+  "rda_ul_data": {
+    "adequacy_results": [
+      {
+        "adequacy_band": "excessive",
+        "age_group": "19-30",
+        "amount": 75.0,
+        "conversion_applied": true,
+        "is_servings_estimated": false,
+        "notes": [
+          "500.0% of RDA/AI (15 mcg)"
+        ],
+        "nutrient": "Vitamin D",
+        "optimal_max": 100.0,
+        "optimal_min": 25.0,
+        "original_quantity": 3000.0,
+        "original_unit": "IU",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": 500.0,
+        "pct_ul": 75.0,
+        "per_day_max": 75.0,
+        "per_day_min": 75.0,
+        "point_recommendation": 0,
+        "rda_ai": 15,
+        "rda_ai_source": "rda",
+        "scoring_eligible": true,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": false,
+        "ul": 100,
+        "ul_status": "established",
+        "unit": "mcg",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "deficient",
+        "age_group": "19-30",
+        "amount": 80.0,
+        "conversion_applied": false,
+        "is_servings_estimated": false,
+        "notes": [
+          "8.0% of RDA/AI (1000 mg)"
+        ],
+        "nutrient": "Calcium",
+        "optimal_max": 1500.0,
+        "optimal_min": 1000.0,
+        "original_quantity": 80.0,
+        "original_unit": "mg",
+        "over_ul": false,
+        "over_ul_amount": null,
+        "pct_rda": 8.0,
+        "pct_ul": 3.2,
+        "per_day_max": 80.0,
+        "per_day_min": 80.0,
+        "point_recommendation": 0,
+        "rda_ai": 1000,
+        "rda_ai_source": "rda",
+        "scoring_eligible": true,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "sex_group": "Male",
+        "skip_ul_check": false,
+        "ul": 2500,
+        "ul_status": "established",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "analyzed_ingredients": [
+      {
+        "adequacy_band": "excessive",
+        "conversion_evidence": {
+          "confidence": "high",
+          "conversion_factor": 0.025,
+          "conversion_rule_id": "vitamin_d3",
+          "converted_unit": "mcg",
+          "converted_value": 75.0,
+          "error": null,
+          "form_detected": "Vitamin D3 (Cholecalciferol)",
+          "form_detection_source": "alias_match",
+          "ingredient": "Vitamin D",
+          "notes": [
+            "FDA requires mcg on labels since 2020; IU may appear in parentheses"
+          ],
+          "nutrient_detected": "Vitamin D",
+          "original_unit": "IU",
+          "original_value": 3000.0,
+          "success": true,
+          "warnings": []
+        },
+        "converted_quantity": 75.0,
+        "converted_unit": "mcg",
+        "data_by_group": [],
+        "highest_ul": 100,
+        "ingredient": "Vitamin D",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mcg",
+        "optimal_range": "25.0-100.0",
+        "pct_rda": 500.0,
+        "per_day_max": 75.0,
+        "per_day_min": 75.0,
+        "quantity": 3000.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Vitamin D",
+        "unit": "IU",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "deficient",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Calcium",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Calcium",
+          "notes": [],
+          "nutrient_detected": "Calcium",
+          "original_unit": "mg",
+          "original_value": 80.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 80.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": 2500,
+        "ingredient": "Calcium",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "1000.0-1500.0",
+        "pct_rda": 8.0,
+        "per_day_max": 80.0,
+        "per_day_min": 80.0,
+        "quantity": 80.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Calcium",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "collection_enabled": true,
+    "collection_reason": null,
+    "conversion_evidence": [
+      {
+        "confidence": "high",
+        "conversion_factor": 0.025,
+        "conversion_rule_id": "vitamin_d3",
+        "converted_unit": "mcg",
+        "converted_value": 75.0,
+        "error": null,
+        "form_detected": "Vitamin D3 (Cholecalciferol)",
+        "form_detection_source": "alias_match",
+        "ingredient": "Vitamin D",
+        "notes": [
+          "FDA requires mcg on labels since 2020; IU may appear in parentheses"
+        ],
+        "nutrient_detected": "Vitamin D",
+        "original_unit": "IU",
+        "original_value": 3000.0,
+        "success": true,
+        "warnings": []
+      },
+      {
+        "confidence": "failed",
+        "conversion_factor": null,
+        "conversion_rule_id": null,
+        "converted_unit": null,
+        "converted_value": null,
+        "error": "No conversion rule found for nutrient: Calcium",
+        "form_detected": null,
+        "form_detection_source": null,
+        "ingredient": "Calcium",
+        "notes": [],
+        "nutrient_detected": "Calcium",
+        "original_unit": "mg",
+        "original_value": 80.0,
+        "success": false,
+        "warnings": []
+      }
+    ],
+    "count": 2,
+    "has_over_ul": false,
+    "ingredients_with_rda": [
+      {
+        "adequacy_band": "excessive",
+        "conversion_evidence": {
+          "confidence": "high",
+          "conversion_factor": 0.025,
+          "conversion_rule_id": "vitamin_d3",
+          "converted_unit": "mcg",
+          "converted_value": 75.0,
+          "error": null,
+          "form_detected": "Vitamin D3 (Cholecalciferol)",
+          "form_detection_source": "alias_match",
+          "ingredient": "Vitamin D",
+          "notes": [
+            "FDA requires mcg on labels since 2020; IU may appear in parentheses"
+          ],
+          "nutrient_detected": "Vitamin D",
+          "original_unit": "IU",
+          "original_value": 3000.0,
+          "success": true,
+          "warnings": []
+        },
+        "converted_quantity": 75.0,
+        "converted_unit": "mcg",
+        "data_by_group": [],
+        "highest_ul": 100,
+        "ingredient": "Vitamin D",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mcg",
+        "optimal_range": "25.0-100.0",
+        "pct_rda": 500.0,
+        "per_day_max": 75.0,
+        "per_day_min": 75.0,
+        "quantity": 3000.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Vitamin D",
+        "unit": "IU",
+        "warnings": []
+      },
+      {
+        "adequacy_band": "deficient",
+        "conversion_evidence": {
+          "confidence": "failed",
+          "conversion_factor": null,
+          "conversion_rule_id": null,
+          "converted_unit": null,
+          "converted_value": null,
+          "error": "No conversion rule found for nutrient: Calcium",
+          "form_detected": null,
+          "form_detection_source": null,
+          "ingredient": "Calcium",
+          "notes": [],
+          "nutrient_detected": "Calcium",
+          "original_unit": "mg",
+          "original_value": 80.0,
+          "success": false,
+          "warnings": []
+        },
+        "converted_quantity": 80.0,
+        "converted_unit": "mg",
+        "data_by_group": [],
+        "highest_ul": 2500,
+        "ingredient": "Calcium",
+        "is_servings_estimated": false,
+        "nutrient_unit": "mg",
+        "optimal_range": "1000.0-1500.0",
+        "pct_rda": 8.0,
+        "per_day_max": 80.0,
+        "per_day_min": 80.0,
+        "quantity": 80.0,
+        "servings_per_day_max": 1.0,
+        "servings_per_day_min": 1.0,
+        "skip_ul_check": false,
+        "skip_ul_reason": null,
+        "standard_name": "Calcium",
+        "unit": "mg",
+        "warnings": []
+      }
+    ],
+    "safety_flags": []
+  },
+  "score_bonuses": [
+    {
+      "detail": "3",
+      "id": "A3",
+      "label": "Advanced delivery system",
+      "score": 1.0
+    },
+    {
+      "id": "A4",
+      "label": "Absorption enhancer present",
+      "score": 3.0
+    },
+    {
+      "id": "A5c",
+      "label": "Synergy cluster qualified",
+      "score": 0.75
+    }
+  ],
+  "score_penalties": [
+    {
+      "id": "B1",
+      "label": "Harmful additive: Unspecified Colors",
+      "reason": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "score": 0.5,
+      "severity": "low"
+    }
+  ],
+  "section_breakdown": {
+    "brand_trust": {
+      "max": 5.0,
+      "score": 2.0,
+      "sub": {
+        "D1": 0.0,
+        "D2": 1.0,
+        "D3": 0.0,
+        "D4": 1.0,
+        "D5": 0.0
+      }
+    },
+    "evidence_research": {
+      "ingredient_points": {
+        "calcium": 4.68,
+        "vitamin d3": 4.29
+      },
+      "matched_entries": 2,
+      "max": 20.0,
+      "score": 6.83
+    },
+    "ingredient_quality": {
+      "max": 25.0,
+      "score": 15.25,
+      "sub": {
+        "A1": 10.5,
+        "A2": 0.0,
+        "A3": 1.0,
+        "A4": 3.0,
+        "A5": 0.75,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 0.75,
+        "A5d": 0.0,
+        "A6": 0.0,
+        "category_bonus_pool_cap": 5.0,
+        "category_bonus_total": 0.0,
+        "core_quality": 15.25,
+        "omega3_breakdown": {
+          "applicable": false,
+          "omega3_dose_bonus": 0.0
+        },
+        "omega3_dose_bonus": 0.0,
+        "probiotic_bonus": 0.0,
+        "probiotic_breakdown": {
+          "cfu": 0.0,
+          "clinical_strains": 0.0,
+          "diversity": 0.0,
+          "eligibility": {
+            "eligible": false,
+            "mode": "non_probiotic",
+            "reason": "no_probiotic_signal"
+          },
+          "prebiotic": 0.0,
+          "probiotic_bonus": 0.0,
+          "survivability": 0.0
+        }
+      }
+    },
+    "safety_purity": {
+      "max": 30.0,
+      "score": 27.5,
+      "sub": {
+        "B0_moderate_penalty": 0.0,
+        "B1_evidence": [],
+        "B1_penalty": 0.5,
+        "B2_penalty": 0.0,
+        "B3": 3.0,
+        "B4a": 0.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B5_blend_evidence": [],
+        "B5_penalty": 0.0,
+        "B6_penalty": 0.0,
+        "B7_dose_safety_evidence": [],
+        "B7_penalty": 0.0,
+        "B8_caers_evidence": [],
+        "B8_penalty": 0.0,
+        "B_hypoallergenic": 0.0,
+        "bonuses": 3.0,
+        "penalties": 0.5
+      }
+    },
+    "violation_penalty": 0.0
+  },
+  "serving_info": {
+    "basis_count": 2.0,
+    "basis_unit": "gummy vitamin",
+    "max_servings_per_day": 1,
+    "min_servings_per_day": 1
+  },
+  "supplement_type_audit": {
+    "active_count": 2,
+    "category_breakdown": {
+      "mineral": 1,
+      "vitamin": 1
+    },
+    "enriched_type": "targeted",
+    "export_type": "targeted",
+    "inferred_type": "targeted",
+    "probiotic_signal": 0,
+    "scored_type": "targeted",
+    "source": "ingredient_quality_data"
+  },
+  "synergy_detail": {
+    "best_tier": 2,
+    "bonus_awarded": 0.75,
+    "bonus_explanation": "This product combines co-dependent nutrients that work together in established biochemical pathways.",
+    "clusters": [
+      {
+        "all_adequate": 1,
+        "benefit_short": "Vitamin C, zinc, vitamin D, and elderberry work on different immune pathways — giving your defense system multiple angles at once.",
+        "evidence_label": "Promising combination",
+        "evidence_tier": 3,
+        "id": "immune_defense",
+        "match_count": 2,
+        "matched_ingredients": [
+          "Vitamin D",
+          "Vitamin D"
+        ],
+        "mechanism": "Vitamin C supports neutrophil function and acts as a cofactor for immune signaling enzymes. Zinc is required for T-cell maturation and NK cell activity. Vitamin D modulates innate immune responses through antimicrobial peptide (cathelicidin) expression. Quercetin has demonstrated ionophore activity ",
+        "name": "Immune Defense",
+        "pmids": []
+      },
+      {
+        "all_adequate": 1,
+        "benefit_short": "Zinc, ashwagandha, vitamin D, and tongkat ali support healthy testosterone pathways — a common stack for men's hormonal balance.",
+        "evidence_label": "Popular combination",
+        "evidence_tier": 4,
+        "id": "hormone_balance_men",
+        "match_count": 2,
+        "matched_ingredients": [
+          "Vitamin D",
+          "Vitamin D"
+        ],
+        "mechanism": "Zinc is essential for testosterone synthesis and 5-alpha-reductase regulation. Ashwagandha supports testosterone via cortisol reduction (inverse relationship). Vitamin D acts as a steroid hormone precursor. Tongkat ali may support free testosterone by reducing SHBG binding.",
+        "name": "Hormone Balance (Men)",
+        "pmids": []
+      },
+      {
+        "all_adequate": 0,
+        "benefit_short": "Calcium, vitamin D, K2, magnesium, and boron work together for bone strength — calcium alone isn't enough, these partners guide it to bone.",
+        "evidence_label": "Supported co-nutrients",
+        "evidence_tier": 2,
+        "id": "bone_health",
+        "match_count": 5,
+        "matched_ingredients": [
+          "Calcium",
+          "Calcium",
+          "Calcium",
+          "Vitamin D",
+          "Vitamin D"
+        ],
+        "mechanism": "Calcium provides building blocks; Vitamin D enhances absorption; K2 (MK-7) activates osteocalcin to deposit calcium in bones; Magnesium is cofactor for vitamin D activation.",
+        "name": "Bone Health",
+        "pmids": [
+          "18410225"
+        ]
+      },
+      {
+        "all_adequate": 1,
+        "benefit_short": "Astragalus, cordyceps, alpha-lipoic acid, and omega-3 together support kidney function — traditional herbs plus modern antioxidants.",
+        "evidence_label": "Promising combination",
+        "evidence_tier": 3,
+        "id": "kidney_health_support",
+        "match_count": 2,
+        "matched_ingredients": [
+          "Vitamin D",
+          "Vitamin D"
+        ],
+        "mechanism": "Astragalus and cordyceps have nephroprotective properties. Omega-3s reduce inflammation. CoQ10 supports mitochondrial function in kidney cells. Alpha-lipoic acid provides antioxidant protection.",
+        "name": "Kidney Health Support",
+        "pmids": []
+      },
+      {
+        "all_adequate": 1,
+        "benefit_short": "CoQ10, vitamin D, K2, and probiotics together support gum and tooth health from the inside — beyond just brushing and flossing.",
+        "evidence_label": "Supported co-nutrients",
+        "evidence_tier": 2,
+        "id": "dental_oral_health",
+        "match_count": 4,
+        "matched_ingredients": [
+          "Vitamin D",
+          "Vitamin D",
+          "Calcium",
+          "Calcium"
+        ],
+        "mechanism": "CoQ10 supports mitochondrial energy in gingival fibroblasts and has demonstrated benefit in periodontal inflammation. Vitamin D enhances calcium absorption for enamel remineralization and modulates oral immune defenses. Vitamin C is critical for collagen synthesis in gingival connective tissue. Zinc",
+        "name": "Dental & Oral Health",
+        "pmids": []
+      },
+      {
+        "all_adequate": 1,
+        "benefit_short": "Magnesium, riboflavin (B2), CoQ10, and feverfew are the most-studied supplement combo for reducing migraine frequency — the headache stack.",
+        "evidence_label": "Popular combination",
+        "evidence_tier": 4,
+        "id": "migraine_prevention",
+        "match_count": 2,
+        "matched_ingredients": [
+          "Vitamin D",
+          "Vitamin D"
+        ],
+        "mechanism": "Magnesium blocks cortical spreading depression (the neurophysiological substrate of migraine aura) and modulates NMDA receptors. Riboflavin (B2) at high dose improves mitochondrial energy metabolism in neurons with impaired oxidative phosphorylation. CoQ10 supports mitochondrial electron transport i",
+        "name": "Migraine Prevention",
+        "pmids": []
+      },
+      {
+        "all_adequate": 1,
+        "benefit_short": "Methylfolate, CoQ10, inositol, vitamin D, and omega-3 together support egg quality and cycle regularity — a common fertility-preparation stack.",
+        "evidence_label": "Promising combination",
+        "evidence_tier": 3,
+        "id": "fertility_female",
+        "match_count": 2,
+        "matched_ingredients": [
+          "Vitamin D",
+          "Vitamin D"
+        ],
+        "mechanism": "Folate (as 5-MTHF) is critical for DNA methylation during oocyte maturation and early embryogenesis. CoQ10 supports mitochondrial energy in oocytes, which declines with age and correlates with egg quality. Myo-inositol acts as a second messenger in insulin signaling and improves oocyte quality in PC",
+        "name": "Fertility (Female)",
+        "pmids": []
+      }
+    ],
+    "qualified": true
+  },
+  "unmapped_actives": {
+    "excluding_banned_exact_alias": 0,
+    "names": [],
+    "total": 0
+  },
+  "warnings": [
+    {
+      "category": "colorant_artificial",
+      "detail": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "display_mode_default": "critical",
+      "identifiers": null,
+      "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
+      "population_warnings": [
+        "Dye-sensitive individuals — cannot assess risk without knowing which colorant is used",
+        "Children — if undisclosed colorant is an azo dye, hyperactivity concern applies"
+      ],
+      "safety_summary": "The label does not specify the color source, which limits transparency and can mask artificial dye use. Worth choosing products that disclose the specific colorant.",
+      "safety_summary_one_liner": "Undisclosed colorant — transparency concern.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Unspecified Colors",
+      "type": "harmful_additive"
+    },
+    {
+      "action": "Vitamin D at standard supplemental doses (up to 4000 IU/day) is not a clinically significant bleeding risk on its own. Monitor if taking high-dose vitamin D (>10,000 IU/day) with anticoagulants.",
+      "alert_body": "Vitamin D has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Vitamin D.",
+      "alert_headline": "Caution with bleeding disorders",
+      "condition_id": "bleeding_disorders",
+      "detail": "Vitamin D does not directly affect platelet aggregation at physiological or supplemental doses. However, high-dose vitamin D supplementation may interact with warfarin sensitivity in patients with concurrent vitamin K deficiency by affecting the vitamin K-dependent carboxylation of coagulation factors (II, VII, IX, X). The vitamin D endocrine system and vitamin K share overlapping roles in gamma-carboxylation of hepatic Gla-proteins.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "theoretical",
+      "informational_note": "Vitamin D can affect platelet function — relevant to people with a bleeding disorder.",
+      "ingredient_name": "Vitamin D",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/21155624/",
+        "https://pubmed.ncbi.nlm.nih.gov/32486167/"
+      ],
+      "title": "Vitamin D / bleeding_disorders",
+      "type": "interaction"
+    },
+    {
+      "action": "Vitamin D supplementation at standard doses (1000–4000 IU/day) is generally safe in autoimmune conditions. High-dose vitamin D requires physician-monitored 25-OH vitamin D levels to avoid toxicity.",
+      "alert_body": "Vitamin D has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding Vitamin D.",
+      "alert_headline": "Caution with autoimmune conditions",
+      "condition_id": "autoimmune",
+      "detail": "Vitamin D exerts broad immunomodulatory effects, generally shifting immune responses toward tolerance via Treg cell upregulation and Th17 suppression. Low vitamin D status is associated with increased autoimmune risk. Supplementation may be beneficial in Hashimoto thyroiditis and multiple sclerosis, but high doses in active autoimmune disease require monitoring.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "Vitamin D affects immune function — relevant to people with autoimmune conditions.",
+      "ingredient_name": "Vitamin D",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/41717291/"
+      ],
+      "title": "Vitamin D / autoimmune",
+      "type": "interaction"
+    },
+    {
+      "action": "Target serum 25(OH)D levels of 30–60 ng/mL. Avoid high-dose supplementation (>4000 IU/day) without clinical monitoring of calcium and 25(OH)D levels.",
+      "alert_body": "Vitamin D can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Vitamin D.",
+      "alert_headline": "Caution with heart conditions",
+      "condition_id": "heart_disease",
+      "detail": "Vitamin D deficiency is associated with increased cardiovascular risk, and moderate supplementation is generally considered beneficial. However, pharmacologic doses (>4000 IU/day chronically) can cause hypercalcemia, which promotes vascular calcification and may worsen coronary artery disease. The benefit-risk ratio is dose-dependent.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": {
+        "evaluated": true,
+        "matched_threshold": false,
+        "selected_from": "severity_if_not_met",
+        "selected_severity": "monitor",
+        "thresholds_checked": [
+          {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 3000.0,
+            "computed_unit": "iu",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "iu",
+            "threshold_value": 4000.0
+          }
+        ]
+      },
+      "evidence_level": "probable",
+      "informational_note": "Vitamin D can affect cardiovascular pathways — relevant to people with heart conditions.",
+      "ingredient_name": "Vitamin D",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
+        "https://pubmed.ncbi.nlm.nih.gov/21505219/"
+      ],
+      "title": "Vitamin D / heart_disease",
+      "type": "interaction"
+    },
+    {
+      "action": "Check 25(OH)D levels prior to or during TTC. Correct deficiency (<20 ng/mL) with supplementation (1000–2000 IU/day) under clinician guidance. Achieving sufficiency (30–60 ng/mL) is recommended before and during early pregnancy. Standard prenatal vitamins provide ~400–1000 IU/day.",
+      "alert_body": "Vitamin D used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin D with your clinician.",
+      "alert_headline": "Continue under prenatal care",
+      "condition_id": "ttc",
+      "detail": "Vitamin D receptors (VDR) are expressed in ovarian granulosa cells, endometrium, and placenta. A 2017 review (Voulgaris et al., Hormones) summarized strong associations between vitamin D status and PCOS metabolic parameters, endometriosis, and IVF outcomes, with deficiency linked to lower clinical pregnancy rates. Meta-analyses of IVF studies suggest women with 25(OH)D >20 ng/mL have significantly better outcomes, though causality is not fully established.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "Vitamin D is continued under clinician guidance — relevant to people planning pregnancy.",
+      "ingredient_name": "Vitamin D",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/28500824/",
+        "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
+      ],
+      "title": "Vitamin D / ttc",
+      "type": "interaction"
+    },
+    {
+      "action": "Monitor INR stability when significantly changing vitamin D supplementation dose, particularly at high doses (>10,000 IU/day). Routine supplementation doses (1000-4000 IU/day) typically do not require INR monitoring changes.",
+      "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about INR or bleeding checks.",
+      "alert_headline": "May add to blood-thinner effects",
+      "detail": "High-dose vitamin D (>10,000 IU/day) has been associated with altered warfarin sensitivity in some patients. The proposed mechanism involves shared metabolic pathways with vitamin K: vitamin D may modulate hepatic expression of vitamin K-dependent coagulation factors (II, VII, IX, X), and vitamin D deficiency itself affects coagulation factor synthesis. Vitamin D and K have documented synergistic effects on Gla-protein carboxylation, and disruption of this balance at supraphysiological vitamin D doses may affect INR stability in warfarin patients.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": {
+        "evaluated": true,
+        "matched_threshold": false,
+        "selected_from": "severity_if_not_met",
+        "selected_severity": "monitor",
+        "thresholds_checked": [
+          {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 3000.0,
+            "computed_unit": "iu",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "iu",
+            "threshold_value": 10000.0
+          }
+        ]
+      },
+      "drug_class_id": "anticoagulants",
+      "evidence_level": "theoretical",
+      "informational_note": "Vitamin D can affect clotting — relevant to people on anticoagulants.",
+      "ingredient_name": "Vitamin D",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/21155624/",
+        "https://pubmed.ncbi.nlm.nih.gov/8983860/"
+      ],
+      "title": "Vitamin D / anticoagulants",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "No specific action required at standard supplemental doses. Monitor for unusual bleeding if taking high-dose vitamin D with antiplatelet medications.",
+      "alert_body": "Vitamin D has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Vitamin D.",
+      "alert_headline": "May add to antiplatelet effects",
+      "detail": "No established direct interaction between vitamin D supplementation and antiplatelet drug activity. Monitoring recommended at high doses due to broader hemostatic pathway involvement.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "antiplatelets",
+      "evidence_level": "theoretical",
+      "informational_note": "Vitamin D can affect platelet function — relevant to people on antiplatelets.",
+      "ingredient_name": "Vitamin D",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/21155624/"
+      ],
+      "title": "Vitamin D / antiplatelets",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "No specific action required at standard supplemental doses.",
+      "alert_body": "Vitamin D has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Vitamin D.",
+      "alert_headline": "May add to NSAID bleeding risk",
+      "detail": "No established pharmacokinetic or pharmacodynamic interaction between vitamin D and NSAIDs on platelet or coagulation pathways. Theoretical concern at high doses given shared anti-inflammatory regulatory roles.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "nsaids",
+      "evidence_level": "theoretical",
+      "informational_note": "Vitamin D can affect platelet function — relevant to people on NSAIDs.",
+      "ingredient_name": "Vitamin D",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/21155624/"
+      ],
+      "title": "Vitamin D / nsaids",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Standard vitamin D supplementation is appropriate alongside immunosuppressants. Monitor 25-OH vitamin D levels annually. High-dose supplementation (>4000 IU/day) requires physician oversight.",
+      "alert_body": "Vitamin D has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding Vitamin D.",
+      "alert_headline": "Caution with immunosuppressants",
+      "detail": "Vitamin D has additive immunomodulatory effects that may complement immunosuppressant therapy. Standard-dose supplementation is generally considered safe alongside immunosuppressants and may reduce corticosteroid-induced bone loss.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "immunosuppressants",
+      "evidence_level": "probable",
+      "informational_note": "Vitamin D affects immune function — relevant to people on immunosuppressants.",
+      "ingredient_name": "Vitamin D",
+      "severity": "info",
+      "severity_contextual": "info",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/41717291/"
+      ],
+      "title": "Vitamin D / immunosuppressants",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "In individuals with existing heart disease, prefer dietary calcium over supplements. If supplementation is necessary, use the lowest effective dose and split doses to blunt calcium spikes. Discuss with cardiologist.",
+      "alert_body": "Calcium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding calcium.",
+      "alert_headline": "Caution with heart conditions",
+      "condition_id": "heart_disease",
+      "detail": "Calcium supplements (not dietary calcium) are associated with a modestly increased risk of myocardial infarction. Bolland et al. WHI reanalysis found RR 1.24 (95% CI 1.07–1.45) for MI with supplemental calcium. Proposed mechanism: acute hypercalcemia following bolus supplementation may promote coronary arterial calcification and thrombosis. Risk may be attenuated by co-administration with vitamin D.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": {
+        "evaluated": true,
+        "matched_threshold": false,
+        "selected_from": "severity_if_not_met",
+        "selected_severity": "caution",
+        "thresholds_checked": [
+          {
+            "basis": "per_day",
+            "comparator": ">",
+            "computed_amount": 80.0,
+            "computed_unit": "mg",
+            "evaluated": true,
+            "matched": false,
+            "threshold_unit": "mg",
+            "threshold_value": 1000.0
+          }
+        ]
+      },
+      "evidence_level": "probable",
+      "informational_note": "Calcium can affect cardiovascular pathways — relevant to people with heart conditions.",
+      "ingredient_name": "Calcium",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/21505219/",
+        "https://pubmed.ncbi.nlm.nih.gov/23951541/",
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+      ],
+      "title": "Calcium / heart_disease",
+      "type": "interaction"
+    },
+    {
+      "action": "Separate calcium supplementation from levothyroxine by at least 4 hours to prevent absorption interference.",
+      "alert_body": "Calcium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing calcium away from your dose.",
+      "alert_headline": "May affect thyroid medication",
+      "detail": "Calcium forms insoluble chelate complexes with levothyroxine in the gastrointestinal tract, reducing oral absorption by 20–25%. Effect is dose-dependent and clinically significant at standard supplementation doses (600–1000 mg/day).",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "thyroid_medications",
+      "evidence_level": "probable",
+      "informational_note": "Calcium affects thyroid pathways — relevant to people on thyroid medication.",
+      "ingredient_name": "Calcium",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30368654/",
+        "https://pubmed.ncbi.nlm.nih.gov/33584551/"
+      ],
+      "title": "Calcium / thyroid_medications",
+      "type": "drug_interaction"
+    }
+  ],
+  "warnings_profile_gated": [
+    {
+      "category": "colorant_artificial",
+      "detail": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "display_mode_default": "critical",
+      "identifiers": null,
+      "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
+      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
+      "population_warnings": [
+        "Dye-sensitive individuals — cannot assess risk without knowing which colorant is used",
+        "Children — if undisclosed colorant is an azo dye, hyperactivity concern applies"
+      ],
+      "safety_summary": "The label does not specify the color source, which limits transparency and can mask artificial dye use. Worth choosing products that disclose the specific colorant.",
+      "safety_summary_one_liner": "Undisclosed colorant — transparency concern.",
+      "severity": "low",
+      "source": "harmful_additives_db",
+      "title": "Contains Unspecified Colors",
+      "type": "harmful_additive"
+    }
+  ]
+}

@@ -15,11 +15,17 @@ We chose option C over rebuilding (option B) after the E1.0/E1.1 work shipped be
 
 ## Canary products
 
+Original 3 (locked 2026-04-21) + 4 added at E1.2.2 kickoff 2026-04-22 per external-dev review (higher blast-radius phase needs broader category coverage):
+
 | Product | DSLD ID | Brand | Blob SHA256 | Why this one |
 |---|---|---|---|---|
-| Plantizyme | 35491 | Thorne Research | `4b581bc2b2984643b0c6655f6c4bc007781a46985d825acea62e0cc9287d1938` | Enzyme prop-blend parent-mass cascade (E1.2.1) + enzyme recognition credit (E1.3.4) |
+| Plantizyme | 35491 | Thorne Research | `4b581bc2b2984643b0c6655f6c4bc007781a46985d825acea62e0cc9287d1938` | Enzyme prop-blend parent-mass cascade (E1.2.1 ✅) + enzyme recognition credit (E1.3.4) |
 | KSM-66 600 mg | 306237 | Nutricost | `c860481858b1e2f160b38ea9e7c24ffe2901838df737c9b69ce14301249f904d` | Branded-token preservation + standardization (E1.2.2 / E1.3.5) |
-| CBD Mixed Berry | 246324 | vitafusion | `cdd4799acb3c41397e96c9fa42d6effb2c2a8b1bd376c5ce32786e0889862f12` | Warning dedup target (E1.2.3) + decision_highlights danger bucket (E1.1.1 validation) + banned_substance_detail (E1.1.4) |
+| CBD Mixed Berry | 246324 | vitafusion | `cdd4799acb3c41397e96c9fa42d6effb2c2a8b1bd376c5ce32786e0889862f12` | Warning dedup (E1.2.3) + decision_highlights danger bucket (E1.1.1 ✅) + banned_substance_detail (E1.1.4 ✅) |
+| Double Strength Fish Oil | 1002 | GNC | `f633b0310c06f0efd5ca74d44fdc02dc443ba7cf05fe57a30a4486d5e54b4ad1` | Fish oil EPA/DHA nested propagation (E1.3.3); display_label test for "Fish Oil" category |
+| Digestive Health Probiotic | 19067 | Nature Made | `2edbe8b6d39646017464d745671d52ac5ab4114bcc6b2082e54d884e6f74f88c` | Probiotic CFU strain display (E1.3.2); strain-name preservation in display_label |
+| Ultra Mega Gold | 1036 | GNC | `9e5c8d968066427f48122f41675dcd59101b905a094eb25cc11e80a3b1cdce5b` | Multi-blend product (3 disclosed blends); display fields across many prop-blend members |
+| Vitamin D3 3000 IU | 176872 | vitafusion | `76eded644dcc772a01c7eb07e8f5cc5aacfd13ba6cc3804bdf62ee3127f06f66` | Simple single-vitamin case; baseline for "nothing should change" on trivial structure |
 
 ## Baseline storage
 
