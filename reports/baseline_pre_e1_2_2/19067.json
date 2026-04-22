@@ -460,6 +460,9 @@
       "unit": "CFU"
     }
   ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE"
+  ],
   "manufacturer_detail": {
     "brand_name": "Nature Made",
     "is_trusted": 1,
@@ -579,6 +582,7 @@
     "blends": [],
     "has_proprietary_blends": 0
   },
+  "raw_actives_count": 1,
   "raw_inactives_count": 3,
   "rda_ul_data": {
     "adequacy_results": [

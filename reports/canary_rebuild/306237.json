@@ -724,6 +724,9 @@
       "unit": "mg"
     }
   ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE"
+  ],
   "interaction_summary": {
     "condition_summary": {
       "thyroid_disorder": {
@@ -840,6 +843,7 @@
     "blends": [],
     "has_proprietary_blends": 0
   },
+  "raw_actives_count": 2,
   "raw_inactives_count": 3,
   "rda_ul_data": {
     "adequacy_results": [

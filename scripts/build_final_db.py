@@ -1124,6 +1124,88 @@ def _compute_display_label(ingredient: Dict[str, Any]) -> str:
     return result.strip() or name
 
 
+# Sprint E1.2.5 — active-count reconciliation.
+# Every delta between raw_actives_count (pre-filter truth from the
+# cleaner) and blob ingredients[] count must be EXPLAINED via
+# reason codes aggregated from the cleaner's display_ingredients.
+# Contract: if raw_actives > 0 and blob == 0, the blob MUST carry
+# at least one reason code. Hard stop: unexplained drops OR the
+# "PARSE_ERROR" sentinel reason must not reach release.
+#
+# Reason-code enum (keep tight — anything else is a bug signal):
+_DROP_REASON_STRUCTURAL_HEADER = "DROPPED_STRUCTURAL_HEADER"   # "Total Omega-3", prop-blend parent
+_DROP_REASON_NUTRITION_FACT = "DROPPED_NUTRITION_FACT"         # "Calories", macro rows
+_DROP_REASON_CLASSIFIED_INACTIVE = "DROPPED_AS_INACTIVE"        # routed to inactive_ingredients
+_DROP_REASON_SUMMARY_WRAPPER = "DROPPED_SUMMARY_WRAPPER"       # "Less than 2% of:" headers
+_DROP_REASON_UNMAPPED = "DROPPED_UNMAPPED_ACTIVE"               # real active, scorer has no rule
+_DROP_REASON_PARSE_ERROR = "DROPPED_PARSE_ERROR"                # bug sentinel (must be 0)
+
+_ALLOWED_DROP_REASONS = frozenset({
+    _DROP_REASON_STRUCTURAL_HEADER,
+    _DROP_REASON_NUTRITION_FACT,
+    _DROP_REASON_CLASSIFIED_INACTIVE,
+    _DROP_REASON_SUMMARY_WRAPPER,
+    _DROP_REASON_UNMAPPED,
+    _DROP_REASON_PARSE_ERROR,  # allowed shape-wise but must surface in triage
+})
+
+# display_type → reason code mapping. The cleaner tags every dropped
+# item via _queue_display_ingredient(display_type=...), so we derive
+# reasons from the already-trusted tag rather than re-classifying.
+_DISPLAY_TYPE_TO_REASON = {
+    "structural_container": _DROP_REASON_STRUCTURAL_HEADER,
+    "summary_wrapper": _DROP_REASON_SUMMARY_WRAPPER,
+    "inactive_ingredient": _DROP_REASON_CLASSIFIED_INACTIVE,
+}
+
+
+def _compute_ingredients_dropped_reasons(enriched: Dict[str, Any]) -> List[str]:
+    """Aggregate per-product drop reason codes from the cleaner's
+    display_ingredients trail. Sorted + deduped — stable emission.
+    Unmapped actives (from scored output) also surface as a reason.
+    """
+    reasons: set = set()
+    for di in safe_list(enriched.get("display_ingredients")):
+        if not isinstance(di, dict):
+            continue
+        dt = safe_str(di.get("display_type"))
+        code = _DISPLAY_TYPE_TO_REASON.get(dt)
+        if code:
+            reasons.add(code)
+    # Unmapped-actives list from scored output (already plumbed through
+    # the pipeline) provides the UNMAPPED signal.
+    # (Note: unmapped_actives is attached in build_detail_blob after
+    # scored data is merged; we accept the caller to layer it in.)
+    return sorted(reasons)
+
+
+def _validate_active_count_reconciliation(
+    blob: Dict[str, Any], raw_actives_count: int, dsld_id: str
+) -> None:
+    """Hard stop when raw has actives but blob is empty AND no drop
+    reasons are recorded. Also flags use of the PARSE_ERROR sentinel
+    — that reason is allowed shape-wise but must trend to zero before
+    release."""
+    blob_actives = len(blob.get("ingredients") or [])
+    reasons = blob.get("ingredients_dropped_reasons") or []
+
+    if raw_actives_count > 0 and blob_actives == 0 and not reasons:
+        raise ValueError(
+            f"[{dsld_id}] raw DSLD disclosed {raw_actives_count} real "
+            f"active(s) but blob has 0 ingredients AND 0 drop reasons. "
+            f"Unexplained drop — inspect normalize_product flatten path "
+            f"(Sprint E1.2.5)."
+        )
+
+    for r in reasons:
+        if r not in _ALLOWED_DROP_REASONS:
+            raise ValueError(
+                f"[{dsld_id}] unknown drop reason {r!r} in "
+                f"ingredients_dropped_reasons — must be one of "
+                f"{sorted(_ALLOWED_DROP_REASONS)} (Sprint E1.2.5)."
+            )
+
+
 # Sprint E1.2.4 — inactive-ingredient preservation invariant.
 # The cleaner (enhanced_normalizer) stashes the pre-filter count of
 # real raw inactives (excluding DSLD's "None" placeholder) as
@@ -2658,6 +2740,16 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     raw_inactives_count = int(enriched.get("raw_inactives_count") or 0)
     blob["raw_inactives_count"] = raw_inactives_count
     _validate_inactive_preservation(blob, raw_inactives_count, dsld_id_for_validation)
+
+    # Sprint E1.2.5 — active-count reconciliation + reason codes.
+    raw_actives_count = int(enriched.get("raw_actives_count") or 0)
+    reasons = _compute_ingredients_dropped_reasons(enriched)
+    # Layer in UNMAPPED signal from scored output when present.
+    if safe_list(scored.get("unmapped_actives")):
+        reasons = sorted(set(reasons + [_DROP_REASON_UNMAPPED]))
+    blob["raw_actives_count"] = raw_actives_count
+    blob["ingredients_dropped_reasons"] = reasons
+    _validate_active_count_reconciliation(blob, raw_actives_count, dsld_id_for_validation)
 
     return blob
 

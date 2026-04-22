@@ -7467,6 +7467,9 @@
       "unit": "mcg"
     }
   ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE"
+  ],
   "interaction_summary": {
     "condition_summary": {
       "autoimmune": {
@@ -8056,6 +8059,7 @@
     ],
     "has_proprietary_blends": 1
   },
+  "raw_actives_count": 38,
   "raw_inactives_count": 8,
   "rda_ul_data": {
     "adequacy_results": [

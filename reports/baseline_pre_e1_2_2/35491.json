@@ -796,6 +796,10 @@
       "unit": "NP"
     }
   ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE",
+    "DROPPED_STRUCTURAL_HEADER"
+  ],
   "manufacturer_detail": {
     "brand_name": "Thorne Research",
     "is_trusted": 1,
@@ -954,6 +958,7 @@
     ],
     "has_proprietary_blends": 1
   },
+  "raw_actives_count": 6,
   "raw_inactives_count": 3,
   "rda_ul_data": {
     "adequacy_results": [],

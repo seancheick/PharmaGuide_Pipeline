@@ -524,6 +524,9 @@
       "unit": "mg"
     }
   ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE"
+  ],
   "interaction_summary": {
     "condition_summary": {
       "bleeding_disorders": {
@@ -725,6 +728,7 @@
     "blends": [],
     "has_proprietary_blends": 0
   },
+  "raw_actives_count": 5,
   "raw_inactives_count": 6,
   "rda_ul_data": {
     "adequacy_results": [

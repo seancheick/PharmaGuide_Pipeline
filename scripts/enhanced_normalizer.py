@@ -3538,6 +3538,20 @@ class EnhancedDSLDNormalizer:
                 and oi["name"].strip().lower() != "none"
             )
 
+            # Sprint E1.2.5 — count RAW actives by walking ingredientRows
+            # recursively (including nested blend members). Excludes DSLD
+            # "None" placeholder + empty names. Used by E1.2.5 invariant
+            # to detect active-ingredient drops.
+            def _walk_raw_actives(rows):
+                for r in rows or []:
+                    if not isinstance(r, dict):
+                        continue
+                    name = (r.get("name") or "").strip()
+                    if name and name.lower() != "none":
+                        yield r
+                    yield from _walk_raw_actives(r.get("nestedRows") or [])
+            raw_actives_count = sum(1 for _ in _walk_raw_actives(raw_ingredients))
+
             # Capture nutritional info from ALL ingredients
             nutritional_info = self._extract_nutritional_info(flattened_ingredients + other_ingredients_raw)
 
@@ -3941,6 +3955,8 @@ class EnhancedDSLDNormalizer:
                 # detect-future-drops invariant. Excludes DSLD "None"
                 # placeholder; passes through enricher to build_final_db.
                 "raw_inactives_count": raw_inactives_count,
+                # Sprint E1.2.5 — same for actives (walks nested rows).
+                "raw_actives_count": raw_actives_count,
                 "display_ingredients": self._build_display_ingredients(active_ingredients, inactive_ingredients),
 
                 # ========== NUTRITIONAL INFORMATION ==========
