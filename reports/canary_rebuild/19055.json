@@ -1,0 +1,1282 @@
+{
+  "audit": {
+    "gate_audit": {
+      "blocking_reason": null,
+      "probiotic_eligibility": {
+        "eligible": false,
+        "mode": "non_probiotic",
+        "reason": "no_probiotic_signal"
+      },
+      "verdict": "POOR"
+    },
+    "non_gmo": {
+      "all_signals": [
+        {
+          "source": "clean_label_claims",
+          "text": "Dairy Free"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "Gluten Free"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Artificial Colors"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Artificial Flavors"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Sugar"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "No Wheat"
+        },
+        {
+          "source": "clean_label_claims",
+          "text": "Yeast Free"
+        }
+      ],
+      "claim_present": false,
+      "generic_signals": [],
+      "project_verified": false,
+      "reason": "no_non_gmo_signal",
+      "score_eligible": false,
+      "verified_signals": []
+    },
+    "omega3": {
+      "applicable_for_dose_bonus": true,
+      "bonus_score": 1.0,
+      "contains_omega3": true,
+      "dha_mg_per_unit": 300.0,
+      "dose_band": "general_health",
+      "epa_dha_mg_per_unit": null,
+      "epa_mg_per_unit": 300.0,
+      "matched_ingredients": [
+        {
+          "canonical_id": "epa",
+          "category": "fatty_acids",
+          "name": "EPA (Eicosapentaenoic Acid)",
+          "raw_source_text": "Eicosapentaenoic Acid"
+        },
+        {
+          "canonical_id": "dha",
+          "category": "fatty_acids",
+          "name": "DHA (Docosahexaenoic Acid)",
+          "raw_source_text": "Docosahexaenoic Acid"
+        }
+      ],
+      "per_day_max_mg": 600.0,
+      "per_day_mid_mg": 600.0,
+      "per_day_min_mg": 600.0,
+      "reason": "omega3_bonus_awarded"
+    },
+    "proprietary_blend": {
+      "blend_count": 0,
+      "evidence": [],
+      "has_proprietary_blends": false,
+      "penalty_score": 0.0
+    },
+    "section_a_audit": {
+      "category_bonus_total": 1.0,
+      "ceiling_hit": false,
+      "core_quality": 0.0,
+      "max": 25.0,
+      "score": 1.0
+    },
+    "supplement_type": {
+      "active_count": 4,
+      "category_breakdown": {
+        "fatty_acid": 3,
+        "vitamin": 1
+      },
+      "enriched_type": "targeted",
+      "export_type": "targeted",
+      "inferred_type": "targeted",
+      "probiotic_signal": 0,
+      "scored_type": "targeted",
+      "source": "ingredient_quality_data"
+    }
+  },
+  "banned_substance_detail": null,
+  "blob_version": 1,
+  "brand_name": "Spring Valley",
+  "certification_detail": {
+    "gmp": {
+      "claimed": false,
+      "fda_registered": false,
+      "nsf_gmp": false,
+      "text_matched": ""
+    },
+    "heavy_metal_tested": 0,
+    "label_accuracy_verified": 0,
+    "purity_verified": 0,
+    "third_party_programs": {
+      "count": 0,
+      "has_generic_claim_only": false,
+      "programs": []
+    }
+  },
+  "compliance_detail": {
+    "allergen_free_claims": [
+      "dairy",
+      "gluten"
+    ],
+    "conflicts": [],
+    "dairy_free": true,
+    "evidence_based": {
+      "allergen_free_claims": [
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "No Gluten, No Yeast, No Wheat, No Milk or Milk Derivatives, No Lactose, No Sugar, No Arti...",
+          "dedupe_key": "allergen_free:gluten",
+          "display_name": "Gluten-Free",
+          "duplicate_count": 3,
+          "evidence_strength": "medium",
+          "ineligibility_reason": "proximity_conflict:wheat,gluten",
+          "matched_text": "No Gluten",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "labelText.raw",
+            "labelText.parsed.cleanLabelClaims[1]"
+          ],
+          "pattern_id": "CLAIM_GLUTEN_FREE_positive_1",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [
+            "wheat",
+            "gluten"
+          ],
+          "rule_id": "CLAIM_GLUTEN_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": false,
+          "source_field": "statements[0].notes"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "No Gluten, No Yeast, No Wheat, No Milk or Milk Derivatives, No Lactose, No Sugar, No Artificial Color, No Artificial F...",
+          "dedupe_key": "allergen_free:dairy",
+          "display_name": "Dairy-Free",
+          "duplicate_count": 3,
+          "evidence_strength": "medium",
+          "ineligibility_reason": "proximity_conflict:milk,lactose",
+          "matched_text": "No Milk",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "labelText.raw",
+            "labelText.parsed.cleanLabelClaims[0]"
+          ],
+          "pattern_id": "CLAIM_DAIRY_FREE_positive_3",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [
+            "milk",
+            "lactose"
+          ],
+          "rule_id": "CLAIM_DAIRY_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": false,
+          "source_field": "statements[0].notes"
+        },
+        {
+          "approved_field_group": "product_level_fields",
+          "claim_type": "allergen_free_claim",
+          "context_snippet": "No Gluten, No Yeast, No Wheat, No Milk or Milk Derivatives, No Lactose, No Sugar, No Artificial Col...",
+          "dedupe_key": "allergen_free:yeast",
+          "display_name": "Yeast-Free",
+          "duplicate_count": 3,
+          "evidence_strength": "medium",
+          "ineligibility_reason": "proximity_conflict:yeast",
+          "matched_text": "No Yeast",
+          "negation": {
+            "negated": false,
+            "negation_match_text": null,
+            "negation_pattern_id": null,
+            "negation_source_field": null
+          },
+          "other_sources": [
+            "labelText.raw",
+            "labelText.parsed.cleanLabelClaims[6]"
+          ],
+          "pattern_id": "CLAIM_YEAST_FREE_positive_1",
+          "points_if_eligible": 1,
+          "proximity_conflicts": [
+            "yeast"
+          ],
+          "rule_id": "CLAIM_YEAST_FREE",
+          "scope_rule": "product_level_only",
+          "scope_violation": false,
+          "score_eligible": false,
+          "source_field": "statements[0].notes"
+        }
+      ],
+      "rules_db_version": "5.0.0"
+    },
+    "gluten_free": true,
+    "has_may_contain_warning": false,
+    "soy_free": false,
+    "vegan": false,
+    "vegetarian": false,
+    "verified": true
+  },
+  "dietary_sensitivity_detail": {
+    "sodium": {
+      "amount_mg": 0.0,
+      "exceeds_aha_threshold": false,
+      "level": "sodium_free",
+      "level_display": "Sodium-Free",
+      "percent_daily_value": 0,
+      "sodium_sources": [],
+      "unit": "mg"
+    },
+    "sugar": {
+      "amount_g": 0.0,
+      "contains_sugar": false,
+      "exceeds_diabetic_threshold": false,
+      "has_added_sugar": false,
+      "level": "sugar_free",
+      "level_display": "Sugar-Free",
+      "sugar_sources": [],
+      "unit": "g"
+    },
+    "sweeteners": {
+      "artificial": [],
+      "has_artificial": false,
+      "has_high_glycemic": false,
+      "has_sugar_alcohols": false,
+      "high_glycemic": [],
+      "safer_alternatives": [],
+      "sugar_alcohols": [],
+      "uses_safer_alternatives": false
+    }
+  },
+  "dsld_id": "19055",
+  "evidence_data": {
+    "clinical_matches": [],
+    "match_count": 0,
+    "unsubstantiated_claims": []
+  },
+  "formulation_detail": {
+    "absorption_enhancer_paired": 0,
+    "absorption_enhancers": [],
+    "claim_non_gmo_present": false,
+    "claim_non_gmo_verified": false,
+    "delivery_form": "",
+    "delivery_tier": "",
+    "is_certified_organic": 0,
+    "organic_verification": "",
+    "standardized_botanicals": [],
+    "synergy_cluster_qualified": 0
+  },
+  "inactive_ingredients": [
+    {
+      "additive_type": "gelatin_capsule",
+      "category": "capsule_material",
+      "common_uses": [
+        "capsule shell",
+        "softgel encapsulation"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0017237",
+        "unii": "2G86QN327L"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Gelatin",
+      "normalized_key": "gelatin",
+      "notes": "Derived from animal collagen, forming the shell of traditional capsules and softgels. Provides a protective casing. While animal-derived (not vegan/vegetarian), it is generally considered safe and inert in its role as a capsule material.",
+      "population_warnings": [],
+      "raw_source_text": "Gelatin",
+      "severity_level": "",
+      "standardName": "Gelatin Capsule",
+      "standard_name": "Gelatin Capsule"
+    },
+    {
+      "additive_type": "processing_aid",
+      "category": "humectant_solvent",
+      "common_uses": [
+        "moisture retention",
+        "solvent",
+        "texture improvement",
+        "humectant",
+        "sweetener",
+        "texture modifier"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0017861",
+        "unii": "PDC6A3C0OX"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Glycerin",
+      "normalized_key": "glycerin",
+      "notes": "Plant-derived glycerol (1,2,3-propanetriol, E422) used as humectant, solvent, and sweetener in supplement formulations. FDA GRAS. Essential for gummy texture and shelf life. Acts as carrier for flavors and herbal extracts. ADI: not specified (JECFA — acceptable for food use).",
+      "population_warnings": [],
+      "raw_source_text": "Glycerin",
+      "severity_level": "",
+      "standardName": "Vegetable Glycerin",
+      "standard_name": "Vegetable Glycerin"
+    },
+    {
+      "additive_type": "coating",
+      "category": "coating_protective",
+      "common_uses": [
+        "tablet coating",
+        "protective barrier"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C1697272"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Food Glaze",
+      "normalized_key": "food_glaze",
+      "notes": "General or specific terms for coatings, which are passive ingredients that protect the tablet or capsule, mask taste, or aid in swallowing. Composition varies but generally considered safe.",
+      "population_warnings": [],
+      "raw_source_text": "Food Glaze",
+      "severity_level": "",
+      "standardName": "Coating (General)",
+      "standard_name": "Coating (General)"
+    },
+    {
+      "additive_type": "enteric_coating",
+      "category": "coating_specialized",
+      "common_uses": [
+        "acid-resistant coating",
+        "intestinal targeted release"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0066072",
+        "unii": "1CS02G8656"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Enteric Coating",
+      "normalized_key": "enteric_coating",
+      "notes": "A specialized coating designed to prevent the tablet from dissolving in the stomach, allowing it to pass into the intestines. Key passive ingredient for targeted delivery. Generally considered safe.",
+      "population_warnings": [],
+      "raw_source_text": "Enteric Coating",
+      "severity_level": "",
+      "standardName": "Enteric Coating",
+      "standard_name": "Enteric Coating"
+    },
+    {
+      "additive_type": "film_former",
+      "category": "coating_agent",
+      "common_uses": [
+        "coating",
+        "controlled release",
+        "moisture barrier",
+        "taste masking"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0059756",
+        "unii": "7Z8S9VYZ4B"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Ethylcellulose",
+      "normalized_key": "ethylcellulose",
+      "notes": "Cellulose derivative used as coating agent and controlled release matrix. Provides moisture barrier and taste masking. GRAS approved with excellent safety profile.",
+      "population_warnings": [],
+      "raw_source_text": "Ethylcellulose",
+      "severity_level": "",
+      "standardName": "Ethylcellulose",
+      "standard_name": "Ethylcellulose"
+    },
+    {
+      "additive_type": "",
+      "category": "",
+      "common_uses": [],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_additive": 0,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Lemon Oil",
+      "normalized_key": "lemon_oil",
+      "notes": "",
+      "population_warnings": [],
+      "raw_source_text": "Lemon Oil",
+      "severity_level": "",
+      "standardName": "Lemon Oil",
+      "standard_name": ""
+    },
+    {
+      "additive_type": "preservative_natural",
+      "category": "preservative_natural",
+      "common_uses": [
+        "antioxidant protection",
+        "shelf life extension",
+        "rancidity prevention"
+      ],
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": {
+        "cui": "C0049690",
+        "unii": "QN83US2B0N"
+      },
+      "is_additive": 1,
+      "is_harmful": false,
+      "match_method": "",
+      "matched_alias": "",
+      "mechanism_of_harm": "",
+      "name": "Mixed Tocopherols",
+      "normalized_key": "mixed_tocopherols",
+      "notes": "Antioxidants used to prevent spoilage, such as fat-soluble Vitamin C (ascorbyl palmitate) or Vitamin E (tocopherols). Generally recognized as safe (GRAS) and beneficial. Premium clean label choice.",
+      "population_warnings": [],
+      "raw_source_text": "Mixed Tocopherols",
+      "severity_level": "",
+      "standardName": "Vitamin E",
+      "standard_name": "Natural Preservatives"
+    },
+    {
+      "additive_type": "",
+      "category": "",
+      "common_uses": [],
+      "forms": [],
+      "harmful_notes": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
+      "harmful_severity": "moderate",
+      "identifiers": {
+        "cas": "9005-65-6",
+        "cui": "C0032601",
+        "unii": "6OZP39ZG8H"
+      },
+      "is_additive": 0,
+      "is_harmful": true,
+      "match_method": "exact",
+      "matched_alias": "",
+      "mechanism_of_harm": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
+      "name": "Polysorbate 80",
+      "normalized_key": "polysorbate_80",
+      "notes": "A synthetic emulsifier that may be contaminated with 1,4-dioxane (a carcinogen). UPGRADED TO HIGH RISK based on 2024-2025 research showing severe gut microbiome disruption, chronic intestinal inflammation, and links to inflammatory bowel disease. 2024 study shows it accelerates age-related cognitive decline. 2025 research confirms it drives mucus-penetrating microbiota causing chronic inflammation. SEVERITY DOWNGRADED FROM HIGH TO MODERATE (2026): Animal study doses demonstrating gut microbiome disruption (Chassaing et al., Nature 2015) were estimated at 100–500× human dietary exposure. ADDapt 2025 trial showed emulsifier-free diet associated with Crohn's remission, but trial used a MIXTURE of emulsifiers (P80 + CMC + carrageenan) in IBD patients — cannot isolate P80 effects. EMA review of polysorbate 80 as pharmaceutical excipient: 'no adverse reactions reported for oral tablet/capsule excipient use' in healthy populations. Human mechanistic data at supplement-level doses is lacking; high/high rating is not supported. Genuine concern warrants moderate/medium as precautionary stance.",
+      "population_warnings": [
+        "IBD/Crohn's disease — animal models show P80 promotes colitis; human organoid data confirms barrier disruption (PMID 37530764)",
+        "PEG/polysorbate allergy — documented anaphylaxis risk with parenteral polysorbate 80",
+        "IBS — may worsen symptoms via gut microbiome disruption"
+      ],
+      "raw_source_text": "Polysorbate 80",
+      "severity_level": "moderate",
+      "standardName": "Polysorbate 80",
+      "standard_name": "Polysorbate 80"
+    }
+  ],
+  "ingredients": [
+    {
+      "adequacy_tier": null,
+      "bio_score": 10.0,
+      "category": "fatty_acids",
+      "cfu_confidence": null,
+      "clinical_support_level": null,
+      "display_badge": "not_disclosed",
+      "display_dose_label": "Amount not disclosed",
+      "display_label": "Eicosapentaenoic Acid",
+      "dosage": 0.0,
+      "dosage_unit": "NP",
+      "dose_basis": null,
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "epa (unspecified)",
+      "matched_forms": [],
+      "name": "Eicosapentaenoic Acid",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "eicosapentaenoic_acid",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "EPA form not specified. Conservative scoring. EPA (eicosapentaenoic acid) is the primary anti-inflammatory omega-3 fatty acid. Form affects bioavailability — check product label.",
+      "parent_key": "eicosapentaenoic_acid",
+      "quantity": 0.0,
+      "raw_source_text": "Eicosapentaenoic Acid",
+      "role": "active",
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "Use with caution in bleeding disorders. Limit EPA intake to under 2 g/day without physician oversight. Disclose use to any treating surgeon.",
+              "alert_body": "EPA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding EPA.",
+              "alert_headline": "Caution with bleeding disorders",
+              "condition_id": "bleeding_disorders",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "established",
+              "informational_note": "EPA can affect platelet function — relevant to people with a bleeding disorder.",
+              "mechanism": "EPA (eicosapentaenoic acid) competitively inhibits arachidonic acid conversion to thromboxane A2 via cyclooxygenase, and generates thromboxane A3 (a much weaker platelet aggregator) instead. This antiplatelet mechanism prolongs bleeding time, particularly at doses above 2 g/day.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            }
+          ],
+          "drug_class_hits": [
+            {
+              "action": "Monitor INR when starting or stopping high-dose EPA (>2 g/day) in patients on warfarin or other anticoagulants.",
+              "alert_body": "EPA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding EPA and ask about INR or bleeding checks.",
+              "alert_headline": "May add to blood-thinner effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "anticoagulants",
+              "evidence_level": "established",
+              "informational_note": "EPA can affect clotting — relevant to people on anticoagulants.",
+              "mechanism": "EPA reduces platelet TXA2 synthesis and may affect the vitamin K-dependent coagulation cascade. Clinical studies with high-dose fish oil (containing EPA) and warfarin show small but consistent INR elevations.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            },
+            {
+              "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
+              "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
+              "alert_headline": "May add to antiplatelet effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "antiplatelets",
+              "evidence_level": "probable",
+              "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
+              "mechanism": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            }
+          ],
+          "last_reviewed": "2026-04-14",
+          "pregnancy_lactation": {},
+          "rule_id": "RULE_IQM_EPA_BLEEDING",
+          "source_bucket": "ingredients",
+          "subject_ref": {
+            "canonical_id": "epa",
+            "db": "ingredient_quality_map"
+          }
+        }
+      ],
+      "score": 13.0,
+      "standardName": "EPA (Eicosapentaenoic Acid)",
+      "standard_name": "EPA (Eicosapentaenoic Acid)",
+      "standardization_note": null,
+      "ui_copy_hint": null,
+      "unit": "NP"
+    },
+    {
+      "adequacy_tier": null,
+      "bio_score": 10.0,
+      "category": "fatty_acids",
+      "cfu_confidence": null,
+      "clinical_support_level": null,
+      "display_badge": "not_disclosed",
+      "display_dose_label": "Amount not disclosed",
+      "display_label": "Docosahexaenoic Acid",
+      "dosage": 0.0,
+      "dosage_unit": "NP",
+      "dose_basis": null,
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "dha (unspecified)",
+      "matched_forms": [],
+      "name": "Docosahexaenoic Acid",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "docosahexaenoic_acid",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "DHA form not specified. Conservative scoring. DHA (docosahexaenoic acid, 22:6 n-3) is critical for brain, retina, and cardiovascular health. Form significantly affects absorption — check product label.",
+      "parent_key": "docosahexaenoic_acid",
+      "quantity": 0.0,
+      "raw_source_text": "Docosahexaenoic Acid",
+      "role": "active",
+      "safety_hits": [
+        {
+          "condition_hits": [
+            {
+              "action": "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
+              "alert_body": "DHA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding DHA.",
+              "alert_headline": "Caution with bleeding disorders",
+              "condition_id": "bleeding_disorders",
+              "dose_threshold_evaluation": null,
+              "evidence_level": "established",
+              "informational_note": "DHA can affect platelet function — relevant to people with a bleeding disorder.",
+              "mechanism": "DHA (docosahexaenoic acid) is incorporated into platelet phospholipid membranes, displacing arachidonic acid and reducing thromboxane A2 (TXA2) synthesis. TXA2 is the primary platelet aggregation amplifier; reduced TXA2 production measurably prolongs bleeding time at doses above 2 g/day.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            }
+          ],
+          "drug_class_hits": [
+            {
+              "action": "Monitor INR when adding or removing high-dose DHA (>2 g/day) in patients on warfarin. Alert prescriber to use.",
+              "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about INR or bleeding checks.",
+              "alert_headline": "May add to blood-thinner effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "anticoagulants",
+              "evidence_level": "established",
+              "informational_note": "DHA can affect clotting — relevant to people on anticoagulants.",
+              "mechanism": "DHA reduces platelet TXA2 synthesis and may weakly inhibit vitamin K-dependent coagulation factor synthesis. Combined with warfarin, a small but clinically relevant INR elevation has been observed in controlled studies.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            },
+            {
+              "action": "Advise prescriber of DHA use when on antiplatelet therapy. Avoid high-dose supplements (>3 g/day) without haematology guidance.",
+              "alert_body": "DHA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding DHA.",
+              "alert_headline": "May add to antiplatelet effects",
+              "dose_threshold_evaluation": null,
+              "drug_class_id": "antiplatelets",
+              "evidence_level": "probable",
+              "informational_note": "DHA can affect platelet function — relevant to people on antiplatelets.",
+              "mechanism": "Additive antiplatelet effect via independent mechanisms: clopidogrel blocks P2Y12 receptor while DHA reduces TXA2 production. The combination further impairs platelet aggregation beyond either agent alone.",
+              "severity": "caution",
+              "sources": [
+                "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+                "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+              ]
+            }
+          ],
+          "last_reviewed": "2026-04-14",
+          "pregnancy_lactation": {},
+          "rule_id": "RULE_IQM_DHA_BLEEDING",
+          "source_bucket": "ingredients",
+          "subject_ref": {
+            "canonical_id": "dha",
+            "db": "ingredient_quality_map"
+          }
+        }
+      ],
+      "score": 13.0,
+      "standardName": "DHA (Docosahexaenoic Acid)",
+      "standard_name": "DHA (Docosahexaenoic Acid)",
+      "standardization_note": null,
+      "ui_copy_hint": null,
+      "unit": "NP"
+    },
+    {
+      "adequacy_tier": null,
+      "bio_score": 10.0,
+      "category": "fatty_acids",
+      "cfu_confidence": null,
+      "clinical_support_level": null,
+      "display_badge": "not_disclosed",
+      "display_dose_label": "Amount not disclosed",
+      "display_label": "Other Fatty Acids",
+      "dosage": 0.0,
+      "dosage_unit": "NP",
+      "dose_basis": null,
+      "extracted_forms": [],
+      "form": "",
+      "forms": [],
+      "harmful_notes": null,
+      "harmful_severity": null,
+      "identifiers": null,
+      "is_allergen": false,
+      "is_banned": false,
+      "is_harmful": false,
+      "is_mapped": 1,
+      "mapped": 1,
+      "matched_form": "other fatty acids (standard)",
+      "matched_forms": [],
+      "name": "Other Fatty Acids",
+      "natural": true,
+      "normalized_amount": null,
+      "normalized_key": "other_fatty_acids",
+      "normalized_unit": "",
+      "normalized_value": null,
+      "notes": "Miscellaneous fatty acid supplement. May include unusual or specialty fatty acids not classified under standard omega categories. Conservative scoring reflects unspecified identity. Check label for specific fatty acid content and concentration.",
+      "parent_key": "other_fatty_acids",
+      "quantity": 0.0,
+      "raw_source_text": "Other Fatty Acids",
+      "role": "active",
+      "safety_hits": [],
+      "score": 13.0,
+      "standardName": "Other Fatty Acids",
+      "standard_name": "Other Fatty Acids",
+      "standardization_note": null,
+      "ui_copy_hint": null,
+      "unit": "NP"
+    }
+  ],
+  "ingredients_dropped_reasons": [
+    "DROPPED_AS_INACTIVE"
+  ],
+  "interaction_summary": {
+    "condition_summary": {
+      "bleeding_disorders": {
+        "actions": [
+          "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
+          "Use with caution in bleeding disorders. Limit EPA intake to under 2 g/day without physician oversight. Disclose use to any treating surgeon."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 2,
+        "ingredients": [
+          "Docosahexaenoic Acid",
+          "Eicosapentaenoic Acid"
+        ],
+        "label": "Bleeding Disorders",
+        "rule_ids": [
+          "RULE_IQM_DHA_BLEEDING",
+          "RULE_IQM_EPA_BLEEDING"
+        ]
+      },
+      "lactation": {
+        "actions": [
+          "Threshold escalates only when intake exceeds adult UL."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Mixed Tocopherols"
+        ],
+        "label": "Breastfeeding",
+        "rule_ids": [
+          "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS"
+        ]
+      },
+      "pregnancy": {
+        "actions": [
+          "Keep total daily vitamin E intake within guideline ranges and avoid megadosing.",
+          "Threshold escalates only when intake exceeds adult UL."
+        ],
+        "highest_severity": "monitor",
+        "ingredient_count": 1,
+        "ingredients": [
+          "Mixed Tocopherols"
+        ],
+        "label": "Pregnancy",
+        "rule_ids": [
+          "RULE_IQM_VITAMIN_E_PREGNANCY_EXCESS"
+        ]
+      }
+    },
+    "drug_class_summary": {
+      "anticoagulants": {
+        "actions": [
+          "Monitor INR when adding or removing high-dose DHA (>2 g/day) in patients on warfarin. Alert prescriber to use.",
+          "Monitor INR when starting or stopping high-dose EPA (>2 g/day) in patients on warfarin or other anticoagulants."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 2,
+        "ingredients": [
+          "Docosahexaenoic Acid",
+          "Eicosapentaenoic Acid"
+        ],
+        "label": "Anticoagulants",
+        "rule_ids": [
+          "RULE_IQM_DHA_BLEEDING",
+          "RULE_IQM_EPA_BLEEDING"
+        ]
+      },
+      "antiplatelets": {
+        "actions": [
+          "Advise prescriber of DHA use when on antiplatelet therapy. Avoid high-dose supplements (>3 g/day) without haematology guidance.",
+          "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight."
+        ],
+        "highest_severity": "caution",
+        "ingredient_count": 2,
+        "ingredients": [
+          "Docosahexaenoic Acid",
+          "Eicosapentaenoic Acid"
+        ],
+        "label": "Antiplatelet Agents",
+        "rule_ids": [
+          "RULE_IQM_DHA_BLEEDING",
+          "RULE_IQM_EPA_BLEEDING"
+        ]
+      }
+    },
+    "highest_severity": "caution"
+  },
+  "manufacturer_detail": {
+    "brand_name": "Spring Valley",
+    "is_trusted": 0,
+    "manufacturing_region": "",
+    "violations": {
+      "found": false,
+      "total_deduction_applied": 0.0,
+      "violations": []
+    }
+  },
+  "non_gmo_audit": {
+    "all_signals": [
+      {
+        "source": "clean_label_claims",
+        "text": "Dairy Free"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "Gluten Free"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Artificial Colors"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Artificial Flavors"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Sugar"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "No Wheat"
+      },
+      {
+        "source": "clean_label_claims",
+        "text": "Yeast Free"
+      }
+    ],
+    "claim_present": false,
+    "generic_signals": [],
+    "project_verified": false,
+    "reason": "no_non_gmo_signal",
+    "score_eligible": false,
+    "verified_signals": []
+  },
+  "nutrition_detail": {
+    "calories_per_serving": 15.0,
+    "dietary_fiber_g": null,
+    "protein_g": null,
+    "total_carbohydrates_g": null,
+    "total_fat_g": 1.5
+  },
+  "omega3_audit": {
+    "applicable_for_dose_bonus": true,
+    "bonus_score": 1.0,
+    "contains_omega3": true,
+    "dha_mg_per_unit": 300.0,
+    "dose_band": "general_health",
+    "epa_dha_mg_per_unit": null,
+    "epa_mg_per_unit": 300.0,
+    "matched_ingredients": [
+      {
+        "canonical_id": "epa",
+        "category": "fatty_acids",
+        "name": "EPA (Eicosapentaenoic Acid)",
+        "raw_source_text": "Eicosapentaenoic Acid"
+      },
+      {
+        "canonical_id": "dha",
+        "category": "fatty_acids",
+        "name": "DHA (Docosahexaenoic Acid)",
+        "raw_source_text": "Docosahexaenoic Acid"
+      }
+    ],
+    "per_day_max_mg": 600.0,
+    "per_day_mid_mg": 600.0,
+    "per_day_min_mg": 600.0,
+    "reason": "omega3_bonus_awarded"
+  },
+  "product_name": "Enteric Coated Fish Oil Mini Softgels 1290 mg",
+  "proprietary_blend_audit": {
+    "blend_count": 0,
+    "evidence": [],
+    "has_proprietary_blends": false,
+    "penalty_score": 0.0
+  },
+  "proprietary_blend_detail": {
+    "blends": [],
+    "has_proprietary_blends": 0
+  },
+  "raw_actives_count": 9,
+  "raw_inactives_count": 4,
+  "rda_ul_data": {
+    "adequacy_results": [],
+    "analyzed_ingredients": [],
+    "collection_enabled": true,
+    "collection_reason": null,
+    "conversion_evidence": [],
+    "count": 0,
+    "has_over_ul": false,
+    "ingredients_with_rda": [],
+    "safety_flags": []
+  },
+  "score_bonuses": [
+    {
+      "detail": "general health",
+      "id": "omega3",
+      "label": "Omega-3 dose bonus",
+      "score": 1.0
+    }
+  ],
+  "score_penalties": [
+    {
+      "id": "B1",
+      "label": "Harmful additive: Polysorbate 80",
+      "reason": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carc",
+      "score": 1.0,
+      "severity": "moderate"
+    },
+    {
+      "id": "B2",
+      "label": "Allergen: Fish",
+      "presence": "contains",
+      "severity": "moderate"
+    }
+  ],
+  "section_breakdown": {
+    "brand_trust": {
+      "max": 5.0,
+      "score": 0.0,
+      "sub": {
+        "D1": 0.0,
+        "D2": 0.0,
+        "D3": 0.0,
+        "D4": 0.0,
+        "D5": 0.0
+      }
+    },
+    "evidence_research": {
+      "ingredient_points": {},
+      "matched_entries": 0,
+      "max": 20.0,
+      "score": 0.0
+    },
+    "ingredient_quality": {
+      "max": 25.0,
+      "score": 1.0,
+      "sub": {
+        "A1": 0.0,
+        "A2": 0.0,
+        "A3": 0.0,
+        "A4": 0.0,
+        "A5": 0.0,
+        "A5a": 0.0,
+        "A5b": 0.0,
+        "A5c": 0.0,
+        "A5d": 0.0,
+        "A6": 0.0,
+        "category_bonus_pool_cap": 5.0,
+        "category_bonus_total": 1.0,
+        "core_quality": 0.0,
+        "omega3_breakdown": {
+          "applicable": true,
+          "dha_mg_per_unit": 300.0,
+          "dose_band": "general_health",
+          "epa_mg_per_unit": 300.0,
+          "omega3_dose_bonus": 1.0,
+          "per_day_max_mg": 600.0,
+          "per_day_mid_mg": 600.0,
+          "per_day_min_mg": 600.0,
+          "prescription_dose": false
+        },
+        "omega3_dose_bonus": 1.0,
+        "probiotic_bonus": 0.0,
+        "probiotic_breakdown": {
+          "cfu": 0.0,
+          "clinical_strains": 0.0,
+          "diversity": 0.0,
+          "eligibility": {
+            "eligible": false,
+            "mode": "non_probiotic",
+            "reason": "no_probiotic_signal"
+          },
+          "prebiotic": 0.0,
+          "probiotic_bonus": 0.0,
+          "survivability": 0.0
+        }
+      }
+    },
+    "safety_purity": {
+      "max": 30.0,
+      "score": 23.5,
+      "sub": {
+        "B0_moderate_penalty": 0.0,
+        "B1_evidence": [],
+        "B1_penalty": 1.0,
+        "B2_penalty": 1.5,
+        "B3": 1.0,
+        "B4a": 0.0,
+        "B4b": 0.0,
+        "B4c": 0.0,
+        "B5_blend_evidence": [],
+        "B5_penalty": 0.0,
+        "B6_penalty": 0.0,
+        "B7_dose_safety_evidence": [],
+        "B7_penalty": 0.0,
+        "B8_caers_evidence": [],
+        "B8_penalty": 0.0,
+        "B_hypoallergenic": 0.0,
+        "bonuses": 1.0,
+        "penalties": 2.5
+      }
+    },
+    "violation_penalty": 0.0
+  },
+  "serving_info": {
+    "basis_count": 2.0,
+    "basis_unit": "softgel",
+    "max_servings_per_day": 1,
+    "min_servings_per_day": 1
+  },
+  "supplement_type_audit": {
+    "active_count": 4,
+    "category_breakdown": {
+      "fatty_acid": 3,
+      "vitamin": 1
+    },
+    "enriched_type": "targeted",
+    "export_type": "targeted",
+    "inferred_type": "targeted",
+    "probiotic_signal": 0,
+    "scored_type": "targeted",
+    "source": "ingredient_quality_data"
+  },
+  "unmapped_actives": {
+    "excluding_banned_exact_alias": 0,
+    "names": [],
+    "total": 0
+  },
+  "warnings": [
+    {
+      "category": "emulsifier",
+      "detail": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "cas": "9005-65-6",
+        "cui": "C0032601",
+        "unii": "6OZP39ZG8H"
+      },
+      "mechanism_of_harm": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
+      "notes": "A synthetic emulsifier that may be contaminated with 1,4-dioxane (a carcinogen). UPGRADED TO HIGH RISK based on 2024-2025 research showing severe gut microbiome disruption, chronic intestinal inflammation, and links to inflammatory bowel disease. 2024 study shows it accelerates age-related cognitive decline. 2025 research confirms it drives mucus-penetrating microbiota causing chronic inflammation. SEVERITY DOWNGRADED FROM HIGH TO MODERATE (2026): Animal study doses demonstrating gut microbiome disruption (Chassaing et al., Nature 2015) were estimated at 100–500× human dietary exposure. ADDapt 2025 trial showed emulsifier-free diet associated with Crohn's remission, but trial used a MIXTURE of emulsifiers (P80 + CMC + carrageenan) in IBD patients — cannot isolate P80 effects. EMA review of polysorbate 80 as pharmaceutical excipient: 'no adverse reactions reported for oral tablet/capsule excipient use' in healthy populations. Human mechanistic data at supplement-level doses is lacking; high/high rating is not supported. Genuine concern warrants moderate/medium as precautionary stance.",
+      "population_warnings": [
+        "IBD/Crohn's disease — animal models show P80 promotes colitis; human organoid data confirms barrier disruption (PMID 37530764)",
+        "PEG/polysorbate allergy — documented anaphylaxis risk with parenteral polysorbate 80",
+        "IBS — may worsen symptoms via gut microbiome disruption"
+      ],
+      "safety_summary": "A synthetic emulsifier (P80). Animal and preclinical studies show gut-microbiome disruption and low-grade inflammation — worth choosing products without it where possible.",
+      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals.",
+      "severity": "moderate",
+      "source": "harmful_additives_db",
+      "title": "Contains Polysorbate 80",
+      "type": "harmful_additive"
+    },
+    {
+      "allergen_id": "ALLERGEN_FISH",
+      "detail": "Presence: contains. labelText.parsed.allergens: fish",
+      "display_mode_default": "informational",
+      "notes": "FDA major allergen (FALCPA). Parvalbumin is the major fish allergen; it is heat-stable and present across most bony fish species. Fish collagen/gelatin retains allergenic potential. IQM-scored fish derivatives (fish oil, cod liver oil, salmon oil, marine collagen) are excluded from aliases to preserve IQM identity — they are flagged via the enricher's allergen cross-reference, not normalizer interception.",
+      "prevalence": "high",
+      "severity": "moderate",
+      "source": "allergen_db",
+      "supplement_context": "Very common in omega-3 supplements and some vitamin A/D sources.",
+      "title": "Allergen: Fish",
+      "type": "allergen"
+    },
+    {
+      "action": "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
+      "alert_body": "DHA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding DHA.",
+      "alert_headline": "Caution with bleeding disorders",
+      "condition_id": "bleeding_disorders",
+      "detail": "DHA (docosahexaenoic acid) is incorporated into platelet phospholipid membranes, displacing arachidonic acid and reducing thromboxane A2 (TXA2) synthesis. TXA2 is the primary platelet aggregation amplifier; reduced TXA2 production measurably prolongs bleeding time at doses above 2 g/day.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "established",
+      "informational_note": "DHA can affect platelet function — relevant to people with a bleeding disorder.",
+      "ingredient_name": "Docosahexaenoic Acid",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+      ],
+      "title": "Docosahexaenoic Acid / bleeding_disorders",
+      "type": "interaction"
+    },
+    {
+      "action": "Monitor INR when adding or removing high-dose DHA (>2 g/day) in patients on warfarin. Alert prescriber to use.",
+      "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about INR or bleeding checks.",
+      "alert_headline": "May add to blood-thinner effects",
+      "detail": "DHA reduces platelet TXA2 synthesis and may weakly inhibit vitamin K-dependent coagulation factor synthesis. Combined with warfarin, a small but clinically relevant INR elevation has been observed in controlled studies.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "anticoagulants",
+      "evidence_level": "established",
+      "informational_note": "DHA can affect clotting — relevant to people on anticoagulants.",
+      "ingredient_name": "Docosahexaenoic Acid",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+      ],
+      "title": "Docosahexaenoic Acid / anticoagulants",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
+      "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
+      "alert_headline": "May add to antiplatelet effects",
+      "detail": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "drug_class_id": "antiplatelets",
+      "evidence_level": "probable",
+      "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
+      "ingredient_name": "Eicosapentaenoic Acid",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+      ],
+      "title": "Eicosapentaenoic Acid / antiplatelets",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Keep total daily vitamin E intake within guideline ranges and avoid megadosing.",
+      "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+      "alert_headline": "Keep vitamin E within prenatal range",
+      "condition_id": "pregnancy",
+      "detail": "Vitamin E is essential, but excessive supplemental intake above established UL is not recommended in pregnancy.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": {
+        "evaluated": false,
+        "reason": "missing_or_invalid_dose"
+      },
+      "evidence_level": "established",
+      "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
+      "ingredient_name": "Mixed Tocopherols",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+      ],
+      "title": "Mixed Tocopherols / pregnancy",
+      "type": "interaction"
+    },
+    {
+      "action": "Threshold escalates only when intake exceeds adult UL.",
+      "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
+      "alert_headline": "Keep vitamin E within prenatal range",
+      "condition_id": "lactation",
+      "detail": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "established",
+      "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
+      "ingredient_name": "Mixed Tocopherols",
+      "severity": "monitor",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+      ],
+      "title": "Mixed Tocopherols / lactation",
+      "type": "interaction"
+    }
+  ],
+  "warnings_profile_gated": [
+    {
+      "category": "emulsifier",
+      "detail": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
+      "display_mode_default": "critical",
+      "identifiers": {
+        "cas": "9005-65-6",
+        "cui": "C0032601",
+        "unii": "6OZP39ZG8H"
+      },
+      "mechanism_of_harm": "Severely disrupts gut microbiome composition and diversity. Promotes chronic low-grade intestinal inflammation and compromises intestinal barrier function. May be contaminated with 1,4-dioxane (a carcinogen). 2024-2025 studies show it accelerates age-related cognitive decline via gut-brain axis disruption and drives mucus-penetrating bacteria that cause inflammation.",
+      "notes": "A synthetic emulsifier that may be contaminated with 1,4-dioxane (a carcinogen). UPGRADED TO HIGH RISK based on 2024-2025 research showing severe gut microbiome disruption, chronic intestinal inflammation, and links to inflammatory bowel disease. 2024 study shows it accelerates age-related cognitive decline. 2025 research confirms it drives mucus-penetrating microbiota causing chronic inflammation. SEVERITY DOWNGRADED FROM HIGH TO MODERATE (2026): Animal study doses demonstrating gut microbiome disruption (Chassaing et al., Nature 2015) were estimated at 100–500× human dietary exposure. ADDapt 2025 trial showed emulsifier-free diet associated with Crohn's remission, but trial used a MIXTURE of emulsifiers (P80 + CMC + carrageenan) in IBD patients — cannot isolate P80 effects. EMA review of polysorbate 80 as pharmaceutical excipient: 'no adverse reactions reported for oral tablet/capsule excipient use' in healthy populations. Human mechanistic data at supplement-level doses is lacking; high/high rating is not supported. Genuine concern warrants moderate/medium as precautionary stance.",
+      "population_warnings": [
+        "IBD/Crohn's disease — animal models show P80 promotes colitis; human organoid data confirms barrier disruption (PMID 37530764)",
+        "PEG/polysorbate allergy — documented anaphylaxis risk with parenteral polysorbate 80",
+        "IBS — may worsen symptoms via gut microbiome disruption"
+      ],
+      "safety_summary": "A synthetic emulsifier (P80). Animal and preclinical studies show gut-microbiome disruption and low-grade inflammation — worth choosing products without it where possible.",
+      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals.",
+      "severity": "moderate",
+      "source": "harmful_additives_db",
+      "title": "Contains Polysorbate 80",
+      "type": "harmful_additive"
+    },
+    {
+      "allergen_id": "ALLERGEN_FISH",
+      "detail": "Presence: contains. labelText.parsed.allergens: fish",
+      "display_mode_default": "informational",
+      "notes": "FDA major allergen (FALCPA). Parvalbumin is the major fish allergen; it is heat-stable and present across most bony fish species. Fish collagen/gelatin retains allergenic potential. IQM-scored fish derivatives (fish oil, cod liver oil, salmon oil, marine collagen) are excluded from aliases to preserve IQM identity — they are flagged via the enricher's allergen cross-reference, not normalizer interception.",
+      "prevalence": "high",
+      "severity": "moderate",
+      "source": "allergen_db",
+      "supplement_context": "Very common in omega-3 supplements and some vitamin A/D sources.",
+      "title": "Allergen: Fish",
+      "type": "allergen"
+    }
+  ]
+}

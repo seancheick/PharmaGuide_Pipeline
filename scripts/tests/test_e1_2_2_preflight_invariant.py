@@ -74,7 +74,7 @@ E1_POST_E1_2_1_TOPLEVEL = {
 # Fixture loading — skip cleanly when a canary hasn't been rebuilt yet.
 # ---------------------------------------------------------------------------
 
-CANARY_IDS = ["35491", "306237", "246324", "1002", "19067", "1036", "176872", "266975"]
+CANARY_IDS = ["35491", "306237", "246324", "1002", "19067", "1036", "176872", "266975", "19055"]
 
 
 @pytest.fixture(scope="module", params=CANARY_IDS)

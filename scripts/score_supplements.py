@@ -2857,6 +2857,43 @@ class SupplementScorer:
             "servings_per_day_min": None,
             "servings_per_day_max": None,
         }
+
+        # Sprint E1.3.3 — fish-oil parent-mass fallback when EPA/DHA
+        # individually labelled NP. Config-gated + scoped to fish-oil /
+        # krill-oil parents only (other blend types don't imply EPA+DHA).
+        # Source flagged so the blob transparently records the inference.
+        _omega3_source = None
+        if not has_dose:
+            o3_cfg = self.config.get("section_A_ingredient_quality", {}).get(
+                "omega3_dose_bonus", {}
+            ) or {}
+            fo_cfg = o3_cfg.get("fish_oil_parent_mass_fallback") or {}
+            if fo_cfg.get("enabled", False):
+                fraction = as_float(fo_cfg.get("epa_dha_fraction_of_parent"), 0.5) or 0.0
+                eligible_parents = set(
+                    name.lower() for name in (fo_cfg.get("eligible_parent_blends") or [
+                        "fish oil", "krill oil"
+                    ])
+                )
+                for ing in ingredients:
+                    cid = norm_text(ing.get("canonical_id") or "")
+                    if cid not in self._EPA_DHA_CANONICAL_IDS:
+                        continue
+                    parent_name = (ing.get("parent_blend") or "").strip().lower()
+                    if parent_name not in eligible_parents:
+                        continue
+                    parent_mass_mg = as_float(ing.get("parent_blend_mass_mg"), None)
+                    if parent_mass_mg is None or parent_mass_mg <= 0:
+                        continue
+                    # Conservative estimate: split EPA+DHA 50/50 from the
+                    # fraction-of-parent pool. Honest: this is an inference.
+                    estimated_combined = parent_mass_mg * fraction
+                    epa_mg = estimated_combined * 0.5
+                    dha_mg = estimated_combined * 0.5
+                    has_dose = True
+                    _omega3_source = "inferred_from_parent_mass"
+                    break
+
         if not has_dose:
             return _empty
 
@@ -2898,6 +2935,9 @@ class SupplementScorer:
             "epa_dha_mg_per_unit": round(total_per_unit, 1),
             "servings_per_day_min": spd_min,
             "servings_per_day_max": spd_max,
+            # Sprint E1.3.3 — transparency flag when the dose was
+            # inferred via the fish-oil parent-mass fallback.
+            "omega3_dose_source": _omega3_source,
         }
 
     def _compute_legacy_section_e(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:

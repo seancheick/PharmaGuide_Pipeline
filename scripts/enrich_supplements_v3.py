@@ -230,6 +230,22 @@ def _compute_probiotic_confidence_hybrid(
     }
 
 
+def _normalize_parent_blend_mg(mass, unit) -> Optional[float]:
+    """Sprint E1.3.3 — convert (mass, unit) pair into milligrams.
+    Tolerates the units DSLD uses on parent rows: mg, g, mcg/ug. Returns
+    ``None`` when mass is missing or the unit is unrecognized."""
+    if not isinstance(mass, (int, float)) or mass <= 0:
+        return None
+    u = (unit or "").strip().lower()
+    if u in ("mg", "milligram", "milligrams", ""):
+        return float(mass)
+    if u in ("g", "gram", "grams"):
+        return float(mass) * 1000.0
+    if u in ("mcg", "ug", "µg", "microgram", "micrograms"):
+        return float(mass) / 1000.0
+    return None
+
+
 def _derive_clinical_support_level(strain_entry) -> str:
     """Resolve ``clinical_support_level`` with a fallback chain:
 
@@ -3611,6 +3627,14 @@ class SupplementEnricherV3:
                 "source_section": source_section,
                 "is_nested_ingredient": bool(ingredient.get("isNestedIngredient", False)),
                 "parent_blend": ingredient.get("parentBlend"),
+                # Sprint E1.3.3 — normalized parent-blend mass (in mg) for
+                # the scorer's fish-oil EPA/DHA fallback. E1.2.1 stamps
+                # parentBlendMass + parentBlendUnit at flatten time; here
+                # we unit-normalize so the scorer reads a single value.
+                "parent_blend_mass_mg": _normalize_parent_blend_mg(
+                    ingredient.get("parentBlendMass"),
+                    ingredient.get("parentBlendUnit"),
+                ),
                 "is_parent_total": False,
                 "form_extraction_used": True,
                 "is_dual_form": bool(match_result.get("is_dual_form")),
@@ -3708,6 +3732,14 @@ class SupplementEnricherV3:
                 "source_section": source_section,
                 "is_nested_ingredient": bool(ingredient.get("isNestedIngredient", False)),
                 "parent_blend": ingredient.get("parentBlend"),
+                # Sprint E1.3.3 — normalized parent-blend mass (in mg) for
+                # the scorer's fish-oil EPA/DHA fallback. E1.2.1 stamps
+                # parentBlendMass + parentBlendUnit at flatten time; here
+                # we unit-normalize so the scorer reads a single value.
+                "parent_blend_mass_mg": _normalize_parent_blend_mg(
+                    ingredient.get("parentBlendMass"),
+                    ingredient.get("parentBlendUnit"),
+                ),
                 "is_parent_total": False,
                 # Multi-form contract fields (if present)
                 "form_extraction_used": match_result.get('form_extraction_used', False),
@@ -3764,6 +3796,14 @@ class SupplementEnricherV3:
                 "source_section": source_section,
                 "is_nested_ingredient": bool(ingredient.get("isNestedIngredient", False)),
                 "parent_blend": ingredient.get("parentBlend"),
+                # Sprint E1.3.3 — normalized parent-blend mass (in mg) for
+                # the scorer's fish-oil EPA/DHA fallback. E1.2.1 stamps
+                # parentBlendMass + parentBlendUnit at flatten time; here
+                # we unit-normalize so the scorer reads a single value.
+                "parent_blend_mass_mg": _normalize_parent_blend_mg(
+                    ingredient.get("parentBlendMass"),
+                    ingredient.get("parentBlendUnit"),
+                ),
                 "is_parent_total": False,
                 "form_extraction_used": False,
                 "is_dual_form": False,
