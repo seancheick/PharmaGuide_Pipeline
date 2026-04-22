@@ -305,7 +305,10 @@ class TestSafetyCategoryRouting:
         """fuzzy match_type should NOT trigger safety flags."""
         e = _base_enriched()
         e["contaminant_data"]["banned_substances"]["substances"] = [
-            {"ingredient": "X", "banned_name": "X", "status": "banned", "match_type": "fuzzy"}
+            {"ingredient": "X", "banned_name": "X", "status": "banned", "match_type": "fuzzy",
+"safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+"safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+}
         ]
         assert has_banned_substance(e) is False
         assert has_recalled_ingredient(e) is False
@@ -394,7 +397,10 @@ class TestTopWarningsPriority:
         e["contaminant_data"]["banned_substances"]["substances"] = [
             {"ingredient": "A", "banned_name": "A", "status": "watchlist", "match_type": "exact"},
             {"ingredient": "B", "banned_name": "B", "status": "recalled", "match_type": "alias"},
-            {"ingredient": "C", "banned_name": "C", "status": "banned", "match_type": "exact"},
+            {"ingredient": "C", "banned_name": "C", "status": "banned", "match_type": "exact",
+"safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+"safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+},
         ]
         warnings = build_top_warnings(e)
         assert warnings[0].startswith("Banned substance:")
@@ -479,7 +485,10 @@ class TestGoldenProducts:
         e = _base_enriched(dsld_id="GOLDEN_BANNED")
         e["contaminant_data"]["banned_substances"]["substances"] = [
             {"ingredient": "DMAA", "banned_name": "1,3-Dimethylamylamine", "status": "banned",
-             "match_type": "alias", "reason": "FDA banned stimulant"}
+             "match_type": "alias", "reason": "FDA banned stimulant",
+             "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+             "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+         }
         ]
         s = _base_scored(verdict="BLOCKED")
         row = _row_dict(e, s)
@@ -562,7 +571,10 @@ class TestGoldenProducts:
         e = _base_enriched(dsld_id="GOLDEN_MULTI")
         e["contaminant_data"]["banned_substances"]["substances"] = [
             {"ingredient": "DMAA", "banned_name": "DMAA", "status": "banned", "match_type": "exact",
-             "reason": "FDA-banned stimulant; removed from lawful supplements."}
+             "reason": "FDA-banned stimulant; removed from lawful supplements.",
+             "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+             "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+         }
         ]
         e["allergen_hits"] = [
             {"allergen_id": "WHEAT", "allergen_name": "Wheat", "presence_type": "contains",
@@ -610,7 +622,10 @@ class TestScoreBonusPenaltyLists:
         e = _base_enriched()
         e["contaminant_data"]["banned_substances"]["substances"] = [
             {"ingredient": "DMAA", "banned_name": "DMAA", "status": "banned",
-             "match_type": "exact", "reason": "FDA banned"}
+             "match_type": "exact", "reason": "FDA banned",
+             "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+             "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+         }
         ]
         s = _base_scored(verdict="BLOCKED")
         s["breakdown"]["B"]["B0_moderate_penalty"] = 5.0

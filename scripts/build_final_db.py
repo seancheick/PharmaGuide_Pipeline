@@ -1005,6 +1005,89 @@ _WARNING_AUTHORED_COPY_FIELDS = (
 )
 
 
+# Sprint E1.1.4 — banned-substance preflight copy propagation.
+# Flutter Sprint 27.7's stack-add preflight sheet renders a red CRITICAL
+# banner when has_banned_substance=1, populated from Dr Pham's authored
+# safety_warning_one_liner (≤80 chars) + safety_warning (≤200 chars)
+# fields. The enricher (D5.4) already propagates these through to
+# warning emission; E1.1.4 aggregates them into a top-level
+# banned_substance_detail key so Flutter can read directly without
+# iterating warnings[].
+_BANNED_PREFLIGHT_ONE_LINER_MAX = 80
+_BANNED_PREFLIGHT_BODY_MAX = 200
+
+
+def build_banned_substance_detail(
+    enriched: Dict[str, Any], warnings_list: List[Dict[str, Any]]
+) -> Optional[Dict[str, Any]]:
+    """Aggregate the first banned-substance warning's Dr Pham authored copy
+    into a top-level detail-blob key. Returns ``None`` when the product
+    does not carry a banned-substance hit (most of the catalog).
+    """
+    if not has_banned_substance(enriched):
+        return None
+    for w in warnings_list or []:
+        if not isinstance(w, dict) or w.get("type") != "banned_substance":
+            continue
+        one = w.get("safety_warning_one_liner")
+        body = w.get("safety_warning")
+        if (
+            isinstance(one, str) and one.strip()
+            and isinstance(body, str) and body.strip()
+        ):
+            title = safe_str(w.get("title"))
+            substance = title.split(":", 1)[-1].strip() if ":" in title else title or None
+            return {
+                "safety_warning_one_liner": one.strip(),
+                "safety_warning": body.strip(),
+                "substance_name": substance,
+            }
+    return None
+
+
+def _validate_banned_preflight_propagation(
+    blob: Dict[str, Any], enriched: Dict[str, Any], dsld_id: str
+) -> None:
+    """Raise ``ValueError`` if a banned product lacks preflight copy. Also
+    enforces Dr Pham's char-limit contract on the authored strings
+    (80 / 200) so the Flutter red-banner layout never truncates.
+    """
+    if not has_banned_substance(enriched):
+        return
+    bsd = blob.get("banned_substance_detail")
+    if not isinstance(bsd, dict):
+        raise ValueError(
+            f"[{dsld_id}] has_banned_substance=1 but banned_substance_detail "
+            f"missing from blob. Flutter Sprint 27.7 preflight sheet needs "
+            f"this top-level key (Sprint E1.1.4)."
+        )
+    one = bsd.get("safety_warning_one_liner")
+    body = bsd.get("safety_warning")
+    if not isinstance(one, str) or not one.strip():
+        raise ValueError(
+            f"[{dsld_id}] banned_substance_detail.safety_warning_one_liner "
+            f"empty — Dr Pham authored copy did not propagate from "
+            f"banned_recalled_ingredients.json (Sprint E1.1.4)."
+        )
+    if not isinstance(body, str) or not body.strip():
+        raise ValueError(
+            f"[{dsld_id}] banned_substance_detail.safety_warning empty — "
+            f"Dr Pham authored copy did not propagate (Sprint E1.1.4)."
+        )
+    if len(one) > _BANNED_PREFLIGHT_ONE_LINER_MAX:
+        raise ValueError(
+            f"[{dsld_id}] banned_substance_detail.safety_warning_one_liner "
+            f"exceeds {_BANNED_PREFLIGHT_ONE_LINER_MAX}-char limit "
+            f"({len(one)} chars): {one!r} (Sprint E1.1.4)."
+        )
+    if len(body) > _BANNED_PREFLIGHT_BODY_MAX:
+        raise ValueError(
+            f"[{dsld_id}] banned_substance_detail.safety_warning exceeds "
+            f"{_BANNED_PREFLIGHT_BODY_MAX}-char limit ({len(body)} chars) "
+            f"(Sprint E1.1.4)."
+        )
+
+
 # Sprint E1.1.3 — every warning MUST carry at least one populated authored-
 # copy field. A warning where only the machine-readable ``type`` enum is
 # populated renders as raw text in Flutter (user sees "ban_ingredient"
@@ -2153,6 +2236,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "category_bonus_total": safe_float(a_sub.get("category_bonus_total"), 0),
         },
     }
+
+    # Sprint E1.1.4 — top-level banned-substance preflight detail for
+    # Flutter Sprint 27.7's stack-add CRITICAL banner.
+    blob["banned_substance_detail"] = build_banned_substance_detail(enriched, warnings)
+    _validate_banned_preflight_propagation(blob, enriched, dsld_id_for_validation)
 
     return blob
 

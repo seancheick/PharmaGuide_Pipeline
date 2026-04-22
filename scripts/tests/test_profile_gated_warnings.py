@@ -78,7 +78,10 @@ def test_all_warnings_carry_display_mode_default():
             "status": "banned",
             "match_type": "exact",
             "reason": "Regulatory ban.",
-        }
+        
+        "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+        "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+    }
     ]
     blob = build_detail_blob(enriched, make_scored())
     missing = [w for w in blob["warnings"] if "display_mode_default" not in w]
@@ -207,7 +210,10 @@ def test_banned_substance_is_always_critical():
             "status": "banned",
             "match_type": "exact",
             "reason": "FDA-banned stimulant.",
-        }
+        
+        "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+        "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+    }
     ]
     blob = build_detail_blob(enriched, make_scored())
     banned = [w for w in blob["warnings"] if w.get("type") == "banned_substance"]

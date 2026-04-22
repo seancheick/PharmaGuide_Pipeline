@@ -743,7 +743,10 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
             # Sprint E1.1.3: realistic fixture matches Dr Pham's 143/143
             # authored-copy coverage; validator requires at least one copy field.
             "reason": "Test regulatory context.",
-        }
+        
+        "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+        "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+    }
     ]
 
     blob = build_detail_blob(enriched, make_scored())
@@ -769,7 +772,10 @@ def test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_stat
             "status": "banned",
             "match_type": "exact",
             "reason": "Regulatory ban.",
-        }
+        
+        "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+        "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+    }
     ]
 
     blob = build_detail_blob(enriched, make_scored())
@@ -816,7 +822,10 @@ def test_top_warnings_priority_prefers_safety_before_dietary_and_status():
             "banned_name": "Vitamin A Palmitate",
             "status": "banned",
             "match_type": "exact",
-        },
+        
+        "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+        "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+    },
         {
             "ingredient": "Soy Lecithin",
             "banned_name": "Soy Lecithin",
@@ -870,7 +879,10 @@ def test_banned_warning_includes_source_urls_from_references_structured():
                     "evidence_grade": "A",
                 },
             ],
-        }
+        
+        "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
+        "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
+    }
     ]
 
     blob = build_detail_blob(enriched, make_scored())
