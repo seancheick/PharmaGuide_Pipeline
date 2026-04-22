@@ -58,6 +58,7 @@ E1_2_2_NEW_INGREDIENT_FIELDS = {
 # only polices ingredient-level shape.
 E1_POST_E1_2_1_TOPLEVEL = {
     "banned_substance_detail",
+    "raw_inactives_count",  # Sprint E1.2.4 additive instrumentation
     # decision_highlights already existed pre-E1; only its shape grew.
 }
 

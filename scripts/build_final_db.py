@@ -1124,6 +1124,46 @@ def _compute_display_label(ingredient: Dict[str, Any]) -> str:
     return result.strip() or name
 
 
+# Sprint E1.2.4 — inactive-ingredient preservation invariant.
+# The cleaner (enhanced_normalizer) stashes the pre-filter count of
+# real raw inactives (excluding DSLD's "None" placeholder) as
+# `raw_inactives_count` on its output. Build emits it on the blob and
+# a validator asserts: if raw_inactives_count > 0, blob
+# inactive_ingredients[] must be non-empty. Detects any future filter
+# regression that silently drops real excipients.
+_NONE_PLACEHOLDER_NAMES = {"none", "n/a", "na", ""}
+
+
+def _validate_inactive_preservation(
+    blob: Dict[str, Any], raw_inactives_count: int, dsld_id: str
+) -> None:
+    """Raise ``ValueError`` if raw DSLD had ≥1 real inactive but the
+    blob emits an empty inactive_ingredients list. Also enforces: the
+    literal "None" placeholder must never leak into a blob entry."""
+    blob_inactives = blob.get("inactive_ingredients") or []
+
+    # Hard stop: literal "None" placeholder leak.
+    for ing in blob_inactives:
+        if not isinstance(ing, dict):
+            continue
+        name = (ing.get("name") or "").strip().lower()
+        if name in _NONE_PLACEHOLDER_NAMES:
+            raise ValueError(
+                f"[{dsld_id}] inactive_ingredients contains a placeholder "
+                f"entry (name={ing.get('name')!r}); the DSLD \"None\" "
+                f"placeholder must be filtered (Sprint E1.2.4)."
+            )
+
+    # Preservation invariant (contract test E1.0.1 #7).
+    if raw_inactives_count > 0 and len(blob_inactives) == 0:
+        raise ValueError(
+            f"[{dsld_id}] raw DSLD disclosed {raw_inactives_count} real "
+            f"inactive(s) but blob emits 0. Filter regression — inspect "
+            f"enhanced_normalizer._process_other_ingredients_enhanced "
+            f"(Sprint E1.2.4)."
+        )
+
+
 # Sprint E1.2.3 — warning dedup at build time.
 # Collapses semantically identical warnings within a single list while
 # preserving the most-informative copy. NEVER merges across the two
@@ -2613,6 +2653,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # Flutter Sprint 27.7's stack-add CRITICAL banner.
     blob["banned_substance_detail"] = build_banned_substance_detail(enriched, warnings)
     _validate_banned_preflight_propagation(blob, enriched, dsld_id_for_validation)
+
+    # Sprint E1.2.4 — raw-inactive preservation invariant.
+    raw_inactives_count = int(enriched.get("raw_inactives_count") or 0)
+    blob["raw_inactives_count"] = raw_inactives_count
+    _validate_inactive_preservation(blob, raw_inactives_count, dsld_id_for_validation)
 
     return blob
 

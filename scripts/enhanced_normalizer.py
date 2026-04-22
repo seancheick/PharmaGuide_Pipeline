@@ -3526,6 +3526,18 @@ class EnhancedDSLDNormalizer:
             if other_ingredients_raw is None:
                 other_ingredients_raw = []
 
+            # Sprint E1.2.4 — count RAW inactives with real names (exclude
+            # DSLD's "None" placeholder + empty/None-valued name entries).
+            # This is the pre-filter truth used by the contract-test gate
+            # to detect any future drop regression.
+            raw_inactives_count = sum(
+                1 for oi in other_ingredients_raw
+                if isinstance(oi, dict)
+                and isinstance(oi.get("name"), str)
+                and oi["name"].strip()
+                and oi["name"].strip().lower() != "none"
+            )
+
             # Capture nutritional info from ALL ingredients
             nutritional_info = self._extract_nutritional_info(flattened_ingredients + other_ingredients_raw)
 
@@ -3925,6 +3937,10 @@ class EnhancedDSLDNormalizer:
                 # ========== INGREDIENTS (CLEANED) ==========
                 "activeIngredients": active_ingredients,
                 "inactiveIngredients": inactive_ingredients,
+                # Sprint E1.2.4 — pre-filter raw inactive count for the
+                # detect-future-drops invariant. Excludes DSLD "None"
+                # placeholder; passes through enricher to build_final_db.
+                "raw_inactives_count": raw_inactives_count,
                 "display_ingredients": self._build_display_ingredients(active_ingredients, inactive_ingredients),
 
                 # ========== NUTRITIONAL INFORMATION ==========
