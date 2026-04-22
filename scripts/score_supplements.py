@@ -90,6 +90,72 @@ def safe_list(value: Any) -> List[Any]:
     return value if isinstance(value, list) else []
 
 
+# Sprint E1.3.2.c — probiotic CFU-adequacy point uplift.
+# Config-driven (section_A_ingredient_quality.probiotic_cfu_adequacy):
+#   tier_points           {low,adequate,good,excellent}   → base points
+#   support_level_caps    {high,moderate,weak}           → multipliers
+#   per_product_max_uplift                               → hard cap
+#
+# Hard gates (return 0 for that strain's contribution):
+#   adequacy_tier is None             — no tier match / not in DB
+#   cfu_per_day is None               — multi-strain blend (per-member CFU unknowable)
+#   clinical_support_level missing    — default to weak cap (0.5)
+#
+# Dev rule pinned in docstring: "Points follow confidence — not just
+# presence." NEVER infer per-member CFU from blend totals.
+def _compute_probiotic_cfu_adequacy_points(
+    clinical_strains: List[Dict[str, Any]],
+    cfg: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Compute per-strain adequacy points + summed + capped uplift.
+
+    Returns:
+      {
+        "probiotic_cfu_adequacy_points": float (capped per product),
+        "strain_contributions": [{"tier","support","cfu_per_day","points"}, ...],
+      }
+    """
+    if not cfg or not cfg.get("enabled", False):
+        return {"probiotic_cfu_adequacy_points": 0.0, "strain_contributions": []}
+
+    tier_points = cfg.get("tier_points") or {}
+    support_caps = cfg.get("support_level_caps") or {}
+    per_product_max = float(cfg.get("per_product_max_uplift", 0.0) or 0.0)
+
+    contributions: List[Dict[str, Any]] = []
+    total = 0.0
+    for strain in clinical_strains or []:
+        if not isinstance(strain, dict):
+            continue
+        tier = strain.get("adequacy_tier")
+        cfu = strain.get("cfu_per_day")
+        # Hard gates: tier missing or cfu missing (multi-strain) → 0.
+        if tier is None or cfu is None:
+            contributions.append({
+                "tier": tier, "support": strain.get("clinical_support_level"),
+                "cfu_per_day": cfu, "points": 0.0,
+            })
+            continue
+        base = float(tier_points.get(tier, 0.0) or 0.0)
+        # Default to weak cap when support level is missing / unknown.
+        support = (strain.get("clinical_support_level") or "weak").strip().lower()
+        mult = float(support_caps.get(support, support_caps.get("weak", 0.5)) or 0.0)
+        pts = base * mult
+        total += pts
+        contributions.append({
+            "tier": tier, "support": support, "cfu_per_day": cfu, "points": pts,
+        })
+
+    # Per-product hard cap.
+    if per_product_max > 0:
+        total = min(total, per_product_max)
+
+    return {
+        "probiotic_cfu_adequacy_points": total,
+        "strain_contributions": contributions,
+    }
+
+
 class SupplementScorer:
     """Main scorer implementing the v3.0 quality score specification."""
 
@@ -1188,6 +1254,18 @@ class SupplementScorer:
         default_cap = as_float(pro_cfg.get("default_max"), 3.0)
         total = min(default_cap, cfu + diversity + prebiotic + clinical_strains + survivability)
 
+        # Sprint E1.3.2.c — per-strain CFU-adequacy uplift (additive,
+        # config-gated, independent from the aggregate bonus cap above).
+        # Hard gates enforced inside the helper: multi-strain blends and
+        # missing-tier strains contribute 0.
+        adequacy_cfg = self.config.get("section_A_ingredient_quality", {}).get("probiotic_cfu_adequacy", {})
+        adequacy_result = _compute_probiotic_cfu_adequacy_points(
+            safe_list(pdata.get("clinical_strains")),
+            adequacy_cfg,
+        )
+        adequacy_points = adequacy_result.get("probiotic_cfu_adequacy_points", 0.0) or 0.0
+        total = total + adequacy_points
+
         return {
             "probiotic_bonus": total,
             "cfu": cfu,
@@ -1196,6 +1274,8 @@ class SupplementScorer:
             "clinical_strains": clinical_strains,
             "survivability": survivability,
             "eligibility": eligibility,
+            "cfu_adequacy_points": adequacy_points,
+            "cfu_adequacy_contributions": adequacy_result.get("strain_contributions", []),
         }
 
     def _compute_omega3_dose_bonus(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:

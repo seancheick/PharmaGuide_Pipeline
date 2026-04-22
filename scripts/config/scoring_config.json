@@ -166,6 +166,29 @@
         ]
       }
     },
+    "probiotic_cfu_adequacy": {
+      "_description": "Sprint E1.3.2.c — per-strain CFU adequacy uplift on top of probiotic_bonus. Points follow confidence: only single-strain blends with knowable per-strain CFU receive points; multi-strain blends and tier=None always contribute 0. Caps reflect clinical_support_level so weak evidence is constrained at 50% of tier points.",
+      "_philosophy": "Points follow confidence — not just presence. Never infer per-member CFU from blend totals.",
+      "enabled": true,
+      "tier_points": {
+        "low": 0.0,
+        "adequate": 1.0,
+        "good": 2.0,
+        "excellent": 3.0
+      },
+      "support_level_caps": {
+        "high": 1.0,
+        "moderate": 0.75,
+        "weak": 0.5
+      },
+      "per_product_max_uplift": 5.0,
+      "_per_product_max_rationale": "Hard upper bound on the summed per-strain contribution even for single-strain-dominant multi-probiotic products. Keeps the uplift gradual across the catalog.",
+      "hard_gates": {
+        "blend_member_without_individual_dose": "zero_points",
+        "adequacy_tier_none": "zero_points",
+        "blend_total_inference": "forbidden"
+      }
+    },
     "omega3_dose_bonus": {
       "max": 3.0,
       "_max_rationale": "Raised from 2.0 to 3.0 to restore the pre-merge value when EPA/DHA dose adequacy was standalone Section E. Still capped by category_bonus_pool.max_contribution=5 when stacked with probiotic. Bands redistributed so top tiers actually hit 3.0.",

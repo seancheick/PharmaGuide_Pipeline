@@ -72,11 +72,11 @@
       "penalty_score": 0.0
     },
     "section_a_audit": {
-      "category_bonus_total": 2.0,
+      "category_bonus_total": 4.0,
       "ceiling_hit": false,
       "core_quality": 16.0,
       "max": 25.0,
-      "score": 18.0
+      "score": 20.0
     },
     "supplement_type": {
       "active_count": 1,
@@ -744,7 +744,7 @@
     {
       "id": "probiotic",
       "label": "Probiotic quality bonus",
-      "score": 2.0
+      "score": 4.0
     },
     {
       "id": "B4a",
@@ -787,7 +787,7 @@
     },
     "ingredient_quality": {
       "max": 25.0,
-      "score": 18.0,
+      "score": 20.0,
       "sub": {
         "A1": 16.0,
         "A2": 0.0,
@@ -800,16 +800,25 @@
         "A5d": 0.0,
         "A6": 0.0,
         "category_bonus_pool_cap": 5.0,
-        "category_bonus_total": 2.0,
+        "category_bonus_total": 4.0,
         "core_quality": 16.0,
         "omega3_breakdown": {
           "applicable": false,
           "omega3_dose_bonus": 0.0
         },
         "omega3_dose_bonus": 0.0,
-        "probiotic_bonus": 2.0,
+        "probiotic_bonus": 4.0,
         "probiotic_breakdown": {
           "cfu": 1.0,
+          "cfu_adequacy_contributions": [
+            {
+              "cfu_per_day": 10000000000.0,
+              "points": 2.0,
+              "support": "high",
+              "tier": "good"
+            }
+          ],
+          "cfu_adequacy_points": 2.0,
           "clinical_strains": 1.0,
           "diversity": 0.0,
           "eligibility": {
@@ -818,7 +827,7 @@
             "reason": "supplement_type_probiotic"
           },
           "prebiotic": 0.0,
-          "probiotic_bonus": 2.0,
+          "probiotic_bonus": 4.0,
           "survivability": 0.0
         }
       }

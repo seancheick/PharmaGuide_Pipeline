@@ -2570,9 +2570,21 @@ class SupplementEnricherV3:
         quality_map = self.databases.get('ingredient_quality_map', {})
         botanicals_db = self.databases.get('botanical_ingredients', {})
 
+        # Sprint E1.3.1 override — but NOT for ingredients nested under a
+        # nutrition rollup (Total Carbohydrates, Total Fat, etc.).  Those
+        # are genuinely additives broken out from the nutrition panel and
+        # must keep skipping.  Real branded actives (KSM-66 in "Herbal
+        # Blend") don't have a "Total X" parent, so they still override.
         has_dose_for_override, _ = self._has_valid_therapeutic_dose(ingredient)
+        _parent_blend = (ingredient.get("parentBlend") or "").strip()
+        _under_nutrition_rollup = bool(
+            ingredient.get("isNestedIngredient")
+            and _parent_blend
+            and _parent_blend.lower().startswith("total ")
+        )
         active_context_override = (
             has_dose_for_override
+            and not _under_nutrition_rollup
             and self._is_known_therapeutic(ing_name_raw, std_name, quality_map, botanicals_db)
         )
 
@@ -2813,8 +2825,15 @@ class SupplementEnricherV3:
         # inactive-panel variants still skip as additive.
         # =================================================================
         has_dose_for_override, _ = self._has_valid_therapeutic_dose(ingredient)
+        _parent_blend = (ingredient.get("parentBlend") or "").strip()
+        _under_nutrition_rollup = bool(
+            ingredient.get("isNestedIngredient")
+            and _parent_blend
+            and _parent_blend.lower().startswith("total ")
+        )
         active_context_override = (
             has_dose_for_override
+            and not _under_nutrition_rollup
             and self._is_known_therapeutic(ing_name, std_name, quality_map, botanicals_db)
         )
 
