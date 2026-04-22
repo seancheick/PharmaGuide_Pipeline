@@ -155,3 +155,54 @@ Engineering will send you:
 All four will land in your inbox once the pipeline work they depend on is ready (probably mid-sprint, around Day 7).
 
 If any of the rules above don't make sense or you'd change the approach — flag it before you start writing. Cheaper to adjust the spec than redo the copy.
+
+---
+
+## Post-delivery async follow-up queue (added 2026-04-21 after verification)
+
+Dr Pham's main 4 tasks are DELIVERED. These are **small async items** surfaced during the agent verification + clinical-reviewer pass. No rush — can be batched during any future touch of the data file.
+
+### FU-1 — Re-confirm or re-classify 3 "strong" strains with unusual evidence type
+
+Three strains currently tagged `evidence_strength: "strong"` but with evidence types that typically don't support a strong classification. Flipped to `dr_pham_signoff: true` on your prior authority; flagging so you can confirm or downgrade on next review.
+
+| Strain | PMID | Evidence Type | Current Tag | Your Call |
+|---|---|---|---|---|
+| Bacillus clausii | 36018495 | narrative_review | strong | Confirm or downgrade to medium? |
+| Lactobacillus paracasei 8700:2 | 36741903 | animal_model | strong | Confirm or downgrade to weak? |
+| Lactobacillus paracasei L.CASEI 431 | 25926507 | animal_model | strong | Confirm or downgrade to weak? |
+
+**Effort:** ~5 min — just reply with "keep" or "downgrade" per strain.
+
+### FU-2 — Find better citations for 2 medium strains
+
+Two medium-tier strains failed strict clinical validation and should have their PMIDs swapped:
+
+| Strain | Current PMID | Problem | Recommended Action |
+|---|---|---|---|
+| Lactobacillus paracasei Lpc-37 | 39842252 | Abstract doesn't name the strain specifically. RCT is legitimate but strain attribution unverifiable from abstract; study endpoint (anxiety/depression) doesn't match claimed indication (caloric restriction / metabolic). Conclusion: "Probiotic supplementation did not enhance the effects of caloric restriction on body composition." | Verify full-text explicitly uses Lpc-37 + CFU dose, OR swap to a Lpc-37-specific RCT. |
+| Escherichia coli Nissle 1917 | 35701435 | Engineered/synthetic-biology mouse-IBD mechanism paper using ECN-pE (GMO variant with overexpressed catalase + SOD). Does NOT support wild-type Nissle CFU-dose claim. | **SWAP REQUIRED** — Nissle 1917 has extensive human IBD/UC clinical evidence (e.g. candidate PMIDs 15043499, 10406200 — mesalamine-comparison UC-maintenance trials). Pick one and swap. |
+
+**Effort:** ~15 min — skim PubMed, pick a citation each, tell engineering the PMIDs. Both `dr_pham_signoff` stay `false` until resolved.
+
+### FU-3 — Review the 5 "weak, no better candidate" strains
+
+These weak-evidence strains have no stronger PubMed citation available. They're flagged correctly as weak today. Review at your convenience — if you know of better evidence (industry reports, product-specific manufacturer clinical data, recent publications not in PubMed), flag the swap.
+
+| Strain | Current PMID | Current Type | Note |
+|---|---|---|---|
+| Lactobacillus acidophilus NCFM | 24717228 | animal_model | Often studied in multi-strain blends; reviewer confirmed weak justified |
+| Bacillus subtilis DE111 | 39631408 | animal_model | Swap candidate was niche ileostomy population; reviewer kept weak |
+| Bifidobacterium lactis Bl-04 | 38665561 | limited | No human-RCT candidate found; reviewer kept weak |
+| Lactobacillus fermentum ME-3 | 36644601 | animal_model | No human-RCT candidate found |
+| Bifidobacterium longum 1714 | 41607522 | animal_model | Rare strain, very limited literature |
+| Lactobacillus acidophilus DDS-1 | 32019158 | multicenter (mixed-strain) | Same study as UABla-12; single-strain attribution weak |
+| Bifidobacterium lactis UABla-12 | 32019158 | multicenter (mixed-strain) | Same study as DDS-1 |
+| Bifidobacterium breve M-16V | 40085083 | mixed-strain RCT | Swap candidate systematic review concluded "very low" quality, "no significant benefits" (reviewer-reversed) |
+
+**Effort:** ~5–10 min skim. If you have no better citations, confirm "weak is honest" and flip `dr_pham_signoff: true` on each with `clinical_support_level: weak`. If you have better citations, flag them and engineering executes swap.
+
+### Current sign-off state (post all updates)
+
+- 32/42 strains signed off (`dr_pham_signoff: true`)
+- 10/42 still pending: 8 weak (FU-3) + 2 needing re-citation (FU-2)
