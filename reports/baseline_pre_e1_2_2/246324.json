@@ -545,6 +545,7 @@
     {
       "bio_score": null,
       "category": "unknown",
+      "display_dose_label": "6 mg",
       "display_label": "Hemp extract",
       "dosage": 6.0,
       "dosage_unit": "mg",
@@ -586,6 +587,7 @@
     {
       "bio_score": null,
       "category": "unknown",
+      "display_dose_label": "5 mg",
       "display_label": "Cannabidiol",
       "dosage": 5.0,
       "dosage_unit": "mg",

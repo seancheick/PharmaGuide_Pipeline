@@ -669,6 +669,7 @@
       "score": 14.0,
       "standardName": "Ashwagandha",
       "standard_name": "Ashwagandha",
+      "standardization_note": "5% withanolides",
       "unit": "mg"
     },
     {
@@ -717,6 +718,7 @@
       "score": 12.0,
       "standardName": "Piperine (Black Pepper Extract)",
       "standard_name": "Piperine (Black Pepper Extract)",
+      "standardization_note": "95% piperine",
       "unit": "mg"
     }
   ],

@@ -582,6 +582,7 @@
       "score": null,
       "standardName": "Hemp Extract",
       "standard_name": "Hemp Extract",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -774,6 +775,7 @@
       "score": null,
       "standardName": "CBD (Cannabidiol)",
       "standard_name": "CBD (Cannabidiol)",
+      "standardization_note": null,
       "unit": "mg"
     }
   ],

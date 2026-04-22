@@ -753,6 +753,7 @@
     {
       "bio_score": 12.0,
       "category": "vitamins",
+      "display_dose_label": "3000 IU",
       "display_label": "Vitamin D (Cholecalciferol)",
       "dosage": 3000.0,
       "dosage_unit": "IU",
@@ -994,6 +995,7 @@
     {
       "bio_score": 6.0,
       "category": "minerals",
+      "display_dose_label": "80 mg",
       "display_label": "Calcium (Tricalcium Phosphate)",
       "dosage": 80.0,
       "dosage_unit": "mg",

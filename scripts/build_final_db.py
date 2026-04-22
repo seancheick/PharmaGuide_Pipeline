@@ -1124,6 +1124,70 @@ def _compute_display_label(ingredient: Dict[str, Any]) -> str:
     return result.strip() or name
 
 
+# Sprint E1.2.2.c — standardization_note extraction.
+# Tight regex (external-dev rule): "If I'm not 100% sure the % belongs
+# to this compound, return null." Matches only ``<int>%`` (with optional
+# "+" suffix like "95%+") followed by a whitespace + exact compound
+# from the conservative starter allowlist. Everything else → None.
+#
+# Explicitly rejects: fractional percents, ranges ("5-10%"),
+# bioavailability / absorption / survival phrases, elemental content,
+# and generic marketing language ("highly standardized").
+_STANDARDIZATION_COMPOUNDS = (
+    "withanolides", "curcuminoids", "ginsenosides", "rosavins",
+    "bacosides", "saponins", "piperine", "EGCG", "silymarin",
+)
+_STANDARDIZATION_RE = re.compile(
+    # \b — word boundary
+    # (\d{1,3}) — integer 1-3 digits  (fractional rejected by design)
+    # %\+? — mandatory % with optional "+" suffix
+    # [\s]+ — whitespace separator (1+)
+    # NOT preceded by a hyphen (ranges like "5-10% withanolides" rejected)
+    # Negative lookbehind rejects leading digit / hyphen / dot so the
+    # "5" in "5.5%" or "10-20%" never matches alone.
+    r"(?<![\d\-\.])(\d{1,3})%\+?\s+(" + "|".join(_STANDARDIZATION_COMPOUNDS) + r")\b",
+    re.IGNORECASE,
+)
+
+
+def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
+    """Extract a standardization claim ("5% withanolides") from the
+    ingredient's matched_form / notes / raw_source_text, in priority
+    order. Returns ``None`` when no tight-regex match exists.
+
+    Compound name is normalized to the canonical casing from the
+    allowlist so downstream consumers aren't forced to case-fold.
+    Does not mutate the input dict.
+    """
+    # Preferred source order — most structured first.
+    candidates: List[str] = []
+    mf = ingredient.get("matched_form")
+    if isinstance(mf, str) and mf.strip():
+        candidates.append(mf)
+
+    notes = ingredient.get("notes")
+    if isinstance(notes, str) and notes.strip():
+        candidates.append(notes)
+    elif isinstance(notes, list):
+        for n in notes:
+            if isinstance(n, str) and n.strip():
+                candidates.append(n)
+
+    raw = ingredient.get("raw_source_text")
+    if isinstance(raw, str) and raw.strip():
+        candidates.append(raw)
+
+    compound_by_lower = {c.lower(): c for c in _STANDARDIZATION_COMPOUNDS}
+    for text in candidates:
+        m = _STANDARDIZATION_RE.search(text)
+        if m:
+            pct = m.group(1)
+            compound_raw = m.group(2)
+            compound_canonical = compound_by_lower.get(compound_raw.lower(), compound_raw)
+            return f"{pct}% {compound_canonical}"
+    return None
+
+
 # Sprint E1.2.2.b — display_dose_label.
 # Three allowed output classes (external-dev medical-honesty rule):
 #   "600 mg"               — individually disclosed
@@ -1655,6 +1719,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "display_label": _compute_display_label(ing),
             # Sprint E1.2.2.b — pre-computed Flutter dose label
             "display_dose_label": _compute_display_dose_label(ing),
+            # Sprint E1.2.2.c — standardization claim (None when not known)
+            "standardization_note": _compute_standardization_note({
+                "matched_form": m.get("matched_form") or ing.get("matched_form"),
+                "notes": m.get("notes") or ing.get("notes"),
+                "raw_source_text": ing.get("raw_source_text"),
+            }),
         })
 
     # Inactive ingredients
