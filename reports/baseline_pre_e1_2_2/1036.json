@@ -3756,6 +3756,7 @@
       "score": 13.0,
       "standardName": "Vitamin A",
       "standard_name": "Vitamin A",
+      "standardization_note": null,
       "unit": "IU"
     },
     {
@@ -3920,6 +3921,7 @@
       "score": 13.0,
       "standardName": "Vitamin C",
       "standard_name": "Vitamin C",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -4196,6 +4198,7 @@
       "score": 15.0,
       "standardName": "Vitamin D",
       "standard_name": "Vitamin D",
+      "standardization_note": null,
       "unit": "IU"
     },
     {
@@ -4247,6 +4250,7 @@
       "score": null,
       "standardName": "Vitamin E",
       "standard_name": "Vitamin E",
+      "standardization_note": null,
       "unit": "IU"
     },
     {
@@ -4344,6 +4348,7 @@
       "score": 10.0,
       "standardName": "Vitamin B1 (Thiamine)",
       "standard_name": "Vitamin B1 (Thiamine)",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -4381,6 +4386,7 @@
       "score": 10.0,
       "standardName": "Vitamin B2 (Riboflavin)",
       "standard_name": "Vitamin B2 (Riboflavin)",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -4561,6 +4567,7 @@
       "score": 11.0,
       "standardName": "Vitamin B3 (Niacin)",
       "standard_name": "Vitamin B3 (Niacin)",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -4723,6 +4730,7 @@
       "score": 9.0,
       "standardName": "Vitamin B6 (Pyridoxine)",
       "standard_name": "Vitamin B6 (Pyridoxine)",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -4827,6 +4835,7 @@
       "score": 6.0,
       "standardName": "Vitamin B9 (Folate)",
       "standard_name": "Vitamin B9 (Folate)",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -4972,6 +4981,7 @@
       "score": 10.0,
       "standardName": "Vitamin B12",
       "standard_name": "Vitamin B12",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -5038,6 +5048,7 @@
       "score": 15.0,
       "standardName": "Vitamin B7 (Biotin)",
       "standard_name": "Vitamin B7 (Biotin)",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -5112,6 +5123,7 @@
       "score": 12.0,
       "standardName": "Vitamin B5 (Pantothenic Acid)",
       "standard_name": "Vitamin B5 (Pantothenic Acid)",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -5252,6 +5264,7 @@
       "score": 11.0,
       "standardName": "Calcium",
       "standard_name": "Calcium",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -5387,6 +5400,7 @@
       "score": 11.0,
       "standardName": "Iron",
       "standard_name": "Iron",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -5576,6 +5590,7 @@
       "score": 14.0,
       "standardName": "Iodine",
       "standard_name": "Iodine",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -5740,6 +5755,7 @@
       "score": 4.0,
       "standardName": "Magnesium",
       "standard_name": "Magnesium",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -5845,6 +5861,7 @@
       "score": 5.0,
       "standardName": "Zinc",
       "standard_name": "Zinc",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -5950,6 +5967,7 @@
       "score": 15.0,
       "standardName": "Selenium",
       "standard_name": "Selenium",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -6073,6 +6091,7 @@
       "score": 4.0,
       "standardName": "Copper",
       "standard_name": "Copper",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -6197,6 +6216,7 @@
       "score": 8.0,
       "standardName": "Manganese",
       "standard_name": "Manganese",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -6305,6 +6325,7 @@
       "score": 5.0,
       "standardName": "Chromium",
       "standard_name": "Chromium",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -6382,6 +6403,7 @@
       "score": 12.0,
       "standardName": "Molybdenum",
       "standard_name": "Molybdenum",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -6459,6 +6481,7 @@
       "score": 10.0,
       "standardName": "Choline",
       "standard_name": "Choline",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -6560,6 +6583,7 @@
       "score": 9.0,
       "standardName": "Alpha Lipoic Acid",
       "standard_name": "Alpha Lipoic Acid",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -6667,6 +6691,7 @@
       "score": 13.0,
       "standardName": "Inositol",
       "standard_name": "Inositol",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -6704,6 +6729,7 @@
       "score": 13.0,
       "standardName": "Digestive Enzymes",
       "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -6804,6 +6830,7 @@
       "score": 12.0,
       "standardName": "Green Tea Extract",
       "standard_name": "Green Tea Extract",
+      "standardization_note": "50% EGCG",
       "unit": "mg"
     },
     {
@@ -6841,6 +6868,7 @@
       "score": 12.0,
       "standardName": "Citrus Bioflavonoids",
       "standard_name": "Citrus Bioflavonoids",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -6878,6 +6906,7 @@
       "score": 13.0,
       "standardName": "Hesperidin",
       "standard_name": "Citrus Bioflavonoids",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -6974,6 +7003,7 @@
       "score": 9.0,
       "standardName": "Quercetin",
       "standard_name": "Quercetin",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -7011,6 +7041,7 @@
       "score": 12.0,
       "standardName": "Citrus Bioflavonoids",
       "standard_name": "Citrus Bioflavonoids",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -7048,6 +7079,7 @@
       "score": 13.0,
       "standardName": "Digestive Enzymes",
       "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -7085,6 +7117,7 @@
       "score": 13.0,
       "standardName": "Digestive Enzymes",
       "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -7122,6 +7155,7 @@
       "score": 13.0,
       "standardName": "Digestive Enzymes",
       "standard_name": "Digestive Enzymes",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -7173,6 +7207,7 @@
       "score": 5.0,
       "standardName": "Boron",
       "standard_name": "Boron",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -7224,6 +7259,7 @@
       "score": 11.0,
       "standardName": "Lutein",
       "standard_name": "Lutein",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -7264,6 +7300,7 @@
       "score": 12.0,
       "standardName": "Lycopene",
       "standard_name": "Lycopene",
+      "standardization_note": null,
       "unit": "mcg"
     },
     {
@@ -7388,6 +7425,7 @@
       "score": 6.0,
       "standardName": "Vitamin E",
       "standard_name": "Vitamin E",
+      "standardization_note": null,
       "unit": "mcg"
     }
   ],

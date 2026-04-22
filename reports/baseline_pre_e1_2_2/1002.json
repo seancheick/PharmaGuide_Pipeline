@@ -420,6 +420,7 @@
       "score": 13.0,
       "standardName": "EPA (Eicosapentaenoic Acid)",
       "standard_name": "EPA (Eicosapentaenoic Acid)",
+      "standardization_note": null,
       "unit": "mg"
     },
     {
@@ -517,6 +518,7 @@
       "score": 13.0,
       "standardName": "DHA (Docosahexaenoic Acid)",
       "standard_name": "DHA (Docosahexaenoic Acid)",
+      "standardization_note": null,
       "unit": "mg"
     }
   ],

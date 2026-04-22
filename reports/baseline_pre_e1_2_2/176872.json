@@ -990,6 +990,7 @@
       "score": 15.0,
       "standardName": "Vitamin D",
       "standard_name": "Vitamin D",
+      "standardization_note": null,
       "unit": "IU"
     },
     {
@@ -1130,6 +1131,7 @@
       "score": 6.0,
       "standardName": "Calcium",
       "standard_name": "Calcium",
+      "standardization_note": null,
       "unit": "mg"
     }
   ],

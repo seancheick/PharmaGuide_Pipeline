@@ -1124,6 +1124,71 @@ def _compute_display_label(ingredient: Dict[str, Any]) -> str:
     return result.strip() or name
 
 
+# Sprint E1.2.2.d — display_badge (adapter, not inference).
+# Pure function of already-trusted fields. Dev rule: "Badges reflect
+# what the system already knows — not what it guesses." If the scorer
+# didn't compute adequacy, the badge stays no_data; we never infer
+# well_dosed from dose magnitude alone, and we never divide blend
+# totals across members.
+_BADGE_WELL_DOSED = "well_dosed"
+_BADGE_LOW_DOSE = "low_dose"
+_BADGE_HIGH_DOSE = "high_dose"
+_BADGE_NOT_DISCLOSED = "not_disclosed"
+_BADGE_NO_DATA = "no_data"
+
+# Scorer adequacy tier → badge mapping. Conservative: unknown tier
+# labels fall through to no_data rather than assuming "well_dosed".
+_ADEQUACY_TIER_TO_BADGE = {
+    "low": _BADGE_LOW_DOSE,
+    "adequate": _BADGE_WELL_DOSED,
+    "good": _BADGE_WELL_DOSED,
+    "excellent": _BADGE_HIGH_DOSE,
+    "above_typical_range": _BADGE_HIGH_DOSE,
+}
+
+
+def _compute_display_badge(ingredient: Dict[str, Any]) -> str:
+    """Produce the user-facing quality-tier badge. Deterministic
+    short-circuit decision tree — no inference beyond what already
+    exists in the ingredient dict.
+    """
+    qty_raw = ingredient.get("quantity")
+    qty = safe_float(qty_raw, 0) if qty_raw is not None else 0.0
+    unit = safe_str(ingredient.get("unit")).strip()
+    unit_lower = unit.lower()
+    has_real_dose = (
+        isinstance(qty, (int, float)) and qty > 0
+        and unit_lower not in _NP_SENTINELS
+    )
+    is_blend_member = bool(
+        ingredient.get("isNestedIngredient")
+        or ingredient.get("proprietaryBlend")
+        or ingredient.get("is_in_proprietary_blend")
+    )
+
+    # Rule 1 — blend member without individual dose → not_disclosed.
+    # Short-circuits first so no upstream adequacy_tier can ever promote
+    # an undisclosed member to well_dosed.
+    if is_blend_member and not has_real_dose:
+        return _BADGE_NOT_DISCLOSED
+
+    # Rule 2 — no dose / NP unit → no_data (on non-blend).
+    if not has_real_dose:
+        return _BADGE_NO_DATA
+
+    # Rule 3 — scorer-supplied adequacy tier wins when present.
+    tier = ingredient.get("adequacy_tier")
+    if isinstance(tier, str):
+        mapped = _ADEQUACY_TIER_TO_BADGE.get(tier.lower())
+        if mapped:
+            return mapped
+        # Unknown tier — fall through; never invent a badge.
+
+    # Rule 4 — dose is disclosed but scorer doesn't know adequacy.
+    # Stay honest: no_data.
+    return _BADGE_NO_DATA
+
+
 # Sprint E1.2.2.c — standardization_note extraction.
 # Tight regex (external-dev rule): "If I'm not 100% sure the % belongs
 # to this compound, return null." Matches only ``<int>%`` (with optional
@@ -1725,6 +1790,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "notes": m.get("notes") or ing.get("notes"),
                 "raw_source_text": ing.get("raw_source_text"),
             }),
+            # Sprint E1.2.2.d — quality-tier badge (adapter — conservative)
+            "display_badge": _compute_display_badge(ing),
         })
 
     # Inactive ingredients

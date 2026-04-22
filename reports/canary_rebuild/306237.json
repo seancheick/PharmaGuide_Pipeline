@@ -582,6 +582,7 @@
     {
       "bio_score": 11.0,
       "category": "herbs",
+      "display_badge": "no_data",
       "display_dose_label": "600 mg",
       "display_label": "KSM-66 Ashwagandha Root Extract",
       "dosage": 600.0,
@@ -675,6 +676,7 @@
     {
       "bio_score": 9.0,
       "category": "herbs",
+      "display_badge": "no_data",
       "display_dose_label": "5 mg",
       "display_label": "BioPerine Black Pepper Fruit Extract",
       "dosage": 5.0,
