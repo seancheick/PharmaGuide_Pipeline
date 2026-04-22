@@ -2650,7 +2650,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A form of added sugar. Contains trace minerals but primarily contributes to glycemic load \u2014 worth limiting if you are tracking added sugars.",
+      "safety_summary": "A form of added sugar. Contains trace minerals but primarily contributes to blood sugar spikes \u2014 worth limiting if you are tracking added sugars.",
       "safety_summary_one_liner": "Added sugar with trace minerals."
     },
     {
@@ -2793,7 +2793,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "Added sugar (sucrose) in a supplement formulation. Contributes to glycemic load with no nutritional benefit beyond calories \u2014 worth limiting.",
+      "safety_summary": "Added sugar (sucrose) in a supplement formulation. Contributes to blood sugar spikes with no nutritional benefit beyond calories \u2014 worth limiting.",
       "safety_summary_one_liner": "Added sugar with no nutritional benefit beyond calories."
     },
     {
@@ -3823,8 +3823,8 @@
       "severity_level": "low",
       "cui": "C0054527",
       "external_ids": {},
-      "safety_summary": "A tapioca-derived maltodextrin with a very high glycemic index. Rapidly digests to glucose \u2014 worth moderating daily intake.",
-      "safety_summary_one_liner": "Maltodextrin \u2014 high glycemic index.",
+      "safety_summary": "A tapioca-derived maltodextrin that spikes blood sugar fast \u2014 digests to glucose as quickly as table sugar. Worth moderating daily intake.",
+      "safety_summary_one_liner": "Maltodextrin \u2014 spikes blood sugar fast.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) \u2014 they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
       ]
@@ -4141,8 +4141,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "Dried corn syrup. Essentially pure glucose with a very high glycemic index \u2014 worth avoiding in daily supplements.",
-      "safety_summary_one_liner": "Essentially pure glucose \u2014 very high glycemic index."
+      "safety_summary": "Dried corn syrup. Essentially pure glucose that spikes blood sugar fast \u2014 worth avoiding in daily supplements.",
+      "safety_summary_one_liner": "Essentially pure glucose \u2014 spikes blood sugar fast."
     },
     {
       "id": "ADD_CROSCARMELLOSE_SODIUM",
@@ -5073,7 +5073,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A naturally occurring simple sugar used in some urinary-tract supplements as an active ingredient; when added purely as a sweetener it contributes to glycemic load. Low concern overall.",
+      "safety_summary": "A naturally occurring simple sugar used in some urinary-tract supplements as an active ingredient; when added purely as a sweetener it contributes to blood sugar spikes. Low concern overall.",
       "safety_summary_one_liner": "Natural simple sugar with targeted uses."
     },
     {
@@ -5578,8 +5578,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A synthetic dye. In vitro studies suggest genotoxic potential; regulatory bodies consider it safe at approved levels but worth avoiding where possible.",
-      "safety_summary_one_liner": "Synthetic green dye with in vitro concerns."
+      "safety_summary": "A synthetic dye. Lab studies suggest DNA-damage potential; regulatory bodies consider it safe at approved levels but worth avoiding where possible.",
+      "safety_summary_one_liner": "Synthetic green dye with lab-study concerns."
     },
     {
       "id": "ADD_HYDROGENATED_STARCH_HYDROLYSATE",
@@ -6695,8 +6695,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A highly processed glucose polymer with a glycemic index comparable to pure glucose \u2014 worth moderating daily intake.",
-      "safety_summary_one_liner": "Maltodextrin \u2014 high glycemic index.",
+      "safety_summary": "A highly processed glucose polymer that spikes blood sugar as fast as pure glucose \u2014 worth moderating daily intake.",
+      "safety_summary_one_liner": "Maltodextrin \u2014 spikes blood sugar fast.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) \u2014 they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
       ]
@@ -14500,8 +14500,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "A refined tapioca starch filler with a high glycemic index. Minimal nutritional value \u2014 worth moderating daily intake.",
-      "safety_summary_one_liner": "Refined starch filler \u2014 high glycemic index."
+      "safety_summary": "A refined tapioca starch filler that spikes blood sugar quickly. Minimal nutritional value \u2014 worth moderating daily intake.",
+      "safety_summary_one_liner": "Refined starch filler \u2014 spikes blood sugar fast."
     },
     {
       "id": "ADD_TETRASODIUM_DIPHOSPHATE",
@@ -16739,7 +16739,7 @@
         "Japanese consumers \u2014 TBHQ is prohibited as a food additive in Japan",
         "Clean-label conscious \u2014 increasingly removed by major retailers (Walmart, Kroger, Whole Foods)"
       ],
-      "safety_summary": "A synthetic antioxidant preservative. Some in vitro studies raise immune-activity concerns \u2014 worth choosing products without it where possible.",
+      "safety_summary": "A synthetic antioxidant preservative. Some lab studies raise immune-activity concerns \u2014 worth choosing products without it where possible.",
       "safety_summary_one_liner": "Synthetic preservative \u2014 immune-activity signals."
     },
     {
@@ -17699,7 +17699,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "safety_summary": "High-fructose corn syrup. Same liver-fat and glycemic concerns as excess added sugar \u2014 worth limiting, especially in daily supplements.",
+      "safety_summary": "High-fructose corn syrup. Same liver-fat and blood-sugar concerns as excess added sugar \u2014 worth limiting, especially in daily supplements.",
       "safety_summary_one_liner": "Processed added sugar \u2014 worth limiting.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) \u2014 they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."

@@ -288,7 +288,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Aloe vera can lower blood sugar. If you have diabetes, talk to your clinician before adding aloe vera and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Aloe vera affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Aloe vera affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -303,7 +303,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Aloe vera can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding aloe vera and monitor your glucose more closely at first.",
-          "informational_note": "Aloe vera affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Aloe vera affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [],
@@ -342,7 +342,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Alpha-lipoic acid can lower blood sugar. If you have diabetes, talk to your clinician before adding Alpha-lipoic acid and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Alpha-lipoic acid affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Alpha-lipoic acid affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -357,7 +357,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Alpha-lipoic acid can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Alpha-lipoic acid and monitor your glucose more closely at first.",
-          "informational_note": "Alpha-lipoic acid affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Alpha-lipoic acid affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [
@@ -495,7 +495,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Bitter melon can lower blood sugar. If you have diabetes, talk to your clinician before adding bitter melon and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Bitter melon affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Bitter melon affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -510,7 +510,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Bitter melon can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding bitter melon and monitor your glucose more closely at first.",
-          "informational_note": "Bitter melon affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Bitter melon affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": {
@@ -562,7 +562,7 @@
           ],
           "alert_headline": "Not recommended with liver disease",
           "alert_body": "Black cohosh has been linked to rare idiosyncratic liver injury. If you have liver disease, talk to your clinician before using it, and monitor liver enzymes.",
-          "informational_note": "Black cohosh has hepatic safety signals relevant to people with liver conditions."
+          "informational_note": "Black cohosh has liver safety signals relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -674,7 +674,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Chromium can lower blood sugar. If you have diabetes, talk to your clinician before adding chromium and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Chromium affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Chromium affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -689,7 +689,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Chromium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding chromium and monitor your glucose more closely at first.",
-          "informational_note": "Chromium affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Chromium affects blood sugar \u2014 relevant to people on diabetes medications."
         },
         {
           "severity": "caution",
@@ -729,7 +729,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Cinnamon can lower blood sugar. If you have diabetes, talk to your clinician before adding cinnamon and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Cinnamon affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Cinnamon affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -744,7 +744,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Cinnamon can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding cinnamon and monitor your glucose more closely at first.",
-          "informational_note": "Cinnamon affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Cinnamon affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -825,7 +825,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Fenugreek can lower blood sugar. If you have diabetes, talk to your clinician before adding fenugreek and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Fenugreek affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Fenugreek affects blood sugar \u2014 relevant to people with diabetes."
         },
         {
           "condition_id": "lactation",
@@ -854,7 +854,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Fenugreek can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fenugreek and monitor your glucose more closely at first.",
-          "informational_note": "Fenugreek affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Fenugreek affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": {
@@ -951,7 +951,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Fiber can lower blood sugar. If you have diabetes, talk to your clinician before adding fiber and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Fiber affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Fiber affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -966,7 +966,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Fiber can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fiber and monitor your glucose more closely at first.",
-          "informational_note": "Fiber affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Fiber affects blood sugar \u2014 relevant to people on diabetes medications."
         },
         {
           "severity": "caution",
@@ -1305,7 +1305,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Ginseng can lower blood sugar. If you have diabetes, talk to your clinician before adding ginseng and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Ginseng affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Ginseng affects blood sugar \u2014 relevant to people with diabetes."
         },
         {
           "condition_id": "surgery_scheduled",
@@ -1334,7 +1334,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
-          "informational_note": "Ginseng affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Ginseng affects blood sugar \u2014 relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "anticoagulants",
@@ -1438,7 +1438,7 @@
           ],
           "alert_headline": "Not recommended with liver disease",
           "alert_body": "High-dose green tea extract has been linked to liver injury. If you have liver disease, talk to your clinician before using concentrated EGCG supplements.",
-          "informational_note": "Concentrated green tea extract has hepatic safety signals relevant to people with liver conditions."
+          "informational_note": "Concentrated green tea extract has liver safety signals relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [
@@ -1479,7 +1479,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Gymnema can lower blood sugar. If you have diabetes, talk to your clinician before adding gymnema and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Gymnema affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Gymnema affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -1494,7 +1494,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Gymnema can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding gymnema and monitor your glucose more closely at first.",
-          "informational_note": "Gymnema affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Gymnema affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -1970,7 +1970,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Psyllium can lower blood sugar. If you have diabetes, talk to your clinician before adding psyllium and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Psyllium affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Psyllium affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -1985,7 +1985,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Psyllium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding psyllium and monitor your glucose more closely at first.",
-          "informational_note": "Psyllium affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Psyllium affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": null,
@@ -2159,7 +2159,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Vanadium can lower blood sugar. If you have diabetes, talk to your clinician before adding vanadium and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Vanadium affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Vanadium affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -2174,7 +2174,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Vanadium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding vanadium and monitor your glucose more closely at first.",
-          "informational_note": "Vanadium affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Vanadium affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "pregnancy_lactation": {
@@ -2286,7 +2286,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Niacin can lower blood sugar. If you have diabetes, talk to your clinician before adding Niacin and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Niacin affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Niacin affects blood sugar \u2014 relevant to people with diabetes."
         },
         {
           "condition_id": "liver_disease",
@@ -2329,7 +2329,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Niacin can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Niacin and monitor your glucose more closely at first.",
-          "informational_note": "Niacin affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Niacin affects blood sugar \u2014 relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "statins",
@@ -2792,7 +2792,7 @@
           ],
           "alert_headline": "Not recommended with liver disease",
           "alert_body": "Kava has been linked to serious liver injury. If you have any chronic liver condition, do not use kava; also avoid with alcohol or other hepatotoxic agents.",
-          "informational_note": "Kava has hepatic safety signals relevant to people with liver conditions."
+          "informational_note": "Kava has liver safety signals relevant to people with liver conditions."
         },
         {
           "severity": "caution",
@@ -5246,7 +5246,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Tribulus can lower blood sugar. If you have diabetes, talk to your clinician before adding tribulus and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Tribulus affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Tribulus affects blood sugar \u2014 relevant to people with diabetes."
         },
         {
           "condition_id": "hypertension",
@@ -5300,7 +5300,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Tribulus can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding tribulus and monitor your glucose more closely at first.",
-          "informational_note": "Tribulus affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Tribulus affects blood sugar \u2014 relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "antihypertensives",
@@ -6336,8 +6336,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/22566672/"
           ],
           "alert_headline": "Not recommended with liver disease",
-          "alert_body": "Butterbur alkaloids are direct liver toxins. If you have liver disease, talk to your clinician; even PA-free products carry some hepatotoxicity risk.",
-          "informational_note": "Butterbur has hepatic safety signals \u2014 relevant to people with liver conditions."
+          "alert_body": "Butterbur alkaloids are direct liver toxins. If you have liver disease, talk to your clinician; even PA-free products carry some liver-injury risk.",
+          "informational_note": "Butterbur has liver safety signals \u2014 relevant to people with liver conditions."
         }
       ],
       "drug_class_rules": [],
@@ -6379,7 +6379,7 @@
           ],
           "alert_headline": "Not recommended with liver disease",
           "alert_body": "Long-term cascara use has been linked to liver injury, and FDA withdrew it from OTC monographs in 2002. If you have liver disease, talk to your clinician about alternatives.",
-          "informational_note": "Cascara sagrada has hepatic safety signals relevant to people with liver conditions."
+          "informational_note": "Cascara sagrada has liver safety signals relevant to people with liver conditions."
         },
         {
           "condition_id": "kidney_disease",
@@ -6478,7 +6478,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Black seed oil can lower blood sugar. If you have diabetes, talk to your clinician before adding black seed oil and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Black seed oil affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Black seed oil affects blood sugar \u2014 relevant to people with diabetes."
         },
         {
           "condition_id": "hypertension",
@@ -6536,7 +6536,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Black seed oil can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding black seed oil and monitor your glucose more closely at first.",
-          "informational_note": "Black seed oil affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Black seed oil affects blood sugar \u2014 relevant to people on diabetes medications."
         },
         {
           "drug_class_id": "antihypertensives",
@@ -6848,7 +6848,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Dandelion can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding dandelion and monitor your glucose more closely at first.",
-          "informational_note": "Dandelion affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Dandelion affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [],
@@ -7060,8 +7060,8 @@
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
           ],
           "alert_headline": "May affect anticholinergic medications",
-          "alert_body": "Alpha-GPC can influence cholinergic balance. If you take an anticholinergic medication, talk to your prescriber before adding Alpha-GPC.",
-          "informational_note": "Alpha-GPC affects cholinergic balance \u2014 relevant to people on anticholinergic medications."
+          "alert_body": "Alpha-GPC can influence brain-signaling balance. If you take an anticholinergic medication, talk to your prescriber before adding Alpha-GPC.",
+          "informational_note": "Alpha-GPC affects brain-signaling balance \u2014 relevant to people on anticholinergic medications."
         }
       ],
       "dose_thresholds": [],
@@ -7287,7 +7287,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Stinging nettle can lower blood sugar. If you have diabetes, talk to your clinician before adding stinging nettle and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Stinging nettle affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Stinging nettle affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -7317,7 +7317,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Stinging nettle can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding stinging nettle and monitor your glucose more closely at first.",
-          "informational_note": "Stinging nettle affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Stinging nettle affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [],
@@ -7372,7 +7372,7 @@
           ],
           "alert_headline": "Caution with diabetes",
           "alert_body": "Olive leaf can lower blood sugar. If you have diabetes, talk to your clinician before adding olive leaf and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Olive leaf affects glycemic control \u2014 relevant to people with diabetes."
+          "informational_note": "Olive leaf affects blood sugar \u2014 relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -7402,7 +7402,7 @@
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Olive leaf can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding olive leaf and monitor your glucose more closely at first.",
-          "informational_note": "Olive leaf affects glycemic control \u2014 relevant to people on diabetes medications."
+          "informational_note": "Olive leaf affects blood sugar \u2014 relevant to people on diabetes medications."
         }
       ],
       "dose_thresholds": [],

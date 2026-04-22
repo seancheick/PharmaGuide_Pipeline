@@ -15365,7 +15365,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A plant alkaloid sold in supplement products at pharmacological doses. Linked to blood-pressure elevation and cardiovascular strain, especially when stacked with other stimulants. Stop.",
+      "safety_warning": "A plant alkaloid sold in supplement products at drug-strength doses. Linked to blood-pressure elevation and cardiovascular strain, especially when stacked with other stimulants. Stop.",
       "safety_warning_one_liner": "Stimulant at supplement doses. Stop."
     },
     {
@@ -16938,7 +16938,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "A beta-adrenergic stimulant found in weight-loss products. Associated with cardiovascular risk; not a lawful supplement ingredient. Stop and consult a doctor.",
+      "safety_warning": "A stimulant that mimics adrenaline, found in weight-loss products. Associated with cardiovascular risk; not a lawful supplement ingredient. Stop and consult a doctor.",
       "safety_warning_one_liner": "Unlawful stimulant linked to heart risk. Stop."
     },
     {
@@ -17427,7 +17427,7 @@
         "metabolites": []
       },
       "ban_context": "substance",
-      "safety_warning": "The pharmacologically active metabolite of psilocybin and a DEA Schedule I substance. Its presence in a supplement is associated with illegal drug inclusion. Stop and consult a doctor.",
+      "safety_warning": "The active metabolite of psilocybin and a DEA Schedule I substance. Its presence in a supplement is associated with illegal drug inclusion. Stop and consult a doctor.",
       "safety_warning_one_liner": "DEA Schedule I substance. Stop."
     },
     {
