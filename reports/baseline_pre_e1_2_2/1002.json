@@ -328,6 +328,7 @@
     {
       "bio_score": 10.0,
       "category": "fatty_acids",
+      "display_label": "Eicosapentaenoic Acid",
       "dosage": 360.0,
       "dosage_unit": "mg",
       "extracted_forms": [],
@@ -423,6 +424,7 @@
     {
       "bio_score": 10.0,
       "category": "fatty_acids",
+      "display_label": "Docosahexaenoic Acid",
       "dosage": 240.0,
       "dosage_unit": "mg",
       "extracted_forms": [],

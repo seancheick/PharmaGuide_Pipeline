@@ -187,3 +187,66 @@ def test_brand_matched_case_insensitive() -> None:
     }
     label = _compute_display_label(ing)
     assert "BioPerine" in label or "Bioperine" in label
+
+
+# ---------------------------------------------------------------------------
+# Hardening contracts (added 2026-04-22 per external-dev review after .a).
+# These are permanent CI invariants — if a future regression drops the
+# base name or the branded token, these fire immediately.
+# ---------------------------------------------------------------------------
+
+@pytest.mark.parametrize("name,form", [
+    ("Vitamin A", "Acetate"),
+    ("Vitamin C", "Ascorbic Acid"),
+    ("Vitamin D", "Cholecalciferol"),
+    ("Calcium", "Tricalcium Phosphate"),
+    ("Magnesium", "Glycinate"),
+    ("Iron", "Bisglycinate"),
+    ("Zinc", "Picolinate"),
+])
+def test_display_label_never_drops_base_name(name: str, form: str) -> None:
+    """Permanent invariant: when name is a base ingredient (vitamin/
+    mineral) and form is a chemical descriptor, the base name must
+    appear in display_label. Protects against substring false-positives
+    like "Calcium" vs "Tricalcium Phosphate"."""
+    ing = {"name": name, "forms": [{"name": form}]}
+    label = _compute_display_label(ing)
+    # Use word-boundary match — the base name must appear as a word
+    import re as _re
+    assert _re.search(r"\b" + _re.escape(name) + r"\b", label), (
+        f"display_label {label!r} dropped base name {name!r}"
+    )
+
+
+@pytest.mark.parametrize("brand,form", [
+    ("KSM-66", "Ashwagandha Root Extract"),
+    ("BioPerine", "Black Pepper Fruit Extract"),
+    ("Ferrochel", "Iron Bisglycinate Chelate"),
+    ("Meriva", "Curcumin Phytosome"),
+    ("Sensoril", "Ashwagandha Extract"),
+])
+def test_display_label_preserves_brand_token(brand: str, form: str) -> None:
+    """Permanent invariant: whenever the source name carries a known
+    branded token, it must survive to display_label (case-insensitive)."""
+    ing = {"name": brand, "forms": [{"name": form}]}
+    label = _compute_display_label(ing)
+    assert brand.lower() in label.lower(), (
+        f"display_label {label!r} dropped branded token {brand!r}"
+    )
+
+
+def test_magnesium_glycinate_composites_without_duplicating_form() -> None:
+    """Edge case flagged in external-dev review: name="Magnesium",
+    form="Glycinate" — must composite to "Magnesium (Glycinate)" and
+    NOT accidentally emit "Magnesium Glycinate Glycinate" or drop
+    either side."""
+    ing = {"name": "Magnesium", "forms": [{"name": "Glycinate"}]}
+    label = _compute_display_label(ing)
+    assert label == "Magnesium (Glycinate)", label
+    # And the inverse shape (form already carries base word):
+    ing2 = {"name": "Magnesium", "forms": [{"name": "Magnesium Glycinate"}]}
+    label2 = _compute_display_label(ing2)
+    assert label2 == "Magnesium Glycinate", label2
+    assert label2.lower().count("glycinate") == 1, (
+        f"form-word duplicated: {label2!r}"
+    )

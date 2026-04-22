@@ -40,11 +40,17 @@ REBUILD_DIR = ROOT / "reports" / "canary_rebuild"
 # Fields E1.2.2 is explicitly permitted to ADD (not mutate). Any other
 # new field on ingredient objects triggers the pre-flight assertion.
 E1_2_2_NEW_INGREDIENT_FIELDS = {
-    "display_label",
-    "display_dose_label",
-    "display_badge",
-    "standardization_note",
+    "display_label",       # E1.2.2.a
+    "display_dose_label",  # E1.2.2.b
+    "display_badge",       # E1.2.2.d
+    "standardization_note", # E1.2.2.c
 }
+
+# Baseline rolls forward sub-task by sub-task. As each field lands, move
+# the baseline pointer. Currently "post-E1.2.2.a" is the active pre-flight
+# reference (contains display_label, not yet dose_label / badge / note).
+# The test allows any subset of E1_2_2_NEW_INGREDIENT_FIELDS to be
+# present in the rebuild but NOT in the baseline (additive-only).
 
 # Known non-ingredient keys that have been added by earlier E1 tasks
 # (E1.1.1 danger bucket, E1.1.4 banned_substance_detail). These are

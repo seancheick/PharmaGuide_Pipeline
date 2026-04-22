@@ -1124,6 +1124,61 @@ def _compute_display_label(ingredient: Dict[str, Any]) -> str:
     return result.strip() or name
 
 
+# Sprint E1.2.2.b — display_dose_label.
+# Three allowed output classes (external-dev medical-honesty rule):
+#   "600 mg"               — individually disclosed
+#   "Amount not disclosed" — proprietary-blend member without own dose
+#   "—"                    — truly missing
+# Never infer member dose from blend total; never leak raw "NP".
+_EM_DASH = "—"
+_NOT_DISCLOSED_TEXT = "Amount not disclosed"
+_NP_SENTINELS = {"np", "n/p", "not provided", ""}
+
+
+def _format_dose_number(qty: float) -> str:
+    """Drop trailing .0 on integer-valued floats; keep decimals on true
+    fractions. Uses ``:g`` which avoids scientific notation up to ~16
+    digits, sufficient for CFU counts and mg doses."""
+    if qty == int(qty):
+        return str(int(qty))
+    return f"{qty:g}"
+
+
+def _compute_display_dose_label(ingredient: Dict[str, Any]) -> str:
+    """Produce the user-facing dose string. Three classes only; never
+    infers from blend totals, never leaks the internal "NP" sentinel.
+    """
+    qty_raw = ingredient.get("quantity")
+    qty = safe_float(qty_raw, 0) if qty_raw is not None else 0.0
+    unit = safe_str(ingredient.get("unit")).strip()
+    unit_lower = unit.lower()
+
+    is_blend_member = bool(
+        ingredient.get("isNestedIngredient")
+        or ingredient.get("proprietaryBlend")
+        or ingredient.get("is_in_proprietary_blend")
+    )
+
+    has_real_unit = unit_lower not in _NP_SENTINELS
+    has_real_dose = isinstance(qty, (int, float)) and qty > 0 and has_real_unit
+
+    # Class 1 — individually disclosed wins regardless of blend membership.
+    if has_real_dose:
+        qty_str = _format_dose_number(qty)
+        # CFU count → render in billions when ≥ 1e9 for human readability.
+        if unit_lower == "cfu" and qty >= 1_000_000_000:
+            billions = qty / 1_000_000_000
+            return f"{_format_dose_number(billions)} billion CFU"
+        return f"{qty_str} {unit}"
+
+    # Class 2 — prop-blend member without an individual dose.
+    if is_blend_member:
+        return _NOT_DISCLOSED_TEXT
+
+    # Class 3 — truly missing.
+    return _EM_DASH
+
+
 def _validate_banned_preflight_propagation(
     blob: Dict[str, Any], enriched: Dict[str, Any], dsld_id: str
 ) -> None:
@@ -1598,6 +1653,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             ),
             # Sprint E1.2.2.a — pre-computed Flutter display label
             "display_label": _compute_display_label(ing),
+            # Sprint E1.2.2.b — pre-computed Flutter dose label
+            "display_dose_label": _compute_display_dose_label(ing),
         })
 
     # Inactive ingredients

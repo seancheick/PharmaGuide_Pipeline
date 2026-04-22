@@ -603,6 +603,7 @@
     {
       "bio_score": 10.0,
       "category": "enzymes",
+      "display_dose_label": "Amount not disclosed",
       "display_label": "Amylase",
       "dosage": 0.0,
       "dosage_unit": "NP",
@@ -639,6 +640,7 @@
     {
       "bio_score": 10.0,
       "category": "enzymes",
+      "display_dose_label": "Amount not disclosed",
       "display_label": "Protease",
       "dosage": 0.0,
       "dosage_unit": "NP",
@@ -675,6 +677,7 @@
     {
       "bio_score": 10.0,
       "category": "enzymes",
+      "display_dose_label": "Amount not disclosed",
       "display_label": "Lipase",
       "dosage": 0.0,
       "dosage_unit": "NP",
@@ -711,6 +714,7 @@
     {
       "bio_score": 10.0,
       "category": "enzymes",
+      "display_dose_label": "Amount not disclosed",
       "display_label": "Cellulase",
       "dosage": 0.0,
       "dosage_unit": "NP",
@@ -747,6 +751,7 @@
     {
       "bio_score": 10.0,
       "category": "enzymes",
+      "display_dose_label": "Amount not disclosed",
       "display_label": "Lactase",
       "dosage": 0.0,
       "dosage_unit": "NP",
