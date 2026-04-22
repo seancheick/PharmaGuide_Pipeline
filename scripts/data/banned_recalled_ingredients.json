@@ -5008,7 +5008,7 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "Partially hydrogenated oils — the primary source of industrial trans fats. FDA removed their GRAS status in 2018 after clear evidence of cardiovascular risk. Avoid products still listing them.",
-      "safety_warning_one_liner": "FDA-banned trans-fat source linked to heart disease. Avoid."
+      "safety_warning_one_liner": "FDA-banned trans-fat source with established cardiovascular risk. Avoid."
     },
     {
       "id": "BANNED_PICAMILON",

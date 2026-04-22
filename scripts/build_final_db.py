@@ -980,6 +980,59 @@ def build_decision_highlights(
     }
 
 
+# Sprint E1.1.2 — critical-mode warnings must be profile-agnostic.
+# A warning with ``display_mode_default == "critical"`` is rendered to
+# every user regardless of profile. Copy referencing a specific condition
+# (e.g. "during pregnancy") shown to a profile-less user is medically
+# wrong. Profile-scoped warnings must default to ``suppress`` and
+# rely on Flutter's on-device promotion when profile matches.
+_WARNING_CONDITION_SPECIFIC_RE = re.compile(
+    r"(during pregnancy|for liver disease|breastfeeding|kidney disease|"
+    r"heart disease|while nursing)",
+    re.IGNORECASE,
+)
+
+_WARNING_AUTHORED_COPY_FIELDS = (
+    "alert_headline",
+    "alert_body",
+    "safety_warning",
+    "safety_warning_one_liner",
+    "safety_summary",
+    "safety_summary_one_liner",
+    "detail",
+    "title",
+    "informational_note",
+)
+
+
+def _validate_warning_display_mode_consistency(
+    warnings_list: List[Dict[str, Any]], dsld_id: str
+) -> None:
+    """Raise ``ValueError`` if any warning with ``display_mode_default ==
+    "critical"`` carries condition-specific copy. Invoked for every
+    product at build time so a future regression cannot silently ship
+    "Do not use during pregnancy" as a profile-less critical banner.
+    """
+    for w in warnings_list or []:
+        if not isinstance(w, dict):
+            continue
+        if w.get("display_mode_default") != "critical":
+            continue
+        for field in _WARNING_AUTHORED_COPY_FIELDS:
+            text = w.get(field)
+            if not isinstance(text, str) or not text:
+                continue
+            m = _WARNING_CONDITION_SPECIFIC_RE.search(text)
+            if m:
+                raise ValueError(
+                    f"[{dsld_id}] critical-mode warning (type="
+                    f"{w.get('type')!r}) carries condition-specific copy "
+                    f"in {field!r}: {m.group(0)!r} — rewrite as profile-"
+                    f"agnostic or set display_mode_default=\"suppress\" "
+                    f"(Sprint E1.1.2)."
+                )
+
+
 def _validate_decision_highlights(dh: Dict[str, Any], dsld_id: str) -> None:
     """Raise ``ValueError`` if ``decision_highlights.positive`` carries any
     token from the danger deny-list. Invoked for every product during
@@ -1530,8 +1583,19 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
 
     # Interaction-rule warnings — profile-gating metadata added here.
     #
-    # Each hit carries `display_mode_default` derived from rule severity:
-    #   contraindicated → "critical"    (always show, profile irrelevant)
+    # Each hit carries `display_mode_default` derived from rule severity.
+    # Sprint E1.1.2 (2026-04-21): every entry in the loops below lives
+    # inside `condition_rules[]` or `drug_class_rules[]` — by definition
+    # profile-scoped. The authored copy carries condition-specific
+    # language ("during pregnancy", "for liver disease", ...). Rendering
+    # such copy to a profile-less user is medically wrong (e.g. a male
+    # user seeing "Do not use during pregnancy"). The invariant:
+    # profile-gated rules default to `suppress`; Flutter promotes to
+    # alert-level severity on device when the user's profile matches
+    # the rule's condition_id / drug_class_id.
+    #
+    #   contraindicated → "suppress" (was "critical" pre-E1.1.2; Flutter
+    #                                  promotes to critical on profile match)
     #   avoid           → "informational" (show as neutral note without
     #                                       profile; Flutter promotes to
     #                                       "alert" if profile matches)
@@ -1540,10 +1604,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     #
     # `severity_contextual` is the severity the app should render when NO
     # profile matches — downgraded to "informational" for avoid/caution
-    # rules, untouched for contraindicated (still alarming without
-    # profile because the chemistry is dangerous regardless).
+    # rules, untouched for contraindicated so the promoted render is
+    # still alarming when profile matches.
     _INTERACTION_DISPLAY_MODE = {
-        "contraindicated": "critical",
+        "contraindicated": "suppress",
         "avoid": "informational",
         "caution": "suppress",
         "monitor": "suppress",
@@ -1684,6 +1748,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         w for w in warnings
         if w.get("display_mode_default", "critical") != "suppress"
     ]
+
+    # Sprint E1.1.2 — critical-mode warnings must be profile-agnostic.
+    dsld_id_for_validation = safe_str(enriched.get("dsld_id"))
+    _validate_warning_display_mode_consistency(warnings, dsld_id_for_validation)
+    _validate_warning_display_mode_consistency(warnings_profile_gated, dsld_id_for_validation)
 
     # Section breakdown — rename to descriptive, preserve all sub-scores
     breakdown_raw = safe_dict(scored.get("breakdown"))

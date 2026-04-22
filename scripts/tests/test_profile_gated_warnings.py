@@ -171,12 +171,16 @@ def test_avoid_severity_is_downgraded_to_informational():
     )
 
 
-def test_contraindicated_severity_is_always_critical():
-    """Contraindicated rules always show — profile irrelevant.
+def test_contraindicated_severity_suppresses_until_profile_match():
+    """Contraindicated rules inside condition_rules[] / drug_class_rules[]
+    are by definition profile-scoped — they live under a condition_id or
+    drug_class_id and only apply when the user's profile matches.
 
-    These are substance-level hazards or absolute contraindications
-    (e.g., 5-HTP + MAOI serotonin syndrome) that alarm regardless of
-    declared profile.
+    Sprint E1.1.2 (2026-04-21): display_mode_default defaults to
+    ``suppress`` for these rules so profile-less users don't see copy
+    like "Do not use during pregnancy". Flutter's on-device filter
+    promotes them to critical-intensity rendering when the profile
+    matches, using ``severity_contextual == "contraindicated"``.
     """
     enriched = _fixture_with_interaction_severities("contraindicated")
     blob = build_detail_blob(enriched, make_scored())
@@ -187,7 +191,9 @@ def test_contraindicated_severity_is_always_critical():
     ]
     assert contra_hits
     for w in contra_hits:
-        assert w["display_mode_default"] == "critical"
+        # Default rendering for profile-less user: suppressed
+        assert w["display_mode_default"] == "suppress"
+        # On-device promoted render intensity when profile matches: critical
         assert w["severity_contextual"] == "contraindicated"
 
 

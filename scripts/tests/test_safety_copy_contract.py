@@ -44,7 +44,7 @@ import pytest
 # Phase-landed toggles — flip to True as each task ships.
 # ---------------------------------------------------------------------------
 
-SPRINT_E1_1_2_LANDED = False  # Warning copy rewrite (critical → profile-agnostic)
+SPRINT_E1_1_2_LANDED = True   # Warning copy rewrite (critical → profile-agnostic)
 SPRINT_E1_1_3_LANDED = False  # Build-time raw-enum-leak validator
 SPRINT_E1_2_3_LANDED = False  # Build-time warning dedup
 
