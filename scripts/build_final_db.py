@@ -38,6 +38,7 @@ import json
 import logging
 import math as _math
 import os
+import re
 import sqlite3
 import tempfile
 from datetime import datetime, timezone
@@ -902,8 +903,35 @@ def build_interaction_summary_hint(enriched: Dict) -> Dict[str, Any]:
     }
 
 
-def build_decision_highlights(enriched: Dict, scored: Dict, blocking_reason: Optional[str]) -> Dict[str, str]:
-    """Build concise hero highlights so Flutter doesn't need to improvise them."""
+# Sprint E1.1.1 — deny-list of tokens that must never appear in the
+# user-facing ``decision_highlights.positive`` bucket. These are danger-
+# valence phrases that belong under the new ``danger`` bucket (rendered
+# red in Flutter) rather than under a green thumbs-up. The validator
+# below enforces this invariant at build time.
+_DECISION_HIGHLIGHTS_DENY_LIST_RE = re.compile(
+    r"(not lawful|banned|talk to your doctor|arsenic|trace metals|"
+    r"undisclosed|high glycemic|contraindicated)",
+    re.IGNORECASE,
+)
+
+
+def build_decision_highlights(
+    enriched: Dict, scored: Dict, blocking_reason: Optional[str]
+) -> Dict[str, Any]:
+    """Build concise hero highlights so Flutter doesn't need to improvise them.
+
+    Four buckets (Sprint E1.1.1):
+
+      * ``positive`` (str)      — green hero string, benign signal only.
+      * ``caution`` (str)       — yellow caution, quality-level signals.
+      * ``danger`` (list[str])  — red banner, safety blocking-reason
+        strings. Rendered by Flutter with red tint.
+      * ``trust`` (str)         — trust/certification signal.
+
+    Blocking-reason strings (banned / recalled / high-risk) route into
+    ``danger`` exclusively; ``caution`` then flows unchanged for the
+    non-blocking signals (additives, allergens, verdict).
+    """
     named_programs = safe_list(enriched.get("named_cert_programs"))
     section_scores = safe_dict(scored.get("section_scores"))
     verdict = safe_str(scored.get("verdict")).upper()
@@ -918,13 +946,15 @@ def build_decision_highlights(enriched: Dict, scored: Dict, blocking_reason: Opt
     else:
         positive = "Some quality signals are present, but this product needs a closer look."
 
+    danger: List[str] = []
     if blocking_reason == "banned_substance":
-        caution = "Contains a banned substance match."
+        danger.append("Contains a banned substance match.")
     elif blocking_reason == "recalled_ingredient":
-        caution = "Contains a recalled ingredient match."
+        danger.append("Contains a recalled ingredient match.")
     elif blocking_reason == "high_risk_ingredient":
-        caution = "Contains an ingredient flagged as high risk."
-    elif safe_list(enriched.get("harmful_additives")):
+        danger.append("Contains an ingredient flagged as high risk.")
+
+    if safe_list(enriched.get("harmful_additives")):
         caution = "Includes additives with known safety concerns."
     elif safe_list(enriched.get("allergen_hits")):
         caution = "Contains allergen risks that may matter for sensitive users."
@@ -945,8 +975,36 @@ def build_decision_highlights(enriched: Dict, scored: Dict, blocking_reason: Opt
     return {
         "positive": positive,
         "caution": caution,
+        "danger": danger,
         "trust": trust,
     }
+
+
+def _validate_decision_highlights(dh: Dict[str, Any], dsld_id: str) -> None:
+    """Raise ``ValueError`` if ``decision_highlights.positive`` carries any
+    token from the danger deny-list. Invoked for every product during
+    the final-DB build so a future regression cannot silently ship green
+    thumbs-up on danger-valence copy.
+
+    Accepts ``positive`` as either str (current shape) or list[str]
+    (forward-compat for future migration).
+    """
+    positive = dh.get("positive")
+    if isinstance(positive, str):
+        candidates = [positive]
+    elif isinstance(positive, list):
+        candidates = [s for s in positive if isinstance(s, str)]
+    else:
+        candidates = []
+
+    for s in candidates:
+        m = _DECISION_HIGHLIGHTS_DENY_LIST_RE.search(s)
+        if m:
+            raise ValueError(
+                f"[{dsld_id}] decision_highlights.positive leaks danger-"
+                f"valence token {m.group(0)!r}: {s!r}. Route this copy "
+                f"into the 'danger' bucket instead (Sprint E1.1.1)."
+            )
 
 
 # ─── Data Loading ───
@@ -2590,6 +2648,7 @@ def build_core_row(
     blocking = derive_blocking_reason(enriched, scored)
     interaction_hint = build_interaction_summary_hint(enriched)
     decision_highlights = build_decision_highlights(enriched, scored, blocking)
+    _validate_decision_highlights(decision_highlights, safe_str(enriched.get("dsld_id")))
 
     # ─── v1.1.0 Enhancements ───
     fingerprint = generate_ingredient_fingerprint(enriched)
