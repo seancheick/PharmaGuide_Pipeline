@@ -423,6 +423,7 @@
     {
       "bio_score": 13.0,
       "category": "probiotics",
+      "display_badge": "no_data",
       "display_dose_label": "10 billion CFU",
       "display_label": "Lactobacillus plantarum 299v",
       "dosage": 10000000000.0,

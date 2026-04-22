@@ -14029,27 +14029,6 @@
     },
     {
       "category": "filler",
-      "detail": "Inert, indigestible cellulose polymer used as tablet binder and filler. Passes through the GI tract unabsorbed. No evidence of systemic toxicity, nutrient absorption interference, or microbiome disruption at approved use levels. EFSA and JECFA set no ADI limit. Nanoparticle concerns are theoretical and unsubstantiated at food/supplement grades.",
-      "display_mode_default": "critical",
-      "identifiers": {
-        "cas": "9004-34-6",
-        "cui": "C0669247",
-        "unii": "OP1R32D61U"
-      },
-      "mechanism_of_harm": "Inert, indigestible cellulose polymer used as tablet binder and filler. Passes through the GI tract unabsorbed. No evidence of systemic toxicity, nutrient absorption interference, or microbiome disruption at approved use levels. EFSA and JECFA set no ADI limit. Nanoparticle concerns are theoretical and unsubstantiated at food/supplement grades.",
-      "notes": "MCC is the most widely used tablet excipient in the supplement and pharmaceutical industry. FDA GRAS with decades of safe use. EFSA and JECFA set no ADI limit. Low severity — tracked purely as non-nutritive filler quality signal.",
-      "population_warnings": [
-        "No specific population concerns at standard excipient levels"
-      ],
-      "safety_summary": "An inert cellulose filler that passes through unabsorbed. Generally considered safe — low overall concern.",
-      "safety_summary_one_liner": "Inert cellulose filler — low overall concern.",
-      "severity": "low",
-      "source": "harmful_additives_db",
-      "title": "Contains Microcrystalline Cellulose",
-      "type": "harmful_additive"
-    },
-    {
-      "category": "filler",
       "detail": "Highly processed glucose polymer (DE 3-20) with glycemic index 85-105, comparable to pure glucose. Rapidly digested to glucose in the small intestine. In vitro studies suggest maltodextrin may suppress antimicrobial defense mechanisms and promote E. coli adhesion to intestinal epithelial cells (PMID 22394256). Used as cheap filler/binder in supplements with no nutritional benefit.",
       "display_mode_default": "critical",
       "identifiers": {
@@ -14167,123 +14146,45 @@
       "type": "interaction"
     },
     {
-      "action": "Applies to preformed vitamin A forms; carotenoids are not handled by this threshold rule.",
-      "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
-      "alert_headline": "Keep preformed vitamin A within prenatal range",
-      "condition_id": "pregnancy",
-      "detail": "Dose and form dependent risk is primarily tied to preformed retinoids.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding.",
-      "ingredient_name": "Vitamin A",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
-      ],
-      "title": "Vitamin A / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "Applies to preformed vitamin A forms; carotenoids are not handled by this threshold rule.",
-      "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
-      "alert_headline": "Keep preformed vitamin A within prenatal range",
+      "action": "B12 supplementation during pregnancy is part of standard prenatal care. Vegans and those with malabsorption (pernicious anemia, gastric surgery, metformin use) need higher supplemental doses.",
+      "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+      "alert_headline": "Continue B12 under prenatal care",
       "condition_id": "lactation",
-      "detail": "Dose and form dependent risk is primarily tied to preformed retinoids.",
+      "detail": "B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomocysteinemia. Standard prenatal vitamins contain B12; supplementation should continue throughout pregnancy and during breastfeeding.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
       "evidence_level": "established",
-      "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding.",
-      "ingredient_name": "Vitamin A",
+      "informational_note": "B12 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
+      "ingredient_name": "Vitamin B12",
       "severity": "monitor",
       "severity_contextual": "informational",
       "source": "interaction_rules",
       "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+        "https://pubmed.ncbi.nlm.nih.gov/34036101/",
+        "https://pubmed.ncbi.nlm.nih.gov/18636794/"
       ],
-      "title": "Vitamin A / lactation",
+      "title": "Vitamin B12 / lactation",
       "type": "interaction"
     },
     {
-      "action": "Keep vitamin C intake within guideline ranges; avoid high-dose supplementation without clinical need.",
-      "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
-      "alert_headline": "Keep vitamin C within prenatal range",
+      "action": "B12 supplementation during pregnancy is part of standard prenatal care. Vegans and those with malabsorption (pernicious anemia, gastric surgery, metformin use) need higher supplemental doses.",
+      "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
+      "alert_headline": "Continue B12 under prenatal care",
       "condition_id": "pregnancy",
-      "detail": "Vitamin C is essential, but excessive supplemental intake above UL is not recommended in pregnancy.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": {
-        "evaluated": true,
-        "matched_threshold": false,
-        "selected_from": "severity_if_not_met",
-        "selected_severity": "monitor",
-        "thresholds_checked": [
-          {
-            "basis": "per_day",
-            "comparator": ">",
-            "computed_amount": 500.0,
-            "computed_unit": "mg",
-            "evaluated": true,
-            "matched": false,
-            "threshold_unit": "mg",
-            "threshold_value": 2000.0
-          }
-        ]
-      },
-      "evidence_level": "established",
-      "informational_note": "Vitamin C is dose-sensitive at high intake — higher doses warrant clinician review.",
-      "ingredient_name": "Vitamin C",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
-        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
-      ],
-      "title": "Vitamin C / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "Threshold escalates only when intake exceeds adult UL.",
-      "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
-      "alert_headline": "Keep vitamin C within prenatal range",
-      "condition_id": "pregnancy",
-      "detail": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
+      "detail": "B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomocysteinemia. Standard prenatal vitamins contain B12; supplementation should continue throughout pregnancy and during breastfeeding.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
       "evidence_level": "established",
-      "informational_note": "Vitamin C is dose-sensitive at high intake — higher doses warrant clinician review.",
-      "ingredient_name": "Vitamin C",
+      "informational_note": "B12 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
+      "ingredient_name": "Vitamin B12",
       "severity": "monitor",
       "severity_contextual": "informational",
       "source": "interaction_rules",
       "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
-        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
+        "https://pubmed.ncbi.nlm.nih.gov/34036101/",
+        "https://pubmed.ncbi.nlm.nih.gov/18636794/"
       ],
-      "title": "Vitamin C / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "Threshold escalates only when intake exceeds adult UL.",
-      "alert_body": "Vitamin C is required in pregnancy, but intakes above the upper limit can raise tolerability concerns. If you are pregnant or nursing, monitor total intake and talk to your clinician.",
-      "alert_headline": "Keep vitamin C within prenatal range",
-      "condition_id": "lactation",
-      "detail": "Dose-dependent tolerability; excessive daily intake can increase adverse-effect risk.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Vitamin C is dose-sensitive at high intake — higher doses warrant clinician review.",
-      "ingredient_name": "Vitamin C",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminC-HealthProfessional/",
-        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
-      ],
-      "title": "Vitamin C / lactation",
+      "title": "Vitamin B12 / pregnancy",
       "type": "interaction"
     },
     {
@@ -14328,41 +14229,24 @@
       "type": "interaction"
     },
     {
-      "action": "Target serum 25(OH)D levels of 30–60 ng/mL. Avoid high-dose supplementation (>4000 IU/day) without clinical monitoring of calcium and 25(OH)D levels.",
-      "alert_body": "Vitamin D can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Vitamin D.",
+      "action": "Use magnesium supplements with caution in heart disease patients, especially those with reduced kidney function. Do not exceed recommended doses without renal function assessment. Monitor for signs of hypermagnesemia (weakness, bradycardia).",
+      "alert_body": "Magnesium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding magnesium.",
       "alert_headline": "Caution with heart conditions",
       "condition_id": "heart_disease",
-      "detail": "Vitamin D deficiency is associated with increased cardiovascular risk, and moderate supplementation is generally considered beneficial. However, pharmacologic doses (>4000 IU/day chronically) can cause hypercalcemia, which promotes vascular calcification and may worsen coronary artery disease. The benefit-risk ratio is dose-dependent.",
+      "detail": "Magnesium plays a critical role in cardiac electrophysiology, stabilizing cardiac membranes and modulating ion channels. Hypomagnesemia is associated with cardiac arrhythmias. However, in patients with heart disease who also have renal impairment (common comorbidity), magnesium supplements can accumulate and cause hypermagnesemia, leading to bradycardia, cardiac conduction block, and potentially cardiac arrest.",
       "display_mode_default": "suppress",
-      "dose_threshold_evaluation": {
-        "evaluated": true,
-        "matched_threshold": false,
-        "selected_from": "severity_if_not_met",
-        "selected_severity": "monitor",
-        "thresholds_checked": [
-          {
-            "basis": "per_day",
-            "comparator": ">",
-            "computed_amount": 600.0,
-            "computed_unit": "iu",
-            "evaluated": true,
-            "matched": false,
-            "threshold_unit": "iu",
-            "threshold_value": 4000.0
-          }
-        ]
-      },
+      "dose_threshold_evaluation": null,
       "evidence_level": "probable",
-      "informational_note": "Vitamin D can affect cardiovascular pathways — relevant to people with heart conditions.",
-      "ingredient_name": "Vitamin D",
+      "informational_note": "Magnesium can affect cardiovascular pathways — relevant to people with heart conditions.",
+      "ingredient_name": "Magnesium",
       "severity": "monitor",
       "severity_contextual": "informational",
       "source": "interaction_rules",
       "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/21505219/"
+        "https://pubmed.ncbi.nlm.nih.gov/25864370/",
+        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
       ],
-      "title": "Vitamin D / heart_disease",
+      "title": "Magnesium / heart_disease",
       "type": "interaction"
     },
     {
@@ -14522,27 +14406,6 @@
       "type": "interaction"
     },
     {
-      "action": "Use with caution in liver disease; doses above 500 mg/day should require physician supervision and baseline LFTs. Avoid sustained-release niacin formulations in patients with liver disease. Discontinue if ALT/AST elevations exceed 3x ULN.",
-      "alert_body": "Niacin is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Niacin.",
-      "alert_headline": "Caution with liver disease",
-      "condition_id": "liver_disease",
-      "detail": "Niacin at doses exceeding 2 g/day causes dose-dependent hepatotoxicity via impairment of mitochondrial oxidative phosphorylation and calcium homeostasis disruption. Sustained-release formulations are associated with higher hepatotoxicity risk than immediate-release at equivalent doses. Case reports include acute fulminant hepatic failure requiring ICU admission. In patients with pre-existing liver disease, baseline impaired hepatic metabolism reduces the threshold for injury, and niacin-induced vasodilatation may also exacerbate portal hypertension.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Niacin depends on liver clearance — relevant to people with liver conditions.",
-      "ingredient_name": "Niacin",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/39416578/",
-        "https://pubmed.ncbi.nlm.nih.gov/27402097/"
-      ],
-      "title": "Niacin / liver_disease",
-      "type": "interaction"
-    },
-    {
       "action": "High-dose niacin for cholesterol management has fallen out of favor due to lack of incremental cardiovascular benefit on top of statin therapy and significant side effects. Consult prescriber before initiating pharmacologic niacin for lipid management.",
       "alert_body": "Niacin can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding Niacin — it may change your lipid-therapy plan.",
       "alert_headline": "Consult on cholesterol management",
@@ -14564,23 +14427,23 @@
       "type": "interaction"
     },
     {
-      "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
-      "alert_body": "Niacin can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Niacin and monitor your glucose more closely at first.",
+      "action": "Monitor glucose and adjust medication only under clinician supervision.",
+      "alert_body": "Alpha-lipoic acid can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Alpha-lipoic acid and monitor your glucose more closely at first.",
       "alert_headline": "May add to diabetes-med effects",
-      "detail": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
+      "detail": "Additive insulin-sensitizing effect may increase hypoglycemia risk, especially with insulin and sulfonylureas.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
       "drug_class_id": "hypoglycemics",
-      "evidence_level": "established",
-      "informational_note": "Niacin affects blood sugar — relevant to people on diabetes medications.",
-      "ingredient_name": "Niacin",
+      "evidence_level": "probable",
+      "informational_note": "Alpha-lipoic acid affects blood sugar — relevant to people on diabetes medications.",
+      "ingredient_name": "Alpha-Lipoic Acid",
       "severity": "caution",
       "severity_contextual": "informational",
       "source": "interaction_rules",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/18381752/"
+        "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
       ],
-      "title": "Niacin / hypoglycemics",
+      "title": "Alpha-Lipoic Acid / hypoglycemics",
       "type": "drug_interaction"
     },
     {
@@ -14648,27 +14511,6 @@
       "action": "This rule applies to supplemental/pharmacologic doses. Prenatal vitamin levels of B6 are appropriate and encouraged.",
       "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
       "alert_headline": "High-dose B6 may affect milk supply",
-      "condition_id": "pregnancy",
-      "detail": "Normal doses of B6 are essential in pregnancy. High pharmacologic doses during lactation may suppress milk production via dopaminergic inhibition of prolactin.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding.",
-      "ingredient_name": "Vitamin B6",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/28425124/",
-        "https://pubmed.ncbi.nlm.nih.gov/569255/"
-      ],
-      "title": "Vitamin B6 / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "This rule applies to supplemental/pharmacologic doses. Prenatal vitamin levels of B6 are appropriate and encouraged.",
-      "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
-      "alert_headline": "High-dose B6 may affect milk supply",
       "condition_id": "lactation",
       "detail": "Normal doses of B6 are essential in pregnancy. High pharmacologic doses during lactation may suppress milk production via dopaminergic inhibition of prolactin.",
       "display_mode_default": "suppress",
@@ -14684,67 +14526,6 @@
         "https://pubmed.ncbi.nlm.nih.gov/569255/"
       ],
       "title": "Vitamin B6 / lactation",
-      "type": "interaction"
-    },
-    {
-      "action": "Begin folate/folic acid supplementation at least 1 month before attempting conception. Standard dose: 400–800 mcg/day for low-risk women; 4 mg/day (4000 mcg) for women with prior NTD-affected pregnancy. Prefer methylfolate (5-MTHF) if MTHFR variant is known. Continue through first trimester.",
-      "alert_body": "Folate used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Folate with your clinician.",
-      "alert_headline": "Continue under prenatal care",
-      "condition_id": "ttc",
-      "detail": "Periconceptional folic acid/folate supplementation reduces neural tube defect (NTD) risk by 69% (RR 0.31, 95% CI 0.17–0.58) in Cochrane meta-analysis of 5 RCTs (6708 births). The protective effect operates during neural tube closure (days 21–28 post-conception), before many women know they are pregnant. Supplementation should therefore begin at least 1 month (ideally 3 months) before conception. For women with MTHFR polymorphisms, methylfolate (5-MTHF) is preferred as it bypasses the enzymatic conversion step.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Folate is continued under clinician guidance — relevant to people planning pregnancy.",
-      "ingredient_name": "Folic Acid",
-      "severity": "info",
-      "severity_contextual": "info",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/26662928/",
-        "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
-      ],
-      "title": "Folic Acid / ttc",
-      "type": "interaction"
-    },
-    {
-      "action": "Folate supplementation started periconceptionally should continue throughout pregnancy as part of prenatal vitamin regimen.",
-      "alert_body": "Folate started before pregnancy should continue through pregnancy and breastfeeding as part of prenatal support. If you are pregnant or nursing, discuss dosing with your obstetrician.",
-      "alert_headline": "Continue folate under prenatal care",
-      "condition_id": "pregnancy",
-      "detail": "Folate is essential throughout pregnancy and lactation for maternal and fetal/infant cell synthesis. The TTC rule transitions to ongoing pregnancy/lactation supplementation guidance.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Folate is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
-      "ingredient_name": "Folic Acid",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/26662928/"
-      ],
-      "title": "Folic Acid / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "Folate supplementation started periconceptionally should continue throughout pregnancy as part of prenatal vitamin regimen.",
-      "alert_body": "Folate started before pregnancy should continue through pregnancy and breastfeeding as part of prenatal support. If you are pregnant or nursing, discuss dosing with your obstetrician.",
-      "alert_headline": "Continue folate under prenatal care",
-      "condition_id": "lactation",
-      "detail": "Folate is essential throughout pregnancy and lactation for maternal and fetal/infant cell synthesis. The TTC rule transitions to ongoing pregnancy/lactation supplementation guidance.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Folate is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
-      "ingredient_name": "Folic Acid",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/26662928/"
-      ],
-      "title": "Folic Acid / lactation",
       "type": "interaction"
     },
     {
@@ -14767,48 +14548,6 @@
         "https://pubmed.ncbi.nlm.nih.gov/34036101/"
       ],
       "title": "Vitamin B12 / ttc",
-      "type": "interaction"
-    },
-    {
-      "action": "B12 supplementation during pregnancy is part of standard prenatal care. Vegans and those with malabsorption (pernicious anemia, gastric surgery, metformin use) need higher supplemental doses.",
-      "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
-      "alert_headline": "Continue B12 under prenatal care",
-      "condition_id": "pregnancy",
-      "detail": "B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomocysteinemia. Standard prenatal vitamins contain B12; supplementation should continue throughout pregnancy and during breastfeeding.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "B12 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
-      "ingredient_name": "Vitamin B12",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/34036101/",
-        "https://pubmed.ncbi.nlm.nih.gov/18636794/"
-      ],
-      "title": "Vitamin B12 / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "B12 supplementation during pregnancy is part of standard prenatal care. Vegans and those with malabsorption (pernicious anemia, gastric surgery, metformin use) need higher supplemental doses.",
-      "alert_body": "B12 is essential throughout pregnancy and breastfeeding, and supplementation started pre-conception should continue. If you are pregnant or nursing, discuss dosing with your obstetrician.",
-      "alert_headline": "Continue B12 under prenatal care",
-      "condition_id": "lactation",
-      "detail": "B12 is an essential nutrient throughout pregnancy and lactation. Deficiency is associated with neural tube defects, developmental delay, and recurrent pregnancy loss via hyperhomocysteinemia. Standard prenatal vitamins contain B12; supplementation should continue throughout pregnancy and during breastfeeding.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "B12 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
-      "ingredient_name": "Vitamin B12",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/34036101/",
-        "https://pubmed.ncbi.nlm.nih.gov/18636794/"
-      ],
-      "title": "Vitamin B12 / lactation",
       "type": "interaction"
     },
     {
@@ -14893,102 +14632,24 @@
       "type": "drug_interaction"
     },
     {
-      "action": "Avoid routine iron supplementation in liver disease patients unless iron deficiency anemia is confirmed by labs (serum iron, ferritin, TIBC). Use the lowest effective dose for the shortest duration. Monitor ferritin and transferrin saturation regularly.",
-      "alert_body": "Iron is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of iron.",
-      "alert_headline": "Caution with liver disease",
-      "condition_id": "liver_disease",
-      "detail": "The liver is the principal organ of iron storage and regulation. In liver disease, hepatic hepcidin production is impaired, disrupting iron homeostasis and increasing intestinal iron absorption. Iron supplementation in this context risks exacerbating hepatic iron overload, which drives oxidative stress via the Fenton reaction (Fe²⁺ + H₂O₂ → Fe³⁺ + OH⁻ + •OH), lipid peroxidation, and progressive liver fibrosis. This mechanism is most critical in hereditary hemochromatosis and alcoholic liver disease, where iron accumulation is already elevated, but applies broadly to chronic liver disease including NAFLD/NASH, hepatitis C, and cirrhosis.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Iron depends on liver clearance — relevant to people with liver conditions.",
-      "ingredient_name": "Iron",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/12957292/",
-        "https://pubmed.ncbi.nlm.nih.gov/33676282/"
-      ],
-      "title": "Iron / liver_disease",
-      "type": "interaction"
-    },
-    {
-      "action": "Separate iron supplement from methyldopa or captopril by at least 2 hours.",
-      "alert_body": "Iron can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding iron.",
+      "action": "Separate green tea extract from beta-blocker dosing by at least 2-3 hours.",
+      "alert_body": "Green tea extract can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding green tea extract.",
       "alert_headline": "May affect blood-pressure control",
-      "detail": "Iron chelates with methyldopa and certain ACE inhibitors (captopril) in the GI tract, reducing drug absorption and bioavailability.",
+      "detail": "EGCG inhibits OATP transporters, reducing beta-blocker absorption and potentially compromising BP control.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
       "drug_class_id": "antihypertensives",
-      "evidence_level": "established",
-      "informational_note": "Iron can affect blood pressure — relevant to people on antihypertensive medications.",
-      "ingredient_name": "Iron",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
-      ],
-      "title": "Iron / antihypertensives",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Separate iron supplementation from levothyroxine by at least 4 hours.",
-      "alert_body": "Iron can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing iron away from your dose.",
-      "alert_headline": "May affect thyroid medication",
-      "detail": "Ferrous sulfate and other iron salts form stable insoluble complexes with levothyroxine, reducing thyroid hormone absorption. Concurrent ingestion can significantly impair replacement therapy efficacy.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "thyroid_medications",
       "evidence_level": "probable",
-      "informational_note": "Iron affects thyroid pathways — relevant to people on thyroid medication.",
-      "ingredient_name": "Iron",
+      "informational_note": "Green tea extract can affect blood pressure — relevant to people on antihypertensive medications.",
+      "ingredient_name": "Green Tea leaf extract",
       "severity": "caution",
       "severity_contextual": "informational",
       "source": "interaction_rules",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/33584551/"
+        "https://pubmed.ncbi.nlm.nih.gov/25312732/"
       ],
-      "title": "Iron / thyroid_medications",
+      "title": "Green Tea leaf extract / antihypertensives",
       "type": "drug_interaction"
-    },
-    {
-      "action": "Keep total iodine intake within guideline ranges; avoid excess supplementation.",
-      "alert_body": "Iodine is required during pregnancy, but excess can affect maternal and fetal thyroid function. If you are pregnant or nursing, monitor total iodine intake and talk to your clinician if in doubt.",
-      "alert_headline": "Keep iodine within prenatal range",
-      "condition_id": "pregnancy",
-      "detail": "Iodine is essential in pregnancy, but excessive intake can adversely affect maternal/fetal thyroid function.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": {
-        "evaluated": true,
-        "matched_threshold": false,
-        "selected_from": "severity_if_not_met",
-        "selected_severity": "monitor",
-        "thresholds_checked": [
-          {
-            "basis": "per_day",
-            "comparator": ">",
-            "computed_amount": 150.0,
-            "computed_unit": "mcg",
-            "evaluated": true,
-            "matched": false,
-            "threshold_unit": "mcg",
-            "threshold_value": 1100.0
-          }
-        ]
-      },
-      "evidence_level": "established",
-      "informational_note": "Iodine is dose-sensitive — both deficiency and excess matter for pregnancy and lactation.",
-      "ingredient_name": "Iodine",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
-      ],
-      "title": "Iodine / pregnancy",
-      "type": "interaction"
     },
     {
       "action": "Avoid high-dose iodine or kelp/seaweed supplements in thyroid disorders without physician oversight. Routine supplementation above the RDA (150 mcg/day) is not recommended.",
@@ -15008,46 +14669,6 @@
         "https://pubmed.ncbi.nlm.nih.gov/29791909/"
       ],
       "title": "Iodine / thyroid_disorder",
-      "type": "interaction"
-    },
-    {
-      "action": "Threshold escalates only on excess; baseline reflects required-but-dose-sensitive nutrient status.",
-      "alert_body": "Iodine is required during pregnancy, but excess can affect maternal and fetal thyroid function. If you are pregnant or nursing, monitor total iodine intake and talk to your clinician if in doubt.",
-      "alert_headline": "Keep iodine within prenatal range",
-      "condition_id": "pregnancy",
-      "detail": "Both deficiency and excess can be harmful; UL and recommended intake should guide use.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Iodine is dose-sensitive — both deficiency and excess matter for pregnancy and lactation.",
-      "ingredient_name": "Iodine",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
-      ],
-      "title": "Iodine / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "Threshold escalates only on excess; baseline reflects required-but-dose-sensitive nutrient status.",
-      "alert_body": "Iodine is required during pregnancy, but excess can affect maternal and fetal thyroid function. If you are pregnant or nursing, monitor total iodine intake and talk to your clinician if in doubt.",
-      "alert_headline": "Keep iodine within prenatal range",
-      "condition_id": "lactation",
-      "detail": "Both deficiency and excess can be harmful; UL and recommended intake should guide use.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Iodine is dose-sensitive — both deficiency and excess matter for pregnancy and lactation.",
-      "ingredient_name": "Iodine",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
-      ],
-      "title": "Iodine / lactation",
       "type": "interaction"
     },
     {
@@ -15088,27 +14709,6 @@
         "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
       ],
       "title": "Magnesium / hypertension",
-      "type": "interaction"
-    },
-    {
-      "action": "Use magnesium supplements with caution in heart disease patients, especially those with reduced kidney function. Do not exceed recommended doses without renal function assessment. Monitor for signs of hypermagnesemia (weakness, bradycardia).",
-      "alert_body": "Magnesium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding magnesium.",
-      "alert_headline": "Caution with heart conditions",
-      "condition_id": "heart_disease",
-      "detail": "Magnesium plays a critical role in cardiac electrophysiology, stabilizing cardiac membranes and modulating ion channels. Hypomagnesemia is associated with cardiac arrhythmias. However, in patients with heart disease who also have renal impairment (common comorbidity), magnesium supplements can accumulate and cause hypermagnesemia, leading to bradycardia, cardiac conduction block, and potentially cardiac arrest.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "Magnesium can affect cardiovascular pathways — relevant to people with heart conditions.",
-      "ingredient_name": "Magnesium",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/25864370/",
-        "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-      ],
-      "title": "Magnesium / heart_disease",
       "type": "interaction"
     },
     {
@@ -15153,163 +14753,6 @@
       "type": "drug_interaction"
     },
     {
-      "action": "Separate magnesium supplementation from levothyroxine by at least 4 hours.",
-      "alert_body": "Magnesium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing magnesium away from your dose.",
-      "alert_headline": "May affect thyroid medication",
-      "detail": "Divalent magnesium cations can bind levothyroxine and impair gastrointestinal absorption, similar to other divalent mineral-levothyroxine chelation interactions.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "thyroid_medications",
-      "evidence_level": "probable",
-      "informational_note": "Magnesium affects thyroid pathways — relevant to people on thyroid medication.",
-      "ingredient_name": "Magnesium",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/33584551/"
-      ],
-      "title": "Magnesium / thyroid_medications",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Separate zinc supplementation from levothyroxine by at least 4 hours.",
-      "alert_body": "Zinc can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing zinc away from your dose.",
-      "alert_headline": "May affect thyroid medication",
-      "detail": "Zinc chelation reduces levothyroxine absorption. Zinc is also required for thyroid hormone synthesis; deficiency can cause hypothyroidism, creating a complex bidirectional relationship.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "thyroid_medications",
-      "evidence_level": "probable",
-      "informational_note": "Zinc affects thyroid pathways — relevant to people on thyroid medication.",
-      "ingredient_name": "Zinc",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/23960398/"
-      ],
-      "title": "Zinc / thyroid_medications",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Selenium supplementation in thyroid disorders should be guided by serum selenium levels. Doses above 200 mcg/day should only be used under medical supervision.",
-      "alert_body": "Selenium can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding selenium and monitor your labs.",
-      "alert_headline": "Caution with thyroid conditions",
-      "condition_id": "thyroid_disorder",
-      "detail": "Selenium is essential for iodothyronine deiodinase (type I/II/III) function required to convert T4 to active T3. Selenium supplementation may benefit Hashimoto thyroiditis by reducing thyroid peroxidase antibody titers. However, excess selenium (>400 mcg/day) can paradoxically impair thyroid function and is toxic.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "Selenium affects thyroid pathways — relevant to people with thyroid conditions.",
-      "ingredient_name": "Selenium",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/41717291/"
-      ],
-      "title": "Selenium / thyroid_disorder",
-      "type": "interaction"
-    },
-    {
-      "action": "Avoid copper supplementation above 2 mg/day in liver disease. In Wilson's disease, supplemental copper is contraindicated. Consult hepatologist before copper supplementation in chronic liver disease.",
-      "alert_body": "Copper is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of copper.",
-      "alert_headline": "Caution with liver disease",
-      "condition_id": "liver_disease",
-      "detail": "Copper homeostasis depends on hepatic biliary excretion as the primary elimination route. In Wilson's disease, ATP7B mutations block copper export into bile, causing pathological hepatic accumulation leading to cirrhosis. In non-Wilson's liver disease, impaired biliary function reduces copper clearance, and supplemental copper can accumulate to hepatotoxic levels even at low doses (>2 mg/day).",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": {
-        "evaluated": true,
-        "matched_threshold": false,
-        "selected_from": "severity_if_not_met",
-        "selected_severity": "caution",
-        "thresholds_checked": [
-          {
-            "basis": "per_day",
-            "comparator": ">",
-            "computed_amount": 2.0,
-            "computed_unit": "mg",
-            "evaluated": true,
-            "matched": false,
-            "threshold_unit": "mg",
-            "threshold_value": 2.0
-          }
-        ]
-      },
-      "evidence_level": "established",
-      "informational_note": "Copper depends on liver clearance — relevant to people with liver conditions.",
-      "ingredient_name": "Copper",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/36992844/",
-        "https://pubmed.ncbi.nlm.nih.gov/29806946/"
-      ],
-      "title": "Copper / liver_disease",
-      "type": "interaction"
-    },
-    {
-      "action": "Avoid manganese supplementation above 5 mg/day in liver disease. In advanced cirrhosis or liver failure, avoid supplemental manganese entirely. Evaluate manganese status if neurological symptoms develop.",
-      "alert_body": "Manganese is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of manganese.",
-      "alert_headline": "Caution with liver disease",
-      "condition_id": "liver_disease",
-      "detail": "Manganese is excreted almost exclusively via bile. Liver disease impairs biliary excretion, leading to systemic accumulation. Excess manganese deposits in the basal ganglia (globus pallidus), producing manganism — a Parkinson-like neurotoxic syndrome with rigidity, bradykinesia, and psychiatric symptoms. MRI T1 hyperintensity in liver disease patients with elevated manganese is well-documented.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": {
-        "evaluated": true,
-        "matched_threshold": false,
-        "selected_from": "severity_if_not_met",
-        "selected_severity": "caution",
-        "thresholds_checked": [
-          {
-            "basis": "per_day",
-            "comparator": ">",
-            "computed_amount": 2.0,
-            "computed_unit": "mg",
-            "evaluated": true,
-            "matched": false,
-            "threshold_unit": "mg",
-            "threshold_value": 5.0
-          }
-        ]
-      },
-      "evidence_level": "established",
-      "informational_note": "Manganese depends on liver clearance — relevant to people with liver conditions.",
-      "ingredient_name": "Manganese",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/17301931/",
-        "https://pubmed.ncbi.nlm.nih.gov/9875025/",
-        "https://pubmed.ncbi.nlm.nih.gov/9002084/"
-      ],
-      "title": "Manganese / liver_disease",
-      "type": "interaction"
-    },
-    {
-      "action": "Use with glucose monitoring if on diabetes treatment.",
-      "alert_body": "Chromium can lower blood sugar. If you have diabetes, talk to your clinician before adding chromium and monitor your glucose, especially in the first weeks.",
-      "alert_headline": "Caution with diabetes",
-      "condition_id": "diabetes",
-      "detail": "Chromium can alter glucose metabolism and insulin sensitivity.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "Chromium affects blood sugar — relevant to people with diabetes.",
-      "ingredient_name": "Chromium",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
-      ],
-      "title": "Chromium / diabetes",
-      "type": "interaction"
-    },
-    {
       "action": "Adjust medication only under clinician supervision.",
       "alert_body": "Chromium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding chromium and monitor your glucose more closely at first.",
       "alert_headline": "May add to diabetes-med effects",
@@ -15327,26 +14770,6 @@
         "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
       ],
       "title": "Chromium / hypoglycemics",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Separate chromium supplementation from levothyroxine by at least 4 hours.",
-      "alert_body": "Chromium can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing chromium away from your dose.",
-      "alert_headline": "May affect thyroid medication",
-      "detail": "Chromium picolinate can reduce levothyroxine absorption when taken concurrently. Divalent chromium binds to thyroid hormone molecules in the gastrointestinal tract.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "thyroid_medications",
-      "evidence_level": "probable",
-      "informational_note": "Chromium affects thyroid pathways — relevant to people on thyroid medication.",
-      "ingredient_name": "Chromium",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/33584551/"
-      ],
-      "title": "Chromium / thyroid_medications",
       "type": "drug_interaction"
     },
     {
@@ -15385,87 +14808,6 @@
         "https://pubmed.ncbi.nlm.nih.gov/34853508/"
       ],
       "title": "Alpha-Lipoic Acid / diabetes",
-      "type": "interaction"
-    },
-    {
-      "action": "Monitor glucose and adjust medication only under clinician supervision.",
-      "alert_body": "Alpha-lipoic acid can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Alpha-lipoic acid and monitor your glucose more closely at first.",
-      "alert_headline": "May add to diabetes-med effects",
-      "detail": "Additive insulin-sensitizing effect may increase hypoglycemia risk, especially with insulin and sulfonylureas.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "hypoglycemics",
-      "evidence_level": "probable",
-      "informational_note": "Alpha-lipoic acid affects blood sugar — relevant to people on diabetes medications.",
-      "ingredient_name": "Alpha-Lipoic Acid",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
-      ],
-      "title": "Alpha-Lipoic Acid / hypoglycemics",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Myo-inositol (2–4 g/day) is a well-supported supplement for women with PCOS who are TTC. It improves ovulation and insulin sensitivity. Safe for TTC use. Also safe to continue in early pregnancy under clinician guidance. Not specifically indicated for non-PCOS TTC without ovulation issues.",
-      "alert_body": "Inositol used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of inositol with your clinician.",
-      "alert_headline": "Continue under prenatal care",
-      "condition_id": "ttc",
-      "detail": "Myo-inositol (the primary isomer in supplements) is a second messenger in insulin signaling and plays a critical role in ovarian follicle maturation. In PCOS, insulin resistance disrupts the inositol phosphoglycan mediator system. Supplementation at 2–4 g/day myo-inositol (alone or in 40:1 ratio with D-chiro-inositol) improves ovulation rates, menstrual regularity, and fertility outcomes. An RCT (Agrawal et al. 2019) found significantly higher live birth rates with metformin + myo-inositol (55%) vs. metformin alone (26.67%, p=0.002) in PCOS women undergoing ovulation induction.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "Inositol is continued under clinician guidance — relevant to people planning pregnancy.",
-      "ingredient_name": "Inositol",
-      "severity": "info",
-      "severity_contextual": "info",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/30614289/",
-        "https://pubmed.ncbi.nlm.nih.gov/29183107/"
-      ],
-      "title": "Inositol / ttc",
-      "type": "interaction"
-    },
-    {
-      "action": "Transition to clinician-supervised use once pregnancy is confirmed if continuing supplementation.",
-      "alert_body": "Myo-inositol is generally considered safe in pregnancy, and use may continue under clinician supervision. If you are pregnant or nursing, discuss dosing with your obstetrician.",
-      "alert_headline": "Continue inositol under prenatal care",
-      "condition_id": "pregnancy",
-      "detail": "Myo-inositol is a naturally occurring compound and generally considered safe in pregnancy. Some evidence supports its use to reduce gestational diabetes risk in PCOS pregnancies. Standard monitoring is appropriate.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "Inositol is continued under clinician supervision — relevant to anyone pregnant or breastfeeding.",
-      "ingredient_name": "Inositol",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/30614289/"
-      ],
-      "title": "Inositol / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "Transition to clinician-supervised use once pregnancy is confirmed if continuing supplementation.",
-      "alert_body": "Myo-inositol is generally considered safe in pregnancy, and use may continue under clinician supervision. If you are pregnant or nursing, discuss dosing with your obstetrician.",
-      "alert_headline": "Continue inositol under prenatal care",
-      "condition_id": "lactation",
-      "detail": "Myo-inositol is a naturally occurring compound and generally considered safe in pregnancy. Some evidence supports its use to reduce gestational diabetes risk in PCOS pregnancies. Standard monitoring is appropriate.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "Inositol is continued under clinician supervision — relevant to anyone pregnant or breastfeeding.",
-      "ingredient_name": "Inositol",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/30614289/"
-      ],
-      "title": "Inositol / lactation",
       "type": "interaction"
     },
     {
@@ -15510,47 +14852,6 @@
       "type": "interaction"
     },
     {
-      "action": "Separate green tea extract from beta-blocker dosing by at least 2-3 hours.",
-      "alert_body": "Green tea extract can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding green tea extract.",
-      "alert_headline": "May affect blood-pressure control",
-      "detail": "EGCG inhibits OATP transporters, reducing beta-blocker absorption and potentially compromising BP control.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "antihypertensives",
-      "evidence_level": "probable",
-      "informational_note": "Green tea extract can affect blood pressure — relevant to people on antihypertensive medications.",
-      "ingredient_name": "Green Tea leaf extract",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/25312732/"
-      ],
-      "title": "Green Tea leaf extract / antihypertensives",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Use with caution in thyroid disorders, especially hypothyroidism. Limit dose to under 500 mg/day. Monitor TSH periodically and inform endocrinologist of use.",
-      "alert_body": "Quercetin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding quercetin and monitor your labs.",
-      "alert_headline": "Caution with thyroid conditions",
-      "condition_id": "thyroid_disorder",
-      "detail": "Quercetin inhibits thyroid peroxidase (TPO), the enzyme responsible for iodinating tyrosine residues in thyroglobulin to form T3 and T4. At high supplemental doses (>500 mg/day), this TPO inhibition may impair thyroid hormone synthesis, contributing to goitre formation or worsening hypothyroidism, particularly in individuals with borderline iodine intake.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "Quercetin affects thyroid pathways — relevant to people with thyroid conditions.",
-      "ingredient_name": "Quercetin",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/12065157/",
-        "https://www.nccih.nih.gov/health/herbs-at-a-glance"
-      ],
-      "title": "Quercetin / thyroid_disorder",
-      "type": "interaction"
-    },
-    {
       "action": "Monitor INR frequently when starting or stopping quercetin supplementation in patients on warfarin. Alert prescriber to dose and any INR changes.",
       "alert_body": "Quercetin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding quercetin and ask about INR or bleeding checks.",
       "alert_headline": "May add to blood-thinner effects",
@@ -15570,86 +14871,6 @@
       ],
       "title": "Quercetin / anticoagulants",
       "type": "drug_interaction"
-    },
-    {
-      "action": "Keep total daily vitamin E intake within guideline ranges and avoid megadosing.",
-      "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
-      "alert_headline": "Keep vitamin E within prenatal range",
-      "condition_id": "pregnancy",
-      "detail": "Vitamin E is essential, but excessive supplemental intake above established UL is not recommended in pregnancy.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": {
-        "evaluated": true,
-        "matched_threshold": false,
-        "selected_from": "severity_if_not_met",
-        "selected_severity": "monitor",
-        "thresholds_checked": [
-          {
-            "basis": "per_day",
-            "comparator": ">",
-            "computed_amount": 0.9,
-            "computed_unit": "mg",
-            "evaluated": true,
-            "matched": false,
-            "threshold_unit": "mg",
-            "threshold_value": 1000.0
-          }
-        ]
-      },
-      "evidence_level": "established",
-      "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
-      "ingredient_name": "Tocotrienol Complex",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
-      ],
-      "title": "Tocotrienol Complex / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "Threshold escalates only when intake exceeds adult UL.",
-      "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
-      "alert_headline": "Keep vitamin E within prenatal range",
-      "condition_id": "pregnancy",
-      "detail": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
-      "ingredient_name": "Tocotrienol Complex",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
-      ],
-      "title": "Tocotrienol Complex / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "Threshold escalates only when intake exceeds adult UL.",
-      "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
-      "alert_headline": "Keep vitamin E within prenatal range",
-      "condition_id": "lactation",
-      "detail": "Dose-dependent risk profile; high intake can increase adverse-effect risk.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review.",
-      "ingredient_name": "Tocotrienol Complex",
-      "severity": "monitor",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-        "https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/"
-      ],
-      "title": "Tocotrienol Complex / lactation",
-      "type": "interaction"
     },
     {
       "detail": "Contains high-glycemic sweeteners: Maltodextrin",
@@ -15697,27 +14918,6 @@
       ],
       "title": "High-risk ingredient: Titanium Dioxide",
       "type": "high_risk_ingredient"
-    },
-    {
-      "category": "filler",
-      "detail": "Inert, indigestible cellulose polymer used as tablet binder and filler. Passes through the GI tract unabsorbed. No evidence of systemic toxicity, nutrient absorption interference, or microbiome disruption at approved use levels. EFSA and JECFA set no ADI limit. Nanoparticle concerns are theoretical and unsubstantiated at food/supplement grades.",
-      "display_mode_default": "critical",
-      "identifiers": {
-        "cas": "9004-34-6",
-        "cui": "C0669247",
-        "unii": "OP1R32D61U"
-      },
-      "mechanism_of_harm": "Inert, indigestible cellulose polymer used as tablet binder and filler. Passes through the GI tract unabsorbed. No evidence of systemic toxicity, nutrient absorption interference, or microbiome disruption at approved use levels. EFSA and JECFA set no ADI limit. Nanoparticle concerns are theoretical and unsubstantiated at food/supplement grades.",
-      "notes": "MCC is the most widely used tablet excipient in the supplement and pharmaceutical industry. FDA GRAS with decades of safe use. EFSA and JECFA set no ADI limit. Low severity — tracked purely as non-nutritive filler quality signal.",
-      "population_warnings": [
-        "No specific population concerns at standard excipient levels"
-      ],
-      "safety_summary": "An inert cellulose filler that passes through unabsorbed. Generally considered safe — low overall concern.",
-      "safety_summary_one_liner": "Inert cellulose filler — low overall concern.",
-      "severity": "low",
-      "source": "harmful_additives_db",
-      "title": "Contains Microcrystalline Cellulose",
-      "type": "harmful_additive"
     },
     {
       "category": "filler",

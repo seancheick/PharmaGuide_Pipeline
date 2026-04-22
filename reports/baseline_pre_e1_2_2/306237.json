@@ -582,6 +582,7 @@
     {
       "bio_score": 11.0,
       "category": "herbs",
+      "display_badge": "no_data",
       "display_dose_label": "600 mg",
       "display_label": "KSM-66 Ashwagandha Root Extract",
       "dosage": 600.0,
@@ -675,6 +676,7 @@
     {
       "bio_score": 9.0,
       "category": "herbs",
+      "display_badge": "no_data",
       "display_dose_label": "5 mg",
       "display_label": "BioPerine Black Pepper Fruit Extract",
       "dosage": 5.0,
@@ -1290,28 +1292,6 @@
   "warnings": [
     {
       "category": "excipient",
-      "detail": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
-      "display_mode_default": "critical",
-      "identifiers": {
-        "cas": "7631-86-9",
-        "cui": "C0037098",
-        "pubchem_cid": 24261,
-        "unii": "ETJ7Z6XBU4"
-      },
-      "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
-      "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
-      "population_warnings": [
-        "No specific population concerns at anti-caking agent levels (<2% w/w)"
-      ],
-      "safety_summary": "An inert anti-caking agent used in tablets and capsules. FDA- and EFSA-approved at the levels used — low overall concern.",
-      "safety_summary_one_liner": "Anti-caking agent — low overall concern.",
-      "severity": "low",
-      "source": "harmful_additives_db",
-      "title": "Contains Silicon Dioxide (E551)",
-      "type": "harmful_additive"
-    },
-    {
-      "category": "excipient",
       "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",
       "display_mode_default": "critical",
       "identifiers": {
@@ -1387,28 +1367,6 @@
     }
   ],
   "warnings_profile_gated": [
-    {
-      "category": "excipient",
-      "detail": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
-      "display_mode_default": "critical",
-      "identifiers": {
-        "cas": "7631-86-9",
-        "cui": "C0037098",
-        "pubchem_cid": 24261,
-        "unii": "ETJ7Z6XBU4"
-      },
-      "mechanism_of_harm": "Amorphous silicon dioxide (SiO2) used as anti-caking agent in tablets/capsules at <2% w/w. FDA GRAS (21 CFR 172.480, max 2% of food weight). EFSA 2018 re-evaluation could not confirm safety due to insufficient nanoparticle characterization data — this was a data gap, not a finding of harm. Amorphous SiO2 is poorly absorbed from the GI tract. Nanoparticle concerns are based on in vitro studies at concentrations far exceeding dietary exposure.",
-      "notes": "Amorphous silicon dioxide is the most common anti-caking agent in supplement manufacturing. FDA GRAS at ≤2%. EFSA 2018 data gap request was precautionary — no finding of harm. Low severity — tracked purely as non-nutritive excipient quality signal.",
-      "population_warnings": [
-        "No specific population concerns at anti-caking agent levels (<2% w/w)"
-      ],
-      "safety_summary": "An inert anti-caking agent used in tablets and capsules. FDA- and EFSA-approved at the levels used — low overall concern.",
-      "safety_summary_one_liner": "Anti-caking agent — low overall concern.",
-      "severity": "low",
-      "source": "harmful_additives_db",
-      "title": "Contains Silicon Dioxide (E551)",
-      "type": "harmful_additive"
-    },
     {
       "category": "excipient",
       "detail": "FDA GRAS flow agent (lubricant) used in virtually all tablet and capsule manufacturing. Facilitates powder flow through equipment. Claims of bioavailability reduction are based on a single in-vitro dissolution study (Brittain 2002) at unrealistically high concentrations; multiple subsequent studies found no meaningful effect on absorption at typical 0.5-2% levels. Stearic acid is a common dietary saturated fat found in cocoa butter and meat.",

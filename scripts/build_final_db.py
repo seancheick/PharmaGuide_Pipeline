@@ -1124,6 +1124,99 @@ def _compute_display_label(ingredient: Dict[str, Any]) -> str:
     return result.strip() or name
 
 
+# Sprint E1.2.3 — warning dedup at build time.
+# Collapses semantically identical warnings within a single list while
+# preserving the most-informative copy. NEVER merges across the two
+# warning lists (warnings[] vs warnings_profile_gated[]) — those have
+# different rendering contracts.
+_DEDUP_COPY_SCORE_FIELDS_RICH = ("alert_headline", "alert_body")
+_DEDUP_COPY_SCORE_FIELDS_AUTHORED = (
+    "safety_warning",
+    "safety_warning_one_liner",
+    "safety_summary",
+    "safety_summary_one_liner",
+    "detail",
+    "informational_note",
+)
+
+
+def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
+    """Normalized identity tuple used to detect duplicates.
+
+    Normalizes:
+      * None / "" / missing key → ()
+      * scalar vs list values → sorted tuple of str
+      * case on source labels kept as-is (identifiers are case-sensitive)
+    """
+    def _norm(v) -> tuple:
+        if v is None:
+            return ()
+        if isinstance(v, (list, tuple)):
+            return tuple(sorted(str(x) for x in v if x not in (None, "")))
+        s = str(v)
+        return (s,) if s else ()
+
+    return (
+        _norm(w.get("severity")),
+        _norm(w.get("canonical_id") or w.get("type")),
+        _norm(w.get("condition_id") or w.get("condition_ids")),
+        _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
+        _norm(w.get("source_rule") or w.get("source")),
+    )
+
+
+def _warning_completeness_score(w: Dict[str, Any]) -> tuple:
+    """Higher-is-better ordering for picking which duplicate to keep.
+
+    Tiers (tuple, compared lexicographically by Python):
+      1. # of rich alert_* fields populated (0/1/2)
+      2. # of authored safety_*/detail fields populated (0-6)
+      3. total char-length of all populated string fields (tiebreaker)
+    """
+    rich = sum(
+        1 for f in _DEDUP_COPY_SCORE_FIELDS_RICH
+        if isinstance(w.get(f), str) and w.get(f).strip()
+    )
+    authored = sum(
+        1 for f in _DEDUP_COPY_SCORE_FIELDS_AUTHORED
+        if isinstance(w.get(f), str) and w.get(f).strip()
+    )
+    total_chars = sum(
+        len(w.get(f)) for f in _DEDUP_COPY_SCORE_FIELDS_RICH + _DEDUP_COPY_SCORE_FIELDS_AUTHORED
+        if isinstance(w.get(f), str)
+    )
+    return (rich, authored, total_chars)
+
+
+def _dedup_warnings(warnings_list: Optional[List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    """Collapse duplicates within one warning list. Preserves the first-
+    surviving-instance order; within a dup group, picks the entry with
+    the highest completeness score."""
+    if not warnings_list:
+        return []
+
+    # First pass — group by dedup key, pick best per group, record
+    # earliest index for stable ordering.
+    by_key: Dict[tuple, Dict[str, Any]] = {}
+    first_index: Dict[tuple, int] = {}
+
+    for idx, w in enumerate(warnings_list):
+        if not isinstance(w, dict):
+            continue
+        key = _warning_dedup_key(w)
+        best = by_key.get(key)
+        if best is None:
+            by_key[key] = w
+            first_index[key] = idx
+            continue
+        if _warning_completeness_score(w) > _warning_completeness_score(best):
+            by_key[key] = w
+            # keep the earliest first_index — don't promote position on replacement
+
+    # Second pass — emit in earliest-appearance order for UX stability.
+    return [by_key[k] for k in sorted(by_key, key=lambda kk: first_index[kk])]
+
+
 # Sprint E1.2.2.d — display_badge (adapter, not inference).
 # Pure function of already-trusted fields. Dev rule: "Badges reflect
 # what the system already knows — not what it guesses." If the scorer
@@ -2151,6 +2244,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         w for w in warnings
         if w.get("display_mode_default", "critical") != "suppress"
     ]
+
+    # Sprint E1.2.3 — collapse duplicates WITHIN each list independently.
+    warnings = _dedup_warnings(warnings)
+    warnings_profile_gated = _dedup_warnings(warnings_profile_gated)
 
     # Sprint E1.1.2 — critical-mode warnings must be profile-agnostic.
     # Sprint E1.1.3 — every warning must carry at least one authored-copy field.

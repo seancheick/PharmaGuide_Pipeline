@@ -328,6 +328,7 @@
     {
       "bio_score": 10.0,
       "category": "fatty_acids",
+      "display_badge": "no_data",
       "display_dose_label": "360 mg",
       "display_label": "Eicosapentaenoic Acid",
       "dosage": 360.0,
@@ -426,6 +427,7 @@
     {
       "bio_score": 10.0,
       "category": "fatty_acids",
+      "display_badge": "no_data",
       "display_dose_label": "240 mg",
       "display_label": "Docosahexaenoic Acid",
       "dosage": 240.0,
@@ -1118,142 +1120,13 @@
   },
   "warnings": [
     {
-      "action": "Use with caution in bleeding disorders. Limit EPA intake to under 2 g/day without physician oversight. Disclose use to any treating surgeon.",
-      "alert_body": "EPA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding EPA.",
-      "alert_headline": "Caution with bleeding disorders",
-      "condition_id": "bleeding_disorders",
-      "detail": "EPA (eicosapentaenoic acid) competitively inhibits arachidonic acid conversion to thromboxane A2 via cyclooxygenase, and generates thromboxane A3 (a much weaker platelet aggregator) instead. This antiplatelet mechanism prolongs bleeding time, particularly at doses above 2 g/day.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "EPA can affect platelet function — relevant to people with a bleeding disorder.",
-      "ingredient_name": "Eicosapentaenoic Acid",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-      ],
-      "title": "Eicosapentaenoic Acid / bleeding_disorders",
-      "type": "interaction"
-    },
-    {
-      "action": "Monitor INR when starting or stopping high-dose EPA (>2 g/day) in patients on warfarin or other anticoagulants.",
-      "alert_body": "EPA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding EPA and ask about INR or bleeding checks.",
-      "alert_headline": "May add to blood-thinner effects",
-      "detail": "EPA reduces platelet TXA2 synthesis and may affect the vitamin K-dependent coagulation cascade. Clinical studies with high-dose fish oil (containing EPA) and warfarin show small but consistent INR elevations.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "anticoagulants",
-      "evidence_level": "established",
-      "informational_note": "EPA can affect clotting — relevant to people on anticoagulants.",
-      "ingredient_name": "Eicosapentaenoic Acid",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-      ],
-      "title": "Eicosapentaenoic Acid / anticoagulants",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
-      "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
-      "alert_headline": "May add to antiplatelet effects",
-      "detail": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "antiplatelets",
-      "evidence_level": "probable",
-      "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
-      "ingredient_name": "Eicosapentaenoic Acid",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-      ],
-      "title": "Eicosapentaenoic Acid / antiplatelets",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
-      "alert_body": "DHA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding DHA.",
-      "alert_headline": "Caution with bleeding disorders",
-      "condition_id": "bleeding_disorders",
-      "detail": "DHA (docosahexaenoic acid) is incorporated into platelet phospholipid membranes, displacing arachidonic acid and reducing thromboxane A2 (TXA2) synthesis. TXA2 is the primary platelet aggregation amplifier; reduced TXA2 production measurably prolongs bleeding time at doses above 2 g/day.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "DHA can affect platelet function — relevant to people with a bleeding disorder.",
-      "ingredient_name": "Docosahexaenoic Acid",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-      ],
-      "title": "Docosahexaenoic Acid / bleeding_disorders",
-      "type": "interaction"
-    },
-    {
-      "action": "Monitor INR when adding or removing high-dose DHA (>2 g/day) in patients on warfarin. Alert prescriber to use.",
-      "alert_body": "DHA has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding DHA and ask about INR or bleeding checks.",
-      "alert_headline": "May add to blood-thinner effects",
-      "detail": "DHA reduces platelet TXA2 synthesis and may weakly inhibit vitamin K-dependent coagulation factor synthesis. Combined with warfarin, a small but clinically relevant INR elevation has been observed in controlled studies.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "anticoagulants",
-      "evidence_level": "established",
-      "informational_note": "DHA can affect clotting — relevant to people on anticoagulants.",
-      "ingredient_name": "Docosahexaenoic Acid",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-      ],
-      "title": "Docosahexaenoic Acid / anticoagulants",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Advise prescriber of DHA use when on antiplatelet therapy. Avoid high-dose supplements (>3 g/day) without haematology guidance.",
-      "alert_body": "DHA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding DHA.",
-      "alert_headline": "May add to antiplatelet effects",
-      "detail": "Additive antiplatelet effect via independent mechanisms: clopidogrel blocks P2Y12 receptor while DHA reduces TXA2 production. The combination further impairs platelet aggregation beyond either agent alone.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "antiplatelets",
-      "evidence_level": "probable",
-      "informational_note": "DHA can affect platelet function — relevant to people on antiplatelets.",
-      "ingredient_name": "Docosahexaenoic Acid",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
-      ],
-      "title": "Docosahexaenoic Acid / antiplatelets",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Use with caution in patients with bleeding disorders. Doses above 3 g/day of EPA+DHA may significantly increase bleeding risk. Consult a healthcare provider before use.",
+      "action": "Monitor for signs of bleeding. Inform prescriber if taking anticoagulants or antiplatelets. Consider dose reduction if >3g EPA+DHA/day.",
       "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
       "alert_headline": "Caution with bleeding disorders",
       "condition_id": "bleeding_disorders",
-      "detail": "EPA and DHA competitively inhibit arachidonic acid metabolism, suppressing thromboxane A2 (TXA2) synthesis and reducing platelet aggregation. At doses >3 g/day of combined EPA+DHA, clinically measurable prolongation of bleeding time has been observed. Fish oil may also reduce factor VII levels, a vitamin K-dependent coagulation factor.",
+      "detail": "Omega-3 fatty acids (EPA/DHA) prolong bleeding time by inhibiting thromboxane A2-mediated platelet aggregation and reducing platelet-activating factor. FDA drug labels for icosapent ethyl (Vascepa) and omega-3-acid ethyl esters (Lovaza) explicitly warn about increased bleeding risk. Doses >3g/day have potential antithrombotic effects per FDA labeling.",
       "display_mode_default": "suppress",
-      "dose_threshold_evaluation": {
-        "evaluated": false,
-        "reason": "missing_or_invalid_dose"
-      },
+      "dose_threshold_evaluation": null,
       "evidence_level": "established",
       "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder.",
       "ingredient_name": "Fish Body Oil",
@@ -1261,31 +1134,11 @@
       "severity_contextual": "informational",
       "source": "interaction_rules",
       "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/17192169/",
-        "https://pubmed.ncbi.nlm.nih.gov/14742793/"
+        "https://pubmed.ncbi.nlm.nih.gov/29136493/",
+        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
+        "https://www.nccih.nih.gov/health/omega-3-supplements"
       ],
       "title": "Fish Body Oil / bleeding_disorders",
-      "type": "interaction"
-    },
-    {
-      "action": "Inform your surgeon of fish oil use before planned procedures. High-dose fish oil (>3 g/day) combined with other anticoagulants or antiplatelets warrants discussion with the surgical team.",
-      "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
-      "alert_headline": "Pause before scheduled surgery",
-      "condition_id": "surgery_scheduled",
-      "detail": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. A large RCT (OPERA, n=1516) found no significant increase in surgical bleeding at standard doses; however, high-dose use (6 g/day) combined with anticoagulants has produced serious hemorrhagic events.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery.",
-      "ingredient_name": "Fish Body Oil",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/30571332/",
-        "https://pubmed.ncbi.nlm.nih.gov/17192169/"
-      ],
-      "title": "Fish Body Oil / surgery_scheduled",
       "type": "interaction"
     },
     {
@@ -1314,24 +1167,46 @@
       "type": "drug_interaction"
     },
     {
-      "action": "Avoid high-dose fish oil (>3 g/day) when combined with antiplatelet medications unless under medical supervision. Monitor for unusual bleeding or bruising.",
-      "alert_body": "Fish oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding fish oil.",
+      "action": "Inform prescriber of EPA supplement use when on antiplatelet therapy. Avoid doses >3 g/day without haematological oversight.",
+      "alert_body": "EPA has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding EPA.",
       "alert_headline": "May add to antiplatelet effects",
-      "detail": "Additive inhibition of platelet aggregation through independent TXA2 suppression. Combined use of high-dose fish oil with aspirin and warfarin has been associated with subdural hematoma after minor trauma.",
+      "detail": "Additive antiplatelet effect: EPA reduces TXA2 while clopidogrel blocks P2Y12 receptor, producing complementary inhibition of platelet aggregation pathways. Combined bleeding risk is greater than with either agent alone.",
       "display_mode_default": "suppress",
       "dose_threshold_evaluation": null,
       "drug_class_id": "antiplatelets",
-      "evidence_level": "established",
-      "informational_note": "Fish oil can affect platelet function — relevant to people on antiplatelets.",
+      "evidence_level": "probable",
+      "informational_note": "EPA can affect platelet function — relevant to people on antiplatelets.",
+      "ingredient_name": "Eicosapentaenoic Acid",
+      "severity": "caution",
+      "severity_contextual": "informational",
+      "source": "interaction_rules",
+      "sources": [
+        "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+        "https://pubmed.ncbi.nlm.nih.gov/17490952/"
+      ],
+      "title": "Eicosapentaenoic Acid / antiplatelets",
+      "type": "drug_interaction"
+    },
+    {
+      "action": "Inform your surgeon of fish oil use before planned procedures. High-dose fish oil (>3 g/day) combined with other anticoagulants or antiplatelets warrants discussion with the surgical team.",
+      "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
+      "alert_headline": "Pause before scheduled surgery",
+      "condition_id": "surgery_scheduled",
+      "detail": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. A large RCT (OPERA, n=1516) found no significant increase in surgical bleeding at standard doses; however, high-dose use (6 g/day) combined with anticoagulants has produced serious hemorrhagic events.",
+      "display_mode_default": "suppress",
+      "dose_threshold_evaluation": null,
+      "evidence_level": "probable",
+      "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery.",
       "ingredient_name": "Fish Body Oil",
       "severity": "caution",
       "severity_contextual": "informational",
       "source": "interaction_rules",
       "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/30571332/",
         "https://pubmed.ncbi.nlm.nih.gov/17192169/"
       ],
-      "title": "Fish Body Oil / antiplatelets",
-      "type": "drug_interaction"
+      "title": "Fish Body Oil / surgery_scheduled",
+      "type": "interaction"
     },
     {
       "action": "Monitor for GI symptoms when combining fish oil with NSAIDs. Take NSAIDs with food.",
@@ -1352,49 +1227,6 @@
       ],
       "title": "Fish Body Oil / nsaids",
       "type": "drug_interaction"
-    },
-    {
-      "action": "Monitor for signs of bleeding. Inform prescriber if taking anticoagulants or antiplatelets. Consider dose reduction if >3g EPA+DHA/day.",
-      "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
-      "alert_headline": "Caution with bleeding disorders",
-      "condition_id": "bleeding_disorders",
-      "detail": "Omega-3 fatty acids (EPA/DHA) prolong bleeding time by inhibiting thromboxane A2-mediated platelet aggregation and reducing platelet-activating factor. FDA drug labels for icosapent ethyl (Vascepa) and omega-3-acid ethyl esters (Lovaza) explicitly warn about increased bleeding risk. Doses >3g/day have potential antithrombotic effects per FDA labeling.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder.",
-      "ingredient_name": "Fish Body Oil",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/29136493/",
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
-        "https://www.nccih.nih.gov/health/omega-3-supplements"
-      ],
-      "title": "Fish Body Oil / bleeding_disorders",
-      "type": "interaction"
-    },
-    {
-      "action": "Consider discontinuing omega-3 supplements 7-10 days before planned surgery. Inform surgeon and anesthesiologist.",
-      "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
-      "alert_headline": "Pause before scheduled surgery",
-      "condition_id": "surgery_scheduled",
-      "detail": "Omega-3 fatty acids may increase perioperative bleeding risk due to antiplatelet effects. Multiple FDA drug labels recommend caution with concurrent anticoagulant/antiplatelet therapy.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "established",
-      "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery.",
-      "ingredient_name": "Fish Body Oil",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/29136493/",
-        "https://www.nccih.nih.gov/health/omega-3-supplements"
-      ],
-      "title": "Fish Body Oil / surgery_scheduled",
-      "type": "interaction"
     },
     {
       "action": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
@@ -1431,51 +1263,6 @@
       "sources": [],
       "title": "Fish Body Oil / lactation",
       "type": "interaction"
-    },
-    {
-      "action": "Monitor INR/bleeding time more frequently. Watch for signs of bruising or bleeding. Inform prescriber.",
-      "alert_body": "Fish oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding fish oil and ask about INR or bleeding checks.",
-      "alert_headline": "May add to blood-thinner effects",
-      "detail": "Omega-3 fatty acids prolong bleeding time and may potentiate anticoagulant effects. FDA labels for icosapent ethyl and omega-3-acid ethyl esters explicitly state: 'omega-3 acids may prolong bleeding time. Monitor patients receiving anticoagulants.'",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": {
-        "evaluated": false,
-        "reason": "missing_or_invalid_dose"
-      },
-      "drug_class_id": "anticoagulants",
-      "evidence_level": "established",
-      "informational_note": "Fish oil can affect clotting — relevant to people on anticoagulants.",
-      "ingredient_name": "Fish Body Oil",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
-        "https://pubmed.ncbi.nlm.nih.gov/29136493/"
-      ],
-      "title": "Fish Body Oil / anticoagulants",
-      "type": "drug_interaction"
-    },
-    {
-      "action": "Monitor for increased bruising or bleeding. Inform prescriber of omega-3 supplementation.",
-      "alert_body": "Fish oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding fish oil.",
-      "alert_headline": "May add to antiplatelet effects",
-      "detail": "Additive antiplatelet effects. Omega-3 fatty acids inhibit platelet aggregation via thromboxane A2 suppression, which may compound the effects of antiplatelet agents like aspirin or clopidogrel.",
-      "display_mode_default": "suppress",
-      "dose_threshold_evaluation": null,
-      "drug_class_id": "antiplatelets",
-      "evidence_level": "probable",
-      "informational_note": "Fish oil can affect platelet function — relevant to people on antiplatelets.",
-      "ingredient_name": "Fish Body Oil",
-      "severity": "caution",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/29136493/",
-        "https://www.nccih.nih.gov/health/omega-3-supplements"
-      ],
-      "title": "Fish Body Oil / antiplatelets",
-      "type": "drug_interaction"
     },
     {
       "detail": "2022-12-13",

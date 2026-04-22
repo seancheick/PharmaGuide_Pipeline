@@ -46,7 +46,7 @@ import pytest
 
 SPRINT_E1_1_2_LANDED = True   # Warning copy rewrite (critical → profile-agnostic)
 SPRINT_E1_1_3_LANDED = True   # Build-time raw-enum-leak validator
-SPRINT_E1_2_3_LANDED = False  # Build-time warning dedup
+SPRINT_E1_2_3_LANDED = True   # Build-time warning dedup
 
 # ---------------------------------------------------------------------------
 # Deny-lists / regex — medical/UX justification in each invariant docstring.

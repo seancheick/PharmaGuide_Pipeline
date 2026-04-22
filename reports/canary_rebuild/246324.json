@@ -1340,24 +1340,6 @@
       "type": "harmful_additive"
     },
     {
-      "category": "colorant_artificial",
-      "detail": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
-      "display_mode_default": "critical",
-      "identifiers": null,
-      "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
-      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
-      "population_warnings": [
-        "Dye-sensitive individuals — cannot assess risk without knowing which colorant is used",
-        "Children — if undisclosed colorant is an azo dye, hyperactivity concern applies"
-      ],
-      "safety_summary": "The label does not specify the color source, which limits transparency and can mask artificial dye use. Worth choosing products that disclose the specific colorant.",
-      "safety_summary_one_liner": "Undisclosed colorant — transparency concern.",
-      "severity": "low",
-      "source": "harmful_additives_db",
-      "title": "Contains Unspecified Colors",
-      "type": "harmful_additive"
-    },
-    {
       "action": "Avoid CBD supplements in liver disease. If already taking, monitor liver function tests regularly. Discontinue if ALT/AST exceed 3x upper limit of normal.",
       "alert_body": "CBD is heavily metabolized in the liver and can elevate liver enzymes. If you have liver disease, talk to your clinician and monitor liver function labs.",
       "alert_headline": "Not recommended with liver disease",
@@ -1417,24 +1399,6 @@
       "sources": [
         "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
       ],
-      "title": "Cannabidiol / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
-      "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
-      "alert_headline": "Not recommended during pregnancy",
-      "condition_id": "pregnancy",
-      "detail": "",
-      "display_mode_default": "informational",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
-      "ingredient_name": "Cannabidiol",
-      "severity": "avoid",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [],
       "title": "Cannabidiol / pregnancy",
       "type": "interaction"
     },
@@ -1598,24 +1562,6 @@
       "type": "harmful_additive"
     },
     {
-      "category": "colorant_artificial",
-      "detail": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
-      "display_mode_default": "critical",
-      "identifiers": null,
-      "mechanism_of_harm": "Lack of disclosure: color source is not specified, which reduces transparency and can mask artificial dye use.",
-      "notes": "Low-severity flag for unspecified color listings. Penalize lightly unless explicit dye tokens indicate artificial colorants.",
-      "population_warnings": [
-        "Dye-sensitive individuals — cannot assess risk without knowing which colorant is used",
-        "Children — if undisclosed colorant is an azo dye, hyperactivity concern applies"
-      ],
-      "safety_summary": "The label does not specify the color source, which limits transparency and can mask artificial dye use. Worth choosing products that disclose the specific colorant.",
-      "safety_summary_one_liner": "Undisclosed colorant — transparency concern.",
-      "severity": "low",
-      "source": "harmful_additives_db",
-      "title": "Contains Unspecified Colors",
-      "type": "harmful_additive"
-    },
-    {
       "action": "Avoid CBD supplements in liver disease. If already taking, monitor liver function tests regularly. Discontinue if ALT/AST exceed 3x upper limit of normal.",
       "alert_body": "CBD is heavily metabolized in the liver and can elevate liver enzymes. If you have liver disease, talk to your clinician and monitor liver function labs.",
       "alert_headline": "Not recommended with liver disease",
@@ -1654,24 +1600,6 @@
       "sources": [
         "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
       ],
-      "title": "Cannabidiol / pregnancy",
-      "type": "interaction"
-    },
-    {
-      "action": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
-      "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
-      "alert_headline": "Not recommended during pregnancy",
-      "condition_id": "pregnancy",
-      "detail": "",
-      "display_mode_default": "informational",
-      "dose_threshold_evaluation": null,
-      "evidence_level": "probable",
-      "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
-      "ingredient_name": "Cannabidiol",
-      "severity": "avoid",
-      "severity_contextual": "informational",
-      "source": "interaction_rules",
-      "sources": [],
       "title": "Cannabidiol / pregnancy",
       "type": "interaction"
     },
