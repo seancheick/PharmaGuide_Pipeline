@@ -101,20 +101,53 @@ Sprint E1 ships only when **all** of the following are true:
 
 Every task in Phases E1.0 through E1.4 follows this exact sequence. No shortcuts.
 
+**Phases E1.0 and E1.1 (test-infra + validators):** the 8-step lifecycle below.
+
+**Phases E1.2, E1.3, E1.4 (code changes touching data transformation):** the **9-step** lifecycle with mandatory per-subtask mini-rebuild + manual eyeball of 3 canary products. Added 2026-04-21 per external-dev review — E1.2+ touches core normalization/enrichment and requires shadow-diff after **each subtask**, not just at phase boundary.
+
 ```
-  ┌─────────────────────────────────────────────────────────┐
-  │ 1. Capture baseline  →  run scope-report on current main │
-  │ 2. Write regression test  →  see it fail                │
-  │ 3. Implement fix  →  minimum viable diff                │
-  │ 4. Rerun regression test  →  see it pass                │
-  │ 5. Run full suite  →  confirm no other tests broke      │
-  │ 6. Run shadow-diff  →  review every delta, explain each │
-  │ 7. QA pass  →  spot-check 3 products on real blobs      │
-  │ 8. Commit  →  atomic, one task per commit               │
-  └─────────────────────────────────────────────────────────┘
+  ┌─────────────────────────────────────────────────────────────┐
+  │ 1. Capture baseline  →  run scope-report on current main    │
+  │ 2. Write regression test  →  see it fail                    │
+  │ 3. Implement fix  →  minimum viable diff                    │
+  │ 4. Rerun regression test  →  see it pass                    │
+  │ 5. Run targeted pytest (phase-boundary full suite)          │
+  │ 6. Mini-rebuild 3 canary products (E1.2+ only)              │
+  │ 7. Shadow-diff blob delta  →  classify every field change   │
+  │     as expected / unexpected                                │
+  │ 8. QA eyeball  →  "does the product page read correctly?    │
+  │     does it mislead?" (E1.2+ required, E1.0/E1.1 optional)  │
+  │ 9. Commit  →  atomic, one task per commit                   │
+  └─────────────────────────────────────────────────────────────┘
 ```
 
-If step 6 reveals unexpected deltas: create `T{n}.fix{m}` subtask, max 3 repair passes. After pass 2 without resolution, escalate.
+If step 7 reveals unexpected deltas: create `T{n}.fix{m}` subtask, max 3 repair passes. After pass 2 without resolution, escalate.
+
+### 6.1 Canary QA set (locked 2026-04-21)
+
+Every E1.2+ subtask rebuilds and eyeballs these 3 products:
+
+| Product | DSLD ID | Why this one |
+|---|---|---|
+| Plantizyme (Thorne) | 35491 | Prop-blend parent-mass cascade (E1.2.1) + enzyme credit (E1.3.4) |
+| KSM-66 Ashwagandha product | TBD | Branded-token preservation + standardization (E1.2.2 / E1.3.5) |
+| VitaFusion CBD Mixed Berry | TBD | Warning dedup (E1.2.3) + decision_highlights danger bucket (E1.1.1 validation) |
+
+**Baseline source (decided 2026-04-21, option C):** reuse existing Supabase snapshot `v2026.04.21.164306` as the pre-E1 baseline — zero-cost, no external API calls. Blobs pulled from Storage bucket `shared/details/sha256/` into a local `reports/baseline_v2026.04.21.164306/` for diffing. For subtasks that touch only `build_final_db.py` (E1.2.2 display fields, E1.2.3 dedup), re-run just the final-build stage against cached enriched+scored outputs — no re-enrichment needed. For subtasks that touch `enhanced_normalizer.py` or `enrich_supplements_v3.py` (E1.2.1, E1.2.4, E1.2.5), re-enrich the 3 canary products only (not the full 8,288 catalog).
+
+Filename ledger captured in `docs/SPRINT_E1_BUILD_BASELINE.md` (created at E1.2.1 kickoff).
+
+### 6.2 Manual eyeball checklist (step 8)
+
+For each canary product after each subtask:
+
+1. Open the detail blob JSON
+2. Grep for the field the subtask changed
+3. Ask: does the value match what's on the physical label / the source DSLD JSON?
+4. Ask: would this read correctly in Flutter? Would it mislead?
+5. Record a one-line verdict in the commit message: `canary QA: {plantizyme / ksm-66 / vitafusion}: pass | flagged reason`
+
+Not a substitute for unit tests — a complement. Contract tests prove structure; eyeball proves meaning.
 
 ---
 
@@ -410,6 +443,49 @@ My findings H, I, J + plant-part preservation (C).
 - Regression test: fixture of 8 products covering all 4 threshold bands × 3 support-level paths (high/moderate/weak)
 - 42-strain sign-off review complete (either flipped to `true` after verification, or kept `false` with documented `clinical_support_level`)
 - Shadow-diff: Section A increases on probiotic products; no change on non-probiotic products
+
+##### E1.3.2.2 — Confidence-model hybrid (added 2026-04-21 per external-dev review)
+
+**Problem the hybrid addresses:** scoring math uses tier caps (100% / 75% / 50% of points by `clinical_support_level`), which is clinically honest on the math side. The **blob-level surfacing**, however, currently encourages precise-sounding UX copy ("Adequate dose", "Excellent dose") against evidence that is probabilistic, not absolute. Probiotic dosing literature is directional — strain effects are context-dependent, meta-analyses disagree, full-text dose validation is often unavailable.
+
+**The hybrid (keep the math, fix the framing):**
+
+1. **Keep** the current 4-tier CFU bands (`low` / `adequate` / `good` / `excellent`).
+2. **Keep** the 3-level scoring cap on `clinical_support_level`.
+3. **Add** two fields to each strain entry in the probiotic_detail blob:
+   - `cfu_confidence`: `"high" | "moderate" | "low"` — derived from `clinical_support_level` + whether full-text dose was verified (vs abstract-only).
+   - `dose_basis`: `"clinical" | "inferred" | "industry_standard"` — `clinical` when the CFU threshold is directly supported by a trial's dosing arm, `inferred` when extrapolated from a review, `industry_standard` when the 1B/10B/50B tier boundaries are default industry convention rather than strain-specific.
+4. **Add** a `ui_copy_hint` per strain — Flutter renders this instead of generating its own adjective ("Excellent dose"). Pipeline-generated honest copy:
+   - "Within typical studied CFU range"
+   - "Above typical studied range — limited evidence for marginal benefit"
+   - "Below typical studied range — may be underdosed"
+   - "CFU claim not independently verified"
+5. **Language sweep** during implementation: grep the blob and remove/rephrase any instance of: `"optimal dose"`, `"clinically proven"`, `"adequate dose"` (as standalone hero copy), `"excellent dose"`. Replace with evidence-confidence framing.
+
+**Emitted shape per strain (blob addition):**
+
+```json
+"probiotic_detail": {
+  "strains": [{
+    "strain_id": "L. rhamnosus GG",
+    "cfu_per_day": 10000000000,
+    "cfu_tier": "within_typical_studied_range",
+    "cfu_confidence": "moderate",
+    "dose_basis": "industry_standard",
+    "evidence_strength": "moderate",
+    "clinical_support_level": "moderate",
+    "ui_copy_hint": "High CFU relative to typical products"
+  }]
+}
+```
+
+**Rationale (external-dev review, 2026-04-21):** "You don't win by being perfectly precise. You win by being the most honest + structured system in a messy domain." Avoids legal/clinical risk of "optimal" / "clinically proven" language while preserving the scoring signal. Downside accepted: slightly less punchy UX copy; upside: user trust holds when a clinician scrutinizes the claim.
+
+**Additional DoD items for E1.3.2 (hybrid):**
+- Every strain in `probiotic_detail.strains[]` carries `cfu_confidence`, `dose_basis`, `ui_copy_hint` fields (validator fails build otherwise).
+- `cfu_confidence` derivation uses BOTH `clinical_support_level` AND `clinical_validation.q4_dose_mentioned` — "high" requires both `high` support + dose explicit in abstract (or full-text verified).
+- Build-time language-scrub validator: grep `ui_copy_hint` + any blob-emitted strings for `{optimal dose, clinically proven, adequate dose}`. Fail build on match.
+- Regression test: 3 strains covering all 3 confidence levels + assertion that `ui_copy_hint` text never contains banned phrases.
 
 ##### E1.3.2.1 — Clinical validation invariant (added 2026-04-21 per clinical-reviewer feedback)
 
