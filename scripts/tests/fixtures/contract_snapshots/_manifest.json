@@ -273,6 +273,18 @@
         "E1.3.4 enzyme recognition credit (config-gated, capped)"
       ],
       "notes": "Accumulated scoring drift from Sprint E1.3.x ingredient-quality refinements. Drift categories: A1 ingredient quality (enzyme recognition credit, fish oil parent-mass fallback), supp_type reclassification (multivitamin vs specialty), grade boundary shifts (Fair vs Below Avg). All drifts verified as legitimate scoring improvements from authored Sprint E1.3.x work, NOT regressions from the goal-matching contract refactor. The schema v6.0.0 goal-matching changes (compute_goal_matches refactor, Solution A alias map, Solution B product-name fallback) were verified scoring-neutral by isolating synthetic ingredients to the cluster-matching path only (no mutation of activeIngredients). Goal_matches and goal_match_confidence are not in the frozen_fields whitelist, so this changelog entry covers the pre-existing E1.3.x scoring drift only."
+    },
+    {
+      "date": "2026-04-24",
+      "action": "refrozen_e1_19_synergy_dedup_drift",
+      "products": [
+        223319,
+        15756
+      ],
+      "sprints_covered": [
+        "E1.19 enrichment cluster-match hardening (ingredient dedup + min-dose inheritance + abbrev matching + qty>0 gate)"
+      ],
+      "notes": "A5c synergy-bonus dropped from 0.75 to 0.0 on two single-ingredient products (223319 Nutricost KSM-66, 15756 Thorne Vitamin D). Root cause: the previous enricher counted the same product ingredient twice when it substring-matched multiple cluster variants (e.g. ashwagandha matching both 'ashwagandha' and 'ksm-66 ashwagandha' as TWO hits), spuriously crossing match_count>=2 and earning the synergy bonus. E1.19's ingredient-dedup fix correctly counts one hit per product ingredient per cluster. Result: single-ingredient products no longer collect an undeserved synergy bonus. This is a clinically-correct drift — genuine synergy requires ACTUAL multi-ingredient coordination."
     }
   ]
 }
