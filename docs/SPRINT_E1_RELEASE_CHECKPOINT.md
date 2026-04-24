@@ -94,6 +94,22 @@ All numeric knobs live in `scripts/config/scoring_config.json`. Checksum persist
 - **Risk:** Low — change is constrained to flatten path; existing E1.2.5 gate is already validating the contract
 - **Impact:** Restores +2–3% catalog coverage
 
+### E1.5.X-4 — UL fallback + product_status (IN-FLIGHT 2026-04-22)
+
+- **Discovered:** Post-release smoke test on Thorne Vitamin A DSLD 15640 (25,000 IU retinyl palmitate scoring SAFE 65.8/100 — should be CAUTION, 2.5× UL).
+- **Root cause (two stacked bugs):**
+  1. `rda_ul_data.ingredients_with_rda[*].highest_ul` was nulled out whenever the pipeline's own UL check was skipped (form ambiguous, conversion failed). This broke Flutter's anonymous-user UL fallback on ~57% of RDA entries (catalog-wide: 7,440 / 13,102 entries with null `highest_ul`).
+  2. `product_status: discontinued` was emitted as a `type='status'` entry in `warnings[]`, causing Flutter to render it as a green SAFE chip — neither accurate (not a safety signal) nor correctly placed.
+- **Architecture restored:** User's original design — pipeline always provides `highest_ul` from the RDA file for Flutter's anonymous-user fallback; profile-specific UL computation happens on device; `product_status` is a dedicated top-level blob field so availability renders as a neutral concern chip.
+- **Changes shipped:**
+  - `scripts/enrich_supplements_v3.py` — always populates `highest_ul` from RDA file regardless of `skip_ul_check`; adds companion field `ul_for_default_profile` for pipeline's age-specific UL.
+  - `scripts/build_final_db.py` — removes `type='status'` emission from `warnings[]`; adds top-level `product_status: {status, date, label}` (null for active products).
+  - Tests: `scripts/tests/test_e1_5_x_4_ul_fallback_and_status.py` (6 tests, covering unit + catalog-wide invariants).
+  - Pre-existing test `test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_status` updated to match new contract.
+- **Priority:** HIGH (safety-critical, in-flight)
+- **Risk:** Low — surgical fix to two files, backward-compatible manifest, catalog-scan tests validate post-rebuild.
+- **Impact:** Flutter's UL fallback starts working for 57% of catalog. Discontinued products stop rendering as SAFE chips. Downstream: Flutter team can implement FLTR-4 (`product_status` chip) and FLTR-5 (trust `highest_ul` fallback) — see `docs/FLUTTER_HANDOFF_E1_POST_RELEASE.md`.
+
 ### E1.5.X-2 — `cleanup_old_versions.py` multi-version orphan-detection fix
 
 - **Scope:** The post-sync cleanup tool currently computes orphan blobs by comparing storage against ONLY the current version's `detail_index.json` (see `fetch_current_detail_index` + `detect_orphan_blobs` at `scripts/cleanup_old_versions.py:154,208`). When retention keeps the last N versions, blobs referenced only by the N-1 older kept versions get classified as orphans and deleted — breaking those versions' rollback integrity.

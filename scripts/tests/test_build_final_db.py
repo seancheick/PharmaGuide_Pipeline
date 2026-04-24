@@ -762,6 +762,11 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
 
 
 def test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_status():
+    # Sprint E1.5.X-4 — status is no longer emitted as a warning; it's
+    # surfaced via the dedicated `product_status_detail` top-level field
+    # so Flutter can render it as a neutral concern chip rather than a
+    # safety warning. This test verifies warnings[] still covers the
+    # safety types AND product_status_detail is populated for discontinued.
     enriched = make_enriched()
     enriched["status"] = "discontinued"
     enriched["discontinuedDate"] = "2025-12-31"
@@ -772,7 +777,7 @@ def test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_stat
             "status": "banned",
             "match_type": "exact",
             "reason": "Regulatory ban.",
-        
+
         "safety_warning": "Test Dr Pham long-form safety warning body copy for fixtures.",
         "safety_warning_one_liner": "Test Dr Pham one-liner safety copy.",
     }
@@ -786,7 +791,18 @@ def test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_stat
     assert "interaction" in warning_types
     assert "drug_interaction" in warning_types
     assert "dietary" in warning_types
-    assert "status" in warning_types
+    # E1.5.X-4 contract: status is NOT in warnings[] anymore.
+    assert "status" not in warning_types, (
+        "product status must not appear in warnings[] — use top-level "
+        "product_status dict instead"
+    )
+    # Discontinued products carry a populated top-level product_status.
+    # Schema: {type, date, display} — `type` (not `status`) for future
+    # extensibility to reformulated/limited_availability/seasonal/etc.
+    ps = blob.get("product_status")
+    assert ps is not None
+    assert ps["type"] == "discontinued"
+    assert ps["date"] == "2025-12-31"
 
 
 def test_watchlist_is_exported_as_warning_but_not_blocking_reason():
