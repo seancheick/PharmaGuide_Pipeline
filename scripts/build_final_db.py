@@ -3402,17 +3402,37 @@ def compute_goal_matches(enriched: Dict) -> Dict:
         score_full = matched_weight / max_weight
 
         if required:
-            max_required_weight = sum(
+            # Use MAX (not SUM) of required weights. Rationale: when a goal
+            # declares multiple required clusters (e.g. GOAL_DIGESTIVE_HEALTH
+            # requires gut_barrier OR probiotic_and_gut_health OR
+            # digestive_enzymes), a single-purpose probiotic that covers
+            # probiotic_and_gut_health at full weight should score 1.0 on
+            # the required axis — not 0.34 (which is what SUM would give,
+            # under-matching every probiotic against digestive).
+            #
+            # Any-present semantics is already the gate (Gate 2). The score
+            # should reflect "how strongly does the BEST matched required
+            # cluster represent this goal" — i.e. does the product cover the
+            # single most goal-relevant required cluster at its full weight?
+            # MAX answers that directly. This also aligns with the
+            # single-ingredient-override design: a DHA-only product earning
+            # prenatal_pregnancy_support (the one required cluster) should
+            # score 1.0 for PRENATAL.
+            required_weights = [
                 safe_float(cluster_weights.get(c), 0.0) for c in required
-            )
-            matched_required_weight = sum(
+            ]
+            matched_required_weights = [
                 safe_float(cluster_weights.get(c), 0.0)
                 for c in product_clusters
                 if c in required
+            ]
+            max_single_required = max(required_weights) if required_weights else 0.0
+            best_matched_required = (
+                max(matched_required_weights) if matched_required_weights else 0.0
             )
             score_required = (
-                matched_required_weight / max_required_weight
-                if max_required_weight > 0.0
+                best_matched_required / max_single_required
+                if max_single_required > 0.0
                 else 0.0
             )
         else:
