@@ -2,7 +2,7 @@
 
 **Pipeline release live:** `v2026.04.23.000925`
 **Doc rewrite:** 2026-04-23 (dedup pass — replaced 3 conflicting priority lists with one; added all tickets accumulated mid-sprint)
-**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.23** SHIPPED, FLTR-21/22/23 OPEN, awaiting full pipeline rebuild). E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion.
+**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.24** SHIPPED, FLTR-21/22/23 OPEN, awaiting full pipeline rebuild). E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion. **E1.24 ships Dr Pham's clinical signoff** with targeted refinements: Berberine note softening, goal weight adjustments (blood_pressure→Aging 0.5→0.35; neuropathy→Blood Sugar 0.4→0.25), 13-cluster primary_ingredients headliner refinement, and stress_resilience enabled for solo matching (ashwagandha now lands correctly on STRESS rather than SLEEP).
 
 **From:** Pipeline / scoring / data-contract side
 **To:** Flutter app team
@@ -909,6 +909,70 @@ Flutter impact: none for consumption (`goal_matches` works the same). FLTR-22 re
 
 Flutter impact: none (no schema change at the contract layer). Could optionally render `demoted_absorption_enhancers` list as "Includes bioavailability aid: BioPerine 5 mg" info chip.
 
+## 6.9 E1.24 — Dr Pham clinical signoff + refinements `[x]` SHIPPED (2026-04-24)
+
+**Dr Pham (pharmaguide_clinical_team) reviewed the full Sprint E1 data set** (dose thresholds + goal mappings + synergy cluster headliners) and signed off with targeted refinements.
+
+### Interaction rules (ingredient_interaction_rules.json)
+
+**Validated as-is**: Vitamin D bleeding/autoimmune/immunosuppressants thresholds, Green Tea EGCG 800 mg liver, Selenium 400 mcg thyroid (NIH ODS UL), Biotin 5 mg thyroid (lab interference). Schema-valid provisional: omega-3, resveratrol, quercetin, creatine, andrographis, red clover (retained as alerting cutoffs with mechanism-backed rationale).
+
+**Refined**: Berberine note wording softened to avoid over-claiming certainty. New authored copy:
+> "Clinical trials typically use 1,000–1,500 mg/day (Yin 2008 PMID 18397984, Dong 2012 meta-analysis). This threshold starts the avoid alert at the upper end of the evidence-based dosing range. Below that range, prescriber discussion is still appropriate, but the glycemic-effect signal is less likely to justify an avoid-level alert on dose alone."
+
+Threshold value ≥1500 mg/day kept (Dr Pham approved "starting at upper end of evidence-based range"). Applied to both condition/diabetes and drug_class/hypoglycemics entries.
+
+### Goal mapping (user_goals_to_clusters.json) — orphan cluster weight adjustments
+
+| Mapping | Before | After | Dr Pham rationale |
+|---|---|---|---|
+| `blood_pressure_support → Cardio (required)` | 1.0 | 1.0 ✅ kept | "direct, high-confidence mapping" |
+| `blood_pressure_support → Healthy Aging (optional)` | 0.5 | **0.35** ⬇ | "aging is a secondary framing, not a peer goal" |
+| `omega3_niacin_lipid → Cardio (required)` | 0.9 | 0.9 ✅ kept | canonical |
+| `wound_healing → Skin/Hair/Nails (required)` | 0.6 | 0.6 ✅ kept | tissue repair fit |
+| `nerve_health_neuropathy_support → Blood Sugar (optional)` | 0.4 | **0.25** ⬇ | "neuropathy is a nerve-health concept first and a glucose-support concept second" |
+
+### Synergy cluster primary_ingredients — schema v5.1.0 → v5.2.0
+
+**13 clusters refined** per Dr Pham's headliner-vs-supportive clinical split. Most significant:
+
+| Cluster | Change |
+|---|---|
+| `sleep_stack` | removed ashwagandha (→ supportive, stress-sleep overlap only) |
+| `immune_defense` | removed elderberry, echinacea (→ supportive); added ester-c, vitamin d |
+| `eye_health` | removed bilberry (→ supportive); added vitamin c, vitamin e, zinc, omega-3 |
+| `cardiovascular_support` | expanded 6 → 21 primaries (coq10, vitamin k2/mk-7, arginine, citrulline, hawthorn, garlic, taurine now solo-eligible) |
+| `magnesium_nervous_system` | added vitamin b6, pyridoxine, p5p, taurine |
+| `curcumin_absorption` | piperine/bioperine/black pepper REMOVED from primary_ingredients (kept in cluster `ingredients[]` for multi-match synergy). Rationale: a bare-piperine product is not a curcumin product; solo-match requires curcumin/turmeric/branded form presence |
+| `iron_absorption` | expanded 1 → 11 primaries |
+| `bone_health` | added menaquinone, magnesium, boron |
+| `liver_support` | added nac, alpha-lipoic acid, selenium, selenomethionine |
+| `muscle_building_recovery` | added protein, casein protein, hmb, creapure |
+| `hair_skin_nutrition` | expanded 2 → 15 primaries |
+| `probiotic_and_gut_health` | expanded 3 → 12 primaries (prebiotics, inulin, fos, gos, postbiotics, butyrate) |
+
+**NEW cluster enabled for solo-matching**: `stress_resilience` now carries `allow_single_ingredient: true` with Dr Pham's curated headliners (ashwagandha, ksm-66, sensoril, rhodiola, rhodiola rosea, l-theanine, theanine, suntheanine, magnesium, magnesium glycinate). This ensures KSM-66 and other ashwagandha products now correctly land on **GOAL_REDUCE_STRESS_ANXIETY** (their clinically primary use case) rather than on Sleep (which Dr Pham correctly reclassified ashwagandha as supportive-only for).
+
+### Canary validation post-E1.24
+
+| Product | goal_matches | conf | Correct? |
+|---|---|---|---|
+| KSM-66 600 mg | `GOAL_REDUCE_STRESS_ANXIETY` | 1.0 | ✅ stress primary, sleep removed |
+| Thorne Vitamin D | `GOAL_IMMUNE_SUPPORT`, `GOAL_JOINT_BONE_MOBILITY` | 1.0 | ✅ new immune-via-D path |
+| Magnesium 100 mg | SLEEP, STRESS, CARDIO, JOINT_BONE | 1.0 | ✅ broader coverage clinically correct |
+| DHA 1,000 mg | CARDIO, PRENATAL | 1.0 | ✅ unchanged |
+| Vitamin C 500 mg | IMMUNE, SKIN, EYE | 1.0 | ✅ new skin + eye paths via Dr Pham additions |
+
+### Flutter impact
+
+None on contract. But **some products will shift their primary goal match** after next pipeline rebuild:
+- Ashwagandha-only products: SLEEP → STRESS (clinically more accurate)
+- Vitamin D products: gain IMMUNE coverage (alongside existing BONE)
+- Cardio ingredients (CoQ10, hawthorn, garlic): expanded cardio solo-match coverage
+- Curcumin+piperine synergy: unchanged (still multi-matches curcumin_absorption cluster); piperine-alone edge case no longer falsely classified as curcumin product
+
+All 142 critical tests pass. Zero integrity findings. Commit: `40df8b6`.
+
 ---
 
 # 7. PRODUCT SMOKE TESTS
@@ -1019,6 +1083,7 @@ Use these after implementation.
 | E1.21      | Score formula: MAX-of-required-weights   | Pipeline | High     | `[x]`  |
 | E1.22      | Synthesizer name-read fallback (pipeline-site fix) | Pipeline | High | `[x]` |
 | E1.23      | Absorption-enhancer sub-threshold demotion (unlocks A6) | Pipeline | High | `[x]` |
+| E1.24      | Dr Pham clinical signoff + refinements (Berberine note, goal weights, primary_ingredients, stress_resilience) | Pipeline | High | `[x]` |
 | FLTR-21    | "Solo ingredient" cluster badge          | Flutter  | Low      | `[ ]`  |
 | FLTR-22    | "Inferred from label" actives disclosure | Flutter  | Low      | `[ ]`  |
 | FLTR-23    | Optional: "Includes bioavailability aid" chip (E1.23 audit surface) | Flutter | Low | `[ ]` |
