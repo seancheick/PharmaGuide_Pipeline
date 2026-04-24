@@ -2,7 +2,7 @@
 
 **Pipeline release live:** `v2026.04.23.000925`
 **Doc rewrite:** 2026-04-23 (dedup pass — replaced 3 conflicting priority lists with one; added all tickets accumulated mid-sprint)
-**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (E1.16–E1.20 SHIPPED, FLTR-21/22 OPEN, awaiting full pipeline rebuild)
+**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.23** SHIPPED, FLTR-21/22/23 OPEN, awaiting full pipeline rebuild). E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion.
 
 **From:** Pipeline / scoring / data-contract side
 **To:** Flutter app team
@@ -825,6 +825,90 @@ When `activeIngredients` is sparse (≤ 2 entries) AND the product name matches 
 
 **Net catalog impact** (24-product canary, seed=42): goal-match rate 21% → **58–67%** depending on product mix. DHA → Prenatal now works. Magnesium → Sleep now works. Vitamin C → Immune now works. Fish oil → Cardio now works. Trace-mineral false positives (e.g. whey+magnesium → sleep) eliminated.
 
+## 6.6 E1.21 — Score formula `max(score_full, score_required)` with MAX-of-required-weights `[x]` SHIPPED (2026-04-24)
+
+**Problem discovered after the first full-catalog pipeline rebuild.** `GOAL_DIGESTIVE_HEALTH` matched only **10 out of 8,169** products (0.1%). `GOAL_FOCUS_MENTAL_CLARITY` (159) and `GOAL_MUSCLE_GROWTH_RECOVERY` (126) were similarly thin.
+
+**Root cause.** For goals with multiple required_clusters (DIGESTIVE has 3: gut_barrier, probiotic_and_gut_health, digestive_enzymes), the score formula summed required weights: `score_required = matched_required_weight / SUM(required_weights)`. A pure probiotic product hitting one required cluster scored only 1.0 / 2.9 = 0.34 — below the 0.5 threshold.
+
+**Fix.** Use `MAX(required_weights)` in the denominator so a product fully covering the highest-weight required cluster earns 1.0:
+```
+score_required = max(matched_required_weights) / max(all_required_weights)
+score = max(score_full, score_required)
+```
+
+**Catalog impact** (simulated on 8169 blobs):
+- `GOAL_DIGESTIVE_HEALTH`: 10 → **711** (70×)
+- `GOAL_FOCUS_MENTAL_CLARITY`: 159 → **672** (4×)
+- `GOAL_MUSCLE_GROWTH_RECOVERY`: 126 → **265** (2×)
+- Overall match rate: **50.8% → 62.5%**
+
+Flutter impact: none. Contract columns `goal_matches` / `goal_match_confidence` unchanged.
+
+## 6.7 E1.22 — Synthesizer name-read fallback (the silent zero-fire bug) `[x]` SHIPPED (2026-04-24)
+
+**Problem.** Despite E1.20 shipping Solution B (product-name synthesizer), the 8169-product dashboard snapshot had **zero** `display_type="inferred_from_name"` entries. DHA 1,000 mg still produced `goal_matches: []`. Synthesizer silently returned early on every single product.
+
+**Root cause.** `_synthesize_ingredients_from_name` read `product.get('product_name')`. But `_collect_synergy_data` is called from the pipeline with the RAW `product` dict, which uses DSLD's native field names `productName` / `fullName`. The enricher renames `fullName → product_name` on a DIFFERENT (`enriched`) dict at line 12234. My direct canary tests happened to use `product_name` as the key and passed; the production pipeline was passing `productName` and hitting `if not name: return [], []`.
+
+**Fix.** Fallback chain:
+```python
+name = (
+    product.get('product_name')
+    or product.get('fullName')
+    or product.get('productName')
+    or ''
+).strip()
+```
+
+**Verified end-to-end on raw cleaned "DHA 1,000 mg Lemon Flavor":**
+- synergy_clusters: 4 (cardio, omega_3_absorption, prenatal, omega3_niacin_lipid)
+- display_ingredients: 1 `inferred_from_name` entry for DHA 1000 mg
+- **goal_matches: `[GOAL_CARDIOVASCULAR_HEART_HEALTH, GOAL_PRENATAL_PREGNANCY]`**
+
+**Catalog-wide projection** (scan of 13,236 cleaned products): **776 products (5.9%)** will gain synthesized actives after next rebuild. Top beneficiaries: CoQ10 (166), Vitamin C (115), Vitamin D3 (104), Biotin (87), Melatonin (72), Vitamin B12 (59), Calcium (43), Magnesium (37), Zinc (25), Iron (22), DHA (16), Curcumin (16), EPA (7).
+
+Flutter impact: none for consumption (`goal_matches` works the same). FLTR-22 remains the open ticket for optional "inferred from label" badge UI.
+
+## 6.8 E1.23 — Absorption-enhancer sub-threshold demotion (unlocks A6 for BioPerine-paired single-nutrient products) `[x]` SHIPPED (2026-04-24)
+
+**Problem.** Single-ingredient ashwagandha / curcumin / resveratrol SKUs paired with a sub-therapeutic BioPerine 5 mg (standard bioavailability-aid dosing) were misclassified as `supplement_type: targeted` instead of `single_nutrient`. Two compounding effects:
+1. **A1 bioavailability diluted**: BioPerine's IQM form_score (12) pulled the weighted average down. KSM-66 alone scored A1 = 11.67; KSM-66 + BioPerine scored 11.11.
+2. **A6 single-ingredient efficiency bonus (+2.0 pts) blocked**: the `A6_single_ingredient_efficiency.single_types` gate accepts only `["single", "single_nutrient"]`, so `targeted` products miss it.
+
+**Fix — Option A (approved design, per per-enhancer dose-threshold pattern):**
+
+1. **Schema change.** `absorption_enhancers.json` v5.0.0 → v5.1.0 (additive). New OPTIONAL per-enhancer field:
+   ```json
+   "non_scorable_when_sub_threshold": {
+     "threshold_mg": 10,
+     "rationale": "Piperine ≤10 mg is bioavailability-aid dosing..."
+   }
+   ```
+   Added to `ENHANCER_BLACK_PEPPER` only. Every other enhancer (Vitamin C, Vitamin D, MK7, amino acids, probiotics, garlic, etc.) intentionally NOT tagged — those have independent nutritional value and must stay scorable.
+
+2. **Enricher method** `_apply_absorption_enhancer_demotion()` runs at end of `_collect_ingredient_quality_data()`. For each scorable row matched to a listed enhancer at or below threshold: flip `role_classification = recognized_non_scorable`, `score_included = false`, record `demotion_reason` / `demotion_ref` / `demotion_rationale` for audit. Row removed from `ingredients_scorable` but left in `product["activeIngredients"]`.
+
+3. **Supplement type re-classified after IQD built** (previously ran before IQD). The classifier already skips `recognized_non_scorable` rows, so it naturally picks up the demotion and returns `single_nutrient`.
+
+4. **Audit surfacing.** New field `ingredient_quality_data.demoted_absorption_enhancers: [...]` carries the demoted list for QA audit and potential Flutter chip rendering.
+
+5. **Critical preservation.** Synergy-cluster matching still sees piperine (so curcumin+piperine synergy fires via `curcumin_absorption` cluster). Interaction-rule analysis still sees piperine (so piperine-CYP drug alerts fire). Only the A1/A6 scoring path is narrowed.
+
+**KSM-66 600 mg measured delta:**
+| Field | Before E1.23 | After E1.23 | Δ |
+|---|---|---|---|
+| supp_type | `targeted` | **`single_nutrient`** | flipped |
+| A1 | 11.11 | **11.67** | **+0.56** |
+| A6 | 0.00 | **2.00** | **+2.00** |
+| score_80 | 48.30 | **50.90** | **+2.60** (+3.3%) |
+
+**Catalog-wide projection**: **28 products** across 4 brands (Doctor's Best 11, Nutricost 10, Pure Encapsulations 4, Sports Research 3) will flip `targeted → single_nutrient` on next pipeline rebuild. Per-product gain: +1.5 to +2.8 points on score_80.
+
+**Tests**: 8 new in `test_absorption_enhancer_demotion.py` — piperine ≤10mg demoted, >10mg stays scorable, exactly-10mg inclusive, activeIngredients preserved for cluster matching, supp_type flips correctly, Vitamin C never demoted, provenance recorded, empty demoted list when no enhancer present.
+
+Flutter impact: none (no schema change at the contract layer). Could optionally render `demoted_absorption_enhancers` list as "Includes bioavailability aid: BioPerine 5 mg" info chip.
+
 ---
 
 # 7. PRODUCT SMOKE TESTS
@@ -932,8 +1016,12 @@ Use these after implementation.
 | E1.18      | Synergy single-ingredient override       | Pipeline | High     | `[x]`  |
 | E1.19      | Enrichment cluster-match hardening       | Pipeline | High     | `[x]`  |
 | E1.20      | Product-name fallback synthesizer        | Pipeline | High     | `[x]`  |
+| E1.21      | Score formula: MAX-of-required-weights   | Pipeline | High     | `[x]`  |
+| E1.22      | Synthesizer name-read fallback (pipeline-site fix) | Pipeline | High | `[x]` |
+| E1.23      | Absorption-enhancer sub-threshold demotion (unlocks A6) | Pipeline | High | `[x]` |
 | FLTR-21    | "Solo ingredient" cluster badge          | Flutter  | Low      | `[ ]`  |
 | FLTR-22    | "Inferred from label" actives disclosure | Flutter  | Low      | `[ ]`  |
+| FLTR-23    | Optional: "Includes bioavailability aid" chip (E1.23 audit surface) | Flutter | Low | `[ ]` |
 
 ---
 
