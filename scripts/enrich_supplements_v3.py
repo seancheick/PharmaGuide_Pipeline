@@ -6361,7 +6361,19 @@ class SupplementEnricherV3:
         if len(active_ingredients) > 2:
             return [], []
 
-        name = (product.get('product_name') or '').strip()
+        # Read the product display name. The raw cleaned input uses DSLD's
+        # camelCase fields (productName / fullName) — the enricher renames
+        # fullName -> product_name on the `enriched` dict at line ~12234, but
+        # _collect_synergy_data is called with the RAW `product` dict, which
+        # still carries the original field names. Check all three so the
+        # synthesizer fires regardless of call site (enrich_product pipeline,
+        # or direct _collect_synergy_data invocation from tests/canaries).
+        name = (
+            product.get('product_name')
+            or product.get('fullName')
+            or product.get('productName')
+            or ''
+        ).strip()
         if not name:
             return [], []
 
