@@ -2471,25 +2471,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "display_mode_default": "informational",
             })
 
-    product_status = normalize_text(enriched.get("status"))
-    if product_status == "discontinued":
-        warnings.append({
-            "type": "status",
-            "severity": "info",
-            "title": "Discontinued Product",
-            "detail": safe_str(enriched.get("discontinuedDate"))[:10],
-            "source": "dsld",
-            "display_mode_default": "informational",
-        })
-    elif product_status == "off_market":
-        warnings.append({
-            "type": "status",
-            "severity": "info",
-            "title": "Off-Market Product",
-            "detail": "Product is no longer marketed.",
-            "source": "dsld",
-            "display_mode_default": "informational",
-        })
+    # Sprint E1.5.X-4 — discontinued/off-market no longer emitted into
+    # warnings[]. Status is now exposed as a top-level `product_status_detail`
+    # field so Flutter can render it as a small neutral "concern" chip
+    # (not a safety warning, not a green-safe tag). Separation of concerns:
+    # warnings[] = safety/interactions; product_status_detail = availability.
+    pass  # intentionally no warning emission for discontinued/off_market
 
     # Build the profile-gated subset — warnings whose default treatment is
     # NOT "suppress". This is what Flutter should render by default when
@@ -2672,6 +2659,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "match_count": len(matched),
                 "all_adequate": safe_bool(sc.get("all_adequate")),
                 "pmids": safe_list(sc.get("pmids")),
+                # Single-ingredient override signal — true when the cluster
+                # qualified via a lone primary ingredient at adequate dose
+                # (e.g. magnesium-only earning sleep_stack). Flutter can
+                # optionally render a "solo ingredient" badge on the detail
+                # card. Defaults to false for standard multi-ingredient
+                # synergy matches.
+                "single_ingredient_match": safe_bool(sc.get("single_ingredient_match")),
             })
 
         tier_bonus_map = {1: 1.0, 2: 0.75, 3: 0.5, 4: 0.25}
@@ -2891,6 +2885,38 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     blob["raw_actives_count"] = raw_actives_count
     blob["ingredients_dropped_reasons"] = reasons
     _validate_active_count_reconciliation(blob, raw_actives_count, dsld_id_for_validation)
+
+    # Sprint E1.5.X-4 — product availability exposed as a dedicated top-level
+    # field, structured so Flutter renders it in the "Consider" (soft-signal)
+    # layer — NOT a safety warning, NOT a SAFE chip.
+    #
+    # Schema deliberately uses `type` (not `status`) so the field can grow
+    # beyond discontinuation without breaking the contract. Expected future
+    # values: "discontinued", "off_market", "reformulated",
+    # "limited_availability", "seasonal". `display` is a pre-formatted
+    # string so Flutter renders verbatim without locale-dependent date
+    # formatting logic.
+    #
+    # Consumed by Flutter in the "⚠️ Consider" (soft signals) UI layer:
+    #   • Product discontinued · Nov 28, 2017
+    #   • Contains proprietary blend (from proprietary_blend_detail)
+    #
+    # Never styled as alert/warning/red chip. Null for active products so
+    # Flutter can hide the chip entirely.
+    _raw_status = normalize_text(enriched.get("status"))
+    if _raw_status in ("discontinued", "off_market"):
+        _disc_date = safe_str(enriched.get("discontinuedDate"))[:10] or None
+        blob["product_status"] = {
+            "type": _raw_status,
+            "date": _disc_date,
+            "display": (
+                f"Discontinued · {_disc_date}" if _raw_status == "discontinued" and _disc_date
+                else "Discontinued" if _raw_status == "discontinued"
+                else "Off-market"
+            ),
+        }
+    else:
+        blob["product_status"] = None
 
     return blob
 
@@ -3199,50 +3225,209 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     }
 
 
-def compute_goal_matches(enriched: Dict) -> Dict:
-    """Pre-compute which goals this product matches based on synergy clusters.
+_GOAL_MAPPINGS_CACHE: Optional[List[Dict[str, Any]]] = None
 
-    Returns dict with keys: goal_matches, goal_match_confidence
-    """
-    # Load user_goals_to_clusters data
+
+def _load_goal_mappings() -> List[Dict[str, Any]]:
+    """Load and cache goal-mapping contract (schema v6.0.0)."""
+    global _GOAL_MAPPINGS_CACHE
+    if _GOAL_MAPPINGS_CACHE is not None:
+        return _GOAL_MAPPINGS_CACHE
     try:
         goals_path = Path(__file__).parent / "data" / "user_goals_to_clusters.json"
         with open(goals_path, "r", encoding="utf-8") as f:
-            goals_data = json.load(f)
+            data = json.load(f)
+        mappings = safe_list(data.get("user_goal_mappings"))
     except Exception as exc:
         logger.warning("Failed to load user_goals_to_clusters.json: %s", exc)
+        mappings = []
+    _GOAL_MAPPINGS_CACHE = mappings
+    return mappings
+
+
+def _extract_product_cluster_ids(enriched: Dict) -> set:
+    """Flatten product cluster IDs from the enrichment output.
+
+    Source of truth from ``enrich_supplements_v3.py``:
+      ``enriched["formulation_data"]["synergy_clusters"]`` is a list of cluster
+      dicts each containing ``cluster_id`` (e.g. ``"sleep_stack"``).
+
+    Dose-adequacy gate: a cluster counts toward goal matching only when at
+    least one of its ``matched_ingredients`` meets the ingredient's minimum
+    effective dose (``meets_minimum``). This prevents trace-mineral
+    over-matching from promoting clusters to goals — e.g. 17 mg of magnesium
+    in a whey protein powder must not earn the product a "Sleep Quality"
+    match, because the sleep-effective magnesium dose is ~200 mg. Clusters
+    without dose data (no ``matched_ingredients`` key, or all entries with
+    ``meets_minimum`` missing/null) pass through — legacy shape tolerance.
+
+    Also tolerates a ``synergy_detail.clusters_matched`` flat list if present
+    (legacy/alternate path), so callers can feed either the raw enrichment
+    object or the post-build detail blob.
+
+    Returns a deduplicated set of non-empty cluster ID strings.
+    """
+    ids: set = set()
+
+    def _cluster_has_adequate_dose(cluster: Dict) -> bool:
+        """True iff the cluster has no dose data, OR at least one matched
+        ingredient meets its minimum effective dose."""
+        matched = cluster.get("matched_ingredients")
+        if not isinstance(matched, list) or not matched:
+            # No per-ingredient data → trust the cluster (legacy tolerance).
+            return True
+        has_dose_info = False
+        for m in matched:
+            if not isinstance(m, dict):
+                continue
+            meets = m.get("meets_minimum")
+            if meets is None:
+                continue
+            has_dose_info = True
+            if bool(meets):
+                return True
+        # Rich dose data present and no match was adequate → filter out.
+        # If dose data is absent across all matches, be lenient.
+        return not has_dose_info
+
+    # Primary path: formulation_data.synergy_clusters[*].cluster_id
+    formulation = safe_dict(enriched.get("formulation_data"))
+    for cluster in safe_list(formulation.get("synergy_clusters")):
+        if isinstance(cluster, dict):
+            cid = safe_str(cluster.get("cluster_id"))
+            if not cid:
+                continue
+            if not _cluster_has_adequate_dose(cluster):
+                continue
+            ids.add(cid)
+
+    # Fallback path: synergy_detail.clusters_matched (flat list) OR
+    #                synergy_detail.clusters[*].id (detail-blob shape)
+    synergy_detail = safe_dict(enriched.get("synergy_detail"))
+    for cluster in safe_list(synergy_detail.get("clusters_matched")):
+        cid = safe_str(cluster)
+        if cid:
+            ids.add(cid)
+    for cluster in safe_list(synergy_detail.get("clusters")):
+        if isinstance(cluster, dict):
+            cid = safe_str(cluster.get("id") or cluster.get("cluster_id"))
+            if not cid:
+                continue
+            if not _cluster_has_adequate_dose(cluster):
+                continue
+            ids.add(cid)
+
+    return ids
+
+
+def compute_goal_matches(enriched: Dict) -> Dict:
+    """Pre-compute which goals this product matches based on synergy clusters.
+
+    Contract (schema v6.0.0 — pipeline-owned, Flutter consumes results only):
+      * Reads product cluster IDs from the enrichment output
+        (primary: ``formulation_data.synergy_clusters[*].cluster_id``;
+        fallback: ``synergy_detail.clusters_matched`` or
+        ``synergy_detail.clusters[*].id``).
+      * For each goal in ``user_goal_mappings``:
+          - Skip if ANY of ``blocked_by_clusters`` is present in product clusters.
+          - Skip if ``required_clusters`` is non-empty AND none are present.
+          - ``score = matched_weight / max_weight`` (normalized 0.0..1.0).
+          - Include goal iff ``score >= min_match_score``.
+      * Output ``goal_matches`` (list of goal IDs) + ``goal_match_confidence``
+        (average matched score, rounded to 2 decimals).
+
+    Returns dict with keys: ``goal_matches``, ``goal_match_confidence``.
+    """
+    goal_mappings = _load_goal_mappings()
+    if not goal_mappings:
         return {"goal_matches": [], "goal_match_confidence": 0.0}
 
-    synergy_detail = safe_dict(enriched.get("synergy_detail"))
-    product_clusters = safe_list(synergy_detail.get("clusters_matched"))
+    product_clusters = _extract_product_cluster_ids(enriched)
 
     if not product_clusters:
         return {"goal_matches": [], "goal_match_confidence": 0.0}
 
-    matched_goals = []
-    total_confidence = 0.0
+    matched_goals: List[str] = []
+    matched_scores: List[float] = []
 
-    # Check each goal
-    for goal_mapping in safe_list(goals_data.get("user_goal_mappings")):
+    for goal_mapping in goal_mappings:
         if not isinstance(goal_mapping, dict):
             continue
 
         goal_id = safe_str(goal_mapping.get("id"))
+        if not goal_id:
+            continue
+
         cluster_weights = safe_dict(goal_mapping.get("cluster_weights"))
+        if not cluster_weights:
+            continue
 
-        # Calculate weighted match
-        match_weight = 0.0
-        for cluster in product_clusters:
-            cluster_str = safe_str(cluster)
-            if cluster_str in cluster_weights:
-                match_weight += safe_float(cluster_weights[cluster_str], 0)
+        required = {safe_str(c) for c in safe_list(goal_mapping.get("required_clusters")) if safe_str(c)}
+        blocked = {safe_str(c) for c in safe_list(goal_mapping.get("blocked_by_clusters")) if safe_str(c)}
+        min_score = safe_float(goal_mapping.get("min_match_score"), 0.5)
 
-        # Threshold: include goal if match weight >= 0.5
-        if match_weight >= 0.5 and goal_id:
+        # Gate 1: blocked clusters disqualify regardless of score
+        if blocked and (product_clusters & blocked):
+            continue
+
+        # Gate 2: required clusters must have at least one present (when list is non-empty)
+        if required and not (product_clusters & required):
+            continue
+
+        # Gate 3: normalized weighted score must meet threshold.
+        # We compute TWO ratios and use the more generous one:
+        #
+        #   score_full     = matched_weight / max_weight
+        #     Rewards multivitamins for breadth — products covering many of
+        #     the goal's cluster_weights score high.
+        #
+        #   score_required = matched_required_weight / max_required_weight
+        #     Rewards focused single-purpose supplements — a DHA-only product
+        #     that hits the only required cluster (prenatal_pregnancy_support)
+        #     scores 1.0 even though it only covers a narrow slice of the
+        #     full goal profile. Without this, single-ingredient overrides
+        #     fire at the cluster level but never propagate to a goal match.
+        #
+        # Take the max — both signals are valid expressions of "this product
+        # serves this goal". Both still respect the same min_match_score
+        # threshold, so noise gets filtered.
+        max_weight = sum(safe_float(w, 0.0) for w in cluster_weights.values())
+        if max_weight <= 0.0:
+            continue
+        matched_weight = sum(
+            safe_float(cluster_weights.get(c), 0.0)
+            for c in product_clusters
+            if c in cluster_weights
+        )
+        score_full = matched_weight / max_weight
+
+        if required:
+            max_required_weight = sum(
+                safe_float(cluster_weights.get(c), 0.0) for c in required
+            )
+            matched_required_weight = sum(
+                safe_float(cluster_weights.get(c), 0.0)
+                for c in product_clusters
+                if c in required
+            )
+            score_required = (
+                matched_required_weight / max_required_weight
+                if max_required_weight > 0.0
+                else 0.0
+            )
+        else:
+            score_required = score_full
+
+        score = max(score_full, score_required)
+
+        if score >= min_score:
             matched_goals.append(goal_id)
-            total_confidence += match_weight
+            matched_scores.append(score)
 
-    avg_confidence = total_confidence / len(matched_goals) if matched_goals else 0.0
+    if matched_goals:
+        avg_confidence = sum(matched_scores) / len(matched_scores)
+    else:
+        avg_confidence = 0.0
 
     return {
         "goal_matches": matched_goals,

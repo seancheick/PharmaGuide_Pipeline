@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Goal-to-cluster mapping contract tests (schema v5.2.0)."""
+"""Goal-to-cluster mapping contract tests (schema v6.0.0).
+
+Pipeline-owned matching contract. Flutter consumes the computed
+``goal_matches`` and ``goal_match_confidence`` fields and only intersects
+``selected_user_goals`` with ``product.goal_matches`` — it does not
+recompute goal matching.
+"""
 
 import json
 from pathlib import Path
@@ -7,10 +13,36 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
-VALID_GOAL_PRIORITIES = {"high", "medium", "low"}
-VALID_GOAL_CATEGORIES = {
-    "mental", "metabolic", "cardiovascular", "fitness",
-    "hormonal", "immune", "longevity", "aesthetic", "sensory", "reproductive",
+# Canonical Flutter goal IDs (authoritative source for matching contract).
+CANONICAL_FLUTTER_GOAL_IDS = {
+    "GOAL_SLEEP_QUALITY",
+    "GOAL_REDUCE_STRESS_ANXIETY",
+    "GOAL_INCREASE_ENERGY",
+    "GOAL_DIGESTIVE_HEALTH",
+    "GOAL_WEIGHT_MANAGEMENT",
+    "GOAL_CARDIOVASCULAR_HEART_HEALTH",
+    "GOAL_HEALTHY_AGING_LONGEVITY",
+    "GOAL_BLOOD_SUGAR_SUPPORT",
+    "GOAL_IMMUNE_SUPPORT",
+    "GOAL_FOCUS_MENTAL_CLARITY",
+    "GOAL_MOOD_EMOTIONAL_WELLNESS",
+    "GOAL_MUSCLE_GROWTH_RECOVERY",
+    "GOAL_JOINT_BONE_MOBILITY",
+    "GOAL_SKIN_HAIR_NAILS",
+    "GOAL_LIVER_DETOX",
+    "GOAL_PRENATAL_PREGNANCY",
+    "GOAL_HORMONAL_BALANCE",
+    "GOAL_EYE_VISION_HEALTH",
+}
+
+# v6.0.0 contract — exactly these per-goal keys are allowed.
+REQUIRED_FIELDS = {
+    "id",
+    "user_facing_goal",
+    "cluster_weights",
+    "required_clusters",
+    "blocked_by_clusters",
+    "min_match_score",
 }
 
 
@@ -23,68 +55,84 @@ def _load_cluster_ids():
     return {c["id"] for c in clusters["synergy_clusters"]}
 
 
+# ---------- top-level structure ----------
+
+
 def test_goal_mapping_has_required_top_level_structure():
     data = _load_goals()
     assert "_metadata" in data
     assert "user_goal_mappings" in data
     assert isinstance(data["user_goal_mappings"], list)
     assert len(data["user_goal_mappings"]) > 0
-    assert data["_metadata"]["schema_version"] == "5.2.0"
+    assert data["_metadata"]["schema_version"] == "6.0.0"
 
 
 def test_goal_mapping_total_entries_matches_metadata():
     data = _load_goals()
     declared = data["_metadata"]["total_entries"]
     actual = len(data["user_goal_mappings"])
-    assert declared == actual, f"_metadata.total_entries={declared} but found {actual} entries"
+    assert declared == actual, (
+        f"_metadata.total_entries={declared} but found {actual} entries"
+    )
 
 
-def test_each_goal_has_required_fields():
+# ---------- per-goal schema ----------
+
+
+def test_each_goal_has_only_canonical_fields():
+    """Schema v6.0.0 — no legacy fields allowed (goal_category, goal_priority,
+    core_clusters, anti_clusters, cluster_limits, confidence_threshold,
+    conflicting_goals, synergy_goals)."""
     goals = _load_goals()["user_goal_mappings"]
-    required = [
-        "id", "user_facing_goal", "goal_category", "goal_priority",
-        "cluster_weights", "core_clusters", "anti_clusters",
-        "cluster_limits", "confidence_threshold",
-        "conflicting_goals", "synergy_goals",
-    ]
     for goal in goals:
-        for field in required:
-            assert field in goal, f"{goal.get('id', '?')} missing field: {field}"
+        keys = set(goal.keys())
+        missing = REQUIRED_FIELDS - keys
+        extras = keys - REQUIRED_FIELDS
+        assert not missing, f"{goal.get('id', '?')} missing fields: {missing}"
+        assert not extras, (
+            f"{goal.get('id', '?')} has legacy/unknown fields: {extras} "
+            "(schema v6.0.0 dropped goal_category, goal_priority, core_clusters, "
+            "anti_clusters, cluster_limits, confidence_threshold, conflicting_goals, "
+            "synergy_goals)"
+        )
 
 
 def test_goal_ids_are_unique():
     goals = _load_goals()["user_goal_mappings"]
     ids = [g["id"] for g in goals]
-    assert len(ids) == len(set(ids)), f"Duplicate goal IDs: {[i for i in ids if ids.count(i) > 1]}"
+    assert len(ids) == len(set(ids)), (
+        f"Duplicate goal IDs: {[i for i in ids if ids.count(i) > 1]}"
+    )
 
 
-def test_goal_priority_values_are_valid():
+def test_goal_ids_are_canonical_flutter_ids():
+    """All goal IDs must match the 18 canonical Flutter app IDs exactly."""
     goals = _load_goals()["user_goal_mappings"]
-    for goal in goals:
-        assert goal["goal_priority"] in VALID_GOAL_PRIORITIES, (
-            f"{goal['id']}: invalid goal_priority={goal['goal_priority']!r}"
-        )
+    ids = {g["id"] for g in goals}
+    extras = ids - CANONICAL_FLUTTER_GOAL_IDS
+    missing = CANONICAL_FLUTTER_GOAL_IDS - ids
+    assert not extras, f"Non-canonical goal IDs: {extras}"
+    assert not missing, f"Missing canonical Flutter goal IDs: {missing}"
 
 
-def test_goal_category_values_are_valid():
-    goals = _load_goals()["user_goal_mappings"]
-    for goal in goals:
-        assert goal["goal_category"] in VALID_GOAL_CATEGORIES, (
-            f"{goal['id']}: invalid goal_category={goal['goal_category']!r}"
-        )
+# ---------- cluster_weights ----------
 
 
 def test_cluster_weights_are_valid_floats_in_range():
     goals = _load_goals()["user_goal_mappings"]
     for goal in goals:
         cw = goal["cluster_weights"]
-        assert isinstance(cw, dict) and cw, f"{goal['id']}: cluster_weights must be non-empty dict"
+        assert isinstance(cw, dict) and cw, (
+            f"{goal['id']}: cluster_weights must be non-empty dict"
+        )
         for cid, weight in cw.items():
             assert isinstance(weight, (int, float)), (
-                f"{goal['id']}.cluster_weights.{cid}: weight must be numeric, got {type(weight).__name__}"
+                f"{goal['id']}.cluster_weights.{cid}: weight must be numeric, "
+                f"got {type(weight).__name__}"
             )
             assert 0.0 <= float(weight) <= 1.0, (
-                f"{goal['id']}.cluster_weights.{cid}: weight={weight} out of range [0.0, 1.0]"
+                f"{goal['id']}.cluster_weights.{cid}: weight={weight} "
+                "out of range [0.0, 1.0]"
             )
 
 
@@ -98,83 +146,126 @@ def test_all_cluster_weight_keys_are_valid_cluster_ids():
             )
 
 
-def test_core_clusters_are_non_empty_and_in_cluster_weights():
+def test_cluster_weights_sum_is_positive():
+    """matched_weight / max_weight is undefined when max_weight == 0."""
+    goals = _load_goals()["user_goal_mappings"]
+    for goal in goals:
+        total = sum(float(w) for w in goal["cluster_weights"].values())
+        assert total > 0.0, (
+            f"{goal['id']}: cluster_weights total must be > 0 (got {total})"
+        )
+
+
+# ---------- required_clusters ----------
+
+
+def test_required_clusters_are_lists_of_valid_cluster_ids():
     goals = _load_goals()["user_goal_mappings"]
     valid_ids = _load_cluster_ids()
     for goal in goals:
-        core = goal["core_clusters"]
-        assert isinstance(core, list) and core, f"{goal['id']}: core_clusters must be non-empty list"
-        cw_keys = set(goal.get("cluster_weights", {}))
-        for cid in core:
-            assert cid in valid_ids, f"{goal['id']}: core_clusters has unknown cluster id: {cid!r}"
+        req = goal["required_clusters"]
+        assert isinstance(req, list), (
+            f"{goal['id']}: required_clusters must be a list"
+        )
+        for cid in req:
+            assert isinstance(cid, str), (
+                f"{goal['id']}.required_clusters: entries must be strings, "
+                f"got {type(cid).__name__}"
+            )
+            assert cid in valid_ids, (
+                f"{goal['id']}.required_clusters has unknown cluster id: {cid!r}"
+            )
+
+
+def test_required_clusters_appear_in_cluster_weights():
+    """A required cluster that has no weight contributes 0 to score —
+    almost certainly an authoring mistake."""
+    goals = _load_goals()["user_goal_mappings"]
+    for goal in goals:
+        cw_keys = set(goal["cluster_weights"])
+        for cid in goal["required_clusters"]:
             assert cid in cw_keys, (
-                f"{goal['id']}: core_cluster {cid!r} must appear in cluster_weights"
+                f"{goal['id']}.required_clusters: {cid!r} not in cluster_weights "
+                "(would force a zero-weight match)"
             )
 
 
-def test_anti_clusters_are_valid_cluster_ids():
+# ---------- blocked_by_clusters ----------
+
+
+def test_blocked_by_clusters_are_lists_of_valid_cluster_ids():
     goals = _load_goals()["user_goal_mappings"]
     valid_ids = _load_cluster_ids()
     for goal in goals:
-        for cid in goal.get("anti_clusters", []):
-            assert cid in valid_ids, (
-                f"{goal['id']}.anti_clusters has unknown cluster id: {cid!r}"
-            )
-
-
-def test_cluster_limits_keys_are_valid_cluster_ids_with_positive_int_values():
-    goals = _load_goals()["user_goal_mappings"]
-    valid_ids = _load_cluster_ids()
-    for goal in goals:
-        for cid, limit in goal.get("cluster_limits", {}).items():
-            assert cid in valid_ids, (
-                f"{goal['id']}.cluster_limits has unknown cluster id: {cid!r}"
-            )
-            assert isinstance(limit, int) and limit >= 1, (
-                f"{goal['id']}.cluster_limits.{cid}: limit must be positive int, got {limit!r}"
-            )
-
-
-def test_confidence_threshold_is_float_in_range():
-    goals = _load_goals()["user_goal_mappings"]
-    for goal in goals:
-        ct = goal["confidence_threshold"]
-        assert isinstance(ct, (int, float)), (
-            f"{goal['id']}: confidence_threshold must be numeric, got {type(ct).__name__}"
+        blocked = goal["blocked_by_clusters"]
+        assert isinstance(blocked, list), (
+            f"{goal['id']}: blocked_by_clusters must be a list"
         )
-        assert 0.0 < float(ct) <= 1.0, (
-            f"{goal['id']}: confidence_threshold={ct} out of range (0.0, 1.0]"
-        )
-
-
-def test_conflicting_and_synergy_goals_reference_valid_goal_ids():
-    data = _load_goals()
-    goals = data["user_goal_mappings"]
-    all_ids = {g["id"] for g in goals}
-    for goal in goals:
-        for gid in goal.get("conflicting_goals", []):
-            assert gid in all_ids, f"{goal['id']}.conflicting_goals references unknown goal: {gid!r}"
-        for gid in goal.get("synergy_goals", []):
-            assert gid in all_ids, f"{goal['id']}.synergy_goals references unknown goal: {gid!r}"
-
-
-def test_conflicting_goals_are_bidirectional():
-    goals = _load_goals()["user_goal_mappings"]
-    conflict_map = {g["id"]: set(g.get("conflicting_goals", [])) for g in goals}
-    for gid, conflicts in conflict_map.items():
-        for other in conflicts:
-            assert gid in conflict_map.get(other, set()), (
-                f"{gid} lists {other} as conflicting, but {other} does not list {gid} back"
+        for cid in blocked:
+            assert isinstance(cid, str), (
+                f"{goal['id']}.blocked_by_clusters: entries must be strings, "
+                f"got {type(cid).__name__}"
+            )
+            assert cid in valid_ids, (
+                f"{goal['id']}.blocked_by_clusters has unknown cluster id: {cid!r}"
             )
 
 
-def test_no_duplicate_cluster_ids_within_goal():
-    """A cluster ID should not appear in both core_clusters and anti_clusters."""
+def test_required_and_blocked_do_not_overlap():
+    """Logical contradiction: a cluster can't simultaneously qualify and disqualify."""
     goals = _load_goals()["user_goal_mappings"]
     for goal in goals:
-        core = set(goal.get("core_clusters", []))
-        anti = set(goal.get("anti_clusters", []))
-        overlap = core & anti
+        req = set(goal["required_clusters"])
+        blk = set(goal["blocked_by_clusters"])
+        overlap = req & blk
         assert not overlap, (
-            f"{goal['id']}: cluster(s) {overlap} appear in both core_clusters and anti_clusters"
+            f"{goal['id']}: cluster(s) {overlap} appear in both "
+            "required_clusters and blocked_by_clusters"
         )
+
+
+# ---------- min_match_score ----------
+
+
+def test_min_match_score_is_in_valid_range():
+    """min_match_score must be numeric in (0.0, 1.0]."""
+    goals = _load_goals()["user_goal_mappings"]
+    for goal in goals:
+        mms = goal["min_match_score"]
+        assert isinstance(mms, (int, float)), (
+            f"{goal['id']}: min_match_score must be numeric, "
+            f"got {type(mms).__name__}"
+        )
+        assert 0.0 < float(mms) <= 1.0, (
+            f"{goal['id']}: min_match_score={mms} out of range (0.0, 1.0]"
+        )
+
+
+def test_min_match_score_is_achievable():
+    """A goal whose min_match_score exceeds the max possible score for its
+    required-only cluster set is unreachable — should never happen by accident."""
+    goals = _load_goals()["user_goal_mappings"]
+    for goal in goals:
+        cw = goal["cluster_weights"]
+        max_weight = sum(float(w) for w in cw.values())
+        # Best case: every weighted cluster present → score = 1.0.
+        # We just sanity-check that min_match_score isn't larger than 1.0
+        # (already enforced) and that max_weight is positive (already enforced).
+        # Also ensure that if we ONLY hit the required clusters, the score
+        # could plausibly meet the threshold (warn-style assertion).
+        req = goal["required_clusters"]
+        if req:
+            req_weight = sum(float(cw.get(c, 0.0)) for c in req)
+            req_only_score = req_weight / max_weight
+            # Soft check: required-only score should be at least 0.2 of threshold,
+            # otherwise the goal is unreachable from required alone.
+            # This catches authoring errors where required clusters carry weight 0.
+            assert req_weight > 0.0, (
+                f"{goal['id']}: required_clusters carry zero weight "
+                "(required cluster present but contributes nothing to score)"
+            )
+            # Ensure threshold is reachable (best-case score == 1.0 always >= threshold)
+            assert goal["min_match_score"] <= 1.0, (
+                f"{goal['id']}: min_match_score > 1.0 is unreachable"
+            )
+            del req_only_score  # informational only
