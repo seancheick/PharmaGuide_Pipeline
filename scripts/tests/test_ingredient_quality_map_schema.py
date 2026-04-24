@@ -141,6 +141,17 @@ class TestAliasQuality:
             'gamma-oryzanol', 'oryzanol', 'inositol hexaphosphate', 'ip6',
             # Naringin / naringenin parent-child
             'naringin',
+            # ─── Added by IQM audit 2026-04-24 — Phase 2 whitelist expansion ───
+            'algal dha',  # algae_oil + dha (source + molecule)
+            'dha from algae',  # algae_oil + dha (source + molecule)
+            # ─── Added by IQM audit 2026-04-24 — Step 3b post-dedup residuals ───
+            'probiotics',  # probiotic_unspecified (deprecated) + probiotics umbrella
+            'probiotic',  # probiotic_unspecified (deprecated) + probiotics umbrella
+            'probiotic bacteria',  # probiotic_unspecified (deprecated) + probiotics umbrella
+            'glutamate',  # glutamate (pending audit) + l_glutamic_acid
+            'monosodium glutamate',  # glutamate (pending audit) + l_glutamic_acid
+            'msg',  # glutamate (pending audit) + l_glutamic_acid
+            'bovine pancreas',  # digestive_enzymes + organ_extracts (shared animal source material)
         }
 
         alias_map = defaultdict(list)

@@ -982,59 +982,6 @@
     "cui": "C0027996",
     "rxcui": "7393",
     "forms": {
-      "nicotinamide riboside": {
-        "bio_score": 14,
-        "natural": false,
-        "score": 14,
-        "absorption": "excellent",
-        "notes": "An advanced NAD+ precursor (brand name: Niagen/TruNiagen). Efficiently raises cellular NAD+ levels without causing the niacin flush. Widely studied in longevity and metabolic health research.",
-        "aliases": [
-          "NAD booster",
-          "Niagen NR",
-          "nicotinamide riboside supplement",
-          "NAD booster supplement",
-          "Niagen NR supplement",
-          "Nicotinamide Riboside Hydrogen Malate"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
-        },
-        "external_ids": {
-          "unii": "0I8H2M0L7N"
-        }
-      },
-      "nicotinamide mononucleotide": {
-        "bio_score": 13,
-        "natural": false,
-        "score": 13,
-        "absorption": "very good",
-        "notes": "A direct NAD+ precursor (NMN) popular in anti-aging research. Converts to NAD+ in one enzymatic step. Highly absorbable, with growing clinical evidence for energy metabolism and cellular repair.",
-        "aliases": [
-          "beta-nicotinamide mononucleotide",
-          "nad+ direct precursor",
-          "beta-NMN",
-          "nicotinamide mononucleotide supplement",
-          "beta-nicotinamide mononucleotide supplement",
-          "nad+ direct precursor supplement",
-          "beta-NMN supplement"
-        ],
-        "dosage_importance": 1.5,
-        "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very good"
-        },
-        "external_ids": {
-          "unii": "2KG6QX4W0V"
-        }
-      },
       "inositol hexanicotinate": {
         "bio_score": 12,
         "natural": false,
@@ -13357,7 +13304,9 @@
           "lab4 probiotics",
           "l acidophilus la-5(r) and bifidobacterium bb-12(r)",
           "l-acidophilus la-5(r) and bifidobacterium bb-12(r)",
-          "ultra probiotics"
+          "ultra probiotics",
+          "Probiotic",
+          "Probiotic Bacteria"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14080,8 +14029,6 @@
           "serinaid phosphatidylserine",
           "leci-ps phosphatidyl serine",
           "leci-ps(r) phosphatidyl serine",
-          "Soy",
-          "Soybean",
           "soy-derived",
           "soy derived phosphatidylserine",
           "soy lecithin phosphatidylserine"
@@ -16209,7 +16156,10 @@
           "glutamic acid",
           "l-glutamate",
           "L-Glutamic Acid Hydrochloride",
-          "l-glutamic acid hcl"
+          "l-glutamic acid hcl",
+          "glutamate",
+          "monosodium glutamate",
+          "msg"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -32545,7 +32495,13 @@
           "niagen supplement",
           "vitamin b3 advanced supplement",
           "vit b3 advanced",
-          "nicotinamide riboside chloride"
+          "nicotinamide riboside chloride",
+          "NAD booster",
+          "Niagen NR",
+          "nicotinamide riboside supplement",
+          "NAD booster supplement",
+          "Niagen NR supplement",
+          "Nicotinamide Riboside Hydrogen Malate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
@@ -32634,7 +32590,14 @@
         "notes": "Direct NAD+ precursor. Oral NMN effectively raises blood NAD+ at 250-500 mg/day, but most undergoes extensive first-pass hepatic metabolism and gut microbiota-mediated deamidation to nicotinic acid (Science Advances 2024, Kim et al.). Only a small portion is directly absorbed intact from the small intestine (PMC11205942). Rapidly absorbed when taken orally with detectable plasma increases within minutes in animal models, but human systemic bioavailability of intact NMN remains unquantified.",
         "aliases": [
           "nmn",
-          "nmn supplement"
+          "nmn supplement",
+          "beta-nicotinamide mononucleotide",
+          "nad+ direct precursor",
+          "beta-NMN",
+          "nicotinamide mononucleotide supplement",
+          "beta-nicotinamide mononucleotide supplement",
+          "nad+ direct precursor supplement",
+          "beta-NMN supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37769,7 +37732,7 @@
     },
     "statistics": {
       "total_parents": 610,
-      "total_forms": 1381,
+      "total_forms": 1379,
       "total_form_aliases": 11983,
       "parents_with_parent_aliases": 186,
       "parents_with_contains_aliases": 0,
@@ -37850,6 +37813,26 @@
           "54 cross-parent alias collisions pending whitelist triage",
           "bio_score PubMed re-verification on 610 parents (quarterly batched effort)",
           "Supporting data file external API audit (FDA/NIH/EWG) — separate session"
+        ]
+      },
+      "5.0.2": {
+        "date": "2026-04-24",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Steps 1-3 (alias triage, UNII cross-check, architectural dedup)",
+        "changes": [
+          "Step 1: Removed 4 bug aliases from wrong parents (NR + NMN from nad+, Soy + Soybean from PS)",
+          "Step 1: Added 2 new aliases to ALLOWED_CROSS_ALIASES whitelist (algal dha, dha from algae)",
+          "Step 2 UNII cross-check (offline cache): 4 UNII collisions found; 3 confirmed as architectural duplicates, 1 (calcium/dicalcium_phosphate) verified as legit shared salt",
+          "Step 3 CASE 5: Removed bogus \"naringin\" alias from naringenin::naringenin form (naringin is a distinct glycoside compound)",
+          "Step 3 CASE 1: Deleted dead vitamin_b3_niacin::nicotinamide mononucleotide form; transferred aliases to nmn::beta-nicotinamide mononucleotide (enricher already routes to nmn parent per test_enrichment_regressions)",
+          "Step 3 CASE 2: Deleted dead vitamin_b3_niacin::nicotinamide riboside form; transferred aliases to nicotinamide_riboside::niagen form",
+          "Step 3 CASE 4: Merged aliases from probiotic_unspecified form+parent → probiotics::probiotics (unspecified) form; flagged probiotic_unspecified parent deprecated_in_favor_of=probiotics (parent kept alive for product-output compat)",
+          "Step 3 CASE 6: Transferred MSG/glutamate aliases from glutamate → l_glutamic_acid; flagged natural=True divergence on glutamate parent for clinical review",
+          "Metadata refresh: parents 610→610, forms 1381→1379, form_aliases 11983→11983"
+        ],
+        "deferred_for_future_audit": [
+          "Step 3 CASE 3 (vanadium naming refactor): `vanadyl_sulfate` parent contains non-sulfate vanadium compounds (BMOV, BPOV, aspartate, citrate); rename to `vanadium_compounds` and merge `vanadium` parent into it — requires product-output canonical_id migration",
+          "Full deletion of probiotic_unspecified parent — pending pipeline rebuild to re-route product outputs to probiotics parent",
+          "Full deletion of glutamate parent — pending clinical signoff on natural flag + pipeline rebuild to re-route product outputs to l_glutamic_acid"
         ]
       }
     },
@@ -38742,7 +38725,9 @@
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
-      "confidence": "high"
+      "confidence": "high",
+      "deprecated_in_favor_of": "probiotics",
+      "deprecation_note": "IQM audit 2026-04-24 (Step 3): architectural duplicate of the `probiotics` umbrella parent. All aliases have been replicated in probiotics::probiotics (unspecified). Parent kept alive for backward-compat with product output canonical_ids; full deletion scheduled for next audit after pipeline rebuild."
     },
     "category_enum": "probiotics",
     "cui_note": "No UMLS entry for botanical/novel compound",
@@ -59357,7 +59342,14 @@
       "last_reviewed_at": "2026-04-14"
     },
     "external_ids": {},
-    "aliases": []
+    "aliases": [],
+    "clinical_review_flags": [
+      {
+        "date": "2026-04-24",
+        "source": "IQM_AUDIT_MASTER_PROMPT.md Step 3",
+        "issue": "Natural=True flag may be incorrect. Per prompt §51: \"Most supplemental amino acids = False (fermentation-synthesized).\" l_glutamic_acid parent correctly has natural=False. glutamate parent should be audited by clinical team and either corrected to natural=False or merged into l_glutamic_acid."
+      }
+    ]
   },
   "oleic_acid": {
     "standard_name": "Oleic Acid",
@@ -59532,9 +59524,7 @@
         "notes": "Supplemented primarily via precursors NMN (nicotinamide mononucleotide) and NR (nicotinamide riboside) which boost intracellular NAD+ levels. Direct oral NAD+ has limited bioavailability. Typical NMN dose 250-1000 mg/day.",
         "aliases": [
           "nad",
-          "nicotinamide adenine dinucleotide",
-          "nicotinamide mononucleotide",
-          "nr"
+          "nicotinamide adenine dinucleotide"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -59580,7 +59570,6 @@
         "absorption": "low (~5%)",
         "notes": "Grapefruit-derived flavanone; potent CYP3A4 inhibitor (grapefruit effect). Antioxidant and hepatoprotective in preclinical studies. Caution: may alter drug metabolism.",
         "aliases": [
-          "naringin",
           "grapefruit flavonoid",
           "grapefruit extract"
         ],
