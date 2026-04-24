@@ -468,7 +468,7 @@
         "alert_body": "Berberine carries neonatal bilirubin and kernicterus concerns. If you are pregnant or breastfeeding, do not use berberine-containing supplements unless specifically directed by your clinician.",
         "informational_note": "Berberine has neonatal safety concerns \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding."
       },
-      "last_reviewed": "2026-04-23",
+      "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team",
       "dose_thresholds": [
         {
@@ -480,7 +480,7 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "caution",
-          "note": "RCT-aligned cutoff: Yin 2008 (PMID 18397984) used 500 mg TID (1500 mg/day) vs metformin 500 mg TID; this is the clinical dosing range that reliably produces metformin-equivalent HbA1c/FPG reduction. Below 1500 mg/day still warrants prescriber discussion (caution) but does not earn an avoid verdict on glycemic-effect grounds alone."
+          "note": "Clinical trials typically use 1,000\u20131,500 mg/day (Yin 2008 PMID 18397984, Dong 2012 meta-analysis). This threshold starts the avoid alert at the upper end of the evidence-based dosing range. Below that range, prescriber discussion is still appropriate, but the glycemic-effect signal is less likely to justify an avoid-level alert on dose alone."
         },
         {
           "scope": "drug_class",
@@ -491,7 +491,7 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "caution",
-          "note": "Additive hypoglycemia risk with sulfonylureas/insulin/GLP-1RAs becomes clinically significant at metformin-equivalent doses (\u22651500 mg/day per Yin 2008 and Dong 2012 meta-analysis). Sub-1500 mg/day use in compound formulations still warrants prescriber oversight."
+          "note": "Additive hypoglycemia risk with sulfonylureas/insulin/GLP-1RAs is clinically plausible across the 1,000\u20131,500 mg/day evidence-based dosing band; this threshold starts the avoid alert at the upper end of that band. Sub-1500 mg/day use in compound formulations still warrants prescriber oversight (caution)."
         }
       ]
     },
