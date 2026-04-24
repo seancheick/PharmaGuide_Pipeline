@@ -2446,6 +2446,29 @@ class SupplementEnricherV3:
         self._mark_parent_total_rows(ingredients_scorable)
 
         # =================================================================
+        # SPRINT E1.23 — ABSORPTION-ENHANCER SUB-THRESHOLD DEMOTION
+        # =================================================================
+        # Demote bioavailability aids (piperine ≤10 mg, etc.) from the
+        # scorable list so they don't (a) drag down the A1 form-score
+        # average and (b) bump a single-nutrient product into the
+        # 'targeted' supp_type bucket (which would make it miss A6).
+        #
+        # Per-enhancer thresholds come from absorption_enhancers.json
+        # (v5.1.0 adds optional ``non_scorable_when_sub_threshold`` field).
+        # Only enhancers with no independent nutritional value are tagged
+        # — never Vitamin C, Vitamin D, MK7, amino acids, etc.
+        #
+        # The ingredient stays in product["activeIngredients"] so synergy
+        # cluster matching (e.g. curcumin_absorption fires on curcumin +
+        # piperine pair) and interaction-rule analysis (piperine is a real
+        # CYP modulator) remain intact.
+        ingredients_scorable, all_quality_data, demoted_enhancers = (
+            self._apply_absorption_enhancer_demotion(
+                ingredients_scorable, all_quality_data, ingredients_skipped
+            )
+        )
+
+        # =================================================================
         # BLEND-ONLY PRODUCT DETECTION
         # =================================================================
         total_scorable = len(ingredients_scorable)
@@ -2519,7 +2542,125 @@ class SupplementEnricherV3:
 
             # Quick-lookup normalized names for scoring efficiency
             "scorable_ingredient_names_normalized": list(scorable_names_normalized),
+            # Sprint E1.23 — ingredients demoted from scorable because they
+            # are sub-threshold absorption enhancers (e.g. BioPerine 5 mg).
+            # Carried for audit; Flutter can surface them as info chips.
+            "demoted_absorption_enhancers": demoted_enhancers,
         }
+
+    # -------------------------------------------------------------------------
+    # Sprint E1.23 — Absorption-enhancer sub-threshold demotion
+    # -------------------------------------------------------------------------
+    def _apply_absorption_enhancer_demotion(
+        self,
+        ingredients_scorable: List[Dict],
+        all_quality_data: List[Dict],
+        ingredients_skipped: List[Dict],
+    ) -> Tuple[List[Dict], List[Dict], List[Dict]]:
+        """Demote absorption enhancers from the scorable list when their dose
+        is at or below the enhancer's ``non_scorable_when_sub_threshold``.
+
+        Returns: (filtered_scorable, updated_all_quality_data, demoted_list).
+
+        Each demoted entry carries:
+          - role_classification = "recognized_non_scorable"
+          - score_included = False
+          - demotion_reason = "absorption_enhancer_sub_threshold"
+          - demotion_ref = "<enhancer_id> (@ <threshold_mg> mg)"
+
+        The ingredient is NOT removed from product["activeIngredients"] —
+        only from the scorable-count inputs. Synergy-cluster matching and
+        drug-interaction analysis still see it.
+        """
+        enhancers_db = self.databases.get('absorption_enhancers', {}) or {}
+        enhancers = enhancers_db.get('absorption_enhancers', []) if isinstance(enhancers_db, dict) else []
+
+        # Build a normalized name -> (enhancer_id, threshold_mg, rationale)
+        # lookup for enhancers that opt-in to sub-threshold demotion.
+        lookup: Dict[str, Tuple[str, float, str]] = {}
+        for entry in enhancers:
+            if not isinstance(entry, dict):
+                continue
+            rule = entry.get('non_scorable_when_sub_threshold')
+            if not isinstance(rule, dict):
+                continue
+            try:
+                threshold_mg = float(rule.get('threshold_mg'))
+            except (TypeError, ValueError):
+                continue
+            eid = entry.get('id', 'ENHANCER')
+            rationale = rule.get('rationale', '')
+            std_name = entry.get('standard_name', '')
+            aliases = entry.get('aliases', []) or []
+            terms = [std_name] + list(aliases)
+            for term in terms:
+                if isinstance(term, str) and term.strip():
+                    lookup[self._normalize_text(term)] = (eid, threshold_mg, rationale)
+
+        if not lookup:
+            return ingredients_scorable, all_quality_data, []
+
+        # mg-equivalent for dose comparison. Enhancers use mg only.
+        def _dose_mg(row: Dict) -> Optional[float]:
+            qty = row.get('quantity')
+            unit = (row.get('unit') or '').strip().lower()
+            if qty is None or unit == '':
+                return None
+            try:
+                qty_f = float(qty)
+            except (TypeError, ValueError):
+                return None
+            if unit in {'mg', 'milligram', 'milligrams'}:
+                return qty_f
+            if unit in {'g', 'gram', 'grams'}:
+                return qty_f * 1000.0
+            if unit in {'mcg', 'microgram', 'micrograms', 'ug', 'µg'}:
+                return qty_f / 1000.0
+            return None  # unsupported unit — be conservative, keep scorable
+
+        def _match_enhancer(row: Dict) -> Optional[Tuple[str, float, str]]:
+            for key in ('standard_name', 'name', 'raw_source_text'):
+                v = row.get(key)
+                if not isinstance(v, str) or not v.strip():
+                    continue
+                hit = lookup.get(self._normalize_text(v))
+                if hit:
+                    return hit
+            return None
+
+        demoted: List[Dict] = []
+        filtered_scorable: List[Dict] = []
+        for row in ingredients_scorable:
+            hit = _match_enhancer(row)
+            if not hit:
+                filtered_scorable.append(row)
+                continue
+            eid, threshold_mg, rationale = hit
+            dose = _dose_mg(row)
+            if dose is None or dose > threshold_mg:
+                # Above threshold OR unknown unit — keep scorable.
+                filtered_scorable.append(row)
+                continue
+
+            # Demote. Mutate in place so all_quality_data sees it too.
+            row['role_classification'] = 'recognized_non_scorable'
+            row['score_included'] = False
+            row['demotion_reason'] = 'absorption_enhancer_sub_threshold'
+            row['demotion_ref'] = f"{eid} (@ \u2264 {threshold_mg} mg)"
+            row['demotion_rationale'] = rationale
+            demoted.append({
+                'name': row.get('name'),
+                'standard_name': row.get('standard_name'),
+                'quantity': row.get('quantity'),
+                'unit': row.get('unit'),
+                'enhancer_id': eid,
+                'threshold_mg': threshold_mg,
+                'rationale': rationale,
+            })
+
+        # all_quality_data shares row refs with ingredients_scorable (same dicts)
+        # so mutations above propagate. Return the updated structures.
+        return filtered_scorable, all_quality_data, demoted
 
     def _has_valid_therapeutic_dose(self, ingredient: Dict) -> Tuple[bool, bool]:
         """
@@ -12256,6 +12397,19 @@ class SupplementEnricherV3:
 
             # Section A: Ingredient Quality
             enriched["ingredient_quality_data"] = self._collect_ingredient_quality_data(product)
+
+            # Sprint E1.23 — Re-classify supplement_type using the
+            # post-demotion scorable set. The first _classify_supplement_type
+            # call above runs on raw activeIngredients and counts absorption
+            # enhancers (e.g. BioPerine 5mg) as actives, bumping 1-ingredient
+            # products into 'targeted' and blocking A6. After
+            # _collect_ingredient_quality_data runs (and applies the
+            # enhancer demotion inside it), the classifier reads
+            # ingredient_quality_data.ingredients[*].role_classification
+            # and correctly skips demoted rows, yielding single_nutrient for
+            # KSM-66 + BioPerine, Curcumin + sub-threshold piperine, etc.
+            enriched["supplement_type"] = self._classify_supplement_type(enriched)
+
             enriched["delivery_data"] = self._collect_delivery_data(product)
             enriched["absorption_data"] = self._collect_absorption_data(product)
             enriched["formulation_data"] = self._collect_formulation_data(product)

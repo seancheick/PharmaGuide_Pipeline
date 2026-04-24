@@ -2,9 +2,12 @@
   "_metadata": {
     "description": "Absorption enhancers that improve nutrient bioavailability",
     "purpose": "bioavailability_bonuses",
-    "schema_version": "5.0.0",
-    "last_updated": "2026-02-20",
-    "total_entries": 23
+    "schema_version": "5.1.0",
+    "last_updated": "2026-04-24",
+    "total_entries": 23,
+    "schema_notes": {
+      "non_scorable_when_sub_threshold": "OPTIONAL per-enhancer field added in v5.1.0. When present, the enricher will demote the ingredient to role_classification='recognized_non_scorable' and score_included=false IF its dose is at or below threshold_mg. This ensures a pure bioavailability aid (e.g. BioPerine 5 mg) does not (a) drag down the A1 ingredient-quality average and (b) bump a single-nutrient product into the 'targeted' supp_type bucket (which would then miss the A6 single-ingredient efficiency bonus). The ingredient REMAINS in activeIngredients so synergy-cluster matching and interaction-rule analysis are unchanged. Only use on enhancers with no independent nutritional value — never on Vitamin C, Vitamin D, MK7, amino acids, digestive enzymes, probiotics, prebiotics, garlic, aloe vera, etc. which are therapeutic in their own right."
+    }
   },
   "absorption_enhancers": [
     {
@@ -57,7 +60,11 @@
       "boost_factor": "20-2000% depending on nutrient",
       "score_contribution": 5,
       "category": "absorption enhancer",
-      "standard_name": "Black Pepper"
+      "standard_name": "Black Pepper",
+      "non_scorable_when_sub_threshold": {
+        "threshold_mg": 10,
+        "rationale": "Piperine ≤10 mg is bioavailability-aid dosing (the standard BioPerine usage pattern). Above 10 mg it appears in thermogenic/metabolic blends where it is dosed as a therapeutic active and should remain scorable."
+      }
     },
     {
       "id": "ENHANCER_MK7_ALL_TRANS",
