@@ -689,6 +689,10 @@ class SupplementEnricherV3:
                 "percentile_categories": "data/percentile_categories.json",
                 "clinical_risk_taxonomy": "data/clinical_risk_taxonomy.json",
                 "ingredient_interaction_rules": "data/ingredient_interaction_rules.json",
+                # Cluster-matching alias map (canonical → variants). Used by
+                # _collect_synergy_data to recover products where DSLD parser
+                # writes "coenzyme q10" but the cluster ingredient is "coq10".
+                "cluster_ingredient_aliases": "data/cluster_ingredient_aliases.json",
             }
 
         # Add clinically_relevant_strains if not present
@@ -6293,12 +6297,219 @@ class SupplementEnricherV3:
 
         return False
 
+    # -------------------------------------------------------------------------
+    # Solution B — Product-name fallback synthesizer
+    # -------------------------------------------------------------------------
+    # Strict allowlist of (regex, canonical_name, default_unit) for products
+    # whose name unambiguously declares a clinical headline nutrient + dose.
+    # MUST be biochem-specific. NEVER add generic marketing terms ("support",
+    # "complex", "blend", "formula", "boost"). Anything ending in those is
+    # rejected by the synthesizer as ambiguous.
+    _NAME_FALLBACK_PATTERNS: List[Tuple[str, str, str]] = [
+        (r'\bDHA\s+([\d,]+\.?\d*)\s*(mg|g)\b',           'DHA',           'mg'),
+        (r'\bEPA\s+([\d,]+\.?\d*)\s*(mg|g)\b',           'EPA',           'mg'),
+        (r'\bMagnesium\s+([\d,]+\.?\d*)\s*(mg|g)\b',     'Magnesium',     'mg'),
+        (r'\bCalcium\s+([\d,]+\.?\d*)\s*(mg|g)\b',       'Calcium',       'mg'),
+        (r'\bIron\s+([\d,]+\.?\d*)\s*(mg|mcg)\b',        'Iron',          'mg'),
+        (r'\bZinc\s+([\d,]+\.?\d*)\s*(mg|mcg)\b',        'Zinc',          'mg'),
+        (r'\bVitamin\s+C\s+([\d,]+\.?\d*)\s*(mg|g)\b',   'Vitamin C',     'mg'),
+        (r'\bVitamin\s+D[3]?\s+([\d,]+\.?\d*)\s*(iu|mcg|mg)\b', 'Vitamin D3', 'IU'),
+        (r'\bVitamin\s+B[\s-]*12\s+([\d,]+\.?\d*)\s*(mcg|mg)\b', 'Vitamin B12', 'mcg'),
+        (r'\bCoQ[\s-]?10\s+([\d,]+\.?\d*)\s*(mg|g)\b',   'CoQ10',         'mg'),
+        (r'\bMelatonin\s+([\d.,]+)\s*(mg|mcg)\b',        'Melatonin',     'mg'),
+        (r'\bBiotin\s+([\d,]+\.?\d*)\s*(mcg|mg)\b',      'Biotin',        'mcg'),
+        (r'\bCreatine\s+([\d.,]+)\s*(g|mg)\b',           'Creatine',      'g'),
+        (r'\bCollagen\s+([\d,]+\.?\d*)\s*(mg|g)\b',      'Collagen',      'mg'),
+        (r'\bAshwagandha\s+([\d,]+\.?\d*)\s*(mg|g)\b',   'Ashwagandha',   'mg'),
+        (r'\bTurmeric\s+([\d,]+\.?\d*)\s*(mg|g)\b',      'Turmeric',      'mg'),
+        (r'\bCurcumin\s+([\d,]+\.?\d*)\s*(mg|g)\b',      'Curcumin',      'mg'),
+    ]
+
+    # Marketing/composition words that signal an ambiguous product (multi-
+    # ingredient blend, marketing-positioned). When the product name ends
+    # with one of these, we do NOT synthesize even if a pattern matches.
+    _NAME_FALLBACK_BLOCK_SUFFIXES: Tuple[str, ...] = (
+        'support', 'complex', 'blend', 'formula', 'boost', 'matrix',
+        'system', 'pack', 'bundle', 'kit',
+    )
+
+    def _synthesize_ingredients_from_name(
+        self,
+        product: Dict,
+        active_ingredients: List[Dict],
+    ) -> Tuple[List[Dict], List[Dict]]:
+        """Solution B — Inject a synthetic active ingredient when the product
+        name declares an unambiguous biochem nutrient + dose AND the parser
+        clearly missed it (sparse activeIngredients).
+
+        Gates (ALL must hold):
+          1. ``len(active_ingredients) <= 2``  (sparse parse signal)
+          2. Product name contains a strict-allowlist nutrient + dose pattern
+          3. The matched canonical nutrient is NOT already in activeIngredients
+             (under any spelling)
+          4. Product name does not end in a marketing/composition word
+             ('Complex', 'Support', 'Blend', etc.)
+          5. Single-pattern cap when actives>0 (only synthesize the FIRST
+             named nutrient if some actives already exist; avoids stacking
+             inferred + parsed for compound products like
+             "Calcium 600 mg + D Plus Minerals")
+
+        Returns (synthetic_active_ingredients, synthetic_display_entries).
+        Each synthetic ingredient carries ``provenance="product_name_fallback"``
+        and ``confidence="inferred_high"`` for downstream audit.
+        """
+        if len(active_ingredients) > 2:
+            return [], []
+
+        name = (product.get('product_name') or '').strip()
+        if not name:
+            return [], []
+
+        # Block ambiguous marketing names (rule #4)
+        name_lower = name.lower()
+        for blocker in self._NAME_FALLBACK_BLOCK_SUFFIXES:
+            if name_lower.endswith(' ' + blocker) or name_lower.endswith(' ' + blocker + 's'):
+                return [], []
+
+        # Build the set of canonical nutrient names already present in actives
+        # (under ANY spelling we know). We check (a) exact normalize matches,
+        # (b) cluster aliases.
+        alias_db = self.databases.get('cluster_ingredient_aliases', {}) or {}
+        alias_map = alias_db.get('aliases', {}) if isinstance(alias_db, dict) else {}
+        # canonical_norm → set of variant_norm (including canonical itself)
+        all_known_terms_for_canon: Dict[str, set] = {}
+        for canon, variants in alias_map.items():
+            if not isinstance(canon, str): continue
+            terms = {self._normalize_text(canon)}
+            if isinstance(variants, list):
+                for v in variants:
+                    if isinstance(v, str):
+                        terms.add(self._normalize_text(v))
+            all_known_terms_for_canon[self._normalize_text(canon)] = terms
+
+        existing_norm: set = set()
+        for ing in active_ingredients:
+            for k in ('standardName', 'name'):
+                v = ing.get(k)
+                if v:
+                    existing_norm.add(self._normalize_text(v))
+
+        def _already_present(canonical_norm: str) -> bool:
+            # direct match
+            for en in existing_norm:
+                if canonical_norm == en or canonical_norm in en or en in canonical_norm:
+                    return True
+            # alias-aware match
+            terms = all_known_terms_for_canon.get(canonical_norm, {canonical_norm})
+            for term in terms:
+                if not term: continue
+                for en in existing_norm:
+                    if term == en or term in en or en in term:
+                        return True
+            return False
+
+        synthetic_actives: List[Dict] = []
+        synthetic_display: List[Dict] = []
+        single_pattern_cap = len(active_ingredients) > 0  # rule #5
+
+        for pattern, canonical_name, default_unit in self._NAME_FALLBACK_PATTERNS:
+            m = re.search(pattern, name, re.IGNORECASE)
+            if not m:
+                continue
+            try:
+                qty = float(m.group(1).replace(',', ''))
+            except (ValueError, AttributeError):
+                continue
+            unit = (m.group(2) or default_unit).lower()
+            # Normalize IU/mcg/mg cosmetics
+            if unit == 'iu':
+                unit = 'IU'
+
+            canonical_norm = self._normalize_text(canonical_name)
+            if _already_present(canonical_norm):
+                continue
+
+            synthetic_actives.append({
+                'name':         canonical_name,
+                'standardName': canonical_name,
+                'quantity':     qty,
+                'unit':         unit,
+                'provenance':   'product_name_fallback',
+                'confidence':   'inferred_high',
+                'inferred_from': name,
+            })
+            synthetic_display.append({
+                'raw_source_text': name,
+                'display_name':    canonical_name,
+                'source_section':  'product_name',
+                'display_type':    'inferred_from_name',
+                'resolution_type': 'product_name_fallback',
+                'score_included':  False,
+                'mapped_to': {
+                    'standard_name':  canonical_name,
+                    'source_section': 'inferred',
+                    'raw_source_path': 'product_name',
+                },
+                'confidence': 'inferred_high',
+            })
+
+            # Single-pattern cap (rule #5): if actives existed pre-synthesis,
+            # only inject the FIRST matched headline. For empty-actives
+            # products, inject up to 2 to handle dual-named products like
+            # "Calcium 600 mg + Vitamin D3 1000 IU" — but no more than 2.
+            if single_pattern_cap:
+                break
+            if len(synthetic_actives) >= 2:
+                break
+
+        return synthetic_actives, synthetic_display
+
     def _collect_synergy_data(self, product: Dict) -> List[Dict]:
         """Collect synergy cluster data"""
         synergy_db = self.databases.get('synergy_cluster', {})
         clusters = synergy_db.get('synergy_clusters', [])
 
+        # Cluster-ingredient alias map (Solution A): canonical-form → variants
+        # used by supplement labels in the wild. Recovers products where DSLD
+        # parser writes "coenzyme q10" but the cluster ingredient is "coq10".
+        # Loaded from scripts/data/cluster_ingredient_aliases.json.
+        alias_db = self.databases.get('cluster_ingredient_aliases', {})
+        alias_map_raw = alias_db.get('aliases', {}) if isinstance(alias_db, dict) else {}
+        # Pre-normalize: {canonical_norm → frozenset(variant_norm,...)}
+        alias_map_norm = {
+            self._normalize_text(canon): frozenset(
+                self._normalize_text(v) for v in variants if isinstance(v, str)
+            )
+            for canon, variants in alias_map_raw.items()
+            if isinstance(canon, str) and isinstance(variants, list)
+        }
+
         active_ingredients = product.get('activeIngredients', [])
+
+        # Solution B: product-name fallback. When activeIngredients is sparse
+        # (≤2 entries) and the product name contains an unambiguous biochem
+        # nutrient + dose pattern, synthesize a virtual ingredient with
+        # provenance flag. Recovers products like "DHA 1,000 mg Lemon Flavor"
+        # whose actives only contain DPA because the parser missed the
+        # carrier-derived DHA.
+        #
+        # IMPORTANT — scoring isolation: synthetic ingredients are used ONLY
+        # for the synergy cluster + goal matching path below. They are NOT
+        # written back into ``product["activeIngredients"]`` because the
+        # ingredient_quality scorer (Section A) uses the same field, and we
+        # don't want product-name-derived ingredients to count toward A1
+        # core-quality scoring. The dev review explicitly warned: "avoid
+        # contaminating scoring blindly". Provenance lives in the
+        # display_ingredients audit channel for QA visibility.
+        synthetic_ingredients, synthetic_display_entries = (
+            self._synthesize_ingredients_from_name(product, active_ingredients)
+        )
+        if synthetic_ingredients:
+            # Local-only union for cluster matching
+            active_ingredients = list(active_ingredients) + synthetic_ingredients
+            existing_display = product.get('display_ingredients') or []
+            if isinstance(existing_display, list):
+                product['display_ingredients'] = existing_display + synthetic_display_entries
 
         # Build ingredient lookup
         ingredient_info = {}
@@ -6318,27 +6529,123 @@ class SupplementEnricherV3:
 
             matched_ings = []
             doses_adequate = []
+            # Track which product ingredients have already been counted against
+            # this cluster. Prevents a single product ingredient (e.g.
+            # "Magnesium 17 mg") from satisfying the synergy gate by matching
+            # multiple cluster-ingredient variants ("magnesium", "magnesium
+            # glycinate"). Each product ingredient counts at most once per
+            # cluster. See CANARY report, whey+trace-mineral false positive.
+            matched_product_keys: set = set()
+
+            # Resolve the strictest known min_effective_dose for a cluster
+            # ingredient, inheriting from shorter keys when variants aren't
+            # explicitly dosed (e.g. "magnesium glycinate" inherits
+            # min_dose from "magnesium"). Falls back to 0 when no dose is
+            # defined anywhere.
+            def _resolve_min_dose(cluster_ing_norm: str, cluster_ing_raw: str) -> float:
+                # 1) exact normalized key
+                if cluster_ing_norm in min_doses:
+                    return min_doses[cluster_ing_norm]
+                # 2) exact raw key (legacy compat)
+                if cluster_ing_raw in min_doses:
+                    return min_doses[cluster_ing_raw]
+                # 3) longest prefix match from available dose keys
+                best = 0
+                best_key_len = 0
+                for k, v in min_doses.items():
+                    if not isinstance(k, str):
+                        continue
+                    k_norm = self._normalize_text(k)
+                    if k_norm and k_norm in cluster_ing_norm and len(k_norm) > best_key_len:
+                        best = v
+                        best_key_len = len(k_norm)
+                return best
 
             for cluster_ing in cluster_ingredients:
                 cluster_ing_norm = self._normalize_text(cluster_ing)
+                # Resolve aliases for this cluster ingredient (Solution A).
+                # The match attempt below tries the cluster ingredient itself
+                # first, then each alias if no direct match. Aliases catch
+                # parser/spelling mismatches (CoQ10 vs coenzymeq10) without
+                # touching the IQM scoring path.
+                cluster_ing_aliases = alias_map_norm.get(cluster_ing_norm, frozenset())
 
                 # Check if this cluster ingredient is in product
                 for ing_key, ing_data in ingredient_info.items():
+                    if ing_key in matched_product_keys:
+                        continue  # already counted via another cluster variant
+
                     # Prefer exact match to avoid false positives (e.g. "EPA" in "HEPATIC")
                     is_match = False
                     if cluster_ing_norm == ing_key:
                         is_match = True
-                    # Allow substring match only for terms >= 6 chars
+                    # Loose substring match for long terms (>= 6 chars).
                     elif len(cluster_ing_norm) >= 6 and len(ing_key) >= 6:
                         if cluster_ing_norm in ing_key or ing_key in cluster_ing_norm:
                             is_match = True
+                    # Word-boundary match for short biochemistry abbreviations
+                    # (DHA, EPA, NAC, GLA, ALA, MK7, CoQ10, etc.). Essential
+                    # because product names routinely pair the abbreviation
+                    # with an expansion in parens — "DHA (Docosahexaenoic
+                    # Acid)" must match cluster ingredient "dha". Word
+                    # boundaries (\b) prevent EPA from matching HEPATIC.
+                    elif len(cluster_ing_norm) >= 3 and len(ing_key) >= 3:
+                        import re as _re
+                        if _re.search(
+                            r'\b' + _re.escape(cluster_ing_norm) + r'\b',
+                            ing_key,
+                        ):
+                            is_match = True
+
+                    # Alias fallback (Solution A): if no direct match, check
+                    # if any alias matches the product ingredient. Each alias
+                    # is checked the same three ways (exact, loose substring,
+                    # word boundary) — alias resolution doesn't relax the
+                    # match rigor, only the canonical form.
+                    if not is_match and cluster_ing_aliases:
+                        import re as _re
+                        for alias_norm in cluster_ing_aliases:
+                            if not alias_norm:
+                                continue
+                            if alias_norm == ing_key:
+                                is_match = True
+                                break
+                            if (
+                                len(alias_norm) >= 6
+                                and len(ing_key) >= 6
+                                and (alias_norm in ing_key or ing_key in alias_norm)
+                            ):
+                                is_match = True
+                                break
+                            if (
+                                len(alias_norm) >= 3
+                                and len(ing_key) >= 3
+                                and _re.search(
+                                    r'\b' + _re.escape(alias_norm) + r'\b',
+                                    ing_key,
+                                )
+                            ):
+                                is_match = True
+                                break
 
                     if is_match:
                         # Found match
                         quantity = ing_data['quantity']
-                        min_dose = min_doses.get(cluster_ing_norm, min_doses.get(cluster_ing, 0))
+                        min_dose = _resolve_min_dose(cluster_ing_norm, cluster_ing)
 
-                        meets_min = quantity >= min_dose if min_dose > 0 else True
+                        # Adequacy gate:
+                        #   - If a min_dose is defined (>0): require quantity >= min_dose
+                        #   - If no min_dose: require quantity > 0 (excludes
+                        #     products listing nutrient names with qty=0/NP unit,
+                        #     e.g. malformed Soy Protein label with calcium=0)
+                        try:
+                            qty_num = float(quantity) if quantity is not None else 0.0
+                        except (TypeError, ValueError):
+                            qty_num = 0.0
+                        if min_dose > 0:
+                            meets_min = qty_num >= min_dose
+                        else:
+                            meets_min = qty_num > 0
 
                         matched_ings.append({
                             "ingredient": ing_data['name'],
@@ -6349,10 +6656,49 @@ class SupplementEnricherV3:
                             "meets_minimum": meets_min
                         })
                         doses_adequate.append(meets_min)
+                        matched_product_keys.add(ing_key)
                         break
 
-            # Need at least 2 ingredients for synergy
+            # Determine whether this cluster qualifies. Default rule: need
+            # at least 2 matched ingredients (classic synergy). Override:
+            # when the cluster has `allow_single_ingredient: true` and the
+            # sole matched ingredient is in `primary_ingredients`, a single
+            # hit is enough (e.g. magnesium-only → sleep_stack, DHA-only →
+            # prenatal_pregnancy_support, calcium-only → bone_health).
+            qualifies = False
+            single_ingredient_match = False
+
             if len(matched_ings) >= 2:
+                qualifies = True
+            elif (
+                len(matched_ings) == 1
+                and cluster.get("allow_single_ingredient") is True
+            ):
+                primary_ings_raw = cluster.get("primary_ingredients") or []
+                primary_norm = {
+                    self._normalize_text(p)
+                    for p in primary_ings_raw
+                    if isinstance(p, str) and p.strip()
+                }
+                sole = matched_ings[0]
+                matched_term = self._normalize_text(
+                    sole.get("cluster_ingredient", "")
+                )
+                # Single-ingredient override requires BOTH:
+                #   (a) matched term is a primary ingredient for this cluster
+                #   (b) the ingredient is at an adequate (minimum effective) dose
+                # Rationale: a trace mineral (e.g. 100 mg magnesium in a multi)
+                # should not earn a solo "Sleep Quality" match — the clinical
+                # sleep-relevant dose is ~200 mg.
+                if (
+                    matched_term
+                    and matched_term in primary_norm
+                    and bool(sole.get("meets_minimum", False))
+                ):
+                    qualifies = True
+                    single_ingredient_match = True
+
+            if qualifies:
                 sources = cluster.get("sources", [])
                 if not isinstance(sources, list):
                     sources = []
@@ -6380,7 +6726,8 @@ class SupplementEnricherV3:
                     "matched_ingredients": matched_ings,
                     "match_count": len(matched_ings),
                     "doses_adequate": doses_adequate,
-                    "all_adequate": all(doses_adequate) if doses_adequate else False
+                    "all_adequate": all(doses_adequate) if doses_adequate else False,
+                    "single_ingredient_match": single_ingredient_match,
                 })
 
         return matched_clusters
@@ -11623,6 +11970,26 @@ class SupplementEnricherV3:
                                 "pct_ul_individual": adequacy.pct_ul,
                             })
 
+                    # Sprint E1.5.X-4 — ALWAYS emit `highest_ul` from the RDA
+                    # file into the blob, even when the pipeline's own UL check
+                    # is skipped (form ambiguous, conversion failed, etc.).
+                    # Flutter uses this as the last-resort UL for anonymous
+                    # users (see lib/services/fit_score/e1_dosage_calculator.dart
+                    # and lib/services/stack/stack_ul_checker.dart). Nullifying
+                    # it here silently broke Flutter's fallback on ~57% of
+                    # catalog entries. The `skip_ul_check` flag remains — it
+                    # now correctly means "pipeline's product-level verdict
+                    # skipped" rather than "no UL data available."
+                    _nutrient_record = (
+                        self.rda_calculator._find_nutrient(std_name) or {}
+                    )
+                    file_highest_ul = _nutrient_record.get("highest_ul")
+                    if isinstance(file_highest_ul, str):
+                        try:
+                            file_highest_ul = float(file_highest_ul)
+                        except (TypeError, ValueError):
+                            file_highest_ul = None
+
                     # Legacy format for backward compatibility
                     rda_data.append({
                         "ingredient": ing_name,
@@ -11638,7 +12005,17 @@ class SupplementEnricherV3:
                         "skip_ul_check": skip_ul_check,
                         "skip_ul_reason": skip_ul_reason,
                         "nutrient_unit": adequacy.unit,
-                        "highest_ul": None if skip_ul_check else adequacy.ul,
+                        # Sprint E1.5.X-4: always populated from the RDA file
+                        # — never None when the nutrient exists in the table.
+                        # Flutter's anonymous-user fallback relies on this.
+                        "highest_ul": file_highest_ul,
+                        # Sprint E1.5.X-4: adequacy.ul is the age/sex-specific
+                        # UL (default profile 19-30 / both). Exposed separately
+                        # so consumers can distinguish "profile-specific UL"
+                        # from "conservative absolute UL".
+                        "ul_for_default_profile": (
+                            None if skip_ul_check else adequacy.ul
+                        ),
                         "optimal_range": f"{adequacy.optimal_min}-{adequacy.optimal_max}" if adequacy.optimal_min else "",
                         "pct_rda": None if skip_ul_check else adequacy.pct_rda,
                         "adequacy_band": "unknown" if skip_ul_check else adequacy.adequacy_band,

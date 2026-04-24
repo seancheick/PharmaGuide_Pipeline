@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Ingredient synergy clusters for bonus scoring when complementary ingredients are combined",
     "purpose": "synergy_bonuses",
-    "schema_version": "5.0.0",
-    "last_updated": "2026-04-14",
+    "schema_version": "5.1.0",
+    "last_updated": "2026-04-23",
     "total_entries": 58,
     "citation_fields": "note + sources (phase_3 curated_no_query_placeholders)",
     "citation_coverage": {
@@ -76,7 +76,16 @@
         "ginger"
       ],
       "evidence_note": "Piperine increases curcumin bioavailability by 2000% in humans (PMID: 9619120). One of the most robustly demonstrated supplement synergies.",
-      "synergy_benefit_short": "Turmeric or curcumin paired with black pepper (piperine) is absorbed up to 20× better — the pair unlocks the anti-inflammatory benefit together."
+      "synergy_benefit_short": "Turmeric or curcumin paired with black pepper (piperine) is absorbed up to 20× better — the pair unlocks the anti-inflammatory benefit together.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "curcumin phytosome",
+        "meriva",
+        "theracurmin",
+        "bcm-95",
+        "longvida",
+        "curcugreen"
+      ]
     },
     {
       "id": "magnesium_nervous_system",
@@ -125,7 +134,13 @@
         "l_glycine"
       ],
       "evidence_note": "Mg + B6 for stress: Phase IV RCT (PMID: 30562392) showed 24% greater improvement only in severe/extremely severe stress subgroup. Not superior overall.",
-      "synergy_benefit_short": "Magnesium with vitamin B6, taurine, or glycine supports calmer nerves and better sleep — these partners help magnesium actually reach your cells."
+      "synergy_benefit_short": "Magnesium with vitamin B6, taurine, or glycine supports calmer nerves and better sleep — these partners help magnesium actually reach your cells.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "magnesium",
+        "magnesium bisglycinate",
+        "magnesium malate"
+      ]
     },
     {
       "id": "sleep_stack",
@@ -208,7 +223,19 @@
         "zinc"
       ],
       "evidence_note": "Melatonin + Mg + Zinc for insomnia: RCT (PMID: 21226679) showed benefit vs placebo, but no single-ingredient arms to prove >additive effect.",
-      "synergy_benefit_short": "Melatonin, magnesium, L-theanine, and glycine work on different parts of falling asleep — the stack covers wind-down, onset, and staying asleep."
+      "synergy_benefit_short": "Melatonin, magnesium, L-theanine, and glycine work on different parts of falling asleep — the stack covers wind-down, onset, and staying asleep.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "magnesium",
+        "magnesium glycinate",
+        "melatonin",
+        "l-theanine",
+        "theanine",
+        "suntheanine",
+        "valerian root",
+        "valerian",
+        "ashwagandha"
+      ]
     },
     {
       "id": "joint_inflammation",
@@ -343,7 +370,14 @@
         "omega_3"
       ],
       "evidence_note": "AREDS2 formula (lutein + zeaxanthin + zinc + omega-3) tested in 4,203-patient RCT (PMID: 23644932). Established combo for AMD, though lutein/zeaxanthin were a safer beta-carotene substitute rather than >additive.",
-      "synergy_benefit_short": "Lutein, zeaxanthin, astaxanthin, and bilberry together filter blue light and protect the retina — they concentrate in different parts of the eye."
+      "synergy_benefit_short": "Lutein, zeaxanthin, astaxanthin, and bilberry together filter blue light and protect the retina — they concentrate in different parts of the eye.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "lutein",
+        "zeaxanthin",
+        "astaxanthin",
+        "bilberry"
+      ]
     },
     {
       "id": "methylation_support",
@@ -589,7 +623,19 @@
         "colostrum"
       ],
       "evidence_note": "Vitamin C + zinc for immune support: some cold symptom relief data (PMC10600480), but no RCT proving the combo is better than each alone.",
-      "synergy_benefit_short": "Vitamin C, zinc, vitamin D, and elderberry work on different immune pathways — giving your defense system multiple angles at once."
+      "synergy_benefit_short": "Vitamin C, zinc, vitamin D, and elderberry work on different immune pathways — giving your defense system multiple angles at once.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "vitamin c",
+        "ascorbic acid",
+        "zinc",
+        "zinc picolinate",
+        "zinc bisglycinate",
+        "elderberry",
+        "echinacea",
+        "vitamin d3",
+        "cholecalciferol"
+      ]
     },
     {
       "id": "energy_mitochondria",
@@ -911,7 +957,16 @@
         "dietary_nitrate"
       ],
       "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy.",
-      "synergy_benefit_short": "CoQ10, omega-3, magnesium, and hawthorn together support heart rhythm, blood-vessel health, and cholesterol — a well-rounded heart stack."
+      "synergy_benefit_short": "CoQ10, omega-3, magnesium, and hawthorn together support heart rhythm, blood-vessel health, and cholesterol — a well-rounded heart stack.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "coq10",
+        "ubiquinol",
+        "fish oil",
+        "omega-3",
+        "epa",
+        "dha"
+      ]
     },
     {
       "id": "blood_sugar_regulation",
@@ -1138,7 +1193,12 @@
         "vitamin_a"
       ],
       "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy.",
-      "synergy_benefit_short": "Biotin, silica, zinc, collagen, and vitamin C support hair, skin, and nail building blocks — beauty nutrition in layers."
+      "synergy_benefit_short": "Biotin, silica, zinc, collagen, and vitamin C support hair, skin, and nail building blocks — beauty nutrition in layers.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "biotin",
+        "keratin"
+      ]
     },
     {
       "id": "liver_support",
@@ -1191,7 +1251,14 @@
         "tudca"
       ],
       "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy.",
-      "synergy_benefit_short": "Milk thistle, NAC, alpha-lipoic acid, and TMG together support the liver's natural repair and detox — each covers a different angle."
+      "synergy_benefit_short": "Milk thistle, NAC, alpha-lipoic acid, and TMG together support the liver's natural repair and detox — each covers a different angle.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "milk thistle",
+        "silymarin",
+        "nac",
+        "tudca"
+      ]
     },
     {
       "id": "bone_health",
@@ -1265,7 +1332,18 @@
         "phosphorus"
       ],
       "evidence_note": "Calcium + Vitamin D is one of the most studied combos for bone health (PMID: 18410225). Vitamin D enhances intestinal calcium absorption, but benefit depends on baseline D status.",
-      "synergy_benefit_short": "Calcium, vitamin D, K2, magnesium, and boron work together for bone strength — calcium alone isn't enough, these partners guide it to bone."
+      "synergy_benefit_short": "Calcium, vitamin D, K2, magnesium, and boron work together for bone strength — calcium alone isn't enough, these partners guide it to bone.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "calcium",
+        "calcium citrate",
+        "calcium carbonate",
+        "vitamin d3",
+        "cholecalciferol",
+        "vitamin d",
+        "vitamin k2",
+        "mk-7"
+      ]
     },
     {
       "id": "iron_absorption",
@@ -1322,7 +1400,11 @@
         "l_lysine"
       ],
       "evidence_note": "Vitamin C converts non-heme Fe3+ to absorbable Fe2+, proven in systematic review (PMID: 10948381). One of the most established nutritional synergies.",
-      "synergy_benefit_short": "Iron with vitamin C and folate is absorbed better and supports red-blood-cell production — the partners help iron do its job."
+      "synergy_benefit_short": "Iron with vitamin C and folate is absorbed better and supports red-blood-cell production — the partners help iron do its job.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "iron"
+      ]
     },
     {
       "id": "antioxidant_defense",
@@ -1693,7 +1775,15 @@
         "taurine"
       ],
       "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy.",
-      "synergy_benefit_short": "Protein, creatine, HMB, and BCAAs cover muscle protein synthesis, strength, and recovery — the foundation for training gains."
+      "synergy_benefit_short": "Protein, creatine, HMB, and BCAAs cover muscle protein synthesis, strength, and recovery — the foundation for training gains.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "creatine",
+        "whey protein",
+        "bcaa",
+        "branched chain amino acids",
+        "leucine"
+      ]
     },
     {
       "id": "inflammation_control",
@@ -1915,7 +2005,13 @@
         "digestive_enzymes"
       ],
       "evidence_note": "Synbiotic concept (probiotic + prebiotic): theoretically the prebiotic feeds the probiotic. However, meta-analysis (PMID: 38999862) found probiotics alone outperform synbiotics.",
-      "synergy_benefit_short": "Lactobacillus, Bifidobacterium, and prebiotic fibers together establish and feed beneficial gut bacteria — the probiotic plus its food."
+      "synergy_benefit_short": "Lactobacillus, Bifidobacterium, and prebiotic fibers together establish and feed beneficial gut bacteria — the probiotic plus its food.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "lactobacillus",
+        "bifidobacterium",
+        "saccharomyces boulardii"
+      ]
     },
     {
       "id": "electrolyte_balance",
@@ -2352,7 +2448,15 @@
         "digestive_enzymes"
       ],
       "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy.",
-      "synergy_benefit_short": "Omega-3 as triglyceride or phospholipid form, taken with food, is absorbed much better than ethyl ester forms on an empty stomach."
+      "synergy_benefit_short": "Omega-3 as triglyceride or phospholipid form, taken with food, is absorbed much better than ethyl ester forms on an empty stomach.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "fish oil",
+        "krill oil",
+        "epa",
+        "dha",
+        "omega-3"
+      ]
     },
     {
       "id": "collagen_synthesis_support",
@@ -2407,7 +2511,11 @@
         "zinc"
       ],
       "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy.",
-      "synergy_benefit_short": "Vitamin C, lysine, proline, and copper together give your body the building blocks and cofactors needed to make collagen — the core of skin and joints."
+      "synergy_benefit_short": "Vitamin C, lysine, proline, and copper together give your body the building blocks and cofactors needed to make collagen — the core of skin and joints.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "collagen peptides"
+      ]
     },
     {
       "id": "respiratory_health_lung_support",
@@ -2736,7 +2844,16 @@
         "zinc"
       ],
       "evidence_note": "Folate + iron + DHA are co-required during pregnancy. Each addresses different fetal development needs. Established standard of care, not >additive synergy.",
-      "synergy_benefit_short": "Methylfolate, iron, choline, DHA, and iodine together cover the nutrients most needed during pregnancy — aligned with prenatal guidelines."
+      "synergy_benefit_short": "Methylfolate, iron, choline, DHA, and iodine together cover the nutrients most needed during pregnancy — aligned with prenatal guidelines.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "dha",
+        "folate",
+        "folic acid",
+        "methylfolate",
+        "5-mthf",
+        "choline"
+      ]
     },
     {
       "id": "nerve_health_neuropathy_support",
@@ -3133,7 +3250,14 @@
         "hawthorn"
       ],
       "evidence_note": "Each ingredient in this combination has individual evidence for the stated benefit, but no clinical trial has tested this specific combination together. Classified as a popular stack, not a proven synergy.",
-      "synergy_benefit_short": "Magnesium, CoQ10, hibiscus, and beet root together support healthy blood-pressure pathways — modest effects that add up in combination."
+      "synergy_benefit_short": "Magnesium, CoQ10, hibiscus, and beet root together support healthy blood-pressure pathways — modest effects that add up in combination.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "beet root",
+        "hibiscus",
+        "coq10",
+        "magnesium"
+      ]
     },
     {
       "id": "fertility_female",
@@ -3249,7 +3373,15 @@
         }
       ],
       "evidence_note": "Omega-3 lowers triglycerides while niacin raises HDL — addressing both legs of dyslipidemia. Human trial evidence per PMC10600480 systematic review.",
-      "synergy_benefit_short": "Omega-3 with niacin covers both triglycerides and cholesterol support — a classic combo for overall lipid-panel improvement."
+      "synergy_benefit_short": "Omega-3 with niacin covers both triglycerides and cholesterol support — a classic combo for overall lipid-panel improvement.",
+      "allow_single_ingredient": true,
+      "primary_ingredients": [
+        "fish oil",
+        "epa",
+        "dha",
+        "omega-3",
+        "niacin"
+      ]
     }
   ]
 }
