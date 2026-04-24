@@ -20280,8 +20280,8 @@
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "moderate (~40–50%)",
-        "notes": "Whole grape extract with lower proanthocyanidin concentration than 95% standardized forms. Contains additional grape polyphenols (resveratrol, anthocyanins, quercetin) but OPC content variable. Same absorption limitations as standardized OPCs — only monomers and microbial catabolites reach systemic circulation (PMID:15640486, Manach 2005).",
+        "absorption": "poor (~1-8%; dimers+ not absorbed, only monomers)",
+        "notes": "Whole grape extract with lower proanthocyanidin concentration than 95% standardized forms. Contains additional grape polyphenols (resveratrol, anthocyanins, quercetin) but OPC content variable. Same absorption limitations as standardized OPCs — only monomers and microbial catabolites reach systemic circulation (PMID:15640486, Manach 2005). PMID:12064339 (Donovan 2002) rat PK — procyanidin dimers and oligomers from grape-seed extract are not detectable in plasma; only catechin/epicatechin monomers are absorbed (as conjugates).",
         "aliases": [
           "grape polyphenols",
           "red grape extract",
@@ -20477,8 +20477,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "good (~50–70%)",
-        "notes": "Non-Pycnogenol pine bark extract from various Pinus species (thunbergii, densiflora, massoniana, radiata). Variable procyanidin content and composition. Pycnogenol research cannot be extrapolated to other species (PMID:38757126). Same absorption limitation: procyanidin oligomers not absorbed intact, only monomers and microbial catabolites reach circulation.",
+        "absorption": "poor (~1-8%; OPCs gut-degraded, monomers absorbed)",
+        "notes": "Non-Pycnogenol pine bark extract from various Pinus species (thunbergii, densiflora, massoniana, radiata). Variable procyanidin content and composition. Pycnogenol research cannot be extrapolated to other species (PMID:38757126). Same absorption limitation: procyanidin oligomers not absorbed intact, only monomers and microbial catabolites reach circulation. PMID:38757126 (Bayer & Högger 2024 review) confirms oligomeric procyanidins are not bioavailable as parent compounds; colonic microbiota metabolize them to phenolic acids.",
         "aliases": [
           "maritime pine extract",
           "generic pine bark",
@@ -20577,8 +20577,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "dramatically enhanced (Compound K AUC 115-135x vs standard red ginseng)",
-        "notes": "Fermented red ginseng pre-converts protopanaxadiol ginsenosides (Rb1) to Compound K. Human PK (PMID:27516803, Choi 2016, n=24): CK Cmax 254 ng/mL, AUC 115x higher than standard RG. Confirmed by Lee 2021 (PMID:33884767): CK-30 showed 135x AUC, 118x Cmax, Tmax 3h (vs 10h for RG). Best PK data of any ginseng form.",
+        "absorption": "moderate (~10-25%; Compound K pre-formed, bypasses microbiota step)",
+        "notes": "Fermented red ginseng pre-converts protopanaxadiol ginsenosides (Rb1) to Compound K. Human PK (PMID:27516803, Choi 2016, n=24): CK Cmax 254 ng/mL, AUC 115x higher than standard RG. Confirmed by Lee 2021 (PMID:33884767): CK-30 showed 135x AUC, 118x Cmax, Tmax 3h (vs 10h for RG). Best PK data of any ginseng form. Absorption string revised 2026-04-24 to avoid \"115-135×\" fold-change phrasing (relative to unfermented red ginseng) that parsers/readers could misread as absolute absorption. Fold-change data retained in notes. struct.value=0.5 flagged for clinical review — agent research (PMID:27516803, Choi 2016; PMID:38476921) suggests absolute F more in line with ~0.10-0.25 range.",
         "aliases": [
           "gs15-4 fermented korean ginseng extract",
           "gs15-4 fermented asian ginseng extract",
@@ -20607,8 +20607,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "enhanced (79-824% higher ginsenoside exposure vs red ginseng)",
-        "notes": "Nine cycles of steaming/drying convert high-MW ginsenosides (Rb1) to low-MW forms (Rg3, Rk1, Rg5). Human PK (PMID:33918329, Kim 2021): Rg3+Rg5+Rk1 AUC 824% higher, total ginsenoside exposure 79% greater, Tmax 1h faster vs red ginseng. Less dramatic than fermentation but still significantly improved PK.",
+        "absorption": "poor-moderate (~10-15%; enriched Rg3/Rk1/Rg5 from steaming)",
+        "notes": "Nine cycles of steaming/drying convert high-MW ginsenosides (Rb1) to low-MW forms (Rg3, Rk1, Rg5). Human PK (PMID:33918329, Kim 2021): Rg3+Rg5+Rk1 AUC 824% higher, total ginsenoside exposure 79% greater, Tmax 1h faster vs red ginseng. Less dramatic than fermentation but still significantly improved PK. Absorption string revised 2026-04-24 to avoid fold-change phrasing (\"79-824% higher exposure vs red ginseng\") that could be misread as absolute bioavailability. Fold-change data retained in notes; struct.value (0.15) reflects absolute F of deglycosylated forms, not relative enhancement.",
         "aliases": [
           "CJ EnerG",
           "steamed ginseng",
@@ -20692,8 +20692,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate (~40–55%)",
-        "notes": "NOT true ginseng — Eleutherococcus senticosus, different genus, contains NO ginsenosides. Active compounds: eleutherosides B (syringin) and E (syringaresinol). Very poor oral bioavailability — eleutheroside K F = 0.30%. Adaptogenic effects well-documented but PK data is limited compared to Panax species (PMID:18718179 for comparison context).",
+        "absorption": "very poor (<1% parent eleutheroside; rat PK only)",
+        "notes": "NOT true ginseng — Eleutherococcus senticosus, different genus, contains NO ginsenosides. Active compounds: eleutherosides B (syringin) and E (syringaresinol). Very poor oral bioavailability — eleutheroside K F = 0.30%. Adaptogenic effects well-documented but PK data is limited compared to Panax species (PMID:18718179 for comparison context). PMID:23369882 (Ma 2013) rat oral vs IV PK of eleutheroside B/E; no human PK data for eleutherosides; sub-1% F consistent with saponin class absorption biology.",
         "aliases": [
           "siberian ginseng",
           "eleuthero",
@@ -20856,8 +20856,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~50–65%)",
-        "notes": "E. angustifolia root extract — higher alkamide content than E. purpurea root. Alkamides rapidly absorbed: dodeca-tetraenoic acid isobutylamides Cmax 10.88 ng/mL at Tmax 30 min (PMID:15901750, Woelkart 2005). Contains echinacoside (caffeic acid derivative) but these are NOT absorbed into systemic circulation. Different alkamide profile (2-monoene) vs E. purpurea (2,4-dienoic).",
+        "absorption": "moderate (~25-40%; alkamides rapidly absorbed)",
+        "notes": "E. angustifolia root extract — higher alkamide content than E. purpurea root. Alkamides rapidly absorbed: dodeca-tetraenoic acid isobutylamides Cmax 10.88 ng/mL at Tmax 30 min (PMID:15901750, Woelkart 2005). Contains echinacoside (caffeic acid derivative) but these are NOT absorbed into systemic circulation. Different alkamide profile (2-monoene) vs E. purpurea (2,4-dienoic). PMID:15901750 (Woelkart 2005) and PMID:15919096 (Matthias 2005) human single-dose PK — sum alkamides Tmax 0.5-2.3h, Cmax 10.88-336 ng/mL depending on formulation.",
         "aliases": [
           "narrow-leaf echinacea",
           "echinacea root",
@@ -37850,6 +37850,46 @@
         ],
         "bio_score_changed": false,
         "note": "7 mushroom forms: absorption string updated to match struct.values; 1-sentence PMID citation appended to notes. bio_score values untouched (not in scope of this batch — those require separate scoring review)."
+      },
+      "5.0.4": {
+        "date": "2026-04-24",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 2 — botanical extract bioavailability",
+        "research_subagent_report": "PubMed research on 5 botanical extracts (pine bark, siberian ginseng, gotu kola, whole grape, echinacea angustifolia) confirmed same pattern as mushroom batch: struct.values (0.02-0.25) are evidence-correct; free-text absorption strings were marketing inflation. 4 of 5 rewritten to single-digit-percent systemic F language; echinacea alkamides genuinely absorb but \"~50-65%\" was overstated — now \"~25-40%\".",
+        "verified_pmids": [
+          "PMID:38757126 (Bayer 2024 Pycnogenol review)",
+          "PMID:23369882 (Ma 2013 eleutheroside rat PK)",
+          "PMID:35204098 (Wright 2022 OHSU asiaticoside human Phase 1)",
+          "PMID:12064339 (Donovan 2002 grape seed procyanidin rat PK)",
+          "PMID:15901750 (Woelkart 2005 echinacea human PK)",
+          "PMID:15919096 (Matthias 2005 echinacea tablet human PK)"
+        ],
+        "forms_updated": [
+          "pine_bark_extract::generic pine bark extract",
+          "ginseng::siberian ginseng (eleuthero)",
+          "gotu_kola::gotu kola aerial extract",
+          "grape_seed_extract::whole grape extract",
+          "echinacea::echinacea angustifolia",
+          "ginseng::black ginseng (deconfusion: fold-change→absolute)",
+          "ginseng::fermented red ginseng (deconfusion: fold-change→absolute)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": {
+          "ginseng::fermented red ginseng": "struct.value=0.5 may be optimistic; research agent suggested ~0.10-0.25 is more consistent with Compound K human PK. Needs Dr Pham clinical signoff before adjustment.",
+          "gotu_kola::gotu kola (unspecified)": "struct.value=0.5 is inconsistent with the aerial extract struct.value=0.02 under the same parent. Unspecified forms should typically score more conservatively than specified extracts. Needs reconciliation or documentation of why unspecified diverges."
+        },
+        "already_audited_no_changes_needed": [
+          "pine_bark_extract::pycnogenol (already conservative + PMID:38757126)",
+          "pine_bark_extract::pine bark extract (unspecified)",
+          "ginseng::panax ginseng extract (already cites PMID:32148404)",
+          "ginseng::american ginseng (already conservative)",
+          "ginseng::ginseng (unspecified)",
+          "grape_seed_extract::grape seed phytosome",
+          "grape_seed_extract::grape seed extract (95% proanthocyanidins) — already PMID-cited",
+          "grape_seed_extract::grape seed extract (unspecified)",
+          "echinacea::echinacea purpurea extract (already cites PMID:15919096)",
+          "echinacea::whole echinacea herb (minor drift, acceptable)",
+          "echinacea::echinacea (unspecified)"
+        ]
       }
     },
     "category_enum": [
@@ -43837,8 +43877,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "good (~55%)",
-        "notes": "Centella asiatica aerial extract standardized to triterpenes (asiaticoside, madecassoside, asiatic acid). Asiaticoside is a prodrug — intestinal/hepatic enzymes cleave the trisaccharide to release asiatic acid, the active aglycone. Human PK (PMC7994819) found intact asiaticoside F = 1.86%; asiatic acid accumulates with repeated dosing. Clinical evidence for wound healing, venous insufficiency, and cognitive support. Phase 1 trial (PMID 35204098) confirmed 250-500 mg doses safe.",
+        "absorption": "poor (~1-2% parent; aglycone asiatic acid is active form)",
+        "notes": "Centella asiatica aerial extract standardized to triterpenes (asiaticoside, madecassoside, asiatic acid). Asiaticoside is a prodrug — intestinal/hepatic enzymes cleave the trisaccharide to release asiatic acid, the active aglycone. Human PK (PMC7994819) found intact asiaticoside F = 1.86%; asiatic acid accumulates with repeated dosing. Clinical evidence for wound healing, venous insufficiency, and cognitive support. Phase 1 trial (PMID 35204098) confirmed 250-500 mg doses safe. PMID:35204098 (Wright 2022 OHSU Phase 1) confirms asiaticoside/madecassoside parents NOT detectable in plasma; only the aglycone metabolites asiatic acid and madecassic acid reach systemic circulation.",
         "aliases": [
           "gotu kola extract",
           "centellicum gotu kola extract",
