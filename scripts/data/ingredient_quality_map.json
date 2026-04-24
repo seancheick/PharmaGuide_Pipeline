@@ -13643,8 +13643,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~40% choline by weight); plasma AUC equivalent to bitartrate (Stoll 2021)",
-        "notes": "Brain-targeted choline form that crosses the blood-brain barrier. 40% choline by weight. Plasma choline AUC is equivalent to bitartrate (Stoll 2021 crossover), but BBB penetration is better. Rx drug in some EU countries for cognitive decline.",
+        "absorption": "plasma choline AUC equivalent to bitartrate/chloride (Böckmann 2021, n=6 crossover)",
+        "notes": "Brain-targeted choline form that crosses the blood-brain barrier. 40% choline by weight. Plasma choline AUC is equivalent to bitartrate (Böckmann 2021 (PMID:34287673) crossover), but BBB penetration is better. Rx drug in some EU countries for cognitive decline. Citation corrected 2026-04-24: \"Stoll 2021\" was a misattribution; the actual paper is Böckmann 2021 (PMID:34287673, Eur J Nutr) — n=6 healthy-adult-men crossover at 550mg choline equivalent showed no difference in plasma choline AUC among chloride, bitartrate, alpha-GPC, or egg-PC. Alpha-GPC dose-response confirmed by Kawamura 2012 (PMID:22673596, single 1000mg dose, plasma free choline rise at 60-120 min).",
         "aliases": [
           "brain choline",
           "GPC"
@@ -13662,8 +13662,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "excellent (>95% oral bioavailability); 18% choline by weight",
-        "notes": "Dual-action nootropic providing choline + cytidine (uridine precursor) for brain phospholipid synthesis. >95% oral bioavailability. Cognizin is the premium branded version. Meta-analyses show similar efficacy to Alpha-GPC for cognition.",
+        "absorption": "~99% oral absorption; <1% fecal recovery of 14C tracer (Dinsdale 1983, n=6)",
+        "notes": "Dual-action nootropic providing choline + cytidine (uridine precursor) for brain phospholipid synthesis. >95% oral bioavailability. Cognizin is the premium branded version. Meta-analyses show similar efficacy to Alpha-GPC for cognition. Evidence update 2026-04-24: PMID:6412727 (Dinsdale 1983) 14C-tracer in 6 healthy subjects — \"absorption was virtually complete, <1% recovered in faeces\"; supports struct.value >0.95. Clinical review PMID:21432836 (Secades 2011).",
         "aliases": [
           "citicoline",
           "CDP-choline",
@@ -13681,8 +13681,8 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.975,
-          "range_low": 0.95,
-          "range_high": 1.0,
+          "range_low": 0.9,
+          "range_high": 0.99,
           "quality": "excellent",
           "notes": ">95% oral bioavailability"
         }
@@ -13691,18 +13691,18 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~13% choline by weight)",
-        "notes": "Cell membrane phospholipid — 13% choline by weight. Supports liver health and fat metabolism. Found naturally in lecithin (soy, sunflower, egg). Less brain-targeted than Alpha-GPC or citicoline.",
+        "absorption": "AUC equivalent to water-soluble salts; Tmax delayed ~3h (Böckmann 2021)",
+        "notes": "Cell membrane phospholipid — 13% choline by weight. Supports liver health and fat metabolism. Found naturally in lecithin (soy, sunflower, egg). Less brain-targeted than Alpha-GPC or citicoline. Evidence update 2026-04-24: prior struct.value=0.6 conflated \"13% choline by weight\" (elemental yield) with systemic F. PMID:34287673 (Böckmann 2021), PMID:36840817 (Böckmann 2023 deuterium-labeled POPC), and PMID:31652561 (Mödinger 2019 krill-PC vs bitartrate) all show PC delivers equivalent plasma choline AUC to water-soluble salts, just with delayed Tmax ~3h. struct.value revised 0.6 → 0.82.",
         "aliases": [
           "PC",
           "phosphatidyl choline"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.6,
-          "range_low": 0.5,
-          "range_high": 0.7,
-          "quality": "good",
+          "value": 0.82,
+          "range_low": 0.75,
+          "range_high": 0.9,
+          "quality": "very_good",
           "notes": "50-70% over 19 hours (slow absorption)"
         }
       },
@@ -13710,8 +13710,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good (~41% choline by weight); plasma AUC equivalent to Alpha-GPC (Stoll 2021)",
-        "notes": "Budget choline salt — 41% choline by weight (highest elemental yield). Plasma choline AUC equivalent to Alpha-GPC and other forms (Stoll 2021 crossover). Limited BBB penetration vs Alpha-GPC/citicoline.",
+        "absorption": "rapidly absorbed via SLC44A1; reference arm in Böckmann 2021 crossover (n=6)",
+        "notes": "Budget choline salt — 41% choline by weight (highest elemental yield). Plasma choline AUC equivalent to Alpha-GPC and other forms (Böckmann 2021 (PMID:34287673) crossover). Limited BBB penetration vs Alpha-GPC/citicoline. Citation corrected 2026-04-24: \"Stoll 2021\" was a misattribution → Böckmann 2021 (PMID:34287673), the reference arm in a 4-form crossover showing no AUC difference vs alpha-GPC, chloride, or egg-PC at 550mg choline equivalent.",
         "aliases": [
           "choline dihydrogen tartrate",
           "tartaric acid choline",
@@ -13735,8 +13735,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "moderate (~40% choline by weight)",
-        "notes": "Citrate salt — 40% choline by weight. Good solubility for liquid formulas. Adequate for daily choline needs but no brain-crossing advantage over bitartrate.",
+        "absorption": "free-choline salt; assumed equivalent to bitartrate (no citrate-specific PK)",
+        "notes": "Citrate salt — 40% choline by weight. Good solubility for liquid formulas. Adequate for daily choline needs but no brain-crossing advantage over bitartrate. Evidence update 2026-04-24: no citrate-specific human PK located. Extrapolated from bitartrate/chloride evidence (PMID:34287673 Böckmann 2021): free-choline-releasing salts all deliver equivalent plasma choline AUC. struct.value revised 0.825 → 0.875 for class-consistency.",
         "aliases": [
           "citric acid choline",
           "citrate choline",
@@ -13744,9 +13744,9 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.825,
-          "range_low": 0.75,
-          "range_high": 0.9,
+          "value": 0.875,
+          "range_low": 0.8,
+          "range_high": 0.95,
           "quality": "very_good",
           "notes": "75-90% estimated"
         }
@@ -13755,8 +13755,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "moderate (~52% choline by weight)",
-        "notes": "Chloride salt — 52% choline by weight (highest elemental content). Mostly used in animal feed and industrial applications. Uncommon in human supplements.",
+        "absorption": "plasma choline AUC equivalent to bitartrate and alpha-GPC (Böckmann 2021)",
+        "notes": "Chloride salt — 52% choline by weight (highest elemental content). Mostly used in animal feed and industrial applications. Uncommon in human supplements. Evidence update 2026-04-24: PMID:34287673 (Böckmann 2021) direct comparator arm — equivalent plasma choline AUC to bitartrate and alpha-GPC at 550mg choline equivalent (n=6 crossover).",
         "aliases": [
           "choline hydrochloride",
           "chloride choline"
@@ -37938,6 +37938,42 @@
           "ashwagandha::liposomal ashwagandha — string \"unknown\"",
           "ashwagandha::ashwagandha (unspecified) — string \"unknown\""
         ]
+      },
+      "5.0.6": {
+        "date": "2026-04-24",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 4 — choline form citation + string clarity",
+        "research_subagent_report": "PubMed research on 6 choline forms identified TWO issues: (1) prior notes cited \"Stoll 2021\" which subagent could not locate — actual paper is Böckmann 2021 (PMID:34287673); (2) absorption strings described \"% choline by weight\" (elemental yield) instead of systemic absorption. Per Böckmann 2021 (4-form crossover), salt identity does NOT modulate plasma choline AUC at nutritional doses. Strings rewritten to describe absorption evidence, not dosing weight fraction.",
+        "verified_pmids": [
+          "PMID:34287673 (Böckmann 2021 Eur J Nutr — 4-form crossover n=6)",
+          "PMID:36840817 (Böckmann 2023 — deuterium-labeled PC crossover)",
+          "PMID:31652561 (Mödinger 2019 Nutrients — krill PC vs bitartrate)",
+          "PMID:6412727  (Dinsdale 1983 — 14C-CDP-choline <1% fecal recovery)",
+          "PMID:21432836 (Secades 2011 — CDP-choline clinical review)",
+          "PMID:22673596 (Kawamura 2012 — alpha-GPC 1000mg PK)"
+        ],
+        "forms_updated": [
+          "choline::alpha-GPC (value 0.875 → 0.875)",
+          "choline::CDP-choline (citicoline) (value 0.975 → 0.975)",
+          "choline::phosphatidylcholine (value 0.6 → 0.82)",
+          "choline::choline bitartrate (value 0.875 → 0.875)",
+          "choline::choline citrate (value 0.825 → 0.875)",
+          "choline::choline chloride (value 0.875 → 0.875)"
+        ],
+        "bio_score_changed": false,
+        "first_upward_value_corrections": [
+          "choline::phosphatidylcholine (0.6 → 0.82): Böckmann 2021/2023 + Mödinger 2019 all confirm PC delivers equivalent AUC to salts",
+          "choline::choline citrate (0.825 → 0.875): no citrate-specific PK; class-consistency with bitartrate/chloride"
+        ],
+        "citation_corrections": {
+          "affected_forms": [
+            "choline::alpha-GPC",
+            "choline::choline bitartrate"
+          ],
+          "old_cite": "Stoll 2021 (misattribution/not locatable)",
+          "new_cite": "Böckmann 2021 (PMID:34287673)",
+          "rationale": "Research subagent could not locate a Stoll 2021 crossover paper matching the described finding. The actual paper is Böckmann KA et al. \"Differential metabolism of choline supplements in adult volunteers.\" Eur J Nutr 61(1):219-230 (2022, epub Jul 2021). PMID:34287673."
+        },
+        "note": "Weight-fraction references retained in notes (dosing context) but removed from absorption field (which describes PK)."
       }
     },
     "category_enum": [
