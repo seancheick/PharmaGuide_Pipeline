@@ -3,7 +3,7 @@
   "brand_name": "Pure Encapsulations",
   "breakdown": {
     "A": {
-      "A1": 10.62,
+      "A1": 10.67,
       "A2": 3.5,
       "A3": 2.0,
       "A4": 3.0,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 1.0,
-      "core_quality": 20.87,
+      "core_quality": 20.92,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": true,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 21.87
+      "score": 21.92
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -58,18 +58,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Proprietary Mixed Carotenoid Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 0.289,
           "children_with_amount_count": 0,
           "children_without_amount_count": 3,
-          "computed_blend_penalty": -2.3191,
-          "computed_blend_penalty_magnitude": 2.3191,
-          "dedupe_fingerprint": "proprietary mixed carotenoid blend|lutein,lycopene,zeaxanthin|0.000|activeingredients[26]",
+          "computed_blend_penalty": -2.5,
+          "computed_blend_penalty_magnitude": 2.5,
+          "dedupe_fingerprint": "proprietary mixed carotenoid blend|lutein,lycopene,zeaxanthin|0.289|activeingredients[26]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.06383,
-          "impact_source": "count_share",
+          "hidden_mass_mg": 0.289,
+          "impact_floor_applied": true,
+          "impact_ratio": 0.1,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -79,18 +79,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Superfruit Antioxidant Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 25.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 6,
-          "computed_blend_penalty": -2.6383,
-          "computed_blend_penalty_magnitude": 2.6383,
-          "dedupe_fingerprint": "superfruit antioxidant blend|acai,acerola,camu camu,green coffee whole fruit concentrate,mangosteen,quercetin|0.000|activeingredients[38]",
+          "computed_blend_penalty": -2.5,
+          "computed_blend_penalty_magnitude": 2.5,
+          "dedupe_fingerprint": "superfruit antioxidant blend|acai,acerola,camu camu,green coffee whole fruit concentrate,mangosteen,quercetin|25.000|activeingredients[38]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.12766,
-          "impact_source": "count_share",
+          "hidden_mass_mg": 25.0,
+          "impact_floor_applied": true,
+          "impact_ratio": 0.1,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -98,7 +98,7 @@
           "unit_conversion_failed": false
         }
       ],
-      "B5_penalty": 4.96,
+      "B5_penalty": 5.0,
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
@@ -107,9 +107,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 5.0,
       "max": 30.0,
-      "penalties": 6.46,
-      "raw": 23.54,
-      "score": 23.54
+      "penalties": 6.5,
+      "raw": 23.5,
+      "score": 23.5
     },
     "C": {
       "depth_bonus": 0.5,
@@ -170,7 +170,7 @@
       "prescription_dose": false,
       "score": 1.0
     },
-    "quality_raw": 56.1,
+    "quality_raw": 56.11,
     "violation_penalty": 0.0
   },
   "dsld_id": "182730",
@@ -192,13 +192,13 @@
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 1.0,
-      "core_quality": 20.87,
+      "core_quality": 20.92,
       "max": 25.0,
-      "score": 21.87
+      "score": 21.92
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 23.54
+      "score": 23.5
     },
     "C_evidence_research": {
       "max": 20.0,

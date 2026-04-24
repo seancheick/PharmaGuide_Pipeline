@@ -3,7 +3,7 @@
   "brand_name": "Garden of Life MyKind Organics",
   "breakdown": {
     "A": {
-      "A1": 8.71,
+      "A1": 8.53,
       "A2": 0.0,
       "A3": 1.0,
       "A4": 3.0,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.21,
+      "core_quality": 15.03,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -36,7 +36,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 15.21
+      "score": 15.03
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -51,18 +51,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Certified Organic Food Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 686.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 30,
-          "computed_blend_penalty": -4.9412,
-          "computed_blend_penalty_magnitude": 4.9412,
-          "dedupe_fingerprint": "certified organic food blend|broccoli,moringa leaf extract,organic amla berry extract,organic annatto extract,organic apple,organic asparagus,organic beet,organic blackberry,organic blueberry,organic brussels sprout,organic carrot,organic cauliflower,organic celery,organic cherry,organic cucumber,organic garlic,organic ginger,organic green bell pepper,organic green onion,organic guava extract,organic holy basil extract,organic kale,organic lemon extract,organic parsley,organic raspberry,organic red cabbage,organic sesbania grandiflora extract,organic spinach,organic strawberry,organic tomato|0.000|activeingredients[15]",
+          "computed_blend_penalty": -7.0,
+          "computed_blend_penalty_magnitude": 7.0,
+          "dedupe_fingerprint": "certified organic food blend|broccoli,moringa leaf extract,organic amla berry extract,organic annatto extract,organic apple,organic asparagus,organic beet,organic blackberry,organic blueberry,organic brussels sprout,organic carrot,organic cauliflower,organic celery,organic cherry,organic cucumber,organic garlic,organic ginger,organic green bell pepper,organic green onion,organic guava extract,organic holy basil extract,organic kale,organic lemon extract,organic parsley,organic raspberry,organic red cabbage,organic sesbania grandiflora extract,organic spinach,organic strawberry,organic tomato|686.000|activeingredients[15]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
+          "hidden_mass_mg": 686.0,
           "impact_floor_applied": false,
-          "impact_ratio": 0.588235,
-          "impact_source": "count_share",
+          "impact_ratio": 1.0,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -72,18 +72,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Certified Organic Beauty Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 194.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 5,
-          "computed_blend_penalty": -2.4902,
-          "computed_blend_penalty_magnitude": 2.4902,
-          "dedupe_fingerprint": "certified organic beauty blend|organic bamboo extract,organic citrus bioflavonoids,organic green tea extract,organic pomegranate extract,organic rooibos tea extract|0.000|activeingredients[45]",
+          "computed_blend_penalty": -7.0,
+          "computed_blend_penalty_magnitude": 7.0,
+          "dedupe_fingerprint": "certified organic beauty blend|organic bamboo extract,organic citrus bioflavonoids,organic green tea extract,organic pomegranate extract,organic rooibos tea extract|194.000|activeingredients[45]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
+          "hidden_mass_mg": 194.0,
           "impact_floor_applied": false,
-          "impact_ratio": 0.098039,
-          "impact_source": "count_share",
+          "impact_ratio": 1.0,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -91,7 +91,7 @@
           "unit_conversion_failed": false
         }
       ],
-      "B5_penalty": 7.43,
+      "B5_penalty": 10.0,
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
@@ -100,9 +100,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 2.0,
       "max": 30.0,
-      "penalties": 8.93,
-      "raw": 18.07,
-      "score": 18.07
+      "penalties": 11.5,
+      "raw": 15.5,
+      "score": 15.5
     },
     "C": {
       "depth_bonus": 0.5,
@@ -144,7 +144,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 43.53,
+    "quality_raw": 40.78,
     "violation_penalty": 0.0
   },
   "dsld_id": "173893",
@@ -158,21 +158,21 @@
   "output_schema_version": "3.4.0",
   "product_name": "Organic Plant Collagen Builder",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 54.4,
-  "score_80": 43.5,
+  "score_100_equivalent": 51.0,
+  "score_80": 40.8,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.21,
+      "core_quality": 15.03,
       "max": 25.0,
-      "score": 15.21
+      "score": 15.03
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 18.07
+      "score": 15.5
     },
     "C_evidence_research": {
       "max": 20.0,

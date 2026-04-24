@@ -3,7 +3,7 @@
   "brand_name": "Garden of Life Baby",
   "breakdown": {
     "A": {
-      "A1": 8.38,
+      "A1": 8.28,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 3.0,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 12.88,
+      "core_quality": 12.78,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -36,7 +36,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 12.88
+      "score": 12.78
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -51,18 +51,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Organic Food Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 50.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 7,
-          "computed_blend_penalty": -3.75,
-          "computed_blend_penalty_magnitude": 3.75,
-          "dedupe_fingerprint": "organic food blend|organic annatto,organic emblic amla phyllanthus emblica fruit extract,organic lemon,organic moringa oleifera,organic ocimum sanctum,organic psidium guajava guava fruit leaf extract,organic sesbania grandiflora leaf extract|0.000|activeingredients[13]",
+          "computed_blend_penalty": -7.0,
+          "computed_blend_penalty_magnitude": 7.0,
+          "dedupe_fingerprint": "organic food blend|organic annatto,organic emblic amla phyllanthus emblica fruit extract,organic lemon,organic moringa oleifera,organic ocimum sanctum,organic psidium guajava guava fruit leaf extract,organic sesbania grandiflora leaf extract|50.000|activeingredients[13]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
+          "hidden_mass_mg": 50.0,
           "impact_floor_applied": false,
-          "impact_ratio": 0.35,
-          "impact_source": "count_share",
+          "impact_ratio": 1.0,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -70,7 +70,7 @@
           "unit_conversion_failed": false
         }
       ],
-      "B5_penalty": 3.75,
+      "B5_penalty": 7.0,
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
@@ -79,9 +79,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 4.0,
       "max": 30.0,
-      "penalties": 3.75,
-      "raw": 25.25,
-      "score": 25.25
+      "penalties": 7.0,
+      "raw": 22.0,
+      "score": 22.0
     },
     "C": {
       "depth_bonus": 0.5,
@@ -119,7 +119,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 47.22,
+    "quality_raw": 43.87,
     "violation_penalty": 0.0
   },
   "dsld_id": "222842",
@@ -133,21 +133,21 @@
   "output_schema_version": "3.4.0",
   "product_name": "Multivitamin Liquid",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 59.0,
-  "score_80": 47.2,
+  "score_100_equivalent": 54.8,
+  "score_80": 43.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 12.88,
+      "core_quality": 12.78,
       "max": 25.0,
-      "score": 12.88
+      "score": 12.78
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 25.25
+      "score": 22.0
     },
     "C_evidence_research": {
       "max": 20.0,

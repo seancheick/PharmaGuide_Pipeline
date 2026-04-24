@@ -246,6 +246,33 @@
         "D5.4 Dr Pham safety_warning / ban_context propagation"
       ],
       "notes": "CVS Spectravite (12012): B7_dose_safety_evidence LEN 0->1, B7_penalty 0->2, score_80 31.0->29.0. Thorne Iron Citrate (15805): similar B7 activation. Drift is the intended result of flipping collect_rda_ul_data to true \u2014 the scorer now actually sees safety_flags on products that exceed 150%+ UL, and the D4.3 teratogenicity aggregation catches multi-form doses that individually sit under UL but summed exceed it. All drifts verified as medically-correct: products receive a B7 penalty when they expose the consumer to OVER-UL dosing. Fixtures re-frozen against post-D5.2 scored output."
+    },
+    {
+      "date": "2026-04-24",
+      "action": "refrozen_sprint_e1_3_x_accumulated_drift",
+      "products": [
+        182730,
+        12012,
+        288344,
+        241306,
+        278454,
+        16125,
+        222842,
+        173734,
+        18141,
+        239600,
+        173893,
+        204571
+      ],
+      "sprints_covered": [
+        "E1.3.1 context-aware is_additive classifier",
+        "E1.3.2.a probiotic CFU adequacy (scoring core)",
+        "E1.3.2.b probiotic confidence hybrid (descriptive fields)",
+        "E1.3.2.c probiotic CFU adequacy point uplift (config-driven)",
+        "E1.3.3 fish oil EPA/DHA parent-mass fallback (config-driven)",
+        "E1.3.4 enzyme recognition credit (config-gated, capped)"
+      ],
+      "notes": "Accumulated scoring drift from Sprint E1.3.x ingredient-quality refinements. Drift categories: A1 ingredient quality (enzyme recognition credit, fish oil parent-mass fallback), supp_type reclassification (multivitamin vs specialty), grade boundary shifts (Fair vs Below Avg). All drifts verified as legitimate scoring improvements from authored Sprint E1.3.x work, NOT regressions from the goal-matching contract refactor. The schema v6.0.0 goal-matching changes (compute_goal_matches refactor, Solution A alias map, Solution B product-name fallback) were verified scoring-neutral by isolating synthetic ingredients to the cluster-matching path only (no mutation of activeIngredients). Goal_matches and goal_match_confidence are not in the frozen_fields whitelist, so this changelog entry covers the pre-existing E1.3.x scoring drift only."
     }
   ]
 }

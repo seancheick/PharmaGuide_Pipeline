@@ -67,18 +67,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Organic B Complex Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 50.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 3,
-          "computed_blend_penalty": -2.9375,
-          "computed_blend_penalty_magnitude": 2.9375,
-          "dedupe_fingerprint": "organic b complex blend|organic lemon extract,organic ocimum sanctum extract,organic psidium guajava extract|0.000|activeingredients[11]",
+          "computed_blend_penalty": -2.5,
+          "computed_blend_penalty_magnitude": 2.5,
+          "dedupe_fingerprint": "organic b complex blend|organic lemon extract,organic ocimum sanctum extract,organic psidium guajava extract|50.000|activeingredients[11]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.1875,
-          "impact_source": "count_share",
+          "hidden_mass_mg": 50.0,
+          "impact_floor_applied": true,
+          "impact_ratio": 0.1,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -88,18 +88,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Probiotic Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 4.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 2,
-          "computed_blend_penalty": -2.625,
-          "computed_blend_penalty_magnitude": 2.625,
-          "dedupe_fingerprint": "probiotic blend|bifidobacterium lactis bl 04,lactobacillus acidophilus la 14|0.000|activeingredients[14]",
+          "computed_blend_penalty": -2.5,
+          "computed_blend_penalty_magnitude": 2.5,
+          "dedupe_fingerprint": "probiotic blend|bifidobacterium lactis bl 04,lactobacillus acidophilus la 14|4.000|activeingredients[14]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.125,
-          "impact_source": "count_share",
+          "hidden_mass_mg": 4.0,
+          "impact_floor_applied": true,
+          "impact_ratio": 0.1,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -107,7 +107,7 @@
           "unit_conversion_failed": false
         }
       ],
-      "B5_penalty": 5.56,
+      "B5_penalty": 5.0,
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
@@ -116,9 +116,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 5.0,
       "max": 30.0,
-      "penalties": 7.56,
-      "raw": 22.44,
-      "score": 22.44
+      "penalties": 7.0,
+      "raw": 23.0,
+      "score": 23.0
     },
     "C": {
       "depth_bonus": 0.5,
@@ -150,7 +150,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 43.8,
+    "quality_raw": 44.36,
     "violation_penalty": 0.0
   },
   "dsld_id": "204571",
@@ -164,8 +164,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "Adrenal Daily Balance",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 54.8,
-  "score_80": 43.8,
+  "score_100_equivalent": 55.5,
+  "score_80": 44.4,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -178,7 +178,7 @@
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 22.44
+      "score": 23.0
     },
     "C_evidence_research": {
       "max": 20.0,

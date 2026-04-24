@@ -3,8 +3,8 @@
   "brand_name": "Garden of Life Vitamin Code",
   "breakdown": {
     "A": {
-      "A1": 9.77,
-      "A2": 2.0,
+      "A1": 9.96,
+      "A2": 2.5,
       "A3": 1.0,
       "A4": 3.0,
       "A5": 2.25,
@@ -14,8 +14,8 @@
       "A5d": 0.5,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 2.0,
-      "core_quality": 18.02,
+      "category_bonus_total": 4.5,
+      "core_quality": 18.71,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -25,6 +25,15 @@
       "probiotic_bonus": 2.0,
       "probiotic_breakdown": {
         "cfu": 0.0,
+        "cfu_adequacy_contributions": [
+          {
+            "cfu_per_day": 500000000.0,
+            "points": 0.0,
+            "support": "high",
+            "tier": "low"
+          }
+        ],
+        "cfu_adequacy_points": 0.0,
         "clinical_strains": 1.0,
         "diversity": 0.0,
         "eligibility": {
@@ -52,7 +61,7 @@
         "probiotic_bonus": 2.0,
         "survivability": 0.0
       },
-      "score": 20.02
+      "score": 23.21
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -67,18 +76,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Raw Organic Fruit & Vegetable Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 560.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 23,
-          "computed_blend_penalty": -3.8254,
-          "computed_blend_penalty_magnitude": 3.8254,
-          "dedupe_fingerprint": "raw organic fruit vegetable blend|apple,asparagus,beet,blackberry,blueberry,broccoli,brussels sprout,carrot,cauliflower,celery,cucumber,garlic,ginger,green bell pepper,green onion,kale,parsley,raspberry,red cabbage,spinach,strawberry,tart cherry,tomato|0.000|activeingredients[23]",
+          "computed_blend_penalty": -7.0,
+          "computed_blend_penalty_magnitude": 7.0,
+          "dedupe_fingerprint": "raw organic fruit vegetable blend|apple,asparagus,beet,blackberry,blueberry,broccoli,brussels sprout,carrot,cauliflower,celery,cucumber,garlic,ginger,green bell pepper,green onion,kale,parsley,raspberry,red cabbage,spinach,strawberry,tart cherry,tomato|560.000|activeingredients[23]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
+          "hidden_mass_mg": 560.0,
           "impact_floor_applied": false,
-          "impact_ratio": 0.365079,
-          "impact_source": "count_share",
+          "impact_ratio": 1.0,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -88,18 +97,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Raw Probiotic & Enzyme Blend",
-          "blend_total_mg": null,
+          "blend_total_mg": 40.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 15,
-          "computed_blend_penalty": -3.1905,
-          "computed_blend_penalty_magnitude": 3.1905,
-          "dedupe_fingerprint": "raw probiotic enzyme blend|aspergillopepsin,beta glucanase,bromelain,cellulose,hemicellulase,lactase,lactobacillus bulgaricus,lactobacillus plantarum,lipase,papain,pectinase,peptidase,phytase,protease,xylanase|0.000|activeingredients[46]",
+          "computed_blend_penalty": -3.2503,
+          "computed_blend_penalty_magnitude": 3.2503,
+          "dedupe_fingerprint": "raw probiotic enzyme blend|aspergillopepsin,beta glucanase,bromelain,cellulose,hemicellulase,lactase,lactobacillus bulgaricus,lactobacillus plantarum,lipase,papain,pectinase,peptidase,phytase,protease,xylanase|40.000|activeingredients[46]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
+          "hidden_mass_mg": 40.0,
           "impact_floor_applied": false,
-          "impact_ratio": 0.238095,
-          "impact_source": "count_share",
+          "impact_ratio": 0.250062,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -109,18 +118,18 @@
         {
           "base_penalty_formula": "none: -(2 + 5*impact)",
           "blend_name": "Raw Antioxidant & Immune Support Complex",
-          "blend_total_mg": null,
+          "blend_total_mg": 10.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 2,
-          "computed_blend_penalty": -2.1587,
-          "computed_blend_penalty_magnitude": 2.1587,
-          "dedupe_fingerprint": "raw antioxidant immune support complex|coenzyme q 10,glutathione|0.000|activeingredients[61]",
+          "computed_blend_penalty": -2.5,
+          "computed_blend_penalty_magnitude": 2.5,
+          "dedupe_fingerprint": "raw antioxidant immune support complex|coenzyme q 10,glutathione|10.000|activeingredients[61]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
-          "hidden_mass_mg": null,
-          "impact_floor_applied": false,
-          "impact_ratio": 0.031746,
-          "impact_source": "count_share",
+          "hidden_mass_mg": 10.0,
+          "impact_floor_applied": true,
+          "impact_ratio": 0.1,
+          "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
@@ -128,7 +137,7 @@
           "unit_conversion_failed": false
         }
       ],
-      "B5_penalty": 9.17,
+      "B5_penalty": 10.0,
       "B6_penalty": 0.0,
       "B7_dose_safety_evidence": [],
       "B7_penalty": 0.0,
@@ -137,9 +146,9 @@
       "B_hypoallergenic": 0.0,
       "bonuses": 5.0,
       "max": 30.0,
-      "penalties": 10.67,
-      "raw": 19.33,
-      "score": 19.33
+      "penalties": 11.5,
+      "raw": 18.5,
+      "score": 18.5
     },
     "C": {
       "depth_bonus": 0.5,
@@ -188,7 +197,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 49.04,
+    "quality_raw": 51.4,
     "violation_penalty": 0.0
   },
   "dsld_id": "288344",
@@ -202,21 +211,21 @@
   "output_schema_version": "3.4.0",
   "product_name": "Men",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 61.3,
-  "score_80": 49.0,
+  "score_100_equivalent": 64.2,
+  "score_80": 51.4,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 2.0,
-      "core_quality": 18.02,
+      "category_bonus_total": 4.5,
+      "core_quality": 18.71,
       "max": 25.0,
-      "score": 20.02
+      "score": 23.21
     },
     "B_safety_purity": {
       "max": 30.0,
-      "score": 19.33
+      "score": 18.5
     },
     "C_evidence_research": {
       "max": 20.0,

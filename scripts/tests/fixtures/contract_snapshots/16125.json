@@ -20,7 +20,7 @@
       "A5d": 0.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 3.0,
+      "category_bonus_total": 4.75,
       "core_quality": 18.33,
       "max": 25.0,
       "omega3_breakdown": {
@@ -28,9 +28,24 @@
         "omega3_dose_bonus": 0.0
       },
       "omega3_dose_bonus": 0.0,
-      "probiotic_bonus": 3.0,
+      "probiotic_bonus": 4.75,
       "probiotic_breakdown": {
         "cfu": 1.0,
+        "cfu_adequacy_contributions": [
+          {
+            "cfu_per_day": 2500000000.0,
+            "points": 0.75,
+            "support": "moderate",
+            "tier": "adequate"
+          },
+          {
+            "cfu_per_day": 1250000000.0,
+            "points": 1.0,
+            "support": "high",
+            "tier": "adequate"
+          }
+        ],
+        "cfu_adequacy_points": 1.75,
         "clinical_strains": 1.0,
         "diversity": 1.0,
         "eligibility": {
@@ -39,10 +54,10 @@
           "reason": "supplement_type_probiotic"
         },
         "prebiotic": 0.0,
-        "probiotic_bonus": 3.0,
+        "probiotic_bonus": 4.75,
         "survivability": 1.0
       },
-      "score": 21.33
+      "score": 23.08
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -93,7 +108,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 59.34,
+    "quality_raw": 61.09,
     "violation_penalty": 0.0
   },
   "dsld_id": "16125",
@@ -104,17 +119,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "FloraMend Prime Probiotic",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 74.2,
-  "score_80": 59.3,
+  "score_100_equivalent": 76.4,
+  "score_80": 61.1,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 3.0,
+      "category_bonus_total": 4.75,
       "core_quality": 18.33,
       "max": 25.0,
-      "score": 21.33
+      "score": 23.08
     },
     "B_safety_purity": {
       "max": 30.0,

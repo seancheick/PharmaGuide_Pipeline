@@ -9,7 +9,7 @@
   "brand_name": "Ritual",
   "breakdown": {
     "A": {
-      "A1": 14.44,
+      "A1": 13.5,
       "A2": 2.0,
       "A3": 2.0,
       "A4": 3.0,
@@ -21,7 +21,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 22.19,
+      "core_quality": 21.25,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -42,7 +42,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 22.19
+      "score": 21.25
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -97,7 +97,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 62.22,
+    "quality_raw": 61.28,
     "violation_penalty": 0.0
   },
   "dsld_id": "278454",
@@ -108,17 +108,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "Essential for Women Mint Essenced",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 77.8,
-  "score_80": 62.2,
+  "score_100_equivalent": 76.6,
+  "score_80": 61.3,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 22.19,
+      "core_quality": 21.25,
       "max": 25.0,
-      "score": 22.19
+      "score": 21.25
     },
     "B_safety_purity": {
       "max": 30.0,
