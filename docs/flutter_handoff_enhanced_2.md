@@ -2,7 +2,7 @@
 
 **Pipeline release live:** `v2026.04.23.000925`
 **Doc rewrite:** 2026-04-23 (dedup pass — replaced 3 conflicting priority lists with one; added all tickets accumulated mid-sprint)
-**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.24** SHIPPED, FLTR-21/22/23 OPEN, awaiting full pipeline rebuild). E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion. **E1.24 ships Dr Pham's clinical signoff** with targeted refinements: Berberine note softening, goal weight adjustments (blood_pressure→Aging 0.5→0.35; neuropathy→Blood Sugar 0.4→0.25), 13-cluster primary_ingredients headliner refinement, and stress_resilience enabled for solo matching (ashwagandha now lands correctly on STRESS rather than SLEEP).
+**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.25** SHIPPED, FLTR-21/22/23 OPEN, awaiting full pipeline rebuild). E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion. **E1.24 ships clinical signoff on goal-matching and synergy clusters**; **E1.25 ships clinical signoff on dose-threshold closeout** (Packet A: Vanadium / EPO / Glucosamine / Olive Leaf thresholds added; Packet B: Red Clover bleeding threshold SKIPPED for weak mechanism anchor; Fish Oil bleeding harmonized to 2g/2g/3g tiers; Iodine thyroid threshold added). **E1.11 (dose-aware warning severity) is now CLOSED** — 33 of 129 rules carry thresholds, the remaining 96 are correctly dose-independent, and FLTR-11a can be retired.
 
 **From:** Pipeline / scoring / data-contract side
 **To:** Flutter app team
@@ -685,17 +685,21 @@ Same product appears 2× with different scores (e.g., GNC Women's Ultra Mega: 51
 ### E1.10 — FTS index rebuild `[P]`
 For FLTR-SEARCH Phase 2.5: rebuild FTS index with trigram tokenizer, add ingredient tokens (so "magnesium glycinate" finds products carrying it), add brand-exact relevance boost.
 
-### E1.11 — Dose-aware warning severity `[P]` ⚠️ CRITICAL
-Current state: pipeline fires warnings by ingredient presence regardless of dose. A prenatal with 10–20 mg niacin fires the same severity as pharmacologic 500 mg niacin.
+### E1.11 — Dose-aware warning severity `[x]` SHIPPED (2026-04-24)
 
-Required rule:
-1. Condition match
-2. Evidence match
-3. **Dose threshold match**
+**Closed out in sprints E1.5 (initial thresholds), E1.24 (clinical validation), and E1.25 (final closeout).**
 
-If dose threshold is not met → downgrade to informational or monitor. Do not label as avoid.
+The dose-threshold engine (`_evaluate_dose_thresholds_for_target` at `enrich_supplements_v3.py:11443`) is called from `_collect_interaction_profile` for both condition and drug-class rule paths. It reads `dose_thresholds[]` from `ingredient_interaction_rules.json` and downgrades / upgrades severity based on the product's computed per-day ingredient dose.
 
-Until this lands, Flutter applies a temporary guardrail (FLTR-11a).
+Final state: **33 / 129 rules (26%)** carry dose thresholds. The remaining 96 are correctly dose-independent (pregnancy/lactation absolutes, banned substances, `monitor`/`info` baselines that don't need downgrading).
+
+**FLTR-11a shim can be retired.** Its two original targets are now handled natively:
+- Niacin 18 mg in a prenatal: `RULE_IQM_NIACIN_DIABETES` has `> 1000 mg/day → avoid else monitor`. Prenatal doses yield `monitor`, not `caution`.
+- Chromium 30 mcg in a prenatal: `RULE_IQM_CHROMIUM_GLUCOSE` base severity is already `monitor`; the FLTR-11a downgrade was already a no-op for the diabetes condition.
+
+All other FLTR-11a-style cases (Olive Leaf trace, Evening Primrose low-dose, Vanadium multi-trace, Glucosamine sub-therapeutic) are now covered by explicit thresholds per E1.25 clinical signoff.
+
+**Deferred to E1.26:** zinc copper-depletion / GI warnings (require a new rule, not just a threshold) and any composite-stimulant-blend rules beyond the existing caffeine / guarana / yohimbe / ephedra set.
 
 ### E1.12 — Warning dedup at pipeline level `[P]`
 Pipeline currently emits `"Vitamin A / pregnancy"` twice inside the same `warnings[]` and also duplicates across `warnings` ↔ `warnings_profile_gated`. Flutter dedupes at render (FLTR-12) but pipeline should also.
@@ -1070,7 +1074,7 @@ Use these after implementation.
 | E1.8       | blocking_reason column enum              | Pipeline | Low      | `[P]`  |
 | E1.9       | Duplicate DSLD listings                  | Pipeline | Medium   | `[P]`  |
 | E1.10      | FTS index rebuild (trigram + ingredients)| Pipeline | Medium   | `[P]`  |
-| E1.11      | Dose-aware warning severity              | Pipeline | **High** | `[P]`  |
+| E1.11      | Dose-aware warning severity              | Pipeline | High     | `[x]`  |
 | E1.12      | Warning dedup at pipeline level          | Pipeline | Medium   | `[P]`  |
 | E1.13      | Pre-sorted profile buckets               | Pipeline | Low      | `[P]`  |
 | E1.14      | Ingredient data model normalization      | Pipeline | Medium   | `[P]`  |
@@ -1084,6 +1088,9 @@ Use these after implementation.
 | E1.22      | Synthesizer name-read fallback (pipeline-site fix) | Pipeline | High | `[x]` |
 | E1.23      | Absorption-enhancer sub-threshold demotion (unlocks A6) | Pipeline | High | `[x]` |
 | E1.24      | Dr Pham clinical signoff + refinements (Berberine note, goal weights, primary_ingredients, stress_resilience) | Pipeline | High | `[x]` |
+| E1.25      | Dose-threshold closeout (Packet A: Vanadium/EPO/Glucosamine/Olive Leaf; Packet B: Red Clover SKIP; Fish Oil harmonized; Iodine thyroid) | Pipeline | High | `[x]` |
+| E1.26      | Zinc copper-depletion / GI rule (new rule, not just threshold) | Pipeline | Medium | `[P]` |
+| FLTR-11a   | Temporary Flutter dose guardrail — **RETIRE** (E1.11 now ships dose-aware severity natively) | Flutter | Low | `[~]` |
 | FLTR-21    | "Solo ingredient" cluster badge          | Flutter  | Low      | `[ ]`  |
 | FLTR-22    | "Inferred from label" actives disclosure | Flutter  | Low      | `[ ]`  |
 | FLTR-23    | Optional: "Includes bioavailability aid" chip (E1.23 audit surface) | Flutter | Low | `[ ]` |
