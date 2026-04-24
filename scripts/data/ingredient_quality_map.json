@@ -34612,8 +34612,8 @@
       "lions mane fruiting body": {
         "bio_score": 8,
         "natural": true,
-        "absorption": "good (~75%)",
-        "notes": "Lion's mane fruiting body (Hericium erinaceus). Contains hericenones (lipophilic, fruiting body-specific) and beta-glucans. No published PK for hericenones. Beta-glucans interact with gut immune receptors rather than being absorbed systemically. Fruiting body provides different bioactive profile than mycelium (which contains erinacines). Clinical cognitive benefits demonstrated in RCTs but mechanism poorly understood.",
+        "absorption": "low-moderate (~12%); hericenones lipophilic (better F) but no human PK; polysaccharides poor",
+        "notes": "Lion's mane fruiting body (Hericium erinaceus). Contains hericenones (lipophilic, fruiting body-specific) and beta-glucans. No published PK for hericenones. Beta-glucans interact with gut immune receptors rather than being absorbed systemically. Fruiting body provides different bioactive profile than mycelium (which contains erinacines). Clinical cognitive benefits demonstrated in RCTs but mechanism poorly understood. 2025 Nutrients review explicitly flags PK data gap: \"elucidation of pharmacokinetics\" needed (PMID:40284172); hericenones are lipophilic aromatics predicted to absorb better than the β-glucans but never quantified in humans.",
         "aliases": [
           "lion's mane mushroom",
           "hericium erinaceus",
@@ -35035,8 +35035,8 @@
       "shiitake fruiting body": {
         "bio_score": 8,
         "natural": true,
-        "absorption": "moderate (~65%)",
-        "notes": "Whole fruiting body; contains lentinan (beta-1,3-glucan), eritadenine, and B vitamins.",
+        "absorption": "low systemic (~12%); high-MW β-1,3/1,6-glucan poorly absorbed; gut immune signaling",
+        "notes": "Whole fruiting body; contains lentinan (beta-1,3-glucan), eritadenine, and B vitamins. β-1,3/1,6-glucans in the fruiting body act via gut-associated immune receptors; systemic F is low per analog polysaccharide PK (PMID:18680305).",
         "aliases": [
           "shiitake mushroom",
           "lentinula edodes",
@@ -35058,8 +35058,8 @@
       "shiitake extract": {
         "bio_score": 10,
         "natural": true,
-        "absorption": "excellent (~85%)",
-        "notes": "Standardized extract; concentrated lentinan and AHCC (Active Hexose Correlated Compound) fractions for enhanced bioavailability.",
+        "absorption": "low systemic (~12%); lentinan is an IV drug — oral F inadequate; acts via M-cells",
+        "notes": "Standardized extract; concentrated lentinan and AHCC (Active Hexose Correlated Compound) fractions for enhanced bioavailability. Evidence: lentinan is approved clinically only as IV therapy; its use as a formulation excipient to improve other drugs' absorption implicitly confirms its own poor oral F (PMID:41943369; PMID:34119545).",
         "aliases": [
           "shiitake mushroom extract",
           "lentinula edodes extract",
@@ -35123,8 +35123,8 @@
       "turkey tail fruiting body": {
         "bio_score": 8,
         "natural": true,
-        "absorption": "moderate (~65%)",
-        "notes": "Whole fruiting body; contains PSK (polysaccharide-K/Krestin) and PSP polysaccharopeptides.",
+        "absorption": "low systemic (~12%); high-MW β-glucans poorly absorbed; gut-associated lymphoid tissue activity",
+        "notes": "Whole fruiting body; contains PSK (polysaccharide-K/Krestin) and PSP polysaccharopeptides. Mushroom β-glucans absorb via M-cell/Peyer's-patch uptake in the low-ng/mL range (PMID:18680305, matsutake analog); not systemically bioavailable in percentage terms.",
         "aliases": [
           "turkey tail mushroom",
           "trametes versicolor",
@@ -35149,8 +35149,8 @@
       "turkey tail standardized extract": {
         "bio_score": 10,
         "natural": true,
-        "absorption": "excellent (~85%)",
-        "notes": "Standardized extract of Trametes versicolor, typically to polysaccharopeptides (PSK/PSP). PSK (Krestin) and PSP are protein-bound polysaccharides used as cancer adjuvant therapy in Japan. They modulate immune function via Toll-like receptors and complement activation in gut-associated lymphoid tissue. Not absorbed intact systemically. Strong clinical evidence base in oncology (meta-analyses show survival benefit as adjuvant).",
+        "absorption": "low systemic (~10%); acts via gut immune cells (M-cell uptake); PSK given IV clinically",
+        "notes": "Standardized extract of Trametes versicolor, typically to polysaccharopeptides (PSK/PSP). PSK (Krestin) and PSP are protein-bound polysaccharides used as cancer adjuvant therapy in Japan. They modulate immune function via Toll-like receptors and complement activation in gut-associated lymphoid tissue. Not absorbed intact systemically. Strong clinical evidence base in oncology (meta-analyses show survival benefit as adjuvant). Evidence: PSK/PSP are clinically used as IV/intraperitoneal agents because oral bioavailability is inadequate for systemic effect (PMID:41943369, 2026 review).",
         "aliases": [
           "turkey tail extract",
           "trametes versicolor extract",
@@ -35215,8 +35215,8 @@
       "chaga sclerotium": {
         "bio_score": 7,
         "natural": true,
-        "absorption": "moderate (~60%)",
-        "notes": "Whole sclerotium (conk); contains betulinic acid, melanin, beta-glucans. Moderately bioavailable.",
+        "absorption": "low systemic (~10%); raw polysaccharide + triterpene matrix; no human PK data",
+        "notes": "Whole sclerotium (conk); contains betulinic acid, melanin, beta-glucans. Moderately bioavailable. No human PK data; triterpenoid fraction (inotodiol, betulinic acid) absorbs ~0.5% in rodent PK (PMID:34451676); polysaccharide fraction lower still.",
         "aliases": [
           "chaga mushroom",
           "inonotus obliquus",
@@ -35238,8 +35238,8 @@
       "chaga extract": {
         "bio_score": 9,
         "natural": true,
-        "absorption": "good (~75%)",
-        "notes": "Concentrated extract; enriched in inotodiol, triterpenoids, and beta-glucans for enhanced bioavailability.",
+        "absorption": "low systemic (~15%); triterpenes (inotodiol) absorbed ~0.5% in animals; β-glucan fraction lower",
+        "notes": "Concentrated extract; enriched in inotodiol, triterpenoids, and beta-glucans for enhanced bioavailability. Inotodiol rat absolute oral F = 0.45% (PMID:34451676); ethanol/solvent extraction enriches the lipophilic triterpene fraction which absorbs marginally better than the β-glucan fraction — but still in the low-single-digit percent range.",
         "aliases": [
           "chaga mushroom extract",
           "inonotus obliquus extract",
@@ -37834,6 +37834,22 @@
           "Full deletion of probiotic_unspecified parent — pending pipeline rebuild to re-route product outputs to probiotics parent",
           "Full deletion of glutamate parent — pending clinical signoff on natural flag + pipeline rebuild to re-route product outputs to l_glutamic_acid"
         ]
+      },
+      "5.0.3": {
+        "date": "2026-04-24",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 1 — mushroom β-glucan bioavailability",
+        "research_subagent_report": "PubMed research confirmed struct.values (0.10-0.15) are correct; absorption free-text strings (~60-85%) were marketing inflation and have been replaced with evidence-backed low-systemic F language. Verified PMIDs: 41943369 (2026 PSK/lentinan IV-only review), 34451676 (chaga inotodiol rat 0.45% F), 18680305 (matsutake β-glucan mouse ng/mL Cmax), 34119545 (lentinan as excipient), 40284172 (2025 lions mane PK gap review).",
+        "forms_updated": [
+          "turkey_tail::turkey tail standardized extract",
+          "turkey_tail::turkey tail fruiting body",
+          "shiitake::shiitake extract",
+          "shiitake::shiitake fruiting body",
+          "chaga::chaga extract",
+          "chaga::chaga sclerotium",
+          "lions_mane::lions mane fruiting body"
+        ],
+        "bio_score_changed": false,
+        "note": "7 mushroom forms: absorption string updated to match struct.values; 1-sentence PMID citation appended to notes. bio_score values untouched (not in scope of this batch — those require separate scoring review)."
       }
     },
     "category_enum": [
