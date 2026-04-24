@@ -468,13 +468,32 @@
         "alert_body": "Berberine carries neonatal bilirubin and kernicterus concerns. If you are pregnant or breastfeeding, do not use berberine-containing supplements unless specifically directed by your clinician.",
         "informational_note": "Berberine has neonatal safety concerns \u2014 relevant to anyone pregnant, planning pregnancy, or breastfeeding."
       },
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team",
-      "dose_thresholds": [],
-      "drug_class_id": "hypoglycemics",
-      "severity": "avoid",
-      "evidence_level": "established",
-      "action": "See drug-class-specific rules for detailed guidance."
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "diabetes",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 1500,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "caution",
+          "note": "RCT-aligned cutoff: Yin 2008 (PMID 18397984) used 500 mg TID (1500 mg/day) vs metformin 500 mg TID; this is the clinical dosing range that reliably produces metformin-equivalent HbA1c/FPG reduction. Below 1500 mg/day still warrants prescriber discussion (caution) but does not earn an avoid verdict on glycemic-effect grounds alone."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "hypoglycemics",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 1500,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "caution",
+          "note": "Additive hypoglycemia risk with sulfonylureas/insulin/GLP-1RAs becomes clinically significant at metformin-equivalent doses (\u22651500 mg/day per Yin 2008 and Dong 2012 meta-analysis). Sub-1500 mg/day use in compound formulations still warrants prescriber oversight."
+        }
+      ]
     },
     {
       "id": "RULE_IQM_BITTER_MELON_DIABETES",
@@ -1457,9 +1476,21 @@
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team",
-      "dose_thresholds": []
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "liver_disease",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 800,
+          "unit": "mg EGCG",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "note": "EGCG hepatotoxicity threshold; at \u2265800 mg EGCG/day first-pass saturation produces hepatocellular injury per USP 2020 review. Brewed green tea not implicated."
+        }
+      ]
     },
     {
       "id": "RULE_IQM_GYMNEMA_DIABETES",
@@ -3746,10 +3777,43 @@
           "unit": "iu",
           "severity_if_met": "avoid",
           "severity_if_not_met": "monitor"
+        },
+        {
+          "scope": "condition",
+          "target_id": "bleeding_disorders",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 10000,
+          "unit": "IU",
+          "severity_if_met": "monitor",
+          "severity_if_not_met": "info",
+          "note": "Above the Endocrine Society supervised-use ceiling (10,000 IU/day), authored action recommends monitoring when combined with anticoagulation. Endocrine Society CPG 2011 permits \u22646,000\u201310,000 IU/day therapeutically under clinical supervision; not an absolute avoid."
+        },
+        {
+          "scope": "condition",
+          "target_id": "autoimmune",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 4000,
+          "unit": "IU",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "IOM UL for adults is 4,000 IU/day. Above this, authored action requires physician-monitored 25-OH vitamin D levels to avoid toxicity; deficiency treatment in this range may still be appropriate under clinician guidance (Endocrine Society 2011)."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "immunosuppressants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 4000,
+          "unit": "IU",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "IOM UL for adults is 4,000 IU/day. Authored action: standard supplementation is appropriate alongside immunosuppressants; >4,000 IU/day requires physician oversight, not an absolute contraindication."
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -4355,9 +4419,21 @@
         }
       ],
       "drug_class_rules": [],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "thyroid_disorder",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 400,
+          "unit": "mcg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "note": "NIH ODS UL for adults is 400 mcg/day; above this, selenium becomes toxic and paradoxically impairs thyroid function per authored mechanism."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -4428,9 +4504,21 @@
         }
       ],
       "drug_class_rules": [],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "thyroid_disorder",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 5,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "Above 5 mg/day, biotin-streptavidin immunoassay interference causes false-low TSH and false-high free T3/T4 (mimicking hyperthyroidism). Does not alter actual thyroid function \u2014 stop biotin \u22652 days before thyroid labs."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -5791,9 +5879,32 @@
           "informational_note": "Andrographis affects immune function \u2014 relevant to people on immunosuppressants."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "bleeding_disorders",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 100,
+          "unit": "mg andrographolide",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "note": "Dose-dependent PAF antagonism and TXA2 suppression; authored action avoids high-dose in bleeding disorders at this cutoff."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "antiplatelets",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 100,
+          "unit": "mg andrographolide",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "note": "Authored action avoids high-dose andrographis with dual antiplatelet therapy."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -5845,7 +5956,19 @@
           "informational_note": "Red clover can affect clotting \u2014 relevant to people on anticoagulants."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "bleeding_disorders",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 160,
+          "unit": "mg isoflavones",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "Coumarin-like constituents; authored action avoids high-dose red clover isoflavone extracts above 160 mg/day in active bleeding."
+        }
+      ],
       "pregnancy_lactation": {
         "pregnancy_category": "avoid",
         "lactation_category": "avoid",
@@ -6299,9 +6422,21 @@
           "informational_note": "NAC can affect clotting \u2014 relevant to people on anticoagulants."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "bleeding_disorders",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 1200,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "note": "Disulfide-bond reduction on platelet glycoproteins becomes clinically meaningful above 1200 mg/day per authored action."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -6610,9 +6745,43 @@
           "informational_note": "DHA can affect platelet function \u2014 relevant to people on antiplatelets."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "bleeding_disorders",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "TXA2 suppression measurably prolongs bleeding time above 2 g/day per authored mechanism."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "INR monitoring warranted above 2 g/day per authored action."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "antiplatelets",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 3000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "Authored avoid-threshold for combined antiplatelet therapy without haematology guidance."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -6667,9 +6836,43 @@
           "informational_note": "EPA can affect platelet function \u2014 relevant to people on antiplatelets."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "bleeding_disorders",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "TXA2\u2192TXA3 substrate shift produces measurable bleeding-time prolongation above 2 g/day per authored mechanism."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 2000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "INR monitoring warranted above 2 g/day per authored action."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "antiplatelets",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 3000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "Authored avoid-threshold without haematological oversight."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -6794,9 +6997,21 @@
         }
       ],
       "drug_class_rules": [],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "kidney_disease",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 10,
+          "unit": "g",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "caution",
+          "note": "Loading protocols above 10 g/day avoided in CKD per authored action; below threshold, use still requires nephrology consult."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -7533,9 +7748,21 @@
           "informational_note": "Quercetin can affect clotting \u2014 relevant to people on anticoagulants."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "thyroid_disorder",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 500,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Thyroid peroxidase inhibition becomes clinically relevant above 500 mg/day per authored action."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -7590,9 +7817,32 @@
           "informational_note": "Resveratrol can affect platelet function \u2014 relevant to people on antiplatelets."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "bleeding_disorders",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 150,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "COX-1/COX-2 and GPVI inhibition produces clinically meaningful antiplatelet effect above 150 mg/day per authored mechanism."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "antiplatelets",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 250,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Authored avoid-threshold without physician oversight."
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
