@@ -2565,8 +2565,8 @@
         "bio_score": 15,
         "natural": true,
         "score": 18,
-        "absorption": "very high",
-        "notes": "The gold standard for B12 supplementation. Methylcobalamin is the active methyl form your body uses directly for nerve function and methylation. Sublingual delivery bypasses the GI tract and intrinsic factor requirement entirely — critical for people with absorption issues, pernicious anemia, or aging-related IF decline.",
+        "absorption": "sublingual; bypasses IF — ~10-40% absorbed at 1000 mcg via oral mucosa",
+        "notes": "The gold standard for B12 supplementation. Methylcobalamin is the active methyl form your body uses directly for nerve function and methylation. Sublingual delivery bypasses the GI tract and intrinsic factor requirement entirely — critical for people with absorption issues, pernicious anemia, or aging-related IF decline. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "sublingual methyl b12",
           "methyl b12 sublingual",
@@ -2575,19 +2575,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very high"
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.4,
+          "quality": "low",
+          "notes": "Sublingual bypasses intrinsic factor; ~10-40% absorption via buccal/sublingual mucosa"
         }
       },
       "methylcobalamin": {
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "The bioactive methyl form of B12 — used directly by your cells without conversion. Supports nerve health, brain function, and methylation pathways. Preferred over cyanocobalamin for people with MTHFR variants. Does not require intrinsic factor conversion, only GI absorption.",
+        "absorption": "active coenzyme form; ~1-2% passive absorption at 1000 mcg supplemental dose",
+        "notes": "The bioactive methyl form of B12 — used directly by your cells without conversion. Supports nerve health, brain function, and methylation pathways. Preferred over cyanocobalamin for people with MTHFR variants. Does not require intrinsic factor conversion, only GI absorption. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "methyl b12",
           "methyl cobalamin",
@@ -2605,11 +2605,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "low",
+          "notes": "Carmel 2008 (PMID:18709891): IF-mediated B12 absorption saturates at ~1.5-2 μg; passive ~1-2% at 1000 mcg"
         },
         "external_ids": {
           "unii": "BR1SN1JS2W"
@@ -2619,8 +2619,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "The mitochondrial active form of B12 (also called dibencozide or coenzyme B12). Essential for energy production in the Krebs cycle. The form your mitochondria actually use. Less common in supplements than methylcobalamin but equally important biologically.",
+        "absorption": "mitochondrial coenzyme form; ~1-2% passive absorption at 1000 mcg dose",
+        "notes": "The mitochondrial active form of B12 (also called dibencozide or coenzyme B12). Essential for energy production in the Krebs cycle. The form your mitochondria actually use. Less common in supplements than methylcobalamin but equally important biologically. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "dibencozide",
           "cobamamide",
@@ -2630,19 +2630,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "low",
+          "notes": "Carmel 2008 (PMID:18709891): same passive ~1-2% F as other oral B12 forms"
         }
       },
       "hydroxocobalamin": {
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "high",
-        "notes": "A natural form of B12 with excellent tissue retention — stays in the body longer than cyanocobalamin. Used medically for cyanide poisoning treatment and B12 injections. Converts to both methylcobalamin and adenosylcobalamin as needed.",
+        "absorption": "long retention; ~1-3% oral F, IM preferred for cyanide antidote use",
+        "notes": "A natural form of B12 with excellent tissue retention — stays in the body longer than cyanocobalamin. Used medically for cyanide poisoning treatment and B12 injections. Converts to both methylcobalamin and adenosylcobalamin as needed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "hydroxy b12",
           "hydroxo b12",
@@ -2652,11 +2652,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "low",
+          "notes": "Carmel 2008 (PMID:18709891): same passive F as other oral B12 forms; long retention is post-absorption"
         },
         "external_ids": {
           "unii": "Q40X8H422O"
@@ -2666,8 +2666,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "moderate-high",
-        "notes": "Synthetic B12 with sublingual delivery to improve absorption. While sublingual bypasses some GI barriers, cyanocobalamin still requires liver conversion to active forms and releases a tiny amount of cyanide during metabolism.",
+        "absorption": "sublingual; bypasses IF — comparable to methyl-SL but requires intracellular conversion",
+        "notes": "Synthetic B12 with sublingual delivery to improve absorption. While sublingual bypasses some GI barriers, cyanocobalamin still requires liver conversion to active forms and releases a tiny amount of cyanide during metabolism. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "sublingual b12",
           "b12 sublingual",
@@ -2675,19 +2675,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Sublingual bypasses IF; F class-equivalent to methylcobalamin sublingual"
         }
       },
       "cyanocobalamin": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "The most common and cheapest synthetic B12 form. Contains a cyanide group that must be removed during metabolism (the amount is toxicologically insignificant). Requires liver conversion to active methylcobalamin or adenosylcobalamin. The most clinically studied form.",
+        "absorption": "synthetic; ~1-2% passive at 1000 mcg, requires conversion to methyl/adenosyl forms",
+        "notes": "The most common and cheapest synthetic B12 form. Contains a cyanide group that must be removed during metabolism (the amount is toxicologically insignificant). Requires liver conversion to active methylcobalamin or adenosylcobalamin. The most clinically studied form. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "vitamin b12",
           "b12",
@@ -2698,11 +2698,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "low",
+          "notes": "Carmel 2008 (PMID:18709891): IF-mediated saturates at low dose; ~1-2% passive at supplement doses"
         },
         "external_ids": {
           "unii": "P6YC3EG204"
@@ -2712,8 +2712,8 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of B12 is used. Cheap supplements typically use cyanocobalamin; premium ones use methylcobalamin or adenosylcobalamin. The form matters significantly for people with MTHFR variants or absorption issues.",
+        "absorption": "form unspecified; assume ~1-2% passive absorption at supplemental dose",
+        "notes": "The supplement label does not specify which form of B12 is used. Cheap supplements typically use cyanocobalamin; premium ones use methylcobalamin or adenosylcobalamin. The form matters significantly for people with MTHFR variants or absorption issues. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "vitamin b12 unspecified",
           "b12 unspecified",
@@ -2723,11 +2723,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.02,
+          "quality": "low",
+          "notes": "Conservative scoring; form unknown",
+          "range_low": 0.01,
+          "range_high": 0.05
         }
       }
     },
@@ -3449,8 +3449,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "The gold standard form of vitamin D — identical to what your skin produces from sunlight. D3 raises and maintains blood 25(OH)D levels significantly better than D2. The most studied and recommended form by clinical guidelines worldwide.",
+        "absorption": "D3 with fat meal: ~50-80% absorbed; raises 25(OH)D more than D2",
+        "notes": "The gold standard form of vitamin D — identical to what your skin produces from sunlight. D3 raises and maintains blood 25(OH)D levels significantly better than D2. The most studied and recommended form by clinical guidelines worldwide. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "context_include": [
           "vitamin",
           "d3",
@@ -3494,19 +3494,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.6,
+          "range_low": 0.5,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "van den Heuvel 2024 (PMID:37865222): D3 raises 25(OH)D ~10.39 nmol/L (40%) more than D2 daily-dosed"
         }
       },
       "calcidiol (25-hydroxy D3)": {
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "superior",
-        "notes": "The pre-activated form of vitamin D (25-hydroxyvitamin D3). Bypasses the liver conversion step, producing faster and more consistent blood level increases. Especially valuable for people with liver issues or poor CYP2R1 enzyme activity. The form measured in blood tests.",
+        "absorption": "pre-hydroxylated; raises total 25(OH)D ~1.85x more than equivalent D3 (Shieh 2017)",
+        "notes": "The pre-activated form of vitamin D (25-hydroxyvitamin D3). Bypasses the liver conversion step, producing faster and more consistent blood level increases. Especially valuable for people with liver issues or poor CYP2R1 enzyme activity. The form measured in blood tests. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "calcidiol",
           "25-hydroxy d3",
@@ -3523,19 +3523,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "superior"
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.9,
+          "quality": "good",
+          "notes": "Shieh 2017 (PMID:28187226, JCEM): calcifediol (25D3) raised total 25(OH)D +25.5 vs +13.8 ng/mL vs D3 (P=0.001)"
         }
       },
       "micellized D3": {
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "superior",
-        "notes": "D3 processed into water-soluble micelles for enhanced absorption without requiring dietary fat. Especially important for people with fat malabsorption (Crohn's, celiac, cystic fibrosis, post-bariatric surgery) who struggle to absorb standard fat-soluble D3.",
+        "absorption": "micellar emulsion; modest improvement over standard D3 in low-fat conditions",
+        "notes": "D3 processed into water-soluble micelles for enhanced absorption without requiring dietary fat. Especially important for people with fat malabsorption (Crohn's, celiac, cystic fibrosis, post-bariatric surgery) who struggle to absorb standard fat-soluble D3. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "water-soluble d3",
           "micellar vitamin d3",
@@ -3552,19 +3552,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "superior"
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Mechanistic advantage in fat-malabsorption populations; limited human PK data"
         }
       },
       "liposomal D3": {
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "very high",
-        "notes": "D3 encapsulated in phospholipid liposomes for improved cellular uptake. Protects the vitamin through the GI tract and delivers it efficiently. A premium delivery format, though head-to-head data vs standard D3-in-oil is limited.",
+        "absorption": "liposomal carrier; claims of enhanced uptake — limited human PK data",
+        "notes": "D3 encapsulated in phospholipid liposomes for improved cellular uptake. Protects the vitamin through the GI tract and delivers it efficiently. A premium delivery format, though head-to-head data vs standard D3-in-oil is limited. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "liposomal vitamin d3",
           "liposome d3",
@@ -3580,19 +3580,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very high"
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "Marketing-driven enhanced uptake claims; no comparative human PK data published"
         }
       },
       "microencapsulated D3": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "25% better",
-        "notes": "D3 coated in a protective shell (typically starch or gum) for improved shelf stability. Useful in powdered and tablet formulations where oil-based D3 isn't practical. Does not significantly enhance absorption beyond standard D3.",
+        "absorption": "microencapsulated; no peer-reviewed % advantage over plain D3 verified",
+        "notes": "D3 coated in a protective shell (typically starch or gum) for improved shelf stability. Useful in powdered and tablet formulations where oil-based D3 isn't practical. Does not significantly enhance absorption beyond standard D3. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "encapsulated vitamin d3",
           "protected d3",
@@ -3605,19 +3605,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "Microencapsulation protects D3 from degradation but does not significantly enhance absorption compared to standard D3 in oil."
+          "value": 0.6,
+          "range_low": 0.5,
+          "range_high": 0.75,
+          "quality": "good",
+          "notes": "Microencapsulation provides shelf stability; no human PK advantage demonstrated"
         }
       },
       "vitamin D3 from lichen": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "The only vegan source of true vitamin D3 (cholecalciferol). Extracted from lichen, a symbiotic algae-fungus organism. Molecularly identical and bioequivalent to animal-derived D3. The go-to choice for vegans and vegetarians who want D3 instead of D2.",
+        "absorption": "vegan D3; equivalent to animal-derived D3 in 25(OH)D response",
+        "notes": "The only vegan source of true vitamin D3 (cholecalciferol). Extracted from lichen, a symbiotic algae-fungus organism. Molecularly identical and bioequivalent to animal-derived D3. The go-to choice for vegans and vegetarians who want D3 instead of D2. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "lichen vitamin d3",
           "vegan d3",
@@ -3648,19 +3648,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.6,
+          "range_low": 0.5,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "Lichen-derived D3 molecularly identical to animal-derived; bioequivalent"
         }
       },
       "ergocalciferol (D2)": {
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "The plant/fungal form of vitamin D. A 2024 meta-analysis of 20 studies confirms D3 raises blood levels 15.69 nmol/L higher than D2. D2 has a shorter half-life and lower potency per microgram. Only recommended when D3 is not an option (strict vegan preference).",
+        "absorption": "D2; raises 25(OH)D ~10.39 nmol/L (40%) less than D3 daily-dose (van den Heuvel 2024)",
+        "notes": "The plant/fungal form of vitamin D. A van den Heuvel 2024 (PMID:37865222) meta-analysis of 20 studies confirms D3 raises 25(OH)D 10.39 nmol/L (40%) higher than D2. D2 has a shorter half-life and lower potency per microgram. Only recommended when D3 is not an option (strict vegan preference). Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "ergocalciferol",
           "d2",
@@ -3678,19 +3678,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.45,
+          "range_low": 0.35,
+          "range_high": 0.6,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "van den Heuvel 2024 (PMID:37865222): meta-analysis of 20 studies, daily-dosed LC-MS/MS subset"
         }
       },
       "vitamin D2 (unspecified source)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "poor",
-        "notes": "Vitamin D2 from an unspecified source — typically irradiated yeast or mushrooms. Less reliable than D3 at raising blood levels, with shorter duration of action. Scored conservatively due to D2's known inferiority and unspecified sourcing.",
+        "absorption": "D2; inferior to D3 for sustained 25(OH)D elevation",
+        "notes": "Vitamin D2 from an unspecified source — typically irradiated yeast or mushrooms. Less reliable than D3 at raising blood levels, with shorter duration of action. Scored conservatively due to D2's known inferiority and unspecified sourcing. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "context_include": [
           "vitamin",
           "d2",
@@ -3718,19 +3718,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "D2 unspecified source; inferior 25(OH)D yield per van den Heuvel 2024 (PMID:37865222)"
         }
       },
       "vitamin D2 from UV-treated mushrooms": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "moderate",
-        "notes": "D2 produced by exposing mushrooms to ultraviolet light, mimicking natural sunlight conversion. Approved for food fortification in the EU. A natural vegan option, but still D2 — less potent than D3 at maintaining blood levels long-term.",
+        "absorption": "UV-treated mushroom D2; absorbed but lower 25(OH)D yield than D3",
+        "notes": "D2 produced by exposing mushrooms to ultraviolet light, mimicking natural sunlight conversion. Approved for food fortification in the EU. A natural vegan option, but still D2 — less potent than D3 at maintaining blood levels long-term. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "mushroom vitamin d2",
           "UV-irradiated mushroom d2",
@@ -3747,19 +3747,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.55,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "D2 from mushrooms; 25(OH)D response inferior to D3 per van den Heuvel 2024 (PMID:37865222)"
         }
       },
       "vitamin D analogs (non-functional)": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "Structurally similar molecules that cannot function as vitamin D in the body. May interfere with vitamin D receptors without providing biological activity. Provides no nutritional benefit.",
+        "absorption": "non-functional analogs; minimal/no 25(OH)D activity",
+        "notes": "Structurally similar molecules that cannot function as vitamin D in the body. May interfere with vitamin D receptors without providing biological activity. Provides no nutritional benefit. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "vitamin d analog",
           "pseudo-vitamin d",
@@ -3778,18 +3778,18 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "unknown",
+          "notes": "Structurally similar but biologically inactive; no 25(OH)D response"
         }
       },
       "oxidized vitamin D": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Vitamin D that has been destroyed by light, heat, or oxygen exposure. Completely inactive — provides no vitamin D benefit. Indicates poor manufacturing, storage, or an expired product.",
+        "absorption": "oxidized D; degraded form, negligible bioactivity",
+        "notes": "Vitamin D that has been destroyed by light, heat, or oxygen exposure. Completely inactive — provides no vitamin D benefit. Indicates poor manufacturing, storage, or an expired product. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "degraded d",
           "inactive vitamin d",
@@ -3807,18 +3807,18 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "range_low": 0.0,
+          "range_high": 0.05,
+          "quality": "unknown",
+          "notes": "Degradation product; no significant 25(OH)D contribution"
         }
       },
       "vitamin d (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify D2 or D3. This matters significantly — D3 is far more effective at raising blood levels. Most quality supplements use D3; cheap or plant-based products may use the inferior D2 form.",
+        "absorption": "form unspecified; assume D3-like ~50% with fat meal",
+        "notes": "The supplement label does not specify D2 or D3. This matters significantly — D3 is far more effective at raising blood levels. Most quality supplements use D3; cheap or plant-based products may use the inferior D2 form. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "Vitamin D",
           "Vitamin D USP",
@@ -3829,9 +3829,9 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "notes": "Unknown form; conservative scoring",
+          "range_low": 0.3,
+          "range_high": 0.7
         }
       }
     },
@@ -4321,8 +4321,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "The premier form of vitamin K2 for supplementation. MK-7's long half-life (~72 hours vs ~1-2 hours for MK-4) means it stays active in your bloodstream for days, providing sustained activation of osteocalcin (bone health) and matrix GLA protein (cardiovascular health). Primarily sourced from natto fermentation.",
+        "absorption": "MK-7; long t1/2, accumulates 7-8x vs K1 with prolonged intake (Schurgers 2007)",
+        "notes": "The premier form of vitamin K2 for supplementation. MK-7's long half-life (~72 hours vs ~1-2 hours for MK-4) means it stays active in your bloodstream for days, providing sustained activation of osteocalcin (bone health) and matrix GLA protein (cardiovascular health). Primarily sourced from natto fermentation. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "MK-7",
           "menaquinone-7",
@@ -4366,19 +4366,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Schurgers 2007 (PMID:17158229, Blood): MK-7 7-8x serum accumulation vs K1 during prolonged intake"
         }
       },
       "menaquinone-7 all-trans": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "The biologically active geometric isomer of MK-7. Only the all-trans configuration properly activates vitamin K-dependent proteins. Some cheap MK-7 supplements contain significant cis-isomer contamination, which is inactive. Look for 'all-trans' or '>99% trans' on the label.",
+        "absorption": "all-trans MK-7; biologically active isomer, superior to cis form",
+        "notes": "The biologically active geometric isomer of MK-7. Only the all-trans configuration properly activates vitamin K-dependent proteins. Some cheap MK-7 supplements contain significant cis-isomer contamination, which is inactive. Look for 'all-trans' or '>99% trans' on the label. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "all-trans MK-7",
           "trans mk7",
@@ -4394,19 +4394,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.9,
+          "quality": "good",
+          "notes": "All-trans isomer is bioactive; cis-MK-7 is inert"
         }
       },
       "menaquinone-4 (MK-4)": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good",
-        "notes": "The short-chain form of vitamin K2, naturally produced in human tissues from K1. Rapidly absorbed but has a very short half-life (~1-2 hours), requiring multiple daily doses or high single doses (typically 15-45 mg in Japanese studies). Best studied for bone density.",
+        "absorption": "MK-4 at 420 μg nutritional dose: NOT detectable in serum (Sato 2012)",
+        "notes": "The short-chain form of vitamin K2, naturally produced in human tissues from K1. Rapidly absorbed but has a very short half-life (~1-2 hours), requiring multiple daily doses or high single doses (typically 15-45 mg in Japanese studies). Best studied for bone density. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "MK-4",
           "menaquinone-4",
@@ -4426,19 +4426,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very good"
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Sato 2012 (PMID:23140417, Nutr J): MK-4 at 420 μg undetectable; MK-7 well-absorbed"
         }
       },
       "vitamin K2 (cis form)": {
         "bio_score": 4,
         "natural": true,
         "score": 7,
-        "absorption": "poor",
-        "notes": "The inactive geometric isomer of vitamin K2. Cannot properly activate vitamin K-dependent proteins. Found as a contaminant in low-quality K2 supplements. If your supplement contains significant cis-K2, the effective dose is much lower than the label states.",
+        "absorption": "cis-MK-7; biologically inactive, fails to raise serum MK-7",
+        "notes": "The inactive geometric isomer of vitamin K2. Cannot properly activate vitamin K-dependent proteins. Found as a contaminant in low-quality K2 supplements. If your supplement contains significant cis-K2, the effective dose is much lower than the label states. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "cis k2",
           "cis vitamin k2",
@@ -4453,18 +4453,18 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "range_low": 0.0,
+          "range_high": 0.05,
+          "quality": "unknown",
+          "notes": "Cis isomer cannot activate vitamin K-dependent proteins"
         }
       },
       "phylloquinone (K1)": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate",
-        "notes": "The plant form of vitamin K found abundantly in leafy greens (kale, spinach, broccoli). Primarily supports blood clotting (coagulation). Has limited conversion to K2 in the body (~5-25%), so it does not fully replace K2 for bone and cardiovascular benefits.",
+        "absorption": "K1 from food ~10%, supplements ~15-25%; short t1/2 ~1-2h",
+        "notes": "The plant form of vitamin K found abundantly in leafy greens (kale, spinach, broccoli). Primarily supports blood clotting (coagulation). Has limited conversion to K2 in the body (~5-25%), so it does not fully replace K2 for bone and cardiovascular benefits. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "k1",
           "plant vitamin k",
@@ -4482,19 +4482,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.25,
+          "quality": "low",
+          "notes": "Schurgers 2000 (PMID:11356998): food-matrix K1 absorption limited; rapid clearance"
         }
       },
       "vitamin K1 synthetic": {
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "moderate",
-        "notes": "Synthetic phytonadione (vitamin K1), commonly used in fortified foods and the injectable form given to newborns to prevent hemorrhagic disease. Functionally equivalent to natural K1 for blood clotting support.",
+        "absorption": "synthetic K1; modestly higher F than food-bound, still rapid clearance",
+        "notes": "Synthetic phytonadione (vitamin K1), commonly used in fortified foods and the injectable form given to newborns to prevent hemorrhagic disease. Functionally equivalent to natural K1 for blood clotting support. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "synthetic vitamin k1",
           "phytonadione synthetic",
@@ -4507,19 +4507,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.2,
+          "range_low": 0.15,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Pure phytonadione; no food matrix; same rapid clearance as natural K1"
         }
       },
       "vitamin K2 from natto": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "MK-7 from traditional Japanese fermented soybeans (natto). The original and most studied food source of long-chain vitamin K2. Natto contains the highest natural concentration of MK-7 of any food. A whole-food form with excellent bioavailability.",
+        "absorption": "natto MK-7; ~10x higher serum K2 vs spinach K1 (Schurgers 2000)",
+        "notes": "MK-7 from traditional Japanese fermented soybeans (natto). The original and most studied food source of long-chain vitamin K2. Natto contains the highest natural concentration of MK-7 of any food. A whole-food form with excellent bioavailability. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "natto vitamin k2",
           "fermented soy k2",
@@ -4533,19 +4533,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.8,
+          "range_low": 0.7,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Schurgers 2000 (PMID:11356998): natto MK-7 ~10x higher serum K2 than equivalent K1 from spinach"
         }
       },
       "vitamin K2 from cheese": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good",
-        "notes": "Vitamin K2 from fermented dairy, primarily containing longer-chain menaquinones (MK-8, MK-9, MK-10) produced by bacteria during cheese aging. Gouda and Brie are the richest sources. These longer forms have extended half-lives but less clinical data than MK-7.",
+        "absorption": "cheese MKs (mainly MK-8/9); food-matrix limited absorption",
+        "notes": "Vitamin K2 from fermented dairy, primarily containing longer-chain menaquinones (MK-8, MK-9, MK-10) produced by bacteria during cheese aging. Gouda and Brie are the richest sources. These longer forms have extended half-lives but less clinical data than MK-7. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "cheese vitamin k2",
           "dairy k2",
@@ -4562,19 +4562,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Long-chain MKs from fermented dairy; food-matrix bound"
         }
       },
       "vitamin K2 from yeast": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Vitamin K2 from yeast fermentation. A food-based source with naturally co-occurring cofactors. Less clinical data than natto-derived MK-7 but a viable option for people avoiding soy.",
+        "absorption": "yeast-derived MK; no peer-reviewed PK data — flagged for verification",
+        "notes": "Vitamin K2 from yeast fermentation. A food-based source with naturally co-occurring cofactors. Less clinical data than natto-derived MK-7 but a viable option for people avoiding soy. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "yeast vitamin k2",
           "natural k2 yeast",
@@ -4586,19 +4586,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Yeast-fermented MK; lacks dedicated PK literature"
         }
       },
       "menadione (K3)": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "A synthetic vitamin K precursor (menadione) that is NOT approved for human supplementation due to toxicity — can cause hemolytic anemia, liver damage, and jaundice. Banned in over-the-counter supplements in most countries. Used only in animal feed.",
+        "absorption": "K3 banned in human supplements (FDA); hemolytic toxicity",
+        "notes": "A synthetic vitamin K precursor (menadione) that is NOT approved for human supplementation due to toxicity — can cause hemolytic anemia, liver damage, and jaundice. Banned in over-the-counter supplements in most countries. Used only in animal feed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "vitamin k3",
           "menadione",
@@ -4612,18 +4612,18 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "range_low": 0.0,
+          "range_high": 0.0,
+          "quality": "unknown",
+          "notes": "Banned by FDA for human use; hemolytic anemia risk"
         }
       },
       "vitamin K analogs (non-functional)": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Structurally similar molecules that cannot activate vitamin K-dependent proteins. Provide no clotting, bone, or cardiovascular benefit.",
+        "absorption": "non-functional K analogs; negligible bioactivity",
+        "notes": "Structurally similar molecules that cannot activate vitamin K-dependent proteins. Provide no clotting, bone, or cardiovascular benefit. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "vitamin k analog",
           "pseudo-vitamin k",
@@ -4639,18 +4639,18 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "range_low": 0.0,
+          "range_high": 0.05,
+          "quality": "unknown",
+          "notes": "Cannot activate vitamin K-dependent proteins"
         }
       },
       "oxidized vitamin K": {
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "very poor",
-        "notes": "Vitamin K degraded by light or oxygen exposure. Completely inactive — cannot participate in the carboxylation reactions essential for blood clotting and calcium metabolism.",
+        "absorption": "oxidized K; degraded, no clinical role",
+        "notes": "Vitamin K degraded by light or oxygen exposure. Completely inactive — cannot participate in the carboxylation reactions essential for blood clotting and calcium metabolism. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "degraded k",
           "inactive vitamin k",
@@ -4668,18 +4668,18 @@
         "dosage_importance": 1.5,
         "absorption_structured": {
           "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "range_low": 0.0,
+          "range_high": 0.05,
+          "quality": "unknown",
+          "notes": "Degradation product; no carboxylase activity"
         }
       },
       "vitamin k (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify K1 or K2, or which K2 subtype. This distinction matters: K1 supports clotting, K2 (especially MK-7) supports bone and cardiovascular health. Without specification, the form and benefits cannot be confirmed.",
+        "absorption": "form unspecified; F varies 10-80% across forms",
+        "notes": "The supplement label does not specify K1 or K2, or which K2 subtype. This distinction matters: K1 supports clotting, K2 (especially MK-7) supports bone and cardiovascular health. Without specification, the form and benefits cannot be confirmed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
           "Vitamin K",
           "vitamin k1/k2",
@@ -4695,9 +4695,9 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "notes": "Unknown form; F highly variable across K1/MK-4/MK-7",
+          "range_low": 0.1,
+          "range_high": 0.7
         }
       }
     },
@@ -38196,6 +38196,104 @@
           "Re-verify PMID:41096614 (algal DHA RCT) — agent could not confirm; if verified valid, retain as-is; if not, replace with descriptive text or verified Arterburn citation",
           "Dr Pham clinical review on fermented CLO bio=14 (no human PK; oxidation concerns)",
           "Dr Pham clinical review on krill phospholipid bio=13 forms (marginal advantage per recent meta-analyses)"
+        ]
+      },
+      "5.0.12": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 10 — vitamin B12/D/K bioavailability + citation surgery",
+        "research_subagent_report": "PubMed research on 31 vitamin forms (B12: 7, D: 12, K: 13). Research agent USED WebFetch on PubMed eutils (per anti-hallucination policy) and discovered ALL 5 supplied \"well-known\" reference PMIDs were misattributions. Verified replacements via PubMed esearch + efetch. Two numeric corrections applied: \"15.69 nmol/L D3>D2\" → verified 10.39 nmol/L; \"25% better\" microencapsulated D3 claim removed (unverified marketing). Major insight: B12 active-form bio_score inflation (~14) is unsupported — oral F is identical (~1-2% passive) to cyanocobalamin; metabolic advantage is post-absorption. Similarly MK-4 at nutritional doses is UNDETECTABLE in serum (Sato 2012); current bio=12 (equal to MK-7) is dramatically inflated.",
+        "pmid_misattributions_caught": {
+          "PMID:18065595": "supposed Carmel 2008 B12 → actually Newby 2007 whole grains",
+          "PMID:11144476": "supposed Heaney 2003 D2/D3 → actually Zerahn 2000 cardiac imaging",
+          "PMID:23682915": "supposed Shieh 2017 calcidiol → actually Castagnone-Sereno 2013 nematode genomics",
+          "PMID:22516125": "supposed Sato 2012 MK-7 → actually Qu 2012 iron spin-crossover DFT",
+          "PMID:17906277": "supposed Schurgers 2007 MK-7 → actually Pearson 2007 nutrition review"
+        },
+        "verified_pmids_introduced": [
+          "PMID:18709891 Carmel R 2008 Food Nutr Bull — B12 absorption review",
+          "PMID:28187226 Shieh A 2017 JCEM — calcidiol +25.5 vs D3 +13.8 ng/mL (P=0.001)",
+          "PMID:23140417 Sato T 2012 Nutr J — MK-4 at 420 μg undetectable in serum",
+          "PMID:17158229 Schurgers LJ 2007 Blood — MK-7 7-8x serum accumulation vs K1",
+          "PMID:11356998 Schurgers LJ 2000 — natto K2 ~10x serum vs spinach K1",
+          "PMID:37865222 van den Heuvel 2024 Adv Nutr — meta-analysis: D2 raises 25(OH)D 10.39 nmol/L (40%) less than D3"
+        ],
+        "numeric_corrections_in_existing_iqm": {
+          "vitamin_d::ergocalciferol (D2)": "\"15.69 nmol/L D3>D2\" → \"10.39 nmol/L (40%)\" per verified PMID:37865222",
+          "vitamin_d::microencapsulated D3": "\"25% better\" claim removed — could not be verified"
+        },
+        "forms_updated": [
+          "vitamin_b12_cobalamin::methylcobalamin sublingual (value None → 0.2)",
+          "vitamin_b12_cobalamin::methylcobalamin (value None → 0.02)",
+          "vitamin_b12_cobalamin::adenosylcobalamin (value None → 0.02)",
+          "vitamin_b12_cobalamin::hydroxocobalamin (value None → 0.03)",
+          "vitamin_b12_cobalamin::cyanocobalamin sublingual (value None → 0.15)",
+          "vitamin_b12_cobalamin::cyanocobalamin (value None → 0.02)",
+          "vitamin_b12_cobalamin::b12 (unspecified) (value None → 0.02)",
+          "vitamin_d::cholecalciferol (D3) (value None → 0.6)",
+          "vitamin_d::calcidiol (25-hydroxy D3) (value None → 0.75)",
+          "vitamin_d::micellized D3 (value None → 0.7)",
+          "vitamin_d::liposomal D3 (value None → 0.65)",
+          "vitamin_d::microencapsulated D3 (value None → 0.6)",
+          "vitamin_d::vitamin D3 from lichen (value None → 0.6)",
+          "vitamin_d::ergocalciferol (D2) (value None → 0.45)",
+          "vitamin_d::vitamin D2 (unspecified source) (value None → 0.4)",
+          "vitamin_d::vitamin D2 from UV-treated mushrooms (value None → 0.4)",
+          "vitamin_d::vitamin D analogs (non-functional) (value None → None)",
+          "vitamin_d::oxidized vitamin D (value None → None)",
+          "vitamin_d::vitamin d (unspecified) (value None → None)",
+          "vitamin_k::menaquinone-7 (MK-7) (value None → 0.7)",
+          "vitamin_k::menaquinone-7 all-trans (value None → 0.75)",
+          "vitamin_k::menaquinone-4 (MK-4) (value None → 0.05)",
+          "vitamin_k::vitamin K2 (cis form) (value None → None)",
+          "vitamin_k::phylloquinone (K1) (value None → 0.15)",
+          "vitamin_k::vitamin K1 synthetic (value None → 0.2)",
+          "vitamin_k::vitamin K2 from natto (value None → 0.8)",
+          "vitamin_k::vitamin K2 from cheese (value None → 0.5)",
+          "vitamin_k::vitamin K2 from yeast (value None → 0.4)",
+          "vitamin_k::menadione (K3) (value None → None)",
+          "vitamin_k::vitamin K analogs (non-functional) (value None → None)",
+          "vitamin_k::oxidized vitamin K (value None → None)",
+          "vitamin_k::vitamin k (unspecified) (value None → None)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "vitamin_b12_cobalamin::methylcobalamin",
+            "flag": "Research agent recommends bio_score 14 → 9 downgrade. Active methyl form provides POST-absorption metabolic advantage but oral F is identical to cyanocobalamin (~1-2% passive). Bio_score should reflect F, not utilization. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b12_cobalamin::adenosylcobalamin",
+            "flag": "Research agent recommends bio_score 14 → 9 downgrade. Same reasoning as methylcobalamin — mitochondrial role is post-absorption. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b12_cobalamin::hydroxocobalamin",
+            "flag": "Research agent recommends bio_score 13 → 9 downgrade. Long tissue retention is post-absorption; oral F is class-equivalent. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_d::micellized D3",
+            "flag": "Research agent recommends bio_score 14 → 12 downgrade. No peer-reviewed evidence of bio advantage over plain D3 with fat. Mechanism preserved for fat-malabsorption use cases. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_d::liposomal D3",
+            "flag": "Research agent recommends bio_score 14 → 12 downgrade. Marketing claim, no PK evidence. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_d::microencapsulated D3",
+            "flag": "Research agent recommends bio_score 10 → 9 downgrade. Prior \"25% better\" claim could not be traced to any PMID — flagged as unverified marketing. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_k::menaquinone-4 (MK-4)",
+            "flag": "Research agent recommends bio_score 12 → 5 downgrade. Sato 2012 (PMID:23140417) shows MK-4 at 420 μg nutritional dose is UNDETECTABLE in serum, while MK-7 is well-absorbed. Current bio=12 (equal to MK-7) is dramatically inflated for nutritional dosing. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_k::vitamin K2 from yeast",
+            "flag": "Research agent recommends bio_score 10 → 8 downgrade. No peer-reviewed PK data for yeast-derived K2. Needs Dr Pham clinical signoff."
+          }
+        ],
+        "class_findings": [
+          "B12 oral F is class-LOW (~1-2% passive at supplemental doses; ~10-30% sublingual). Active-form metabolic advantage is POST-absorption — bio_score should reflect F, not utilization.",
+          "Vitamin D class-MID-HIGH (~50-80% with fat meal); D2 ~40% lower than D3 per van den Heuvel 2024.",
+          "Vitamin K spectrum: MK-7 (0.70-0.90) >> MK-4 (0.05) at nutritional doses per Sato 2012; phylloquinone (0.15) << MK-7."
         ]
       }
     },
