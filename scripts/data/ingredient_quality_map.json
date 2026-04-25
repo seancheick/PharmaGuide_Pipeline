@@ -38139,6 +38139,64 @@
           }
         ],
         "class_finding": "Free curcumin oral F is class-bounded at ~1-7% across all enhanced formulations. Per Kroon 2025: NovaSol delivers highest free curcumin Cmax (6.7-38 nM) but still 100× below in vitro bioactive thresholds. Fold-change AUC figures describe relative improvement over the 1-3% baseline of unformulated curcumin, not absolute F. The 80-point IQM scoring should treat curcumin as a class similar to CoQ10 (fold-change ≠ clinical equivalence)."
+      },
+      "5.0.11": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 9 — omega-3 framework + value population",
+        "research_subagent_report": "PubMed research on 22 omega-3 forms across 4 parents (fish_oil, dha, epa, cod_liver_oil). Research agent did NOT have direct PubMed efetch access in its session and explicitly relied on training-data knowledge — per project policy \"NEVER hallucinate PMIDs\", this batch APPLIED the framework analysis and value recommendations but did NOT introduce any agent-suggested NEW PMIDs without verification. Existing IQM PMIDs (Dyerberg 2010 PMID:20638827, Schuchardt 2011 PMC3168413, PMID:41096614 algal DHA) retained pending live verification.",
+        "framework_finding": "Omega-3 absolute oral F is class-HIGH (0.70-0.97) across all chemical forms (rTG, TG, EE, PL, CLO) when co-ingested with dietary fat. Form differences are mostly Cmax/AUC RATE, not extent. Dyerberg 2010 numbers describe RELATIVE plasma rise vs CLO reference (rTG=124%, TG=100%, FFA=91%, EE=73%), NOT absolute F. EE catches up to TG at steady-state.",
+        "verified_pmids_kept_from_existing_iqm": [
+          "PMID:20638827 Dyerberg 2010 — primary form-comparison reference",
+          "PMC3168413 Schuchardt 2011 — krill PL vs fish oil",
+          "PMID:41096614 algal DHA RCT — flagged for re-verification (agent could not confirm)"
+        ],
+        "agent_suggested_pmids_NOT_introduced_pending_verification": [
+          "PMID:17413132 Arterburn 2007 (algal DHA bioequivalence) — REQUIRES VERIFICATION",
+          "PMID:18689564 Arterburn 2008 (DHA tissue accretion) — REQUIRES VERIFICATION",
+          "PMID:22113870 Neubronner 2011 (EE catches up long-term) — REQUIRES VERIFICATION",
+          "PMID:25510778 Köhler 2015 (krill PL uptake) — REQUIRES VERIFICATION",
+          "PMID:24373555 Ramprasath 2013 (krill modest advantage) — REQUIRES VERIFICATION",
+          "PMID:21854650 Schuchardt 2011 PMID form (vs PMC) — REQUIRES VERIFICATION",
+          "PMID:26561784 Yurko-Mauro 2015 — REQUIRES VERIFICATION",
+          "PMID:24344723 Laidlaw 2014 — REQUIRES VERIFICATION"
+        ],
+        "forms_updated": [
+          "fish_oil::triglyceride (rTG) form (value None → 0.92)",
+          "fish_oil::natural triglyceride (value None → 0.85)",
+          "fish_oil::ethyl ester (value None → 0.7)",
+          "fish_oil::molecularly distilled (value None → 0.85)",
+          "fish_oil::fish liver oil (value None → 0.85)",
+          "fish_oil::fish oil phospholipid (value None → 0.88)",
+          "fish_oil::fish oil (unspecified) (value None → 0.78)",
+          "dha::algal triglyceride (value None → 0.85)",
+          "dha::DHA fish oil ethyl ester (value None → 0.7)",
+          "dha::DHA fish oil triglyceride (value None → 0.85)",
+          "dha::DHA krill phospholipid (value None → 0.88)",
+          "dha::dha (unspecified) (value None → 0.78)",
+          "dha::DHA fish oil rTG (value None → 0.92)",
+          "epa::EPA fish oil ethyl ester (value None → 0.7)",
+          "epa::EPA fish oil triglyceride (value None → 0.85)",
+          "epa::EPA krill phospholipid (value None → 0.88)",
+          "epa::epa (unspecified) (value None → 0.78)",
+          "epa::EPA fish oil rTG (value None → 0.92)",
+          "cod_liver_oil::fermented (value None → 0.8)",
+          "cod_liver_oil::virgin/cold-processed (value None → 0.85)",
+          "cod_liver_oil::cod liver oil molecular distilled (value None → 0.82)",
+          "cod_liver_oil::cod liver oil (unspecified) (value None → 0.8)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "cod_liver_oil::fermented",
+            "flag": "No human PK study exists for fermented cod liver oil (Green Pasture-style products). bio=14 (premium tier) is marketing-driven, not evidence-based. Industry analyses (Schuldt 2015 et al.) have raised oxidation/rancidity (PV/AnV) concerns. Recommend bio_score downgrade 14 → 11 (TG-class default) pending Dr Pham clinical review."
+          }
+        ],
+        "next_session_action_items": [
+          "Run scripts/api_audit/verify_pubmed_references.py to verify the 8 agent-suggested PMIDs above before introducing any to notes",
+          "Re-verify PMID:41096614 (algal DHA RCT) — agent could not confirm; if verified valid, retain as-is; if not, replace with descriptive text or verified Arterburn citation",
+          "Dr Pham clinical review on fermented CLO bio=14 (no human PK; oxidation concerns)",
+          "Dr Pham clinical review on krill phospholipid bio=13 forms (marginal advantage per recent meta-analyses)"
+        ]
       }
     },
     "category_enum": [
@@ -40537,8 +40595,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "DHA from microalgae (Schizochytrium or Crypthecodinium) in triglyceride form. Bioequivalent to fish oil TG — GMR 112% (96-130%) in 93-adult RCT (PMID 41096614). Vegan/vegetarian source. Free of ocean contaminants (mercury, PCBs). Life's DHA (DSM) is the leading brand. Environmental advantage over fish-derived DHA.",
+        "absorption": "high; algal DHA-TG bioequivalent to fish oil DHA-TG",
+        "notes": "DHA from microalgae (Schizochytrium or Crypthecodinium) in triglyceride form. Bioequivalent to fish oil TG — GMR 112% (96-130%) in 93-adult RCT (PMID 41096614). Vegan/vegetarian source. Free of ocean contaminants (mercury, PCBs). Life's DHA (DSM) is the leading brand. Environmental advantage over fish-derived DHA. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "life's omega",
           "life'sdha dha",
@@ -40553,19 +40611,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "Algal DHA-TG class-equivalent to fish oil DHA-TG; PMID:41096614 (cite pending re-verification)",
+          "range_low": 0.78,
+          "range_high": 0.92
         }
       },
       "DHA fish oil ethyl ester": {
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "DHA as ethyl ester — chemically modified form with lower bioavailability than TG or rTG (~27% less than natural TG, Dyerberg 2010). Synthetic ester bond requires cleavage before absorption. Found in prescription omega-3 concentrates (Lovaza). Less efficient than triglyceride forms.",
+        "absorption": "-27% short-term vs DHA-TG; equivalent at steady-state (Dyerberg 2010)",
+        "notes": "DHA as ethyl ester — chemically modified form with lower bioavailability than TG or rTG (~27% less than natural TG, Dyerberg 2010). Synthetic ester bond requires cleavage before absorption. Found in prescription omega-3 concentrates (Lovaza). Less efficient than triglyceride forms. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "docosahexaenoic acid ethyl ester",
           "DHA Ethyl Esters",
@@ -40573,19 +40631,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "quality": "good",
+          "notes": "EE-class per Dyerberg 2010 (PMID:20638827); pancreatic lipase cleavage required",
+          "range_low": 0.6,
+          "range_high": 0.8
         }
       },
       "DHA fish oil triglyceride": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "DHA in natural fish oil triglyceride form. Standard bioavailability reference. Well-absorbed with fat-containing meals. Most standard DHA supplements use this form unless otherwise specified on label.",
+        "absorption": "high; reference DHA-TG (~85% F with fat-containing meal)",
+        "notes": "DHA in natural fish oil triglyceride form. Standard bioavailability reference. Well-absorbed with fat-containing meals. Most standard DHA supplements use this form unless otherwise specified on label. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "Triglycerides",
           "Triglyceride",
@@ -40597,37 +40655,37 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "TG-class reference; standard DHA-TG well absorbed",
+          "range_low": 0.78,
+          "range_high": 0.92
         }
       },
       "DHA krill phospholipid": {
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "DHA bound to phospholipids from Antarctic krill (Euphausia superba). Enhanced acute absorption vs fish oil TG in some studies. Contains astaxanthin naturally. Phospholipid-bound DHA may preferentially incorporate into cell membranes. Superba Krill is a major branded source.",
+        "absorption": "high; krill PL with marginal AUC advantage vs DHA-TG at equal dose",
+        "notes": "DHA bound to phospholipids from Antarctic krill (Euphausia superba). Enhanced acute absorption vs fish oil TG in some studies. Contains astaxanthin naturally. Phospholipid-bound DHA may preferentially incorporate into cell membranes. Superba Krill is a major branded source. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "DHA krill phospholipid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.88,
+          "quality": "very_good",
+          "notes": "Krill PL modest advantage per Schuchardt 2011 (PMC3168413); ≈ fish oil at equal-dose per recent meta-analyses",
+          "range_low": 0.8,
+          "range_high": 0.95
         }
       },
       "dha (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "DHA form not specified. Conservative scoring. DHA (docosahexaenoic acid, 22:6 n-3) is critical for brain, retina, and cardiovascular health. Form significantly affects absorption — check product label.",
+        "absorption": "form unspecified; could be TG, EE, rTG, or PL",
+        "notes": "DHA form not specified. Conservative scoring. DHA (docosahexaenoic acid, 22:6 n-3) is critical for brain, retina, and cardiovascular health. Form significantly affects absorption — check product label. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "dha (docosahexaenoic acid)",
           "dha",
@@ -40636,19 +40694,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.78,
+          "quality": "good",
+          "notes": "Conservative scoring; check label for specific form",
+          "range_low": 0.65,
+          "range_high": 0.9
         }
       },
       "DHA fish oil rTG": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "DHA concentrated via re-esterified triglyceride processing. High bioavailability (~24% above natural TG). Enzymatic process selectively concentrates DHA content while maintaining natural triglyceride backbone for efficient lipase digestion and absorption.",
+        "absorption": "very high; rTG concentrated DHA, +24% plasma rise vs CLO reference (Dyerberg 2010)",
+        "notes": "DHA concentrated via re-esterified triglyceride processing. High bioavailability (~24% above natural TG). Enzymatic process selectively concentrates DHA content while maintaining natural triglyceride backbone for efficient lipase digestion and absorption. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "docasahexaenoic acid",
           "docosahexanoic acid",
@@ -40656,11 +40714,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.92,
+          "quality": "very_good",
+          "notes": "Dyerberg 2010 (PMID:20638827): rTG=124% relative to CLO reference",
+          "range_low": 0.85,
+          "range_high": 0.97
         }
       }
     },
@@ -40722,8 +40780,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "EPA as ethyl ester — lower bioavailability than TG forms (~27% less). Vascepa (icosapent ethyl) is a prescription EPA-EE product for cardiovascular risk reduction. Synthetic ester requires lipase cleavage before absorption. Take with fat-containing meal.",
+        "absorption": "-27% short-term vs EPA-TG; equivalent at steady-state (Dyerberg 2010)",
+        "notes": "EPA as ethyl ester — lower bioavailability than TG forms (~27% less). Vascepa (icosapent ethyl) is a prescription EPA-EE product for cardiovascular risk reduction. Synthetic ester requires lipase cleavage before absorption. Take with fat-containing meal. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "eicosapentaenoic acid ethyl ester",
           "Ethyl-EPA Concentrate",
@@ -40732,19 +40790,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "quality": "good",
+          "notes": "EE-class per Dyerberg 2010 (PMID:20638827); pancreatic lipase cleavage required",
+          "range_low": 0.6,
+          "range_high": 0.8
         }
       },
       "EPA fish oil triglyceride": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "EPA in natural fish oil triglyceride form. Standard bioavailability. Well-absorbed with dietary fat. Most standard EPA supplements unless label specifies otherwise. EPA is the direct precursor to anti-inflammatory resolvins and protectins.",
+        "absorption": "high; reference EPA-TG (~85% F with fat-containing meal)",
+        "notes": "EPA in natural fish oil triglyceride form. Standard bioavailability. Well-absorbed with dietary fat. Most standard EPA supplements unless label specifies otherwise. EPA is the direct precursor to anti-inflammatory resolvins and protectins. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "Triglycerides",
           "Triglyceride",
@@ -40755,37 +40813,37 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "TG-class reference; standard EPA-TG well absorbed",
+          "range_low": 0.78,
+          "range_high": 0.92
         }
       },
       "EPA krill phospholipid": {
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "EPA bound to phospholipids from Antarctic krill. Enhanced bioavailability vs standard fish oil. EPA (eicosapentaenoic acid, 20:5 n-3) is the primary anti-inflammatory omega-3. Phospholipid form may improve cell membrane incorporation. Contains astaxanthin naturally.",
+        "absorption": "high; krill PL with marginal AUC advantage vs EPA-TG at equal dose",
+        "notes": "EPA bound to phospholipids from Antarctic krill. Enhanced bioavailability vs standard fish oil. EPA (eicosapentaenoic acid, 20:5 n-3) is the primary anti-inflammatory omega-3. Phospholipid form may improve cell membrane incorporation. Contains astaxanthin naturally. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "EPA krill phospholipid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.88,
+          "quality": "very_good",
+          "notes": "Krill PL modest advantage per Schuchardt 2011 (PMC3168413); ≈ fish oil at equal-dose per meta-analyses",
+          "range_low": 0.8,
+          "range_high": 0.95
         }
       },
       "epa (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "EPA form not specified. Conservative scoring. EPA (eicosapentaenoic acid) is the primary anti-inflammatory omega-3 fatty acid. Form affects bioavailability — check product label.",
+        "absorption": "form unspecified; could be TG, EE, rTG, or PL",
+        "notes": "EPA form not specified. Conservative scoring. EPA (eicosapentaenoic acid) is the primary anti-inflammatory omega-3 fatty acid. Form affects bioavailability — check product label. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "epa (eicosapentaenoic acid)",
           "epa",
@@ -40794,30 +40852,30 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.78,
+          "quality": "good",
+          "notes": "Conservative scoring; check label for specific form",
+          "range_low": 0.65,
+          "range_high": 0.9
         }
       },
       "EPA fish oil rTG": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "EPA in re-esterified triglyceride form. ~24% higher bioavailability than natural TG (Dyerberg 2010). Enzymatic concentration process. EPA-dominant rTG products target inflammation, cardiovascular risk, and mood support at 1-4 g/day.",
+        "absorption": "very high; rTG concentrated EPA, +24% plasma rise vs CLO (Dyerberg 2010)",
+        "notes": "EPA in re-esterified triglyceride form. ~24% higher bioavailability than natural TG (Dyerberg 2010). Enzymatic concentration process. EPA-dominant rTG products target inflammation, cardiovascular risk, and mood support at 1-4 g/day. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "icosapent",
           "eicosapentanoic acid"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.92,
+          "quality": "very_good",
+          "notes": "Dyerberg 2010 (PMID:20638827): rTG=124% relative to CLO reference",
+          "range_low": 0.85,
+          "range_high": 0.97
         }
       }
     },
@@ -41683,62 +41741,62 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "unknown",
-        "notes": "Traditionally fermented cod liver oil (Green Pasture is the primary manufacturer). Lacto-fermentation process preserves natural vitamin A, D3, and omega-3 without heat. Contains fat-soluble vitamins in natural ratios. Controversial — some third-party tests have questioned rancidity markers. Premium pricing.",
+        "absorption": "TG-class assumed (no human PK); oxidation/rancidity concerns flagged",
+        "notes": "Traditionally fermented cod liver oil (Green Pasture is the primary manufacturer). Lacto-fermentation process preserves natural vitamin A, D3, and omega-3 without heat. Contains fat-soluble vitamins in natural ratios. Controversial — some third-party tests have questioned rancidity markers. Premium pricing. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "fermented"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.8,
+          "quality": "good",
+          "notes": "No published human PK data for fermented CLO; TG-class default",
+          "range_low": 0.7,
+          "range_high": 0.9
         }
       },
       "virgin/cold-processed": {
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "Cod liver oil extracted without heat or chemical solvents. Preserves natural vitamins A and D3 alongside EPA/DHA. Rosita Extra Virgin Cod Liver Oil is the best-known brand. Minimal processing maintains full spectrum of cofactors. Take with fat for optimal absorption.",
+        "absorption": "high; TG-class CLO with low oxidation; preserves natural vitamins A/D",
+        "notes": "Cod liver oil extracted without heat or chemical solvents. Preserves natural vitamins A and D3 alongside EPA/DHA. Rosita Extra Virgin Cod Liver Oil is the best-known brand. Minimal processing maintains full spectrum of cofactors. Take with fat for optimal absorption. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "virgin/cold-processed"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "TG-class CLO; cold-processing preserves matrix integrity",
+          "range_low": 0.78,
+          "range_high": 0.92
         }
       },
       "cod liver oil molecular distilled": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Cod liver oil purified via molecular distillation. Removes contaminants (mercury, PCBs) but also strips natural vitamins A and D, which must be re-added synthetically. Carlson's and Nordic Naturals use this process. Trade-off: purity vs loss of naturally-occurring cofactors.",
+        "absorption": "high; molecular distillation preserves TG form; vitamins A/D re-added",
+        "notes": "Cod liver oil purified via molecular distillation. Removes contaminants (mercury, PCBs) but also strips natural vitamins A and D, which must be re-added synthetically. Carlson's and Nordic Naturals use this process. Trade-off: purity vs loss of naturally-occurring cofactors. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "COD_LIVER_OIL molecular distilled"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.82,
+          "quality": "very_good",
+          "notes": "TG-class CLO; distillation strips natural vitamins, requires re-fortification",
+          "range_low": 0.75,
+          "range_high": 0.9
         }
       },
       "cod liver oil (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Cod liver oil form not specified. Conservative scoring. Cod liver oil uniquely provides omega-3 + vitamins A and D. Form affects vitamin retention — check label for processing method.",
+        "absorption": "TG-class assumed; CLO form/processing not specified",
+        "notes": "Cod liver oil form not specified. Conservative scoring. Cod liver oil uniquely provides omega-3 + vitamins A and D. Form affects vitamin retention — check label for processing method. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "cod liver oil",
           "purified arctic cod liver oil",
@@ -41761,11 +41819,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.8,
+          "quality": "good",
+          "notes": "Conservative scoring; form unknown",
+          "range_low": 0.7,
+          "range_high": 0.9
         }
       }
     },
@@ -41965,8 +42023,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "unknown",
-        "notes": "Re-esterified triglyceride — the gold-standard supplemental fish oil form. ~24% higher bioavailability than natural TG (Dyerberg et al. 2010, PMID 20638827). Enzymatic re-esterification concentrates EPA/DHA while restoring the natural triglyceride backbone. Nordic Naturals Ultimate Omega is a well-known rTG product. Only 55-60% of typical 'rTG' products are truly re-esterified (PMC9882700).",
+        "absorption": "very high; +24% plasma EPA+DHA rise vs CLO reference (Dyerberg 2010)",
+        "notes": "Re-esterified triglyceride — the gold-standard supplemental fish oil form. ~24% higher bioavailability than natural TG (Dyerberg et al. 2010, PMID 20638827). Enzymatic re-esterification concentrates EPA/DHA while restoring the natural triglyceride backbone. Nordic Naturals Ultimate Omega is a well-known rTG product. Only 55-60% of typical 'rTG' products are truly re-esterified (PMC9882700). Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "kosher tg fish oil",
           "fish oil concentrate 10/50 tg",
@@ -41974,19 +42032,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.92,
+          "quality": "very_good",
+          "notes": "Dyerberg 2010 (PMID:20638827, n=72, 2-week): rTG=124% relative to CLO=100% reference",
+          "range_low": 0.85,
+          "range_high": 0.97
         }
       },
       "natural triglyceride": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Fish oil in its natural triglyceride form — the baseline reference for bioavailability comparisons. Well-absorbed (~70-80% of EPA+DHA reaches systemic circulation). Requires pancreatic lipase for digestion. Take with a fat-containing meal for optimal absorption. Most standard fish oil softgels contain this form.",
+        "absorption": "high; reference TG-class form (~85% F with fat-containing meal)",
+        "notes": "Fish oil in its natural triglyceride form — the baseline reference for bioavailability comparisons. Well-absorbed (~70-80% of EPA+DHA reaches systemic circulation). Requires pancreatic lipase for digestion. Take with a fat-containing meal for optimal absorption. Most standard fish oil softgels contain this form. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "deep-sea fish oil",
           "supercritical deep-sea fish oil",
@@ -42001,19 +42059,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "Dyerberg 2010 (PMID:20638827) reference baseline: natural TG=100% in 2-week study",
+          "range_low": 0.78,
+          "range_high": 0.92
         }
       },
       "ethyl ester": {
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Chemically modified fish oil where fatty acids are bound to ethanol instead of glycerol. ~27% lower bioavailability than natural TG (Dyerberg 2010, PMID 20638827). Requires pancreatic lipase cleavage before absorption. Lovaza/Omacor (prescription) uses this form. Cheaper to manufacture but less efficiently absorbed than TG or rTG forms.",
+        "absorption": "-27% short-term plasma rise vs TG; equivalent at steady-state (Dyerberg 2010)",
+        "notes": "Chemically modified fish oil where fatty acids are bound to ethanol instead of glycerol. ~27% lower bioavailability than natural TG (Dyerberg 2010, PMID 20638827). Requires pancreatic lipase cleavage before absorption. Lovaza/Omacor (prescription) uses this form. Cheaper to manufacture but less efficiently absorbed than TG or rTG forms. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "fish oil ee",
           "fish oil ethyl ester",
@@ -42023,19 +42081,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "quality": "good",
+          "notes": "Dyerberg 2010 (PMID:20638827): EE=73% vs CLO 2-week plasma rise; long-term steady-state catches up",
+          "range_low": 0.6,
+          "range_high": 0.8
         }
       },
       "molecularly distilled": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Fish oil purified via molecular distillation to remove heavy metals, PCBs, and dioxins. The distillation process itself does not change the molecular form (typically remains TG). Considered a purification method rather than a distinct bioavailability class. Score reflects purity benefit minus minimal processing impact.",
+        "absorption": "high; molecular distillation typically preserves TG form (~85% F)",
+        "notes": "Fish oil purified via molecular distillation to remove heavy metals, PCBs, and dioxins. The distillation process itself does not change the molecular form (typically remains TG). Considered a purification method rather than a distinct bioavailability class. Score reflects purity benefit minus minimal processing impact. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "maxsimil fish oil concentrate",
           "purified & distilled fish oil",
@@ -42073,19 +42131,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "TG-class default; molecular distillation purifies but does not change chemical form",
+          "range_low": 0.78,
+          "range_high": 0.92
         }
       },
       "fish liver oil": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good",
-        "notes": "Fish liver oil contains EPA/DHA plus vitamins A and D. Cod liver oil is the most common form.",
+        "absorption": "high; TG-class natural fish-liver matrix with omega-3 + vitamins A/D",
+        "notes": "Fish liver oil contains EPA/DHA plus vitamins A and D. Cod liver oil is the most common form. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "shark liver oil",
           "halibut liver oil",
@@ -42093,11 +42151,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "good",
-          "notes": "good absorption",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "TG-class default; cod liver oil reference in Dyerberg 2010 (PMID:20638827)",
+          "range_low": 0.78,
+          "range_high": 0.92
         },
         "external_ids": {
           "unii": "BN5IO4652Q"
@@ -42107,26 +42165,26 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "Omega-3 bound to phospholipids, primarily from krill oil (Euphausia superba). ~33% higher AUC than standard fish oil TG in single-dose crossover studies (Schuchardt et al. 2011, PMC3168413). Contains astaxanthin antioxidant naturally. Neptune Krill Oil and Superba are leading brands. May cause fewer fishy burps due to phospholipid emulsification.",
+        "absorption": "high; phospholipid-bound omega-3 with marginal AUC advantage vs TG (Schuchardt 2011)",
+        "notes": "Omega-3 bound to phospholipids, primarily from krill oil (Euphausia superba). ~33% higher AUC than standard fish oil TG in single-dose crossover studies (Schuchardt et al. 2011, PMC3168413). Contains astaxanthin antioxidant naturally. Neptune Krill Oil and Superba are leading brands. May cause fewer fishy burps due to phospholipid emulsification. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "FISH_OIL phospholipid form"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.88,
+          "quality": "very_good",
+          "notes": "Schuchardt 2011 (PMC3168413): krill PL modest AUC advantage; recent meta-analyses suggest PL ≈ TG at equal dose",
+          "range_low": 0.8,
+          "range_high": 0.95
         }
       },
       "fish oil (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Fish oil form not specified on label. Conservative scoring applied. Could be TG, EE, or rTG — form significantly affects bioavailability (up to 70% difference between worst and best). Check product label for specific form information.",
+        "absorption": "form unspecified; likely TG/EE blend, F ranges 0.65-0.90",
+        "notes": "Fish oil form not specified on label. Conservative scoring applied. Could be TG, EE, or rTG — form significantly affects bioavailability (up to 70% difference between worst and best). Check product label for specific form information. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
           "fish oil",
           "anchovy",
@@ -42176,11 +42234,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.78,
+          "quality": "good",
+          "notes": "Conservative scoring; form unknown could be TG, EE, or rTG",
+          "range_low": 0.65,
+          "range_high": 0.9
         }
       }
     },
