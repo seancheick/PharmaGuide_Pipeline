@@ -3047,8 +3047,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "A whole-food vitamin C source from the Amazonian camu camu berry — one of the most vitamin C-dense fruits on Earth. Contains natural bioflavonoids, carotenoids, and phytochemicals that may enhance absorption and provide antioxidant synergy.",
+        "absorption": "whole-food ascorbate; same SVCT1-mediated F as ascorbic acid; F~70-90% at <200mg",
+        "notes": "A whole-food vitamin C source from the Amazonian camu camu berry — one of the most vitamin C-dense fruits on Earth. Contains natural bioflavonoids, carotenoids, and phytochemicals that may enhance absorption and provide antioxidant synergy. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "camu camu",
           "natural vitamin c",
@@ -3066,19 +3066,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "Carr & Vissers 2013 (PMID:24067392): synthetic vs food-derived vit C show equivalent steady-state F; SVCT1 saturable"
         }
       },
       "acerola cherry extract": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good",
-        "notes": "A natural, whole-food vitamin C from acerola cherries. Contains naturally co-occurring bioflavonoids, carotenoids, and other phytonutrients. One of the richest natural sources of vitamin C with excellent synergistic cofactors.",
+        "absorption": "acerola juice AUC trend higher (NS) vs ascorbic acid; bioflavonoid retention effect",
+        "notes": "A natural, whole-food vitamin C from acerola cherries. Contains naturally co-occurring bioflavonoids, carotenoids, and other phytonutrients. One of the richest natural sources of vitamin C with excellent synergistic cofactors. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "acerola cherry",
           "acerola extract",
@@ -3105,19 +3105,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very good"
+          "value": 0.72,
+          "range_low": 0.65,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "Uchida 2011 (PMID:22040889, Biol Pharm Bull): AUC \"tended higher\" but NOT statistically significant; reduced urinary excretion supports retention/recycling not absorption advantage"
         }
       },
       "potassium ascorbate": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "moderate",
-        "notes": "A buffered form of vitamin C combined with potassium. Non-acidic and stomach-friendly. Less commonly used than sodium or calcium ascorbate. Provides supplemental potassium alongside vitamin C.",
+        "absorption": "buffered ascorbate salt; dissociates to ascorbate ion, F equivalent to ascorbic acid",
+        "notes": "A buffered form of vitamin C combined with potassium. Non-acidic and stomach-friendly. Less commonly used than sodium or calcium ascorbate. Provides supplemental potassium alongside vitamin C. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "potassium vitamin c",
           "K ascorbate",
@@ -3128,11 +3128,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.78,
+          "range_low": 0.7,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Class-match with Ca/Na/Mg ascorbate (all 0.78); same dissociated ascorbate ion; F equivalent per Levine 1996 (PMID:8623000)"
         },
         "external_ids": {
           "unii": "X5523762RI"
@@ -3142,8 +3142,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "good",
-        "notes": "A combined form providing both vitamin C and zinc in a single molecule. Both nutrients support immune function synergistically. The zinc is well-absorbed in this chelated form.",
+        "absorption": "mineral ascorbate; ascorbate ion F equivalent to ascorbic acid; co-delivers zinc",
+        "notes": "A combined form providing both vitamin C and zinc in a single molecule. Both nutrients support immune function synergistically. The zinc is well-absorbed in this chelated form. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "redirect": "zinc.forms.zinc_ascorbate",
         "aliases": [
           "zinc vitamin c",
@@ -3155,11 +3155,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.78,
+          "range_low": 0.7,
+          "range_high": 0.85,
           "quality": "good",
-          "notes": "good"
+          "notes": "Class-match with other ascorbate salts; Zn co-delivery is separate mineral pathway, not C-absorption booster"
         },
         "external_ids": {
           "unii": "9TI35313XW"
@@ -3169,8 +3169,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "variable",
-        "notes": "A timed-release formulation designed to deliver vitamin C gradually over several hours. May reduce peak plasma levels compared to immediate-release forms but provides sustained low-level absorption. Useful for maintaining steady blood levels.",
+        "absorption": "sustained-release; reduces plasma fluctuation; may improve F at >500mg by avoiding SVCT1 saturation",
+        "notes": "A timed-release formulation designed to deliver vitamin C gradually over several hours. May reduce peak plasma levels compared to immediate-release forms but provides sustained low-level absorption. Useful for maintaining steady blood levels. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "timed-release c",
           "sustained release c",
@@ -3181,11 +3181,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Viscovich 2004 (PMID:15380894, Clin Nutr): slow-release in smokers reduced fluctuation; total absorption not raised at low doses"
         }
       },
       "dehydroascorbic acid": {
@@ -3881,8 +3881,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "The full-spectrum natural vitamin E containing all four tocopherols (alpha, beta, gamma, delta). Provides broader antioxidant protection than alpha-tocopherol alone. Gamma-tocopherol in particular offers unique anti-inflammatory benefits not found in alpha-only supplements.",
+        "absorption": "full-spectrum natural; α-form retained via α-TTP, β/γ/δ absorbed but rapidly metabolized",
+        "notes": "The full-spectrum natural vitamin E containing all four tocopherols (alpha, beta, gamma, delta). Provides broader antioxidant protection than alpha-tocopherol alone. Gamma-tocopherol in particular offers unique anti-inflammatory benefits not found in alpha-only supplements. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "natural vitamin e complex",
           "tocopherol complex",
@@ -3926,19 +3926,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Hosomi 1997 (PMID:9199513): α-TTP affinity RRR-α=100%, β=38%, γ=9%, δ=2% — only α-form retained at tissue level"
         }
       },
       "d-alpha-tocopherol": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "very good",
-        "notes": "The natural RRR form of alpha-tocopherol — your body's preferred vitamin E. The alpha-tocopherol transfer protein (α-TTP) in the liver selectively retains this natural form, giving it ~2x the biological activity of synthetic dl-alpha-tocopherol.",
+        "absorption": "natural RRR; ~2× plasma retention vs all-rac via α-TTP selectivity",
+        "notes": "The natural RRR form of alpha-tocopherol — your body's preferred vitamin E. The alpha-tocopherol transfer protein (α-TTP) in the liver selectively retains this natural form, giving it ~2x the biological activity of synthetic dl-alpha-tocopherol. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "natural vitamin e",
           "rrr-alpha-tocopherol",
@@ -3959,19 +3959,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.85,
+          "range_low": 0.75,
+          "range_high": 0.9,
           "quality": "very_good",
-          "notes": "very good"
+          "notes": "Burton 1998 (PMID:9537614, AJCN): natural RRR ~2× plasma/tissue retention vs all-rac. Hosomi 1997 (PMID:9199513): α-TTP affinity 100% for RRR"
         }
       },
       "tocotrienols": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "A distinct class of vitamin E found in palm oil, rice bran, and annatto. Emerging research shows tocotrienols (especially delta and gamma forms) have potent antioxidant, neuroprotective, and cholesterol-lowering properties that tocopherols lack. A cutting-edge vitamin E category.",
+        "absorption": "lipid-dependent F; minimal α-TTP retention; short plasma half-life vs tocopherols",
+        "notes": "A distinct class of vitamin E found in palm oil, rice bran, and annatto. Emerging research shows tocotrienols (especially delta and gamma forms) have potent antioxidant, neuroprotective, and cholesterol-lowering properties that tocopherols lack. A cutting-edge vitamin E category. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "palm tocotrienols",
           "rice bran tocotrienols",
@@ -4038,11 +4038,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Yap & Yuen 2004 (PMID:15288344): tocotrienol oral F is poor without lipid vehicle; SEDDS gives 2-3× relative improvement. Hosomi 1997 (PMID:9199513): α-tocotrienol α-TTP affinity ~12% of RRR-α-tocopherol → poor tissue retention"
         },
         "external_ids": {
           "unii": "KP2MW85SSQ"
@@ -4081,8 +4081,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "The natural alpha-tocopherol esterified with succinic acid. Water-dispersible, making it useful for dry formulations and for people with fat absorption issues. Also studied for unique anticancer properties in vitro.",
+        "absorption": "hydrolyzed pre-absorption to d-alpha-tocopherol; F tracks parent natural form",
+        "notes": "The natural alpha-tocopherol esterified with succinic acid. Water-dispersible, making it useful for dry formulations and for people with fat absorption issues. Also studied for unique anticancer properties in vitro. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "d-alpha-tocopherol succinate",
           "natural vitamin e succinate",
@@ -4096,11 +4096,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.7,
+          "range_low": 0.55,
+          "range_high": 0.8,
           "quality": "good",
-          "notes": "good"
+          "notes": "Ester hydrolyzed by intestinal esterases pre-absorption (same pre-absorption hydrolysis pattern as ascorbyl palmitate, dl-succinate); F tracks d-alpha-tocopherol per Burton 1998 (PMID:9537614)"
         }
       },
       "dl-alpha-tocopherol": {
@@ -4183,8 +4183,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "very good",
-        "notes": "A whole-food vitamin E source from wheat germ, one of the richest natural sources of d-alpha-tocopherol. Contains co-occurring tocopherols, phytosterols, and essential fatty acids. A traditional, food-based vitamin E option. Note: not suitable for wheat/gluten-sensitive individuals.",
+        "absorption": "whole-food RRR-tocopherol mix in lipid matrix; α-TTP retains α-form",
+        "notes": "A whole-food vitamin E source from wheat germ, one of the richest natural sources of d-alpha-tocopherol. Contains co-occurring tocopherols, phytosterols, and essential fatty acids. A traditional, food-based vitamin E option. Note: not suitable for wheat/gluten-sensitive individuals. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper.",
         "aliases": [
           "wheat germ vitamin e",
           "natural e from wheat germ",
@@ -4200,11 +4200,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very good"
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Whole-food natural mixed tocopherols predominantly RRR-α; lipid matrix aids absorption; α-TTP retention per Hosomi 1997 (PMID:9199513)"
         }
       },
       "vitamin E analogs (non-functional)": {
@@ -38479,6 +38479,69 @@
           {
             "location": "vitamin_b9_folate::quatrefolic",
             "flag": "Research agent recommends bio_score 13 → 12 downgrade. Quatrefolic human PK has not been published; the often-cited \"9.7x AUC\" figure comes from Miraglia 2016 RAT study (PMID:27008238). Treat as animal-only until human equivalence study published. Needs Dr Pham clinical signoff."
+          }
+        ]
+      },
+      "5.0.15": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 13 — vitamin C/E PK + class findings",
+        "research_subagent_report": "PubMed research on 10 vit C and E forms. Research agent USED WebFetch on PubMed eutils. Three class findings: (1) vit C whole-food superiority is POST-absorption, not F — SVCT1 saturable, all sources equivalent. (2) Tocotrienols are a SEPARATE class from tocopherols — α-TTP affinity ~12% of RRR-α-tocopherol, poor retention. Current bio=12 inflated. (3) Pre-absorption hydrolysis pattern recurs for tocopheryl succinate (matches ascorbyl palmitate, dl-succinate already audited). 11 PMIDs verified, 3 misattributions caught.",
+        "verified_pmids": [
+          "PMID:8623000  Levine 1996 PNAS — vit C PK men",
+          "PMID:11504949 Levine 2001 PNAS — vit C PK women",
+          "PMID:15068981 Padayatty 2004 Ann Intern Med — oral vs IV",
+          "PMID:24067392 Carr & Vissers 2013 Nutrients — synthetic vs food F equiv",
+          "PMID:24169506 Carr 2013 Nutrients — kiwifruit RCT",
+          "PMID:22040889 Uchida 2011 Biol Pharm Bull — acerola NS AUC trend",
+          "PMID:15380894 Viscovich 2004 Clin Nutr — slow-release vit C",
+          "PMID:9199513  Hosomi 1997 FEBS Lett — α-TTP affinity table",
+          "PMID:9537614  Burton 1998 AJCN — natural RRR 2× retention",
+          "PMID:15288344 Yap & Yuen 2004 Int J Pharm — tocotrienol SEDDS human",
+          "PMID:18806966 Rasool 2008 Arch Pharm Res — tocotrienol human plasma"
+        ],
+        "misattributions_caught": {
+          "\"Yap 2003 tocotrienol PK\"": "PMID:12625867 is rat study, not human → use PMID:15288344",
+          "\"Carr 2018 vitamin C bioavailability\"": "DOES NOT EXIST in PubMed → use PMID:24067392",
+          "\"Padayatty/Levine 2001\"": "PMID:11401949 is wrong topic (Circulation commentary) → use PMID:11504949"
+        },
+        "class_findings": [
+          "Vit C whole-food superiority is POST-absorption (bioflavonoid retention) NOT absolute F — SVCT1 saturable across all sources",
+          "Tocotrienols are SEPARATE class from tocopherols — α-TTP affinity ~12% of RRR-α-tocopherol; poor tissue retention",
+          "Pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks d-alpha-tocopherol; matches Batch 12 active-coenzyme finding)"
+        ],
+        "forms_updated": [
+          "vitamin_c::camu camu extract (value None → 0.7)",
+          "vitamin_c::acerola cherry extract (value None → 0.72)",
+          "vitamin_c::potassium ascorbate (value None → 0.78)",
+          "vitamin_c::zinc ascorbate (value None → 0.78)",
+          "vitamin_c::slow-release vitamin C (value None → 0.75)",
+          "vitamin_e::mixed tocopherols (value None → 0.75)",
+          "vitamin_e::d-alpha-tocopherol (value None → 0.85)",
+          "vitamin_e::tocotrienols (value None → 0.4)",
+          "vitamin_e::d-alpha-tocopheryl succinate (value None → 0.7)",
+          "vitamin_e::vitamin E from wheat germ oil (value None → 0.75)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "vitamin_c::camu camu extract",
+            "flag": "Research agent recommends bio_score 12 → ~10 downgrade. Camu camu has no human PK study showing absolute F advantage over ascorbic acid. Whole-food superiority is post-absorption (bioflavonoid retention/recycling), not F. Carr & Vissers 2013 (PMID:24067392) confirms steady-state F equivalence. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_c::acerola cherry extract",
+            "flag": "Research agent recommends bio_score 12 → ~10 downgrade. Uchida 2011 (PMID:22040889) AUC trend was NOT statistically significant. Reduced urinary excretion supports retention, not absorption. \"Very good\" claim overstated. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_c::potassium ascorbate",
+            "flag": "Research agent recommends bio_score 13 → 12 downgrade to class-match other ascorbate salts (Ca/Na/Mg ascorbate at bio=13-14 in IQM but value=0.78). All ascorbate salts deliver identical ascorbate ion. K-ascorbate has no published F advantage. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_c::zinc ascorbate",
+            "flag": "Research agent recommends bio_score 14 → 12-13 downgrade. Zn co-presence does not enhance vit C absolute F. The high bio=14 conflates Zn+C dual-nutrient delivery with vit C enhanced absorption. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_e::tocotrienols",
+            "flag": "MAJOR — Research agent recommends bio_score 12 → ~7 downgrade. Tocotrienols are a separate class from tocopherols. Hosomi 1997 (PMID:9199513) shows α-tocotrienol α-TTP affinity is only ~12% of RRR-α-tocopherol — poor tissue retention. Yap & Yuen 2004 (PMID:15288344) shows oral F is poor without lipid vehicle. Current bio=12 (equal to d-alpha-tocopherol) is dramatically inflated. Needs Dr Pham clinical signoff."
           }
         ]
       }
