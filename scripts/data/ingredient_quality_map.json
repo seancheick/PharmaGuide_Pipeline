@@ -340,8 +340,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "moderate",
-        "notes": "An older synthetic thiamine form occasionally found in budget supplements. Less bioavailable than the standard HCl and mononitrate forms. Not commonly used in modern formulations.",
+        "absorption": "lowest oral F among lipophilic thiamine derivatives (Greb 1998)",
+        "notes": "An older synthetic thiamine form occasionally found in budget supplements. Less bioavailable than the standard HCl and mononitrate forms. Not commonly used in modern formulations. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "thiamin disulfide",
           "vitamin b1 disulfide",
@@ -352,11 +352,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.45,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Greb & Bitsch 1998 (PMID:9587048): poorest of three thiamine derivatives tested"
         },
         "external_ids": {
           "unii": "UJV8K21YKL"
@@ -366,8 +366,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "5x better than standard forms",
-        "notes": "A fat-soluble synthetic thiamine that crosses cell membranes far more effectively than water-soluble forms. Achieves ~5x higher blood thiamine levels than standard thiamine HCl. Especially studied for nerve health and blood sugar support.",
+        "absorption": "Cmax ~5× & AUC ~3.6× vs thiamine HCl orally (Loew 1996); absolute F not measured",
+        "notes": "A fat-soluble synthetic thiamine that crosses cell membranes far more effectively than water-soluble forms. Achieves ~5x higher blood thiamine levels than standard thiamine HCl. Especially studied for nerve health and blood sugar support. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "benfo",
           "fat-soluble thiamine",
@@ -386,11 +386,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "~5x higher plasma thiamine levels vs HCl in pharmacokinetic studies; crosses cell membranes via passive diffusion"
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Loew 1996 (PMID:8929745): Cmax 5x, AUC ratio ~3.6x vs HCl at equimolar oral dose — absolute F never measured in humans"
         },
         "external_ids": {
           "unii": "Y92OUS2H9B"
@@ -400,8 +400,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "The standard thiamine form used in most multivitamins and fortified foods. Very shelf-stable. Well-absorbed and effective for preventing and correcting B1 deficiency.",
+        "absorption": "saturable: ~50% F at low dose, ~5% at 1500 mg (Smithline 2012)",
+        "notes": "The standard thiamine form used in most multivitamins and fortified foods. Very shelf-stable. Well-absorbed and effective for preventing and correcting B1 deficiency. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "thiamin mononitrate",
           "vitamin b1 mononitrate",
@@ -418,11 +418,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.5,
+          "range_low": 0.05,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Smithline 2012 (PMID:22305197, BMC Clin Pharmacol): saturable active + passive transport across 100/500/1500 mg"
         },
         "external_ids": {
           "unii": "8K0I04919X"
@@ -432,8 +432,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "good",
-        "notes": "A widely used water-soluble thiamine salt. Slightly less shelf-stable than mononitrate but equally bioavailable. One of the two most common B1 forms in supplements.",
+        "absorption": "saturable: ~50% F at low dose, ~5% at 1500 mg (Smithline 2012)",
+        "notes": "A widely used water-soluble thiamine salt. Slightly less shelf-stable than mononitrate but equally bioavailable. One of the two most common B1 forms in supplements. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "thiamine hcl",
           "thiamin hcl",
@@ -456,11 +456,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.5,
+          "range_low": 0.05,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Smithline 2012 (PMID:22305197): same saturable PK as thiamine mononitrate"
         },
         "external_ids": {
           "unii": "M572600E5P"
@@ -470,8 +470,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "excellent",
-        "notes": "A naturally occurring lipid-soluble thiamine found in garlic (Allium sativum). Can cross cell membranes, but human clinical absorption data is limited compared to benfotiamine and TTFD. Primarily supported by preclinical research.",
+        "absorption": "lipid-soluble; limited human PK; absolute F not characterized",
+        "notes": "A naturally occurring lipid-soluble thiamine found in garlic (Allium sativum). Can cross cell membranes, but human clinical absorption data is limited compared to benfotiamine and TTFD. Primarily supported by preclinical research. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "garlic thiamine",
           "natural thiamine",
@@ -487,11 +487,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Garlic-derived lipid-soluble thiamine; limited dedicated human PK"
         },
         "external_ids": {
           "unii": "83SWN21920"
@@ -501,8 +501,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "very high",
-        "notes": "The biologically active coenzyme form of B1 (also called cocarboxylase). While it's the form your body actually uses, oral TPP is largely hydrolyzed in the GI tract before absorption, reducing its advantage over standard forms.",
+        "absorption": "hydrolyzed to thiamine pre-absorption; oral F ≈ thiamine HCl",
+        "notes": "The biologically active coenzyme form of B1 (also called cocarboxylase). While it's the form your body actually uses, oral TPP is largely hydrolyzed in the GI tract before absorption, reducing its advantage over standard forms. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "thiamine pyrophosphate",
           "TPP",
@@ -527,19 +527,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very high"
+          "value": 0.45,
+          "range_low": 0.3,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "TPP dephosphorylated by intestinal alkaline phosphatase before absorption — systemic F equals free thiamine"
         }
       },
       "thiamine tetrahydrofurfuryl disulfide (TTFD)": {
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent",
-        "notes": "A highly bioavailable synthetic lipid-soluble thiamine derivative (brand name: Alinamin). Widely used in Japan for rapid thiamine repletion. Excellent membrane permeability and tissue delivery, with strong clinical evidence for neurological support.",
+        "absorption": "lipophilic; bypasses thiamine transporter; orally < benfotiamine (Greb 1998)",
+        "notes": "A highly bioavailable synthetic lipid-soluble thiamine derivative (brand name: Alinamin). Widely used in Japan for rapid thiamine repletion. Excellent membrane permeability and tissue delivery, with strong clinical evidence for neurological support. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "TTFD",
           "thiamine tetrahydrofurfuryl disulfide",
@@ -554,19 +554,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.75,
+          "quality": "moderate",
+          "notes": "Greb & Bitsch 1998 (PMID:9587048) ranks benfotiamine > TTFD/fursultiamine orally; Watanabe 2021 (PMID:33812058) human [11C]TTFD PET shows transporter bypass"
         }
       },
       "thiamine from brewer's yeast": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "good",
-        "notes": "Thiamine from a whole-food yeast matrix. Contains naturally co-occurring B vitamins and cofactors. However, no strong evidence that the food matrix significantly enhances B1 absorption over isolated forms.",
+        "absorption": "whole-food matrix; F lower than purified salts",
+        "notes": "Thiamine from a whole-food yeast matrix. Contains naturally co-occurring B vitamins and cofactors. However, no strong evidence that the food matrix significantly enhances B1 absorption over isolated forms. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "brewer's yeast thiamine",
           "natural b1 yeast",
@@ -579,11 +579,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Yeast-bound thiamine; food-matrix limited absorption"
         }
       },
       "thiamine oxide": {
@@ -735,8 +735,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent",
-        "notes": "The active coenzyme form of B2 (also called FMN — flavin mononucleotide). Your body uses this form directly without conversion. Ideal for people with impaired riboflavin metabolism or who want the most bioavailable form.",
+        "absorption": "dephosphorylated to riboflavin in gut; oral F ≈ riboflavin (Zempleni 1996)",
+        "notes": "The active coenzyme form of B2 (also called FMN — flavin mononucleotide). Your body uses this form directly without conversion. Ideal for people with impaired riboflavin metabolism or who want the most bioavailable form. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "R5P",
           "riboflavin 5-phosphate",
@@ -768,19 +768,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "FMN dephosphorylated by intestinal alkaline phosphatase + FMN/FAD pyrophosphatase before absorption — systemic F is liberated riboflavin"
         }
       },
       "riboflavin": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "The standard form of vitamin B2 used in most supplements and fortified foods. Your body must convert it to the active forms FMN and FAD before use. Well-absorbed and effective for general B2 supplementation.",
+        "absorption": "F ~95% at <10 mg; saturates at ~27 mg single dose (Zempleni 1996)",
+        "notes": "The standard form of vitamin B2 used in most supplements and fortified foods. Your body must convert it to the active forms FMN and FAD before use. Well-absorbed and effective for general B2 supplementation. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "vitamin b 2",
           "b2",
@@ -800,11 +800,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.9,
+          "range_low": 0.3,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Zempleni 1996 (PMID:8604671, AJCN): n=9 oral/IV PK; max absorbable single dose ≈ 27 mg; t½abs 1.1 h"
         },
         "external_ids": {
           "unii": "TLM2976OFR"
@@ -814,8 +814,8 @@
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "good",
-        "notes": "Riboflavin from a whole-food yeast source, providing naturally co-occurring B vitamins. The food matrix adds nutritional context but has not been shown to significantly enhance B2 absorption over standard riboflavin.",
+        "absorption": "whole-food matrix; F lower than free riboflavin",
+        "notes": "Riboflavin from a whole-food yeast source, providing naturally co-occurring B vitamins. The food matrix adds nutritional context but has not been shown to significantly enhance B2 absorption over standard riboflavin. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "yeast riboflavin",
           "natural b2 yeast",
@@ -828,19 +828,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Yeast-matrix riboflavin; food-matrix limited absorption"
         }
       },
       "flavin adenine dinucleotide (FAD)": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent",
-        "notes": "An active coenzyme form of B2 involved in hundreds of metabolic reactions. However, oral FAD is broken down (dephosphorylated) in the gut before absorption and must be reconverted in your cells, reducing its theoretical advantage.",
+        "absorption": "hydrolyzed to riboflavin pre-absorption; oral F ≈ riboflavin",
+        "notes": "An active coenzyme form of B2 involved in hundreds of metabolic reactions. However, oral FAD is broken down (dephosphorylated) in the gut before absorption and must be reconverted in your cells, reducing its theoretical advantage. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "FAD",
           "flavin adenine dinucleotide",
@@ -853,11 +853,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "FAD dephosphorylated/hydrolyzed in gut before absorption — systemic F is free riboflavin"
         }
       },
       "riboflavin analog": {
@@ -986,8 +986,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "excellent",
-        "notes": "A flush-free niacin form made of six niacin molecules bound to inositol. Releases niacin slowly, avoiding the uncomfortable vasodilation ('niacin flush'). Supports lipid metabolism without skin flushing.",
+        "absorption": "NO measurable niacin release in 6-wk human trial (Keenan 2013)",
+        "notes": "A flush-free niacin form made of six niacin molecules bound to inositol. Releases niacin slowly, avoiding the uncomfortable vasodilation ('niacin flush'). Supports lipid metabolism without skin flushing. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "no-flush niacin",
           "flush-free niacin",
@@ -1004,19 +1004,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Keenan 2013 (PMID:23351578, J Clin Lipidol): 1500 mg/day × 6 weeks; null lipid endpoints; \"IHN showed NO evidence of bioavailability\""
         }
       },
       "niacinamide": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "very good",
-        "notes": "The non-flushing amide form of B3. Does not cause vasodilation. Preferred for skin health, cellular repair, and general B3 supplementation. Does NOT have the same lipid-lowering effects as nicotinic acid.",
+        "absorption": "rapid passive absorption; F ~85-95% at typical doses",
+        "notes": "The non-flushing amide form of B3. Does not cause vasodilation. Preferred for skin health, cellular repair, and general B3 supplementation. Does NOT have the same lipid-lowering effects as nicotinic acid. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "b3 amide",
           "b3 amide supplement",
@@ -1040,11 +1040,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
           "quality": "very_good",
-          "notes": "very good"
+          "notes": "Niacinamide rapid passive absorption per MacKay 2012 (PMID:22646128)"
         },
         "external_ids": {
           "unii": "25X51I8RD4"
@@ -1054,8 +1054,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "good",
-        "notes": "Compound salt delivering niacinamide (B3 component) and ascorbate (C component). When the product context indicates B3, routes here. Niacinamide is well-absorbed from this compound.",
+        "absorption": "salt of niacinamide; assumed F similar to niacinamide",
+        "notes": "Compound salt delivering niacinamide (B3 component) and ascorbate (C component). When the product context indicates B3, routes here. Niacinamide is well-absorbed from this compound. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "niacinamide ascorbate",
           "nicotinamide ascorbate",
@@ -1065,19 +1065,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Compound salt; class estimate from niacinamide"
         }
       },
       "nicotinic acid": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "The original, traditional form of niacin. Highly effective for raising HDL cholesterol and lowering triglycerides, but causes the 'niacin flush' (skin redness, warmth, tingling) at higher doses due to prostaglandin release.",
+        "absorption": "rapid F ~85-95%; flushes via GPR109A activation",
+        "notes": "The original, traditional form of niacin. Highly effective for raising HDL cholesterol and lowering triglycerides, but causes the 'niacin flush' (skin redness, warmth, tingling) at higher doses due to prostaglandin release. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "niacin",
           "b3",
@@ -1092,19 +1092,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Rapid passive absorption; well-characterized class"
         }
       },
       "tryptophan_derived_niacin": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low conversion rate",
-        "notes": "Niacin produced naturally in your body from the amino acid tryptophan. The conversion is very inefficient (~60 mg tryptophan → 1 mg niacin) and requires B6, iron, and riboflavin as cofactors.",
+        "absorption": "endogenous synthesis ~60mg trp → 1mg niacin equiv",
+        "notes": "Niacin produced naturally in your body from the amino acid tryptophan. The conversion is very inefficient (~60 mg tryptophan → 1 mg niacin) and requires B6, iron, and riboflavin as cofactors. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "tryptophan-derived niacin",
           "endogenous niacin",
@@ -1117,11 +1117,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "low conversion rate"
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.02,
+          "quality": "low",
+          "notes": "Mass-equivalent ratio ~60:1; cofactor-dependent (B6, Fe, riboflavin)"
         }
       },
       "niacin analog": {
@@ -1335,8 +1335,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good",
-        "notes": "The most common B5 supplement form — calcium salt of pantothenic acid. Very shelf-stable, well-absorbed, and widely used in multivitamins and B-complex formulas. Provides ~92% pantothenic acid by weight.",
+        "absorption": "saturable SMVT transport; F ~40-60% at supplement doses",
+        "notes": "The most common B5 supplement form — calcium salt of pantothenic acid. Very shelf-stable, well-absorbed, and widely used in multivitamins and B-complex formulas. Provides ~92% pantothenic acid by weight. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "calcium d-pantothenate",
           "pantothenic acid calcium",
@@ -1356,11 +1356,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very good"
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Calcium salt; standard reference form for B5 supplementation"
         },
         "external_ids": {
           "unii": "568ET80C3D"
@@ -1370,8 +1370,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent",
-        "notes": "The active, reduced form of pantothenic acid — a direct precursor to Coenzyme A (CoA). Superior to standard pantothenic acid for supporting lipid metabolism. Clinical studies show it can help maintain healthy cholesterol levels.",
+        "absorption": "hydrolyzed to pantothenate + cysteamine pre-absorption (Wittwer 1985)",
+        "notes": "The active, reduced form of pantothenic acid — a direct precursor to Coenzyme A (CoA). Superior to standard pantothenic acid for supporting lipid metabolism. Clinical studies show it can help maintain healthy cholesterol levels. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "active b5",
           "coenzyme a precursor",
@@ -1390,11 +1390,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Wittwer 1985 (PMID:4056044, J Clin Invest): \"rapidly hydrolyzed... could not detect pantethine in plasma\" — systemic delivery is pantothenate"
         },
         "external_ids": {
           "unii": "7K81IL792L"
@@ -1404,8 +1404,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "The basic free-acid form of vitamin B5. Requires conversion to Coenzyme A (CoA) in the body for biological activity. Less shelf-stable than the calcium salt form but equally effective when fresh.",
+        "absorption": "saturable SMVT; F ~40-60%",
+        "notes": "The basic free-acid form of vitamin B5. Requires conversion to Coenzyme A (CoA) in the body for biological activity. Less shelf-stable than the calcium salt form but equally effective when fresh. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "b5",
           "free pantothenic acid",
@@ -1417,11 +1417,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Free acid form; SMVT-mediated absorption"
         },
         "external_ids": {
           "unii": "19F5HK2737"
@@ -1431,8 +1431,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "The sodium salt of pantothenic acid. Less commonly used than calcium pantothenate and somewhat less stable. Found in some liquid and injectable B5 formulations.",
+        "absorption": "salt of pantothenate; F ≈ calcium pantothenate",
+        "notes": "The sodium salt of pantothenic acid. Less commonly used than calcium pantothenate and somewhat less stable. Found in some liquid and injectable B5 formulations. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "pantothenic acid sodium",
           "b5 sodium salt",
@@ -1442,11 +1442,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.6,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Sodium salt; class estimate from calcium pantothenate"
         },
         "external_ids": {
           "unii": "OES0R93F0C"
@@ -1456,8 +1456,8 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "poor",
-        "notes": "A pro-vitamin form of B5 (dexpanthenol) primarily used in topical skincare and haircare products. Not ideal for oral supplementation due to low systemic conversion. Best known for wound healing and skin hydration when applied topically.",
+        "absorption": "pro-vitamin; oxidized to pantothenate; F lower than parent",
+        "notes": "A pro-vitamin form of B5 (dexpanthenol) primarily used in topical skincare and haircare products. Not ideal for oral supplementation due to low systemic conversion. Best known for wound healing and skin hydration when applied topically. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "panthenol",
           "dexpanthenol",
@@ -1474,11 +1474,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Dexpanthenol; primarily topical use; oral F ~30-50%"
         }
       },
       "pantothenic_analog": {
@@ -2123,8 +2123,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent",
-        "notes": "The biologically active form of folate — the exact molecule your body uses for DNA synthesis, methylation, and neurotransmitter production. Bypasses the MTHFR enzyme entirely, making it essential for the ~40% of people with MTHFR gene variants who poorly convert folic acid.",
+        "absorption": "AUC ~2× folic acid; no UMFA generated (Prinz-Langenohl 2009)",
+        "notes": "The biologically active form of folate — the exact molecule your body uses for DNA synthesis, methylation, and neurotransmitter production. Bypasses the MTHFR enzyme entirely, making it essential for the ~40% of people with MTHFR gene variants who poorly convert folic acid. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "5-MTHF",
           "L-5-MTHF",
@@ -2183,19 +2183,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Prinz-Langenohl 2009 (PMID:19917061): AUC/Cmax 1.5-2x FA; UMFA only after FA. Obeid 2020 (PMID:33255787) confirms ~2.25x AUC"
         }
       },
       "calcium folinate": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good",
-        "notes": "Folinic acid (leucovorin) — an active folate that readily converts to 5-MTHF in the body. Used medically to rescue cells from methotrexate toxicity. A good alternative active folate for people who don't tolerate methylfolate.",
+        "absorption": "reduced folate; bypasses DHFR; F similar to 5-MTHF",
+        "notes": "Folinic acid (leucovorin) — an active folate that readily converts to 5-MTHF in the body. Used medically to rescue cells from methotrexate toxicity. A good alternative active folate for people who don't tolerate methylfolate. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "folinic acid",
           "leucovorin",
@@ -2221,19 +2221,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
           "quality": "very_good",
-          "notes": "very good"
+          "notes": "Folinic acid (leucovorin); reduced folate, bypasses DHFR conversion"
         }
       },
       "quatrefolic": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent",
-        "notes": "A patented glucosamine salt of 5-MTHF with superior stability and shelf life. Structurally identical active folate molecule to generic 5-MTHF, but the glucosamine salt form provides better manufacturing stability and dissolution.",
+        "absorption": "glucosamine salt of (6S)-5-MTHF; superior PK shown in rats only",
+        "notes": "A patented glucosamine salt of 5-MTHF with superior stability and shelf life. Structurally identical active folate molecule to generic 5-MTHF, but the glucosamine salt form provides better manufacturing stability and dissolution. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "glucosamine salt 5-mthf",
           "patented methylfolate",
@@ -2268,19 +2268,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Miraglia 2016 (PMID:27008238) is RAT only — \"9.7x AUC vs FA\" claim is animal-only; human PK same as generic 5-MTHF"
         }
       },
       "metafolin": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent",
-        "notes": "A patented calcium salt of L-5-MTHF developed by Merck. One of the first branded active folate supplements. Identical active molecule to generic 5-MTHF, with the calcium salt providing good stability.",
+        "absorption": "calcium salt of L-5-MTHF; AUC ~2× folic acid in humans",
+        "notes": "A patented calcium salt of L-5-MTHF developed by Merck. One of the first branded active folate supplements. Identical active molecule to generic 5-MTHF, with the calcium salt providing good stability. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "calcium l-5-methyltetrahydrofolate",
           "patented calcium methylfolate",
@@ -2297,19 +2297,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Obeid 2020 (PMID:33255787): Na vs Ca salt of (6S)-5-MTHF; AUC ratio ~2.25 vs FA; no UMFA"
         }
       },
       "folic acid": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "variable",
-        "notes": "The synthetic, inactive form of folate used in most cheap supplements and fortified foods. Must be converted through multiple enzymatic steps to become active 5-MTHF. Up to 40% of people carry MTHFR variants that impair this conversion, potentially leading to unmetabolized folic acid buildup.",
+        "absorption": "F ~85% but 80% enters portal vein unmodified; UMFA in 38% adults ≥60",
+        "notes": "The synthetic, inactive form of folate used in most cheap supplements and fortified foods. Must be converted through multiple enzymatic steps to become active 5-MTHF. Up to 40% of people carry MTHFR variants that impair this conversion, potentially leading to unmetabolized folic acid buildup. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "pteroylmonoglutamic acid",
           "folacin",
@@ -2354,11 +2354,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Patanwala 2014 (PMID:24944062): folic acid enters portal vein unmodified. Bailey 2010 (PMID:20573790, NHANES): UMFA detected in 38% adults ≥60"
         },
         "external_ids": {
           "unii": "935E97BOY8"
@@ -2368,8 +2368,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate",
-        "notes": "The natural form of folate found in leafy greens, legumes, and liver. Present as polyglutamates that must be enzymatically cleaved to monoglutamate for absorption. About 50% less bioavailable than folic acid due to incomplete deconjugation.",
+        "absorption": "polyglutamates require gut conjugase; F ~50-80% of FA equiv.",
+        "notes": "The natural form of folate found in leafy greens, legumes, and liver. Present as polyglutamates that must be enzymatically cleaved to monoglutamate for absorption. About 50% less bioavailable than folic acid due to incomplete deconjugation. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "natural folate",
           "whole food folate",
@@ -2384,19 +2384,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.65,
+          "range_low": 0.5,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "Natural folate; requires intestinal γ-glutamyl hydrolase deconjugation"
         }
       },
       "folate from yeast": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Folate from a whole-food yeast fermentation process. Provides folate in a food-matrix context with co-occurring B vitamins. Generally well-absorbed, though specific bioavailability data vs isolated forms is limited.",
+        "absorption": "mixed natural folates from yeast; F similar to food folate",
+        "notes": "Folate from a whole-food yeast fermentation process. Provides folate in a food-matrix context with co-occurring B vitamins. Generally well-absorbed, though specific bioavailability data vs isolated forms is limited. Evidence update 2026-04-25 (Batch 12): B-vitamin audit — 14 PMIDs WebFetch-verified. CLASS-FINDING: ACTIVE COENZYME forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption (Wittwer 1985, Zempleni 1996); systemic F equals parent vitamin F. The body re-synthesizes coenzymes intracellularly regardless. Elevated bio_scores 13-14 are NOT justified by oral PK. IHN MAJOR: Keenan 2013 (PMID:23351578) found NO measurable IHN bioavailability at 1500 mg/day x 6 weeks — bio=12 severely misleading. Misattributions: \"Norris 2006\" non-existent → Keenan 2013; \"Wittwer 1989\" → 1985; \"Loew 5x F\" → Cmax 5x/AUC 3.6x.",
         "aliases": [
           "yeast folate",
           "natural b9 yeast",
@@ -2409,11 +2409,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.65,
+          "range_low": 0.5,
+          "range_high": 0.8,
           "quality": "good",
-          "notes": "good"
+          "notes": "Yeast-fermented folates; class estimate from food folate"
         }
       },
       "folate_analog": {
@@ -38376,6 +38376,109 @@
           {
             "location": "selenium::selenium brown rice chelate",
             "flag": "Research agent recommends bio_score 11 → 8 downgrade. Same brown-rice-chelate marketing pattern (0 PubMed hits). Needs Dr Pham clinical signoff."
+          }
+        ]
+      },
+      "5.0.14": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 12 — B-vitamin PK + active coenzyme class finding",
+        "research_subagent_report": "PubMed research on 24 B-vitamin forms across 5 parents (B1/B2/B3/B5/B9). Research agent USED WebFetch on PubMed eutils. TWO MAJOR CLASS FINDINGS: (1) Active coenzyme forms (FMN, FAD, TPP, pantethine) are dephosphorylated/hydrolyzed in gut lumen BEFORE absorption — systemic F = parent vitamin F; elevated bio_scores 13-14 are NOT justified. (2) IHN (inositol hexanicotinate) has NO measurable bioavailability (Keenan 2013 PMID:23351578) — current bio=12 severely misleading.",
+        "verified_pmids": [
+          "PMID:8929745  Loew 1996 — benfotiamine Cmax 5x/AUC 3.6x (NOT absolute F=5x)",
+          "PMID:9587048  Greb & Bitsch 1998 — benfotiamine > TTFD orally",
+          "PMID:22305197 Smithline 2012 — thiamine HCl saturable (50% low / 5% 1500mg)",
+          "PMID:33812058 Watanabe 2021 — TTFD [11C] human PET",
+          "PMID:8604671  Zempleni 1996 — riboflavin oral/IV PK; ~95% F at <10mg",
+          "PMID:4056044  Wittwer 1985 — pantethine hydrolyzed pre-absorption",
+          "PMID:23351578 Keenan 2013 — IHN NO measurable bioavailability",
+          "PMID:22646128 MacKay 2012 — niacin chemical forms review",
+          "PMID:20608755 Pietrzik 2010 — FA vs L-5-MTHF review",
+          "PMID:16825690 Lamers 2006 — RBC folate higher with [6S]-5-MTHF",
+          "PMID:19917061 Prinz-Langenohl 2009 — 5-MTHF AUC ~2x FA; UMFA only after FA",
+          "PMID:33255787 Obeid 2020 — Na/Ca salt 5-MTHF AUC ratio ~2.25 vs FA",
+          "PMID:20573790 Bailey 2010 NHANES — UMFA in 38% adults ≥60",
+          "PMID:24944062 Patanwala 2014 — folic acid portal vein handling"
+        ],
+        "misattributions_caught": {
+          "\"Norris 2006 inositol hexanicotinate\"": "DOES NOT EXIST in PubMed → replaced with Keenan 2013 (PMID:23351578) which actually shows IHN null",
+          "\"Wittwer 1989 pantethine\"": "wrong year → actual is 1985 (PMID:4056044, J Clin Invest)",
+          "\"Patanwala 2014 bioequivalence\"": "actually portal-vein folic acid handling study, not bioequivalence",
+          "\"Loew 1996 5x better bioavailability\"": "actually Cmax 5x / AUC 3.6x; absolute F never measured",
+          "\"Quatrefolic 9.7x AUC\"": "Miraglia 2016 (PMID:27008238) is RAT study, not human"
+        },
+        "class_findings": [
+          "ACTIVE COENZYME FORMS dephosphorylated pre-absorption: FMN, FAD, TPP, pantethine all hydrolyzed in gut by intestinal alkaline phosphatase / pyrophosphatase / pantetheinase BEFORE absorption. Recommend bio_score cap of parent_form + 1 unless head-to-head human PK shows superiority (currently only 5-MTHF vs FA in B9).",
+          "IHN (inositol hexanicotinate) has NO measurable bioavailability (Keenan 2013 PMID:23351578); flush-free because it does not release niacin systemically.",
+          "UMFA (unmetabolized folic acid) detected in 38% of US adults ≥60 (Bailey 2010 PMID:20573790); MTHFR 677TT highest-risk subgroup."
+        ],
+        "forms_updated": [
+          "vitamin_b1_thiamine::benfotiamine (value None → 0.5)",
+          "vitamin_b1_thiamine::thiamine mononitrate (value None → 0.5)",
+          "vitamin_b1_thiamine::thiamine hydrochloride (value None → 0.5)",
+          "vitamin_b1_thiamine::allithiamine (value None → 0.5)",
+          "vitamin_b1_thiamine::thiamine pyrophosphate (TPP) (value None → 0.45)",
+          "vitamin_b1_thiamine::thiamine tetrahydrofurfuryl disulfide (TTFD) (value None → 0.55)",
+          "vitamin_b1_thiamine::thiamine from brewer's yeast (value None → 0.4)",
+          "vitamin_b1_thiamine::thiamine disulfide (value None → 0.3)",
+          "vitamin_b2_riboflavin::riboflavin-5-phosphate (value None → 0.9)",
+          "vitamin_b2_riboflavin::riboflavin (value None → 0.9)",
+          "vitamin_b2_riboflavin::riboflavin from yeast (value None → 0.5)",
+          "vitamin_b2_riboflavin::flavin adenine dinucleotide (FAD) (value None → 0.9)",
+          "vitamin_b3_niacin::inositol hexanicotinate (value None → 0.05)",
+          "vitamin_b3_niacin::niacinamide (value None → 0.9)",
+          "vitamin_b3_niacin::niacinamide ascorbate (b3) (value None → 0.85)",
+          "vitamin_b3_niacin::nicotinic acid (value None → 0.85)",
+          "vitamin_b3_niacin::tryptophan_derived_niacin (value None → 0.02)",
+          "vitamin_b5_pantothenic::calcium pantothenate (value None → 0.5)",
+          "vitamin_b5_pantothenic::pantethine (value None → 0.5)",
+          "vitamin_b5_pantothenic::pantothenic acid (value None → 0.5)",
+          "vitamin_b5_pantothenic::sodium pantothenate (value None → 0.5)",
+          "vitamin_b5_pantothenic::panthenol (pro-vitamin B5) (value None → 0.4)",
+          "vitamin_b9_folate::5-methyltetrahydrofolate (5-MTHF) (value None → 0.85)",
+          "vitamin_b9_folate::calcium folinate (value None → 0.9)",
+          "vitamin_b9_folate::quatrefolic (value None → 0.85)",
+          "vitamin_b9_folate::metafolin (value None → 0.85)",
+          "vitamin_b9_folate::folic acid (value None → 0.85)",
+          "vitamin_b9_folate::food folate (polyglutamate) (value None → 0.65)",
+          "vitamin_b9_folate::folate from yeast (value None → 0.65)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "vitamin_b1_thiamine::benfotiamine",
+            "flag": "Research agent recommends bio_score 14 → 12 downgrade. Current \"5x better\" claim conflates Cmax (relative metric) with absolute F. Loew 1996 (PMID:8929745) reports Cmax 5x and AUC ~3.6x vs thiamine HCl — neither is absolute F=5x. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b1_thiamine::allithiamine",
+            "flag": "Research agent recommends bio_score 10 → 9 downgrade. No human absolute-F data; only animal/preclinical evidence. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b1_thiamine::thiamine pyrophosphate (TPP)",
+            "flag": "Research agent recommends bio_score 10 → 8 downgrade. TPP is dephosphorylated in gut lumen before absorption — systemic F is that of free thiamine. \"Active coenzyme\" advantage is post-absorption. Part of class-wide active-coenzyme finding. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b1_thiamine::thiamine tetrahydrofurfuryl disulfide (TTFD)",
+            "flag": "Research agent recommends bio_score 14 → 11 downgrade. TTFD is overstated as \"excellent\" — Greb 1998 (PMID:9587048) shows benfotiamine > TTFD orally. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b2_riboflavin::riboflavin-5-phosphate",
+            "flag": "Research agent recommends bio_score 14 → 11 downgrade. FMN is dephosphorylated in gut to free riboflavin before absorption — no human PK shows superiority over equimolar riboflavin. Part of class-wide active-coenzyme finding. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b2_riboflavin::flavin adenine dinucleotide (FAD)",
+            "flag": "Research agent recommends bio_score 13 → 11 downgrade. FAD is hydrolyzed pre-absorption — same as FMN. Existing notes already state this (\"broken down in gut before absorption\"); current bio=13 is internally inconsistent. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b3_niacin::inositol hexanicotinate",
+            "flag": "MAJOR — Research agent recommends bio_score 12 → 4 downgrade. Keenan 2013 (PMID:23351578) found NO measurable bioavailability at 1500 mg/day for 6 weeks. Current bio=12 is severely misleading. IHN is \"flush-free\" because it does not release niacin systemically. Needs Dr Pham urgent clinical signoff."
+          },
+          {
+            "location": "vitamin_b5_pantothenic::pantethine",
+            "flag": "Research agent recommends bio_score 14 → 11 downgrade. Wittwer 1985 (PMID:4056044) shows pantethine is rapidly hydrolyzed pre-absorption to pantothenate + cysteamine — \"active reduced form direct CoA precursor\" claim is false at the absorption step. Lipid-modifying effect is separate pharmacology, not vitamin F advantage. Part of class-wide active-coenzyme finding. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "vitamin_b9_folate::quatrefolic",
+            "flag": "Research agent recommends bio_score 13 → 12 downgrade. Quatrefolic human PK has not been published; the often-cited \"9.7x AUC\" figure comes from Miraglia 2016 RAT study (PMID:27008238). Treat as animal-only until human equivalence study published. Needs Dr Pham clinical signoff."
           }
         ]
       }
