@@ -205,8 +205,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "high",
-        "notes": "Vitamin A processed into water-soluble micelles for enhanced absorption. Especially valuable for people with fat malabsorption conditions (e.g., Crohn's, celiac, cystic fibrosis, gallbladder removal) who struggle to absorb fat-soluble vitamins.",
+        "absorption": "very high; micellar dispersion bypasses fat-dependence, ~70-90% absorption efficiency",
+        "notes": "Vitamin A processed into water-soluble micelles for enhanced absorption. Especially valuable for people with fat malabsorption conditions (e.g., Crohn's, celiac, cystic fibrosis, gallbladder removal) who struggle to absorb fat-soluble vitamins. Evidence update 2026-04-24: EVIDENCE-THIN flag — no published human oral PK study isolates micellized retinyl palmitate vs oil-form. Range extrapolated from Reboul 2013 (PMID:24036530) review showing preformed vitamin A reaches 70-90% absorption when properly emulsified, plus intramuscular water-miscible vs oily RP comparison (Hartmann 1990, PMID:2271745) showing ~100× bioavailability gap supporting micellization as bypassing the fat-dependence rate-limit. Value is mechanistic, not empirical.",
         "aliases": [
           "water-soluble vitamin a",
           "micelle vitamin a",
@@ -222,10 +222,10 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
+          "quality": "very_good",
           "notes": "Enhanced absorption via micellar solubilization; particularly beneficial in fat malabsorption syndromes."
         }
       },
@@ -233,8 +233,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "very high",
-        "notes": "Vitamin A encapsulated in phospholipid liposomes to improve lymphatic uptake and cellular delivery. Bypasses some digestive barriers. A premium delivery format, though head-to-head clinical trials vs standard forms are still limited.",
+        "absorption": "very high (mechanistic); efficient enterocyte uptake via lipid bilayer",
+        "notes": "Vitamin A encapsulated in phospholipid liposomes to improve lymphatic uptake and cellular delivery. Bypasses some digestive barriers. A premium delivery format, though head-to-head clinical trials vs standard forms are still limited. Evidence update 2026-04-24: VERY EVIDENCE-THIN flag — NO published human oral PK trial of liposomal vitamin A exists in PubMed (as of Nov 2026). All available \"liposomal vitamin A\" papers (PMIDs:27829536, 23740112) are in vitro / cell-line / nanoparticle reviews, not human pharmacokinetics. Value 0.85 mirrors micellized estimate based on shared mechanism (lipid-vesicle-mediated enterocyte delivery per PMID:24036530). Rating reflects mechanism, not direct human evidence; carries preclinical_only evidence basis.",
         "aliases": [
           "liposome vitamin a",
           "encapsulated vitamin a",
@@ -248,9 +248,9 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
           "quality": "very_good",
           "notes": "Liposomal encapsulation improves lymphatic uptake; limited comparative clinical data vs standard forms."
         }
@@ -7505,8 +7505,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "High (fat-soluble; best absorbed with fats or oils)",
-        "notes": "The clinically preferred form — extracted from Haematococcus pluvialis microalgae. One of nature's most powerful antioxidants (~6000x stronger than vitamin C in singlet oxygen quenching). Supported by 50+ clinical trials for skin UV protection, eye health (macular support), exercise recovery, and cognitive function. Fat-soluble — best absorbed with a meal containing fat or oils.",
+        "absorption": "variable; ~10-50% with food (fat boosts 1.7-3.7×); Cmax ~1.3 mg/L at 100mg w/ meal",
+        "notes": "The clinically preferred form — extracted from Haematococcus pluvialis microalgae. One of nature's most powerful antioxidants (~6000x stronger than vitamin C in singlet oxygen quenching). Supported by 50+ clinical trials for skin UV protection, eye health (macular support), exercise recovery, and cognitive function. Fat-soluble — best absorbed with a meal containing fat or oils. Evidence update 2026-04-24: Mercke Odeberg 2003 (PMID:12885395, n=32 males, 40mg) showed lipid-based formulations enhance astaxanthin oral bioavailability 1.7-3.7× vs commercial reference. Østerlie 2000 (PMID:11120445, n=3, 100mg with meal) reported Cmax 1.3 mg/L and t½ 21h. Astaxanthin absolute F not directly measured in humans; 0.20 midpoint reflects published lipid-enhancement factors. CAVEAT: marketing claims of \"natural absorbs better than synthetic\" lack human head-to-head PK evidence.",
         "aliases": [
           "natural astaxanthin",
           "haematococcus pluvialis astaxanthin",
@@ -7561,10 +7561,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "variable",
           "notes": "high (fat-soluble; best absorbed with fats or oils)"
         }
       },
@@ -7572,8 +7572,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "Moderate",
-        "notes": "Petroleum-derived synthetic astaxanthin, primarily used in aquaculture (salmon farming) to color fish flesh pink. Different stereoisomer profile than natural astaxanthin. Far less clinical evidence for human health benefits. Significantly cheaper but not recommended for human supplementation.",
+        "absorption": "variable; equivalent F to natural form when fat-matrixed (no human head-to-head PK)",
+        "notes": "Petroleum-derived synthetic astaxanthin, primarily used in aquaculture (salmon farming) to color fish flesh pink. Different stereoisomer profile than natural astaxanthin. Far less clinical evidence for human health benefits. Significantly cheaper but not recommended for human supplementation. Evidence update 2026-04-24: EVIDENCE-THIN flag — no published human head-to-head PK study compares natural Haematococcus vs synthetic astaxanthin oral bioavailability. Value 0.20 mirrors natural form based on shared lipoprotein-mediated absorption pathway (PMID:11120445). Aquaculture comparisons (e.g. PMID:36552680) are not human PK and should not be cited as evidence of differential human absorption.",
         "aliases": [
           "chemical astaxanthin",
           "lab-made astaxanthin",
@@ -7585,10 +7585,10 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "variable",
           "notes": "moderate"
         }
       },
@@ -7596,8 +7596,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "Unverified",
-        "notes": "The supplement label says astaxanthin but does not specify natural (algae-derived) or synthetic. This distinction matters — natural astaxanthin from Haematococcus pluvialis has far more clinical support. If the source isn't specified, it may be the cheaper synthetic version.",
+        "absorption": "low/variable when fat-matrix unknown; reference Cmax ~3.86 µg/mL (Khayyal 2024)",
+        "notes": "The supplement label says astaxanthin but does not specify natural (algae-derived) or synthetic. This distinction matters — natural astaxanthin from Haematococcus pluvialis has far more clinical support. If the source isn't specified, it may be the cheaper synthetic version. Evidence update 2026-04-24: Khayyal 2024 (PMID:38748358, n=12 males, 8mg crossover) reference (non-micellar) astaxanthin gave Cmax only 3.86 µg/mL vs 7.21 µg/mL for micellar formulation, confirming unformulated/unspecified astaxanthin defaults to lower bioavailability than fat-optimized forms.",
         "aliases": [
           "astaxanthin",
           "astaxanthin extract",
@@ -7612,11 +7612,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
+          "value": 0.1,
+          "quality": "low",
           "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "range_low": 0.05,
+          "range_high": 0.3
         }
       }
     },
@@ -37995,6 +37995,37 @@
           "PMID:15640486 (Manach 2005) — flavonoid subclass bioavailability review"
         ],
         "bio_score_changed": false
+      },
+      "5.0.8": {
+        "date": "2026-04-24",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 6 — astaxanthin + premium vitamin A null-value fill",
+        "research_subagent_report": "PubMed research populated struct.value on 5 forms previously left null despite high bio_scores (10-14). 3 astaxanthin forms have published human PK (PMIDs:12885395, 11120445, 38748358); 2 premium vitamin A forms (micellized, liposomal) have NO published human oral PK and are flagged accordingly. The agent identified 3 important \"evidence-thin\" caveats now embedded in notes to prevent marketing-claim leakage.",
+        "verified_pmids": [
+          "PMID:12885395 (Mercke Odeberg 2003 — astaxanthin lipid F-enhancement)",
+          "PMID:11120445 (Østerlie 2000 — 100mg astaxanthin Cmax/t½)",
+          "PMID:38748358 (Khayyal 2024 — micellar vs reference astaxanthin)",
+          "PMID:24036530 (Reboul 2013 — vit A 70-90% absorption review)"
+        ],
+        "evidence_thin_flags_documented": [
+          "Synthetic vs natural astaxanthin: no human head-to-head PK exists",
+          "Liposomal vitamin A: NO human oral PK published as of Nov 2026",
+          "Micellized vitamin A: extrapolated from review + IM data",
+          "Astaxanthin absolute F: not directly measured in humans (only Cmax/AUC ratios)"
+        ],
+        "forms_updated": [
+          "astaxanthin::natural astaxanthin (haematococcus pluvialis) (value None → 0.2)",
+          "astaxanthin::synthetic astaxanthin (value None → 0.2)",
+          "astaxanthin::unspecified astaxanthin (value None → 0.1)",
+          "vitamin_a::micellized vitamin A (value None → 0.85)",
+          "vitamin_a::liposomal vitamin A (value None → 0.85)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "vitamin_a::liposomal vitamin A",
+            "flag": "bio_score=14 (premium tier) on liposomal vitamin A is supported by mechanism only; no human PK exists. Dr Pham should consider whether to retain bio=14 or downgrade pending human trial data."
+          }
+        ]
       }
     },
     "category_enum": [
