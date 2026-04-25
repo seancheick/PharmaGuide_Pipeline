@@ -16,14 +16,26 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import threading
 
-# Import fuzzy matching with fallback
+# Import fuzzy matching with a 3-tier fallback chain.
+# rapidfuzz is preferred: C++ accelerated, MIT-licensed, ~50-100x faster than
+# pure-Python difflib, and already declared in requirements-dev.txt. fuzzywuzzy
+# is the historical second choice (needs python-levenshtein for speed). difflib
+# is the last-resort pure-Python fallback — it works everywhere but is the
+# reason cleaning regressed ~64x when neither rapidfuzz nor fuzzywuzzy was
+# importable. Both rapidfuzz.process.extractOne and fuzzywuzzy.process.extractOne
+# return (choice, score[, index]); only [0] and [1] are read at the call sites,
+# so the libraries are drop-in compatible.
 try:
-    from fuzzywuzzy import fuzz, process
+    from rapidfuzz import fuzz, process
     FUZZY_AVAILABLE = True
 except ImportError:
-    from difflib import SequenceMatcher
-    FUZZY_AVAILABLE = False
-    print("⚠️ fuzzywuzzy not found. Install for better matching: pip install fuzzywuzzy python-levenshtein")
+    try:
+        from fuzzywuzzy import fuzz, process
+        FUZZY_AVAILABLE = True
+    except ImportError:
+        from difflib import SequenceMatcher
+        FUZZY_AVAILABLE = False
+        print("⚠️ No accelerated fuzzy matcher found. Install: pip install rapidfuzz")
 
 from constants import (
     INGREDIENT_QUALITY_MAP,
