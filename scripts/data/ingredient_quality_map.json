@@ -9682,8 +9682,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Copper chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "marketing label; class-equivalent generic Cu chelate, ~30-55% F homeostatic",
+        "notes": "Copper chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "copper rice chelate",
           "rice chelate copper",
@@ -9694,11 +9694,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Marketing-only label (Batch 11 verdict: 0 PubMed hits). Behaves as generic Cu chelate per Turnlund 1989 (PMID:2718922) class data"
         }
       },
       "copper gluconate": {
@@ -9783,8 +9783,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "Copper bonded to citric acid — well-tolerated and moderately absorbed. Citrate is a natural chelator that keeps copper soluble through the digestive tract. A solid mid-tier option, more bioavailable than sulfate or oxide but not as well-absorbed as bisglycinate chelate.",
+        "absorption": "inorganic salt; 30-50% F at supplement doses, dose-inverse",
+        "notes": "Copper bonded to citric acid — well-tolerated and moderately absorbed. Citrate is a natural chelator that keeps copper soluble through the digestive tract. A solid mid-tier option, more bioavailable than sulfate or oxide but not as well-absorbed as bisglycinate chelate. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "citric acid copper",
           "citrate-bound copper",
@@ -9794,19 +9794,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.35,
+          "range_low": 0.25,
+          "range_high": 0.5,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Class F per Turnlund 1989 (PMID:2718922): 12-56% homeostatic"
         }
       },
       "copper amino acid chelate": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "good",
-        "notes": "Copper bound to an unspecified amino acid or protein hydrolysate. 'Chelated copper' on a label usually means this form. Absorption is generally better than inorganic salts (sulfate, oxide) because the amino acid carrier protects copper through the gut. However, without knowing the specific amino acid, quality can vary. Bisglycinate is the premium chelate — this generic form scores slightly lower.",
+        "absorption": "generic Cu AAC; class-equivalent, no own PK",
+        "notes": "Copper bound to an unspecified amino acid or protein hydrolysate. 'Chelated copper' on a label usually means this form. Absorption is generally better than inorganic salts (sulfate, oxide) because the amino acid carrier protects copper through the gut. However, without knowing the specific amino acid, quality can vary. Bisglycinate is the premium chelate — this generic form scores slightly lower. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "copper protein complex",
           "copper amino acid chelate supplement",
@@ -9817,11 +9817,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Generic AAC; assumed class-equivalent to bisglycinate; no dedicated human PK"
         }
       },
       "copper (unspecified)": {
@@ -9848,8 +9848,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "~40-60% (estimated; between bisglycinate and amino acid chelate)",
-        "notes": "Copper(II) chelated with picolinic acid. The picolinate carrier employs the same intestinal mucosal transport enhancement as zinc picolinate and chromium picolinate, with bidentate coordination protecting copper(II) through gastric transit. Animal model and in vitro data (Ashmead, Albion Research Notes series) indicate picolinate chelates improve mineral mucosal uptake vs. inorganic salts. Human copper picolinate RCT data are limited; estimated absorption 40–60% places it between bisglycinate (top) and generic amino acid chelate.",
+        "absorption": "no human PK; extrapolated from Cr/Zn picolinate; class-equivalent ~30-55% F",
+        "notes": "Copper(II) chelated with picolinic acid. The picolinate carrier employs the same intestinal mucosal transport enhancement as zinc picolinate and chromium picolinate, with bidentate coordination protecting copper(II) through gastric transit. Animal model and in vitro data (Ashmead, Albion Research Notes series) indicate picolinate chelates improve mineral mucosal uptake vs. inorganic salts. Human copper picolinate RCT data are limited; estimated absorption 40–60% places it between bisglycinate (top) and generic amino acid chelate. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "Cu picolinate",
           "copper(II) picolinate",
@@ -9858,11 +9858,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "~40-60% estimated"
+          "value": 0.4,
+          "range_low": 0.25,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "\"Hashmi\" PMID often cited for Cu picolinate human PK is NOT FOUND in PubMed (ghost reference). \"40-60% estimated\" claim is unsourced"
         }
       }
     },
@@ -9945,8 +9945,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Chromium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "marketing label; class F 0.5-4% same as inorganic Cr",
+        "notes": "Chromium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "chromium rice chelate",
           "rice chelate chromium",
@@ -9957,11 +9957,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.015,
+          "range_low": 0.005,
+          "range_high": 0.04,
+          "quality": "low",
+          "notes": "Marketing-only label (Batch 11 verdict: 0 PubMed hits). Class F 0.5-4% applies regardless"
         }
       },
       "chromium polynicotinate": {
@@ -10115,8 +10115,8 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "~2-4% (estimated, comparable to organic chromium chelates)",
-        "notes": "Patented complex (Natreon Inc.) combining trivalent chromium with Phyllanthus emblica (amla) extract and PrimaVie shilajit. RCT evidence shows comparable glucose and lipid effects to chromium picolinate with a potentially improved safety profile (reduced Cr(VI) conversion risk per Natreon in vitro data, 2010). Absorption estimated 2–4%, consistent with other organic chromium complexes. Used in branded products like Crominex 3+.",
+        "absorption": "Natreon proprietary; clinical RCTs only, no PK data, class F 0.5-4%",
+        "notes": "Patented complex (Natreon Inc.) combining trivalent chromium with Phyllanthus emblica (amla) extract and PrimaVie shilajit. RCT evidence shows comparable glucose and lipid effects to chromium picolinate with a potentially improved safety profile (reduced Cr(VI) conversion risk per Natreon in vitro data, 2010). Absorption estimated 2–4%, consistent with other organic chromium complexes. Used in branded products like Crominex 3+. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "Crominex 3+",
           "crominex",
@@ -10126,19 +10126,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "~2-4% estimated; comparable to organic chromium chelates"
+          "value": 0.025,
+          "range_low": 0.005,
+          "range_high": 0.04,
+          "quality": "low",
+          "notes": "Natreon Crominex 3+ (Cr + amla + shilajit). Two clinical-endpoint RCTs: PMID:32021349 (endothelial) and PMID:30723735 (lipid) — measure outcomes, NOT absolute F. No PK data published"
         }
       },
       "chromium chelidamate arginate": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "~2-3% (estimated, similar to chromium nicotinate glycinate)",
-        "notes": "Chromium(III) chelated with chelidamic acid (2,6-pyridinedicarboxylic acid) and L-arginine. Chelidamic acid is structurally related to picolinic acid and provides strong bidentate coordination to chromium(III); the arginine component adds biological compatibility. A specialty Albion-class chelate; human clinical RCT data sparse but chelation chemistry predicts solid oral absorption (~2–3%), comparable to chromium nicotinate glycinate in mechanism and expected bioavailability.",
+        "absorption": "no published evidence of any kind; class F 0.5-4%",
+        "notes": "Chromium(III) chelated with chelidamic acid (2,6-pyridinedicarboxylic acid) and L-arginine. Chelidamic acid is structurally related to picolinic acid and provides strong bidentate coordination to chromium(III); the arginine component adds biological compatibility. A specialty Albion-class chelate; human clinical RCT data sparse but chelation chemistry predicts solid oral absorption (~2–3%), comparable to chromium nicotinate glycinate in mechanism and expected bioavailability. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "chromium chelidamate arginate chelate",
           "chelidamic acid arginine chromium",
@@ -10147,11 +10147,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "~2-3% estimated"
+          "value": 0.02,
+          "range_low": 0.005,
+          "range_high": 0.04,
+          "quality": "low",
+          "notes": "PubMed search returns ZERO results on ANY topic for \"chromium chelidamate arginate\" — even less evidentiary support than brown rice chelate. Marketing-only"
         }
       }
     },
@@ -10794,8 +10794,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Molybdenum chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "marketing label; class F 88-93% (Turnlund 1995)",
+        "notes": "Molybdenum chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "molybdenum rice chelate",
           "rice chelate molybdenum",
@@ -10806,11 +10806,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.905,
+          "range_low": 0.88,
+          "range_high": 0.93,
+          "quality": "very_good",
+          "notes": "Marketing-only label (Batch 11 verdict: 0 PubMed hits). Mo class F is 88-93% per Turnlund 1995 (PMID:7572711) regardless of form"
         }
       },
       "sodium molybdate": {
@@ -10842,8 +10842,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "good",
-        "notes": "Molybdenum bound to amino acids, but the specific carrier isn't disclosed. Absorbs better than inorganic salts. This is the catch-all for chelated molybdenum when the label doesn't name the exact amino acid.",
+        "absorption": "generic Mo AAC; class F 88-93% homeostatic, no form differences",
+        "notes": "Molybdenum bound to amino acids, but the specific carrier isn't disclosed. Absorbs better than inorganic salts. This is the catch-all for chelated molybdenum when the label doesn't name the exact amino acid. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "molybdenum amino acid complex",
           "molybdenum protein complex",
@@ -10854,19 +10854,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.905,
+          "range_low": 0.88,
+          "range_high": 0.93,
+          "quality": "very_good",
+          "notes": "Class F per Turnlund 1995 (PMID:7572711); homeostatic regulation dominates form differences"
         }
       },
       "molybdenum chloride": {
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "An inorganic chloride salt with moderate absorption. Rarely used in consumer supplements — sodium molybdate is far more common. Included because it occasionally appears on labels from niche manufacturers.",
+        "absorption": "inorganic Mo salt; class F 88-93%",
+        "notes": "An inorganic chloride salt with moderate absorption. Rarely used in consumer supplements — sodium molybdate is far more common. Included because it occasionally appears on labels from niche manufacturers. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "chloride-bound molybdenum",
           "molybdenum(III) chloride",
@@ -10874,30 +10874,30 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.905,
+          "range_low": 0.88,
+          "range_high": 0.93,
+          "quality": "very_good",
+          "notes": "Inorganic salt; class F per Turnlund 1995 (PMID:7572711)"
         }
       },
       "molybdenum picolinate": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "very good",
-        "notes": "Picolinic acid chelate — uses the same carrier principle as the popular chromium picolinate. Very good absorption. Less commonly used than glycinate or sodium molybdate, but a quality form when available.",
+        "absorption": "no dedicated PK; class F 88-93%, picolinate offers no Mo advantage",
+        "notes": "Picolinic acid chelate — uses the same carrier principle as the popular chromium picolinate. Very good absorption. Less commonly used than glycinate or sodium molybdate, but a quality form when available. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
         "aliases": [
           "picolinate molybdenum",
           "Mo picolinate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.905,
+          "range_low": 0.88,
+          "range_high": 0.93,
           "quality": "very_good",
-          "notes": "very good"
+          "notes": "No published Mo picolinate human PK. Class F 88-93% per Turnlund 1995 (PMID:7572711); picolinate offers no advantage at this F ceiling"
         },
         "external_ids": {
           "unii": "4E86NC774D"
@@ -38717,6 +38717,83 @@
           {
             "location": "boswellia::boswellia (unspecified)",
             "flag": "Research agent recommends bio_score 6 → 4 downgrade. Form ambiguity should default to crude-class assumption. Needs Dr Pham clinical signoff."
+          }
+        ]
+      },
+      "5.0.19": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 17 — Cu/Cr/Mo chelates + ghost references",
+        "research_subagent_report": "PubMed research on 11 Cu/Cr/Mo forms. Research agent USED WebFetch on PubMed eutils. FOUR major findings: (1) Cr chelidamate arginate has ZERO PubMed hits on ANY topic; (2) Crominex 3+ has only Natreon-funded clinical RCTs, no PK; (3) Cu picolinate \"Hashmi\" PMID is a ghost reference; (4) Mo picolinate has no human PK. Plus brown rice chelate × 3 reconfirms Batch 11 marketing finding.",
+        "verified_pmids": [
+          "PMID:7572711  Turnlund 1995 AJCN — Mo 88-93% F (CANONICAL)",
+          "PMID:7733035  Turnlund 1995 AJCN — Mo depletion/repletion",
+          "PMID:15564651 Anderson 2004 — Cr histidinate vs picolinate",
+          "PMID:10573563 Baker 1999 — Cu oxide ineffective",
+          "PMID:2718922  Turnlund 1989 — Cu 12-56% F homeostatic",
+          "PMID:32021349 Natreon Crominex endothelial RCT (clinical, NOT PK)",
+          "PMID:30723735 Natreon Crominex lipid RCT (clinical, NOT PK)"
+        ],
+        "ghost_references_caught": {
+          "Cu picolinate \"Hashmi\" PMID": "NOT FOUND in PubMed — ghost industry citation",
+          "Crominex 3+ absolute F PMID": "NOT FOUND — only clinical-endpoint RCTs exist",
+          "Cr chelidamate arginate": "ZERO PubMed presence on any topic — pure marketing",
+          "Mo picolinate human PK": "NOT FOUND — only unrelated chemistry/microbiology hits"
+        },
+        "class_findings": [
+          "Copper: 12-56% F dose-inverse homeostatic (Turnlund 1989). All organic chelates and salts cluster ~30-55% at supplement doses.",
+          "Chromium: 0.5-4% F class-poor across ALL forms; picolinate is \"high\" only relative to other chromium forms.",
+          "Molybdenum: 88-93% F across ALL forms per Turnlund 1995; homeostatic regulation dominates; form differences negligible."
+        ],
+        "forms_updated": [
+          "copper::copper brown rice chelate (value None → 0.4)",
+          "copper::copper amino acid chelate (value None → 0.4)",
+          "copper::copper picolinate (value None → 0.4)",
+          "copper::copper citrate (value None → 0.35)",
+          "chromium::chromium brown rice chelate (value None → 0.015)",
+          "chromium::crominex 3+ chromium complex (value None → 0.025)",
+          "chromium::chromium chelidamate arginate (value None → 0.02)",
+          "molybdenum::molybdenum brown rice chelate (value None → 0.905)",
+          "molybdenum::molybdenum amino acid chelate (value None → 0.905)",
+          "molybdenum::molybdenum picolinate (value None → 0.905)",
+          "molybdenum::molybdenum chloride (value None → 0.905)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "copper::copper brown rice chelate",
+            "flag": "Research agent recommends bio_score 11 → 5 downgrade. Brown rice chelate marketing-only (Batch 11 confirmed). Cu chelate class F is ~30-55% per Turnlund 1989. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "copper::copper amino acid chelate",
+            "flag": "Research agent recommends bio_score 11 → 7 downgrade. No dedicated human PK; class-equivalent at best. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "copper::copper picolinate",
+            "flag": "MAJOR — Research agent recommends bio_score 12 → 6 downgrade. The \"Hashmi\" PMID often cited for Cu picolinate human PK does NOT EXIST in PubMed (ghost reference). \"Estimated 40-60%\" claim is unsourced industry extrapolation from Cr/Zn picolinate. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "chromium::chromium brown rice chelate",
+            "flag": "Research agent recommends bio_score 11 → 4 downgrade. Brown rice chelate marketing-only; chromium F is class-poor (0.5-4%) regardless. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "chromium::crominex 3+ chromium complex",
+            "flag": "MAJOR — Research agent recommends bio_score 13 → 5 downgrade. NO human absolute F study exists. Two Natreon-funded clinical RCTs (PMID:32021349, 30723735) measure endothelial/lipid outcomes — NOT bioavailability. \"Premium\" tier is unsupported. Benefit (if any) likely from amla/shilajit co-actives, not Cr bioavailability. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "chromium::chromium chelidamate arginate",
+            "flag": "MAJOR — Research agent recommends bio_score 12 → 4 downgrade. Cr chelidamate arginate has ZERO PubMed presence on any topic (less evidence than brown rice chelate which at least had 0 absorption hits — chelidamate has 0 hits PERIOD). Pure marketing. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "molybdenum::molybdenum brown rice chelate",
+            "flag": "Research agent recommends bio_score 11 → 7 downgrade. Brown rice chelate marketing-only; F itself is class-equivalent at 88-93%. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "molybdenum::molybdenum amino acid chelate",
+            "flag": "Research agent recommends bio_score 11 → 8 downgrade. No dedicated human PK; class-equivalent at 88-93% F per Turnlund 1995. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "molybdenum::molybdenum picolinate",
+            "flag": "MAJOR — Research agent recommends bio_score 12 → 8 downgrade. No human PK exists for Mo picolinate. Mo class F is already near-saturation (88-93%) per Turnlund 1995 — picolinate cannot offer further advantage. Bio=12 inflated. Needs Dr Pham clinical signoff."
           }
         ]
       }
