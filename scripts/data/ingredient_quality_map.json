@@ -38908,6 +38908,100 @@
             "flag": "Research agent recommends bio_score 10 → 8 downgrade. Class-poor TQ F. Needs Dr Pham clinical signoff."
           }
         ]
+      },
+      "5.0.21": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 19 — fenugreek/SB/hemp/bioflavonoids",
+        "research_subagent_report": "PubMed research on 17 botanical forms across 4 parents. Research agent USED WebFetch on PubMed eutils. FOUR major findings: (1) Sea buckthorn berry oil palmitoleic F unsupported — Johansson 2000 plasma FA unchanged at 5g/4wk. (2) Testofen Crominex-pattern repeat (Steels/Wankhede clinical-only, Aswar rat). (3) Bioflavonoids class-poor F confirmed (hesperidin 4-8%, rutin 1-5%). (4) Hemp organic ≡ cold-pressed (artificial F gap; same chemistry).",
+        "verified_pmids": [
+          "PMID:21312304 Steels 2011 — testofen libido (clinical, NOT PK)",
+          "PMID:30356905 Wankhede 2016 — fenugreek glycoside RT (clinical)",
+          "PMID:20878698 Aswar 2010 — furostanol RAT castration (rat-only)",
+          "PMID:7491892  Hollman 1995 — quercetin ileostomy",
+          "PMID:11151743 Erlund 2000 — quercetin from rutin PK",
+          "PMID:12571654 Manach 2003 — hesperidin urinary 4.1-7.9%",
+          "PMID:17103080 Schwab 2006 — hempseed/flax oil plasma LA/GLA",
+          "PMID:11120446 Johansson 2000 — SB berry oil 5g/4wk plasma FA UNCHANGED",
+          "PMID:16968106 Suomela 2006 — SB flavonols urinary low",
+          "PMID:35426970 Ollinger 2022 — SB anti-hyperglycemic (in-vitro)"
+        ],
+        "class_findings": [
+          "Fenugreek furostanol saponins ~1-5% systemic F; class-poor.",
+          "Sea buckthorn berry oil palmitoleic does NOT raise plasma palmitoleic at 5g/4wk supplement doses (Johansson 2000).",
+          "Bioflavonoids class-poor F: hesperidin 4-8% urinary, rutin systemic 1-5%, quercetin from rutin equivalent AUC via gut microbiota deglycosylation.",
+          "Hemp organic ≡ cold-pressed (same TG chemistry); certification is not a F differentiator."
+        ],
+        "forms_updated": [
+          "fenugreek::testofen (value None → 0.05)",
+          "fenugreek::fenugreek standardized extract (value None → 0.04)",
+          "fenugreek::fenugreek seed powder (value None → 0.03)",
+          "fenugreek::fenugreek (unspecified) (value None → 0.03)",
+          "fenugreek::testosurge extract (value None → 0.04)",
+          "sea_buckthorn::sea buckthorn seed oil (value None → 0.85)",
+          "sea_buckthorn::sea buckthorn berry oil (value None → 0.4)",
+          "sea_buckthorn::sea buckthorn extract (value None → 0.05)",
+          "sea_buckthorn::sea buckthorn powder (value None → 0.3)",
+          "sea_buckthorn::sea buckthorn (unspecified) (value None → 0.3)",
+          "hemp_seed_oil::cold-pressed organic (value None → 0.88)",
+          "hemp_seed_oil::cold-pressed (value None → 0.88)",
+          "hemp_seed_oil::refined (value None → 0.78)",
+          "hemp_seed_oil::hemp seed oil (unspecified) (value None → 0.78)",
+          "bioflavonoids::citrus complex (value None → 0.05)",
+          "bioflavonoids::hesperidin-rich (value None → 0.06)",
+          "bioflavonoids::rutin complex (value None → 0.04)",
+          "bioflavonoids::bioflavonoids (unspecified) (value None → 0.05)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "fenugreek::testofen",
+            "flag": "MAJOR — Research agent recommends bio_score 14 → 9 downgrade. Same Crominex/Aflapin/PrimaVie pattern: clinical RCTs being conflated with bioavailability evidence. Steels 2011 (PMID:21312304) and Wankhede 2016 (PMID:30356905) measured libido/testosterone endpoints, not PK. Aswar 2010 (PMID:20878698) is RAT-only. Furostanol glycosides ~1-5% systemic F class. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "fenugreek::fenugreek standardized extract",
+            "flag": "Research agent recommends bio_score 12 → 8 downgrade. Standardization ≠ enhanced F. Class-poor saponin F applies. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "fenugreek::testosurge extract",
+            "flag": "Research agent recommends bio_score 12 → 8 downgrade. Branded saponin claim without PK. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "sea_buckthorn::sea buckthorn seed oil",
+            "flag": "Research agent recommends bio_score 13 → 12 downgrade. Slight normalization to lipid TG class. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "sea_buckthorn::sea buckthorn berry oil",
+            "flag": "MAJOR — Research agent recommends bio_score 12 → 10 downgrade. Johansson 2000 (PMID:11120446) explicitly shows plasma fatty acids UNCHANGED at 5g berry oil/day for 4 weeks. The \"30-40% palmitoleic content\" was conflated with systemic F. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "sea_buckthorn::sea buckthorn extract",
+            "flag": "Research agent recommends bio_score 10 → 8 downgrade. Flavonol-dominated extract; class-poor F per Suomela 2006. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "hemp_seed_oil::cold-pressed",
+            "flag": "Research agent recommends bio_score 12 → 13 UPGRADE for class-equivalence with organic cold-pressed (same TG chemistry; certification ≠ F). Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "hemp_seed_oil::refined",
+            "flag": "Research agent recommends bio_score 9 → 11 UPGRADE. Refined hemp retains TG structure; F barely drops. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "bioflavonoids::citrus complex",
+            "flag": "Research agent recommends bio_score 11 → 8 downgrade. Class-poor F confirmed: hesperidin urinary 4-8% (PMID:12571654); rutin systemic 1-5% (PMID:7491892). Concentration ≠ F. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "bioflavonoids::hesperidin-rich",
+            "flag": "MAJOR — Research agent recommends bio_score 12 → 8 downgrade. Manach 2003 (PMID:12571654) directly measures hesperidin F at 4.1-7.9% urinary recovery. Bio=12 not justified by published F. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "bioflavonoids::rutin complex",
+            "flag": "MAJOR — Research agent recommends bio_score 11 → 7 downgrade. Rutinoside ileal 17% per Hollman 1995 but systemic F is 1-5%. Bio=11 not supported. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "bioflavonoids::bioflavonoids (unspecified)",
+            "flag": "Research agent recommends bio_score 9 → 7 downgrade. Class-poor F. Needs Dr Pham clinical signoff."
+          }
+        ]
       }
     },
     "category_enum": [
@@ -40202,8 +40296,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "high",
-        "notes": "Cold-pressed oil from Hippophae rhamnoides seeds. Rich in ALA (omega-3), linoleic acid (omega-6), and vitamin E. Unlike berry oil, seed oil does NOT contain palmitoleic acid (omega-7). Supports skin health, mucosal integrity, and cardiovascular function. Sibu and SeabuckWonders are leading brands.",
+        "absorption": "ALA/LA TG class; ~70-90% F with dietary fat",
+        "notes": "Cold-pressed oil from Hippophae rhamnoides seeds. Rich in ALA (omega-3), linoleic acid (omega-6), and vitamin E. Unlike berry oil, seed oil does NOT contain palmitoleic acid (omega-7). Supports skin health, mucosal integrity, and cardiovascular function. Sibu and SeabuckWonders are leading brands. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "sea buckthorn oil",
           "hippophae oil",
@@ -40219,57 +40313,57 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Schwab 2006 (PMID:17103080) supports plasma LA/GLA elevation from hempseed oil; class-equivalent ALA/LA TG absorption"
         }
       },
       "sea buckthorn berry oil": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "moderate-high",
-        "notes": "Oil from sea buckthorn fruit pulp/peel. Uniquely rich in palmitoleic acid (omega-7, 30-40%) and carotenoids (giving orange color). Supports mucosal membranes (vaginal dryness, dry eye), skin health, and cardiovascular function. Different fatty acid profile from seed oil.",
+        "absorption": "palmitoleic-rich oil; plasma 16:1n-7 unchanged at 5g/d (Johansson 2000)",
+        "notes": "Oil from sea buckthorn fruit pulp/peel. Uniquely rich in palmitoleic acid (omega-7, 30-40%) and carotenoids (giving orange color). Supports mucosal membranes (vaginal dryness, dry eye), skin health, and cardiovascular function. Different fatty acid profile from seed oil. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "sea buckthorn fruit oil",
           "seaberry oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.4,
+          "range_low": 0.2,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Johansson 2000 (PMID:11120446) n=12, 5g berry oil × 4 weeks → plasma fatty acids UNCHANGED. \"30-40% palmitoleic content\" is composition, not systemic delivery at supplement doses"
         }
       },
       "sea buckthorn extract": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate",
-        "notes": "Concentrated extract from sea buckthorn berries. Contains flavonoids (isorhamnetin, quercetin), carotenoids, and vitamin C. Antioxidant and anti-inflammatory. Less studied than the oil forms but provides polyphenol benefits not present in pure oil.",
+        "absorption": "flavonols + carotenoids; isorhamnetin urinary recovery low (~1-5%)",
+        "notes": "Concentrated extract from sea buckthorn berries. Contains flavonoids (isorhamnetin, quercetin), carotenoids, and vitamin C. Antioxidant and anti-inflammatory. Less studied than the oil forms but provides polyphenol benefits not present in pure oil. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "seaberry extract",
           "hippophae rhamnoides extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Suomela 2006 (PMID:16968106) shows isorhamnetin absorbed but at low recovery; class-poor flavonol F"
         }
       },
       "sea buckthorn powder": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Dried sea buckthorn berry/leaf powder. Contains fiber, vitamin C, and polyphenols but lower concentration of fatty acids than oil forms. Provides broader nutrient profile including minerals. Used in smoothies and traditional preparations.",
+        "absorption": "whole-fruit matrix; mixed F profile; lipid + low-F flavonol mix",
+        "notes": "Dried sea buckthorn berry/leaf powder. Contains fiber, vitamin C, and polyphenols but lower concentration of fatty acids than oil forms. Provides broader nutrient profile including minerals. Used in smoothies and traditional preparations. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "seaberry powder",
           "sea buckthorn berry powder",
@@ -40277,19 +40371,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.5,
           "quality": "moderate",
-          "notes": "low-moderate"
+          "notes": "Whole fruit/leaf; mixed lipid + flavonoid; intermediate F"
         }
       },
       "sea buckthorn (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Hippophae rhamnoides berry/seed oil; rich in palmitoleic acid (omega-7), flavonoids, and vitamins C/E. Traditional Tibetan/Ayurvedic medicine. Form unspecified.",
+        "absorption": "form unknown; assume mid-range mixed F",
+        "notes": "Hippophae rhamnoides berry/seed oil; rich in palmitoleic acid (omega-7), flavonoids, and vitamins C/E. Traditional Tibetan/Ayurvedic medicine. Form unspecified. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "sea buckthorn",
           "seaberry",
@@ -40298,11 +40392,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "quality": "moderate",
+          "notes": "Form-ambiguous; mid-range conservative",
+          "range_low": 0.1,
+          "range_high": 0.5
         }
       }
     },
@@ -40488,8 +40582,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Patented fenugreek extract (Gencor) standardized to 50% Fenuside (furostanol saponins). Multiple RCTs show testosterone support, libido improvement, and body composition benefits in men at 600 mg/day. FDA GRAS. The most clinically studied fenugreek extract for male health.",
+        "absorption": "furostanol saponins ~1-5% systemic F; activity via gut sapogenin metabolites",
+        "notes": "Patented fenugreek extract (Gencor) standardized to 50% Fenuside (furostanol saponins). Multiple RCTs show testosterone support, libido improvement, and body composition benefits in men at 600 mg/day. FDA GRAS. The most clinically studied fenugreek extract for male health. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "testofen fenugreek",
           "fenuside 50%",
@@ -40499,19 +40593,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Steels 2011 (PMID:21312304) and Wankhede 2016 (PMID:30356905) are CLINICAL endpoint trials, NOT PK. NO human PK study of fenugreek saponins exists"
         }
       },
       "fenugreek standardized extract": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "moderate-high",
-        "notes": "Fenugreek (Trigonella foenum-graecum) seed extract standardized to saponins or 4-hydroxyisoleucine. Clinical evidence for glycemic control (insulin sensitization), lactation support, and testosterone modulation. 500-1000 mg/day typical dose. Multiple branded extracts (Testofen, Fenulife).",
+        "absorption": "concentrated saponins still poor F (~1-5%); deglycosylation in gut needed",
+        "notes": "Fenugreek (Trigonella foenum-graecum) seed extract standardized to saponins or 4-hydroxyisoleucine. Clinical evidence for glycemic control (insulin sensitization), lactation support, and testosterone modulation. 500-1000 mg/day typical dose. Multiple branded extracts (Testofen, Fenulife). Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "fenugreek extract",
           "trigonella foenum-graecum extract",
@@ -40520,19 +40614,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.08,
+          "quality": "low",
+          "notes": "Standardization concentrates saponins but does not solve molecular-size F barrier. Class F per Hollman 1995 saponin biology"
         }
       },
       "fenugreek seed powder": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Ground whole fenugreek seeds. Contains galactomannan fiber, saponins, and 4-hydroxyisoleucine at lower concentrations than extracts. Traditional use as spice and galactagogue. Higher doses needed (2-5 g/day) vs extracts. Fiber content may support glycemic control independently.",
+        "absorption": "whole seed matrix; saponin F class-poor (~1-5%); fiber slows absorption",
+        "notes": "Ground whole fenugreek seeds. Contains galactomannan fiber, saponins, and 4-hydroxyisoleucine at lower concentrations than extracts. Traditional use as spice and galactagogue. Higher doses needed (2-5 g/day) vs extracts. Fiber content may support glycemic control independently. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "fenugreek powder",
           "methi powder",
@@ -40540,19 +40634,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "low-moderate"
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.06,
+          "quality": "low",
+          "notes": "Whole seed; fiber and matrix interactions; class F applies"
         }
       },
       "fenugreek (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Trigonella foenum-graecum seed containing furostanol saponins (protodioscin), galactomannan fiber, and 4-hydroxyisoleucine. Supports glycemic control and testosterone. Form unspecified.",
+        "absorption": "form unknown; assume class-poor saponin F (~1-5%)",
+        "notes": "Trigonella foenum-graecum seed containing furostanol saponins (protodioscin), galactomannan fiber, and 4-hydroxyisoleucine. Supports glycemic control and testosterone. Form unspecified. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "fenugreek",
           "trigonella",
@@ -40563,19 +40657,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.03,
+          "quality": "low",
+          "notes": "Form-ambiguous; conservative class scoring",
+          "range_low": 0.01,
+          "range_high": 0.06
         }
       },
       "testosurge extract": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "enhanced",
-        "notes": "Branded fenugreek extract with enhanced saponins standardization. Clinically studied for testosterone support and male health.",
+        "absorption": "branded saponin extract; no PK data; class F ~1-5%",
+        "notes": "Branded fenugreek extract with enhanced saponins standardization. Clinically studied for testosterone support and male health. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "testosurge",
           "testo surge",
@@ -40585,11 +40679,11 @@
         ],
         "dosage_importance": 1.4,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "enhanced"
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.08,
+          "quality": "low",
+          "notes": "\"Enhanced saponins\" branding without PK substantiation"
         }
       }
     },
@@ -41772,74 +41866,74 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Mixed bioflavonoids from citrus peel (hesperidin, naringin, rutin, quercetin). Support capillary integrity and vitamin C recycling. Typically standardized to total bioflavonoid content. Often combined with vitamin C supplements to enhance antioxidant activity and absorption.",
+        "absorption": "mixed flavanones/flavonols; urinary recovery 4-8%",
+        "notes": "Mixed bioflavonoids from citrus peel (hesperidin, naringin, rutin, quercetin). Support capillary integrity and vitamin C recycling. Typically standardized to total bioflavonoid content. Often combined with vitamin C supplements to enhance antioxidant activity and absorption. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "citrus flavonoid complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "quality": "low",
+          "notes": "Manach 2003 (PMID:12571654) hesperidin urinary recovery 4.1-7.9%; Hollman 1995 (PMID:7491892) ileostomy quercetin glucosides 52%, aglycone 24%, rutinoside 17% — gut disappearance not systemic F",
+          "range_low": 0.03,
+          "range_high": 0.1
         }
       },
       "hesperidin-rich": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Bioflavonoid complex standardized for high hesperidin content from citrus peel. Hesperidin is the most abundant citrus flavonoid. Supports venous tone, capillary permeability, and anti-inflammatory pathways. Diosmin-hesperidin combinations used clinically for chronic venous insufficiency.",
+        "absorption": "hesperidin urinary recovery 4.1-7.9% in humans (Manach 2003)",
+        "notes": "Bioflavonoid complex standardized for high hesperidin content from citrus peel. Hesperidin is the most abundant citrus flavonoid. Supports venous tone, capillary permeability, and anti-inflammatory pathways. Diosmin-hesperidin combinations used clinically for chronic venous insufficiency. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "hesperidin bioflavonoid",
           "hesperidin concentrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.06,
+          "quality": "low",
+          "notes": "Manach 2003 (PMID:12571654) urinary recovery 4.1-7.9% from orange juice; bio=12 not justified by published F",
+          "range_low": 0.04,
+          "range_high": 0.08
         }
       },
       "rutin complex": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Bioflavonoid complex rich in rutin (quercetin-3-rutinoside) from buckwheat, citrus, or eucalyptus. Rutin supports capillary strength, anti-inflammatory activity, and antioxidant defense. Metabolized by gut bacteria to quercetin. Historically used for vascular fragility and bruising.",
+        "absorption": "rutinoside ileal absorption ~17%; systemic F ~1-5%",
+        "notes": "Bioflavonoid complex rich in rutin (quercetin-3-rutinoside) from buckwheat, citrus, or eucalyptus. Rutin supports capillary strength, anti-inflammatory activity, and antioxidant defense. Metabolized by gut bacteria to quercetin. Historically used for vascular fragility and bruising. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "rutin bioflavonoid complex",
           "rutin + quercetin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.04,
+          "quality": "low",
+          "notes": "Hollman 1995 (PMID:7491892) ileostomy rutinoside 17%, but that is GUT disappearance not systemic F; Erlund 2000 (PMID:11151743) confirms equivalent AUC via gut deglycosylation. Systemic F ~1-5%",
+          "range_low": 0.01,
+          "range_high": 0.07
         }
       },
       "bioflavonoids (unspecified)": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "unknown",
-        "notes": "Bioflavonoid form not specified. Conservative scoring. Bioflavonoids are a diverse class of plant polyphenols that support antioxidant defense and vascular health. Check label for specific composition.",
+        "absorption": "bioflavonoid class poor F (~1-10% systemic); gut microbiota dominant",
+        "notes": "Bioflavonoid form not specified. Conservative scoring. Bioflavonoids are a diverse class of plant polyphenols that support antioxidant defense and vascular health. Check label for specific composition. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "bioflavonoids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "quality": "low",
+          "notes": "Class F per Manach 2003 + Hollman 1995; gut microbiota deglycosylation dominates",
+          "range_low": 0.01,
+          "range_high": 0.1
         }
       }
     },
@@ -42155,62 +42249,62 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "Organic hemp seed oil pressed without heat (≤49°C). Preserves full spectrum of omega-3 (ALA), omega-6 (GLA, LA), and phytosterols. Ideal 3:1 omega-6:omega-3 ratio. USDA organic certification ensures no pesticides or GMO. Contains no CBD/THC. Nutiva and Manitoba Harvest are leading brands.",
+        "absorption": "TG hydrolysis by lipase; LA/GLA/ALA F ~80-95% with fat",
+        "notes": "Organic hemp seed oil pressed without heat (≤49°C). Preserves full spectrum of omega-3 (ALA), omega-6 (GLA, LA), and phytosterols. Ideal 3:1 omega-6:omega-3 ratio. USDA organic certification ensures no pesticides or GMO. Contains no CBD/THC. Nutiva and Manitoba Harvest are leading brands. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "cold-pressed organic"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.88,
+          "quality": "very_good",
+          "notes": "Schwab 2006 (PMID:17103080) confirms plasma LA/GLA elevation. Organic certification ≠ F advantage; same chemistry",
+          "range_low": 0.8,
+          "range_high": 0.95
         }
       },
       "cold-pressed": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Hemp seed oil pressed without heat to preserve polyunsaturated fatty acids. Rich in ALA (omega-3), linoleic acid (omega-6), and gamma-linolenic acid (GLA). Balanced omega profile for cardiovascular and skin health. Non-organic but still cold-pressed for nutrient preservation.",
+        "absorption": "same TG profile as organic; F equivalent ~80-95%",
+        "notes": "Hemp seed oil pressed without heat to preserve polyunsaturated fatty acids. Rich in ALA (omega-3), linoleic acid (omega-6), and gamma-linolenic acid (GLA). Balanced omega profile for cardiovascular and skin health. Non-organic but still cold-pressed for nutrient preservation. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "cold-pressed"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.88,
+          "quality": "very_good",
+          "notes": "Same chemistry as organic cold-pressed; F is the same",
+          "range_low": 0.8,
+          "range_high": 0.95
         }
       },
       "refined": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "unknown",
-        "notes": "Heat-processed or solvent-extracted hemp seed oil. Refining removes some phytonutrients, chlorophyll, and volatile compounds. Neutral taste and longer shelf life vs cold-pressed. Lower GLA and phytosterol content. Primarily a cooking/carrier oil rather than supplement-grade.",
+        "absorption": "refining removes minors but TG intact; F ~70-85%",
+        "notes": "Heat-processed or solvent-extracted hemp seed oil. Refining removes some phytonutrients, chlorophyll, and volatile compounds. Neutral taste and longer shelf life vs cold-pressed. Lower GLA and phytosterol content. Primarily a cooking/carrier oil rather than supplement-grade. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "refined"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.78,
+          "quality": "good",
+          "notes": "Heat/solvent processing loses minor antioxidants but TG/F structure intact",
+          "range_low": 0.65,
+          "range_high": 0.88
         }
       },
       "hemp seed oil (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Hemp seed oil form not specified. Conservative scoring. Hemp seed oil provides balanced omega-3/6/9 fatty acids and GLA. Contains no significant CBD or THC. Check label for cold-pressed specification.",
+        "absorption": "form unknown; assume TG class F ~70-85%",
+        "notes": "Hemp seed oil form not specified. Conservative scoring. Hemp seed oil provides balanced omega-3/6/9 fatty acids and GLA. Contains no significant CBD or THC. Check label for cold-pressed specification. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
           "hemp seed oil",
           "non psychotropic Hemp Oil",
@@ -42219,11 +42313,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.78,
+          "quality": "good",
+          "notes": "Form-ambiguous; mid-range hemp class",
+          "range_low": 0.65,
+          "range_high": 0.88
         }
       }
     },
