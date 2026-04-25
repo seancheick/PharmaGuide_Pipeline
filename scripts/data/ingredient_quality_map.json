@@ -38672,6 +38672,53 @@
             "flag": "Research agent recommends bio_score 9 → 11 UPGRADE. Mg gluconate is the only form with strong rat F data (highest of 10 salts in Coudray 2005 PMID:16548135). Currently bio=9 underestimates. Needs Dr Pham clinical signoff."
           }
         ]
+      },
+      "5.0.18": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 16 — boswellia PK + Aflapin rat-only conflation",
+        "research_subagent_report": "PubMed research on 5 boswellia forms. Research agent USED WebFetch on PubMed eutils. THREE major findings: (1) Aflapin \"51.78% bioavailability advantage\" is RAT-ONLY (Sengupta 2011 PMID:21479939). (2) Clinical OA RCTs measure WOMAC, not PK — efficacy ≠ bioavailability. (3) NO human absolute F study exists for any boswellic acid form (Sterk 2004 PMID:15643550 has no IV reference). 2 misattributions caught before introduction (cytokine paper / transgenic fish paper).",
+        "verified_pmids": [
+          "PMID:15643550 Sterk 2004 Planta Med — human food-effect PK (no IV)",
+          "PMID:18667054 Sengupta 2008 — 5-Loxin OA RCT (clinical)",
+          "PMID:21060724 Sengupta 2010 — 5-Loxin vs Aflapin clinical",
+          "PMID:21479939 Sengupta 2011 — RAT PK + in-vitro",
+          "PMID:22022214 Vishal 2011 — Aflapin OA RCT (clinical)"
+        ],
+        "misattributions_caught": {
+          "\"Sterk 2004 PMID:15047492\"": "wrong — actually Pinna 2004 cytokine assay paper. Correct: PMID:15643550",
+          "\"Vishal 2011 PMID:21235550\"": "wrong — actually Jiang 2011 transgenic fish paper. Correct: PMID:22022214"
+        },
+        "rat_vs_human_pattern_recurrence": "Same rat-vs-human conflation pattern caught in Batches 9, 13, 15, and now 16. Industry-wide tendency to elevate rodent PK into human bioavailability claims. Aflapin \"51.78% advantage\" is the headline rat data presented as human-validated.",
+        "forms_updated": [
+          "boswellia::5-loxin (value None → 0.05)",
+          "boswellia::boswellia aflapin (value None → 0.05)",
+          "boswellia::boswellia standardized extract (value None → 0.04)",
+          "boswellia::boswellia resin powder (value None → 0.03)",
+          "boswellia::boswellia (unspecified) (value None → 0.03)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "boswellia::5-loxin",
+            "flag": "MAJOR — Research agent recommends bio_score 14 → 9 downgrade. The bio=14 reflects clinical WOMAC outcome (Sengupta 2008 PMID:18667054), not bioavailability. NO human absolute F study exists for AKBA. Higher AKBA content (30%) drives clinical outcome via concentration, not enhanced absorption. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "boswellia::boswellia aflapin",
+            "flag": "MAJOR — Research agent recommends bio_score 14 → 9 downgrade. The \"Aflapin > 5-Loxin bioavailability\" claim cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley rats). Same rat-vs-human conflation pattern as Mg threonate (Batch 15) and tocotrienol (Batch 13). Vishal 2011 (PMID:22022214) is clinical OA outcome, not PK. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "boswellia::boswellia standardized extract",
+            "flag": "Research agent recommends bio_score 12 → 8 downgrade. Sterk 2004 (PMID:15643550) shows boswellic acids absorbed only with food and undetectable when fasted — class-poor lipophilic absorption. No published human absolute F study. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "boswellia::boswellia resin powder",
+            "flag": "Research agent recommends bio_score 8 → 5 downgrade. Crude resin is unstandardized with lower extraction efficiency than dry extract. Same class-poor F. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "boswellia::boswellia (unspecified)",
+            "flag": "Research agent recommends bio_score 6 → 4 downgrade. Form ambiguity should default to crude-class assumption. Needs Dr Pham clinical signoff."
+          }
+        ]
       }
     },
     "category_enum": [
@@ -39590,8 +39637,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Standardized to 30% AKBA, patented extract. Superior anti-inflammatory activity.",
+        "absorption": "30% AKBA enriched; clinical OA benefit (Sengupta 2008); no human absolute F",
+        "notes": "Standardized to 30% AKBA, patented extract. Superior anti-inflammatory activity. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper).",
         "aliases": [
           "5loxin",
           "5-loxin - boswellia serrata extract",
@@ -39614,19 +39661,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Sengupta 2008 (PMID:18667054, Arthritis Res Ther) OA RCT n=75: clinical WOMAC improvement at 100/250 mg vs placebo. NO PK data. Class F inferred ~1-7% from lipophilicity"
         }
       },
       "boswellia aflapin": {
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Patented Boswellia serrata extract (Laila Nutra) with enhanced bioavailability via proprietary process. Contains both boswellic acids and non-boswellic acid synergists. Clinical RCTs show faster onset of joint pain relief vs standard extracts. 100 mg/day effective dose. Superior to 5-Loxin in some head-to-head comparisons.",
+        "absorption": "AKBA + non-volatile oil; +51.78% AUC in RATS only (Sengupta 2011); no human PK",
+        "notes": "Patented Boswellia serrata extract (Laila Nutra) with enhanced bioavailability via proprietary process. Contains both boswellic acids and non-boswellic acid synergists. Clinical RCTs show faster onset of joint pain relief vs standard extracts. 100 mg/day effective dose. Superior to 5-Loxin in some head-to-head comparisons. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper).",
         "aliases": [
           "aflapin",
           "aflapin boswellia",
@@ -39650,19 +39697,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Sengupta 2011 (PMID:21479939, Mol Cell Biochem) RAT PK: \"AKBA in systemic circulation increased by 51.78%\" — Sprague-Dawley rats, NOT humans. Vishal 2011 (PMID:22022214) clinical OA only, no PK"
         }
       },
       "boswellia standardized extract": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "moderate-high",
-        "notes": "Boswellia serrata extract standardized to 65% boswellic acids (AKBA is the most active). Anti-inflammatory via 5-LOX inhibition. Multiple RCTs support efficacy for osteoarthritis and IBD at 300-500 mg/day. Generic standardized extracts are less studied than 5-Loxin or Aflapin branded forms.",
+        "absorption": "65% boswellic acids; food-dependent absorption (Sterk 2004); class-poor F",
+        "notes": "Boswellia serrata extract standardized to 65% boswellic acids (AKBA is the most active). Anti-inflammatory via 5-LOX inhibition. Multiple RCTs support efficacy for osteoarthritis and IBD at 300-500 mg/day. Generic standardized extracts are less studied than 5-Loxin or Aflapin branded forms. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper).",
         "aliases": [
           "boswellia extract",
           "boswellia serrata extract",
@@ -39703,19 +39750,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.04,
+          "range_low": 0.01,
+          "range_high": 0.08,
+          "quality": "low",
+          "notes": "Sterk 2004 (PMID:15643550, Planta Med) human PK n=12: alphaBA and AalphaBA UNDETECTABLE when fasted; high-fat meal needed for measurable plasma. NO IV reference, absolute F unmeasured"
         }
       },
       "boswellia resin powder": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Raw Boswellia serrata resin (frankincense) in powder form. Contains boswellic acids at lower concentration than standardized extracts. Traditional Ayurvedic use for joint inflammation. Requires higher doses (1-3 g/day) due to variable boswellic acid content. Food-matrix bound actives slow release.",
+        "absorption": "crude frankincense resin; unstandardized BAs; poor lipophilic absorption",
+        "notes": "Raw Boswellia serrata resin (frankincense) in powder form. Contains boswellic acids at lower concentration than standardized extracts. Traditional Ayurvedic use for joint inflammation. Requires higher doses (1-3 g/day) due to variable boswellic acid content. Food-matrix bound actives slow release. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper).",
         "aliases": [
           "boswellia powder",
           "boswellia resin",
@@ -39727,19 +39774,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "low-moderate"
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "low",
+          "notes": "Crude resin powder; lower BA content than standardized extracts; same class-poor lipophilic absorption applies"
         }
       },
       "boswellia (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Boswellia serrata resin containing boswellic acids (AKBA). Anti-inflammatory via 5-LOX inhibition. Form not specified; conservative scoring applied.",
+        "absorption": "unspecified Boswellia form; assume class-poor absolute F (~1-7%)",
+        "notes": "Boswellia serrata resin containing boswellic acids (AKBA). Anti-inflammatory via 5-LOX inhibition. Form not specified; conservative scoring applied. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper).",
         "aliases": [
           "boswellia",
           "boswellia serrata",
@@ -39752,11 +39799,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.03,
+          "quality": "low",
+          "notes": "Form not specified; conservative scoring per class lipophilic absorption",
+          "range_low": 0.01,
+          "range_high": 0.07
         }
       }
     },
