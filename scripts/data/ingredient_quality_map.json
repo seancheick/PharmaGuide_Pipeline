@@ -38796,6 +38796,118 @@
             "flag": "MAJOR — Research agent recommends bio_score 12 → 8 downgrade. No human PK exists for Mo picolinate. Mo class F is already near-saturation (88-93%) per Turnlund 1995 — picolinate cannot offer further advantage. Bio=12 inflated. Needs Dr Pham clinical signoff."
           }
         ]
+      },
+      "5.0.20": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 18 — marine oils + specialty (20 forms, 6 parents)",
+        "research_subagent_report": "Combined batch on krill/calamari/tuna oils + shilajit/manuka/black seed oil. 9 PMIDs WebFetch-verified. FOUR major findings: (1) Krill = fish-TG at matched dose (Yurko-Mauro 2015 definitive); Schuchardt \"+33% AUC\" was NS trend with sample contamination. (2) Manuka MGO is local-action — CATEGORY ERROR in IQM absorption framework; schema reframe needed. (3) PrimaVie shilajit is Crominex-pattern: clinical endpoint, not PK. (4) Thymoquinone \"Alkharfy 2015 human PK\" is a GHOST — actual paper is rat glibenclamide study.",
+        "verified_pmids": [
+          "PMID:21854650 Schuchardt 2011 — krill +33% NS trend (sample contaminated)",
+          "PMID:21042875 Ulven 2011 — krill = fish oil at matched dose",
+          "PMID:24304605 Ramprasath 2013 — krill claim",
+          "PMID:24383554 Nichols 2014 — rebuttal: Ramprasath FO had 32% LA",
+          "PMID:24447440 Ramprasath 2014 reply",
+          "PMID:26328782 Yurko-Mauro 2015 — DEFINITIVE n=66 dose-matched",
+          "PMID:26395129 Pandit 2016 — shilajit testosterone endpoint (NOT PK)",
+          "PMID:26434126 Ahmad/Alkharfy 2015 — RAT glibenclamide (NOT human TQ PK)",
+          "PMID:27789370 Tenci 2017 — manuka MGO topical/local-action"
+        ],
+        "ghost_references_caught": {
+          "Wilson 2011 fulvic acid PK": "NOT FOUND in PubMed",
+          "Alkharfy 2015 human thymoquinone PK": "NOT FOUND — actual PMID:26434126 is rat glibenclamide study",
+          "PrimaVie-branded human PK": "NOT FOUND — Pandit 2016 is endpoint RCT",
+          "Maki squid oil / Salem-Kuratko calamari PK": "NOT FOUND"
+        },
+        "manuka_category_error_flag": "IQM \"absorption\" framework does not apply to manuka honey. MGO/methylglyoxal is a LOCAL-ACTION antibacterial agent (Tenci 2017 PMID:27789370 explicit) acting at GI/oral/wound surfaces. Sugars absorb normally as glucose/fructose. UMF/MGO grade reflects antibacterial potency, NOT systemic F. Recommend: schema-level `local_action=true` flag + separate `topical_potency_grade` field. Until that schema change, struct.value is set to None for all manuka grades with category-error flag in notes.",
+        "class_findings": [
+          "Krill oil = fish-TG at matched n-3 dose (Yurko-Mauro 2015). Branded krill (NKO, Superba) bio=14 unsupported.",
+          "Calamari/tuna oil = species variants; ester chemistry (TG/MD) drives F, not source species.",
+          "Shilajit forms have NO human PK. Pandit 2016 is endpoint, not PK.",
+          "Thymoquinone has NO human PK. Animal F ~5-15%."
+        ],
+        "forms_updated": [
+          "krill_oil::standard krill oil (value None → 0.85)",
+          "krill_oil::Neptune Krill Oil (NKO) (value None → 0.85)",
+          "krill_oil::Superba Krill (Aker BioMarine) (value None → 0.85)",
+          "calamari_oil::calamari oil phospholipid (value None → 0.85)",
+          "calamari_oil::calamari oil triglyceride (value None → 0.85)",
+          "calamari_oil::calamari oil (unspecified) (value None → 0.78)",
+          "tuna_oil::tuna oil molecular distilled (value None → 0.85)",
+          "tuna_oil::tuna oil triglyceride (value None → 0.85)",
+          "tuna_oil::tuna oil (unspecified) (value None → 0.78)",
+          "shilajit::primavie shilajit (value None → 0.3)",
+          "shilajit::purified shilajit extract (value None → 0.3)",
+          "shilajit::fulvic acid (value None → 0.2)",
+          "shilajit::shilajit resin (value None → 0.25)",
+          "shilajit::shilajit powder (value None → 0.2)",
+          "shilajit::shilajit (unspecified) (value None → 0.2)",
+          "manuka_honey::umf 15+ / mgo 514+ (value None → None)",
+          "manuka_honey::umf 10+ / mgo 263+ (value None → None)",
+          "manuka_honey::umf 5+ / mgo 83+ (value None → None)",
+          "manuka_honey::manuka honey (unspecified) (value None → None)",
+          "black_seed_oil::thymoquinone standardized (value None → 0.1)",
+          "black_seed_oil::cold-pressed black seed oil (value None → 0.1)",
+          "black_seed_oil::black seed oil (value None → 0.08)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "krill_oil::standard krill oil",
+            "flag": "Research agent recommends bio_score 13 → 12 downgrade. Krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782). The \"+33% AUC\" claim was a non-significant trend with sample contamination. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "krill_oil::Neptune Krill Oil (NKO)",
+            "flag": "Research agent recommends bio_score 14 → 12 downgrade. NKO branding does not add F over class krill PL. Same biology; class-equivalent to fish-TG per Yurko-Mauro 2015. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "krill_oil::Superba Krill (Aker BioMarine)",
+            "flag": "Research agent recommends bio_score 14 → 12 downgrade. Superba GRAS/MSC certifications are sustainability/safety credentials, not F-enhancement. Class-equivalent to fish-TG. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "calamari_oil::calamari oil phospholipid",
+            "flag": "Research agent recommends bio_score 14 → 12 downgrade. No squid-specific human PK published. Class-equivalent to krill PL. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "shilajit::primavie shilajit",
+            "flag": "MAJOR — Research agent recommends bio_score 14 → 11 downgrade. Same Crominex-pattern as caught in Batch 17. Pandit 2016 (PMID:26395129) measures testosterone endpoint, NOT bioavailability. NO human PK study exists for shilajit. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "shilajit::purified shilajit extract",
+            "flag": "Research agent recommends bio_score 12 → 10 downgrade. Same evidence base as PrimaVie. No human PK. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "shilajit::fulvic acid",
+            "flag": "MAJOR — Research agent recommends bio_score 11 → 8 downgrade. NO human PK paper exists for fulvic acid. Often-cited \"Wilson 2011\" is a ghost reference. Likely gut-microbe metabolism. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "manuka_honey::umf 15+ / mgo 514+",
+            "flag": "MAJOR FRAMEWORK BUG — Research agent recommends schema-level `local_action=true` flag + separate `topical_potency_grade` field for UMF/MGO. Manuka MGO is a local antibacterial, NOT systemically absorbed. Current bio=15 confuses antibacterial grade with absorption. Needs Dr Pham + schema architecture review."
+          },
+          {
+            "location": "manuka_honey::umf 10+ / mgo 263+",
+            "flag": "Same framework bug as UMF 15+. Schema reframe needed."
+          },
+          {
+            "location": "manuka_honey::umf 5+ / mgo 83+",
+            "flag": "Same framework bug. Schema reframe needed."
+          },
+          {
+            "location": "manuka_honey::manuka honey (unspecified)",
+            "flag": "Same framework bug. Schema reframe needed."
+          },
+          {
+            "location": "black_seed_oil::thymoquinone standardized",
+            "flag": "MAJOR — Research agent recommends bio_score 14 → 10 downgrade. \"Alkharfy 2015 human TQ PK\" is a GHOST REFERENCE — actual PMID:26434126 is a RAT glibenclamide-interaction study. NO human thymoquinone PK published. Animal F ~5-15%. bio=14 unjustified. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "black_seed_oil::cold-pressed black seed oil",
+            "flag": "Research agent recommends bio_score 12 → 9 downgrade. Class-poor TQ F. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "black_seed_oil::black seed oil",
+            "flag": "Research agent recommends bio_score 10 → 8 downgrade. Class-poor TQ F. Needs Dr Pham clinical signoff."
+          }
+        ]
       }
     },
     "category_enum": [
@@ -39928,8 +40040,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Nigella sativa oil standardized for thymoquinone (TQ) content (typically 3-5%). TQ is the primary bioactive with anti-inflammatory, antioxidant, and immunomodulatory properties. Clinical evidence for glycemic control, lipid modulation, and respiratory support. BioPerine may enhance TQ absorption.",
+        "absorption": "thymoquinone lipophilic; no human PK published; animal F ~5-15%",
+        "notes": "Nigella sativa oil standardized for thymoquinone (TQ) content (typically 3-5%). TQ is the primary bioactive with anti-inflammatory, antioxidant, and immunomodulatory properties. Clinical evidence for glycemic control, lipid modulation, and respiratory support. BioPerine may enhance TQ absorption. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "tq extract",
           "black seed thymoquinone",
@@ -39940,19 +40052,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "NO human TQ PK paper exists in PubMed. \"Alkharfy 2015 human TQ PK\" is misattribution — actual PMID:26434126 is Ahmad/Alkharfy 2015 RAT glibenclamide interaction. TQ logP ~2.5, lipophilic"
         }
       },
       "cold-pressed black seed oil": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "moderate-high",
-        "notes": "Cold-pressed Nigella sativa seed oil preserving full spectrum of fatty acids, thymoquinone, and volatile compounds. Natural TQ content (~1-3%) lower than standardized extracts. Rich in linoleic acid and oleic acid. Traditional Islamic medicine use ('the cure for everything except death').",
+        "absorption": "cold-pressed; lipid matrix may aid slightly; class-poor TQ F",
+        "notes": "Cold-pressed Nigella sativa seed oil preserving full spectrum of fatty acids, thymoquinone, and volatile compounds. Natural TQ content (~1-3%) lower than standardized extracts. Rich in linoleic acid and oleic acid. Traditional Islamic medicine use ('the cure for everything except death'). Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "cold pressed black seed oil",
           "virgin black seed oil",
@@ -39976,19 +40088,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "No human PK; lipid matrix may marginally aid TQ absorption"
         }
       },
       "black seed oil": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate",
-        "notes": "Standard Nigella sativa (black cumin) seed oil. Processing method unspecified. Contains thymoquinone, thymol, and essential fatty acids. Evidence for anti-inflammatory, antioxidant, and metabolic benefits at 1-3 g/day or 200-600 mg TQ/day.",
+        "absorption": "standard black seed oil; class-poor TQ F (~5-15%)",
+        "notes": "Standard Nigella sativa (black cumin) seed oil. Processing method unspecified. Contains thymoquinone, thymol, and essential fatty acids. Evidence for anti-inflammatory, antioxidant, and metabolic benefits at 1-3 g/day or 200-600 mg TQ/day. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "nigella sativa oil",
           "black cumin oil",
@@ -39997,11 +40109,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.08,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Standard processing; same class-poor TQ F"
         }
       },
       "black seed powder": {
@@ -40221,8 +40333,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Patented purified shilajit extract (Natreon Inc). Standardized to >50% fulvic acid and dibenzo-α-pyrones. Clinical RCTs show testosterone support, CoQ10 enhancement, and exercise performance improvement. GMP-certified purification removes heavy metals. Most clinically studied shilajit brand.",
+        "absorption": "no human PK published; endpoint RCT only (Pandit 2016)",
+        "notes": "Patented purified shilajit extract (Natreon Inc). Standardized to >50% fulvic acid and dibenzo-α-pyrones. Clinical RCTs show testosterone support, CoQ10 enhancement, and exercise performance improvement. GMP-certified purification removes heavy metals. Most clinically studied shilajit brand. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "primavie",
           "patented shilajit",
@@ -40230,19 +40342,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Pandit 2016 (PMID:26395129) — 90-day testosterone endpoint RCT, NOT PK, NOT \"PrimaVie\"-titled. \"PrimaVie\" is Natreon trade name applied retrospectively"
         }
       },
       "purified shilajit extract": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "moderate-high",
-        "notes": "Shilajit processed to remove heavy metals and contaminants while preserving fulvic acid and dibenzo-α-pyrones. Purification is critical — raw shilajit from Himalayan/Altai sources may contain unsafe levels of lead, arsenic, or mycotoxins. Look for third-party heavy metal testing.",
+        "absorption": "purified extract; class-equivalent to PrimaVie; no human PK",
+        "notes": "Shilajit processed to remove heavy metals and contaminants while preserving fulvic acid and dibenzo-α-pyrones. Purification is critical — raw shilajit from Himalayan/Altai sources may contain unsafe levels of lead, arsenic, or mycotoxins. Look for third-party heavy metal testing. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "purified shilajit",
           "shilajit extract",
@@ -40251,19 +40363,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Same evidence base as PrimaVie; no human PK exists"
         }
       },
       "fulvic acid": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "moderate",
-        "notes": "Primary bioactive component of shilajit. Fulvic acid is a complex mixture of humic substances that enhances mitochondrial function and mineral transport. May improve CoQ10 bioavailability and support cellular energy production. Also found in soil/compost independently of shilajit.",
+        "absorption": "no human PK; \"Wilson 2011\" ghost reference; gut-microbe metabolism likely",
+        "notes": "Primary bioactive component of shilajit. Fulvic acid is a complex mixture of humic substances that enhances mitochondrial function and mineral transport. May improve CoQ10 bioavailability and support cellular energy production. Also found in soil/compost independently of shilajit. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "fulvic minerals",
           "humic fulvic acid",
@@ -40275,11 +40387,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.4,
+          "quality": "low",
+          "notes": "\"Wilson 2011 fulvic acid PK\" is a ghost reference (NOT FOUND in PubMed). Fulvic acid is a complex humic substance, gut-microbe metabolism likely dominates"
         },
         "external_ids": {
           "unii": "XII14C5FXV"
@@ -40289,46 +40401,46 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate",
-        "notes": "Semi-purified shilajit in tar-like resin form. Traditional Ayurvedic preparation (mineral pitch). Contains fulvic acid, trace minerals, and dibenzo-α-pyrones. Less processed than extracts — verify heavy metal testing. Traditional dose 300-500 mg/day dissolved in warm water.",
+        "absorption": "traditional Ayurvedic resin form; no PK; heavy metal concern",
+        "notes": "Semi-purified shilajit in tar-like resin form. Traditional Ayurvedic preparation (mineral pitch). Contains fulvic acid, trace minerals, and dibenzo-α-pyrones. Less processed than extracts — verify heavy metal testing. Traditional dose 300-500 mg/day dissolved in warm water. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "pure shilajit resin",
           "himalayan shilajit resin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.25,
+          "range_low": 0.1,
+          "range_high": 0.45,
+          "quality": "low",
+          "notes": "Traditional form; no human PK; verify heavy-metal testing"
         }
       },
       "shilajit powder": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Dried powdered shilajit. May be less concentrated than resin or extract forms. Easier to encapsulate. Verify purification and heavy metal testing — raw shilajit can contain dangerous contaminant levels. Lower fulvic acid concentration than purified extracts.",
+        "absorption": "powder; less concentrated than resin/extract; verify purification",
+        "notes": "Dried powdered shilajit. May be less concentrated than resin or extract forms. Easier to encapsulate. Verify purification and heavy metal testing — raw shilajit can contain dangerous contaminant levels. Lower fulvic acid concentration than purified extracts. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "asphaltum powder",
           "mineral pitch powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "low-moderate"
+          "value": 0.2,
+          "range_low": 0.05,
+          "range_high": 0.4,
+          "quality": "low",
+          "notes": "Lower processing; verify heavy-metal testing"
         }
       },
       "shilajit (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Mineral pitch (mumijo) from Himalayan rock exudate; contains fulvic acid, dibenzo-alpha-pyrones, and trace minerals. Ayurvedic adaptogen. Form unspecified; conservative scoring.",
+        "absorption": "unspecified shilajit form; conservative class default",
+        "notes": "Mineral pitch (mumijo) from Himalayan rock exudate; contains fulvic acid, dibenzo-alpha-pyrones, and trace minerals. Ayurvedic adaptogen. Form unspecified; conservative scoring. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "shilajit",
           "mineral pitch",
@@ -40339,11 +40451,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.2,
+          "quality": "low",
+          "notes": "Form-ambiguous; conservative scoring",
+          "range_low": 0.05,
+          "range_high": 0.4
         }
       }
     },
@@ -42165,26 +42277,26 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "unknown",
-        "notes": "Calamari-derived omega-3 in phospholipid form. Enhanced bioavailability and cell membrane incorporation vs TG. Contains naturally occurring DHA-rich phospholipids. Less commonly available than TG form. Premium pricing reflects phospholipid extraction process.",
+        "absorption": "calamari PL: DHA-rich; class-equivalent to krill PL; no squid-specific PK",
+        "notes": "Calamari-derived omega-3 in phospholipid form. Enhanced bioavailability and cell membrane incorporation vs TG. Contains naturally occurring DHA-rich phospholipids. Less commonly available than TG form. Premium pricing reflects phospholipid extraction process. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "CALAMARI_OIL phospholipid form"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "No published calamari-specific human PK; class-equivalent to other marine PL forms",
+          "range_low": 0.7,
+          "range_high": 0.97
         }
       },
       "calamari oil triglyceride": {
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "Omega-3 oil from deep-sea squid (Dosidicus gigas or Illex) in natural triglyceride form. Naturally high in DHA (up to 50% of total omega-3). Sustainable marine source with lower heavy metal burden than large predatory fish. Well-absorbed via standard lipase digestion pathway.",
+        "absorption": "calamari TG: DHA-rich squid TG; class-equivalent to fish-TG",
+        "notes": "Omega-3 oil from deep-sea squid (Dosidicus gigas or Illex) in natural triglyceride form. Naturally high in DHA (up to 50% of total omega-3). Sustainable marine source with lower heavy metal burden than large predatory fish. Well-absorbed via standard lipase digestion pathway. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "CALAMARI_OIL triglyceride form",
           "norwegian calamari oil",
@@ -42193,29 +42305,29 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "No squid-specific human PK; class-equivalent to fish oil natural TG (Batch 9 framework)",
+          "range_low": 0.7,
+          "range_high": 0.97
         }
       },
       "calamari oil (unspecified)": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Calamari oil form not specified. Conservative scoring. Squid-derived omega-3 naturally high in DHA. Check label for triglyceride or phospholipid specification.",
+        "absorption": "form unspecified; default to general marine TG/PL class",
+        "notes": "Calamari oil form not specified. Conservative scoring. Squid-derived omega-3 naturally high in DHA. Check label for triglyceride or phospholipid specification. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "calamari oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.78,
+          "quality": "good",
+          "notes": "Form-ambiguous; conservative scoring per Batch 9 unspecified marine framework",
+          "range_low": 0.65,
+          "range_high": 0.9
         }
       }
     },
@@ -42252,54 +42364,54 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Tuna oil purified via molecular distillation to remove mercury, PCBs, and other contaminants. Critical for tuna-sourced oils due to bioaccumulation in large predatory fish. Purification does not change the molecular form (remains TG). Score reflects purity improvement.",
+        "absorption": "molecular distillation = purification step, not F-enhancing; class fish-TG",
+        "notes": "Tuna oil purified via molecular distillation to remove mercury, PCBs, and other contaminants. Critical for tuna-sourced oils due to bioaccumulation in large predatory fish. Purification does not change the molecular form (remains TG). Score reflects purity improvement. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "TUNA_OIL molecular distilled"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "MD removes contaminants but does not change ester chemistry; F equivalent to TG class",
+          "range_low": 0.78,
+          "range_high": 0.92
         }
       },
       "tuna oil triglyceride": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Omega-3 oil from tuna (typically Thunnus species) in natural triglyceride form. Higher DHA:EPA ratio than most fish oils. Standard lipase-dependent absorption. Mercury content concern with tuna — molecular distillation recommended for purification.",
+        "absorption": "tuna TG: same fish-TG class chemistry; species variant only",
+        "notes": "Omega-3 oil from tuna (typically Thunnus species) in natural triglyceride form. Higher DHA:EPA ratio than most fish oils. Standard lipase-dependent absorption. Mercury content concern with tuna — molecular distillation recommended for purification. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "TUNA_OIL triglyceride form"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.85,
+          "quality": "very_good",
+          "notes": "Tuna species variant; ester chemistry (TG) drives F, not source species",
+          "range_low": 0.78,
+          "range_high": 0.92
         }
       },
       "tuna oil (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Tuna oil form not specified. Conservative scoring. Tuna oil provides DHA-rich omega-3. Mercury contamination is a concern — verify third-party testing or molecular distillation.",
+        "absorption": "form unspecified; mixed marine TG/EE blend default",
+        "notes": "Tuna oil form not specified. Conservative scoring. Tuna oil provides DHA-rich omega-3. Mercury contamination is a concern — verify third-party testing or molecular distillation. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "tuna oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.78,
+          "quality": "good",
+          "notes": "Form-ambiguous; mercury/contamination concern with tuna species",
+          "range_low": 0.65,
+          "range_high": 0.9
         }
       }
     },
@@ -42486,8 +42598,8 @@
         "bio_score": 15,
         "natural": true,
         "score": 18,
-        "absorption": "unknown",
-        "notes": "Medical-grade manuka honey (Leptospermum scoparium, NZ). UMF 15+ corresponds to MGO 514+ mg/kg — strong antibacterial activity. Methylglyoxal (MGO) is the primary bioactive. Clinical evidence for wound healing, H. pylori inhibition, and upper respiratory support. Comvita and Manuka Health are leading brands. Expensive; verify UMF certification authenticity.",
+        "absorption": "manuka MGO acts locally (oral/GI/wound); not systemically absorbed; grade ≠ F",
+        "notes": "Medical-grade manuka honey (Leptospermum scoparium, NZ). UMF 15+ corresponds to MGO 514+ mg/kg — strong antibacterial activity. Methylglyoxal (MGO) is the primary bioactive. Clinical evidence for wound healing, H. pylori inhibition, and upper respiratory support. Comvita and Manuka Health are leading brands. Expensive; verify UMF certification authenticity. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "manuka umf 15+",
           "manuka mgo 500+"
@@ -42496,7 +42608,7 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "CATEGORY ERROR FLAG: MGO is local-action antibacterial (Tenci 2017 PMID:27789370). Sugars absorb normally as glucose/fructose. UMF/MGO grade reflects antibacterial POTENCY, not systemic F. bio_score in absorption framework is mismatched",
           "range_low": null,
           "range_high": null
         }
@@ -42505,8 +42617,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "Mid-grade manuka honey. UMF 10+ / MGO 263+ provides meaningful antibacterial activity above regular honey. Suitable for general health maintenance and mild throat/digestive support. More affordable than UMF 15+. Still requires verified New Zealand UMF trademark certification.",
+        "absorption": "manuka MGO acts locally (oral/GI/wound); grade ≠ F",
+        "notes": "Mid-grade manuka honey. UMF 10+ / MGO 263+ provides meaningful antibacterial activity above regular honey. Suitable for general health maintenance and mild throat/digestive support. More affordable than UMF 15+. Still requires verified New Zealand UMF trademark certification. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "manuka umf 10+",
           "manuka mgo 250+"
@@ -42515,7 +42627,7 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "CATEGORY ERROR: same as UMF 15+; local-action mechanism",
           "range_low": null,
           "range_high": null
         }
@@ -42524,8 +42636,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Entry-level manuka honey. UMF 5+ / MGO 83+ has mild antibacterial activity above regular honey but below therapeutic grades. Suitable as a premium honey for general wellness use. Limited clinical evidence at this MGO concentration for specific health claims.",
+        "absorption": "manuka MGO acts locally (oral/GI/wound); grade ≠ F",
+        "notes": "Entry-level manuka honey. UMF 5+ / MGO 83+ has mild antibacterial activity above regular honey but below therapeutic grades. Suitable as a premium honey for general wellness use. Limited clinical evidence at this MGO concentration for specific health claims. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "manuka umf 5+",
           "manuka mgo 83+"
@@ -42534,7 +42646,7 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "CATEGORY ERROR: same as UMF 15+; local-action mechanism",
           "range_low": null,
           "range_high": null
         }
@@ -42562,8 +42674,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Manuka honey grade not specified. Conservative scoring. Manuka's benefits depend on MGO content — verify UMF or MGO certification on label.",
+        "absorption": "unspecified manuka grade; local-action mechanism applies",
+        "notes": "Manuka honey grade not specified. Conservative scoring. Manuka's benefits depend on MGO content — verify UMF or MGO certification on label. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "manuka honey",
           "manuka honey generic",
@@ -42573,7 +42685,7 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "Form-ambiguous + category error: local-action regardless of grade",
           "range_low": null,
           "range_high": null
         }
@@ -58620,8 +58732,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "high",
-        "notes": "Standard phospholipid-bound krill oil. EPA/DHA in phospholipid form (~40% phospholipids). ~33% higher AUC than standard fish oil triglycerides (Schuchardt et al. 2011, PMC3168413). Natural astaxanthin provides antioxidant protection against lipid oxidation. Shellfish allergen.",
+        "absorption": "krill PL: F~0.7-0.97 with fat; equivalent to fish-TG at matched dose (Yurko-Mauro 2015)",
+        "notes": "Standard phospholipid-bound krill oil. EPA/DHA in phospholipid form (~40% phospholipids). ~33% higher AUC than standard fish oil triglycerides (Schuchardt et al. 2011, PMC3168413). Natural astaxanthin provides antioxidant protection against lipid oxidation. Shellfish allergen. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "100% krill oil",
           "krill oil concentrate",
@@ -58659,19 +58771,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
+          "value": 0.85,
           "quality": "very_good",
-          "notes": "Phospholipid-bound omega-3s show ~33% higher AUC vs. fish oil TG (PMC3168413)",
-          "range_low": null,
-          "range_high": null
+          "notes": "Yurko-Mauro 2015 (PMID:26328782) n=66 dose-matched: krill = fish-TG = fish-EE. Schuchardt 2011 \"+33% AUC\" was NS trend (p=0.057) confounded by 22% free EPA / 21% free DHA",
+          "range_low": 0.7,
+          "range_high": 0.97
         }
       },
       "Neptune Krill Oil (NKO)": {
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Neptune Krill Oil (NKO) — original branded krill oil with FDA NDI notification acceptance. Standardized phospholipid-bound omega-3s with astaxanthin. Manufactured by Neptune Technologies (Canada). Well-studied clinically for cardiovascular and PMS support.",
+        "absorption": "NKO branded: same PL chemistry; F equivalent to fish-TG (Yurko-Mauro 2015)",
+        "notes": "Neptune Krill Oil (NKO) — original branded krill oil with FDA NDI notification acceptance. Standardized phospholipid-bound omega-3s with astaxanthin. Manufactured by Neptune Technologies (Canada). Well-studied clinically for cardiovascular and PMS support. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "NKO",
           "NKO krill oil",
@@ -58681,19 +58793,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
+          "value": 0.85,
           "quality": "very_good",
-          "notes": "Clinically studied phospholipid-bound form",
-          "range_low": null,
-          "range_high": null
+          "notes": "Branding (Neptune) does NOT add F vs class krill PL; same biological pathway",
+          "range_low": 0.7,
+          "range_high": 0.97
         }
       },
       "Superba Krill (Aker BioMarine)": {
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Superba Krill Oil by Aker BioMarine (Norway) — GRAS-notified, MSC-certified sustainable harvest. Superba2 is a concentrated upgrade. SuperbaBoost targets higher EPA/DHA density. ArcticPure is a retail brand using Superba.",
+        "absorption": "Superba branded: GRAS status ≠ better F; class-equivalent to fish-TG",
+        "notes": "Superba Krill Oil by Aker BioMarine (Norway) — GRAS-notified, MSC-certified sustainable harvest. Superba2 is a concentrated upgrade. SuperbaBoost targets higher EPA/DHA density. ArcticPure is a retail brand using Superba. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "Superba2 Krill",
           "SuperbaBoost Krill Oil",
@@ -58704,11 +58816,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
+          "value": 0.85,
           "quality": "very_good",
-          "notes": "GRAS-notified, MSC-certified Aker BioMarine product",
-          "range_low": null,
-          "range_high": null
+          "notes": "Aker BioMarine GRAS-notified MSC-certified; sustainability/safety claim, not F advantage",
+          "range_low": 0.7,
+          "range_high": 0.97
         }
       }
     },
