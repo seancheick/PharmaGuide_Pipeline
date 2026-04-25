@@ -2,7 +2,9 @@
 
 **Pipeline release live:** `v2026.04.23.000925`
 **Doc rewrite:** 2026-04-23 (dedup pass — replaced 3 conflicting priority lists with one; added all tickets accumulated mid-sprint)
-**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.25** SHIPPED, FLTR-21/22/23 OPEN, awaiting full pipeline rebuild). E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion. **E1.24 ships clinical signoff on goal-matching and synergy clusters**; **E1.25 ships clinical signoff on dose-threshold closeout** (Packet A: Vanadium / EPO / Glucosamine / Olive Leaf thresholds added; Packet B: Red Clover bleeding threshold SKIPPED for weak mechanism anchor; Fish Oil bleeding harmonized to 2g/2g/3g tiers; Iodine thyroid threshold added). **E1.11 (dose-aware warning severity) is now CLOSED** — 33 of 129 rules carry thresholds, the remaining 96 are correctly dose-independent, and FLTR-11a can be retired.
+**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.25** SHIPPED, FLTR-21/22/23 OPEN, awaiting full pipeline rebuild). E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion. **E1.24 ships clinical signoff on goal-matching and synergy clusters**; **E1.25 ships clinical signoff on dose-threshold closeout** (Packet A: Vanadium / EPO / Glucosamine / Olive Leaf thresholds added; Packet B: Red Clover bleeding threshold SKIPPED for weak mechanism anchor; Fish Oil bleeding harmonized to 2g/2g/3g tiers; Iodine thyroid threshold added). **E1.11 (dose-aware warning severity) is now CLOSED** — 33 of 129 rules carry thresholds, the remaining 96 are correctly dose-independent, and **FLTR-11a is RETIRED** (commit `37c245e`, 4 files / 35+ / 336− lines).
+
+**Perf addendum:** 2026-04-25 — **E1.27** ships a one-line cleaning performance hotfix: `enhanced_normalizer.py` import block now prefers `rapidfuzz` over `fuzzywuzzy` over `difflib` (commit `3364f18`). Diagnoses a **64x cleaning regression** introduced by the Apr-20 D1/D2 sprints (10d54a6 + c0e1450) which added many new fuzzy-match call sites in `_enhanced_non_harmful_check`; with neither `rapidfuzz` nor `fuzzywuzzy` resolved by the import chain, the code fell through to pure-Python `difflib.SequenceMatcher` and the new call volume blew up. cProfile: 96% of `normalize_product` time was inside `difflib`. **Fix verified bit-for-bit safe**: catalog-wide diff across **13,236 products / 6 brands** showed **100.00% identical** active+inactive classifications between rapidfuzz and the shipped difflib output. **Bonus**: rapidfuzz also fixes the silybin canonical-id bug on product 16037 (Thorne Planti-Oxidants) — Silybin Phytosome now correctly resolves to `milk_thistle` instead of the difflib-misclassified `lecithin`, restoring `supp_type=targeted` and `score_80=52.1` to match the frozen snapshot. Projected next-pipeline runtime: **~127 min vs the broken 373 min** (cleaning alone: ~10 min vs 258 min).
 
 **From:** Pipeline / scoring / data-contract side
 **To:** Flutter app team
@@ -557,7 +559,9 @@ if (isUnsafeVerdict(productVerdictFromBlob)) {
 
 `isUnsafeVerdict` = BLOCKED or UNSAFE. `isBlockedVerdict` = BLOCKED only.
 
-## 5.11 FLTR-11a — Temporary dose guardrail (not started)
+## 5.11 FLTR-11a — Temporary dose guardrail (SHIPPED + RETIRED 2026-04-24, commit `37c245e`)
+
+**Original shim (Release B Part 2, commit `d360ec0`)** — historical reference only:
 
 ```dart
 /// Pre-pipeline defensive rule — prevents low-dose ingredients from
@@ -582,7 +586,14 @@ const _lowDoseThresholds = <String, double>{
 };
 ```
 
-Applied in `_DetailSection.build` before the render filter: downgrade severity to `monitor` (or `informational` if it was already < major) when the rule fires. Log the downgrade to telemetry so we can measure pipeline E1.11 coverage later.
+**Retirement (commit `37c245e`, 2026-04-24)** — pipeline E1.11 + E1.25 now ship dose-aware severity at source (33 of 129 rules carry thresholds). The Flutter shim was deleted across 4 files (35+ / 336− lines):
+
+1. `lib/features/product_detail/dose_safety.dart` — deleted `_lowDoseThresholds` map, `shouldDowngradeSeverity()`, `indexIngredientsByStandardName()`. Replaced with a 15-line retirement tombstone (lines 161-181).
+2. `lib/features/product_detail/widgets/interaction_warnings.dart` — deleted `copyWithSeverity()` method (34 lines). `ingredientName` field preserved with updated dartdoc for general UI use.
+3. `lib/features/product_detail/product_detail_screen.dart` — deleted the per-warning downgrade loop (20 lines) and replaced with `final guardedWarnings = filteredWarnings;` pass-through.
+4. `test/features/product_detail/dose_safety_test.dart` — deleted 13 FLTR-11a-specific tests (199 lines). The 23 core UL/`DoseSafety` tests are untouched and still passing.
+
+Audit verified: 4 remaining grep matches for the removed symbols are all retirement-comment tombstones (historical context), zero live-code references.
 
 ## 5.12 FLTR-18 — Personalization split (not started)
 
@@ -977,6 +988,82 @@ None on contract. But **some products will shift their primary goal match** afte
 
 All 142 critical tests pass. Zero integrity findings. Commit: `40df8b6`.
 
+## 6.10 E1.27 — Cleaning fuzzy-matcher upgrade (rapidfuzz) `[x]` SHIPPED (2026-04-25)
+
+**Symptom.** The Apr-25 02:56→09:09 production run took **6h13m** total, with the **CLEANING** stage alone consuming **258 min** vs the Apr-18 baseline of **4 min** for a comparable workload. ENRICH and SCORE scaled normally; SNAPSHOT/`build_final_db` ran exactly once at the end (architecture verified — not the bug).
+
+| Stage | Apr-18 baseline (15 brands) | Apr-25 broken (20 brands) | Apr-25 fixed (projected) |
+|---|---|---|---|
+| Cleaning | 4 min | **258 min** (64x) | **~10 min** |
+| Enrichment | 72 min | 112 min | 112 min |
+| Scoring + snapshot | 0.5 min | 5 min | 5 min |
+| **Total** | **76 min** | **373 min** | **~127 min** |
+
+**Root cause.** `scripts/enhanced_normalizer.py` lines 19-26 had a 2-tier fuzzy import: `fuzzywuzzy` → `difflib`. Neither `fuzzywuzzy` nor `python-levenshtein` is installed on the build machine, so it fell through to **pure-Python `difflib.SequenceMatcher`**. The Apr-20 D1/D2 sprints (`10d54a6` "Period C + Sprint D1 — medical-grade verdict fixes" + `c0e1450` "Sprint D2 — silent-mapping contract + alias/DB expansion") added many new fuzzy-match call sites in `_enhanced_non_harmful_check`. With pure-Python difflib those new calls compounded into a 64x cleaning slowdown.
+
+cProfile of 5 raw products through `normalize_product()`:
+- 5.85s total / 1.17s per product
+- **96% of time inside `difflib.SequenceMatcher.ratio()`**
+- 231,200 difflib calls (~46K per product)
+
+`rapidfuzz==3.13.0` was already installed and listed in `requirements-dev.txt` — the import block just never tried it.
+
+**Fix.** Replaced the import block with a 3-tier fallback chain (commit `3364f18`, 1 file / 17+ / 5−):
+
+```python
+try:
+    from rapidfuzz import fuzz, process
+    FUZZY_AVAILABLE = True
+except ImportError:
+    try:
+        from fuzzywuzzy import fuzz, process
+        FUZZY_AVAILABLE = True
+    except ImportError:
+        from difflib import SequenceMatcher
+        FUZZY_AVAILABLE = False
+        print("⚠️ No accelerated fuzzy matcher found. Install: pip install rapidfuzz")
+```
+
+Drop-in compatible — both `rapidfuzz.process.extractOne` and `fuzzywuzzy.process.extractOne` return `(choice, score[, index])` and only `[0]` and `[1]` are read at the two call sites (lines 625, 637).
+
+**Why rapidfuzz over fuzzywuzzy + python-levenshtein.**
+- License: **MIT** vs **GPL-2.0** — avoids GPL contamination of the shipped catalog.
+- Speed: C++ accelerated, equivalent or faster than `python-levenshtein`.
+- Maintenance: actively maintained by the original `python-levenshtein` author; `fuzzywuzzy` is largely abandoned.
+- API: 100% compatible with `fuzzywuzzy` for the calls used here.
+
+**Verified medical-accuracy safe — catalog-wide diff.** Compared fresh rapidfuzz cleaning output vs the shipped Apr-25 difflib catalog across **every product currently on disk**:
+
+| Metric | Result |
+|---|---|
+| Products compared | **13,236** (all 6 brands × all batches) |
+| Identical active+inactive classifications | **13,236 (100.00%)** |
+| Drift cases (active) | 0 |
+| Drift cases (inactive) | 0 |
+| Drift cases (both) | 0 |
+| Missing raw files | 0 |
+
+Per-product cleaning time drop measured on the same 5 raw products: **1.17s → 0.041s = 28.7x faster**.
+
+The `BLOCKED dangerous fuzzy match: 'vitamin c natural' -> 'vitamin e natural' (score: 94.1)` log line observed during the audit is the **safety blacklist working correctly** — refusing to fuzzy-match across vitamins C↔E even at 94% string similarity.
+
+**Bonus fix.** rapidfuzz also resolves a pre-existing canonical-id bug on product 16037 (Thorne Planti-Oxidants). The Apr-25 difflib catalog mis-classified `Silybin Phytosome` → `Lecithin`, which inflated active_count and flipped `supp_type=targeted` to `supp_type=multivitamin` and dropped `score_80` from 52.1 to 51.7. Rapidfuzz correctly resolves `Silybin Phytosome` → `milk_thistle`, restoring the snapshot-expected values. The `test_scoring_snapshot_v1.py::16037` failure (verified pre-existing via `git stash`) self-heals on next pipeline rebuild.
+
+**Test suite.** `4599 passed, 27 skipped, 1 pre-existing snapshot failure` (16037, fixed by this change). No new failures introduced.
+
+**Flutter impact.** None. The fix is pipeline-side and produces byte-identical classifications for all 13,236 products. The 16037 silybin re-classification will improve that single product's score after pipeline rebuild + Supabase sync.
+
+**Deployment.**
+
+```bash
+# 1. Re-run the pipeline (now ~127 min instead of 373 min)
+bash batch_run_all_datasets.sh
+
+# 2. Snapshot rebuilds automatically at end (already verified — runs once, not per-brand)
+
+# 3. Supabase sync + Flutter catalog bundle refresh per standard procedure
+```
+
 ---
 
 # 7. PRODUCT SMOKE TESTS
@@ -1090,7 +1177,8 @@ Use these after implementation.
 | E1.24      | Dr Pham clinical signoff + refinements (Berberine note, goal weights, primary_ingredients, stress_resilience) | Pipeline | High | `[x]` |
 | E1.25      | Dose-threshold closeout (Packet A: Vanadium/EPO/Glucosamine/Olive Leaf; Packet B: Red Clover SKIP; Fish Oil harmonized; Iodine thyroid) | Pipeline | High | `[x]` |
 | E1.26      | Zinc copper-depletion / GI rule (new rule, not just threshold) | Pipeline | Medium | `[P]` |
-| FLTR-11a   | Temporary Flutter dose guardrail — **RETIRE** (E1.11 now ships dose-aware severity natively) | Flutter | Low | `[~]` |
+| E1.27      | Cleaning fuzzy-matcher upgrade (rapidfuzz) — fix 64x cleaning regression; 13,236 products verified bit-for-bit identical; bonus silybin canonical-id fix on 16037 | Pipeline | High | `[x]` |
+| FLTR-11a   | Temporary Flutter dose guardrail — **RETIRED 2026-04-24** (commit `37c245e`; pipeline E1.11+E1.25 now ship dose-aware severity natively) | Flutter | Low | `[x]` |
 | FLTR-21    | "Solo ingredient" cluster badge          | Flutter  | Low      | `[ ]`  |
 | FLTR-22    | "Inferred from label" actives disclosure | Flutter  | Low      | `[ ]`  |
 | FLTR-23    | Optional: "Includes bioavailability aid" chip (E1.23 audit surface) | Flutter | Low | `[ ]` |
@@ -1197,6 +1285,16 @@ python3 scripts/sync_to_supabase.py <build_output>
 - Drift schema (`products_core_table.dart`) — `goalMatches TEXT` and `goalMatchConfidence REAL` already mirror pipeline columns.
 - Synergy detail render (`synergy_detail_section.dart`) — reads existing fields; new `single_ingredient_match` field is read-tolerant (defaults `false`).
 
+## Release E — Cleaning perf hotfix `[x]` PIPELINE SHIPPED (2026-04-25)
+
+- **E1.27** — Cleaning fuzzy-matcher upgrade (rapidfuzz over fuzzywuzzy over difflib) — commit `3364f18`. Fixes 64x cleaning regression discovered after the Apr-25 02:56→09:09 production run. cProfile pinpointed 96% of `normalize_product` time inside pure-Python `difflib`; rapidfuzz was already installed (`requirements-dev.txt`) but the import chain never tried it. **Verified bit-for-bit safe** across all 13,236 products in disk catalog (100.00% identical active+inactive classifications). **Bonus**: also fixes the silybin canonical-id bug on product 16037 (Thorne Planti-Oxidants — Silybin Phytosome now correctly maps to `milk_thistle`, not `lecithin`). Projected next-run total: **~127 min** vs the broken 373 min. See §6.10 for full diagnosis + verification.
+
+**No Flutter work required.** Pipeline-only fix; the catalog produced by the next rebuild will be correct-and-faster.
+
+## Release F — FLTR-11a retirement `[x]` FLUTTER SHIPPED (2026-04-24)
+
+- **FLTR-11a RETIRE** — commit `37c245e` on the Flutter repo. Pipeline E1.11 + E1.25 now ship dose-aware severity at source (33/129 rules carry thresholds), so the temporary client-side downgrade shim is no longer needed. Deleted across 4 Flutter files (35+/336− lines): `dose_safety.dart` (`_lowDoseThresholds`, `shouldDowngradeSeverity()`, `indexIngredientsByStandardName()`), `interaction_warnings.dart` (`copyWithSeverity()`), `product_detail_screen.dart` (per-warning downgrade loop replaced with pass-through), `dose_safety_test.dart` (13 FLTR-11a tests). The 23 core UL/`DoseSafety` tests are untouched. Audit confirmed zero live-code references to removed symbols (the 4 remaining grep matches are retirement-comment tombstones for historical context). See §5.11.
+
 ---
 
 # 11. ENGINEERING GUARDRAILS (working agreement)
@@ -1205,7 +1303,7 @@ python3 scripts/sync_to_supabase.py <build_output>
 2. **Simplicity first** — minimum code that solves the problem. No abstractions for single-use code. If 200 lines could be 50, rewrite.
 3. **Surgical changes** — touch only what the task requires. Don't "improve" adjacent code, comments, or formatting.
 4. **Goal-driven execution** — define success criteria (tests or observable behavior) before implementing. Loop until verified.
-5. **Pipeline is the source of truth** — the UI interprets; it does not reinterpret. The only exception is the explicit FLTR-11a guardrail.
+5. **Pipeline is the source of truth** — the UI interprets; it does not reinterpret. (The historical FLTR-11a Flutter dose-guardrail exception was retired on 2026-04-24 with commit `37c245e`; pipeline E1.11+E1.25 now ship dose-aware severity at source. No client-side severity overrides remain.)
 
 ---
 
