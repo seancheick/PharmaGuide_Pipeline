@@ -11903,8 +11903,8 @@
         "bio_score": 15,
         "natural": false,
         "score": 15,
-        "absorption": "very high",
-        "notes": "The top-tier CoQ10 form — Kaneka's crystal-free ubiquinol (CoQH-CF). Ubiquinol is the reduced (active) form your body actually uses, and the crystal-free dispersion technology prevents the molecule from re-crystallizing, which is what normally tanks absorption. About 2-4x better absorbed than standard crystalline CoQ10 depending on the comparator (Lopez-Lluch 2019). The gold standard.",
+        "absorption": "Highest CoQ10 absorption (~6% absolute F); Kaneka CoQH-CF crystal-free dispersion",
+        "notes": "The top-tier CoQ10 form — Kaneka's crystal-free ubiquinol (CoQH-CF). Ubiquinol is the reduced (active) form your body actually uses, and the crystal-free dispersion technology prevents the molecule from re-crystallizing, which is what normally tanks absorption. The gold standard. Citation correction 2026-04-25: prior \"~2-4× standard CoQ10\" fold-change attributed to López-Lluch 2019 is not present in PMID:30153575 (verified via efetch). Hosoe 2007 (PMID:16919858) is the proper Kaneka CoQH-CF PK reference; absolute F not stated but Cmax/AUC are highest of the CoQ10 class. Class baseline ~6% absolute F per Mantle 2020 (PMID:32380795) + Bhagavan 2006 (PMID:16551570).",
         "aliases": [
           "kaneka ubiquinol",
           "kaneka qh",
@@ -11920,19 +11920,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.06,
+          "range_low": 0.04,
+          "range_high": 0.1,
           "quality": "very_good",
-          "notes": "~2-4x standard CoQ10 (Lopez-Lluch 2019)"
+          "notes": "Class-leading absorption; Hosoe 2007 (PMID:16919858) plasma plateau 2.6-6.5 µg/mL across 90-300 mg/day"
         }
       },
       "ubiquinol": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "high",
-        "notes": "The reduced (active) form of CoQ10 — this is what your mitochondria actually use. Your body normally converts ubiquinone to ubiquinol after absorption, but this conversion slows with age. Langsjoen 2014 showed ~1.7x higher plasma levels vs ubiquinone in older adults. Especially important for people over 40, those on statins, or anyone with heart conditions.",
+        "absorption": "Reduced active form; modest absorption gain over ubiquinone (~5% absolute)",
+        "notes": "The reduced (active) form of CoQ10 — this is what your mitochondria actually use. Your body normally converts ubiquinone to ubiquinol after absorption, but this conversion slows with age. Especially important for people over 40, those on statins, or anyone with heart conditions. Citation correction 2026-04-25: \"Langsjoen 2014 1.7× higher in older adults\" claim removed — no verified PMID matches that population/effect. Closest PMID:19096107 (Langsjoen 2008) was advanced CHF NYHA IV patients with intestinal edema, not healthy older adults. Replaced with Mantle & Dybring 2020 (PMID:32380795) review which finds only modest, formulation-dependent differences between ubiquinol and ubiquinone in healthy adults.",
         "aliases": [
           "reduced coenzyme q10",
           "qh",
@@ -11958,11 +11958,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.08,
           "quality": "good",
-          "notes": "~1.7x higher plasma levels vs ubiquinone in older adults (Langsjoen 2014)"
+          "notes": "Mantle 2020 (PMID:32380795) review: only modest, formulation-dependent gain over ubiquinone"
         },
         "external_ids": {
           "unii": "M9NL0C577Y"
@@ -11972,8 +11972,8 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "high",
-        "notes": "Ubiquinone (oxidized CoQ10) processed with thermal crystal dispersion or solubilization technology to break apart the crystals that normally limit absorption. Products like Q-Gel, VESIsorb CoQ10, and MegaSorb use this approach. Absorption rivals ubiquinol in younger adults (whose bodies efficiently reduce ubiquinone after absorption). A strong choice if ubiquinol is unavailable.",
+        "absorption": "Solubilized softgel; ~4% absolute F; superior AUC vs powder",
+        "notes": "Ubiquinone (oxidized CoQ10) processed with thermal crystal dispersion or solubilization technology to break apart the crystals that normally limit absorption. Products like Q-Gel, VESIsorb CoQ10, and MegaSorb use this approach. Absorption rivals ubiquinol in younger adults (whose bodies efficiently reduce ubiquinone after absorption). A strong choice if ubiquinol is unavailable. Citation correction 2026-04-25: \"~2.3× better than standard crystalline\" fold-change is not present in López-Lluch 2019 (PMID:30153575) abstract — that paper reports only relative AUC ranking across 7 formulations in 14 healthy volunteers. Absolute ~4% F estimate extrapolated from Bhagavan 2006 (PMID:16551570) class baseline + Lopez-Lluch ranking.",
         "aliases": [
           "q-gel",
           "qgel",
@@ -12000,19 +12000,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.04,
+          "range_low": 0.03,
+          "range_high": 0.07,
           "quality": "good",
-          "notes": "high; crystal dispersion ~2.3x better than standard crystalline (Lopez-Lluch 2019)"
+          "notes": "López-Lluch 2019 (PMID:30153575) ranked solubilized softgel among 2 best-absorbed of 7 formulations by AUC"
         }
       },
       "ubiquinone softgel": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "moderate-high",
-        "notes": "Standard ubiquinone dissolved in oil inside a softgel capsule. The oil base helps dissolve the CoQ10 crystals, improving absorption ~2.3x over dry powder (Lopez-Lluch 2019). A reliable mid-tier form and the most common quality CoQ10 delivery. Always take with a fat-containing meal for best results.",
+        "absorption": "Oil-based softgel; ~3% absolute F; take with fatty meal",
+        "notes": "Standard ubiquinone dissolved in oil inside a softgel capsule. The oil base helps dissolve the CoQ10 crystals, improving absorption modestly over dry powder. A reliable mid-tier form and the most common quality CoQ10 delivery. Always take with a fat-containing meal for best results. Citation correction 2026-04-25: \"~2.3× better than dry powder\" specific fold-change is not in López-Lluch 2019 (PMID:30153575). That paper confirms oil-softgel as superior by AUC ranking but does not report this specific multiplier. Absolute F ~3% per Bhagavan 2006 class baseline.",
         "aliases": [
           "coq10 softgel",
           "coenzyme q10 softgel",
@@ -12044,19 +12044,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "~2.3x better than dry powder; take with fat-containing meal"
+          "value": 0.03,
+          "range_low": 0.02,
+          "range_high": 0.05,
+          "quality": "moderate",
+          "notes": "López-Lluch 2019 (PMID:30153575): oil-softgel one of 2 best-absorbed formulations by AUC (n=14)"
         }
       },
       "ubiquinone standard": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "The basic oxidized form of CoQ10 in a standard capsule or tablet. Your body converts it to active ubiquinol after absorption. Well-studied and affordable, but the crystalline structure limits how much dissolves in your gut. Taking it with a fat-containing meal significantly improves absorption. Produced by Kaneka (the world's largest CoQ10 manufacturer).",
+        "absorption": "Crystalline CoQ10; ~2% absolute F; slow & limited absorption",
+        "notes": "The basic oxidized form of CoQ10 in a standard capsule or tablet. Your body converts it to active ubiquinol after absorption. Well-studied and affordable, but the crystalline structure limits how much dissolves in your gut. Taking it with a fat-containing meal significantly improves absorption. Produced by Kaneka (the world's largest CoQ10 manufacturer). Evidence update 2026-04-25: Bhagavan & Chopra 2006 (PMID:16551570) established the class baseline — oral CoQ10 absorption is slow (Tmax ~6 h, t½ ~33 h) and limited (~2% absolute F) due to lipophilicity and large molecular weight (863 Da).",
         "aliases": [
           "ubiquinone",
           "coenzyme q10",
@@ -12085,19 +12085,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.02,
+          "range_low": 0.015,
+          "range_high": 0.04,
           "quality": "moderate",
-          "notes": "moderate; crystalline form limits dissolution"
+          "notes": "Bhagavan 2006 (PMID:16551570): \"absorption is slow and limited\" due to lipophilicity + large MW"
         }
       },
       "ubiquinone powder/capsule": {
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "low-moderate",
-        "notes": "Dry powder CoQ10 in a hard capsule — the cheapest and least effective delivery. Without an oil carrier, the crystalline CoQ10 barely dissolves in your gut. Lopez-Lluch 2019 measured only ~1.3% absorption for powder vs ~3% for oil-based. If this is what you have, always take it with a fatty meal to improve absorption.",
+        "absorption": "Dry powder ~1-2% absolute F; ~75% lower than crystal-dispersed",
+        "notes": "Dry powder CoQ10 in a hard capsule — the cheapest and least effective delivery. Without an oil carrier, the crystalline CoQ10 barely dissolves in your gut. Class baseline ~1-2% absolute F per Mantle 2020 (PMID:32380795); ~75% lower than crystal-dispersed forms. If this is what you have, always take it with a fatty meal to improve absorption. Citation correction 2026-04-25: prior \"~1.3% absorption (López-Lluch 2019)\" attribution is incorrect — PMID:30153575 does not report absolute F figures. The 1.3% class-baseline estimate originates from CoQ10 reviews (Bhagavan 2006, Mantle 2020). Re-anchored to Mantle & Dybring 2020 (PMID:32380795) which explicitly addresses CoQ10 marketing-vs-PK confusion.",
         "aliases": [
           "coq10 powder",
           "coq10 capsule",
@@ -12109,10 +12109,10 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.013,
-          "range_low": 0.0,
-          "range_high": 0.113,
+          "range_low": 0.005,
+          "range_high": 0.025,
           "quality": "poor",
-          "notes": "~1.3% (Lopez-Lluch 2019)"
+          "notes": "Mantle 2020 (PMID:32380795): absence of crystal dispersion reduces bioavailability ~75%"
         }
       },
       "coq10 (unspecified)": {
@@ -38026,6 +38026,47 @@
             "flag": "bio_score=14 (premium tier) on liposomal vitamin A is supported by mechanism only; no human PK exists. Dr Pham should consider whether to retain bio=14 or downgrade pending human trial data."
           }
         ]
+      },
+      "5.0.9": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 7 — CoQ10 form bioavailability + citation correction",
+        "research_subagent_report": "PubMed research on 6 CoQ10 forms identified TWO concurrent issues: (1) struct.value was null on 5 of 6 forms despite bio_scores 10-15; populated with evidence-backed absolute F values (0.02-0.06 range, consistent with class-poor CoQ10 absorption); (2) MULTIPLE CITATION MISATTRIBUTIONS — \"Lopez-Lluch 2019\" cited for absolute %s and fold-changes (1.3%, 3%, 2-4×, 2.3×) that are NOT in PMID:30153575 (verified via efetch). That paper reports only RELATIVE AUC ranking. The \"Langsjoen 2014 1.7× older adults\" claim does not match any verified PMID — closest PMID:19096107 was NYHA IV CHF, wrong population. Class baseline now correctly anchored to Mantle 2020 + Bhagavan 2006.",
+        "verified_pmids": [
+          "PMID:32380795 (Mantle & Dybring 2020 — class authority, anti-marketing review)",
+          "PMID:16551570 (Bhagavan & Chopra 2006 — absorption \"slow and limited\")",
+          "PMID:30153575 (Lopez-Lluch 2019 — RELATIVE AUC ranking only, NOT absolute F)",
+          "PMID:16919858 (Hosoe 2007 — Kaneka CoQH-CF Cmax/AUC)",
+          "PMID:17482886 (Bhagavan & Chopra 2007 — solubilized > non-solubilized)",
+          "PMID:20863275 (Beg 2010 — patent landscape; confirms low systemic F)"
+        ],
+        "citation_corrections": {
+          "lopez_lluch_2019_misattributions": {
+            "affected_forms": [
+              "coq10::ubiquinol crystal-free",
+              "coq10::ubiquinone crystal-dispersed",
+              "coq10::ubiquinone softgel",
+              "coq10::ubiquinone powder/capsule"
+            ],
+            "old_attribution": "Lopez-Lluch 2019 → 1.3%, 3%, 2-4×, 2.3× absolute/fold-change",
+            "new_attribution": "Mantle 2020 (PMID:32380795) + Bhagavan 2006 (PMID:16551570) for class baselines; Lopez-Lluch 2019 for relative AUC ranking only"
+          },
+          "langsjoen_2014_phantom": {
+            "affected_forms": [
+              "coq10::ubiquinol"
+            ],
+            "issue": "No PMID matches \"Langsjoen 2014 1.7× higher plasma in older adults\"; closest PMID:19096107 was NYHA IV CHF",
+            "resolution": "Removed claim; replaced with Mantle 2020 review"
+          }
+        },
+        "forms_updated": [
+          "coq10::ubiquinol crystal-free (value None → 0.06)",
+          "coq10::ubiquinol (value None → 0.05)",
+          "coq10::ubiquinone crystal-dispersed (value None → 0.04)",
+          "coq10::ubiquinone softgel (value None → 0.03)",
+          "coq10::ubiquinone standard (value None → 0.02)",
+          "coq10::ubiquinone powder/capsule (value 0.013 → 0.013)"
+        ],
+        "bio_score_changed": false
       }
     },
     "category_enum": [
