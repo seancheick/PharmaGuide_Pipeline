@@ -12319,8 +12319,8 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "no improvement over standard (Verhoeven 2025)",
-        "notes": "UCLA-patented SLCP (Solid Lipid Curcumin Particle) technology. Originally claimed 65-100x better free curcumin bioavailability (Gota 2010). However, Verhoeven 2025 (PMID:40487425) — a rigorous head-to-head crossover PK study — found Longvida total AUC (271 nM×hr) was NOT significantly different from unformulated curcumin (289 nM×hr), and free curcumin remained below 2 nM. The original Gota study is now considered methodologically unreliable. Clinical benefits reported in Longvida trials may be mediated by non-curcumin components or non-systemic mechanisms.",
+        "absorption": "no improvement over unformulated; free curcumin <2 nM (Kroon 2025)",
+        "notes": "UCLA-patented SLCP (Solid Lipid Curcumin Particle) technology. Originally claimed 65-100x better free curcumin bioavailability (Gota 2010). However, Kroon 2025 (PMID:40487425) — a rigorous head-to-head crossover PK study — found Longvida total AUC (271 nM×hr) was NOT significantly different from unformulated curcumin (289 nM×hr), and free curcumin remained below 2 nM. The original Gota study is now considered methodologically unreliable. Clinical benefits reported in Longvida trials may be mediated by non-curcumin components or non-systemic mechanisms. Citation correction 2026-04-25: \"Verhoeven 2025\" was the wrong first-author surname — PMID:40487425 is Kroon MAGM et al. iScience 2025;28(6):112575 (Amsterdam UMC, n=9 healthy males, crossover). Class evidence now confirms Longvida free curcumin <2 nM in plasma even at 2280 mg dose; the original Gota 2010 (PMID:20092313) 65-100× claim is debunked.",
         "aliases": [
           "longvida",
           "slcp curcumin",
@@ -12331,19 +12331,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.015,
+          "range_low": 0.01,
+          "range_high": 0.02,
           "quality": "poor",
-          "notes": "Verhoeven 2025 (PMID:40487425): AUC not different from unformulated; free curcumin <2 nM"
+          "notes": "Kroon 2025 (PMID:40487425): AUC not different from unformulated; free curcumin <2 nM"
         }
       },
       "novasol curcumin": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "185x total curcuminoids (includes conjugates)",
-        "notes": "Micellar curcumin using Tween-80 (polysorbate 80) synthetic surfactant to form tiny micelles. Schiborr 2014 showed 185x total curcuminoid AUC — but that includes conjugated metabolites (glucuronides/sulfates) with limited biological activity. Free curcumin levels are much lower. Very high total absorption numbers but the clinical relevance of conjugated metabolites is debated.",
+        "absorption": "185x total AUC (Schiborr 2014) but free <40 nM, still subtherapeutic (Kroon 2025)",
+        "notes": "Micellar curcumin using Tween-80 (polysorbate 80) synthetic surfactant to form tiny micelles. Schiborr 2014 (PMID:24402825) reported 185× total curcuminoid AUC — but that includes conjugated metabolites (glucuronides/sulfates) with limited biological activity. Free curcumin levels are much lower. Very high total absorption numbers but the clinical relevance of conjugated metabolites is debated. Evidence update 2026-04-25: Schiborr 2014 PMID confirmed as :24402825 (Mol Nutr Food Res) — separate from CurcuWIN PMID. Kroon 2025 (PMID:40487425) reappraisal found NovaSol delivers highest free curcumin Cmax of any tested enhanced form (6.7-38 nM at 30 min) but this is still ~100× below in vitro bioactive thresholds and declines rapidly. The 185× total-AUC figure reflects mostly conjugated metabolites with limited pharmacological activity.",
         "aliases": [
           "novasol",
           "micellar curcumin",
@@ -12353,19 +12353,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "185x total curcuminoids AUC (Schiborr 2014); mostly conjugated metabolites"
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.06,
+          "quality": "moderate",
+          "notes": "185× total curcuminoid AUC (Schiborr 2014 PMID:24402825); but free curcumin only 6.7-38 nM at 30 min, 100× below bioactive (Kroon 2025 PMID:40487425)"
         }
       },
       "hydrocurc": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "high (LipiSperse)",
-        "notes": "Gencor's LipiSperse technology makes curcumin water-dispersible using food-grade lipid carriers. Sports nutrition research shows positive results for exercise recovery (PMID:32858046). However, no head-to-head human PK study vs standard curcumin has been published with quantified fold-improvement. Good clinical evidence base but lacks rigorous comparative PK data. Uses food-grade ingredients (no synthetic surfactants).",
+        "absorption": "~2.5x total curcuminoids vs raw (Briskey 2019); free fraction unmeasured",
+        "notes": "Gencor's LipiSperse technology makes curcumin water-dispersible using food-grade lipid carriers. Sports nutrition research shows positive results for exercise recovery (PMID:32858046). However, Briskey 2019 (PMID:29974228, Eur J Nutr) measured 807 ng/mL Cmax for HydroCurc vs 318 ng/mL for raw curcumin (n=18) — ~2.5× total curcuminoids. Good clinical evidence base but lacks rigorous comparative PK data. Uses food-grade ingredients (no synthetic surfactants). Evidence update 2026-04-25: prior note saying \"no head-to-head PK study published\" was incorrect — Briskey 2019 (PMID:29974228, Eur J Nutr) is a verified n=18 crossover comparing LipiSperse-formulated HydroCurc to raw curcumin. Like other enhanced forms, measured TOTAL curcuminoids (free fraction not separately quantified); fold-change reflects conjugate-dominated AUC per Kroon 2025 (PMID:40487425) framework.",
         "aliases": [
           "hydrocurc curcumin",
           "LipiSperse curcumin",
@@ -12374,19 +12374,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high (LipiSperse food-grade lipid dispersion)"
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.06,
+          "quality": "moderate",
+          "notes": "Briskey 2019 (PMID:29974228, Eur J Nutr): LipiSperse/HydroCurc 807 vs raw 318 ng/mL Cmax (n=18)"
         }
       },
       "curcuwin": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "~136x total curcuminoids (mostly conjugated)",
-        "notes": "OmniActive's UltraSOL technology using polyvinylpyrrolidone, cellulose, and turmeric oil to create a colloidal dispersion. Schiborr 2014 (PMID:28204880) showed 136x total curcuminoid AUC vs unformulated. However, like most enhanced forms, the majority of circulating curcuminoids are conjugated metabolites (glucuronides/sulfates), not free bioactive curcumin. Uses natural carrier components. Good total absorption but clinical relevance of conjugated metabolites is debated.",
+        "absorption": "~39x total curcuminoids vs unformulated (Purpura 2018); free fraction unverified",
+        "notes": "OmniActive's UltraSOL technology using polyvinylpyrrolidone, cellulose, and turmeric oil to create a colloidal dispersion. Purpura 2018 (PMID:28204880) reported 39× total curcuminoid AUC for γ-cyclodextrin CW8 vs unformulated. However, like most enhanced forms, the majority of circulating curcuminoids are conjugated metabolites (glucuronides/sulfates), not free bioactive curcumin. Uses natural carrier components. Good total absorption but clinical relevance of conjugated metabolites is debated. Citation correction 2026-04-25: prior note had THREE errors on this form. (1) Wrong author: PMID:28204880 is Purpura 2018 (Eur J Nutr), NOT Schiborr 2014. (2) Wrong fold: paper reports 39× total curcuminoids, NOT 136×. (3) Wrong product: paper tested γ-cyclodextrin CW8 — not confirmed to be CurcuWIN by name. The \"136× CurcuWIN\" claim cannot be traced to any PubMed-indexed paper and should be flagged as marketing.",
         "aliases": [
           "curcuwin curcumin",
           "ultrasol curcumin",
@@ -12394,19 +12394,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "~136x total curcuminoid AUC (PMID:28204880); mostly conjugated"
+          "value": 0.03,
+          "range_low": 0.02,
+          "range_high": 0.05,
+          "quality": "moderate",
+          "notes": "Purpura 2018 (PMID:28204880, Eur J Nutr): γ-cyclodextrin CW8 39× total curcuminoids vs StdC; only phase-2 metabolites detected"
         }
       },
       "meriva curcumin": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "~29x standard",
-        "notes": "Indena's phosphatidylcholine phytosome — the most clinically studied enhanced curcumin formulation with 35+ published human trials covering joint health, inflammation, skin, and diabetic microangiopathy. About 29x better absorption than standard curcumin. Uses sunflower lecithin (food-grade, no synthetic surfactants). The go-to form for evidence-based joint and inflammation support.",
+        "absorption": "~29x total curcuminoids; only phase-2 metabolites detected (Cuomo 2011)",
+        "notes": "Indena's phosphatidylcholine phytosome — the most clinically studied enhanced curcumin formulation with 35+ published human trials covering joint health, inflammation, skin, and diabetic microangiopathy. About 29x better absorption than standard curcumin. Uses sunflower lecithin (food-grade, no synthetic surfactants). The go-to form for evidence-based joint and inflammation support. Evidence update 2026-04-25: Cuomo 2011 PMID:21413691 (J Nat Prod) verified 29× total curcuminoid AUC. Critically, the paper itself states only phase-2 metabolites (glucuronides/sulfates) could be detected and plasma concentrations were \"still significantly lower than those required for inhibition of most anti-inflammatory targets of curcumin.\" Plasma curcuminoid profile shifts to demethoxycurcumin in Meriva, distinct from raw curcumin pharmacology. Highest evidence base of the enhanced-form group (35+ RCTs).",
         "aliases": [
           "meriva",
           "curcumin phytosome",
@@ -12445,11 +12445,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.07,
           "quality": "good",
-          "notes": "~29x standard (35+ human RCTs)"
+          "notes": "Cuomo 2011 (PMID:21413691, J Nat Prod): Meriva 29× total AUC; plasma curcuminoid shifted to demethoxycurcumin (only phase-2 conjugates)"
         },
         "audit_trail": [
           "D3.4 (2026-04-20): Phytosome Curcuminoids + related variants added to meriva form."
@@ -12459,8 +12459,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "~27x standard",
-        "notes": "Japanese colloidal submicron particle technology — ~27x better absorption than standard curcumin. About 17 published studies, fewer than Meriva but with solid evidence for cognitive function (Small 2018 PMID: 30265004) and inflammation. The tiny particle size helps bypass the usual absorption barriers.",
+        "absorption": "~27x total curcuminoid AUC at 30 mg (Sasaki 2011); free fraction unmeasured",
+        "notes": "Japanese colloidal submicron particle technology — ~27x better absorption than standard curcumin. About 17 published studies, fewer than Meriva but with solid evidence for cognitive function (Small 2018 PMID: 30265004) and inflammation. The tiny particle size helps bypass the usual absorption barriers. Evidence update 2026-04-25: Sasaki 2011 PMID:21532153 (Biol Pharm Bull) verified 27× total curcuminoid AUC vs powder in n=14 healthy adults at 30 mg. Like other enhanced forms, measured total curcuminoids only — free fraction not separately quantified; falls under Kroon 2025 (PMID:40487425) framework caveat that fold-change AUC is conjugate-dominated.",
         "aliases": [
           "theracurmin curcumin",
           "nano curcumin",
@@ -12470,19 +12470,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "~27x standard"
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.06,
+          "quality": "moderate",
+          "notes": "Sasaki 2011 (PMID:21532153, Biol Pharm Bull): Theracurmin colloidal nano-particles 27× total AUC vs powder, n=14, 30mg dose"
         }
       },
       "bcm-95 curcumin": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "~6.9x standard",
-        "notes": "Curcumin combined with turmeric essential oils (ar-turmerone) for natural synergy — about 6.9x better absorption than plain curcumin. Sold as CurcuGreen (formerly BCM-95) by DolCas Biotech. A good mid-tier option that keeps the whole-plant synergy without synthetic delivery systems.",
+        "absorption": "~6.9x total curcuminoids vs plain (Antony 2008, pilot); free fraction unmeasured",
+        "notes": "Curcumin combined with turmeric essential oils (ar-turmerone) for natural synergy — about 6.9x better absorption than plain curcumin. Sold as CurcuGreen (formerly BCM-95) by DolCas Biotech. A good mid-tier option that keeps the whole-plant synergy without synthetic delivery systems. Evidence update 2026-04-25: Antony 2008 PMID:20046768 (Indian J Pharm Sci) verified 6.93× total curcuminoids vs plain curcumin in pilot crossover. Methodology weaker than Cuomo/Sasaki — small n, less rigorous design. Total curcuminoids only; fold-change reflects conjugate-dominated AUC per Kroon 2025 framework.",
         "aliases": [
           "bcm-95",
           "bcm95",
@@ -12508,19 +12508,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.04,
           "quality": "moderate",
-          "notes": "~6.9x standard"
+          "notes": "Antony 2008 (PMID:20046768, Indian J Pharm Sci): BCM-95CG 6.93× total curcuminoid bioavailability vs normal curcumin in pilot crossover"
         }
       },
       "curcumin c3 complex with bioperine": {
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "no improvement (Verhoeven 2025)",
-        "notes": "Sabinsa's C3 Complex (95% curcuminoids) plus piperine (BioPerine). The original Shoba 1998 study claimed 2000% (20x) increase (PMID:9619120), later reassessed to '5-10x'. However, Verhoeven 2025 (PMID:40487425) found piperine addition produced NO improvement in either free or total curcumin AUC in a controlled crossover study. The Shoba study is now considered methodologically flawed. Still widely available and affordable, but the piperine enhancement claim is not supported by modern PK evidence.",
+        "absorption": "no improvement over plain C3; piperine debunked (Kroon 2025)",
+        "notes": "Sabinsa's C3 Complex (95% curcuminoids) plus piperine (BioPerine). The original Shoba 1998 study claimed 2000% (20x) increase (PMID:9619120), later reassessed to '5-10x'. However, Kroon 2025 (PMID:40487425) found piperine addition produced NO improvement in either free or total curcumin AUC in a controlled crossover study. The Shoba study is now considered methodologically flawed. Still widely available and affordable, but the piperine enhancement claim is not supported by modern PK evidence. Citation correction 2026-04-25: \"Verhoeven 2025\" was the wrong first-author surname — PMID:40487425 is Kroon MAGM et al. iScience 2025;28(6):112575. Findings unchanged: piperine addition produced ZERO improvement in either free or total curcumin AUC. The original Shoba 1998 (PMID:9619120) \"2000% increase\" claim is debunked.",
         "aliases": [
           "c3 curcumin with piperine",
           "curcumin bioperine",
@@ -12532,11 +12532,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.025,
+          "range_low": 0.01,
+          "range_high": 0.04,
           "quality": "poor",
-          "notes": "Piperine enhancement debunked — no AUC improvement (PMID:40487425)"
+          "notes": "Piperine enhancement debunked — no AUC improvement (Kroon 2025 PMID:40487425)"
         }
       },
       "curcumin c3 complex": {
@@ -38067,6 +38067,78 @@
           "coq10::ubiquinone powder/capsule (value 0.013 → 0.013)"
         ],
         "bio_score_changed": false
+      },
+      "5.0.10": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 8 — curcumin enhanced forms PK + citation surgery",
+        "research_subagent_report": "PubMed research on 8 curcumin forms identified THREE concurrent issues: null values on 7 of 11 forms, multiple citation misattributions following the Stoll 2021 / Lopez-Lluch 2019 / Langsjoen 2014 pattern, AND fold-change-vs-absolute-F confusion. Kroon 2025 (PMID:40487425) emerges as the authoritative critical reappraisal: free curcumin remains class-bounded at ~1-7% absolute F across ALL enhanced formulations; fold-change AUC figures (185×, 136×, 29×, 27×, 6.9×) reflect mostly conjugated metabolites with limited pharmacological activity.",
+        "citation_corrections": {
+          "verhoeven_2025_phantom_author": {
+            "affected_forms": [
+              "curcumin::longvida curcumin",
+              "curcumin::novasol curcumin",
+              "curcumin::curcumin c3 complex with bioperine"
+            ],
+            "old_attribution": "Verhoeven 2025 PMID:40487425",
+            "new_attribution": "Kroon 2025 PMID:40487425 (iScience)",
+            "note": "Same misattribution pattern as Stoll 2021 (Batch 4) and Lopez-Lluch 2019 (Batch 7)"
+          },
+          "curcuwin_triple_error": {
+            "affected_forms": [
+              "curcumin::curcuwin"
+            ],
+            "errors_corrected": [
+              "wrong author: Schiborr 2014 → Purpura 2018",
+              "wrong fold: 136× → 39×",
+              "wrong product: paper tested γ-cyclodextrin CW8, not CurcuWIN by name"
+            ],
+            "notes": "136× claim cannot be traced to any PubMed-indexed paper; flagged as marketing"
+          },
+          "novasol_pmid_clarification": {
+            "affected_forms": [
+              "curcumin::novasol curcumin"
+            ],
+            "detail": "Schiborr 2014 PMID confirmed as :24402825 (Mol Nutr Food Res), not :28204880 (which is the unrelated Purpura 2018 CurcuWIN-area paper)"
+          },
+          "hydrocurc_no_pk_misclaim": {
+            "affected_forms": [
+              "curcumin::hydrocurc"
+            ],
+            "detail": "Prior note claimed \"no head-to-head PK study published\" — incorrect. Briskey 2019 PMID:29974228 (Eur J Nutr) is a verified n=18 crossover with ~2.5× total curcuminoids data"
+          }
+        },
+        "verified_pmids": [
+          "PMID:40487425 (Kroon 2025 iScience — class authority critical reappraisal)",
+          "PMID:24402825 (Schiborr 2014 Mol Nutr Food Res — NovaSol 185× total)",
+          "PMID:28204880 (Purpura 2018 Eur J Nutr — γ-CD CW8 39× total, NOT 136×)",
+          "PMID:21413691 (Cuomo 2011 J Nat Prod — Meriva 29× total)",
+          "PMID:21532153 (Sasaki 2011 Biol Pharm Bull — Theracurmin 27× total)",
+          "PMID:20046768 (Antony 2008 Indian J Pharm Sci — BCM-95 6.93× pilot)",
+          "PMID:29974228 (Briskey 2019 Eur J Nutr — HydroCurc 2.5× total)",
+          "PMID:20092313 (Gota 2010 — Longvida 22.43 ng/mL Cmax; 65-100× claim NOT in abstract)"
+        ],
+        "forms_updated": [
+          "curcumin::longvida curcumin (value None → 0.015)",
+          "curcumin::novasol curcumin (value None → 0.04)",
+          "curcumin::hydrocurc (value None → 0.04)",
+          "curcumin::curcuwin (value None → 0.03)",
+          "curcumin::meriva curcumin (value None → 0.05)",
+          "curcumin::theracurmin (value None → 0.04)",
+          "curcumin::bcm-95 curcumin (value None → 0.02)",
+          "curcumin::curcumin c3 complex with bioperine (value None → 0.025)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "curcumin::novasol curcumin",
+            "flag": "Research agent recommends bio_score 13 → 10 downgrade. NovaSol is currently the highest-rated curcumin form on the basis of total-AUC marketing, but Kroon 2025 establishes its free-curcumin advantage is irrelevant at clinical doses. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "curcumin::curcuwin",
+            "flag": "Research agent recommends bio_score 12 → 10 downgrade. The 136× figure used to justify the high score is unverified in literature. Even taking the verified 39× number, free curcumin is still conjugate-dominated per Kroon 2025 framework. Needs Dr Pham clinical signoff."
+          }
+        ],
+        "class_finding": "Free curcumin oral F is class-bounded at ~1-7% across all enhanced formulations. Per Kroon 2025: NovaSol delivers highest free curcumin Cmax (6.7-38 nM) but still 100× below in vitro bioactive thresholds. Fold-change AUC figures describe relative improvement over the 1-3% baseline of unformulated curcumin, not absolute F. The 80-point IQM scoring should treat curcumin as a class similar to CoQ10 (fold-change ≠ clinical equivalence)."
       }
     },
     "category_enum": [
