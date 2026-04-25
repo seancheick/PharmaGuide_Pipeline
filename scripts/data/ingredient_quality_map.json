@@ -7883,8 +7883,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good",
-        "notes": "Buffered with alkaline compounds to resist stomach acid breakdown. Marketed as Kre-Alkalyn. Head-to-head trials (Jagim 2012) found no advantage over standard monohydrate in strength, body composition, or muscle creatine levels. Scores lower because the added cost brings no proven benefit.",
+        "absorption": "same F as monohydrate; buffering claim unsupported (Jagim 2012)",
+        "notes": "Buffered with alkaline compounds to resist stomach acid breakdown. Marketed as Kre-Alkalyn. Head-to-head trials (Jagim 2012) found no advantage over standard monohydrate in strength, body composition, or muscle creatine levels. Scores lower because the added cost brings no proven benefit. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
           "alkaline creatine",
           "buffered creatine",
@@ -7895,19 +7895,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.99,
+          "range_low": 0.95,
+          "range_high": 0.99,
+          "quality": "excellent",
+          "notes": "Jagim 2012 (PMID:22971354): KA buffered creatine = monohydrate, no advantage in muscle creatine, body comp, or strength"
         }
       },
       "creatine nitrate": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "good",
-        "notes": "Creatine bonded to a nitrate group. Theoretically combines creatine's ATP-regeneration benefits with nitrate-driven nitric oxide vasodilation. Limited independent research; most evidence comes from multi-ingredient pre-workouts, making it hard to isolate creatine nitrate's specific contribution.",
+        "absorption": "salt dissociates to creatine ion; F equivalent to monohydrate",
+        "notes": "Creatine bonded to a nitrate group. Theoretically combines creatine's ATP-regeneration benefits with nitrate-driven nitric oxide vasodilation. Limited independent research; most evidence comes from multi-ingredient pre-workouts, making it hard to isolate creatine nitrate's specific contribution. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
           "nitrate-bound creatine",
           "NO creatine",
@@ -7917,11 +7917,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.99,
+          "range_low": 0.95,
+          "range_high": 0.99,
+          "quality": "excellent",
+          "notes": "Persky 2003 (PMID:12793840): creatine actively absorbed via SLC6A8/CRT transporter, near-complete F regardless of counter-ion"
         },
         "external_ids": {
           "unii": "1XGV09LL9X"
@@ -7931,8 +7931,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "Creatine bonded to hydrochloric acid, making it extremely water-soluble — roughly 40x more soluble than monohydrate. Marketed as Con-Cret. This means smaller doses dissolve fully, reducing bloating. However, no published trial shows it loads muscles faster or produces greater strength gains than monohydrate at equivalent creatine doses.",
+        "absorption": "higher solubility, same F; no human PK advantage shown (Jäger 2007)",
+        "notes": "Creatine bonded to hydrochloric acid, making it extremely water-soluble — roughly 40x more soluble than monohydrate. Marketed as Con-Cret. This means smaller doses dissolve fully, reducing bloating. However, no published trial shows it loads muscles faster or produces greater strength gains than monohydrate at equivalent creatine doses. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
           "HCl creatine",
           "creatine hcl",
@@ -7946,11 +7946,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.99,
+          "range_low": 0.95,
+          "range_high": 0.99,
+          "quality": "excellent",
+          "notes": "Jäger 2007 (PMID:17997838): creatine HCl water solubility ~40× monohydrate but absolute F equivalent — \"CrM absorption already close to 100%\""
         },
         "external_ids": {
           "unii": "429W5UKC8E"
@@ -7960,8 +7960,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "poor",
-        "notes": "An esterified creatine designed to cross cell membranes without a transporter. In practice, studies (Spillane 2009) show it rapidly converts to creatinine (an inactive waste product) in the stomach, delivering far less creatine to muscles than standard monohydrate. Not recommended — low score reflects poor real-world effectiveness.",
+        "absorption": "hydrolyzes to creatinine pre-absorption; near-zero functional F (Giese 2009)",
+        "notes": "An esterified creatine designed to cross cell membranes without a transporter. In practice, studies (Spillane 2009) show it rapidly converts to creatinine (an inactive waste product) in the stomach, delivering far less creatine to muscles than standard monohydrate. Not recommended — low score reflects poor real-world effectiveness. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
           "CEE",
           "ethyl creatine",
@@ -7973,11 +7973,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Gufford 2013 (PMID:23957855): CEE cyclizes to creatinine at neutral/basic pH. Giese 2009 (PMID:19585404): plasma esterases convert CEE to creatinine, no detectable creatine recovery. Spillane 2009 (PMID:19228401): reduced in vivo serum/muscle response"
         },
         "external_ids": {
           "unii": "I3P1L0D47K"
@@ -7987,27 +7987,27 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "Creatine bonded to citric acid for improved water solubility. Dissolves more easily than monohydrate, which can help with mixing. However, the citrate salt adds molecular weight, meaning you get less actual creatine per gram (~40% creatine by weight vs ~88% for monohydrate). No trials show superior efficacy to monohydrate.",
+        "absorption": "same F as monohydrate, faster Tmax only (Jäger 2007)",
+        "notes": "Creatine bonded to citric acid for improved water solubility. Dissolves more easily than monohydrate, which can help with mixing. However, the citrate salt adds molecular weight, meaning you get less actual creatine per gram (~40% creatine by weight vs ~88% for monohydrate). No trials show superior efficacy to monohydrate. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
           "tri-creatine citrate",
           "creatine citrate supplement"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.99,
+          "range_low": 0.95,
+          "range_high": 0.99,
+          "quality": "excellent",
+          "notes": "Jäger 2007 (PMID:17997838): citrate vs CrM head-to-head; absolute F equivalent. Counter-ion affects Cmax/Tmax not extent"
         }
       },
       "creatine magnesium chelate": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "good",
-        "notes": "Creatine chelated with magnesium — marketed as MagnaPower. The magnesium may help creatine convert to phosphocreatine more efficiently, and one study (Brilla 2003) showed comparable strength gains to monohydrate at a lower dose. Provides both creatine and magnesium in one compound. Limited research compared to monohydrate keeps the score moderate.",
+        "absorption": "chelate dissociates; F equivalent to monohydrate",
+        "notes": "Creatine chelated with magnesium — marketed as MagnaPower. The magnesium may help creatine convert to phosphocreatine more efficiently, and one study (Brilla 2003) showed comparable strength gains to monohydrate at a lower dose. Provides both creatine and magnesium in one compound. Limited research compared to monohydrate keeps the score moderate. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
           "magnapower",
           "MagnaPower Creatine",
@@ -8018,30 +8018,30 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.99,
+          "range_low": 0.9,
+          "range_high": 0.99,
+          "quality": "excellent",
+          "notes": "Brilla 2003 (PMID:14506619) measured intracellular water + power, NOT absorption or absolute F. Class-equivalent F per Persky 2003 (PMID:12793840) since chelate dissociates to deliver creatine ion"
         }
       },
       "dicreatine malate": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "~moderate (estimated from creatine class)",
-        "notes": "Di-creatine malate — 2 creatine molecules bound to 1 malic acid molecule. Theoretically combines creatine benefit with malic acid's role in Krebs cycle. Limited human PK data specific to this form; scored conservatively relative to creatine monohydrate. Found in GNC AMP branded products.",
+        "absorption": "no human PK; theoretical F equivalent via salt dissociation",
+        "notes": "Di-creatine malate — 2 creatine molecules bound to 1 malic acid molecule. Theoretically combines creatine benefit with malic acid's role in Krebs cycle. Limited human PK data specific to this form; scored conservatively relative to creatine monohydrate. Found in GNC AMP branded products. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
           "di-creatine malate",
           "creatine malate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "No human PK data for dicreatine malate specifically; assumed similar to creatine monohydrate"
+          "value": 0.95,
+          "range_low": 0.85,
+          "range_high": 0.99,
+          "quality": "excellent",
+          "notes": "Limited human PK; theoretical class-equivalent F via dissociation per Persky 2003 (PMID:12793840). Malic acid co-delivery separate Krebs cycle pathway"
         },
         "external_ids": {
           "unii": "VF8L36HTE0"
@@ -8051,8 +8051,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Generic creatine listing without a specified form. Could be monohydrate, HCl, or another salt. Since creatine monohydrate is the gold standard with the most research, products that don't specify the form may be using a less-studied variant. Conservative score applied.",
+        "absorption": "form-unverified monohydrate; assume class-typical F",
+        "notes": "Generic creatine listing without a specified form. Could be monohydrate, HCl, or another salt. Since creatine monohydrate is the gold standard with the most research, products that don't specify the form may be using a less-studied variant. Conservative score applied. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
           "creatine",
           "creatine pyruvate",
@@ -8067,11 +8067,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.95,
+          "range_low": 0.85,
+          "range_high": 0.99,
+          "quality": "excellent",
+          "notes": "Form ambiguity — likely monohydrate but not verified; assume class-typical F per Persky 2003 (PMID:12793840)"
         }
       }
     },
@@ -38544,6 +38544,74 @@
             "flag": "MAJOR — Research agent recommends bio_score 12 → ~7 downgrade. Tocotrienols are a separate class from tocopherols. Hosomi 1997 (PMID:9199513) shows α-tocotrienol α-TTP affinity is only ~12% of RRR-α-tocopherol — poor tissue retention. Yap & Yuen 2004 (PMID:15288344) shows oral F is poor without lipid vehicle. Current bio=12 (equal to d-alpha-tocopherol) is dramatically inflated. Needs Dr Pham clinical signoff."
           }
         ]
+      },
+      "5.0.16": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 14 — creatine F-class collapse + CEE pro-drug",
+        "research_subagent_report": "PubMed research on 8 creatine forms. Research agent USED WebFetch on PubMed eutils. TWO major findings: (1) all creatine salts dissociate to deliver identical creatine ion via SLC6A8/CRT transporter — F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838). (2) CEE is a failed ester pro-drug that hydrolyzes to creatinine pre-absorption (Gufford/Giese/Spillane). Two misattributions caught (Schedel 2000, Greenwood 2003 — neither exists in PubMed).",
+        "verified_pmids": [
+          "PMID:22971354 Jagim 2012 — KA = CrM, no advantage",
+          "PMID:19228401 Spillane 2009 — CEE less effective in vivo",
+          "PMID:14506619 Brilla 2003 — Mg-Cr-chelate intracellular (NOT F)",
+          "PMID:12793840 Persky 2003 — creatine PK review (CANONICAL)",
+          "PMID:12888208 Persky 2003 HPLC method",
+          "PMID:17997838 Jäger 2007 — citrate/pyruvate/CrM head-to-head",
+          "PMID:23957855 Gufford 2013 — CEE pH stability",
+          "PMID:19585404 Giese 2009 — CEE NMR plasma esterase conversion",
+          "PMID:29518030 Alraddadi 2018 — rat F dose-dependent"
+        ],
+        "misattributions_caught": {
+          "\"Schedel 2000 creatine PK\"": "DOES NOT EXIST in PubMed → use Persky 2003 (PMID:12793840) canonical review",
+          "\"Greenwood 2003 creatine citrate\"": "DOES NOT EXIST → use Jäger 2007 (PMID:17997838) for citrate head-to-head"
+        },
+        "class_finding": "All creatine SALTS (HCl, citrate, nitrate, Mg-chelate, KA-buffered) are F-class-equivalent to monohydrate (~99% absolute F). Counter-ion affects Cmax/Tmax/solubility but NOT absolute F. Per Persky 2003 (PMID:12793840) review: creatine actively absorbed via SLC6A8/CRT transporter, near-complete F.",
+        "cee_pro_drug_finding": "Creatine ethyl ester (CEE) is a failed pro-drug — NOT a salt. Three independent papers confirm pre-absorption hydrolysis to creatinine (inactive metabolite): Gufford 2013 PMID:23957855 (pH stability), Giese 2009 PMID:19585404 (NMR), Spillane 2009 PMID:19228401 (in vivo reduced response). Near-zero functional creatine reaches muscle.",
+        "forms_updated": [
+          "creatine_monohydrate::buffered creatine monohydrate (value None → 0.99)",
+          "creatine_monohydrate::creatine nitrate (value None → 0.99)",
+          "creatine_monohydrate::creatine hydrochloride (value None → 0.99)",
+          "creatine_monohydrate::creatine ethyl ester (value None → 0.05)",
+          "creatine_monohydrate::creatine citrate (value None → 0.99)",
+          "creatine_monohydrate::creatine magnesium chelate (value None → 0.99)",
+          "creatine_monohydrate::dicreatine malate (value None → 0.95)",
+          "creatine_monohydrate::creatine monohydrate ((unspecified)) (value None → 0.95)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "creatine_monohydrate::buffered creatine monohydrate",
+            "flag": "Research agent recommends bio_score 12 → 14 upgrade. Kre-Alkalyn (KA) is class-equivalent to monohydrate — Jagim 2012 (PMID:22971354) found NO advantage in muscle Cr, body comp, or strength. Buffering claim is marketing-driven, not PK-supported. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "creatine_monohydrate::creatine nitrate",
+            "flag": "Research agent recommends bio_score 11 → 14 upgrade. Creatine nitrate dissociates to deliver same creatine ion via CRT transporter. F class-equivalent to monohydrate per Persky 2003 (PMID:12793840). Nitrate co-delivery is separate vasodilator pathway, not creatine absorption advantage. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "creatine_monohydrate::creatine hydrochloride",
+            "flag": "Research agent recommends bio_score 10 → 14 upgrade. Creatine HCl (Con-Cret) has 40× water solubility advantage but Jäger 2007 (PMID:17997838) shows F is class-equivalent to monohydrate. Solubility ≠ absolute F when monohydrate already absorbs at ~99%. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "creatine_monohydrate::creatine ethyl ester",
+            "flag": "MAJOR — Research agent recommends bio_score 8 → 3 downgrade. CEE is NOT a salt but a covalent ester pro-drug that fails. Three independent papers confirm pre-absorption hydrolysis to CREATININE (inactive metabolite): Gufford 2013 (PMID:23957855) pH stability, Giese 2009 (PMID:19585404) NMR, Spillane 2009 (PMID:19228401) in vivo. Near-zero functional creatine reaches muscle. Current bio=8 is misleading. Needs Dr Pham urgent clinical signoff."
+          },
+          {
+            "location": "creatine_monohydrate::creatine citrate",
+            "flag": "Research agent recommends bio_score 10 → 14 upgrade. Creatine citrate dissociates to creatine ion; F class-equivalent to monohydrate per Jäger 2007 (PMID:17997838). Faster dissolution gives faster Tmax, NOT higher absolute F. Lower mass-fraction creatine per gram of salt is a dosing consideration. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "creatine_monohydrate::creatine magnesium chelate",
+            "flag": "Research agent recommends bio_score 11 → 14 upgrade. MagnaPower chelate dissociates to deliver creatine ion. Brilla 2003 (PMID:14506619) measured intracellular water and power output, NOT absorption or F. Mg co-delivery is separate mineral pathway. Class-equivalent F to monohydrate. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "creatine_monohydrate::dicreatine malate",
+            "flag": "Research agent recommends bio_score 6 → 13 upgrade. Dicreatine malate dissociates to deliver creatine ion; F theoretically class-equivalent to monohydrate per Persky 2003 framework. No dedicated human PK study. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "creatine_monohydrate::creatine monohydrate ((unspecified))",
+            "flag": "Research agent recommends bio_score 5 → 13 upgrade. If actually monohydrate, F is ~99%. The bio=5 reflects form ambiguity but underestimates likely F. Needs Dr Pham clinical signoff."
+          }
+        ],
+        "next_batch_lead": "Pre-absorption ester hydrolysis pattern: Search IQM for other ethyl ester pro-drugs (glutamine ethyl ester, arginine ethyl ester, leucine ethyl ester, taurine ethyl ester, beta-alanine ethyl ester) — likely class-wide audit target."
       }
     },
     "category_enum": [
