@@ -5955,8 +5955,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "high (2-4x sulfate)",
-        "notes": "The gold standard chelated iron (Ferrochel/TRAACS by Albion). Absorbed 2-4x better than ferrous sulfate via amino acid transport pathways, completely independent of stomach acid. Dramatically fewer GI side effects (no nausea, constipation, or metallic taste). Not blocked by food, tannins, or calcium.",
+        "absorption": "~2× ferrous sulfate; 20-45% in deficient subjects (Pineda 2001 PMID:11377130)",
+        "notes": "The gold standard chelated iron (Ferrochel/TRAACS by Albion). Absorbed 2-4x better than ferrous sulfate via amino acid transport pathways, completely independent of stomach acid. Dramatically fewer GI side effects (no nausea, constipation, or metallic taste). Not blocked by food, tannins, or calcium. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "ferrous bisglycinate",
           "ferrochel",
@@ -5981,19 +5981,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high (2-4x sulfate)"
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.45,
+          "quality": "moderate",
+          "notes": "Pineda & Ashmead 2001 (PMID:11377130, Nutrition): n=40 anemic infants, FeSO4 26.7% vs ferrous bisglycinate 90.9% apparent F (overstates adult euferremic absorption)"
         }
       },
       "iron brown rice chelate": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Iron chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "no human PK; assume ferrous-sulfate-equivalent absent peer-reviewed data",
+        "notes": "Iron chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "iron rice chelate",
           "rice chelate iron",
@@ -6004,19 +6004,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.18,
+          "quality": "low",
+          "notes": "Marketing claim \"60-70%\" has ZERO PubMed support; conservative ferrous-sulfate-class estimate"
         }
       },
       "iron protein succinylate": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "high",
-        "notes": "Iron bound to a modified protein carrier (casein succinylate). Releases iron only at intestinal pH, protecting the stomach lining. Excellent GI tolerance — comparable to bisglycinate. Widely used in Europe (brand: Ferplex/Legofer). A premium option for iron-sensitive individuals.",
+        "absorption": "enteric-protected ferric form; clinical efficacy similar to FeSO4, no isotopic PK",
+        "notes": "Iron bound to a modified protein carrier (casein succinylate). Releases iron only at intestinal pH, protecting the stomach lining. Excellent GI tolerance — comparable to bisglycinate. Widely used in Europe (brand: Ferplex/Legofer). A premium option for iron-sensitive individuals. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "ips iron",
           "irovit",
@@ -6025,11 +6025,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.15,
+          "range_low": 0.08,
+          "range_high": 0.25,
+          "quality": "low",
+          "notes": "Casein succinylate carrier releases iron at intestinal pH; no published isotopic F study"
         },
         "external_ids": {
           "unii": "VBJ9L90P4L"
@@ -6039,8 +6039,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "high",
-        "notes": "Iron derived from animal hemoglobin (brand: Proferrin). Heme iron is absorbed via the HCP-1 receptor — a completely different pathway than non-heme iron. Absorbs at 15-35% (vs 2-20% for non-heme). Not blocked by phytates, tannins, calcium, or fiber. The most efficiently absorbed iron form available.",
+        "absorption": "heme uptake ~15-35% via heme transporter; class estimate, no validated brand PK",
+        "notes": "Iron derived from animal hemoglobin (brand: Proferrin). Heme iron is absorbed via the HCP-1 receptor — a completely different pathway than non-heme iron. Absorbs at 15-35% (vs 2-20% for non-heme). Not blocked by phytates, tannins, calcium, or fiber. The most efficiently absorbed iron form available. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "heme iron",
           "proferrin",
@@ -6051,11 +6051,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.2,
+          "range_low": 0.15,
+          "range_high": 0.35,
+          "quality": "low",
+          "notes": "Class estimate from heme iron literature; specific brand PK not located"
         },
         "external_ids": {
           "unii": "31VDO12CJY"
@@ -6089,19 +6089,19 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "A gentler iron salt with moderate absorption and only 12% elemental iron. Better tolerated than sulfate or fumarate. The lower iron concentration means larger doses needed, but with fewer GI side effects per milligram of elemental iron.",
+        "absorption": "~12% elemental iron; absorption similar to ferrous sulfate per dose",
+        "notes": "A gentler iron salt with moderate absorption and only 12% elemental iron. Better tolerated than sulfate or fumarate. The lower iron concentration means larger doses needed, but with fewer GI side effects per milligram of elemental iron. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "iron gluconate",
           "gluconate iron"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.12,
+          "range_low": 0.07,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Class estimate; ferrous salts comparable F at iron-deficient state per Anderson 2017 (PMID:29070551)"
         },
         "external_ids": {
           "unii": "U1B11I423Z"
@@ -6137,8 +6137,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "Highly purified elemental iron powder (98% pure). Absorbed slowly via a surface-dissolution mechanism, which means better GI tolerance than ferrous salts. Also much safer in accidental overdose (important for households with children). The Ferronyl brand is the most common.",
+        "absorption": "slow dissolution; ~7% effective F at high doses (Gordeuk 1987 PMID:3318377)",
+        "notes": "Highly purified elemental iron powder (98% pure). Absorbed slowly via a surface-dissolution mechanism, which means better GI tolerance than ferrous salts. Also much safer in accidental overdose (important for households with children). The Ferronyl brand is the most common. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "elemental iron",
           "pure iron powder",
@@ -6147,11 +6147,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.07,
+          "range_low": 0.04,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Gordeuk 1987 (PMID:3318377, AJCN RCT): 10× dose gave only 1.5× absorption — effective F ~7%"
         }
       },
       "ferric iron": {
@@ -6266,8 +6266,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good",
-        "notes": "Iron bound to amino acids (generic chelate, not specifying which amino acid). Absorbed via amino acid transport pathways with reduced GI irritation compared to ferrous salts. The specific amino acid matters — glycine (bisglycinate) is the best-studied.",
+        "absorption": "generic chelate; ~2× FeSO4 when ferrochel-grade (Layrisse 2000 PMID:10958812)",
+        "notes": "Iron bound to amino acids (generic chelate, not specifying which amino acid). Absorbed via amino acid transport pathways with reduced GI irritation compared to ferrous salts. The specific amino acid matters — glycine (bisglycinate) is the best-studied. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "iron chelate",
           "iron amino acid complex",
@@ -6279,19 +6279,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.35,
+          "quality": "low",
+          "notes": "Layrisse 2000 (PMID:10958812, J Nutr): ferrochel ~2× FeSO4 in fortified breakfasts"
         }
       },
       "polysaccharide-iron complex": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "Iron bound to a polysaccharide (sugar) carrier (brand: Niferex/Neo-Plex). Designed for slow, gentle iron release with minimal GI side effects. Well-tolerated but absorption may be lower than ferrous bisglycinate. A good option for people who cannot tolerate standard iron salts.",
+        "absorption": "ferric polysaccharide; absorption similar to FeSO4 in clinical trials, no isotopic data",
+        "notes": "Iron bound to a polysaccharide (sugar) carrier (brand: Niferex/Neo-Plex). Designed for slow, gentle iron release with minimal GI side effects. Well-tolerated but absorption may be lower than ferrous bisglycinate. A good option for people who cannot tolerate standard iron salts. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "polysaccharide iron",
           "iron polysaccharide",
@@ -6303,19 +6303,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.18,
+          "quality": "low",
+          "notes": "Niferex; clinical efficacy data exists but no head-to-head isotopic F"
         }
       },
       "microencapsulated iron": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "Ferric pyrophosphate particles coated in a lipid bilayer (brand: SunActive Fe by Taiyo). The micronized particles are absorbed via endocytosis rather than standard iron transport. About 4x the absorption of conventional ferric pyrophosphate. Virtually no metallic taste or GI irritation. Increasingly used in fortified foods.",
+        "absorption": "lipid-encapsulated ferric pyrophosphate; FeSO4-equivalent in fortification studies",
+        "notes": "Ferric pyrophosphate particles coated in a lipid bilayer (brand: SunActive Fe by Taiyo). The micronized particles are absorbed via endocytosis rather than standard iron transport. About 4x the absorption of conventional ferric pyrophosphate. Virtually no metallic taste or GI irritation. Increasingly used in fortified foods. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "iron microencapsulated",
           "iron, microencapsulated",
@@ -6328,19 +6328,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "good",
-          "notes": "Micronized particles with lipid bilayer coating; absorbed via endocytosis. 40% iron transport vs 10% for conventional ferric pyrophosphate.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.12,
+          "quality": "low",
+          "notes": "SunActive Fe; fortification efficacy comparable to FeSO4",
+          "range_low": 0.07,
+          "range_high": 0.2
         }
       },
       "ferrous ascorbate": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "high",
-        "notes": "Iron combined with vitamin C (ascorbic acid), which significantly enhances non-heme iron absorption by reducing Fe3+ to Fe2+ and forming a soluble chelate. Studies show 2-3x improved absorption vs ferrous sulfate when taken with vitamin C. A well-tolerated form with clinical evidence for effective iron repletion.",
+        "absorption": "ascorbate co-presence yields ~2-3× ferrous baseline absorption",
+        "notes": "Iron combined with vitamin C (ascorbic acid), which significantly enhances non-heme iron absorption by reducing Fe3+ to Fe2+ and forming a soluble chelate. Studies show 2-3x improved absorption vs ferrous sulfate when taken with vitamin C. A well-tolerated form with clinical evidence for effective iron repletion. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "iron ascorbate",
           "iron with vitamin c",
@@ -6350,11 +6350,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Ascorbic acid chelation enhances Fe2+ absorption 2-3x vs sulfate alone"
+          "value": 0.2,
+          "range_low": 0.12,
+          "range_high": 0.35,
+          "quality": "low",
+          "notes": "Vitamin C reduces Fe3+→Fe2+ and forms soluble chelate; well-documented mechanism"
         },
         "external_ids": {
           "unii": "DI3477D0PI"
@@ -6364,8 +6364,8 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "high",
-        "notes": "Iron encapsulated in phospholipid liposomes (e.g., sucrosomial iron / Sideral). Bypasses the standard DMT-1 iron transport pathway, absorbing via endocytosis in the M-cells of the intestinal epithelium. Clinical trials show equivalent efficacy to IV iron for correcting deficiency, with dramatically better GI tolerance than any oral ferrous salt.",
+        "absorption": "M-cell vesicle uptake (Fabiano 2018 PMID:30213039 ex vivo); human PK preliminary",
+        "notes": "Iron encapsulated in phospholipid liposomes (e.g., sucrosomial iron / Sideral). Bypasses the standard DMT-1 iron transport pathway, absorbing via endocytosis in the M-cells of the intestinal epithelium. Clinical trials show equivalent efficacy to IV iron for correcting deficiency, with dramatically better GI tolerance than any oral ferrous salt. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "sucrosomial iron",
           "sideral iron",
@@ -6378,11 +6378,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "Absorbed via M-cell endocytosis, bypassing DMT-1. Clinical trials show non-inferiority to IV iron."
+          "value": 0.15,
+          "range_low": 0.08,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Fabiano 2018 (PMID:30213039, IJMS): sucrosomial Sideral ex vivo transcytosis (rat); human PK preliminary"
         }
       },
       "iron picolinate": {
@@ -6464,8 +6464,8 @@
         "bio_score": 15,
         "natural": false,
         "score": 15,
-        "absorption": "high",
-        "notes": "A patented zinc-carnosine complex (PepZin GI/Polaprezinc). Unique among zinc forms — it adheres to the gastric lining and slowly releases zinc directly where it's needed. Clinically proven to support stomach lining integrity, reduce H. pylori damage, and heal GI mucosal injuries. The top-tier zinc form for gut health.",
+        "absorption": "mucosal-acting Zn-carnosine; systemic F not well characterized, GI-targeted",
+        "notes": "A patented zinc-carnosine complex (PepZin GI/Polaprezinc). Unique among zinc forms — it adheres to the gastric lining and slowly releases zinc directly where it's needed. Clinically proven to support stomach lining integrity, reduce H. pylori damage, and heal GI mucosal injuries. The top-tier zinc form for gut health. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "zinc l-carnosine",
           "pepzin gi",
@@ -6481,11 +6481,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "PepZin GI/Polaprezinc; primary mechanism is gastric mucosal adherence, not systemic absorption"
         },
         "external_ids": {
           "unii": "0WA1B15A1Z",
@@ -6521,8 +6521,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "high",
-        "notes": "Zinc chelated with glycine (Albion TRAACS). Absorbed via amino acid transport pathways, bypassing competitive mineral channels. Very gentle on the stomach. One of the best all-around zinc forms — combines excellent absorption with superior GI tolerance.",
+        "absorption": "Albion TRAACS; class estimate ~1.4× sulfate, isotopic studies limited",
+        "notes": "Zinc chelated with glycine (Albion TRAACS). Absorbed via amino acid transport pathways, bypassing competitive mineral channels. Very gentle on the stomach. One of the best all-around zinc forms — combines excellent absorption with superior GI tolerance. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "zinc glycinate",
           "zinc bis-glycinate chelate",
@@ -6542,30 +6542,30 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Class chelate estimate; limited dedicated TRAACS-vs-sulfate FZA studies"
         }
       },
       "zinc acetate": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "high",
-        "notes": "A highly soluble zinc salt that releases ionic zinc rapidly. The preferred form in clinical trials for reducing cold duration (Cochrane meta-analysis). Particularly effective in lozenge form where direct contact with throat tissue matters. Well-absorbed orally.",
+        "absorption": "inorganic salt; lozenge effect is local-pharyngeal (Hemilä 2015), not systemic F",
+        "notes": "A highly soluble zinc salt that releases ionic zinc rapidly. The preferred form in clinical trials for reducing cold duration (Cochrane meta-analysis). Particularly effective in lozenge form where direct contact with throat tissue matters. Well-absorbed orally. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "acetate zinc",
           "zinc acetate lozenge"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.4,
+          "range_low": 0.25,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Hemilä 2015 (PMID:25888289, BMC Fam Pract): lozenge cold-symptom effect is LOCAL pharyngeal action — NOT systemic F evidence"
         },
         "external_ids": {
           "unii": "FM5526K07A"
@@ -6597,8 +6597,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "A common, affordable zinc form with moderate absorption. Widely used in cold lozenges (along with acetate). Well-tolerated but not as bioavailable as picolinate or bisglycinate. A reasonable choice for general supplementation.",
+        "absorption": "FZA significantly higher than ZnSO4 in milk matrix (Piacenza 2023)",
+        "notes": "A common, affordable zinc form with moderate absorption. Widely used in cold lozenges (along with acetate). Well-tolerated but not as bioavailable as picolinate or bisglycinate. A reasonable choice for general supplementation. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "gluconate zinc",
           "zinc gluconate lozenge",
@@ -6606,11 +6606,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.4,
+          "range_low": 0.25,
+          "range_high": 0.55,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Piacenza 2023 (PMID:37111104, Nutrients): n=8 stable-isotope study, gluconate FZA > sulfate"
         },
         "external_ids": {
           "unii": "U6WSN5SQ1Z"
@@ -6620,8 +6620,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "moderate-high",
-        "notes": "Zinc chelated with the amino acid L-methionine (patented as OptiZinc). Good absorption and cellular retention. Methionine is a sulfur-containing amino acid that may provide additional antioxidant benefits. A well-studied branded form.",
+        "absorption": "methionine-bound Zn; class chelate estimate, no comparator-controlled human FZA",
+        "notes": "Zinc chelated with the amino acid L-methionine (patented as OptiZinc). Good absorption and cellular retention. Methionine is a sulfur-containing amino acid that may provide additional antioxidant benefits. A well-studied branded form. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "optizinc",
           "zinc methionine",
@@ -6633,29 +6633,29 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "OptiZinc; class chelate estimate, no published comparator FZA"
         }
       },
       "zinc orotate": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "moderate-high",
-        "notes": "Zinc chelated with orotic acid. Some European research suggests good cellular uptake, but the evidence base is limited compared to picolinate or bisglycinate. A specialty form used primarily in European and integrative medicine.",
+        "absorption": "orotic acid complex; popular but no controlled human PK",
+        "notes": "Zinc chelated with orotic acid. Some European research suggests good cellular uptake, but the evidence base is limited compared to picolinate or bisglycinate. A specialty form used primarily in European and integrative medicine. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "orotate zinc"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.45,
+          "range_low": 0.3,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "No published controlled human FZA for zinc orotate"
         },
         "external_ids": {
           "unii": "Z722242H10"
@@ -6665,8 +6665,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "moderate",
-        "notes": "The cheapest and most basic zinc salt. Commonly causes nausea, metallic taste, and stomach upset — especially on an empty stomach. Moderate absorption, but the GI side effects make it difficult to tolerate for many people. The form you'll find in most budget supplements.",
+        "absorption": "reference inorganic; FZA ~20-40% baseline (Piacenza 2023 PMID:37111104)",
+        "notes": "The cheapest and most basic zinc salt. Commonly causes nausea, metallic taste, and stomach upset — especially on an empty stomach. Moderate absorption, but the GI side effects make it difficult to tolerate for many people. The form you'll find in most budget supplements. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "sulfate zinc",
           "zinc sulphate",
@@ -6676,11 +6676,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.45,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Piacenza 2023 (PMID:37111104): reference-arm FZA ~20-40% in milk matrix"
         },
         "external_ids": {
           "unii": "89DS0H96TB"
@@ -6734,8 +6734,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good",
-        "notes": "Zinc chelated with the amino acid L-aspartate. A double-blind crossover trial (PMID 37111104) showed higher fractional zinc absorption than gluconate or sulfate. Well-tolerated amino acid chelate with growing clinical support.",
+        "absorption": "FZA significantly higher than ZnSO4 and Zn-gluconate (Piacenza 2023)",
+        "notes": "Zinc chelated with the amino acid L-aspartate. A double-blind crossover trial (PMID 37111104) showed higher fractional zinc absorption than gluconate or sulfate. Well-tolerated amino acid chelate with growing clinical support. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "zinc l-aspartate",
           "zinc aspartate chelate",
@@ -6743,11 +6743,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "good",
-          "notes": "Higher FZA than zinc gluconate and zinc sulfate in double-blind crossover trial (PMID 37111104). Amino acid chelation mechanism.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "quality": "moderate",
+          "notes": "Piacenza 2023 (PMID:37111104, Nutrients): n=8 stable-isotope; aspartate FZA > gluconate > sulfate",
+          "range_low": 0.35,
+          "range_high": 0.65
         },
         "external_ids": {
           "unii": "4OC7QTI23H"
@@ -6757,8 +6757,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Zinc chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific picolinate and bisglycinate chelates. Often marketed as a hypoallergenic zinc alternative suitable for those avoiding soy or whey-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "no human PK; treat as ZnSO4-equivalent absent peer-reviewed data",
+        "notes": "Zinc chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific picolinate and bisglycinate chelates. Often marketed as a hypoallergenic zinc alternative suitable for those avoiding soy or whey-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "zinc rice chelate",
           "rice chelate zinc",
@@ -6768,19 +6768,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.45,
+          "quality": "moderate",
+          "notes": "\"60-70%\" claim has ZERO PubMed support — conservative ZnSO4-class estimate"
         }
       },
       "zinc amino acid chelate": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good",
-        "notes": "Zinc chelated to unspecified amino acids. The catch-all when a label says 'Zinc AAC' or 'chelated zinc' without specifying glycinate, picolinate, or another named form. Absorbs better than zinc oxide (bio=5) or zinc sulfate (bio=8); less documented than zinc bisglycinate (bio=14). Amino acid chelation enhances intestinal absorption via amino acid transport pathways.",
+        "absorption": "generic chelate; bisglycinate-class estimate",
+        "notes": "Zinc chelated to unspecified amino acids. The catch-all when a label says 'Zinc AAC' or 'chelated zinc' without specifying glycinate, picolinate, or another named form. Absorbs better than zinc oxide (bio=5) or zinc sulfate (bio=8); less documented than zinc bisglycinate (bio=14). Amino acid chelation enhances intestinal absorption via amino acid transport pathways. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "zinc aac",
           "aac zinc",
@@ -6794,11 +6794,11 @@
         ],
         "dosage_importance": 0.7,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.5,
+          "range_low": 0.35,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Generic AAC; class estimate from bisglycinate analogy"
         }
       }
     },
@@ -7033,8 +7033,8 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent",
-        "notes": "A potent organic selenium compound that's a direct precursor to methylselenol — the selenium metabolite most studied for anti-cancer activity. Unlike selenomethionine (which gets stored in proteins), this form is immediately metabolized to active selenium species. Found naturally in selenium-enriched broccoli and garlic.",
+        "absorption": "organic Se; absorption comparable to selenomethionine, retained as MeSeCys pool",
+        "notes": "A potent organic selenium compound that's a direct precursor to methylselenol — the selenium metabolite most studied for anti-cancer activity. Unlike selenomethionine (which gets stored in proteins), this form is immediately metabolized to active selenium species. Found naturally in selenium-enriched broccoli and garlic. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "selenium methyl selenocysteine",
           "se-methyl-l-selenocysteine",
@@ -7050,11 +7050,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.88,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Class estimate from organic Se literature; comparable to selenomethionine"
         }
       },
       "selenized yeast": {
@@ -7091,8 +7091,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "The 'twenty-first amino acid' — the form of selenium actually built into your body's selenoproteins (glutathione peroxidase, thioredoxin reductase, etc.). Extremely rare in supplement form. When available, it's the most biologically direct selenium species, requiring no conversion.",
+        "absorption": "organic Se; high F, channels into selenoprotein synthesis",
+        "notes": "The 'twenty-first amino acid' — the form of selenium actually built into your body's selenoproteins (glutathione peroxidase, thioredoxin reductase, etc.). Extremely rare in supplement form. When available, it's the most biologically direct selenium species, requiring no conversion. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "sec",
           "21st amino acid",
@@ -7104,11 +7104,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.85,
+          "range_low": 0.75,
+          "range_high": 0.92,
+          "quality": "very_good",
+          "notes": "Direct selenoprotein precursor; class estimate from organic Se"
         },
         "external_ids": {
           "unii": "0CH9049VIS"
@@ -7198,8 +7198,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good",
-        "notes": "Selenium accumulated naturally in broccoli sprouts grown in selenium-rich conditions. Contains primarily Se-methylselenocysteine — the form most studied for anti-cancer properties. Provides selenium within a whole-food matrix of sulforaphane and other cruciferous phytonutrients.",
+        "absorption": "plant-matrix Se predominantly as MeSeCys; class estimate from organic Se",
+        "notes": "Selenium accumulated naturally in broccoli sprouts grown in selenium-rich conditions. Contains primarily Se-methylselenocysteine — the form most studied for anti-cancer properties. Provides selenium within a whole-food matrix of sulforaphane and other cruciferous phytonutrients. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "selenium broccoli",
           "broccoli selenium extract",
@@ -7210,19 +7210,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.8,
+          "range_low": 0.65,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Plant-incorporated Se primarily MeSeCys"
         }
       },
       "selenium-enriched garlic extract": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good",
-        "notes": "Selenium accumulated naturally in garlic grown in selenium-rich soil. Contains multiple organic selenium species including Se-methylselenocysteine and gamma-glutamyl-Se-methylselenocysteine. Combines selenium's antioxidant benefits with garlic's cardiovascular and antimicrobial properties.",
+        "absorption": "garlic-matrix MeSeCys/γ-glutamyl-MeSeCys; class estimate",
+        "notes": "Selenium accumulated naturally in garlic grown in selenium-rich soil. Contains multiple organic selenium species including Se-methylselenocysteine and gamma-glutamyl-Se-methylselenocysteine. Combines selenium's antioxidant benefits with garlic's cardiovascular and antimicrobial properties. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "selenium garlic",
           "garlic selenium extract",
@@ -7233,19 +7233,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.8,
+          "range_low": 0.65,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Garlic Se primarily MeSeCys + γ-glutamyl-MeSeCys"
         }
       },
       "selenobetaine": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "A synthetic selenium compound used primarily in experimental cancer research. Acts as a precursor to methylselenol. Limited availability and clinical data for general supplementation — mainly of interest in research settings.",
+        "absorption": "synthetic organic Se; limited human data",
+        "notes": "A synthetic selenium compound used primarily in experimental cancer research. Acts as a precursor to methylselenol. Limited availability and clinical data for general supplementation — mainly of interest in research settings. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "betaine selenium",
           "synthetic selenium precursor",
@@ -7255,11 +7255,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.7,
+          "range_low": 0.55,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Synthetic; primarily research-grade compound"
         },
         "external_ids": {
           "unii": "F489E6K70B"
@@ -7269,8 +7269,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "A synthetic organoselenium compound (MSA) studied extensively in cancer research. Generates methylselenol directly without enzymatic conversion. Potent in laboratory studies but limited human supplementation data. A research-grade selenium form.",
+        "absorption": "research-grade Se compound; minimal human PK",
+        "notes": "A synthetic organoselenium compound (MSA) studied extensively in cancer research. Generates methylselenol directly without enzymatic conversion. Potent in laboratory studies but limited human supplementation data. A research-grade selenium form. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "MSA",
           "methyl selenium acid",
@@ -7280,19 +7280,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.7,
+          "range_low": 0.55,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "MSA; primarily cancer research, limited supplement-grade PK"
         }
       },
       "selenium glycinate": {
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "Excellent, chelated form for enhanced bioavailability",
-        "notes": "Selenium chelated with the amino acid glycine (Albion patented form). Absorbed via amino acid transport pathways like other Albion chelates, providing excellent bioavailability with minimal GI irritation. A premium chelated selenium option.",
+        "absorption": "Albion-patented Se chelate; no published human comparator PK",
+        "notes": "Selenium chelated with the amino acid glycine (Albion patented form). Absorbed via amino acid transport pathways like other Albion chelates, providing excellent bioavailability with minimal GI irritation. A premium chelated selenium option. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "albion selenium glycinate",
           "selenium bisglycinate",
@@ -7304,19 +7304,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent, chelated form for enhanced bioavailability"
+          "value": 0.8,
+          "range_low": 0.65,
+          "range_high": 0.92,
+          "quality": "very_good",
+          "notes": "Albion patented; no published human comparator FZA — class estimate from organic Se"
         }
       },
       "selenium brown rice chelate": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Selenium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "no human PK; treat as inorganic-equivalent absent peer-reviewed data",
+        "notes": "Selenium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "selenium rice chelate",
           "rice chelate selenium",
@@ -7327,11 +7327,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "\"60-70%\" claim has ZERO PubMed support — conservative inorganic-class estimate"
         }
       },
       "selenium analogs (non-functional)": {
@@ -7434,18 +7434,18 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "Selenium complexed with picolinic acid. Picolinate chelation likely improves transport versus unspecified inorganic selenium forms, but direct human PK data are limited compared with selenomethionine and selenized yeast. Scored conservatively above unspecified selenium and below premium organic forms.",
+        "absorption": "picolinic acid complex of Se; no validated human PK",
+        "notes": "Selenium complexed with picolinic acid. Picolinate chelation likely improves transport versus unspecified inorganic selenium forms, but direct human PK data are limited compared with selenomethionine and selenized yeast. Scored conservatively above unspecified selenium and below premium organic forms. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "picolinate selenium"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "No published Se-picolinate human PK"
         }
       }
     },
@@ -10376,8 +10376,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent",
-        "notes": "The premium manganese form — two glycine molecules wrap around the mineral, protecting it through your stomach and delivering it efficiently to your intestinal wall. The TRAACS/Albion branded version is found in most high-end formulas. Excellent absorption with minimal GI upset.",
+        "absorption": "Albion chelate; class estimate, no published human Mn-isotopic PK",
+        "notes": "The premium manganese form — two glycine molecules wrap around the mineral, protecting it through your stomach and delivering it efficiently to your intestinal wall. The TRAACS/Albion branded version is found in most high-end formulas. Excellent absorption with minimal GI upset. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "manganese glycinate",
           "glycine-bound manganese",
@@ -10393,19 +10393,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.08,
+          "range_low": 0.03,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "TRAACS Albion; no published human Mn-isotopic comparator PK located"
         }
       },
       "manganese amino acid chelate": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "very good",
-        "notes": "Manganese bound to amino acids, but the label doesn't say which ones. This catch-all chelate form absorbs well — better than inorganic salts, though not as well-documented as bisglycinate specifically. Includes protein-hydrolysate (proteinate) chelates, which use the same absorption mechanism.",
+        "absorption": "generic chelate; assumed superior to inorganic, no isotopic confirmation",
+        "notes": "Manganese bound to amino acids, but the label doesn't say which ones. This catch-all chelate form absorbs well — better than inorganic salts, though not as well-documented as bisglycinate specifically. Includes protein-hydrolysate (proteinate) chelates, which use the same absorption mechanism. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "amino chelated manganese",
           "manganese chelate",
@@ -10420,19 +10420,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very good"
+          "value": 0.07,
+          "range_low": 0.03,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Class estimate; no Mn-specific human PK"
         }
       },
       "manganese citrate": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "An organic salt where citric acid acts as the carrier. Good solubility means decent absorption, and it's gentle on the stomach. A common mid-range choice found in many multivitamins.",
+        "absorption": "organic acid salt; ~3-5% absorbed under homeostatic regulation",
+        "notes": "An organic salt where citric acid acts as the carrier. Good solubility means decent absorption, and it's gentle on the stomach. A common mid-range choice found in many multivitamins. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "manganese citrate complex",
           "citric acid manganese",
@@ -10441,30 +10441,30 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Class estimate; Mn absorption tightly homeostatic"
         }
       },
       "manganese gluconate": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "An organic salt bound to gluconic acid. Better tolerated than sulfate with moderate absorption. A reliable mid-tier choice commonly found in daily multivitamins.",
+        "absorption": "organic salt; absorption similar to citrate at supplement doses",
+        "notes": "An organic salt bound to gluconic acid. Better tolerated than sulfate with moderate absorption. A reliable mid-tier choice commonly found in daily multivitamins. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "gluconic acid manganese",
           "Mn gluconate"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Class estimate; homeostatic regulation dominates"
         },
         "external_ids": {
           "unii": "9YY2F980SV"
@@ -10474,27 +10474,27 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "Picolinic acid chelate designed to improve mineral transport across gut membranes — same carrier principle as the popular chromium picolinate. Less studied than bisglycinate for manganese specifically, but generally well absorbed.",
+        "absorption": "picolinic acid complex; no Mn-specific human PK",
+        "notes": "Picolinic acid chelate designed to improve mineral transport across gut membranes — same carrier principle as the popular chromium picolinate. Less studied than bisglycinate for manganese specifically, but generally well absorbed. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "Mn picolinate",
           "picolinic acid manganese"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "No published Mn picolinate human PK"
         }
       },
       "manganese ascorbate": {
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "good",
-        "notes": "Manganese bound to ascorbic acid (vitamin C). The vitamin C carrier may enhance absorption and provides additional antioxidant support. A solid mid-to-upper tier form.",
+        "absorption": "ascorbate may modestly aid uptake; no isolated Mn PK study",
+        "notes": "Manganese bound to ascorbic acid (vitamin C). The vitamin C carrier may enhance absorption and provides additional antioxidant support. A solid mid-to-upper tier form. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "ascorbic manganese",
           "vitamin C manganese",
@@ -10503,11 +10503,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.06,
+          "range_low": 0.03,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Class estimate; ascorbate effect on Mn less established than on Fe"
         },
         "external_ids": {
           "unii": "332B7O278V"
@@ -10517,38 +10517,38 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "good",
-        "notes": "Manganese chelated with aspartic acid, an amino acid involved in the urea cycle and energy production. Good bioavailability, above inorganic salts. Occasionally found in standalone mineral and joint-support formulas.",
+        "absorption": "amino acid salt; class estimate, homeostatically regulated",
+        "notes": "Manganese chelated with aspartic acid, an amino acid involved in the urea cycle and energy production. Good bioavailability, above inorganic salts. Occasionally found in standalone mineral and joint-support formulas. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "Mn aspartate",
           "aspartic acid manganese"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.06,
+          "range_low": 0.03,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Class estimate; no published Mn aspartate PK"
         }
       },
       "manganese malate": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "good",
-        "notes": "Malic acid chelate — malic acid is a Krebs cycle intermediate involved in energy production. Good absorption and sometimes paired with magnesium malate in energy-focused formulas. Growing in popularity.",
+        "absorption": "organic acid salt; no human Mn PK",
+        "notes": "Malic acid chelate — malic acid is a Krebs cycle intermediate involved in energy production. Good absorption and sometimes paired with magnesium malate in energy-focused formulas. Growing in popularity. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "Mn malate",
           "malic acid manganese"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Class estimate; no published Mn malate PK"
         }
       },
       "manganese sulfate": {
@@ -10579,8 +10579,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "An inorganic chloride salt — slightly better absorbed than sulfate, but still below organic chelates. Mostly seen in clinical/IV settings. Not the best choice for oral supplementation.",
+        "absorption": "inorganic salt baseline; ~2-5% under homeostatic regulation",
+        "notes": "An inorganic chloride salt — slightly better absorbed than sulfate, but still below organic chelates. Mostly seen in clinical/IV settings. Not the best choice for oral supplementation. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "MnCl₂",
           "manganese dichloride",
@@ -10589,11 +10589,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.08,
+          "quality": "low",
+          "notes": "Inorganic baseline; lowest of class"
         },
         "external_ids": {
           "unii": "QQE170PANO"
@@ -10628,8 +10628,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Whole-food sourced manganese from nuts, grains, or leafy greens. Comes with natural cofactors that may help absorption, but the actual manganese content per serving varies and is harder to standardize. A good choice if you prefer food-based supplements.",
+        "absorption": "whole-food matrix; absorption modulated by phytate, iron status",
+        "notes": "Whole-food sourced manganese from nuts, grains, or leafy greens. Comes with natural cofactors that may help absorption, but the actual manganese content per serving varies and is harder to standardize. A good choice if you prefer food-based supplements. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "natural manganese",
           "whole food manganese",
@@ -10639,19 +10639,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Whole-food Mn; absorption variable by matrix"
         }
       },
       "manganese yeast-bound": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Manganese grown into Saccharomyces cerevisiae (baker's yeast) cells during fermentation. The yeast creates a natural food-matrix around the mineral, mimicking how you'd get it from food. No human data supports superior absorption over standard organic salts, but the whole-food matrix earns a natural bonus. Common in brands like MegaFood and New Chapter.",
+        "absorption": "yeast-incorporated organic Mn; class estimate from Se-yeast analogy",
+        "notes": "Manganese grown into Saccharomyces cerevisiae (baker's yeast) cells during fermentation. The yeast creates a natural food-matrix around the mineral, mimicking how you'd get it from food. No human data supports superior absorption over standard organic salts, but the whole-food matrix earns a natural bonus. Common in brands like MegaFood and New Chapter. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "yeast manganese",
           "fermented manganese",
@@ -10661,11 +10661,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.06,
+          "range_low": 0.03,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Yeast-bound; class estimate, no published Mn-yeast PK"
         }
       },
       "manganese (unspecified)": {
@@ -10697,8 +10697,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "moderate-high (estimated; organic rice amino acid chelate class)",
-        "notes": "Manganese chelated to amino acids derived from brown rice protein hydrolysate. Provides organic chelate bonding for improved mucosal uptake vs. inorganic manganese sulfate or oxide. Absorption estimated moderate-high; limited direct comparative clinical data vs. bisglycinate or amino acid chelate. Commonly used in hypoallergenic multivitamin formulations as an alternative to soy or whey protein-derived chelates. The rice amino acid matrix offers a gentle gastric profile analogous to zinc brown rice chelate.",
+        "absorption": "no human PK; marketing-only claim flagged 2026-04 audit",
+        "notes": "Manganese chelated to amino acids derived from brown rice protein hydrolysate. Provides organic chelate bonding for improved mucosal uptake vs. inorganic manganese sulfate or oxide. Absorption estimated moderate-high; limited direct comparative clinical data vs. bisglycinate or amino acid chelate. Commonly used in hypoallergenic multivitamin formulations as an alternative to soy or whey protein-derived chelates. The rice amino acid matrix offers a gentle gastric profile analogous to zinc brown rice chelate. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
         "aliases": [
           "manganese rice chelate",
           "rice chelate manganese",
@@ -10708,11 +10708,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high estimated; organic rice amino acid chelate class"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "\"60-70%\" claim has ZERO PubMed support — marketing-only"
         }
       }
     },
@@ -38294,6 +38294,89 @@
           "B12 oral F is class-LOW (~1-2% passive at supplemental doses; ~10-30% sublingual). Active-form metabolic advantage is POST-absorption — bio_score should reflect F, not utilization.",
           "Vitamin D class-MID-HIGH (~50-80% with fat meal); D2 ~40% lower than D3 per van den Heuvel 2024.",
           "Vitamin K spectrum: MK-7 (0.70-0.90) >> MK-4 (0.05) at nutritional doses per Sato 2012; phylloquinone (0.15) << MK-7."
+        ]
+      },
+      "5.0.13": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 11 — mineral chelate PK + brown rice chelate verdict",
+        "research_subagent_report": "PubMed research on 42 mineral chelate forms across 4 parents (iron 11, manganese 12, zinc 9, selenium 9 - many already populated). Research agent USED WebFetch on PubMed eutils. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits — the recurring \"60-70%\" claim is marketing copy without peer-reviewed support. All 4 brown rice chelate forms flagged for bio_score downgrade 11→8. Verified 9 PMIDs; caught 1 misattribution (Liu 2011 PMID:21411831 NOT cited for heme iron — it is rat exercise/hepcidin study, not human PK).",
+        "verified_pmids": [
+          "PMID:37111104 Piacenza 2023 Nutrients — zinc aspartate/gluconate/sulfate FZA",
+          "PMID:11377130 Pineda & Ashmead 2001 Nutrition — iron bisglycinate (anemic infants)",
+          "PMID:10958812 Layrisse 2000 J Nutr — ferrochel ~2× FeSO4 in fortification",
+          "PMID:25888289 Hemilä 2015 BMC Fam Pract — zinc lozenge LOCAL effect (not systemic F)",
+          "PMID:3318377  Gordeuk 1987 AJCN — carbonyl iron 7% effective F",
+          "PMID:3630857  Barrie 1987 Agents Actions — zinc picolinate steady-state surrogates",
+          "PMID:30213039 Fabiano 2018 IJMS — sucrosomial iron ex vivo M-cell",
+          "PMID:29070551 Anderson & Frazer 2017 AJCN — iron homeostasis review",
+          "PMID:22955356 Mogna 2012 J Clin Gastroenterol — Caco-2 Se/Zn (in vitro)"
+        ],
+        "misattribution_caught": {
+          "PMID:21411831": "Liu 2011 rat exercise/hepcidin — NOT human heme iron PK; flagged for next-batch follow-up"
+        },
+        "class_finding_brown_rice_chelate": "PubMed esearch for \"brown rice chelate absorption bioavailability\" returned ZERO results across iron/zinc/manganese/selenium. The \"60-70%\" figure originates from supplier datasheets (notably Lipoceutical-class vendors) and lacks any peer-reviewed PK validation. All 4 brown rice chelate forms flagged for bio_score downgrade 11→8 pending Dr Pham clinical signoff.",
+        "forms_updated": [
+          "iron::iron bisglycinate (value None → 0.3)",
+          "iron::iron brown rice chelate (value None → 0.1)",
+          "iron::iron protein succinylate (value None → 0.15)",
+          "iron::heme iron polypeptide (value None → 0.2)",
+          "iron::ferrous gluconate (value None → 0.12)",
+          "iron::carbonyl iron (value None → 0.07)",
+          "iron::iron amino acid chelate (value None → 0.2)",
+          "iron::polysaccharide-iron complex (value None → 0.1)",
+          "iron::microencapsulated iron (value None → 0.12)",
+          "iron::ferrous ascorbate (value None → 0.2)",
+          "iron::liposomal iron (value None → 0.15)",
+          "manganese::manganese bisglycinate (value None → 0.08)",
+          "manganese::manganese amino acid chelate (value None → 0.07)",
+          "manganese::manganese citrate (value None → 0.05)",
+          "manganese::manganese gluconate (value None → 0.05)",
+          "manganese::manganese picolinate (value None → 0.05)",
+          "manganese::manganese ascorbate (value None → 0.06)",
+          "manganese::manganese aspartate (value None → 0.06)",
+          "manganese::manganese malate (value None → 0.05)",
+          "manganese::manganese chloride (value None → 0.04)",
+          "manganese::food-based manganese (value None → 0.05)",
+          "manganese::manganese yeast-bound (value None → 0.06)",
+          "manganese::manganese brown rice chelate (value None → 0.05)",
+          "zinc::zinc carnosine (value None → 0.55)",
+          "zinc::zinc bisglycinate (value None → 0.55)",
+          "zinc::zinc acetate (value None → 0.4)",
+          "zinc::zinc gluconate (value None → 0.4)",
+          "zinc::zinc monomethionine (value None → 0.55)",
+          "zinc::zinc orotate (value None → 0.45)",
+          "zinc::zinc sulfate (value None → 0.3)",
+          "zinc::zinc aspartate (value None → 0.5)",
+          "zinc::zinc brown rice chelate (value None → 0.3)",
+          "zinc::zinc amino acid chelate (value None → 0.5)",
+          "selenium::selenium-methyl L-selenocysteine (value None → 0.88)",
+          "selenium::selenocysteine (value None → 0.85)",
+          "selenium::selenium-enriched broccoli extract (value None → 0.8)",
+          "selenium::selenium-enriched garlic extract (value None → 0.8)",
+          "selenium::selenobetaine (value None → 0.7)",
+          "selenium::methylseleninic acid (value None → 0.7)",
+          "selenium::selenium glycinate (value None → 0.8)",
+          "selenium::selenium brown rice chelate (value None → 0.5)",
+          "selenium::selenium picolinate (value None → 0.55)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "iron::iron brown rice chelate",
+            "flag": "Research agent recommends bio_score 11 → 8 downgrade. Brown rice chelate is MARKETING — PubMed esearch returned 0 results for \"brown rice chelate absorption\". The \"60-70% absorption\" claim originates from supplier datasheets without peer-reviewed PK validation. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "manganese::manganese brown rice chelate",
+            "flag": "Research agent recommends bio_score 11 → 8 downgrade. Same brown-rice-chelate marketing pattern across iron/Mn/Zn/Se (0 PubMed hits). Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "zinc::zinc brown rice chelate",
+            "flag": "Research agent recommends bio_score 11 → 8 downgrade. Same brown-rice-chelate marketing pattern (0 PubMed hits). Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "selenium::selenium brown rice chelate",
+            "flag": "Research agent recommends bio_score 11 → 8 downgrade. Same brown-rice-chelate marketing pattern (0 PubMed hits). Needs Dr Pham clinical signoff."
+          }
         ]
       }
     },
