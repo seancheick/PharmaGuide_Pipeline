@@ -28127,7 +28127,7 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable (0.3-43% depending on subclass; PMID 15640486)",
+        "absorption": "highly variable by subclass (anthocyanins <1%, flavanones up to 43%; PMID:15640486)",
         "notes": "Generic polyphenol term covering flavones, flavonols, flavanones, isoflavones, anthocyanins, flavan-3-ols. Bioavailability ranges from <1% (anthocyanins) to ~43% (isoflavones/gallic acid) (PMID 15640486). No clinical evidence applies to \"flavonoids\" as a class — efficacy is entirely subclass-specific. See quercetin, rutin, hesperidin, EGCG, citrus_bioflavonoids for specific data.",
         "aliases": [
           "flavonoids",
@@ -37974,6 +37974,27 @@
           "rationale": "Research subagent could not locate a Stoll 2021 crossover paper matching the described finding. The actual paper is Böckmann KA et al. \"Differential metabolism of choline supplements in adult volunteers.\" Eur J Nutr 61(1):219-230 (2022, epub Jul 2021). PMID:34287673."
         },
         "note": "Weight-fraction references retained in notes (dosing context) but removed from absorption field (which describes PK)."
+      },
+      "5.0.7": {
+        "date": "2026-04-24",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 5 — glucosinolate/sulforaphane/flavonoid verification",
+        "finding": "Inspection of 6 forms across 3 parents (flavonoids, glucosinolates, sulforaphane) confirmed all are ALREADY well-audited from prior quarterly cycles with conservative struct.values cited to PMC:3076202 (Egner 2011) and PMID:15640486 (Manach 2005). No struct.value or bio_score changes needed. The drift scanner flagged these forms because their honest \"X-Y% subclass range\" absorption strings parse to a wide average that diverges from the conservative struct.value (which represents the lower-end typical absorption). Added regression test to lock in the evidence-backed state and prevent future inflation.",
+        "minor_string_refinement": [
+          "flavonoids::flavonoids (unspecified): clarified subclass range with anchor examples (anthocyanins <1%, flavanones up to 43%) rather than raw range \"(0.3-43%)\" which read like a single F claim"
+        ],
+        "forms_locked_in_regression_test": [
+          "flavonoids::flavonoids (unspecified) — value=0.1 [0.003, 0.43]",
+          "glucosinolates::glucosinolates (unspecified) — value=0.1 [0.05, 0.8]",
+          "sulforaphane::stabilized sulforaphane — value=0.7 [0.6, 0.8]",
+          "sulforaphane::broccoli sprout extract — value=0.4 [0.3, 0.5]",
+          "sulforaphane::glucoraphanin — value=0.05 [0.01, 0.4]",
+          "sulforaphane::glucoraphanin + myrosinase — value=0.3 [0.2, 0.4]"
+        ],
+        "verified_pmid_basis": [
+          "PMC:3076202 (Egner 2011) — sulforaphane urinary recovery PK",
+          "PMID:15640486 (Manach 2005) — flavonoid subclass bioavailability review"
+        ],
+        "bio_score_changed": false
       }
     },
     "category_enum": [
