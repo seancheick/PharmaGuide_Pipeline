@@ -5453,8 +5453,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Magnesium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "marketing term; 0 PubMed hits; assume oxide-tier F absent verified data",
+        "notes": "Magnesium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "magnesium rice chelate",
           "rice chelate magnesium",
@@ -5465,19 +5465,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "\"Brown rice chelate\" returned 0 PubMed esearch hits across iron/Mg/Zn/Se variants (Batch 11 finding); marketing-only"
         }
       },
       "magnesium threonate": {
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "high",
-        "notes": "The only magnesium form clinically proven to cross the blood-brain barrier (patented as Magtein). Specifically designed for cognitive support — studies show it can improve learning, memory, and synaptic density. Lower total Mg delivery than glycinate but uniquely effective for brain health.",
+        "absorption": "rat-only brain Mg elevation; human cognitive RCTs lack PK; F not established",
+        "notes": "Patented as Magtein and marketed for cognitive support; brain-Mg elevation has been demonstrated in rodents only (Slutsky 2010 PMID:20152124, rats) — no human BBB-PK study exists. Specifically designed for cognitive support — studies show it can improve learning, memory, and synaptic density. Lower total Mg delivery than glycinate but uniquely effective for brain health. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "magtein",
           "magtein magnesium l-threonate",
@@ -5491,19 +5491,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.2,
+          "range_low": 0.15,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Slutsky 2010 (PMID:20152124, Neuron) elevated brain Mg in RATS only. Liu 2016 (PMID:26519439) + Zhang 2022 (PMID:36558392) human cognitive RCTs but NO brain Mg PK"
         }
       },
       "magnesium taurate": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "high",
-        "notes": "Magnesium chelated with the amino acid taurine — both nutrients independently support cardiovascular health. The combination provides synergistic heart and blood pressure benefits. Well-absorbed and calming. A top choice for people focused on heart health. Also provides taurine — see taurine entry for that nutrient's scoring.",
+        "absorption": "organic chelate; cardiovascular synergy claims; no human PK head-to-head",
+        "notes": "Magnesium chelated with the amino acid taurine — both nutrients independently support cardiovascular health. The combination provides synergistic heart and blood pressure benefits. Well-absorbed and calming. A top choice for people focused on heart health. Also provides taurine — see taurine entry for that nutrient's scoring. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "mag taurate",
           "magnesium taurinate",
@@ -5514,11 +5514,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.3,
+          "range_low": 0.25,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Organic chelate; F class-equivalent to other Mg organic chelates per Firoz & Graber 2001 (PMID:11794633) framework"
         },
         "external_ids": {
           "unii": "RCM1N3D968"
@@ -5528,8 +5528,8 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "high (preclinical, limited human PK)",
-        "notes": "Magnesium chelated with N-acetyltaurine. UNII TPU6QLA66F, CAS 75350-40-2. Distinct from magnesium taurate (RCM1N3D968). Marketed primarily as a nootropic magnesium form with enhanced brain penetration via the acetylated taurine moiety. Preclinical data suggests good BBB permeability; human pharmacokinetic data is limited. Sometimes referred to as MgAT or Magtein-adjacent (though Magtein is L-threonate, not acetyl-taurate). Note the raw DSLD label may contain a typo: 'Acetyl-Tuarate'.",
+        "absorption": "rodent brain accumulation only; no human PK; nootropic claim unverified",
+        "notes": "Magnesium chelated with N-acetyltaurine. UNII TPU6QLA66F, CAS 75350-40-2. Distinct from magnesium taurate (RCM1N3D968). Marketed primarily as a nootropic magnesium form with enhanced brain penetration via the acetylated taurine moiety. Preclinical data suggests good BBB permeability; human pharmacokinetic data is limited. Sometimes referred to as MgAT or Magtein-adjacent (though Magtein is L-threonate, not acetyl-taurate). Note the raw DSLD label may contain a typo: 'Acetyl-Tuarate'. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "magnesium acetyl taurate",
           "magnesium acetyltaurate",
@@ -5540,19 +5540,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "Preclinical BBB permeability data only; no published human PK"
+          "value": 0.25,
+          "range_low": 0.2,
+          "range_high": 0.35,
+          "quality": "low",
+          "notes": "Ates 2019 (PMID:30761462, mice) + Uysal 2019 (PMID:29679349, rats): brain accumulation in RODENTS only. No human PK published"
         }
       },
       "magnesium malate": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "moderate-high",
-        "notes": "Magnesium bound to malic acid, a key molecule in cellular energy production (Krebs cycle). Well-absorbed and often recommended for fatigue, fibromyalgia, and muscle pain. The malic acid component supports ATP synthesis. The Albion DiMagnesium Malate is a well-studied form.",
+        "absorption": "organic chelate; sustained serum Mg in rats; no human head-to-head PK",
+        "notes": "Magnesium bound to malic acid, a key molecule in cellular energy production (Krebs cycle). Well-absorbed and often recommended for fatigue, fibromyalgia, and muscle pain. The malic acid component supports ATP synthesis. The Albion DiMagnesium Malate is a well-studied form. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "mag malate",
           "dimagnesium malate",
@@ -5567,11 +5567,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.35,
+          "range_low": 0.3,
+          "range_high": 0.45,
+          "quality": "moderate",
+          "notes": "Uysal 2019 (PMID:29679349, rats) showed malate sustained serum Mg better than oxide/citrate. F class-equivalent to organic chelates"
         },
         "external_ids": {
           "unii": "LA9X9UJA2Z"
@@ -5606,19 +5606,19 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "moderate-high",
-        "notes": "Magnesium chelated with orotic acid, which may support cellular energy production and cardiovascular function. Some European clinical studies show heart health benefits. Well-absorbed but lower elemental magnesium content than simpler forms. A premium specialty option.",
+        "absorption": "clinical CHF/MVP benefit (MACH); no published human oral PK comparison",
+        "notes": "Magnesium chelated with orotic acid, which may support cellular energy production and cardiovascular function. Some European clinical studies show heart health benefits. Well-absorbed but lower elemental magnesium content than simpler forms. A premium specialty option. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "mag orotate",
           "magnesium orate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Stepura 2009 (PMID:19367681, MACH trial) human CHF survival benefit; Martynov 2011 (PMID:21878073) MVP — clinical only, no PK"
         },
         "external_ids": {
           "unii": "GI96W46M5A"
@@ -5628,8 +5628,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "moderate",
-        "notes": "A natural magnesium salt from seawater (brand: Ancient Minerals). Well-absorbed orally. Also popular as 'magnesium oil' for transdermal application (topical absorption is debated but widely used for muscle cramps and relaxation). One of the few forms available for both oral and topical use.",
+        "absorption": "soluble salt; F equivalent to lactate/aspartate, > oxide (Firoz 2001)",
+        "notes": "A natural magnesium salt from seawater (brand: Ancient Minerals). Well-absorbed orally. Also popular as 'magnesium oil' for transdermal application (topical absorption is debated but widely used for muscle cramps and relaxation). One of the few forms available for both oral and topical use. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "mag chloride",
           "magnesium oil",
@@ -5641,11 +5641,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.3,
+          "range_low": 0.25,
+          "range_high": 0.4,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Firoz & Graber 2001 (PMID:11794633): chloride = lactate = aspartate > oxide in humans"
         },
         "external_ids": {
           "unii": "02F3473H9O"
@@ -5655,19 +5655,19 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "Magnesium bound to lactic acid. Moderate absorption and very easy on the digestive system — rarely causes the laxative effect seen with citrate or oxide. A good choice for people who need gentle, long-term magnesium supplementation.",
+        "absorption": "F equivalent to chloride/aspartate in humans; > oxide (Firoz 2001)",
+        "notes": "Magnesium bound to lactic acid. Moderate absorption and very easy on the digestive system — rarely causes the laxative effect seen with citrate or oxide. A good choice for people who need gentle, long-term magnesium supplementation. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "mag lactate",
           "lactic acid magnesium"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.3,
+          "range_low": 0.25,
+          "range_high": 0.4,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Firoz & Graber 2001 (PMID:11794633): chloride/lactate/aspartate equivalent F"
         },
         "external_ids": {
           "unii": "MT6QI8324A"
@@ -5677,19 +5677,19 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "Magnesium bound to gluconic acid. Similar profile to lactate — gentle on the stomach with moderate absorption. Lower elemental magnesium content. Well-tolerated for daily supplementation without GI side effects.",
+        "absorption": "highest F of 10 salts in Mg-depleted rats (Coudray 2005); limited human data",
+        "notes": "Magnesium bound to gluconic acid. Similar profile to lactate — gentle on the stomach with moderate absorption. Lower elemental magnesium content. Well-tolerated for daily supplementation without GI side effects. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "mag gluconate",
           "gluconic acid magnesium"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.35,
+          "range_low": 0.3,
+          "range_high": 0.45,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Coudray 2005 (PMID:16548135): n=80 rats, gluconate F=67% (highest of 10 salts tested)"
         },
         "external_ids": {
           "unii": "T42NAD2KHC"
@@ -5699,19 +5699,19 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "Magnesium chelated with the amino acid aspartate. Decent absorption via amino acid transport. Aspartate plays a role in the urea cycle and energy metabolism. Less commonly used than glycinate or citrate in modern supplements.",
+        "absorption": "F equivalent to chloride/lactate in humans; > oxide (Firoz 2001)",
+        "notes": "Magnesium chelated with the amino acid aspartate. Decent absorption via amino acid transport. Aspartate plays a role in the urea cycle and energy metabolism. Less commonly used than glycinate or citrate in modern supplements. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "mag aspartate",
           "magnesium l-aspartate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.3,
+          "range_low": 0.25,
+          "range_high": 0.4,
           "quality": "moderate",
-          "notes": "moderate"
+          "notes": "Firoz & Graber 2001 (PMID:11794633): aspartate equivalent to chloride/lactate"
         },
         "external_ids": {
           "unii": "R17X820ROL"
@@ -5771,19 +5771,19 @@
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "poor",
-        "notes": "Milk of Magnesia — primarily an antacid and osmotic laxative. Minimal systemic magnesium absorption. Not a meaningful source of supplemental magnesium. Used therapeutically for constipation and heartburn relief.",
+        "absorption": "antacid form; minimal F due to insolubility at neutral pH",
+        "notes": "Milk of Magnesia — primarily an antacid and osmotic laxative. Minimal systemic magnesium absorption. Not a meaningful source of supplemental magnesium. Used therapeutically for constipation and heartburn relief. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "milk of magnesia",
           "mag hydroxide"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Milk of Magnesia; primary use is osmotic laxative; minimal systemic F"
         },
         "external_ids": {
           "unii": "NBZ3QY004S"
@@ -5793,8 +5793,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "poor oral",
-        "notes": "Epsom salt (MgSO4) — used primarily for baths, soaking, and topical muscle relaxation. Very poor oral bioavailability and causes strong laxative effects when taken by mouth. Not recommended as an oral magnesium supplement. Transdermal absorption from baths is unproven but widely practiced.",
+        "absorption": "oral laxative effect dominates; absorbed Mg low and variable",
+        "notes": "Epsom salt (MgSO4) — used primarily for baths, soaking, and topical muscle relaxation. Very poor oral bioavailability and causes strong laxative effects when taken by mouth. Not recommended as an oral magnesium supplement. Transdermal absorption from baths is unproven but widely practiced. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "epsom salt",
           "epsom salts",
@@ -5803,11 +5803,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor oral"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Epsom salt; oral use is osmotic laxative; topical has different mechanism"
         },
         "external_ids": {
           "unii": "DE08037SAB"
@@ -5817,8 +5817,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which magnesium form is used. This is a major red flag — cheap supplements overwhelmingly use magnesium oxide, which has only ~4% absorption. Quality brands specify the form (glycinate, citrate, threonate, etc.). Always check the form.",
+        "absorption": "form unknown; assume oxide-tier worst-case for scoring",
+        "notes": "The supplement label does not specify which magnesium form is used. This is a major red flag — cheap supplements overwhelmingly use magnesium oxide, which has only ~4% absorption. Quality brands specify the form (glycinate, citrate, threonate, etc.). Always check the form. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "magnesium",
           "mag",
@@ -5837,11 +5837,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "quality": "low",
+          "notes": "Form-ambiguous; budget supplements typically use oxide (4-15% F)",
+          "range_low": 0.05,
+          "range_high": 0.3
         }
       },
       "magnesium ascorbate (as magnesium source)": {
@@ -5876,8 +5876,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good",
-        "notes": "Magnesium chelated to unspecified amino acids. Catch-all for 'Magnesium AAC' or 'chelated magnesium' when the specific amino acid carrier (glycinate, malate, etc.) is not named. Better absorbed than magnesium oxide (bio=4) or carbonate (bio=6). Less specific than magnesium glycinate (bio=14) or malate (bio=12).",
+        "absorption": "AAC superior to oxide in humans (Walker 2003); inferior to citrate",
+        "notes": "Magnesium chelated to unspecified amino acids. Catch-all for 'Magnesium AAC' or 'chelated magnesium' when the specific amino acid carrier (glycinate, malate, etc.) is not named. Better absorbed than magnesium oxide (bio=4) or carbonate (bio=6). Less specific than magnesium glycinate (bio=14) or malate (bio=12). Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
         "aliases": [
           "magnesium aac",
           "aac magnesium",
@@ -5891,11 +5891,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.35,
+          "range_low": 0.25,
+          "range_high": 0.45,
+          "quality": "moderate",
+          "notes": "Walker 2003 (PMID:14596323): generic AAC > oxide, < citrate in 60-day human trial"
         }
       }
     },
@@ -38612,6 +38612,66 @@
           }
         ],
         "next_batch_lead": "Pre-absorption ester hydrolysis pattern: Search IQM for other ethyl ester pro-drugs (glutamine ethyl ester, arginine ethyl ester, leucine ethyl ester, taurine ethyl ester, beta-alanine ethyl ester) — likely class-wide audit target."
+      },
+      "5.0.17": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 15 — magnesium PK + threonate BBB conflation",
+        "research_subagent_report": "PubMed research on 14 magnesium forms. Research agent USED WebFetch on PubMed eutils (27 calls). THREE major findings: (1) Mg threonate \"BBB crossing\" claim that justifies bio=14 is RAT-ONLY (Slutsky 2010 PMID:20152124); human RCTs measured cognition but no brain Mg PK. (2) Mg acetyl-taurate similarly rodent-only. (3) Organic chelates cluster F~25-45% in humans with overlapping CIs — only citrate > chelates > oxide is robustly replicated. 4 misattributions caught.",
+        "verified_pmids": [
+          "PMID:14596323 Walker 2003 — citrate > AAC > oxide (humans n=46)",
+          "PMID:2407766  Lindberg 1990 — citrate > oxide (humans)",
+          "PMID:11794633 Firoz & Graber 2001 — chloride/lactate/aspartate > oxide",
+          "PMID:16548135 Coudray 2005 — rats, gluconate highest of 10 salts",
+          "PMID:20152124 Slutsky 2010 Neuron — RAT brain Mg + memory",
+          "PMID:26519439 Liu 2016 — human MMFS-01 cognitive (NO brain Mg PK)",
+          "PMID:36558392 Zhang 2022 — human Magtein®PS cognitive (NO PK)",
+          "PMID:30761462 Ates 2019 — MICE acetyl-taurate",
+          "PMID:29679349 Uysal 2019 — RATS acetyl-taurate",
+          "PMID:19367681 Stepura 2009 MACH — human CHF (clinical, no PK)",
+          "PMID:21878073 Martynov 2011 — human MVP (clinical, no PK)"
+        ],
+        "misattributions_caught": {
+          "\"Slutsky 2010 PMID:20152120\"": "wrong PMID — actually Bush AI commentary; correct is PMID:20152124",
+          "\"Walker 2003 glycinate vs oxide\"": "Walker actually tested citrate vs AAC vs oxide; glycinate not in this study",
+          "\"Schwalfenberg 2017 muscle-cramps RCT\"": "DOES NOT EXIST as cited; Schwalfenberg 2017 was a Mg review, not muscle-cramp RCT",
+          "\"Coudray PMID:16253138\"": "wrong paper (inulin/aging); correct comparative is PMID:16548135"
+        },
+        "class_finding_organic_chelates": "Magnesium organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping confidence intervals. Robust ranking is citrate ≥ organic chelates > carbonate > oxide ≈ hydroxide. Differences WITHIN organic-chelate band are NOT human-PK-supported.",
+        "forms_updated": [
+          "magnesium::magnesium brown rice chelate (value None → 0.1)",
+          "magnesium::magnesium threonate (value None → 0.2)",
+          "magnesium::magnesium taurate (value None → 0.3)",
+          "magnesium::magnesium acetyl-taurate (value None → 0.25)",
+          "magnesium::magnesium malate (value None → 0.35)",
+          "magnesium::magnesium orotate (value None → 0.3)",
+          "magnesium::magnesium amino acid chelate (value None → 0.35)",
+          "magnesium::magnesium chloride (value None → 0.3)",
+          "magnesium::magnesium lactate (value None → 0.3)",
+          "magnesium::magnesium gluconate (value None → 0.35)",
+          "magnesium::magnesium aspartate (value None → 0.3)",
+          "magnesium::magnesium hydroxide (value None → 0.05)",
+          "magnesium::magnesium sulfate (value None → 0.1)",
+          "magnesium::magnesium (unspecified) (value None → 0.1)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "magnesium::magnesium brown rice chelate",
+            "flag": "Research agent recommends bio_score 11 → 5 downgrade. Re-confirms Batch 11 finding: \"brown rice chelate\" has 0 PubMed hits across all mineral variants. The \"60-70%\" claim is marketing without peer-reviewed PK validation. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "magnesium::magnesium threonate",
+            "flag": "MAJOR — Research agent recommends bio_score 14 → 9 downgrade. The \"BBB-crossing brain magnesium\" claim that justifies bio=14 is RAT-ONLY (Slutsky 2010 PMID:20152124). Human Magtein RCTs (Liu 2016 PMID:26519439, Zhang 2022 PMID:36558392) measured cognitive outcomes only — NO brain Mg PK. Same rat-vs-human conflation pattern as Yap 2003 tocotrienol (Batch 13). Needs Dr Pham urgent clinical signoff."
+          },
+          {
+            "location": "magnesium::magnesium acetyl-taurate",
+            "flag": "Research agent recommends bio_score 13 → 9 downgrade. Same rodent-only conflation as threonate. Ates 2019 is mice, Uysal 2019 is rats. No human PK. Current bio=13 inflated. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "magnesium::magnesium gluconate",
+            "flag": "Research agent recommends bio_score 9 → 11 UPGRADE. Mg gluconate is the only form with strong rat F data (highest of 10 salts in Coudray 2005 PMID:16548135). Currently bio=9 underestimates. Needs Dr Pham clinical signoff."
+          }
+        ]
       }
     },
     "category_enum": [
