@@ -844,7 +844,15 @@ def main(argv=None):
                 if _script_dir not in _sys.path:
                     _sys.path.insert(0, _script_dir)
                 cleanup_mod = importlib.import_module("cleanup_old_versions")
-                cleanup_mod.main(["--keep", str(args.cleanup_keep), "--execute", "--cleanup-orphan-blobs"])
+                # Full cleanup: storage versions + orphan blobs + manifest DB rows.
+                # Without --cleanup-db, export_manifest rows accumulate forever even
+                # though the storage objects are deleted, leaving stale references.
+                cleanup_mod.main([
+                    "--keep", str(args.cleanup_keep),
+                    "--execute",
+                    "--cleanup-orphan-blobs",
+                    "--cleanup-db",
+                ])
             sys.exit(0)
     except FileNotFoundError as e:
         print(f"Error: {e}")
