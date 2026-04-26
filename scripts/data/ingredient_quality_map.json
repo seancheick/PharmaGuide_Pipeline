@@ -5063,8 +5063,8 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "variable",
-        "notes": "Calcium from fossilized coral (primarily calcium carbonate with trace minerals). Despite aggressive marketing claims, absorption is similar to standard calcium carbonate. Quality varies — may contain lead or other contaminants. Sango coral is the most common source.",
+        "absorption": "low (~95% CaCO3 + trace minerals; class-equiv CaCO3)",
+        "notes": "Calcium from fossilized coral (primarily calcium carbonate with trace minerals). Despite aggressive marketing claims, absorption is similar to standard calcium carbonate. Quality varies — may contain lead or other contaminants. Sango coral is the most common source. B27 audit 2026-04-25: coral calcium class-equivalent CaCO3 (PMID:11444420). Ghost catch: Heaney 2002 coral fabricated.",
         "aliases": [
           "marine calcium",
           "fossilized coral calcium",
@@ -5077,11 +5077,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.25,
+          "range_low": 0.2,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Coral calcium is ~95% calcium carbonate + trace minerals (marketed for \"Okinawan longevity\"). Class-extension from Heaney 2001 (PMID:11444420): CaCO3 vs Ca citrate identical 24-h serum Ca AUC in 24 postmenopausal women. NO direct coral-calcium PK study exists in PubMed. GHOST CATCH: \"Heaney 2002 coral calcium\" — 0 PubMed hits, fabricated citation; do NOT cite."
         }
       },
       "calcium citrate malate": {
@@ -5140,8 +5140,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "poor",
-        "notes": "An industrial-grade calcium compound (quickite/burnt lime) that is caustic and poorly bioavailable. Not suitable for human supplementation. If present in a supplement, it indicates a very low-quality product that prioritized cost over efficacy.",
+        "absorption": "poor (CaO is strong base; GI irritant)",
+        "notes": "An industrial-grade calcium compound (quickite/burnt lime) that is caustic and poorly bioavailable. Not suitable for human supplementation. If present in a supplement, it indicates a very low-quality product that prioritized cost over efficacy. B27 audit 2026-04-25: CaO strong base; GI irritant; F ~0.",
         "aliases": [
           "quicklime calcium",
           "inactive calcium",
@@ -5151,11 +5151,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Calcium oxide (CaO, \"quicklime\") reacts violently with water to form Ca(OH)2 + heat. Strong base, GI irritant — not used in modern supplements. Effective F approaches zero."
         },
         "external_ids": {
           "unii": "C7X2M0VVNH"
@@ -5165,8 +5165,8 @@
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Structurally similar molecules that cannot function as bioavailable calcium in the body. Provide no nutritional benefit for bone health or calcium-dependent biological processes.",
+        "absorption": "poor (non-functional analog)",
+        "notes": "Structurally similar molecules that cannot function as bioavailable calcium in the body. Provide no nutritional benefit for bone health or calcium-dependent biological processes. B27 audit 2026-04-25: non-functional analog (mechanical 0.0).",
         "aliases": [
           "calcium analog",
           "pseudo-calcium",
@@ -5177,19 +5177,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional calcium analog. Does not provide bioavailable Ca2+ ions. Present in DB only for completeness."
         }
       },
       "calcium (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which calcium form is used. This matters significantly — calcium citrate and bisglycinate are far better absorbed than calcium carbonate, especially without food. Budget supplements overwhelmingly use the cheapest form (carbonate or phosphate).",
+        "absorption": "moderate (Ca class baseline; form-dependent 25-42%)",
+        "notes": "The supplement label does not specify which calcium form is used. This matters significantly — calcium citrate and bisglycinate are far better absorbed than calcium carbonate, especially without food. Budget supplements overwhelmingly use the cheapest form (carbonate or phosphate). B27 audit 2026-04-25: Ca class baseline (PMID:11444420).",
         "aliases": [
           "Calcium",
           "calcium aspartate",
@@ -5200,19 +5200,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.32,
+          "range_low": 0.2,
+          "range_high": 0.42,
+          "quality": "moderate",
+          "notes": "Calcium F well-characterized: CaCO3 ~31% (with meal), Ca citrate ~42%, Ca bis-glycinate ~40%, Ca lactate ~35%, Ca gluconate ~33%. Default 0.32 for unspecified — most consumer products are CaCO3-based. Heaney 2001 (PMID:11444420) anchor."
         }
       },
       "calcium amino acid chelate": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good",
-        "notes": "Calcium chelated to unspecified amino acids. Catch-all for 'Calcium AAC' on labels when the specific chelate type (bisglycinate, citrate, malate) is not disclosed. Better absorbed than calcium carbonate (bio=8). Less specific than calcium bis-glycinate (bio=14) or calcium citrate (bio=14).",
+        "absorption": "moderate (class-equiv bisglycinate; PK uncertain)",
+        "notes": "Calcium chelated to unspecified amino acids. Catch-all for 'Calcium AAC' on labels when the specific chelate type (bisglycinate, citrate, malate) is not disclosed. Better absorbed than calcium carbonate (bio=8). Less specific than calcium bis-glycinate (bio=14) or calcium citrate (bio=14). B27 audit 2026-04-25: class-equiv bisglycinate; PK uncertainty band. Ghost catch: Heaney 2003 bisglycinate suspect.",
         "aliases": [
           "calcium aac",
           "aac calcium",
@@ -5225,11 +5225,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.35,
+          "range_low": 0.3,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Generic \"calcium amino acid chelate\" class-equivalent to calcium bis-glycinate (already at 0.40). HONEST EVIDENCE GAP: no high-quality stable-isotope human PK exists for any Ca-AA-chelate. Range [0.30, 0.40] reflects evidence uncertainty rather than tight value. GHOST CATCH: \"Heaney 2003 bisglycinate\" cited in legacy data may be fabricated (0 PubMed hits) — flag for cross-file audit."
         }
       }
     },
@@ -6158,8 +6158,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "poor",
-        "notes": "The oxidized form of iron (Fe3+). Must be reduced to ferrous iron (Fe2+) by stomach acid and vitamin C before absorption, making it inherently less bioavailable than ferrous (Fe2+) forms. Ferric pyrophosphate is the most common ferric supplement salt.",
+        "absorption": "low (Fe3+ requires reduction; F well below ferrous)",
+        "notes": "The oxidized form of iron (Fe3+). Must be reduced to ferrous iron (Fe2+) by stomach acid and vitamin C before absorption, making it inherently less bioavailable than ferrous (Fe2+) forms. Ferric pyrophosphate is the most common ferric supplement salt. B27 audit 2026-04-25: Fe3+ requires reduction (PMID:2507689); F ~5-10% class baseline.",
         "aliases": [
           "iron(iii)",
           "ferric pyrophosphate",
@@ -6168,19 +6168,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.07,
+          "range_low": 0.05,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Hallberg 1989 (PMID:2507689): \"the reduction of ferric to ferrous iron... seems to be a requirement for the uptake of iron into the mucosal cells.\" Fe3+ must be reduced to Fe2+ by ascorbate or DcytB before DMT1 uptake. Class F ~5-10%, well below ferrous forms (12-33%). Troesch/Hurrell 2011 (PMID:21430252) supports."
         }
       },
       "iron oxide": {
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "very poor",
-        "notes": "Essentially rust (Fe2O3). Biologically inert and virtually unabsorbable as a nutritional iron source. Used as a red/brown colorant in supplement coatings and food products, NOT as an iron source. If this is the only iron form listed, the product provides no meaningful iron.",
+        "absorption": "poor (Fe2O3/Fe3O4 essentially non-bioavailable)",
+        "notes": "Essentially rust (Fe2O3). Biologically inert and virtually unabsorbable as a nutritional iron source. Used as a red/brown colorant in supplement coatings and food products, NOT as an iron source. If this is the only iron form listed, the product provides no meaningful iron. B27 audit 2026-04-25: iron oxide essentially non-bioavailable; food coloring E172 only.",
         "aliases": [
           "ferric oxide",
           "rust",
@@ -6188,19 +6188,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.02,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Iron oxide (Fe2O3, Fe3O4) is the form used in food coloring (E172) — chemically stable, very low oral bioavailability. EFSA opinions confirm minimal systemic iron contribution."
         }
       },
       "iron (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which iron form is used. This matters enormously — forms range from excellent (bisglycinate, heme) to terrible (oxide, ferric salts). Budget supplements often use ferrous sulfate, which causes the most GI side effects.",
+        "absorption": "low-variable (form-dependent: 5-30%)",
+        "notes": "The supplement label does not specify which iron form is used. This matters enormously — forms range from excellent (bisglycinate, heme) to terrible (oxide, ferric salts). Budget supplements often use ferrous sulfate, which causes the most GI side effects. B27 audit 2026-04-25: iron class baseline (form-dependent).",
         "aliases": [
           "iron",
           "iron supplement",
@@ -6211,30 +6211,30 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.15,
+          "range_low": 0.05,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Iron F highly form-dependent: ferric ~5-10%; ferrous fumarate/sulfate/gluconate ~12-33%; bisglycinate ~30%; heme ~25%. Default 0.15 conservative middle for unspecified form. F also depends on iron status (deficient adults absorb more)."
         }
       },
       "ferric citrate": {
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "moderate",
-        "notes": "Iron (Fe3+) chelated with citric acid. Better absorbed than other ferric salts due to the solubilizing effect of citrate. Used pharmaceutically (brand: Auryxia) as a phosphate binder in kidney disease, which also provides iron absorption as a secondary benefit.",
+        "absorption": "low (CKD distal-colon absorption; FDA-approved Auryxia)",
+        "notes": "Iron (Fe3+) chelated with citric acid. Better absorbed than other ferric salts due to the solubilizing effect of citrate. Used pharmaceutically (brand: Auryxia) as a phosphate binder in kidney disease, which also provides iron absorption as a secondary benefit. B27 audit 2026-04-25: ferric citrate Auryxia FDA-approved (PMID:24408120, PMID:25958079); distal-colon absorption (PMID:32514572).",
         "aliases": [
           "iron citrate",
           "ferric citrate supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Ferric citrate (Auryxia/JTT-751) is FDA-approved (2014) for iron deficiency anemia in non-dialysis CKD AND hyperphosphatemia. Yokoyama 2014 (PMID:24408120) phase 3 (90 CKD pts), Van Buren/Lewis 2015 (PMID:25958079) 52-wk phase 3 demonstrate iron repletion. Vaziri 2020 (PMID:32514572): atypical absorption via distal colon with disrupted tight junctions + SCFA transporter upregulation. No standalone fractional F% in healthy adults."
         },
         "external_ids": {
           "unii": "63G354M39Z"
@@ -6244,19 +6244,19 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "poor-moderate",
-        "notes": "An oxidized iron (Fe3+) sulfate salt with poor bioavailability compared to ferrous (Fe2+) salts. Rarely chosen for oral supplementation due to inferior absorption. Sometimes found in very cheap iron products.",
+        "absorption": "low (Fe3+ class; reduction-dependent uptake)",
+        "notes": "An oxidized iron (Fe3+) sulfate salt with poor bioavailability compared to ferrous (Fe2+) salts. Rarely chosen for oral supplementation due to inferior absorption. Sometimes found in very cheap iron products. B27 audit 2026-04-25: Fe3+ class baseline (PMID:2507689).",
         "aliases": [
           "iron sulfate ferric",
           "ferric sulfate supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "poor-moderate"
+          "value": 0.07,
+          "range_low": 0.05,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Ferric sulfate (Fe2(SO4)3) is Fe3+ form — same reduction requirement as ferric iron generic (Hallberg 1989 PMID:2507689). Class-equivalent to other Fe3+ forms ~5-10%."
         },
         "external_ids": {
           "unii": "3HWS7HF5XD"
@@ -6389,8 +6389,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "~25-30% elemental iron (high; comparable to ferrous ascorbate)",
-        "notes": "Iron(II) chelated with picolinic acid. Picolinate chelation employs the same intestinal mucosal carrier mechanism as zinc picolinate, reducing free iron exposure and associated GI irritation vs. inorganic ferrous salts. Bidentate coordination stabilizes Fe(II) through gastric transit. Limited specific RCT data vs. iron bisglycinate; absorption estimated 25–30% elemental iron — comparable to ferrous ascorbate and above ferrous sulfate (10–15%). Relevant for iron-deficiency supplementation where GI tolerance is key (Tolkien 2015 systematic review framework for iron form GI tolerability).",
+        "absorption": "low (= ferrous sulfate; picolinate premium UNSUPPORTED)",
+        "notes": "Iron(II) chelated with picolinic acid. Picolinate chelation employs the same intestinal mucosal carrier mechanism as zinc picolinate, reducing free iron exposure and associated GI irritation vs. inorganic ferrous salts. Bidentate coordination stabilizes Fe(II) through gastric transit. Limited specific RCT data vs. iron bisglycinate; absorption estimated 25–30% elemental iron — comparable to ferrous ascorbate and above ferrous sulfate (10–15%). Relevant for iron-deficiency supplementation where GI tolerance is key (Tolkien 2015 systematic review framework for iron form GI tolerability). B27 audit 2026-04-25: PICOLINATE PREMIUM UNSUPPORTED — Fe picolinate = FeSO4 RBV 0.99 (PMID:31187261). bio_score inflated — flagged for Dr Pham Section C13.",
         "aliases": [
           "ferrous picolinate",
           "iron(II) picolinate",
@@ -6399,11 +6399,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "~25-30% elemental iron estimated; picolinate chelate class"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Sabatier 2020 (PMID:31187261): stable-isotope RCT in 19 women, double-blind crossover — Fe picolinate F 5.2% vs Fe sulfate F 5.3%, RBV 0.99 (95% CI 0.85-1.15). DEFINITIVE: picolinate carrier provides NO measurable PK premium over plain ferrous sulfate. Marketing claim unsupported. CLASS-EQUIVALENT TO FERROUS SULFATE (~12-15%), NOT to bisglycinate (30%). GHOST CATCH CONFIRMED: \"Hashmi 1990 picolinate\" — 0 PubMed hits. DR PHAM REVIEW: bio_score=12 inflated — should match FeSO4 (bio=8). See review doc Section C13."
         },
         "external_ids": {
           "unii": "48VAK352CN"

@@ -336,6 +336,18 @@ For brevity, these don't fit the family clusters above but need your call:
 - **[PROPOSED]** Downgrade BMOV value 0.125 → 0.02 to match V class baseline. Bio_score 12 → 7–8.
 - **[DECISION]** ☐ APPROVE downgrade   ☐ KEEP (BMOV-specific data?)   ☐ MODIFY: ____
 
+## C13 — Iron picolinate (Batch 27, NEW) — definitive PK study
+
+| Form | bio_score | Verified F | Concern |
+|---|---|---|---|
+| iron picolinate | **12** | 0.15 | Stable-isotope RCT: F = ferrous sulfate (RBV 0.99) — picolinate premium UNSUPPORTED |
+
+- **[CONTEXT]** Sabatier 2020 (PMID:[31187261](https://pubmed.ncbi.nlm.nih.gov/31187261/)): double-blind crossover stable-isotope RCT in 19 women — Fe picolinate F **5.2%** vs Fe sulfate F **5.3%**, RBV 0.99 (95% CI 0.85–1.15). Picolinate carrier provides NO measurable PK premium over plain ferrous sulfate. Marketing claim definitively unsupported.
+- **[GHOST CONFIRMED]** "Hashmi 1990 picolinate iron" — 0 PubMed hits; was likely the basis of the inflated bio_score=12 in the original data. Now caught in 2 separate batches (B17 audit and B27).
+- **[CURRENT]** iron picolinate at 0.15 (matches FeSO4 at 0.125, set in B27); bio_score=12 unchanged.
+- **[PROPOSED]** Downgrade bio_score 12 → 7–8 to match ferrous sulfate (bio=8). Forms should rank: bisglycinate (14, F=0.30) > heme polypeptide (13, F=0.20) > picolinate (8, F=0.15) ≈ FeSO4 (8, F=0.125).
+- **[DECISION]** ☐ APPROVE downgrade 12→8   ☐ KEEP (clinical efficacy?)   ☐ MODIFY: ____
+
 ---
 
 # Section D — New Framework Patterns (FYI / future-proofing)
