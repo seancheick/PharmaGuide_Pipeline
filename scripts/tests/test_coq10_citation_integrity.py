@@ -153,7 +153,6 @@ def test_class_authority_pmids_cited(iqm):
     counts = {'PMID:32380795': 0, 'PMID:16551570': 0}
     for form in forms.values():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         for pmid in counts:
             if pmid in text:
                 counts[pmid] += 1

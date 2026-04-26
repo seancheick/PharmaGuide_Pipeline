@@ -113,7 +113,6 @@ def test_probiotics_unspecified_framework_mismatch_documented(iqm):
     val = (form.get('absorption_structured') or {}).get('value')
     assert val is None, 'probiotics (unspecified) should be null'
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('framework_mismatch', 'framework mismatch', 'pending',
                     'harmonization', 'mixed', 'b18', 'b22', 'category-error')

@@ -92,7 +92,6 @@ def test_uc2_oral_tolerance_8th_category_error_documented(iqm):
     """UC-II must document 8th category-error oral-tolerance pattern."""
     form = iqm['collagen']['forms']['undenatured collagen']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('category error', 'category_error', '8th category',
                     'oral tolerance', 'peyer', 'treg', 'gut immune', 'galt',
@@ -110,7 +109,6 @@ def test_cascara_pre_absorption_hydrolysis_documented(iqm):
     forms = iqm['cascara_sagrada']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('cascaroside', 'anthrone', 'emodin', 'pre-absorption',
                         'pre absorption', 'colonic hydrolysis', '30321134',
@@ -127,7 +125,6 @@ def test_cordycepsprime_crominex_relapse_documented(iqm):
     """
     form = iqm['cordyceps']['forms']['cordycepsprime extract']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('crominex', 'no branded', 'no superior', 'no premium',
                     'class-equivalent', 'class equiv', 'no proprietary',
@@ -188,7 +185,6 @@ def test_no_phantom_borges_2010_first_author(iqm):
     forms = iqm['tart_cherry']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         if 'Borges 2010' in text:
             assert any(neg in text.lower() for neg in
                        ('2nd author', 'second author', 'ghost', 'wrong',
@@ -215,7 +211,6 @@ def test_class_authority_pmids_introduced_b31(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

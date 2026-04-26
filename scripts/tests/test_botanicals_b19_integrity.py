@@ -123,7 +123,6 @@ def test_sb_berry_oil_palmitoleic_qualified(iqm):
     """
     form = iqm['sea_buckthorn']['forms']['sea buckthorn berry oil']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('plasma fa unchanged', 'plasma fatty acids unchanged',
                     'plasma 16:1n-7 unchanged', 'unchanged at 5g',
@@ -153,7 +152,6 @@ def test_testofen_no_pk_qualified(iqm):
     """
     form = iqm['fenugreek']['forms']['testofen']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('no pk', 'not pk', 'clinical endpoint', 'no human pk',
                     'no published pk', 'crominex pattern')
@@ -169,7 +167,6 @@ def test_aswar_2010_rat_qualified(iqm):
     forms = iqm['fenugreek']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         if 'aswar 2010' in text_lower or 'pmid:20878698' in text_lower:
             assert 'rat' in text_lower, (
@@ -190,7 +187,6 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

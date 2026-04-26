@@ -99,7 +99,6 @@ def test_organ_extract_category_error_documented(iqm):
     forms = iqm['organ_extracts']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('category error', 'composite food', 'no unified f',
                         'per-component', 'per-nutrient', 'nutrient density',
@@ -117,7 +116,6 @@ def test_ceramides_pre_absorption_hydrolysis_qualified(iqm):
     forms = iqm['ceramides']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('hydrolyzed', 'sphingoid', 'pre-absorption',
                         'pre absorption', 'pd endpoint', 'pd not pk')
@@ -170,7 +168,6 @@ def test_no_phantom_bizot_2017_citation(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             for m in live.finditer(text):
                 start = max(0, m.start() - 1)
                 end = min(len(text), m.end() + 1)
@@ -197,7 +194,6 @@ def test_no_phantom_tomonaga_silk_peptide_citation(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             for m in live.finditer(text):
                 end80 = min(len(text), m.end() + 80)
                 window80 = text[m.start():end80]
@@ -217,7 +213,6 @@ def test_silk_pmid_447109_qualified(iqm):
     forms = iqm['silk_amino_acids']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         if '447109' in text:
             assert 'fish' in text.lower() or 'author' in text.lower() or 'NOT silkworm' in text or 'NOT silk fibroin' in text, (
                 f'silk_amino_acids::{fname} cites PMID:447109 without '
@@ -238,7 +233,6 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

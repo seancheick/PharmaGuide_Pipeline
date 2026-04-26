@@ -3,8 +3,8 @@
   "brand_name": "Garden of Life Vitamin Code",
   "breakdown": {
     "A": {
-      "A1": 9.96,
-      "A2": 2.5,
+      "A1": 9.66,
+      "A2": 2.0,
       "A3": 1.0,
       "A4": 3.0,
       "A5": 2.25,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 4.5,
-      "core_quality": 18.71,
+      "core_quality": 17.91,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -61,7 +61,7 @@
         "probiotic_bonus": 2.0,
         "survivability": 0.0
       },
-      "score": 23.21
+      "score": 22.41
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -197,7 +197,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 51.4,
+    "quality_raw": 50.6,
     "violation_penalty": 0.0
   },
   "dsld_id": "288344",
@@ -210,17 +210,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "Men",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 64.2,
-  "score_80": 51.4,
+  "score_100_equivalent": 63.2,
+  "score_80": 50.6,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 4.5,
-      "core_quality": 18.71,
+      "core_quality": 17.91,
       "max": 25.0,
-      "score": 23.21
+      "score": 22.41
     },
     "B_safety_purity": {
       "max": 30.0,

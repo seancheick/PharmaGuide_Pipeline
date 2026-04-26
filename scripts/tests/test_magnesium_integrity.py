@@ -145,7 +145,6 @@ def test_brown_rice_chelate_marketing_flagged(iqm):
     + Batch 15 confirmed verdict)."""
     form = iqm['magnesium']['forms']['magnesium brown rice chelate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('marketing', '0 pubmed', 'zero pubmed', 'no peer-reviewed',
                     'marketing-only', 'absent verified data', 'no human pk')
@@ -161,7 +160,6 @@ def test_threonate_bbb_claim_qualified(iqm):
     """
     form = iqm['magnesium']['forms']['magnesium threonate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     # If the note mentions BBB or brain Mg, it must also qualify as rat
     if any(p in text_lower for p in ('bbb', 'blood-brain', 'brain mg', 'brain magnesium')):
@@ -194,7 +192,6 @@ def test_no_phantom_schwalfenberg_2017_muscle_cramps(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             for m in live.finditer(text):
                 # Look in 80-char window after match for audit-trail markers
                 end = min(len(text), m.end() + 80)
@@ -226,7 +223,6 @@ def test_class_authority_pmids_introduced(iqm):
     for form in iqm['magnesium']['forms'].values():
         full_text += (form.get('notes') or '') + ' '
         full_text += (form.get('absorption') or '') + ' '
-        full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing from magnesium notes: {missing}'

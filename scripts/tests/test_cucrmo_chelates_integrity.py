@@ -138,7 +138,6 @@ def test_crominex_no_pk_qualified(iqm):
     """
     form = iqm['chromium']['forms']['crominex 3+ chromium complex']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('no pk', 'clinical only', 'clinical rct', 'no absolute f',
                     'no bioavailability', 'no published evidence', 'natreon')
@@ -152,7 +151,6 @@ def test_chelidamate_arginate_zero_evidence_qualified(iqm):
     """
     form = iqm['chromium']['forms']['chromium chelidamate arginate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('zero pubmed', '0 pubmed', 'no published',
                     'no evidence', 'marketing-only', 'marketing only')
@@ -168,7 +166,6 @@ def test_cu_picolinate_ghost_reference_qualified(iqm):
     """
     form = iqm['copper']['forms']['copper picolinate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('no human pk', 'ghost', 'extrapolated', 'unsourced',
                     'not found', 'no published')
@@ -190,7 +187,6 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing from Cu/Cr/Mo notes: {missing}'
@@ -210,7 +206,6 @@ def test_brown_rice_chelate_consistency_across_minerals(iqm):
         form = iqm[pid]['forms'].get(fname)
         assert form is not None, f'{pid}::{fname} missing'
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('marketing', '0 pubmed', 'zero pubmed', 'class-equivalent',
                         'no peer-reviewed', 'marketing-only', 'marketing label')

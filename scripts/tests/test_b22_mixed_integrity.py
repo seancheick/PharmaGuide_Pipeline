@@ -106,7 +106,6 @@ def test_prebiotic_category_error_documented(iqm):
     for pid, fname in forms:
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('fermentation', 'scfa', 'short-chain fatty', 'category error',
                         'non-digestible', 'not systemically absorbed', 'colonic')
@@ -122,7 +121,6 @@ def test_bhb_salts_vs_creatine_distinction_qualified(iqm):
     """
     form = iqm['d_beta_hydroxybutyrate_bhb']['forms']['d beta hydroxybutyrate bhb (standard)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     # Must reference inactive isomer or Stubbs/Cmax difference
     flag_phrases = ('inactive l-isomer', 'l-βhb', 'l-bhb', 'l-isomer',
@@ -167,7 +165,6 @@ def test_tudca_no_human_pk_qualified(iqm):
     """TUDCA notes must qualify the absence of robust human oral F PMID."""
     form = iqm['tudca']['forms']['tudca (standard)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('no verified human', 'mechanistic inference', 'no human pk',
                     'not robustly published', 'no robust')
@@ -182,7 +179,6 @@ def test_no_phantom_stubbs_28261556(iqm):
     """
     form = iqm['d_beta_hydroxybutyrate_bhb']['forms']['d beta hydroxybutyrate bhb (standard)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     if 'PMID:28261556' in text:
         assert 'wrong' in text.lower() or 'misattribut' in text.lower() or 'ghost' in text.lower(), (
             f'BHB notes still cite PMID:28261556 as live citation '
@@ -204,7 +200,6 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

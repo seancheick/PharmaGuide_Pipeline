@@ -184,7 +184,6 @@ def test_no_phantom_norris_2006_ihn_citation(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             for m in live.finditer(text):
                 start = max(0, m.start() - 1)
                 end = min(len(text), m.end() + 1)
@@ -204,7 +203,6 @@ def test_no_phantom_wittwer_1989_citation(iqm):
     """
     form = iqm['vitamin_b5_pantothenic']['forms']['pantethine']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     live = re.compile(r'(?<![\"“])Wittwer\s*1989(?![\"”])', re.IGNORECASE)
     for m in live.finditer(text):
         start = max(0, m.start() - 1)
@@ -223,7 +221,6 @@ def test_keenan_2013_ihn_cited(iqm):
     """Inositol hexanicotinate must cite verified Keenan 2013 (PMID:23351578)."""
     form = iqm['vitamin_b3_niacin']['forms']['inositol hexanicotinate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     assert ('PMID:23351578' in text or 'Keenan 2013' in text), (
         f'IHN must cite verified Keenan 2013 (PMID:23351578) — IHN has NO '
         f'measurable bioavailability finding'
@@ -247,7 +244,6 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing from B-vitamin notes: {missing}'

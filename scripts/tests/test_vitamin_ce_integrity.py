@@ -159,7 +159,6 @@ def test_no_phantom_yap_2003_human_citation(iqm):
     """
     form = iqm['vitamin_e']['forms']['tocotrienols']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     if 'PMID:12625867' in text:
         # Must be flagged as rat-only
         assert 'rat' in text.lower(), (
@@ -184,7 +183,6 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing from vit C/E notes: {missing}'

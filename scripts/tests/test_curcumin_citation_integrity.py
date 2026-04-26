@@ -143,7 +143,6 @@ def test_kroon_2025_cited_for_critical_reappraisals(iqm):
     for fname in must_cite:
         form = forms.get(fname, {})
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         assert ('PMID:40487425' in text or 'Kroon 2025' in text), (
             f'curcumin::{fname} should cite Kroon 2025 (PMID:40487425) as '
             f'class-authority critical reappraisal of curcumin enhanced forms'
@@ -185,7 +184,6 @@ def test_novasol_pmid_attribution_correct(iqm):
     """
     form = iqm['curcumin']['forms']['novasol curcumin']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     # If Schiborr is cited, the PMID must be 24402825
     if 'Schiborr' in text:
         # Look for incorrect PMID linkage

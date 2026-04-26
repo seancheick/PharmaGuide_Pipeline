@@ -117,7 +117,6 @@ def test_dyerberg_2010_pmid_cited(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             if 'PMID:20638827' in text or 'Dyerberg 2010' in text:
                 hits += 1
     assert hits >= 6, (
@@ -146,7 +145,6 @@ def test_no_unverified_pmids_introduced(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             for pmid in unverified:
                 if pmid in text:
                     violations.append((pid, fname, pmid))

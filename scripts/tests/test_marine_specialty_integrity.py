@@ -115,7 +115,6 @@ def test_manuka_category_error_documented(iqm):
         if 'umf' not in fname.lower() and 'mgo' not in fname.lower():
             continue
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('local-action', 'local action', 'category error',
                         'topical', 'not systemically absorbed',
@@ -180,7 +179,6 @@ def test_shilajit_no_pk_qualified(iqm):
         if not form:
             continue
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('no human pk', 'no published pk', 'endpoint rct',
                         'not pk', 'no published evidence', 'no pk')
@@ -197,7 +195,6 @@ def test_no_phantom_alkharfy_human_tq_citation(iqm):
     forms = iqm['black_seed_oil']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         # If "Alkharfy" appears, must be qualified as rat / ghost / misattribution
         if 'alkharfy' in text.lower():
             text_lower = text.lower()
@@ -219,7 +216,6 @@ def test_yurko_mauro_pmid_cited(iqm):
     for form in forms.values():
         full_text += (form.get('notes') or '') + ' '
         full_text += (form.get('absorption') or '') + ' '
-        full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     assert 'PMID:26328782' in full_text or 'Yurko-Mauro 2015' in full_text, (
         f'Krill notes must cite Yurko-Mauro 2015 (PMID:26328782) — the '
         f'definitive dose-matched class-equivalence study'
@@ -238,7 +234,6 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

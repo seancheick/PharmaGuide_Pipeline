@@ -99,7 +99,6 @@ def test_no_misattributed_pmids_introduced(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             for pmid, what in misattributed:
                 if pmid in text:
                     # Allow if surrounded by audit-trail context
@@ -125,7 +124,6 @@ def test_d2_correction_15_69_to_10_39(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             assert '15.69 nmol/L' not in text or 'NOT 15.69' in text or 'corrected' in text.lower(), (
                 f'{pid}::{fname} still claims "15.69 nmol/L" — verified value '
                 f'per PMID:37865222 (van den Heuvel 2024) is 10.39 nmol/L'
@@ -138,7 +136,6 @@ def test_microencap_d3_no_25percent_marketing_claim(iqm):
     """
     form = iqm['vitamin_d']['forms']['microencapsulated D3']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     # Allow "25%" only if surrounded by qualifier ("no peer-reviewed", "claim", etc.)
     if '25%' in text:
         idx = text.find('25%')
@@ -166,7 +163,6 @@ def test_verified_pmids_introduced(iqm):
     for pmid, (pid, fname) in expected_citations.items():
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         assert pmid in text, (
             f'Verified citation {pmid} should be cited in {pid}::{fname}'
         )

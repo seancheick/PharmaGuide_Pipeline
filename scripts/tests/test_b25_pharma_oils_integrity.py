@@ -123,7 +123,6 @@ def test_konjac_7th_category_error_documented(iqm):
     for pid, fname in forms:
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('category error', 'category_error', '7th category',
                         'viscous fiber', 'luminal mechanism', 'gel formation',
@@ -142,7 +141,6 @@ def test_sda_intermediate_omega3_tier(iqm):
     forms = iqm['ahiflower_seed_oil']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('sda', 'stearidonic', '22279143', 'whelan 2012',
                         'bioequivalence', 'bioequiv', '5:1', 'intermediate')
@@ -207,7 +205,6 @@ def test_butterbur_no_human_pk_documented(iqm):
     forms = iqm['butterbur']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('no human pk', 'first-pass', 'first pass',
                         'no published', 'unknown', 'extensive', '29341029',
@@ -266,7 +263,6 @@ def test_class_authority_pmids_introduced_b25(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

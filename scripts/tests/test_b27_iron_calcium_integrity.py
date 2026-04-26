@@ -158,7 +158,6 @@ def test_no_phantom_hashmi_iron_picolinate(iqm):
     """
     form = iqm['iron']['forms']['iron picolinate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     if 'Hashmi' in text and '1990' in text:
         assert any(neg in text.lower() for neg in
                    ('ghost', 'does not exist', '0 pubmed', 'fabricated',
@@ -174,7 +173,6 @@ def test_no_phantom_heaney_2002_coral(iqm):
     """
     form = iqm['calcium']['forms']['coral calcium']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     if 'Heaney' in text and '2002' in text:
         assert any(neg in text.lower() for neg in
                    ('ghost', 'does not exist', '0 pubmed', 'fabricated',
@@ -197,7 +195,6 @@ def test_class_authority_pmids_introduced_b27(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

@@ -111,7 +111,6 @@ def test_nucleic_acid_digestion_barrier_documented(iqm):
     forms = iqm['rna_dna']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('digestion barrier', 'digested', 'nucleotide', 'nuclease',
                         'does not survive', 'not survive')

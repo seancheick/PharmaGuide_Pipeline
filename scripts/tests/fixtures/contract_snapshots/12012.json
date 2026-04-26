@@ -9,8 +9,8 @@
   "brand_name": "CVS Pharmacy",
   "breakdown": {
     "A": {
-      "A1": 9.95,
-      "A2": 1.0,
+      "A1": 9.84,
+      "A2": 0.5,
       "A3": 0.0,
       "A4": 3.0,
       "A5": 0.75,
@@ -21,7 +21,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 14.7,
+      "core_quality": 14.09,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -42,7 +42,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 14.7
+      "score": 14.09
     },
     "B": {
       "B0_moderate_penalty": 10.0,
@@ -122,7 +122,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 28.89,
+    "quality_raw": 28.28,
     "violation_penalty": 0.0
   },
   "dsld_id": "12012",
@@ -136,17 +136,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "Spectravite Advanced Formula",
   "safety_verdict": "CAUTION",
-  "score_100_equivalent": 36.1,
-  "score_80": 28.9,
+  "score_100_equivalent": 35.4,
+  "score_80": 28.3,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 14.7,
+      "core_quality": 14.09,
       "max": 25.0,
-      "score": 14.7
+      "score": 14.09
     },
     "B_safety_purity": {
       "max": 30.0,

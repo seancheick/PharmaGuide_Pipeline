@@ -178,52 +178,10 @@ def test_e3_digestive_enzymes_category_error(iqm):
 
 
 # ============================================================================
-# Section D7 — category_error_type enum
+# Section D7 — REMOVED 2026-04-26: category_error_type/_label fields were
+# bloat I added; users said don't over-engineer. The mechanism is documented
+# in form.notes (the existing user-facing field) — no separate enum needed.
 # ============================================================================
-
-@pytest.mark.parametrize('pid,fname,expected_type', [
-    ('manuka_honey', 'umf 15+ / mgo 514+',                              'local_action'),
-    ('slippery_elm', 'standardized extract (mucilage)',                 'local_action'),
-    ('organ_extracts', 'grass-fed desiccated',                          'composite_food'),
-    ('spirulina', 'fresh spirulina paste',                              'composite_food'),
-    ('inulin', 'inulin (unspecified)',                                  'colonic_fermentation'),
-    ('prebiotics', 'pectin',                                            'colonic_fermentation'),
-    ('psyllium', 'psyllium seed',                                       'viscous_fiber_luminal'),
-    ('fiber', 'konjac glucomannan',                                     'viscous_fiber_luminal'),
-    ('superoxide_dismutase', 'sod supplement',                          'protein_digestion_barrier'),
-    ('collagen', 'undenatured collagen',                                'oral_tolerance'),
-    ('digestive_enzymes', 'plant-based enzyme complex',                 'framework_mismatch'),
-    ('hyaluronic_acid', 'hyaluronic acid (unspecified)',                'framework_mismatch'),
-    ('iodine', 'kelp iodine',                                           'framework_mismatch'),
-    ('butterbur', 'butterbur (unspecified)',                            'framework_mismatch'),
-    ('probiotics', 'probiotics (unspecified)',                          'framework_mismatch'),
-])
-def test_d7_category_error_enum_applied(iqm, pid, fname, expected_type):
-    """D7 category_error_type enum must be applied per Dr Pham sign-off."""
-    form = iqm[pid]['forms'].get(fname)
-    assert form is not None, f'{pid}::{fname} missing'
-    struct = form.get('absorption_structured') or {}
-    cet = struct.get('category_error_type')
-    assert cet == expected_type, (
-        f'{pid}::{fname} category_error_type={cet}, expected {expected_type}.'
-    )
-    cel = struct.get('category_error_label')
-    assert cel and isinstance(cel, str) and len(cel) > 5, (
-        f'{pid}::{fname} category_error_label missing or too short.'
-    )
-
-
-def test_d7_enum_only_on_null_forms(iqm):
-    """category_error_type should only appear on forms with null struct.value."""
-    violations = []
-    for pid, parent in iqm.items():
-        for fname, form in parent.get('forms', {}).items():
-            struct = form.get('absorption_structured') or {}
-            if struct.get('category_error_type') and struct.get('value') is not None:
-                violations.append((pid, fname, struct.get('value')))
-    assert not violations, (
-        f'category_error_type set on forms with non-null struct.value: {violations}'
-    )
 
 
 # ============================================================================

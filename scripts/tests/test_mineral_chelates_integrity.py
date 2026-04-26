@@ -118,7 +118,6 @@ def test_brown_rice_chelate_marketing_flagged(iqm):
         form = iqm.get(pid, {}).get('forms', {}).get(fname)
         assert form is not None, f'{pid}::{fname} missing'
         text = (form.get('absorption') or '') + ' ' + (form.get('notes') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text = text.lower()
         flag_phrases = ('no human pk', 'no human-pk', 'marketing', 'zero pubmed',
                         'no peer-reviewed', 'absent peer-reviewed', 'marketing-only')
@@ -150,7 +149,6 @@ def test_no_liu_2011_misattributed_for_heme_iron(iqm):
     """
     form = iqm['iron']['forms']['heme iron polypeptide']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     assert 'PMID:21411831' not in text or 'NOT cited' in text or 'misattribut' in text.lower(), (
         f'heme iron must not cite PMID:21411831 (Liu 2011 rat exercise study). '
         f'Text: {text[:200]}'
@@ -161,7 +159,6 @@ def test_zinc_aspartate_pmid_37111104_cited(iqm):
     """Zinc aspartate must continue to cite verified PMID:37111104 (Piacenza 2023)."""
     form = iqm['zinc']['forms']['zinc aspartate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     assert 'PMID:37111104' in text, (
         f'zinc aspartate must cite verified PMID:37111104 (Piacenza 2023)'
     )
@@ -173,7 +170,6 @@ def test_iron_bisglycinate_class_evidence_cited(iqm):
     """
     form = iqm['iron']['forms']['iron bisglycinate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     assert 'PMID:11377130' in text or 'PMID:10958812' in text, (
         f'iron bisglycinate must cite verified Pineda 2001 or Layrisse 2000 PMID'
     )
@@ -185,7 +181,6 @@ def test_zinc_acetate_local_effect_caveat(iqm):
     """
     form = iqm['zinc']['forms']['zinc acetate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     if 'hemilä' in text_lower or '25888289' in text:
         # Must include local-effect caveat

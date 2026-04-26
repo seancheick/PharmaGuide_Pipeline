@@ -145,7 +145,6 @@ def test_biotin_zempleni_pmid_anchored(iqm):
     """d-biotin notes must reference Zempleni 1999 PMID:10075337."""
     form = iqm['vitamin_b7_biotin']['forms']['d-biotin']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     assert '10075337' in text, (
         f'd-biotin must cite Zempleni 1999 PMID:10075337. Text: {text[:300]}'
     )
@@ -172,7 +171,6 @@ def test_dha_different_transporter_documented(iqm):
     """
     form = iqm['vitamin_c']['forms']['dehydroascorbic acid']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('glut1', 'glut3', 'glut4', 'glut family', 'glut transporters',
                     '19391462', 'rivas', 'vera 2008', 'differs from ascorbate',
@@ -189,7 +187,6 @@ def test_cis_mk7_inactive_documented(iqm):
     """
     form = iqm['vitamin_k']['forms']['vitamin K2 (cis form)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('all-trans', 'cis isomer', 'biologically inactive',
                     'biologically active', '35864383', 'lal 2022', 'all trans')
@@ -205,7 +202,6 @@ def test_pyridoxine_hcl_pmid_anchored(iqm):
     """
     form = iqm['vitamin_b6_pyridoxine']['forms']['pyridoxine hydrochloride']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     has_pmid = '12507972' in text or '11786647' in text
     assert has_pmid, (
         f'pyridoxine HCl must cite Bor 2003 (PMID:12507972) or '
@@ -220,7 +216,6 @@ def test_no_phantom_mock_malik_1992(iqm):
     forms = iqm['vitamin_b7_biotin']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         if 'Mock' in text and 'Malik' in text and '1992' in text:
             assert any(neg in text.lower() for neg in
                        ('could not verify', 'ghost', 'unverified', 'wrong year',
@@ -246,7 +241,6 @@ def test_class_authority_pmids_introduced_b26(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

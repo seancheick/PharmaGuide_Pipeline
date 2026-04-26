@@ -9,7 +9,7 @@
   "brand_name": "CVS Pharmacy",
   "breakdown": {
     "A": {
-      "A1": 11.76,
+      "A1": 12.06,
       "A2": 0.5,
       "A3": 1.0,
       "A4": 3.0,
@@ -21,7 +21,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 16.26,
+      "core_quality": 16.56,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -42,7 +42,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 16.26
+      "score": 16.56
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -70,13 +70,12 @@
     "C": {
       "depth_bonus": 0.0,
       "ingredient_points": {
-        "omega 3 fatty acids": 3.98,
         "vitamin a beta carotene": 4.68,
         "vitamin c": 3.98,
         "vitamin d3": 4.29,
         "vitamin e": 2.81
       },
-      "matched_entries": 5,
+      "matched_entries": 4,
       "max": 20.0,
       "score": 7.82,
       "top_n_applied": 3
@@ -96,7 +95,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 47.58,
+    "quality_raw": 47.88,
     "violation_penalty": 0.0
   },
   "dsld_id": "18141",
@@ -107,17 +106,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "Omega-3 100 mg",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 59.5,
-  "score_80": 47.6,
+  "score_100_equivalent": 59.9,
+  "score_80": 47.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 16.26,
+      "core_quality": 16.56,
       "max": 25.0,
-      "score": 16.26
+      "score": 16.56
     },
     "B_safety_purity": {
       "max": 30.0,

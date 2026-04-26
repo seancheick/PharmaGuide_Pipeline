@@ -123,7 +123,6 @@ def test_pectin_alpha_gos_category_error_documented(iqm):
     for pid, fname in forms:
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('category error', 'category_error', 'fermentation', 'scfa',
                         'b22', 'batch 22', 'inulin framework', '12088514', 'nyman 2002')
@@ -137,7 +136,6 @@ def test_kelp_variable_content_not_F_documented(iqm):
     """Kelp iodine notes must document variable CONTENT not variable F."""
     form = iqm['iodine']['forms']['kelp iodine']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('variable content', 'content not f', 'variable iodine',
                     '15588380', 'teas 2004', '15220938', 'zimmermann',
@@ -152,7 +150,6 @@ def test_molecular_iodine_distinct_mechanism_documented(iqm):
     """Molecular I2 notes must document NIS-independent mechanism."""
     form = iqm['iodine']['forms']['molecular iodine']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('nis-independent', 'nis independent', 'distinct', 'aranda 2013',
                     '22576883', '23607319', 'aceves', 'extrathyroidal')
@@ -169,7 +166,6 @@ def test_no_phantom_oe_kimura_HA(iqm):
     forms = iqm['hyaluronic_acid']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         if 'Oe 2014' in text:
             assert any(neg in text.lower() for neg in
                        ('ghost', 'fabricated', 'not in pubmed', 'not found')), (
@@ -195,7 +191,6 @@ def test_class_authority_pmids_introduced_b28(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

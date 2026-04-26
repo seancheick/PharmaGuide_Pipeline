@@ -123,7 +123,6 @@ def test_no_phantom_schedel_2000_citation(iqm):
     for pid in parents:
         for fname, form in iqm[pid]['forms'].items():
             text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-            text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
             for m in live.finditer(text):
                 start = max(0, m.start() - 1)
                 end = min(len(text), m.end() + 1)
@@ -143,7 +142,6 @@ def test_no_phantom_greenwood_2003_citrate(iqm):
     """
     form = iqm['creatine_monohydrate']['forms']['creatine citrate']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     live = re.compile(r'(?<![\"“])Greenwood\s*2003(?![\"”])', re.IGNORECASE)
     for m in live.finditer(text):
         start = max(0, m.start() - 1)
@@ -172,7 +170,6 @@ def test_class_authority_pmids_introduced(iqm):
     for form in iqm['creatine_monohydrate']['forms'].values():
         full_text += (form.get('notes') or '') + ' '
         full_text += (form.get('absorption') or '') + ' '
-        full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing from creatine notes: {missing}'
@@ -183,7 +180,6 @@ def test_cee_creatinine_mechanism_documented(iqm):
     """CEE notes must mention creatinine conversion (pre-absorption hydrolysis)."""
     form = iqm['creatine_monohydrate']['forms']['creatine ethyl ester']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     assert 'creatinine' in text_lower, (
         f'CEE notes must mention creatinine conversion (the pre-absorption '

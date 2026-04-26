@@ -133,7 +133,6 @@ def test_psyllium_5th_category_error_documented(iqm):
     for pid, fname in forms:
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('category error', 'category_error', '5th category',
                         'fiber', 'bile-acid', 'gel-forming', 'not systemically',
@@ -155,7 +154,6 @@ def test_sod_6th_category_error_documented(iqm):
     for pid, fname in forms:
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('category error', 'category_error', '6th category',
                         'protein digestion', 'pepsin', 'gliadin',
@@ -211,7 +209,6 @@ def test_liposomal_evidence_thin_documented_b24(iqm):
     for pid, fname in liposomal_forms:
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('evidence-thin', 'no human pk', 'no head-to-head',
                         'no published', 'unsupported', 'no comparator',
@@ -228,7 +225,6 @@ def test_no_phantom_demuro_10843432(iqm):
     """
     form = iqm['melatonin']['forms']['melatonin (unspecified)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     # Must cite correct DeMuro PMID
     assert '10883420' in text, (
         f'melatonin (unspecified) must cite DeMuro 2000 PMID:10883420. '
@@ -250,7 +246,6 @@ def test_no_phantom_boonstra_26617552(iqm):
     """
     form = iqm['gaba']['forms']['gaba (gamma-aminobutyric acid) (unspecified)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     assert '26500584' in text, (
         f'gaba (unspecified) must cite Boonstra 2015 PMID:26500584. '
         f'Text: {text[:400]}'
@@ -283,7 +278,6 @@ def test_class_authority_pmids_introduced_b24(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'
@@ -328,7 +322,6 @@ def test_pending_dr_pham_review_documented(iqm):
     for pid, fname in pending_forms:
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('dr pham', 'pending', 'review', 'e1', 'e2', 'e3')
         assert any(p in text_lower for p in flag_phrases), (

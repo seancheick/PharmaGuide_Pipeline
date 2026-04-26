@@ -130,7 +130,6 @@ def test_slippery_elm_category_error_documented(iqm):
     forms = iqm['slippery_elm']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('category error', 'category_error', 'local action',
                         'local mucosal', 'demulcent', 'not systemically',
@@ -147,7 +146,6 @@ def test_white_willow_pre_absorption_hydrolysis_qualified(iqm):
     """
     form = iqm['white_willow_bark']['forms']['white willow bark standardized']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('salicin', 'salicylic acid', 'pre-absorption',
                     'pre absorption', 'hydrolysis', '11599656')
@@ -163,7 +161,6 @@ def test_calanus_wax_ester_iauc_qualified(iqm):
     """
     form = iqm['calanus_oil']['forms']['calanus oil']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('27604086', 'cook 2016', 'iauc', 'ethyl ester',
                     'wax ester', 'wax-ester', 'slow-release', 'slow release')
@@ -180,7 +177,6 @@ def test_st_johns_wort_biber_pmid_correct(iqm):
     """
     form = iqm['st_johns_wort']['forms']["st john's wort standardized extract"]
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     # Must cite correct Biber PMID
     assert '9684946' in text, (
         'st_johns_wort standardized must cite Biber 1998 PMID:9684946. '
@@ -202,7 +198,6 @@ def test_olive_pre_absorption_hydrolysis_qualified(iqm):
     """
     form = iqm['olive_leaf']['forms']['olive leaf extract standardized']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('oleuropein', 'hydroxytyrosol', 'pre-absorption',
                     'pre absorption', 'hydrolysis', '24158653',
@@ -219,7 +214,6 @@ def test_verbascoside_efflux_substrate_qualified(iqm):
     """
     form = iqm['mullein']['forms']['standardized mullein (verbascoside)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('p-gp', 'p gp', 'bcrp', 'mrp2', 'efflux',
                     '31778580', 'yang 2020', 'acteoside')
@@ -235,7 +229,6 @@ def test_goldenseal_berberine_class_extension(iqm):
     """
     form = iqm['goldenseal']['forms']['standardized goldenseal (berberine/hydrastine)']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('berberine', '19269122', 'gupta 2009', 'class-poor',
                     'class poor', 'hydrastine')
@@ -251,7 +244,6 @@ def test_perilla_ala_class_equivalence(iqm):
     """
     form = iqm['perilla_oil']['forms']['perilla seed oil']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     # Must cite Kurowska or Burdge or ALA conversion
     flag_phrases = ('12591004', '12323085', 'kurowska', 'burdge',
@@ -270,7 +262,6 @@ def test_seal_oil_tg_class_equivalence(iqm):
     """
     form = iqm['seal_oil']['forms']['blubber oil']
     text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-    text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
     text_lower = text.lower()
     flag_phrases = ('10588467', 'conquer 1999', 'serum phospholipid',
                     'tg omega-3', 'tg omega', 'triglyceride', 'epa', 'dpa')
@@ -288,7 +279,6 @@ def test_no_phantom_biber_9684421(iqm):
     forms = iqm['st_johns_wort']['forms']
     for fname, form in forms.items():
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         if 'PMID:9684421' in text or '9684421' in text:
             assert any(neg in text.lower() for neg in
                        ('not biber', 'transposition', 'ghost', 'misattribut',
@@ -315,7 +305,6 @@ def test_class_authority_pmids_introduced(iqm):
         for form in iqm[pid]['forms'].values():
             full_text += (form.get('notes') or '') + ' '
             full_text += (form.get('absorption') or '') + ' '
-            full_text += ((form.get('absorption_structured') or {}).get('notes') or '') + ' '
     missing = [pmid for pmid in expected_pmids if pmid not in full_text]
     assert not missing, (
         f'Verified class-authority PMIDs missing: {missing}'

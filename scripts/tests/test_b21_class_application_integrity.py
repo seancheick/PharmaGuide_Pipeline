@@ -170,7 +170,6 @@ def test_liposomal_evidence_thin_documented(iqm):
     for pid, fname in liposomal_forms:
         form = iqm[pid]['forms'][fname]
         text = (form.get('notes') or '') + ' ' + (form.get('absorption') or '')
-        text += ' ' + ((form.get('absorption_structured') or {}).get('notes') or '')
         text_lower = text.lower()
         flag_phrases = ('evidence-thin', 'no human pk', 'no dedicated',
                         'mechanistic', 'no published', 'no comparator')
