@@ -327,9 +327,11 @@ echo "FULL RELEASE: interaction DB → Supabase → Flutter"
 echo "==========================================${NC}"
 echo ""
 
-# Build release_full.sh arguments. Snapshot already assembled the catalog,
-# so --skip-assemble avoids a redundant build_all_final_dbs.py run.
-RELEASE_ARGS=(--skip-assemble)
+# Build release_full.sh arguments. release_full.sh is auto-smart now —
+# every step decides for itself whether it has work. After
+# rebuild_dashboard_snapshot.sh runs, the catalog is fresh in dist/, and
+# release_full's step 1+2 detection skips both. No --skip-assemble needed.
+RELEASE_ARGS=()
 [ "$RELEASE_SKIP_SUPABASE" = "1" ]    && RELEASE_ARGS+=(--skip-supabase)
 [ "$RELEASE_SKIP_FLUTTER" = "1" ]     && RELEASE_ARGS+=(--skip-flutter)
 [ "$RELEASE_SUPABASE_DRY_RUN" = "1" ] && RELEASE_ARGS+=(--supabase-dry-run)
