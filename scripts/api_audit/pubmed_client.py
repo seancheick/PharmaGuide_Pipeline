@@ -30,6 +30,7 @@ DEFAULT_EMAIL = os.environ.get("NCBI_EMAIL") or os.environ.get("PUBMED_EMAIL") o
 DEFAULT_TIMEOUT_SECONDS = 20.0
 DEFAULT_RATE_LIMIT_DELAY = 0.12
 DEFAULT_CACHE_TTL_SECONDS = 60 * 60 * 24 * 14
+DEFAULT_CACHE_PATH = SCRIPTS_ROOT / ".cache" / "pubmed_cache.json"
 MAX_RETRIES = 4
 DEFAULT_FAILURE_LIMIT = 3  # circuit breaker threshold
 
@@ -54,7 +55,7 @@ class PubMedConfig:
 def load_pubmed_config(env: Mapping[str, str] | None = None) -> PubMedConfig:
     source = env or os.environ
     cache_env = source.get("PUBMED_CACHE_FILE") or source.get("NCBI_CACHE_FILE")
-    cache_path = Path(cache_env) if cache_env else None
+    cache_path = Path(cache_env) if cache_env else DEFAULT_CACHE_PATH
     return PubMedConfig(
         api_key=source.get("NCBI_API_KEY") or source.get("PUBMED_API_KEY", ""),
         tool=source.get("NCBI_TOOL") or source.get("PUBMED_TOOL") or "pharmaguide-audit",
