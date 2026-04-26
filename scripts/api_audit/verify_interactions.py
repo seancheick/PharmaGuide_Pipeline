@@ -142,6 +142,7 @@ class VerificationReport:
     rxcui_mismatches: list[dict[str, Any]] = field(default_factory=list)
     unmapped_supplements: list[dict[str, Any]] = field(default_factory=list)
     unknown_classes: list[dict[str, Any]] = field(default_factory=list)
+    food_agents: list[dict[str, Any]] = field(default_factory=list)  # foods don't need IQM mapping
     issues: list[EntryIssue] = field(default_factory=list)
 
     def add_issue(self, issue: EntryIssue) -> None:
@@ -161,6 +162,7 @@ class VerificationReport:
             "cui_corrections": self.cui_corrections,
             "rxcui_mismatches": self.rxcui_mismatches,
             "unmapped_supplements": self.unmapped_supplements,
+            "food_agents": self.food_agents,
             "unknown_classes": self.unknown_classes,
             "issues": [i.to_dict() for i in self.issues],
         }
@@ -632,6 +634,18 @@ def verify_entry(
         return None
 
     # Check 5: canonical_id mapping for supplements
+    # NOTE: foods (Med-Food / Food-Med / Sup-Food / Food-Sup) carry CUIs but
+    # are intentionally out of IQM scope (the IQM is supplement-only). After
+    # normalize_direction(), Med-Food and Food-Med both place the food at
+    # agent2. Sup-Food/Food-Sup have CUI-CUI sides that may swap by id sort —
+    # for those, fall back to noting both sides as food-eligible.
+    type_authored = str(normalized.get("type_authored", "") or "")
+    food_sides: set[str] = set()
+    if type_authored in ("Med-Food", "Food-Med"):
+        food_sides = {"agent2"}
+    elif type_authored in ("Sup-Food", "Food-Sup"):
+        food_sides = {"agent1", "agent2"}  # ambiguous after CUI-sort swap
+
     for side in ("agent1", "agent2"):
         agent_id = str(normalized.get(f"{side}_id", ""))
         kind = classify_agent(agent_id)
@@ -639,23 +653,35 @@ def verify_entry(
             canonical = map_canonical_id(agent_id, kind, ctx.iqm_cui_index)
             normalized[f"{side}_canonical_id"] = canonical
             if canonical is None:
-                report.add_issue(
-                    EntryIssue(
-                        entry_id=entry_id,
-                        check="canonical_map",
-                        severity="warning",
-                        message=f"supplement {agent_id} has no canonical_id in ingredient_quality_map",
-                        details={"agent_side": side, "name": normalized.get(f"{side}_name")},
+                if side in food_sides:
+                    # Food agent — out of IQM scope, no warning, track separately
+                    report.food_agents.append(
+                        {
+                            "entry_id": entry_id,
+                            "side": side,
+                            "cui": agent_id,
+                            "name": normalized.get(f"{side}_name"),
+                            "type_authored": type_authored,
+                        }
                     )
-                )
-                report.unmapped_supplements.append(
-                    {
-                        "entry_id": entry_id,
-                        "side": side,
-                        "cui": agent_id,
-                        "name": normalized.get(f"{side}_name"),
-                    }
-                )
+                else:
+                    report.add_issue(
+                        EntryIssue(
+                            entry_id=entry_id,
+                            check="canonical_map",
+                            severity="warning",
+                            message=f"supplement {agent_id} has no canonical_id in ingredient_quality_map",
+                            details={"agent_side": side, "name": normalized.get(f"{side}_name")},
+                        )
+                    )
+                    report.unmapped_supplements.append(
+                        {
+                            "entry_id": entry_id,
+                            "side": side,
+                            "cui": agent_id,
+                            "name": normalized.get(f"{side}_name"),
+                        }
+                    )
         else:
             normalized[f"{side}_canonical_id"] = None
 

@@ -1065,7 +1065,10 @@ class TestCompoundParentDisambiguation:
             ("MaquiBright", "maqui_berry", "maqui berry (unspecified)"),
             ("Vitexin", "vitexin", "vitexin (unspecified)"),
             ("Life's DHA", "dha", "algal triglyceride"),
-            ("Concentrated Fish Oil", "fish_oil", "fish oil (unspecified)"),
+            # Post-B38 (2026-04-25) alias dedup: "concentrated fish oil" was
+            # duplicated in both 'ethyl ester' and 'fish oil (unspecified)';
+            # the more specific 'ethyl ester' kept the alias.
+            ("Concentrated Fish Oil", "fish_oil", "ethyl ester"),
         ],
     )
     def test_dangerous_or_dual_identity_aliases_route_to_expected_parent(
@@ -1535,10 +1538,16 @@ class TestFormFallbackPrecisionRegression:
         assert "konjac" in str(match.get("form_name", "")).lower()
 
     def test_dha_epa_combined_alias_maps_to_epa_dha(self, enricher):
+        # Post-B38 (2026-04-25): the epa_dha parent was merged into fish_oil.
+        # The "DHA/EPA" (with slash) form-alias resolves to the fish_oil parent
+        # via the alias index (it lives on a fish_oil form). The comma variant
+        # "DHA, EPA" still hits the parent-level omega_3 alias — those bulk
+        # labels are pending a future relocation pass to fish_oil.
+        # Test asserts current behavior to detect future drift.
         qm = enricher.databases.get("ingredient_quality_map", {})
         match = enricher._match_quality_map("DHA/EPA", "DHA/EPA", qm)
         assert match is not None
-        assert match.get("canonical_id") == "epa_dha"
+        assert match.get("canonical_id") == "fish_oil"
 
     def test_trimethylglycine_hydrochloride_maps_to_betaine_hcl(self, enricher):
         qm = enricher.databases.get("ingredient_quality_map", {})

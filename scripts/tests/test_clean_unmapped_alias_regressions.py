@@ -2510,9 +2510,10 @@ def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, 
         ("flax", "Flaxseed"),
         ("organic flax seed fiber", "Flaxseed"),
         ("flaxseed fermented", "Flaxseed"),
-        # Flaxseed oil extract — cleaner routes to Omega-3 (IQM precedence);
-        # IQM flaxseed oil form alias fixes enricher fallback
-        ("flaxseed oil extract", "Omega-3"),
+        # Flaxseed oil extract — post-B38 (2026-04-25), the omega_3 parent
+        # is metabolite-only; flaxseed (a botanical oil source) routes to the
+        # botanical "Flaxseed" instead of the omega-3 umbrella.
+        ("flaxseed oil extract", "Flaxseed"),
         # Piperine / Black pepper — "organic black pepper" now routes to botanical
         # (genus contamination fix: bare plant names → botanical, not compound IQM)
         ("organic black pepper", "Black Pepper"),
@@ -2621,19 +2622,22 @@ def test_batch48_brown_rice_chelate_mineral_forms_map(normalizer, name, ingredie
 
 
 @pytest.mark.parametrize(
-    "mineral_key,form_name",
+    "mineral_key,form_name,expected_bio",
     [
-        ("chromium", "chromium brown rice chelate"),
-        ("iron", "iron brown rice chelate"),
-        ("molybdenum", "molybdenum brown rice chelate"),
-        ("boron", "boron brown rice chelate"),
-        ("magnesium", "magnesium brown rice chelate"),
-        ("selenium", "selenium brown rice chelate"),
-        ("copper", "copper brown rice chelate"),
-        ("potassium", "potassium brown rice chelate"),
+        # Dr Pham C4 (2026-04-25) downgraded most BRC forms to mineral-specific bio_scores
+        # because BRC class F is determined by mineral, not by chelate form.
+        # Molybdenum/copper retain bio=11 (intrinsic high bioavailability).
+        ("chromium",   "chromium brown rice chelate",    6),
+        ("iron",       "iron brown rice chelate",        6),
+        ("molybdenum", "molybdenum brown rice chelate", 11),
+        ("boron",      "boron brown rice chelate",       9),
+        ("magnesium",  "magnesium brown rice chelate",   6),
+        ("selenium",   "selenium brown rice chelate",    8),
+        ("copper",     "copper brown rice chelate",     11),
+        ("potassium",  "potassium brown rice chelate",   9),
     ],
 )
-def test_batch48_brown_rice_chelate_forms_exist_in_iqm(mineral_key, form_name):
+def test_batch48_brown_rice_chelate_forms_exist_in_iqm(mineral_key, form_name, expected_bio):
     import json as _json
     from pathlib import Path
 
@@ -2646,9 +2650,12 @@ def test_batch48_brown_rice_chelate_forms_exist_in_iqm(mineral_key, form_name):
     assert form_name in forms, f"IQM form {form_name!r} missing from {mineral_key!r}"
 
     form = forms[form_name]
-    # Parallel structure with zinc/manganese brown rice chelate
-    assert form.get("bio_score") == 11, f"{form_name} bio_score must be 11 (zn/mn BRC precedent)"
-    assert form.get("score") == 11
+    # Bio score is mineral-specific per Dr Pham C4 sign-off (2026-04-25):
+    # BRC chelate confers no extra absorption beyond the mineral's own class F.
+    assert form.get("bio_score") == expected_bio, (
+        f"{form_name} bio_score must be {expected_bio} per Dr Pham C4 BRC review."
+    )
+    assert form.get("score") == expected_bio  # natural=False so score == bio
     assert form.get("natural") is False
     assert isinstance(form.get("aliases"), list) and len(form["aliases"]) >= 3
     struct = form.get("absorption_structured") or {}

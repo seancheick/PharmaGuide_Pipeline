@@ -41,6 +41,14 @@ OFFLINE_FLAG=""
 DO_IMPORT=0
 FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
 
+# Single source of truth: pull pipeline version from build_final_db.py
+# (catalog and interaction artifacts must agree on pipeline_version).
+PIPELINE_VERSION="$(grep -E '^PIPELINE_VERSION[[:space:]]*=' scripts/build_final_db.py | head -1 | awk -F'"' '{print $2}')"
+if [[ -z "$PIPELINE_VERSION" ]]; then
+  echo "ERROR: could not read PIPELINE_VERSION from scripts/build_final_db.py" >&2
+  exit 1
+fi
+
 # ---------------------------------------------------------------------------
 # CLI parsing
 # ---------------------------------------------------------------------------
@@ -105,7 +113,8 @@ python3 scripts/build_interaction_db.py \
   --output "$OUTPUT_DIR/interaction_db.sqlite" \
   --manifest "$OUTPUT_DIR/interaction_db_manifest.json" \
   --report "$OUTPUT_DIR/build_audit_report.json" \
-  --interaction-db-version "$INTERACTION_VERSION"
+  --interaction-db-version "$INTERACTION_VERSION" \
+  --pipeline-version "$PIPELINE_VERSION"
 
 ok "SQLite built"
 

@@ -123,7 +123,7 @@ def test_parse_ecitmatch_rows_extracts_pmid_by_local_key():
     ]
 
 
-def test_pubmed_client_retries_http_429(monkeypatch):
+def test_pubmed_client_retries_http_429(monkeypatch, tmp_path):
     import api_audit.pubmed_client as pubmed_client
     from api_audit.pubmed_client import PubMedClient
 
@@ -153,7 +153,9 @@ def test_pubmed_client_retries_http_429(monkeypatch):
     monkeypatch.setattr(pubmed_client.requests, "request", fake_request, raising=False)
     monkeypatch.setattr(pubmed_client.time, "sleep", lambda _: None)
 
-    client = PubMedClient(rate_limit_delay=0.0)
+    # Use an isolated cache path so the default disk cache (added 2026-04-26)
+    # doesn't short-circuit the retry path with a previously-stored result.
+    client = PubMedClient(rate_limit_delay=0.0, cache_path=tmp_path / "pubmed_cache.json")
     result = client.esearch("quercetin")
 
     assert result["esearchresult"]["idlist"] == ["12345"]

@@ -459,6 +459,59 @@ If you must sync manually (e.g., CI broken):
 
 Rotate quarterly at minimum, or immediately if a secret is suspected compromised.
 
+### SOP-5 — Rebuilding the interaction DB
+
+The interaction DB (`scripts/interaction_db_output/interaction_db.sqlite`, ~22 MB) is a separate artifact from the catalog DB (`pharmaguide_core.db`). It bundles three data sources into one SQLite that the Flutter app queries: curated drug↔supplement interactions (Tier 1, full severity), supp.ai research pairs (Tier 2, info-only), and drug class membership.
+
+**When to rebuild — trigger-driven, not on a clock:**
+
+| Trigger | Action |
+|---|---|
+| Edited `scripts/data/curated_interactions/*.json` (added pair, fixed CUI, changed severity) | Rebuild |
+| Edited `scripts/data/drug_classes.json` (new class, member RXCUI changes) | Rebuild |
+| New supp.ai dump available (rare — last upstream update 2021-10-20) | Re-run `ingest_suppai.py`, then rebuild |
+| Major IQM changes that map a previously-unmapped CUI | Rebuild (the verifier re-runs `map_canonical_id` against current IQM) |
+| Schema bump (`schema_version` change in spec) | Rebuild |
+| Catalog release (any `pharmaguide_core.db` ship) | Rebuild *together* so manifests agree on `pipeline_version` |
+
+**Not** a weekly cron — it's release-time work. If none of the inputs above changed, the bundled artifact stays valid.
+
+**Run command:**
+
+```bash
+# Build + stage to scripts/dist/ (does NOT push to Flutter)
+bash scripts/rebuild_interaction_db.sh
+
+# Build + stage + atomic import into Flutter assets/db/
+bash scripts/rebuild_interaction_db.sh --import
+
+# Offline mode (skip live UMLS+RxNorm calls — fast schema-only re-check)
+bash scripts/rebuild_interaction_db.sh --offline
+```
+
+The script runs four steps under one shell:
+1. **Verify** — `verify_interactions.py` runs the 10 spec checks against UMLS+RxNorm (or schema-only if `--offline`). Builds fail on any error; warnings surface in the audit report. Foods in `Med-Food`/`Food-Med` entries are recognized and routed to a `food_agents` list (no false-positive "unmapped supplement" warnings).
+2. **Build** — `build_interaction_db.py` produces SQLite with `interactions`, `research_pairs`, `drug_class_map`, `interaction_db_metadata`, and the `interactions_fts` FTS5 index. Sets `pipeline_version` from `build_final_db.py` so catalog and interaction artifacts agree.
+3. **Stage** — `release_interaction_artifact.py` promotes the verified build from `scripts/interaction_db_output/` (working dir) → `scripts/dist/` (release-staging). If anything in step 1 or 2 broke, `dist/` keeps the previous good copy.
+4. **Import** *(only with `--import`)* — Flutter's `import_catalog_artifact.sh` validates manifest + checksum + integrity, then atomically copies into `assets/db/interaction_db.sqlite`.
+
+**Health checks after a rebuild:**
+- `scripts/interaction_db_output/interaction_audit_report.json` → `errors: 0`
+- `scripts/dist/interaction_db_manifest.json` → `pipeline_version` matches the catalog manifest
+- `scripts/interaction_db_output/build_audit_report.json` → review `resolved_conflicts` for any new "more cautious wins" decisions
+- Diff `total_interactions` against the previous build — sudden drops mean entries were silently dropped
+
+**Order vs the catalog rebuild:** they're independent but should ship together. Standard release flow:
+```
+1. python3 scripts/run_pipeline.py <dataset>     # Stage 1-3: clean→enrich→score
+2. python3 scripts/build_final_db.py <input>     # build pharmaguide_core.db
+3. python3 scripts/release_catalog_artifact.py   # stage catalog to dist/
+4. bash scripts/rebuild_interaction_db.sh        # build + stage interaction DB (uses same pipeline_version)
+5. python3 scripts/sync_to_supabase.py dist/ --dry-run  # preview
+6. python3 scripts/sync_to_supabase.py dist/     # commit Supabase sync
+7. cd "/Users/seancheick/PharmaGuide ai" && ./scripts/import_catalog_artifact.sh /Users/seancheick/Downloads/dsld_clean/scripts/dist
+```
+
 ---
 
 ## Monitoring & alerting

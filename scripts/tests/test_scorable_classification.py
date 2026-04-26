@@ -1330,7 +1330,12 @@ class TestFormUnmappedFallbackRegression:
     def test_combined_dha_epa_does_not_get_premium_form_credit(self, enricher):
         """
         Combined labels like 'DHA, EPA' without explicit delivery/form evidence
-        must map to a conservative omega-3 unspecified form (no premium boost).
+        must NOT receive premium form credit (e.g. triglyceride/rTG bio=14).
+
+        Post-B38 (2026-04-25): omega_3 parent retains only metabolite forms
+        (HDHA/HEPE/ETA, all bio≤11). The "no premium credit" intent is now
+        guarded purely by the score≤11 ceiling — there is no longer an
+        explicit "unspecified" form on omega_3 to assert against.
         """
         quality_map = enricher.databases.get('ingredient_quality_map', {})
         match = enricher._match_quality_map(
@@ -1344,7 +1349,7 @@ class TestFormUnmappedFallbackRegression:
         )
         assert match is not None
         assert match.get("canonical_id") == "omega_3"
-        assert "unspecified" in str(match.get("form_id", "")).lower()
+        # Premium-form ceiling guard — must stay below TG/rTG premium scores.
         assert float(match.get("score", 0)) <= 11.0
 
 

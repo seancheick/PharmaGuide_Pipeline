@@ -60,11 +60,14 @@ class TestRawNamePriority:
     def test_raw_name_miss_falls_back_to_standard(self, normalizer) -> None:
         # When raw_name isn't a reverse-index key, behavior matches the
         # pre-Phase-3 contract — use standard_name.
+        # Post-B38 (2026-04-25): the architectural merge made fish_oil the bulk
+        # omega-3 supplement parent; omega_3 retained only metabolite forms.
+        # Standard_name "Omega-3 Fatty Acids" now resolves to fish_oil.
         result = normalizer._resolve_canonical_identity(
             standard_name="Omega-3 Fatty Acids",
             raw_name="Some Random Label Token No One Ships",
         )
-        assert result == ("omega_3", "ingredient_quality_map")
+        assert result == ("fish_oil", "ingredient_quality_map")
 
     def test_both_miss_returns_none(self, normalizer) -> None:
         result = normalizer._resolve_canonical_identity(
