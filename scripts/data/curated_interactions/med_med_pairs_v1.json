@@ -1,8 +1,8 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
-    "last_updated": "2026-04-12",
-    "total_entries": 29,
+    "last_updated": "2026-04-26",
+    "total_entries": 28,
     "purpose": "Med-Med interaction pairs for the PharmaGuide interaction database. Harvested from DailyMed SPL drug label 'Drug Interactions' sections and NIH/FDA authoritative sources. Covers the ~30 highest-risk drug-drug pairs for consumer safety alerting.",
     "sources": [
       "DailyMed (dailymed.nlm.nih.gov) — FDA-approved drug labeling",
@@ -473,37 +473,6 @@
       "applies_to": "dose_dependent",
       "agent1_canonical_id": null,
       "agent2_canonical_id": null
-    },
-    {
-      "id": "DDI_ACE_KSUPPLEMENT",
-      "type": "Med-Sup",
-      "agent1_name": "ACE Inhibitors (class)",
-      "agent1_id": "class:ace_inhibitors",
-      "agent2_name": "Potassium (supplement)",
-      "agent2_id": "C0032821",
-      "severity": "Moderate",
-      "interaction_effect_type": "Additive",
-      "mechanism": "ACE inhibitors block angiotensin II-driven aldosterone release, causing potassium retention. Adding supplemental potassium (including potassium-based salt substitutes) can cause hyperkalemia, especially in patients with renal impairment or diabetes.",
-      "management": "Avoid routine potassium supplementation on ACE inhibitors unless hypokalemia is documented and monitored. Check serum potassium and renal function within 1–2 weeks of any change. Counsel patients to avoid potassium-enriched salt substitutes.",
-      "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
-        "https://medlineplus.gov/druginfo/meds/a692005.html"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_at": "2026-04-13T16:37:00Z",
-        "verified_with": {
-          "rxnorm": true,
-          "umls": true,
-          "pubmed": false
-        },
-        "method": "live_api_batch_2026_04_13"
-      },
-      "evidence_basis": "authoritative_review",
-      "clinical_confidence": "medium",
-      "applies_to": "whole_class",
-      "agent1_canonical_id": null,
-      "agent2_canonical_id": "potassium"
     },
     {
       "id": "DDI_DIGOXIN_AMIODARONE",

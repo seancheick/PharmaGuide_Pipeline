@@ -544,8 +544,14 @@ def test_dedup_same_key_keeps_curated_over_suppai(tmp_path, build_ctx, normalize
     assert rp["paper_count"] == 99
 
 
-def test_conflict_resolution_more_cautious_wins(tmp_path, build_ctx):
-    """Two curated drafts colliding on the same pair → more-cautious severity wins."""
+def test_conflict_resolution_more_cautious_wins(tmp_path, build_ctx, monkeypatch):
+    """Two curated drafts colliding on the same pair → more-cautious severity wins.
+
+    Updated 2026-04-26: build is strict-by-default and now FAILS on duplicate
+    pair_keys. The conflict-resolution merge logic is preserved as a bypass
+    path (set ALLOW_CURATED_CONFLICTS=1) for emergency rebuilds. This test
+    exercises the bypass path to confirm the merge logic still works.
+    """
     drafts = json.loads(build_ctx.normalized_drafts_path.read_text())
     softer = dict(CURATED_ROW_WARFARIN_VITK)
     softer["id"] = "DDI_WAR_VITK_SOFTER"
@@ -553,6 +559,7 @@ def test_conflict_resolution_more_cautious_wins(tmp_path, build_ctx):
     drafts["interactions"].append(softer)
     build_ctx.normalized_drafts_path.write_text(json.dumps(drafts))
 
+    monkeypatch.setenv("ALLOW_CURATED_CONFLICTS", "1")
     report = _build(build_ctx)
     con = _conn(build_ctx.output_db)
     row = con.execute(
@@ -563,6 +570,20 @@ def test_conflict_resolution_more_cautious_wins(tmp_path, build_ctx):
         "more-cautious-wins broke — expected 'avoid' (from 'avoid' vs 'caution')"
     )
     assert report["resolved_conflicts"], "conflict should be logged in audit report"
+
+
+def test_strict_mode_fails_on_duplicate_pair_keys(tmp_path, build_ctx):
+    """Without ALLOW_CURATED_CONFLICTS=1, build raises ValueError on duplicates."""
+    import pytest as _pytest
+    drafts = json.loads(build_ctx.normalized_drafts_path.read_text())
+    softer = dict(CURATED_ROW_WARFARIN_VITK)
+    softer["id"] = "DDI_WAR_VITK_SOFTER"
+    softer["severity"] = "caution"
+    drafts["interactions"].append(softer)
+    build_ctx.normalized_drafts_path.write_text(json.dumps(drafts))
+
+    with _pytest.raises(ValueError, match="duplicate pair_key"):
+        _build(build_ctx)
 
 
 def test_override_beats_curated(tmp_path, build_ctx):

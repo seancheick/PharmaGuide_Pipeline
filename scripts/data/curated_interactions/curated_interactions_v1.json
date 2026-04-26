@@ -2,7 +2,7 @@
   "_metadata": {
     "schema_version": "1.0.0",
     "last_updated": "2026-04-26",
-    "total_entries": 109,
+    "total_entries": 108,
     "purpose": "Tier 1 curated drug-supplement and supplement-supplement interactions for the interaction database",
     "sources": [
       "NIH Office of Dietary Supplements (ods.od.nih.gov)",
@@ -29,10 +29,7 @@
         "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
         "https://www.ncbi.nlm.nih.gov/books/NBK470313/"
       ],
-      "source_pmids": [
-        "12501001",
-        "15128046"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -100,8 +97,7 @@
         "https://nccih.nih.gov/health/ginkgo/ataglance.htm"
       ],
       "source_pmids": [
-        "40198642",
-        "9475490"
+        "40198642"
       ],
       "verification": {
         "status": "verified",
@@ -167,13 +163,9 @@
       "management": "Do not use St. John's Wort while taking warfarin. INR must be monitored closely if it is started or stopped. Switching to a different antidepressant approach is strongly recommended.",
       "source_urls": [
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/10744188/",
         "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers"
       ],
-      "source_pmids": [
-        "10744188",
-        "10744187"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -238,9 +230,7 @@
         "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/",
         "https://nccih.nih.gov/health/coq10"
       ],
-      "source_pmids": [
-        "9585792"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -271,9 +261,7 @@
       "source_urls": [
         "https://www.nccih.nih.gov/health/glucosamine-and-chondroitin-for-osteoarthritis"
       ],
-      "source_pmids": [
-        "14693100"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -301,13 +289,9 @@
       "mechanism": "Cranberry juice and extracts may inhibit CYP2C9, the primary enzyme responsible for warfarin (S-enantiomer) metabolism. This can elevate warfarin levels and INR. Case reports include fatal hemorrhage.",
       "management": "Limit cranberry consumption to small amounts (occasional serving of juice/food). Avoid large quantities of cranberry juice or concentrated supplements. Monitor INR closely if intake changes.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/15383640/",
         "https://www.mhra.gov.uk/home/groups/pl-p/documents/websiteresources/con019838.pdf"
       ],
-      "source_pmids": [
-        "15383640",
-        "16396594"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -372,9 +356,7 @@
         "https://www.nccih.nih.gov/health/dong-quai",
         "https://nccih.nih.gov/health/herbsataglance.htm"
       ],
-      "source_pmids": [
-        "9621133"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -436,9 +418,7 @@
         "https://www.nccih.nih.gov/health/st-johns-wort",
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm"
       ],
-      "source_pmids": [
-        "10744188"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -471,9 +451,7 @@
         "https://nccih.nih.gov/health/redyeastrice",
         "https://www.fda.gov/food/cfsan-constituent-updates/fda-warns-consumers-about-red-yeast-rice-products-containing-monacolin-k"
       ],
-      "source_pmids": [
-        "19064874"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -505,9 +483,7 @@
         "https://ods.od.nih.gov/factsheets/list-all/",
         "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
       ],
-      "source_pmids": [
-        "23307956"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -538,9 +514,7 @@
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/CoQ10-HealthProfessional/"
       ],
-      "source_pmids": [
-        "12107349"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -569,12 +543,9 @@
       "mechanism": "Statins inhibit HMG-CoA reductase, which also reduces endogenous CoQ10 synthesis. Some patients experience statin-associated muscle symptoms (SAMS). CoQ10 supplementation is studied as mitigation but evidence is mixed — it may help some patients.",
       "management": "CoQ10 (100–200 mg/day) is widely used to offset statin-related muscle symptoms. It does not interfere with the statin's lipid-lowering effect. Discuss with your doctor if you have muscle pain while on a statin.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Coenzyme10-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/25547491/"
+        "https://ods.od.nih.gov/factsheets/Coenzyme10-HealthProfessional/"
       ],
-      "source_pmids": [
-        "25547491"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -638,12 +609,9 @@
       "mechanism": "5-HTP (5-hydroxytryptophan) is the direct precursor to serotonin. Taking 5-HTP while on an SSRI floods the serotonin system from both the supply side (increased synthesis) and the reuptake side (blocked clearance), creating a high risk of serotonin syndrome.",
       "management": "Avoid 5-HTP while taking any SSRI. If transitioning from an SSRI to 5-HTP for mood support, a full washout of the SSRI is required. Consult your doctor before using 5-HTP.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/12410562/",
         "https://nccih.nih.gov/health/5-htp"
       ],
-      "source_pmids": [
-        "12410562"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -805,9 +773,7 @@
         "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/",
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f4cb6e1e-2d43-4d17-8c6e-c9d3f7b4c4a0"
       ],
-      "source_pmids": [
-        "15466213"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -907,9 +873,7 @@
         "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
         "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
       ],
-      "source_pmids": [
-        "23307956"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1033,9 +997,7 @@
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Alpha-Lipoic-Acid-HealthProfessional/"
       ],
-      "source_pmids": [
-        "16163552"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1333,9 +1295,7 @@
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
       ],
-      "source_pmids": [
-        "21748102"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1362,12 +1322,8 @@
       "interaction_effect_type": "Inhibitor",
       "mechanism": "Soy isoflavones and soy protein can impair levothyroxine absorption and may also affect thyroid hormone metabolism. The effect is most pronounced in infants but relevant at high supplemental doses in adults.",
       "management": "Separate levothyroxine from soy-rich foods or supplements by at least 4 hours. Patients with hypothyroidism on stable levothyroxine should have TSH re-checked if starting high-dose soy isoflavone supplements.",
-      "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/16522724/"
-      ],
-      "source_pmids": [
-        "16522724"
-      ],
+      "source_urls": [],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1398,9 +1354,7 @@
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
       ],
-      "source_pmids": [
-        "18541855"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1432,9 +1386,7 @@
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
         "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers"
       ],
-      "source_pmids": [
-        "10744187"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1463,12 +1415,9 @@
       "mechanism": "Echinacea is an immune stimulant. In transplant recipients or patients on immunosuppressants for autoimmune disease, immune stimulation can overcome the intended immunosuppression, triggering organ rejection or disease flare.",
       "management": "Avoid echinacea with any immunosuppressant therapy. Transplant patients and those on immunosuppressants for autoimmune conditions should not use echinacea for colds or immune support.",
       "source_urls": [
-        "https://nccih.nih.gov/health/echinacea/ataglance.htm",
-        "https://pubmed.ncbi.nlm.nih.gov/12410562/"
+        "https://nccih.nih.gov/health/echinacea/ataglance.htm"
       ],
-      "source_pmids": [
-        "12410562"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1624,9 +1573,7 @@
         "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=d5b3c5ca-6064-4bc4-b46f-f45a41f0a4f6",
         "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
       ],
-      "source_pmids": [
-        "22073431"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1658,9 +1605,7 @@
         "https://www.nccih.nih.gov/health/evening-primrose-oil",
         "https://nccih.nih.gov/health/eveningprimrose"
       ],
-      "source_pmids": [
-        "8062477"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1691,9 +1636,7 @@
       "source_urls": [
         "https://www.nccih.nih.gov/health/ginkgo"
       ],
-      "source_pmids": [
-        "11745503"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1725,9 +1668,7 @@
         "https://medlineplus.gov/ency/article/001508.htm",
         "https://www.ncbi.nlm.nih.gov/books/NBK539849/"
       ],
-      "source_pmids": [
-        "24974062"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1857,12 +1798,9 @@
       "mechanism": "Ginseng has stimulant and sympathomimetic-like properties. With MAO inhibited, the catecholaminergic activity of ginseng can contribute to hypertensive reactions and CNS overstimulation.",
       "management": "Avoid ginseng with MAOIs. Case reports of hypomania and headache with this combination exist. Use ginseng only after full MAOI washout.",
       "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/7739379/",
         "https://nccih.nih.gov/health/asianginseng"
       ],
-      "source_pmids": [
-        "7739379"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1987,9 +1925,7 @@
         "https://www.nccih.nih.gov/health/willow-bark",
         "https://nccih.nih.gov/health/willowbark"
       ],
-      "source_pmids": [
-        "11398060"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2056,9 +1992,7 @@
         "https://nccih.nih.gov/health/kava",
         "https://livertox.nih.gov/Kava.htm"
       ],
-      "source_pmids": [
-        "11449161"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2150,9 +2084,7 @@
         "https://ods.od.nih.gov/factsheets/list-all/",
         "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
       ],
-      "source_pmids": [
-        "21367944"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2184,9 +2116,7 @@
         "https://ods.od.nih.gov/factsheets/list-all/",
         "https://ods.od.nih.gov/factsheets/VitaminB12-HealthProfessional/"
       ],
-      "source_pmids": [
-        "23192004"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2249,9 +2179,7 @@
         "https://ods.od.nih.gov/factsheets/list-all/",
         "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
       ],
-      "source_pmids": [
-        "16837015"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2313,12 +2241,9 @@
       "mechanism": "Long-term corticosteroid use reduces calcium absorption and increases urinary calcium excretion, leading to bone loss. Calcium and vitamin D supplementation is recommended as a preventive measure against steroid-induced osteoporosis.",
       "management": "Supplementation with calcium (1000–1200 mg/day) and vitamin D (800–1000 IU/day) is standard practice for patients on long-term corticosteroids. Discuss with your prescriber.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
-        "https://pubmed.ncbi.nlm.nih.gov/12571244/"
+        "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
       ],
-      "source_pmids": [
-        "12571244"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2475,9 +2400,7 @@
         "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/",
         "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
       ],
-      "source_pmids": [
-        "1546761"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -2607,9 +2530,7 @@
         "https://www.nccih.nih.gov/health/kava",
         "https://livertox.nih.gov/Kava.htm"
       ],
-      "source_pmids": [
-        "11449161"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -3168,9 +3089,7 @@
         "https://www.nccih.nih.gov/health/st-johns-wort",
         "https://www.fda.gov/drugs/drug-safety-and-availability/fda-public-health-advisory-risk-drug-interactions-st-johns-wort-hypericum-perforatum-and-indinavir"
       ],
-      "source_pmids": [
-        "10744188"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -3202,9 +3121,7 @@
         "https://www.nccih.nih.gov/health/probiotics-what-you-need-to-know",
         "https://nccih.nih.gov/health/probiotics/introduction.htm"
       ],
-      "source_pmids": [
-        "15643562"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -3235,9 +3152,7 @@
       "source_urls": [
         "https://www.nccih.nih.gov/health/asian-ginseng"
       ],
-      "source_pmids": [
-        "15499937"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -3269,9 +3184,7 @@
         "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
         "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
       ],
-      "source_pmids": [
-        "23297988"
-      ],
+      "source_pmids": [],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -3486,36 +3399,6 @@
       ],
       "source_pmids": [
         "40198642"
-      ],
-      "verification": {
-        "status": "verified",
-        "verified_with": {
-          "rxnorm": false,
-          "umls": true,
-          "pubmed": true
-        }
-      },
-      "evidence_basis": "systematic_review",
-      "clinical_confidence": "high"
-    },
-    {
-      "id": "DSI_SJW_CONTRACEPTIVES",
-      "type": "Med-Sup",
-      "agent1_name": "Oral Contraceptives (class)",
-      "agent1_id": "class:oral_contraceptives",
-      "agent1_canonical_id": null,
-      "agent2_name": "St. John's Wort",
-      "agent2_id": "C0813171",
-      "agent2_canonical_id": "st_johns_wort",
-      "severity": "Major",
-      "interaction_effect_type": "Inhibitor",
-      "mechanism": "Hyperforin in St John's Wort potently induces CYP3A4 and P-glycoprotein, accelerating metabolism of synthetic estrogens and progestins, reducing plasma concentrations and causing contraceptive failure.",
-      "management": "Do not combine St John's Wort with hormonal contraceptives. Use alternative non-hormonal contraception if taking SJW.",
-      "source_urls": [
-        "https://pubmed.ncbi.nlm.nih.gov/27444983/"
-      ],
-      "source_pmids": [
-        "27444983"
       ],
       "verification": {
         "status": "verified",

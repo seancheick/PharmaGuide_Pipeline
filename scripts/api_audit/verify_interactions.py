@@ -143,6 +143,9 @@ class VerificationReport:
     unmapped_supplements: list[dict[str, Any]] = field(default_factory=list)
     unknown_classes: list[dict[str, Any]] = field(default_factory=list)
     food_agents: list[dict[str, Any]] = field(default_factory=list)  # foods don't need IQM mapping
+    ghost_pmids: list[dict[str, Any]] = field(default_factory=list)        # Check 11 — PMID dead/404
+    retracted_pmids: list[dict[str, Any]] = field(default_factory=list)    # Check 11 — PMID flagged retracted
+    topic_mismatch_pmids: list[dict[str, Any]] = field(default_factory=list)  # Check 11 — abstract topic ≠ rule
     issues: list[EntryIssue] = field(default_factory=list)
 
     def add_issue(self, issue: EntryIssue) -> None:
@@ -163,6 +166,9 @@ class VerificationReport:
             "rxcui_mismatches": self.rxcui_mismatches,
             "unmapped_supplements": self.unmapped_supplements,
             "food_agents": self.food_agents,
+            "ghost_pmids": self.ghost_pmids,
+            "retracted_pmids": self.retracted_pmids,
+            "topic_mismatch_pmids": self.topic_mismatch_pmids,
             "unknown_classes": self.unknown_classes,
             "issues": [i.to_dict() for i in self.issues],
         }
@@ -189,6 +195,10 @@ class UMLSSearchClientProtocol(Protocol):
 class PubMedValidatorProtocol(Protocol):
     def exists(self, pmid: str) -> bool:
         ...
+
+    def fetch(self, pmid: str) -> dict | None:
+        """Return parsed article dict (title, abstract, retracted, etc.)
+        or None if PMID is unknown / dead."""
 
 
 # --------------------------------------------------------------------------- #
@@ -261,6 +271,53 @@ class RxNormClient:
         }
         self._cache[rxcui] = result
         return result
+
+
+# --------------------------------------------------------------------------- #
+# Default PubMed validator — wraps api_audit.pubmed_client (real network)
+# --------------------------------------------------------------------------- #
+
+
+class PubMedValidator:
+    """Adapter on top of api_audit.pubmed_client.PubMedClient that satisfies
+    PubMedValidatorProtocol. Caches per-PMID lookups across the full audit
+    run via the underlying client's disk cache.
+
+    `fetch(pmid)` returns the parsed article dict (title, abstract, retracted,
+    publication_types, mesh_terms, …) or None when the PMID is unknown.
+    """
+
+    def __init__(self, client: Any | None = None) -> None:
+        if client is None:
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            from pubmed_client import PubMedClient  # type: ignore
+            client = PubMedClient()
+        self._client = client
+        self._fetch_cache: dict[str, dict | None] = {}
+
+    def exists(self, pmid: str) -> bool:
+        return self.fetch(pmid) is not None
+
+    def fetch(self, pmid: str) -> dict | None:
+        pmid = (pmid or "").strip()
+        if not pmid or not pmid.isdigit():
+            return None
+        if pmid in self._fetch_cache:
+            return self._fetch_cache[pmid]
+        try:
+            xml = self._client.efetch([pmid])
+            sys.path.insert(0, str(Path(__file__).resolve().parent))
+            from pubmed_client import parse_pubmed_article_xml  # type: ignore
+            articles = parse_pubmed_article_xml(xml) if xml else []
+        except Exception:
+            articles = []
+        record = articles[0] if articles else None
+        # Confirm the returned article actually matches the requested PMID
+        # (PubMed sometimes returns related but different IDs).
+        if record and str(record.get("pmid", "")).strip() != pmid:
+            record = None
+        self._fetch_cache[pmid] = record
+        return record
 
 
 # --------------------------------------------------------------------------- #
@@ -410,6 +467,103 @@ def normalize_direction(entry: dict[str, Any]) -> dict[str, Any]:
         a2_kind, "unknown"
     )
     return out
+
+
+# Common stop-words to drop from agent names before topic-overlap check.
+# Without this, "class:statins" → ["class", "statins"] would always
+# match any article mentioning "statin" — too lax. We want the *specific*
+# agents to appear (Vitamin K, Warfarin, etc.), not generic terms.
+_TOPIC_STOPWORDS = frozenset({
+    "class", "the", "and", "for", "with", "from", "into", "drug",
+    "drugs", "medication", "medications", "supplement", "supplements",
+    "vitamin", "extract", "powder", "supplement", "natural", "herbal",
+    "oil", "acid", "high", "low", "tyramine-containing",
+})
+
+
+# Latin-name + synonym aliases for topic-overlap. Common-name agent
+# rules cite papers that often title-mention the Latin binomial. Without
+# this map, the heuristic reports false positives on legit citations
+# (e.g. fenugreek paper titled "Trigonella foenum-graecum").
+_AGENT_ALIASES: dict[str, tuple[str, ...]] = {
+    "st. john's wort":   ("hypericum", "perforatum"),
+    "st johns wort":     ("hypericum", "perforatum"),
+    "fenugreek":         ("trigonella", "foenum-graecum", "foenum"),
+    "ashwagandha":       ("withania", "somnifera"),
+    "valerian":          ("valeriana", "officinalis"),
+    "ginkgo biloba":     ("ginkgo", "biloba", "egb"),
+    "milk thistle":      ("silybum", "marianum", "silymarin", "silibinin"),
+    "saw palmetto":      ("serenoa", "repens"),
+    "echinacea":         ("echinacea", "purpurea"),
+    "ginger":            ("zingiber", "officinale"),
+    "turmeric":          ("curcuma", "longa", "curcumin"),
+    "garlic":            ("allium", "sativum"),
+    "ginseng":           ("panax", "ginseng"),
+    "black cohosh":      ("cimicifuga", "actaea", "racemosa"),
+    "dong quai":         ("angelica", "sinensis"),
+    "kava":              ("piper", "methysticum"),
+    "yohimbe":           ("pausinystalia", "yohimbine"),
+    "willow bark":       ("salix", "salicin"),
+    "evening primrose":  ("oenothera", "biennis", "gla"),
+    "vitamin k":         ("phylloquinone", "menaquinone", "k1", "k2"),
+    "vitamin d":         ("cholecalciferol", "ergocalciferol", "calcidiol", "calcitriol"),
+    "vitamin e":         ("tocopherol", "tocotrienol"),
+    "vitamin b12":       ("cobalamin", "cyanocobalamin", "methylcobalamin"),
+    "vitamin a":         ("retinol", "retinoid", "retinyl"),
+    "vitamin c":         ("ascorbic", "ascorbate"),
+    "folate":            ("folic", "methylfolate"),
+    "niacin":            ("nicotinic", "nicotinamide"),
+    "calcium":           ("calci",),
+    "iron":              ("ferrous", "ferric"),
+    "magnesium":         ("magnesi",),
+    "potassium":         ("potass",),
+    "alpha-lipoic acid": ("lipoic", "thioctic"),
+    "coenzyme q10":      ("ubiquinol", "ubiquinone", "coq10", "coenzyme"),
+    "5-htp":             ("hydroxytryptophan", "serotonin", "5ht"),
+    "red yeast rice":    ("monacolin", "lovastatin", "monascus"),
+    "warfarin":          ("coumadin", "coumarin", "anticoagulant", "inr"),
+    "soy isoflavones":   ("soy", "isoflavone", "genistein", "daidzein"),
+}
+
+
+def _pmid_topic_overlap(article: dict[str, Any], rule: dict[str, Any]) -> bool:
+    """Loose topic-overlap heuristic.
+
+    Returns True if at least one agent-name token (length >= 4, not a
+    stopword) OR any known alias for that agent appears in the article's
+    title + abstract. Returns True when there are no usable agent tokens
+    (defensive fallback — don't flag entries with all-stopword names
+    like 'class:statins').
+    """
+    haystack = (
+        (article.get("title") or "") + " " + (article.get("abstract") or "")
+    ).lower()
+    needles: set[str] = set()
+    for field_name in ("agent1_name", "agent2_name"):
+        raw = str(rule.get(field_name, "")).lower()
+        # Strip class: prefix if present
+        if raw.startswith("class:") or raw.startswith("class "):
+            continue  # class names are too generic for topic-overlap
+        # Add aliases for known agents (Latin names, synonyms)
+        clean = raw.replace("(class)", "").replace("(high dose)", "").strip()
+        for alias_key, aliases in _AGENT_ALIASES.items():
+            if alias_key in clean or clean in alias_key:
+                needles.update(aliases)
+        # Special-case vitamin <letter>: keep the full phrase as a needle
+        # because the letter alone is too short to clear the >=4 filter
+        # (e.g., "Vitamin E" → 'tocopherol' alias might not match an article
+        # that titles "Vitamin E serum levels…" verbatim).
+        m = re.match(r"vitamin\s+([a-z]\d{0,2})\b", clean)
+        if m:
+            needles.add(f"vitamin {m.group(1)}")
+        # Tokenize on common separators
+        for tok in clean.replace("(", " ").replace(")", " ").replace(",", " ").split():
+            tok = tok.strip(".,;:'-")
+            if len(tok) >= 4 and tok not in _TOPIC_STOPWORDS:
+                needles.add(tok)
+    if not needles:
+        return True  # nothing to check; defer to other gates
+    return any(n in haystack for n in needles)
 
 
 def extract_pmids_from_urls(source_urls: list[str] | None) -> list[str]:
@@ -614,6 +768,70 @@ def verify_entry(
             seen.add(p)
             merged_pmids.append(p)
     normalized["source_pmids"] = merged_pmids
+
+    # Check 11: PubMed PMID content verification (live efetch + topic match).
+    # Only runs when ctx.pubmed is wired (CLI flag --check-pubmed). Catches
+    # the failure mode that bit us on the Tyramine + Valerian sweep: an
+    # ID that "looks valid" but the cited article is wrong-topic.
+    #
+    # Three failure shapes, all surfaced as warnings (not errors) so the
+    # build still produces output and authors can fix iteratively:
+    #   - ghost: PMID 404 / not in PubMed at all
+    #   - retracted: PMID exists but article was retracted
+    #   - topic_mismatch: PMID exists but title+abstract has zero overlap
+    #     with agent1_name / agent2_name (probable wrong citation)
+    if ctx.pubmed is not None and merged_pmids:
+        for pmid in merged_pmids:
+            article = ctx.pubmed.fetch(pmid)
+            if article is None:
+                report.ghost_pmids.append({
+                    "entry_id": entry_id,
+                    "pmid": pmid,
+                    "reason": "not_found_in_pubmed",
+                })
+                report.add_issue(
+                    EntryIssue(
+                        entry_id=entry_id,
+                        check="pmid_ghost",
+                        severity="warning",
+                        message=f"PMID {pmid} not found in PubMed (ghost citation)",
+                    )
+                )
+                continue
+            if article.get("retracted"):
+                report.retracted_pmids.append({
+                    "entry_id": entry_id,
+                    "pmid": pmid,
+                    "title": article.get("title", ""),
+                })
+                report.add_issue(
+                    EntryIssue(
+                        entry_id=entry_id,
+                        check="pmid_retracted",
+                        severity="warning",
+                        message=f"PMID {pmid} flagged retracted in PubMed",
+                    )
+                )
+                continue
+            if not _pmid_topic_overlap(article, normalized):
+                report.topic_mismatch_pmids.append({
+                    "entry_id": entry_id,
+                    "pmid": pmid,
+                    "title": (article.get("title") or "")[:200],
+                    "agent1_name": normalized.get("agent1_name"),
+                    "agent2_name": normalized.get("agent2_name"),
+                })
+                report.add_issue(
+                    EntryIssue(
+                        entry_id=entry_id,
+                        check="pmid_topic_mismatch",
+                        severity="warning",
+                        message=(
+                            f"PMID {pmid} title+abstract has zero overlap with "
+                            f"agent names — possible wrong citation"
+                        ),
+                    )
+                )
 
     # Check 9: Major+ source gate (run *after* PMID extraction)
     if not check_major_source_gate(normalized):
@@ -967,6 +1185,16 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         action="store_true",
         help="Skip UMLS verification only",
     )
+    p.add_argument(
+        "--check-pubmed",
+        action="store_true",
+        help=(
+            "Run Check 11: live PubMed PMID verification (efetch each cited "
+            "PMID, flag 404s / retracted / topic-mismatched articles). Slow "
+            "(~1-2s per PMID with rate-limiting). Off by default for routine "
+            "rebuilds; on for clinical-data audits."
+        ),
+    )
     return p.parse_args(argv)
 
 
@@ -1020,6 +1248,13 @@ def main(argv: list[str] | None = None) -> int:
                 print("  (UMLS skipped — no UMLS_API_KEY in env)", file=sys.stderr)
         except Exception as exc:  # pragma: no cover — import guard
             print(f"  (UMLS skipped — could not load client: {exc})", file=sys.stderr)
+
+    if not args.offline and args.check_pubmed:
+        try:
+            ctx.pubmed = PubMedValidator()
+            print("  (PubMed live verification enabled — Check 11)", file=sys.stderr)
+        except Exception as exc:  # pragma: no cover — import guard
+            print(f"  (PubMed skipped — could not load client: {exc})", file=sys.stderr)
 
     report, normalized = verify_all(entries, ctx)
 

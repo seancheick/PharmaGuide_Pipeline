@@ -54,6 +54,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import sqlite3
 import sys
 from dataclasses import dataclass, field
@@ -616,6 +617,24 @@ def run_build(ctx: BuildContext) -> BuildResult:
     source_suppai_count = len(research_pairs)
 
     deduped, resolved_conflicts = resolve_curated_conflicts(drafts)
+
+    # Strict-by-default: fail the build on duplicate pair_keys in source.
+    # Prior behavior silently picked the more-cautious entry, which let
+    # editorial debt accumulate in curated_interactions_v1.json. Authors
+    # should fix the source file, not rely on the builder to clean up.
+    # Set ALLOW_CURATED_CONFLICTS=1 to bypass for emergency rebuilds.
+    if resolved_conflicts and os.environ.get("ALLOW_CURATED_CONFLICTS") != "1":
+        conflict_summary = "\n".join(
+            f"  pair_key={c['pair_key']}: kept {c['kept_id']!r}, dropped {c['dropped_id']!r}"
+            for c in resolved_conflicts
+        )
+        raise ValueError(
+            f"{len(resolved_conflicts)} duplicate pair_key(s) in curated drafts:\n"
+            f"{conflict_summary}\n"
+            f"Delete duplicates from source files (curated_interactions/*.json) "
+            f"and re-run. Set ALLOW_CURATED_CONFLICTS=1 to bypass (not recommended)."
+        )
+
     merged, override_count = apply_overrides(deduped, overrides)
 
     # Deterministic insert order. Research pairs may lack a pre-computed
