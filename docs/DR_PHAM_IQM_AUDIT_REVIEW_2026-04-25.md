@@ -93,6 +93,18 @@ These are forms where the **whole bioavailability framework does not apply**. Tr
 - **[PROPOSED]** Confirm: konjac and unspecified fiber are luminal-action, not absorbed. The category-error pattern is now established for the entire viscous-fiber class (psyllium A5 + konjac A7).
 - **[DECISION]** ☐ APPROVE   ☐ REJECT   ☐ MODIFY: ____
 
+## A8 — Undenatured Type II Collagen (UC-II) (Batch 31, APPLIED) [8th category error — NEW PATTERN: oral tolerance / Peyer's patch immune mechanism]
+
+- **[FINDING]** UC-II works at a **40 mg/d dose** (vs gram-doses for hydrolyzed collagen) via **oral tolerance / Treg induction in Peyer's patches** in the small intestine. The mechanism REQUIRES survival of the **intact triple-helical epitope** to GALT (gut-associated lymphoid tissue) — it is **not systemic absorption**. Comparing UC-II to hydrolyzed collagen peptides (which deliver gram-doses of free amino acids at F~85%) is apples-to-oranges.
+- **[EVIDENCE]**
+  - Crowley 2009 (PMID:[19847319](https://pubmed.ncbi.nlm.nih.gov/19847319/)) — UC-II 40 mg vs G+C in OA RCT
+  - Lugo 2013 (PMID:[24153020](https://pubmed.ncbi.nlm.nih.gov/24153020/)) — UC-II in healthy volunteers
+  - Lugo 2016 (PMID:[26822714](https://pubmed.ncbi.nlm.nih.gov/26822714/)) — 180-day RCT vs G+C (1500/1200 mg)
+- **[NEW PATTERN]** **8th category-error type**: oral tolerance / immune mechanism (small-bowel mucosal immune signaling, not systemic PK). Likely applies to other oral-tolerance immunomodulators. Future audits should flag: oral tolerance peptides, allergen-immunotherapy nutraceuticals.
+- **[CURRENT]** UC-II form set to null with category-error note.
+- **[PROPOSED]** Confirm: UC-II is an immune-mechanism product, not a bioavailability target. Score on RCT efficacy + dose-response (40 mg/d) instead of F. Confirm 8th-category-error pattern for future oral-tolerance entries.
+- **[DECISION]** ☐ APPROVE pattern   ☐ REJECT   ☐ MODIFY: ____
+
 ---
 
 # Section B — Critical Ghost References (already corrected)
@@ -127,6 +139,15 @@ These are PMIDs that previous database entries cited as supporting a claim — b
 | **B24** *(Batch 25)* | "Lemke 2010 SDA" | Cannot locate | Use Whelan 2012 PMID:**22279143** |
 | **B25** *(Batch 25)* | "Surette SDA omega-3" | Cannot locate | Use Whelan 2012 PMID:**22279143** |
 | **B26** *(Batch 25)* | "Goldfine 2000 vanadium" | Conflated; year wrong | Correct = Willsky/Goldfine 2001 PMID:**11377693** |
+| **B27** *(Batch 27)* | "Hashmi 1990 picolinate iron" | 0 PubMed hits (confirms 2nd batch catch) | Use Sabatier 2020 PMID:**31187261** |
+| **B28** *(Batch 27)* | "Heaney 2002 coral calcium" | 0 PubMed hits, fabricated | Use Heaney 2001 PMID:**11444420** |
+| **B29** *(Batch 27)* | "Heaney 2003 calcium bisglycinate" | 0 PubMed hits, suspect | No verified replacement |
+| **B30** *(Batch 28)* | "Oe 2014 HA labeled distribution" | Fabricated, not in PubMed | Use Mannino 2024 PMID:**37081790** (mouse only) |
+| **B31** *(Batch 28)* | "Kimura 2016 HA Caco-2" | Fabricated, not in PubMed | n/a |
+| **B32** *(Batch 31)* | "Bagchi 2002 UC-II" | Likely conflation (Bagchi is co-author on Crowley 2009) | Use Crowley 2009 PMID:**19847319** |
+| **B33** *(Batch 31)* | "Borges 2010 anthocyanin" | Borges is 2nd author, not 1st | Correct first = González-Barrio PMID:**20218618** |
+| **B34** *(Batch 31)* | "Tuli 2014 cordyceps" | Year wrong — actually 2013 | PMID:**24121015** (2013) |
+| **B35** *(Batch 31)* | "Yang 2009 cordycepin" | Not verified | Use Lee 2019 PMID:**31673018** (definitive metabolite-only paper) |
 
 **Trap PMIDs that PubMed returned for our search queries (would have been false-positive citations if accepted blindly):**
 - PMID:21055800 (returned for vanadium absorption query) — actually dental ceramics

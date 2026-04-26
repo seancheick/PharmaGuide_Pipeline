@@ -19342,8 +19342,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "oral tolerance mechanism (gut immune modulation, not systemic absorption)",
-        "notes": "Native (non-hydrolyzed) type II collagen that works via oral tolerance — activating Treg cells in Peyer's patches to suppress immune attack on joint cartilage (PMID:12837047, Bagchi 2002). UC-II is the leading brand. Effective at just 40 mg/day: WOMAC 33% reduction vs 14% for glucosamine+chondroitin (PMID:19847319, Crowley 2009; PMID:26822714, Lugo 2016). Absorption % is irrelevant — works via gut immune modulation, not systemic delivery.",
+        "absorption": "category_error (oral tolerance / Peyer's patch immune)",
+        "notes": "Native (non-hydrolyzed) type II collagen that works via oral tolerance — activating Treg cells in Peyer's patches to suppress immune attack on joint cartilage (PMID:12837047, Bagchi 2002). UC-II is the leading brand. Effective at just 40 mg/day: WOMAC 33% reduction vs 14% for glucosamine+chondroitin (PMID:19847319, Crowley 2009; PMID:26822714, Lugo 2016). Absorption % is irrelevant — works via gut immune modulation, not systemic delivery. B31 audit 2026-04-25: 8TH CATEGORY ERROR — oral tolerance mechanism (PMID:19847319). NOT comparable to hydrolyzed peptides.",
         "aliases": [
           "type II collagen",
           "UC-II",
@@ -19370,7 +19370,7 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Oral tolerance mechanism via GALT; systemic absorption not the mechanism (PMID:12837047)"
+          "notes": "CATEGORY ERROR (8th overall) — NEW PATTERN: oral tolerance / immune mechanism. UC-II 40 mg/d works via oral tolerance + Treg induction in Peyer's patches (Crowley 2009 PMID:19847319, Lugo 2013 PMID:24153020, Lugo 2016 PMID:26822714 head-to-head vs G+C 1500/1200 mg). Mechanism REQUIRES survival of intact triple-helical epitope to GALT — NOT systemic absorption. Compare to gram-dose hydrolyzed collagen peptides (0.85 F): apples-to-oranges; UC-II is small-bowel immune modulation, not absorption. GHOST CATCH: \"Bagchi 2002 UC-II\" likely conflation — Bagchi is co-author on Crowley 2009, not first."
         }
       },
       "gelatin": {
@@ -19405,8 +19405,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Collagen products range from intact gelatin to highly hydrolyzed peptides and tripeptides, with dramatically different absorption profiles. Type (I, II, III) and source (bovine, marine, chicken) also vary. Scored conservatively until the exact form is identified.",
+        "absorption": "very_good (default to hydrolyzed peptide class)",
+        "notes": "Form not specified on the label. Collagen products range from intact gelatin to highly hydrolyzed peptides and tripeptides, with dramatically different absorption profiles. Type (I, II, III) and source (bovine, marine, chicken) also vary. Scored conservatively until the exact form is identified. B31 audit 2026-04-25: collagen class default = hydrolyzed peptides.",
         "aliases": [
           "collagen",
           "tendoguard",
@@ -19416,11 +19416,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Default to hydrolyzed peptide class baseline (0.85). Most consumer \"collagen\" products are hydrolyzed peptides. Companion forms: tripeptides 0.90, hydrolyzed peptides 0.85, gelatin 0.50."
         }
       }
     },
@@ -19767,8 +19767,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "unknown (absorbed but no formal F% data)",
-        "notes": "Acetylated glucosamine for glycosaminoglycan synthesis. Pilot study (PMID:9001835, Talent 1996, n=10) confirmed oral absorption and serum detection, but no formal PK parameters (Cmax, AUC, F%) were reported. Partially converted to glucosamine in vivo. Preferred for GI-focused protocols (gut mucosal health) rather than systemic joint delivery.",
+        "absorption": "moderate (in vivo NAG → glucosamine conversion)",
+        "notes": "Acetylated glucosamine for glycosaminoglycan synthesis. Pilot study (PMID:9001835, Talent 1996, n=10) confirmed oral absorption and serum detection, but no formal PK parameters (Cmax, AUC, F%) were reported. Partially converted to glucosamine in vivo. Preferred for GI-focused protocols (gut mucosal health) rather than systemic joint delivery. B31 audit 2026-04-25: NAG → glucosamine in vivo conversion (PMID:9001835); class-equiv to glucosamine sulfate.",
         "aliases": [
           "n-acetyl glucosamine",
           "acetyl glucosamine",
@@ -19781,11 +19781,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Absorbed but no formal PK; pilot only (PMID:9001835)"
+          "value": 0.35,
+          "range_low": 0.3,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Talent & Gracy 1996 (PMID:9001835): orally ingested NAG and POLY-NAG absorbed; \"increases in serum glucosamine levels indicate NAG and POLY-NAG are converted to glucosamine in vivo.\" 1 g/d crossover n=10. End-organ exposure resembles glucosamine sulfate (~0.35). Rubin/Talent 2001 (PMID:11432083) OA RCT follow-up."
         }
       },
       "glucosamine sulfate (non-crystalline)": {
@@ -19817,8 +19817,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Glucosamine is available as HCl (highest concentration), crystalline sulfate (most studied), NAG (gut-focused), and non-crystalline sulfate (least stable). Salt form significantly affects both potency and absorption. Scored conservatively until form is confirmed.",
+        "absorption": "moderate (glucosamine class baseline)",
+        "notes": "Form not specified on the label. Glucosamine is available as HCl (highest concentration), crystalline sulfate (most studied), NAG (gut-focused), and non-crystalline sulfate (least stable). Salt form significantly affects both potency and absorption. Scored conservatively until form is confirmed. B31 audit 2026-04-25: glucosamine class baseline.",
         "aliases": [
           "glucosamine",
           "greengrown",
@@ -19829,11 +19829,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Default to glucosamine class baseline. Companions: HCl 0.26, sulfate crystalline 0.35, sulfate non-crystalline 0.20, NAG 0.35."
         }
       }
     },
@@ -35356,8 +35356,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "low (cordyceps class baseline; militaris/sinensis range)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B31 audit 2026-04-25: cordyceps class baseline. Cordycepin metabolite-only absorption (PMID:31673018).",
         "aliases": [
           "cordyceps",
           "Cordyceps 7% extract",
@@ -35368,19 +35368,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.13,
+          "range_low": 0.1,
+          "range_high": 0.18,
+          "quality": "low",
+          "notes": "Default to cordyceps class baseline. Companions: militaris 0.15, sinensis mycelium 0.12. Lee 2019 (PMID:31673018): \"intact cordycepin not absorbed orally; only 3'-deoxyinosine metabolite absorbed\" — applies to ALL cordyceps forms equally. Tuli 2013 (PMID:24121015) cordycepin therapeutic review. GHOST CATCHES: \"Yang 2009 cordycepin\" not verified — use Lee 2019; \"Tuli 2014\" actually 2013."
         }
       },
       "cordycepsprime extract": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "enhanced",
-        "notes": "Enhanced cordyceps bioavailability formula with improved absorption technology. Branded cordyceps extract with superior cellular uptake.",
+        "absorption": "low (Crominex pattern; class-equiv to militaris)",
+        "notes": "Enhanced cordyceps bioavailability formula with improved absorption technology. Branded cordyceps extract with superior cellular uptake. B31 audit 2026-04-25: Crominex relapse — class-equiv militaris, no branded PK premium (PMID:31673018).",
         "aliases": [
           "cordycepsprime",
           "enhanced cordyceps",
@@ -35388,11 +35388,11 @@
         ],
         "dosage_importance": 1.3,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "enhanced"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "CROMINEX PATTERN RELAPSE — Cordycepsprime is a branded extract with NO published superior PK data. Lee 2019 (PMID:31673018) cordycepin metabolite-only absorption applies equally to all cordyceps forms; no branded extract escapes this. Class-equivalent to militaris (0.15) WITHOUT the branded premium."
         }
       }
     },
@@ -55362,8 +55362,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "very low",
-        "notes": "Garcinia mangostana whole fruit powder including pericarp, pulp, and seeds. Contains xanthones (alpha-mangostin, gamma-mangostin) at lower concentration than pericarp-only extract. Broader nutrient profile including fiber, vitamins, and polyphenols. Traditional Southeast Asian medicinal fruit.",
+        "absorption": "poor (xanthone class-poor; whole fruit dilutes pericarp)",
+        "notes": "Garcinia mangostana whole fruit powder including pericarp, pulp, and seeds. Contains xanthones (alpha-mangostin, gamma-mangostin) at lower concentration than pericarp-only extract. Broader nutrient profile including fiber, vitamins, and polyphenols. Traditional Southeast Asian medicinal fruit. B31 audit 2026-04-25: whole fruit < pericarp (PMID:22399525).",
         "aliases": [
           "mangosteen powder",
           "mangosteen fruit powder",
@@ -55371,19 +55371,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
+          "value": 0.03,
+          "range_low": 0.02,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "Unprocessed powder; xanthone release during digestion is limited",
-          "range_low": null,
-          "range_high": null
+          "notes": "Chitchumroonchokchai 2012 (PMID:22399525): mangosteen juice α-mangostin urinary recovery only 2.0% (range 0.3-3.4%) of dose. Pericarp particles = 99% of xanthone content; whole fruit powder dilutes pericarp xanthone ~10-50× → much lower F than pericarp extract (0.07)."
         }
       },
       "mangosteen (unspecified)": {
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Garcinia mangostana fruit pericarp; contains xanthones (alpha-mangostin, gamma-mangostin). Anti-inflammatory and antioxidant; preclinical anticancer data. Limited human RCTs. Form unspecified.",
+        "absorption": "poor (xanthone class baseline)",
+        "notes": "Garcinia mangostana fruit pericarp; contains xanthones (alpha-mangostin, gamma-mangostin). Anti-inflammatory and antioxidant; preclinical anticancer data. Limited human RCTs. Form unspecified. B31 audit 2026-04-25: xanthone class baseline (PMID:22399525).",
         "aliases": [
           "mangosteen",
           "garcinia mangostana",
@@ -55395,11 +55395,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.07,
+          "quality": "poor",
+          "notes": "Xanthone class baseline; default for unspecified form. Class-poor F per Chitchumroonchokchai 2012."
         }
       }
     },
@@ -56429,8 +56429,8 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "low",
-        "notes": "Standard Montmorency tart cherry extract. Good clinical evidence for muscle recovery and sleep. Lower anthocyanin concentration than standardized forms. Dose: 60-90mL concentrate or 300-500mg extract/day.",
+        "absorption": "poor (anthocyanin class-poor; <1% intact F)",
+        "notes": "Standard Montmorency tart cherry extract. Good clinical evidence for muscle recovery and sleep. Lower anthocyanin concentration than standardized forms. Dose: 60-90mL concentrate or 300-500mg extract/day. B31 audit 2026-04-25: anthocyanin class-poor <0.1% intact (PMID:20218618). Ghost: Borges is 2nd author not 1st.",
         "aliases": [
           "montmorency tart cherry extract",
           "montmorency cherry extract",
@@ -56448,19 +56448,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "low",
-          "notes": "Anthocyanin bioavailability ~0.6-2%; formulation quality significantly affects absorption.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.008,
+          "range_low": 0.005,
+          "range_high": 0.015,
+          "quality": "poor",
+          "notes": "González-Barrio/Borges 2010 (PMID:20218618) ileostomy study: <0.1% urinary recovery of intact anthocyanins from raspberries — direct measurement of small-intestine absorption. Czank 2013 (PMID:23604435) 13C-cyanidin tracer \"12.4%\" includes ALL metabolites (degradation products, phenolic acids), NOT intact parent anthocyanin. For \"anthocyanin as scored species\" the <1% intact-parent value is correct anchor. Class-equivalent to vitacherry sports extract (0.006). GHOST CATCH: \"Borges 2010\" is 2nd author; correct first-author is González-Barrio."
         }
       },
       "tart cherry (unspecified)": {
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Prunus cerasus (Montmorency cherry) fruit; rich in anthocyanins (cyanidin-3-glucosylrutinoside) and melatonin. Evidence for sleep quality, post-exercise recovery, and uric acid reduction. Form unspecified.",
+        "absorption": "poor (anthocyanin class baseline; matches vitacherry)",
+        "notes": "Prunus cerasus (Montmorency cherry) fruit; rich in anthocyanins (cyanidin-3-glucosylrutinoside) and melatonin. Evidence for sleep quality, post-exercise recovery, and uric acid reduction. Form unspecified. B31 audit 2026-04-25: anthocyanin class (PMID:20218618).",
         "aliases": [
           "tart cherry",
           "montmorency cherry",
@@ -56482,11 +56482,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.006,
+          "range_low": 0.003,
+          "range_high": 0.012,
+          "quality": "poor",
+          "notes": "Anthocyanin class baseline. Class-equivalent to vitacherry sports extract companion (0.006)."
         }
       }
     },
@@ -60512,8 +60512,8 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "Anthraquinone glycosides (cascarosides) hydrolyzed by gut bacteria to active aglycones",
-        "notes": "Cascara Sagrada (Frangula purshiana bark). Contains cascarosides A-D (anthraquinone glycosides). Stimulant laxative acting on colonic smooth muscle. FDA reclassified as Category III (insufficient data) in 2002 but still legal in supplements. UNII 4VBP01X99F, CAS 8015-89-2.",
+        "absorption": "low-moderate (cascarosides → anthrones colonic hydrolysis)",
+        "notes": "Cascara Sagrada (Frangula purshiana bark). Contains cascarosides A-D (anthraquinone glycosides). Stimulant laxative acting on colonic smooth muscle. FDA reclassified as Category III (insufficient data) in 2002 but still legal in supplements. UNII 4VBP01X99F, CAS 8015-89-2. B31 audit 2026-04-25: pre-absorption hydrolysis (PMID:30321134, PMID:22982073). Active at colonic lumen; systemic F low.",
         "aliases": [
           "cascara sagrada extract",
           "cascara sagrada bark",
@@ -60524,19 +60524,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Prodrug; cascarosides activated by colonic bacteria"
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Pre-absorption colonic hydrolysis pattern (parallels B23 white willow salicin → salicylic acid). Cascarosides A-D cleaved by colonic bacterial β-glucosidases to anthrones (emodin, chrysophanol). Demarque 2018 (PMID:30321134) confirms cascaroside structures. Liu 2012 (PMID:22982073): emodin systemic F is low (UGT/MRP intestinal disposition). Active site is colonic lumen (laxative); systemic F low."
         }
       },
       "cascara sagrada bark powder": {
         "bio_score": 4,
         "natural": true,
         "score": 7,
-        "absorption": "Whole bark powder — cascarosides must be released from plant matrix before bacterial hydrolysis in colon. Less concentrated than standardized extract.",
-        "notes": "Whole Cascara Sagrada bark powder. Lower potency than standardized extract; cascarosides A-D not concentrated. D2.9.2 (2026-04-20): added to prevent 'Cascara Sagrada bark powder' labels falling to extract form, which overstates absorption.",
+        "absorption": "low (whole bark; cascarosides released by colonic bacteria)",
+        "notes": "Whole Cascara Sagrada bark powder. Lower potency than standardized extract; cascarosides A-D not concentrated. D2.9.2 (2026-04-20): added to prevent 'Cascara Sagrada bark powder' labels falling to extract form, which overstates absorption. B31 audit 2026-04-25: cascara class baseline.",
         "aliases": [
           "cascara sagrada powder",
           "cascara sagrada bark powder",
@@ -60547,11 +60547,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "Whole-bark powder; less concentrated than standardized extract"
+          "value": 0.25,
+          "range_low": 0.15,
+          "range_high": 0.35,
+          "quality": "low",
+          "notes": "Whole bark powder — cascarosides released by colonic bacteria; class-equivalent to extract (PMID:30321134, PMID:22982073). Slightly lower than extract due to lower active concentration."
         }
       }
     },
