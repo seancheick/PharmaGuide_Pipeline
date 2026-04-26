@@ -1539,11 +1539,11 @@ class TestFormFallbackPrecisionRegression:
 
     def test_dha_epa_combined_alias_maps_to_epa_dha(self, enricher):
         # Post-B38 (2026-04-25): the epa_dha parent was merged into fish_oil.
-        # The "DHA/EPA" (with slash) form-alias resolves to the fish_oil parent
-        # via the alias index (it lives on a fish_oil form). The comma variant
-        # "DHA, EPA" still hits the parent-level omega_3 alias — those bulk
-        # labels are pending a future relocation pass to fish_oil.
-        # Test asserts current behavior to detect future drift.
+        # Post-B38-cleanup (2026-04-26): bulk-supplement aliases relocated
+        # from omega_3 → fish_oil parent. "DHA/EPA" (slash) and "DHA, EPA"
+        # (comma) both now resolve to fish_oil parent — the bulk omega-3
+        # supplement parent. omega_3 retained only "other omega 3 fatty
+        # acids" (the metabolite-class label).
         qm = enricher.databases.get("ingredient_quality_map", {})
         match = enricher._match_quality_map("DHA/EPA", "DHA/EPA", qm)
         assert match is not None

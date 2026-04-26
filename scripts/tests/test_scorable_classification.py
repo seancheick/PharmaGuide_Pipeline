@@ -1333,9 +1333,11 @@ class TestFormUnmappedFallbackRegression:
         must NOT receive premium form credit (e.g. triglyceride/rTG bio=14).
 
         Post-B38 (2026-04-25): omega_3 parent retains only metabolite forms
-        (HDHA/HEPE/ETA, all bio≤11). The "no premium credit" intent is now
-        guarded purely by the score≤11 ceiling — there is no longer an
-        explicit "unspecified" form on omega_3 to assert against.
+        (HDHA/HEPE/ETA). Post-B38-cleanup (2026-04-26): bulk-supplement aliases
+        ("dha, epa", "omega 3 fatty acids", "total omega-3", etc.) relocated
+        from omega_3 → fish_oil parent. Combined DHA, EPA labels now resolve
+        to fish_oil (the bulk omega-3 supplement parent) and fall back to
+        fish_oil (unspecified) form.
         """
         quality_map = enricher.databases.get('ingredient_quality_map', {})
         match = enricher._match_quality_map(
@@ -1348,9 +1350,10 @@ class TestFormUnmappedFallbackRegression:
             ],
         )
         assert match is not None
-        assert match.get("canonical_id") == "omega_3"
-        # Premium-form ceiling guard — must stay below TG/rTG premium scores.
-        assert float(match.get("score", 0)) <= 11.0
+        assert match.get("canonical_id") == "fish_oil"
+        # Premium-form ceiling guard — fish_oil (unspecified) is bio=10,
+        # natural=true → score=13 ≤ TG/rTG premium ceilings (bio=14, score=17).
+        assert float(match.get("score", 0)) <= 13.0
 
 
 class TestParentTotalFlagging:

@@ -11288,12 +11288,7 @@
       }
     },
     "aliases": [
-      "dha, epa",
-      "omega 3 fatty acids",
-      "other omega 3 fatty acids",
-      "total omega-3 fatty acids",
-      "total omega-3",
-      "total omega oil"
+      "other omega 3 fatty acids"
     ],
     "match_rules": {
       "priority": 2,
@@ -36632,7 +36627,7 @@
       "vitamins": 17
     },
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-24",
+    "last_updated": "2026-04-26",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -41802,7 +41797,12 @@
       "ester omega(tm) fish oil",
       "ester omega(r) fish oil",
       "ester omega fish oil",
-      "red sockeye salmon oil natural wild"
+      "red sockeye salmon oil natural wild",
+      "dha, epa",
+      "omega 3 fatty acids",
+      "total omega-3 fatty acids",
+      "total omega-3",
+      "total omega oil"
     ],
     "forms": {
       "triglyceride (rTG) form": {
