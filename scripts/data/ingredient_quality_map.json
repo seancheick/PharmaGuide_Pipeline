@@ -259,8 +259,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of Vitamin A is used. Could be preformed (retinyl esters) or provitamin A (beta-carotene). Scored conservatively since the actual bioavailability cannot be determined.",
+        "absorption": "good (retinol/retinyl ester class baseline)",
+        "notes": "The supplement label does not specify which form of Vitamin A is used. Could be preformed (retinyl esters) or provitamin A (beta-carotene). Scored conservatively since the actual bioavailability cannot be determined. B26 audit 2026-04-25: vitamin A class baseline.",
         "aliases": [
           "Vitamin A",
           "Vitamin A USP",
@@ -286,11 +286,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "range_low": 0.5,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Vitamin A oral F: retinyl palmitate/acetate ~75-90% with fat; beta-carotene provitamin A converts at ~0.08 RAE/IU. Default 0.70 for unspecified form."
         }
       }
     },
@@ -590,8 +590,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "poor",
-        "notes": "An oxidized, degraded form of thiamine with very poor bioactivity. If your supplement contains this form, the thiamine has likely been damaged by heat or oxygen exposure during manufacturing or storage.",
+        "absorption": "low (oxidized thiamine; partial activity)",
+        "notes": "An oxidized, degraded form of thiamine with very poor bioactivity. If your supplement contains this form, the thiamine has likely been damaged by heat or oxygen exposure during manufacturing or storage. B26 audit 2026-04-25: oxidized form, partial activity.",
         "aliases": [
           "oxidized thiamine",
           "inactive thiamine",
@@ -601,19 +601,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Thiamine oxide is a partially-oxidized form with reduced cofactor activity. Some retained activity (TPP cofactor potential after reduction in vivo) but lower than parent thiamine HCl."
         }
       },
       "thiamine analog": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "A structurally similar but biologically inactive molecule that cannot function as vitamin B1 in the body. Provides no nutritional benefit. Found as a contaminant or degradation product, never intentionally used.",
+        "absorption": "non_functional (analog without cofactor activity)",
+        "notes": "A structurally similar but biologically inactive molecule that cannot function as vitamin B1 in the body. Provides no nutritional benefit. Found as a contaminant or degradation product, never intentionally used. B26 audit 2026-04-25: non-functional analog (mechanical 0.0).",
         "aliases": [
           "pseudo-thiamine",
           "inactive b1 analog",
@@ -625,19 +625,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional thiamine analog. Does not serve as TPP cofactor. No clinical bioavailability — present in DB only for completeness."
         }
       },
       "thiamine with thiaminase": {
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "very poor",
-        "notes": "Thiamine that has been destroyed by thiaminase enzymes (found in raw fish, some plants, and certain bacteria). The resulting fragments cannot function as vitamin B1. Not a supplement form — represents degraded thiamine.",
+        "absorption": "non_functional (thiaminase actively destroys thiamine)",
+        "notes": "Thiamine that has been destroyed by thiaminase enzymes (found in raw fish, some plants, and certain bacteria). The resulting fragments cannot function as vitamin B1. Not a supplement form — represents degraded thiamine. B26 audit 2026-04-25: thiaminase destroys thiamine in matrix.",
         "aliases": [
           "enzyme-degraded thiamine",
           "anti-thiamine compound",
@@ -649,19 +649,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.02,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Thiaminase enzymes (in raw fish, ferns) actively cleave thiamine in the food matrix. Net F approaches zero."
         }
       },
       "vitamin b1 (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of thiamine (B1) is used. Most commonly this means thiamine HCl or mononitrate, but the exact form and bioavailability cannot be confirmed.",
+        "absorption": "moderate (thiamine class baseline; saturable)",
+        "notes": "The supplement label does not specify which form of thiamine (B1) is used. Most commonly this means thiamine HCl or mononitrate, but the exact form and bioavailability cannot be confirmed. B26 audit 2026-04-25: thiamine class baseline (saturable).",
         "aliases": [
           "Vitamin B1 (Thiamine)",
           "Vitamin B1",
@@ -675,11 +675,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Thiamine oral F is saturable — high at low doses (~80%), falling at high doses (~5-10 mg) due to intestinal carrier saturation. Default 0.50 for unspecified form."
         }
       }
     },
@@ -864,8 +864,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "A structurally similar but biologically inactive molecule. Cannot function as vitamin B2 in the body and provides no nutritional benefit.",
+        "absorption": "non_functional (analog)",
+        "notes": "A structurally similar but biologically inactive molecule. Cannot function as vitamin B2 in the body and provides no nutritional benefit. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "pseudo-riboflavin",
           "inactive b2",
@@ -877,19 +877,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional riboflavin analog. Does not serve as FMN/FAD cofactor."
         }
       },
       "light-degraded riboflavin": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Riboflavin that has been destroyed by UV light exposure. B2 is one of the most light-sensitive vitamins — degraded riboflavin has drastically reduced potency and effectiveness.",
+        "absorption": "very_low (light-degraded; lumichrome formed)",
+        "notes": "Riboflavin that has been destroyed by UV light exposure. B2 is one of the most light-sensitive vitamins — degraded riboflavin has drastically reduced potency and effectiveness. B26 audit 2026-04-25: photodegradation to lumichrome.",
         "aliases": [
           "UV-exposed riboflavin",
           "inactive riboflavin",
@@ -903,19 +903,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Riboflavin is highly photosensitive — UV/visible light converts it to lumiflavin/lumichrome which lack cofactor activity. Light-degraded riboflavin retains minimal activity."
         }
       },
       "vitamin b2 (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of riboflavin (B2) is used. Most likely standard riboflavin, but the exact form cannot be confirmed.",
+        "absorption": "moderate (riboflavin saturable; ~60% at 5 mg)",
+        "notes": "The supplement label does not specify which form of riboflavin (B2) is used. Most likely standard riboflavin, but the exact form cannot be confirmed. B26 audit 2026-04-25: B2 saturable class baseline.",
         "aliases": [
           "Vitamin B2 (Riboflavin)",
           "Vitamin B2",
@@ -924,11 +924,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Riboflavin saturable absorption: ~60% F at 5 mg, declining at higher doses (Zempleni 1996; class baseline). Default 0.55."
         }
       }
     },
@@ -1128,8 +1128,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "A structurally similar but biologically inactive molecule. Cannot function as vitamin B3 and provides no nutritional benefit.",
+        "absorption": "non_functional (analog)",
+        "notes": "A structurally similar but biologically inactive molecule. Cannot function as vitamin B3 and provides no nutritional benefit. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "inactive b3",
           "inactive b3 supplement",
@@ -1141,19 +1141,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional niacin analog. Does not serve as NAD/NADP precursor."
         }
       },
       "heat-degraded niacin": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Niacin that has lost potency due to prolonged high-temperature processing. While niacin is relatively heat-stable, extreme or prolonged heat can cause significant degradation.",
+        "absorption": "low (heat-degraded; partial activity)",
+        "notes": "Niacin that has lost potency due to prolonged high-temperature processing. While niacin is relatively heat-stable, extreme or prolonged heat can cause significant degradation. B26 audit 2026-04-25: partial heat degradation.",
         "aliases": [
           "cooked niacin",
           "unstable niacin",
@@ -1165,19 +1165,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Niacin is reasonably heat-stable but extreme heat (>200°C) causes partial degradation to niacinamide and other products. Some retained activity."
         }
       },
       "vitamin b3 (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of niacin (B3) is used. Could be nicotinic acid (may cause flushing) or niacinamide (flush-free). The exact form cannot be confirmed.",
+        "absorption": "moderate (niacin/niacinamide class baseline)",
+        "notes": "The supplement label does not specify which form of niacin (B3) is used. Could be nicotinic acid (may cause flushing) or niacinamide (flush-free). The exact form cannot be confirmed. B26 audit 2026-04-25: B3 class baseline.",
         "aliases": [
           "Vitamin B3 (Niacin)",
           "Vitamin B3",
@@ -1189,11 +1189,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Niacin oral F well-known — both nicotinic acid and niacinamide absorbed by carrier-mediated + passive diffusion. Saturable at very high doses."
         }
       }
     },
@@ -1485,8 +1485,8 @@
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "A structurally similar but biologically inactive molecule. Cannot function as vitamin B5 and provides no nutritional benefit.",
+        "absorption": "non_functional (analog)",
+        "notes": "A structurally similar but biologically inactive molecule. Cannot function as vitamin B5 and provides no nutritional benefit. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "pantothenic analog",
           "pseudo b5",
@@ -1499,19 +1499,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional pantothenic acid analog. Does not serve as CoA precursor."
         }
       },
       "vitamin b5 (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of pantothenic acid (B5) is used. Most commonly calcium pantothenate in standard supplements.",
+        "absorption": "moderate (pantothenic acid class baseline)",
+        "notes": "The supplement label does not specify which form of pantothenic acid (B5) is used. Most commonly calcium pantothenate in standard supplements. B26 audit 2026-04-25: B5 SMVT class baseline.",
         "aliases": [
           "Vitamin B5 (Pantothenic Acid)",
           "Vitamin B5",
@@ -1521,11 +1521,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Pantothenic acid F ~40-60% from food/supplement; absorbed by sodium-dependent multivitamin transporter (SMVT). Class baseline."
         }
       },
       "d-pantothenic acid": {
@@ -1703,8 +1703,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "good",
-        "notes": "The most common synthetic B6 form in supplements and fortified foods. Requires liver conversion to active P5P, which can be inefficient in some individuals (especially those with liver conditions or certain genetic variants).",
+        "absorption": "very_good (pyridoxine HCl ~95% F; PLP cofactor)",
+        "notes": "The most common synthetic B6 form in supplements and fortified foods. Requires liver conversion to active P5P, which can be inefficient in some individuals (especially those with liver conditions or certain genetic variants). B26 audit 2026-04-25: pyridoxine HCl F~95% (PMID:12507972, PMID:11786647). Ghost trap: Hansen actual year 1996.",
         "aliases": [
           "pyridoxine hcl",
           "vitamin b6 hcl",
@@ -1723,11 +1723,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Bor 2003 (PMID:12507972): 40 mg/d pyridoxine HCl → 100-fold PL rise, 50-fold 4-PA, 10-fold PLP in plasma at day 3. Bosy-Westphal 2001 (PMID:11786647): 25 mg/d → PLP from 40.6 to 426.8 nmol/L. Robust F. GHOST CATCH: \"Hansen 2001\" is wrong year — Hansen pyridoxine paper is 1996 PMID:8857512."
         },
         "external_ids": {
           "unii": "68Y4CF58BV"
@@ -1737,8 +1737,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "moderate",
-        "notes": "A rare B6 form combining pyridoxine with the amino acid glutamate. Less bioavailable than P5P and less commonly used than pyridoxine HCl. Generally not preferred for broad supplementation.",
+        "absorption": "very_good (class-equiv to pyridoxine HCl)",
+        "notes": "A rare B6 form combining pyridoxine with the amino acid glutamate. Less bioavailable than P5P and less commonly used than pyridoxine HCl. Generally not preferred for broad supplementation. B26 audit 2026-04-25: class-equivalent pyridoxine HCl after dissociation.",
         "aliases": [
           "pyridoxine-5-glutamate",
           "glutamic b6",
@@ -1748,19 +1748,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.85,
+          "range_low": 0.75,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Pyridoxine glutamate dissociates in GI tract to pyridoxine + glutamate. Active species = pyridoxine. Class-equivalent to pyridoxine HCl (PMID:12507972) with small downward delta reflecting unverified dissociation kinetics."
         }
       },
       "pyridoxine_oxide": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "poor",
-        "notes": "An oxidized, degraded form of vitamin B6 with very poor bioactivity. Indicates the B6 has been damaged by heat or oxygen exposure.",
+        "absorption": "low (oxidized form; partial activity)",
+        "notes": "An oxidized, degraded form of vitamin B6 with very poor bioactivity. Indicates the B6 has been damaged by heat or oxygen exposure. B26 audit 2026-04-25: oxidized form, partial activity.",
         "aliases": [
           "pyridoxine oxide",
           "oxidized b6",
@@ -1771,19 +1771,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Oxidized pyridoxine form. Reduced cofactor capacity vs HCl parent."
         }
       },
       "pyridoxine_analog": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "A structurally similar but biologically inactive molecule. Cannot function as vitamin B6 and provides no nutritional benefit.",
+        "absorption": "non_functional (analog)",
+        "notes": "A structurally similar but biologically inactive molecule. Cannot function as vitamin B6 and provides no nutritional benefit. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "pseudo b6",
           "inactive b6",
@@ -1796,19 +1796,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional B6 analog."
         }
       },
       "vitamin b6 (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of vitamin B6 is used. Most commonly pyridoxine HCl in standard supplements. The active P5P form would typically be explicitly stated on the label.",
+        "absorption": "good (B6 class baseline)",
+        "notes": "The supplement label does not specify which form of vitamin B6 is used. Most commonly pyridoxine HCl in standard supplements. The active P5P form would typically be explicitly stated on the label. B26 audit 2026-04-25: B6 class baseline.",
         "aliases": [
           "Vitamin B6 (Pyridoxine)",
           "Vitamin B6",
@@ -1820,11 +1820,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "B6 forms collectively well-absorbed; pyridoxine HCl ~95%, P5P~70-95% (active dephosphorylated pre-absorption per Batch 21). Default 0.70 for unspecified form."
         }
       }
     },
@@ -1899,8 +1899,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "excellent",
-        "notes": "The natural, biologically active form of biotin (the D-enantiomer). This is what your body actually uses for metabolizing fats, carbohydrates, and proteins. The vast majority of commercial biotin supplements contain d-biotin. Top-tier B7 form.",
+        "absorption": "excellent (~100% F at pharmacologic oral doses)",
+        "notes": "The natural, biologically active form of biotin (the D-enantiomer). This is what your body actually uses for metabolizing fats, carbohydrates, and proteins. The vast majority of commercial biotin supplements contain d-biotin. Top-tier B7 form. B26 audit 2026-04-25: d-biotin ~100% F at pharmacologic doses (PMID:10075337); SMVT saturable (PMID:19056639).",
         "aliases": [
           "natural biotin",
           "(+)-biotin",
@@ -1922,19 +1922,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.95,
+          "range_low": 0.85,
+          "range_high": 1.0,
           "quality": "excellent",
-          "notes": "excellent"
+          "notes": "Zempleni & Mock 1999 (PMID:10075337): crossover human PK, oral 2.1/8.2/81.9 µmol vs IV — urinary recoveries similar (~50%) after 2 largest oral doses and IV → \"100% bioavailability of the 2 largest oral doses.\" Said 2009 (PMID:19056639): SMVT (hSMVT) main biotin uptake, saturable. GHOST CATCH: \"Mock & Malik 1992\" could not be verified — use Zempleni 1999 as cleaner human PK anchor."
         }
       },
       "biotin from yeast": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "very good",
-        "notes": "Biotin from a whole-food yeast matrix with naturally co-occurring B vitamins and cofactors. Provides d-biotin in a food-based context, but no strong clinical evidence that the yeast matrix enhances biotin absorption.",
+        "absorption": "very_good (class-equiv; same molecule as d-biotin)",
+        "notes": "Biotin from a whole-food yeast matrix with naturally co-occurring B vitamins and cofactors. Provides d-biotin in a food-based context, but no strong clinical evidence that the yeast matrix enhances biotin absorption. B26 audit 2026-04-25: class-equivalent d-biotin (same molecule).",
         "aliases": [
           "yeast biotin",
           "natural b7 yeast",
@@ -1949,19 +1949,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.9,
+          "range_low": 0.8,
+          "range_high": 0.95,
           "quality": "very_good",
-          "notes": "very good"
+          "notes": "Yeast biotin is the IDENTICAL d-biotin molecule (same CAS, same SMVT substrate). Class-equivalent to d-biotin (PMID:10075337) with slight reduction for unverified matrix binding effects."
         }
       },
       "protein_bound_biotin": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good",
-        "notes": "Biotin bound to proteins (as biocytin), the form naturally found in foods like eggs, liver, and nuts. Requires the enzyme biotinidase to release free biotin for absorption. People with biotinidase deficiency may poorly absorb this form.",
+        "absorption": "very_good (biocytin; biotinidase cleavage required)",
+        "notes": "Biotin bound to proteins (as biocytin), the form naturally found in foods like eggs, liver, and nuts. Requires the enzyme biotinidase to release free biotin for absorption. People with biotinidase deficiency may poorly absorb this form. B26 audit 2026-04-25: biocytin → free biotin via biotinidase (PMID:2123084, PMID:3930842, PMID:19056639).",
         "aliases": [
           "protein-bound biotin",
           "biocytin",
@@ -1972,19 +1972,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.8,
+          "range_low": 0.7,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "León-Del-Río 1990 (PMID:2123084) and Said 2009 (PMID:19056639): protein-bound biotin (biocytin) is converted to free biotin pre-absorption via biotinidase. Baumgartner 1985 (PMID:3930842): biotinidase-deficient patients show unchanged plasma biotin after oral biocytin. Healthy adults: extent equivalent, kinetics slower than free d-biotin."
         }
       },
       "biotin_analog": {
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "A structurally similar but biologically inactive molecule. Cannot function as biotin in the body and provides no nutritional benefit.",
+        "absorption": "non_functional (analog)",
+        "notes": "A structurally similar but biologically inactive molecule. Cannot function as biotin in the body and provides no nutritional benefit. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "biotin analog",
           "pseudo-biotin",
@@ -1997,19 +1997,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.02,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional biotin analog. Does not serve as carboxylase cofactor."
         }
       },
       "biotin degraded by avidin": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Biotin irreversibly bound by avidin, a protein in raw egg whites. The avidin-biotin bond is one of the strongest in nature — once bound, the biotin cannot be absorbed. Cooking eggs denatures avidin and prevents this problem.",
+        "absorption": "non_functional (avidin Kd ~10^-15 M renders biotin unavailable)",
+        "notes": "Biotin irreversibly bound by avidin, a protein in raw egg whites. The avidin-biotin bond is one of the strongest in nature — once bound, the biotin cannot be absorbed. Cooking eggs denatures avidin and prevents this problem. B26 audit 2026-04-25: avidin-bound; F≈0 (Kd ~10^-15 M).",
         "aliases": [
           "avidin-bound biotin",
           "egg-white biotin complex",
@@ -2022,19 +2022,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.02,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Avidin (raw egg white) binds biotin with Kd ~10^-15 M — one of the strongest non-covalent interactions in biochemistry. Avidin-bound biotin is biologically unavailable. Cooking denatures avidin and restores biotin."
         }
       },
       "vitamin b7 (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of biotin (B7) is used. Most commercial biotin supplements use d-biotin, but without explicit labeling, the exact form cannot be confirmed.",
+        "absorption": "good (default to biotin class baseline)",
+        "notes": "The supplement label does not specify which form of biotin (B7) is used. Most commercial biotin supplements use d-biotin, but without explicit labeling, the exact form cannot be confirmed. B26 audit 2026-04-25: B7 class baseline (PMID:10075337).",
         "aliases": [
           "Vitamin B7 (Biotin)",
           "Vitamin B7",
@@ -2046,19 +2046,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.65,
+          "range_low": 0.5,
+          "range_high": 0.7,
+          "quality": "good",
+          "notes": "Default to free-biotin baseline minus uncertainty for unspecified source/form. Class anchor: Zempleni 1999 (PMID:10075337), Said 2009 (PMID:19056639)."
         }
       },
       "dl-biotin (racemic)": {
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "very good",
-        "notes": "A racemic (50/50) mixture of active d-biotin and inactive l-biotin. Only half the molecule is biologically useful. Rarely used in modern supplements — most have switched to pure d-biotin. Significantly less effective per milligram.",
+        "absorption": "moderate (only D-isomer active; racemic = 50% F)",
+        "notes": "A racemic (50/50) mixture of active d-biotin and inactive l-biotin. Only half the molecule is biologically useful. Rarely used in modern supplements — most have switched to pure d-biotin. Significantly less effective per milligram. B26 audit 2026-04-25: racemic = 50% effective F (only D-isomer active per biochemistry textbook).",
         "aliases": [
           "synthetic biotin",
           "dl-biotin",
@@ -2069,11 +2069,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "very good"
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "L-biotin is biologically inactive (textbook chiral specificity — only D-isomer fits biotinidase/carboxylase active sites). Racemic dl-biotin contains 50% D + 50% L → ~50% effective F vs pure d-biotin. No clean human PK PMID for racemic comparison; reference d-biotin anchor (PMID:10075337) with stoichiometric adjustment."
         }
       }
     },
@@ -2420,8 +2420,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "A structurally similar but biologically inactive molecule. Cannot function as folate and provides no nutritional benefit.",
+        "absorption": "non_functional (analog)",
+        "notes": "A structurally similar but biologically inactive molecule. Cannot function as folate and provides no nutritional benefit. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "folate analog",
           "pseudo-folate",
@@ -2434,19 +2434,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional folate analog. Does not serve as 1-carbon donor."
         }
       },
       "heat_degraded_folate": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Folate damaged by heat exposure. Folate is one of the most heat-sensitive B vitamins — cooking can destroy 50–90% of food folate content. Degraded folate has drastically reduced biological activity.",
+        "absorption": "very_low (folate is highly heat-labile)",
+        "notes": "Folate damaged by heat exposure. Folate is one of the most heat-sensitive B vitamins — cooking can destroy 50–90% of food folate content. Degraded folate has drastically reduced biological activity. B26 audit 2026-04-25: heat-degradation 50-90% loss.",
         "aliases": [
           "heat-degraded folate",
           "cooked folate",
@@ -2459,19 +2459,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Folate is one of the most heat-labile vitamins — 50-90% loss with prolonged cooking/processing. Heat-degraded folate retains minimal activity."
         }
       },
       "vitamin b9 (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of folate (B9) is used. Could be synthetic folic acid or active methylfolate — a critical distinction for people with MTHFR gene variants.",
+        "absorption": "moderate (folate class baseline; food matrix-dep)",
+        "notes": "The supplement label does not specify which form of folate (B9) is used. Could be synthetic folic acid or active methylfolate — a critical distinction for people with MTHFR gene variants. B26 audit 2026-04-25: B9 class baseline (matrix-dependent).",
         "aliases": [
           "Vitamin B9 (Folate)",
           "Vitamin B9",
@@ -2482,11 +2482,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Folate F highly variable: synthetic folic acid ~85% F; natural food folates ~50% (Sauberlich 1987 baseline). Unspecified defaults to middle range."
         }
       }
     },
@@ -3192,8 +3192,8 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "poor",
-        "notes": "The oxidized form of vitamin C. While your body can recycle small amounts back to active ascorbic acid, dehydroascorbic acid is unstable and degrades quickly. Indicates the vitamin C has been partially oxidized — reduced potency.",
+        "absorption": "good (DHA via GLUT1/3/4; differs from ascorbate SVCT)",
+        "notes": "The oxidized form of vitamin C. While your body can recycle small amounts back to active ascorbic acid, dehydroascorbic acid is unstable and degrades quickly. Indicates the vitamin C has been partially oxidized — reduced potency. B26 audit 2026-04-25: DHA via GLUT (PMID:19391462, PMID:12220624), NOT SVCT. Ghost catches: Vera 1993, Wilson 2005.",
         "aliases": [
           "oxidized vitamin c",
           "inactive c",
@@ -3220,11 +3220,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.65,
+          "range_low": 0.5,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "DHA uses GLUT1/3/4 transporters (NOT SVCT1/2 used by ascorbate). Rivas/Vera 2008 (PMID:19391462): \"DHA transporters are members of GLUT family.\" Wilson 2002 (PMID:12220624): \"DHA absorbed from lumen and reduced to AA, which subsequently circulates.\" Functionally comparable to ascorbate after intracellular reduction. Wide range reflects lack of dose-recovery PK in humans. GHOST CATCHES: \"Vera 1993\" → Rivas/Vera 2008; \"Wilson 2005\" → Wilson 2002 (year wrong)."
         },
         "external_ids": {
           "unii": "Y2Z3ZTP9UM"
@@ -3234,8 +3234,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "Structurally similar molecules that cannot function as vitamin C in the body. Provide no antioxidant or nutritional benefit. May appear as degradation products in poorly stored supplements.",
+        "absorption": "non_functional (analog)",
+        "notes": "Structurally similar molecules that cannot function as vitamin C in the body. Provide no antioxidant or nutritional benefit. May appear as degradation products in poorly stored supplements. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "vitamin c analog",
           "pseudo-c",
@@ -3247,19 +3247,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional vitamin C analog. Does not serve as antioxidant or enzymatic cofactor."
         }
       },
       "vitamin c (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of vitamin C is used. Most commonly ascorbic acid. Buffered forms (calcium/sodium ascorbate) and liposomal forms would typically be explicitly stated.",
+        "absorption": "good (ascorbate class baseline; sigmoidal dose-response)",
+        "notes": "The supplement label does not specify which form of vitamin C is used. Most commonly ascorbic acid. Buffered forms (calcium/sodium ascorbate) and liposomal forms would typically be explicitly stated. B26 audit 2026-04-25: vitamin C sigmoidal dose-response (PMID:11504949).",
         "aliases": [
           "foodstate orange vitamin c",
           "nature's c with qpower",
@@ -3270,19 +3270,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.65,
+          "range_low": 0.5,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "Levine 2001 (PMID:11504949): vitamin C dose-steady-state plasma is sigmoidal across 30-2500 mg daily; F~80% at low doses, falling at high doses due to SVCT saturation. Default 0.65 for unspecified form."
         }
       },
       "niacinamide ascorbate": {
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "moderate",
-        "notes": "A combined salt of niacinamide (vitamin B3) and ascorbic acid (vitamin C). Provides both vitamins in one molecule with moderate bioavailability for each. The niacinamide component is flush-free.",
+        "absorption": "good (ascorbate component class-equivalent)",
+        "notes": "A combined salt of niacinamide (vitamin B3) and ascorbic acid (vitamin C). Provides both vitamins in one molecule with moderate bioavailability for each. The niacinamide component is flush-free. B26 audit 2026-04-25: ascorbate class baseline (PMID:11504949).",
         "aliases": [
           "nicotinamide ascorbate",
           "vitamin c niacinamide",
@@ -3292,11 +3292,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "Moderate vitamin C fraction bioavailability",
-          "range_low": null,
-          "range_high": null
+          "value": 0.78,
+          "range_low": 0.7,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Niacinamide ascorbate dissociates to niacinamide + ascorbate. Ascorbate component matches ascorbate-class baseline (Levine 2001 PMID:11504949). No specific human PK on this combined salt; default to ascorbate class."
         },
         "external_ids": {
           "unii": "JTL8B7TVW7"
@@ -3758,8 +3758,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "non-functional analogs; minimal/no 25(OH)D activity",
-        "notes": "Structurally similar molecules that cannot function as vitamin D in the body. May interfere with vitamin D receptors without providing biological activity. Provides no nutritional benefit. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "absorption": "non_functional (analog)",
+        "notes": "Structurally similar molecules that cannot function as vitamin D in the body. May interfere with vitamin D receptors without providing biological activity. Provides no nutritional benefit. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "vitamin d analog",
           "pseudo-vitamin d",
@@ -3777,19 +3777,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
+          "value": 0.0,
           "range_low": 0.0,
-          "range_high": 0.1,
-          "quality": "unknown",
-          "notes": "Structurally similar but biologically inactive; no 25(OH)D response"
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Non-functional vitamin D analog. Does not raise 25(OH)D or serve as VDR ligand."
         }
       },
       "oxidized vitamin D": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "oxidized D; degraded form, negligible bioactivity",
-        "notes": "Vitamin D that has been destroyed by light, heat, or oxygen exposure. Completely inactive — provides no vitamin D benefit. Indicates poor manufacturing, storage, or an expired product. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "absorption": "very_low (degraded; minimal bioactivity)",
+        "notes": "Vitamin D that has been destroyed by light, heat, or oxygen exposure. Completely inactive — provides no vitamin D benefit. Indicates poor manufacturing, storage, or an expired product. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: oxidative degradation.",
         "aliases": [
           "degraded d",
           "inactive vitamin d",
@@ -3806,19 +3806,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
+          "value": 0.05,
           "range_low": 0.0,
-          "range_high": 0.05,
-          "quality": "unknown",
-          "notes": "Degradation product; no significant 25(OH)D contribution"
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Oxidized vitamin D loses VDR-binding capacity. Minimal residual bioactivity."
         }
       },
       "vitamin d (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "form unspecified; assume D3-like ~50% with fat meal",
-        "notes": "The supplement label does not specify D2 or D3. This matters significantly — D3 is far more effective at raising blood levels. Most quality supplements use D3; cheap or plant-based products may use the inferior D2 form. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "absorption": "moderate (D3 class baseline; fat-meal-dependent)",
+        "notes": "The supplement label does not specify D2 or D3. This matters significantly — D3 is far more effective at raising blood levels. Most quality supplements use D3; cheap or plant-based products may use the inferior D2 form. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: D3 class baseline (fat-meal dependent).",
         "aliases": [
           "Vitamin D",
           "Vitamin D USP",
@@ -3827,11 +3827,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Unknown form; conservative scoring",
-          "range_low": 0.3,
-          "range_high": 0.7
+          "value": 0.55,
+          "range_low": 0.4,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Vitamin D3 oral F highly fat-meal-dependent: ~50% with fat-containing meal vs <10% fasting. Default 0.55 assuming normal meal context."
         }
       }
     },
@@ -4211,8 +4211,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "Structurally similar molecules that cannot function as vitamin E. May compete with active tocopherols for absorption and binding sites without providing antioxidant benefit.",
+        "absorption": "non_functional (analog)",
+        "notes": "Structurally similar molecules that cannot function as vitamin E. May compete with active tocopherols for absorption and binding sites without providing antioxidant benefit. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "vitamin e analog",
           "pseudo-vitamin e",
@@ -4228,19 +4228,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional vitamin E analog. Does not serve as antioxidant or α-TTP ligand."
         }
       },
       "oxidized vitamin E": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Vitamin E that has been destroyed by light, heat, or oxidation. Ironically, vitamin E is an antioxidant that sacrifices itself to protect other molecules — once oxidized, it has lost its protective function entirely.",
+        "absorption": "very_low (chromanol oxidized; bioactivity lost)",
+        "notes": "Vitamin E that has been destroyed by light, heat, or oxidation. Ironically, vitamin E is an antioxidant that sacrifices itself to protect other molecules — once oxidized, it has lost its protective function entirely. B26 audit 2026-04-25: oxidative degradation of chromanol.",
         "aliases": [
           "degraded tocopherol",
           "inactive vitamin e",
@@ -4258,19 +4258,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "very poor"
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Oxidized vitamin E (tocopheroxyl/tocopherylquinone) lacks antioxidant activity. Minimal residual bioactivity."
         }
       },
       "vitamin e (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which form of vitamin E is used. This matters greatly — natural d-alpha-tocopherol has ~2x the biological activity of synthetic dl-alpha-tocopherol. Check for 'd-' (natural) vs 'dl-' (synthetic) prefix.",
+        "absorption": "moderate (alpha-tocopherol class baseline)",
+        "notes": "The supplement label does not specify which form of vitamin E is used. This matters greatly — natural d-alpha-tocopherol has ~2x the biological activity of synthetic dl-alpha-tocopherol. Check for 'd-' (natural) vs 'dl-' (synthetic) prefix. B26 audit 2026-04-25: vitamin E class baseline (variable).",
         "aliases": [
           "vitamin e",
           "vit e",
@@ -4282,11 +4282,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Alpha-tocopherol oral F highly variable (10-80%) depending on fat content of meal, dose, and form. Default 0.30 conservative middle for unspecified."
         }
       }
     },
@@ -4437,8 +4437,8 @@
         "bio_score": 4,
         "natural": true,
         "score": 7,
-        "absorption": "cis-MK-7; biologically inactive, fails to raise serum MK-7",
-        "notes": "The inactive geometric isomer of vitamin K2. Cannot properly activate vitamin K-dependent proteins. Found as a contaminant in low-quality K2 supplements. If your supplement contains significant cis-K2, the effective dose is much lower than the label states. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "absorption": "very_low (cis-MK-7 biologically inactive)",
+        "notes": "The inactive geometric isomer of vitamin K2. Cannot properly activate vitamin K-dependent proteins. Found as a contaminant in low-quality K2 supplements. If your supplement contains significant cis-K2, the effective dose is much lower than the label states. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: cis-MK-7 biologically inactive (PMID:35864383). Ghost catch: Schurgers 2007 claim mismatch.",
         "aliases": [
           "cis k2",
           "cis vitamin k2",
@@ -4452,11 +4452,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
+          "value": 0.05,
           "range_low": 0.0,
-          "range_high": 0.05,
-          "quality": "unknown",
-          "notes": "Cis isomer cannot activate vitamin K-dependent proteins"
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Lal 2022 (PMID:35864383): \"only the all-trans form is biologically active. MK-7 produced through fermentation can occur as all-trans and cis isomers, and the therapeutic value...is exclusively determined by the quantity of the all-trans isomer.\" Molecule is absorbed but NOT functional. GHOST CATCH: \"Schurgers 2007 cis-MK-7 inactivity\" — claim mismatch; Schurgers 2007 (PMID:17158229) tested all-trans only. Use Lal 2022 for cis-inactive claim."
         }
       },
       "phylloquinone (K1)": {
@@ -4597,8 +4597,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "K3 banned in human supplements (FDA); hemolytic toxicity",
-        "notes": "A synthetic vitamin K precursor (menadione) that is NOT approved for human supplementation due to toxicity — can cause hemolytic anemia, liver damage, and jaundice. Banned in over-the-counter supplements in most countries. Used only in animal feed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "absorption": "non_functional (FDA-banned; hemolytic toxicity)",
+        "notes": "A synthetic vitamin K precursor (menadione) that is NOT approved for human supplementation due to toxicity — can cause hemolytic anemia, liver damage, and jaundice. Banned in over-the-counter supplements in most countries. Used only in animal feed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: K3 FDA-banned, hemolytic; set 0.0.",
         "aliases": [
           "vitamin k3",
           "menadione",
@@ -4611,19 +4611,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
+          "value": 0.0,
           "range_low": 0.0,
-          "range_high": 0.0,
-          "quality": "unknown",
-          "notes": "Banned by FDA for human use; hemolytic anemia risk"
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Menadione (K3) is FDA-banned in human supplements due to hemolytic toxicity in infants. Although the molecule is absorbed, it is not a functional clinical bioavailability target. Set to 0.0 to discourage use."
         }
       },
       "vitamin K analogs (non-functional)": {
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "non-functional K analogs; negligible bioactivity",
-        "notes": "Structurally similar molecules that cannot activate vitamin K-dependent proteins. Provide no clotting, bone, or cardiovascular benefit. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "absorption": "non_functional (analog)",
+        "notes": "Structurally similar molecules that cannot activate vitamin K-dependent proteins. Provide no clotting, bone, or cardiovascular benefit. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "vitamin k analog",
           "pseudo-vitamin k",
@@ -4638,19 +4638,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
+          "value": 0.0,
           "range_low": 0.0,
           "range_high": 0.05,
-          "quality": "unknown",
-          "notes": "Cannot activate vitamin K-dependent proteins"
+          "quality": "poor",
+          "notes": "Non-functional vitamin K analog. Does not serve as VKORC1 substrate or γ-carboxylation cofactor."
         }
       },
       "oxidized vitamin K": {
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "oxidized K; degraded, no clinical role",
-        "notes": "Vitamin K degraded by light or oxygen exposure. Completely inactive — cannot participate in the carboxylation reactions essential for blood clotting and calcium metabolism. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "absorption": "non_functional (degraded)",
+        "notes": "Vitamin K degraded by light or oxygen exposure. Completely inactive — cannot participate in the carboxylation reactions essential for blood clotting and calcium metabolism. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: degraded form.",
         "aliases": [
           "degraded k",
           "inactive vitamin k",
@@ -4667,19 +4667,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
+          "value": 0.0,
           "range_low": 0.0,
           "range_high": 0.05,
-          "quality": "unknown",
-          "notes": "Degradation product; no carboxylase activity"
+          "quality": "poor",
+          "notes": "Oxidized vitamin K. No clinical role."
         }
       },
       "vitamin k (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "form unspecified; F varies 10-80% across forms",
-        "notes": "The supplement label does not specify K1 or K2, or which K2 subtype. This distinction matters: K1 supports clotting, K2 (especially MK-7) supports bone and cardiovascular health. Without specification, the form and benefits cannot be confirmed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "absorption": "moderate (K class highly form-dependent: 10-80%)",
+        "notes": "The supplement label does not specify K1 or K2, or which K2 subtype. This distinction matters: K1 supports clotting, K2 (especially MK-7) supports bone and cardiovascular health. Without specification, the form and benefits cannot be confirmed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. B26 audit 2026-04-25: K class baseline; F varies 10-80%.",
         "aliases": [
           "Vitamin K",
           "vitamin k1/k2",
@@ -4693,11 +4693,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Unknown form; F highly variable across K1/MK-4/MK-7",
+          "value": 0.3,
           "range_low": 0.1,
-          "range_high": 0.7
+          "range_high": 0.8,
+          "quality": "moderate",
+          "notes": "Vitamin K F varies dramatically by form: K1 (phylloquinone) ~10% from leafy greens; MK-7 ~80% with long t1/2; MK-4 ~40% short t1/2. Default 0.30 conservative middle for unspecified."
         }
       }
     },
