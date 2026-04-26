@@ -12,10 +12,10 @@
       "A5b": 0.0,
       "A5c": 0.0,
       "A5d": 0.0,
-      "A6": 2.0,
+      "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 18.0,
+      "core_quality": 16.0,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -36,7 +36,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 18.0
+      "score": 16.0
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -86,7 +86,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 55.29,
+    "quality_raw": 53.29,
     "violation_penalty": 0.0
   },
   "dsld_id": "15756",
@@ -97,17 +97,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "Vitamin D",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 69.1,
-  "score_80": 55.3,
+  "score_100_equivalent": 66.6,
+  "score_80": 53.3,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 18.0,
+      "core_quality": 16.0,
       "max": 25.0,
-      "score": 18.0
+      "score": 16.0
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -128,7 +128,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "single_nutrient",
+  "supp_type": "targeted",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

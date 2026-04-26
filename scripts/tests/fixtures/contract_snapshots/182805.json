@@ -13,15 +13,15 @@
       "A2": 0.0,
       "A3": 0.0,
       "A4": 0.0,
-      "A5": 0.0,
+      "A5": 0.75,
       "A5a": 0.0,
       "A5b": 0.0,
-      "A5c": 0.0,
+      "A5c": 0.75,
       "A5d": 0.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 10.0,
+      "core_quality": 10.75,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -42,7 +42,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 10.0
+      "score": 10.75
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -92,7 +92,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 46.9,
+    "quality_raw": 47.65,
     "violation_penalty": 0.0
   },
   "dsld_id": "182805",
@@ -103,17 +103,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "CoQ10 120 mg",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 58.6,
-  "score_80": 46.9,
+  "score_100_equivalent": 59.6,
+  "score_80": 47.6,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 10.0,
+      "core_quality": 10.75,
       "max": 25.0,
-      "score": 10.0
+      "score": 10.75
     },
     "B_safety_purity": {
       "max": 30.0,

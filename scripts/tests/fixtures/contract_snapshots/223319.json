@@ -9,7 +9,7 @@
   "brand_name": "Nutricost",
   "breakdown": {
     "A": {
-      "A1": 13.33,
+      "A1": 14.0,
       "A2": 0.0,
       "A3": 3.0,
       "A4": 0.0,
@@ -18,10 +18,10 @@
       "A5b": 1.0,
       "A5c": 0.0,
       "A5d": 0.0,
-      "A6": 0.0,
+      "A6": 2.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 17.33,
+      "core_quality": 20.0,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -42,7 +42,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 17.33
+      "score": 20.0
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -93,7 +93,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 50.53,
+    "quality_raw": 53.2,
     "violation_penalty": 0.0
   },
   "dsld_id": "223319",
@@ -104,17 +104,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "KSM-66 600 mg",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 63.2,
-  "score_80": 50.5,
+  "score_100_equivalent": 66.5,
+  "score_80": 53.2,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 17.33,
+      "core_quality": 20.0,
       "max": 25.0,
-      "score": 17.33
+      "score": 20.0
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -135,7 +135,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "targeted",
+  "supp_type": "single_nutrient",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

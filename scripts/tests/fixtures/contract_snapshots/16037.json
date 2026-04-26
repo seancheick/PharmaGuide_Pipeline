@@ -3,7 +3,7 @@
   "brand_name": "Thorne Research",
   "breakdown": {
     "A": {
-      "A1": 10.1,
+      "A1": 9.77,
       "A2": 0.0,
       "A3": 3.0,
       "A4": 0.0,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 14.1,
+      "core_quality": 13.77,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -36,7 +36,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 14.1
+      "score": 13.77
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -89,7 +89,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 52.05,
+    "quality_raw": 51.72,
     "violation_penalty": 0.0
   },
   "dsld_id": "16037",
@@ -100,17 +100,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "Planti-Oxidants",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 65.1,
-  "score_80": 52.1,
+  "score_100_equivalent": 64.6,
+  "score_80": 51.7,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 14.1,
+      "core_quality": 13.77,
       "max": 25.0,
-      "score": 14.1
+      "score": 13.77
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -131,7 +131,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "targeted",
+  "supp_type": "multivitamin",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

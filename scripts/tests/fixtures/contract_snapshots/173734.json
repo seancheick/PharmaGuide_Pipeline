@@ -3,7 +3,7 @@
   "brand_name": "Garden Of Life",
   "breakdown": {
     "A": {
-      "A1": 7.73,
+      "A1": 8.11,
       "A2": 0.0,
       "A3": 1.0,
       "A4": 3.0,
@@ -14,80 +14,45 @@
       "A5d": 0.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 2.0,
-      "core_quality": 12.48,
+      "category_bonus_total": 0.0,
+      "core_quality": 12.86,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
         "omega3_dose_bonus": 0.0
       },
       "omega3_dose_bonus": 0.0,
-      "probiotic_bonus": 2.0,
+      "probiotic_bonus": 0.0,
       "probiotic_breakdown": {
         "cfu": 0.0,
-        "cfu_adequacy_contributions": [
-          {
-            "cfu_per_day": null,
-            "points": 0.0,
-            "support": "high",
-            "tier": null
-          },
-          {
-            "cfu_per_day": null,
-            "points": 0.0,
-            "support": "weak",
-            "tier": null
-          },
-          {
-            "cfu_per_day": null,
-            "points": 0.0,
-            "support": "high",
-            "tier": null
-          },
-          {
-            "cfu_per_day": null,
-            "points": 0.0,
-            "support": "moderate",
-            "tier": null
-          },
-          {
-            "cfu_per_day": null,
-            "points": 0.0,
-            "support": "moderate",
-            "tier": null
-          },
-          {
-            "cfu_per_day": null,
-            "points": 0.0,
-            "support": "weak",
-            "tier": null
-          },
-          {
-            "cfu_per_day": null,
-            "points": 0.0,
-            "support": "high",
-            "tier": null
-          },
-          {
-            "cfu_per_day": null,
-            "points": 0.0,
-            "support": "weak",
-            "tier": null
-          }
-        ],
-        "cfu_adequacy_points": 0.0,
-        "clinical_strains": 1.0,
-        "diversity": 1.0,
+        "clinical_strains": 0.0,
+        "diversity": 0.0,
         "eligibility": {
-          "eligible": true,
-          "mode": "probiotic",
-          "reason": "supplement_type_probiotic"
+          "eligible": false,
+          "mode": "non_probiotic",
+          "reason": "strict_gate_failed",
+          "strict_gate_checks": {
+            "cfu_guarantee": false,
+            "dose_context": false,
+            "explicit_intent": true,
+            "require_viable_cfu": false,
+            "strain_identity": true
+          },
+          "strict_gate_inputs": {
+            "clinical_strain_count": 8,
+            "guarantee_type": null,
+            "is_probiotic_product": true,
+            "strain_id_count": 0,
+            "supp_type": "multivitamin",
+            "total_billion_count": 0.0,
+            "total_strain_count": 10
+          }
         },
         "prebiotic": 0.0,
-        "probiotic_bonus": 2.0,
+        "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 14.48
+      "score": 12.86
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -274,31 +239,30 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 39.17,
+    "quality_raw": 37.55,
     "violation_penalty": 0.0
   },
   "dsld_id": "173734",
   "evaluation_stage": "scoring",
   "flags": [
-    "PROPRIETARY_BLEND_PRESENT",
-    "SUPPLEMENT_TYPE_REINFERRED"
+    "PROPRIETARY_BLEND_PRESENT"
   ],
   "grade": "Low",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",
   "product_name": "Perfect Food Berry Super Green Fruit & Veggie Formula",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 49.0,
-  "score_80": 39.2,
+  "score_100_equivalent": 46.9,
+  "score_80": 37.5,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
-      "category_bonus_total": 2.0,
-      "core_quality": 12.48,
+      "category_bonus_total": 0.0,
+      "core_quality": 12.86,
       "max": 25.0,
-      "score": 14.48
+      "score": 12.86
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -319,7 +283,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "probiotic",
+  "supp_type": "multivitamin",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

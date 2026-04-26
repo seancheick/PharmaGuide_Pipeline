@@ -106,9 +106,7 @@
   },
   "dsld_id": "306381",
   "evaluation_stage": "scoring",
-  "flags": [
-    "SUPPLEMENT_TYPE_REINFERRED"
-  ],
+  "flags": [],
   "grade": "Fair",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",

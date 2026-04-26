@@ -136,7 +136,7 @@
       "score": 0.0
     }
   },
-  "supp_type": "single_nutrient",
+  "supp_type": "targeted",
   "unmapped_actives_excluding_banned_exact_alias": 0,
   "unmapped_actives_total": 0,
   "verdict": "SAFE"

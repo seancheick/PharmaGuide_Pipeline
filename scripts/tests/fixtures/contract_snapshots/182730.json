@@ -176,8 +176,7 @@
   "dsld_id": "182730",
   "evaluation_stage": "scoring",
   "flags": [
-    "PROPRIETARY_BLEND_PRESENT",
-    "SUPPLEMENT_TYPE_REINFERRED"
+    "PROPRIETARY_BLEND_PRESENT"
   ],
   "grade": "Good",
   "mapped_coverage": 1.0,
