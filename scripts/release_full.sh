@@ -116,11 +116,31 @@ fi
 
 # ---------------------------------------------------------------------------
 # Step 2: Stage catalog to dist/
+#
+# Two valid input paths:
+#   • Standalone (--skip-assemble OFF): build_all_final_dbs.py wrote to
+#     scripts/final_db_output/, release_catalog_artifact reads from there.
+#   • Chained from batch_run_all_datasets.sh: rebuild_dashboard_snapshot.sh
+#     ran first and ALREADY staged the catalog into scripts/dist/ from a
+#     /tmp staging dir. final_db_output/ does NOT exist in this path.
+#
+# Detect the chained case and skip step 2 cleanly. dist/ already has a
+# valid catalog from snapshot — no re-stage needed.
 # ---------------------------------------------------------------------------
 
-info "Step 2/6: Staging catalog artifact to dist/..."
-python3 scripts/release_catalog_artifact.py
-ok "Catalog staged"
+if [[ ! -d "$REPO_ROOT/scripts/final_db_output" ]] && [[ -f "$DIST_DIR/pharmaguide_core.db" ]]; then
+  info "Step 2/6: Skipped — dist/ already has catalog (chained from snapshot)"
+elif [[ ! -d "$REPO_ROOT/scripts/final_db_output" ]]; then
+  err "Step 2/6: Cannot stage catalog — neither scripts/final_db_output/"
+  err "         nor scripts/dist/pharmaguide_core.db exists."
+  err "         Run rebuild_dashboard_snapshot.sh first OR omit --skip-assemble"
+  err "         so build_all_final_dbs.py can produce final_db_output/."
+  exit 1
+else
+  info "Step 2/6: Staging catalog artifact to dist/..."
+  python3 scripts/release_catalog_artifact.py
+  ok "Catalog staged"
+fi
 
 # ---------------------------------------------------------------------------
 # Step 3: Rebuild interaction DB (delegates verify → build → stage)
