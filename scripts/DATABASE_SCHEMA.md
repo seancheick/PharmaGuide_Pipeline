@@ -1,12 +1,12 @@
 # DATABASE_SCHEMA.md — Master Schema Reference
 
-> Reference data schema: **5.0.0 / 5.1.0 / 5.2.0 / 5.3.0** | Export schema: **v1.4.0 (91 columns)** | Last updated: 2026-04-16 | 39 database files
+> Reference data schema: **5.0.0 / 5.1.0 / 5.2.0 / 5.3.0 / 6.0.0** | Export schema: **v1.4.0 (91 columns)** | Last updated: 2026-04-25 | 39 database files
 >
 > ## Two schemas, one document
 >
 > This file covers two related but distinct schemas:
 >
-> 1. **Reference data files** (`scripts/data/*.json`) — version 5.0.0 / 5.1.0 / 5.2.0 / 5.3.0. These are the input data the enricher consumes.
+> 1. **Reference data files** (`scripts/data/*.json`) — version 5.0.0 / 5.1.0 / 5.2.0 / 5.3.0 / 6.0.0. These are the input data the enricher consumes.
 > 2. **Final DB export** (`pharmaguide_core.db` + `detail_blobs/*.json`) — version 1.4.0. This is what the mobile app consumes. Runtime source of truth: `CORE_COLUMN_COUNT` and `EXPORT_SCHEMA_VERSION` in `build_final_db.py`. Per-column contract: `FINAL_EXPORT_SCHEMA_V1.md`.
 >
 > The reference data schema drives what the enricher CAN compute. The export schema drives what the mobile app CAN query. They evolve independently.
@@ -753,7 +753,7 @@ Updated from `https://download.open.fda.gov/other/unii/other-unii-0001-of-0001.j
 ## Cross-File Relationships
 
 ```
-ingredient_quality_map.json (588 parents)
+ingredient_quality_map.json (610 parents)
   ├── forms[].aliases → enhanced_normalizer alias lookup
   ├── standard_name → enrichment ingredient matching
   ├── category → supplement type classification

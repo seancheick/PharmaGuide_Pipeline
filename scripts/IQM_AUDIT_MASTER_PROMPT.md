@@ -11,11 +11,11 @@ You are auditing a supplement scoring pipeline that powers a consumer health app
 
 ## CODEBASE ORIENTATION
 
-- **IQM file:** `scripts/data/ingredient_quality_map.json` — the master ingredient database (549 parents, each with scored forms)
+- **IQM file:** `scripts/data/ingredient_quality_map.json` — the master ingredient database (610 parents, each with scored forms)
 - **Scoring range:** bio_score is 0-15. If natural=True, score = bio_score + 3 (max score = 18). If natural=False, score = bio_score (max score = 15). bio_score MUST NOT exceed 15.
 - **Scoring engine:** `scripts/score_supplements.py` — reads IQM scores to produce final product grades
 - **Enrichment pipeline:** `scripts/enrich_supplements_v3.py` — resolves raw labels → IQM parents/forms
-- **Scoring spec:** `scripts/SCORING_ENGINE_SPEC.md` (v3.1.0) — authoritative scoring rules
+- **Scoring spec:** `scripts/SCORING_ENGINE_SPEC.md` (v3.4.0) — authoritative scoring rules
 - **Scoring config:** `scripts/config/scoring_config.json` — caps, gates, coefficients
 - **Tests:** `python -m pytest scripts/tests/` — ALL tests must pass after every change
 - **Supporting data files (in `scripts/data/`):**
@@ -247,7 +247,7 @@ Remember: This system directly affects health decisions. Every bio_score must be
 
 ## CHANGELOG
 
-| Date | Auditor | Parents Audited | Key Changes |
-|------|---------|----------------|-------------|
+| Date    | Auditor       | Parents Audited                                                                                                                                                              | Key Changes                                                                                                                                                                                                                                             |
+| ------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 2026-02 | Claude + Sean | Vitamins A-K, Ca, P, Mg, Fe, Zn, Slippery Elm, Chromium-Glutathione, Choline-Taurine, PI-TMG, Probiotics/Prebiotics (architecture refactor), L-Glutamine through L-Ornithine | 498→508 parents, 10 species-level probiotic parents created, 37 strain forms migrated, 200+ bio_score corrections, 300+ notes rewritten with PubMed citations, 150+ suffix aliases removed, 8 phantom "from food" forms deleted, Nitrosigine form added |
-| 2026-03 | Claude + Sean | Interaction rules, clinical taxonomy, export hardening, project cleanup | 549 parents, 33 data files, 45 interaction rules (pregnancy/hypertension/diabetes), condition_summary + dose_threshold_evaluation in export, 2672 tests, schema 5.0/5.1 |
+| 2026-03 | Claude + Sean | Interaction rules, clinical taxonomy, export hardening, project cleanup                                                                                                      | 549 parents, 33 data files, 45 interaction rules (pregnancy/hypertension/diabetes), condition_summary + dose_threshold_evaluation in export, 2672 tests, schema 5.0/5.1                                                                                 |

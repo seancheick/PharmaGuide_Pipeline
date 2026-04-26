@@ -45,6 +45,10 @@ scripts/data/other-unii-*.json
 # FDA drug label bulk downloads (600MB+ per file — regenerable from OpenFDA)
 scripts/data/fda_drug_labels/
 
+# graphify output (regenerable via /graphify)
+graphify-out/
+.graphify_*
+
 # Logs (regenerated each run)
 scripts/logs/
 

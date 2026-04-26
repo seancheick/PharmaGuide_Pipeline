@@ -352,8 +352,8 @@ Required rows:
 | Key                | Example value          |
 | ------------------ | ---------------------- |
 | `db_version`       | `2026.03.29.232343`    |
-| `pipeline_version` | `3.1.0`                |
-| `scoring_version`  | `3.1.0`                |
+| `pipeline_version` | `3.4.0`                |
+| `scoring_version`  | `3.4.0`                |
 | `generated_at`     | `2026-03-29T22:33:24Z` |
 | `product_count`    | `180423`               |
 | `min_app_version`  | `1.0.0`                |

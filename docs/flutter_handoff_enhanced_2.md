@@ -2,13 +2,19 @@
 
 **Pipeline release live:** `v2026.04.23.000925`
 **Doc rewrite:** 2026-04-23 (dedup pass — replaced 3 conflicting priority lists with one; added all tickets accumulated mid-sprint)
-**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.25** SHIPPED, FLTR-21/22/23 OPEN, awaiting full pipeline rebuild). E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion. **E1.24 ships clinical signoff on goal-matching and synergy clusters**; **E1.25 ships clinical signoff on dose-threshold closeout** (Packet A: Vanadium / EPO / Glucosamine / Olive Leaf thresholds added; Packet B: Red Clover bleeding threshold SKIPPED for weak mechanism anchor; Fish Oil bleeding harmonized to 2g/2g/3g tiers; Iodine thyroid threshold added). **E1.11 (dose-aware warning severity) is now CLOSED** — 33 of 129 rules carry thresholds, the remaining 96 are correctly dose-independent, and **FLTR-11a is RETIRED** (commit `37c245e`, 4 files / 35+ / 336− lines).
+**Release D addendum:** 2026-04-24 — goal-matching contract v6.0.0 + cluster-ingredient alias map + single-ingredient override + enrichment hardening + product-name fallback synthesizer (**E1.16–E1.25** SHIPPED, awaiting full pipeline rebuild). Flutter status as of 2026-04-25: **FLTR-21 SHIPPED**, **FLTR-22 SHIPPED**, **FLTR-23 OPEN**. E1.21–E1.23 are post-rebuild bugfixes discovered from the first 8,169-product dashboard snapshot: score-formula MAX-of-required-weights, synthesizer name-read fallback, and absorption-enhancer sub-threshold demotion. **E1.24 ships clinical signoff on goal-matching and synergy clusters**; **E1.25 ships clinical signoff on dose-threshold closeout** (Packet A: Vanadium / EPO / Glucosamine / Olive Leaf thresholds added; Packet B: Red Clover bleeding threshold SKIPPED for weak mechanism anchor; Fish Oil bleeding harmonized to 2g/2g/3g tiers; Iodine thyroid threshold added). **E1.11 (dose-aware warning severity) is now CLOSED** — 33 of 129 rules carry thresholds, the remaining 96 are correctly dose-independent, and **FLTR-11a is RETIRED** (commit `37c245e`, 4 files / 35+ / 336− lines).
 
 **Perf addendum:** 2026-04-25 — **E1.27** ships a one-line cleaning performance hotfix: `enhanced_normalizer.py` import block now prefers `rapidfuzz` over `fuzzywuzzy` over `difflib` (commit `3364f18`). Diagnoses a **64x cleaning regression** introduced by the Apr-20 D1/D2 sprints (10d54a6 + c0e1450) which added many new fuzzy-match call sites in `_enhanced_non_harmful_check`; with neither `rapidfuzz` nor `fuzzywuzzy` resolved by the import chain, the code fell through to pure-Python `difflib.SequenceMatcher` and the new call volume blew up. cProfile: 96% of `normalize_product` time was inside `difflib`. **Fix verified bit-for-bit safe**: catalog-wide diff across **13,236 products / 6 brands** showed **100.00% identical** active+inactive classifications between rapidfuzz and the shipped difflib output. **Bonus**: rapidfuzz also fixes the silybin canonical-id bug on product 16037 (Thorne Planti-Oxidants) — Silybin Phytosome now correctly resolves to `milk_thistle` instead of the difflib-misclassified `lecithin`, restoring `supp_type=targeted` and `score_80=52.1` to match the frozen snapshot. Projected next-pipeline runtime: **~127 min vs the broken 373 min** (cleaning alone: ~10 min vs 258 min).
 
 **From:** Pipeline / scoring / data-contract side
 **To:** Flutter app team
 **Purpose:** Implement post-E1 UI correctness, safety rendering, profile filtering, and product-detail hierarchy without ambiguity.
+
+**Current truth update (2026-04-25):**
+- Product detail no longer uses a disconnected blocked-only page architecture. The app now uses one shared premium product shell across normal, caution, unsafe, blocked, and recall states, with the safety state changing the hero copy, warning strip, and available actions.
+- The score ring remains the visual anchor of the product page. The redesign direction is not "fewer signals"; it is better hierarchy: score + image first, horizontal safety banner directly under the hero, then fit, score reasoning, ingredients, and deeper evidence in a calmer flow.
+- "Inferred from label" disclosure is already shipped in Flutter for synthetic actives coming from the product-name fallback path.
+- The next remaining product-detail surfacing item from Release D is optional: expose E1.23 absorption-enhancer demotion as a subtle informational chip when useful.
 
 **Status legend:**
 - `[x]` shipped and simulator-verified
@@ -33,29 +39,27 @@ The backend is now deterministic, clinically safer, and structured. The frontend
 
 # 1. GLOBAL RULES (NON-NEGOTIABLE)
 
-## 1.1 BLOCKED MODE OVERRIDE (highest priority)
+## 1.1 BLOCKED / UNSAFE SHELL OVERRIDE (highest priority)
 
 Before rendering ANY product UI:
 
 ```dart
-if (product.verdict == 'BLOCKED') {
-  renderBlockedScreen(product);
+if (isUnsafeVerdict(product.verdict)) {
+  renderSharedProductShellWithHardStopBanner(product);
   return;
 }
 ```
 
-When BLOCKED:
+When `BLOCKED` or `UNSAFE`:
 
-* ❌ No score
-* ❌ No ingredients
-* ❌ No warnings list
-* ❌ No stack interaction
-* ❌ No formulation analysis
-* ❌ No "safe" messaging
+* ✅ Keep the shared premium product shell
+* ✅ Keep the score ring + product image hero
+* ✅ Show a hard-stop safety banner high on the page
+* ✅ Allow contextual explanation and supporting evidence
+* ❌ Do not show a positive fit state
+* ❌ Do not show "safe to add" or normal add-to-stack success affordances
 
-Only render the **Blocked Screen**.
-
-**Distinction:** `UNSAFE` verdict does NOT take this override. UNSAFE still renders the full detail screen so users see context and alerts.
+`BLOCKED` and `UNSAFE` are not separate layouts anymore; they are separate safety states inside the same layout system. This keeps the app visually consistent while preserving safety priority.
 
 ## 1.2 SAFETY PRIORITY HIERARCHY
 
@@ -143,18 +147,24 @@ A non-kidney user must never see a kidney-disease warning presented as a persona
 The target page structure (FLTR-3 final state). Current implementation sits between today's layout and this target.
 
 ```
-Header              → name, brand, score, verdict, grade
-Decision strip      → score summary + one-line verdict
-Why this score      → positive drivers only
-Tradeoffs           → neutral caveats (proprietary blend, filler load, limited dose disclosure)
+Hero                → image + score ring + verdict/status framing
+Safety strip        → horizontal, high-signal warning banner directly under hero
+Personal fit        → state chip + short reason (never a competing big number)
+Why this product    → positive drivers / tradeoffs in compact language
+Score breakdown     → "why this scored this way" before ingredient deep dive
 Applies to you      → profile-matched warnings ONLY (FLTR-18)
-Other precautions   → non-profile precautions, collapsed (FLTR-18)
-Alerts              → UL exceeded, banned/recalled, contraindications, major interactions
-Concerns            → product_status chip (discontinued), additive concerns, added sugar
-Active Ingredients  → name (incl. form), dose, dose-safety badge, form quality (FLTR-20)
-Other Ingredients   → inactives, collapsed by default
-Deep dive           → evidence, ingredient rationale, citations
+Other precautions   → non-profile precautions, collapsed by default (FLTR-18)
+Active ingredients  → name (incl. form), dose, dose-safety badge, form quality
+Other ingredients   → deduped inactives, collapsed by default
+Evidence / details  → synergy, citations, rationale, formulation notes
 ```
+
+Design direction for the full app:
+- Premium, not card-stacked. Sections should feel like one intentional page with shared spacing, illustration language, and shape system.
+- Keep the score ring as brand identity.
+- Use horizontal alert surfaces under the hero instead of disconnected warning cards fighting the header.
+- Keep decision language specific: "CAUTION · Monitor with lisinopril" is preferred over vague generic phrasing.
+- Use the same shell for normal, caution, blocked, and recall pages so the app feels coherent rather than rebuilt per verdict.
 
 ---
 
@@ -322,17 +332,17 @@ Currently two separate cards show the same ingredient twice in two systems.
 
 These two are non-blocking enhancements that surface fields the pipeline now emits. Both are pure UI additions; no contract change.
 
-### FLTR-21 — "Solo ingredient" badge on synergy cluster card `[ ]`
+### FLTR-21 — "Solo ingredient" badge on synergy cluster card `[x]`
 The pipeline now emits `synergy_detail.clusters[*].single_ingredient_match: bool`. When true, the cluster qualified via a lone primary ingredient at adequate dose (e.g. magnesium-only earning sleep_stack). Rendering a small badge ("Single-ingredient match" / "Solo headliner") on the cluster card helps users understand why a calcium-only product earned the bone goal.
 
-**Where:** `lib/features/product_detail/widgets/pipeline_sections/synergy_detail_section.dart`. Read `cluster['single_ingredient_match']` (defaults to `false`). Add a chip next to the evidence-tier pill when true.
+**Where:** `lib/features/product_detail/widgets/pipeline_sections/synergy_detail_section.dart`. Reads `cluster['single_ingredient_match']` (defaults to `false`) and renders a `Single-ingredient match` chip beside the evidence-tier pill.
 
 **Acceptance:** A solo-magnesium product surfaces "Single-ingredient match" beside the `sleep_stack` cluster. Multi-ingredient matches do not surface the badge.
 
-### FLTR-22 — "Inferred from label" disclosure for synthetic actives `[ ]`
+### FLTR-22 — "Inferred from label" disclosure for synthetic actives `[x]`
 The pipeline injects a small number of synthetic ingredients (≤ 2 per product) into `display_ingredients` with `display_type: "inferred_from_name"`, `provenance: "product_name_fallback"`, `confidence: "inferred_high"`, `score_included: false`. These come from products like "DHA 1,000 mg Lemon Flavor" where the parser missed the headline ingredient.
 
-**Where:** ingredient list render in product detail. When `display_ingredients[i].display_type == "inferred_from_name"`, render the row with a subtle subtitle ("inferred from product label") or info-icon tooltip. Builds user trust through transparency.
+**Where:** ingredient list render in product detail. Shipped in Flutter as a subtle `Inferred from label` chip when `display_ingredients[i].display_type == "inferred_from_name"` or `provenance == "product_name_fallback"`. Builds user trust through transparency without changing scoring language.
 
 **Acceptance:** "DHA 1,000 mg Lemon Flavor" shows DHA 1000 mg in the ingredient list with the "inferred from label" disclosure. Standard parser-extracted ingredients render identically to today (no badge).
 
@@ -1225,11 +1235,20 @@ Ingredients-side cleanup. FitScore/cluster sync bundle (commit `a1d0783`) pushed
 - **FLTR-6** dedupe inactive ingredients `[x]` — commit `daed364`
   Real blobs repeat excipients; UI dedupes at the parse boundary via `dedupeInactivesForDisplay` (first occurrence wins, whitespace-tolerant, fallback name → standard_name → raw_source_text). 7 tests.
 
-## Release C `[~]` DEFERRED
+## Release C `[~]` DEFERRED / PARTIALLY SUPERSEDED
 
-FLTR-3 (5-layer architecture), FLTR-7 (delete stale RDA file), FLTR-8 (warning grouping refinement), FLTR-15 (discontinued warning filter), FitScore empty-profile suppress, FLTR-SEARCH Phase 2.5.
+Still open:
+- FLTR-3 (remaining premium page polish)
+- FLTR-7 (delete stale RDA file)
+- FLTR-8 (warning grouping refinement)
+- FLTR-15 (discontinued warning filter)
+- FLTR-SEARCH Phase 2.5
 
-## Release D — Goal-matching contract `[x]` PIPELINE SHIPPED · `[ ]` FLUTTER OPEN (2026-04-24)
+No longer open:
+- FitScore empty-profile suppress — superseded by stateful fit rendering (`Incomplete profile`) rather than numeric uplift
+- FLTR-6 inactive dedupe — shipped
+
+## Release D — Goal-matching contract `[x]` PIPELINE SHIPPED · `[-]` FLUTTER PARTIALLY OPEN (2026-04-24)
 
 ### Pipeline (shipped — rebuild required to populate columns across the catalog)
 
@@ -1249,9 +1268,10 @@ FLTR-3 (5-layer architecture), FLTR-7 (delete stale RDA file), FLTR-8 (warning g
 **Flutter fallback patched:**
 - `lib/services/fit_score/e2a_goal_calculator.dart` — rewrote to use v6.0.0 fields (`required_clusters`, `blocked_by_clusters`, `min_match_score`) with full algorithm parity to pipeline's `compute_goal_matches`. The legacy `anti_clusters` lookup is removed.
 
-**Flutter UI tickets — open:**
-- **FLTR-21** — "Solo ingredient" badge on synergy cluster cards (consumes `synergy_detail.clusters[*].single_ingredient_match`)
-- **FLTR-22** — "Inferred from label" disclosure for synthetic actives (consumes `display_ingredients[*].display_type == "inferred_from_name"`)
+**Flutter UI tickets — current status:**
+- **FLTR-21** — shipped: "Single-ingredient match" badge on synergy cluster cards
+- **FLTR-22** — shipped: "Inferred from label" disclosure for synthetic actives
+- **FLTR-23** — still open: optional "Includes bioavailability aid" chip for E1.23 audit surfacing
 
 ### Verification status
 
@@ -1283,7 +1303,7 @@ python3 scripts/sync_to_supabase.py <build_output>
 
 - Goal-matching consumption (`fit_score_provider.dart`, `fit_score_service.dart`) — already correctly intersects `userGoals ∩ goalMatches` with confidence weighting. No code change needed.
 - Drift schema (`products_core_table.dart`) — `goalMatches TEXT` and `goalMatchConfidence REAL` already mirror pipeline columns.
-- Synergy detail render (`synergy_detail_section.dart`) — reads existing fields; new `single_ingredient_match` field is read-tolerant (defaults `false`).
+- Synergy detail render (`synergy_detail_section.dart`) — now also surfaces `single_ingredient_match` as a user-facing explanatory chip.
 
 ## Release E — Cleaning perf hotfix `[x]` PIPELINE SHIPPED (2026-04-25)
 
