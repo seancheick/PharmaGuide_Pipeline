@@ -15,6 +15,11 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 from enrich_supplements_v3 import SupplementEnricherV3
 from constants import SKIP_REASON_RECOGNIZED_NON_SCORABLE
 
+# Mega-file: full SupplementEnricherV3 boot per test class (loads all 26
+# reference databases). Marked slow so `pytest -m "not slow"` skips for
+# tight dev loops. Default `pytest` still runs everything.
+pytestmark = pytest.mark.slow
+
 
 class TestAllergenPresenceType:
     """P0.1: Allergen detection with presence_type"""

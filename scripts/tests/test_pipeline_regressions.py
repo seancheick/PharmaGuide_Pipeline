@@ -16,6 +16,11 @@ from enhanced_normalizer import EnhancedDSLDNormalizer
 from dsld_validator import DSLDValidator
 from unmapped_ingredient_tracker import UnmappedIngredientTracker
 
+# Mega-file: full normalizer + validator integration. Marked slow so
+# `pytest -m "not slow"` skips for tight dev loops. Default `pytest`
+# still runs everything.
+pytestmark = pytest.mark.slow
+
 
 class TestSkipEnforcement:
     """Tests for skip list enforcement (Task 2)"""
