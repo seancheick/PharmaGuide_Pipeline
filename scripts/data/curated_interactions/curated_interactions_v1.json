@@ -27,9 +27,12 @@
       "management": "Maintain consistent dietary vitamin K intake. Avoid starting high-dose vitamin K supplements while on warfarin. Monitor INR closely if dietary patterns change. Supplement doses >100 mcg/day require physician guidance.",
       "source_urls": [
         "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
-        "https://www.ncbi.nlm.nih.gov/books/NBK470313/"
+        "https://www.ncbi.nlm.nih.gov/books/NBK470313/",
+        "https://pubmed.ncbi.nlm.nih.gov/10102468/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "10102468"
+      ],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -163,9 +166,14 @@
       "management": "Do not use St. John's Wort while taking warfarin. INR must be monitored closely if it is started or stopped. Switching to a different antidepressant approach is strongly recommended.",
       "source_urls": [
         "https://nccih.nih.gov/health/stjohnswort/ataglance.htm",
-        "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers"
+        "https://www.fda.gov/drugs/drug-interactions-labeling/drug-development-and-drug-interactions-table-substrates-inhibitors-and-inducers",
+        "https://pubmed.ncbi.nlm.nih.gov/15260917/",
+        "https://pubmed.ncbi.nlm.nih.gov/15049433/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "15260917",
+        "15049433"
+      ],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",
@@ -1352,9 +1360,12 @@
       "mechanism": "Coffee, particularly espresso, can reduce levothyroxine absorption when taken simultaneously. Polyphenols and other coffee compounds may interfere with GI absorption.",
       "management": "Take levothyroxine with water only, at least 30–60 minutes before coffee. This is a standard clinical recommendation for all thyroid patients.",
       "source_urls": [
-        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
+        "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/",
+        "https://pubmed.ncbi.nlm.nih.gov/18341376/"
       ],
-      "source_pmids": [],
+      "source_pmids": [
+        "18341376"
+      ],
       "verification": {
         "status": "verified",
         "verified_at": "2026-04-13T16:37:00Z",

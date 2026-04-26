@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.3.0",
-    "last_updated": "2026-04-17",
-    "total_entries": 143,
+    "last_updated": "2026-04-26",
+    "total_entries": 146,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -17736,6 +17736,141 @@
       "ban_context": "substance",
       "safety_warning": "A neurotoxic amino acid in Amanita mushrooms that acts on NMDA receptors and can cause excitotoxic brain injury. Not a lawful supplement ingredient. Stop and consult a doctor.",
       "safety_warning_one_liner": "Neurotoxic mushroom compound. Stop."
+    },
+    {
+      "id": "BANNED_PENNYROYAL",
+      "standard_name": "Pennyroyal",
+      "aliases": [
+        "pennyroyal",
+        "mentha pulegium",
+        "hedeoma pulegioides",
+        "pulegone",
+        "pennyroyal oil",
+        "american pennyroyal",
+        "european pennyroyal"
+      ],
+      "reason": "Pennyroyal contains pulegone, a hepatotoxic monoterpene that is metabolized to the highly reactive menthofuran. Documented case reports of fatal hepatotoxicity, abortifacient use leading to maternal death, and seizures. Both leaf preparations and (especially) essential oil are unsafe; oil ingestion has caused liver necrosis and renal failure. Contraindicated in pregnancy because of well-documented abortifacient use linked to maternal fatalities.",
+      "status": "high_risk",
+      "class_tags": [
+        "hepatotoxic",
+        "reproductive_toxin",
+        "essential_oil_toxicity"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "advisory",
+          "status": "high_risk",
+          "effective_date": "1996-01-01",
+          "source": "FDA / NCCIH advisory",
+          "notes": "FDA repeatedly warns against pennyroyal oil ingestion; not banned outright but flagged hepatotoxic."
+        }
+      ]
+    },
+    {
+      "id": "BANNED_TANSY",
+      "standard_name": "Tansy",
+      "aliases": [
+        "tansy",
+        "tanacetum vulgare",
+        "common tansy",
+        "golden buttons",
+        "cow bitter",
+        "tansy oil"
+      ],
+      "reason": "Tansy contains thujone (a GABA-A antagonist neurotoxin) and other terpenoid constituents that are abortifacient, hepatotoxic, and can cause seizures at supplement-relevant doses. Historical use as an abortifacient is linked to multiple fatalities. Essential oil is more toxic than dried herb. Pregnancy use is not clinically acceptable.",
+      "status": "high_risk",
+      "class_tags": [
+        "neurotoxic",
+        "reproductive_toxin",
+        "hepatotoxic"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "tansy ragwort",
+          "senecio jacobaea"
+        ]
+      },
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "advisory",
+          "status": "high_risk",
+          "effective_date": "1996-01-01",
+          "source": "NCCIH / NIH toxic medicinal plant reviews",
+          "notes": "Not federally banned, but NCCIH and toxicology literature consistently flag as unsafe for ingestion."
+        }
+      ]
+    },
+    {
+      "id": "BANNED_BITTER_ORANGE",
+      "standard_name": "Bitter Orange (synephrine)",
+      "aliases": [
+        "bitter orange",
+        "citrus aurantium",
+        "synephrine",
+        "p-synephrine",
+        "seville orange",
+        "zhi shi",
+        "sour orange",
+        "bitter orange extract"
+      ],
+      "reason": "Bitter orange (Citrus aurantium) extracts in supplements are concentrated for synephrine, an adrenergic agonist that — alone or combined with caffeine — has caused hypertensive crises, arrhythmias, ischemic strokes, and myocardial infarction. Marketed as an ephedra replacement after the 2004 ephedra ban. Health Canada caps OTC synephrine at 30 mg/day; supplement-dose products routinely exceed clinical safety. Pregnancy is not appropriate for stimulant-driven cardiovascular stress.",
+      "status": "high_risk",
+      "class_tags": [
+        "sympathomimetic",
+        "stimulant",
+        "cardiovascular_risk"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "bitter orange peel powder culinary",
+          "sweet orange",
+          "citrus sinensis"
+        ]
+      },
+      "legal_status_enum": "high_risk",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "CA",
+          "level": "regulatory_cap",
+          "status": "restricted",
+          "effective_date": "2010-01-01",
+          "source": "Health Canada synephrine guidance",
+          "notes": "Health Canada caps OTC synephrine at 30 mg/day."
+        },
+        {
+          "region": "US",
+          "level": "advisory",
+          "status": "high_risk",
+          "effective_date": "2004-04-12",
+          "source": "NCCIH / FDA bitter orange advisory",
+          "notes": "FDA flags bitter orange + caffeine combinations as cardiovascular risk after ephedra ban."
+        }
+      ]
     }
   ]
 }

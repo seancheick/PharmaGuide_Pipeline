@@ -3,8 +3,8 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "5.2.0",
-    "last_updated": "2026-04-24",
-    "total_entries": 129,
+    "last_updated": "2026-04-26",
+    "total_entries": 137,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
     "total_rules": 129,
     "flutter_top_level_key": "interaction_rules",
@@ -114,13 +114,16 @@
         "mechanism": "Serious toxicity risk profile and regulatory prohibition for supplement use.",
         "notes": "Ephedra-containing supplements should not be used.",
         "sources": [
-          "https://www.nccih.nih.gov/health/ephedra"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. If you are pregnant, do not use ephedra-containing products.",
-        "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant to anyone pregnant or planning pregnancy."
+        "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant to anyone pregnant or planning pregnancy.",
+        "lactation_severity": "contraindicated",
+        "lactation_evidence": "established",
+        "lactation_notes": "Ephedrine is stimulant-like and can affect infants. Do not use in breastfeeding."
       },
-      "last_reviewed": "2026-02-28",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -314,13 +317,17 @@
         "mechanism": "NCCIH indicates oral aloe may be unsafe in pregnancy and breastfeeding.",
         "notes": "This rule is intended for oral/systemic supplement use, not topical-only products.",
         "sources": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
           "https://www.nccih.nih.gov/health/aloe-vera"
         ],
         "alert_headline": "Oral aloe not recommended in pregnancy",
         "alert_body": "Oral aloe products (gel, latex, whole-leaf) raise safety concerns in pregnancy. If you are pregnant, talk to your obstetrician before using any oral aloe supplement.",
-        "informational_note": "Oral aloe has safety concerns relevant to anyone pregnant."
+        "informational_note": "Oral aloe has safety concerns relevant to anyone pregnant.",
+        "lactation_severity": "avoid",
+        "lactation_evidence": "probable",
+        "lactation_notes": "Oral anthraquinone-containing products can cause diarrhea and are not good lactation choices. Topical use is different."
       },
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -593,13 +600,17 @@
         "mechanism": "Pregnancy safety is uncertain and potential adverse effects are described in safety guidance.",
         "notes": "Avoid in pregnancy; lactation evidence is limited.",
         "sources": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
           "https://www.nccih.nih.gov/health/black-cohosh"
         ],
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "Black cohosh may have uterotonic and hormone-active effects. If you are pregnant, do not use black cohosh unless specifically directed by your obstetrician.",
-        "informational_note": "Black cohosh is hormone-active — relevant to anyone pregnant or planning pregnancy."
+        "informational_note": "Black cohosh is hormone-active — relevant to anyone pregnant or planning pregnancy.",
+        "lactation_severity": "avoid",
+        "lactation_evidence": "probable",
+        "lactation_notes": "Hormonal uncertainty and limited lactation data justify avoidance."
       },
-      "last_reviewed": "2026-02-28",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -666,13 +677,17 @@
         "mechanism": "High caffeine exposure can affect maternal-fetal and infant outcomes.",
         "notes": "This threshold applies to supplemental caffeine only; total daily caffeine from beverages/foods should be considered.",
         "sources": [
-          "https://www.acog.org/womens-health/experts-and-stories/ask-acog/how-much-coffee-can-i-drink-while-pregnant"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
+          "https://www.cdc.gov/breastfeeding/breastfeeding-special-circumstances/maternal-or-infant-illnesses/maternal-diet.html"
         ],
         "alert_headline": "Caffeine adds up — watch total intake",
         "alert_body": "Caffeine crosses the placenta and passes into breast milk. If you are pregnant or nursing, monitor total caffeine from coffee, tea, chocolate, and supplements against a 200 mg/day ceiling.",
-        "informational_note": "Caffeine crosses the placenta and reaches breast milk — relevant to anyone pregnant or breastfeeding."
+        "informational_note": "Caffeine crosses the placenta and reaches breast milk — relevant to anyone pregnant or breastfeeding.",
+        "lactation_severity": "monitor",
+        "lactation_evidence": "established",
+        "lactation_notes": "Caffeine passes into milk and can affect infant sleep and irritability. Keep intake moderate (≥200 mg/day triggers monitoring) and watch infant tolerance."
       },
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -1054,6 +1069,16 @@
           "alert_headline": "Consult on cholesterol management",
           "alert_body": "Garlic can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding garlic — it may change your lipid-therapy plan.",
           "informational_note": "Garlic affects lipid pathways — relevant to people managing high cholesterol."
+        },
+        {
+          "condition_id": "diabetes",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Garlic can modestly lower glucose and may add to insulin or sulfonylurea effects.",
+          "action": "Monitor for hypoglycemia if used with diabetes meds.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/garlic"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -1111,9 +1136,20 @@
           "informational_note": "Garlic affects statin pathways — relevant to people on statin therapy."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "diabetes",
+          "comparator": ">=",
+          "value": 600,
+          "unit": "mg",
+          "basis": "per_day",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor"
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-03-18",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -1809,6 +1845,17 @@
           "alert_headline": "May raise blood pressure",
           "alert_body": "Whole licorice (with glycyrrhizin) can raise blood pressure through sodium retention. If you have high blood pressure, talk to your clinician; DGL licorice does not carry this concern.",
           "informational_note": "Licorice with glycyrrhizin raises blood pressure — relevant to people with hypertension."
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "High glycyrrhizin intake inhibits placental 11β-HSD2 and has been associated with shorter gestation and higher preterm risk.",
+          "action": "Avoid high-dose licorice supplements in pregnancy.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/11390327/",
+            "https://pubmed.ncbi.nlm.nih.gov/12396997/"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -1840,9 +1887,20 @@
         "alert_body": "Whole licorice's glycyrrhizin can raise maternal cortisol reaching the fetus, linked to preterm delivery. If you are pregnant, talk to your obstetrician; DGL licorice does not carry this concern.",
         "informational_note": "Licorice with glycyrrhizin affects fetal cortisol exposure — relevant to anyone pregnant or breastfeeding."
       },
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team",
-      "dose_thresholds": []
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "comparator": ">=",
+          "value": 71,
+          "unit": "mg",
+          "basis": "per_day",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "caution"
+        }
+      ]
     },
     {
       "id": "RULE_IQM_MAGNESIUM_HYPERTENSION",
@@ -1891,6 +1949,16 @@
           "alert_headline": "Caution with kidney disease",
           "alert_body": "In advanced kidney disease (eGFR below 30), supplemental magnesium can build up to risky levels. If you have CKD, talk to your nephrologist before adding magnesium.",
           "informational_note": "Magnesium excretion depends on kidney function — relevant to people with kidney disease."
+        },
+        {
+          "condition_id": "diabetes",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "Magnesium may modestly help insulin sensitivity, but high doses can cause GI loss and electrolyte issues.",
+          "action": "Track glucose and tolerance if using high doses.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -1923,7 +1991,7 @@
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team",
       "dose_thresholds": []
     },
@@ -2174,13 +2242,17 @@
         "mechanism": "Potential fetal risk and broad CYP/P-gp interactions.",
         "notes": "Use in pregnancy should be avoided outside specialist care.",
         "sources": [
-          "https://www.nccih.nih.gov/health/st-johns-wort"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
+          "https://www.nccih.nih.gov/health/stjohnswort"
         ],
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "St John's Wort has been flagged for possible birth-defect risk and major drug interactions. If you are pregnant, talk to a specialist before any use.",
-        "informational_note": "St John's Wort has pregnancy safety concerns relevant to anyone pregnant or planning pregnancy."
+        "informational_note": "St John's Wort has pregnancy safety concerns relevant to anyone pregnant or planning pregnancy.",
+        "lactation_severity": "caution",
+        "lactation_evidence": "probable",
+        "lactation_notes": "Milk transfer appears limited, but infant CNS effects and major drug interactions remain relevant. Use cautiously and monitor infant + maternal interacting drugs."
       },
-      "last_reviewed": "2026-04-14",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -2324,13 +2396,17 @@
         "mechanism": "Dose and form dependent risk is primarily tied to preformed retinoids.",
         "notes": "Applies to preformed vitamin A forms; carotenoids are not handled by this threshold rule.",
         "sources": [
-          "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/"
+          "https://ods.od.nih.gov/factsheets/VitaminA-HealthProfessional/",
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
         ],
         "alert_headline": "Keep preformed vitamin A within prenatal range",
         "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
-        "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding."
+        "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding.",
+        "lactation_severity": "caution",
+        "lactation_evidence": "established",
+        "lactation_notes": "Excess retinol can accumulate in milk. Avoid chronic high-dose retinol while breastfeeding (≥10,000 IU/day)."
       },
-      "last_reviewed": "2026-02-28",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -2661,13 +2737,17 @@
         "mechanism": "Safety data are limited and stimulant effects raise risk concerns.",
         "notes": "Avoid in pregnancy and lactation.",
         "sources": [
-          "https://www.nccih.nih.gov/health/safety"
+          "https://www.nccih.nih.gov/health/yohimbe",
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
-        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy."
+        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy.",
+        "lactation_severity": "avoid",
+        "lactation_evidence": "probable",
+        "lactation_notes": "Potent adrenergic stimulant with poor lactation safety data. Avoid during breastfeeding."
       },
-      "last_reviewed": "2026-02-28",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -2743,15 +2823,18 @@
         "mechanism": "Uterotonic glycosides (caulosaponin) and nicotinic alkaloids (methylcytisine) pose direct fetal risk including cardiac toxicity and CNS injury.",
         "notes": "Multiple case reports of serious neonatal adverse events. ACOG and NCCIH advise against use in pregnancy.",
         "sources": [
-          "https://www.nccih.nih.gov/health/blue-cohosh",
-          "https://pubmed.ncbi.nlm.nih.gov/9600579/"
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
+          "https://www.nccih.nih.gov/health/blue-cohosh"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
-        "informational_note": "Blue cohosh stimulates contractions — relevant to anyone pregnant or planning pregnancy."
+        "informational_note": "Blue cohosh stimulates contractions — relevant to anyone pregnant or planning pregnancy.",
+        "lactation_severity": "contraindicated",
+        "lactation_evidence": "established",
+        "lactation_notes": "Toxicity concern is substantial; not appropriate for lactation."
       },
       "form_scope": null,
-      "last_reviewed": "2026-02-28",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -3024,6 +3107,17 @@
           "alert_headline": "Stop if you become pregnant",
           "alert_body": "Saw palmetto has antiandrogenic activity and no established fetal safety. If you are trying to conceive, discuss dosing with your clinician and plan to stop saw palmetto at confirmed pregnancy.",
           "informational_note": "Saw palmetto is typically discontinued at confirmed pregnancy — relevant to people trying to conceive."
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Anti-androgenic and hormonal concern combined with absent pregnancy safety data.",
+          "action": "Avoid in pregnancy unless specialist-directed.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/saw-palmetto",
+            "https://www.acog.org/clinical/clinical-guidance/committee-opinion"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -3083,7 +3177,7 @@
         "alert_body": "Saw palmetto has antiandrogenic activity with no pregnancy or lactation safety data. If you are pregnant or breastfeeding, do not use saw palmetto supplements.",
         "informational_note": "Saw palmetto is antiandrogenic — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
       },
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -3464,6 +3558,16 @@
           "alert_headline": "Caution with bleeding disorders",
           "alert_body": "Curcumin has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding curcumin.",
           "informational_note": "Curcumin can affect platelet function — relevant to people with a bleeding disorder."
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Culinary turmeric is different from gram-level curcumin extracts; high-dose supplements may affect platelet and GI biology and have limited pregnancy data.",
+          "action": "Keep to food-level intake; avoid routine high-dose extracts.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/turmeric"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -3511,9 +3615,20 @@
           "informational_note": "Curcumin can affect platelet function — relevant to people on NSAIDs."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "comparator": ">=",
+          "value": 1000,
+          "unit": "mg",
+          "basis": "per_day",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor"
+        }
+      ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -3756,6 +3871,27 @@
           "alert_headline": "Continue under prenatal care",
           "alert_body": "Vitamin D used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin D with your clinician.",
           "informational_note": "Vitamin D is continued under clinician guidance — relevant to people planning pregnancy."
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "Vitamin D deficiency should be corrected, but routine high-dose use beyond standard supplementation should be tracked with labs.",
+          "action": "Monitor 25(OH)D and avoid unmonitored chronic high dosing.",
+          "sources": [
+            "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2011/07/vitamin-d-screening-and-supplementation-during-pregnancy",
+            "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
+          ]
+        },
+        {
+          "condition_id": "diabetes",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Repleting deficiency can improve insulin sensitivity in some patients.",
+          "action": "Monitor glucose and adjust diabetes therapy if needed.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -3867,10 +4003,20 @@
           "severity_if_met": "caution",
           "severity_if_not_met": "info",
           "note": "IOM UL for adults is 4,000 IU/day. Authored action: standard supplementation is appropriate alongside immunosuppressants; >4,000 IU/day requires physician oversight, not an absolute contraindication."
+        },
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "comparator": ">",
+          "value": 4000,
+          "unit": "IU",
+          "basis": "per_day",
+          "severity_if_met": "monitor",
+          "severity_if_not_met": "info"
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-23",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -5147,6 +5293,17 @@
           "alert_headline": "Continue under prenatal care",
           "alert_body": "DHEA used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of DHEA with your clinician.",
           "informational_note": "DHEA is continued under clinician guidance — relevant to people planning pregnancy."
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "avoid",
+          "evidence_level": "established",
+          "mechanism": "DHEA is a steroid precursor with potential fetal endocrine effects.",
+          "action": "Avoid in pregnancy unless a reproductive specialist has a specific indication.",
+          "sources": [
+            "https://medlineplus.gov/druginfo/natural/331.html",
+            "https://www.nccih.nih.gov/health/dehydroepiandrosterone"
+          ]
         }
       ],
       "drug_class_rules": [],
@@ -5164,7 +5321,7 @@
         "alert_body": "DHEA has androgenic and hormonal activity that is not recommended once pregnancy is achieved. If pregnancy is confirmed, talk to your obstetrician about discontinuing DHEA.",
         "informational_note": "DHEA is hormonally active — relevant to anyone pregnant, planning pregnancy, or breastfeeding."
       },
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -5227,6 +5384,16 @@
           "alert_headline": "Continue under prenatal care",
           "alert_body": "Inositol used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of inositol with your clinician.",
           "informational_note": "Inositol is continued under clinician guidance — relevant to people planning pregnancy."
+        },
+        {
+          "condition_id": "diabetes",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Inositol can improve insulin signaling and glycemic metrics in some settings.",
+          "action": "Monitor for additive glucose lowering.",
+          "sources": [
+            "https://diabetesjournals.org/care/issue/49/Supplement_1"
+          ]
         }
       ],
       "drug_class_rules": [],
@@ -5244,7 +5411,7 @@
         "alert_body": "Myo-inositol is generally considered safe in pregnancy, and use may continue under clinician supervision. If you are pregnant or nursing, discuss dosing with your obstetrician.",
         "informational_note": "Inositol is continued under clinician supervision — relevant to anyone pregnant or breastfeeding."
       },
-      "last_reviewed": "2026-04-09",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -6395,8 +6562,15 @@
         }
       ],
       "dose_thresholds": [],
-      "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "pregnancy_lactation": {
+        "lactation_severity": "caution",
+        "lactation_evidence": "probable",
+        "lactation_notes": "Usually lower risk than cascara, but infant GI effects can occur. Use short term if needed and monitor infant stools.",
+        "sources": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
+        ]
+      },
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -6437,8 +6611,16 @@
       ],
       "drug_class_rules": [],
       "dose_thresholds": [],
-      "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "pregnancy_lactation": {
+        "lactation_severity": "avoid",
+        "lactation_evidence": "probable",
+        "lactation_notes": "Dopaminergic activity can suppress prolactin and reduce milk supply. Avoid if maintaining lactation matters.",
+        "sources": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
+          "https://www.nccih.nih.gov/health/chasteberry"
+        ]
+      },
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -6461,6 +6643,16 @@
           "alert_headline": "Caution with bleeding disorders",
           "alert_body": "NAC has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding NAC.",
           "informational_note": "NAC can affect platelet function — relevant to people with a bleeding disorder."
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "NAC is used clinically, but high-dose chronic supplement use in pregnancy should still be supervised.",
+          "action": "Monitor and keep use indication-driven.",
+          "sources": [
+            "https://www.fda.gov/regulatory-information/search-fda-guidance-documents"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -6490,10 +6682,20 @@
           "severity_if_met": "avoid",
           "severity_if_not_met": "monitor",
           "note": "Disulfide-bond reduction on platelet glycoproteins becomes clinically meaningful above 1200 mg/day per authored action."
+        },
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "comparator": ">=",
+          "value": 2000,
+          "unit": "mg",
+          "basis": "per_day",
+          "severity_if_met": "monitor",
+          "severity_if_not_met": "info"
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-24",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -6605,8 +6807,15 @@
         }
       ],
       "dose_thresholds": [],
-      "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-14",
+      "pregnancy_lactation": {
+        "lactation_severity": "avoid",
+        "lactation_evidence": "probable",
+        "lactation_notes": "Stimulant laxative anthranoids transfer to milk and can cause infant diarrhea. Prefer non-stimulant laxatives.",
+        "sources": [
+          "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
+        ]
+      },
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -7876,6 +8085,16 @@
           "alert_headline": "Caution with bleeding disorders",
           "alert_body": "Resveratrol has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding resveratrol.",
           "informational_note": "Resveratrol can affect platelet function — relevant to people with a bleeding disorder."
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "monitor",
+          "evidence_level": "theoretical",
+          "mechanism": "Limited human pregnancy data; animal work suggests developmental effects at some exposures.",
+          "action": "Avoid high-dose self-supplementation.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/resveratrol"
+          ]
         }
       ],
       "drug_class_rules": [
@@ -7933,7 +8152,7 @@
         }
       ],
       "pregnancy_lactation": null,
-      "last_reviewed": "2026-04-24",
+      "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -8167,6 +8386,212 @@
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "drug_label_mining"
+    },
+    {
+      "id": "RULE_BANNED_PENNYROYAL_PREGNANCY",
+      "subject_ref": {
+        "db": "banned_recalled_ingredients",
+        "canonical_id": "BANNED_PENNYROYAL"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "Pennyroyal contains pulegone and related hepatotoxic constituents; pregnancy use is unsafe because of toxicity and abortifacient concern.",
+          "action": "Do not use in pregnancy.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/pennyroyal",
+            "https://medlineplus.gov/druginfo/natural/480.html"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_BANNED_TANSY_PREGNANCY",
+      "subject_ref": {
+        "db": "banned_recalled_ingredients",
+        "canonical_id": "BANNED_TANSY"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "Tansy contains thujone and other toxic constituents; pregnancy exposure is not clinically acceptable.",
+          "action": "Do not use in pregnancy.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbsataglance",
+            "https://www.ncbi.nlm.nih.gov/books/NBK547852/"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_BANNED_BITTER_ORANGE_PREGNANCY",
+      "subject_ref": {
+        "db": "banned_recalled_ingredients",
+        "canonical_id": "BANNED_BITTER_ORANGE"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "contraindicated",
+          "evidence_level": "probable",
+          "mechanism": "Synephrine is a sympathomimetic; pregnancy is not the place for stimulant-driven cardiovascular stress.",
+          "action": "Do not use supplement-dose bitter orange in pregnancy.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/bitterorange",
+            "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "pregnancy",
+          "comparator": ">=",
+          "value": 3,
+          "unit": "mg",
+          "basis": "per_day",
+          "severity_if_met": "contraindicated",
+          "severity_if_not_met": "avoid"
+        }
+      ],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_BOTAN_GINKGO_PREGNANCY",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "ginkgo_biloba_leaf"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Antiplatelet effects make peripartum bleeding the main concern.",
+          "action": "Avoid chronic use in pregnancy and stop before delivery if used.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/ginkgo"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_HOLY_BASIL_PREGNANCY",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "holy_basil"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Pregnancy data are limited and animal data raise endocrine and uterotonic uncertainty.",
+          "action": "Avoid concentrated extracts; culinary use is not the same as supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbsataglance"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_MACA_PREGNANCY",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "maca"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "pregnancy",
+          "severity": "monitor",
+          "evidence_level": "theoretical",
+          "mechanism": "Human pregnancy safety data are sparse.",
+          "action": "Do not present as proven pregnancy support; monitor rather than hard-block.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/maca"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_L_CARNITINE_DIABETES",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "l_carnitine"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "diabetes",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "May modestly affect fuel utilization and insulin sensitivity.",
+          "action": "Monitor glucose trends if used chronically.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_BOTAN_WHITE_MULBERRY_DIABETES",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "white_mulberry"
+      },
+      "condition_rules": [
+        {
+          "condition_id": "diabetes",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Alpha-glucosidase inhibition slows carbohydrate absorption.",
+          "action": "Monitor if combined with acarbose-like therapy or insulin.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbsataglance"
+          ]
+        }
+      ],
+      "drug_class_rules": [],
+      "dose_thresholds": [],
+      "pregnancy_lactation": null,
+      "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
     }
   ]
 }
