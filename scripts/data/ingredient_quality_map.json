@@ -11517,8 +11517,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Re-esterified triglyceride form — concentrated fish oil that's been converted back to the natural triglyceride structure after purification. Absorbs about 70% better than ethyl ester (EE) form (Dyerberg 2010). The premium fish oil form used by brands like Nordic Naturals. Combines high EPA/DHA concentration with excellent absorption.",
+        "absorption": "very_good (rTG class-equiv to fish_oil rTG=0.92)",
+        "notes": "Re-esterified triglyceride form — concentrated fish oil that's been converted back to the natural triglyceride structure after purification. Absorbs about 70% better than ethyl ester (EE) form (Dyerberg 2010). The premium fish oil form used by brands like Nordic Naturals. Combines high EPA/DHA concentration with excellent absorption. B29 audit 2026-04-25: class-equiv to fish_oil rTG (B9 anchor); architectural-duplicate parent (DR PHAM REVIEW).",
         "aliases": [
           "rtg omega-3",
           "triglyceride fish oil",
@@ -11532,19 +11532,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.92,
+          "range_low": 0.85,
+          "range_high": 0.95,
           "quality": "very_good",
-          "notes": "~70% better than EE form (Dyerberg 2010)"
+          "notes": "Class-equivalent to fish_oil rTG companion form (0.92). Re-esterified triglyceride is the highest-F omega-3 chemistry per Dyerberg 2010 / Schuchardt 2013 (Batch 9 anchor)."
         }
       },
       "algal omega-3 DHA": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "high",
-        "notes": "Omega-3 from microalgae (Schizochytrium or similar). The only vegan source of preformed DHA. High purity with no ocean contaminants. Traditionally DHA-dominant with limited EPA, though newer strains produce both. Sold as Life's DHA, OPTI-3, and Elantria. A great choice for vegetarians and vegans.",
+        "absorption": "very_good (algae oil class; B9 audit baseline)",
+        "notes": "Omega-3 from microalgae (Schizochytrium or similar). The only vegan source of preformed DHA. High purity with no ocean contaminants. Traditionally DHA-dominant with limited EPA, though newer strains produce both. Sold as Life's DHA, OPTI-3, and Elantria. A great choice for vegetarians and vegans. B29 audit 2026-04-25: class-equiv to algae_oil (B9).",
         "aliases": [
           "algae omega-3",
           "algal oil",
@@ -11583,19 +11583,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high; comparable to fish-derived TG forms"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Class-equivalent to algae oil parent (B9 audit). Algal DHA incorporates into plasma phospholipids equivalently to fish oil DHA per Lemaitre-Delaunay 1999 / Arterburn 2008."
         }
       },
       "omega-3 emulsified": {
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "high",
-        "notes": "Fish oil processed with emulsification or micellization technology (VESIsorb, AquaCelle) to dramatically improve absorption, especially on an empty stomach. Qin 2017 showed SMEDS formulations significantly boosted fasting omega-3 absorption. A premium delivery technology, not a different chemical form. Best for people who can't take fish oil with meals.",
+        "absorption": "very_good (emulsified premium; bypasses lipase needs)",
+        "notes": "Fish oil processed with emulsification or micellization technology (VESIsorb, AquaCelle) to dramatically improve absorption, especially on an empty stomach. Qin 2017 showed SMEDS formulations significantly boosted fasting omega-3 absorption. A premium delivery technology, not a different chemical form. Best for people who can't take fish oil with meals. B29 audit 2026-04-25: emulsified modest premium over plain TG.",
         "aliases": [
           "emulsified fish oil",
           "vesisorb omega-3",
@@ -11607,19 +11607,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
           "quality": "very_good",
-          "notes": "enhanced absorption via emulsification technology (Qin 2017)"
+          "notes": "Pre-emulsified omega-3 bypasses the lipase-dependent step in fat digestion — modest premium over plain TG. Class-equivalent slightly above fish_oil natural TG (0.85)."
         }
       },
       "omega-3 natural triglyceride": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "moderate-high",
-        "notes": "Standard fish oil in its natural triglyceride form — the way omega-3s exist in actual fish. Better absorbed than ethyl ester (EE) concentrates but less concentrated in EPA/DHA. Includes whole salmon oil, sardine oil, and other single-species oils. A solid natural choice, especially from wild-caught sources.",
+        "absorption": "very_good (natural TG class-equiv to fish_oil TG)",
+        "notes": "Standard fish oil in its natural triglyceride form — the way omega-3s exist in actual fish. Better absorbed than ethyl ester (EE) concentrates but less concentrated in EPA/DHA. Includes whole salmon oil, sardine oil, and other single-species oils. A solid natural choice, especially from wild-caught sources. B29 audit 2026-04-25: class-equiv to fish_oil natural TG.",
         "aliases": [
           "natural fish oil",
           "salmon oil",
@@ -11654,19 +11654,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high; natural TG form absorbs better than EE"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Class-equivalent to fish_oil natural TG companion (0.85). Native triglyceride form (Schuchardt 2013)."
         }
       },
       "omega-3 ethyl ester (EE)": {
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "The concentrated pharmaceutical form used in prescription drugs like Lovaza and Vascepa. Created by chemically converting fish oil triglycerides into ethyl esters for purification. Absorbs about 30% less than natural TG form (Dyerberg 2010), especially on an empty stomach. Cheaper to produce, which is why most budget fish oil supplements use this form.",
+        "absorption": "good (EE class-equiv to fish_oil EE=0.70)",
+        "notes": "The concentrated pharmaceutical form used in prescription drugs like Lovaza and Vascepa. Created by chemically converting fish oil triglycerides into ethyl esters for purification. Absorbs about 30% less than natural TG form (Dyerberg 2010), especially on an empty stomach. Cheaper to produce, which is why most budget fish oil supplements use this form. B29 audit 2026-04-25: class-equiv to fish_oil EE (B9).",
         "aliases": [
           "ethyl ester fish oil",
           "ee fish oil",
@@ -11686,11 +11686,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "~30% less absorbed than TG form; worse on empty stomach"
+          "value": 0.7,
+          "range_low": 0.65,
+          "range_high": 0.75,
+          "quality": "good",
+          "notes": "Class-equivalent to fish_oil ethyl ester companion (0.70). EE chemistry requires re-esterification to TG before absorption — modest F penalty vs native TG per Dyerberg 2010 / Lawson 1988 (Batch 9 anchor)."
         }
       },
       "flaxseed oil (ALA)": {
@@ -11720,8 +11720,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which omega-3 form is used (triglyceride, ethyl ester, krill, or plant-based). This gets a conservative score because many budget fish oils use cheaper ethyl ester (EE) form. Look for 'triglyceride,' 'rTG,' 'krill oil,' or 'ubiquinol' on your label for a more accurate score.",
+        "absorption": "good (unspecified class baseline; matches fish_oil unspec)",
+        "notes": "The label doesn't specify which omega-3 form is used (triglyceride, ethyl ester, krill, or plant-based). This gets a conservative score because many budget fish oils use cheaper ethyl ester (EE) form. Look for 'triglyceride,' 'rTG,' 'krill oil,' or 'ubiquinol' on your label for a more accurate score. B29 audit 2026-04-25: class-equiv to fish_oil unspec.",
         "aliases": [
           "omega-3",
           "fish oil unspecified",
@@ -11739,19 +11739,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.78,
+          "range_low": 0.7,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Class-equivalent to fish_oil \"unspecified\" companion (0.78). Default for unspecified omega-3 form on label."
         }
       },
       "eicosatetraenoic acid (ETA, 20:4n-3)": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good",
-        "notes": "ETA is a lesser-used marine omega-3 fatty acid identity. It is treated as a distinct omega-3 form for cleaner label recognition; direct comparative human PK data versus EPA/DHA are limited.",
+        "absorption": "very_good (omega-3 TG class; ETA is EPA precursor)",
+        "notes": "ETA is a lesser-used marine omega-3 fatty acid identity. It is treated as a distinct omega-3 form for cleaner label recognition; direct comparative human PK data versus EPA/DHA are limited. B29 audit 2026-04-25: ETA omega-3 TG class baseline.",
         "aliases": [
           "eicosatetraenoic acid",
           "eta",
@@ -11760,19 +11760,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Identity recognized as an omega-3 fatty acid; direct human comparative PK data are limited."
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "ETA (20:4n-3) is a minor omega-3 fatty acid; biosynthetic precursor to EPA. Dietarily delivered as TG — class-equivalent to omega-3 TG framework. Minimal independent PK literature; uses standard fatty acid absorption."
         }
       },
       "eicosatrienoic acid (20:3n-3)": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "good",
-        "notes": "Minor marine omega-3 fatty acid (C20:3n-3) found in wild salmon and cold-water fish oils. UNII PQB8MJD4RB. Structural precursor in the omega-3 elongation pathway; present in trace-to-moderate amounts in whole-fish oils like Dutch Harbor Omega and similar products. Limited direct human supplementation trials; activity inferred from its role in the EPA/DHA biosynthetic cascade.",
+        "absorption": "very_good (omega-3 TG class; minor n-3 fatty acid)",
+        "notes": "Minor marine omega-3 fatty acid (C20:3n-3) found in wild salmon and cold-water fish oils. UNII PQB8MJD4RB. Structural precursor in the omega-3 elongation pathway; present in trace-to-moderate amounts in whole-fish oils like Dutch Harbor Omega and similar products. Limited direct human supplementation trials; activity inferred from its role in the EPA/DHA biosynthetic cascade. B29 audit 2026-04-25: 20:3n-3 omega-3 TG class baseline.",
         "aliases": [
           "ESA",
           "20:3n-3",
@@ -11780,19 +11780,19 @@
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Absorbed as a fatty acid; no direct comparative PK data versus EPA/DHA."
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "20:3n-3 (ETrA) is a minor omega-3 fatty acid; biosynthetic intermediate. Class-equivalent to omega-3 TG framework."
         }
       },
       "14-hydroxy-docosahexaenoic acid (14-HDHA)": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "bioactive metabolite",
-        "notes": "14-HDHA — a hydroxylated DHA metabolite, intermediate in the D-series resolvin/maresin pathway. Specialized Pro-resolving Mediator (SPM) precursor. Present in fish-oil SPM concentrates.",
+        "absorption": "moderate (SPM precursor; class-distinct from TG omega-3)",
+        "notes": "14-HDHA — a hydroxylated DHA metabolite, intermediate in the D-series resolvin/maresin pathway. Specialized Pro-resolving Mediator (SPM) precursor. Present in fish-oil SPM concentrates. B29 audit 2026-04-25: SPM precursor class-distinct; conservative range pending dedicated audit.",
         "aliases": [
           "14-Hydroxydocosahexaenoic acid",
           "14-Hydroxy-Docosahexaenoic Acid",
@@ -11801,11 +11801,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "SPM precursor, activity is signaling"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "SPECIALIZED PRO-RESOLVING MEDIATOR (SPM) precursor. 14-HDHA is an oxidized DHA metabolite (maresin precursor). NOT typical TG-omega-3 chemistry — more polar, lipid-mediator structure. Limited human oral PK literature available; conservative range pending dedicated SPM-class audit. Class-distinct framework from native omega-3 TG."
         },
         "external_ids": {
           "cui": "C0044857"
@@ -11815,8 +11815,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "bioactive metabolite",
-        "notes": "17-HDHA — hydroxylated DHA metabolite, precursor to D-series resolvins (RvD1-6) and protectins. Specialized Pro-resolving Mediator (SPM). Present in fish-oil SPM concentrates.",
+        "absorption": "moderate (SPM precursor; class-distinct)",
+        "notes": "17-HDHA — hydroxylated DHA metabolite, precursor to D-series resolvins (RvD1-6) and protectins. Specialized Pro-resolving Mediator (SPM). Present in fish-oil SPM concentrates. B29 audit 2026-04-25: SPM precursor class-distinct; conservative.",
         "aliases": [
           "17-Hydroxydocosahexaenoic Acid",
           "17-Hydroxy-Docosahexaenoic Acid",
@@ -11825,11 +11825,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "SPM precursor, activity is signaling"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "SPM precursor. 17-HDHA is an oxidized DHA metabolite (D-series resolvin / protectin precursor). Class-distinct framework; limited human PK. Conservative range."
         },
         "external_ids": {
           "cui": "C0639949"
@@ -11839,8 +11839,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "bioactive metabolite",
-        "notes": "18-HEPE — hydroxylated EPA metabolite, precursor to E-series resolvins (RvE1-3). Specialized Pro-resolving Mediator (SPM). Studied for resolution of inflammation.",
+        "absorption": "moderate (SPM precursor; class-distinct)",
+        "notes": "18-HEPE — hydroxylated EPA metabolite, precursor to E-series resolvins (RvE1-3). Specialized Pro-resolving Mediator (SPM). Studied for resolution of inflammation. B29 audit 2026-04-25: SPM precursor class-distinct; conservative.",
         "aliases": [
           "18-Hydroxyeicosapentaenoic Acid",
           "18-Hydroxy-Eicosapentaenoic Acid",
@@ -11849,11 +11849,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "SPM precursor, activity is signaling"
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "SPM precursor. 18-HEPE is an oxidized EPA metabolite (E-series resolvin precursor). Class-distinct framework; limited human PK. Conservative range."
         },
         "external_ids": {
           "cui": "C3251952"
@@ -39940,8 +39940,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Combined EPA+DHA omega-3 supplement. Provides both primary marine omega-3 fatty acids in a single product. Most fish oil supplements fall in this category. Combined dose of 1-4 g/day EPA+DHA recommended for cardiovascular health. AHA recommends ~1 g/day for secondary prevention.",
+        "absorption": "good (class-equiv to fish_oil unspecified)",
+        "notes": "Combined EPA+DHA omega-3 supplement. Provides both primary marine omega-3 fatty acids in a single product. Most fish oil supplements fall in this category. Combined dose of 1-4 g/day EPA+DHA recommended for cardiovascular health. AHA recommends ~1 g/day for secondary prevention. B29 audit 2026-04-25: class-equiv fish_oil unspec; epa_dha parent is architectural duplicate of fish_oil (DR PHAM REVIEW).",
         "aliases": [
           "EPA and DHA",
           "EPA & DHA",
@@ -39951,11 +39951,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.78,
+          "range_low": 0.7,
+          "range_high": 0.85,
           "quality": "good",
-          "notes": "good"
+          "notes": "Class-equivalent to fish_oil \"unspecified\" companion (0.78). epa_dha parent is architectural duplicate of fish_oil — see omega_3 parent notes for DR PHAM architectural flag."
         }
       }
     },

@@ -391,6 +391,44 @@ Studies in rats may inform mechanism but should NEVER be used to assign a human 
 
 **[DECISION]** ☐ APPROVE rule   ☐ REJECT   ☐ MODIFY: ____
 
+## D8 — ⚠️ Architectural consolidation proposals (Batch 29, NEW)
+
+The audit has surfaced **multiple parent IDs that represent the same underlying PK class**. Per user directive ("what we can put together we put them together"), these should be consolidated. **Each merge requires coordinated cross-file migration** since other data files (synergy_cluster, ingredient_interaction_rules, CAERS, percentile_categories, migration_report) reference parent_ids.
+
+### D8.1 — `omega_3` + `epa_dha` + `fish_oil` (3-way merge)
+- **Current state:** 3 separate parents with overlapping forms.
+  - `fish_oil` — 7 fully-populated forms (canonical, PK-anchored)
+  - `omega_3` — 12 forms; 5 are direct duplicates of fish_oil (rTG, natural TG, EE, unspecified, emulsified). Other 7 are unique (algal DHA, flaxseed ALA, ETA, 20:3n-3, 14-HDHA, 17-HDHA, 18-HEPE).
+  - `epa_dha` — 1 form ("epa dha (standard)") = duplicate of fish_oil unspecified.
+- **Proposed merge:**
+  - **Move into `fish_oil`:** the 5 fish-oil-class duplicates from omega_3 (merge their aliases) + epa_dha's single form (merge aliases into fish_oil's "fish oil (unspecified)").
+  - **Move into `algae_oil`:** algal omega-3 DHA aliases.
+  - **Move into `flaxseed_oil`:** flaxseed oil (ALA) aliases.
+  - **Keep `omega_3` as a focused parent** for: ETA, 20:3n-3, 14-HDHA, 17-HDHA, 18-HEPE (the SPM precursors and minor n-3 fatty acids that don't fit fish_oil chemistry). Rename to `omega3_minor_fatty_acids` for clarity.
+  - **Delete `epa_dha`** parent; migrate all 6 cross-file references (synergy_cluster, CAERS, percentile, migration_report) to point to `fish_oil`.
+- **Cross-file migration required:**
+  - `synergy_cluster.json` — 11+ references to "omega_3"
+  - `ingredient_interaction_rules.json` — 1 canonical_id reference
+  - `caers_adverse_event_signals.json` — epa_dha entry
+  - `percentile_categories.json` — omega_3 reference
+  - `migration_report.json` — multiple omega_3 + epa_dha references
+- **[DECISION]** ☐ APPROVE 3-way merge plan   ☐ REJECT   ☐ MODIFY: ____
+
+### D8.2 — Other architectural-duplicate candidates (need your call before audit)
+- `nad_precursors` — separate from `nicotinamide_riboside` / `nmn`?
+- `citrus_bioflavonoids` — overlaps with `bioflavonoids` parent?
+- `cordyceps` — separate from `cordycepsprime` branded form?
+- `naringin (unspecified)` — needs review
+- `calcium amino acid chelate` (already merged in B27 as class-equiv to bisglycinate)
+- `iron picolinate` (B27 exposed marketing-only premium; bio_score downgrade flagged)
+
+### D8.3 — Category-error parent consolidation candidate
+The 7 category-error parents (manuka, organ extracts, inulin, larch AG, slippery elm, psyllium, SOD, fiber/konjac) might benefit from a `category_error_type` enum field on each entry rather than continuing to add new parent stubs. See D7 above.
+
+**[ASK]** Should we proceed with D8.1 omega_3/epa_dha → fish_oil merge as a dedicated structural batch? The values are correct now (B29 applied class-equivalence) but the parent stubs still exist as architectural debt.
+
+**[DECISION]** ☐ APPROVE structural merge as next batch   ☐ DEFER until after value audits complete   ☐ MODIFY: ____
+
 ## D6 — SDA omega-3 "intermediate tier" (Batch 25, NEW)
 The omega-3 framework now has **three tiers** based on conversion efficiency to EPA/DHA:
 - **High (TG omega-3, 0.80–0.90):** fish, krill, seal, calanus — direct EPA/DHA delivery
