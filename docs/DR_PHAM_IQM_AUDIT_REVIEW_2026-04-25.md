@@ -1,8 +1,10 @@
 # Dr Pham — IQM Audit Clinical Review (April 2026)
 
-> **What this is:** A summary of the bioavailability audit we ran on the ingredient quality database between Batches 1–24. **We need your medical sign-off** on the items below before we lock them in for the next pipeline release.
+> **What this is:** A summary of the bioavailability audit we ran on the ingredient quality database between Batches 1–25. **We need your medical sign-off** on the items below before we lock them in for the next pipeline release.
 >
 > **Updated 2026-04-25 (Batch 24):** Two new category errors confirmed (psyllium fiber, SOD protein digestion barrier — see A5/A6 below). 9 more ghost PMIDs caught (Section B). GABA BBB question now urgent (Section E1).
+>
+> **Updated 2026-04-25 (Batch 25):** **7th category error confirmed** (konjac glucomannan / soluble viscous fiber — see A7 below). **NEW finding: SDA omega-3 intermediate tier** in framework rules (D6). **BMOV vanadium downgrade question** added to Section C (C12). 5+ more ghost references caught (now 26 total).
 >
 > **What we did:** For 23 batches, we re-checked every claim of "this form is more bioavailable than that form" against verified PubMed evidence. Every single PMID was content-verified by reading the actual abstract — no AI guesses, no surname matches, no transposition errors.
 >
@@ -83,6 +85,14 @@ These are forms where the **whole bioavailability framework does not apply**. Tr
 - **[PROPOSED]** Confirm: unprotected oral SOD does not belong in our database with a meaningful F. Also confirm the 6th-category-error pattern for future protein/enzyme entries.
 - **[DECISION]** ☐ APPROVE pattern   ☐ REJECT   ☐ MODIFY: ____
 
+## A7 — Konjac Glucomannan / Fiber (Batch 25, APPLIED) [7th category error — viscous fiber]
+
+- **[FINDING]** Konjac glucomannan is a **soluble viscous fiber** like psyllium (A5). Mechanism is **gel formation + gastric-emptying delay + bile-acid binding** — not systemic absorption. The same applies to "fiber (unspecified)" which is a catchall for products that don't specify their fiber type.
+- **[EVIDENCE]** González Canga 2004 (PMID:[14983741](https://pubmed.ncbi.nlm.nih.gov/14983741/)) — glucomannan luminal mechanism review.
+- **[CURRENT]** Both forms (`konjac glucomannan`, `fiber (unspecified)`) set to null with 7th-category-error note.
+- **[PROPOSED]** Confirm: konjac and unspecified fiber are luminal-action, not absorbed. The category-error pattern is now established for the entire viscous-fiber class (psyllium A5 + konjac A7).
+- **[DECISION]** ☐ APPROVE   ☐ REJECT   ☐ MODIFY: ____
+
 ---
 
 # Section B — Critical Ghost References (already corrected)
@@ -112,10 +122,21 @@ These are PMIDs that previous database entries cited as supporting a claim — b
 | **B19** *(Batch 24)* | "Wenzel silymarin PK" PMID:**12888381** | CME for colon-cancer staging | Use Calani PMID:**23072776** |
 | **B20** *(Batch 24)* | "Eriksen phycocyanin" PMID:**18509687** | apoC-I and atherosclerosis | Use Donadio PMID:**34836173** |
 | **B21** *(Batch 24)* | "Anderton I3C/DIM" PMID:**15470159** | Cigarette eNOS inactivation | Use Reed PMID:**17164373** + Sanderson PMID:**11294972** |
+| **B22** *(Batch 25)* | "Heyliger 1985 vanadyl PK" | Paper does not exist (0 PubMed hits) | Use Willsky 2013 PMID:**23982218** |
+| **B23** *(Batch 25)* | "Setyawati 2011 V chelate" | Paper does not exist | Use Willsky 2001 PMID:**11377693** |
+| **B24** *(Batch 25)* | "Lemke 2010 SDA" | Cannot locate | Use Whelan 2012 PMID:**22279143** |
+| **B25** *(Batch 25)* | "Surette SDA omega-3" | Cannot locate | Use Whelan 2012 PMID:**22279143** |
+| **B26** *(Batch 25)* | "Goldfine 2000 vanadium" | Conflated; year wrong | Correct = Willsky/Goldfine 2001 PMID:**11377693** |
 
-> **Important note on Batch 24 ghost-catch rate:** When we asked the research agent to verify 9 candidate PMIDs (drawn from common citation patterns), **ALL 9 failed content verification**. This is a higher rate than earlier batches and suggests two things: (1) the older the literature claim, the higher the chance of an LLM-fabricated PMID, and (2) author-surname matching is the dominant failure mode. The verified replacements above were all found by free-text PubMed search rather than by accepting the suggested PMID.
+**Trap PMIDs that PubMed returned for our search queries (would have been false-positive citations if accepted blindly):**
+- PMID:21055800 (returned for vanadium absorption query) — actually dental ceramics
+- PMID:26869109 (returned for SDA query) — actually goat milk biohydrogenation
+- PMID:22064208 (returned for "Lemke SDA" query) — actually K-complex EEG
+- PMID:10442214 (returned for "EPO GLA PK" query) — actually topical EPO study
 
-- **[ASK]** Do you want a recurring "ghost-reference audit" added to our quarterly maintenance schedule? (We're seeing **~1 ghost per 4 verified PMIDs** in newer batches — higher than initially estimated.)
+> **Important note on Batch 24 ghost-catch rate:** When we asked the research agent to verify 9 candidate PMIDs (drawn from common citation patterns), **ALL 9 failed content verification**. Batch 25 added 5 more ghost-references and 4 PubMed search-result trap PMIDs. The pattern is now overwhelming: (1) the older the literature claim, the higher the chance of an LLM-fabricated PMID, (2) author-surname matching is the dominant failure mode, (3) even free-text PubMed searches return relevant-looking but wrong-topic papers in the top results. **Manual abstract verification is the only reliable check.**
+
+- **[ASK]** Do you want a recurring "ghost-reference audit" added to our quarterly maintenance schedule? (Updated Batch 25 estimate: **~1 ghost per 3 candidate PMIDs** in older legacy entries.)
 - **[DECISION]** ☐ APPROVE quarterly recurring audit   ☐ REJECT   ☐ MODIFY: ____
 
 ---
@@ -304,6 +325,17 @@ For brevity, these don't fit the family clusters above but need your call:
 - **[DECISION (Mg threonate)]** ☐ APPROVE downgrade 14→8 (rat-only)   ☐ KEEP (PD evidence)   ☐ MODIFY: ____
 - **[DECISION (others)]** Free-text notes per row welcome.
 
+## C12 — BMOV vanadium chelate (Batch 25, NEW)
+
+| Form | bio_score | Verified F | Concern |
+|---|---|---|---|
+| bis(maltolato)oxovanadium (BMOV) | **12** | 0.125 | Premium 4× higher than VOSO4 — but new evidence says all V forms class-equivalent ~1–3% |
+
+- **[CONTEXT]** Batch 25 confirmed all vanadium forms cluster at F~1–3% in humans (Willsky 2013 PMID:[23982218](https://pubmed.ncbi.nlm.nih.gov/23982218/)). The premium for BMOV (0.125 vs VOSO4 at 0.03) appears unsupported by human PK — Willsky 2001 (PMID:[11377693](https://pubmed.ncbi.nlm.nih.gov/11377693/)) shows BMOV vs VOSO4 differences are speciation, not absorption.
+- **[CURRENT]** BMOV at 0.125 (4× VOSO4); BPOV/aspartate/citrate just set to 0.02 in Batch 25.
+- **[PROPOSED]** Downgrade BMOV value 0.125 → 0.02 to match V class baseline. Bio_score 12 → 7–8.
+- **[DECISION]** ☐ APPROVE downgrade   ☐ KEEP (BMOV-specific data?)   ☐ MODIFY: ____
+
 ---
 
 # Section D — New Framework Patterns (FYI / future-proofing)
@@ -346,6 +378,28 @@ Liposomal forms without published human PK head-to-head studies should be capped
 Studies in rats may inform mechanism but should NEVER be used to assign a human F number. Forms previously credited based on rat data (e.g., Mg threonate, fenugreek Aswar 2010, thymoquinone Alkharfy, tocotrienol Yap 2003) all flagged.
 
 **[DECISION]** ☐ APPROVE rule   ☐ REJECT   ☐ MODIFY: ____
+
+## D6 — SDA omega-3 "intermediate tier" (Batch 25, NEW)
+The omega-3 framework now has **three tiers** based on conversion efficiency to EPA/DHA:
+- **High (TG omega-3, 0.80–0.90):** fish, krill, seal, calanus — direct EPA/DHA delivery
+- **NEW Intermediate (SDA, 0.20–0.25):** ahiflower oil — SDA→EPA bioequivalence ~5:1 (4× more efficient than ALA, but inferior to direct EPA/DHA) per Whelan 2012 (PMID:[22279143](https://pubmed.ncbi.nlm.nih.gov/22279143/))
+- **Low (ALA, ~0.05–0.10):** flaxseed, perilla, chia — ALA→EPA conversion ~5–10% in adult males; no DHA conversion
+
+**[DECISION]** ☐ APPROVE 3-tier framework   ☐ REJECT   ☐ MODIFY: ____
+
+## D7 — Category-error taxonomy (now 7 patterns)
+Six distinct mechanisms by which the bioavailability framework does NOT apply (we keep adding to this list as we audit):
+1. **Local-action** (manuka antibacterial, slippery elm demulcent)
+2. **Composite food** (organ extracts; possibly spirulina pending E2)
+3. **Colonic fermentation** (inulin, larch arabinogalactan)
+4. **Viscous fiber luminal** (psyllium, konjac glucomannan)
+5. **Protein digestion barrier** (SOD; future: lactoferrin, immunoglobulins, IgY, transfer factor, BCN-A)
+6. **Live organism** (probiotic strains — Batch 18; survival/colonization metric not F)
+7. **Framework mismatch** (digestive enzymes — luminal activity not systemic F; pending E3)
+
+**[ASK]** Should we add a `category_error_type` enum field to the schema so the front-end can display the appropriate scoring framework per category?
+
+**[DECISION]** ☐ APPROVE add enum   ☐ KEEP narrative-only   ☐ MODIFY: ____
 
 ---
 
@@ -393,8 +447,8 @@ Superoxide dismutase (SOD) is now treated as the **6th category error — protei
 |---|---|---|
 | A — Category errors | **6** patterns (manuka, organ, prebiotics, slippery elm, psyllium, SOD) | Confirm framework |
 | B — Ghost references | **21** corrections (12 earlier + 9 from Batch 24) | Approve quarterly audit cadence |
-| C — bio_score downgrades | 93 forms across 11 families | Approve / reject per family |
-| D — Framework rules | 5 patterns + new "protein digestion barrier" pattern (A6) | Confirm rules |
+| C — bio_score downgrades | 93 forms across 11 families + BMOV vanadium (C12 from Batch 25) | Approve / reject per family |
+| D — Framework rules | **7 patterns** (D1–D5 + new D6 SDA intermediate tier + D7 category-error taxonomy enum) | Confirm rules |
 | E — Open questions | **3** (GABA ⚠️ urgent, spirulina, enzymes) | Medical judgment call |
 
 **Once you respond, we will:**
