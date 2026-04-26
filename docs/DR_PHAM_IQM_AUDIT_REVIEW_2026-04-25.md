@@ -1,6 +1,8 @@
 # Dr Pham — IQM Audit Clinical Review (April 2026)
 
-> **What this is:** A summary of the bioavailability audit we ran on the ingredient quality database between Batches 1–23. **We need your medical sign-off** on the items below before we lock them in for the next pipeline release.
+> **What this is:** A summary of the bioavailability audit we ran on the ingredient quality database between Batches 1–24. **We need your medical sign-off** on the items below before we lock them in for the next pipeline release.
+>
+> **Updated 2026-04-25 (Batch 24):** Two new category errors confirmed (psyllium fiber, SOD protein digestion barrier — see A5/A6 below). 9 more ghost PMIDs caught (Section B). GABA BBB question now urgent (Section E1).
 >
 > **What we did:** For 23 batches, we re-checked every claim of "this form is more bioavailable than that form" against verified PubMed evidence. Every single PMID was content-verified by reading the actual abstract — no AI guesses, no surname matches, no transposition errors.
 >
@@ -64,13 +66,22 @@ These are forms where the **whole bioavailability framework does not apply**. Tr
 - **[PROPOSED]** Confirm: slippery elm is a topical GI demulcent. Score on traditional-use evidence, not bioavailability.
 - **[DECISION]** ☐ APPROVE   ☐ REJECT   ☐ MODIFY: ____
 
-## A5 — Psyllium [PROPOSED for Batch 24, not yet applied]
+## A5 — Psyllium (Batch 24, APPLIED) [5th category error]
 
-- **[FINDING]** Like inulin (A3), psyllium husk is **soluble fiber that is fermented in the colon to SCFAs** (some) and otherwise passes unabsorbed (most). The existing `psyllium husk powder` entry already has `value = 0.0`, which we'd extend to all psyllium forms.
-- **[EVIDENCE]** Same fermentation mechanism as inulin (Holscher 2017 PMID:[28165863](https://pubmed.ncbi.nlm.nih.gov/28165863/)).
-- **[CURRENT]** husk powder = 0.0; psyllium seed and unspecified = `null` (we want to keep them null and add category-error note).
-- **[PROPOSED]** All psyllium forms = `null` + category-error note. Same as inulin.
+- **[FINDING]** Psyllium is **soluble fiber that is NOT systemically absorbed**. Marlett 2003 found that the gel-forming fraction (~55% of psyllium) actually **resists colonic fermentation** — its mechanism is **bile-acid binding + gel formation in the GI lumen**, not absorption.
+- **[EVIDENCE]** Marlett 2003 (PMID:[12749348](https://pubmed.ncbi.nlm.nih.gov/12749348/)) — gel-forming fraction resists fermentation.
+- **[CURRENT]** All 3 psyllium forms (husk powder = 0.0, seed = null, unspecified = null) flagged as 5th category error.
+- **[PROPOSED]** Confirm: psyllium is a luminal-action fiber, not a bioavailability target.
 - **[DECISION]** ☐ APPROVE   ☐ REJECT   ☐ MODIFY: ____
+
+## A6 — Superoxide Dismutase (SOD) (Batch 24, APPLIED) [6th category error — NEW PATTERN: protein digestion barrier]
+
+- **[FINDING]** SOD is an **enzyme protein**. When taken orally without protection, it is **digested by gastric pepsin to amino acids** — no intact enzyme reaches systemic circulation. The only oral SOD product with any in vivo data is **GliSODin®** (melon SOD coated with wheat gliadin), but even that has only animal data, not human PK.
+- **[EVIDENCE]** Vouldoukis 2004 (PMID:[15742357](https://pubmed.ncbi.nlm.nih.gov/15742357/)) — gliadin coating preserves activity in mice; unprotected SOD ineffective.
+- **[NEW PATTERN]** This is a **6th category-error type** we hadn't recognized before: **protein digestion barrier**. Applies broadly to oral protein/enzyme supplements. Future audits should flag: lactoferrin, immunoglobulins, transfer factor, BCN-A, IgY, etc.
+- **[CURRENT]** Both SOD forms set to null with category-error note.
+- **[PROPOSED]** Confirm: unprotected oral SOD does not belong in our database with a meaningful F. Also confirm the 6th-category-error pattern for future protein/enzyme entries.
+- **[DECISION]** ☐ APPROVE pattern   ☐ REJECT   ☐ MODIFY: ____
 
 ---
 
@@ -92,8 +103,19 @@ These are PMIDs that previous database entries cited as supporting a claim — b
 | B10 | "Bos 1996 valerenic acid" | Cannot locate | Use Anderson 2010 PMID:[20878691](https://pubmed.ncbi.nlm.nih.gov/20878691/) |
 | B11 | Multiple Batch 10 ghosts (Newby/Zerahn/Castagnone/Qu/Pearson) | Various wrong topics | Replaced with verified PMIDs |
 | B12 | Manuka honey PK PMIDs (4 ghosts) | Wrong topics | Removed; manuka set to category-error |
+| **B13** *(Batch 24)* | "DeMuro 2000 melatonin" PMID:**10843432** | Mustard allergy in children | PMID:**10883420** |
+| **B14** *(Batch 24)* | "Boonstra 2015 GABA review" PMID:**26617552** | Belief networks/ecosystems | PMID:**26500584** |
+| **B15** *(Batch 24)* | "Vouldoukis 2004 GliSODin" PMID:**14975508** | Odontogenic carcinoma classification | PMID:**15742357** |
+| **B16** *(Batch 24)* | "Reed DIM PK" PMID:**18483339** | Aspirin/NSAIDs/esophageal cancer | PMID:**18843002** |
+| **B17** *(Batch 24)* | "Lee EGCG PK" PMID:**11935256** | nNOS in SOD1-mutant ALS mice | Use Chow PMID:**11205489** |
+| **B18** *(Batch 24)* | "Chow EGCG PK" PMID:**11489775** | Biventricular repair in infants | Correct PMID:**11205489** |
+| **B19** *(Batch 24)* | "Wenzel silymarin PK" PMID:**12888381** | CME for colon-cancer staging | Use Calani PMID:**23072776** |
+| **B20** *(Batch 24)* | "Eriksen phycocyanin" PMID:**18509687** | apoC-I and atherosclerosis | Use Donadio PMID:**34836173** |
+| **B21** *(Batch 24)* | "Anderton I3C/DIM" PMID:**15470159** | Cigarette eNOS inactivation | Use Reed PMID:**17164373** + Sanderson PMID:**11294972** |
 
-- **[ASK]** Do you want a recurring "ghost-reference audit" added to our quarterly maintenance schedule? (We're seeing ~1 ghost per 8 verified PMIDs in older entries.)
+> **Important note on Batch 24 ghost-catch rate:** When we asked the research agent to verify 9 candidate PMIDs (drawn from common citation patterns), **ALL 9 failed content verification**. This is a higher rate than earlier batches and suggests two things: (1) the older the literature claim, the higher the chance of an LLM-fabricated PMID, and (2) author-surname matching is the dominant failure mode. The verified replacements above were all found by free-text PubMed search rather than by accepting the suggested PMID.
+
+- **[ASK]** Do you want a recurring "ghost-reference audit" added to our quarterly maintenance schedule? (We're seeing **~1 ghost per 4 verified PMIDs** in newer batches — higher than initially estimated.)
 - **[DECISION]** ☐ APPROVE quarterly recurring audit   ☐ REJECT   ☐ MODIFY: ____
 
 ---
@@ -329,17 +351,22 @@ Studies in rats may inform mechanism but should NEVER be used to assign a human 
 
 # Section E — Open Questions (genuine medical judgment calls)
 
-## E1 — GABA oral bioavailability
-**Conventional pharmacology** says oral GABA does NOT cross the blood-brain barrier in adults (Boonstra 2015 review PMID:[26617552](https://pubmed.ncbi.nlm.nih.gov/26617552/)). But our database has GABA powder at 0.40 and pharma-GABA at 0.45.
+## E1 — GABA oral bioavailability ⚠️ URGENT (Batch 24)
 
-If the BBB is the rate-limiting step, those values may be massively overstated. However, **some clinical trials show anxiolytic effects from oral GABA**. Possible explanations:
+**[UPDATED 2026-04-25]** Verified PMID is **26500584** (Boonstra 2015), NOT 26617552 — that was an LLM-fabricated PMID that we caught. The corrected paper concludes: *"long thought GABA unable to cross BBB; studies contradictory; mechanism unclear; calls for MRS validation."*
+
+**Conventional pharmacology** says oral GABA does NOT cross the blood-brain barrier in adults (Boonstra 2015 review PMID:[26500584](https://pubmed.ncbi.nlm.nih.gov/26500584/)). But our database has GABA powder at 0.40 and pharma-GABA at 0.45.
+
+If the BBB is the rate-limiting step, those values are inflated 4–9x. However, **some clinical trials show anxiolytic effects from oral GABA**. Possible explanations:
 1. Enteric nervous system effect (GABA receptors in gut → vagal signal to brain)
 2. Subset of patients with BBB permeability changes
 3. Marketing inflation in the existing values
 
+**[WHAT WE'VE DONE]** New forms in Batch 24 (`liposomal gaba` = null, `gaba (unspecified)` = 0.05) are set conservatively to PK-strict values. **Companion values (powder 0.40, pharma-GABA 0.45) are UNCHANGED pending your decision.** The current data has an internal inconsistency (unspecified=0.05 but powder=0.40) that we will resolve once you decide.
+
 **[ASK]** What's the right F for oral GABA? Should we treat it as 0.05 (PK-strict, BBB-blocked) or 0.40 (current, PD-respectful)?
 
-**[DECISION]** ☐ Use 0.05–0.10 (PK-strict)   ☐ Keep 0.40–0.45 (current)   ☐ MODIFY: ____
+**[DECISION]** ☐ Use 0.05–0.10 (PK-strict, downgrade companions)   ☐ Keep 0.40–0.45 (PD-respectful, raise unspecified)   ☐ MODIFY: ____
 
 ## E2 — Spirulina composite-food framework
 Spirulina is treated like organ extracts (composite food). Current values 0.80–0.88 reflect "nutrient density" but spirulina is a multi-nutrient food, not a single-molecule supplement. Phycocyanin extract is even murkier (it's a pigment-protein, likely digested).
@@ -355,12 +382,8 @@ Pancreatic / plant / enteric-coated enzymes are scored at 0.40–0.65 — but **
 
 **[DECISION]** ☐ Category error / local action   ☐ Keep as activity-based   ☐ MODIFY: ____
 
-## E4 — Superoxide dismutase (SOD) supplements
-SOD is a protein. Eaten orally without protection, it is **digested to amino acids in the stomach** — no intact enzyme reaches systemic circulation. Branded GliSODin® (with gliadin coating) shows some clinical activity but that's PD, not PK.
-
-**[ASK]** Does SOD without gliadin coating belong in our database at all? Most products listed don't specify a protection mechanism.
-
-**[DECISION]** ☐ Treat unprotected SOD as null/category-error   ☐ Keep but flag low F   ☐ MODIFY: ____
+## E4 — ✅ Resolved in Batch 24 (see Section A6 above)
+Superoxide dismutase (SOD) is now treated as the **6th category error — protein digestion barrier**. See A6 for the verified evidence and decision request. This open question has been moved into a proposed framework rule.
 
 ---
 
@@ -368,11 +391,11 @@ SOD is a protein. Eaten orally without protection, it is **digested to amino aci
 
 | Section | Items | Action needed |
 |---|---|---|
-| A — Category errors | 5 patterns (manuka, organ, prebiotics, slippery elm, psyllium) | Confirm framework |
-| B — Ghost references | 12+ corrections | Approve quarterly audit cadence |
+| A — Category errors | **6** patterns (manuka, organ, prebiotics, slippery elm, psyllium, SOD) | Confirm framework |
+| B — Ghost references | **21** corrections (12 earlier + 9 from Batch 24) | Approve quarterly audit cadence |
 | C — bio_score downgrades | 93 forms across 11 families | Approve / reject per family |
-| D — Framework rules | 5 patterns | Confirm rules |
-| E — Open questions | 4 (GABA, spirulina, enzymes, SOD) | Medical judgment call |
+| D — Framework rules | 5 patterns + new "protein digestion barrier" pattern (A6) | Confirm rules |
+| E — Open questions | **3** (GABA ⚠️ urgent, spirulina, enzymes) | Medical judgment call |
 
 **Once you respond, we will:**
 1. Apply approved bio_score downgrades to the database

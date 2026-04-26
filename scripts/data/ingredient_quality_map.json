@@ -8535,8 +8535,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "variable",
-        "notes": "3,3'-Diindolylmethane — primary acid-condensation product of indole-3-carbinol from cruciferous vegetables. Studied for estrogen metabolism modulation (2-hydroxy vs 16-hydroxy pathway) and cervical/breast health support. Absorption is variable; BioResponse-DIM (microencapsulated) improves bioavailability.",
+        "absorption": "low (BR-DIM Cmax modest, non-linear PK)",
+        "notes": "3,3'-Diindolylmethane — primary acid-condensation product of indole-3-carbinol from cruciferous vegetables. Studied for estrogen metabolism modulation (2-hydroxy vs 16-hydroxy pathway) and cervical/breast health support. Absorption is variable; BioResponse-DIM (microencapsulated) improves bioavailability. B24 audit 2026-04-25: BR-DIM PK non-linear, modest plasma (PMID:18843002).",
         "aliases": [
           "diindolylmethane",
           "DIM",
@@ -8554,11 +8554,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "Lipophilic; microencapsulation boosts absorption"
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Reed 2008 (PMID:18843002): single ascending dose BR-DIM in healthy volunteers — non-linear PK, well-tolerated to 200 mg, modest plasma Cmax. DIM is the systemic species (I3C undetectable)."
         },
         "external_ids": {
           "unii": "SSZ9HQT61Z",
@@ -8571,8 +8571,8 @@
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "acid-labile (converts to DIM in stomach)",
-        "notes": "Indole-3-carbinol — glucosinolate-derived compound from cruciferous vegetables. Rapidly converts to DIM and other oligomers in stomach acid. Active via its conversion products.",
+        "absorption": "low (acid-condensed to DIM in stomach; class-equiv)",
+        "notes": "Indole-3-carbinol — glucosinolate-derived compound from cruciferous vegetables. Rapidly converts to DIM and other oligomers in stomach acid. Active via its conversion products. B24 audit 2026-04-25: I3C → DIM acid-condensation (PMID:17164373, PMID:11294972). Class-equivalent.",
         "aliases": [
           "indole-3-carbinol",
           "i3c",
@@ -8584,11 +8584,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "Converts to DIM in acidic stomach"
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Reed 2006 (PMID:17164373): single-dose oral I3C in women — I3C ITSELF UNDETECTABLE in plasma; only DIM detected as systemic species. Sanderson 2001 (PMID:11294972): DIM is acid-catalyzed condensation product of I3C in stomach. Class-equivalence collapse: I3C and DIM converge to same systemic species (DIM)."
         },
         "external_ids": {
           "unii": "C11E72455F",
@@ -14440,8 +14440,8 @@
       "liposomal l-carnitine": {
         "score": 9,
         "natural": false,
-        "absorption": "low-moderate (no clinical data on liposomal carnitine; base L-carnitine is ~14-18%)",
-        "notes": "Liposome-encapsulated L-carnitine. Commercial products exist but zero published clinical studies on liposomal carnitine bioavailability. Standard oral L-carnitine is only ~14-18% bioavailable (Rebouche 2004). Liposomal may improve this but no evidence.",
+        "absorption": "evidence-thin (no human PK comparison)",
+        "notes": "Liposome-encapsulated L-carnitine. Commercial products exist but zero published clinical studies on liposomal carnitine bioavailability. Standard oral L-carnitine is only ~14-18% bioavailable (Rebouche 2004). Liposomal may improve this but no evidence. B24 audit 2026-04-25: liposomal evidence-thin pattern.",
         "aliases": [
           "nano carnitine",
           "encapsulated carnitine",
@@ -14457,7 +14457,7 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "No PK study; standard L-carnitine is ~14-18% (Rebouche 2004)"
+          "notes": "Liposomal evidence-thin pattern: no published head-to-head human PK comparing liposomal L-carnitine to standard. Rebouche 2004 (PMID:15591001) supplement baseline F 14-18%; liposomal claim unsupported."
         }
       },
       "acetyl-l-carnitine (alcar)": {
@@ -14607,19 +14607,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "L-carnitine form not specified on label. Scored conservatively — ALCAR (brain health) and tartrate (athletic performance) are the most clinically supported forms.",
+        "absorption": "low (supplement F 14-18%; carrier-saturable)",
+        "notes": "L-carnitine form not specified on label. Scored conservatively — ALCAR (brain health) and tartrate (athletic performance) are the most clinically supported forms. B24 audit 2026-04-25: supplement F 14-18% (PMID:15591001), class-equivalent to companions.",
         "aliases": [
           "l-carnitine supplement",
           "carnitine supplement"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Depends on form — ranges from ~14-18% (base) to potentially higher (ALCAR)"
+          "value": 0.15,
+          "range_low": 0.14,
+          "range_high": 0.18,
+          "quality": "low",
+          "notes": "Rebouche 2004 (PMID:15591001): kinetics, PK, and regulation of L-carnitine. Supplement F 14-18% (vs dietary 54-87%) — carrier-saturable absorption. Matches companions ALCAR 0.20, tartrate/PLC/free 0.15-0.16."
         }
       }
     },
@@ -16627,8 +16627,8 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "theoretical (no oral human clinical data)",
-        "notes": "Liposome-encapsulated GABA designed to improve BBB crossing. Theoretical rationale is sound (liposomes may shield from enzymatic degradation and improve lymphatic absorption), but zero oral human clinical trials exist. Only published liposomal GABA data is IV animal studies (Loeb et al. — epileptic activity reduction via intravenous delivery, not oral). Scored above unspecified but well below forms with actual human clinical data.",
+        "absorption": "evidence-thin (no human PK; BBB barrier unproven)",
+        "notes": "Liposome-encapsulated GABA designed to improve BBB crossing. Theoretical rationale is sound (liposomes may shield from enzymatic degradation and improve lymphatic absorption), but zero oral human clinical trials exist. Only published liposomal GABA data is IV animal studies (Loeb et al. — epileptic activity reduction via intravenous delivery, not oral). Scored above unspecified but well below forms with actual human clinical data. B24 audit 2026-04-25: liposomal-thin + BBB barrier.",
         "aliases": [
           "nano gaba",
           "encapsulated gaba",
@@ -16640,26 +16640,26 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Theoretical enhanced delivery; no published oral human pharmacokinetic or clinical data (Bhatt 2017, PMC6415746)"
+          "notes": "Liposomal evidence-thin pattern + BBB barrier (Boonstra 2015 PMID:26500584). No human PK; oral GABA BBB crossing unproven."
         }
       },
       "gaba (gamma-aminobutyric acid) (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "GABA form not specified on label. Scored conservatively. Oral GABA has documented gut absorption but limited/unproven direct BBB crossing; clinical effects likely via gut-brain axis (Boonstra 2015).",
+        "absorption": "low (BBB barrier unproven; PK-strict baseline)",
+        "notes": "GABA form not specified on label. Scored conservatively. Oral GABA has documented gut absorption but limited/unproven direct BBB crossing; clinical effects likely via gut-brain axis (Boonstra 2015). B24 audit 2026-04-25: PK-strict 0.05 (BBB barrier per PMID:26500584). Companions 0.40-0.45 pending Dr Pham E1.",
         "aliases": [
           "gaba (gamma-aminobutyric acid)",
           "gaba supplement"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Boonstra 2015 (PMID:26500584): oral GABA BBB crossing unproven; existing companions GABA powder 0.40 + pharma-GABA 0.45 likely conflate peripheral ENS/vagal effects with CNS PK. Set conservatively to 0.05 PK-strict; companions pending Dr Pham E1 review (see DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md). GHOST TRAP: PMID:26617552 (belief networks) is NOT Boonstra."
         }
       }
     },
@@ -17394,8 +17394,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Spirulina form not specified on label. Scored conservatively. Human protein digestibility of dried spirulina is ~85% (PMC6179135). Spirulina has a peptidoglycan cell wall (more digestible than chlorella's cellulose wall).",
+        "absorption": "composite_food_pending (Dr Pham E2 decision)",
+        "notes": "Spirulina form not specified on label. Scored conservatively. Human protein digestibility of dried spirulina is ~85% (PMC6179135). Spirulina has a peptidoglycan cell wall (more digestible than chlorella's cellulose wall). B24 audit 2026-04-25: composite food — pending Dr Pham E2 reclassification (PMID:34836173).",
         "aliases": [
           "spirulina",
           "blue-green algae spirulina",
@@ -17407,15 +17407,15 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Data not available"
+          "notes": "COMPOSITE FOOD — likely category-error per Batch 20 organ extracts parallel. Companions paste 0.88 / organic 0.85 / powder 0.85 / tablets 0.80 reflect nutrient-density framework, NOT classical bioavailability. Donadio 2021 (PMID:34836173): food matrix dominates spirulina peptide production. Pending Dr Pham E2 review (see DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md)."
         }
       },
       "phycocyanin extract (spirulina)": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low (chromophore)",
-        "notes": "Purified C-phycocyanin from Arthrospira platensis (spirulina). Anti-inflammatory via PCB chromophore inhibiting NADPH oxidase and acting as bilirubin analog (PMC9185767). Intact protein MW 70-131 kDa limits direct GI absorption; phycocyanobilin is the bioavailable chromophore released upon digestion. Used in 'blue spirulina' products. Spray drying causes ~20% phycocyanin loss (PMC10144176).",
+        "absorption": "low (protein-chromophore; partial peptide survival)",
+        "notes": "Purified C-phycocyanin from Arthrospira platensis (spirulina). Anti-inflammatory via PCB chromophore inhibiting NADPH oxidase and acting as bilirubin analog (PMC9185767). Intact protein MW 70-131 kDa limits direct GI absorption; phycocyanobilin is the bioavailable chromophore released upon digestion. Used in 'blue spirulina' products. Spray drying causes ~20% phycocyanin loss (PMC10144176). B24 audit 2026-04-25: phycocyanin partial peptide survival food-matrix dependent (PMID:34836173).",
         "aliases": [
           "phycocyanin",
           "c-phycocyanin",
@@ -17429,11 +17429,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
           "quality": "low",
-          "notes": "Intact C-phycocyanin (70-131 kDa) poorly absorbed; PCB chromophore is absorbed species; microencapsulation improves delivery"
+          "notes": "Phycocyanin is a protein-chromophore — partial peptide survival in food matrix (Donadio 2021 PMID:34836173: kiwi protease inhibitors drastically reduce peptide production; food matrix dominates). Not a free systemic chromophore. Class-equivalent to other oral phycobiliproteins."
         }
       }
     },
@@ -17965,8 +17965,8 @@
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "theoretical enhancement; no human oral PK data",
-        "notes": "Liposome-encapsulated ALA for theoretical enhanced oral delivery. No published human oral PK study exists for liposomal ALA. Claims of 2-3x improved absorption are extrapolated from liposomal delivery principles applied to other compounds. Scored above racemic but below forms with actual human PK data (Na-RALA, free R-ALA).",
+        "absorption": "evidence-thin (no human PK comparison)",
+        "notes": "Liposome-encapsulated ALA for theoretical enhanced oral delivery. No published human oral PK study exists for liposomal ALA. Claims of 2-3x improved absorption are extrapolated from liposomal delivery principles applied to other compounds. Scored above racemic but below forms with actual human PK data (Na-RALA, free R-ALA). B24 audit 2026-04-25: liposomal evidence-thin pattern (5th application) — no head-to-head human PK PMID exists.",
         "aliases": [
           "nano ALA",
           "encapsulated ALA",
@@ -17983,15 +17983,15 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "No human oral PK data; theoretical enhancement from liposomal delivery"
+          "notes": "Liposomal evidence-thin pattern (Batch 6/10/15): no published head-to-head human PK comparing liposomal ALA to standard racemic. Teichert 2003 baseline (PMID:14551180) racemic F ~30%; liposomal claim unsupported by PK data."
         }
       },
       "granulated alpha-lipoic acid": {
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "theoretical gastric protection; no published human PK comparison",
-        "notes": "Polymer-coated ALA granules designed to resist stomach acid degradation. No published human PK study comparing granulated vs standard ALA exists. The 1.5x improvement claim appears to be manufacturer marketing without peer-reviewed clinical support. May modestly improve stability of acid-sensitive ALA, but bioavailability advantage is unproven.",
+        "absorption": "low (granulated solid; racemic ALA F class baseline)",
+        "notes": "Polymer-coated ALA granules designed to resist stomach acid degradation. No published human PK study comparing granulated vs standard ALA exists. The 1.5x improvement claim appears to be manufacturer marketing without peer-reviewed clinical support. May modestly improve stability of acid-sensitive ALA, but bioavailability advantage is unproven. B24 audit 2026-04-25: granulated = standard solid form; racemic baseline F ~30% (PMID:14551180).",
         "aliases": [
           "granulated ALA",
           "coated alpha-lipoic acid",
@@ -18004,11 +18004,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "No published human PK comparison vs standard ALA; theoretical gastric protection"
+          "value": 0.3,
+          "range_low": 0.25,
+          "range_high": 0.35,
+          "quality": "moderate",
+          "notes": "Teichert 2003 (PMID:14551180): racemic ALA F ~30% in healthy volunteers. Granulated form is a solid-dispersion presentation; matches racemic baseline (companion racemic ALA = 0.25). Hermann 1996 (PMID:8858282) confirms food-effect on enantiomer PK."
         }
       },
       "racemic alpha-lipoic acid": {
@@ -18062,8 +18062,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "ALA form/enantiomer not specified. Scored conservatively. Na-RALA (sodium R-lipoate) has the best human PK data with 10x+ Cmax vs free R-ALA (Carlson 2007, PMID:18069903). R-ALA has 38% absolute bioavailability (Breithaupt-Grogler 1999). Racemic ALA is the most common form at ~30% overall F%.",
+        "absorption": "low (unspecified; defaults to racemic ~30%)",
+        "notes": "ALA form/enantiomer not specified. Scored conservatively. Na-RALA (sodium R-lipoate) has the best human PK data with 10x+ Cmax vs free R-ALA (Carlson 2007, PMID:18069903). R-ALA has 38% absolute bioavailability (Breithaupt-Grogler 1999). Racemic ALA is the most common form at ~30% overall F%. B24 audit 2026-04-25: unspecified defaults to racemic baseline (PMID:14551180).",
         "aliases": [
           "alpha lipoic acid",
           "alpha-lipoic acid & r-lipoic acid",
@@ -18073,11 +18073,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.35,
+          "quality": "moderate",
+          "notes": "Teichert 2003 (PMID:14551180) racemic baseline ~30%. Unspecified defaults to mixed-enantiomer (racemic) PK."
         }
       }
     },
@@ -19020,8 +19020,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Milk thistle (Silybum marianum) products range from crude seed powder to phytosome-complexed silybin. Silymarin content and bioavailability vary dramatically between forms. Scored conservatively until the exact form is identified.",
+        "absorption": "very_low (silymarin total F 0.45±0.28%)",
+        "notes": "Form not specified on the label. Milk thistle (Silybum marianum) products range from crude seed powder to phytosome-complexed silybin. Silymarin content and bioavailability vary dramatically between forms. Scored conservatively until the exact form is identified. B24 audit 2026-04-25: silymarin total F 0.45% (PMID:23072776). Class-poor unspecified.",
         "aliases": [
           "milk thistle",
           "silymarins",
@@ -19031,11 +19031,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.005,
+          "range_low": 0.001,
+          "range_high": 0.01,
+          "quality": "low",
+          "notes": "Calani 2012 (PMID:23072776): silymarin total F 0.45±0.28% across silybin, silychristin, silydianin, isosilybin in humans; extensive glucuronide/sulfate conjugation. Loguercio 2011 (PMID:21633595): phytosome > standard but baseline inherently poor."
         }
       },
       "silybin (isolated)": {
@@ -19068,8 +19068,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "poor",
-        "notes": "Silychristin comprises ~20% of silymarin. Lowest systemic exposure of major silymarin flavonolignans (PMC3876803). Most potent MCT8 thyroid transporter inhibitor in silymarin complex (PMID 26910310). No standalone clinical data.",
+        "absorption": "very_low (minor flavanolignan; same poor F as silybin)",
+        "notes": "Silychristin comprises ~20% of silymarin. Lowest systemic exposure of major silymarin flavonolignans (PMC3876803). Most potent MCT8 thyroid transporter inhibitor in silymarin complex (PMID 26910310). No standalone clinical data. B24 audit 2026-04-25: minor flavanolignan class-equivalent to silybin (PMID:23072776).",
         "aliases": [
           "silychristin",
           "silychristin A",
@@ -19077,19 +19077,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "Lowest plasma exposure among silymarin flavonolignans (PMC3876803)"
+          "value": 0.005,
+          "range_low": 0.001,
+          "range_high": 0.01,
+          "quality": "low",
+          "notes": "Calani 2012 (PMID:23072776) total flavanolignan F 0.45%. Silychristin shares silybin's poor-F class — class-equivalence collapse."
         }
       },
       "silydianin (minor flavonolignan)": {
         "bio_score": 4,
         "natural": true,
         "score": 7,
-        "absorption": "very poor",
-        "notes": "Silydianin comprises ~10% of silymarin. Barely detectable in plasma at standard milk thistle doses (PMC3876803). No standalone clinical trials; minor constituent marker only.",
+        "absorption": "very_low (minor flavanolignan; same poor F as silybin)",
+        "notes": "Silydianin comprises ~10% of silymarin. Barely detectable in plasma at standard milk thistle doses (PMC3876803). No standalone clinical trials; minor constituent marker only. B24 audit 2026-04-25: class-equivalent to silybin (PMID:23072776).",
         "aliases": [
           "silydianin",
           "silydianin flavonolignan",
@@ -19097,11 +19097,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "Minimal systemic exposure; lowest AUC of all silymarin flavonolignans (PMC3876803)"
+          "value": 0.005,
+          "range_low": 0.001,
+          "range_high": 0.01,
+          "quality": "low",
+          "notes": "Calani 2012 (PMID:23072776) total flavanolignan F 0.45%. Silydianin class-equivalent to silybin."
         }
       }
     },
@@ -19452,8 +19452,8 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "unknown (no comparative PK data; clinical outcomes only)",
-        "notes": "Lipid-encapsulated melatonin (Melatosome). Bruni 2022 (PMID:36612875) showed reduced sleep latency in 100 pediatric patients vs placebo, but measured NO plasma melatonin levels. Zero published human PK study comparing liposomal vs standard oral melatonin Cmax/AUC. Claims of 90-95% absorption are unsupported.",
+        "absorption": "evidence-thin (no oral human PK)",
+        "notes": "Lipid-encapsulated melatonin (Melatosome). Bruni 2022 (PMID:36612875) showed reduced sleep latency in 100 pediatric patients vs placebo, but measured NO plasma melatonin levels. Zero published human PK study comparing liposomal vs standard oral melatonin Cmax/AUC. Claims of 90-95% absorption are unsupported. B24 audit 2026-04-25: liposomal evidence-thin.",
         "aliases": [
           "nano melatonin",
           "encapsulated melatonin",
@@ -19469,7 +19469,7 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "No plasma melatonin PK comparison published (PMID:36612875 is outcomes only)"
+          "notes": "Liposomal evidence-thin pattern: no head-to-head human PK comparing liposomal oral melatonin to standard. DeMuro 2000 (PMID:10883420) standard oral F ~15%; liposomal premium unsupported."
         }
       },
       "oral spray melatonin": {
@@ -19581,19 +19581,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified. Oral melatonin F = 14.3-15.9% (PMID:10883420, DeMuro 2000) with high inter-individual variability (9-33%, PMID:26008214). Extensive first-pass CYP1A2 metabolism. Despite low F, clinically effective at 0.5-5 mg doses. Scored conservatively until form is confirmed.",
+        "absorption": "low (oral absolute F ~15%; first-pass dominant)",
+        "notes": "Form not specified. Oral melatonin F = 14.3-15.9% (PMID:10883420, DeMuro 2000) with high inter-individual variability (9-33%, PMID:26008214). Extensive first-pass CYP1A2 metabolism. Despite low F, clinically effective at 0.5-5 mg doses. Scored conservatively until form is confirmed. B24 audit 2026-04-25: oral F ~15% (PMID:10883420). Ghost trap caught: PMID:10843432 is NOT DeMuro.",
         "aliases": [
           "melatonin",
           "sleep hormone melatonin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "DeMuro 2000 (PMID:10883420): absolute oral F ~15% at 2 and 4 mg in 12 healthy volunteers via IV/oral crossover. GHOST TRAP: PMID:10843432 (mustard allergy in children) is NOT DeMuro — use PMID:10883420."
         }
       }
     },
@@ -20078,8 +20078,8 @@
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "moderate (~40–60%)",
-        "notes": "Whole-leaf green tea powder. Contains ~137x more EGCG per gram vs brewed tea (PMID:14518774, Weiss 2003), but whole-leaf matrix (fiber, protein) may alter absorption kinetics vs isolated extracts. No direct human PK comparison vs standardized extract exists. Variable catechin content depending on grade and preparation.",
+        "absorption": "very_low (EGCG class-poor F 0.1-1%)",
+        "notes": "Whole-leaf green tea powder. Contains ~137x more EGCG per gram vs brewed tea (PMID:14518774, Weiss 2003), but whole-leaf matrix (fiber, protein) may alter absorption kinetics vs isolated extracts. No direct human PK comparison vs standardized extract exists. Variable catechin content depending on grade and preparation. B24 audit 2026-04-25: matcha = EGCG class-poor (PMID:15585768).",
         "aliases": [
           "stone-ground green tea",
           "whole leaf green tea",
@@ -20090,11 +20090,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "No PK comparison vs extract; whole-leaf matrix effects unknown"
+          "value": 0.01,
+          "range_low": 0.005,
+          "range_high": 0.02,
+          "quality": "low",
+          "notes": "Henning 2004 (PMID:15585768): tea capsule > brewed but both far below 1%. Matcha is a powdered green tea — same EGCG class baseline. Class-equivalent to existing catechins 0.01."
         }
       },
       "green tea catechins": {
@@ -20132,8 +20132,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified. EGCG oral F is <1% even for standardized extracts (PMID:12960117). Greenselect Phytosome provides ~3x enhancement (PMID:9861443). Scored conservatively until form and EGCG content are confirmed.",
+        "absorption": "very_low (EGCG class-poor; F ~0.1-1%)",
+        "notes": "Form not specified. EGCG oral F is <1% even for standardized extracts (PMID:12960117). Greenselect Phytosome provides ~3x enhancement (PMID:9861443). Scored conservatively until form and EGCG content are confirmed. B24 audit 2026-04-25: EGCG class-poor (PMID:11205489).",
         "aliases": [
           "green tea extract",
           "catechins",
@@ -20144,11 +20144,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.01,
+          "range_low": 0.005,
+          "range_high": 0.02,
+          "quality": "low",
+          "notes": "Chow 2001 (PMID:11205489): EGCG/Polyphenon E PK in healthy individuals — multiple-dose plasma F 0.1-1%. Class-equivalent to existing 50% EGCG / catechins forms (0.01)."
         }
       }
     },
@@ -22231,8 +22231,8 @@
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "negligible",
-        "notes": "Enzymes that have been degraded by exposure to heat, light, or improper storage, rendering them inactive and ineffective. [FLAG: Review for removal due to low efficacy]",
+        "absorption": "invalid (oxidation deactivates enzymatic activity)",
+        "notes": "Enzymes that have been degraded by exposure to heat, light, or improper storage, rendering them inactive and ineffective. [FLAG: Review for removal due to low efficacy] B24 audit 2026-04-25: oxidation deactivates enzyme.",
         "aliases": [
           "damaged enzymes",
           "inactive enzymes",
@@ -22253,16 +22253,16 @@
           "value": null,
           "range_low": null,
           "range_high": null,
-          "quality": "poor",
-          "notes": "negligible"
+          "quality": "unknown",
+          "notes": "Oxidation deactivates enzymatic activity — not viable as functional supplement. Framework mismatch: digestive enzymes measure luminal activity survival, not systemic F. See unspecified entry for framework discussion."
         }
       },
       "digestive enzymes (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Digestive enzymes work locally in the GI tract and are not absorbed systemically. Enzyme activity, stability, and spectrum vary widely between products. OTC supplements lack FDA regulation of potency. Consider using a specific form for better characterization.",
+        "absorption": "framework_mismatch (luminal activity not systemic F)",
+        "notes": "Form not specified; conservative scoring applied. Digestive enzymes work locally in the GI tract and are not absorbed systemically. Enzyme activity, stability, and spectrum vary widely between products. OTC supplements lack FDA regulation of potency. Consider using a specific form for better characterization. B24 audit 2026-04-25: framework mismatch — luminal activity not systemic F (PMID:22762290). Companions pending Dr Pham E3.",
         "aliases": [
           "digestive enzymes",
           "dairy digestive enymes",
@@ -22285,10 +22285,10 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "FRAMEWORK MISMATCH (not strictly category-error): digestive enzymes act in GI lumen on food, NOT systemically absorbed. The bioavailability framework measures wrong target. Companions plant complex 0.55, pancreatic 0.65, specific enzymes 0.40, enteric-coated 0.65 are activity-survival proxies, NOT oral F. Pending Dr Pham E3 review (see DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md). Thorat 2012 (PMID:22762290): pancrelipase efficacy via fat absorption coefficient, not plasma PK."
         }
       }
     },
@@ -23712,8 +23712,8 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "very poor (native SOD ~0% oral F; GliSODin gliadin-coated form has indirect efficacy)",
-        "notes": "Antioxidant metalloenzyme (~32 kDa). Native unprotected SOD is completely degraded by gastric acid and proteases (0% oral bioavailability). GliSODin (melon SOD + wheat gliadin biopolymer coating, Isocell) preserves enzyme activity through GI transit and shows indirect efficacy — likely induces endogenous SOD expression rather than being absorbed intact. Over 30 publications on GliSODin show antioxidant marker improvements. Score reflects mixed product category (native SOD worthless, GliSODin has evidence).",
+        "absorption": "category_error (protein digestion barrier)",
+        "notes": "Antioxidant metalloenzyme (~32 kDa). Native unprotected SOD is completely degraded by gastric acid and proteases (0% oral bioavailability). GliSODin (melon SOD + wheat gliadin biopolymer coating, Isocell) preserves enzyme activity through GI transit and shows indirect efficacy — likely induces endogenous SOD expression rather than being absorbed intact. Over 30 publications on GliSODin show antioxidant marker improvements. Score reflects mixed product category (native SOD worthless, GliSODin has evidence). B24 audit 2026-04-25: 6TH CATEGORY ERROR (NEW PATTERN — protein digestion barrier). Unprotected SOD digested by gastric pepsin (PMID:15742357).",
         "aliases": [
           "sod",
           "superoxide dismutase",
@@ -23742,16 +23742,16 @@
           "value": null,
           "range_low": null,
           "range_high": null,
-          "quality": "poor",
-          "notes": "Native SOD: 0% oral F (protein degradation). GliSODin: indirect mechanism via endogenous SOD induction"
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR (6th overall) — NEW PATTERN: protein digestion barrier. SOD is an enzyme protein digested by gastric pepsin; intact enzyme does NOT survive to systemic circulation. Vouldoukis 2004 (PMID:15742357): GliSODin (Cu-Zn SOD-melon + wheat gliadin) preserves activity but is animal data only. Vouldoukis 2004 companion (PMID:15261965): unprotected SOD ineffective. Pattern applies broadly to oral protein/enzyme supplements (lactoferrin, immunoglobulins)."
         }
       },
       "superoxide dismutase (sod) (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "category_error (protein digestion barrier)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B24 audit 2026-04-25: 6TH CATEGORY ERROR — protein digestion.",
         "aliases": [
           "superoxide dismutase (sod)",
           "superoxide dismutase enzyme"
@@ -23759,10 +23759,10 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR (6th — protein digestion barrier). See sod supplement entry. Unprotected oral SOD digested in stomach."
         }
       }
     },
@@ -35773,8 +35773,8 @@
       "psyllium seed": {
         "bio_score": 9,
         "natural": true,
-        "absorption": "not applicable (fiber)",
-        "notes": "Whole Plantago ovata seeds. Contains both soluble (husk) and insoluble fiber components. Less gel-forming capacity than husk alone — husk is the primary active fraction. Used for bowel regularity at 5-10 g/day. FDA-approved health claim for cholesterol when consumed as part of low-fat diet.",
+        "absorption": "category_error (soluble fiber; not systemically absorbed)",
+        "notes": "Whole Plantago ovata seeds. Contains both soluble (husk) and insoluble fiber components. Less gel-forming capacity than husk alone — husk is the primary active fraction. Used for bowel regularity at 5-10 g/day. FDA-approved health claim for cholesterol when consumed as part of low-fat diet. B24 audit 2026-04-25: 5TH CATEGORY ERROR — soluble fiber mechanism is bile-acid binding + gel formation (PMID:12749348), not systemic absorption.",
         "aliases": [
           "psyllium whole seed",
           "plantago seed"
@@ -35786,15 +35786,15 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "not applicable (fiber)"
+          "notes": "CATEGORY ERROR (5th overall after manuka B18, organ extracts B20, prebiotics B22, slippery elm B23). Marlett 2003 (PMID:12749348): psyllium gel-forming fraction (~55%) RESISTS fermentation by colonic bacteria. Mechanism is luminal: bile-acid binding + gel formation, NOT systemic absorption."
         }
       },
       "psyllium (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "category_error (soluble fiber; not systemically absorbed)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B24 audit 2026-04-25: 5TH CATEGORY ERROR — fiber mechanism.",
         "aliases": [
           "psyllium",
           "psyllium husk fiber",
@@ -35805,10 +35805,10 @@
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR (5th). See psyllium seed entry. Husk powder companion already at 0.0; consistent with category-error."
         }
       }
     },
@@ -49380,8 +49380,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "moderate",
-        "notes": "AKG is a key Krebs cycle intermediate and nitrogen carrier. Calcium AKG (Ca-AKG) lifespan extension data in mice (PMID 32877690). Supports glutamine/glutamate metabolism. Form unspecified.",
+        "absorption": "low-moderate (split-dose human F ~40% w/water)",
+        "notes": "AKG is a key Krebs cycle intermediate and nitrogen carrier. Calcium AKG (Ca-AKG) lifespan extension data in mice (PMID 32877690). Supports glutamine/glutamate metabolism. Form unspecified. B24 audit 2026-04-25: AKG split-dose human F ~40% w/water (PMID:20572756); dose/matrix sensitive. Conservative 0.20.",
         "aliases": [
           "alpha ketoglutarate",
           "alpha-ketoglutarate",
@@ -49393,19 +49393,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "moderate",
-          "range_low": null,
-          "range_high": null
+          "value": 0.2,
+          "range_low": 0.15,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Mittal 2010 (PMID:20572756): radiolabeled AKG split-dose human F up to ~40% with water dilution. Dabek 2006 (PMID:16401194) pig intestine: better F upper SI, t1/2 <5 min portal. Dose-dependent and matrix-sensitive."
         }
       },
       "ornithine alpha-ketoglutarate": {
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "Salt combining L-ornithine and alpha-ketoglutarate (OKG). Used in clinical nutrition for wound healing and muscle wasting (enteral/parenteral). OKG serves as dual-substrate for polyamine synthesis and glutamine production. Limited oral supplement evidence vs clinical IV/enteral use.",
+        "absorption": "low-moderate (OKG t1/2 89 min; ornithine carrier)",
+        "notes": "Salt combining L-ornithine and alpha-ketoglutarate (OKG). Used in clinical nutrition for wound healing and muscle wasting (enteral/parenteral). OKG serves as dual-substrate for polyamine synthesis and glutamine production. Limited oral supplement evidence vs clinical IV/enteral use. B24 audit 2026-04-25: ornithine carrier modest PK benefit (PMID:9022538, PMID:17513441) over plain AKG.",
         "aliases": [
           "ornithine alpha ketoglutarate",
           "ornithine akg",
@@ -49413,11 +49413,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "moderate",
-          "range_low": null,
-          "range_high": null
+          "value": 0.25,
+          "range_low": 0.2,
+          "range_high": 0.35,
+          "quality": "low",
+          "notes": "Le Bricon 1996 (PMID:9022538): OKG enteral PK in burn patients — t1/2 ~89 min, proline as main metabolite. Cynober 2007 (PMID:17513441): OKG modifies AA PK. Slight carrier benefit over plain AKG."
         }
       }
     },
