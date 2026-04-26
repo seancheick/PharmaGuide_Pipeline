@@ -7338,8 +7338,8 @@
         "bio_score": 3,
         "natural": false,
         "score": 3,
-        "absorption": "very poor",
-        "notes": "Structurally similar molecules that cannot function as bioavailable selenium. Provide no antioxidant or selenoprotein activity.",
+        "absorption": "poor (non-functional analog)",
+        "notes": "Structurally similar molecules that cannot function as bioavailable selenium. Provide no antioxidant or selenoprotein activity. B28 audit 2026-04-25: non-functional analog.",
         "aliases": [
           "selenium analog",
           "pseudo-selenium",
@@ -7352,19 +7352,19 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": "Non-functional selenium analog. Does not provide bioactive selenocysteine/selenomethionine."
         }
       },
       "oxidized selenium": {
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "negligible",
-        "notes": "Selenium that has been degraded by oxidation. Completely inactive and provides no biological selenium activity. Indicates poor manufacturing or storage conditions.",
+        "absorption": "poor (oxidative degradation)",
+        "notes": "Selenium that has been degraded by oxidation. Completely inactive and provides no biological selenium activity. Indicates poor manufacturing or storage conditions. B28 audit 2026-04-25: oxidative degradation.",
         "aliases": [
           "degraded selenium",
           "damaged selenium",
@@ -7376,19 +7376,21 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "negligible"
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": [
+            "Oxidized selenium loses bioactive forms. Minimal residual activity."
+          ]
         }
       },
       "selenium (unspecified)": {
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which selenium form is used. This matters — organic forms (selenomethionine, selenized yeast) are ~90% absorbed and well-retained, while inorganic forms (selenite, selenate) are only ~50% absorbed with poor retention.",
+        "absorption": "good (Se class baseline; form-dependent 40-90%)",
+        "notes": "The supplement label does not specify which selenium form is used. This matters — organic forms (selenomethionine, selenized yeast) are ~90% absorbed and well-retained, while inorganic forms (selenite, selenate) are only ~50% absorbed with poor retention. B28 audit 2026-04-25: Se class baseline (form-dependent).",
         "aliases": [
           "Selenium",
           "selenium amino acid chelate",
@@ -7404,11 +7406,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.65,
+          "range_low": 0.45,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Se F highly form-dependent: selenomethionine ~90% (highest), selenite ~50%, selenate ~45%, oxide ~40%. Default 0.65 middle for unspecified."
         }
       },
       "selenium citrate": {
@@ -7661,8 +7663,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "variable",
-        "notes": "A natural blend of flavonoid compounds from citrus fruits — typically including hesperidin, naringin, rutin, and quercetin. These compounds work synergistically with vitamin C, enhancing its absorption and extending its antioxidant activity. Traditionally known as 'Vitamin P.' Supports capillary strength, circulation, and anti-inflammatory pathways.",
+        "absorption": "low (bioflavonoid class-poor; extensive glucuronidation)",
+        "notes": "A natural blend of flavonoid compounds from citrus fruits — typically including hesperidin, naringin, rutin, and quercetin. These compounds work synergistically with vitamin C, enhancing its absorption and extending its antioxidant activity. Traditionally known as 'Vitamin P.' Supports capillary strength, circulation, and anti-inflammatory pathways. B28 audit 2026-04-25: bioflavonoid class-poor (B19 framework).",
         "aliases": [
           "citrus bioflavonoids",
           "bioflavonoid complex",
@@ -7712,19 +7714,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Bioflavonoid class-poor framework (Batch 19). Citrus bioflavonoids (mostly hesperidin/naringin/eriocitrin) undergo extensive intestinal/hepatic glucuronidation; F typically <15%. Complex matrix has slight matrix advantage over isolated forms."
         }
       },
       "hesperidin": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate",
-        "notes": "The dominant flavanone in oranges and other citrus fruits. Clinically studied for cardiovascular benefits — supports healthy blood pressure, reduces inflammation, and improves endothelial function. Also available as hesperidin methyl chalcone (HMC), which has improved water solubility. Its metabolite hesperetin is the active form.",
+        "absorption": "low (hesperidin class-poor; rutinose hydrolysis required)",
+        "notes": "The dominant flavanone in oranges and other citrus fruits. Clinically studied for cardiovascular benefits — supports healthy blood pressure, reduces inflammation, and improves endothelial function. Also available as hesperidin methyl chalcone (HMC), which has improved water solubility. Its metabolite hesperetin is the active form. B28 audit 2026-04-25: hesperidin class-poor (B19).",
         "aliases": [
           "orange flavonoid",
           "citrus hesperidin",
@@ -7746,11 +7748,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.06,
+          "range_low": 0.03,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Hesperidin (hesperetin-7-O-rutinoside) F well-established low (~3-12%). Requires colonic α-rhamnosidase to cleave rutinose before absorption — same baseline as rutin. Class-poor flavonoid (B19 framework)."
         },
         "external_ids": {
           "unii": "E750O06Y6O"
@@ -7760,8 +7762,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "low",
-        "notes": "A flavonol glycoside (quercetin bound to the sugar rutinose) found in citrus, buckwheat, and Sophora japonica. Traditionally used for capillary fragility and varicose veins. Acts as a natural quercetin delivery vehicle — gut bacteria cleave the sugar to release quercetin. Absorption of intact rutin is limited (~20%).",
+        "absorption": "low (rutin class-poor; rutinoside hydrolysis required)",
+        "notes": "A flavonol glycoside (quercetin bound to the sugar rutinose) found in citrus, buckwheat, and Sophora japonica. Traditionally used for capillary fragility and varicose veins. Acts as a natural quercetin delivery vehicle — gut bacteria cleave the sugar to release quercetin. Absorption of intact rutin is limited (~20%). B28 audit 2026-04-25: rutin class-poor (B19).",
         "aliases": [
           "quercetin-3-rutinoside",
           "vitamin p rutin",
@@ -7780,11 +7782,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "low"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Rutin (quercetin-3-O-rutinoside) F well-established low (~2-10%). Requires colonic α-rhamnosidase + β-glucosidase before absorption. Class-poor flavonoid (B19 framework)."
         },
         "external_ids": {
           "unii": "5G06TVY3R7"
@@ -10233,8 +10235,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "variable",
-        "notes": "Natural iodine from kelp seaweed (Laminaria, Ascophyllum, or bladderwrack species). Provides iodine within a whole-food matrix alongside trace minerals. The downside: iodine content varies wildly between batches (50-500%), making precise dosing difficult. A good natural option but less predictable than potassium iodide.",
+        "absorption": "variable (16-8,165 µg/g content; dose unpredictability)",
+        "notes": "Natural iodine from kelp seaweed (Laminaria, Ascophyllum, or bladderwrack species). Provides iodine within a whole-food matrix alongside trace minerals. The downside: iodine content varies wildly between batches (50-500%), making precise dosing difficult. A good natural option but less predictable than potassium iodide. B28 audit 2026-04-25: kelp variability is CONTENT not F (PMID:15588380); WHO advises avoiding (PMID:15220938).",
         "aliases": [
           "kelp",
           "seaweed iodine",
@@ -10252,8 +10254,8 @@
           "value": null,
           "range_low": null,
           "range_high": null,
-          "quality": "variable",
-          "notes": "Iodine content varies 50-500% between batches depending on kelp species and harvest"
+          "quality": "unknown",
+          "notes": "Teas 2004 (PMID:15588380): iodine content varies 16 µg/g (nori) to 8,165 µg/g (Laminaria digitata) across species; juvenile vs sun-bleached blades 6,571 vs 514 µg/g. Zimmermann 2004 (PMID:15220938): WHO/expert recommendation to AVOID kelp in supplementation due to unacceptable variability. NOTE: variable CONTENT/dose, NOT variable F. Once converted to iodide, F is class-equivalent (~95-99%)."
         }
       },
       "sodium iodide": {
@@ -10282,8 +10284,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "variable",
-        "notes": "Elemental iodine (I₂) — a distinct form from iodide salts like KI. Used in Lugol's solution (a mix of I₂ + KI) and studied for breast tissue health (Ghent 1993). Absorption depends on the formulation. Nascent iodine is a marketing term for atomic iodine (I⁻) in an 'energized' state — no peer-reviewed evidence supports claims of superior absorption. Dosing can be trickier than standard KI.",
+        "absorption": "unknown (distinct NIS-independent mechanism)",
+        "notes": "Elemental iodine (I₂) — a distinct form from iodide salts like KI. Used in Lugol's solution (a mix of I₂ + KI) and studied for breast tissue health (Ghent 1993). Absorption depends on the formulation. Nascent iodine is a marketing term for atomic iodine (I⁻) in an 'energized' state — no peer-reviewed evidence supports claims of superior absorption. Dosing can be trickier than standard KI. B28 audit 2026-04-25: I2 NIS-independent (PMID:22576883), NOT class-equivalent to KI; no human F estimate.",
         "aliases": [
           "nascent iodine",
           "elemental iodine",
@@ -10301,16 +10303,16 @@
           "value": null,
           "range_low": null,
           "range_high": null,
-          "quality": "variable",
-          "notes": "Depends on formulation; I2 requires reduction to iodide for thyroid uptake"
+          "quality": "unknown",
+          "notes": "Aranda 2013 (PMID:22576883): molecular iodine (I2) uses NIS-INDEPENDENT cellular uptake — distinct from iodide (NIS-dependent). Aceves 2013 (PMID:23607319): different tissue distribution profile; recommended for extrathyroidal antioxidant/apoptotic actions. CANNOT assume KI-class F. No definitive human oral F estimate."
         }
       },
       "iodine (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which iodine form is used. This gets a conservative score. Most iodine forms absorb well, but without knowing the source we can't confirm quality. Look for 'potassium iodide' or 'kelp' on your label for a more accurate score.",
+        "absorption": "excellent (default to iodide class; KI/NaI ~97%)",
+        "notes": "The label doesn't specify which iodine form is used. This gets a conservative score. Most iodine forms absorb well, but without knowing the source we can't confirm quality. Look for 'potassium iodide' or 'kelp' on your label for a more accurate score. B28 audit 2026-04-25: iodide class baseline (KI/NaI 0.97 companions).",
         "aliases": [
           "iodide",
           "iodine",
@@ -10324,11 +10326,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.95,
+          "range_low": 0.9,
+          "range_high": 0.99,
+          "quality": "excellent",
+          "notes": "Default to iodide class baseline. Companion forms KI = 0.97, NaI = 0.97. Most common supplement chemistry is iodide salt; F ~95-99% well-established."
         }
       }
     },
@@ -10555,8 +10557,8 @@
         "bio_score": 8,
         "natural": false,
         "score": 8,
-        "absorption": "poor",
-        "notes": "An inorganic salt form with lower absorption than organic chelates. More likely to cause GI upset at higher doses. Inexpensive, so it's common in budget multivitamins. If your label says sulfate, you're getting a basic form.",
+        "absorption": "poor (Mn class baseline genuinely low ~3-8%)",
+        "notes": "An inorganic salt form with lower absorption than organic chelates. More likely to cause GI upset at higher doses. Inexpensive, so it's common in budget multivitamins. If your label says sulfate, you're getting a basic form. B28 audit 2026-04-25: Mn class-equivalence (inherent low F).",
         "aliases": [
           "manganese sulphate",
           "MnSO4",
@@ -10565,11 +10567,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.08,
+          "quality": "low",
+          "notes": "Mn oral F is INHERENTLY LOW (~3-8%) for ALL forms — tightly homeostatic. Sulfate form class-equivalent to other inorganic Mn salts (citrate, gluconate, picolinate all 0.05-0.06)."
         },
         "external_ids": {
           "unii": "W00LYS4T26"
@@ -10603,8 +10605,8 @@
         "bio_score": 4,
         "natural": false,
         "score": 4,
-        "absorption": "very poor",
-        "notes": "The cheapest manganese form with very poor absorption. Low solubility means most of it passes through your gut unabsorbed. Found in bargain-bin multivitamins. If you see this on a label, the manufacturer chose cost over quality.",
+        "absorption": "poor (oxide form essentially non-bioavailable)",
+        "notes": "The cheapest manganese form with very poor absorption. Low solubility means most of it passes through your gut unabsorbed. Found in bargain-bin multivitamins. If you see this on a label, the manufacturer chose cost over quality. B28 audit 2026-04-25: oxide non-bioavailable.",
         "aliases": [
           "MnO",
           "manganese(II) oxide",
@@ -10614,11 +10616,13 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.02,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "very poor"
+          "notes": [
+            "MnO/MnO2 essentially non-bioavailable (food coloring pigment). Far below soluble Mn salts."
+          ]
         },
         "external_ids": {
           "unii": "64J2OA7MH3"
@@ -10672,8 +10676,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which manganese form is used. This gets a conservative score because it could be anything from cheap oxide (barely absorbed) to premium bisglycinate. Check your label for the specific form name.",
+        "absorption": "poor (Mn class baseline ~3-8%)",
+        "notes": "The label doesn't specify which manganese form is used. This gets a conservative score because it could be anything from cheap oxide (barely absorbed) to premium bisglycinate. Check your label for the specific form name. B28 audit 2026-04-25: Mn class baseline.",
         "aliases": [
           "Manganese",
           "Manganeso",
@@ -10686,11 +10690,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.06,
+          "range_low": 0.03,
+          "range_high": 0.08,
+          "quality": "low",
+          "notes": "Mn class baseline genuinely low. Default 0.06 middle of class."
         }
       },
       "manganese brown rice chelate": {
@@ -13513,8 +13517,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "moderate fermentation",
-        "notes": "Soluble fiber from fruits that supports beneficial bacteria and may help with cholesterol management.",
+        "absorption": "category_error (soluble fiber → SCFA fermentation)",
+        "notes": "Soluble fiber from fruits that supports beneficial bacteria and may help with cholesterol management. B28 audit 2026-04-25: CATEGORY ERROR (PMID:12088514, PMID:33119011). Companion FOS/GOS values 0.65-0.90 inconsistent with this — pending Dr Pham harmonization.",
         "aliases": [
           "apple pectin",
           "citrus pectin",
@@ -13525,8 +13529,8 @@
           "value": null,
           "range_low": null,
           "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate fermentation"
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR (extension of Batch 22 inulin/larch AG framework). Nyman 2002 (PMID:12088514): \"easily fermented fibres such as pectins and gums...most of the SCFA formed during fermentation already absorbed by colonic mucosa.\" Míguez 2020 (PMID:33119011): pectin → butyrate cumulative production. NOT systemically absorbed as parent compound. **INCONSISTENCY**: companion FOS/GOS/XOS/HMO at 0.65-0.90 reflect older nutrient-density framework — flagged for Dr Pham harmonization (review doc Section E2-extension)."
         },
         "external_ids": {
           "unii": "89NA02M4RX"
@@ -13557,8 +13561,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Type not specified on label. Conservative score — different prebiotics feed different bacterial populations. Look for specific types (FOS, GOS, inulin, HMO) for a more accurate score.",
+        "absorption": "category_error (default to fermentation framework)",
+        "notes": "Type not specified on label. Conservative score — different prebiotics feed different bacterial populations. Look for specific types (FOS, GOS, inulin, HMO) for a more accurate score. B28 audit 2026-04-25: CATEGORY ERROR default (B22 framework).",
         "aliases": [
           "prebiotics",
           "prebiotic",
@@ -13570,15 +13574,15 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Depends on type"
+          "notes": "CATEGORY ERROR. Default for \"(unspecified)\" prebiotic — all known prebiotic chemistries are non-digestible fermentable substrates → SCFA production. Class-extension from inulin (Batch 22)."
         }
       },
       "alpha-glucooligosaccharides (alpha-GOS)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good fermentation",
-        "notes": "Alpha-linked gluco-oligosaccharide prebiotic form. Includes branded alpha-GOS ingredients such as BioEcolians. Kept separate from GOS and XOS for identity accuracy.",
+        "absorption": "category_error (alpha-GOS class-extension; ferments to SCFA)",
+        "notes": "Alpha-linked gluco-oligosaccharide prebiotic form. Includes branded alpha-GOS ingredients such as BioEcolians. Kept separate from GOS and XOS for identity accuracy. B28 audit 2026-04-25: CATEGORY ERROR (PMID:12088514). NAMING DISAMBIGUATION: alpha-GOS ≠ beta-GOS — verify entry.",
         "aliases": [
           "alpha-gos",
           "alpha gos",
@@ -13592,8 +13596,8 @@
           "value": null,
           "range_low": null,
           "range_high": null,
-          "quality": "good",
-          "notes": "good fermentation"
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR. Alpha-GOS (raffinose/stachyose family) is non-digestible by human enzymes; fermented in colon to SCFA. Class-extension from inulin/FOS framework (Nyman 2002 PMID:12088514). NAMING REVIEW NEEDED: ensure entry is alpha-GOS specifically — beta-GOS (Bimuno-type, lactose-derived) is chemically distinct (more common in supplements)."
         },
         "dosage_importance": 1.0
       }
@@ -17662,8 +17666,8 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "theoretical enhancement; no human oral PK data",
-        "notes": "Liposome-encapsulated HA for theoretical enhanced oral delivery. Zero published human oral PK studies exist for liposomal HA. Liposomal HA literature in PubMed is about injectable drug delivery (PMC7384933), not oral supplements. Claims of 2-3x improved absorption are extrapolated from liposomal delivery of other compounds and have no direct evidence for oral HA.",
+        "absorption": "unknown (liposomal claim; no human PK validation)",
+        "notes": "Liposome-encapsulated HA for theoretical enhanced oral delivery. Zero published human oral PK studies exist for liposomal HA. Liposomal HA literature in PubMed is about injectable drug delivery (PMC7384933), not oral supplements. Claims of 2-3x improved absorption are extrapolated from liposomal delivery of other compounds and have no direct evidence for oral HA. B28 audit 2026-04-25: liposomal-thin pattern; no human PK for any oral HA form.",
         "aliases": [
           "liposomal hyaluronic acid",
           "encapsulated HA",
@@ -17680,15 +17684,15 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "No human oral PK data exists for liposomal HA; theoretical enhancement only"
+          "notes": "Liposomal HA is a delivery-format claim with NO published human PK data validating bioavailability uplift over plain HA. No head-to-head comparisons exist."
         }
       },
       "acetylated HA": {
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "no human oral PK data; acetylation studied primarily for topical penetration",
-        "notes": "Chemically acetylated HA with improved stability. No published human oral PK data for acetylated HA. Acetylation is primarily studied for topical/dermal penetration enhancement, not oral bioavailability. Claims of ~2x improved absorption have zero clinical support for oral delivery. May have improved antioxidant activity vs native HA in vitro.",
+        "absorption": "unknown (acetylation studied dermally not orally)",
+        "notes": "Chemically acetylated HA with improved stability. No published human oral PK data for acetylated HA. Acetylation is primarily studied for topical/dermal penetration enhancement, not oral bioavailability. Claims of ~2x improved absorption have zero clinical support for oral delivery. May have improved antioxidant activity vs native HA in vitro. B28 audit 2026-04-25: no human oral PK; acetylation studied dermally only.",
         "aliases": [
           "acetylated hyaluronic acid",
           "HA-acet",
@@ -17706,7 +17710,7 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "No human oral PK data; acetylation studied for topical, not oral delivery"
+          "notes": "Acetylation of HA studied for skin penetration; no human oral PK data. Likely class-equivalent to plain HA — also lacks human PK."
         }
       },
       "low molecular weight HA": {
@@ -17767,8 +17771,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown (all oral HA has very low systemic bioavailability)",
-        "notes": "HA molecular weight not specified. All oral HA has very low systemic bioavailability (~0.2% intact; PMID:37182970). Smaller MW forms have modestly better absorption. Clinical skin/joint benefits are real but mediated through degradation products and gut-immune signaling, not intact HA reaching target tissues. Sodium hyaluronate is the sodium salt form. Commercial HA is produced by bacterial fermentation.",
+        "absorption": "unknown (MW-dependent; HMW fiber-like, vLMW mouse-only)",
+        "notes": "HA molecular weight not specified. All oral HA has very low systemic bioavailability (~0.2% intact; PMID:37182970). Smaller MW forms have modestly better absorption. Clinical skin/joint benefits are real but mediated through degradation products and gut-immune signaling, not intact HA reaching target tissues. Sodium hyaluronate is the sodium salt form. Commercial HA is produced by bacterial fermentation. B28 audit 2026-04-25: no human PK; MW-dependent (PMID:37081790 mouse only). Ghost catches: Oe 2014, Kimura 2016 fabricated.",
         "aliases": [
           "hyaluronic acid",
           "Hyal-Joint",
@@ -17784,7 +17788,7 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Data not available"
+          "notes": "No human oral PK exists for HA. Mannino 2024 (PMID:37081790): vLMW-HA (≤5 kDa) absorbed in mice — significant plasma/skin/bladder/gut increase after 7 days. HMW (>500 kDa) typical food-grade HA likely fiber-like category-error (paracellular only, primarily fermented/excreted). MW rarely specified on supplement labels. Galla 2022 (PMID:35897688) HMW in vitro only. GHOST CATCHES: \"Oe 2014\" and \"Kimura 2016\" HA absorption — fabricated, not in PubMed."
         }
       }
     },
@@ -21088,8 +21092,8 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "unknown (no oral human PK data)",
-        "notes": "Curcumin encapsulated in lipid vesicles. Despite marketing claims of '50x better' absorption, the only published human PK study of liposomal curcumin used intravenous administration (PMID:25500488, Greil 2014), NOT oral. No rigorous human oral pharmacokinetic data exists to validate absorption enhancement claims. Scored conservatively pending proper oral PK studies.",
+        "absorption": "low (liposomal-thin; curcumin class-poor baseline)",
+        "notes": "Curcumin encapsulated in lipid vesicles. Despite marketing claims of '50x better' absorption, the only published human PK study of liposomal curcumin used intravenous administration (PMID:25500488, Greil 2014), NOT oral. No rigorous human oral pharmacokinetic data exists to validate absorption enhancement claims. Scored conservatively pending proper oral PK studies. B28 audit 2026-04-25: liposomal-thin + curcumin class-poor.",
         "aliases": [
           "nano-curcumin",
           "curcumin liposome",
@@ -21105,19 +21109,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "No oral human PK data; only IV study published (PMID:25500488)"
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Liposomal-thin pattern (Batch 6/10/15). Curcumin baseline F ~1-3%; liposomal claim adds modest premium without head-to-head human PK. Class-equivalent to curcumin parent."
         }
       },
       "curcumin with piperine": {
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "poor (piperine enhancement debunked)",
-        "notes": "Curcumin combined with piperine (BioPerine/black pepper extract). The landmark Shoba 1998 claim of 2000% (20x) bioavailability increase (PMID:9619120) has been directly contradicted by Verhoeven 2025 (PMID:40487425), which found piperine addition produced NO improvement in either free or total curcumin AUC in a controlled crossover study. The original study is now considered methodologically flawed. Piperine may still have independent anti-inflammatory value, but it does not meaningfully enhance curcumin absorption.",
+        "absorption": "low (piperine enhancement DEBUNKED in newer studies)",
+        "notes": "Curcumin combined with piperine (BioPerine/black pepper extract). The landmark Shoba 1998 claim of 2000% (20x) bioavailability increase (PMID:9619120) has been directly contradicted by Verhoeven 2025 (PMID:40487425), which found piperine addition produced NO improvement in either free or total curcumin AUC in a controlled crossover study. The original study is now considered methodologically flawed. Piperine may still have independent anti-inflammatory value, but it does not meaningfully enhance curcumin absorption. B28 audit 2026-04-25: piperine 20× CLAIM DEBUNKED (B8 curcumin audit); class-equivalent to plain curcumin.",
         "aliases": [
           "curcumin + black pepper",
           "bioperine curcumin",
@@ -21134,19 +21138,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.08,
           "quality": "poor",
-          "notes": "Shoba 1998 2000% claim debunked by Verhoeven 2025 (PMID:40487425)"
+          "notes": "Shoba 1998 piperine 20× claim NOT replicated in modern studies (per Batch 8 curcumin audit). Piperine has CYP3A4/P-gp inhibitory effects but 20× claim was rat data on aglycone, not human Cmax. Curcumin baseline F ~1-3%; piperine modest premium at best."
         }
       },
       "turmeric (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Turmeric/curcumin products range from raw powder (~3% curcuminoids, very poor absorption) to advanced delivery systems (liposomal, phytosome, piperine-enhanced) that can increase bioavailability 20–50x. Form choice dramatically affects clinical benefit. Scored conservatively.",
+        "absorption": "low (curcumin class-poor baseline ~1-3%)",
+        "notes": "Form not specified on the label. Turmeric/curcumin products range from raw powder (~3% curcuminoids, very poor absorption) to advanced delivery systems (liposomal, phytosome, piperine-enhanced) that can increase bioavailability 20–50x. Form choice dramatically affects clinical benefit. Scored conservatively. B28 audit 2026-04-25: curcumin class-poor (B8).",
         "aliases": [
           "turmeric",
           "tumeric root extract",
@@ -21162,11 +21166,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Default to curcumin class-poor baseline (~1-3% F). Unspecified turmeric defaults to whole rhizome (less concentrated than extract)."
         }
       }
     },
@@ -41008,8 +41012,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "moderate-high",
-        "notes": "Cimicifuga racemosa (Actaea racemosa) root/rhizome extract standardized to 2.5% triterpene glycosides. Clinical evidence supports hot flash reduction and menopausal symptom relief. Mechanism debated: may act via serotonergic pathways rather than phytoestrogen activity. Rare hepatotoxicity reports; monitor liver function.",
+        "absorption": "low (triterpene standardized; PD-not-PK Crominex pattern)",
+        "notes": "Cimicifuga racemosa (Actaea racemosa) root/rhizome extract standardized to 2.5% triterpene glycosides. Clinical evidence supports hot flash reduction and menopausal symptom relief. Mechanism debated: may act via serotonergic pathways rather than phytoestrogen activity. Rare hepatotoxicity reports; monitor liver function. B28 audit 2026-04-25: Crominex pattern; class-equiv Remifemin.",
         "aliases": [
           "black cohosh extract",
           "cimicifuga racemosa extract",
@@ -41020,19 +41024,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Triterpene glycoside (actein/cimicifugoside) standardized extract. Crominex pattern (B16/B21): clinical RCTs document menopausal efficacy but limited human PK. Class-equivalent to Remifemin companion (0.15) with slight standardization premium."
         }
       },
       "black cohosh root powder": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Ground black cohosh root/rhizome. Lower triterpene concentration than standardized extracts. Traditional Native American use for women's health. Variable potency between batches due to lack of standardization. Higher doses needed. Same hepatotoxicity precaution as extracts.",
+        "absorption": "low (root powder; lower concentration than extract)",
+        "notes": "Ground black cohosh root/rhizome. Lower triterpene concentration than standardized extracts. Traditional Native American use for women's health. Variable potency between batches due to lack of standardization. Higher doses needed. Same hepatotoxicity precaution as extracts. B28 audit 2026-04-25: powder lower than standardized.",
         "aliases": [
           "black cohosh powder",
           "black cohosh root",
@@ -41041,19 +41045,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "low-moderate"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Root powder has lower triterpene concentration than standardized extract. Class-equivalent baseline."
         }
       },
       "black cohosh (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Actaea racemosa (Cimicifuga) rhizome; contains triterpene glycosides (actein, 23-epi-26-deoxyactein). Evidence for menopausal vasomotor symptoms. Form unspecified; conservative scoring.",
+        "absorption": "low (class baseline; conservative default)",
+        "notes": "Actaea racemosa (Cimicifuga) rhizome; contains triterpene glycosides (actein, 23-epi-26-deoxyactein). Evidence for menopausal vasomotor symptoms. Form unspecified; conservative scoring. B28 audit 2026-04-25: class baseline (Crominex).",
         "aliases": [
           "black cohosh",
           "cimicifuga",
@@ -41069,11 +41073,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Default for unspecified form. Crominex pattern baseline."
         }
       }
     },
@@ -56521,8 +56525,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "good",
-        "notes": "Neumentix® by Kemin Industries. Proprietary high-polyphenol spearmint bred for elevated rosmarinic acid and 50+ phenolic compounds. 5 clinical trials support cognitive performance, reaction time, and working memory at 900mg/day x 90 days; onset at 7 days (PMID 29314866, 30802720). Superior to standard spearmint extract.",
+        "absorption": "low (rosmarinic acid class-poor; Crominex pattern)",
+        "notes": "Neumentix® by Kemin Industries. Proprietary high-polyphenol spearmint bred for elevated rosmarinic acid and 50+ phenolic compounds. 5 clinical trials support cognitive performance, reaction time, and working memory at 900mg/day x 90 days; onset at 7 days (PMID 29314866, 30802720). Superior to standard spearmint extract. B28 audit 2026-04-25: Neumentix Crominex pattern; rosmarinic acid class-poor.",
         "aliases": [
           "neumentix",
           "neumentix spearmint",
@@ -56533,19 +56537,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "good",
-          "notes": "Polyphenol bioavailability assumed good based on water-soluble phenolic compounds; no direct pharmacokinetic data available.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Neumentix is a branded standardized spearmint extract (Kemin Industries) with cognitive-function RCTs (Falcone 2018). Active = rosmarinic acid + phenolic complex — rosmarinic acid is class-poor flavonoid (~5-15% F per Baba 2004). Crominex pattern: clinical RCTs ≠ PK premium."
         }
       },
       "spearmint extract": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "moderate",
-        "notes": "Standard spearmint extract. Polyphenol content variable between suppliers. Limited clinical evidence for cognitive effects; primarily used as digestive aid and flavoring.",
+        "absorption": "low (rosmarinic acid class-poor; generic extract)",
+        "notes": "Standard spearmint extract. Polyphenol content variable between suppliers. Limited clinical evidence for cognitive effects; primarily used as digestive aid and flavoring. B28 audit 2026-04-25: rosmarinic acid class-poor.",
         "aliases": [
           "mentha spicata extract",
           "spearmint leaf extract",
@@ -56553,19 +56557,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "Rosmarinic acid and flavonoids have moderate polyphenol bioavailability.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.25,
+          "quality": "low",
+          "notes": "Generic spearmint extract — rosmarinic acid + minor phenolics. Class-poor flavonoid baseline."
         }
       },
       "spearmint (unspecified)": {
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Mentha spicata herb; contains rosmarinic acid, carvone, and limonene. Evidence for PCOS anti-androgen activity (PMID 19585478) and cognitive enhancement (Neumentix). Form unspecified.",
+        "absorption": "low (class baseline; conservative default)",
+        "notes": "Mentha spicata herb; contains rosmarinic acid, carvone, and limonene. Evidence for PCOS anti-androgen activity (PMID 19585478) and cognitive enhancement (Neumentix). Form unspecified. B28 audit 2026-04-25: class baseline.",
         "aliases": [
           "spearmint",
           "mentha spicata",
@@ -56575,11 +56579,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Default for unspecified spearmint. Rosmarinic acid class-poor baseline."
         }
       }
     },
@@ -56903,8 +56907,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "good",
-        "notes": "Cognivia® by Nexira. Proprietary Salvia officinalis leaf extract standardized to high ursolic acid and rosmarinic acid. Multiple RCTs: improved cognitive performance, working memory, and attention in healthy adults (PMID 16205659, 20377818). Dose: 300–600mg/day. Superior polyphenol profile vs standard sage.",
+        "absorption": "low (rosmarinic+carnosic acid; Crominex pattern)",
+        "notes": "Cognivia® by Nexira. Proprietary Salvia officinalis leaf extract standardized to high ursolic acid and rosmarinic acid. Multiple RCTs: improved cognitive performance, working memory, and attention in healthy adults (PMID 16205659, 20377818). Dose: 300–600mg/day. Superior polyphenol profile vs standard sage. B28 audit 2026-04-25: Cognivia Crominex; rosmarinic+carnosic.",
         "aliases": [
           "cognivia sage (leaf) extract",
           "organic cognivia sage (leaf) extract",
@@ -56914,19 +56918,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "good",
-          "notes": "Rosmarinic acid and ursolic acid bioavailability moderate-good; phenolic matrix enhances uptake.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Cognivia is a branded sage+rosemary extract with cognitive RCTs. Active = rosmarinic acid + carnosic acid — both class-poor flavonoid/diterpene phenolics. Crominex pattern: RCTs ≠ PK premium."
         }
       },
       "sage extract": {
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "Standard Salvia officinalis extract. Polyphenol content variable. Clinical evidence for cognitive and memory support. Dose: 300–600mg/day leaf extract.",
+        "absorption": "low (rosmarinic+carnosic acid class-poor)",
+        "notes": "Standard Salvia officinalis extract. Polyphenol content variable. Clinical evidence for cognitive and memory support. Dose: 300–600mg/day leaf extract. B28 audit 2026-04-25: rosmarinic+carnosic class-poor.",
         "aliases": [
           "salvia officinalis extract",
           "sage leaf extract",
@@ -56938,19 +56942,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "Polyphenol bioavailability moderate; rosmarinic acid well-absorbed.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.25,
+          "quality": "low",
+          "notes": "Generic sage extract — rosmarinic + carnosic acid. Class-poor flavonoid/diterpene baseline."
         }
       },
       "sage (unspecified)": {
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Salvia officinalis herb; contains rosmarinic acid, carnosic acid, and thujone. Evidence for cognitive enhancement, menopausal hot flashes, and sore throat. German Commission E approved. Form unspecified.",
+        "absorption": "low (class baseline; conservative default)",
+        "notes": "Salvia officinalis herb; contains rosmarinic acid, carnosic acid, and thujone. Evidence for cognitive enhancement, menopausal hot flashes, and sore throat. German Commission E approved. Form unspecified. B28 audit 2026-04-25: class baseline.",
         "aliases": [
           "sage",
           "salvia officinalis",
@@ -56962,11 +56966,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Default for unspecified sage. Class-poor baseline."
         }
       }
     },
