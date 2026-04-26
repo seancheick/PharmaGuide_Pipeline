@@ -1628,8 +1628,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "excellent",
-        "notes": "The biologically active coenzyme form of B6. Your body uses P5P directly in over 100 enzymatic reactions. Bypasses the liver conversion step required by other B6 forms — ideal for people with impaired conversion or liver issues.",
+        "absorption": "P5P dephosphorylated to pyridoxal pre-absorption; F equals pyridoxine class",
+        "notes": "The biologically active coenzyme form of B6. Your body uses P5P directly in over 100 enzymatic reactions. Bypasses the liver conversion step required by other B6 forms — ideal for people with impaired conversion or liver issues. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "P5P",
           "P-5-P",
@@ -1662,19 +1662,19 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent"
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "P5P is hydrolyzed by intestinal alkaline phosphatase to pyridoxal before absorption (same as FMN/FAD/TPP per Batch 12). Systemic F equals B6 class. \"Active coenzyme\" advantage is post-absorption, not bioavailability"
         }
       },
       "pyridoxamine": {
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "very good",
-        "notes": "A natural form of B6 found in animal-derived foods. Must be converted to the active P5P form in the body. Less common in supplements than pyridoxine HCl but can support enzymatic reactions after conversion.",
+        "absorption": "pyridoxamine; class-equivalent to pyridoxine F",
+        "notes": "A natural form of B6 found in animal-derived foods. Must be converted to the active P5P form in the body. Less common in supplements than pyridoxine HCl but can support enzymatic reactions after conversion. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "pyridoxamine dihydrochloride",
           "b6 amine",
@@ -1689,11 +1689,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
           "quality": "very_good",
-          "notes": "very good"
+          "notes": "Class-equivalent passive B6 absorption"
         },
         "external_ids": {
           "unii": "6466NM3W93"
@@ -8815,9 +8815,9 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "superior (~2–3x conventional extracts)",
+        "absorption": "liposomal saw palmetto; mechanistic claim; lipid baseline already good (oral lipid)",
         "technology": "Phospholipid encapsulation technology",
-        "notes": "Saw palmetto's active fatty acids (lauric, oleic, myristic) wrapped in phospholipid liposomes for enhanced gut absorption — claimed 2–3x greater bioavailability than conventional extracts. Liposomal delivery protects the lipophilic compounds from bile salt disruption. Limited head-to-head trials vs CO2 extract specifically, but the delivery technology is well-established for fat-soluble botanicals.",
+        "notes": "Saw palmetto's active fatty acids (lauric, oleic, myristic) wrapped in phospholipid liposomes for enhanced gut absorption — claimed 2–3x greater bioavailability than conventional extracts. Liposomal delivery protects the lipophilic compounds from bile salt disruption. Limited head-to-head trials vs CO2 extract specifically, but the delivery technology is well-established for fat-soluble botanicals. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "nano-emulsified saw palmetto",
           "phospholipid-complexed saw palmetto",
@@ -8857,11 +8857,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "superior (~2–3x conventional extracts)"
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "Saw palmetto fatty acids absorbed as lipids (~70-85% baseline); liposomal claim adds little; quality \"excellent\" overstated"
         }
       },
       "supercritical CO₂ saw palmetto extract": {
@@ -11081,8 +11081,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Boron chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "marketing label; boron class F ~85%; no peer-reviewed data for brown rice chelate",
+        "notes": "Boron chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "boron rice chelate",
           "rice chelate boron",
@@ -11093,11 +11093,11 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.85,
+          "range_low": 0.7,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Brown rice chelate has 0 PubMed hits (Batch 11 verdict). Boron class F ~85% homeostatic regardless of form"
         }
       },
       "boron citrate": {
@@ -11446,8 +11446,8 @@
         "bio_score": 11,
         "natural": false,
         "score": 11,
-        "absorption": "60-70% (estimated; moderate-high, better than oxide/sulfate)",
-        "notes": "Potassium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework.",
+        "absorption": "marketing label; potassium class F ~90% homeostatic",
+        "notes": "Potassium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "potassium rice chelate",
           "rice chelate potassium",
@@ -11458,11 +11458,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "60-70% estimated; organic rice-amino acid chelate class"
+          "value": 0.9,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Brown rice chelate has 0 PubMed hits (Batch 11 verdict). Potassium absorbed at ~90% regardless of form"
         }
       }
     },
@@ -12223,8 +12223,8 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "enhanced (manufacturer claims 2.2x vs standard)",
-        "notes": "Sustained-release micro-encapsulated PQQ using beta-cyclodextrin complexation, manufactured by BioActives/Maypro. Claims 2.2x better bioavailability with 9+ hour sustained release, but this is based on a manufacturer case study, not a peer-reviewed RCT. Found in brands like Pure Encapsulations. A premium option, though independent replication of the 2.2x claim is lacking.",
+        "absorption": "MicroActive PQQ branded; sustained-release matrix; PQQ baseline F not well-characterized",
+        "notes": "Sustained-release micro-encapsulated PQQ using beta-cyclodextrin complexation, manufactured by BioActives/Maypro. Claims 2.2x better bioavailability with 9+ hour sustained release, but this is based on a manufacturer case study, not a peer-reviewed RCT. Found in brands like Pure Encapsulations. A premium option, though independent replication of the 2.2x claim is lacking. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "micropqq",
           "sustained release pqq",
@@ -12233,11 +12233,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Manufacturer claims 2.2x vs standard; not independently verified"
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "PQQ (pyrroloquinoline quinone) baseline F unmeasured in humans; branded sustained-release claim has no dedicated PK"
         }
       },
       "pqq (pyrroloquinoline quinone) (unspecified)": {
@@ -12270,8 +12270,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "stabilized",
-        "notes": "Stabilized PQQ form with enhanced stability and bioavailability. Premium branded pyrroloquinoline quinone for mitochondrial support.",
+        "absorption": "LifePQQ branded; class-equivalent to standard PQQ",
+        "notes": "Stabilized PQQ form with enhanced stability and bioavailability. Premium branded pyrroloquinoline quinone for mitochondrial support. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "stabilized pqq",
           "branded pqq",
@@ -12279,11 +12279,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "stabilized"
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "LifePQQ branded form; no published comparator PK; class-equivalent"
         }
       }
     },
@@ -12717,8 +12717,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "~20x standard",
-        "notes": "Indena's Quercefit — quercetin bound to sunflower lecithin (phospholipid phytosome). About 20x better absorption than standard quercetin (Riva 2019). The best-studied enhanced quercetin form with clinical data for respiratory health and antioxidant support. If you want quercetin that actually gets absorbed, this is the top choice.",
+        "absorption": "phytosome lipid carrier; modest 2-4× over rutin baseline; still class-poor",
+        "notes": "Indena's Quercefit — quercetin bound to sunflower lecithin (phospholipid phytosome). About 20x better absorption than standard quercetin (Riva 2019). The best-studied enhanced quercetin form with clinical data for respiratory health and antioxidant support. If you want quercetin that actually gets absorbed, this is the top choice. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "bio-quercetin phytosome",
           "bio quercetin phytosome",
@@ -12733,19 +12733,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "~20x standard quercetin (Riva 2019, PMC6418071)"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Phospholipid-conjugated quercetin (Quercefit); ~2-4× AUC over rutin per Riva 2019; absolute F still class-poor (Batch 19 framework)"
         }
       },
       "isoquercetin (EMIQ)": {
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "17-40x standard",
-        "notes": "Enzymatically Modified Isoquercetin — quercetin with a glucose molecule attached, then further modified with enzymes to dramatically boost absorption (17-40x over standard quercetin). Your gut enzymes cleave the sugar moiety, releasing free quercetin for absorption. Used in several clinical trials. Not natural since it's enzymatically manufactured.",
+        "absorption": "EMIQ enzymatically-modified isoquercitrin; SGLT1-mediated; genuinely better F than rutin",
+        "notes": "Enzymatically Modified Isoquercetin — quercetin with a glucose molecule attached, then further modified with enzymes to dramatically boost absorption (17-40x over standard quercetin). Your gut enzymes cleave the sugar moiety, releasing free quercetin for absorption. Used in several clinical trials. Not natural since it's enzymatically manufactured. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "EMIQ",
           "isoquercetin",
@@ -12756,11 +12756,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "17-40x standard quercetin"
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.35,
+          "quality": "low",
+          "notes": "EMIQ is SGLT1-absorbed (Murota et al.); genuinely enhanced F vs rutin glycoside; ~3-5× higher Cmax/AUC"
         }
       },
       "quercetin dihydrate": {
@@ -12860,8 +12860,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "significantly enhanced (~6x Cmax vs standard GSH)",
-        "notes": "Glutathione encapsulated in phospholipid liposomes that protect it from stomach acid and digestive enzymes. About 6x higher peak blood levels than standard GSH (LipoDuo 2025 data). Sinha 2018 showed liposomal GSH elevated blood GSH levels and improved immune markers. The most effective oral glutathione delivery, but expensive. The '90-100% absorption' sometimes claimed has no peer-reviewed PK data behind it.",
+        "absorption": "liposomal carrier; mechanistic claim; intact GSH F is class-poor without carrier",
+        "notes": "Glutathione encapsulated in phospholipid liposomes that protect it from stomach acid and digestive enzymes. About 6x higher peak blood levels than standard GSH (LipoDuo 2025 data). Sinha 2018 showed liposomal GSH elevated blood GSH levels and improved immune markers. The most effective oral glutathione delivery, but expensive. The '90-100% absorption' sometimes claimed has no peer-reviewed PK data behind it. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "nano glutathione",
           "encapsulated glutathione",
@@ -12871,19 +12871,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "~6x Cmax vs standard GSH (Sinha 2018); no absolute % data"
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.4,
+          "quality": "low",
+          "notes": "Free GSH is hydrolyzed by gut γ-glutamyltransferase; liposomal carrier may protect but no dedicated human absolute F study"
         }
       },
       "s-acetyl glutathione": {
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "enhanced (higher plasma AUC vs standard GSH)",
-        "notes": "An acetylated prodrug of glutathione — the acetyl group protects the molecule from stomach acid breakdown. Once absorbed, it's rapidly deacetylated to active GSH inside cells. Clinical crossover studies show higher peak plasma GSH levels vs standard reduced GSH. The '80-90% absorption' sometimes claimed has no peer-reviewed source. A good option for people who want better-than-standard oral GSH delivery.",
+        "absorption": "acetylated GSH; resists γ-GT hydrolysis; modest F improvement claimed",
+        "notes": "An acetylated prodrug of glutathione — the acetyl group protects the molecule from stomach acid breakdown. Once absorbed, it's rapidly deacetylated to active GSH inside cells. Clinical crossover studies show higher peak plasma GSH levels vs standard reduced GSH. The '80-90% absorption' sometimes claimed has no peer-reviewed source. A good option for people who want better-than-standard oral GSH delivery. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "acetylated glutathione",
           "SAG",
@@ -12894,11 +12894,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Enhanced relative to standard GSH; no absolute % data available"
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Acetyl group resists γ-glutamyltransferase; better stability; absolute F still not measured"
         }
       },
       "standard glutathione": {
@@ -14086,8 +14086,8 @@
         "bio_score": 14,
         "natural": false,
         "score": 14,
-        "absorption": "~3.7x AUC vs standard PS (industry PK study, not yet peer-reviewed)",
-        "notes": "Proprietary PS blend with catechins and arabinose nanocarrier system (Shankar/SD Head USA). Industry PK study showed Cmax 2.8x and AUC 3.7x vs conventional PS. Peer-reviewed publication pending — preliminary data. NOT the same as Sharp-PS Gold.",
+        "absorption": "Actiserine branded PS blend; PS hydrolyzed to PA + serine pre-absorption",
+        "notes": "Proprietary PS blend with catechins and arabinose nanocarrier system (Shankar/SD Head USA). Industry PK study showed Cmax 2.8x and AUC 3.7x vs conventional PS. Peer-reviewed publication pending — preliminary data. NOT the same as Sharp-PS Gold. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "Actiserine",
           "enhanced phosphatidylserine",
@@ -14097,11 +14097,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "3.7x AUC vs standard PS (non-peer-reviewed industry PK study 2025)"
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Phosphatidylserine hydrolyzed to phosphatidic acid + serine by gut phospholipases; intact PS F class-poor; resynthesized in cells. Same pre-absorption hydrolysis as ceramides (Batch 20)"
         }
       },
       "phosphatidylserine (unspecified)": {
@@ -14132,8 +14132,8 @@
         "bio_score": 12,
         "score": 12,
         "natural": false,
-        "absorption": "enhanced (PS-DHA conjugate); small pilot study data",
-        "notes": "PS-DHA conjugate by Enzymotec (now IFF). DHA chemically bonded to PS backbone. Pilot study (8 elderly, 6 weeks) showed 42% improvement in delayed word recall. Separate product from Actiserine.",
+        "absorption": "PS-DHA conjugate; DHA carrier may aid lipid absorption; PS still hydrolyzed",
+        "notes": "PS-DHA conjugate by Enzymotec (now IFF). DHA chemically bonded to PS backbone. Pilot study (8 elderly, 6 weeks) showed 42% improvement in delayed word recall. Separate product from Actiserine. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "sharp-ps gold",
           "sharp ps gold",
@@ -14143,11 +14143,11 @@
           "sharp-ps gold conjugated ps-dha"
         ],
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Enhanced absorption (pilot study n=8)"
+          "value": 0.4,
+          "range_low": 0.2,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Conjugated PS-DHA; DHA component absorbed as omega-3 lipid (~85% F); PS component still hydrolyzed to PA + serine"
         },
         "dosage_importance": 1.0
       }
@@ -18720,8 +18720,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "enhanced (1.7-2.2x AUC vs standard, PMID:35922794)",
-        "notes": "Liposome-encapsulated ginkgo (Ginkgosome). Human crossover PK (PMID:35922794, Ried 2022, n=13): ginkgolide B AUC 1.9x higher, ginkgolide C AUC 2.2x higher, Cmax 1.7x higher vs standard GBE. One of few liposomal forms with real human PK support. Sustained-release profile.",
+        "absorption": "liposomal carrier; evidence-thin (no human PK comparator); ginkgo terpene class",
+        "notes": "Liposome-encapsulated ginkgo (Ginkgosome). Human crossover PK (PMID:35922794, Ried 2022, n=13): ginkgolide B AUC 1.9x higher, ginkgolide C AUC 2.2x higher, Cmax 1.7x higher vs standard GBE. One of few liposomal forms with real human PK support. Sustained-release profile. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "nano ginkgo",
           "encapsulated ginkgo",
@@ -18735,11 +18735,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "very_good",
-          "notes": "Ginkgolide B AUC 1.9x, C AUC 2.2x vs standard GBE (PMID:35922794)"
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Liposomal claim; no published human PK comparator; ginkgo flavonoid/terpene class baseline"
         }
       },
       "ginkgo biloba extract (24% flavone glycosides)": {
@@ -20194,8 +20194,8 @@
         "bio_score": 10,
         "natural": false,
         "score": 10,
-        "absorption": "enhanced (Leucoselect Phytosome; improved antioxidant delivery but fold-enhancement not quantified)",
-        "notes": "Leucoselect Phytosome (Indena) — procyanidin-phosphatidylcholine complex. Human study (PMID:9875688, Vinson 1998): increased serum antioxidant capacity after 5 days, but no direct PK fold-enhancement quantified (unlike silymarin/green tea phytosomes). Reviewed in Kidd 2009 (PMID:19803548). Enhancement expected based on phytosome mechanism but magnitude uncertain.",
+        "absorption": "phytosome carrier on grape seed OPCs; modest improvement; OPCs still class-poor",
+        "notes": "Leucoselect Phytosome (Indena) — procyanidin-phosphatidylcholine complex. Human study (PMID:9875688, Vinson 1998): increased serum antioxidant capacity after 5 days, but no direct PK fold-enhancement quantified (unlike silymarin/green tea phytosomes). Reviewed in Kidd 2009 (PMID:19803548). Enhancement expected based on phytosome mechanism but magnitude uncertain. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "phospholipid grape seed",
           "enhanced grape seed extract",
@@ -20218,11 +20218,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Enhanced antioxidant delivery (PMID:9875688) but PK fold not quantified"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Indena Leucoselect phytosome; phospholipid carrier improves monomer F slightly; OPC dimers/trimers still poorly absorbed (Batch 2)"
         }
       },
       "grape seed extract (95% proanthocyanidins)": {
@@ -22653,8 +22653,8 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "superior (enhanced delivery)",
-        "notes": "NMN or NR encapsulated in liposomes to bypass gut microbiota degradation and first-pass metabolism via lymphatic absorption. A Feb 2025 RCT (n=15, healthy men) found liposomal NMN at 350 mg/day significantly increased NAD+ vs non-liposomal NMN over 4 weeks — the first human head-to-head comparison. Mechanistic rationale is sound (liposomes bypass enterohepatic degradation) but evidence base is still limited to one small trial. Stability concerns: liposomes can leak during storage, losing the bioavailability advantage.",
+        "absorption": "liposomal NMN/NR; mechanistic claim; class-poor without carrier",
+        "notes": "NMN or NR encapsulated in liposomes to bypass gut microbiota degradation and first-pass metabolism via lymphatic absorption. A Feb 2025 RCT (n=15, healthy men) found liposomal NMN at 350 mg/day significantly increased NAD+ vs non-liposomal NMN over 4 weeks — the first human head-to-head comparison. Mechanistic rationale is sound (liposomes bypass enterohepatic degradation) but evidence base is still limited to one small trial. Stability concerns: liposomes can leak during storage, losing the bioavailability advantage. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "liposomal nmn",
           "liposomal nr",
@@ -22675,11 +22675,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "One human RCT (Feb 2025, n=15) shows significant NAD+ increase vs non-liposomal; larger trials needed"
+          "value": 0.15,
+          "range_low": 0.05,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Liposomal claim; NMN/NR baseline F class-poor without carrier; no dedicated PK"
         }
       },
       "niacinamide (nicotinamide)": {
@@ -33215,8 +33215,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "colonization dependent",
-        "notes": "Specific strain with oral and gut health benefits. Produces bacteriocins with antimicrobial properties.",
+        "absorption": "L. salivarius HA-118 strain; live organism gut-survival F",
+        "notes": "Specific strain with oral and gut health benefits. Produces bacteriocins with antimicrobial properties. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "l. salivarius ha-118",
           "ligilactobacillus salivarius",
@@ -33228,11 +33228,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "colonization dependent"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Strain HA-118 (Lallemand); live organism"
         }
       },
       "generic lactobacillus salivarius": {
@@ -33600,8 +33600,8 @@
         "bio_score": 13,
         "natural": false,
         "score": 13,
-        "absorption": "excellent (10-20x improvement)",
-        "notes": "Berberine encapsulated in phospholipid liposomes to enhance absorption. Standard berberine HCl has only ~0.37% oral F; liposomal delivery may improve 3-6x via lymphatic absorption pathway (PMC10675484). Still experimental — limited head-to-head human PK data vs standard berberine. Premium pricing.",
+        "absorption": "liposomal carrier; evidence-thin (no human PK); berberine class F ~0.05",
+        "notes": "Berberine encapsulated in phospholipid liposomes to enhance absorption. Standard berberine HCl has only ~0.37% oral F; liposomal delivery may improve 3-6x via lymphatic absorption pathway (PMC10675484). Still experimental — limited head-to-head human PK data vs standard berberine. Premium pricing. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "nano berberine",
           "enhanced berberine",
@@ -33609,11 +33609,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "excellent",
-          "notes": "excellent (10-20x improvement)"
+          "value": 0.15,
+          "range_low": 0.05,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Liposomal claim adds mechanistic ~2-3× over berberine baseline (~0.05); no dedicated human PK published. Pattern matches Batch 6/10/15 liposomal forms"
         }
       },
       "berberine sulfate": {
@@ -33952,8 +33952,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "active_forms",
-        "notes": "Active coenzyme forms of B-vitamins for enhanced bioavailability and cellular utilization. Pre-converted forms ready for immediate use.",
+        "absorption": "coenzymated B-vitamin complex; active forms dephosphorylated pre-absorption",
+        "notes": "Active coenzyme forms of B-vitamins for enhanced bioavailability and cellular utilization. Pre-converted forms ready for immediate use. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "coenzyme forms",
           "active b vitamins",
@@ -33962,11 +33962,11 @@
         ],
         "dosage_importance": 1.4,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "active_forms"
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Active coenzyme forms (FMN, FAD, TPP, P5P) dephosphorylated by intestinal alkaline phosphatase before absorption per Batch 12. Systemic F equals parent vitamin F"
         }
       },
       "coenzymated complex (unspecified)": {
@@ -36195,8 +36195,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Bifidobacterium animalis subsp. lactis — widely studied probiotic species. Specific strain identification yields higher scoring.",
+        "absorption": "live organism; F = gut survival not classical absorption; CFU dose-dependent",
+        "notes": "Bifidobacterium animalis subsp. lactis — widely studied probiotic species. Specific strain identification yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "b. lactis",
           "bifidobacterium lactis",
@@ -36237,11 +36237,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "quality": "low",
+          "notes": "Probiotics are live organisms; \"F\" is gut survival to colon (typically 5-20% of CFU); systemic absorption not the relevant metric (similar manuka category-error Batch 18)",
+          "range_low": 0.05,
+          "range_high": 0.2
         }
       },
       "bifidobacterium lactis bb-12": {
@@ -36383,8 +36383,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Lactobacillus rhamnosus — one of the most researched probiotic species. Specific strain (GG, HN001) yields higher scoring.",
+        "absorption": "L. rhamnosus; live organism gut-survival F",
+        "notes": "Lactobacillus rhamnosus — one of the most researched probiotic species. Specific strain (GG, HN001) yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "lactobacillus rhamnosus",
           "L. rhamnosus",
@@ -36407,11 +36407,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "quality": "low",
+          "notes": "Live organism; gut survival ~5-20%",
+          "range_low": 0.05,
+          "range_high": 0.2
         }
       },
       "lactobacillus rhamnosus lr-04": {
@@ -36561,8 +36561,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "Lactobacillus plantarum — versatile probiotic species with strong GI colonization. Specific strain (LP299v, DR7) yields higher scoring.",
+        "absorption": "L. plantarum; live organism gut-survival F",
+        "notes": "Lactobacillus plantarum — versatile probiotic species with strong GI colonization. Specific strain (LP299v, DR7) yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "lactobacillus plantarum",
           "L. plantarum",
@@ -36591,19 +36591,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "quality": "low",
+          "notes": "Live organism; \"F\" = gut survival not classical absorption",
+          "range_low": 0.05,
+          "range_high": 0.2
         }
       },
       "lactobacillus plantarum l-137 (heat-killed/postbiotic)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Heat-killed Lactobacillus plantarum L-137 is used as a postbiotic immune-support ingredient. It is a distinct branded/form identity from live L. plantarum probiotic strains and is tracked separately for clean label resolution.",
+        "absorption": "heat-killed postbiotic; cell-wall fragments interact with gut immune cells locally",
+        "notes": "Heat-killed Lactobacillus plantarum L-137 is used as a postbiotic immune-support ingredient. It is a distinct branded/form identity from live L. plantarum probiotic strains and is tracked separately for clean label resolution. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "immuno-lp20",
           "hk l-137",
@@ -36614,11 +36614,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Postbiotic identity tracked separately from live probiotic strains; no oral PK-style absorption metric is typically reported."
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.4,
+          "quality": "low",
+          "notes": "Heat-killed L. plantarum L-137 is a POSTBIOTIC — bacterial cell-wall fragments. Mechanism is local gut immune modulation, not systemic absorption. Different from live probiotics"
         }
       }
     },
@@ -36752,8 +36752,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "gut colonization",
-        "notes": "B. longum subsp. infantis 35624 (Align, Bifantis) — best-studied infantis strain for IBS symptom relief.",
+        "absorption": "B. infantis 35624 (Align); live organism gut-survival F",
+        "notes": "B. longum subsp. infantis 35624 (Align, Bifantis) — best-studied infantis strain for IBS symptom relief. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "Bifidobacterium infantis 35624",
           "B. infantis 35624",
@@ -36763,11 +36763,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Clinically studied strain"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Strain 35624 (Align/Procter & Gamble); strain-specific clinical IBS evidence; gut survival ~5-20%"
         }
       },
       "bifidobacterium longum infantis ni313": {
@@ -36815,8 +36815,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "gut colonization",
-        "notes": "B. longum R0175 — well-studied strain (Cerebiome / Lallemand), paired with L. helveticus R0052 for gut-brain axis and anxiety/stress endpoints.",
+        "absorption": "B. longum R0175; live organism gut-survival F",
+        "notes": "B. longum R0175 — well-studied strain (Cerebiome / Lallemand), paired with L. helveticus R0052 for gut-brain axis and anxiety/stress endpoints. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "Bifidobacterium longum R0175",
           "B. longum R0175",
@@ -36825,11 +36825,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "Clinically studied strain"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Strain R0175 (Lallemand/Cerebiome); psychobiotic clinical evidence; gut survival ~5-20%"
         }
       }
     },
@@ -39073,6 +39073,148 @@
             "flag": "Research agent recommends bio_score 12 → 10 downgrade. Same category-error pattern. Needs Dr Pham clinical signoff."
           }
         ]
+      },
+      "5.0.23": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 21 — class-application from Batches 1-20",
+        "research_subagent_report": "NO new research subagent. This batch APPLIES findings from prior 20 batches to 28 forms across 7 class-equivalent groups. Plus 8 architectural duplicates flagged for separate review. Frameworks applied: Batch 6/10/15 liposomal evidence-thin; Batch 11 brown rice chelate marketing; Batch 12 active coenzyme dephosphorylation; Batches 16-19 Crominex pattern; Batch 18 manuka category-error; Batch 19 bioflavonoid class-poor; Batch 20 ceramide pre-absorption hydrolysis.",
+        "class_application_groups": {
+          "liposomal_forms": "6 forms — Batch 6/10/15 evidence-thin pattern",
+          "brown_rice_chelate": "2 forms (boron, potassium) — Batch 11 marketing",
+          "branded_clinical_only": "9 forms — Crominex pattern (Batches 16-19)",
+          "active_coenzyme": "2 forms (P5P, pyridoxamine) — Batch 12 dephosphorylation",
+          "phytosome_emiq": "3 forms — Batch 19 with EMIQ SGLT1 exception",
+          "probiotic_strains": "7 forms — manuka category-error framework (Batch 18)",
+          "phosphatidylserine_branded": "2 forms — ceramide pre-absorption pattern (Batch 20)"
+        },
+        "architectural_duplicates_flagged": {
+          "algae_oil::algae oil (dha)": "duplicates dha::algal triglyceride (audited Batch 9 at value=0.85)",
+          "epa_dha::epa dha (standard)": "combined parent overlaps separate epa + dha parents",
+          "nad_precursors::liposomal nmn / nr": "overlaps nmn + nicotinamide_riboside parents (Step 3 dedup)",
+          "citrus_bioflavonoids::hesperidin": "duplicates bioflavonoids::hesperidin-rich (Batch 19 audited at 0.06)",
+          "iron::iron picolinate": "already in mineral chelates audit (Batch 11)",
+          "cordyceps::cordycepsprime extract": "duplicates cordyceps::cordyceps militaris (Batch 3 audited)",
+          "naringin::naringin (unspecified)": "naringin parent separate from naringenin (Step 3 dedup)",
+          "calcium::calcium amino acid chelate": "class chelate similar to other mineral AACs"
+        },
+        "forms_updated": [
+          "berberine_supplement::liposomal berberine (value None → 0.15)",
+          "ginkgo::liposomal ginkgo (value None → 0.3)",
+          "glutathione::liposomal glutathione (value None → 0.2)",
+          "glutathione::s-acetyl glutathione (value None → 0.3)",
+          "saw_palmetto::liposomal saw palmetto (value None → 0.5)",
+          "nad_precursors::liposomal nmn / nr (value None → 0.15)",
+          "boron::boron brown rice chelate (value None → 0.85)",
+          "potassium::potassium brown rice chelate (value None → 0.9)",
+          "black_cohosh::remifemin (value None → 0.15)",
+          "chasteberry::vitex standardized extract (value None → 0.2)",
+          "citrus_bergamot::bergamot bpf (value None → 0.1)",
+          "citrus_bergamot::bergamot standardized extract (value None → 0.06)",
+          "coenzymated_complex::coenzymated (value None → 0.3)",
+          "phosphatidylserine::Actiserine (enhanced PS blend) (value None → 0.3)",
+          "phosphatidylserine::sharp-ps gold (PS-DHA conjugate) (value None → 0.4)",
+          "pqq::microactive PQQ (value None → 0.3)",
+          "pqq::lifepqq (value None → 0.3)",
+          "vitamin_b6_pyridoxine::pyridoxal-5-phosphate (P5P) (value None → 0.85)",
+          "vitamin_b6_pyridoxine::pyridoxamine (value None → 0.85)",
+          "quercetin::quercetin phytosome (value None → 0.1)",
+          "quercetin::isoquercetin (EMIQ) (value None → 0.2)",
+          "grape_seed_extract::grape seed phytosome (value None → 0.1)",
+          "bifidobacterium_lactis::bifidobacterium lactis (unspecified) (value None → 0.1)",
+          "bifidobacterium_longum::bifidobacterium longum infantis 35624 (value None → 0.1)",
+          "bifidobacterium_longum::bifidobacterium longum r0175 (value None → 0.1)",
+          "lactobacillus_plantarum::lactobacillus plantarum (unspecified) (value None → 0.1)",
+          "lactobacillus_plantarum::lactobacillus plantarum l-137 (heat-killed/postbiotic) (value None → 0.2)",
+          "lactobacillus_rhamnosus::lactobacillus rhamnosus (unspecified) (value None → 0.1)",
+          "lactobacillus_salivarius::lactobacillus salivarius ha-118 (value None → 0.1)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "berberine_supplement::liposomal berberine",
+            "flag": "Batch 6/10/15 liposomal pattern: bio=13 → 11 recommended. No dedicated human PK; mechanistic estimate."
+          },
+          {
+            "location": "ginkgo::liposomal ginkgo",
+            "flag": "Liposomal evidence-thin. Bio=12 → 11 recommended."
+          },
+          {
+            "location": "glutathione::liposomal glutathione",
+            "flag": "Liposomal claim; bio=14 → 11 recommended. Intact GSH absolute F unmeasured."
+          },
+          {
+            "location": "glutathione::s-acetyl glutathione",
+            "flag": "Bio=12 → 10 recommended. Acetyl protection mechanism plausible but no PK."
+          },
+          {
+            "location": "saw_palmetto::liposomal saw palmetto",
+            "flag": "Bio=12 → 11 recommended. Liposomal advantage modest for already-lipid-class compound."
+          },
+          {
+            "location": "nad_precursors::liposomal nmn / nr",
+            "flag": "Liposomal claim + ARCHITECTURAL DUPLICATE: nad_precursors parent overlaps nmn + nicotinamide_riboside parents (Step 3 dedup). Recommend merging or aliasing this parent."
+          },
+          {
+            "location": "boron::boron brown rice chelate",
+            "flag": "Apply Batch 11/15/17 brown rice chelate marketing finding. Bio=11 → 7 recommended (consistent with prior brown rice mineral downgrades). Class F applied per parent mineral."
+          },
+          {
+            "location": "potassium::potassium brown rice chelate",
+            "flag": "Apply Batch 11 brown rice chelate marketing finding. Bio=11 → 7 recommended."
+          },
+          {
+            "location": "black_cohosh::remifemin",
+            "flag": "Crominex pattern (Batch 16-19): clinical-only evidence. Bio=14 → 10 recommended."
+          },
+          {
+            "location": "chasteberry::vitex standardized extract",
+            "flag": "Crominex pattern. Bio=13 → 9 recommended."
+          },
+          {
+            "location": "citrus_bergamot::bergamot bpf",
+            "flag": "Crominex pattern + Batch 19 bioflavonoid class-poor. Bio=14 → 9 recommended."
+          },
+          {
+            "location": "coenzymated_complex::coenzymated",
+            "flag": "MAJOR — Apply Batch 12 active-coenzyme finding. Bio=14 → 10 recommended. \"Coenzymated\" claim does NOT add F advantage; dephosphorylation pre-absorption returns to parent vitamin class F. Same pattern as FMN, FAD, TPP, pantethine."
+          },
+          {
+            "location": "phosphatidylserine::Actiserine (enhanced PS blend)",
+            "flag": "Bio=14 → 11 recommended. Apply ceramide-class pre-absorption hydrolysis pattern (Batch 20)."
+          },
+          {
+            "location": "phosphatidylserine::sharp-ps gold (PS-DHA conjugate)",
+            "flag": "Bio=12 → 10 recommended."
+          },
+          {
+            "location": "pqq::microactive PQQ",
+            "flag": "Crominex pattern; bio=13 → 10 recommended."
+          },
+          {
+            "location": "pqq::lifepqq",
+            "flag": "Bio=13 → 10 recommended."
+          },
+          {
+            "location": "vitamin_b6_pyridoxine::pyridoxal-5-phosphate (P5P)",
+            "flag": "MAJOR — Apply Batch 12 active coenzyme finding. Bio=14 → 10 recommended. P5P dephosphorylated pre-absorption like FMN/FAD/TPP/pantethine; oral F is class-equivalent to pyridoxine."
+          },
+          {
+            "location": "quercetin::quercetin phytosome",
+            "flag": "Bio=13 → 10 recommended. Phytosome modest improvement over class-poor baseline."
+          },
+          {
+            "location": "quercetin::isoquercetin (EMIQ)",
+            "flag": "Bio=13 acceptable for EMIQ — separately-absorbed form with real F advantage."
+          },
+          {
+            "location": "grape_seed_extract::grape seed phytosome",
+            "flag": "Bio=10 acceptable; phytosome modest improvement over OPC baseline."
+          },
+          {
+            "location": "bifidobacterium_lactis::bifidobacterium lactis (unspecified)",
+            "flag": "CATEGORY: live organism; bio=12 reflects strain clinical evidence not absorption F."
+          }
+        ]
       }
     },
     "category_enum": [
@@ -40793,18 +40935,18 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Patented black cohosh extract (Schaper & Brümmer, Germany). The most clinically studied botanical for menopausal symptoms — over 100 clinical studies. Standardized to triterpene glycosides (including actein and 27-deoxyactein). 40 mg/day is the standard dose. European Medicines Agency approved for menopausal hot flashes.",
+        "absorption": "Remifemin branded extract; clinical RCTs only; no human PK published",
+        "notes": "Patented black cohosh extract (Schaper & Brümmer, Germany). The most clinically studied botanical for menopausal symptoms — over 100 clinical studies. Standardized to triterpene glycosides (including actein and 27-deoxyactein). 40 mg/day is the standard dose. European Medicines Agency approved for menopausal hot flashes. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "remifemin black cohosh"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.15,
+          "range_low": 0.05,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Triterpene glycosides (actein, cimicifugoside) class-poor F; clinical menopause RCTs measure outcome not PK"
         }
       },
       "black cohosh standardized extract": {
@@ -41153,8 +41295,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "moderate-high",
-        "notes": "Vitex agnus-castus berry extract (typically standardized to 0.5% agnuside or 6% aucubin). Clinical evidence for PMS symptom relief, luteal phase support, and cycle regulation. Acts on dopamine D2 receptors to reduce prolactin. 20-40 mg/day standard dose. Clinically studied brands include Femicur and Mastodynon.",
+        "absorption": "Vitex standardized; iridoid + flavonoid class; clinical RCTs only",
+        "notes": "Vitex agnus-castus berry extract (typically standardized to 0.5% agnuside or 6% aucubin). Clinical evidence for PMS symptom relief, luteal phase support, and cycle regulation. Acts on dopamine D2 receptors to reduce prolactin. 20-40 mg/day standard dose. Clinically studied brands include Femicur and Mastodynon. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "vitex extract",
           "vitex agnus-castus extract",
@@ -41173,11 +41315,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.4,
+          "quality": "low",
+          "notes": "Vitex agnus-castus iridoids (agnuside) + flavonoids; class-poor saponin/glycoside F; clinical PMS/cycle RCTs measure outcome not PK"
         }
       },
       "chasteberry powder": {
@@ -41266,8 +41408,8 @@
         "bio_score": 14,
         "natural": true,
         "score": 17,
-        "absorption": "high",
-        "notes": "Bergamot Polyphenolic Fraction — patented extract from Citrus bergamia (Calabria, Italy). Standardized to naringin, neoeriocitrin, and neohesperidin. Clinical RCTs show significant LDL-C and triglyceride reduction at 500-1000 mg/day. H&AD (Herbal & Antioxidant Derivatives) is the patent holder. May improve endothelial function.",
+        "absorption": "Bergamot Polyphenolic Fraction; flavonoid class-poor F; clinical lipid RCTs only",
+        "notes": "Bergamot Polyphenolic Fraction — patented extract from Citrus bergamia (Calabria, Italy). Standardized to naringin, neoeriocitrin, and neohesperidin. Clinical RCTs show significant LDL-C and triglyceride reduction at 500-1000 mg/day. H&AD (Herbal & Antioxidant Derivatives) is the patent holder. May improve endothelial function. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "bpf bergamot",
           "bergamonte",
@@ -41281,19 +41423,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "high"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "BPF is bioflavonoid-rich (neoeriocitrin, naringin, neohesperidin); class-poor F per Batch 19 (Manach 2003 hesperidin 4-8%)"
         }
       },
       "bergamot standardized extract": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "moderate-high",
-        "notes": "Citrus bergamia extract standardized for polyphenol content. Contains statin-like HMG-CoA reductase inhibiting flavonoids. Less specifically standardized than BPF but still provides bergamot polyphenols for cardiovascular/lipid support.",
+        "absorption": "standardized bergamot flavonoids; class-poor F per Batch 19",
+        "notes": "Citrus bergamia extract standardized for polyphenol content. Contains statin-like HMG-CoA reductase inhibiting flavonoids. Less specifically standardized than BPF but still provides bergamot polyphenols for cardiovascular/lipid support. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "bergamot extract",
           "citrus bergamot extract",
@@ -41304,11 +41446,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.06,
+          "range_low": 0.04,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Bergamot flavanones; class-poor F per Manach 2003 hesperidin 4-8%"
         }
       },
       "bergamot (unspecified)": {
