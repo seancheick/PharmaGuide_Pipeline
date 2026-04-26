@@ -8694,8 +8694,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Generic resveratrol listing without specifying the isomer or source. Could be trans- or cis-resveratrol, or a mix. Only trans-resveratrol has established bioactivity. Conservative score applied — look for products specifying 'trans-resveratrol' content for a meaningful dose.",
+        "absorption": "low-moderate (resveratrol class baseline; rapid glucuronidation)",
+        "notes": "Generic resveratrol listing without specifying the isomer or source. Could be trans- or cis-resveratrol, or a mix. Only trans-resveratrol has established bioactivity. Conservative score applied — look for products specifying 'trans-resveratrol' content for a meaningful dose. B33 audit 2026-04-25: resveratrol class baseline.",
         "aliases": [
           "resveratrol",
           "resveratrols",
@@ -8706,11 +8706,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.3,
+          "range_low": 0.25,
+          "range_high": 0.45,
+          "quality": "moderate",
+          "notes": "Resveratrol oral F low-moderate due to rapid intestinal/hepatic glucuronidation + sulfation. Companions 0.25-0.50 (trans-form higher than mixed). Walle 2004 anchor."
         }
       },
       "stilbenes (resveratrol-family)": {
@@ -9052,8 +9052,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Generic saw palmetto listing without specifying the extraction method or standardization level. Could be a potent CO2 extract or a basic powder — impossible to determine quality. Look for products standardized to 85–95% fatty acids for clinically relevant potency. Conservative score applied.",
+        "absorption": "moderate (lipid extract class; form-dependent)",
+        "notes": "Generic saw palmetto listing without specifying the extraction method or standardization level. Could be a potent CO2 extract or a basic powder — impossible to determine quality. Look for products standardized to 85–95% fatty acids for clinically relevant potency. Conservative score applied. B33 audit 2026-04-25: saw palmetto lipid class.",
         "aliases": [
           "saw palmetto",
           "saw palmetto ext.",
@@ -9076,11 +9076,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.75,
+          "quality": "moderate",
+          "notes": "Saw palmetto lipid extract class. Companions 0.25-0.88 (supercritical CO2 extraction higher F than ethanol). Default 0.50."
         }
       }
     },
@@ -9183,8 +9183,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Generic nettle listing without specifying root or leaf. This matters because the root and leaf have different active compounds and clinical uses — root for prostate/BPH, leaf for allergies and minerals. Conservative score applied since the specific plant part cannot be determined.",
+        "absorption": "good (stinging nettle phenolic + lectin class)",
+        "notes": "Generic nettle listing without specifying root or leaf. This matters because the root and leaf have different active compounds and clinical uses — root for prostate/BPH, leaf for allergies and minerals. Conservative score applied since the specific plant part cannot be determined. B33 audit 2026-04-25: stinging nettle class.",
         "aliases": [
           "stinging nettle",
           "nettle",
@@ -9196,11 +9196,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.62,
+          "range_low": 0.55,
+          "range_high": 0.7,
+          "quality": "good",
+          "notes": "Stinging nettle phenolic class. Companions 0.60-0.65."
         }
       }
     },
@@ -9830,8 +9830,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Generic copper listing without specifying the salt form. This matters significantly — copper bisglycinate absorbs 75–90% while copper oxide absorbs less than 10%. Without knowing the form, quality cannot be assessed. Conservative score applied.",
+        "absorption": "moderate (Cu form-dependent ~10-82%; conservative middle)",
+        "notes": "Generic copper listing without specifying the salt form. This matters significantly — copper bisglycinate absorbs 75–90% while copper oxide absorbs less than 10%. Without knowing the form, quality cannot be assessed. Conservative score applied. B33 audit 2026-04-25: Cu class baseline (form-dep).",
         "aliases": [
           "Copper",
           "Cobre",
@@ -9839,11 +9839,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.4,
+          "range_low": 0.2,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Copper F highly form-dependent: gluconate/citrate ~80%, amino-acid chelate ~60%, brown rice ~10%. Conservative 0.40 for unspecified."
         }
       },
       "copper picolinate": {
@@ -11396,8 +11396,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which potassium salt is used. Most potassium forms absorb at ~90%, so the conservative score reflects uncertainty about tolerability rather than absorption. Look for 'citrate' or 'gluconate' on your label for a more specific score.",
+        "absorption": "very_good (K class baseline ~80-95%; mineral)",
+        "notes": "The label doesn't specify which potassium salt is used. Most potassium forms absorb at ~90%, so the conservative score reflects uncertainty about tolerability rather than absorption. Look for 'citrate' or 'gluconate' on your label for a more specific score. B33 audit 2026-04-25: K class baseline.",
         "aliases": [
           "Potassium",
           "potassium ascorbate complex",
@@ -11412,11 +11412,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.85,
+          "range_low": 0.78,
+          "range_high": 0.92,
+          "quality": "very_good",
+          "notes": "Potassium class baseline. Most K salts ~85-95% F. Companions 0.80-0.92."
         }
       },
       "potassium glycinate": {
@@ -12248,8 +12248,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which PQQ form is used. Most likely disodium PQQ (BioPQQ), which is by far the most common commercial form. Conservative score. Look for 'BioPQQ' or 'disodium' on your label.",
+        "absorption": "moderate (PQQ class baseline; form-dependent)",
+        "notes": "The label doesn't specify which PQQ form is used. Most likely disodium PQQ (BioPQQ), which is by far the most common commercial form. Conservative score. Look for 'BioPQQ' or 'disodium' on your label. B33 audit 2026-04-25: PQQ class baseline.",
         "aliases": [
           "pqq (pyrroloquinoline quinone)",
           "PQQ",
@@ -12263,11 +12263,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.45,
+          "range_low": 0.3,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "PQQ class baseline. Companions 0.30-0.62 (form-dep)."
         }
       },
       "lifepqq": {
@@ -12800,8 +12800,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which quercetin form is used. Standard quercetin absorbs very poorly (~2%), so this gets a conservative score. Look for 'Quercefit,' 'Phytosome,' or 'EMIQ' on your label — those forms absorb 17-40x better.",
+        "absorption": "poor (quercetin class-poor; <10% F)",
+        "notes": "The label doesn't specify which quercetin form is used. Standard quercetin absorbs very poorly (~2%), so this gets a conservative score. Look for 'Quercefit,' 'Phytosome,' or 'EMIQ' on your label — those forms absorb 17-40x better. B33 audit 2026-04-25: quercetin class-poor (B19).",
         "aliases": [
           "quercetin complex",
           "quercetin blend",
@@ -12810,11 +12810,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.05,
+          "range_low": 0.02,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Quercetin class-poor flavonoid (B19 framework). Companions 0.02-0.20 (EMIQ exception for SGLT1 transport). Default 0.05."
         }
       }
     },
@@ -12950,8 +12950,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which glutathione form is used — could be standard reduced GSH (<10% absorbed), liposomal, or S-acetyl. Conservative score. Standard oral GSH is poorly absorbed, so look for 'liposomal,' 'S-acetyl,' or 'Setria' on your label.",
+        "absorption": "low (GSH class-poor; gut peptidase degradation)",
+        "notes": "The label doesn't specify which glutathione form is used — could be standard reduced GSH (<10% absorbed), liposomal, or S-acetyl. Conservative score. Standard oral GSH is poorly absorbed, so look for 'liposomal,' 'S-acetyl,' or 'Setria' on your label. B33 audit 2026-04-25: GSH class-poor.",
         "aliases": [
           "glutathione complex",
           "glutathione blend",
@@ -12961,11 +12961,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.25,
+          "quality": "low",
+          "notes": "GSH class-poor — extensive gut peptidase hydrolysis. Companions 0.10-0.30. Default 0.15."
         }
       }
     },
@@ -13294,8 +13294,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Strain not specified on label. Conservative score — without knowing the specific strain, delivery format, and CFU count, we can't assess viability or clinical evidence. Look for named strains (e.g., LGG, BB-12, DE111) for an accurate score.",
+        "absorption": "framework_mismatch (mixed live-organism + fermented-substrate)",
+        "notes": "Strain not specified on label. Conservative score — without knowing the specific strain, delivery format, and CFU count, we can't assess viability or clinical evidence. Look for named strains (e.g., LGG, BB-12, DE111) for an accurate score. B33 audit 2026-04-25: framework-mismatch null pending Dr Pham harmonization.",
         "aliases": [
           "lactic acid bacteria",
           "lactic acid bacterium",
@@ -13318,7 +13318,7 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Depends on strain and delivery format"
+          "notes": "FRAMEWORK MISMATCH. Companion forms span 0.15-0.90 reflecting mixed frameworks: live-organism strains (B18 — F is wrong metric) AND fermented prebiotic substrates (B22 — category-error to SCFA). Cannot assign single class baseline. Pending Dr Pham E2-style harmonization decision (review doc D8.3 category-error taxonomy enum)."
         }
       }
     },
@@ -13781,8 +13781,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on label. Conservative score — big difference between budget bitartrate and premium Alpha-GPC/citicoline. Look for a specific form name for an accurate score.",
+        "absorption": "very_good (choline class baseline; PC ~95%)",
+        "notes": "Form not specified on label. Conservative score — big difference between budget bitartrate and premium Alpha-GPC/citicoline. Look for a specific form name for an accurate score. B33 audit 2026-04-25: choline class baseline.",
         "aliases": [
           "choline",
           "vitacholine",
@@ -13790,11 +13790,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Depends on form"
+          "value": 0.9,
+          "range_low": 0.82,
+          "range_high": 0.97,
+          "quality": "very_good",
+          "notes": "Choline class baseline. Phosphatidylcholine ~95% F; choline bitartrate ~85%. Default 0.90 middle."
         }
       }
     },
@@ -14112,8 +14112,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "PS form not specified on label. Scored conservatively — soy-derived PS and Sharp-PS forms score higher with better clinical data.",
+        "absorption": "moderate (PS class baseline; form-dependent)",
+        "notes": "PS form not specified on label. Scored conservatively — soy-derived PS and Sharp-PS forms score higher with better clinical data. B33 audit 2026-04-25: PS class baseline.",
         "aliases": [
           "phosphatidylserine",
           "SHARPS PS 20 D",
@@ -14125,11 +14125,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Depends on source"
+          "value": 0.5,
+          "range_low": 0.35,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "PS class baseline. Companions 0.30-0.82 (form-dep: sharp-PS, ceramide, etc.). Default 0.50 middle."
         }
       },
       "sharp-ps gold (PS-DHA conjugate)": {
@@ -14795,19 +14795,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "TMG/betaine form not specified. Scored conservatively — betaine anhydrous is the most studied and effective supplemental form.",
+        "absorption": "very_good (TMG class baseline; well-absorbed)",
+        "notes": "TMG/betaine form not specified. Scored conservatively — betaine anhydrous is the most studied and effective supplemental form. B33 audit 2026-04-25: TMG class baseline.",
         "aliases": [
           "tmg (trimethylglycine)",
           "tri-methyl glycine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Depends on form"
+          "value": 0.85,
+          "range_low": 0.75,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "TMG/betaine class baseline. Companions 0.60-0.95. Schwab 2002 anchor."
         }
       }
     },
@@ -17121,8 +17121,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Sulforaphane form not specified on label. Scored conservatively. Stabilized/pre-formed sulforaphane has the best bioavailability (~70% urinary recovery, Egner 2011). Glucoraphanin alone converts poorly (~5%) without myrosinase co-administration.",
+        "absorption": "low-moderate (myrosinase-dependent; raw vs activated)",
+        "notes": "Sulforaphane form not specified on label. Scored conservatively. Stabilized/pre-formed sulforaphane has the best bioavailability (~70% urinary recovery, Egner 2011). Glucoraphanin alone converts poorly (~5%) without myrosinase co-administration. B33 audit 2026-04-25: sulforaphane myrosinase-dependent class.",
         "aliases": [
           "sulforaphane",
           "broccosinolate",
@@ -17140,11 +17140,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Sulforaphane F highly preparation-dependent: raw broccoli sprout (myrosinase active) ~70%, dried/heated (myrosinase denatured) ~5%. Conservative 0.30 for unspecified."
         }
       }
     },
@@ -17594,19 +17594,19 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown (highly dependent on cell wall disruption)",
-        "notes": "Chlorella form not specified on label. Scored conservatively. Human data (PMID:39610880): intact cell chlorella has near-zero amino acid absorption; broken/split cell achieves ~64% of milk protein. Cell wall is sporopollenin/algaenan, NOT cellulose (PMC8759652). Cell wall disruption status is the single most important factor.",
+        "absorption": "low-moderate (cell-wall-dependent; broken-cell-wall higher F)",
+        "notes": "Chlorella form not specified on label. Scored conservatively. Human data (PMID:39610880): intact cell chlorella has near-zero amino acid absorption; broken/split cell achieves ~64% of milk protein. Cell wall is sporopollenin/algaenan, NOT cellulose (PMC8759652). Cell wall disruption status is the single most important factor. B33 audit 2026-04-25: cell-wall-dependent class baseline.",
         "aliases": [
           "chlorella",
           "Japanese Chlorella"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available; depends on cell wall disruption status"
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Chlorella cell wall is rigid sporopollenin/cellulose; raw chlorella ~10% F vs broken-cell-wall (CGF) ~58%. Default 0.30 middle. Composite food framework — many nutrients (B12, minerals, protein) at different F."
         }
       }
     },
@@ -18677,8 +18677,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Rhodiola rosea is valued for rosavins and salidroside, but potency varies widely between raw root powder and standardized extracts. Scored conservatively until the exact form is identified.",
+        "absorption": "low-moderate (rosavin + salidroside class)",
+        "notes": "Form not specified on the label. Rhodiola rosea is valued for rosavins and salidroside, but potency varies widely between raw root powder and standardized extracts. Scored conservatively until the exact form is identified. B33 audit 2026-04-25: rosavin/salidroside class.",
         "aliases": [
           "rhodiola",
           "siberian rhodiola root extract",
@@ -18688,11 +18688,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.32,
+          "range_low": 0.28,
+          "range_high": 0.38,
+          "quality": "moderate",
+          "notes": "Rhodiola rosavin/salidroside class. Companions 0.30-0.35."
         }
       }
     },
@@ -18834,19 +18834,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified. Ginkgo terpene lactones have 79-88% oral F (PMID:7631288) in standardized extracts, but crude preparations vary enormously (PMID:20041430). Scored conservatively until form is confirmed.",
+        "absorption": "moderate (flavonoid + terpene lactone class)",
+        "notes": "Form not specified. Ginkgo terpene lactones have 79-88% oral F (PMID:7631288) in standardized extracts, but crude preparations vary enormously (PMID:20041430). Scored conservatively until form is confirmed. B33 audit 2026-04-25: ginkgo class baseline.",
         "aliases": [
           "ginkgo",
           "gingko biloba extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.45,
+          "range_low": 0.25,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Ginkgo flavonoid + terpene lactone class. Companions 0.25-0.82 (form-dep). Default 0.45."
         }
       }
     },
@@ -20523,19 +20523,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified. Pine bark procyanidins are poorly absorbed intact — only monomers and microbial catabolites are bioavailable (PMID:38757126). Pycnogenol is the gold-standard branded form. Scored conservatively.",
+        "absorption": "poor (OPC/proanthocyanidin class-poor; <5% F)",
+        "notes": "Form not specified. Pine bark procyanidins are poorly absorbed intact — only monomers and microbial catabolites are bioavailable (PMID:38757126). Pycnogenol is the gold-standard branded form. Scored conservatively. B33 audit 2026-04-25: OPC class-poor (B19).",
         "aliases": [
           "pine bark extract",
           "pine bark"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.04,
+          "range_low": 0.02,
+          "range_high": 0.06,
+          "quality": "poor",
+          "notes": "OPC class-poor (B19/B32 grape seed extension). Companions 0.03-0.05."
         }
       }
     },
@@ -20739,8 +20739,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Ginseng products span multiple species (Panax ginseng, P. quinquefolius, Eleutherococcus), processing methods (white, red, black, fermented), and ginsenoside profiles. Bioavailability and effects vary substantially by form. Scored conservatively until species and preparation are confirmed.",
+        "absorption": "low (ginsenoside biotransformation-dependent)",
+        "notes": "Form not specified on the label. Ginseng products span multiple species (Panax ginseng, P. quinquefolius, Eleutherococcus), processing methods (white, red, black, fermented), and ginsenoside profiles. Bioavailability and effects vary substantially by form. Scored conservatively until species and preparation are confirmed. B33 audit 2026-04-25: ginsenoside biotransformation-dep.",
         "aliases": [
           "ginseng",
           "red chinese ginseng",
@@ -20755,11 +20755,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.1,
+          "range_low": 0.0,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Ginsenoside oral F genuinely low (~0-15%) — depends on colonic biotransformation to compound K (Tawab 2003). Conservative 0.10 for unspecified."
         }
       }
     },
@@ -21358,8 +21358,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Garlic supplements vary dramatically: aged garlic extract (water-soluble SAC), fresh garlic concentrates (allicin-releasing), dehydrated powders, and black garlic (fermented). Each has a different active compound profile and absorption pattern. Scored conservatively.",
+        "absorption": "low-moderate (allicin instability; aged > raw stability)",
+        "notes": "Form not specified on the label. Garlic supplements vary dramatically: aged garlic extract (water-soluble SAC), fresh garlic concentrates (allicin-releasing), dehydrated powders, and black garlic (fermented). Each has a different active compound profile and absorption pattern. Scored conservatively. B33 audit 2026-04-25: garlic class (preparation-dep).",
         "aliases": [
           "garlic",
           "deodorized garlic",
@@ -21390,11 +21390,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Garlic F highly preparation-dependent: aged garlic extract ~70% (stable S-allyl cysteine), raw allicin ~0% (rapid thermal/gastric degradation). Conservative 0.30 for unspecified."
         }
       }
     },
@@ -34879,18 +34879,18 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "good (reishi triterpene + polysaccharide class)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B33 audit 2026-04-25: reishi triterpene class (higher than standard mushroom B1 framework due to lipid-soluble actives).",
         "aliases": [
           "reishi"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Reishi (Ganoderma lucidum) — triterpenes + beta-glucans. Note: companion forms 0.65-0.85 are HIGHER than typical mushroom class-poor (B1 framework) because reishi triterpenes (ganoderic acids) are lipid-soluble small molecules with better F than beta-glucan polysaccharides. Default 0.75."
         }
       }
     },
@@ -35087,18 +35087,18 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Lentinula edodes mushroom (shiitake); source of lentinan (beta-1,3-glucan) with documented immunostimulatory activity. Contains eritadenine for cholesterol reduction. Form not specified; conservative scoring applied.",
+        "absorption": "low (mushroom class-poor; chitin shell barrier)",
+        "notes": "Lentinula edodes mushroom (shiitake); source of lentinan (beta-1,3-glucan) with documented immunostimulatory activity. Contains eritadenine for cholesterol reduction. Form not specified; conservative scoring applied. B33 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "shiitake"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.12,
+          "range_low": 0.1,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Mushroom class-poor (B1). Both companions 0.12."
         }
       }
     },
@@ -35179,18 +35179,18 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Trametes versicolor mushroom (turkey tail); source of PSK (polysaccharide-K) and PSP with clinical evidence in oncology adjuvant therapy. Japanese approval for cancer immunotherapy support. Form not specified.",
+        "absorption": "low (mushroom class-poor; chitin shell barrier)",
+        "notes": "Trametes versicolor mushroom (turkey tail); source of PSK (polysaccharide-K) and PSP with clinical evidence in oncology adjuvant therapy. Japanese approval for cancer immunotherapy support. Form not specified. B33 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "turkey tail"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.11,
+          "range_low": 0.1,
+          "range_high": 0.13,
+          "quality": "low",
+          "notes": "Mushroom class-poor (B1). Companions 0.10-0.12."
         }
       }
     },
@@ -47571,8 +47571,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Punica granatum fruit extract; contains punicalagins (ellagitannins) metabolized to urolithin A by gut microbiota. Evidence for cardiovascular and prostate health. Form unspecified.",
+        "absorption": "moderate (ellagitannin → urolithin metabolite class)",
+        "notes": "Punica granatum fruit extract; contains punicalagins (ellagitannins) metabolized to urolithin A by gut microbiota. Evidence for cardiovascular and prostate health. Form unspecified. B33 audit 2026-04-25: ellagitannin → urolithin class.",
         "aliases": [
           "pomegranate",
           "punica granatum",
@@ -47585,11 +47585,11 @@
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "unknown",
-          "range_low": null,
-          "range_high": null
+          "value": 0.42,
+          "range_low": 0.35,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Pomegranate ellagitannins (punicalagin) hydrolyzed to ellagic acid → urolithins by gut microbiota. Active species = urolithins (Cerda 2003). Companions 0.40-0.45."
         }
       }
     },
@@ -48275,8 +48275,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Rosmarinus officinalis leaf; contains carnosic acid, rosmarinic acid, and ursolic acid. EFSA-approved antioxidant. Cognitive and anti-inflammatory effects. Form unspecified; conservative scoring.",
+        "absorption": "good (rosmarinic + carnosic acid class)",
+        "notes": "Rosmarinus officinalis leaf; contains carnosic acid, rosmarinic acid, and ursolic acid. EFSA-approved antioxidant. Cognitive and anti-inflammatory effects. Form unspecified; conservative scoring. B33 audit 2026-04-25: rosmarinic + carnosic class.",
         "aliases": [
           "rosemary",
           "rosmarinus officinalis",
@@ -48288,11 +48288,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.6,
+          "range_low": 0.5,
+          "range_high": 0.7,
+          "quality": "good",
+          "notes": "Rosemary phenolic class (rosmarinic + carnosic). Companions 0.50-0.70."
         }
       },
       "rosemary essential oil": {
@@ -57367,19 +57367,19 @@
         "bio_score": 5,
         "score": 8,
         "natural": true,
-        "absorption": "unknown — strain not specified",
-        "notes": "Strain not specified on label. Conservative score — look for a specific strain designation for an accurate score.",
+        "absorption": "good (S. salivarius class — companion harmonization flag)",
+        "notes": "Strain not specified on label. Conservative score — look for a specific strain designation for an accurate score. B33 audit 2026-04-25: probiotic harmonization flag (B18 vs older nutrient-density framework).",
         "aliases": [
           "streptococcus salivarius",
           "S.. salivarius"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Depends on strain"
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "S. salivarius class — companion forms at 0.70 reflect older nutrient-density / colonization framework rather than B18 live-organism category-error. Class match for consistency; pending Dr Pham E2 harmonization."
         }
       }
     },
