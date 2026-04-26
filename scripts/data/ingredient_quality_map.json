@@ -39002,6 +39002,77 @@
             "flag": "Research agent recommends bio_score 9 → 7 downgrade. Class-poor F. Needs Dr Pham clinical signoff."
           }
         ]
+      },
+      "5.0.22": {
+        "date": "2026-04-25",
+        "audit": "IQM_AUDIT_MASTER_PROMPT.md Step 4 Batch 20 — ceramides/silk/organ extracts",
+        "research_subagent_report": "PubMed research on 11 specialty forms. Research agent USED WebFetch on PubMed eutils. THREE framework findings: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases — pre-absorption hydrolysis pattern matches Batches 14, 17 esters. (2) Silk peptide marketing advantage debunked — collapse to AA F class. (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18). 7+ misattributions caught.",
+        "verified_pmids": [
+          "PMID:20646083 Guillou 2011 — wheat ceramide RCT (PD endpoint)",
+          "PMID:32020853 Heggar Venkataramana 2020 — konjac glycosylceramide",
+          "PMID:35905137 Sugawara 2022 — sphingolipid review",
+          "PMID:34208952 Yamashita 2021 — dietary sphingolipid review",
+          "PMID:28357619 Morifuji 2017 — sphingomyelin RAT (not human F)",
+          "PMID:447109  Silk DB 1979 — fish hydrolysate (DO NOT cite as silk fibroin PK)"
+        ],
+        "misattributions_caught": {
+          "\"Bizot 2017 Lipowheat ceramide RCT\"": "GHOST — 0 PubMed hits; correct is Guillou 2011 PMID:20646083",
+          "\"Tomonaga 2017 silk peptide PK\"": "GHOST — 0 PubMed hits",
+          "PMID:447109 author-surname trap": "Silk DB 1979 is fish protein hydrolysate, NOT silkworm fibroin",
+          "PMID:41629969": "silk fibroin NANOGEL drug carrier, NOT AA absorption",
+          "PMID:20061445": "French 2010 SK2 inhibitor MICE, NOT human ceramide PK",
+          "PMID:27591028": "gangliosides, NOT ceramides",
+          "PMID:17624027": "miglustat, NOT ceramide absorption",
+          "PMID:29851380": "peptide delivery vehicle, NOT ceramide PK"
+        },
+        "in_place_correction": {
+          "wheat-derived ceramide notes": "BACKWARDS claim \"glucosylceramides metabolized to ceramides\" corrected to \"hydrolyzed PAST ceramide to sphingoid bases + FFAs\""
+        },
+        "class_findings": [
+          "Ceramides hydrolyzed pre-absorption (Sugawara 2022); intact ceramide F class-poor (<5%); skin RCTs are PD not PK.",
+          "Silk peptide F advantage not supported; collapse to hydrolyzed silk class (~95% F as amino acids).",
+          "Organ extracts CATEGORY ERROR: composite food with no unified F; bio_score reflects nutrient density, not absorption."
+        ],
+        "forms_updated": [
+          "ceramides::phytoceramides (plant) (value None → 0.05)",
+          "ceramides::wheat-derived (value None → 0.05)",
+          "ceramides::synthetic (value None → 0.05)",
+          "ceramides::ceramides (unspecified) (value None → 0.05)",
+          "silk_amino_acids::hydrolyzed silk protein (value None → 0.95)",
+          "silk_amino_acids::silk peptides (value None → 0.95)",
+          "silk_amino_acids::silk amino acids (unspecified) (value None → 0.95)",
+          "organ_extracts::grass-fed desiccated (value None → None)",
+          "organ_extracts::freeze-dried (value None → None)",
+          "organ_extracts::standard desiccated (value None → None)",
+          "organ_extracts::organ extracts (unspecified) (value None → None)"
+        ],
+        "bio_score_changed": false,
+        "clinical_review_flagged": [
+          {
+            "location": "ceramides::phytoceramides (plant)",
+            "flag": "Research agent recommends bio_score 12 → 11 downgrade. Intact ceramide F is class-poor (<5%) per pre-absorption hydrolysis pattern. Skin hydration RCTs measure PD outcome via sphingoid base salvage in keratinocytes, not systemic intact ceramide F. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "ceramides::synthetic",
+            "flag": "Research agent recommends bio_score 9 → 8 downgrade. Same class-poor F as other ceramide forms. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "ceramides::ceramides (unspecified)",
+            "flag": "Research agent recommends bio_score 10 → 9 downgrade. Class-poor F. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "silk_amino_acids::silk peptides",
+            "flag": "Research agent recommends bio_score 12 → 11 downgrade — collapse to hydrolyzed silk class. Silk peptides delivered as individual amino acids; no intact silk peptide is detectable systemically. Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "organ_extracts::grass-fed desiccated",
+            "flag": "MAJOR — Research agent recommends bio_score 13 → 11 downgrade. Grass-fed organ has the HIGHEST bio_score in entire IQM with ZERO human PK supporting an absorption advantage. Source premium (higher A, K2, CoQ10) belongs in nutrient-density metric, not bio_score. Same category-error as manuka honey (Batch 18). Needs Dr Pham clinical signoff."
+          },
+          {
+            "location": "organ_extracts::freeze-dried",
+            "flag": "Research agent recommends bio_score 12 → 10 downgrade. Same category-error pattern. Needs Dr Pham clinical signoff."
+          }
+        ]
       }
     },
     "category_enum": [
@@ -41751,8 +41822,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Plant-derived ceramides (typically from rice, wheat, or sweet potato). Ceramides are sphingolipids critical for skin barrier function. Oral phytoceramides at 350 mg/day showed improved skin hydration in RCTs. Lipowheat and Ceramosides are branded sources. Natural plant origin.",
+        "absorption": "low (<5%); intact ceramide hydrolyzed to sphingoid bases pre-absorption",
+        "notes": "Plant-derived ceramides (typically from rice, wheat, or sweet potato). Ceramides are sphingolipids critical for skin barrier function. Oral phytoceramides at 350 mg/day showed improved skin hydration in RCTs. Lipowheat and Ceramosides are branded sources. Natural plant origin. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "HydroPeach",
           "HydroPeach Ceramides",
@@ -41766,19 +41837,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "quality": "low",
+          "notes": "Sugawara 2022 (PMID:35905137) + Yamashita 2021 (PMID:34208952): glucosylceramides hydrolyzed to sphingoid bases + FFAs before enterocyte uptake. Skin RCTs are PD endpoints, NOT PK",
+          "range_low": 0.02,
+          "range_high": 0.1
         }
       },
       "wheat-derived": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Ceramides extracted from wheat oil (Lipowheat). FDA GRAS-affirmed. Clinical studies show skin hydration improvement after 4 weeks at 350 mg/day. Contains glucosylceramides that are metabolized to ceramides in the gut. Wheat allergen concern for celiac/gluten-sensitive individuals.",
+        "absorption": "low (<5%); 350mg/d skin hydration RCT (Guillou 2011) is PD endpoint, not PK",
+        "notes": "Ceramides extracted from wheat oil (Lipowheat). FDA GRAS-affirmed. Clinical studies show skin hydration improvement after 4 weeks at 350 mg/day. Glucosylceramides are hydrolyzed PAST ceramide to sphingoid bases + FFAs (gut lumen, pre-absorption). Wheat allergen concern for celiac/gluten-sensitive individuals. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "ceratiq wheat (triticum vulgare) oil extract",
           "Lipowheat Wheat (Triticum vulgare) Oil extract",
@@ -41787,19 +41858,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "quality": "low",
+          "notes": "Guillou 2011 (PMID:20646083, Int J Cosmet Sci) n=51 women, 350 mg/d × 84 days — measures skin hydration (PD), NOT plasma ceramide PK",
+          "range_low": 0.02,
+          "range_high": 0.1
         }
       },
       "synthetic": {
         "bio_score": 9,
         "natural": false,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Chemically synthesized ceramides. Identical molecular structure to natural ceramides but produced via chemical synthesis rather than plant extraction. May have batch-to-batch consistency advantages. Less studied in oral supplement context than plant-derived forms.",
+        "absorption": "low (<5%); same hydrolysis pathway; no oral RCT data",
+        "notes": "Chemically synthesized ceramides. Identical molecular structure to natural ceramides but produced via chemical synthesis rather than plant extraction. May have batch-to-batch consistency advantages. Less studied in oral supplement context than plant-derived forms. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "CERAMIDES synthetic",
           "synthetic ceramides",
@@ -41807,30 +41878,30 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "quality": "low",
+          "notes": "Same pre-absorption hydrolysis as plant/wheat ceramides; no published human PK",
+          "range_low": 0.02,
+          "range_high": 0.1
         }
       },
       "ceramides (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Ceramide form not specified. Conservative scoring. Ceramides are essential skin barrier lipids. Oral supplementation targets skin hydration and anti-aging. Check label for plant vs synthetic source.",
+        "absorption": "low (<5%); pre-absorption hydrolysis to sphingoid bases",
+        "notes": "Ceramide form not specified. Conservative scoring. Ceramides are essential skin barrier lipids. Oral supplementation targets skin hydration and anti-aging. Check label for plant vs synthetic source. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "ceramides",
           "Ceramosides Wheat seed oil extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "quality": "low",
+          "notes": "Form-ambiguous; class-poor F applies regardless",
+          "range_low": 0.02,
+          "range_high": 0.1
         }
       }
     },
@@ -41971,46 +42042,46 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "unknown",
-        "notes": "Enzymatically hydrolyzed silk fibroin from Bombyx mori (silkworm cocoon). Rich in serine (~33%), glycine (~44%), and alanine (~29%). Peptides are more bioavailable than intact silk protein. Used for skin, hair, and joint support. Traditionally consumed in Asian medicine.",
+        "absorption": "high (~95% as free amino acids via PepT1); peptides hydrolyzed pre-systemic",
+        "notes": "Enzymatically hydrolyzed silk fibroin from Bombyx mori (silkworm cocoon). Rich in serine (~33%), glycine (~44%), and alanine (~29%). Peptides are more bioavailable than intact silk protein. Used for skin, hair, and joint support. Traditionally consumed in Asian medicine. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "silk protein hydrolysate",
           "bombyx mori silk"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.95,
+          "quality": "excellent",
+          "notes": "Silk fibroin hydrolyzed by gut proteases; AA F via PepT-1 + amino acid transporters; class F similar to other dietary proteins",
+          "range_low": 0.85,
+          "range_high": 0.99
         }
       },
       "silk peptides": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Low-molecular-weight peptides (typically <3 kDa) from silk fibroin hydrolysis. Better absorption than intact protein due to small peptide size. May support collagen synthesis and skin hydration. Limited clinical evidence for oral supplementation vs topical use.",
+        "absorption": "high (~95% as amino acids); \"peptide\" marketing — no human PK advantage vs hydrolysate",
+        "notes": "Low-molecular-weight peptides (typically <3 kDa) from silk fibroin hydrolysis. Better absorption than intact protein due to small peptide size. May support collagen synthesis and skin hydration. Limited clinical evidence for oral supplementation vs topical use. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "bioactive silk peptides",
           "silk peptide powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.95,
+          "quality": "excellent",
+          "notes": "No intact silk peptide reaches systemic circulation. Class-equivalent to hydrolyzed silk; \"peptide form advantage\" not supported by human PK",
+          "range_low": 0.85,
+          "range_high": 0.99
         }
       },
       "silk amino acids (unspecified)": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Silk amino acid form not specified. Conservative scoring. Derived from silkworm cocoon protein. Rich in serine, glycine, and alanine. Check label for hydrolyzed or peptide specification.",
+        "absorption": "high (~95% as free amino acids); standard AA absorption",
+        "notes": "Silk amino acid form not specified. Conservative scoring. Derived from silkworm cocoon protein. Rich in serine, glycine, and alanine. Check label for hydrolyzed or peptide specification. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "silk amino acids",
           "silk amino acid complex",
@@ -42018,11 +42089,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.95,
+          "quality": "excellent",
+          "notes": "Class F as dietary amino acids regardless of form",
+          "range_low": 0.85,
+          "range_high": 0.99
         }
       }
     },
@@ -42086,8 +42157,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "unknown",
-        "notes": "Freeze-dried organ meat from grass-fed, pasture-raised cattle (typically liver, heart, kidney). Grass-fed sourcing provides higher levels of fat-soluble vitamins (A, K2), CoQ10, and B12 vs grain-fed. Ancestral Supplements and Heart & Soil are major brands. Concentrated micronutrient source.",
+        "absorption": "composite food; per-nutrient F (heme Fe ~25%, B12 ~50%); score = nutrient density",
+        "notes": "Freeze-dried organ meat from grass-fed, pasture-raised cattle (typically liver, heart, kidney). Grass-fed sourcing provides higher levels of fat-soluble vitamins (A, K2), CoQ10, and B12 vs grain-fed. Ancestral Supplements and Heart & Soil are major brands. Concentrated micronutrient source. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "grass-fed desiccated"
         ],
@@ -42095,7 +42166,7 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "CATEGORY ERROR FLAG: organ extract is composite food with no unified F. Each component (heme Fe via HCP1, B12 via intrinsic factor, vit A with fat, AAs via PepT1) has its own absorption pathway. Same category-error as manuka honey (Batch 18). bio_score reflects nutrient DENSITY/source quality, not absorption",
           "range_low": null,
           "range_high": null
         }
@@ -42104,8 +42175,8 @@
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "unknown",
-        "notes": "Organs preserved via lyophilization (freeze-drying), maintaining heat-sensitive nutrients (enzymes, vitamins). Superior nutrient retention vs conventional desiccation. Typically sourced from bovine liver, heart, kidney, or multi-organ blends. Popular in nose-to-tail nutrition approach.",
+        "absorption": "composite food; lyophilization preserves heat-sensitive nutrients vs heat drying",
+        "notes": "Organs preserved via lyophilization (freeze-drying), maintaining heat-sensitive nutrients (enzymes, vitamins). Superior nutrient retention vs conventional desiccation. Typically sourced from bovine liver, heart, kidney, or multi-organ blends. Popular in nose-to-tail nutrition approach. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "freeze-dried"
         ],
@@ -42113,7 +42184,7 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "CATEGORY ERROR: composite food; processing affects nutrient retention, not unified F",
           "range_low": null,
           "range_high": null
         }
@@ -42122,8 +42193,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Conventionally dried organ meat powder. Heat processing may reduce some heat-sensitive nutrients (enzymes, certain B-vitamins) compared to freeze-dried. Still provides heme iron, B12, copper, and organ-specific peptides. More affordable than freeze-dried or grass-fed options.",
+        "absorption": "composite food; heat-dried; per-component absorption pathways",
+        "notes": "Conventionally dried organ meat powder. Heat processing may reduce some heat-sensitive nutrients (enzymes, certain B-vitamins) compared to freeze-dried. Still provides heme iron, B12, copper, and organ-specific peptides. More affordable than freeze-dried or grass-fed options. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "standard desiccated"
         ],
@@ -42131,7 +42202,7 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "CATEGORY ERROR: composite food; heat processing reduces some heat-sensitive nutrients",
           "range_low": null,
           "range_high": null
         }
@@ -42140,8 +42211,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "unknown",
-        "notes": "Organ extract form not specified. Conservative scoring. Desiccated organ supplements provide concentrated nutrients from animal organs (liver, heart, kidney). Check label for source animal, organ type, and processing method.",
+        "absorption": "composite food; no unified F; check label for source/processing",
+        "notes": "Organ extract form not specified. Conservative scoring. Desiccated organ supplements provide concentrated nutrients from animal organs (liver, heart, kidney). Check label for source animal, organ type, and processing method. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
           "organ extracts (glandulars)",
           "organ extracts",
@@ -42203,7 +42274,7 @@
         "absorption_structured": {
           "value": null,
           "quality": "unknown",
-          "notes": "Data not available",
+          "notes": "CATEGORY ERROR: form-ambiguous composite food",
           "range_low": null,
           "range_high": null
         }
