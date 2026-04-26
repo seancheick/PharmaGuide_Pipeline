@@ -3,11 +3,16 @@
 ###############################################################################
 # Batch Pipeline Runner for All DSLD Datasets
 ###############################################################################
-# Processes child dataset folders through the pipeline
-# Creates separate output directories for each dataset
+# Processes child dataset folders through the pipeline → dashboard snapshot →
+# full release (catalog + interaction DB → Supabase → Flutter bundle).
+#
+# Stop-on-fail: if any brand fails during clean/enrich/score, the post-pipeline
+# release stages are skipped so partial data never reaches Supabase or Flutter.
+# If a release stage fails, earlier stages remain successful and dist/ keeps
+# the previous good copy.
 #
 # Usage:
-#   bash batch_run_all_datasets.sh                          # Full pipeline on all brands + dashboard snapshot
+#   bash batch_run_all_datasets.sh                          # Full pipeline → snapshot → full release
 #   bash batch_run_all_datasets.sh score                    # Score-only on all brands
 #   bash batch_run_all_datasets.sh --stages enrich,score    # Enrich + score only
 #   bash batch_run_all_datasets.sh --targets Thorne,Olly    # Specific brands only
@@ -15,13 +20,27 @@
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
 #bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
+#
+# Release-stage flags (apply after pipeline + snapshot succeed):
+#   --skip-release            Skip the full release (snapshot only — old behavior)
+#   --skip-supabase           Run snapshot + interaction DB + Flutter, but no Supabase sync
+#   --skip-flutter            Run snapshot + interaction DB + Supabase, but no Flutter import
+#   --supabase-dry-run        Preview Supabase sync without uploading
+#   --flutter-repo <path>     Override Flutter repo location for the import step
+#
 # Environment:
 #   PYTHON=python3.13 bash batch_run_all_datasets.sh        # Use specific python
-#   SKIP_SNAPSHOT=1 bash batch_run_all_datasets.sh          # Skip auto-snapshot at end
+#   SKIP_SNAPSHOT=1 bash batch_run_all_datasets.sh          # Skip snapshot+release (legacy)
+#   SKIP_RELEASE=1  bash batch_run_all_datasets.sh          # Snapshot only, skip full release
 #
-# After every successful run, the dashboard snapshot is rebuilt automatically
-# (scripts/dist/ gets the fresh pharmaguide_core.db + detail_blobs/). Set
-# SKIP_SNAPSHOT=1 to skip that step (e.g., when iterating on one brand).
+# After every successful run:
+#   1. Dashboard snapshot is rebuilt (scripts/dist/ refreshed for streamlit).
+#   2. Interaction DB is rebuilt (verifies CUI/RXCUI live, stages to dist/).
+#   3. dist/ is synced to Supabase with full cleanup (storage + manifest rows).
+#   4. Both DBs are atomically bundled into Flutter assets/db/ (17 gates).
+#   5. .previous backups in Flutter assets/db/ are pruned.
+#
+# Set SKIP_SNAPSHOT=1 (legacy) or SKIP_RELEASE=1 to skip the post-pipeline work.
 ###############################################################################
 
 set -e -o pipefail  # Exit on error and fail pipelines when any segment fails
@@ -32,6 +51,13 @@ SCRIPTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/scripts" && pwd)"
 STAGES="clean,enrich,score"  # Default: full pipeline
 TARGET_DATASETS=""  # Empty = all datasets
 PYTHON="${PYTHON:-python3}"  # Use python3 by default
+
+# Release-stage flags (passed through to release_full.sh)
+SKIP_RELEASE_FLAG=0          # 1 = skip full release entirely (snapshot still runs)
+RELEASE_SKIP_SUPABASE=0
+RELEASE_SKIP_FLUTTER=0
+RELEASE_SUPABASE_DRY_RUN=0
+RELEASE_FLUTTER_REPO=""      # empty = use release_full.sh default
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -46,6 +72,26 @@ while [[ $# -gt 0 ]]; do
             ;;
         --root)
             DATASET_ROOT="$2"
+            shift 2
+            ;;
+        --skip-release)
+            SKIP_RELEASE_FLAG=1
+            shift
+            ;;
+        --skip-supabase)
+            RELEASE_SKIP_SUPABASE=1
+            shift
+            ;;
+        --skip-flutter)
+            RELEASE_SKIP_FLUTTER=1
+            shift
+            ;;
+        --supabase-dry-run)
+            RELEASE_SUPABASE_DRY_RUN=1
+            shift
+            ;;
+        --flutter-repo)
+            RELEASE_FLUTTER_REPO="$2"
             shift 2
             ;;
         *)
@@ -202,37 +248,102 @@ fi
 echo "Summary written to: $SUMMARY_FILE"
 echo ""
 
-# Rebuild dashboard snapshot automatically after a clean run.
-# Skip when any brand failed (snapshot from a partial catalog is misleading)
-# or when the caller opts out via SKIP_SNAPSHOT=1.
+# ─────────────────────────────────────────────────────────────────────────
+# POST-PIPELINE: dashboard snapshot → full release
+# ─────────────────────────────────────────────────────────────────────────
+# Skip everything when any brand failed (post-pipeline work from a partial
+# catalog would push misleading data downstream).
+#
+# SKIP_SNAPSHOT=1 (legacy) / SKIP_RELEASE=1 / --skip-release flag → skip
+# the full release stage. The dashboard snapshot still runs unless
+# SKIP_SNAPSHOT=1 (which now skips both).
+
 SKIP_SNAPSHOT="${SKIP_SNAPSHOT:-0}"
+SKIP_RELEASE="${SKIP_RELEASE:-0}"
 SNAPSHOT_SCRIPT="$SCRIPTS_DIR/rebuild_dashboard_snapshot.sh"
-if [ ${#FAILED[@]} -eq 0 ] && [ "$SKIP_SNAPSHOT" != "1" ] && [ -x "$SNAPSHOT_SCRIPT" ]; then
-    echo -e "${BLUE}=========================================="
-    echo "REBUILDING DASHBOARD SNAPSHOT"
-    echo "==========================================${NC}"
-    echo ""
-    if bash "$SNAPSHOT_SCRIPT" 2>&1 | tee -a "$SUMMARY_FILE"; then
-        echo -e "${GREEN}✓ Snapshot rebuilt: scripts/dist/ is up to date${NC}"
-    else
-        echo -e "${RED}✗ Snapshot rebuild failed — pipeline outputs are fresh but scripts/dist/ may be stale${NC}"
-        echo -e "${RED}  Rerun manually: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
-        # Don't fail the whole batch for snapshot issues; pipeline stages succeeded.
-    fi
-    echo ""
-elif [ "$SKIP_SNAPSHOT" = "1" ]; then
-    echo -e "${YELLOW}Snapshot rebuild skipped (SKIP_SNAPSHOT=1)${NC}"
-    echo -e "${YELLOW}  Run manually when ready: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
-    echo ""
+RELEASE_SCRIPT="$SCRIPTS_DIR/release_full.sh"
+
+# CLI flag overrides env var for the full release.
+if [ "$SKIP_RELEASE_FLAG" = "1" ]; then
+    SKIP_RELEASE=1
 fi
 
-# Exit with appropriate code
-if [ ${#FAILED[@]} -eq 0 ]; then
-    echo -e "${GREEN}All datasets processed successfully!${NC}"
-    exit 0
-else
+if [ ${#FAILED[@]} -ne 0 ]; then
     echo -e "${RED}Some datasets failed processing.${NC}"
-    echo -e "${YELLOW}Dashboard snapshot NOT rebuilt because some brands failed.${NC}"
-    echo -e "${YELLOW}  Fix failures + rerun, or force with: SKIP_SNAPSHOT=0 bash scripts/rebuild_dashboard_snapshot.sh${NC}"
+    echo -e "${YELLOW}Dashboard snapshot + full release NOT run because some brands failed.${NC}"
+    echo -e "${YELLOW}  Fix failures + rerun, or:${NC}"
+    echo -e "${YELLOW}    SKIP_SNAPSHOT=0 bash scripts/rebuild_dashboard_snapshot.sh${NC}"
+    echo -e "${YELLOW}    bash scripts/release_full.sh${NC}"
     exit 1
 fi
+
+# Step A: dashboard snapshot
+if [ "$SKIP_SNAPSHOT" = "1" ]; then
+    echo -e "${YELLOW}Snapshot rebuild skipped (SKIP_SNAPSHOT=1)${NC}"
+    echo -e "${YELLOW}  Run manually when ready: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
+    echo -e "${YELLOW}Full release also skipped (snapshot is its prerequisite).${NC}"
+    echo ""
+    echo -e "${GREEN}All datasets processed successfully!${NC}"
+    exit 0
+fi
+
+if [ ! -x "$SNAPSHOT_SCRIPT" ]; then
+    echo -e "${RED}✗ Snapshot script not executable: $SNAPSHOT_SCRIPT${NC}"
+    exit 1
+fi
+
+echo -e "${BLUE}=========================================="
+echo "REBUILDING DASHBOARD SNAPSHOT"
+echo "==========================================${NC}"
+echo ""
+if bash "$SNAPSHOT_SCRIPT" 2>&1 | tee -a "$SUMMARY_FILE"; then
+    echo -e "${GREEN}✓ Snapshot rebuilt: scripts/dist/ is up to date${NC}"
+else
+    echo -e "${RED}✗ Snapshot rebuild failed — pipeline outputs are fresh but scripts/dist/ may be stale${NC}"
+    echo -e "${RED}  Rerun manually: bash scripts/rebuild_dashboard_snapshot.sh${NC}"
+    # Don't fail the whole batch for snapshot issues; pipeline stages succeeded.
+    # But skip the full release since dist/ is suspect.
+    SKIP_RELEASE=1
+fi
+echo ""
+
+# Step B: full release (interaction DB → Supabase → Flutter)
+if [ "$SKIP_RELEASE" = "1" ]; then
+    echo -e "${YELLOW}Full release skipped (SKIP_RELEASE=1 or --skip-release).${NC}"
+    echo -e "${YELLOW}  Run manually when ready: bash scripts/release_full.sh${NC}"
+    echo ""
+    echo -e "${GREEN}All datasets + dashboard snapshot ready.${NC}"
+    exit 0
+fi
+
+if [ ! -x "$RELEASE_SCRIPT" ]; then
+    echo -e "${RED}✗ Release script not found or not executable: $RELEASE_SCRIPT${NC}"
+    echo -e "${YELLOW}  Snapshot succeeded; pipeline can be released manually.${NC}"
+    exit 1
+fi
+
+echo -e "${BLUE}=========================================="
+echo "FULL RELEASE: interaction DB → Supabase → Flutter"
+echo "==========================================${NC}"
+echo ""
+
+# Build release_full.sh arguments. Snapshot already assembled the catalog,
+# so --skip-assemble avoids a redundant build_all_final_dbs.py run.
+RELEASE_ARGS=(--skip-assemble)
+[ "$RELEASE_SKIP_SUPABASE" = "1" ]    && RELEASE_ARGS+=(--skip-supabase)
+[ "$RELEASE_SKIP_FLUTTER" = "1" ]     && RELEASE_ARGS+=(--skip-flutter)
+[ "$RELEASE_SUPABASE_DRY_RUN" = "1" ] && RELEASE_ARGS+=(--supabase-dry-run)
+[ -n "$RELEASE_FLUTTER_REPO" ]        && RELEASE_ARGS+=(--flutter-repo "$RELEASE_FLUTTER_REPO")
+
+if bash "$RELEASE_SCRIPT" "${RELEASE_ARGS[@]}" 2>&1 | tee -a "$SUMMARY_FILE"; then
+    echo -e "${GREEN}✓ Full release pipeline completed${NC}"
+else
+    echo -e "${RED}✗ Full release pipeline failed${NC}"
+    echo -e "${RED}  Pipeline outputs + dashboard snapshot are fine; rerun release manually:${NC}"
+    echo -e "${RED}    bash scripts/release_full.sh${NC}"
+    exit 1
+fi
+
+echo ""
+echo -e "${GREEN}All datasets processed + released successfully!${NC}"
+exit 0
