@@ -5320,19 +5320,19 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify the phosphorus source. Most people get adequate phosphorus from diet — supplemental phosphorus is rarely needed except in specific medical conditions (renal phosphorus wasting, refeeding syndrome).",
+        "absorption": "moderate (phosphate class baseline)",
+        "notes": "The supplement label does not specify the phosphorus source. Most people get adequate phosphorus from diet — supplemental phosphorus is rarely needed except in specific medical conditions (renal phosphorus wasting, refeeding syndrome). B32 audit 2026-04-25: phosphate class.",
         "aliases": [
           "Phosphorus",
           "Phosphorous"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.42,
+          "range_low": 0.3,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Phosphate F variable by chemistry: dicalcium phosphate ~25%, mono ~50%. Default 0.42."
         }
       },
       "dicalcium phosphate (as phosphorus source)": {
@@ -10091,8 +10091,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which chromium form is used. This gets a conservative score because it could be anything from cheap chromium chloride (very poorly absorbed) to premium picolinate. Look for the specific form name on your label for a more accurate score.",
+        "absorption": "poor (Cr class baseline ~1-3%; all forms similar)",
+        "notes": "The label doesn't specify which chromium form is used. This gets a conservative score because it could be anything from cheap chromium chloride (very poorly absorbed) to premium picolinate. Look for the specific form name on your label for a more accurate score. B32 audit 2026-04-25: Cr class baseline (~1-3%).",
         "aliases": [
           "Chromium",
           "Chromium-Chelavite",
@@ -10106,11 +10106,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.04,
+          "quality": "poor",
+          "notes": "Chromium oral F inherently low (~1-3%) for ALL forms (Anderson 1996). Companion forms 0.00-0.04."
         }
       },
       "crominex 3+ chromium complex": {
@@ -10911,8 +10911,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which molybdenum form is used. Conservative score. Most molybdenum forms actually absorb reasonably well, but without knowing the source we can't confirm. Look for 'glycinate' or 'sodium molybdate' on your label.",
+        "absorption": "very_good (Mo class baseline ~91%)",
+        "notes": "The label doesn't specify which molybdenum form is used. Conservative score. Most molybdenum forms actually absorb reasonably well, but without knowing the source we can't confirm. Look for 'glycinate' or 'sodium molybdate' on your label. B32 audit 2026-04-25: Mo class baseline (~91%).",
         "aliases": [
           "Molybdenum",
           "molybdenum citrate",
@@ -10925,11 +10925,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.91,
+          "range_low": 0.85,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Molybdenum oral F well-established at ~91% per Turnlund 1995. Companion forms all 0.91."
         }
       },
       "molybdenum aspartate": {
@@ -12123,8 +12123,8 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify whether this is ubiquinol (active) or ubiquinone (oxidized), or what delivery format is used. Conservative score since it could be anything from premium crystal-free ubiquinol to cheap dry powder. Look for 'ubiquinol' or 'Kaneka QH' for a more accurate score.",
+        "absorption": "poor (CoQ10 class-poor; ~3-8% F all forms)",
+        "notes": "The label doesn't specify whether this is ubiquinol (active) or ubiquinone (oxidized), or what delivery format is used. Conservative score since it could be anything from premium crystal-free ubiquinol to cheap dry powder. Look for 'ubiquinol' or 'Kaneka QH' for a more accurate score. B32 audit 2026-04-25: CoQ10 class-poor.",
         "aliases": [
           "coq10 unspecified",
           "coenzyme q10 unspecified",
@@ -12139,11 +12139,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.04,
+          "range_low": 0.03,
+          "range_high": 0.08,
+          "quality": "poor",
+          "notes": "CoQ10 class-poor. Companions 0.01-0.06 (Bhagavan 2006 anchor)."
         }
       }
     },
@@ -12589,8 +12589,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "The label doesn't specify which curcumin technology is used. Without an enhanced delivery form (Longvida, Meriva, BCM-95, etc.), standard curcumin absorbs very poorly (1-3%). Conservative score. Check your label for branded enhancement technologies.",
+        "absorption": "poor (curcumin class-poor; ~1-5% F)",
+        "notes": "The label doesn't specify which curcumin technology is used. Without an enhanced delivery form (Longvida, Meriva, BCM-95, etc.), standard curcumin absorbs very poorly (1-3%). Conservative score. Check your label for branded enhancement technologies. B32 audit 2026-04-25: curcumin class-poor (B8).",
         "aliases": [
           "curcuma longa extract",
           "curcumin curcuma longa rhizome extract",
@@ -12617,11 +12617,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Curcumin class-poor (B8 anchor). Companions 0.01-0.05."
         }
       }
     },
@@ -15580,8 +15580,8 @@
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "poor",
-        "notes": "AVOID: D-tyrosine is the biologically inactive stereoisomer. Does not serve as a neurotransmitter precursor and may interfere with L-tyrosine uptake.",
+        "absorption": "moderate (D-isomer class-poor; only L active for protein)",
+        "notes": "AVOID: D-tyrosine is the biologically inactive stereoisomer. Does not serve as a neurotransmitter precursor and may interfere with L-tyrosine uptake. B32 audit 2026-04-25: D-isomer biological inactivity (B26 parallel). Absorbed but inactive.",
         "aliases": [
           "d-form tyrosine",
           "inactive tyrosine",
@@ -15589,11 +15589,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor"
+          "value": 0.4,
+          "range_low": 0.25,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "D-tyrosine is biologically inactive for protein synthesis (only L-isomer accepted by aminoacyl-tRNA synthetases). Some passive absorption occurs but no biological activity. Class-equivalent to dl-biotin framework (B26): 50% efficiency stoichiometry but with biological inactivity penalty. Conservative ~0.40."
         }
       }
     },
@@ -19198,8 +19198,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. L-Theanine is an amino acid found naturally in tea leaves (Camellia sinensis) but most supplements use enzymatic fermentation. Suntheanine is a patented pure L-isomer form; generic products vary in purity. Well-absorbed orally (~70% when pure L-isomer) with good blood-brain barrier penetration. Scored conservatively until form details confirmed.",
+        "absorption": "good (theanine amino-acid-class transport)",
+        "notes": "Form not specified on the label. L-Theanine is an amino acid found naturally in tea leaves (Camellia sinensis) but most supplements use enzymatic fermentation. Suntheanine is a patented pure L-isomer form; generic products vary in purity. Well-absorbed orally (~70% when pure L-isomer) with good blood-brain barrier penetration. Scored conservatively until form details confirmed. B32 audit 2026-04-25: theanine class.",
         "aliases": [
           "l-theanine",
           "Theanine XR",
@@ -19207,11 +19207,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.7,
+          "range_low": 0.6,
+          "range_high": 0.8,
+          "quality": "good",
+          "notes": "L-theanine — system L amino acid transporter. Class baseline 0.70."
         }
       }
     },
@@ -19954,19 +19954,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Chondroitin sulfate is a large glycosaminoglycan molecule with inherently poor oral absorption (~13–15% for standard form). Low-molecular-weight and phytosome forms improve this significantly. Source (shark, bovine, or avian) and molecular weight affect bioavailability. Scored conservatively.",
+        "absorption": "low (chondroitin class baseline ~10-15%)",
+        "notes": "Form not specified on the label. Chondroitin sulfate is a large glycosaminoglycan molecule with inherently poor oral absorption (~13–15% for standard form). Low-molecular-weight and phytosome forms improve this significantly. Source (shark, bovine, or avian) and molecular weight affect bioavailability. Scored conservatively. B32 audit 2026-04-25: chondroitin class baseline.",
         "aliases": [
           "chondroitin",
           "bovine tracheal cartilage"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.13,
+          "range_low": 0.1,
+          "range_high": 0.18,
+          "quality": "low",
+          "notes": "Chondroitin sulfate F well-established low (~12-15%) per Volpi 2002. High-MW polysaccharide; partial absorption."
         }
       }
     },
@@ -20316,19 +20316,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified. Grape seed OPCs have very low intact absorption — only monomers (5-10% of extract) are well-absorbed (PMID:12834296). Scored conservatively until OPC standardization level is confirmed.",
+        "absorption": "poor (OPC/proanthocyanidin class-poor; <10% F)",
+        "notes": "Form not specified. Grape seed OPCs have very low intact absorption — only monomers (5-10% of extract) are well-absorbed (PMID:12834296). Scored conservatively until OPC standardization level is confirmed. B32 audit 2026-04-25: OPC class-poor.",
         "aliases": [
           "grape seed extract",
           "grape seed"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "OPC/proanthocyanidin class-poor (B19 framework). Companions 0.03-0.10."
         }
       }
     },
@@ -20925,19 +20925,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Echinacea products span three species (purpurea, angustifolia, pallida), different plant parts (root, aerial, whole herb), and both standardized extracts and raw powders. Immune-active compounds (alkylamides, cichoric acid) vary significantly between species and preparations. Scored conservatively.",
+        "absorption": "low-moderate (alkamide class; partial absorption)",
+        "notes": "Form not specified on the label. Echinacea products span three species (purpurea, angustifolia, pallida), different plant parts (root, aerial, whole herb), and both standardized extracts and raw powders. Immune-active compounds (alkylamides, cichoric acid) vary significantly between species and preparations. Scored conservatively. B32 audit 2026-04-25: alkamide class.",
         "aliases": [
           "echinacea",
           "coneflower extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.32,
+          "range_low": 0.2,
+          "range_high": 0.45,
+          "quality": "moderate",
+          "notes": "Echinacea alkamides + caffeic acid derivatives. Companions 0.25-0.40."
         }
       }
     },
@@ -21536,19 +21536,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Cranberry products range from standardized PAC extracts (proanthocyanidins) to juice concentrates and whole fruit powders. PAC type (A-type vs B-type) and concentration determine anti-adhesion activity against urinary tract bacteria. Scored conservatively.",
+        "absorption": "very_low (PAC + anthocyanin class-poor; <1% intact F)",
+        "notes": "Form not specified on the label. Cranberry products range from standardized PAC extracts (proanthocyanidins) to juice concentrates and whole fruit powders. PAC type (A-type vs B-type) and concentration determine anti-adhesion activity against urinary tract bacteria. Scored conservatively. B32 audit 2026-04-25: PAC/anthocyanin class-poor.",
         "aliases": [
           "cranberry",
           "vitacran"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.01,
+          "range_low": 0.005,
+          "range_high": 0.02,
+          "quality": "poor",
+          "notes": "Cranberry proanthocyanidins (PACs) + anthocyanins; class-poor flavonoid (B19/B31). Companions all 0.01."
         }
       }
     },
@@ -21687,8 +21687,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Bilberry (Vaccinium myrtillus) products range from standardized 25% anthocyanoside extracts to whole fruit powders and juice concentrates. Anthocyanin content and bioavailability vary significantly between forms. Scored conservatively until form is confirmed.",
+        "absorption": "very_low (anthocyanin class-poor; <1% intact F)",
+        "notes": "Form not specified on the label. Bilberry (Vaccinium myrtillus) products range from standardized 25% anthocyanoside extracts to whole fruit powders and juice concentrates. Anthocyanin content and bioavailability vary significantly between forms. Scored conservatively until form is confirmed. B32 audit 2026-04-25: anthocyanin class-poor.",
         "aliases": [
           "bilberry",
           "bilberry fruit ext.",
@@ -21700,11 +21700,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.01,
+          "range_low": 0.005,
+          "range_high": 0.02,
+          "quality": "poor",
+          "notes": "Anthocyanin class-poor (B19/B31 framework). All companion bilberry forms at 0.01."
         }
       }
     },
@@ -21897,8 +21897,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Elderberry (Sambucus nigra/canadensis) products range from standardized anthocyanin extracts (Sambucol, ElderCraft) to syrups, powders, and juice concentrates. Anthocyanin content and immune-stimulating potency vary substantially between forms. Scored conservatively.",
+        "absorption": "poor (anthocyanin class-poor; <5% intact F)",
+        "notes": "Form not specified on the label. Elderberry (Sambucus nigra/canadensis) products range from standardized anthocyanin extracts (Sambucol, ElderCraft) to syrups, powders, and juice concentrates. Anthocyanin content and immune-stimulating potency vary substantially between forms. Scored conservatively. B32 audit 2026-04-25: anthocyanin class-poor.",
         "aliases": [
           "elderberry",
           "sambucus black elderberry",
@@ -21915,11 +21915,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.03,
+          "range_low": 0.01,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Elderberry anthocyanins (cyanidin glycosides); class-poor (B19/B31). Companions 0.02-0.04."
         }
       }
     },
@@ -30490,8 +30490,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Plant-derived sterols (beta-sitosterol, campesterol, stigmasterol) that competitively inhibit intestinal cholesterol absorption. EFSA/FDA-approved health claim for LDL reduction at 1.5-3 g/day. Form unspecified; conservative scoring applied.",
+        "absorption": "poor (phytosterol class-poor; <2% F)",
+        "notes": "Plant-derived sterols (beta-sitosterol, campesterol, stigmasterol) that competitively inhibit intestinal cholesterol absorption. EFSA/FDA-approved health claim for LDL reduction at 1.5-3 g/day. Form unspecified; conservative scoring applied. B32 audit 2026-04-25: phytosterol class-poor.",
         "aliases": [
           "phytosterols",
           "plant sterols unspecified",
@@ -30506,11 +30506,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.01,
+          "range_low": 0.0,
+          "range_high": 0.05,
+          "quality": "poor",
+          "notes": "Phytosterol oral F genuinely <2% per Salen 1970 / Ostlund 2002. Mechanism is luminal cholesterol-displacement; not classical absorption. Companion forms all 0.00-0.02."
         }
       }
     },
@@ -33437,8 +33437,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "low-moderate (gymnemic acid saponin class; variable)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: gymnemic acid class.",
         "aliases": [
           "gymnema sylvestre",
           "gymnema",
@@ -33446,11 +33446,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "range_low": 0.15,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Gymnema saponins; variable F (companions 0.14-0.65)."
         }
       }
     },
@@ -34519,18 +34519,18 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "good (gingerol/shogaol class baseline)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: gingerol class.",
         "aliases": [
           "ginger"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.7,
+          "range_low": 0.55,
+          "range_high": 0.85,
+          "quality": "good",
+          "notes": "Gingerol/shogaol class. Companions 0.60-0.90."
         }
       },
       "ginger essential oil": {
@@ -34672,18 +34672,18 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "low (mushroom class-poor; chitin shell barrier)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "lion's mane"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.13,
+          "range_low": 0.1,
+          "range_high": 0.18,
+          "quality": "low",
+          "notes": "Mushroom class-poor (B1). Companions 0.12-0.15."
         }
       }
     },
@@ -34986,18 +34986,18 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Grifola frondosa mushroom (maitake); contains beta-glucans (D-fraction, MD-fraction) with immunomodulatory properties. Preclinical evidence for blood glucose regulation. Form not specified; conservative scoring applied.",
+        "absorption": "low (mushroom class-poor; chitin shell barrier)",
+        "notes": "Grifola frondosa mushroom (maitake); contains beta-glucans (D-fraction, MD-fraction) with immunomodulatory properties. Preclinical evidence for blood glucose regulation. Form not specified; conservative scoring applied. B32 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "maitake"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.11,
+          "range_low": 0.08,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Mushroom class-poor (B1). Companions 0.10-0.12."
         }
       }
     },
@@ -35266,18 +35266,18 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Inonotus obliquus mushroom (chaga); rich in betulinic acid, melanin, and polysaccharides. Traditional Siberian medicine for immune and GI support. Limited human clinical data; most evidence preclinical. Form not specified.",
+        "absorption": "low (mushroom class-poor; chitin shell barrier)",
+        "notes": "Inonotus obliquus mushroom (chaga); rich in betulinic acid, melanin, and polysaccharides. Traditional Siberian medicine for immune and GI support. Limited human clinical data; most evidence preclinical. Form not specified. B32 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "chaga"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.12,
+          "range_low": 0.08,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Mushroom class-poor (B1 framework). Companions 0.10-0.15."
         }
       }
     },
@@ -35484,8 +35484,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "good (macamide + glucosinolate class)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: maca class.",
         "aliases": [
           "maca",
           "black maca extract",
@@ -35501,11 +35501,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.66,
+          "range_low": 0.6,
+          "range_high": 0.72,
+          "quality": "good",
+          "notes": "Lepidium meyenii — macamides + glucosinolates. Companions 0.65-0.68."
         }
       }
     },
@@ -35999,8 +35999,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "low (live organism class; B18 framework)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: live-organism class (B18). Companions inflated under older framework — pending harmonization.",
         "aliases": [
           "L. acidophilus",
           "acidophilus",
@@ -36025,11 +36025,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Live probiotic strain (B18): F is wrong metric. Companion forms span 0.65-0.90 reflecting older nutrient-density framework — flagged for harmonization (Dr Pham E2-style)."
         }
       },
       "lactobacillus acidophilus la-5": {
@@ -37208,8 +37208,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "low (live organism class; B18 framework)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: live-organism class (B18).",
         "aliases": [
           "lactobacillus paracasei",
           "l. paracasei",
@@ -37217,11 +37217,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Live probiotic strain (B18). Same harmonization flag as L. acidophilus."
         }
       },
       "lactobacillus paracasei l.casei 431": {
@@ -37417,8 +37417,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a standardized extract for better parthenolide consistency.",
+        "absorption": "moderate (parthenolide class baseline)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a standardized extract for better parthenolide consistency. B32 audit 2026-04-25: parthenolide class.",
         "aliases": [
           "feverfew",
           "tanacetum parthenium",
@@ -37428,11 +37428,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "range_low": 0.35,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Feverfew parthenolide class. Companions 0.38-0.60."
         }
       }
     },
@@ -41516,8 +41516,8 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Citrus bergamia extract; contains statin-like HMG-CoA reductase inhibitors (brutieridin, melitidin). Evidence for LDL/triglyceride reduction. Form unspecified; conservative scoring.",
+        "absorption": "low (citrus flavonoid class-poor)",
+        "notes": "Citrus bergamia extract; contains statin-like HMG-CoA reductase inhibitors (brutieridin, melitidin). Evidence for LDL/triglyceride reduction. Form unspecified; conservative scoring. B32 audit 2026-04-25: bergamot class-poor.",
         "aliases": [
           "bergamot",
           "citrus bergamot",
@@ -41528,11 +41528,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.08,
+          "range_low": 0.05,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Bergamot flavonoid class-poor (B16/B19 framework)."
         }
       }
     },
@@ -44113,19 +44113,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "good (carvacrol + thymol class baseline)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: carvacrol/thymol class.",
         "aliases": [
           "oregano",
           "origanum vulgare"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.62,
+          "range_low": 0.5,
+          "range_high": 0.75,
+          "quality": "good",
+          "notes": "Oregano carvacrol + thymol class. Companions 0.55-0.68."
         }
       }
     },
@@ -47951,8 +47951,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "variable",
-        "notes": "Phyllanthus emblica (Indian gooseberry); richest natural source of vitamin C (600-900 mg/100g). Ayurvedic Rasayana with antioxidant and anti-inflammatory properties. Form unspecified.",
+        "absorption": "moderate (vitamin C + tannin matrix; class baseline)",
+        "notes": "Phyllanthus emblica (Indian gooseberry); richest natural source of vitamin C (600-900 mg/100g). Ayurvedic Rasayana with antioxidant and anti-inflammatory properties. Form unspecified. B32 audit 2026-04-25: amla class baseline.",
         "aliases": [
           "amla",
           "indian gooseberry",
@@ -47973,11 +47973,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "Amla (Phyllanthus emblica) — high vitamin C + ellagitannins. Class-equivalent to companion forms (~0.50)."
         }
       }
     },
@@ -48071,8 +48071,8 @@
         "bio_score": 4,
         "natural": true,
         "score": 7,
-        "absorption": "variable",
-        "notes": "Unspecified form of fo-ti. Processing status unknown. FDA hepatotoxicity warning.",
+        "absorption": "low-moderate (Polygonum stilbene + anthraquinone class)",
+        "notes": "Unspecified form of fo-ti. Processing status unknown. FDA hepatotoxicity warning. B32 audit 2026-04-25: fo-ti class.",
         "aliases": [
           "fo-ti",
           "fo ti",
@@ -48085,11 +48085,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Fo-ti (He shou wu) — stilbenes + emodin-type anthraquinones. Companions 0.25-0.35."
         }
       }
     },
@@ -48174,8 +48174,8 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "variable",
-        "notes": "Angelica sinensis root (female ginseng); contains ligustilide, ferulic acid, and polysaccharides. Traditional Chinese medicine for gynecological conditions. May potentiate anticoagulants. Form unspecified.",
+        "absorption": "low-moderate (ferulic acid + ligustilide class)",
+        "notes": "Angelica sinensis root (female ginseng); contains ligustilide, ferulic acid, and polysaccharides. Traditional Chinese medicine for gynecological conditions. May potentiate anticoagulants. Form unspecified. B32 audit 2026-04-25: dong quai class.",
         "aliases": [
           "dong quai",
           "angelica sinensis",
@@ -48189,11 +48189,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.35,
+          "range_low": 0.25,
+          "range_high": 0.45,
+          "quality": "moderate",
+          "notes": "Angelica sinensis phytochemicals — ferulic acid + ligustilide. Companions 0.30-0.40."
         }
       }
     },
@@ -48406,8 +48406,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Ocimum tenuiflorum (tulsi); Ayurvedic adaptogen containing eugenol, ursolic acid, and rosmarinic acid. Evidence for stress reduction, blood glucose regulation, and immune support. Form unspecified.",
+        "absorption": "good (eugenol + ursolic acid class)",
+        "notes": "Ocimum tenuiflorum (tulsi); Ayurvedic adaptogen containing eugenol, ursolic acid, and rosmarinic acid. Evidence for stress reduction, blood glucose regulation, and immune support. Form unspecified. B32 audit 2026-04-25: tulsi class.",
         "aliases": [
           "holy basil",
           "tulsi",
@@ -48420,11 +48420,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.67,
+          "range_low": 0.6,
+          "range_high": 0.75,
+          "quality": "good",
+          "notes": "Tulsi (Ocimum sanctum) — eugenol + ursolic acid. Companions 0.65-0.70."
         }
       }
     },
@@ -48506,8 +48506,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Scutellaria baicalensis root; contains baicalin, baicalein, and wogonin. Anti-inflammatory, antiviral, and neuroprotective properties. Used in traditional Chinese medicine. Form unspecified.",
+        "absorption": "good (baicalein/baicalin class baseline)",
+        "notes": "Scutellaria baicalensis root; contains baicalin, baicalein, and wogonin. Anti-inflammatory, antiviral, and neuroprotective properties. Used in traditional Chinese medicine. Form unspecified. B32 audit 2026-04-25: baicalein class.",
         "aliases": [
           "chinese skullcap",
           "baikal skullcap",
@@ -48524,11 +48524,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.6,
+          "range_low": 0.55,
+          "range_high": 0.7,
+          "quality": "good",
+          "notes": "Scutellaria baicalensis flavone class. Companions 0.60-0.65."
         }
       }
     },
@@ -48614,8 +48614,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Chondrus crispus red algae; source of carrageenan polysaccharides, iodine, and trace minerals. Traditional Irish/Caribbean food. Thyroid-sensitive due to iodine content. Form unspecified.",
+        "absorption": "moderate (polysaccharide + iodide class)",
+        "notes": "Chondrus crispus red algae; source of carrageenan polysaccharides, iodine, and trace minerals. Traditional Irish/Caribbean food. Thyroid-sensitive due to iodine content. Form unspecified. B32 audit 2026-04-25: sea moss class.",
         "aliases": [
           "gracilaria",
           "sea moss gel",
@@ -48624,11 +48624,11 @@
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.52,
+          "range_low": 0.45,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Chondrus crispus — carrageenan polysaccharide + iodide. Companions 0.50-0.55."
         }
       }
     },
@@ -48717,19 +48717,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "PE is a major phospholipid in cell membranes, constituting ~25% of all phospholipids. Supports membrane fluidity and autophagy. Found in eggs, soybeans, and organ meats. Form unspecified.",
+        "absorption": "moderate (PE phospholipid class baseline)",
+        "notes": "PE is a major phospholipid in cell membranes, constituting ~25% of all phospholipids. Supports membrane fluidity and autophagy. Found in eggs, soybeans, and organ meats. Form unspecified. B32 audit 2026-04-25: PE class baseline.",
         "aliases": [
           "phosphatidylethanolamine supplement",
           "PE phospholipid"
         ],
         "dosage_importance": 0.8,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.52,
+          "range_low": 0.45,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "PE phospholipid class. Companions 0.50-0.55."
         }
       }
     },
@@ -49534,8 +49534,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Crataegus spp. berry/leaf/flower; contains vitexin, hyperoside, and oligomeric procyanidins. Evidence for mild heart failure (NYHA I-II) and cardioprotection. German Commission E approved. Form unspecified.",
+        "absorption": "good (oligomeric proanthocyanidin + flavonoid class)",
+        "notes": "Crataegus spp. berry/leaf/flower; contains vitexin, hyperoside, and oligomeric procyanidins. Evidence for mild heart failure (NYHA I-II) and cardioprotection. German Commission E approved. Form unspecified. B32 audit 2026-04-25: hawthorn class.",
         "aliases": [
           "hawthorn",
           "hawthorn berry",
@@ -49562,11 +49562,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.62,
+          "range_low": 0.55,
+          "range_high": 0.7,
+          "quality": "good",
+          "notes": "Hawthorn OPC + vitexin. Companions 0.60-0.65."
         }
       }
     },
@@ -49663,8 +49663,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Vanilloid alkaloid from Capsicum peppers; TRPV1 agonist with analgesic, thermogenic, and metabolic effects. Topical FDA-approved (Qutenza). Oral capsaicin for weight management. Form unspecified.",
+        "absorption": "good (capsaicinoid class baseline; passive diffusion)",
+        "notes": "Vanilloid alkaloid from Capsicum peppers; TRPV1 agonist with analgesic, thermogenic, and metabolic effects. Topical FDA-approved (Qutenza). Oral capsaicin for weight management. Form unspecified. B32 audit 2026-04-25: capsaicin class baseline.",
         "aliases": [
           "cayenne",
           "cayenne pepper",
@@ -49681,11 +49681,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.6,
+          "range_low": 0.5,
+          "range_high": 0.7,
+          "quality": "good",
+          "notes": "Capsaicinoid class baseline. Companions 0.50-0.70."
         }
       }
     },
@@ -50302,8 +50302,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Harpagophytum procumbens tuber; contains harpagoside (iridoid glycoside). Evidence for low back pain and osteoarthritis (ESCOP monograph). Anti-inflammatory via COX-2 and NF-kB. Form unspecified.",
+        "absorption": "low-moderate (harpagoside class baseline)",
+        "notes": "Harpagophytum procumbens tuber; contains harpagoside (iridoid glycoside). Evidence for low back pain and osteoarthritis (ESCOP monograph). Anti-inflammatory via COX-2 and NF-kB. Form unspecified. B32 audit 2026-04-25: harpagoside class.",
         "aliases": [
           "devil's claw",
           "devils claw",
@@ -50316,11 +50316,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.35,
+          "range_low": 0.25,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Harpagoside iridoid class. Companions 0.28-0.45."
         }
       },
       "devil's claw standardized (harpagoside)": {
@@ -57237,8 +57237,8 @@
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Garcinia gummi-gutta fruit rind; contains hydroxycitric acid (HCA). ATP citrate lyase inhibitor reducing lipogenesis. Meta-analyses show modest weight loss (~0.88 kg vs placebo). Hepatotoxicity reports. Form unspecified.",
+        "absorption": "moderate (HCA class baseline)",
+        "notes": "Garcinia gummi-gutta fruit rind; contains hydroxycitric acid (HCA). ATP citrate lyase inhibitor reducing lipogenesis. Meta-analyses show modest weight loss (~0.88 kg vs placebo). Hepatotoxicity reports. Form unspecified. B32 audit 2026-04-25: HCA class.",
         "aliases": [
           "garcinia cambogia",
           "garcinia",
@@ -57257,11 +57257,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.4,
+          "range_low": 0.35,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Hydroxycitric acid (HCA) class. Companions 0.40."
         }
       }
     },
