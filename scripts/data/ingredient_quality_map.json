@@ -6852,7 +6852,7 @@
         "natural": true,
         "score": 15,
         "efficacy": "excellent",
-        "notes": "The highest-quality slippery elm preparation, made from the inner bark which contains the highest concentration of mucilage — a gel-forming fiber that coats and soothes irritated mucous membranes. Traditionally used for sore throat, cough, acid reflux, and inflammatory bowel conditions. The demulcent coating protects tissue from irritation.",
+        "notes": "The highest-quality slippery elm preparation, made from the inner bark which contains the highest concentration of mucilage — a gel-forming fiber that coats and soothes irritated mucous membranes. Traditionally used for sore throat, cough, acid reflux, and inflammatory bowel conditions. The demulcent coating protects tissue from irritation. B23 audit 2026-04-25: CATEGORY ERROR — mucilage local action.",
         "aliases": [
           "slippery elm inner bark",
           "slippery elm bark powder",
@@ -6866,13 +6866,13 @@
           "inner slippery elm bark supplement"
         ],
         "dosage_importance": 1.0,
-        "absorption": "unknown",
+        "absorption": "category_error (mucilage demulcent; not systemic)",
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action, not systemic absorption. See standardized extract entry for mechanism rationale."
         }
       },
       "standardized extract (mucilage)": {
@@ -6880,7 +6880,7 @@
         "natural": false,
         "score": 14,
         "efficacy": "superior",
-        "notes": "A concentrated slippery elm extract standardized for high mucilage content. More potent per milligram than raw bark powder, providing a consistent therapeutic dose. Preferred when precise dosing matters. May lose some of the whole-bark synergistic compounds during extraction.",
+        "notes": "A concentrated slippery elm extract standardized for high mucilage content. More potent per milligram than raw bark powder, providing a consistent therapeutic dose. Preferred when precise dosing matters. May lose some of the whole-bark synergistic compounds during extraction. B23 audit 2026-04-25: CATEGORY ERROR (4th overall after manuka, organ extracts, prebiotics). Mucilage acts topically on GI mucosa; not systemically absorbed. No PubMed PK PMID.",
         "aliases": [
           "slippery elm extract",
           "slippery elm bark extract",
@@ -6896,13 +6896,13 @@
           "slippery elm bark extract standardized supplement"
         ],
         "dosage_importance": 1.0,
-        "absorption": "unknown",
+        "absorption": "category_error (mucosal demulcent; not systemically absorbed)",
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR — bioavailability framework does not apply. Mucilage polysaccharides hydrate in GI lumen → viscous gel → topical demulcent coating on mucosa (textbook pharmacognosy). NO PubMed PMID exists for slippery elm mucilage systemic absorption. Same pattern as manuka honey (Batch 18), organ extracts (Batch 20), prebiotics (Batch 22) — local-action / fermented substrate / composite food categories."
         }
       },
       "bark powder (unspecified)": {
@@ -6910,7 +6910,7 @@
         "natural": true,
         "score": 11,
         "efficacy": "moderate",
-        "notes": "Slippery elm bark without specification of inner vs outer bark. Quality varies — inner bark is far richer in mucilage (the active compound) than outer bark. When the label doesn't specify, the product may contain a mix of both, resulting in inconsistent potency.",
+        "notes": "Slippery elm bark without specification of inner vs outer bark. Quality varies — inner bark is far richer in mucilage (the active compound) than outer bark. When the label doesn't specify, the product may contain a mix of both, resulting in inconsistent potency. B23 audit 2026-04-25: CATEGORY ERROR — mucilage local action.",
         "aliases": [
           "slippery elm bark",
           "ulmus rubra bark",
@@ -6929,13 +6929,13 @@
           "Ulmus fulva, Powder"
         ],
         "dosage_importance": 1.0,
-        "absorption": "unknown",
+        "absorption": "category_error (mucilage; not systemic)",
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action."
         }
       },
       "outer bark powder": {
@@ -6943,7 +6943,7 @@
         "natural": true,
         "score": 7,
         "efficacy": "poor",
-        "notes": "The inferior part of the slippery elm bark with significantly less mucilage than the inner bark. Far less effective as a demulcent (soothing agent). Sometimes used as a cheap filler or in lower-quality products. Look for 'inner bark' on the label for the real therapeutic form.",
+        "notes": "The inferior part of the slippery elm bark with significantly less mucilage than the inner bark. Far less effective as a demulcent (soothing agent). Sometimes used as a cheap filler or in lower-quality products. Look for 'inner bark' on the label for the real therapeutic form. B23 audit 2026-04-25: CATEGORY ERROR — mucilage local action.",
         "aliases": [
           "slippery elm outer bark",
           "outer bark of slippery elm",
@@ -6953,13 +6953,13 @@
           "inferior slippery elm supplement"
         ],
         "dosage_importance": 1.0,
-        "absorption": "unknown",
+        "absorption": "category_error (mucilage; not systemic; lower mucilage)",
         "absorption_structured": {
           "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action. Outer bark has even less mucilage than inner bark; trad. discouraged."
         }
       }
     },
@@ -32742,8 +32742,8 @@
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "Variable",
-        "notes": "Verbascum thapsus leaf extract. Traditional respiratory herb for bronchitis, cough, and lung congestion. Contains saponins, mucilage, and flavonoids. Mucolytic and expectorant properties. Limited clinical trial data but strong ethnobotanical history. Used as tea or tincture traditionally.",
+        "absorption": "low (extract; verbascoside efflux + class-poor)",
+        "notes": "Verbascum thapsus leaf extract. Traditional respiratory herb for bronchitis, cough, and lung congestion. Contains saponins, mucilage, and flavonoids. Mucolytic and expectorant properties. Limited clinical trial data but strong ethnobotanical history. Used as tea or tincture traditionally. B23 audit 2026-04-25: bioflavonoid class-poor + efflux.",
         "aliases": [
           "verbascum thapsus",
           "common mullein",
@@ -32754,19 +32754,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "PMID:27355793 + PMID:31778580 — extract slightly lower than standardized form due to lower verbascoside concentration."
         }
       },
       "standardized mullein (verbascoside)": {
         "bio_score": 12,
         "natural": true,
         "score": 15,
-        "absorption": "Better than generic",
-        "notes": "Mullein extract standardized to verbascoside (acteoside) content. Verbascoside is a phenylpropanoid glycoside with anti-inflammatory, antimicrobial, and antioxidant activity. More concentrated than plain leaf extract. Better quality control via standardization.",
+        "absorption": "low (verbascoside P-gp/BCRP/MRP2 efflux substrate)",
+        "notes": "Mullein extract standardized to verbascoside (acteoside) content. Verbascoside is a phenylpropanoid glycoside with anti-inflammatory, antimicrobial, and antioxidant activity. More concentrated than plain leaf extract. Better quality control via standardization. B23 audit 2026-04-25: verbascoside is P-gp+BCRP+MRP2 efflux substrate (PMID:31778580) on top of bioflavonoid class-poor baseline (PMID:27355793).",
         "aliases": [
           "mullein standardized extract",
           "verbascoside standardized mullein",
@@ -32775,19 +32775,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "better than generic"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "D'Antuono 2016 (PMID:27355793): verbascoside Caco-2 absorption after HT/TYR, overall 1.86%. Yang 2020 (PMID:31778580): acteoside (verbascoside) is P-gp + BCRP + MRP2 substrate, undergoes active transport (efflux limits F). Bioflavonoid class-poor + active efflux → upper end of low band."
         }
       },
       "mullein (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "low (unspecified; bioflavonoid class-poor floor)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B23 audit 2026-04-25: bioflavonoid class-poor floor.",
         "aliases": [
           "mullein",
           "mullein herb",
@@ -32795,11 +32795,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Bioflavonoid class-poor floor (PMID:31778580 efflux)."
         }
       }
     },
@@ -32831,8 +32831,8 @@
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "Poor alkaloid absorption",
-        "notes": "Ground Hydrastis canadensis root. Contains berberine and hydrastine alkaloids at variable concentrations. Traditional antimicrobial and mucosal support herb. Wild-harvested goldenseal is endangered — prefer cultivated sources. Often combined with echinacea for immune support.",
+        "absorption": "low (root powder; berberine class-poor)",
+        "notes": "Ground Hydrastis canadensis root. Contains berberine and hydrastine alkaloids at variable concentrations. Traditional antimicrobial and mucosal support herb. Wild-harvested goldenseal is endangered — prefer cultivated sources. Often combined with echinacea for immune support. B23 audit 2026-04-25: berberine class-poor (PMID:19269122).",
         "aliases": [
           "hydrastis canadensis",
           "goldenseal root",
@@ -32845,19 +32845,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor alkaloid absorption"
+          "value": 0.08,
+          "range_low": 0.05,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Berberine + hydrastine class-poor (PMID:19269122). Root powder lower than standardized."
         }
       },
       "standardized goldenseal (berberine/hydrastine)": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "Improved with standardization",
-        "notes": "Hydrastis canadensis root extract standardized to berberine (typically 5%) and hydrastine content. More reliable potency than root powder. Antimicrobial and anti-inflammatory via multiple mechanisms. Berberine component has gut microbiome modulatory effects.",
+        "absorption": "low (berberine + hydrastine class-poor ~5% F)",
+        "notes": "Hydrastis canadensis root extract standardized to berberine (typically 5%) and hydrastine content. More reliable potency than root powder. Antimicrobial and anti-inflammatory via multiple mechanisms. Berberine component has gut microbiome modulatory effects. B23 audit 2026-04-25: berberine + hydrastine class-poor (PMID:19269122) — Batch 6 berberine framework extends.",
         "aliases": [
           "goldenseal standardized extract",
           "berberine standardized goldenseal",
@@ -32870,29 +32870,29 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "improved with standardization"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Gupta 2009 (PMID:19269122): LC-MS/MS for berberine + hydrastine in human serum after 77 mg hydrastine + 132 mg berberine — both alkaloids reach serum but at very low concentrations (LLOQ 0.1 ng/mL). Chatterjee 2003 (PMID:14570772) supports oral systemic exposure. Class-equivalent to berberine class-poor framework (Batch 6, ~5% F)."
         }
       },
       "goldenseal (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "low (unspecified; berberine class-poor floor)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B23 audit 2026-04-25: berberine class-poor (PMID:19269122).",
         "aliases": [
           "goldenseal"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Berberine class-poor floor (PMID:19269122)."
         }
       }
     },
@@ -41116,8 +41116,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "moderate-high",
-        "notes": "Hypericum perforatum extract standardized to 0.3% hypericin and/or 3-5% hyperforin. Multiple meta-analyses confirm efficacy comparable to SSRIs for mild-moderate depression (Cochrane Review 2008). CRITICAL drug interactions: induces CYP3A4 and P-gp, reducing efficacy of oral contraceptives, warfarin, cyclosporine, and many other drugs. 300 mg TID standard dose.",
+        "absorption": "moderate (hyperforin Cmax 150 ng/mL t1/2 9 h)",
+        "notes": "Hypericum perforatum extract standardized to 0.3% hypericin and/or 3-5% hyperforin. Multiple meta-analyses confirm efficacy comparable to SSRIs for mild-moderate depression (Cochrane Review 2008). CRITICAL drug interactions: induces CYP3A4 and P-gp, reducing efficacy of oral contraceptives, warfarin, cyclosporine, and many other drugs. 300 mg TID standard dose. B23 audit 2026-04-25: hyperforin PK well-characterized (PMID:9684946); hypericin/pseudohypericin F=14-21% (PMID:8878586). Ghost trap caught: PMID:9684421 is n-of-1 RCT editorial NOT Biber 1998 — use 9684946.",
         "aliases": [
           "hypericin extract",
           "st johns wort 0.3%",
@@ -41137,19 +41137,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Biber 1998 (PMID:9684946): 300 mg extract → hyperforin Cmax ~150 ng/mL (~280 nM) at 3.5 h, t1/2 9 h; PK linear up to 600 mg (saturation 900-1200 mg). Kerb 1996 (PMID:8878586): hypericin systemic availability ~14%, pseudohypericin ~21% from LI 160 extract. Brockmöller 1997 (PMID:9342768) confirms total hypericin Cmax 0.028-0.159 mg/L. CRITICAL: PMID:9684421 is NOT Biber — actually n-of-1 RCT editorial (Drug Ther Bull 1998); transposition trap."
         }
       },
       "st john's wort powder": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Ground Hypericum perforatum aerial parts (flowering tops). Lower hypericin/hyperforin concentration than standardized extracts. Traditional use for mood support. Variable potency. Same CYP3A4 induction concern — avoid concurrent medications metabolized by CYP3A4.",
+        "absorption": "moderate (powder; lower active concentration)",
+        "notes": "Ground Hypericum perforatum aerial parts (flowering tops). Lower hypericin/hyperforin concentration than standardized extracts. Traditional use for mood support. Variable potency. Same CYP3A4 induction concern — avoid concurrent medications metabolized by CYP3A4. B23 audit 2026-04-25: class-extract gradient (PMID:9684946).",
         "aliases": [
           "st johns wort powder",
           "hypericum powder",
@@ -41157,19 +41157,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
           "quality": "moderate",
-          "notes": "low-moderate"
+          "notes": "Biber 1998 (PMID:9684946) baseline applies; powder has lower hyperforin/hypericin per gram than standardized extract."
         }
       },
       "st john's wort (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Hypericum perforatum herb; contains hypericin and hyperforin. Well-documented antidepressant for mild-moderate depression (Cochrane review). CYP3A4/P-gp inducer. Form unspecified.",
+        "absorption": "moderate-low (unspecified; conservative)",
+        "notes": "Hypericum perforatum herb; contains hypericin and hyperforin. Well-documented antidepressant for mild-moderate depression (Cochrane review). CYP3A4/P-gp inducer. Form unspecified. B23 audit 2026-04-25: class floor (PMID:9684946).",
         "aliases": [
           "st johns wort",
           "st john's wort",
@@ -41192,11 +41192,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Biber 1998 (PMID:9684946) baseline — unspecified at conservative class floor."
         }
       }
     },
@@ -41240,8 +41240,8 @@
         "bio_score": 13,
         "natural": true,
         "score": 16,
-        "absorption": "moderate-high",
-        "notes": "Valeriana officinalis root extract standardized to valerenic acids (typically 0.8%). Clinical evidence for mild sleep improvement and anxiety reduction, though results are mixed across meta-analyses. May modulate GABA-A receptors. Generally safe with minimal hangover effect. 300-600 mg before bedtime standard dose.",
+        "absorption": "moderate (valerenic acid measurable; high inter-subject CV)",
+        "notes": "Valeriana officinalis root extract standardized to valerenic acids (typically 0.8%). Clinical evidence for mild sleep improvement and anxiety reduction, though results are mixed across meta-analyses. May modulate GABA-A receptors. Generally safe with minimal hangover effect. 300-600 mg before bedtime standard dose. B23 audit 2026-04-25: valerenic acid PK measurable but high variability (PMID:20878691). Standardized > root powder > unspecified by class-extract gradient.",
         "aliases": [
           "valerian extract",
           "valeriana officinalis extract",
@@ -41254,19 +41254,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "moderate-high"
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.5,
+          "quality": "moderate",
+          "notes": "Anderson 2010 (PMID:20878691): valerenic acid PK after single + multiple doses in older women — measurable Cmax/AUC/t1/2; no accumulation; large inter- and intra-subject variability. Becker 2014 (PMID:25066015): valerenic acid is the active anxiolytic constituent. NO ROBUST PMID for \"Bos 1996\" valerian PK — treat as unverified."
         }
       },
       "valerian root powder": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Ground Valeriana officinalis root. Contains valerenic acids, valepotriates, and volatile oils at lower concentrations than standardized extracts. Traditional European sedative herb. Characteristic strong odor. Higher doses needed (2-3 g) vs extracts for sleep support.",
+        "absorption": "moderate (root powder; lower valerenic acid concentration)",
+        "notes": "Ground Valeriana officinalis root. Contains valerenic acids, valepotriates, and volatile oils at lower concentrations than standardized extracts. Traditional European sedative herb. Characteristic strong odor. Higher doses needed (2-3 g) vs extracts for sleep support. B23 audit 2026-04-25: class-extract gradient applied per Anderson 2010 (PMID:20878691).",
         "aliases": [
           "valerian powder",
           "valeriana powder",
@@ -41275,19 +41275,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.4,
+          "range_low": 0.3,
+          "range_high": 0.5,
           "quality": "moderate",
-          "notes": "low-moderate"
+          "notes": "Anderson 2010 (PMID:20878691) baseline applies; root powder has lower active concentration than standardized extract → 0.40."
         }
       },
       "valerian (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Valeriana officinalis root; contains valerenic acid and valepotriates. GABA-A receptor modulator for sleep and anxiolysis. European Pharmacopoeia monograph. Form unspecified; conservative scoring.",
+        "absorption": "moderate-low (unspecified; conservative)",
+        "notes": "Valeriana officinalis root; contains valerenic acid and valepotriates. GABA-A receptor modulator for sleep and anxiolysis. European Pharmacopoeia monograph. Form unspecified; conservative scoring. B23 audit 2026-04-25: unspecified form set to conservative class-extract floor (PMID:20878691).",
         "aliases": [
           "valerian",
           "valeriana",
@@ -41299,11 +41299,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.4,
+          "quality": "moderate",
+          "notes": "Anderson 2010 (PMID:20878691) baseline — unspecified gets conservative low end of class gradient."
         }
       }
     },
@@ -41561,8 +41561,8 @@
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "moderate",
-        "notes": "Psidium guajava leaf extract rich in quercetin, catechin, and gallic acid. Clinical evidence for postprandial glucose reduction (inhibits alpha-glucosidase) and antidiarrheal activity. Japanese functional food ingredient (Bansoureicha). 400-1000 mg/day for glycemic support.",
+        "absorption": "low (bioflavonoid quercetin glycoside class-poor)",
+        "notes": "Psidium guajava leaf extract rich in quercetin, catechin, and gallic acid. Clinical evidence for postprandial glucose reduction (inhibits alpha-glucosidase) and antidiarrheal activity. Japanese functional food ingredient (Bansoureicha). 400-1000 mg/day for glycemic support. B23 audit 2026-04-25: bioflavonoid class-poor per Batch 19 framework — no robust human PK for guava leaf flavonoids.",
         "aliases": [
           "psidium guajava extract",
           "guava extract",
@@ -41571,38 +41571,38 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "moderate"
+          "value": 0.08,
+          "range_low": 0.05,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "NO ROBUST HUMAN PK PMID found for Psidium guajava leaf quercetin glycosides. Bioflavonoid class-poor framework (Batch 19) applies — quercetin glycosides have low oral F (<10%). Class-extension from D'Antuono 2016 (PMID:27355793) Caco-2 1.86% baseline."
         }
       },
       "guava leaf powder": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Ground Psidium guajava leaves. Traditional tropical medicine for diarrhea, diabetes, and wound healing. Contains polyphenols and tannins. Lower bioactive concentration than standardized extracts. Used as tea preparation traditionally.",
+        "absorption": "low (powder; bioflavonoid class-poor)",
+        "notes": "Ground Psidium guajava leaves. Traditional tropical medicine for diarrhea, diabetes, and wound healing. Contains polyphenols and tannins. Lower bioactive concentration than standardized extracts. Used as tea preparation traditionally. B23 audit 2026-04-25: bioflavonoid class-poor (Batch 19).",
         "aliases": [
           "guava powder",
           "psidium guajava powder"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "low-moderate"
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.08,
+          "quality": "low",
+          "notes": "Bioflavonoid class-poor per Batch 19 framework. Powder lower than extract → conservative 0.05."
         }
       },
       "guava (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Psidium guajava leaf extract; contains quercetin glycosides and gallic acid. Traditional anti-diarrheal and antidiabetic use. Form unspecified; conservative scoring.",
+        "absorption": "low (unspecified; bioflavonoid class-poor)",
+        "notes": "Psidium guajava leaf extract; contains quercetin glycosides and gallic acid. Traditional anti-diarrheal and antidiabetic use. Form unspecified; conservative scoring. B23 audit 2026-04-25: bioflavonoid class-poor floor.",
         "aliases": [
           "guava",
           "guava leaf",
@@ -41610,11 +41610,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Bioflavonoid class-poor per Batch 19. Unspecified at floor."
         }
       }
     },
@@ -43889,8 +43889,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Olea europaea leaf extract standardized to oleuropein (typically 18-25%). Oleuropein and hydroxytyrosol provide antioxidant, antimicrobial, and cardiovascular benefits. EFSA-approved health claim for olive polyphenol protection of LDL from oxidation. 500-1000 mg/day typical dose.",
+        "absorption": "moderate (oleuropein → HT pre-absorption hydrolysis)",
+        "notes": "Olea europaea leaf extract standardized to oleuropein (typically 18-25%). Oleuropein and hydroxytyrosol provide antioxidant, antimicrobial, and cardiovascular benefits. EFSA-approved health claim for olive polyphenol protection of LDL from oxidation. 500-1000 mg/day typical dose. B23 audit 2026-04-25: oleuropein → HT pre-absorption hydrolysis class-equivalent to plain extract + HT companion (PMID:24158653).",
         "aliases": [
           "olive leaf extract 20% oleuropein",
           "olive leaf (20% oleuropein)",
@@ -43919,11 +43919,11 @@
           "bonolive olive leaf extract"
         ],
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.55,
+          "range_low": 0.45,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "García-Villalba 2014 (PMID:24158653): 250 mg olive leaf extract (40% oleuropein) in pre/post-menopausal women → HT-glucuronide, HT-sulfate, oleuropein-aglycon-glucuronide detected in plasma over 24 h. Pre-absorption hydrolysis: oleuropein → HT (parallel to ascorbyl palmitate / P5P / ceramide framework). Standardized = plain extract since both deliver HT."
         },
         "dosage_importance": 1.0
       },
@@ -44221,8 +44221,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "White willow bark extract standardized to 15% salicin. Oral bioavailability 43.3% as total salicylates (PMID 11599656); salicin hydrolyzed to salicylic acid within 2h. Effective at 120-240 mg/day for low back pain and OA in RCTs (PMID 25997859). Broader mechanism than aspirin: NF-kB/TNF-a downregulation + flavonoid synergy (PMID 21226125). Less GI risk than aspirin.",
+        "absorption": "moderate (salicin → salicylic acid pre-absorption hydrolysis)",
+        "notes": "White willow bark extract standardized to 15% salicin. Oral bioavailability 43.3% as total salicylates (PMID 11599656); salicin hydrolyzed to salicylic acid within 2h. Effective at 120-240 mg/day for low back pain and OA in RCTs (PMID 25997859). Broader mechanism than aspirin: NF-kB/TNF-a downregulation + flavonoid synergy (PMID 21226125). Less GI risk than aspirin. B23 audit 2026-04-25: salicin → salicylic acid pre-absorption hydrolysis CONFIRMED (PMID:11599656). Class-equivalent to plain extract.",
         "aliases": [
           "white willow bark 15% salicin",
           "standardized white willow bark",
@@ -44234,11 +44234,11 @@
           "15% salicin"
         ],
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.55,
+          "range_low": 0.5,
+          "range_high": 0.6,
+          "quality": "moderate",
+          "notes": "Schmid 2001 (PMID:11599656): 240 mg salicin → ~86% salicylic acid in serum, AUC equivalent to 87 mg ASA. Pre-absorption hydrolysis: salicin → saligenin → salicylic acid via gut microflora + liver. Standardized form = plain extract since both deliver salicylic acid as active species."
         },
         "dosage_importance": 1.0
       },
@@ -46376,8 +46376,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Marine oil from Calanus finmarchicus copepods. Rich in wax esters of omega-3 (SDA, EPA, DHA) with unique slow-release absorption. Norwegian Arctic source.",
+        "absorption": "good (wax ester slow-release; iAUC = ethyl ester ref)",
+        "notes": "Marine oil from Calanus finmarchicus copepods. Rich in wax esters of omega-3 (SDA, EPA, DHA) with unique slow-release absorption. Norwegian Arctic source. B23 audit 2026-04-25: wax ester iAUC = ethyl ester reference (PMID:27604086) — bottleneck hypothesis overturned. Mild downstream penalty (PMID:32277573). Recommend 0.70.",
         "aliases": [
           "calanus finmarchicus oil",
           "arctic calanus oil",
@@ -46386,11 +46386,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.7,
+          "range_low": 0.65,
+          "range_high": 0.75,
           "quality": "good",
-          "notes": "good"
+          "notes": "Cook 2016 (PMID:27604086): randomized crossover, 4 g calanus oil (260 mg EPA + 156 mg DHA) vs Lovaza ethyl ester (465+375 mg). iAUC0-72h for total EPA+DHA NOT different from EE reference; calanus EPA iAUC0-48h SIGNIFICANTLY HIGHER despite lower dose. Original wax-ester-bottleneck hypothesis OVERTURNED. Paluchova 2020 (PMID:32277573): TG-bound DHA more effective for FAHFA synthesis than wax ester (mild downstream penalty). Place between EE (0.50) and TG (0.85) → 0.70."
         }
       }
     },
@@ -46422,8 +46422,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Richest plant source of alpha-linolenic acid (ALA, 54-64%). Cold-pressed from Perilla frutescens seeds. Traditional East Asian botanical.",
+        "absorption": "good (TG-bound ALA; conversion to EPA/DHA limited)",
+        "notes": "Richest plant source of alpha-linolenic acid (ALA, 54-64%). Cold-pressed from Perilla frutescens seeds. Traditional East Asian botanical. B23 audit 2026-04-25: ALA absorption robust (PMID:12591004) but conversion to EPA/DHA limited (PMID:12323085). Class-equivalent to flaxseed ALA TG framework.",
         "aliases": [
           "perilla oil",
           "perilla extract",
@@ -46437,11 +46437,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.8,
+          "range_low": 0.7,
+          "range_high": 0.85,
+          "quality": "very_good",
+          "notes": "Kurowska 2003 (PMID:12591004): 6 g ALA from perilla, plasma ALA PK 0-24 h; coated vs uncoated similar (robust absorption). Burdge 2002 (PMID:12323085): ~33% [13C]ALA recovered as 13CO2 (oxidation), small fractional conversion to EPA + DPA, NO measurable conversion to DHA in adult males over 21 d. ALA absorption = TG omega-3 class but EPA/DHA conversion limited."
         }
       }
     },
@@ -58450,8 +58450,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good",
-        "notes": "Olea europaea fruit extract standardized for olive polyphenols such as hydroxytyrosol. Fruit-derived olive phenolics support LDL oxidation protection and endothelial antioxidant status. Hytolive is a branded olive fruit extract standardized to hydroxytyrosol; the underlying identity is fruit-derived, not leaf-derived.",
+        "absorption": "moderate (HT/TYR delivery; whole-fruit Caco-2 1.86%)",
+        "notes": "Olea europaea fruit extract standardized for olive polyphenols such as hydroxytyrosol. Fruit-derived olive phenolics support LDL oxidation protection and endothelial antioxidant status. Hytolive is a branded olive fruit extract standardized to hydroxytyrosol; the underlying identity is fruit-derived, not leaf-derived. B23 audit 2026-04-25: standardized whole-fruit extract delivers HT (F=0.55) plus oleuropein → HT pre-absorption hydrolysis (PMID:27355793, PMID:16753843). Recommend 0.45 for matrix dilution.",
         "aliases": [
           "olive fruit extract",
           "olea europaea fruit extract",
@@ -58461,11 +58461,11 @@
           "olive"
         ],
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.45,
+          "range_low": 0.4,
+          "range_high": 0.55,
+          "quality": "moderate",
+          "notes": "D'Antuono 2016 (PMID:27355793): biophenols from table olive extract — overall Caco-2 bioavailability 1.86% with hydroxytyrosol+tyrosol highest, then verbascoside, luteolin. Corona 2006 (PMID:16753843): oleuropein hydrolyzed to HT in stomach + colon → class-equivalent to pure HT companion form (0.55). Slight matrix dilution → 0.45."
         },
         "dosage_importance": 1.0
       },
@@ -58864,18 +58864,18 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "unknown",
-        "notes": "Marine mammal blubber oil that naturally provides EPA, DHA, and docosapentaenoic acid (DPA). Used as a specialty omega-3 supplement in some legacy softgel products. Clinical literature often distinguishes seal oil from fish oil because of its comparatively higher DPA content.",
+        "absorption": "very_good (TG omega-3 class + DPA enrichment)",
+        "notes": "Marine mammal blubber oil that naturally provides EPA, DHA, and docosapentaenoic acid (DPA). Used as a specialty omega-3 supplement in some legacy softgel products. Clinical literature often distinguishes seal oil from fish oil because of its comparatively higher DPA content. B23 audit 2026-04-25: TG omega-3 class (Batch 9) + DPA enrichment (Batch 22) — robust serum incorporation (PMID:10588467, PMID:11428220).",
         "aliases": [
           "seal oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Conquer 1999 (PMID:10588467): 20 g seal oil/day × 42 days — EPA in serum phospholipid up 4.3-fold, NEFA up 2.7-fold; DHA up 1.5-2.1-fold; DPA up 0.5-0.7-fold. Bonefeld-Jørgensen 2001 (PMID:11428220): n-6/n-3 ratio reduction in plasma + erythrocyte membranes. TG-form (similar to fish oil TG) → class-equivalent to TG omega-3 framework (Batch 9). DPA component matches Batch 22 DPA band 0.75-0.90."
         }
       }
     },
