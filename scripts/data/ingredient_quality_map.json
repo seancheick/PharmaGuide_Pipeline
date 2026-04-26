@@ -6690,19 +6690,19 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "low (49%)",
-        "notes": "The cheapest zinc form with the worst absorption. Despite containing 80% elemental zinc by weight, very little is actually bioavailable due to poor solubility. If your supplement uses zinc oxide, you're getting far less zinc than the label suggests. Avoid for zinc supplementation — it's chosen for cost, not efficacy.",
+        "absorption": "low-moderate (ZnO ~25-35% F; less soluble than salts)",
+        "notes": "The cheapest zinc form with the worst absorption. Despite containing 80% elemental zinc by weight, very little is actually bioavailable due to poor solubility. If your supplement uses zinc oxide, you're getting far less zinc than the label suggests. Avoid for zinc supplementation — it's chosen for cost, not efficacy. B30 audit 2026-04-25: ZnO class baseline (lower than salts).",
         "aliases": [
           "oxide zinc",
           "zno"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "Consistently the lowest-bioavailable common zinc form in comparative studies. High elemental zinc content (80%) is misleading — poorly soluble in the GI tract."
+          "value": 0.3,
+          "range_low": 0.25,
+          "range_high": 0.35,
+          "quality": "moderate",
+          "notes": "Zinc oxide F ~25-35% — lower than zinc citrate (~60%) or gluconate (~60%) due to lower solubility. Wapnir 1985 classic Zn absorption baseline. Still functional supplement form, just at lower end of Zn class."
         },
         "external_ids": {
           "unii": "SOI2LOH54Z"
@@ -6712,8 +6712,8 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "The supplement label does not specify which zinc form is used. This is a red flag — budget products overwhelmingly use zinc oxide (poorest absorption) or zinc sulfate (most GI side effects). Quality brands specify the form.",
+        "absorption": "moderate (Zn class baseline; form-dependent)",
+        "notes": "The supplement label does not specify which zinc form is used. This is a red flag — budget products overwhelmingly use zinc oxide (poorest absorption) or zinc sulfate (most GI side effects). Quality brands specify the form. B30 audit 2026-04-25: Zn class baseline.",
         "aliases": [
           "zinc",
           "zn",
@@ -6723,11 +6723,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.65,
+          "quality": "moderate",
+          "notes": "Zn F highly form-dependent: oxide ~30%, citrate/gluconate ~60%, picolinate ~60%, bisglycinate ~60%. Default 0.50 middle for unspecified."
         }
       },
       "zinc aspartate": {
@@ -18361,8 +18361,8 @@
         "bio_score": 7,
         "natural": false,
         "score": 7,
-        "absorption": "unknown (no comparative PK data published)",
-        "notes": "Lipid-encapsulated ashwagandha. NooGandha (Specnova) is a branded liposomal form with clinical outcome data (PMID:38931168, 225mg/day improved cognition and cortisol in 59 subjects) but NO plasma withanolide PK comparison vs conventional extracts. Claims of enhanced bioavailability lack pharmacokinetic evidence.",
+        "absorption": "evidence-thin (no human PK comparison)",
+        "notes": "Lipid-encapsulated ashwagandha. NooGandha (Specnova) is a branded liposomal form with clinical outcome data (PMID:38931168, 225mg/day improved cognition and cortisol in 59 subjects) but NO plasma withanolide PK comparison vs conventional extracts. Claims of enhanced bioavailability lack pharmacokinetic evidence. B30 audit 2026-04-25: liposomal evidence-thin (5th application).",
         "aliases": [
           "nano ashwagandha",
           "encapsulated ashwagandha",
@@ -18379,7 +18379,7 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "No plasma withanolide PK comparison published"
+          "notes": "Liposomal evidence-thin pattern (Batch 6/10/15). No published head-to-head human PK comparing liposomal ashwagandha to standard. Companion KSM-66 / Sensoril / Shoden class baseline 0.20-0.35 (B21 audit)."
         }
       },
       "sensoril ashwagandha": {
@@ -18497,8 +18497,8 @@
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified on the label. Ashwagandha (Withania somnifera) products range from raw root powder to highly concentrated extracts like KSM-66 and Sensoril. Withanolide content and bioavailability vary widely. Scored conservatively until the exact form is identified.",
+        "absorption": "low (withanolide class-poor; Crominex pattern)",
+        "notes": "Form not specified on the label. Ashwagandha (Withania somnifera) products range from raw root powder to highly concentrated extracts like KSM-66 and Sensoril. Withanolide content and bioavailability vary widely. Scored conservatively until the exact form is identified. B30 audit 2026-04-25: ashwagandha withanolide class baseline (B21).",
         "aliases": [
           "ashwagandha",
           "ashwagandha leaf root extract",
@@ -18509,11 +18509,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "unknown",
-          "notes": "Data not available"
+          "value": 0.2,
+          "range_low": 0.15,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Withanolide PK poorly characterized in humans. Class-equivalent to KSM-66 (0.20), sensoril (0.25). Branded extracts have RCTs but limited PK (Crominex pattern). Default 0.20 for unspecified."
         }
       }
     },
@@ -22748,8 +22748,8 @@
         "bio_score": 2,
         "natural": false,
         "score": 2,
-        "absorption": "negligible",
-        "notes": "A degraded or inactive NAD+ precursor due to improper storage, heat, or age. It provides no biological activity and indicates a poor-quality product. [FLAG: Low Efficacy]",
+        "absorption": "poor (oxidative degradation; loss of cofactor capacity)",
+        "notes": "A degraded or inactive NAD+ precursor due to improper storage, heat, or age. It provides no biological activity and indicates a poor-quality product. [FLAG: Low Efficacy] B30 audit 2026-04-25: oxidative degradation (mechanical).",
         "aliases": [
           "oxidized nmn",
           "oxidized nr",
@@ -22774,19 +22774,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
+          "value": 0.0,
+          "range_low": 0.0,
+          "range_high": 0.05,
           "quality": "poor",
-          "notes": "negligible"
+          "notes": "Oxidized NAD+ precursor loses cofactor activity. Mechanical low-F entry for completeness."
         }
       },
       "nad+ precursors (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "moderate (NAD precursor class baseline; NR/NMN ~50%)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B30 audit 2026-04-25: NAD precursor class baseline. Architectural overlap with NR/NMN parents (D8.2 pending).",
         "aliases": [
           "nad+ precursors",
           "nad precursor",
@@ -22794,11 +22794,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.5,
+          "range_low": 0.3,
+          "range_high": 0.7,
+          "quality": "moderate",
+          "notes": "NAD precursor class baseline. NR (nicotinamide riboside) and NMN typical commercial forms have F ~30-70% per Trammell 2016 (NR human PK). Default 0.50 middle. **ARCHITECTURAL FLAG**: nad_precursors parent overlaps with nicotinamide_riboside / nmn parents (D8.2 review pending)."
         }
       }
     },
@@ -23994,8 +23994,8 @@
         "bio_score": 4,
         "natural": true,
         "score": 7,
-        "absorption": "poor (digestive breakdown)",
-        "notes": "Oral RNA and DNA are completely degraded by pancreatic nucleases and phosphodiesterases to individual nucleosides and bases, which are absorbed. However, the body synthesizes nucleotides de novo, so exogenous nucleic acids provide no unique molecular entity. Limited evidence of clinical benefit from standalone RNA/DNA supplements. Only positive data is for RNA combined with L-arginine and EPA in immunonutrition formulas for surgical patients (multicomponent intervention, not proof of RNA bioavailability). Typically yeast-derived.",
+        "absorption": "poor (intact RNA/DNA digested to nucleotides)",
+        "notes": "Oral RNA and DNA are completely degraded by pancreatic nucleases and phosphodiesterases to individual nucleosides and bases, which are absorbed. However, the body synthesizes nucleotides de novo, so exogenous nucleic acids provide no unique molecular entity. Limited evidence of clinical benefit from standalone RNA/DNA supplements. Only positive data is for RNA combined with L-arginine and EPA in immunonutrition formulas for surgical patients (multicomponent intervention, not proof of RNA bioavailability). Typically yeast-derived. B30 audit 2026-04-25: nucleic acid digestion barrier — intact NA does not survive to systemic; degraded to nucleotides only.",
         "aliases": [
           "rna",
           "dna",
@@ -24010,19 +24010,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "poor",
-          "notes": "poor (digestive breakdown)"
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "NUCLEIC ACID DIGESTION BARRIER (similar to protein digestion barrier in B24 SOD). Intact RNA/DNA digested by gastric/pancreatic nucleases to nucleotides + nucleosides; the parent nucleic acid does NOT survive to systemic circulation. Nucleotides ARE absorbed but at this point the supplement is effectively a nucleotide source, not \"nucleic acid.\" Sanchez-Pozo 1998 nucleotide absorption review."
         }
       },
       "rna/dna (nucleic acids) (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "poor (digestion barrier; nucleotides absorbed not RNA)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B30 audit 2026-04-25: nucleic acid digestion barrier.",
         "aliases": [
           "rna/dna (nucleic acids)",
           "nucleic acid supplement",
@@ -24030,11 +24030,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.05,
+          "range_low": 0.0,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "See nucleic acid complex entry. Intact NA digestion barrier."
         }
       }
     },
@@ -32944,8 +32944,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "Variable",
-        "notes": "Smilax officinalis root extract. Traditional use for skin conditions, joint inflammation, and as a 'blood purifier.' Contains steroidal saponins (sarsaponin, smilagenin). Limited clinical evidence. Historical use in syphilis treatment. May have mild anti-inflammatory and diuretic effects.",
+        "absorption": "low (saponin class-poor; sarsapogenin metabolism)",
+        "notes": "Smilax officinalis root extract. Traditional use for skin conditions, joint inflammation, and as a 'blood purifier.' Contains steroidal saponins (sarsaponin, smilagenin). Limited clinical evidence. Historical use in syphilis treatment. May have mild anti-inflammatory and diuretic effects. B30 audit 2026-04-25: saponin class-poor.",
         "aliases": [
           "smilax officinalis",
           "smilax species",
@@ -32956,29 +32956,29 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": "variable"
+          "value": 0.15,
+          "range_low": 0.1,
+          "range_high": 0.25,
+          "quality": "low",
+          "notes": "Smilax saponins (sarsasapogenin/smilagenin) are steroidal glycosides. Class-equivalent to other saponin-class herbal extracts. Limited human PK; conservative range."
         }
       },
       "sarsaparilla (unspecified)": {
         "bio_score": 5,
         "natural": false,
         "score": 5,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability.",
+        "absorption": "low (saponin class baseline)",
+        "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B30 audit 2026-04-25: saponin class.",
         "aliases": [
           "sarsaparilla"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Saponin class baseline."
         }
       }
     },
@@ -33798,8 +33798,8 @@
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "good",
-        "notes": "Calcium and phosphorus supplement providing both essential minerals. Good bioavailability and well-tolerated. Used as both nutritional supplement and tablet excipient.",
+        "absorption": "low-moderate (Ca phosphate class baseline ~25%)",
+        "notes": "Calcium and phosphorus supplement providing both essential minerals. Good bioavailability and well-tolerated. Used as both nutritional supplement and tablet excipient. B30 audit 2026-04-25: Ca phosphate class (B27 anchor).",
         "aliases": [
           "dicalcium phosphate",
           "calcium hydrogen phosphate",
@@ -33809,11 +33809,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "good",
-          "notes": "good"
+          "value": 0.25,
+          "range_low": 0.2,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Class-equivalent to companion calcium phosphate forms in calcium parent (~25% F). Standard pharmaceutical/feed-grade Ca form. Heaney 2001 (PMID:11444420) Ca class anchor."
         },
         "external_ids": {
           "unii": "O7TSZ97GEP"
@@ -33823,18 +33823,18 @@
         "bio_score": 6,
         "natural": false,
         "score": 6,
-        "absorption": "unknown",
-        "notes": "Dicalcium phosphate (DCP) provides both calcium (~29%) and phosphorus (~23%). Used as tablet filler and calcium source. Absorption comparable to milk calcium at ~30% efficiency.",
+        "absorption": "low-moderate (Ca phosphate class baseline)",
+        "notes": "Dicalcium phosphate (DCP) provides both calcium (~29%) and phosphorus (~23%). Used as tablet filler and calcium source. Absorption comparable to milk calcium at ~30% efficiency. B30 audit 2026-04-25: Ca phosphate class.",
         "aliases": [
           "Di-Calcium Phosphate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.25,
+          "range_low": 0.2,
+          "range_high": 0.3,
+          "quality": "low",
+          "notes": "Same as dihydrate form."
         }
       }
     },
@@ -36779,8 +36779,8 @@
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "gut colonization",
-        "notes": "B. longum subsp. infantis NI313 — probiotic strain used in multi-strain formulas.",
+        "absorption": "low (live organism; B18 framework — F not the metric)",
+        "notes": "B. longum subsp. infantis NI313 — probiotic strain used in multi-strain formulas. B30 audit 2026-04-25: live-organism class (B18); F is wrong metric.",
         "aliases": [
           "Bifidobacterium infantis NI313",
           "b. infantis ni313",
@@ -36789,19 +36789,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": ""
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Live probiotic strain — bioavailability framework does NOT apply (B18 framework). Metric should be survival-to-colon + CFU dose + strain-specific clinical evidence. Conservative 0.10 placeholder pending dedicated probiotic scoring system (see Dr Pham C9)."
         }
       },
       "bifidobacterium longum infantis bi-26": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "gut colonization",
-        "notes": "B. longum subsp. infantis Bi-26 — probiotic strain used in multi-strain formulas.",
+        "absorption": "low (live organism; B18 framework)",
+        "notes": "B. longum subsp. infantis Bi-26 — probiotic strain used in multi-strain formulas. B30 audit 2026-04-25: live-organism class (B18).",
         "aliases": [
           "Bifidobacterium infantis Bi-26",
           "B. infantis Bi-26",
@@ -36809,11 +36809,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "variable",
-          "notes": ""
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Live probiotic strain (B18 framework). Conservative placeholder."
         }
       },
       "bifidobacterium longum r0175": {
@@ -41385,8 +41385,8 @@
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "low-moderate",
-        "notes": "Ground Vitex agnus-castus berries. Traditional European herb for women's cycle regulation and PMS. Lower agnuside/aucubin concentration than standardized extracts. Variable potency. May take 2-3 cycles for full effect. Contraindicated with dopamine agonists and hormone therapies.",
+        "absorption": "low (powder; flavonoid class-poor)",
+        "notes": "Ground Vitex agnus-castus berries. Traditional European herb for women's cycle regulation and PMS. Lower agnuside/aucubin concentration than standardized extracts. Variable potency. May take 2-3 cycles for full effect. Contraindicated with dopamine agonists and hormone therapies. B30 audit 2026-04-25: chasteberry powder lower than standardized extract (B21).",
         "aliases": [
           "vitex powder",
           "chaste tree berry powder",
@@ -41394,19 +41394,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "low-moderate"
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Vitex agnus-castus berry powder — agnusides + casticin (flavonoid) class-poor. Class-equivalent to vitex standardized extract (B21 = 0.20) with powder having lower active concentration."
         }
       },
       "chasteberry (unspecified)": {
         "bio_score": 6,
         "natural": true,
         "score": 9,
-        "absorption": "unknown",
-        "notes": "Vitex agnus-castus berry; contains diterpenes (rotundifuran) and iridoids (agnuside, aucubin). Dopaminergic action reduces prolactin. Evidence for PMS and menstrual irregularities. Form unspecified.",
+        "absorption": "low (vitex class baseline)",
+        "notes": "Vitex agnus-castus berry; contains diterpenes (rotundifuran) and iridoids (agnuside, aucubin). Dopaminergic action reduces prolactin. Evidence for PMS and menstrual irregularities. Form unspecified. B30 audit 2026-04-25: vitex class.",
         "aliases": [
           "chasteberry",
           "vitex",
@@ -41429,11 +41429,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Vitex class baseline."
         }
       }
     },
@@ -48965,19 +48965,16 @@
         "bio_score": 12,
         "score": 15,
         "natural": true,
-        "absorption": "excellent (~95%, triglyceride form)",
+        "absorption": "very_good (TG omega-3 class; algal DHA = fish DHA)",
         "absorption_structured": {
-          "rate": 0.95,
-          "mechanism": "passive diffusion",
-          "food_effect": "high",
-          "quality": "excellent",
-          "range_low": null,
-          "range_high": null,
-          "value": null,
-          "notes": "Data not available"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.9,
+          "quality": "very_good",
+          "notes": "Class-equivalent to fish_oil natural TG (0.85) per Batch 9 omega-3 audit. Algal DHA incorporates into plasma phospholipids equivalently to fish oil DHA per Lemaitre-Delaunay 1999 / Arterburn 2008."
         },
         "dosage_importance": 1.0,
-        "notes": "Microalgal oil (typically Schizochytrium sp.) providing DHA in triglyceride form. Vegan/vegetarian DHA source bioequivalent to fish oil TG (PMID 41096614, GMR 112%). Free from ocean contaminants. Life's DHA (DSM) is the leading brand. Sustainable alternative to fish-derived omega-3.",
+        "notes": "Microalgal oil (typically Schizochytrium sp.) providing DHA in triglyceride form. Vegan/vegetarian DHA source bioequivalent to fish oil TG (PMID 41096614, GMR 112%). Free from ocean contaminants. Life's DHA (DSM) is the leading brand. Sustainable alternative to fish-derived omega-3. B30 audit 2026-04-25: TG omega-3 class (B9). algae_oil is architectural duplicate of fish_oil/omega_3 (D8.1 review).",
         "aliases": [
           "algae oil",
           "dha from algae",
@@ -49000,16 +48997,16 @@
         "bio_score": 5,
         "score": 8,
         "natural": true,
-        "absorption": "unknown",
+        "absorption": "very_good (algal omega-3 class baseline)",
         "absorption_structured": {
-          "quality": "unknown",
-          "notes": "Form not specified",
-          "range_low": null,
-          "range_high": null,
-          "value": null
+          "value": 0.83,
+          "range_low": 0.78,
+          "range_high": 0.88,
+          "quality": "very_good",
+          "notes": "Class-equivalent to algae oil DHA companion (0.85). Default for unspecified algal source."
         },
         "dosage_importance": 1.0,
-        "notes": "Microalgae-derived DHA/EPA oil (Schizochytrium, Crypthecodinium). Vegan omega-3 source with equivalent bioavailability to fish oil. Sustainable marine-free production. Form unspecified.",
+        "notes": "Microalgae-derived DHA/EPA oil (Schizochytrium, Crypthecodinium). Vegan omega-3 source with equivalent bioavailability to fish oil. Sustainable marine-free production. Form unspecified. B30 audit 2026-04-25: algal omega-3 class baseline.",
         "aliases": [
           "microalgae supplement"
         ]
@@ -51497,8 +51494,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "Extract from Agaricus blazei fruiting bodies. Some human RCT evidence: hepatoprotective at 1,500mg/day in chronic hepatitis B (PMID 17309383, 26933886). Predominantly preclinical immunomodulatory and antitumor data. Extract quality varies significantly between suppliers.",
+        "absorption": "low (mushroom class-poor; chitin shell barrier)",
+        "notes": "Extract from Agaricus blazei fruiting bodies. Some human RCT evidence: hepatoprotective at 1,500mg/day in chronic hepatitis B (PMID 17309383, 26933886). Predominantly preclinical immunomodulatory and antitumor data. Extract quality varies significantly between suppliers. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "royal sun mushroom fruiting body extract",
           "royal sun mushroom extract",
@@ -51510,19 +51507,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "Beta-glucans partially absorbed; exact bioavailability data limited.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Mushroom class baseline (B1 framework). Agaricus blazei beta-glucan; chitin shell limits absorption."
         }
       },
       "royal sun blazei (unspecified)": {
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Form not specified; conservative scoring applied. Agaricus blazei Murill mushroom (Himematsutake). Immune-modulating beta-glucans.",
+        "absorption": "low (mushroom class-poor; unspecified)",
+        "notes": "Form not specified; conservative scoring applied. Agaricus blazei Murill mushroom (Himematsutake). Immune-modulating beta-glucans. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "royal sun blazei",
           "royal sun mushroom",
@@ -51535,11 +51532,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.08,
+          "range_low": 0.03,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Mushroom class baseline (B1)."
         }
       }
     },
@@ -56632,8 +56629,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "Extract from Agaricus bisporus fruiting bodies. Beta-glucans activate macrophages and NK cells. Ergothioneine and glutathione provide antioxidant protection. Emerging oncology research (PMID 32653808, 22113068). Less medicinal evidence than reishi/maitake/shiitake.",
+        "absorption": "low (mushroom class-poor; chitin shell barrier)",
+        "notes": "Extract from Agaricus bisporus fruiting bodies. Beta-glucans activate macrophages and NK cells. Ergothioneine and glutathione provide antioxidant protection. Emerging oncology research (PMID 32653808, 22113068). Less medicinal evidence than reishi/maitake/shiitake. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "white button mushroom fruiting body extract",
           "button mushroom extract",
@@ -56643,19 +56640,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "Beta-glucans partially absorbed; ergothioneine well-absorbed orally.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Mushroom class baseline (B1 framework). Agaricus bisporus beta-glucan/polysaccharide; chitin shell limits absorption."
         }
       },
       "button mushroom (unspecified)": {
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Agaricus bisporus (white/cremini mushroom); contains ergothioneine, beta-glucans, and conjugated linoleic acid. Only natural food source of ergothioneine. Aromatase-inhibiting properties. Form unspecified.",
+        "absorption": "low (mushroom class-poor; unspecified)",
+        "notes": "Agaricus bisporus (white/cremini mushroom); contains ergothioneine, beta-glucans, and conjugated linoleic acid. Only natural food source of ergothioneine. Aromatase-inhibiting properties. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "button mushroom",
           "white button mushroom",
@@ -56665,11 +56662,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.08,
+          "range_low": 0.03,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Mushroom class baseline (B1)."
         }
       }
     },
@@ -56718,8 +56715,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "Extract from Auricularia auricula-judae fruiting bodies. TCM mushroom with polysaccharide-rich profile. Animal studies show antioxidant and metabolic benefits (PMID 39968271). Limited human clinical evidence — conservative scoring applied.",
+        "absorption": "low (mushroom class-poor; chitin shell barrier)",
+        "notes": "Extract from Auricularia auricula-judae fruiting bodies. TCM mushroom with polysaccharide-rich profile. Animal studies show antioxidant and metabolic benefits (PMID 39968271). Limited human clinical evidence — conservative scoring applied. B30 audit 2026-04-25: mushroom class-poor (B1 framework).",
         "aliases": [
           "black fungus mushroom fruiting body extract",
           "black fungus mushroom extract",
@@ -56732,19 +56729,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "Polysaccharide bioavailability variable; direct pharmacokinetic data limited.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Mushroom class baseline (Batch 1 framework). Beta-glucan + polysaccharide-rich; chitin cell wall limits intact molecule absorption. Active components partially fermented to SCFAs."
         }
       },
       "auricularia (unspecified)": {
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Auricularia auricula-judae (wood ear/black fungus) mushroom; contains polysaccharides with anticoagulant and hypoglycemic properties. Traditional Chinese medicine for blood stasis. Form unspecified.",
+        "absorption": "low (mushroom class-poor; unspecified default)",
+        "notes": "Auricularia auricula-judae (wood ear/black fungus) mushroom; contains polysaccharides with anticoagulant and hypoglycemic properties. Traditional Chinese medicine for blood stasis. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
           "auricularia",
           "black fungus",
@@ -56757,11 +56754,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.08,
+          "range_low": 0.03,
+          "range_high": 0.12,
+          "quality": "low",
+          "notes": "Mushroom class baseline (B1). Unspecified default lower than extract."
         }
       }
     },
@@ -57018,8 +57015,8 @@
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "moderate",
-        "notes": "Traditional fermented kefir grain culture (Eastern European origin). Consortium of Lactobacillus, Leuconostoc, Acetobacter species plus Saccharomyces and Kluyveromyces yeasts. Provides diverse probiotic strains; evidence for gut health, immune function, and lactose digestion (general fermented dairy evidence). Dose: varies by CFU content.",
+        "absorption": "low (live organism + fermentation; B18 framework)",
+        "notes": "Traditional fermented kefir grain culture (Eastern European origin). Consortium of Lactobacillus, Leuconostoc, Acetobacter species plus Saccharomyces and Kluyveromyces yeasts. Provides diverse probiotic strains; evidence for gut health, immune function, and lactose digestion (general fermented dairy evidence). Dose: varies by CFU content. B30 audit 2026-04-25: live-organism + fermentation (B18).",
         "aliases": [
           "eastern european wild kefir culture",
           "wild kefir culture",
@@ -57033,19 +57030,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "moderate",
-          "notes": "Live culture viability and colonization depends on CFU count, acid tolerance, and gut transit conditions.",
-          "range_low": null,
-          "range_high": null
+          "value": 0.1,
+          "range_low": 0.05,
+          "range_high": 0.2,
+          "quality": "low",
+          "notes": "Kefir = mixed live-organism + fermentation product. B18 framework: F is wrong metric — survival/colonization + fermented metabolites are the relevant outputs."
         }
       },
       "kefir (unspecified)": {
         "bio_score": 5,
         "natural": true,
         "score": 8,
-        "absorption": "unknown",
-        "notes": "Symbiotic culture of bacteria and yeast (SCOBY) producing fermented milk. Contains Lactobacillus kefiranofaciens, L. kefiri, and kefiran polysaccharide. Evidence for gut health and bone density. Form unspecified.",
+        "absorption": "low (live organism class baseline)",
+        "notes": "Symbiotic culture of bacteria and yeast (SCOBY) producing fermented milk. Contains Lactobacillus kefiranofaciens, L. kefiri, and kefiran polysaccharide. Evidence for gut health and bone density. Form unspecified. B30 audit 2026-04-25: live-organism class.",
         "aliases": [
           "kefir",
           "kefir powder",
@@ -57054,11 +57051,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": null,
-          "quality": "unknown",
-          "notes": "Data not available",
-          "range_low": null,
-          "range_high": null
+          "value": 0.08,
+          "range_low": 0.03,
+          "range_high": 0.15,
+          "quality": "low",
+          "notes": "Live-organism class (B18). Unspecified default."
         }
       }
     },
@@ -58526,8 +58523,8 @@
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "rapid oral hydration matrix; no special enhancement",
-        "notes": "Dehydrated coconut water / coconut liquid endosperm. Used in hydration and electrolyte formulas. Cococin is a branded coconut water ingredient. Human trials support coconut water as a reasonable oral rehydration ingredient in some exercise settings.",
+        "absorption": "very_good (electrolyte solution; rapid absorption)",
+        "notes": "Dehydrated coconut water / coconut liquid endosperm. Used in hydration and electrolyte formulas. Cococin is a branded coconut water ingredient. Human trials support coconut water as a reasonable oral rehydration ingredient in some exercise settings. B30 audit 2026-04-25: electrolyte solution F class baseline.",
         "aliases": [
           "coconut water concentrate powder",
           "cococin",
@@ -58536,29 +58533,29 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "Hydration ingredient; no formal bioavailability fraction used"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Coconut water is primarily K+/Mg2+/Na+ electrolytes + simple sugars in aqueous matrix — F essentially equivalent to plain salt+water solutions. Rapid absorption via standard ion transport. Saat 2002 (oral rehydration efficacy)."
         }
       },
       "coconut water (unspecified)": {
         "bio_score": 7,
         "natural": true,
         "score": 10,
-        "absorption": "rapid oral hydration matrix; no special enhancement",
-        "notes": "Coconut water ingredient without a specified powder or concentrate form. Conservative scoring.",
+        "absorption": "very_good (electrolyte hydration class)",
+        "notes": "Coconut water ingredient without a specified powder or concentrate form. Conservative scoring. B30 audit 2026-04-25: electrolyte solution class.",
         "aliases": [
           "coconut water"
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": null,
-          "range_low": null,
-          "range_high": null,
-          "quality": "moderate",
-          "notes": "Hydration ingredient; no formal bioavailability fraction used"
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Same as powder — electrolyte solution class."
         }
       }
     },
