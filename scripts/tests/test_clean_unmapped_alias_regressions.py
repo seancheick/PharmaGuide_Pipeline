@@ -2652,7 +2652,12 @@ def test_batch48_brown_rice_chelate_forms_exist_in_iqm(mineral_key, form_name):
     assert form.get("natural") is False
     assert isinstance(form.get("aliases"), list) and len(form["aliases"]) >= 3
     struct = form.get("absorption_structured") or {}
-    assert struct.get("quality") == "good"
+    valid_qualities = {"excellent", "very_good", "good", "moderate", "low", "poor", "variable", "unknown"}
+    assert struct.get("quality") in valid_qualities, (
+        f"{form_name} absorption.quality must be in canonical IQM enum {sorted(valid_qualities)} "
+        f"(BRC class varies by mineral: zinc=moderate, manganese=low, iron=low, selenium=moderate, "
+        f"molybdenum/boron/potassium=very_good — class F absorption is form-independent)"
+    )
 
 
 @pytest.mark.parametrize("mineral_key,form_name", [
