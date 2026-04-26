@@ -2562,11 +2562,11 @@
     "rxcui": "11248",
     "forms": {
       "methylcobalamin sublingual": {
-        "bio_score": 15,
+        "bio_score": 12,
         "natural": true,
-        "score": 18,
+        "score": 15,
         "absorption": "sublingual; bypasses IF — ~10-40% absorbed at 1000 mcg via oral mucosa",
-        "notes": "The gold standard for B12 supplementation. Methylcobalamin is the active methyl form your body uses directly for nerve function and methylation. Sublingual delivery bypasses the GI tract and intrinsic factor requirement entirely — critical for people with absorption issues, pernicious anemia, or aging-related IF decline. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "notes": "The gold standard for B12 supplementation. Methylcobalamin is the active methyl form your body uses directly for nerve function and methylation. Sublingual delivery bypasses the GI tract and intrinsic factor requirement entirely — critical for people with absorption issues, pernicious anemia, or aging-related IF decline. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 15 → 12. Sublingual partial first-pass bypass; F~20% — 12 reflects modest premium without fantasy claim.",
         "aliases": [
           "sublingual methyl b12",
           "methyl b12 sublingual",
@@ -2583,11 +2583,11 @@
         }
       },
       "methylcobalamin": {
-        "bio_score": 14,
+        "bio_score": 8,
         "natural": true,
-        "score": 17,
+        "score": 11,
         "absorption": "active coenzyme form; ~1-2% passive absorption at 1000 mcg supplemental dose",
-        "notes": "The bioactive methyl form of B12 — used directly by your cells without conversion. Supports nerve health, brain function, and methylation pathways. Preferred over cyanocobalamin for people with MTHFR variants. Does not require intrinsic factor conversion, only GI absorption. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "notes": "The bioactive methyl form of B12 — used directly by your cells without conversion. Supports nerve health, brain function, and methylation pathways. Preferred over cyanocobalamin for people with MTHFR variants. Does not require intrinsic factor conversion, only GI absorption. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 14 → 8. Oral B12 above intrinsic factor saturation absorbs at passive 1-2%; oral methylcobalamin at 14 was \"fantasy\" per Dr Pham.",
         "aliases": [
           "methyl b12",
           "methyl cobalamin",
@@ -2616,11 +2616,11 @@
         }
       },
       "adenosylcobalamin": {
-        "bio_score": 14,
+        "bio_score": 8,
         "natural": true,
-        "score": 17,
+        "score": 11,
         "absorption": "mitochondrial coenzyme form; ~1-2% passive absorption at 1000 mcg dose",
-        "notes": "The mitochondrial active form of B12 (also called dibencozide or coenzyme B12). Essential for energy production in the Krebs cycle. The form your mitochondria actually use. Less common in supplements than methylcobalamin but equally important biologically. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "notes": "The mitochondrial active form of B12 (also called dibencozide or coenzyme B12). Essential for energy production in the Krebs cycle. The form your mitochondria actually use. Less common in supplements than methylcobalamin but equally important biologically. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 14 → 8. Same passive 1-2% F as oral methylcobalamin.",
         "aliases": [
           "dibencozide",
           "cobamamide",
@@ -2638,11 +2638,11 @@
         }
       },
       "hydroxocobalamin": {
-        "bio_score": 13,
+        "bio_score": 8,
         "natural": true,
-        "score": 16,
+        "score": 11,
         "absorption": "long retention; ~1-3% oral F, IM preferred for cyanide antidote use",
-        "notes": "A natural form of B12 with excellent tissue retention — stays in the body longer than cyanocobalamin. Used medically for cyanide poisoning treatment and B12 injections. Converts to both methylcobalamin and adenosylcobalamin as needed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "notes": "A natural form of B12 with excellent tissue retention — stays in the body longer than cyanocobalamin. Used medically for cyanide poisoning treatment and B12 injections. Converts to both methylcobalamin and adenosylcobalamin as needed. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 13 → 8. Oral hydroxocobalamin F~3%; injectable form is the clinical default.",
         "aliases": [
           "hydroxy b12",
           "hydroxo b12",
@@ -2663,11 +2663,11 @@
         }
       },
       "cyanocobalamin sublingual": {
-        "bio_score": 11,
+        "bio_score": 9,
         "natural": false,
-        "score": 11,
+        "score": 9,
         "absorption": "sublingual; bypasses IF — comparable to methyl-SL but requires intracellular conversion",
-        "notes": "Synthetic B12 with sublingual delivery to improve absorption. While sublingual bypasses some GI barriers, cyanocobalamin still requires liver conversion to active forms and releases a tiny amount of cyanide during metabolism. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
+        "notes": "Synthetic B12 with sublingual delivery to improve absorption. While sublingual bypasses some GI barriers, cyanocobalamin still requires liver conversion to active forms and releases a tiny amount of cyanide during metabolism. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption. Dr Pham C2 sign-off: bio_score 11 → 9. Sublingual partial first-pass bypass; modest premium.",
         "aliases": [
           "sublingual b12",
           "b12 sublingual",
@@ -5450,11 +5450,11 @@
         }
       },
       "magnesium brown rice chelate": {
-        "bio_score": 11,
+        "bio_score": 6,
         "natural": false,
-        "score": 11,
+        "score": 6,
         "absorption": "marketing term; 0 PubMed hits; assume oxide-tier F absent verified data",
-        "notes": "Magnesium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135.",
+        "notes": "Magnesium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 15): Magnesium audit — 11 PMIDs WebFetch-verified. CLASS FINDING: organic chelates (glycinate, malate, taurate, orotate, AAC, gluconate, aspartate, lactate, chloride) cluster F ~25-45% in humans with overlapping CIs; only robustly-replicated human ranking is citrate ≥ organic chelates > carbonate > oxide. THREONATE FINDING: BBB-crossing claim is RAT-ONLY (Slutsky 2010 PMID:20152124, Neuron). Liu 2016 + Zhang 2022 human cognitive RCTs have NO brain Mg PK. ACETYL-TAURATE: rodent-only (Ates 2019 mice, Uysal 2019 rats); no human PK. BROWN RICE CHELATE: re-confirmed 0 PubMed hits (Batch 11). Misattributions caught: Slutsky PMID 20152120→20152124; Walker 2003 did NOT test glycinate; Schwalfenberg 2017 muscle-cramps RCT does not exist; Coudray PMID 16253138→16548135. Dr Pham C4 sign-off: bio_score 11 → 6. Marketing form.",
         "aliases": [
           "magnesium rice chelate",
           "rice chelate magnesium",
@@ -5952,11 +5952,11 @@
     "rda_ul_ref": "Iron",
     "forms": {
       "iron bisglycinate": {
-        "bio_score": 14,
+        "bio_score": 12,
         "natural": false,
-        "score": 14,
+        "score": 12,
         "absorption": "~2× ferrous sulfate; 20-45% in deficient subjects (Pineda 2001 PMID:11377130)",
-        "notes": "The gold standard chelated iron (Ferrochel/TRAACS by Albion). Absorbed 2-4x better than ferrous sulfate via amino acid transport pathways, completely independent of stomach acid. Dramatically fewer GI side effects (no nausea, constipation, or metallic taste). Not blocked by food, tannins, or calcium. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "The gold standard chelated iron (Ferrochel/TRAACS by Albion). Absorbed 2-4x better than ferrous sulfate via amino acid transport pathways, completely independent of stomach acid. Dramatically fewer GI side effects (no nausea, constipation, or metallic taste). Not blocked by food, tannins, or calcium. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C8 sign-off MODIFY: bio_score 14 → 12 (bisglycinate retained mid-high; modest downgrade only).",
         "aliases": [
           "ferrous bisglycinate",
           "ferrochel",
@@ -5989,11 +5989,11 @@
         }
       },
       "iron brown rice chelate": {
-        "bio_score": 11,
+        "bio_score": 6,
         "natural": false,
-        "score": 11,
+        "score": 6,
         "absorption": "no human PK; assume ferrous-sulfate-equivalent absent peer-reviewed data",
-        "notes": "Iron chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Iron chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C4 sign-off: bio_score 11 → 6. Marketing form.",
         "aliases": [
           "iron rice chelate",
           "rice chelate iron",
@@ -6012,11 +6012,11 @@
         }
       },
       "iron protein succinylate": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": false,
-        "score": 13,
+        "score": 10,
         "absorption": "enteric-protected ferric form; clinical efficacy similar to FeSO4, no isotopic PK",
-        "notes": "Iron bound to a modified protein carrier (casein succinylate). Releases iron only at intestinal pH, protecting the stomach lining. Excellent GI tolerance — comparable to bisglycinate. Widely used in Europe (brand: Ferplex/Legofer). A premium option for iron-sensitive individuals. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Iron bound to a modified protein carrier (casein succinylate). Releases iron only at intestinal pH, protecting the stomach lining. Excellent GI tolerance — comparable to bisglycinate. Widely used in Europe (brand: Ferplex/Legofer). A premium option for iron-sensitive individuals. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C8 sign-off: bio_score 13 → 10.",
         "aliases": [
           "ips iron",
           "irovit",
@@ -6036,11 +6036,11 @@
         }
       },
       "heme iron polypeptide": {
-        "bio_score": 13,
+        "bio_score": 10,
         "natural": true,
-        "score": 16,
+        "score": 13,
         "absorption": "heme uptake ~15-35% via heme transporter; class estimate, no validated brand PK",
-        "notes": "Iron derived from animal hemoglobin (brand: Proferrin). Heme iron is absorbed via the HCP-1 receptor — a completely different pathway than non-heme iron. Absorbs at 15-35% (vs 2-20% for non-heme). Not blocked by phytates, tannins, calcium, or fiber. The most efficiently absorbed iron form available. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Iron derived from animal hemoglobin (brand: Proferrin). Heme iron is absorbed via the HCP-1 receptor — a completely different pathway than non-heme iron. Absorbs at 15-35% (vs 2-20% for non-heme). Not blocked by phytates, tannins, calcium, or fiber. The most efficiently absorbed iron form available. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C8 sign-off: bio_score 13 → 10.",
         "aliases": [
           "heme iron",
           "proferrin",
@@ -6263,11 +6263,11 @@
         }
       },
       "iron amino acid chelate": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "generic chelate; ~2× FeSO4 when ferrochel-grade (Layrisse 2000 PMID:10958812)",
-        "notes": "Iron bound to amino acids (generic chelate, not specifying which amino acid). Absorbed via amino acid transport pathways with reduced GI irritation compared to ferrous salts. The specific amino acid matters — glycine (bisglycinate) is the best-studied. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Iron bound to amino acids (generic chelate, not specifying which amino acid). Absorbed via amino acid transport pathways with reduced GI irritation compared to ferrous salts. The specific amino acid matters — glycine (bisglycinate) is the best-studied. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C8 sign-off: bio_score 12 → 10.",
         "aliases": [
           "iron chelate",
           "iron amino acid complex",
@@ -6336,11 +6336,11 @@
         }
       },
       "ferrous ascorbate": {
-        "bio_score": 12,
+        "bio_score": 10,
         "natural": false,
-        "score": 12,
+        "score": 10,
         "absorption": "ascorbate co-presence yields ~2-3× ferrous baseline absorption",
-        "notes": "Iron combined with vitamin C (ascorbic acid), which significantly enhances non-heme iron absorption by reducing Fe3+ to Fe2+ and forming a soluble chelate. Studies show 2-3x improved absorption vs ferrous sulfate when taken with vitamin C. A well-tolerated form with clinical evidence for effective iron repletion. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Iron combined with vitamin C (ascorbic acid), which significantly enhances non-heme iron absorption by reducing Fe3+ to Fe2+ and forming a soluble chelate. Studies show 2-3x improved absorption vs ferrous sulfate when taken with vitamin C. A well-tolerated form with clinical evidence for effective iron repletion. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C8 sign-off: bio_score 12 → 10.",
         "aliases": [
           "iron ascorbate",
           "iron with vitamin c",
@@ -6361,11 +6361,11 @@
         }
       },
       "liposomal iron": {
-        "bio_score": 13,
+        "bio_score": 9,
         "natural": false,
-        "score": 13,
+        "score": 9,
         "absorption": "M-cell vesicle uptake (Fabiano 2018 PMID:30213039 ex vivo); human PK preliminary",
-        "notes": "Iron encapsulated in phospholipid liposomes (e.g., sucrosomial iron / Sideral). Bypasses the standard DMT-1 iron transport pathway, absorbing via endocytosis in the M-cells of the intestinal epithelium. Clinical trials show equivalent efficacy to IV iron for correcting deficiency, with dramatically better GI tolerance than any oral ferrous salt. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Iron encapsulated in phospholipid liposomes (e.g., sucrosomial iron / Sideral). Bypasses the standard DMT-1 iron transport pathway, absorbing via endocytosis in the M-cells of the intestinal epithelium. Clinical trials show equivalent efficacy to IV iron for correcting deficiency, with dramatically better GI tolerance than any oral ferrous salt. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C5 sign-off: bio_score 13 → 9. Liposomal cap.",
         "aliases": [
           "sucrosomial iron",
           "sideral iron",
@@ -6386,11 +6386,11 @@
         }
       },
       "iron picolinate": {
-        "bio_score": 12,
+        "bio_score": 8,
         "natural": false,
-        "score": 12,
+        "score": 8,
         "absorption": "low (= ferrous sulfate; picolinate premium UNSUPPORTED)",
-        "notes": "Iron(II) chelated with picolinic acid. Picolinate chelation employs the same intestinal mucosal carrier mechanism as zinc picolinate, reducing free iron exposure and associated GI irritation vs. inorganic ferrous salts. Bidentate coordination stabilizes Fe(II) through gastric transit. Limited specific RCT data vs. iron bisglycinate; absorption estimated 25–30% elemental iron — comparable to ferrous ascorbate and above ferrous sulfate (10–15%). Relevant for iron-deficiency supplementation where GI tolerance is key (Tolkien 2015 systematic review framework for iron form GI tolerability). B27 audit 2026-04-25: PICOLINATE PREMIUM UNSUPPORTED — Fe picolinate = FeSO4 RBV 0.99 (PMID:31187261). bio_score inflated — flagged for Dr Pham Section C13.",
+        "notes": "Iron(II) chelated with picolinic acid. Picolinate chelation employs the same intestinal mucosal carrier mechanism as zinc picolinate, reducing free iron exposure and associated GI irritation vs. inorganic ferrous salts. Bidentate coordination stabilizes Fe(II) through gastric transit. Limited specific RCT data vs. iron bisglycinate; absorption estimated 25–30% elemental iron — comparable to ferrous ascorbate and above ferrous sulfate (10–15%). Relevant for iron-deficiency supplementation where GI tolerance is key (Tolkien 2015 systematic review framework for iron form GI tolerability). B27 audit 2026-04-25: PICOLINATE PREMIUM UNSUPPORTED — Fe picolinate = FeSO4 RBV 0.99 (PMID:31187261). bio_score inflated — flagged for Dr Pham Section C13. Dr Pham C13 sign-off: bio_score 12 → 8. Sabatier 2020 (PMID:31187261) smoking gun — picolinate premium definitively unsupported in human RCT (RBV 0.99 vs FeSO4).",
         "aliases": [
           "ferrous picolinate",
           "iron(II) picolinate",
@@ -6754,11 +6754,11 @@
         }
       },
       "zinc brown rice chelate": {
-        "bio_score": 11,
+        "bio_score": 8,
         "natural": false,
-        "score": 11,
+        "score": 8,
         "absorption": "no human PK; treat as ZnSO4-equivalent absent peer-reviewed data",
-        "notes": "Zinc chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific picolinate and bisglycinate chelates. Often marketed as a hypoallergenic zinc alternative suitable for those avoiding soy or whey-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Zinc chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific picolinate and bisglycinate chelates. Often marketed as a hypoallergenic zinc alternative suitable for those avoiding soy or whey-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C4 sign-off: bio_score → 8. Marketing form.",
         "aliases": [
           "zinc rice chelate",
           "rice chelate zinc",
@@ -6872,7 +6872,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action, not systemic absorption. See standardized extract entry for mechanism rationale."
+          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action, not systemic absorption. See standardized extract entry for mechanism rationale.",
+          "category_error_type": "local_action",
+          "category_error_label": "Works locally; not systemically absorbed"
         }
       },
       "standardized extract (mucilage)": {
@@ -6902,7 +6904,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR — bioavailability framework does not apply. Mucilage polysaccharides hydrate in GI lumen → viscous gel → topical demulcent coating on mucosa (textbook pharmacognosy). NO PubMed PMID exists for slippery elm mucilage systemic absorption. Same pattern as manuka honey (Batch 18), organ extracts (Batch 20), prebiotics (Batch 22) — local-action / fermented substrate / composite food categories."
+          "notes": "CATEGORY ERROR — bioavailability framework does not apply. Mucilage polysaccharides hydrate in GI lumen → viscous gel → topical demulcent coating on mucosa (textbook pharmacognosy). NO PubMed PMID exists for slippery elm mucilage systemic absorption. Same pattern as manuka honey (Batch 18), organ extracts (Batch 20), prebiotics (Batch 22) — local-action / fermented substrate / composite food categories.",
+          "category_error_type": "local_action",
+          "category_error_label": "Works locally; not systemically absorbed"
         }
       },
       "bark powder (unspecified)": {
@@ -6935,7 +6939,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action."
+          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action.",
+          "category_error_type": "local_action",
+          "category_error_label": "Works locally; not systemically absorbed"
         }
       },
       "outer bark powder": {
@@ -6959,7 +6965,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action. Outer bark has even less mucilage than inner bark; trad. discouraged."
+          "notes": "CATEGORY ERROR — mucilage polysaccharide local mucosal action. Outer bark has even less mucilage than inner bark; trad. discouraged.",
+          "category_error_type": "local_action",
+          "category_error_label": "Works locally; not systemically absorbed"
         }
       }
     },
@@ -7312,11 +7320,11 @@
         }
       },
       "selenium brown rice chelate": {
-        "bio_score": 11,
+        "bio_score": 8,
         "natural": false,
-        "score": 11,
+        "score": 8,
         "absorption": "no human PK; treat as inorganic-equivalent absent peer-reviewed data",
-        "notes": "Selenium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Selenium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C4 sign-off: bio_score → 8. Marketing form.",
         "aliases": [
           "selenium rice chelate",
           "rice chelate selenium",
@@ -9359,11 +9367,11 @@
         }
       },
       "bis(maltolato)oxovanadium (BMOV)": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": false,
-        "score": 12,
+        "score": 7,
         "absorption": "high (~10–15%)",
-        "notes": "An organovanadium chelate designed for better oral absorption — 3–5x more bioavailable than vanadyl sulfate and with a wider safety margin. BMOV showed stronger insulin-mimetic activity in diabetic animal models (Thompson 2009). Still primarily research-grade and rarely found in consumer supplements. Higher score reflects the improved pharmacokinetics over inorganic vanadium.",
+        "notes": "An organovanadium chelate designed for better oral absorption — 3–5x more bioavailable than vanadyl sulfate and with a wider safety margin. BMOV showed stronger insulin-mimetic activity in diabetic animal models (Thompson 2009). Still primarily research-grade and rarely found in consumer supplements. Higher score reflects the improved pharmacokinetics over inorganic vanadium. Dr Pham C12 sign-off: bio_score 12 → 7, struct.value 0.125 → 0.02. Speciation difference, NOT absorption miracle.",
         "aliases": [
           "bis maltolato oxovanadium",
           "organic vanadium",
@@ -9378,11 +9386,11 @@
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
-          "value": 0.125,
-          "range_low": 0.1,
-          "range_high": 0.15,
-          "quality": "low",
-          "notes": "high (~10–15%)"
+          "value": 0.02,
+          "range_low": 0.01,
+          "range_high": 0.03,
+          "quality": "poor",
+          "notes": "Willsky 2013 (PMID:23982218) — VOSO4 ~1% in T2D humans. Willsky 2001 (PMID:11377693): BMOV vs VOSO4 differences are speciation, not absorption. Class-equivalent to VOSO4 (~0.02)."
         }
       },
       "bis(picolinato)oxovanadium (BPOV)": {
@@ -9913,11 +9921,11 @@
     "rda_ul_ref": "Chromium",
     "forms": {
       "chromium picolinate": {
-        "bio_score": 14,
+        "bio_score": 7,
         "natural": false,
-        "score": 14,
+        "score": 7,
         "absorption": "2.8%",
-        "notes": "The most-studied chromium form for blood sugar support. The picolinic acid carrier helps shuttle chromium across your gut lining, achieving about 2.8% absorption — which is actually high for chromium. Backed by strong clinical evidence for insulin sensitivity (Cefalu 2004). Found in popular brands like Chromax.",
+        "notes": "The most-studied chromium form for blood sugar support. The picolinic acid carrier helps shuttle chromium across your gut lining, achieving about 2.8% absorption — which is actually high for chromium. Backed by strong clinical evidence for insulin sensitivity (Cefalu 2004). Found in popular brands like Chromax. Dr Pham C7 sign-off: bio_score 14 → 7. Anderson 1996 stands; all Cr forms F~1-3%.",
         "aliases": [
           "picolinic acid chromium",
           "chromium pic",
@@ -9944,11 +9952,11 @@
         }
       },
       "chromium brown rice chelate": {
-        "bio_score": 11,
+        "bio_score": 6,
         "natural": false,
-        "score": 11,
+        "score": 6,
         "absorption": "marketing label; class F 0.5-4% same as inorganic Cr",
-        "notes": "Chromium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
+        "notes": "Chromium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged. Dr Pham C4 sign-off: bio_score 11 → 6. Marketing not biology.",
         "aliases": [
           "chromium rice chelate",
           "rice chelate chromium",
@@ -9967,11 +9975,11 @@
         }
       },
       "chromium polynicotinate": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": false,
-        "score": 12,
+        "score": 7,
         "absorption": "2.4%",
-        "notes": "Chromium bound to niacin (vitamin B3). The niacin component may independently support healthy cholesterol levels. Slightly lower absorption than picolinate (~2.4%), but still a quality chelated form. Sold under the ChromeMate brand.",
+        "notes": "Chromium bound to niacin (vitamin B3). The niacin component may independently support healthy cholesterol levels. Slightly lower absorption than picolinate (~2.4%), but still a quality chelated form. Sold under the ChromeMate brand. Dr Pham C7 sign-off: bio_score 12 → 7. Anderson 1996.",
         "aliases": [
           "niacin-bound chromium",
           "chromium nicotinate",
@@ -9993,11 +10001,11 @@
         }
       },
       "chromium GTF": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": false,
-        "score": 11,
+        "score": 7,
         "absorption": "2%",
-        "notes": "Glucose Tolerance Factor — a complex of chromium, niacin, and amino acids that mimics the naturally occurring chromium compound found in brewer's yeast. Moderate evidence for blood sugar support. Less standardized than picolinate.",
+        "notes": "Glucose Tolerance Factor — a complex of chromium, niacin, and amino acids that mimics the naturally occurring chromium compound found in brewer's yeast. Moderate evidence for blood sugar support. Less standardized than picolinate. Dr Pham C7 sign-off: bio_score 11 → 7. Anderson 1996.",
         "aliases": [
           "glucose tolerance factor chromium",
           "gtf chromium",
@@ -10016,11 +10024,11 @@
         }
       },
       "chromium histidinate": {
-        "bio_score": 13,
+        "bio_score": 7,
         "natural": false,
-        "score": 13,
+        "score": 7,
         "absorption": "~4.3%",
-        "notes": "Chromium chelated with the amino acid histidine. A head-to-head human trial (Anderson 2004) showed 76% higher urinary chromium excretion than picolinate, suggesting superior absorption (~4.3%). Less commercially available and with a thinner evidence base than picolinate, which is why it scores the same rather than higher.",
+        "notes": "Chromium chelated with the amino acid histidine. A head-to-head human trial (Anderson 2004) showed 76% higher urinary chromium excretion than picolinate, suggesting superior absorption (~4.3%). Less commercially available and with a thinner evidence base than picolinate, which is why it scores the same rather than higher. Dr Pham C7 sign-off: bio_score 13 → 7. Anderson 1996.",
         "aliases": [
           "histidine-bound chromium",
           "CrHis",
@@ -10060,11 +10068,11 @@
         }
       },
       "chromium nicotinate glycinate": {
-        "bio_score": 13,
+        "bio_score": 7,
         "natural": false,
-        "score": 13,
+        "score": 7,
         "absorption": "2.5-3%",
-        "notes": "A dual-chelate that combines niacin and glycine carriers for enhanced mineral transport. The TRAACS/Albion branded version is found in many premium formulas. Manufacturer claims 2.5-3% absorption (not independently verified in peer-reviewed studies), which would make it one of the better-absorbed chromium forms.",
+        "notes": "A dual-chelate that combines niacin and glycine carriers for enhanced mineral transport. The TRAACS/Albion branded version is found in many premium formulas. Manufacturer claims 2.5-3% absorption (not independently verified in peer-reviewed studies), which would make it one of the better-absorbed chromium forms. Dr Pham C7 sign-off: bio_score 13 → 7. Anderson 1996.",
         "aliases": [
           "chromium glycinate nicotinate",
           "niacin-bound glycinate chromium",
@@ -10114,11 +10122,11 @@
         }
       },
       "crominex 3+ chromium complex": {
-        "bio_score": 13,
+        "bio_score": 7,
         "natural": false,
-        "score": 13,
+        "score": 7,
         "absorption": "Natreon proprietary; clinical RCTs only, no PK data, class F 0.5-4%",
-        "notes": "Patented complex (Natreon Inc.) combining trivalent chromium with Phyllanthus emblica (amla) extract and PrimaVie shilajit. RCT evidence shows comparable glucose and lipid effects to chromium picolinate with a potentially improved safety profile (reduced Cr(VI) conversion risk per Natreon in vitro data, 2010). Absorption estimated 2–4%, consistent with other organic chromium complexes. Used in branded products like Crominex 3+. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
+        "notes": "Patented complex (Natreon Inc.) combining trivalent chromium with Phyllanthus emblica (amla) extract and PrimaVie shilajit. RCT evidence shows comparable glucose and lipid effects to chromium picolinate with a potentially improved safety profile (reduced Cr(VI) conversion risk per Natreon in vitro data, 2010). Absorption estimated 2–4%, consistent with other organic chromium complexes. Used in branded products like Crominex 3+. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged. Dr Pham C3 sign-off: bio_score 13 → 7. Crominex pattern (branded RCT ≠ PK premium). F~2.5% per Anderson 1996.",
         "aliases": [
           "Crominex 3+",
           "crominex",
@@ -10136,11 +10144,11 @@
         }
       },
       "chromium chelidamate arginate": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": false,
-        "score": 12,
+        "score": 7,
         "absorption": "no published evidence of any kind; class F 0.5-4%",
-        "notes": "Chromium(III) chelated with chelidamic acid (2,6-pyridinedicarboxylic acid) and L-arginine. Chelidamic acid is structurally related to picolinic acid and provides strong bidentate coordination to chromium(III); the arginine component adds biological compatibility. A specialty Albion-class chelate; human clinical RCT data sparse but chelation chemistry predicts solid oral absorption (~2–3%), comparable to chromium nicotinate glycinate in mechanism and expected bioavailability. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged.",
+        "notes": "Chromium(III) chelated with chelidamic acid (2,6-pyridinedicarboxylic acid) and L-arginine. Chelidamic acid is structurally related to picolinic acid and provides strong bidentate coordination to chromium(III); the arginine component adds biological compatibility. A specialty Albion-class chelate; human clinical RCT data sparse but chelation chemistry predicts solid oral absorption (~2–3%), comparable to chromium nicotinate glycinate in mechanism and expected bioavailability. Evidence update 2026-04-25 (Batch 17): Cu/Cr/Mo chelate audit — 7 PMIDs WebFetch-verified. CLASS FINDINGS: Cu 12-56% homeostatic (Turnlund 1989 PMID:2718922); Cr 0.5-4% class-poor across all forms (Anderson 2004 PMID:15564651); Mo 88-93% class-saturated per Turnlund 1995 (PMID:7572711). GHOST REFERENCES caught: \"Hashmi\" Cu picolinate PMID does NOT exist; Cr chelidamate arginate has ZERO PubMed hits on ANY topic; Crominex 3+ has only 2 Natreon-funded clinical RCTs (PMID:32021349, 30723735) — no PK data; Mo picolinate has no human PK. All \"premium\" branded chromium and unsourced picolinate claims downgrade-flagged. Dr Pham C7 sign-off: bio_score 12 → 7. Anderson 1996.",
         "aliases": [
           "chromium chelidamate arginate chelate",
           "chelidamic acid arginine chromium",
@@ -10255,7 +10263,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Teas 2004 (PMID:15588380): iodine content varies 16 µg/g (nori) to 8,165 µg/g (Laminaria digitata) across species. Zimmermann 2004 (PMID:15220938): WHO/expert recommendation to AVOID kelp. NOTE: variable CONTENT/dose, NOT variable F. Once converted to iodide, F is class-equivalent (~95-99%)."
+          "notes": "Teas 2004 (PMID:15588380): iodine content varies 16 µg/g (nori) to 8,165 µg/g (Laminaria digitata) across species. Zimmermann 2004 (PMID:15220938): WHO/expert recommendation to AVOID kelp. NOTE: variable CONTENT/dose, NOT variable F. Once converted to iodide, F is class-equivalent (~95-99%).",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "sodium iodide": {
@@ -10304,7 +10314,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Aranda 2013 (PMID:22576883): molecular iodine (I2) uses NIS-INDEPENDENT cellular uptake — distinct from iodide. Aceves 2013 (PMID:23607319): different tissue distribution profile. CANNOT assume KI-class F. No definitive human oral F estimate."
+          "notes": "Aranda 2013 (PMID:22576883): molecular iodine (I2) uses NIS-INDEPENDENT cellular uptake — distinct from iodide. Aceves 2013 (PMID:23607319): different tissue distribution profile. CANNOT assume KI-class F. No definitive human oral F estimate.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "iodine (unspecified)": {
@@ -10698,11 +10710,11 @@
         }
       },
       "manganese brown rice chelate": {
-        "bio_score": 11,
+        "bio_score": 6,
         "natural": false,
-        "score": 11,
+        "score": 6,
         "absorption": "no human PK; marketing-only claim flagged 2026-04 audit",
-        "notes": "Manganese chelated to amino acids derived from brown rice protein hydrolysate. Provides organic chelate bonding for improved mucosal uptake vs. inorganic manganese sulfate or oxide. Absorption estimated moderate-high; limited direct comparative clinical data vs. bisglycinate or amino acid chelate. Commonly used in hypoallergenic multivitamin formulations as an alternative to soy or whey protein-derived chelates. The rice amino acid matrix offers a gentle gastric profile analogous to zinc brown rice chelate. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient).",
+        "notes": "Manganese chelated to amino acids derived from brown rice protein hydrolysate. Provides organic chelate bonding for improved mucosal uptake vs. inorganic manganese sulfate or oxide. Absorption estimated moderate-high; limited direct comparative clinical data vs. bisglycinate or amino acid chelate. Commonly used in hypoallergenic multivitamin formulations as an alternative to soy or whey protein-derived chelates. The rice amino acid matrix offers a gentle gastric profile analogous to zinc brown rice chelate. Evidence update 2026-04-25 (Batch 11): Mineral chelate audit — 9 PMIDs WebFetch-verified. CRITICAL FINDING: \"brown rice chelate\" returned ZERO PubMed hits across iron/Mn/Zn/Se variants — the recurring \"60-70%\" claim is marketing copy without peer-reviewed PK validation. Verified citations: Piacenza 2023 (PMID:37111104) zinc FZA; Pineda 2001 (PMID:11377130) iron bisglycinate in anemic infants; Layrisse 2000 (PMID:10958812) ferrochel; Hemilä 2015 (PMID:25888289) Zn lozenge — LOCAL pharyngeal action only, not systemic F; Gordeuk 1987 (PMID:3318377) carbonyl iron 7% effective F. Class context: Mn ~2-15% (homeostatic); Fe non-heme 2-20% / heme 15-35%; Zn 20-70%; Se 50-95% (inorganic→organic gradient). Dr Pham C4 sign-off: bio_score 11 → 6. Marketing not biology.",
         "aliases": [
           "manganese rice chelate",
           "rice chelate manganese",
@@ -11082,11 +11094,11 @@
         }
       },
       "boron brown rice chelate": {
-        "bio_score": 11,
+        "bio_score": 9,
         "natural": false,
-        "score": 11,
+        "score": 9,
         "absorption": "marketing label; boron class F ~85%; no peer-reviewed data for brown rice chelate",
-        "notes": "Boron chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Boron chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C4 sign-off: bio_score 11 → 9. Boron parent class F still high.",
         "aliases": [
           "boron rice chelate",
           "rice chelate boron",
@@ -11447,11 +11459,11 @@
         "notes": "Amino acid chelated potassium (glycine chelate). Chelation with glycine protects the mineral through GI transit and facilitates uptake via amino acid transporters (general chelate mechanism; PMID:7751878 for mineral-amino acid chelate absorption). Bioavailability comparable to potassium citrate; glycine chelation may reduce GI irritation versus potassium chloride."
       },
       "potassium brown rice chelate": {
-        "bio_score": 11,
+        "bio_score": 9,
         "natural": false,
-        "score": 11,
+        "score": 9,
         "absorption": "marketing label; potassium class F ~90% homeostatic",
-        "notes": "Potassium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Potassium chelated to amino acids derived from brown rice protein hydrolysate. The rice protein amino acid matrix provides organic chelate bonding similar to generic amino acid chelates. Absorption estimated 60–70% — meaningfully better than inorganic forms (oxide, sulfate) but below specific bisglycinate and picolinate chelates. Commonly used in hypoallergenic multivitamin formulations (e.g., Garden of Life RAW line) as an alternative to soy or whey protein-derived chelates. Positioned within the amino acid chelate class per Anderson (1995) chelation framework. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C4 sign-off: bio_score 11 → 9. K parent class F still high.",
         "aliases": [
           "potassium rice chelate",
           "rice chelate potassium",
@@ -11908,7 +11920,7 @@
         "natural": false,
         "score": 15,
         "absorption": "Highest CoQ10 absorption (~6% absolute F); Kaneka CoQH-CF crystal-free dispersion",
-        "notes": "The top-tier CoQ10 form — Kaneka's crystal-free ubiquinol (CoQH-CF). Ubiquinol is the reduced (active) form your body actually uses, and the crystal-free dispersion technology prevents the molecule from re-crystallizing, which is what normally tanks absorption. The gold standard. Citation correction 2026-04-25: prior \"~2-4× standard CoQ10\" fold-change attributed to López-Lluch 2019 is not present in PMID:30153575 (verified via efetch). Hosoe 2007 (PMID:16919858) is the proper Kaneka CoQH-CF PK reference; absolute F not stated but Cmax/AUC are highest of the CoQ10 class. Class baseline ~6% absolute F per Mantle 2020 (PMID:32380795) + Bhagavan 2006 (PMID:16551570).",
+        "notes": "The top-tier CoQ10 form — Kaneka's crystal-free ubiquinol (CoQH-CF). Ubiquinol is the reduced (active) form your body actually uses, and the crystal-free dispersion technology prevents the molecule from re-crystallizing, which is what normally tanks absorption. The gold standard. Citation correction 2026-04-25: prior \"~2-4× standard CoQ10\" fold-change attributed to López-Lluch 2019 is not present in PMID:30153575 (verified via efetch). Hosoe 2007 (PMID:16919858) is the proper Kaneka CoQH-CF PK reference; absolute F not stated but Cmax/AUC are highest of the CoQ10 class. Class baseline ~6% absolute F per Mantle 2020 (PMID:32380795) + Bhagavan 2006 (PMID:16551570). Dr Pham C1 sign-off (PD-respect): bio_score=15 RETAINED for clinical-utility reasons despite low absolute F (~6%). CoQ10 RCTs at high doses show real efficacy; PK and PD decoupled per Dr Pham clinical review.",
         "aliases": [
           "kaneka ubiquinol",
           "kaneka qh",
@@ -11936,7 +11948,7 @@
         "natural": false,
         "score": 13,
         "absorption": "Reduced active form; modest absorption gain over ubiquinone (~5% absolute)",
-        "notes": "The reduced (active) form of CoQ10 — this is what your mitochondria actually use. Your body normally converts ubiquinone to ubiquinol after absorption, but this conversion slows with age. Especially important for people over 40, those on statins, or anyone with heart conditions. Citation correction 2026-04-25: \"Langsjoen 2014 1.7× higher in older adults\" claim removed — no verified PMID matches that population/effect. Closest PMID:19096107 (Langsjoen 2008) was advanced CHF NYHA IV patients with intestinal edema, not healthy older adults. Replaced with Mantle & Dybring 2020 (PMID:32380795) review which finds only modest, formulation-dependent differences between ubiquinol and ubiquinone in healthy adults.",
+        "notes": "The reduced (active) form of CoQ10 — this is what your mitochondria actually use. Your body normally converts ubiquinone to ubiquinol after absorption, but this conversion slows with age. Especially important for people over 40, those on statins, or anyone with heart conditions. Citation correction 2026-04-25: \"Langsjoen 2014 1.7× higher in older adults\" claim removed — no verified PMID matches that population/effect. Closest PMID:19096107 (Langsjoen 2008) was advanced CHF NYHA IV patients with intestinal edema, not healthy older adults. Replaced with Mantle & Dybring 2020 (PMID:32380795) review which finds only modest, formulation-dependent differences between ubiquinol and ubiquinone in healthy adults. Dr Pham C1 sign-off (PD-respect): bio=13 retained; F~5% reflects PK reality, bio_score reflects clinical utility.",
         "aliases": [
           "reduced coenzyme q10",
           "qh",
@@ -11977,7 +11989,7 @@
         "natural": false,
         "score": 13,
         "absorption": "Solubilized softgel; ~4% absolute F; superior AUC vs powder",
-        "notes": "Ubiquinone (oxidized CoQ10) processed with thermal crystal dispersion or solubilization technology to break apart the crystals that normally limit absorption. Products like Q-Gel, VESIsorb CoQ10, and MegaSorb use this approach. Absorption rivals ubiquinol in younger adults (whose bodies efficiently reduce ubiquinone after absorption). A strong choice if ubiquinol is unavailable. Citation correction 2026-04-25: \"~2.3× better than standard crystalline\" fold-change is not present in López-Lluch 2019 (PMID:30153575) abstract — that paper reports only relative AUC ranking across 7 formulations in 14 healthy volunteers. Absolute ~4% F estimate extrapolated from Bhagavan 2006 (PMID:16551570) class baseline + Lopez-Lluch ranking.",
+        "notes": "Ubiquinone (oxidized CoQ10) processed with thermal crystal dispersion or solubilization technology to break apart the crystals that normally limit absorption. Products like Q-Gel, VESIsorb CoQ10, and MegaSorb use this approach. Absorption rivals ubiquinol in younger adults (whose bodies efficiently reduce ubiquinone after absorption). A strong choice if ubiquinol is unavailable. Citation correction 2026-04-25: \"~2.3× better than standard crystalline\" fold-change is not present in López-Lluch 2019 (PMID:30153575) abstract — that paper reports only relative AUC ranking across 7 formulations in 14 healthy volunteers. Absolute ~4% F estimate extrapolated from Bhagavan 2006 (PMID:16551570) class baseline + Lopez-Lluch ranking. Dr Pham C1 sign-off (PD-respect): bio=13 retained; F~4% reflects PK reality, bio_score reflects clinical utility.",
         "aliases": [
           "q-gel",
           "qgel",
@@ -12016,7 +12028,7 @@
         "natural": false,
         "score": 11,
         "absorption": "Oil-based softgel; ~3% absolute F; take with fatty meal",
-        "notes": "Standard ubiquinone dissolved in oil inside a softgel capsule. The oil base helps dissolve the CoQ10 crystals, improving absorption modestly over dry powder. A reliable mid-tier form and the most common quality CoQ10 delivery. Always take with a fat-containing meal for best results. Citation correction 2026-04-25: \"~2.3× better than dry powder\" specific fold-change is not in López-Lluch 2019 (PMID:30153575). That paper confirms oil-softgel as superior by AUC ranking but does not report this specific multiplier. Absolute F ~3% per Bhagavan 2006 class baseline.",
+        "notes": "Standard ubiquinone dissolved in oil inside a softgel capsule. The oil base helps dissolve the CoQ10 crystals, improving absorption modestly over dry powder. A reliable mid-tier form and the most common quality CoQ10 delivery. Always take with a fat-containing meal for best results. Citation correction 2026-04-25: \"~2.3× better than dry powder\" specific fold-change is not in López-Lluch 2019 (PMID:30153575). That paper confirms oil-softgel as superior by AUC ranking but does not report this specific multiplier. Absolute F ~3% per Bhagavan 2006 class baseline. Dr Pham C1 sign-off (PD-respect): bio=11 retained; F~3% reflects PK reality.",
         "aliases": [
           "coq10 softgel",
           "coenzyme q10 softgel",
@@ -12224,11 +12236,11 @@
         }
       },
       "microactive PQQ": {
-        "bio_score": 13,
+        "bio_score": 7,
         "natural": false,
-        "score": 13,
+        "score": 7,
         "absorption": "MicroActive PQQ branded; sustained-release matrix; PQQ baseline F not well-characterized",
-        "notes": "Sustained-release micro-encapsulated PQQ using beta-cyclodextrin complexation, manufactured by BioActives/Maypro. Claims 2.2x better bioavailability with 9+ hour sustained release, but this is based on a manufacturer case study, not a peer-reviewed RCT. Found in brands like Pure Encapsulations. A premium option, though independent replication of the 2.2x claim is lacking. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Sustained-release micro-encapsulated PQQ using beta-cyclodextrin complexation, manufactured by BioActives/Maypro. Claims 2.2x better bioavailability with 9+ hour sustained release, but this is based on a manufacturer case study, not a peer-reviewed RCT. Found in brands like Pure Encapsulations. A premium option, though independent replication of the 2.2x claim is lacking. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C3 sign-off: bio_score 13 → 7. Crominex pattern.",
         "aliases": [
           "micropqq",
           "sustained release pqq",
@@ -12271,11 +12283,11 @@
         }
       },
       "lifepqq": {
-        "bio_score": 13,
+        "bio_score": 7,
         "natural": true,
-        "score": 16,
+        "score": 10,
         "absorption": "LifePQQ branded; class-equivalent to standard PQQ",
-        "notes": "Stabilized PQQ form with enhanced stability and bioavailability. Premium branded pyrroloquinoline quinone for mitochondrial support. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Stabilized PQQ form with enhanced stability and bioavailability. Premium branded pyrroloquinoline quinone for mitochondrial support. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C3 sign-off: bio_score 13 → 7. Crominex pattern.",
         "aliases": [
           "stabilized pqq",
           "branded pqq",
@@ -12343,11 +12355,11 @@
         }
       },
       "novasol curcumin": {
-        "bio_score": 13,
+        "bio_score": 9,
         "natural": false,
-        "score": 13,
+        "score": 9,
         "absorption": "185x total AUC (Schiborr 2014) but free <40 nM, still subtherapeutic (Kroon 2025)",
-        "notes": "Micellar curcumin using Tween-80 (polysorbate 80) synthetic surfactant to form tiny micelles. Schiborr 2014 (PMID:24402825) reported 185× total curcuminoid AUC — but that includes conjugated metabolites (glucuronides/sulfates) with limited biological activity. Free curcumin levels are much lower. Very high total absorption numbers but the clinical relevance of conjugated metabolites is debated. Evidence update 2026-04-25: Schiborr 2014 PMID confirmed as :24402825 (Mol Nutr Food Res) — separate from CurcuWIN PMID. Kroon 2025 (PMID:40487425) reappraisal found NovaSol delivers highest free curcumin Cmax of any tested enhanced form (6.7-38 nM at 30 min) but this is still ~100× below in vitro bioactive thresholds and declines rapidly. The 185× total-AUC figure reflects mostly conjugated metabolites with limited pharmacological activity.",
+        "notes": "Micellar curcumin using Tween-80 (polysorbate 80) synthetic surfactant to form tiny micelles. Schiborr 2014 (PMID:24402825) reported 185× total curcuminoid AUC — but that includes conjugated metabolites (glucuronides/sulfates) with limited biological activity. Free curcumin levels are much lower. Very high total absorption numbers but the clinical relevance of conjugated metabolites is debated. Evidence update 2026-04-25: Schiborr 2014 PMID confirmed as :24402825 (Mol Nutr Food Res) — separate from CurcuWIN PMID. Kroon 2025 (PMID:40487425) reappraisal found NovaSol delivers highest free curcumin Cmax of any tested enhanced form (6.7-38 nM at 30 min) but this is still ~100× below in vitro bioactive thresholds and declines rapidly. The 185× total-AUC figure reflects mostly conjugated metabolites with limited pharmacological activity. Dr Pham C6 sign-off: bio_score 13 → 9. 3-5% absolute F is still \"poor\" — premium claim doesn't escape that.",
         "aliases": [
           "novasol",
           "micellar curcumin",
@@ -12386,11 +12398,11 @@
         }
       },
       "curcuwin": {
-        "bio_score": 12,
+        "bio_score": 8,
         "natural": false,
-        "score": 12,
+        "score": 8,
         "absorption": "~39x total curcuminoids vs unformulated (Purpura 2018); free fraction unverified",
-        "notes": "OmniActive's UltraSOL technology using polyvinylpyrrolidone, cellulose, and turmeric oil to create a colloidal dispersion. Purpura 2018 (PMID:28204880) reported 39× total curcuminoid AUC for γ-cyclodextrin CW8 vs unformulated. However, like most enhanced forms, the majority of circulating curcuminoids are conjugated metabolites (glucuronides/sulfates), not free bioactive curcumin. Uses natural carrier components. Good total absorption but clinical relevance of conjugated metabolites is debated. Citation correction 2026-04-25: prior note had THREE errors on this form. (1) Wrong author: PMID:28204880 is Purpura 2018 (Eur J Nutr), NOT Schiborr 2014. (2) Wrong fold: paper reports 39× total curcuminoids, NOT 136×. (3) Wrong product: paper tested γ-cyclodextrin CW8 — not confirmed to be CurcuWIN by name. The \"136× CurcuWIN\" claim cannot be traced to any PubMed-indexed paper and should be flagged as marketing.",
+        "notes": "OmniActive's UltraSOL technology using polyvinylpyrrolidone, cellulose, and turmeric oil to create a colloidal dispersion. Purpura 2018 (PMID:28204880) reported 39× total curcuminoid AUC for γ-cyclodextrin CW8 vs unformulated. However, like most enhanced forms, the majority of circulating curcuminoids are conjugated metabolites (glucuronides/sulfates), not free bioactive curcumin. Uses natural carrier components. Good total absorption but clinical relevance of conjugated metabolites is debated. Citation correction 2026-04-25: prior note had THREE errors on this form. (1) Wrong author: PMID:28204880 is Purpura 2018 (Eur J Nutr), NOT Schiborr 2014. (2) Wrong fold: paper reports 39× total curcuminoids, NOT 136×. (3) Wrong product: paper tested γ-cyclodextrin CW8 — not confirmed to be CurcuWIN by name. The \"136× CurcuWIN\" claim cannot be traced to any PubMed-indexed paper and should be flagged as marketing. Dr Pham C6 sign-off: bio_score 12 → 8. Curcumin class still poor.",
         "aliases": [
           "curcuwin curcumin",
           "ultrasol curcumin",
@@ -12406,11 +12418,11 @@
         }
       },
       "meriva curcumin": {
-        "bio_score": 12,
+        "bio_score": 8,
         "natural": false,
-        "score": 12,
+        "score": 8,
         "absorption": "~29x total curcuminoids; only phase-2 metabolites detected (Cuomo 2011)",
-        "notes": "Indena's phosphatidylcholine phytosome — the most clinically studied enhanced curcumin formulation with 35+ published human trials covering joint health, inflammation, skin, and diabetic microangiopathy. About 29x better absorption than standard curcumin. Uses sunflower lecithin (food-grade, no synthetic surfactants). The go-to form for evidence-based joint and inflammation support. Evidence update 2026-04-25: Cuomo 2011 PMID:21413691 (J Nat Prod) verified 29× total curcuminoid AUC. Critically, the paper itself states only phase-2 metabolites (glucuronides/sulfates) could be detected and plasma concentrations were \"still significantly lower than those required for inhibition of most anti-inflammatory targets of curcumin.\" Plasma curcuminoid profile shifts to demethoxycurcumin in Meriva, distinct from raw curcumin pharmacology. Highest evidence base of the enhanced-form group (35+ RCTs).",
+        "notes": "Indena's phosphatidylcholine phytosome — the most clinically studied enhanced curcumin formulation with 35+ published human trials covering joint health, inflammation, skin, and diabetic microangiopathy. About 29x better absorption than standard curcumin. Uses sunflower lecithin (food-grade, no synthetic surfactants). The go-to form for evidence-based joint and inflammation support. Evidence update 2026-04-25: Cuomo 2011 PMID:21413691 (J Nat Prod) verified 29× total curcuminoid AUC. Critically, the paper itself states only phase-2 metabolites (glucuronides/sulfates) could be detected and plasma concentrations were \"still significantly lower than those required for inhibition of most anti-inflammatory targets of curcumin.\" Plasma curcuminoid profile shifts to demethoxycurcumin in Meriva, distinct from raw curcumin pharmacology. Highest evidence base of the enhanced-form group (35+ RCTs). Dr Pham C6 sign-off: bio_score 12 → 8. Phytosome modest improvement on poor baseline.",
         "aliases": [
           "meriva",
           "curcumin phytosome",
@@ -12460,11 +12472,11 @@
         ]
       },
       "theracurmin": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": false,
-        "score": 11,
+        "score": 7,
         "absorption": "~27x total curcuminoid AUC at 30 mg (Sasaki 2011); free fraction unmeasured",
-        "notes": "Japanese colloidal submicron particle technology — ~27x better absorption than standard curcumin. About 17 published studies, fewer than Meriva but with solid evidence for cognitive function (Small 2018 PMID: 30265004) and inflammation. The tiny particle size helps bypass the usual absorption barriers. Evidence update 2026-04-25: Sasaki 2011 PMID:21532153 (Biol Pharm Bull) verified 27× total curcuminoid AUC vs powder in n=14 healthy adults at 30 mg. Like other enhanced forms, measured total curcuminoids only — free fraction not separately quantified; falls under Kroon 2025 (PMID:40487425) framework caveat that fold-change AUC is conjugate-dominated.",
+        "notes": "Japanese colloidal submicron particle technology — ~27x better absorption than standard curcumin. About 17 published studies, fewer than Meriva but with solid evidence for cognitive function (Small 2018 PMID: 30265004) and inflammation. The tiny particle size helps bypass the usual absorption barriers. Evidence update 2026-04-25: Sasaki 2011 PMID:21532153 (Biol Pharm Bull) verified 27× total curcuminoid AUC vs powder in n=14 healthy adults at 30 mg. Like other enhanced forms, measured total curcuminoids only — free fraction not separately quantified; falls under Kroon 2025 (PMID:40487425) framework caveat that fold-change AUC is conjugate-dominated. Dr Pham C6 sign-off: bio_score 11 → 7. Particle-size class.",
         "aliases": [
           "theracurmin curcumin",
           "nano curcumin",
@@ -12861,11 +12873,11 @@
     "rxcui": "4890",
     "forms": {
       "liposomal glutathione": {
-        "bio_score": 14,
+        "bio_score": 9,
         "natural": false,
-        "score": 14,
+        "score": 9,
         "absorption": "liposomal carrier; mechanistic claim; intact GSH F is class-poor without carrier",
-        "notes": "Glutathione encapsulated in phospholipid liposomes that protect it from stomach acid and digestive enzymes. About 6x higher peak blood levels than standard GSH (LipoDuo 2025 data). Sinha 2018 showed liposomal GSH elevated blood GSH levels and improved immune markers. The most effective oral glutathione delivery, but expensive. The '90-100% absorption' sometimes claimed has no peer-reviewed PK data behind it. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Glutathione encapsulated in phospholipid liposomes that protect it from stomach acid and digestive enzymes. About 6x higher peak blood levels than standard GSH (LipoDuo 2025 data). Sinha 2018 showed liposomal GSH elevated blood GSH levels and improved immune markers. The most effective oral glutathione delivery, but expensive. The '90-100% absorption' sometimes claimed has no peer-reviewed PK data behind it. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C5 sign-off: bio_score 14 → 9. Liposomal cap at 9 (no human PK proof).",
         "aliases": [
           "nano glutathione",
           "encapsulated glutathione",
@@ -13318,7 +13330,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "FRAMEWORK MISMATCH. Companion forms span 0.15-0.90 reflecting mixed frameworks: live-organism strains (B18 — F is wrong metric) AND fermented prebiotic substrates (B22 — category-error to SCFA). Cannot assign single class baseline. Pending Dr Pham E2-style harmonization decision (review doc D8.3 category-error taxonomy enum)."
+          "notes": "FRAMEWORK MISMATCH. Companion forms span 0.15-0.90 reflecting mixed frameworks: live-organism strains (B18 — F is wrong metric) AND fermented prebiotic substrates (B22 — category-error to SCFA). Cannot assign single class baseline. Pending Dr Pham E2-style harmonization decision (review doc D8.3 category-error taxonomy enum).",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       }
     },
@@ -13530,7 +13544,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR (extension of Batch 22 inulin/larch AG framework). Nyman 2002 (PMID:12088514): \"easily fermented fibres such as pectins and gums...most of the SCFA formed during fermentation already absorbed by colonic mucosa.\" Míguez 2020 (PMID:33119011): pectin → butyrate cumulative production. NOT systemically absorbed as parent compound. **INCONSISTENCY**: companion FOS/GOS/XOS/HMO at 0.65-0.90 reflect older nutrient-density framework — flagged for Dr Pham harmonization (review doc Section E2-extension)."
+          "notes": "CATEGORY ERROR (extension of Batch 22 inulin/larch AG framework). Nyman 2002 (PMID:12088514): \"easily fermented fibres such as pectins and gums...most of the SCFA formed during fermentation already absorbed by colonic mucosa.\" Míguez 2020 (PMID:33119011): pectin → butyrate cumulative production. NOT systemically absorbed as parent compound. **INCONSISTENCY**: companion FOS/GOS/XOS/HMO at 0.65-0.90 reflect older nutrient-density framework — flagged for Dr Pham harmonization (review doc Section E2-extension).",
+          "category_error_type": "colonic_fermentation",
+          "category_error_label": "Fermented in colon to SCFAs (microbiome)"
         },
         "external_ids": {
           "unii": "89NA02M4RX"
@@ -13574,7 +13590,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR. Default for \"(unspecified)\" prebiotic — all known prebiotic chemistries are non-digestible fermentable substrates → SCFA production. Class-extension from inulin (Batch 22)."
+          "notes": "CATEGORY ERROR. Default for \"(unspecified)\" prebiotic — all known prebiotic chemistries are non-digestible fermentable substrates → SCFA production. Class-extension from inulin (Batch 22).",
+          "category_error_type": "colonic_fermentation",
+          "category_error_label": "Fermented in colon to SCFAs (microbiome)"
         }
       },
       "alpha-glucooligosaccharides (alpha-GOS)": {
@@ -13597,7 +13615,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR. Alpha-GOS (raffinose/stachyose family) is non-digestible by human enzymes; fermented in colon to SCFA. Class-extension from inulin/FOS framework (Nyman 2002 PMID:12088514). NAMING REVIEW NEEDED: ensure entry is alpha-GOS specifically — beta-GOS (Bimuno-type, lactose-derived) is chemically distinct (more common in supplements)."
+          "notes": "CATEGORY ERROR. Alpha-GOS (raffinose/stachyose family) is non-digestible by human enzymes; fermented in colon to SCFA. Class-extension from inulin/FOS framework (Nyman 2002 PMID:12088514). NAMING REVIEW NEEDED: ensure entry is alpha-GOS specifically — beta-GOS (Bimuno-type, lactose-derived) is chemically distinct (more common in supplements).",
+          "category_error_type": "colonic_fermentation",
+          "category_error_label": "Fermented in colon to SCFAs (microbiome)"
         },
         "dosage_importance": 1.0
       }
@@ -16582,11 +16602,11 @@
     "rxcui": "618257",
     "forms": {
       "gaba powder": {
-        "bio_score": 9,
+        "bio_score": 6,
         "natural": false,
-        "score": 9,
-        "absorption": "gut absorption good; BBB crossing minimal (efflux 17x influx in animal models)",
-        "notes": "Primary inhibitory neurotransmitter. Absorbed in gut via GAT2/BGT-1 transporters with measurable plasma elevation at 30 min. However, brain efflux rate is 17x higher than influx in animal models, and no human study has directly measured GABA BBB permeability (Boonstra 2015, PMC4594160). Clinical effects at 28-100 mg doses (stress/sleep) are likely mediated via enteric nervous system and vagal nerve signaling rather than direct CNS penetration (Frontiers 2025, PMC12093412). Effective but through indirect gut-brain axis mechanism.",
+        "score": 6,
+        "absorption": "low (BBB-blocked PK; gut-brain axis effect not CNS PK)",
+        "notes": "Primary inhibitory neurotransmitter. Absorbed in gut via GAT2/BGT-1 transporters with measurable plasma elevation at 30 min. However, brain efflux rate is 17x higher than influx in animal models, and no human study has directly measured GABA BBB permeability (Boonstra 2015, PMC4594160). Clinical effects at 28-100 mg doses (stress/sleep) are likely mediated via enteric nervous system and vagal nerve signaling rather than direct CNS penetration (Frontiers 2025, PMC12093412). Effective but through indirect gut-brain axis mechanism. Dr Pham E1 sign-off: PK-STRICT 0.40 → 0.07. BBB barrier per PMID:26500584. Gut-brain axis PD goes in evidence axis, NOT bio_score.",
         "aliases": [
           "gaba",
           "gamma-aminobutyric acid",
@@ -16597,19 +16617,19 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.4,
-          "range_low": 0.2,
-          "range_high": 0.5,
-          "quality": "moderate",
-          "notes": "Good gut absorption; CNS bioavailability minimal — BBB efflux 17x influx (Boonstra 2015); effects likely vagal/peripheral"
+          "value": 0.07,
+          "range_low": 0.05,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Boonstra 2015 (PMID:26500584): oral GABA does NOT cross the BBB in adults. Previous value (0.40) conflated peripheral ENS/vagal effects with CNS systemic bioavailability. PK-strict value reflects BBB-blocked reality. PD efficacy (anxiolytic RCTs) is via gut-brain axis, scored separately on evidence axis."
         }
       },
       "pharma-gaba": {
-        "bio_score": 11,
+        "bio_score": 6,
         "natural": true,
-        "score": 14,
-        "absorption": "gut absorption good; BBB crossing unproven (chemically identical to synthetic GABA)",
-        "notes": "Naturally fermented GABA produced by Lactobacillus hilgardii. Abdou 2006 showed increased alpha-wave EEG amplitude and preserved secretory IgA under stress (n=13 crossover RCT). Byun 2018 showed improved PSQI sleep scores with fermented rice germ GABA. However, PharmaGABA is chemically identical to synthetic GABA — no published head-to-head PK data demonstrates superior BBB crossing. Clinical effects are real but likely mediated through gut-brain axis/vagal signaling, same as synthetic GABA. The +2 bio gap vs generic reflects stronger clinical evidence base, not molecular advantage.",
+        "score": 9,
+        "absorption": "low (BBB-blocked PK; PharmaGABA = same BBB problem)",
+        "notes": "Naturally fermented GABA produced by Lactobacillus hilgardii. Abdou 2006 showed increased alpha-wave EEG amplitude and preserved secretory IgA under stress (n=13 crossover RCT). Byun 2018 showed improved PSQI sleep scores with fermented rice germ GABA. However, PharmaGABA is chemically identical to synthetic GABA — no published head-to-head PK data demonstrates superior BBB crossing. Clinical effects are real but likely mediated through gut-brain axis/vagal signaling, same as synthetic GABA. The +2 bio gap vs generic reflects stronger clinical evidence base, not molecular advantage. Dr Pham E1 sign-off: PK-STRICT 0.45 → 0.07. PharmaGABA brand has SAME BBB problem as generic GABA. bio_score 11 → 6.",
         "aliases": [
           "natural gaba",
           "fermented gaba",
@@ -16620,11 +16640,11 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.45,
-          "range_low": 0.25,
-          "range_high": 0.55,
-          "quality": "moderate",
-          "notes": "Same molecule as synthetic GABA; gut absorption good; CNS delivery unproven; clinical signal via gut-brain axis (Abdou 2006, Byun 2018)"
+          "value": 0.07,
+          "range_low": 0.05,
+          "range_high": 0.1,
+          "quality": "low",
+          "notes": "Boonstra 2015 (PMID:26500584): oral GABA does NOT cross the BBB. PharmaGABA branded form has SAME BBB-blocked PK as generic GABA. Branded RCT efficacy reflects gut-brain axis, NOT systemic CNS PK."
         }
       },
       "liposomal gaba": {
@@ -17295,8 +17315,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "good (~85-90% protein digestibility; higher phycocyanin retention than dried)",
-        "notes": "Unprocessed fresh spirulina with highest nutrient integrity. Phycocyanin and heat-sensitive enzymes are fully intact — spray drying causes ~20% phycocyanin loss (PMC10144176). However, no human study has directly compared fresh vs dried spirulina absorption. Protein digestibility of dried spirulina = 85% (PMC6179135, human dual-tracer ileal method); fresh is likely slightly higher due to intact cell structure. Rare in supplement form — most products are dried.",
+        "absorption": "category_error (composite food; nutrient matrix)",
+        "notes": "Unprocessed fresh spirulina with highest nutrient integrity. Phycocyanin and heat-sensitive enzymes are fully intact — spray drying causes ~20% phycocyanin loss (PMC10144176). However, no human study has directly compared fresh vs dried spirulina absorption. Protein digestibility of dried spirulina = 85% (PMC6179135, human dual-tracer ileal method); fresh is likely slightly higher due to intact cell structure. Rare in supplement form — most products are dried. Dr Pham E2 sign-off: 9TH CATEGORY ERROR (composite food). 0.88 → null. Score per-component nutrient density.",
         "aliases": [
           "fresh spirulina",
           "raw spirulina",
@@ -17310,19 +17330,21 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.88,
-          "range_low": 0.85,
-          "range_high": 0.9,
-          "quality": "very_good",
-          "notes": "Protein digestibility ~85% measured on dried (PMC6179135); fresh likely slightly higher; phycocyanin retention ~20% better than spray-dried"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR (9th overall) — composite food. Per Dr Pham E2 sign-off: spirulina is a NUTRIENT MATRIX (multi-nutrient food), not a single-molecule supplement. Comparing spirulina to a class baseline F is a category error like organ extracts (B20). Nutrient density is the right metric, not oral F.",
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       },
       "organic spirulina": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "good (~83-88% protein digestibility)",
-        "notes": "Certified organic spirulina grown without synthetic fertilizers or pesticides. 'Organic' is a cultivation certification, not a bioavailability modifier — protein digestibility is the same as standard spirulina powder (~85%, PMC6179135). Spirulina has a peptidoglycan-based cell wall (not cellulose like chlorella), which is more readily digestible by human enzymes (PMC94402). May have lower heavy metal contamination due to controlled cultivation conditions.",
+        "absorption": "category_error (composite food; nutrient matrix)",
+        "notes": "Certified organic spirulina grown without synthetic fertilizers or pesticides. 'Organic' is a cultivation certification, not a bioavailability modifier — protein digestibility is the same as standard spirulina powder (~85%, PMC6179135). Spirulina has a peptidoglycan-based cell wall (not cellulose like chlorella), which is more readily digestible by human enzymes (PMC94402). May have lower heavy metal contamination due to controlled cultivation conditions. Dr Pham E2 sign-off: 9TH CATEGORY ERROR. 0.85 → null.",
         "aliases": [
           "certified organic spirulina",
           "non-gmo spirulina",
@@ -17335,19 +17357,21 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.85,
-          "range_low": 0.83,
-          "range_high": 0.88,
-          "quality": "very_good",
-          "notes": "Same protein digestibility as standard spirulina (~85%, PMC6179135); organic = cultivation practice, not PK modifier"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR (9th — composite food) per Dr Pham E2.",
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       },
       "spirulina powder": {
         "bio_score": 9,
         "natural": true,
         "score": 12,
-        "absorption": "good (~83-88% protein digestibility)",
-        "notes": "Standard dried spirulina powder (Arthrospira platensis). Mean indispensable amino acid digestibility = 85.2% in humans via dual-tracer ileal method (PMC6179135). PDCAAS = 84%. Spirulina has a peptidoglycan cell wall (not cellulose), making it more digestible than chlorella without cell-wall cracking (PMC94402). Rich in protein (~60%), phycocyanin, and B-vitamins. Spray drying causes ~20% phycocyanin loss vs fresh (PMC10144176).",
+        "absorption": "category_error (composite food; nutrient matrix)",
+        "notes": "Standard dried spirulina powder (Arthrospira platensis). Mean indispensable amino acid digestibility = 85.2% in humans via dual-tracer ileal method (PMC6179135). PDCAAS = 84%. Spirulina has a peptidoglycan cell wall (not cellulose), making it more digestible than chlorella without cell-wall cracking (PMC94402). Rich in protein (~60%), phycocyanin, and B-vitamins. Spray drying causes ~20% phycocyanin loss vs fresh (PMC10144176). Dr Pham E2 sign-off: 9TH CATEGORY ERROR. 0.85 → null.",
         "aliases": [
           "blue-green algae",
           "arthrospira platensis",
@@ -17363,19 +17387,21 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.85,
-          "range_low": 0.83,
-          "range_high": 0.88,
-          "quality": "very_good",
-          "notes": "Mean IAA digestibility 85.2% (PMC6179135, human dual-tracer); PDCAAS 84%"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR (9th — composite food) per Dr Pham E2.",
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       },
       "spirulina tablets": {
         "bio_score": 8,
         "natural": true,
         "score": 11,
-        "absorption": "good (~75-85% protein digestibility; compression may slow dissolution)",
-        "notes": "Compressed spirulina tablets or capsules. Same base material as powder but compression into tablets may slightly slow dissolution and digestion onset. No direct human study comparing tablet vs powder spirulina bioavailability. Small penalty vs powder reflects theoretical slower disintegration. Convenient dosage form for standardized intake.",
+        "absorption": "category_error (composite food; nutrient matrix)",
+        "notes": "Compressed spirulina tablets or capsules. Same base material as powder but compression into tablets may slightly slow dissolution and digestion onset. No direct human study comparing tablet vs powder spirulina bioavailability. Small penalty vs powder reflects theoretical slower disintegration. Convenient dosage form for standardized intake. Dr Pham E2 sign-off: 9TH CATEGORY ERROR. 0.80 → null.",
         "aliases": [
           "spirulina pills",
           "compressed spirulina",
@@ -17387,11 +17413,13 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.8,
-          "range_low": 0.75,
-          "range_high": 0.85,
-          "quality": "very_good",
-          "notes": "Powder digestibility ~85% (PMC6179135); small compression penalty estimated; no direct tablet PK study"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR (9th — composite food) per Dr Pham E2.",
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       },
       "spirulina (unspecified)": {
@@ -17411,7 +17439,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "COMPOSITE FOOD — likely category-error per Batch 20 organ extracts parallel. Companions paste 0.88 / organic 0.85 / powder 0.85 / tablets 0.80 reflect nutrient-density framework, NOT classical bioavailability. Donadio 2021 (PMID:34836173): food matrix dominates spirulina peptide production. Pending Dr Pham E2 review (see DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md)."
+          "notes": "COMPOSITE FOOD — likely category-error per Batch 20 organ extracts parallel. Companions paste 0.88 / organic 0.85 / powder 0.85 / tablets 0.80 reflect nutrient-density framework, NOT classical bioavailability. Donadio 2021 (PMID:34836173): food matrix dominates spirulina peptide production. Pending Dr Pham E2 review (see DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md).",
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       },
       "phycocyanin extract (spirulina)": {
@@ -17684,7 +17714,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Liposomal HA is a delivery-format claim with NO published human PK data validating bioavailability uplift over plain HA. No head-to-head comparisons exist."
+          "notes": "Liposomal HA is a delivery-format claim with NO published human PK data validating bioavailability uplift over plain HA. No head-to-head comparisons exist.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "acetylated HA": {
@@ -17710,7 +17742,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Acetylation of HA studied for skin penetration; no human oral PK data. Likely class-equivalent to plain HA — also lacks human PK."
+          "notes": "Acetylation of HA studied for skin penetration; no human oral PK data. Likely class-equivalent to plain HA — also lacks human PK.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "low molecular weight HA": {
@@ -17788,7 +17822,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "No human oral PK exists for HA. Mannino 2024 (PMID:37081790): vLMW-HA (≤5 kDa) absorbed in mice — significant plasma/skin/bladder/gut increase after 7 days. HMW (>500 kDa) typical food-grade HA likely fiber-like category-error (paracellular only, primarily fermented/excreted). MW rarely specified on supplement labels. Galla 2022 (PMID:35897688) HMW in vitro only. GHOST CATCHES: \"Oe 2014\" and \"Kimura 2016\" HA absorption — fabricated, not in PubMed."
+          "notes": "No human oral PK exists for HA. Mannino 2024 (PMID:37081790): vLMW-HA (≤5 kDa) absorbed in mice — significant plasma/skin/bladder/gut increase after 7 days. HMW (>500 kDa) typical food-grade HA likely fiber-like category-error (paracellular only, primarily fermented/excreted). MW rarely specified on supplement labels. Galla 2022 (PMID:35897688) HMW in vitro only. GHOST CATCHES: \"Oe 2014\" and \"Kimura 2016\" HA absorption — fabricated, not in PubMed.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       }
     },
@@ -19370,7 +19406,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR (8th overall) — NEW PATTERN: oral tolerance / immune mechanism. UC-II 40 mg/d works via oral tolerance + Treg induction in Peyer's patches (Crowley 2009 PMID:19847319, Lugo 2013 PMID:24153020, Lugo 2016 PMID:26822714 head-to-head vs G+C 1500/1200 mg). Mechanism REQUIRES survival of intact triple-helical epitope to GALT — NOT systemic absorption. Compare to gram-dose hydrolyzed collagen peptides (0.85 F): apples-to-oranges; UC-II is small-bowel immune modulation, not absorption. GHOST CATCH: \"Bagchi 2002 UC-II\" likely conflation — Bagchi is co-author on Crowley 2009, not first."
+          "notes": "CATEGORY ERROR (8th overall) — NEW PATTERN: oral tolerance / immune mechanism. UC-II 40 mg/d works via oral tolerance + Treg induction in Peyer's patches (Crowley 2009 PMID:19847319, Lugo 2013 PMID:24153020, Lugo 2016 PMID:26822714 head-to-head vs G+C 1500/1200 mg). Mechanism REQUIRES survival of intact triple-helical epitope to GALT — NOT systemic absorption. Compare to gram-dose hydrolyzed collagen peptides (0.85 F): apples-to-oranges; UC-II is small-bowel immune modulation, not absorption. GHOST CATCH: \"Bagchi 2002 UC-II\" likely conflation — Bagchi is co-author on Crowley 2009, not first.",
+          "category_error_type": "oral_tolerance",
+          "category_error_label": "Immune signaling via Peyer's patches (oral tolerance)"
         }
       },
       "gelatin": {
@@ -21965,8 +22003,8 @@
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "N/A (enzymes act locally in GI tract)",
-        "notes": "Broad-spectrum blend of enzymes sourced from fungal (Aspergillus) or botanical sources. Includes amylase, protease, lipase, cellulase, and often lactase. Fungal-derived enzymes are generally more acid-stable than animal-derived pancreatic enzymes, allowing activity across a wider pH range in the GI tract. DigeZyme (penta-enzyme complex) showed significant improvement in gastric/intestinal symptoms over 60 days in a clinical study. OTC supplements lack FDA regulation of enzyme potency and concentrations.",
+        "absorption": "category_error (local action; activity-units metric)",
+        "notes": "Broad-spectrum blend of enzymes sourced from fungal (Aspergillus) or botanical sources. Includes amylase, protease, lipase, cellulase, and often lactase. Fungal-derived enzymes are generally more acid-stable than animal-derived pancreatic enzymes, allowing activity across a wider pH range in the GI tract. DigeZyme (penta-enzyme complex) showed significant improvement in gastric/intestinal symptoms over 60 days in a clinical study. OTC supplements lack FDA regulation of enzyme potency and concentrations. Dr Pham E3 sign-off: CATEGORY ERROR (local action). 0.55 → null. Future activity-units scoring system.",
         "aliases": [
           "plant enzymes",
           "vegetarian enzymes",
@@ -22006,19 +22044,21 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.55,
-          "range_low": 0.45,
-          "range_high": 0.65,
-          "quality": "moderate",
-          "notes": "Represents GI enzyme activity survival; fungal enzymes more acid-stable than animal-derived"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR — local action per Dr Pham E3 sign-off. Digestive enzymes act in GI lumen on FOOD substrate; they are NOT systemically absorbed intact. The right metric is enzymatic ACTIVITY survival (HUT for proteases, DU for amylases, FCC units for lipases) measured at the site of action, not oral F. Future schema: `activity_units_score` field (separate from struct.value).",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "pancreatic enzymes (animal-derived)": {
         "bio_score": 11,
         "natural": true,
         "score": 14,
-        "absorption": "good (~60–70%)",
-        "notes": "Enzymes sourced from animal (typically porcine) pancreases, containing amylase, lipase, and protease. Requires enteric coating to survive stomach acid and function in the small intestine. Prescription pancreatic enzyme replacement therapy (PERT) is FDA-regulated for exocrine pancreatic insufficiency; OTC forms have unregulated potency. Pancreatin 4x/8x/10x refers to concentration multiples of USP activity units. Well-established efficacy in pancreatic insufficiency but limited evidence for use in healthy individuals.",
+        "absorption": "category_error (local action; activity-units metric)",
+        "notes": "Enzymes sourced from animal (typically porcine) pancreases, containing amylase, lipase, and protease. Requires enteric coating to survive stomach acid and function in the small intestine. Prescription pancreatic enzyme replacement therapy (PERT) is FDA-regulated for exocrine pancreatic insufficiency; OTC forms have unregulated potency. Pancreatin 4x/8x/10x refers to concentration multiples of USP activity units. Well-established efficacy in pancreatic insufficiency but limited evidence for use in healthy individuals. Dr Pham E3 sign-off: CATEGORY ERROR. 0.65 → null.",
         "aliases": [
           "pancreatic enzymes",
           "pancreatin",
@@ -22058,19 +22098,21 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.65,
-          "range_low": 0.6,
-          "range_high": 0.7,
-          "quality": "good",
-          "notes": "good (~60–70%)"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR — local action per Dr Pham E3. Pancreatic enzymes (pancrelipase) act in duodenum/jejunum on food; NOT systemically absorbed. Score on activity-units survival.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "specific enzymes": {
         "bio_score": 10,
         "natural": true,
         "score": 13,
-        "absorption": "N/A (enzymes act locally in GI tract, not absorbed systemically)",
-        "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, serrapeptase, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally — systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency.",
+        "absorption": "category_error (local action; activity-units metric)",
+        "notes": "Targeted individual enzymes (protease, lipase, amylase, bromelain, papain, serrapeptase, lactase, cellulase, etc.) designed to break down specific food components in the GI lumen. Enzymes work locally — systemic absorption is NOT the relevant metric; GI stability and enzyme activity delivery matter. Without enteric coating, many enzymes are partially denatured by stomach acid (~30-50% survival). OTC enzyme supplements are not FDA-regulated and enzyme concentrations are not guaranteed (Johns Hopkins Medicine). Well-characterized branded forms (DigeZyme, ProHydrolase) have more reliable potency. Dr Pham E3 sign-off: CATEGORY ERROR. 0.40 → null.",
         "aliases": [
           "protease",
           "acid protease",
@@ -22192,11 +22234,13 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.4,
-          "range_low": 0.3,
-          "range_high": 0.5,
-          "quality": "moderate",
-          "notes": "Represents GI enzyme activity survival, NOT systemic absorption; stomach acid denatures unprotected enzymes"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR — local action per Dr Pham E3. Specific enzymes (lactase, etc.) act in GI lumen on substrate.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         },
         "audit_trail": [
           "D3.6 (2026-04-20): added serrapeptase enzyme variants (Doctor's Best label)."
@@ -22206,8 +22250,8 @@
         "bio_score": 12,
         "natural": false,
         "score": 12,
-        "absorption": "good (~60–70%)",
-        "notes": "Encapsulation technology that protects enzymes from stomach acid, ensuring they are released in the small intestine where they are most effective. Essential for pancreatic enzymes.",
+        "absorption": "category_error (local action; activity-units metric)",
+        "notes": "Encapsulation technology that protects enzymes from stomach acid, ensuring they are released in the small intestine where they are most effective. Essential for pancreatic enzymes. Dr Pham E3 sign-off: CATEGORY ERROR. 0.65 → null.",
         "aliases": [
           "delayed-release enzymes",
           "acid-resistant enzymes",
@@ -22224,11 +22268,13 @@
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
-          "value": 0.65,
-          "range_low": 0.6,
-          "range_high": 0.7,
-          "quality": "good",
-          "notes": "good (~60–70%)"
+          "value": null,
+          "range_low": null,
+          "range_high": null,
+          "quality": "unknown",
+          "notes": "CATEGORY ERROR — local action per Dr Pham E3. Enteric coating optimizes activity at duodenum/jejunum, NOT systemic absorption. Score on activity-units survival.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "oxidized enzymes": {
@@ -22258,7 +22304,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Oxidation deactivates enzymatic activity — not viable as functional supplement. Framework mismatch: digestive enzymes measure luminal activity survival, not systemic F. See unspecified entry for framework discussion."
+          "notes": "Oxidation deactivates enzymatic activity — not viable as functional supplement. Framework mismatch: digestive enzymes measure luminal activity survival, not systemic F. See unspecified entry for framework discussion.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "digestive enzymes (unspecified)": {
@@ -22292,7 +22340,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "FRAMEWORK MISMATCH (not strictly category-error): digestive enzymes act in GI lumen on food, NOT systemically absorbed. The bioavailability framework measures wrong target. Companions plant complex 0.55, pancreatic 0.65, specific enzymes 0.40, enteric-coated 0.65 are activity-survival proxies, NOT oral F. Pending Dr Pham E3 review (see DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md). Thorat 2012 (PMID:22762290): pancrelipase efficacy via fat absorption coefficient, not plasma PK."
+          "notes": "FRAMEWORK MISMATCH (not strictly category-error): digestive enzymes act in GI lumen on food, NOT systemically absorbed. The bioavailability framework measures wrong target. Companions plant complex 0.55, pancreatic 0.65, specific enzymes 0.40, enteric-coated 0.65 are activity-survival proxies, NOT oral F. Pending Dr Pham E3 review (see DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md). Thorat 2012 (PMID:22762290): pancrelipase efficacy via fat absorption coefficient, not plasma PK.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       }
     },
@@ -22654,11 +22704,11 @@
         }
       },
       "liposomal nmn / nr": {
-        "bio_score": 13,
+        "bio_score": 9,
         "natural": false,
-        "score": 13,
+        "score": 9,
         "absorption": "liposomal NMN/NR; mechanistic claim; class-poor without carrier",
-        "notes": "NMN or NR encapsulated in liposomes to bypass gut microbiota degradation and first-pass metabolism via lymphatic absorption. A Feb 2025 RCT (n=15, healthy men) found liposomal NMN at 350 mg/day significantly increased NAD+ vs non-liposomal NMN over 4 weeks — the first human head-to-head comparison. Mechanistic rationale is sound (liposomes bypass enterohepatic degradation) but evidence base is still limited to one small trial. Stability concerns: liposomes can leak during storage, losing the bioavailability advantage. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "NMN or NR encapsulated in liposomes to bypass gut microbiota degradation and first-pass metabolism via lymphatic absorption. A Feb 2025 RCT (n=15, healthy men) found liposomal NMN at 350 mg/day significantly increased NAD+ vs non-liposomal NMN over 4 weeks — the first human head-to-head comparison. Mechanistic rationale is sound (liposomes bypass enterohepatic degradation) but evidence base is still limited to one small trial. Stability concerns: liposomes can leak during storage, losing the bioavailability advantage. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C5 sign-off: bio_score 13 → 9. Liposomal cap.",
         "aliases": [
           "liposomal nmn",
           "liposomal nr",
@@ -23747,7 +23797,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR (6th overall) — NEW PATTERN: protein digestion barrier. SOD is an enzyme protein digested by gastric pepsin; intact enzyme does NOT survive to systemic circulation. Vouldoukis 2004 (PMID:15742357): GliSODin (Cu-Zn SOD-melon + wheat gliadin) preserves activity but is animal data only. Vouldoukis 2004 companion (PMID:15261965): unprotected SOD ineffective. Pattern applies broadly to oral protein/enzyme supplements (lactoferrin, immunoglobulins)."
+          "notes": "CATEGORY ERROR (6th overall) — NEW PATTERN: protein digestion barrier. SOD is an enzyme protein digested by gastric pepsin; intact enzyme does NOT survive to systemic circulation. Vouldoukis 2004 (PMID:15742357): GliSODin (Cu-Zn SOD-melon + wheat gliadin) preserves activity but is animal data only. Vouldoukis 2004 companion (PMID:15261965): unprotected SOD ineffective. Pattern applies broadly to oral protein/enzyme supplements (lactoferrin, immunoglobulins).",
+          "category_error_type": "protein_digestion_barrier",
+          "category_error_label": "Protein/enzyme digested before absorption"
         }
       },
       "superoxide dismutase (sod) (unspecified)": {
@@ -23766,7 +23818,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR (6th — protein digestion barrier). See sod supplement entry. Unprotected oral SOD digested in stomach."
+          "notes": "CATEGORY ERROR (6th — protein digestion barrier). See sod supplement entry. Unprotected oral SOD digested in stomach.",
+          "category_error_type": "protein_digestion_barrier",
+          "category_error_label": "Protein/enzyme digested before absorption"
         }
       }
     },
@@ -28068,7 +28122,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR (7th — see konjac glucomannan entry). Fiber mechanism is luminal (gel/binding), not systemic absorption."
+          "notes": "CATEGORY ERROR (7th — see konjac glucomannan entry). Fiber mechanism is luminal (gel/binding), not systemic absorption.",
+          "category_error_type": "viscous_fiber_luminal",
+          "category_error_label": "Forms a gel in the gut (luminal action)"
         }
       },
       "konjac glucomannan": {
@@ -28092,7 +28148,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR (7th overall after manuka B18, organ extracts B20, prebiotics B22, slippery elm B23, psyllium B24, SOD B24). González Canga 2004 (PMID:14983741): glucomannan mechanism is gel formation + gastric-emptying delay + bile-acid binding — NOT systemic absorption. Same pattern as psyllium."
+          "notes": "CATEGORY ERROR (7th overall after manuka B18, organ extracts B20, prebiotics B22, slippery elm B23, psyllium B24, SOD B24). González Canga 2004 (PMID:14983741): glucomannan mechanism is gel formation + gastric-emptying delay + bile-acid binding — NOT systemic absorption. Same pattern as psyllium.",
+          "category_error_type": "viscous_fiber_luminal",
+          "category_error_label": "Forms a gel in the gut (luminal action)"
         }
       }
     },
@@ -29197,7 +29255,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR FLAG: Roberfroid 2005 (PMID:15877886) — \"Because of the beta-configuration of the anomeric C2 in their fructose monomers, inulin-type fructans resist hydrolysis by intestinal digestive enzymes, they classify as non-digestible carbohydrates...rapidly fermented [in colon] to produce SCFA that are good candidates to explain some of the systemic effects.\" Intact systemic F essentially 0%; fermented to SCFA ~100%"
+          "notes": "CATEGORY ERROR FLAG: Roberfroid 2005 (PMID:15877886) — \"Because of the beta-configuration of the anomeric C2 in their fructose monomers, inulin-type fructans resist hydrolysis by intestinal digestive enzymes, they classify as non-digestible carbohydrates...rapidly fermented [in colon] to produce SCFA that are good candidates to explain some of the systemic effects.\" Intact systemic F essentially 0%; fermented to SCFA ~100%",
+          "category_error_type": "colonic_fermentation",
+          "category_error_label": "Fermented in colon to SCFAs (microbiome)"
         }
       }
     },
@@ -33171,7 +33231,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR FLAG: Holscher 2017 (PMID:28165863) explicit — \"Human alimentary enzymes are not able to digest most complex carbohydrates and plant polysaccharides. Instead, these polysaccharides are metabolized by microbes which generate SCFAs.\" Same framework category-error as manuka (Batch 18) + organ extracts (Batch 20)"
+          "notes": "CATEGORY ERROR FLAG: Holscher 2017 (PMID:28165863) explicit — \"Human alimentary enzymes are not able to digest most complex carbohydrates and plant polysaccharides. Instead, these polysaccharides are metabolized by microbes which generate SCFAs.\" Same framework category-error as manuka (Batch 18) + organ extracts (Batch 20)",
+          "category_error_type": "colonic_fermentation",
+          "category_error_label": "Fermented in colon to SCFAs (microbiome)"
         }
       }
     },
@@ -33217,11 +33279,11 @@
     "rxcui": "2110033",
     "forms": {
       "lactobacillus salivarius ha-118": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": true,
-        "score": 15,
+        "score": 10,
         "absorption": "L. salivarius HA-118 strain; live organism gut-survival F",
-        "notes": "Specific strain with oral and gut health benefits. Produces bacteriocins with antimicrobial properties. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Specific strain with oral and gut health benefits. Produces bacteriocins with antimicrobial properties. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C9 sign-off: bio_score 12 → 7. Strain-specific pending.",
         "aliases": [
           "l. salivarius ha-118",
           "ligilactobacillus salivarius",
@@ -33602,11 +33664,11 @@
         }
       },
       "liposomal berberine": {
-        "bio_score": 13,
+        "bio_score": 9,
         "natural": false,
-        "score": 13,
+        "score": 9,
         "absorption": "liposomal carrier; evidence-thin (no human PK); berberine class F ~0.05",
-        "notes": "Berberine encapsulated in phospholipid liposomes to enhance absorption. Standard berberine HCl has only ~0.37% oral F; liposomal delivery may improve 3-6x via lymphatic absorption pathway (PMC10675484). Still experimental — limited head-to-head human PK data vs standard berberine. Premium pricing. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Berberine encapsulated in phospholipid liposomes to enhance absorption. Standard berberine HCl has only ~0.37% oral F; liposomal delivery may improve 3-6x via lymphatic absorption pathway (PMC10675484). Still experimental — limited head-to-head human PK data vs standard berberine. Premium pricing. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C5 sign-off: bio_score 13 → 9. Liposomal cap.",
         "aliases": [
           "nano berberine",
           "enhanced berberine",
@@ -35791,7 +35853,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR (5th overall after manuka B18, organ extracts B20, prebiotics B22, slippery elm B23). Marlett 2003 (PMID:12749348): psyllium gel-forming fraction (~55%) RESISTS fermentation by colonic bacteria. Mechanism is luminal: bile-acid binding + gel formation, NOT systemic absorption."
+          "notes": "CATEGORY ERROR (5th overall after manuka B18, organ extracts B20, prebiotics B22, slippery elm B23). Marlett 2003 (PMID:12749348): psyllium gel-forming fraction (~55%) RESISTS fermentation by colonic bacteria. Mechanism is luminal: bile-acid binding + gel formation, NOT systemic absorption.",
+          "category_error_type": "viscous_fiber_luminal",
+          "category_error_label": "Forms a gel in the gut (luminal action)"
         }
       },
       "psyllium (unspecified)": {
@@ -35813,7 +35877,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "CATEGORY ERROR (5th). See psyllium seed entry. Husk powder companion already at 0.0; consistent with category-error."
+          "notes": "CATEGORY ERROR (5th). See psyllium seed entry. Husk powder companion already at 0.0; consistent with category-error.",
+          "category_error_type": "viscous_fiber_luminal",
+          "category_error_label": "Forms a gel in the gut (luminal action)"
         }
       }
     },
@@ -36197,11 +36263,11 @@
         }
       },
       "bifidobacterium lactis (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": true,
-        "score": 15,
+        "score": 10,
         "absorption": "live organism; F = gut survival not classical absorption; CFU dose-dependent",
-        "notes": "Bifidobacterium animalis subsp. lactis — widely studied probiotic species. Specific strain identification yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Bifidobacterium animalis subsp. lactis — widely studied probiotic species. Specific strain identification yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C9 sign-off: bio_score 12 → 7. Strain-specific pending.",
         "aliases": [
           "b. lactis",
           "bifidobacterium lactis",
@@ -36385,11 +36451,11 @@
         }
       },
       "lactobacillus rhamnosus (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 7,
         "natural": true,
-        "score": 15,
+        "score": 10,
         "absorption": "L. rhamnosus; live organism gut-survival F",
-        "notes": "Lactobacillus rhamnosus — one of the most researched probiotic species. Specific strain (GG, HN001) yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Lactobacillus rhamnosus — one of the most researched probiotic species. Specific strain (GG, HN001) yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C9 sign-off: bio_score 12 → 7. Strain-specific pending.",
         "aliases": [
           "lactobacillus rhamnosus",
           "L. rhamnosus",
@@ -36563,11 +36629,11 @@
         }
       },
       "lactobacillus plantarum (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 7,
         "natural": true,
-        "score": 16,
+        "score": 10,
         "absorption": "L. plantarum; live organism gut-survival F",
-        "notes": "Lactobacillus plantarum — versatile probiotic species with strong GI colonization. Specific strain (LP299v, DR7) yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Lactobacillus plantarum — versatile probiotic species with strong GI colonization. Specific strain (LP299v, DR7) yields higher scoring. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C9 sign-off: bio_score 13 → 7. Strain-specific scoring system pending (survival-to-colon + CFU + strain RCT).",
         "aliases": [
           "lactobacillus plantarum",
           "L. plantarum",
@@ -36754,11 +36820,11 @@
         }
       },
       "bifidobacterium longum infantis 35624": {
-        "bio_score": 11,
+        "bio_score": 7,
         "natural": true,
-        "score": 14,
+        "score": 10,
         "absorption": "B. infantis 35624 (Align); live organism gut-survival F",
-        "notes": "B. longum subsp. infantis 35624 (Align, Bifantis) — best-studied infantis strain for IBS symptom relief. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "B. longum subsp. infantis 35624 (Align, Bifantis) — best-studied infantis strain for IBS symptom relief. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C9 sign-off: bio_score 11 → 7. Strain-specific pending.",
         "aliases": [
           "Bifidobacterium infantis 35624",
           "B. infantis 35624",
@@ -40189,11 +40255,11 @@
     "cui": "C2608032",
     "forms": {
       "5-loxin": {
-        "bio_score": 14,
+        "bio_score": 7,
         "natural": true,
-        "score": 17,
+        "score": 10,
         "absorption": "30% AKBA enriched; clinical OA benefit (Sengupta 2008); no human absolute F",
-        "notes": "Standardized to 30% AKBA, patented extract. Superior anti-inflammatory activity. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper).",
+        "notes": "Standardized to 30% AKBA, patented extract. Superior anti-inflammatory activity. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper). Dr Pham C3 sign-off: bio_score 14 → 7. Crominex pattern.",
         "aliases": [
           "5loxin",
           "5-loxin - boswellia serrata extract",
@@ -40224,11 +40290,11 @@
         }
       },
       "boswellia aflapin": {
-        "bio_score": 14,
+        "bio_score": 7,
         "natural": true,
-        "score": 17,
+        "score": 10,
         "absorption": "AKBA + non-volatile oil; +51.78% AUC in RATS only (Sengupta 2011); no human PK",
-        "notes": "Patented Boswellia serrata extract (Laila Nutra) with enhanced bioavailability via proprietary process. Contains both boswellic acids and non-boswellic acid synergists. Clinical RCTs show faster onset of joint pain relief vs standard extracts. 100 mg/day effective dose. Superior to 5-Loxin in some head-to-head comparisons. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper).",
+        "notes": "Patented Boswellia serrata extract (Laila Nutra) with enhanced bioavailability via proprietary process. Contains both boswellic acids and non-boswellic acid synergists. Clinical RCTs show faster onset of joint pain relief vs standard extracts. 100 mg/day effective dose. Superior to 5-Loxin in some head-to-head comparisons. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper). Dr Pham C3 sign-off: bio_score 14 → 7. Crominex pattern.",
         "aliases": [
           "aflapin",
           "aflapin boswellia",
@@ -40696,11 +40762,11 @@
     "cui": "C3709449",
     "forms": {
       "primavie shilajit": {
-        "bio_score": 14,
+        "bio_score": 7,
         "natural": true,
-        "score": 17,
+        "score": 10,
         "absorption": "no human PK published; endpoint RCT only (Pandit 2016)",
-        "notes": "Patented purified shilajit extract (Natreon Inc). Standardized to >50% fulvic acid and dibenzo-α-pyrones. Clinical RCTs show testosterone support, CoQ10 enhancement, and exercise performance improvement. GMP-certified purification removes heavy metals. Most clinically studied shilajit brand. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
+        "notes": "Patented purified shilajit extract (Natreon Inc). Standardized to >50% fulvic acid and dibenzo-α-pyrones. Clinical RCTs show testosterone support, CoQ10 enhancement, and exercise performance improvement. GMP-certified purification removes heavy metals. Most clinically studied shilajit brand. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK). Dr Pham C3 sign-off: bio_score 14 → 7. Crominex pattern.",
         "aliases": [
           "primavie",
           "patented shilajit",
@@ -40851,11 +40917,11 @@
     "cui": "C0936126",
     "forms": {
       "testofen": {
-        "bio_score": 14,
+        "bio_score": 7,
         "natural": true,
-        "score": 17,
+        "score": 10,
         "absorption": "furostanol saponins ~1-5% systemic F; activity via gut sapogenin metabolites",
-        "notes": "Patented fenugreek extract (Gencor) standardized to 50% Fenuside (furostanol saponins). Multiple RCTs show testosterone support, libido improvement, and body composition benefits in men at 600 mg/day. FDA GRAS. The most clinically studied fenugreek extract for male health. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
+        "notes": "Patented fenugreek extract (Gencor) standardized to 50% Fenuside (furostanol saponins). Multiple RCTs show testosterone support, libido improvement, and body composition benefits in men at 600 mg/day. FDA GRAS. The most clinically studied fenugreek extract for male health. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already. Dr Pham C3 sign-off: bio_score 14 → 7. Crominex pattern.",
         "aliases": [
           "testofen fenugreek",
           "fenuside 50%",
@@ -40991,11 +41057,11 @@
     "cui": "C0771967",
     "forms": {
       "remifemin": {
-        "bio_score": 14,
+        "bio_score": 7,
         "natural": true,
-        "score": 17,
+        "score": 10,
         "absorption": "Remifemin branded extract; clinical RCTs only; no human PK published",
-        "notes": "Patented black cohosh extract (Schaper & Brümmer, Germany). The most clinically studied botanical for menopausal symptoms — over 100 clinical studies. Standardized to triterpene glycosides (including actein and 27-deoxyactein). 40 mg/day is the standard dose. European Medicines Agency approved for menopausal hot flashes. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Patented black cohosh extract (Schaper & Brümmer, Germany). The most clinically studied botanical for menopausal symptoms — over 100 clinical studies. Standardized to triterpene glycosides (including actein and 27-deoxyactein). 40 mg/day is the standard dose. European Medicines Agency approved for menopausal hot flashes. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C3 sign-off: bio_score 14 → 7. Crominex pattern.",
         "aliases": [
           "remifemin black cohosh"
         ],
@@ -41351,11 +41417,11 @@
     "cui": "C3887788",
     "forms": {
       "vitex standardized extract": {
-        "bio_score": 13,
+        "bio_score": 7,
         "natural": true,
-        "score": 16,
+        "score": 10,
         "absorption": "Vitex standardized; iridoid + flavonoid class; clinical RCTs only",
-        "notes": "Vitex agnus-castus berry extract (typically standardized to 0.5% agnuside or 6% aucubin). Clinical evidence for PMS symptom relief, luteal phase support, and cycle regulation. Acts on dopamine D2 receptors to reduce prolactin. 20-40 mg/day standard dose. Clinically studied brands include Femicur and Mastodynon. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
+        "notes": "Vitex agnus-castus berry extract (typically standardized to 0.5% agnuside or 6% aucubin). Clinical evidence for PMS symptom relief, luteal phase support, and cycle regulation. Acts on dopamine D2 receptors to reduce prolactin. 20-40 mg/day standard dose. Clinically studied brands include Femicur and Mastodynon. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only. Dr Pham C3 sign-off: bio_score 13 → 7. Crominex pattern.",
         "aliases": [
           "vitex extract",
           "vitex agnus-castus extract",
@@ -42369,7 +42435,9 @@
           "quality": "unknown",
           "notes": "CATEGORY ERROR FLAG: organ extract is composite food with no unified F. Each component (heme Fe via HCP1, B12 via intrinsic factor, vit A with fat, AAs via PepT1) has its own absorption pathway. Same category-error as manuka honey (Batch 18). bio_score reflects nutrient DENSITY/source quality, not absorption",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       },
       "freeze-dried": {
@@ -42387,7 +42455,9 @@
           "quality": "unknown",
           "notes": "CATEGORY ERROR: composite food; processing affects nutrient retention, not unified F",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       },
       "standard desiccated": {
@@ -42405,7 +42475,9 @@
           "quality": "unknown",
           "notes": "CATEGORY ERROR: composite food; heat processing reduces some heat-sensitive nutrients",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       },
       "organ extracts (unspecified)": {
@@ -42477,7 +42549,9 @@
           "quality": "unknown",
           "notes": "CATEGORY ERROR: form-ambiguous composite food",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "category_error_type": "composite_food",
+          "category_error_label": "Multi-nutrient food; score per-nutrient"
         }
       }
     },
@@ -42976,7 +43050,9 @@
           "quality": "unknown",
           "notes": "CATEGORY ERROR FLAG: MGO is local-action antibacterial (Tenci 2017 PMID:27789370). Sugars absorb normally as glucose/fructose. UMF/MGO grade reflects antibacterial POTENCY, not systemic F. bio_score in absorption framework is mismatched",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "category_error_type": "local_action",
+          "category_error_label": "Works locally; not systemically absorbed"
         }
       },
       "umf 10+ / mgo 263+": {
@@ -43053,7 +43129,9 @@
           "quality": "unknown",
           "notes": "Form-ambiguous + category error: local-action regardless of grade",
           "range_low": null,
-          "range_high": null
+          "range_high": null,
+          "category_error_type": "local_action",
+          "category_error_label": "Works locally; not systemically absorbed"
         }
       }
     },
@@ -45592,7 +45670,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Disch 2018 (PMID:29341029): Petadolex Ze 339 petasin shows high Caco-2 permeability BUT extensive intestinal + hepatic first-pass metabolism. No published human plasma PK figure for petasin/isopetasin. Effective drug per migraine RCTs but quantitative oral F UNKNOWN. GHOST FLAG: any future cite claiming a specific human butterbur F is likely fabricated."
+          "notes": "Disch 2018 (PMID:29341029): Petadolex Ze 339 petasin shows high Caco-2 permeability BUT extensive intestinal + hepatic first-pass metabolism. No published human plasma PK figure for petasin/isopetasin. Effective drug per migraine RCTs but quantitative oral F UNKNOWN. GHOST FLAG: any future cite claiming a specific human butterbur F is likely fabricated.",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       },
       "butterbur (unspecified)": {
@@ -45621,7 +45701,9 @@
           "range_low": null,
           "range_high": null,
           "quality": "unknown",
-          "notes": "Same basis as Petadolex form: no human plasma PK published (PMID:29341029)."
+          "notes": "Same basis as Petadolex form: no human plasma PK published (PMID:29341029).",
+          "category_error_type": "framework_mismatch",
+          "category_error_label": "Bioavailability framework does not apply"
         }
       }
     },
