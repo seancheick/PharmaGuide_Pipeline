@@ -3283,8 +3283,8 @@
       "signal_strength": "weak",
       "year_range": "2005-2025"
     },
-    "epa_dha": {
-      "canonical_id": "epa_dha",
+    "fish_oil": {
+      "canonical_id": "fish_oil",
       "total_reports": 20,
       "serious_reports": 19,
       "outcomes": {

@@ -641,7 +641,7 @@
       ]
     },
     {
-      "ingredient": "epa_dha",
+      "ingredient": "fish_oil",
       "relationships": [
         {
           "type": "combines",

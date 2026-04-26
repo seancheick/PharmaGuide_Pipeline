@@ -11520,244 +11520,11 @@
     }
   },
   "omega_3": {
-    "standard_name": "Omega-3 Fatty Acids",
+    "standard_name": "Minor Omega-3 Fatty Acids & SPM Precursors",
     "category": "fatty_acids",
     "cui": "C0015689",
     "rxcui": "4301",
     "forms": {
-      "omega-3 triglyceride (rTG)": {
-        "bio_score": 14,
-        "natural": true,
-        "score": 17,
-        "absorption": "very_good (rTG class-equiv to fish_oil rTG=0.92)",
-        "notes": "Re-esterified triglyceride form — concentrated fish oil that's been converted back to the natural triglyceride structure after purification. Absorbs about 70% better than ethyl ester (EE) form (Dyerberg 2010). The premium fish oil form used by brands like Nordic Naturals. Combines high EPA/DHA concentration with excellent absorption. B29 audit 2026-04-25: class-equiv to fish_oil rTG (B9 anchor); architectural-duplicate parent (DR PHAM REVIEW).",
-        "aliases": [
-          "rtg omega-3",
-          "triglyceride fish oil",
-          "natural triglyceride omega-3",
-          "tg fish oil",
-          "re-esterified fish oil",
-          "nordic naturals fish oil",
-          "re-esterified triglyceride",
-          "rTG fish oil",
-          "concentrated triglyceride fish oil"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.92,
-          "range_low": 0.85,
-          "range_high": 0.95,
-          "quality": "very_good",
-          "notes": "Class-equivalent to fish_oil rTG companion form (0.92). Re-esterified triglyceride is the highest-F omega-3 chemistry per Dyerberg 2010 / Schuchardt 2013 (Batch 9 anchor)."
-        }
-      },
-      "algal omega-3 DHA": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "very_good (algae oil class; B9 audit baseline)",
-        "notes": "Omega-3 from microalgae (Schizochytrium or similar). The only vegan source of preformed DHA. High purity with no ocean contaminants. Traditionally DHA-dominant with limited EPA, though newer strains produce both. Sold as Life's DHA, OPTI-3, and Elantria. A great choice for vegetarians and vegans. B29 audit 2026-04-25: class-equiv to algae_oil (B9).",
-        "aliases": [
-          "algae omega-3",
-          "algal oil",
-          "vegan dha",
-          "vegetarian omega-3",
-          "plant omega-3",
-          "schizochytrium dha",
-          "microalgae oil",
-          "microalgae schizochytrium oil",
-          "schizochytrium oil",
-          "schizochytrium spp. oil",
-          "high dha algal oil",
-          "dha algal oil",
-          "algal docosahexaenoic acid",
-          "purealgaeomega3",
-          "dha rich oil",
-          "OPTI-3 Choice",
-          "Elantria",
-          "Onavita",
-          "Life'sDHA Omega 3 Fatty Acids",
-          "Algal OMEGATEX0053TGCH",
-          "vegan omega-3",
-          "plant-based omega-3",
-          "vegan EPA DHA",
-          "purealgalomega3",
-          "pure algal omega-3",
-          "pure algal omega 3",
-          "algae oil docosahexaenoic acid",
-          "algal dha oil",
-          "Schizochytrium sp. Oil",
-          "Nannochloropsis sp.",
-          "nannochloropsis oil",
-          "nannochloropsis gaditana",
-          "nannochloropsis microalgae",
-          "schizochytrium sp."
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.85,
-          "range_low": 0.8,
-          "range_high": 0.9,
-          "quality": "very_good",
-          "notes": "Class-equivalent to algae oil parent (B9 audit). Algal DHA incorporates into plasma phospholipids equivalently to fish oil DHA per Lemaitre-Delaunay 1999 / Arterburn 2008."
-        }
-      },
-      "omega-3 emulsified": {
-        "bio_score": 13,
-        "natural": true,
-        "score": 16,
-        "absorption": "very_good (emulsified premium; bypasses lipase needs)",
-        "notes": "Fish oil processed with emulsification or micellization technology (VESIsorb, AquaCelle) to dramatically improve absorption, especially on an empty stomach. Qin 2017 showed SMEDS formulations significantly boosted fasting omega-3 absorption. A premium delivery technology, not a different chemical form. Best for people who can't take fish oil with meals. B29 audit 2026-04-25: emulsified modest premium over plain TG.",
-        "aliases": [
-          "emulsified fish oil",
-          "vesisorb omega-3",
-          "micellized fish oil",
-          "smoothie fish oil",
-          "liquid omega-3",
-          "VESIsorb",
-          "AquaCelle omega-3"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.9,
-          "range_low": 0.85,
-          "range_high": 0.95,
-          "quality": "very_good",
-          "notes": "Pre-emulsified omega-3 bypasses the lipase-dependent step in fat digestion — modest premium over plain TG. Class-equivalent slightly above fish_oil natural TG (0.85)."
-        }
-      },
-      "omega-3 natural triglyceride": {
-        "bio_score": 12,
-        "natural": true,
-        "score": 15,
-        "absorption": "very_good (natural TG class-equiv to fish_oil TG)",
-        "notes": "Standard fish oil in its natural triglyceride form — the way omega-3s exist in actual fish. Better absorbed than ethyl ester (EE) concentrates but less concentrated in EPA/DHA. Includes whole salmon oil, sardine oil, and other single-species oils. A solid natural choice, especially from wild-caught sources. B29 audit 2026-04-25: class-equiv to fish_oil natural TG.",
-        "aliases": [
-          "natural fish oil",
-          "salmon oil",
-          "wild fish oil",
-          "omega-3 fish oil",
-          "Triglycerides",
-          "Triglyceride",
-          "marine omega-3",
-          "wild alaskan salmon oil",
-          "wild alaskan sockeye salmon oil",
-          "norwegian salmon oil",
-          "norwegian virgin salmon oil",
-          "red sockeye salmon oil",
-          "100% natural salmon oil",
-          "virgin salmon oil",
-          "wild salmon oil",
-          "alaskan salmon oil",
-          "sockeye salmon oil",
-          "ecomega virgin salmon oil",
-          "ester omega salmon oil",
-          "ester-omega salmon oil",
-          "marine triglyceride concentrate",
-          "marine oil triglyceride concentrate",
-          "marine triglycerides",
-          "Natural Triglyceride Marine Lipid Concentrate",
-          "active fractionated Marine Lipid Concentrate",
-          "sardine oil",
-          "anchovy oil",
-          "menhaden oil",
-          "herring oil",
-          "mackerel oil"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.85,
-          "range_low": 0.8,
-          "range_high": 0.9,
-          "quality": "very_good",
-          "notes": "Class-equivalent to fish_oil natural TG companion (0.85). Native triglyceride form (Schuchardt 2013)."
-        }
-      },
-      "omega-3 ethyl ester (EE)": {
-        "bio_score": 9,
-        "natural": false,
-        "score": 9,
-        "absorption": "good (EE class-equiv to fish_oil EE=0.70)",
-        "notes": "The concentrated pharmaceutical form used in prescription drugs like Lovaza and Vascepa. Created by chemically converting fish oil triglycerides into ethyl esters for purification. Absorbs about 30% less than natural TG form (Dyerberg 2010), especially on an empty stomach. Cheaper to produce, which is why most budget fish oil supplements use this form. B29 audit 2026-04-25: class-equiv to fish_oil EE (B9).",
-        "aliases": [
-          "ethyl ester fish oil",
-          "ee fish oil",
-          "concentrated fish oil",
-          "omega-3 concentrate",
-          "lovaza",
-          "vascepa",
-          "icosapent ethyl",
-          "omega-3 fatty acid ethyl ester",
-          "omega-3 fatty acids ethyl esters",
-          "omega 3 fatty acid ethyl ester",
-          "omega-3 concentrate ethyl esters",
-          "fish oil ethyl ester concentrate",
-          "omega-3 acid ethyl esters",
-          "Ester-Omega Fish Oil Ethyl Ester",
-          "Ethyl Esters"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.7,
-          "range_low": 0.65,
-          "range_high": 0.75,
-          "quality": "good",
-          "notes": "Class-equivalent to fish_oil ethyl ester companion (0.70). EE chemistry requires re-esterification to TG before absorption — modest F penalty vs native TG per Dyerberg 2010 / Lawson 1988 (Batch 9 anchor)."
-        }
-      },
-      "flaxseed oil (ALA)": {
-        "bio_score": 6,
-        "natural": true,
-        "score": 9,
-        "absorption": "ALA well-absorbed (~96%), but poor conversion to EPA/DHA",
-        "notes": "Plant-based omega-3 from flaxseed, providing alpha-linolenic acid (ALA). ALA itself absorbs well (~96%), but your body converts only 5-10% to EPA and less than 5% to DHA (Burdge 2006). Not equivalent to fish oil for EPA/DHA benefits. Best used as a general omega-3 source alongside a direct EPA/DHA supplement if needed.",
-        "aliases": [
-          "ala omega-3",
-          "plant omega-3 ala",
-          "Omega-3 Alpha Linolenic Acid",
-          "Alpha Linoleic Acid",
-          "ALA from flax",
-          "english walnut oil"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.96,
-          "range_low": 0.768,
-          "range_high": 1.0,
-          "quality": "excellent",
-          "notes": "ALA absorption ~96%, but EPA/DHA conversion only 5-10% (Burdge 2006)"
-        }
-      },
-      "omega-3 (unspecified)": {
-        "bio_score": 8,
-        "natural": false,
-        "score": 8,
-        "absorption": "good (unspecified class baseline; matches fish_oil unspec)",
-        "notes": "The label doesn't specify which omega-3 form is used (triglyceride, ethyl ester, krill, or plant-based). This gets a conservative score because many budget fish oils use cheaper ethyl ester (EE) form. Look for 'triglyceride,' 'rTG,' 'krill oil,' or 'ubiquinol' on your label for a more accurate score. B29 audit 2026-04-25: class-equiv to fish_oil unspec.",
-        "aliases": [
-          "omega-3",
-          "fish oil unspecified",
-          "omega-3 fatty acids",
-          "omega-3s",
-          "omega 3s",
-          "omega3s",
-          "omega 3",
-          "Omega-3 DHA",
-          "Omega-3 Fatty Acid",
-          "OmegaChoice Omega-3 Essential Fatty Acids",
-          "Fish Oil Omega III fatty acids",
-          "Omega 3 Fatty Acids - Fish Oil Concentrate",
-          "EPA/DHA - Fish Oil Concentrate"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.78,
-          "range_low": 0.7,
-          "range_high": 0.85,
-          "quality": "good",
-          "notes": "Class-equivalent to fish_oil \"unspecified\" companion (0.78). Default for unspecified omega-3 form on label."
-        }
-      },
       "eicosatetraenoic acid (ETA, 20:4n-3)": {
         "bio_score": 11,
         "natural": true,
@@ -11907,7 +11674,8 @@
       "salt_parents": [],
       "metabolic_relationships": [],
       "metabolites": []
-    }
+    },
+    "description": "Minor omega-3 fatty acids (ETA 20:4n-3, 20:3n-3) plus specialized pro-resolving mediator (SPM) precursors (14-HDHA, 17-HDHA, 18-HEPE — oxidized DHA/EPA metabolites). Renamed parent (Batch 38, Dr Pham D8.1 sign-off): main TG/EE/unspecified omega-3 forms migrated to fish_oil; algal DHA to algae_oil; flaxseed ALA to flaxseed. This parent now contains only forms that are class-distinct from native TG omega-3 chemistry."
   },
   "coq10": {
     "standard_name": "Coenzyme Q10",
@@ -39998,65 +39766,6 @@
     "external_ids": {},
     "aliases": []
   },
-  "epa_dha": {
-    "standard_name": "EPA/DHA",
-    "category": "fatty_acids",
-    "forms": {
-      "epa dha (standard)": {
-        "bio_score": 10,
-        "natural": true,
-        "score": 13,
-        "absorption": "good (class-equiv to fish_oil unspecified)",
-        "notes": "Combined EPA+DHA omega-3 supplement. Provides both primary marine omega-3 fatty acids in a single product. Most fish oil supplements fall in this category. Combined dose of 1-4 g/day EPA+DHA recommended for cardiovascular health. AHA recommends ~1 g/day for secondary prevention. B29 audit 2026-04-25: class-equiv fish_oil unspec; epa_dha parent is architectural duplicate of fish_oil (DR PHAM REVIEW).",
-        "aliases": [
-          "EPA and DHA",
-          "EPA & DHA",
-          "DHA/EPA",
-          "EPA/DHA",
-          "purified fish oil concentrate"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.78,
-          "range_low": 0.7,
-          "range_high": 0.85,
-          "quality": "good",
-          "notes": "Class-equivalent to fish_oil \"unspecified\" companion (0.78). epa_dha parent is architectural duplicate of fish_oil — see omega_3 parent notes for DR PHAM architectural flag."
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 0,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [],
-      "parent_id": null,
-      "confidence": "high"
-    },
-    "category_enum": "fatty_acids",
-    "cui_note": "No confirmed exact UMLS concept for the combined EPA/DHA shorthand without forcing a branded product.",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "data_quality": {
-      "completeness": 1.0,
-      "missing_fields": [],
-      "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
-    },
-    "relationships": [
-      {
-        "type": "combines",
-        "target_id": "epa",
-        "notes": "Combined EPA+DHA supplement"
-      },
-      {
-        "type": "combines",
-        "target_id": "dha",
-        "notes": "Combined EPA+DHA supplement"
-      }
-    ],
-    "cui_status": "no_confirmed_umls_match",
-    "external_ids": {},
-    "aliases": []
-  },
   "d_beta_hydroxybutyrate_bhb": {
     "standard_name": "D-Beta-Hydroxybutyrate (BHB)",
     "category": "other",
@@ -43183,7 +42892,16 @@
         "aliases": [
           "kosher tg fish oil",
           "fish oil concentrate 10/50 tg",
-          "fish oil tg"
+          "fish oil tg",
+          "rtg omega-3",
+          "triglyceride fish oil",
+          "natural triglyceride omega-3",
+          "tg fish oil",
+          "re-esterified fish oil",
+          "nordic naturals fish oil",
+          "re-esterified triglyceride",
+          "rTG fish oil",
+          "concentrated triglyceride fish oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -43210,7 +42928,37 @@
           "anchovy fish oil",
           "alaska pollock oil",
           "msc coc mercury-free tuna fish oil",
-          "puresea omega3 mercury free tuna oil"
+          "puresea omega3 mercury free tuna oil",
+          "natural fish oil",
+          "salmon oil",
+          "wild fish oil",
+          "omega-3 fish oil",
+          "Triglycerides",
+          "Triglyceride",
+          "marine omega-3",
+          "wild alaskan salmon oil",
+          "wild alaskan sockeye salmon oil",
+          "norwegian salmon oil",
+          "norwegian virgin salmon oil",
+          "red sockeye salmon oil",
+          "100% natural salmon oil",
+          "virgin salmon oil",
+          "wild salmon oil",
+          "alaskan salmon oil",
+          "sockeye salmon oil",
+          "ecomega virgin salmon oil",
+          "ester omega salmon oil",
+          "ester-omega salmon oil",
+          "marine triglyceride concentrate",
+          "marine oil triglyceride concentrate",
+          "marine triglycerides",
+          "Natural Triglyceride Marine Lipid Concentrate",
+          "active fractionated Marine Lipid Concentrate",
+          "sardine oil",
+          "anchovy oil",
+          "menhaden oil",
+          "herring oil",
+          "mackerel oil"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -43232,7 +42980,21 @@
           "fish oil ethyl ester",
           "docosapentaenoic acid ethyl ester",
           "omega-7 fatty acid ethyl ester",
-          "Ethyl Esters"
+          "Ethyl Esters",
+          "ethyl ester fish oil",
+          "ee fish oil",
+          "concentrated fish oil",
+          "omega-3 concentrate",
+          "lovaza",
+          "vascepa",
+          "icosapent ethyl",
+          "omega-3 fatty acid ethyl ester",
+          "omega-3 fatty acids ethyl esters",
+          "omega 3 fatty acid ethyl ester",
+          "omega-3 concentrate ethyl esters",
+          "fish oil ethyl ester concentrate",
+          "omega-3 acid ethyl esters",
+          "Ester-Omega Fish Oil Ethyl Ester"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -43382,10 +43144,27 @@
           "marine lipid oil",
           "Omega-3 Fatty Acids, Sardines",
           "Cod",
-          "concentrated fish oil",
           "fish oil concentrate",
           "concentrated omega-3 fish oil",
-          "highly concentrated fish oil"
+          "highly concentrated fish oil",
+          "omega-3",
+          "fish oil unspecified",
+          "omega-3 fatty acids",
+          "omega-3s",
+          "omega 3s",
+          "omega3s",
+          "omega 3",
+          "Omega-3 DHA",
+          "Omega-3 Fatty Acid",
+          "OmegaChoice Omega-3 Essential Fatty Acids",
+          "Fish Oil Omega III fatty acids",
+          "Omega 3 Fatty Acids - Fish Oil Concentrate",
+          "EPA/DHA - Fish Oil Concentrate",
+          "EPA and DHA",
+          "EPA & DHA",
+          "DHA/EPA",
+          "EPA/DHA",
+          "purified fish oil concentrate"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -43394,6 +43173,30 @@
           "notes": "Conservative scoring; form unknown could be TG, EE, or rTG",
           "range_low": 0.65,
           "range_high": 0.9
+        }
+      },
+      "emulsified": {
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
+        "absorption": "very_good (emulsified premium; bypasses lipase needs)",
+        "notes": "Fish oil processed with emulsification or micellization technology (VESIsorb, AquaCelle) to dramatically improve absorption, especially on an empty stomach. Qin 2017 showed SMEDS formulations significantly boosted fasting omega-3 absorption. A premium delivery technology, not a different chemical form. Best for people who can't take fish oil with meals. B29 audit 2026-04-25: emulsified modest premium over plain TG.",
+        "aliases": [
+          "emulsified fish oil",
+          "vesisorb omega-3",
+          "micellized fish oil",
+          "smoothie fish oil",
+          "liquid omega-3",
+          "VESIsorb",
+          "AquaCelle omega-3"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
+          "quality": "very_good",
+          "notes": "Pre-emulsified omega-3 bypasses the lipase-dependent step in fat digestion — modest premium over plain TG. Class-equivalent slightly above fish_oil natural TG (0.85)."
         }
       }
     },
@@ -43741,7 +43544,13 @@
           "organic cold-milled flax seed",
           "organic flax oil",
           "cold-pressed linseed oil",
-          "flaxseed oil"
+          "flaxseed oil",
+          "ala omega-3",
+          "plant omega-3 ala",
+          "Omega-3 Alpha Linolenic Acid",
+          "Alpha Linoleic Acid",
+          "ALA from flax",
+          "english walnut oil"
         ],
         "absorption_structured": {
           "value": 0.55,
@@ -49072,7 +48881,41 @@
           "algal oil supplement",
           "omega-3 docosahexaenoic acid (form: algal oil)",
           "docosahexaenoic acid (form: algal oil)",
-          "omega-3 dha (form: algal oil)"
+          "omega-3 dha (form: algal oil)",
+          "algae omega-3",
+          "algal oil",
+          "vegan dha",
+          "vegetarian omega-3",
+          "plant omega-3",
+          "schizochytrium dha",
+          "microalgae oil",
+          "microalgae schizochytrium oil",
+          "schizochytrium oil",
+          "schizochytrium spp. oil",
+          "high dha algal oil",
+          "dha algal oil",
+          "algal docosahexaenoic acid",
+          "purealgaeomega3",
+          "dha rich oil",
+          "OPTI-3 Choice",
+          "Elantria",
+          "Onavita",
+          "Life'sDHA Omega 3 Fatty Acids",
+          "Algal OMEGATEX0053TGCH",
+          "vegan omega-3",
+          "plant-based omega-3",
+          "vegan EPA DHA",
+          "purealgalomega3",
+          "pure algal omega-3",
+          "pure algal omega 3",
+          "algae oil docosahexaenoic acid",
+          "algal dha oil",
+          "Schizochytrium sp. Oil",
+          "Nannochloropsis sp.",
+          "nannochloropsis oil",
+          "nannochloropsis gaditana",
+          "nannochloropsis microalgae",
+          "schizochytrium sp."
         ]
       },
       "algae oil (unspecified)": {
