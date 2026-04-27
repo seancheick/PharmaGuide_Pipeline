@@ -1078,7 +1078,10 @@
           "action": "Monitor for hypoglycemia if used with diabetes meds.",
           "sources": [
             "https://www.nccih.nih.gov/health/garlic"
-          ]
+          ],
+          "alert_headline": "May lower blood sugar",
+          "alert_body": "Garlic can modestly lower blood glucose and may add to insulin or sulfonylurea effects. If you take diabetes medication, watch for low blood sugar.",
+          "informational_note": "Garlic can modestly affect blood sugar — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -1855,7 +1858,10 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11390327/",
             "https://pubmed.ncbi.nlm.nih.gov/12396997/"
-          ]
+          ],
+          "alert_headline": "Not recommended in pregnancy",
+          "alert_body": "Whole licorice's glycyrrhizin can affect fetal cortisol exposure and is associated with shorter gestation. If you are pregnant, talk to your obstetrician; DGL licorice does not carry this concern.",
+          "informational_note": "Licorice with glycyrrhizin affects fetal cortisol exposure — relevant in pregnancy."
         }
       ],
       "drug_class_rules": [
@@ -1958,7 +1964,9 @@
           "action": "Track glucose and tolerance if using high doses.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May affect glucose control",
+          "alert_body": "Magnesium may modestly support insulin sensitivity, but high doses can cause GI losses and electrolyte issues. If you use it with diabetes, track glucose and tolerance."
         }
       ],
       "drug_class_rules": [
@@ -3117,7 +3125,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/saw-palmetto",
             "https://www.acog.org/clinical/clinical-guidance/committee-opinion"
-          ]
+          ],
+          "alert_headline": "Not well studied in pregnancy",
+          "alert_body": "Saw palmetto has hormonal and anti-androgen concerns and pregnancy safety data are limited. If you are pregnant, talk to your clinician before using it.",
+          "informational_note": "Saw palmetto lacks pregnancy safety data and may affect hormone signaling."
         }
       ],
       "drug_class_rules": [
@@ -3567,7 +3578,9 @@
           "action": "Keep to food-level intake; avoid routine high-dose extracts.",
           "sources": [
             "https://www.nccih.nih.gov/health/turmeric"
-          ]
+          ],
+          "alert_headline": "High doses may be a concern",
+          "alert_body": "Food-level turmeric is different from concentrated curcumin extracts. If you are pregnant, routine high-dose curcumin may not be the right choice because safety data are limited."
         }
       ],
       "drug_class_rules": [
@@ -3881,7 +3894,9 @@
           "sources": [
             "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2011/07/vitamin-d-screening-and-supplementation-during-pregnancy",
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "Use labs to guide dosing",
+          "alert_body": "Vitamin D deficiency should be corrected, but chronic high-dose use beyond standard supplementation should be tracked with labs. If you are pregnant, monitor 25(OH)D with your clinician."
         },
         {
           "condition_id": "diabetes",
@@ -3891,7 +3906,9 @@
           "action": "Monitor glucose and adjust diabetes therapy if needed.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May improve insulin sensitivity",
+          "alert_body": "Repleting vitamin D deficiency can improve insulin sensitivity in some people. If you take it for diabetes support, monitor glucose and adjust therapy as needed."
         }
       ],
       "drug_class_rules": [
@@ -5303,7 +5320,10 @@
           "sources": [
             "https://medlineplus.gov/druginfo/natural/331.html",
             "https://www.nccih.nih.gov/health/dehydroepiandrosterone"
-          ]
+          ],
+          "alert_headline": "Not recommended in pregnancy",
+          "alert_body": "DHEA is a steroid precursor that can affect fetal hormone signaling. If you are pregnant, talk to a reproductive specialist before using it.",
+          "informational_note": "DHEA has fetal endocrine concerns and limited pregnancy safety data."
         }
       ],
       "drug_class_rules": [],
@@ -5393,7 +5413,9 @@
           "action": "Monitor for additive glucose lowering.",
           "sources": [
             "https://diabetesjournals.org/care/issue/49/Supplement_1"
-          ]
+          ],
+          "alert_headline": "May lower blood glucose",
+          "alert_body": "Inositol can improve insulin signaling and may lower glucose in some settings. If you take diabetes medicines, watch for additive blood sugar lowering."
         }
       ],
       "drug_class_rules": [],
@@ -6652,7 +6674,9 @@
           "action": "Monitor and keep use indication-driven.",
           "sources": [
             "https://www.fda.gov/regulatory-information/search-fda-guidance-documents"
-          ]
+          ],
+          "alert_headline": "Use with clinical guidance",
+          "alert_body": "NAC is used clinically, but long-term high-dose supplement use in pregnancy should still be supervised. If you are pregnant, keep use indication-driven and discuss it with your clinician."
         }
       ],
       "drug_class_rules": [
@@ -8094,7 +8118,9 @@
           "action": "Avoid high-dose self-supplementation.",
           "sources": [
             "https://www.nccih.nih.gov/health/resveratrol"
-          ]
+          ],
+          "alert_headline": "Limited pregnancy safety data",
+          "alert_body": "Resveratrol has limited human pregnancy data, and higher exposures raise developmental questions in animal studies. If you are pregnant, avoid routine high-dose self-supplementation."
         }
       ],
       "drug_class_rules": [
@@ -8403,7 +8429,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/pennyroyal",
             "https://medlineplus.gov/druginfo/natural/480.html"
-          ]
+          ],
+          "alert_headline": "Unsafe during pregnancy",
+          "alert_body": "Pennyroyal contains toxic compounds that can harm the liver and has abortifacient concern. If you are pregnant, do not use it.",
+          "informational_note": "Pennyroyal contains hepatotoxic constituents and is not safe in pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -8428,7 +8457,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbsataglance",
             "https://www.ncbi.nlm.nih.gov/books/NBK547852/"
-          ]
+          ],
+          "alert_headline": "Unsafe during pregnancy",
+          "alert_body": "Tansy contains thujone and other toxic constituents. If you are pregnant, do not use it.",
+          "informational_note": "Tansy contains toxic compounds and is not clinically acceptable in pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -8453,7 +8485,10 @@
           "sources": [
             "https://www.nccih.nih.gov/health/bitterorange",
             "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
-          ]
+          ],
+          "alert_headline": "Not for use in pregnancy",
+          "alert_body": "Supplement-dose bitter orange contains synephrine, a stimulant that can stress the cardiovascular system. If you are pregnant, do not use it.",
+          "informational_note": "Bitter orange contains synephrine and is not appropriate in pregnancy."
         }
       ],
       "drug_class_rules": [],
@@ -8488,7 +8523,9 @@
           "action": "Avoid chronic use in pregnancy and stop before delivery if used.",
           "sources": [
             "https://www.nccih.nih.gov/health/ginkgo"
-          ]
+          ],
+          "alert_headline": "May raise bleeding risk",
+          "alert_body": "Ginkgo can have antiplatelet effects, which is a concern near delivery. If you are pregnant, avoid chronic use and stop before birth if your clinician has you taking it."
         }
       ],
       "drug_class_rules": [],
@@ -8512,7 +8549,9 @@
           "action": "Avoid concentrated extracts; culinary use is not the same as supplement use.",
           "sources": [
             "https://www.nccih.nih.gov/health/herbsataglance"
-          ]
+          ],
+          "alert_headline": "Not well studied in pregnancy",
+          "alert_body": "Holy basil has limited pregnancy data, and animal studies raise endocrine and uterotonic uncertainty. If you are pregnant, avoid concentrated extracts."
         }
       ],
       "drug_class_rules": [],
@@ -8536,7 +8575,9 @@
           "action": "Do not present as proven pregnancy support; monitor rather than hard-block.",
           "sources": [
             "https://www.nccih.nih.gov/health/maca"
-          ]
+          ],
+          "alert_headline": "Pregnancy safety is unclear",
+          "alert_body": "Human pregnancy safety data for maca are sparse. If you are pregnant, discuss use with your clinician rather than treating it as proven support."
         }
       ],
       "drug_class_rules": [],
@@ -8560,7 +8601,9 @@
           "action": "Monitor glucose trends if used chronically.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
-          ]
+          ],
+          "alert_headline": "May change glucose trends",
+          "alert_body": "L-carnitine may modestly affect fuel use and insulin sensitivity. If you use it chronically with diabetes, monitor glucose trends."
         }
       ],
       "drug_class_rules": [],
@@ -8584,7 +8627,9 @@
           "action": "Monitor if combined with acarbose-like therapy or insulin.",
           "sources": [
             "https://www.nccih.nih.gov/health/herbsataglance"
-          ]
+          ],
+          "alert_headline": "May lower glucose after meals",
+          "alert_body": "White mulberry can slow carbohydrate absorption through alpha-glucosidase inhibition. If you use it with acarbose-like therapy or insulin, monitor for low blood sugar."
         }
       ],
       "drug_class_rules": [],
