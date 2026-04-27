@@ -411,8 +411,29 @@ def main(argv=None):
     if dry_run:
         print("Dry-run complete. Re-run with --execute to apply deletions.")
     else:
-        all_failures = total_failed + total_db_failed + total_orphans_failed
-        if all_failures == 0:
+        # Categorize failures by data-integrity impact:
+        #   • storage version deletes  → intentional retirement, must succeed
+        #   • manifest DB row deletes  → data integrity, must succeed
+        #   • orphan blob deletes      → housekeeping; partial success is fine
+        #                                at scale (HTTP/2 stream limits, transient
+        #                                connection issues kick in around 20K calls
+        #                                per session). Stragglers get caught next run.
+        orphan_total = total_orphans_deleted + total_orphans_failed
+        ORPHAN_TOLERANCE_RATE = 0.01     # ≤1% failure on large runs is OK
+        ORPHAN_LARGE_THRESHOLD = 1000    # below this, require full success
+        orphan_failures_block = total_orphans_failed
+        if orphan_total >= ORPHAN_LARGE_THRESHOLD and total_orphans_failed > 0:
+            rate = total_orphans_failed / orphan_total
+            if rate <= ORPHAN_TOLERANCE_RATE:
+                print(
+                    f"  Note: orphan-blob failure rate {rate:.2%} "
+                    f"({total_orphans_failed}/{orphan_total}) within tolerance; "
+                    f"stragglers will be retried on the next cleanup run."
+                )
+                orphan_failures_block = 0  # don't fail the build
+
+        blocking_failures = total_failed + total_db_failed + orphan_failures_block
+        if blocking_failures == 0:
             print("Cleanup complete.")
         else:
             print("Cleanup finished with errors (see above).")
