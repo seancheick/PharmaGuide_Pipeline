@@ -6709,6 +6709,36 @@ class EnhancedDSLDNormalizer:
             "fiber", "total fiber", "dietary fiber", "soluble fiber", "insoluble fiber",
             "protein",  # handled carefully — see below
         }
+        # E1.6: Curated allowlist of supplements DSLD tags under category=fat
+        # but which are REAL active ingredients (phospholipids, marine oils,
+        # plant oils, sterols, MCTs). Without this list, the legacy D1.3
+        # rule treated every fat-category row as a Nutrition-Facts-panel
+        # exclusion and silently dropped ~186 single-active products like
+        # Phosphatidyl Serine 300 mg, Neptune Krill Oil, Phytosterols,
+        # Evening Primrose Oil, Flaxseed Oil. Match is case-insensitive
+        # against the row's ingredientGroup.
+        _FAT_CATEGORY_REAL_ACTIVES = {
+            # Phospholipids
+            "phosphatidylserine", "phosphatidylcholine", "phosphatidylinositol",
+            "phosphatidylethanolamine", "phosphatidic acid",
+            # Marine / animal oils
+            "krill oil", "fish oil", "cod liver oil", "salmon oil",
+            "sardine oil", "anchovy oil", "calamari oil", "menhaden oil",
+            # Plant / seed oils with active claims
+            "flaxseed oil", "evening primrose oil", "borage oil",
+            "black currant seed oil", "perilla seed oil",
+            "hemp seed oil", "chia seed oil", "sea buckthorn oil",
+            # Sterols / stanols
+            "phytosterols (unspecified)", "phytosterols",
+            "beta-sitosterol", "stigmasterol", "campesterol",
+            "plant sterols", "plant stanols",
+            # MCT / fractionated coconut
+            "mct", "mct oil", "medium chain triglycerides",
+            # Lecithin family
+            "lecithin", "soy lecithin", "sunflower lecithin",
+            # Fat-soluble actives DSLD occasionally tags fat
+            "monolaurin", "lauric acid",
+        }
         if unit:
             unit_lower = unit.lower().strip()
             # Strip braces if present so we accept both forms.
@@ -6719,26 +6749,34 @@ class EnhancedDSLDNormalizer:
             if unit_lower in _NUTRITION_PANEL_UNITS:
                 logger.debug(f"Excluding via unit pattern: {name} (unit: {unit})")
                 return True
-            # D1.3: Sugar/Fat/Carb rows with Gram-scale unit are Nutrition
-            # Facts panel disclosures regardless of category bypass. Protein
-            # is special — protein powders legitimately declare total protein
-            # in grams, so only apply when we also see a panel-explicit marker
-            # (ingredientGroup containing "Total" prefix). Avoid false
-            # positives on legitimate fatty-acid / MCT supplements by
-            # requiring DSLD category to be a macro-nutrient class (fat,
-            # sugar, carbohydrate), not "fatty acid".
+            # D1.3 + E1.6: Sugar/Fat/Carb rows are Nutrition Facts panel
+            # disclosures by default — UNLESS the ingredientGroup matches a
+            # known supplement-active (allowlist below). This preserves the
+            # original D1.3 behavior for genuine panel/formulation rows
+            # (Palm Oil, Cane Sugar, Maltodextrin, Dextrose) while
+            # exempting real actives (Phosphatidyl Serine, Krill Oil,
+            # Phytosterols, Evening Primrose Oil, Flaxseed Oil, MCT, …).
             if _cat_lower in _NUTRITION_FACTS_CATEGORIES and _cat_lower not in {
                 "protein",  # handled below
                 "fiber", "total fiber", "dietary fiber", "soluble fiber", "insoluble fiber",
                 # Fiber can be a real active ingredient (psyllium, inulin).
                 # We do NOT auto-filter fiber rows — let them route normally.
             }:
-                logger.debug(
-                    "D1.3: routing sugar/fat/carb disclosure to nutritionalInfo: %s "
-                    "(cat=%s, unit=%s)",
-                    name, _cat_lower, unit,
-                )
-                return True
+                ingredient_group_lower = (ingredient_group or "").lower().strip()
+                if ingredient_group_lower in _FAT_CATEGORY_REAL_ACTIVES:
+                    logger.debug(
+                        "E1.6: ingredientGroup %r is a known fat-class active — "
+                        "routing %s to actives despite category=%s",
+                        ingredient_group, name, _cat_lower,
+                    )
+                    # Fall through to subsequent checks; do NOT exclude here.
+                else:
+                    logger.debug(
+                        "D1.3: routing sugar/fat/carb disclosure to nutritionalInfo: %s "
+                        "(cat=%s, unit=%s, group=%s)",
+                        name, _cat_lower, unit, ingredient_group,
+                    )
+                    return True
 
         # Preprocess the name for comparison
         processed_name = self.matcher.preprocess_text(name)

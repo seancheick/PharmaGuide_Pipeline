@@ -117,6 +117,65 @@ class TestRealSupplementIngredientsStillRoute:
         )
 
 
+class TestFatCategoryRealActivesNotFiltered:
+    """E1.6 regression — DSLD category=fat with mg-scale unit and a
+    specific ingredientGroup (Phosphatidylserine, Krill Oil, etc.) is a
+    REAL active, not a Nutrition Facts panel disclosure.
+
+    The earlier D1.3 logic (line 6730) treated ANY category=fat row as
+    nutrition-panel exclusion regardless of unit, which silently dropped
+    ~186 single-active products (Phosphatidyl Serine, Krill Oil, EPO,
+    Flaxseed Oil, Phytosterols, etc.) from scoring entirely.
+
+    The fix requires THREE conditions to exclude as panel disclosure:
+        1. category in nutrition-facts set (fat, sugar, carb, …)
+        2. unit is gram-scale (g, gram, grams) — NOT mg
+        3. ingredientGroup matches a generic panel term
+           ("Fat (unspecified)", "Saturated Fat", "Cholesterol", …)
+
+    Anything else routes to actives.
+    """
+
+    @pytest.mark.parametrize("name,group,unit,cat,reason", [
+        # Real Bucket-B examples from production data (DSLD IDs verified):
+        ("Phosphatidyl Serine",     "Phosphatidylserine",         "mg", "fat",  "DSLD 1037 — phospholipid supplement, 300 mg/day"),
+        ("Neptune Krill Oil",       "Krill Oil",                  "mg", "fat",  "DSLD 1072 — marine phospholipid concentrate"),
+        ("CardioAid Phytosterols",  "Phytosterols (unspecified)", "mg", "fat",  "DSLD 11531 — plant sterols for cholesterol"),
+        ("Evening Primrose Oil",    "Evening Primrose Oil",       "mg", "fat",  "DSLD 11588 — GLA omega-6"),
+        ("Organic Flax Seed Oil",   "Flaxseed Oil",               "mg", "fat",  "DSLD 12859 — ALA omega-3"),
+    ])
+    def test_specific_fat_supplements_are_actives(
+        self, normalizer, name, group, unit, cat, reason
+    ) -> None:
+        assert normalizer._is_nutrition_fact(
+            name, ingredient_group=group, unit=unit, dsld_category=cat,
+        ) is False, (
+            f"E1.6 regression: {name!r} (group={group!r}, cat={cat!r}, "
+            f"unit={unit!r}) is a real active supplement — must route to "
+            f"activeIngredients, NOT be filtered as a Nutrition Facts row.\n"
+            f"Source: {reason}"
+        )
+
+    @pytest.mark.parametrize("name,group,unit,cat", [
+        # These ARE genuine Nutrition Facts panel disclosures:
+        ("Total Fat",         "Fat (unspecified)",   "g", "fat"),
+        ("Saturated Fat",     "Saturated Fat",       "g", "fat"),
+        ("Trans Fat",         "Trans Fat",           "g", "fat"),
+        ("Cholesterol",       "Cholesterol",         "mg", "fat"),
+        ("Polyunsaturated Fat", "Polyunsaturated Fat","g", "fat"),
+        ("Monounsaturated Fat", "Monounsaturated Fat","g", "fat"),
+    ])
+    def test_panel_fat_rows_still_excluded(
+        self, normalizer, name, group, unit, cat
+    ) -> None:
+        assert normalizer._is_nutrition_fact(
+            name, ingredient_group=group, unit=unit, dsld_category=cat,
+        ) is True, (
+            f"{name!r} (group={group!r}) is a Nutrition Facts panel "
+            f"disclosure and MUST still be filtered out."
+        )
+
+
 # ---------------------------------------------------------------------------
 # Braced vs bare unit rendering — both must work
 # ---------------------------------------------------------------------------
