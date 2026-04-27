@@ -4,7 +4,7 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "5.2.0",
     "last_updated": "2026-04-27",
-    "total_entries": 141,
+    "total_entries": 137,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
     "total_rules": 129,
     "flutter_top_level_key": "interaction_rules",
@@ -27,7 +27,7 @@
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-04-18",
     "review_round": "full_authoring_pass_v1",
-    "rules_with_dose_thresholds": 43
+    "rules_with_dose_thresholds": 42
   },
   "interaction_rules": [
     {
@@ -2645,7 +2645,21 @@
           "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review."
         }
       ],
-      "drug_class_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "High-dose vitamin E (>300 mg/day) antagonizes vitamin K-dependent clotting factors. https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+          "action": "Discuss vitamin E intake with your clinician if on anticoagulants.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
+          ],
+          "alert_headline": "High-dose vitamin E interacts with thinners",
+          "alert_body": "If you take anticoagulants, discuss your vitamin E intake with your doctor, as high doses may increase bleeding risk.",
+          "informational_note": "Vitamin E in high doses can affect clotting; it is important to monitor your levels if you take blood thinners."
+        }
+      ],
       "dose_thresholds": [
         {
           "scope": "condition",
@@ -2656,6 +2670,17 @@
           "unit": "mg",
           "severity_if_met": "avoid",
           "severity_if_not_met": "monitor"
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 300,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Vitamin E doses >300 mg/day potentiate anticoagulants. https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
         }
       ],
       "pregnancy_lactation": {
@@ -2672,7 +2697,7 @@
         "alert_body": "Vitamin E is dose-sensitive in pregnancy; high intakes can raise adverse-effect risk over time. If you are pregnant or breastfeeding, monitor total intake and talk to your clinician.",
         "informational_note": "Vitamin E is dose-sensitive at high intake — higher doses warrant clinician review."
       },
-      "last_reviewed": "2026-02-28",
+      "last_reviewed": "2026-04-27",
       "review_owner": "pharmaguide_clinical_team"
     },
     {
@@ -8298,11 +8323,11 @@
           "target_id": "anticoagulants",
           "basis": "per_day",
           "comparator": ">",
-          "value": 250,
+          "value": 500,
           "unit": "mg",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor",
-          "note": "Resveratrol inhibition of CYP enzymes may alter anticoagulant pharmacokinetics. https://pubmed.ncbi.nlm.nih.gov/27040449/"
+          "note": "Resveratrol-warfarin interaction evidence is animal-only (mouse model at 0.5% of diet potentiated warfarin; 10x lower dose had no effect). Typical supplement doses are 100-250 mg/day. Threshold raised to >500 mg/day to avoid over-alerting on standard supplements. https://pubmed.ncbi.nlm.nih.gov/27040449/"
         }
       ],
       "pregnancy_lactation": null,
@@ -8672,7 +8697,7 @@
       "condition_rules": [
         {
           "condition_id": "pregnancy",
-          "severity": "caution",
+          "severity": "info",
           "evidence_level": "theoretical",
           "mechanism": "Pregnancy data are limited and animal data raise endocrine and uterotonic uncertainty.",
           "action": "Avoid concentrated extracts; culinary use is not the same as supplement use.",
@@ -8698,7 +8723,7 @@
       "condition_rules": [
         {
           "condition_id": "pregnancy",
-          "severity": "monitor",
+          "severity": "info",
           "evidence_level": "theoretical",
           "mechanism": "Human pregnancy safety data are sparse.",
           "action": "Do not present as proven pregnancy support; monitor rather than hard-block.",
@@ -8777,115 +8802,6 @@
       ],
       "pregnancy_lactation": null,
       "last_reviewed": "2026-04-26",
-      "review_owner": "pharmaguide_clinical_team"
-    },
-    {
-      "id": "RULE_IMMUNO_ECHINACEA",
-      "subject_ref": {
-        "db": "botanical_ingredients",
-        "canonical_id": "echinacea_angustifolia"
-      },
-      "drug_class_rules": [
-        {
-          "drug_class_id": "immunosuppressants",
-          "severity": "avoid",
-          "evidence_level": "probable",
-          "mechanism": "Echinacea stimulates immune cell activity, which may interfere with immunosuppressive therapy. https://www.nccih.nih.gov/health/echinacea",
-          "action": "Avoid echinacea while on immunosuppressant therapy.",
-          "sources": [
-            "https://www.nccih.nih.gov/health/echinacea"
-          ],
-          "alert_headline": "Avoid with immunosuppressants",
-          "alert_body": "Echinacea can stimulate immune activity, which may interfere with immunosuppressant medication. Talk to your doctor before combining them.",
-          "informational_note": "Serious interaction potential for those on immunosuppressants."
-        }
-      ],
-      "last_reviewed": "2026-04-27",
-      "review_owner": "pharmaguide_clinical_team"
-    },
-    {
-      "id": "RULE_IMMUNO_ASTRAGALUS",
-      "subject_ref": {
-        "db": "botanical_ingredients",
-        "canonical_id": "astragalus_root"
-      },
-      "drug_class_rules": [
-        {
-          "drug_class_id": "immunosuppressants",
-          "severity": "avoid",
-          "evidence_level": "probable",
-          "mechanism": "Astragalus may stimulate immune activity, potentially decreasing the effectiveness of immunosuppressant medication. https://www.nccih.nih.gov/health/astragalus",
-          "action": "Avoid astragalus while on immunosuppressant therapy.",
-          "sources": [
-            "https://www.nccih.nih.gov/health/astragalus"
-          ],
-          "alert_headline": "Avoid with immunosuppressants",
-          "alert_body": "If you take immunosuppressants, talk to your doctor before adding astragalus, as it may interfere with your treatment.",
-          "informational_note": "Astragalus can stimulate the immune system, which is relevant for people using immunosuppressant medications."
-        }
-      ],
-      "last_reviewed": "2026-04-27",
-      "review_owner": "pharmaguide_clinical_team"
-    },
-    {
-      "id": "RULE_BERBERINE_METFORMIN_HYPO",
-      "subject_ref": {
-        "db": "ingredient_quality_map",
-        "canonical_id": "berberine_supplement"
-      },
-      "drug_class_rules": [
-        {
-          "drug_class_id": "hypoglycemics",
-          "severity": "monitor",
-          "evidence_level": "established",
-          "mechanism": "Berberine has potent hypoglycemic activity via AMPK activation, similar to metformin. https://pubmed.ncbi.nlm.nih.gov/30676451/",
-          "action": "Monitor blood glucose closely if combining berberine with diabetes medication.",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30676451/"
-          ],
-          "alert_headline": "Monitor for low blood sugar",
-          "alert_body": "Combining berberine with diabetes medication may lower blood sugar too much. Monitor your readings closely and discuss with your clinician.",
-          "informational_note": "Additive hypoglycemic potential exists; monitor your glucose levels."
-        }
-      ],
-      "last_reviewed": "2026-04-27",
-      "review_owner": "pharmaguide_clinical_team"
-    },
-    {
-      "id": "RULE_IQM_VITAMIN_E_BLEEDING",
-      "subject_ref": {
-        "db": "ingredient_quality_map",
-        "canonical_id": "vitamin_e"
-      },
-      "drug_class_rules": [
-        {
-          "drug_class_id": "anticoagulants",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "High-dose vitamin E (>300 mg/day) antagonizes vitamin K-dependent clotting factors. https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
-          "action": "Discuss vitamin E intake with your clinician if on anticoagulants.",
-          "sources": [
-            "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
-          ],
-          "alert_headline": "High-dose vitamin E interacts with thinners",
-          "alert_body": "If you take anticoagulants, discuss your vitamin E intake with your doctor, as high doses may increase bleeding risk.",
-          "informational_note": "Vitamin E in high doses can affect clotting; it is important to monitor your levels if you take blood thinners."
-        }
-      ],
-      "dose_thresholds": [
-        {
-          "scope": "drug_class",
-          "target_id": "anticoagulants",
-          "basis": "per_day",
-          "comparator": ">",
-          "value": 300,
-          "unit": "mg",
-          "severity_if_met": "caution",
-          "severity_if_not_met": "monitor",
-          "note": "Vitamin E doses >300 mg/day potentiate anticoagulants. https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
-        }
-      ],
-      "last_reviewed": "2026-04-27",
       "review_owner": "pharmaguide_clinical_team"
     }
   ]
