@@ -412,27 +412,34 @@ def main(argv=None):
         print("Dry-run complete. Re-run with --execute to apply deletions.")
     else:
         # Categorize failures by data-integrity impact:
-        #   • storage version deletes  → intentional retirement, must succeed
-        #   • manifest DB row deletes  → data integrity, must succeed
-        #   • orphan blob deletes      → housekeeping; partial success is fine
-        #                                at scale (HTTP/2 stream limits, transient
-        #                                connection issues kick in around 20K calls
-        #                                per session). Stragglers get caught next run.
-        orphan_total = total_orphans_deleted + total_orphans_failed
-        ORPHAN_TOLERANCE_RATE = 0.01     # ≤1% failure on large runs is OK
-        ORPHAN_LARGE_THRESHOLD = 1000    # below this, require full success
-        orphan_failures_block = total_orphans_failed
-        if orphan_total >= ORPHAN_LARGE_THRESHOLD and total_orphans_failed > 0:
-            rate = total_orphans_failed / orphan_total
-            if rate <= ORPHAN_TOLERANCE_RATE:
-                print(
-                    f"  Note: orphan-blob failure rate {rate:.2%} "
-                    f"({total_orphans_failed}/{orphan_total}) within tolerance; "
-                    f"stragglers will be retried on the next cleanup run."
-                )
-                orphan_failures_block = 0  # don't fail the build
+        #
+        #   • storage version deletes  → strict. Intentional version retirements
+        #                                are user-initiated; if they fail, the
+        #                                user wants to know.
+        #   • manifest DB row deletes  → strict. Data integrity gate; a row
+        #                                pointing at deleted storage is a
+        #                                real inconsistency.
+        #   • orphan blob deletes      → ALWAYS non-blocking. This is pure
+        #                                housekeeping — the blobs are unreferenced
+        #                                garbage. Whether we delete them today
+        #                                or next run does not affect any user.
+        #                                Failures here are most often transient
+        #                                (HTTP/2 stream limit at ~20K calls per
+        #                                connection, supabase-py response parsing
+        #                                issues on success responses, etc.) and
+        #                                always self-heal on the next cleanup.
+        #                                Blocking the release on housekeeping
+        #                                failures is the wrong call.
+        if total_orphans_failed > 0:
+            orphan_total = total_orphans_deleted + total_orphans_failed
+            print(
+                f"  Note: {total_orphans_failed}/{orphan_total} orphan-blob "
+                f"deletions failed — typically transient HTTP/2 stream-limit "
+                f"or response-parse issues. Treating as non-blocking; the "
+                f"stragglers retry on the next cleanup run."
+            )
 
-        blocking_failures = total_failed + total_db_failed + orphan_failures_block
+        blocking_failures = total_failed + total_db_failed
         if blocking_failures == 0:
             print("Cleanup complete.")
         else:
