@@ -297,6 +297,17 @@
       ],
       "author": "Pipeline + Dr Pham clinical review",
       "snapshots_re_baselined": 30
+    },
+    {
+      "date": "2026-04-27",
+      "action": "refrozen_sprint_e1_21_goal_matches_drift",
+      "products": [
+        18141
+      ],
+      "sprints_covered": [
+        "E1.21 compute_goal_matches score formula — MAX-of-required-weights (commit c9c1719)"
+      ],
+      "notes": "CVS Omega-3 100 mg (18141): Section A1 12.06 → 12.19, Section C added omega-3 fatty acids ingredient_points 3.98, score_80 47.9 → 48.0, grade Below Avg → Fair. Drift is the intended result of the goal_matches scoring refactor (Sprint E1.21) which switched to MAX-of-required-weights, allowing fish-oil products to surface omega-3 evidence credit they previously missed. Verified as a legitimate scoring improvement, not a regression."
     }
   ]
 }

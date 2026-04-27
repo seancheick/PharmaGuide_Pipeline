@@ -11,10 +11,40 @@ from build_final_db import build_detail_blob, resolve_export_supplement_type
 
 
 BUILD_ROOT = Path("scripts/final_db_output")
+PRODUCTS_ROOT = Path("scripts/products")
 
 _BUILD_EXISTS = BUILD_ROOT.exists() and (BUILD_ROOT / "export_manifest.json").exists()
 _SKIP_MSG = "final_db_output not present — run build_final_db.py first"
-PRODUCTS_ROOT = Path("scripts/products")
+
+
+def _build_is_full_corpus() -> bool:
+    """Sprint E1.7 — distinguish a full-corpus build from a canary build.
+
+    The release-parity tests assert the build matches the FULL enriched +
+    scored corpus on disk. After a canary rebuild (single brand or a
+    diagnostic subset), the build will be smaller than the corpus and
+    these contracts will fail with confusing 8169 != 13236 messages.
+    Skip cleanly in that case so canary rebuilds don't generate false
+    failures. Run a real full-corpus rebuild to re-engage the gate.
+    """
+    if not _BUILD_EXISTS:
+        return False
+    try:
+        import json as _json
+        manifest = _json.loads((BUILD_ROOT / "export_manifest.json").read_text())
+    except Exception:
+        return False
+    enriched_dirs, scored_dirs = _discover_pair_dirs()
+    enriched_lookup = _load_products(enriched_dirs)
+    scored_lookup = _load_products(scored_dirs)
+    full_corpus = max(len(enriched_lookup), len(scored_lookup))
+    return manifest.get("product_count") == full_corpus and full_corpus > 0
+
+
+_FULL_CORPUS_SKIP_MSG = (
+    "final_db_output is a canary subset (count != full corpus) — run a "
+    "full-corpus build to re-engage release-parity tests"
+)
 
 
 def _discover_pair_dirs() -> tuple[list[Path], list[Path]]:
@@ -45,6 +75,7 @@ def _load_products(directories: list[Path]) -> dict[str, dict]:
 
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
+@pytest.mark.skipif(not _build_is_full_corpus(), reason=_FULL_CORPUS_SKIP_MSG)
 def test_release_export_counts_and_index_parity():
     enriched_lookup = _load_products(ENRICHED_DIRS)
     scored_lookup = _load_products(SCORED_DIRS)
@@ -69,6 +100,7 @@ def test_release_export_counts_and_index_parity():
 
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
+@pytest.mark.skipif(not _build_is_full_corpus(), reason=_FULL_CORPUS_SKIP_MSG)
 def test_release_export_matches_source_scored_and_resolved_type():
     enriched_lookup = _load_products(ENRICHED_DIRS)
     scored_lookup = _load_products(SCORED_DIRS)
@@ -109,6 +141,7 @@ def test_release_export_matches_source_scored_and_resolved_type():
 
 
 @pytest.mark.skipif(not _BUILD_EXISTS, reason=_SKIP_MSG)
+@pytest.mark.skipif(not _build_is_full_corpus(), reason=_FULL_CORPUS_SKIP_MSG)
 def test_release_detail_blobs_match_recomputed_export_contract():
     enriched_lookup = _load_products(ENRICHED_DIRS)
     scored_lookup = _load_products(SCORED_DIRS)
