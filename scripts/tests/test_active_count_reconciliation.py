@@ -123,6 +123,37 @@ def test_validator_raises_on_unexplained_drop() -> None:
         _validate_active_count_reconciliation(blob, 5, "DSLD-BUG")
 
 
+def test_validator_raises_when_all_actives_silently_inactive() -> None:
+    """E1.6 defense gate: when 100% of raw actives become DROPPED_AS_INACTIVE
+    and that's the ONLY drop reason, the cleaner has likely misclassified
+    real actives (Bucket-B class of bug — Phosphatidyl Serine, Krill Oil,
+    Phytosterols, etc. silently shipped unscored for months before this
+    gate was added). Raise excluded_by_gate so the product doesn't ship
+    with no score and the operator sees the problem in audit."""
+    blob = {
+        "ingredients": [],
+        "ingredients_dropped_reasons": ["DROPPED_AS_INACTIVE"],
+    }
+    with pytest.raises(ValueError, match="all raw actives reclassified as inactive"):
+        _validate_active_count_reconciliation(blob, 1, "DSLD-PHOSPHATIDYL")
+
+
+def test_validator_silent_when_inactive_drops_mixed_with_other_reasons() -> None:
+    """If DROPPED_AS_INACTIVE is mixed with another reason (e.g.
+    NUTRITION_FACT or UNMAPPED_ACTIVE), the gate does NOT fire — the
+    drops have a varied story so the bug-pattern signature doesn't match.
+    Behavior must match the existing 'silent with reasons' guarantee."""
+    blob = {
+        "ingredients": [],
+        "ingredients_dropped_reasons": [
+            "DROPPED_AS_INACTIVE",
+            "DROPPED_NUTRITION_FACT",
+        ],
+    }
+    # Should NOT raise — varied reasons indicate normal cleaner behavior
+    _validate_active_count_reconciliation(blob, 3, "DSLD-MIXED")
+
+
 def test_validator_raises_on_unknown_reason_code() -> None:
     blob = {
         "ingredients": [{"name": "x"}],

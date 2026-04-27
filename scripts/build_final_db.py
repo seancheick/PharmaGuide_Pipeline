@@ -1210,6 +1210,9 @@ _EXPORT_ERROR_TAXONOMY: List[Tuple[str, "re.Pattern[str]"]] = [
             r"raw DSLD disclosed \d+ real (active|inactive)\(s\) but blob"
             r"|filter regression — inspect"
             r"|Unexplained drop — inspect normalize_product"
+            # E1.6 defense gate: 100% of raw actives became inactive — almost
+            # always a cleaner classifier bug (see commit 4d05a74).
+            r"|all raw actives reclassified as inactive — likely cleaner classifier bug"
         ),
     ),
     (
@@ -1249,6 +1252,29 @@ def _validate_active_count_reconciliation(
             f"active(s) but blob has 0 ingredients AND 0 drop reasons. "
             f"Unexplained drop — inspect normalize_product flatten path "
             f"(Sprint E1.2.5)."
+        )
+
+    # E1.6 defense gate: catch the Bucket-B class of bug where 100% of raw
+    # actives become DROPPED_AS_INACTIVE (and nothing else). That pattern
+    # almost always indicates a cleaner classifier mistake — a real active
+    # is being routed to the inactive bucket because of a category=fat /
+    # sugar / carb misclassification (see fix at enhanced_normalizer.py
+    # commit 4d05a74). Without this gate, ~186 single-active products
+    # silently shipped with no score for months. Excluded products surface
+    # in export_audit_report.json under excluded_by_gate; the next pipeline
+    # run after a real fix recovers them.
+    if (
+        raw_actives_count > 0
+        and blob_actives == 0
+        and reasons
+        and set(reasons) == {_DROP_REASON_CLASSIFIED_INACTIVE}
+    ):
+        raise ValueError(
+            f"[{dsld_id}] all raw actives reclassified as inactive — "
+            f"likely cleaner classifier bug. raw_actives={raw_actives_count}, "
+            f"blob_actives={blob_actives}, drop_reasons={reasons}. "
+            f"Investigate enhanced_normalizer._is_nutrition_fact for this "
+            f"product's category/group combo."
         )
 
     for r in reasons:
