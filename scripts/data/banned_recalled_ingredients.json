@@ -17762,7 +17762,24 @@
         "priority": 1,
         "match_type": "normalized",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "peppermint",
+          "peppermint leaf",
+          "peppermint extract",
+          "peppermint oil",
+          "mentha piperita",
+          "mentha x piperita",
+          "spearmint",
+          "spearmint leaf",
+          "mentha spicata",
+          "mentha longifolia",
+          "horsemint",
+          "horsemint leaf",
+          "wintermint",
+          "mint extract",
+          "field mint",
+          "mentha arvensis"
+        ]
       },
       "legal_status_enum": "high_risk",
       "clinical_risk_enum": "critical",
@@ -17773,9 +17790,30 @@
           "status": "high_risk",
           "effective_date": "1996-01-01",
           "source": "FDA / NCCIH advisory",
-          "notes": "FDA repeatedly warns against pennyroyal oil ingestion; not banned outright but flagged hepatotoxic."
+          "notes": "FDA repeatedly warns against pennyroyal oil ingestion; not banned outright but flagged hepatotoxic.",
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-04-26"
         }
-      ]
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "ban_context": "substance",
+      "safety_warning": "Pennyroyal contains pulegone, a hepatotoxin linked to fatal liver injury, seizures, and maternal death. Both leaf and (especially) essential oil are unsafe. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Hepatotoxic herb linked to fatal liver injury. Stop.",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-04-26",
+        "next_review_due": "2026-10-26",
+        "reviewed_by": "dr_pham_clinical_signoff",
+        "change_log": [
+          {
+            "date": "2026-04-26",
+            "change": "Added schema-completion fields (match_mode, review, jurisdiction code/type, ban_context, safety_warning) to satisfy v5.0 release gate.",
+            "by": "system"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_TANSY",
@@ -17803,7 +17841,22 @@
         "confidence": "high",
         "negative_match_terms": [
           "tansy ragwort",
-          "senecio jacobaea"
+          "senecio jacobaea",
+          "feverfew",
+          "feverfew leaf",
+          "feverfew leaf extract",
+          "feverfew extract",
+          "tanacetum parthenium",
+          "tanacetum parthenium leaf",
+          "tanacetum parthenium leaf extract",
+          "tanacetum balsamita",
+          "costmary",
+          "matricaria recutita",
+          "matricaria chamomilla",
+          "german chamomile",
+          "chamomile",
+          "pyrethrum",
+          "tanacetum cinerariifolium"
         ]
       },
       "legal_status_enum": "high_risk",
@@ -17815,9 +17868,30 @@
           "status": "high_risk",
           "effective_date": "1996-01-01",
           "source": "NCCIH / NIH toxic medicinal plant reviews",
-          "notes": "Not federally banned, but NCCIH and toxicology literature consistently flag as unsafe for ingestion."
+          "notes": "Not federally banned, but NCCIH and toxicology literature consistently flag as unsafe for ingestion.",
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-04-26"
         }
-      ]
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "ban_context": "substance",
+      "safety_warning": "Tansy contains thujone, a neurotoxin that can cause seizures, liver injury, and miscarriage. Historical abortifacient use is linked to maternal deaths. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Neurotoxic herb linked to seizures and miscarriage. Stop.",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-04-26",
+        "next_review_due": "2026-10-26",
+        "reviewed_by": "dr_pham_clinical_signoff",
+        "change_log": [
+          {
+            "date": "2026-04-26",
+            "change": "Added schema-completion fields (match_mode, review, jurisdiction code/type, ban_context, safety_warning) to satisfy v5.0 release gate.",
+            "by": "system"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_BITTER_ORANGE",
@@ -17848,7 +17922,22 @@
         "negative_match_terms": [
           "bitter orange peel powder culinary",
           "sweet orange",
-          "citrus sinensis"
+          "sweet orange peel",
+          "sweet orange oil",
+          "citrus sinensis",
+          "citrus sinensis peel",
+          "neroli",
+          "neroli oil",
+          "orange flower",
+          "orange blossom",
+          "petitgrain",
+          "petitgrain oil",
+          "citrus aurantifolia",
+          "key lime",
+          "lime",
+          "tangerine",
+          "mandarin",
+          "citrus reticulata"
         ]
       },
       "legal_status_enum": "high_risk",
@@ -17860,7 +17949,10 @@
           "status": "restricted",
           "effective_date": "2010-01-01",
           "source": "Health Canada synephrine guidance",
-          "notes": "Health Canada caps OTC synephrine at 30 mg/day."
+          "notes": "Health Canada caps OTC synephrine at 30 mg/day.",
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "CA",
+          "last_verified_date": "2026-04-26"
         },
         {
           "region": "US",
@@ -17868,9 +17960,30 @@
           "status": "high_risk",
           "effective_date": "2004-04-12",
           "source": "NCCIH / FDA bitter orange advisory",
-          "notes": "FDA flags bitter orange + caffeine combinations as cardiovascular risk after ephedra ban."
+          "notes": "FDA flags bitter orange + caffeine combinations as cardiovascular risk after ephedra ban.",
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-04-26"
         }
-      ]
+      ],
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "ban_context": "substance",
+      "safety_warning": "Bitter orange concentrates synephrine, a stimulant linked to hypertensive crisis, arrhythmias, strokes, and heart attacks. Health Canada caps OTC use at 30 mg/day. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Stimulant linked to hypertensive crisis and stroke. Stop.",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-04-26",
+        "next_review_due": "2026-10-26",
+        "reviewed_by": "dr_pham_clinical_signoff",
+        "change_log": [
+          {
+            "date": "2026-04-26",
+            "change": "Added schema-completion fields (match_mode, review, jurisdiction code/type, ban_context, safety_warning) to satisfy v5.0 release gate.",
+            "by": "system"
+          }
+        ]
+      }
     }
   ]
 }

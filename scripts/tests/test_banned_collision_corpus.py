@@ -200,6 +200,86 @@ class TestTrueNegatives:
 
 
 # =============================================================================
+# Dr Pham clinical sign-off — collision regression for the 3 banned entries
+# added in commit 8a609b3 (BANNED_PENNYROYAL / BANNED_TANSY / BANNED_BITTER_ORANGE).
+#
+# These entries share Latin genus names with legitimate supplement species
+# (Mentha piperita = peppermint, Tanacetum parthenium = feverfew, Citrus
+# sinensis = sweet orange). The aliases on each banned entry are specific
+# binomials (Mentha pulegium, Tanacetum vulgare, Citrus aurantium) so today
+# the matcher correctly exclusion-classifies the safe variants. Negative
+# match terms were also added defensively against any future fuzzy matching.
+# These tests lock that behavior in.
+# =============================================================================
+
+class TestDrPhamBannedCollisions:
+    """Regression: feverfew/peppermint/sweet-orange must NOT trigger the
+    Dr Pham banned entries."""
+
+    @pytest.mark.parametrize("safe_ingredient", [
+        "feverfew",
+        "feverfew leaf",
+        "feverfew leaf extract",
+        "feverfew extract",
+        "tanacetum parthenium",
+        "tanacetum parthenium leaf extract",
+        "matricaria recutita",
+        "german chamomile",
+        "chamomile",
+    ])
+    def test_feverfew_chamomile_not_tansy(self, enricher, safe_ingredient):
+        assert "BANNED_TANSY" not in _banned_ids(enricher, safe_ingredient)
+
+    @pytest.mark.parametrize("safe_ingredient", [
+        "peppermint",
+        "peppermint leaf",
+        "peppermint leaf extract",
+        "peppermint oil",
+        "mentha piperita",
+        "spearmint",
+        "mentha spicata",
+        "horsemint leaf",
+        "mentha longifolia",
+    ])
+    def test_mint_species_not_pennyroyal(self, enricher, safe_ingredient):
+        assert "BANNED_PENNYROYAL" not in _banned_ids(enricher, safe_ingredient)
+
+    @pytest.mark.parametrize("safe_ingredient", [
+        "sweet orange",
+        "sweet orange peel",
+        "sweet orange oil",
+        "citrus sinensis",
+        "neroli oil",
+        "petitgrain",
+        "orange flower",
+        "key lime",
+        "citrus aurantifolia",
+        "tangerine",
+        "mandarin",
+    ])
+    def test_orange_relatives_not_bitter_orange(self, enricher, safe_ingredient):
+        assert "BANNED_BITTER_ORANGE" not in _banned_ids(enricher, safe_ingredient)
+
+    # True positives still must fire — defensive negatives must not silence real matches.
+    @pytest.mark.parametrize("name,expected_id", [
+        ("pennyroyal oil", "BANNED_PENNYROYAL"),
+        ("mentha pulegium", "BANNED_PENNYROYAL"),
+        ("hedeoma pulegioides", "BANNED_PENNYROYAL"),
+        ("pulegone", "BANNED_PENNYROYAL"),
+        ("tansy", "BANNED_TANSY"),
+        ("tanacetum vulgare", "BANNED_TANSY"),
+        ("tansy oil", "BANNED_TANSY"),
+        ("bitter orange extract", "BANNED_BITTER_ORANGE"),
+        ("citrus aurantium", "BANNED_BITTER_ORANGE"),
+        ("synephrine", "BANNED_BITTER_ORANGE"),
+        ("p-synephrine", "BANNED_BITTER_ORANGE"),
+        ("zhi shi", "BANNED_BITTER_ORANGE"),
+    ])
+    def test_dr_pham_true_positives_still_fire(self, enricher, name, expected_id):
+        assert expected_id in _banned_ids(enricher, name)
+
+
+# =============================================================================
 # EDGE CASES - Tricky collisions that need careful handling
 # =============================================================================
 

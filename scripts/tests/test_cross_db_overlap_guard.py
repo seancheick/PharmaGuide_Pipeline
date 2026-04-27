@@ -242,6 +242,11 @@ def test_iqm_banned_overlap_set_is_only_intentional_high_risk_dual_classificatio
         ("garcinia_cambogia", "RISK_GARCINIA_CAMBOGIA"),
         ("kavalactones", "RISK_KAVA"),
         ("synephrine", "RISK_BITTER_ORANGE"),
+        # Intentional dual-classification (Dr Pham clinical sign-off, 2026-04):
+        # RISK_BITTER_ORANGE in IQM penalises quality; BANNED_BITTER_ORANGE
+        # in banned db drives the high_risk safety gate. Different purposes,
+        # both required.
+        ("synephrine", "BANNED_BITTER_ORANGE"),
         ("yohimbe", "RISK_YOHIMBE"),
         ("7_keto_dhea", "BANNED_7_KETO_DHEA"),
         ("cascara_sagrada", "ADD_CASCARA_SAGRADA"),
