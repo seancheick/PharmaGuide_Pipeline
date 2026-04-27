@@ -910,6 +910,106 @@ class TestV30Scoring:
         assert scorer._compute_manufacturer_violation_penalty(product) == pytest.approx(-11.5)
 
 
+class TestNutritionOnlyVerdict:
+    """Bucket C — DSLD doesn't capture whey/protein in `ingredientRows`
+    for ~16 protein-powder products. They previously fell to NOT_SCORED
+    (which signals 'real supplement, mapping failed'). The truth is
+    these are food-shape products (whey, protein powders), not
+    supplements at all.
+
+    Fix: emit a distinct NUTRITION_ONLY verdict so the UI can render
+    'food product — banned/harmful flags still apply, no bioactive
+    scoring'. Precedence:
+
+        BLOCKED > UNSAFE > NUTRITION_ONLY > NOT_SCORED > CAUTION > POOR > SAFE
+
+    Discriminator: `mapping_gate.stop` AND `product_name` contains a
+    food-shape keyword (whey/protein powder/casein/meal replacement/
+    shake/smoothie). Capsule supplements that fail mapping still hit
+    NOT_SCORED (no false positives).
+    """
+
+    @pytest.fixture
+    def scorer(self):
+        return SupplementScorer()
+
+    def _make_unmapped_whey(self):
+        product = make_base_product()
+        product["product_name"] = "100% Whey Vanilla Cream"
+        # Force a single unmapped active to trip require_full_mapping
+        product["ingredient_quality_data"]["unmapped_count"] = 1
+        product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients"][1]["name"] = "Whey Protein Concentrate"
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["name"] = "Whey Protein Concentrate"
+        return product
+
+    def test_whey_product_with_unmapped_actives_returns_nutrition_only(self, scorer):
+        product = self._make_unmapped_whey()
+        scorer.feature_gates["require_full_mapping"] = True
+
+        result = scorer.score_product(product)
+        assert result["verdict"] == "NUTRITION_ONLY"
+        assert result["score_80"] is None
+        assert result["score_basis"] == "nutrition_only_food_shape"
+        # Flags array still populated so UI can render warnings
+        assert "UNMAPPED_ACTIVE_INGREDIENT" in result["flags"]
+
+    @pytest.mark.parametrize("product_name", [
+        "100% Whey Chocolate Supreme",
+        "Hydrolyzed Whey Protein",
+        "Pea Protein Powder",
+        "Plant-Based Protein Shake",
+        "Casein Protein Powder",
+        "Meal Replacement Vanilla",
+    ])
+    def test_food_shape_keywords_route_to_nutrition_only(self, scorer, product_name):
+        product = self._make_unmapped_whey()
+        product["product_name"] = product_name
+        scorer.feature_gates["require_full_mapping"] = True
+        result = scorer.score_product(product)
+        assert result["verdict"] == "NUTRITION_ONLY", (
+            f"{product_name!r} should route to NUTRITION_ONLY"
+        )
+
+    def test_capsule_supplement_with_unmapped_active_still_not_scored(self, scorer):
+        """Non-food-shape products (capsules, tablets) still fall to NOT_SCORED.
+        We only divert food-shape products — pipeline bugs for real supplements
+        must remain visible as NOT_SCORED."""
+        product = make_base_product()
+        product["product_name"] = "MysteryHerb Capsules"
+        product["ingredient_quality_data"]["unmapped_count"] = 1
+        product["ingredient_quality_data"]["ingredients"][1]["mapped"] = False
+        product["ingredient_quality_data"]["ingredients"][1]["name"] = "Mystery Compound"
+        product["ingredient_quality_data"]["ingredients_scorable"][1]["mapped"] = False
+        scorer.feature_gates["require_full_mapping"] = True
+
+        result = scorer.score_product(product)
+        assert result["verdict"] == "NOT_SCORED"
+
+    def test_blocked_b0_overrides_nutrition_only(self, scorer):
+        """A whey product with a banned ingredient must still BLOCK — the
+        Bucket C divert never weakens safety."""
+        product = self._make_unmapped_whey()
+        product["contaminant_data"]["banned_substances"] = {
+            "found": True,
+            "substances": [
+                {
+                    "ingredient": "Ephedra",
+                    "match_type": "exact",
+                    "status": "banned",
+                    "id": "BANNED_EPHEDRA",
+                }
+            ],
+        }
+        scorer.feature_gates["require_full_mapping"] = True
+
+        result = scorer.score_product(product)
+        assert result["verdict"] == "BLOCKED", (
+            "Banned ingredients must still take precedence over NUTRITION_ONLY"
+        )
+
+
 def _make_blend(
     name,
     level,

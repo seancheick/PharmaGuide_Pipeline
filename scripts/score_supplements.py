@@ -56,6 +56,34 @@ except ImportError:
     SCORE_BASIS_SAFETY_BLOCK = "safety_block"
     SCORE_BASIS_SCORING_ERROR = "scoring_error"
 
+# Sprint E1.7 — Bucket C divert. DSLD upstream gap (whey/protein/casein/
+# meal-replacement powders) where ingredientRows captures only the
+# nutrition panel + minerals, not the protein itself. These products
+# previously got NOT_SCORED (signaling "real supplement, mapping failed")
+# which masked the upstream data gap. NUTRITION_ONLY signals "food-shape
+# product, no bioactive scoring — banned/harmful flags still apply".
+SCORE_BASIS_NUTRITION_ONLY = "nutrition_only_food_shape"
+
+# Food-shape product_name keywords. Substring match, case-insensitive.
+# Curated from real Bucket C examples in the 20-brand corpus.
+_FOOD_SHAPE_NAME_KEYWORDS = (
+    "whey",
+    "casein",
+    "pea protein",
+    "soy protein",
+    "rice protein",
+    "hemp protein",
+    "plant protein",
+    "plant-based protein",
+    "protein powder",
+    "protein shake",
+    "protein blend",
+    "meal replacement",
+    "mass gainer",
+    "weight gainer",
+    "smoothie mix",
+)
+
 
 def clamp(low: float, high: float, value: float) -> float:
     return max(low, min(high, value))
@@ -3203,7 +3231,7 @@ class SupplementScorer:
 
     def _build_badges(self, product: Dict[str, Any], verdict: str) -> List[Dict[str, str]]:
         badges: List[Dict[str, str]] = []
-        if verdict in {"BLOCKED", "UNSAFE", "NOT_SCORED"}:
+        if verdict in {"BLOCKED", "UNSAFE", "NOT_SCORED", "NUTRITION_ONLY"}:
             return badges
         if self._has_full_disclosure(product):
             badges.append(
@@ -3425,7 +3453,7 @@ class SupplementScorer:
     ]
 
     def _grade_word(self, score_100_equivalent: float, verdict: str) -> Optional[str]:
-        if verdict in {"BLOCKED", "UNSAFE", "NOT_SCORED"}:
+        if verdict in {"BLOCKED", "UNSAFE", "NOT_SCORED", "NUTRITION_ONLY"}:
             return None
 
         # Build (label, min) pairs from config, descending by min, with a safe
@@ -3453,18 +3481,46 @@ class SupplementScorer:
         # Fall through if nothing matches (shouldn't happen with a 0-min entry)
         return pairs[-1][0] if pairs else None
 
+    @staticmethod
+    def _is_food_shape_product(product: Dict[str, Any]) -> bool:
+        """Sprint E1.7 — Bucket C discriminator.
+
+        Returns True when the product_name contains a food-shape keyword
+        (whey/casein/protein-powder/meal-replacement/etc.). Used by the
+        verdict deriver to divert NOT_SCORED → NUTRITION_ONLY when DSLD
+        upstream fails to capture the active ingredient (protein itself
+        is not encoded in `ingredientRows` for many of these products).
+
+        Substring match against the keyword list — case-insensitive,
+        product_name-only. Form_factor is unreliable in DSLD (often
+        None) so we don't depend on it.
+        """
+        name = norm_text(product.get("product_name"))
+        if not name:
+            return False
+        return any(kw in name for kw in _FOOD_SHAPE_NAME_KEYWORDS)
+
     def _derive_verdict(
         self,
         b0: Dict[str, Any],
         mapping_gate: Dict[str, Any],
         flags: List[str],
         quality_score: Optional[float],
+        product: Optional[Dict[str, Any]] = None,
     ) -> str:
         if b0.get("blocked"):
             return "BLOCKED"
         if b0.get("unsafe"):
             return "UNSAFE"
         if mapping_gate.get("stop"):
+            # Bucket C divert: food-shape products (whey/protein) where
+            # DSLD upstream doesn't encode the active. Surface NUTRITION_ONLY
+            # so the UI can render "food product — flags still apply" rather
+            # than NOT_SCORED ("real supplement, mapping failed"). Real
+            # capsule/tablet supplements with mapping bugs stay NOT_SCORED
+            # so the gap remains visible in audit reports.
+            if product is not None and self._is_food_shape_product(product):
+                return "NUTRITION_ONLY"
             return "NOT_SCORED"
         if "BANNED_MATCH_REVIEW_NEEDED" in flags:
             return "CAUTION"
@@ -3518,6 +3574,11 @@ class SupplementScorer:
         elif verdict == "NOT_SCORED":
             scoring_status = SCORING_STATUS_NOT_APPLICABLE
             score_basis = SCORE_BASIS_NO_SCORABLE
+        elif verdict == "NUTRITION_ONLY":
+            # Bucket C — DSLD upstream gap (food-shape product). No bioactive
+            # score, but flags array still surfaces banned/harmful warnings.
+            scoring_status = SCORING_STATUS_NOT_APPLICABLE
+            score_basis = SCORE_BASIS_NUTRITION_ONLY
         else:
             scoring_status = SCORING_STATUS_SCORED
             score_basis = SCORE_BASIS_BIOACTIVES
@@ -3526,6 +3587,9 @@ class SupplementScorer:
         if verdict == "POOR":
             safety_verdict = "SAFE"
         elif verdict == "NOT_SCORED":
+            safety_verdict = "CAUTION"
+        elif verdict == "NUTRITION_ONLY":
+            # Same as NOT_SCORED for legacy consumers — flags still steer UI.
             safety_verdict = "CAUTION"
         else:
             safety_verdict = verdict
@@ -3733,7 +3797,7 @@ class SupplementScorer:
                     flags.append(flag)
 
             if mapping_gate.get("stop"):
-                verdict = self._derive_verdict(b0, mapping_gate, flags, None)
+                verdict = self._derive_verdict(b0, mapping_gate, flags, None, product)
                 breakdown = {
                     "A": {"score": 0.0, "max": section_a_max},
                     "B": {"score": 0.0, "max": section_b_max},
@@ -3794,7 +3858,7 @@ class SupplementScorer:
             quality_raw += violation_penalty
             quality_score = clamp(0.0, 80.0, quality_raw)
 
-            verdict = self._derive_verdict(b0, mapping_gate, flags, quality_score)
+            verdict = self._derive_verdict(b0, mapping_gate, flags, quality_score, product)
 
             breakdown = {
                 "A": section_a,
