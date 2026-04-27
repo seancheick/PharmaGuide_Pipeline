@@ -6736,8 +6736,13 @@ class EnhancedDSLDNormalizer:
             "mct", "mct oil", "medium chain triglycerides",
             # Lecithin family
             "lecithin", "soy lecithin", "sunflower lecithin",
-            # Fat-soluble actives DSLD occasionally tags fat
-            "monolaurin", "lauric acid",
+            # Fat-soluble actives DSLD occasionally tags category=fat
+            # instead of category=fatty acid (the latter triggers
+            # _bypass_name_match correctly; the former leaks).
+            "monolaurin", "lauric acid", "caprylic acid", "capric acid",
+            "caproic acid", "palmitic acid",
+            # Conjugated linoleic acid — supplement-grade, not panel
+            "conjugated linoleic acid", "cla",
         }
         if unit:
             unit_lower = unit.lower().strip()
