@@ -3,9 +3,10 @@
     "description": "Controlled clinical risk taxonomy for condition and medication-class interaction alerts",
     "purpose": "interaction_alert_taxonomy",
     "schema_version": "5.1.0",
-    "last_updated": "2026-04-14",
-    "total_entries": 41,
-    "flutter_top_level_key": "clinical_risk_taxonomy"
+    "last_updated": "2026-04-27",
+    "total_entries": 42,
+    "flutter_top_level_key": "clinical_risk_taxonomy",
+    "drug_classes_count": 15
   },
   "conditions": [
     {
@@ -49,7 +50,7 @@
       "label": "Diabetes",
       "category": "metabolic",
       "display_priority": 7,
-      "note": "Covers type 1 and type 2. Merged from diabetes_type1/diabetes_type2 — supplement interactions are the same for both types (blood sugar impact, hypoglycemic risk)."
+      "note": "Covers type 1 and type 2. Merged from diabetes_type1/diabetes_type2 \u2014 supplement interactions are the same for both types (blood sugar impact, hypoglycemic risk)."
     },
     {
       "id": "bleeding_disorders",
@@ -185,6 +186,13 @@
         "topiramate"
       ],
       "mechanism_note": "Supplements that affect CYP3A4/2C19 metabolism or GABAergic signaling may alter anticonvulsant drug levels or seizure threshold."
+    },
+    {
+      "id": "thiazide_diuretics",
+      "label": "Thiazide Diuretics",
+      "category": "cardiology",
+      "display_priority": 14,
+      "description": "Thiazide and thiazide-like diuretics. Distinct from other diuretics because they retain calcium (relevant for vitamin D + calcium supplements)."
     }
   ],
   "severity_levels": [

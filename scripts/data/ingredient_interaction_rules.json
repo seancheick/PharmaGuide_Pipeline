@@ -3,8 +3,8 @@
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
     "schema_version": "5.2.0",
-    "last_updated": "2026-04-26",
-    "total_entries": 137,
+    "last_updated": "2026-04-27",
+    "total_entries": 141,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
     "total_rules": 129,
     "flutter_top_level_key": "interaction_rules",
@@ -26,7 +26,8 @@
     },
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-04-18",
-    "review_round": "full_authoring_pass_v1"
+    "review_round": "full_authoring_pass_v1",
+    "rules_with_dose_thresholds": 43
   },
   "interaction_rules": [
     {
@@ -1087,7 +1088,7 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "Potential additive anticoagulant/antiplatelet effects.",
           "action": "Use only with clinician monitoring for bleeding signs.",
@@ -1149,6 +1150,17 @@
           "basis": "per_day",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor"
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 1200,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "note": "Garlic supplements may have antiplatelet effects. Evidence is dose-dependent; caution is advised with anticoagulants. https://www.nccih.nih.gov/health/garlic"
         }
       ],
       "pregnancy_lactation": null,
@@ -1330,7 +1342,19 @@
       "pregnancy_lactation": null,
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
-      "dose_thresholds": []
+      "dose_thresholds": [
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 240,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Ginkgo's antiplatelet activity is dose-dependent; bleeding risks increase at ≥240 mg/day. https://pubmed.ncbi.nlm.nih.gov/17085776/"
+        }
+      ]
     },
     {
       "id": "RULE_INGREDIENT_GINSENG",
@@ -1408,7 +1432,19 @@
           "informational_note": "Ginseng can affect clotting — relevant to people on anticoagulants."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 1000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Ginsenosides in high-dose ginseng may antagonize warfarin effects. https://pubmed.ncbi.nlm.nih.gov/22137021/"
+        }
+      ],
       "pregnancy_lactation": {
         "pregnancy_category": "caution",
         "lactation_category": "caution",
@@ -1905,6 +1941,17 @@
           "basis": "per_day",
           "severity_if_met": "avoid",
           "severity_if_not_met": "caution"
+        },
+        {
+          "scope": "condition",
+          "target_id": "hypertension",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 2000,
+          "unit": "mg",
+          "severity_if_met": "avoid",
+          "severity_if_not_met": "monitor",
+          "note": "2000 mg of typical commercial licorice extract (4-5% glycyrrhizin) ≈ 100 mg glycyrrhizic acid, the threshold above which BP elevation becomes clinically significant. DGL is exempt. https://www.nccih.nih.gov/health/licorice-root"
         }
       ]
     },
@@ -2001,7 +2048,19 @@
       "pregnancy_lactation": null,
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team",
-      "dose_thresholds": []
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "hypertension",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 350,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "NIH ODS upper limit for supplemental magnesium is 350 mg/day. https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
+        }
+      ]
     },
     {
       "id": "RULE_IQM_POTASSIUM_HYPERTENSION",
@@ -3174,7 +3233,19 @@
           "informational_note": "Saw palmetto can affect platelet function — relevant to people on NSAIDs."
         }
       ],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "liver_disease",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 600,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "info",
+          "note": "Liver injury rarely reported; high-dose precaution. https://pubmed.ncbi.nlm.nih.gov/16800417/"
+        }
+      ],
       "pregnancy_lactation": {
         "pregnancy_category": "avoid",
         "lactation_category": "avoid",
@@ -3586,7 +3657,7 @@
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "Curcumin may enhance warfarin effect through additive antiplatelet activity (TXA2 suppression, COX-1 inhibition, 12-LOX inhibition) and potential CYP2C9 modulation affecting S-warfarin metabolism. The concentrated extract form poses higher interaction risk than dietary turmeric. Warfarin potentiation by turmeric/curcumin is documented in herb-drug interaction systematic reviews.",
           "action": "Monitor INR when initiating or escalating curcumin supplementation during warfarin therapy. Inform prescriber. Consider temporary INR check 1-2 weeks after starting curcumin extract.",
@@ -3638,6 +3709,17 @@
           "basis": "per_day",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor"
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 1000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "High-dose curcumin extracts may affect platelet function. https://pubmed.ncbi.nlm.nih.gov/22531131/"
         }
       ],
       "pregnancy_lactation": null,
@@ -3965,6 +4047,19 @@
           "alert_headline": "Caution with immunosuppressants",
           "alert_body": "Vitamin D has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding Vitamin D.",
           "informational_note": "Vitamin D affects immune function — relevant to people on immunosuppressants."
+        },
+        {
+          "drug_class_id": "thiazide_diuretics",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Thiazide diuretics reduce urinary calcium excretion; high vitamin D doses enhance calcium absorption, increasing the risk of hypercalcemia.",
+          "action": "Avoid high-dose vitamin D (>4000 IU/day) when taking a thiazide diuretic. Monitor serum calcium under medical supervision.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
+          ],
+          "alert_headline": "Vitamin D plus thiazides may raise calcium",
+          "alert_body": "Thiazide diuretics reduce calcium excretion. High-dose vitamin D (>4000 IU/day) can raise blood calcium. If you take a thiazide, talk to your doctor about monitoring calcium.",
+          "informational_note": "High vitamin D doses combined with thiazides may cause hypercalcemia."
         }
       ],
       "dose_thresholds": [
@@ -4030,6 +4125,17 @@
           "basis": "per_day",
           "severity_if_met": "monitor",
           "severity_if_not_met": "info"
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "thiazide_diuretics",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 4000,
+          "unit": "IU",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Thiazide diuretics reduce renal calcium excretion; high-dose vitamin D can increase hypercalcemia risk. https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
         }
       ],
       "pregnancy_lactation": null,
@@ -5299,7 +5405,7 @@
       "condition_rules": [
         {
           "condition_id": "ttc",
-          "severity": "monitor",
+          "severity": "caution",
           "evidence_level": "probable",
           "mechanism": "DHEA (dehydroepiandrosterone) supplementation at 75 mg/day for ≥12 weeks has been studied in women with diminished ovarian reserve (DOR) undergoing IVF. The DITTO RCT protocol targeted women with AFC ≤10 and AMH ≤5 pmol/L. A controlled case-series (Barad & Gleicher 2006) showed significant improvements in fertilized oocytes, normal Day-3 embryo count, and embryos transferred after DHEA treatment. Proposed mechanism: DHEA converts to androgens and estrogens in follicular cells, improving follicular microenvironment and reducing follicle apoptosis. DHEA should not be used without hormonal workup confirming DOR, as it may disrupt normal hormonal balance in women without ovarian reserve issues.",
           "action": "DHEA at 75 mg/day may be considered for women with confirmed diminished ovarian reserve, ideally under reproductive endocrinologist guidance. Monitor DHEA-S and androgen levels. Not appropriate for general TTC use without confirmed DOR diagnosis.",
@@ -5407,7 +5513,7 @@
         },
         {
           "condition_id": "diabetes",
-          "severity": "caution",
+          "severity": "info",
           "evidence_level": "probable",
           "mechanism": "Inositol can improve insulin signaling and glycemic metrics in some settings.",
           "action": "Monitor for additive glucose lowering.",
@@ -6716,6 +6822,17 @@
           "basis": "per_day",
           "severity_if_met": "monitor",
           "severity_if_not_met": "info"
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 1200,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "High-dose NAC (>1.2g/day) may influence platelet aggregation. https://pubmed.ncbi.nlm.nih.gov/22467323/"
         }
       ],
       "pregnancy_lactation": null,
@@ -8175,6 +8292,17 @@
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor",
           "note": "Authored avoid-threshold without physician oversight."
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 250,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Resveratrol inhibition of CYP enzymes may alter anticoagulant pharmacokinetics. https://pubmed.ncbi.nlm.nih.gov/27040449/"
         }
       ],
       "pregnancy_lactation": null,
@@ -8517,7 +8645,7 @@
       "condition_rules": [
         {
           "condition_id": "pregnancy",
-          "severity": "caution",
+          "severity": "avoid",
           "evidence_level": "probable",
           "mechanism": "Antiplatelet effects make peripartum bleeding the main concern.",
           "action": "Avoid chronic use in pregnancy and stop before delivery if used.",
@@ -8525,7 +8653,8 @@
             "https://www.nccih.nih.gov/health/ginkgo"
           ],
           "alert_headline": "May raise bleeding risk",
-          "alert_body": "Ginkgo can have antiplatelet effects, which is a concern near delivery. If you are pregnant, avoid chronic use and stop before birth if your clinician has you taking it."
+          "alert_body": "Ginkgo can have antiplatelet effects, which is a concern near delivery. If you are pregnant, avoid chronic use and stop before birth if your clinician has you taking it.",
+          "informational_note": "Ginkgo's antiplatelet activity is a peripartum bleeding concern, especially near delivery."
         }
       ],
       "drug_class_rules": [],
@@ -8595,7 +8724,7 @@
       "condition_rules": [
         {
           "condition_id": "diabetes",
-          "severity": "monitor",
+          "severity": "info",
           "evidence_level": "probable",
           "mechanism": "May modestly affect fuel utilization and insulin sensitivity.",
           "action": "Monitor glucose trends if used chronically.",
@@ -8633,9 +8762,130 @@
         }
       ],
       "drug_class_rules": [],
-      "dose_thresholds": [],
+      "dose_thresholds": [
+        {
+          "scope": "condition",
+          "target_id": "diabetes",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 1000,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "May potentiate blood-sugar lowering medications. https://pubmed.ncbi.nlm.nih.gov/27092496/"
+        }
+      ],
       "pregnancy_lactation": null,
       "last_reviewed": "2026-04-26",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IMMUNO_ECHINACEA",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "echinacea_angustifolia"
+      },
+      "drug_class_rules": [
+        {
+          "drug_class_id": "immunosuppressants",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Echinacea stimulates immune cell activity, which may interfere with immunosuppressive therapy. https://www.nccih.nih.gov/health/echinacea",
+          "action": "Avoid echinacea while on immunosuppressant therapy.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/echinacea"
+          ],
+          "alert_headline": "Avoid with immunosuppressants",
+          "alert_body": "Echinacea can stimulate immune activity, which may interfere with immunosuppressant medication. Talk to your doctor before combining them.",
+          "informational_note": "Serious interaction potential for those on immunosuppressants."
+        }
+      ],
+      "last_reviewed": "2026-04-27",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IMMUNO_ASTRAGALUS",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "astragalus_root"
+      },
+      "drug_class_rules": [
+        {
+          "drug_class_id": "immunosuppressants",
+          "severity": "avoid",
+          "evidence_level": "probable",
+          "mechanism": "Astragalus may stimulate immune activity, potentially decreasing the effectiveness of immunosuppressant medication. https://www.nccih.nih.gov/health/astragalus",
+          "action": "Avoid astragalus while on immunosuppressant therapy.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/astragalus"
+          ],
+          "alert_headline": "Avoid with immunosuppressants",
+          "alert_body": "If you take immunosuppressants, talk to your doctor before adding astragalus, as it may interfere with your treatment.",
+          "informational_note": "Astragalus can stimulate the immune system, which is relevant for people using immunosuppressant medications."
+        }
+      ],
+      "last_reviewed": "2026-04-27",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_BERBERINE_METFORMIN_HYPO",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "berberine_supplement"
+      },
+      "drug_class_rules": [
+        {
+          "drug_class_id": "hypoglycemics",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "Berberine has potent hypoglycemic activity via AMPK activation, similar to metformin. https://pubmed.ncbi.nlm.nih.gov/30676451/",
+          "action": "Monitor blood glucose closely if combining berberine with diabetes medication.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/30676451/"
+          ],
+          "alert_headline": "Monitor for low blood sugar",
+          "alert_body": "Combining berberine with diabetes medication may lower blood sugar too much. Monitor your readings closely and discuss with your clinician.",
+          "informational_note": "Additive hypoglycemic potential exists; monitor your glucose levels."
+        }
+      ],
+      "last_reviewed": "2026-04-27",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_IQM_VITAMIN_E_BLEEDING",
+      "subject_ref": {
+        "db": "ingredient_quality_map",
+        "canonical_id": "vitamin_e"
+      },
+      "drug_class_rules": [
+        {
+          "drug_class_id": "anticoagulants",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "High-dose vitamin E (>300 mg/day) antagonizes vitamin K-dependent clotting factors. https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+          "action": "Discuss vitamin E intake with your clinician if on anticoagulants.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
+          ],
+          "alert_headline": "High-dose vitamin E interacts with thinners",
+          "alert_body": "If you take anticoagulants, discuss your vitamin E intake with your doctor, as high doses may increase bleeding risk.",
+          "informational_note": "Vitamin E in high doses can affect clotting; it is important to monitor your levels if you take blood thinners."
+        }
+      ],
+      "dose_thresholds": [
+        {
+          "scope": "drug_class",
+          "target_id": "anticoagulants",
+          "basis": "per_day",
+          "comparator": ">",
+          "value": 300,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Vitamin E doses >300 mg/day potentiate anticoagulants. https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/"
+        }
+      ],
+      "last_reviewed": "2026-04-27",
       "review_owner": "pharmaguide_clinical_team"
     }
   ]
