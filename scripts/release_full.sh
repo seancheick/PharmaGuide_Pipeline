@@ -399,11 +399,20 @@ ELAPSED=$(($(date +%s) - START_TS))
 echo ""
 ok "Full release pipeline completed in ${ELAPSED}s"
 info ""
+
+# Resolve the freshly-bundled versions from the Flutter assets/db/ manifests
+# so the next-steps message prints a copy-pasteable commit command instead of
+# a literal "<version>" placeholder. Falls back to "unknown" if the manifest
+# is unreadable (skipped Flutter step, missing jq, etc.) — the user will see
+# the placeholder and know something needs investigating before committing.
+CATALOG_VERSION="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('db_version','unknown'))" "$ASSETS_DIR/export_manifest.json" 2>/dev/null || echo unknown)"
+INTERACTION_VERSION="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('interaction_db_version','unknown'))" "$ASSETS_DIR/interaction_db_manifest.json" 2>/dev/null || echo unknown)"
+
 info "Next steps (manual git-side):"
 info "  cd \"$FLUTTER_REPO\""
 info "  git status                 # review assets/db/ changes (LFS-tracked)"
 info "  git add assets/db/"
-info "  git commit -m 'chore(catalog): bundle catalog + interaction <version>'"
+info "  git commit -m 'chore(catalog): bundle catalog v${CATALOG_VERSION} + interaction v${INTERACTION_VERSION}'"
 info "  git push origin main"
 info ""
 info "  cd $REPO_ROOT"
