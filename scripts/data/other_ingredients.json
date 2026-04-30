@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
-    "schema_version": "5.2.0",
+    "schema_version": "5.3.0",
     "last_updated": "2026-04-30",
     "total_entries": 673,
     "functional_roles_field": {
@@ -17,6 +17,9 @@
         "is_label_descriptor": "Phase 4a flag (2026-04-30): true on label-noise entries (marketing_descriptor / phytochemical_marker / source_descriptor / etc.). Suppressed from Flutter inactive_ingredients[] blob.",
         "is_active_only": "Phase 4a flag (2026-04-30): true on entries that will relocate to the active-ingredient pipeline in V1.1 (botanical_extract, glandular_tissue, branded complexes, amino_acid_derivative, phytocannabinoids, marine extracts). Suppressed from inactive_ingredients[]."
       }
+    },
+    "field_contract_changes": {
+      "v5.3.0": "2026-04-30 Phase 4c — category canonicalization. Renamed 241 → ~30 values per CLINICIAN_REVIEW.md Section 2B. Each category now equals either a functional_roles vocab ID or a transitional bucket (label_descriptor / active_pending_relocation / manual_review). No Flutter impact — Flutter reads functional_roles[], not category."
     }
   },
   "other_ingredients": [
@@ -27,7 +30,7 @@
         "10-undecenoic acid",
         "undecylenic acid"
       ],
-      "category": "fatty_acid_derivative",
+      "category": "lubricant",
       "is_additive": false,
       "additive_type": "antifungal_fatty_acid",
       "allergen": false,
@@ -108,7 +111,7 @@
         "2-beta coxatene",
         "2 beta coxatene"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -147,7 +150,7 @@
         "a-kic",
         "akic"
       ],
-      "category": "amino_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -174,7 +177,7 @@
         "gum acacia",
         "gum arabic"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "natural_fiber",
       "allergen": false,
@@ -219,7 +222,7 @@
       "aliases": [
         "acetic acid"
       ],
-      "category": "preservative_acidity_regulator",
+      "category": "preservative",
       "is_additive": true,
       "additive_type": "preservative_natural",
       "allergen": false,
@@ -307,7 +310,7 @@
         "added color",
         "colorant"
       ],
-      "category": "color_descriptor",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "color_descriptor",
       "allergen": false,
@@ -424,7 +427,7 @@
         "bovine adrenal cortex",
         "bovine adrenal tissue"
       ],
-      "category": "glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
@@ -459,7 +462,7 @@
         "aerosil 200",
         "colloidal silicon dioxide aerosil"
       ],
-      "category": "anti_caking",
+      "category": "anti_caking_agent",
       "is_additive": true,
       "additive_type": "anti_caking_agent",
       "allergen": false,
@@ -493,7 +496,7 @@
         "kanten",
         "vegetable gelatin"
       ],
-      "category": "thickener_stabilizer",
+      "category": "gelling_agent",
       "is_additive": true,
       "additive_type": "gelling_agent",
       "allergen": false,
@@ -536,7 +539,7 @@
         "agave inulin fiber",
         "organic agave fiber"
       ],
-      "category": "fiber_plant",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "fiber",
       "allergen": false,
@@ -560,7 +563,7 @@
         "ageloss female factors",
         "ageloss male factors"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -669,7 +672,7 @@
         "Algae",
         "algae (unspecified)"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_descriptor",
       "allergen": false,
@@ -696,7 +699,7 @@
         "DHA/EPA Algal Oil",
         "dha/epa algal oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "algal_oil_carrier",
       "allergen": false,
@@ -759,7 +762,7 @@
         "alpha-glucan oligosaccharide",
         "oligosaccharides"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -796,7 +799,7 @@
       "aliases": [
         "alpha-glycosyl isoquercitrin"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -829,7 +832,7 @@
         "Alpha-Terpineol",
         "Alpha-terpineol"
       ],
-      "category": "terpene_flavor",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "terpene_flavor_component",
       "allergen": false,
@@ -856,7 +859,7 @@
         "aluminum oxide",
         "aluminium oxide"
       ],
-      "category": "coating_agent",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "coating",
       "allergen": false,
@@ -896,7 +899,7 @@
         "ammonium muriate",
         "sal ammoniac"
       ],
-      "category": "buffering_agent",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -984,7 +987,7 @@
       "aliases": [
         "ammonium hydroxide"
       ],
-      "category": "pH_adjuster",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "pH_adjuster",
       "allergen": false,
@@ -1010,7 +1013,7 @@
         "ammonium molybdate",
         "ammonium molybdate tetrahydrate"
       ],
-      "category": "mineral salt",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
@@ -1049,7 +1052,7 @@
         "amp-xt",
         "amp xt"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -1201,7 +1204,7 @@
       "aliases": [
         "anti-fungi 10x-88"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -1220,7 +1223,7 @@
       "aliases": [
         "anti-fungi 11x-88"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -1240,7 +1243,7 @@
         "Aorta",
         "aorta tissue"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -1269,7 +1272,7 @@
         "Vinegar",
         "apple cider vinegar, raw"
       ],
-      "category": "functional_ingredient",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -1346,7 +1349,7 @@
         "organic Apple puree concentrate",
         "organic Apples"
       ],
-      "category": "fruit_concentrate",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_ingredient",
       "allergen": false,
@@ -1435,7 +1438,7 @@
         "organic Arabica fair trade Coffee",
         "organic arabica fair trade coffee"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -1457,7 +1460,7 @@
         "arabinose",
         "l-arabinose"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "is_additive": true,
       "additive_type": "sweetener",
       "allergen": false,
@@ -1497,7 +1500,7 @@
         "maranta arundinacea starch",
         "Arrowroot Flour"
       ],
-      "category": "filler_binder",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "filler",
       "allergen": false,
@@ -1520,7 +1523,7 @@
       "aliases": [
         "artemisinin"
       ],
-      "category": "phytochemical_isolate",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "sesquiterpene_lactone",
       "allergen": false,
@@ -1563,7 +1566,7 @@
         "vitamin c preservative",
         "non-gmo ascorbic acid"
       ],
-      "category": "preservative_natural",
+      "category": "preservative",
       "is_additive": true,
       "additive_type": "antioxidant_preservative",
       "allergen": false,
@@ -1698,7 +1701,7 @@
       "aliases": [
         "AstraGin"
       ],
-      "category": "branded_blend",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "absorption_enhancer",
       "allergen": false,
@@ -1718,7 +1721,7 @@
         "atpro",
         "atpro blend"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -1738,7 +1741,7 @@
         "avocado/soy unsaponifiables",
         "ASU"
       ],
-      "category": "lipid_descriptor",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": true,
@@ -1764,7 +1767,7 @@
         "organic bamboo silica",
         "silica from bamboo"
       ],
-      "category": "plant_extract_natural",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "natural_mineral",
       "allergen": false,
@@ -1805,7 +1808,7 @@
         "honeybee pollen",
         "pollen"
       ],
-      "category": "functional_ingredient",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bee_product",
       "allergen": true,
@@ -1842,7 +1845,7 @@
         "beef tissue",
         "bovine tissue"
       ],
-      "category": "animal_source_material",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -2054,7 +2057,7 @@
         "organic Raspberries",
         "Raspberry puree"
       ],
-      "category": "fruit_concentrate",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_ingredient",
       "allergen": false,
@@ -2076,7 +2079,7 @@
       "aliases": [
         "beta-ecdysterone"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -2100,7 +2103,7 @@
       "aliases": [
         "betaine monohydrate"
       ],
-      "category": "functional_compound_source",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -2184,7 +2187,7 @@
         "bronson bioaccelerators",
         "futurebiotics bioaccelerators"
       ],
-      "category": "branded_blend_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "functional_descriptor",
       "allergen": false,
@@ -2204,7 +2207,7 @@
       "aliases": [
         "biocore optimum complete"
       ],
-      "category": "branded_enzyme_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -2223,7 +2226,7 @@
       "aliases": [
         "bismuth citrate"
       ],
-      "category": "mineral_salt",
+      "category": "ph_regulator",
       "is_additive": false,
       "additive_type": "mineral_salt",
       "allergen": false,
@@ -2319,7 +2322,7 @@
       "aliases": [
         "black edible ink"
       ],
-      "category": "printing_ink_descriptor",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "printing_ink",
       "allergen": false,
@@ -2343,7 +2346,7 @@
         "Piper nigrum extract",
         "piperine"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioenhancer",
       "allergen": false,
@@ -2422,7 +2425,7 @@
         "Bladderwrack Whole Plant Extract",
         "Fucus vesiculosus"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -2487,7 +2490,7 @@
         "bone broth protein powder",
         "bone broth protein"
       ],
-      "category": "protein_source",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "animal_protein",
       "allergen": false,
@@ -2510,7 +2513,7 @@
         "New Zealand grassfed Bone Marrow",
         "bone marrow concentrate"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -2556,7 +2559,7 @@
         "Bovine Hide Collagen Peptides",
         "bovine hide collagen peptides"
       ],
-      "category": "protein_source",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -2579,7 +2582,7 @@
         "Brain",
         "brain tissue"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -2660,7 +2663,7 @@
         "CARE4U",
         "Calzbone"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "marketing_descriptor",
       "allergen": false,
@@ -2681,7 +2684,7 @@
         "brown rice protein magnesium chelate",
         "organic brown rice protein magnesium chelate"
       ],
-      "category": "mineral_chelate_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "mineral_delivery_matrix",
       "allergen": false,
@@ -2703,7 +2706,7 @@
       "aliases": [
         "Caffeic Acid"
       ],
-      "category": "phytochemical_constituent",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "phenolic_acid",
       "allergen": false,
@@ -2746,7 +2749,7 @@
       "aliases": [
         "calcium caprylate"
       ],
-      "category": "fatty_acid_salt",
+      "category": "lubricant",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -2793,7 +2796,7 @@
         "limestone",
         "precipitated calcium carbonate"
       ],
-      "category": "filler_opacifier_colorant",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "mineral_filler",
       "allergen": false,
@@ -2843,7 +2846,7 @@
       "aliases": [
         "calcium caseinate"
       ],
-      "category": "protein_excipient",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "milk_protein",
       "allergen": true,
@@ -2872,7 +2875,7 @@
         "calcium chloride",
         "calcium chloride anhydrous"
       ],
-      "category": "processing aid",
+      "category": "processing_aid",
       "is_additive": true,
       "additive_type": "processing_salt",
       "allergen": false,
@@ -2918,7 +2921,7 @@
       "aliases": [
         "Calcium Chloride"
       ],
-      "category": "mineral_salt_exipient",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "mineral_excipient",
       "allergen": false,
@@ -2965,7 +2968,7 @@
         "calcium compound",
         "calcium salt complex"
       ],
-      "category": "mineral_blend",
+      "category": "ph_regulator",
       "is_additive": false,
       "additive_type": "mineral_blend",
       "allergen": false,
@@ -2987,7 +2990,7 @@
         "calcium d-glucarate",
         "calcium glucarate"
       ],
-      "category": "specialty_compound",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "calcium_salt",
       "allergen": false,
@@ -3030,7 +3033,7 @@
       "aliases": [
         "calcium glycerophosphate"
       ],
-      "category": "mineral_salt",
+      "category": "ph_regulator",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -3078,7 +3081,7 @@
       "aliases": [
         "calcium hydroxide"
       ],
-      "category": "pH_adjuster",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
@@ -3121,7 +3124,7 @@
         "E327",
         "lactic acid calcium salt"
       ],
-      "category": "mineral_salt_natural",
+      "category": "ph_regulator",
       "is_additive": false,
       "additive_type": "mineral_supplement",
       "allergen": false,
@@ -3174,7 +3177,7 @@
         "calcium salt of palmitic acid",
         "palmitic acid calcium salt"
       ],
-      "category": "anticaking_agent",
+      "category": "anti_caking_agent",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -3213,7 +3216,7 @@
       "aliases": [
         "calcium sulfate"
       ],
-      "category": "mineral_excipient",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "filler",
       "allergen": false,
@@ -3257,7 +3260,7 @@
       "aliases": [
         "calcium undecylenate"
       ],
-      "category": "specialty_compound",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "mineral_salt",
       "allergen": false,
@@ -3304,7 +3307,7 @@
         "cbg",
         "cbg isolate"
       ],
-      "category": "phytocannabinoid",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -3342,7 +3345,7 @@
         "cbn",
         "cbn isolate"
       ],
-      "category": "phytocannabinoid",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -3379,7 +3382,7 @@
         "canola",
         "Canola"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_descriptor",
       "allergen": false,
@@ -3449,7 +3452,7 @@
         "pullulan capsule",
         "pullulan polysaccharide"
       ],
-      "category": "capsule_material",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "capsule_shell",
       "allergen": false,
@@ -3475,7 +3478,7 @@
         "Caramel Sugar Syrup",
         "caramel sugar syrup"
       ],
-      "category": "sweetener_syrup",
+      "category": "sweetener_natural",
       "is_additive": true,
       "additive_type": "sweetener_syrup",
       "allergen": false,
@@ -3510,7 +3513,7 @@
       "aliases": [
         "carbomer"
       ],
-      "category": "stabilizer_thickener",
+      "category": "stabilizer",
       "is_additive": true,
       "additive_type": "stabilizer",
       "allergen": false,
@@ -3551,7 +3554,7 @@
         "sodium carboxymethylcellulose",
         "wood cellulose"
       ],
-      "category": "binder_filler",
+      "category": "binder",
       "is_additive": true,
       "additive_type": "cellulose_binder",
       "allergen": false,
@@ -3602,7 +3605,7 @@
         "Carob liquid",
         "Carob, Natural, Powder"
       ],
-      "category": "flavor_carrier",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_flavor_carrier",
       "allergen": false,
@@ -3639,7 +3642,7 @@
       "aliases": [
         "Carob and caramel"
       ],
-      "category": "color_blend_descriptor",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "color_blend",
       "allergen": false,
@@ -3675,7 +3678,7 @@
         "carotene, natural",
         "Mixed Carotene"
       ],
-      "category": "carotenoid_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -3697,7 +3700,7 @@
         "carrot extract",
         "carrot extract color"
       ],
-      "category": "colorant",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -3759,7 +3762,7 @@
         "Carrot Oil",
         "carrot oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "botanical_oil_carrier",
       "allergen": false,
@@ -3785,7 +3788,7 @@
         "casein peptones",
         "Hydrolyzed Casein"
       ],
-      "category": "protein_derivative",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "protein_hydrolysate",
       "allergen": true,
@@ -3849,7 +3852,7 @@
         "catalase enzyme",
         "hydrogen peroxide catalyst"
       ],
-      "category": "enzyme",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "antioxidant_enzyme",
       "allergen": false,
@@ -3875,7 +3878,7 @@
         "sodium carboxymethylcellulose",
         "vegetable modified cellulose gum"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "texture_modifier",
       "allergen": false,
@@ -3925,7 +3928,7 @@
         "Chamomile flower 4:1 extract",
         "Matricaria chamomilla extract"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -3966,7 +3969,7 @@
         "natural and artificial cherry flavor",
         "natural cherry flavor"
       ],
-      "category": "flavoring_agent",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavor_enhancer",
       "allergen": false,
@@ -4005,7 +4008,7 @@
         "chia seed powder",
         "ground chia seed"
       ],
-      "category": "filler_binder",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "seed_filler",
       "allergen": false,
@@ -4044,7 +4047,7 @@
         "expeller-pressed chia seed oil",
         "salvia hispanica seed oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -4086,7 +4089,7 @@
         "Fiber, Soluble",
         "soluble fiber"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -4125,7 +4128,7 @@
         "cayenne pepper",
         "Chili Pepper"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -4161,7 +4164,7 @@
         "cinnamon, natural",
         "natural cinnamon flavoring"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "spice_flavoring",
       "allergen": false,
@@ -4202,7 +4205,7 @@
         "non-gmo citric acid",
         "sour salt"
       ],
-      "category": "preservative_acidity_regulator",
+      "category": "preservative",
       "is_additive": true,
       "additive_type": "preservative_natural",
       "allergen": false,
@@ -4254,7 +4257,7 @@
         "natural citrus oils",
         "citrus oils, natural"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "essential_oil_flavor",
       "allergen": false,
@@ -4278,7 +4281,7 @@
         "lemon fiber",
         "orange fiber"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -4302,7 +4305,7 @@
       "aliases": [
         "citrus peel oil extract"
       ],
-      "category": "flavor",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavoring",
       "allergen": false,
@@ -4323,7 +4326,7 @@
       "aliases": [
         "clary sage oil"
       ],
-      "category": "botanical_oil",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "aromatic_botanical_oil",
       "allergen": false,
@@ -4361,7 +4364,7 @@
         "clove powder",
         "ground clove"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "spice_flavoring",
       "allergen": false,
@@ -4424,7 +4427,7 @@
         "vegetarian coating",
         "vegetable glycerin coating"
       ],
-      "category": "coating_protective",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "coating",
       "allergen": false,
@@ -4448,7 +4451,7 @@
         "cochineal c175470",
         "cochineal"
       ],
-      "category": "color_natural",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "natural_color",
       "allergen": false,
@@ -4486,7 +4489,7 @@
         "theobroma cacao butter",
         "theobroma oil"
       ],
-      "category": "carrier_filler_natural",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "carrier",
       "allergen": false,
@@ -4532,7 +4535,7 @@
         "dutch process cocoa",
         "organic cocoa powder"
       ],
-      "category": "flavor",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavor_natural",
       "allergen": false,
@@ -4568,7 +4571,7 @@
       "aliases": [
         "cocoabuterol"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -4588,7 +4591,7 @@
         "coconut",
         "Coconut"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_descriptor",
       "allergen": true,
@@ -4639,7 +4642,7 @@
         "coconut cream",
         "100% organic coconut"
       ],
-      "category": "carrier_filler_natural",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "carrier",
       "allergen": false,
@@ -4678,7 +4681,7 @@
         "10 minims norwegian cod liver oil",
         "norwegian cod liver oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "fish_oil_carrier",
       "allergen": true,
@@ -4717,7 +4720,7 @@
       "aliases": [
         "cogniboost"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -4743,7 +4746,7 @@
         "for colors",
         "natural and artificial colors"
       ],
-      "category": "colorant_generic",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "colorant",
       "allergen": false,
@@ -4767,7 +4770,7 @@
         "colostrum",
         "cow colostrum"
       ],
-      "category": "animal_derived_protein",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "dairy_protein",
       "allergen": true,
@@ -4803,7 +4806,7 @@
       "aliases": [
         "conjugated bile acid"
       ],
-      "category": "lipid_descriptor",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -4830,7 +4833,7 @@
         "contains <1% of:",
         "Contains <1% of:"
       ],
-      "category": "labeling_indicator",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "labeling_indicator",
       "allergen": false,
@@ -4850,7 +4853,7 @@
         "Coral Mineral Complex",
         "Coral Minerals"
       ],
-      "category": "mineral_complex",
+      "category": "ph_regulator",
       "is_additive": false,
       "additive_type": "mineral_complex",
       "allergen": false,
@@ -4871,7 +4874,7 @@
         "Corn",
         "corn"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_descriptor",
       "allergen": false,
@@ -4897,7 +4900,7 @@
         "maize oil",
         "zea mays oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -4943,7 +4946,7 @@
         "zea mays starch",
         "pregelantinized corn starch"
       ],
-      "category": "filler_binder_disintegrant",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "starch_filler",
       "allergen": false,
@@ -4972,7 +4975,7 @@
         "CranRx Cranberry fruit concentrate",
         "Pacran Cranberry concentrate powder"
       ],
-      "category": "fruit_extract",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -5011,7 +5014,7 @@
         "cranberry seed fiber",
         "cranberry seed oil"
       ],
-      "category": "fiber_plant",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "fiber",
       "allergen": false,
@@ -5049,7 +5052,7 @@
       "aliases": [
         "crominex 3+"
       ],
-      "category": "branded_mineral_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -5117,7 +5120,7 @@
         "Cuprous Oxide",
         "cuprous oxide"
       ],
-      "category": "color_mineral",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "mineral_color",
       "allergen": false,
@@ -5155,7 +5158,7 @@
       "aliases": [
         "curcuma oil"
       ],
-      "category": "botanical_oil",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "botanical_oil",
       "allergen": false,
@@ -5178,7 +5181,7 @@
         "cyanthox 30",
         "cyanthox30"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -5200,7 +5203,7 @@
         "cycloastragenol extract",
         "ta-65 cycloastragenol"
       ],
-      "category": "phytochemical_novel",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -5241,7 +5244,7 @@
         "hydroxypropyl beta cyclodextrin",
         "hydroxypropyl-beta-cyclodextrin"
       ],
-      "category": "solubilizer",
+      "category": "surfactant",
       "is_additive": true,
       "additive_type": "inclusion_complex",
       "allergen": false,
@@ -5271,7 +5274,7 @@
         "cyplexinol pro nature's bmp complex",
         "cyplexinol pro natures bmp complex"
       ],
-      "category": "branded_protein_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -5294,7 +5297,7 @@
         "d-limonene oil",
         "D Limonene Oil"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "solvent_flavor_carrier",
       "allergen": false,
@@ -5366,7 +5369,7 @@
         "go ghruta",
         "go-ghruta"
       ],
-      "category": "vehicle",
+      "category": "solvent",
       "is_additive": false,
       "additive_type": "dairy_carrier",
       "allergen": true,
@@ -5404,7 +5407,7 @@
       "aliases": [
         "daltonmax 700"
       ],
-      "category": "proprietary_blend",
+      "category": "active_pending_relocation",
       "is_additive": true,
       "additive_type": "branded_complex",
       "allergen": false,
@@ -5475,7 +5478,7 @@
       "aliases": [
         "dermaval"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -5499,7 +5502,7 @@
         "potato dextrin",
         "wheat dextrin"
       ],
-      "category": "binder_filler",
+      "category": "binder",
       "is_additive": true,
       "additive_type": "starch_binder",
       "allergen": false,
@@ -5527,7 +5530,7 @@
       "aliases": [
         "dhqvital dihydroquercetin"
       ],
-      "category": "branded_phytochemical",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -5548,7 +5551,7 @@
         "di-pac anhydrous",
         "dicalcium phosphate di-pac"
       ],
-      "category": "filler_binder",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "mineral_filler",
       "allergen": false,
@@ -5573,7 +5576,7 @@
         "glucoamylase",
         "starch-digesting enzyme"
       ],
-      "category": "enzyme",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "starch_digesting_enzyme",
       "allergen": false,
@@ -5597,7 +5600,7 @@
       "aliases": [
         "diatomaceous earth"
       ],
-      "category": "mineral_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -5642,7 +5645,7 @@
         "E341",
         "dicalcium phopshate"
       ],
-      "category": "filler_binder",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "mineral_filler",
       "allergen": false,
@@ -5708,7 +5711,7 @@
       "aliases": [
         "dihydroquercetin-3-rhamnoside"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -5728,7 +5731,7 @@
         "dimethylglycine",
         "dmg"
       ],
-      "category": "amino_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "amino_acid_derivative",
       "allergen": false,
@@ -5770,7 +5773,7 @@
       "aliases": [
         "Diosmetin"
       ],
-      "category": "phytochemical_constituent",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "flavonoid",
       "allergen": false,
@@ -5807,7 +5810,7 @@
       "aliases": [
         "diosmin"
       ],
-      "category": "specialty_compound",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "flavonoid_glycoside",
       "allergen": false,
@@ -5845,7 +5848,7 @@
         "directline nutrient delivery technology",
         "directline technology"
       ],
-      "category": "delivery_system",
+      "category": "coating",
       "is_additive": false,
       "additive_type": "branded_delivery_system",
       "allergen": false,
@@ -5867,7 +5870,7 @@
         "Disodium Edetate",
         "disodium edetate"
       ],
-      "category": "chelating_agent",
+      "category": "preservative",
       "is_additive": true,
       "additive_type": "chelating_agent",
       "allergen": false,
@@ -5892,7 +5895,7 @@
       "aliases": [
         "disodium phosphate"
       ],
-      "category": "buffering_salt",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
@@ -5959,7 +5962,7 @@
         "dnf10 yeast hydrolysate",
         "dnf-10"
       ],
-      "category": "fermentation_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -5979,7 +5982,7 @@
         "canola oil powder",
         "dried canola oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -6045,7 +6048,7 @@
         "Echinacea purpurea extract",
         "Echinacea root 4:1 extract"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -6067,7 +6070,7 @@
         "ecoganic veggies & greens",
         "ecoganic herbs & superfoods"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -6086,7 +6089,7 @@
       "aliases": [
         "ecoganic super fruits"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -6105,7 +6108,7 @@
       "aliases": [
         "edible Hemoglobin"
       ],
-      "category": "animal_derived",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -6138,7 +6141,7 @@
       "aliases": [
         "egg albumin"
       ],
-      "category": "protein_excipient",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "protein",
       "allergen": true,
@@ -6165,7 +6168,7 @@
         "organic ElderCraft European Elderberry extract",
         "sambucus nigra extract"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -6212,7 +6215,7 @@
         "elevatp blend",
         "elevatp proprietary blend"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -6231,7 +6234,7 @@
       "aliases": [
         "emothion"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -6250,7 +6253,7 @@
       "aliases": [
         "emu oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "animal_oil_carrier",
       "allergen": false,
@@ -6295,7 +6298,7 @@
         "pH-dependent coating",
         "Methacrylic Acid Copolymer Type C"
       ],
-      "category": "coating_specialized",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "enteric_coating",
       "allergen": false,
@@ -6320,7 +6323,7 @@
         "enzopharm(r) plus",
         "enzopharm plus"
       ],
-      "category": "branded_enzyme_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -6340,7 +6343,7 @@
         "ep107",
         "ep-107"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -6363,7 +6366,7 @@
         "ergogen-xt",
         "ergogen xt"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -6382,7 +6385,7 @@
       "aliases": [
         "Erythrodiol"
       ],
-      "category": "phytochemical_constituent",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "triterpenoid",
       "allergen": false,
@@ -6418,7 +6421,7 @@
       "aliases": [
         "essential oil"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "form_descriptor",
       "allergen": false,
@@ -6439,7 +6442,7 @@
         "estrog-100",
         "estrog100"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -6459,7 +6462,7 @@
       "aliases": [
         "etas"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -6479,7 +6482,7 @@
         "Ethyl Acrylate Copolymer",
         "ethyl acrylate copolymer"
       ],
-      "category": "polymer_coating",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "polymer_coating",
       "allergen": false,
@@ -6548,7 +6551,7 @@
       "aliases": [
         "ethyl oleate"
       ],
-      "category": "excipient_lipid",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "solvent_carrier",
       "allergen": false,
@@ -6591,7 +6594,7 @@
         "ethyl cellulose",
         "ethylcellulose"
       ],
-      "category": "coating_agent",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "film_former",
       "allergen": false,
@@ -6631,7 +6634,7 @@
       "aliases": [
         "eurypeptides"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -6654,7 +6657,7 @@
         "Garden of Life(R) organic extra virgin Coconut Oil",
         "garden of life organic extra virgin coconut oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -6690,7 +6693,7 @@
         "extra virgin olive fruit oil",
         "Olive oil-extra virgin"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -6744,7 +6747,7 @@
         "punicic acid",
         "tetracosenoic acid"
       ],
-      "category": "lipid_component",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "lipid_component",
       "allergen": false,
@@ -6784,7 +6787,7 @@
         "fd&c blue no. 1",
         "fd&c blue#1"
       ],
-      "category": "colorant",
+      "category": "colorant_artificial",
       "is_additive": true,
       "additive_type": "synthetic_colorant",
       "allergen": false,
@@ -6824,7 +6827,7 @@
       "aliases": [
         "fd&c blue"
       ],
-      "category": "color_descriptor",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "color_descriptor",
       "allergen": false,
@@ -6844,7 +6847,7 @@
       "aliases": [
         "FD&C Red"
       ],
-      "category": "color_descriptor",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "synthetic_color_descriptor",
       "allergen": false,
@@ -6868,7 +6871,7 @@
         "quinoline yellow",
         "yellow #10"
       ],
-      "category": "colorant",
+      "category": "colorant_artificial",
       "is_additive": true,
       "additive_type": "synthetic_colorant",
       "allergen": false,
@@ -6916,7 +6919,7 @@
         "nutrient medium",
         "yeast culture medium"
       ],
-      "category": "processing_aid_culture",
+      "category": "processing_aid",
       "is_additive": true,
       "additive_type": "culture_medium",
       "allergen": false,
@@ -6939,7 +6942,7 @@
         "fermentation-activated organically grown whole soya",
         "enzyme pre-digested whole soya"
       ],
-      "category": "descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": true,
@@ -6959,7 +6962,7 @@
       "aliases": [
         "flavanols"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -6982,7 +6985,7 @@
         "linum usitatissimum oil",
         "organic flaxseed oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -7018,7 +7021,7 @@
       "aliases": [
         "flour"
       ],
-      "category": "grain_powder_descriptor",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -7042,7 +7045,7 @@
         "Forest Fruits flavor",
         "Forest Fruits flavour"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavor",
       "allergen": false,
@@ -7063,7 +7066,7 @@
       "aliases": [
         "fortify optima"
       ],
-      "category": "branded_enzyme_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -7084,7 +7087,7 @@
         "frac",
         "frac r"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -7103,7 +7106,7 @@
       "aliases": [
         "fractionated coconut oil/beeswax"
       ],
-      "category": "coating_glazing_natural",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "coating_glaze",
       "allergen": false,
@@ -7153,7 +7156,7 @@
         "fructooligosaccharides",
         "short-chain fos"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "prebiotic_fiber",
       "allergen": false,
@@ -7197,7 +7200,7 @@
         "vegetable and fruit juice",
         "vegetable juice"
       ],
-      "category": "natural_sweetener_colorant",
+      "category": "sweetener_natural",
       "is_additive": false,
       "additive_type": "natural_ingredient",
       "allergen": false,
@@ -7247,7 +7250,7 @@
         "spirulina",
         "turmeric"
       ],
-      "category": "colorant_flavoring_natural",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -7289,7 +7292,7 @@
         "strawberry juice concentrate",
         "watermelon juice concentrate"
       ],
-      "category": "colorant_flavoring_natural",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -7764,7 +7767,7 @@
         "fenugreek galactomannan",
         "galactomannan"
       ],
-      "category": "soluble_fiber_matrix",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "soluble_fiber",
       "allergen": false,
@@ -7792,7 +7795,7 @@
         "gamma butyrobetaine hydrochloride",
         "gamma-butyrobetaine hcl"
       ],
-      "category": "amino_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -7816,7 +7819,7 @@
         "gamma-glutamylcysteines",
         "gamma glutamylcysteines"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -7836,7 +7839,7 @@
       "aliases": [
         "gbbgo"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -7895,7 +7898,7 @@
         "Halal Bovine Gelatin",
         "halal bovine gelatin"
       ],
-      "category": "capsule_material",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "gelatin_capsule",
       "allergen": false,
@@ -7921,7 +7924,7 @@
         "gelling agent",
         "gelling agents"
       ],
-      "category": "thickener_gelling",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "texture_agent",
       "allergen": false,
@@ -7947,7 +7950,7 @@
         "organic fermented Ginger",
         "Zingiber officinale extract"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -8022,7 +8025,7 @@
       "aliases": [
         "gkg"
       ],
-      "category": "amino_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -8044,7 +8047,7 @@
         "glucodox amp activated protein kinase hormone booster",
         "glucodox(tm) amp activated protein kinase hormone booster"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -8109,7 +8112,7 @@
       "aliases": [
         "glucose polymers"
       ],
-      "category": "carbohydrate_matrix",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "bulking_agent",
       "allergen": false,
@@ -8240,7 +8243,7 @@
         "monostearin",
         "Glycerin Monostearate"
       ],
-      "category": "emulsifier_stabilizer",
+      "category": "emulsifier",
       "is_additive": true,
       "additive_type": "emulsifier",
       "allergen": false,
@@ -8284,7 +8287,7 @@
         "compritol 888 ATO",
         "glycerol behenate"
       ],
-      "category": "lubricant_binder",
+      "category": "lubricant",
       "is_additive": true,
       "additive_type": "lubricant_binder",
       "allergen": false,
@@ -8375,7 +8378,7 @@
       "aliases": [
         "glycosaponins"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -8486,7 +8489,7 @@
         "goat's milk protein concentrate",
         "goat milk protein"
       ],
-      "category": "protein_base",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dairy_protein",
       "allergen": true,
@@ -8512,7 +8515,7 @@
         "Coconut, Granulated",
         "granulated coconut"
       ],
-      "category": "flavor_texture",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_ingredient",
       "allergen": false,
@@ -8561,7 +8564,7 @@
       "aliases": [
         "grapefruit fiber"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "natural_fiber",
       "allergen": false,
@@ -8628,7 +8631,7 @@
         "guar gum",
         "guaran"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "texture_modifier",
       "allergen": false,
@@ -8668,7 +8671,7 @@
       "aliases": [
         "gum ghatti"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "gum_stabilizer",
       "allergen": false,
@@ -8692,7 +8695,7 @@
         "Heart",
         "heart tissue"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -8726,7 +8729,7 @@
         "Broad Spectrum Hemp Oil",
         "broad spectrum hemp oil"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -8762,7 +8765,7 @@
       "aliases": [
         "99% pure hemp isolate"
       ],
-      "category": "hemp_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -8781,7 +8784,7 @@
       "aliases": [
         "herbaflor"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -8801,7 +8804,7 @@
         "herbal extract",
         "herbal extracts"
       ],
-      "category": "botanical_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "functional_descriptor",
       "allergen": false,
@@ -8821,7 +8824,7 @@
       "aliases": [
         "Herbatonin"
       ],
-      "category": "branded_ingredient",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_botanical",
       "allergen": false,
@@ -8841,7 +8844,7 @@
         "high oleic safflower and/or sunflower oil",
         "high oleic safflower/sunflower oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -8862,7 +8865,7 @@
       "aliases": [
         "high quality protein"
       ],
-      "category": "descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -8982,7 +8985,7 @@
         "Hydroxypropylmethylcellulose",
         "purified Water and Glycerin (vegetable source) gelcap"
       ],
-      "category": "capsule_material",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "capsule_shell",
       "allergen": false,
@@ -9006,7 +9009,7 @@
         "Coconut Oil, Hydrogenated",
         "hydrogenated coconut oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -9046,7 +9049,7 @@
         "hydrogenated vegetable oils",
         "vegetable oil, hydrogenated"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -9080,7 +9083,7 @@
         "Type II Collagen Hydrolysate",
         "hydrolyzed type II collagen"
       ],
-      "category": "protein",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -9106,7 +9109,7 @@
         "hydrolyzed marine collagen",
         "marine protein hydrolysate"
       ],
-      "category": "protein_source",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "marine_protein",
       "allergen": true,
@@ -9129,7 +9132,7 @@
       "aliases": [
         "Hydroxymethyl Starch"
       ],
-      "category": "starch_derivative",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "binder_stabilizer",
       "allergen": false,
@@ -9154,7 +9157,7 @@
         "HPC",
         "hyprolose"
       ],
-      "category": "binder_coating_thickener",
+      "category": "binder",
       "is_additive": true,
       "additive_type": "cellulose_binder",
       "allergen": false,
@@ -9249,7 +9252,7 @@
         "plantgel",
         "Hypromellose, Natural"
       ],
-      "category": "capsule_shell",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "capsule_coating",
       "allergen": false,
@@ -9317,7 +9320,7 @@
       "aliases": [
         "immune support response"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -9336,7 +9339,7 @@
       "aliases": [
         "immunolin"
       ],
-      "category": "branded_protein_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -9357,7 +9360,7 @@
         "edible ink",
         "edible Ink"
       ],
-      "category": "printing_ink_descriptor",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "printing_ink_descriptor",
       "allergen": false,
@@ -9379,7 +9382,7 @@
       "aliases": [
         "innoslim"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -9400,7 +9403,7 @@
         "intrinsic factor",
         "intrinsic factor concentrate"
       ],
-      "category": "glandular",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
@@ -9438,7 +9441,7 @@
         "inulin and fos",
         "fos/inulin"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -9475,7 +9478,7 @@
       "aliases": [
         "invetek chewable base"
       ],
-      "category": "base_matrix_descriptor",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -9496,7 +9499,7 @@
         "ionic sea mineral",
         "ionic sea minerals"
       ],
-      "category": "marine_mineral_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "functional_descriptor",
       "allergen": false,
@@ -9516,7 +9519,7 @@
       "aliases": [
         "ipriflavone"
       ],
-      "category": "specialty_compound",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "synthetic_isoflavone",
       "allergen": false,
@@ -9563,7 +9566,7 @@
         "Irish Sea Moss Extract",
         "sea moss"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -9599,7 +9602,7 @@
         "isolase",
         "Isolase(R)"
       ],
-      "category": "proprietary_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_enzyme_complex",
       "allergen": false,
@@ -9624,7 +9627,7 @@
         "isomalto-oligosaccharides",
         "isomaltooligosaccharides"
       ],
-      "category": "prebiotic_sweetener",
+      "category": "sweetener_natural",
       "is_additive": false,
       "additive_type": "prebiotic_fiber",
       "allergen": false,
@@ -9709,7 +9712,7 @@
       "aliases": [
         "isovitexin"
       ],
-      "category": "phytochemical_novel",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -9744,7 +9747,7 @@
       "aliases": [
         "jasmine rice bran"
       ],
-      "category": "grain_source_material",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -9813,7 +9816,7 @@
         "kefir starter culture r0215",
         "kefir starter culture"
       ],
-      "category": "culture_starter",
+      "category": "processing_aid",
       "is_additive": false,
       "additive_type": "microbial_culture",
       "allergen": false,
@@ -9836,7 +9839,7 @@
         "hydrolyzed keratin",
         "Keratin"
       ],
-      "category": "protein",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -9860,7 +9863,7 @@
         "Kidney",
         "kidney tissue"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -9888,7 +9891,7 @@
         "povidone k30",
         "pvp"
       ],
-      "category": "pharmaceutical_excipient",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "synthetic_binder",
       "allergen": false,
@@ -9913,7 +9916,7 @@
       "aliases": [
         "l-arabinose"
       ],
-      "category": "carbohydrate_derivative",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -9937,7 +9940,7 @@
       "aliases": [
         "l-asparagine"
       ],
-      "category": "amino_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -9988,7 +9991,7 @@
         "lacitol monohydrate",
         "lactitol"
       ],
-      "category": "sugar_alcohol",
+      "category": "sweetener_sugar_alcohol",
       "is_additive": false,
       "additive_type": "sugar_alcohol_sweetener",
       "allergen": false,
@@ -10041,7 +10044,7 @@
         "lactic acid",
         "milk acid"
       ],
-      "category": "ph_adjuster",
+      "category": "ph_regulator",
       "is_additive": false,
       "additive_type": "acidity_regulator",
       "allergen": false,
@@ -10196,7 +10199,7 @@
         "alpha-s1 casein hydrolysate",
         "hydrolyzed milk protein (lactium)"
       ],
-      "category": "bioactive_peptide_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_complex",
       "allergen": true,
@@ -10221,7 +10224,7 @@
         "lactose",
         "lactose monohydrate"
       ],
-      "category": "dairy_excipient",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "filler",
       "allergen": true,
@@ -10267,7 +10270,7 @@
         "isoleucyl-prolyl-proline",
         "valyl-prolyl-proline"
       ],
-      "category": "bioactive_peptide_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -10293,7 +10296,7 @@
         "wool wax",
         "wool grease"
       ],
-      "category": "animal_derived",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "animal_wax_source",
       "allergen": false,
@@ -10336,7 +10339,7 @@
         "Lecithin oil",
         "lecithin oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "lecithin_lipid_carrier",
       "allergen": false,
@@ -10363,7 +10366,7 @@
         "Lemon Balm leaf 4:1 extract",
         "Melissa officinalis extract"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -10398,7 +10401,7 @@
       "aliases": [
         "lemon flavor oil"
       ],
-      "category": "flavor",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavoring",
       "allergen": false,
@@ -10467,7 +10470,7 @@
         "liver fractions",
         "Liver Tissue"
       ],
-      "category": "glandular",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
@@ -10504,7 +10507,7 @@
         "lithothamnion calcareum",
         "natural lithothamnion calcarea"
       ],
-      "category": "marine_mineral_algae",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -10538,7 +10541,7 @@
       "aliases": [
         "Long Chain Triglycerides"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "lipid_matrix",
       "allergen": false,
@@ -10561,7 +10564,7 @@
         "LuraLean",
         "LuraLean(R)"
       ],
-      "category": "branded_blend",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_fiber",
       "allergen": false,
@@ -10580,7 +10583,7 @@
       "aliases": [
         "lymph"
       ],
-      "category": "glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
@@ -10603,7 +10606,7 @@
         "L-Lysine Mono HCl",
         "l-lysine mono hcl"
       ],
-      "category": "amino_acid_source",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -10628,7 +10631,7 @@
       "aliases": [
         "macadamia nut oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "nut_oil_carrier",
       "allergen": true,
@@ -10666,7 +10669,7 @@
       "aliases": [
         "magnesium borate"
       ],
-      "category": "processing aid",
+      "category": "processing_aid",
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
@@ -10702,7 +10705,7 @@
       "aliases": [
         "Magnesium Caprylate"
       ],
-      "category": "fatty_acid_salt",
+      "category": "lubricant",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -10742,7 +10745,7 @@
         "tribasic magnesium phosphate",
         "trimagnesium phosphate"
       ],
-      "category": "buffering_agent",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
@@ -10799,7 +10802,7 @@
         "vegetable source magnesium stearate",
         "vegetarian magnesium stearate"
       ],
-      "category": "tablet_lubricant",
+      "category": "lubricant",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -10856,7 +10859,7 @@
         "syloid",
         "vegetable magnesium silicate"
       ],
-      "category": "antacid_excipient",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -10901,7 +10904,7 @@
       "aliases": [
         "malate"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -10931,7 +10934,7 @@
         "DL-Malic Acid",
         "dl-malic acid"
       ],
-      "category": "organic_acid_natural",
+      "category": "acidulant",
       "is_additive": false,
       "additive_type": "acidulant",
       "allergen": false,
@@ -11091,7 +11094,7 @@
         "mandarin orange flavor",
         "mandarin peel flavor"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_flavor",
       "allergen": false,
@@ -11115,7 +11118,7 @@
         "Mango puree",
         "organic Mangoes"
       ],
-      "category": "fruit_concentrate",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_ingredient",
       "allergen": false,
@@ -11176,7 +11179,7 @@
       "aliases": [
         "medium chain fatty acids"
       ],
-      "category": "lipid_component",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "lipid_carrier",
       "allergen": false,
@@ -11229,7 +11232,7 @@
         "middle chained Triglycerides",
         "<1% MCT Oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "lipid_carrier",
       "allergen": false,
@@ -11266,7 +11269,7 @@
       "aliases": [
         "Meratrim"
       ],
-      "category": "branded_blend",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_botanical",
       "allergen": false,
@@ -11305,7 +11308,7 @@
       "aliases": [
         "Mica"
       ],
-      "category": "coating_colorant",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "mineral_colorant",
       "allergen": false,
@@ -11336,7 +11339,7 @@
         "instantized micellar casein",
         "non-gmo micellar casein"
       ],
-      "category": "protein_source",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "dairy_protein",
       "allergen": true,
@@ -11374,7 +11377,7 @@
         "micosolle excipient",
         "microcrystalline cellulose blend"
       ],
-      "category": "excipient",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "branded_excipient",
       "allergen": false,
@@ -11413,7 +11416,7 @@
         "silicified microcrystaline cellulose",
         "silicified microcrystalline cellulose"
       ],
-      "category": "bulking_agent",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "fiber_bulking",
       "allergen": false,
@@ -11450,7 +11453,7 @@
       "aliases": [
         "micronized purified flavonoid fraction"
       ],
-      "category": "phytochemical_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -11508,7 +11511,7 @@
         "Mineral",
         "mineral"
       ],
-      "category": "mineral_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -11529,7 +11532,7 @@
       "aliases": [
         "minor cannabinoids"
       ],
-      "category": "phytocannabinoid_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -11548,7 +11551,7 @@
       "aliases": [
         "minor glycolipids"
       ],
-      "category": "composition_descriptor",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "composition_descriptor",
       "allergen": false,
@@ -11568,7 +11571,7 @@
       "aliases": [
         "mirtogenol"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -11591,7 +11594,7 @@
         "active flavonols, flavonones, flavones & naringen",
         "citrus fruits"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -11628,7 +11631,7 @@
         "Sweet Potato Juice",
         "Turmeric juice"
       ],
-      "category": "fruit_vegetable_juice",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -11687,7 +11690,7 @@
       "aliases": [
         "mitoheal"
       ],
-      "category": "proprietary_blend",
+      "category": "active_pending_relocation",
       "is_additive": true,
       "additive_type": "branded_complex",
       "allergen": false,
@@ -11707,7 +11710,7 @@
         "mitopure urolithin a",
         "mitopure"
       ],
-      "category": "branded_novel_compound",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -11748,7 +11751,7 @@
       "aliases": [
         "mobilee"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -11782,7 +11785,7 @@
         "non-GMO modified Tapioca Starch",
         "Non-GMO modified Tapioca Starch"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "texture_modifier",
       "allergen": false,
@@ -11812,7 +11815,7 @@
         "Tarch Acetate",
         "corn starch modified"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "texture_modifier",
       "allergen": false,
@@ -11961,7 +11964,7 @@
         "Mucosave",
         "Mucosave FG"
       ],
-      "category": "branded_blend",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_mucosal_protectant",
       "allergen": false,
@@ -11980,7 +11983,7 @@
       "aliases": [
         "muscle"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -12007,7 +12010,7 @@
         "Royal Sun Mushroom",
         "White Button Mushroom"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -12032,7 +12035,7 @@
         "myceliated rice",
         "mycelium on rice"
       ],
-      "category": "carrier_base",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "carrier",
       "allergen": false,
@@ -12054,7 +12057,7 @@
       "aliases": [
         "mythocondro"
       ],
-      "category": "branded_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -12128,7 +12131,7 @@
         "n-methyl-d-aspartic acid",
         "nmda"
       ],
-      "category": "amino_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -12234,7 +12237,7 @@
         "strawberry flavor natural",
         "wildberry flavor"
       ],
-      "category": "natural_flavor",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "natural_flavoring",
       "allergen": false,
@@ -12314,7 +12317,7 @@
         "natural chocolate flavors",
         "organic chocolate mint flavor"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_flavor",
       "allergen": false,
@@ -12447,7 +12450,7 @@
         "natural yellow coloring",
         "natural orange coloring"
       ],
-      "category": "colorant",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -12805,7 +12808,7 @@
         "plant-derived glaze",
         "vegetable glaze"
       ],
-      "category": "coating_protective",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "natural_glaze",
       "allergen": false,
@@ -12867,7 +12870,7 @@
         "carob bean gum",
         "Carob bean Gum"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "texture_modifier",
       "allergen": false,
@@ -12958,7 +12961,7 @@
         "peppermint flavor natural",
         "natural mint oil"
       ],
-      "category": "natural_flavor",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "natural_flavoring",
       "allergen": false,
@@ -12983,7 +12986,7 @@
         "natural berry flavors",
         "natural mixed berry flavors"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_flavor",
       "allergen": false,
@@ -13155,7 +13158,7 @@
         "rosemary extract antioxidant",
         "non-gmo citrus extract"
       ],
-      "category": "preservative_natural",
+      "category": "preservative",
       "is_additive": true,
       "additive_type": "preservative_natural",
       "allergen": false,
@@ -13488,7 +13491,7 @@
         "vegetable waxes",
         "wax"
       ],
-      "category": "coating_glazing_natural",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "coating_agent",
       "allergen": false,
@@ -13516,7 +13519,7 @@
         "nem eggshell membrane",
         "NEM brand Eggshell Membrane"
       ],
-      "category": "branded_protein_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": true,
@@ -13578,7 +13581,7 @@
       "aliases": [
         "neumentix"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -13601,7 +13604,7 @@
         "non-ionic Surfactant",
         "non-ionic surfactant"
       ],
-      "category": "solubilizer_surfactant",
+      "category": "surfactant",
       "is_additive": true,
       "additive_type": "surfactant_descriptor",
       "allergen": false,
@@ -13630,7 +13633,7 @@
         "cycloc",
         "cyloc"
       ],
-      "category": "carrier_descriptor",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -13653,7 +13656,7 @@
         "whole oat flour",
         "organic oat flour"
       ],
-      "category": "food_ingredient",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "food_base",
       "allergen": true,
@@ -13712,7 +13715,7 @@
       "aliases": [
         "Oat Oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -13736,7 +13739,7 @@
         "oil",
         "Palm Olein"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "oil_carrier",
       "allergen": false,
@@ -13772,7 +13775,7 @@
       "aliases": [
         "avocado fruit oil"
       ],
-      "category": "vehicle",
+      "category": "solvent",
       "is_additive": false,
       "additive_type": "oil_carrier",
       "allergen": false,
@@ -13809,7 +13812,7 @@
         "olea-pro",
         "olea pro"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -13828,7 +13831,7 @@
       "aliases": [
         "oleamide"
       ],
-      "category": "fatty_acid_derivative",
+      "category": "lubricant",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -13869,7 +13872,7 @@
         "oleic acid",
         "omega-9 oleic acid"
       ],
-      "category": "fatty_acid",
+      "category": "lubricant",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -14018,7 +14021,7 @@
       "aliases": [
         "Omega-3 Triglycerides"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "omega_3_lipid_matrix",
       "allergen": false,
@@ -14085,7 +14088,7 @@
         "natural orange flavor",
         "orange flavor"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_flavor",
       "allergen": false,
@@ -14123,7 +14126,7 @@
       "aliases": [
         "orchic substance"
       ],
-      "category": "glandular_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
@@ -14170,7 +14173,7 @@
         "organic Chia",
         "organic chia"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -14216,7 +14219,7 @@
         "Ovary",
         "ovary tissue"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -14237,7 +14240,7 @@
         "Oxalic Acid",
         "oxalic acid"
       ],
-      "category": "processing_acid",
+      "category": "acidulant",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -14410,7 +14413,7 @@
         "oxaloacetate",
         "oxaloacetic acid"
       ],
-      "category": "metabolic_intermediate",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "krebs_cycle_intermediate",
       "allergen": false,
@@ -14436,7 +14439,7 @@
         "oxi-fend",
         "oxifend"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -14455,7 +14458,7 @@
       "aliases": [
         "oyster extract"
       ],
-      "category": "marine_animal_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": true,
@@ -14489,7 +14492,7 @@
       "aliases": [
         "paeoniflorin"
       ],
-      "category": "phytochemical_novel",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -14513,7 +14516,7 @@
       "aliases": [
         "pak"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -14534,7 +14537,7 @@
         "palatinose",
         "palatinose isomaltulose"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "is_additive": true,
       "additive_type": "natural_disaccharide",
       "allergen": false,
@@ -14579,7 +14582,7 @@
         "palm",
         "Palm"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_descriptor",
       "allergen": false,
@@ -14604,7 +14607,7 @@
         "palm kernel stearate",
         "vegetable stearate palm"
       ],
-      "category": "unclear_additive",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "lubricant",
       "allergen": false,
@@ -14625,7 +14628,7 @@
         "palm stearin",
         "palm fruit stearin"
       ],
-      "category": "fat_fraction",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "lipid_fraction",
       "allergen": false,
@@ -14647,7 +14650,7 @@
         "Pancreas",
         "pancreas substance"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -14712,7 +14715,7 @@
         "Parotid",
         "parotid gland"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -14747,7 +14750,7 @@
         "parteck",
         "parteck m200"
       ],
-      "category": "filler_sweetener",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "mannitol_filler",
       "allergen": false,
@@ -14786,7 +14789,7 @@
         "guar gum, hydrolyzed",
         "guar gum, partially hydrolyzed"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -14830,7 +14833,7 @@
         "passionflower extract",
         "Passionflower Flower, Leaf Extract"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -14868,7 +14871,7 @@
         "pea fiber",
         "organic pea hull fiber"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "natural_fiber",
       "allergen": false,
@@ -14907,7 +14910,7 @@
         "pearlitol",
         "pharmaceutical mannitol"
       ],
-      "category": "bulking_agent",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "mannitol_filler",
       "allergen": false,
@@ -14944,7 +14947,7 @@
         "peat extract",
         "ancient peat extract"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -14975,7 +14978,7 @@
         "pectin, natural",
         "pectins"
       ],
-      "category": "gelling_agent_natural",
+      "category": "gelling_agent",
       "is_additive": true,
       "additive_type": "natural_fiber",
       "allergen": false,
@@ -15021,7 +15024,7 @@
         "pepsin, pure",
         "pure pepsin"
       ],
-      "category": "enzyme",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proteolytic_enzyme",
       "allergen": false,
@@ -15059,7 +15062,7 @@
       "aliases": [
         "peptone"
       ],
-      "category": "protein_hydrolysate",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "protein_derived",
       "allergen": false,
@@ -15084,7 +15087,7 @@
         "omega-12 fatty acid",
         "petroselinic acid"
       ],
-      "category": "fatty_acid_component",
+      "category": "lubricant",
       "is_additive": false,
       "additive_type": "fatty_acid",
       "allergen": false,
@@ -15120,7 +15123,7 @@
       "aliases": [
         "phloridzin"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -15147,7 +15150,7 @@
         "Phospholipids",
         "Polar Lipids"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "lipid_descriptor",
       "allergen": false,
@@ -15170,7 +15173,7 @@
         "orthophosphoric acid",
         "Phosphoric Acid"
       ],
-      "category": "acidity_regulator",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "pH_adjuster",
       "allergen": false,
@@ -15208,7 +15211,7 @@
       "aliases": [
         "phytocannabinoids"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "cannabinoid_descriptor",
       "allergen": false,
@@ -15230,7 +15233,7 @@
         "nutrilite phytonutrient concentrate",
         "whole food phytoalgae"
       ],
-      "category": "phytonutrient_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "functional_descriptor",
       "allergen": false,
@@ -15252,7 +15255,7 @@
         "phytopin pine sterols",
         "phytopin pine phytosterols"
       ],
-      "category": "branded_phytosterol_wrapper",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -15272,7 +15275,7 @@
         "phytosure",
         "phytosure certified"
       ],
-      "category": "certification_wrapper",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
@@ -15293,7 +15296,7 @@
         "pineal gland",
         "pineal tissue"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -15328,7 +15331,7 @@
         "Pituitary",
         "pituitary gland"
       ],
-      "category": "animal_glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -15356,7 +15359,7 @@
         "non-gmo vegetable cellulose dual-layer capsules",
         "non-gmo vegetable cellulose capsule"
       ],
-      "category": "filler_fiber",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "bulking_agent",
       "allergen": false,
@@ -15379,7 +15382,7 @@
       "aliases": [
         "plasacryl"
       ],
-      "category": "coating_system_descriptor",
+      "category": "coating",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -15441,7 +15444,7 @@
         "Polyacrylic Resin",
         "polyacrylic resin"
       ],
-      "category": "polymer_coating",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "polymer_coating",
       "allergen": false,
@@ -15472,7 +15475,7 @@
         "polyethylene oxide",
         "Polyethylene Glycol 200"
       ],
-      "category": "solvent_plasticizer_lubricant",
+      "category": "solvent",
       "is_additive": true,
       "additive_type": "plasticizer_solvent",
       "allergen": false,
@@ -15522,7 +15525,7 @@
         "Polyglycitol Syrup",
         "Polygycitol Syrup"
       ],
-      "category": "sweetener_humectant",
+      "category": "sweetener_sugar_alcohol",
       "is_additive": true,
       "additive_type": "bulk_sweetener_humectant",
       "allergen": false,
@@ -15548,7 +15551,7 @@
         "HSH",
         "hydrogenated starch hydrolyzate"
       ],
-      "category": "sugar_alcohol",
+      "category": "sweetener_sugar_alcohol",
       "is_additive": true,
       "additive_type": "sugar_alcohol_excipient",
       "notes": "Hydrogenated starch hydrolysate (HSH) — a mixture of sugar alcohols (sorbitol, maltitol, longer-chain polyols) produced by partial hydrolysis and hydrogenation of starch. UNII: 27F77DSJ5V, CAS: 68425-17-2. Used as a tableting excipient, binder, and mild sweetener in dietary supplements. Generally recognized as safe; low glycemic impact. Not a harmful additive.",
@@ -15595,7 +15598,7 @@
         "Polymethylacrylate",
         "polymethylacrylate"
       ],
-      "category": "coating_polymer",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "coating_polymer",
       "allergen": false,
@@ -15616,7 +15619,7 @@
       "aliases": [
         "Polyoxyl Castor Oil"
       ],
-      "category": "solubilizer_surfactant",
+      "category": "surfactant",
       "is_additive": true,
       "additive_type": "solubilizer",
       "allergen": false,
@@ -15640,7 +15643,7 @@
         "Polyunsaturated Oils",
         "polyunsaturated oils"
       ],
-      "category": "oil_descriptor",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "oil_source_descriptor",
       "allergen": false,
@@ -15663,7 +15666,7 @@
         "PVOH",
         "vinyl alcohol polymer"
       ],
-      "category": "coating_film_former",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "film_former",
       "allergen": false,
@@ -15734,7 +15737,7 @@
         "Pomegranate Fruit Peel Extract",
         "pomegranate juice concentrate"
       ],
-      "category": "fruit_concentrate",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -15771,7 +15774,7 @@
       "aliases": [
         "potassium amino acid chelate"
       ],
-      "category": "mineral salt",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
@@ -15793,7 +15796,7 @@
       "aliases": [
         "potassium borate"
       ],
-      "category": "mineral_salt_excipient",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
@@ -15838,7 +15841,7 @@
         "potassium salt of citric acid",
         "tripotassium citrate"
       ],
-      "category": "mineral_salt_natural",
+      "category": "ph_regulator",
       "is_additive": false,
       "additive_type": "mineral_supplement",
       "allergen": false,
@@ -15890,7 +15893,7 @@
         "potato starch powder",
         "solanum tuberosum starch"
       ],
-      "category": "filler_binder",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "starch_filler",
       "allergen": false,
@@ -15958,7 +15961,7 @@
         "preforpro",
         "preforpro bacteriophage blend"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "prebiotic",
       "allergen": false,
@@ -15980,7 +15983,7 @@
         "Probiotic microorganisms",
         "probiotic microorganisms"
       ],
-      "category": "descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -16004,7 +16007,7 @@
         "propolis extract",
         "propolis resin"
       ],
-      "category": "functional_ingredient",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bee_product",
       "allergen": true,
@@ -16040,7 +16043,7 @@
       "aliases": [
         "Proprietary Food Emulsifier"
       ],
-      "category": "emulsifier_descriptor",
+      "category": "emulsifier",
       "is_additive": true,
       "additive_type": "emulsifier_descriptor",
       "allergen": false,
@@ -16099,7 +16102,7 @@
         "non-gmo pullulan",
         "Plantcap"
       ],
-      "category": "capsule_material",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "capsule_shell",
       "allergen": false,
@@ -16145,7 +16148,7 @@
         "Marine Lip Concentrate",
         "Marine Lipid Concentrate 30 A% TG"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "fish_oil_carrier",
       "allergen": true,
@@ -16332,7 +16335,7 @@
       "aliases": [
         "receptomax precision release profile"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -16352,7 +16355,7 @@
         "ribonucleic acid",
         "rna"
       ],
-      "category": "nucleic_acid_support",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "nucleic_acid",
       "allergen": false,
@@ -16388,7 +16391,7 @@
         "stabilized rice bran",
         "white rice bran"
       ],
-      "category": "flow_agent_filler",
+      "category": "glidant",
       "is_additive": true,
       "additive_type": "flow_agent",
       "allergen": false,
@@ -16431,7 +16434,7 @@
         "oryza sativa bran oil",
         "White Rice Bran Oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -16469,7 +16472,7 @@
         "rice chelate",
         "rice protein chelate"
       ],
-      "category": "carrier_base",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "carrier",
       "allergen": false,
@@ -16493,7 +16496,7 @@
         "rice-based dextrin",
         "low moisture rice dextrin"
       ],
-      "category": "binder_filler",
+      "category": "binder",
       "is_additive": true,
       "additive_type": "starch_binder",
       "allergen": false,
@@ -16520,7 +16523,7 @@
         "rice extract blend",
         "whole rice concentrate"
       ],
-      "category": "anticaking_flow_agent",
+      "category": "anti_caking_agent",
       "is_additive": true,
       "additive_type": "natural_flow_agent",
       "allergen": false,
@@ -16672,7 +16675,7 @@
         "rice-derived starch",
         "starch from rice"
       ],
-      "category": "binder_filler",
+      "category": "binder",
       "is_additive": true,
       "additive_type": "starch_binder",
       "allergen": false,
@@ -16695,7 +16698,7 @@
       "aliases": [
         "rice substrate"
       ],
-      "category": "grain_source_material",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -16743,7 +16746,7 @@
         "royal jelly",
         "royal jelly extract"
       ],
-      "category": "functional_ingredient",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "bee_product",
       "allergen": true,
@@ -16779,7 +16782,7 @@
       "aliases": [
         "rutaecarpine"
       ],
-      "category": "phytochemical_marker",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -16803,7 +16806,7 @@
         "s7",
         "s7 blend"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -16830,7 +16833,7 @@
         "yeast extract",
         "yeast extracts"
       ],
-      "category": "fermentation_yeast",
+      "category": "processing_aid",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -16871,7 +16874,7 @@
         "organic safflower oil",
         "Safflower seed Oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -16907,7 +16910,7 @@
       "aliases": [
         "Safflower Oil Glyceride"
       ],
-      "category": "oil_derivative",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "oil_glyceride",
       "allergen": false,
@@ -16928,7 +16931,7 @@
       "aliases": [
         "Salmon Nasal Cartilage powder"
       ],
-      "category": "marine_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": true,
@@ -16997,7 +17000,7 @@
       "aliases": [
         "sarcosine"
       ],
-      "category": "amino_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -17052,7 +17055,7 @@
         "Sea Vegetable extract",
         "Seaweed extract"
       ],
-      "category": "botanical_extract",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -17073,7 +17076,7 @@
       "aliases": [
         "seditol"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -17095,7 +17098,7 @@
         "senactiv branded blend",
         "panax notoginseng and rosa roxburghii blend"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_complex",
       "allergen": false,
@@ -17122,7 +17125,7 @@
         "sesamum indicum oil",
         "Black Sesame Seed Oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": true,
@@ -17166,7 +17169,7 @@
         "Shellac glaze",
         "Aqueous Shellac"
       ],
-      "category": "coating_resin",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "resin_coating",
       "allergen": false,
@@ -17204,7 +17207,7 @@
       "aliases": [
         "shen min herb"
       ],
-      "category": "branded_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -17225,7 +17228,7 @@
         "sienna fruit juice color",
         "sienna color"
       ],
-      "category": "colorant",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -17266,7 +17269,7 @@
         "synthetic amorphous silica",
         "vegetable magnesium silicate"
       ],
-      "category": "flow_agent_anticaking",
+      "category": "glidant",
       "is_additive": true,
       "additive_type": "anti_caking_agent",
       "allergen": false,
@@ -17312,7 +17315,7 @@
         "silicon dioxide flow agent",
         "silicone dioxide"
       ],
-      "category": "anti-caking agent",
+      "category": "anti_caking_agent",
       "is_additive": true,
       "additive_type": "anti_caking_agent",
       "allergen": false,
@@ -17340,7 +17343,7 @@
         "nonfat milk powder",
         "skim milk powder"
       ],
-      "category": "dairy_derivative",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "filler_protein",
       "allergen": true,
@@ -17379,7 +17382,7 @@
       "aliases": [
         "sodium acid sulfate"
       ],
-      "category": "acidity_regulator",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
@@ -17421,7 +17424,7 @@
         "brown algae extract",
         "E401"
       ],
-      "category": "gelling_agent_stabilizer",
+      "category": "gelling_agent",
       "is_additive": true,
       "additive_type": "gelling_agent",
       "allergen": false,
@@ -17468,7 +17471,7 @@
         "sodium acid carbonate",
         "sodium hydrogen carbonate"
       ],
-      "category": "buffer_acidity_regulator",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "ph_adjuster",
       "allergen": false,
@@ -17515,7 +17518,7 @@
       "aliases": [
         "Sodium Caprylate"
       ],
-      "category": "fatty_acid_salt",
+      "category": "lubricant",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -17567,7 +17570,7 @@
         "soda ash",
         "washing soda"
       ],
-      "category": "buffer_acidity_regulator",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "ph_adjuster",
       "allergen": false,
@@ -17617,7 +17620,7 @@
         "sodium carboxymethycellulose",
         "sodium carboxymethylcellulose"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "thickener",
       "allergen": false,
@@ -17671,7 +17674,7 @@
         "trisodium citrate dihydrate",
         "trysodium citrate"
       ],
-      "category": "buffer_acidity_regulator",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "ph_adjuster",
       "allergen": false,
@@ -17702,7 +17705,7 @@
         "naoh",
         "sodium hydroxide"
       ],
-      "category": "ph_adjuster",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "ph_adjuster",
       "allergen": false,
@@ -17747,7 +17750,7 @@
         "lactic acid sodium salt",
         "sodium lactate"
       ],
-      "category": "humectant_preservative",
+      "category": "humectant",
       "is_additive": true,
       "additive_type": "moisture_retention",
       "allergen": false,
@@ -17840,7 +17843,7 @@
         "sodium hydrogen malate",
         "sodium malate"
       ],
-      "category": "buffering_agent",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "acidity_regulator",
       "allergen": false,
@@ -17877,7 +17880,7 @@
       "aliases": [
         "sodium metasilicate"
       ],
-      "category": "processing_aid_mineral",
+      "category": "processing_aid",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -17917,7 +17920,7 @@
       "aliases": [
         "sodium phosphate"
       ],
-      "category": "buffering_salt",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
@@ -17960,7 +17963,7 @@
         "Rochelle salt",
         "Sodium Potassium Tartrate"
       ],
-      "category": "acidity_regulator",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "pH_adjuster",
       "allergen": false,
@@ -18074,7 +18077,7 @@
         "stearyl fumarate sodium",
         "tablet lubricant"
       ],
-      "category": "tablet_lubricant",
+      "category": "lubricant",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -18216,7 +18219,7 @@
         "soft-gel",
         "{soft-gel}"
       ],
-      "category": "packaging_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "form_descriptor",
       "allergen": false,
@@ -18235,7 +18238,7 @@
       "aliases": [
         "solarplast"
       ],
-      "category": "plant_extract_natural",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "branded_chloroplast_extract",
       "allergen": false,
@@ -18258,7 +18261,7 @@
         "fibersol",
         "soluble corn fiber"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -18282,7 +18285,7 @@
         "soluble food starch",
         "Soluble Food Starch"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "texture_modifier",
       "allergen": false,
@@ -18454,7 +18457,7 @@
       "aliases": [
         "sorghum substrate"
       ],
-      "category": "grain_source_material",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -18476,7 +18479,7 @@
         "source-70",
         "source 70"
       ],
-      "category": "branded_mineral_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -18593,7 +18596,7 @@
         "soya peptones",
         "soybean peptones"
       ],
-      "category": "fermentation_medium",
+      "category": "processing_aid",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": true,
@@ -18622,7 +18625,7 @@
         "organic soy bean fiber",
         "soy polysaccharide"
       ],
-      "category": "stabilizer_thickener",
+      "category": "stabilizer",
       "is_additive": true,
       "additive_type": "stabilizer",
       "allergen": true,
@@ -18648,7 +18651,7 @@
         "soynatto",
         "fermented soyfood"
       ],
-      "category": "fermented_food_complex",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "branded_complex",
       "allergen": true,
@@ -18670,7 +18673,7 @@
         "spectra",
         "spectra blend"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -18695,7 +18698,7 @@
         "spice extracts",
         "spices"
       ],
-      "category": "flavor",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavor_natural",
       "allergen": false,
@@ -18746,7 +18749,7 @@
         "spleen tissue",
         "bovine spleen tissue"
       ],
-      "category": "glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
@@ -18790,7 +18793,7 @@
         "Borago officinalis oil",
         "Starflower Oil"
       ],
-      "category": "fatty_acid",
+      "category": "lubricant",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -18861,7 +18864,7 @@
         "steric acid",
         "vegetable stearic acid"
       ],
-      "category": "fatty_acid_excipient",
+      "category": "lubricant",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -19054,7 +19057,7 @@
         "organic strawberry puree",
         "Strawberry puree"
       ],
-      "category": "fruit_concentrate",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_ingredient",
       "allergen": false,
@@ -19231,7 +19234,7 @@
       "aliases": [
         "sumalate"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -19253,7 +19256,7 @@
         "sunfiber",
         "sunfiber phgg"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -19276,7 +19279,7 @@
         "sunfiber",
         "sunfiber ag"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -19298,7 +19301,7 @@
         "sunflower",
         "Sunflower"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_descriptor",
       "allergen": false,
@@ -19374,7 +19377,7 @@
         "non-GMO Sunflower Oil",
         "non-gmo sunflower oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -19436,7 +19439,7 @@
         "sunflower oil, high oleic",
         "sunflower seed oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "oil",
       "allergen": false,
@@ -19458,7 +19461,7 @@
       "aliases": [
         "Sunflower seed Oil Glyceride"
       ],
-      "category": "oil_derivative",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "oil_glyceride",
       "allergen": false,
@@ -19479,7 +19482,7 @@
       "aliases": [
         "syntol digestive yeast cleanse"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -19498,7 +19501,7 @@
       "aliases": [
         "Syringic Acid"
       ],
-      "category": "phytochemical_constituent",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "phenolic_acid",
       "allergen": false,
@@ -19538,7 +19541,7 @@
         "tapioca fiber",
         "tapioca fiber, soluble"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
@@ -19560,7 +19563,7 @@
       "aliases": [
         "tapioca gelatin"
       ],
-      "category": "capsule_material",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "capsule_shell",
       "allergen": false,
@@ -19587,7 +19590,7 @@
         "tapioca flour",
         "yuca starch"
       ],
-      "category": "filler_binder",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "starch_filler",
       "allergen": false,
@@ -19628,7 +19631,7 @@
         "grape acid",
         "tartaric acid"
       ],
-      "category": "acidity_regulator",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "acidity_regulator",
       "allergen": false,
@@ -20288,7 +20291,7 @@
         "taste masking agent",
         "flavor modifier"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavoring",
       "allergen": false,
@@ -20312,7 +20315,7 @@
         "Terpenes",
         "Terpenes, Natural"
       ],
-      "category": "botanical_compound",
+      "category": "active_pending_relocation",
       "is_additive": true,
       "additive_type": "functional",
       "allergen": false,
@@ -20334,7 +20337,7 @@
       "aliases": [
         "test 1700 activator"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -20361,7 +20364,7 @@
         "2nd messenger(tm) hormone amplifiers",
         "growth hormone & sleep support"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -20458,7 +20461,7 @@
         "thymus tissue",
         "bovine thymus tissue"
       ],
-      "category": "glandular_tissue",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
@@ -20479,7 +20482,7 @@
         "thyroid substance",
         "thyroid gland"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -20560,7 +20563,7 @@
         "natural D-Alpha Tocopheryl",
         "non-GMO Mixed Tocopherols"
       ],
-      "category": "preservative_natural",
+      "category": "preservative",
       "is_additive": true,
       "additive_type": "antioxidant_preservative",
       "allergen": false,
@@ -20601,7 +20604,7 @@
         "tomato extract color",
         "tomato lycopene color"
       ],
-      "category": "colorant",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -20636,7 +20639,7 @@
       "aliases": [
         "total bile acids"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -20675,7 +20678,7 @@
       "aliases": [
         "total resveratrols"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -20694,7 +20697,7 @@
       "aliases": [
         "total sulfur"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -20733,7 +20736,7 @@
       "aliases": [
         "total terpene lactones"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -20752,7 +20755,7 @@
       "aliases": [
         "Trace metals"
       ],
-      "category": "blend_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "trace_mineral_blend_descriptor",
       "allergen": false,
@@ -20776,7 +20779,7 @@
         "trace minerals",
         "ultra trace minerals"
       ],
-      "category": "mineral_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "functional_descriptor",
       "allergen": false,
@@ -20799,7 +20802,7 @@
         "transport c-plus(r)",
         "transport c plus"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -20867,7 +20870,7 @@
         "tri-magnesium citrate",
         "trimagnesium citrate"
       ],
-      "category": "mineral salt",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
@@ -20895,7 +20898,7 @@
         "glycerol triacetate",
         "glyceryl triacetate"
       ],
-      "category": "plasticizer",
+      "category": "humectant",
       "is_additive": true,
       "additive_type": "plasticizer",
       "allergen": false,
@@ -20938,7 +20941,7 @@
         "E1505",
         "TEC"
       ],
-      "category": "plasticizer",
+      "category": "humectant",
       "is_additive": true,
       "additive_type": "plasticizer",
       "allergen": false,
@@ -20979,7 +20982,7 @@
       "aliases": [
         "Trimethyl Citrate"
       ],
-      "category": "plasticizer_solvent",
+      "category": "humectant",
       "is_additive": true,
       "additive_type": "plasticizer_solvent",
       "allergen": false,
@@ -21021,7 +21024,7 @@
         "Tri Sodium Citrate",
         "trisodium citrate"
       ],
-      "category": "acidity_regulator",
+      "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
@@ -21068,7 +21071,7 @@
       "aliases": [
         "true food superpotency soyagen"
       ],
-      "category": "marketing_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -21089,7 +21092,7 @@
         "trumask",
         "trumask ultra"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavor_masking_system",
       "allergen": false,
@@ -21150,7 +21153,7 @@
       "aliases": [
         "Ultra-Pure Marine Oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "marine_oil_carrier",
       "allergen": true,
@@ -21172,7 +21175,7 @@
       "aliases": [
         "univestin"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -21193,7 +21196,7 @@
         "unsweetened chocolate",
         "organic unsweetened chocolate"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -21213,7 +21216,7 @@
       "aliases": [
         "Ursolic & Oleanolic Acids"
       ],
-      "category": "triterpenes",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -21246,7 +21249,7 @@
         "hydroxypropyl methylcellulose (vegetable) capsules",
         "vegetarian pullulan capsule"
       ],
-      "category": "capsule_shell_descriptor",
+      "category": "coating",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -21268,7 +21271,7 @@
         "Vegetable",
         "vegetable"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -21292,7 +21295,7 @@
         "plant-based acetoglycerides",
         "Acetylated Monoglyceride"
       ],
-      "category": "plasticizer_emulsifier",
+      "category": "humectant",
       "is_additive": true,
       "additive_type": "plasticizer",
       "allergen": false,
@@ -21357,7 +21360,7 @@
       "aliases": [
         "vegetable and fruit juices"
       ],
-      "category": "colorant_flavoring_natural",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_color_flavor_system",
       "allergen": false,
@@ -21392,7 +21395,7 @@
         "vegetable polysaccharide",
         "vegetarian cellulose"
       ],
-      "category": "bulking_agent",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "cellulose_filler",
       "allergen": false,
@@ -21441,7 +21444,7 @@
         "Vegetable Concentrate",
         "vegetable concentrate"
       ],
-      "category": "vegetable_concentrate",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -21467,7 +21470,7 @@
         "plant fiber",
         "vegetable fiber"
       ],
-      "category": "fiber_prebiotic",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "plant_fiber",
       "allergen": false,
@@ -21528,7 +21531,7 @@
         "vegetable glycerol",
         "Palm Glycerin"
       ],
-      "category": "humectant_solvent",
+      "category": "humectant",
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
@@ -21591,7 +21594,7 @@
         "plant gum",
         "vegetable gum"
       ],
-      "category": "thickener_stabilizer_general",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "natural_thickener",
       "allergen": false,
@@ -21618,7 +21621,7 @@
         "vegetable source lubricant",
         "vegetable-derived flow agent"
       ],
-      "category": "lubricant_flow_agent",
+      "category": "lubricant",
       "is_additive": true,
       "additive_type": "plant_lubricant",
       "allergen": false,
@@ -21665,7 +21668,7 @@
         "veg. magnesium silicate",
         "vegetable magnesium silicate"
       ],
-      "category": "anti-caking agent",
+      "category": "anti_caking_agent",
       "is_additive": true,
       "additive_type": "anti_caking_agent",
       "allergen": false,
@@ -21748,7 +21751,7 @@
         "vegetable stearic acid",
         "vegetable-derived stearate"
       ],
-      "category": "lubricant_plant_based",
+      "category": "lubricant",
       "is_additive": true,
       "additive_type": "vegetable_lubricant",
       "allergen": false,
@@ -21775,7 +21778,7 @@
         "Verisol",
         "Verisol Bioactive Collagen Peptides"
       ],
-      "category": "branded_ingredient",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -21796,7 +21799,7 @@
         "vinitrox",
         "vi nitrox"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -21820,7 +21823,7 @@
         "vitaberry(tm)",
         "vitaberry tm"
       ],
-      "category": "branded_botanical_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "proprietary_complex",
       "allergen": false,
@@ -21839,7 +21842,7 @@
       "aliases": [
         "vitamin f"
       ],
-      "category": "legacy_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -21875,7 +21878,7 @@
         "vitamin mix",
         "Vitamin premix"
       ],
-      "category": "base_blend",
+      "category": "active_pending_relocation",
       "is_additive": true,
       "additive_type": "carrier",
       "allergen": false,
@@ -21894,7 +21897,7 @@
       "aliases": [
         "vitamin u"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -21940,7 +21943,7 @@
         "Malpighia glabra",
         "West Indian Cherry"
       ],
-      "category": "fruit_extract",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "natural_ingredient",
       "allergen": false,
@@ -21975,7 +21978,7 @@
       "aliases": [
         "Wheat Bran"
       ],
-      "category": "fiber_plant",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "fiber",
       "allergen": true,
@@ -22012,7 +22015,7 @@
       "aliases": [
         "wheat germ flour"
       ],
-      "category": "grain_flour",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": true,
@@ -22034,7 +22037,7 @@
       "aliases": [
         "wheat starch"
       ],
-      "category": "filler_binder_disintegrant",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "starch_filler",
       "allergen": true,
@@ -22077,7 +22080,7 @@
         "whey protein",
         "whey isolate"
       ],
-      "category": "protein_base",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "dairy_protein",
       "allergen": true,
@@ -22138,7 +22141,7 @@
       "aliases": [
         "white milo"
       ],
-      "category": "grain_source_material",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "source_material",
       "allergen": false,
@@ -22161,7 +22164,7 @@
         "thymus vulgaris oil",
         "white thyme oil"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "essential_oil_flavor",
       "allergen": false,
@@ -22200,7 +22203,7 @@
         "whole bovine adrenal",
         "adrenal whole glandular"
       ],
-      "category": "animal_glandular",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "glandular_tissue",
       "allergen": false,
@@ -22223,7 +22226,7 @@
         "rice meal",
         "whole Brown Rice"
       ],
-      "category": "filler_binder",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "excipient",
       "allergen": false,
@@ -22265,7 +22268,7 @@
         "organic fruit and vegetable concentrates",
         "whole food base"
       ],
-      "category": "base_blend",
+      "category": "active_pending_relocation",
       "is_additive": true,
       "additive_type": "carrier",
       "allergen": false,
@@ -22287,7 +22290,7 @@
         "xanthan",
         "xanthomonas campestris"
       ],
-      "category": "thickener_stabilizer",
+      "category": "thickener",
       "is_additive": true,
       "additive_type": "texture_modifier",
       "allergen": false,
@@ -22329,7 +22332,7 @@
       "aliases": [
         "xanthones"
       ],
-      "category": "descriptor_component",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
@@ -22350,7 +22353,7 @@
         "hemicellulase",
         "xylanase enzyme"
       ],
-      "category": "enzyme",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "fiber_digesting_enzyme",
       "allergen": false,
@@ -22375,7 +22378,7 @@
         "xylo-oligosaccharide",
         "xylooligosaccharide"
       ],
-      "category": "prebiotic_sweetener",
+      "category": "sweetener_natural",
       "is_additive": false,
       "additive_type": "prebiotic_fiber",
       "allergen": false,
@@ -22405,7 +22408,7 @@
         "yeast fermentate dried",
         "epicor dried yeast fermentate"
       ],
-      "category": "fermentation_complex",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "branded_complex",
       "allergen": false,
@@ -22424,7 +22427,7 @@
       "aliases": [
         "yellow ochre"
       ],
-      "category": "colorant_mineral",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
@@ -22447,7 +22450,7 @@
         "ylang ylang oil",
         "ylang-ylang oil"
       ],
-      "category": "flavoring",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "essential_oil_flavor",
       "allergen": false,
@@ -22485,7 +22488,7 @@
         "yoghurt powder",
         "yogurt powder"
       ],
-      "category": "dairy_derivative",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "flavor_texture",
       "allergen": true,
@@ -22513,7 +22516,7 @@
         "young barley",
         "young barley grass"
       ],
-      "category": "carrier_base",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "whole_food_base",
       "allergen": false,
@@ -22539,7 +22542,7 @@
         "Alpha Pinene",
         "Alpha-pinene"
       ],
-      "category": "terpene_flavor",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "terpene_flavor_component",
       "allergen": false,
@@ -22566,7 +22569,7 @@
         "galactose",
         "Galactose"
       ],
-      "category": "carbohydrate",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "sugar_component",
       "allergen": false,
@@ -22614,7 +22617,7 @@
         "non-gmo vegetable oil",
         "vegetable oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -22637,7 +22640,7 @@
         "unrefined cold-pressed Hemp Seed Oil",
         "unrefined cold pressed hemp seed oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "seed_oil_carrier",
       "allergen": false,
@@ -22658,7 +22661,7 @@
       "aliases": [
         "Apple Cider Concentrate"
       ],
-      "category": "fruit_concentrate",
+      "category": "flavor_natural",
       "is_additive": false,
       "additive_type": "fruit_concentrate",
       "allergen": false,
@@ -22695,7 +22698,7 @@
         "beta-sitosterol-3-o-glucoside",
         "B-SG"
       ],
-      "category": "phytosterol_glycoside",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "plant_constituent",
       "allergen": false,
@@ -22718,7 +22721,7 @@
       "aliases": [
         "Chinese Cabbage"
       ],
-      "category": "botanical_food_component",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": "food_component",
       "allergen": false,
@@ -22739,7 +22742,7 @@
         "Conjugated Linoleic Acid Oil",
         "CLA EE Oil"
       ],
-      "category": "fatty_acid_oil",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "fatty_acid_oil_source",
       "allergen": false,
@@ -22776,7 +22779,7 @@
         "TPGS",
         "tocofersolan"
       ],
-      "category": "solubilizer",
+      "category": "surfactant",
       "is_additive": true,
       "additive_type": "bioavailability_enhancer",
       "allergen": false,
@@ -22801,7 +22804,7 @@
       "aliases": [
         "triacylglycerol"
       ],
-      "category": "lipid_excipient",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -22829,7 +22832,7 @@
         "Grapeseed Oil",
         "grapeseed oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
@@ -22866,7 +22869,7 @@
         "Emulsifiers",
         "emulsifiers"
       ],
-      "category": "emulsifier_descriptor",
+      "category": "emulsifier",
       "is_additive": true,
       "additive_type": "emulsifier_descriptor",
       "allergen": false,
@@ -22890,7 +22893,7 @@
         "Opaquing Agent",
         "opaquing agent"
       ],
-      "category": "colorant_opacifier",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "opacifier_descriptor",
       "allergen": false,
@@ -22913,7 +22916,7 @@
         "omega ethyl esters",
         "Ethyl Esters (EE)"
       ],
-      "category": "fatty_acid_form_descriptor",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "fatty_acid_form_descriptor",
       "allergen": false,
@@ -22933,7 +22936,7 @@
         "Mortierella Alpina Oil",
         "mortierella alpina oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "carrier_oil",
       "allergen": false,
@@ -22956,7 +22959,7 @@
         "Myrcene",
         "myrcene"
       ],
-      "category": "terpene",
+      "category": "active_pending_relocation",
       "is_additive": true,
       "additive_type": "terpene_flavor",
       "allergen": false,
@@ -22997,7 +23000,7 @@
         "beta-caryophyllene",
         "Caryophyllene Beta, Natural"
       ],
-      "category": "terpene",
+      "category": "active_pending_relocation",
       "is_additive": true,
       "additive_type": "terpene_flavor",
       "allergen": false,
@@ -23041,7 +23044,7 @@
         "Krill Oil",
         "krill oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "carrier_oil",
       "allergen": true,
@@ -23078,7 +23081,7 @@
       "aliases": [
         "Soybean or Safflower Oil"
       ],
-      "category": "oil_blend_alternative",
+      "category": "carrier_oil",
       "is_additive": true,
       "additive_type": "carrier_oil",
       "allergen": true,
@@ -23101,7 +23104,7 @@
         "minor Fatty Acids",
         "Minor Fatty Acids"
       ],
-      "category": "fatty_acid_descriptor",
+      "category": "lubricant",
       "is_additive": true,
       "additive_type": "fatty_acid_descriptor",
       "allergen": false,
@@ -23121,7 +23124,7 @@
       "aliases": [
         "Triglyceride Concentrate, Re-esterified"
       ],
-      "category": "fatty_acid_form_descriptor",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "fatty_acid_form_descriptor",
       "allergen": false,
@@ -23144,7 +23147,7 @@
         "sacha inchi oil",
         "sacha inchi seed oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "vegetable_oil_carrier",
       "allergen": false,
@@ -23182,7 +23185,7 @@
         "skipjack tuna liver oil",
         "Katsuwonus pelamis liver oil"
       ],
-      "category": "oil_carrier",
+      "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "marine_oil_carrier",
       "allergen": true,
@@ -23206,7 +23209,7 @@
         "Corn protein",
         "corn protein"
       ],
-      "category": "protein_excipient",
+      "category": "filler",
       "is_additive": false,
       "additive_type": "protein_base",
       "allergen": false,
@@ -23255,7 +23258,7 @@
         "micro-beadlets",
         "microbeadlets"
       ],
-      "category": "delivery_form_descriptor",
+      "category": "coating",
       "is_additive": true,
       "additive_type": "delivery_descriptor",
       "notes": "Beadlets are small spherical pellets used as a delivery form for vitamins, minerals, or other actives. Not an ingredient but a structural descriptor for encapsulated particles.",
@@ -23273,7 +23276,7 @@
         "nutmeg powder",
         "nutmeg extract"
       ],
-      "category": "flavoring_spice",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "natural_flavoring",
       "notes": "Myristica fragrans seed. Used as a natural flavoring agent in supplements. Contains myristicin. Generally safe at flavoring doses.",
@@ -23314,7 +23317,7 @@
         "natural and artificial flavors",
         "flavor blend"
       ],
-      "category": "flavor_additive",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "flavor",
       "allergen": false,
@@ -23337,7 +23340,7 @@
         "vegetable based",
         "plant-based vegetable"
       ],
-      "category": "source_descriptor",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "source_descriptor",
       "allergen": false,
@@ -23358,7 +23361,7 @@
         "sea trace minerals",
         "ionic sea minerals"
       ],
-      "category": "mineral_source",
+      "category": "label_descriptor",
       "is_additive": true,
       "additive_type": "mineral_source",
       "allergen": false,
@@ -23380,7 +23383,7 @@
         "SMM",
         "MMS"
       ],
-      "category": "non_vitamin_factor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "bioactive_factor",
       "allergen": false,
@@ -23401,7 +23404,7 @@
         "vitafiber isomalto-oligosaccharide",
         "imo isomalto-oligosaccharide"
       ],
-      "category": "fiber_plant",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "fiber",
       "allergen": false,
@@ -23430,7 +23433,7 @@
         "creafibe(tm)",
         "creafibe prebiotic cellulose"
       ],
-      "category": "fiber_plant",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "fiber",
       "allergen": false,
@@ -23459,7 +23462,7 @@
         "activait mustard essential oil",
         "activait mustard oil"
       ],
-      "category": "essential_oil",
+      "category": "flavor_natural",
       "is_additive": true,
       "additive_type": "essential_oil",
       "allergen": false,
@@ -23488,7 +23491,7 @@
         "beef protein hydrolysate",
         "beef isolate"
       ],
-      "category": "protein_animal",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "protein_source",
       "allergen": false,
@@ -23516,7 +23519,7 @@
         "chicken bone broth protein",
         "chicken bone broth"
       ],
-      "category": "protein_animal",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "protein_source",
       "allergen": false,
@@ -23545,7 +23548,7 @@
         "garbanzo protein",
         "cicer arietinum protein"
       ],
-      "category": "protein_plant",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "protein_source",
       "allergen": false,
@@ -23575,7 +23578,7 @@
         "glycosphingolipids",
         "glycoglycerolipids"
       ],
-      "category": "lipid_structural",
+      "category": "manual_review",
       "is_additive": true,
       "additive_type": "structural_lipid",
       "allergen": false,

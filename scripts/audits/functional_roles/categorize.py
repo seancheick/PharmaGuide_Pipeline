@@ -305,7 +305,13 @@ MOVE_TO_ACTIVES = {
 MANUAL_REVIEW_CATEGORIES = {
     "colorant",                     # TiO2/pearlescent/per-source verification
     "color_blend_descriptor",       # ambiguous source
+    "manual_review",                # post-Phase 4c canonical bucket (idempotent)
 }
+
+# Post-Phase 4c canonical transitional categories — make categorize.py
+# idempotent by recognizing the canonical values it has already written.
+POST_4C_RETIRE = {"label_descriptor"}
+POST_4C_MOVE_TO_ACTIVES = {"active_pending_relocation"}
 
 
 def _decompose_compound(category: str, vocab: set):
@@ -349,10 +355,28 @@ def _decompose_compound(category: str, vocab: set):
 
 
 def categorize(entry: dict, vocab: set):
-    """Return (action, roles_or_none, rationale)."""
+    """Return (action, roles_or_none, rationale).
+
+    Idempotent — handles both the original raw category strings and the
+    post-Phase-4c canonical values (vocab IDs + transitional buckets).
+    """
     category = (entry.get("category") or "").lower().strip()
     if not category:
         return ("manual_review", [], "no category")
+
+    # Post-Phase 4c canonical transitional buckets (idempotent path)
+    if category in POST_4C_RETIRE:
+        return ("retire", [], f"post-4c canonical: {category}")
+    if category in POST_4C_MOVE_TO_ACTIVES:
+        return ("move_to_actives", [], f"post-4c canonical: {category}")
+
+    # Post-Phase 4c canonical: a vocab ID directly = assign with that role
+    # (preserves the existing functional_roles[] which may have multiple roles)
+    if category in vocab:
+        existing_roles = entry.get("functional_roles") or []
+        if existing_roles:
+            return ("assign", list(existing_roles), f"post-4c vocab: {category}")
+        return ("assign", [category], f"post-4c vocab: {category}")
 
     if category in DIRECT_MAP:
         roles = DIRECT_MAP[category]
