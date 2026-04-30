@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
-    "purpose": "ingredient_mapping_and_standardization",
+    "purpose": "Standardized branded forms reference (bonus-awarding layer per match_ledger.py — capped bonus when label shows standardization evidence). Holds plant-part botanicals AND non-botanical branded forms (amino acids, minerals, fatty acids, proteins, fibers, fermentates, hormones). Non-botanical entries cross-reference their matching IQM parent via attributes.iqm_parent_id.",
     "schema_version": "5.0.0",
     "last_updated": "2026-04-30",
     "total_entries": 239,
@@ -252,8 +252,7 @@
       "data_quality": "complete",
       "min_threshold": 100,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (amino_acids)"
+        "iqm_parent_id": "l_theanine"
       }
     },
     {
@@ -1469,8 +1468,7 @@
       "min_threshold": 2400,
       "threshold_source": "2400 GDU/g — activity unit threshold",
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (enzymes)"
+        "no_iqm_parent_reason": "Pineapple enzyme — no IQM enzymes parent yet; consider adding for V1.1"
       }
     },
     {
@@ -1922,8 +1920,7 @@
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (minerals)"
+        "iqm_parent_id": "chromium"
       }
     },
     {
@@ -2166,8 +2163,7 @@
       "data_quality": "complete",
       "min_threshold": 99,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (amino_acids)"
+        "iqm_parent_id": "choline"
       }
     },
     {
@@ -2458,8 +2454,7 @@
       },
       "cui": "C0024742",
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "DUPLICATE — already in ingredient_quality_map.json (fibers)"
+        "iqm_parent_id": "d_mannose"
       }
     },
     {
@@ -2808,8 +2803,7 @@
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (functional_foods)"
+        "iqm_parent_id": "yeast_fermentate"
       }
     },
     {
@@ -3106,8 +3100,7 @@
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (minerals)"
+        "iqm_parent_id": "boron"
       }
     },
     {
@@ -4161,8 +4154,7 @@
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (proteins)"
+        "iqm_parent_id": "keratin"
       }
     },
     {
@@ -4364,8 +4356,7 @@
       "data_quality": "complete",
       "min_threshold": 98,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (fatty_acids)"
+        "iqm_parent_id": "palmitoylethanolamide"
       }
     },
     {
@@ -4432,8 +4423,7 @@
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (fatty_acids)"
+        "iqm_parent_id": "dha"
       }
     },
     {
@@ -4764,8 +4754,7 @@
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (other — hormones)"
+        "iqm_parent_id": "melatonin"
       }
     },
     {
@@ -5239,8 +5228,7 @@
       "external_ids": {},
       "data_quality": "stub",
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "BLEND — proprietary, defer per-entry analysis"
+        "no_iqm_parent_reason": "Proprietary blend — no clean parent target; defer per-entry analysis"
       }
     },
     {
@@ -5449,8 +5437,7 @@
       },
       "cui": "C0301704",
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (fatty_acids)"
+        "iqm_parent_id": "phosphatidylserine"
       }
     },
     {
@@ -6291,8 +6278,7 @@
       "data_quality": "complete",
       "min_threshold": 98,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (amino_acids)"
+        "iqm_parent_id": "glutathione"
       }
     },
     {
@@ -6716,8 +6702,7 @@
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (minerals)"
+        "iqm_parent_id": "iron"
       }
     },
     {
@@ -6761,8 +6746,7 @@
       "data_quality": "requires_verification",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (minerals)"
+        "iqm_parent_id": "silicon"
       }
     },
     {
@@ -6995,8 +6979,7 @@
       "data_quality": "complete",
       "branded_form": true,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (proteins)"
+        "iqm_parent_id": "collagen"
       }
     },
     {
@@ -7077,8 +7060,7 @@
       "data_quality": "complete",
       "min_threshold": 75,
       "attributes": {
-        "is_misclassified_in_botanicals": true,
-        "v1_1_relocation_target": "ingredient_quality_map.json (fibers)"
+        "iqm_parent_id": "beta_glucan"
       }
     },
     {
