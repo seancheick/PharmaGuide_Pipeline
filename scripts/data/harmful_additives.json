@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
-    "schema_version": "5.3.0",
+    "schema_version": "5.4.0",
     "last_updated": "2026-04-30",
     "total_entries": 115,
     "functional_roles_field": {
@@ -135,7 +135,8 @@
     "reviewed_date": "2026-04-18",
     "review_round": "full_authoring_pass_v1",
     "field_contract_changes": {
-      "v5.3.0": "2026-04-30 Phase 4b — category canonicalization. Renamed 21 → 12 canonical safety values per CLINICIAN_REVIEW.md Section 2A. Granular functional info now lives in functional_roles[]. Renames: artificial_color→colorant_artificial; fat_oil→excipient; flavor→excipient; preservative_antioxidant→preservative; sweetener→sweetener_natural. Transitional holdouts (Phase 4c): mineral_compound, nutrient_synthetic, stimulant_laxative."
+      "v5.3.0": "2026-04-30 Phase 4b — category canonicalization. Renamed 21 → 12 canonical safety values per CLINICIAN_REVIEW.md Section 2A. Granular functional info now lives in functional_roles[]. Renames: artificial_color→colorant_artificial; fat_oil→excipient; flavor→excipient; preservative_antioxidant→preservative; sweetener→sweetener_natural. Transitional holdouts (Phase 4c): mineral_compound, nutrient_synthetic, stimulant_laxative.",
+      "v5.4.0": "2026-04-30 Phase 6 — V1.1 attributes scaffolding. Added attributes object with is_animal_derived (Carmine cochineal) and caramel_class = null (Caramel Color, pending per-class data per CLINICIAN_REVIEW Section 4F)."
     }
   },
   "harmful_additives": [
@@ -3202,7 +3203,10 @@
       },
       "safety_summary": "Class III and IV caramel colors are made with ammonia and can contain 4-methylimidazole, a possible carcinogen. Worth choosing products without ammoniated caramel where possible.",
       "safety_summary_one_liner": "Ammoniated caramel color with 4-MEI concerns.",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "caramel_class": null
+      }
     },
     {
       "id": "ADD_CARBOXYMETHYLCELLULOSE",
@@ -3528,7 +3532,10 @@
       "safety_summary_one_liner": "Insect-derived colorant — allergy and vegan concerns.",
       "functional_roles": [
         "colorant_natural"
-      ]
+      ],
+      "attributes": {
+        "is_animal_derived": true
+      }
     },
     {
       "id": "ADD_CARRAGEENAN",

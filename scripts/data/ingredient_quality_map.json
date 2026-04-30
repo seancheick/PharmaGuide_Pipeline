@@ -7609,7 +7609,7 @@
   },
   "creatine_monohydrate": {
     "standard_name": "Creatine Monohydrate",
-    "category": "other",
+    "category": "amino_acids",
     "cui": "C0873188",
     "rxcui": "1310467",
     "forms": {
@@ -8882,7 +8882,7 @@
   },
   "diindolylmethane": {
     "standard_name": "Diindolylmethane (DIM)",
-    "category": "other",
+    "category": "antioxidants",
     "cui": "C0163151",
     "rxcui": "1603521",
     "forms": {
@@ -13336,7 +13336,7 @@
   },
   "prebiotics": {
     "standard_name": "Prebiotics",
-    "category": "other",
+    "category": "fibers",
     "cui": "C2717875",
     "forms": {
       "fructooligosaccharides (FOS)": {
@@ -13608,7 +13608,7 @@
   },
   "choline": {
     "standard_name": "Choline",
-    "category": "other",
+    "category": "amino_acids",
     "cui": "C0008405",
     "rxcui": "2449",
     "rda_ul_ref": "Choline",
@@ -17101,7 +17101,7 @@
   },
   "spermidine": {
     "standard_name": "Spermidine",
-    "category": "other",
+    "category": "amino_acids",
     "cui": "C0037871",
     "rxcui": "1483262",
     "forms": {
@@ -17186,7 +17186,7 @@
   },
   "spirulina": {
     "standard_name": "Spirulina",
-    "category": "other",
+    "category": "functional_foods",
     "cui": "C1095785",
     "rxcui": "1321355",
     "forms": {
@@ -17368,7 +17368,7 @@
   },
   "chlorella": {
     "standard_name": "Chlorella",
-    "category": "other",
+    "category": "functional_foods",
     "cui": "C0008190",
     "forms": {
       "fermented chlorella": {
@@ -17518,7 +17518,7 @@
   },
   "hyaluronic_acid": {
     "standard_name": "Hyaluronic Acid",
-    "category": "other",
+    "category": "fibers",
     "cui": "C0020196",
     "rxcui": "5463",
     "forms": {
@@ -19100,7 +19100,7 @@
   },
   "collagen": {
     "standard_name": "Collagen",
-    "category": "other",
+    "category": "proteins",
     "cui": "C0009325",
     "forms": {
       "collagen tripeptides": {
@@ -19528,7 +19528,7 @@
   },
   "glucosamine": {
     "standard_name": "Glucosamine",
-    "category": "other",
+    "category": "fibers",
     "cui": "C0017718",
     "rxcui": "4845",
     "forms": {
@@ -19718,7 +19718,7 @@
   },
   "chondroitin": {
     "standard_name": "Chondroitin",
-    "category": "other",
+    "category": "fibers",
     "cui": "C0008454",
     "forms": {
       "low molecular weight chondroitin": {
@@ -22678,7 +22678,7 @@
   },
   "paba": {
     "standard_name": "PABA (Para-Aminobenzoic Acid)",
-    "category": "other",
+    "category": "amino_acids",
     "cui": "C0000473",
     "rxcui": "74",
     "forms": {
@@ -23550,7 +23550,7 @@
   },
   "synephrine": {
     "standard_name": "Synephrine",
-    "category": "other",
+    "category": "herbs",
     "cui": "C0039086",
     "forms": {
       "synephrine hcl": {
@@ -24535,7 +24535,7 @@
   "cgf": {
     "standard_name": "CGF (Chlorella Growth Factor)",
     "severity_level": "none",
-    "category": "other",
+    "category": "functional_foods",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Nucleotide-peptide complex extracted from Chlorella vulgaris; growth and repair support",
@@ -26431,7 +26431,7 @@
   "caffeine": {
     "standard_name": "Caffeine",
     "severity_level": "none",
-    "category": "other",
+    "category": "herbs",
     "cui": "C0006644",
     "rxcui": "1886",
     "source": "botanical_extract",
@@ -32032,7 +32032,7 @@
   "xanthines": {
     "standard_name": "Xanthines",
     "severity_level": "none",
-    "category": "other",
+    "category": "herbs",
     "source": "botanical_extract",
     "priority": "high",
     "description": "Methylxanthine alkaloid class (caffeine, theobromine, theophylline) from botanical sources",
@@ -32084,7 +32084,7 @@
   },
   "nicotinamide_riboside": {
     "standard_name": "Nicotinamide Riboside",
-    "category": "other",
+    "category": "vitamins",
     "cui": "C4476285",
     "forms": {
       "niagen (nicotinamide riboside chloride)": {
@@ -32184,7 +32184,7 @@
   },
   "nmn": {
     "standard_name": "Nicotinamide Mononucleotide",
-    "category": "other",
+    "category": "vitamins",
     "cui": "C1159803",
     "rxcui": "2262276",
     "forms": {
@@ -33144,7 +33144,7 @@
   },
   "berberine_supplement": {
     "standard_name": "Berberine",
-    "category": "other",
+    "category": "herbs",
     "cui": "C0005117",
     "rxcui": "1437",
     "forms": {
@@ -38936,7 +38936,7 @@
   },
   "alpha_gpc": {
     "standard_name": "Alpha GPC",
-    "category": "other",
+    "category": "fatty_acids",
     "cui": "C5762292",
     "aliases": [
       "Choline alfoscerate",
@@ -39386,7 +39386,7 @@
   },
   "d_beta_hydroxybutyrate_bhb": {
     "standard_name": "D-Beta-Hydroxybutyrate (BHB)",
-    "category": "other",
+    "category": "fatty_acids",
     "cui": "C0106006",
     "forms": {
       "d beta hydroxybutyrate bhb (standard)": {
@@ -39458,7 +39458,7 @@
   },
   "tudca": {
     "standard_name": "TUDCA",
-    "category": "other",
+    "category": "fatty_acids",
     "cui": "C0075857",
     "rxcui": "2613950",
     "forms": {
@@ -45918,7 +45918,7 @@
   },
   "inositol_hexaphosphate": {
     "standard_name": "Inositol Hexaphosphate (IP6)",
-    "category": "other",
+    "category": "fibers",
     "cui": "C0031855",
     "rxcui": "8302",
     "forms": {
@@ -47846,7 +47846,7 @@
   },
   "irish_sea_moss": {
     "standard_name": "Irish Sea Moss",
-    "category": "other",
+    "category": "functional_foods",
     "cui": "C0996244",
     "rxcui": "1426885",
     "forms": {
@@ -47957,7 +47957,7 @@
   },
   "phosphatidylethanolamine": {
     "standard_name": "Phosphatidylethanolamine",
-    "category": "other",
+    "category": "fatty_acids",
     "cui": "C1450468",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
@@ -48335,7 +48335,7 @@
   },
   "apple_cider_vinegar": {
     "standard_name": "Apple Cider Vinegar",
-    "category": "other",
+    "category": "functional_foods",
     "cui": "C1178459",
     "rxcui": "360262",
     "match_rules": {
@@ -51355,7 +51355,7 @@
   },
   "methylliberine": {
     "standard_name": "Methylliberine",
-    "category": "other",
+    "category": "herbs",
     "cui": "C5433892",
     "forms": {
       "methylliberine (unspecified)": {
@@ -51581,7 +51581,7 @@
   },
   "brewers_yeast": {
     "standard_name": "Brewer's Yeast",
-    "category": "other",
+    "category": "functional_foods",
     "cui": "C4048298",
     "rxcui": "350141",
     "forms": {
@@ -52765,7 +52765,7 @@
     "aliases": []
   },
   "theophylline": {
-    "category": "other",
+    "category": "herbs",
     "cui": "C0039771",
     "cui_note": "UMLS CUI: C0039771",
     "forms": {
@@ -53077,7 +53077,7 @@
     "aliases": []
   },
   "bentonite": {
-    "category": "other",
+    "category": "minerals",
     "cui": "C0005018",
     "cui_note": "No UMLS entry for bentonite supplement",
     "forms": {
@@ -53786,7 +53786,7 @@
   "urolithin_a": {
     "standard_name": "Urolithin A",
     "severity_level": "none",
-    "category": "other",
+    "category": "antioxidants",
     "source": "synthetic",
     "priority": "medium",
     "description": "Gut metabolite of ellagitannins (from pomegranate). Activates mitophagy for mitochondrial renewal. Clinically studied for muscle health and aging.",
@@ -54113,7 +54113,7 @@
   "keratin": {
     "standard_name": "Keratin",
     "severity_level": "none",
-    "category": "other",
+    "category": "proteins",
     "source": "animal_derived",
     "priority": "medium",
     "description": "Structural protein for hair, skin, and nails. Hydrolyzed forms (Cynatine) are bioavailable. Clinical evidence for hair growth and nail strength.",
@@ -54221,7 +54221,7 @@
   "casein_hydrolysate": {
     "standard_name": "Casein Hydrolysate",
     "severity_level": "none",
-    "category": "other",
+    "category": "proteins",
     "source": "animal_derived",
     "priority": "medium",
     "description": "Alpha-s1 casein tryptic hydrolysate containing alpha-casozepine. Bioactive decapeptide that modulates GABA-A receptors for stress and sleep support.",
@@ -54358,7 +54358,7 @@
   "yeast_fermentate": {
     "standard_name": "Yeast Fermentate",
     "severity_level": "none",
-    "category": "other",
+    "category": "functional_foods",
     "source": "fermented",
     "priority": "medium",
     "description": "Dried yeast fermentate/hydrolysate. Postbiotic rich in beta-glucans, mannans, and metabolites. Immune support ingredient.",
@@ -54868,7 +54868,7 @@
   "colostrum": {
     "standard_name": "Colostrum",
     "severity_level": "none",
-    "category": "other",
+    "category": "functional_foods",
     "source": "animal_derived",
     "priority": "medium",
     "description": "Bovine first milk. Rich in immunoglobulins (IgG), lactoferrin, growth factors, and proline-rich polypeptides (PRP/Colostrinin). Immune and gut health.",
@@ -57649,7 +57649,7 @@
   },
   "coconut_water": {
     "standard_name": "Coconut Water",
-    "category": "other",
+    "category": "functional_foods",
     "aliases": [
       "coconut water",
       "coconut water solids",
@@ -59139,7 +59139,7 @@
   "touchi_extract": {
     "standard_name": "Touchi Extract",
     "severity_level": "none",
-    "category": "other",
+    "category": "functional_foods",
     "description": "Fermented soybean (Glycine max) extract from Aspergillus oryzae fermentation. Contains alpha-glucosidase inhibitors. Japanese traditional food derivative for blood sugar management.",
     "dosage_importance": 1.0,
     "forms": {
@@ -60297,7 +60297,7 @@
   "oligosaccharides": {
     "standard_name": "Oligosaccharides",
     "severity_level": "low",
-    "category": "other",
+    "category": "fibers",
     "source": "prebiotic_fiber",
     "description": "Short-chain carbohydrates (FOS, GOS, XOS) that serve as prebiotic substrates for beneficial gut bacteria.",
     "dosage_importance": 1.0,
@@ -60455,7 +60455,7 @@
   "rice_bran": {
     "standard_name": "Rice Bran",
     "severity_level": "low",
-    "category": "other",
+    "category": "functional_foods",
     "source": "food_derived",
     "description": "Outer layer of rice grain rich in gamma-oryzanol, tocotrienols, and phytic acid (IP6). Used as a fiber and antioxidant supplement.",
     "dosage_importance": 1.0,
@@ -60610,7 +60610,7 @@
   "lecithin": {
     "standard_name": "Lecithin",
     "severity_level": "low",
-    "category": "other",
+    "category": "fatty_acids",
     "source": "phospholipid",
     "description": "Phospholipid mixture (primarily phosphatidylcholine) from soy or sunflower. Supports brain health and liver function.",
     "dosage_importance": 1.0,
@@ -60803,7 +60803,7 @@
   },
   "palmitic_acid": {
     "standard_name": "Palmitic Acid",
-    "category": "other",
+    "category": "fatty_acids",
     "cui": "C0030234",
     "rxcui": "1370621",
     "forms": {

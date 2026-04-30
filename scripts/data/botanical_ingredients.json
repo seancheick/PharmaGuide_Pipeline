@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
-    "schema_version": "5.1.0",
+    "schema_version": "5.2.0",
     "last_updated": "2026-04-30",
     "total_entries": 459,
     "functional_roles_field": {
@@ -13,7 +13,10 @@
     },
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
-    "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."
+    "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders.",
+    "field_contract_changes": {
+      "v5.2.0": "2026-04-30 Phase 6 — V1.1 attributes scaffolding. Added attributes object with source_origin populated on all entries (plant/fungal/algal/animal derived from category)."
+    }
   },
   "botanical_ingredients": [
     {
@@ -53,7 +56,10 @@
         "metabolites": []
       },
       "cui": "C1054955",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "acerola_cherry",
@@ -72,7 +78,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950505",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "african_geranium",
@@ -101,7 +110,10 @@
         "metabolites": []
       },
       "cui": "C1090842",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "agarikon",
@@ -117,7 +129,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1662787",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "akkalkara_root",
@@ -148,7 +163,10 @@
         "metabolites": []
       },
       "cui": "C1669961",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "alfalfa_leaf",
@@ -182,7 +200,10 @@
         "metabolites": []
       },
       "cui": "C0085839",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "aloe_vera",
@@ -207,7 +228,10 @@
         "unii": "ZY81Z83H0X"
       },
       "cui": "C0718405",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "aloe_vera_concentrated_gel",
@@ -229,7 +253,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0002707",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "amadou",
@@ -246,7 +273,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0319810",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "amla_fruit",
@@ -284,7 +314,10 @@
         "metabolites": []
       },
       "cui": "C0971862",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "andrographis",
@@ -321,7 +354,10 @@
         "metabolites": []
       },
       "cui": "C1256659",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "angelica_archangelica",
@@ -357,7 +393,10 @@
         "metabolites": []
       },
       "cui": "C0331174",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "angelica_gigas",
@@ -374,7 +413,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1006839",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "apocynum_venetum_leaf",
@@ -406,7 +448,10 @@
         "metabolites": []
       },
       "cui": "C0949822",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "apple_cider_vinegar",
@@ -435,7 +480,10 @@
         "metabolites": []
       },
       "cui": "C1178459",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "apple_fiber",
@@ -452,7 +500,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0330653",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "apricot",
@@ -483,7 +534,10 @@
         "metabolites": []
       },
       "cui": "C0003607",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "artists_conk",
@@ -510,7 +564,10 @@
         "metabolites": []
       },
       "cui": "C0319803",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "ashoka",
@@ -539,7 +596,10 @@
         "metabolites": []
       },
       "cui": "C0885753",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ashwagandha",
@@ -553,7 +613,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1061163",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ashwagandha_root",
@@ -584,7 +647,10 @@
         "metabolites": []
       },
       "cui": "C1061163",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "asparagus",
@@ -613,7 +679,10 @@
         "metabolites": []
       },
       "cui": "C0003741",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "astragalus_root",
@@ -634,7 +703,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0004133",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "atractylodes",
@@ -664,7 +736,10 @@
         "metabolites": []
       },
       "cui": "C0949568",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "avocado_fruit",
@@ -696,7 +771,10 @@
         "metabolites": []
       },
       "cui": "C2722027",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "avocado_oil",
@@ -727,7 +805,10 @@
         "metabolites": []
       },
       "cui": "C3265002",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "bacopa",
@@ -745,7 +826,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950097",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "barberry_root",
@@ -778,7 +862,10 @@
         "metabolites": []
       },
       "cui": "C0004747",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "barley_grass_powder",
@@ -810,7 +897,10 @@
         "metabolites": []
       },
       "cui": "C0004755",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "barley_juice",
@@ -841,7 +931,10 @@
         "metabolites": []
       },
       "cui": "C0004755",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "bayberry",
@@ -858,7 +951,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949964",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "beet_root",
@@ -889,7 +985,10 @@
         "metabolites": []
       },
       "cui": "C0004749",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "beetroot",
@@ -919,7 +1018,10 @@
         "metabolites": []
       },
       "cui": "C0004749",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "belleric_myrobalan",
@@ -938,7 +1040,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950296",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "bhringraj",
@@ -957,7 +1062,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C1017586",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "bilberry",
@@ -985,7 +1093,10 @@
         "metabolites": []
       },
       "cui": "C0795673",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "bilberry_fruit",
@@ -1014,7 +1125,10 @@
         "metabolites": []
       },
       "cui": "C0004843",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "bitter_melon_fruit",
@@ -1048,7 +1162,10 @@
         "metabolites": []
       },
       "cui": "C0004811",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_cherry",
@@ -1079,7 +1196,10 @@
         "metabolites": []
       },
       "cui": "C0330497",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_garlic",
@@ -1116,7 +1236,10 @@
         "metabolites": []
       },
       "cui": "C0993243",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_ginger",
@@ -1147,7 +1270,10 @@
         "metabolites": []
       },
       "cui": "C3178990",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_gram",
@@ -1178,7 +1304,10 @@
         "metabolites": []
       },
       "cui": "C0996864",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_pepper",
@@ -1208,7 +1337,10 @@
         "metabolites": []
       },
       "cui": "C0030934",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_radish",
@@ -1223,7 +1355,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C3254856",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_soybean_hull",
@@ -1238,7 +1373,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0037733",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_tea_leaf",
@@ -1274,7 +1412,10 @@
         "metabolites": []
       },
       "cui": "C0039400",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "blackcurrant",
@@ -1292,7 +1433,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0004842",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "blessed_thistle",
@@ -1321,7 +1465,10 @@
         "metabolites": []
       },
       "cui": "C0330621",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "blue_cohosh",
@@ -1338,7 +1485,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0331048",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "blue_flag_root",
@@ -1366,7 +1516,10 @@
         "metabolites": []
       },
       "cui": "C0949872",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "blue_vervain",
@@ -1396,7 +1549,10 @@
         "metabolites": []
       },
       "cui": "C0949588",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "blueberry",
@@ -1436,7 +1592,10 @@
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['blueberry juice powder', 'blueberry juice', 'organic blueberry juice powder']"
       ],
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "blueberry_fruit",
@@ -1467,7 +1626,10 @@
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 1 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['blueberry juice powder']"
       ],
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "boldo_leaf",
@@ -1485,7 +1647,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950026",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "boneset_herb",
@@ -1515,7 +1680,10 @@
         "metabolites": []
       },
       "cui": "C0949776",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "boswellia_serrata_resin",
@@ -1546,7 +1714,10 @@
         "metabolites": []
       },
       "cui": "C1260643",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "brassaiopsis_glomerulata",
@@ -1561,7 +1732,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1234684",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "broccoli",
@@ -1596,7 +1770,10 @@
         "metabolites": []
       },
       "cui": "C0330498",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "brussels_sprout",
@@ -1632,7 +1809,10 @@
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 1 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['brussels']"
       ],
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "buchu_leaf",
@@ -1666,7 +1846,10 @@
         "metabolites": []
       },
       "cui": "C0996116",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "buckthorn_bark",
@@ -1699,7 +1882,10 @@
         "metabolites": []
       },
       "cui": "C0949619",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "buckwheat_seed",
@@ -1731,7 +1917,10 @@
         "metabolites": []
       },
       "cui": "C0330501",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "bulbine_natalensis",
@@ -1744,7 +1933,10 @@
       "notes": "Bulbine natalensis (Asphodelaceae) root/stem. South African succulent marketed for testosterone support. Contains mesembrenone alkaloids and saponins. Limited human clinical evidence; mostly animal studies.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "bupleurum_root",
@@ -1764,7 +1956,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949630",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "burdock_root_powder",
@@ -1799,7 +1994,10 @@
         "metabolites": []
       },
       "cui": "C0003780",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "butchers_broom_root",
@@ -1834,7 +2032,10 @@
         "metabolites": []
       },
       "cui": "C0330653",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "butternut",
@@ -1851,7 +2052,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0330973",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cabbage",
@@ -1882,7 +2086,10 @@
         "metabolites": []
       },
       "cui": "C2740612",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cacao_powder",
@@ -1913,7 +2120,10 @@
         "metabolites": []
       },
       "cui": "C0006879",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "california_poppy",
@@ -1944,7 +2154,10 @@
         "metabolites": []
       },
       "cui": "C0949771",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "caralluma",
@@ -1974,7 +2187,10 @@
         "metabolites": []
       },
       "cui": "C3178930",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "caralluma_fimbriata",
@@ -2003,7 +2219,10 @@
         "metabolites": []
       },
       "cui": "C3178930",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cardamom",
@@ -2034,7 +2253,10 @@
         "metabolites": []
       },
       "cui": "C0006761",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "carob",
@@ -2065,7 +2287,10 @@
         "metabolites": []
       },
       "cui": "C0006820",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "carrot",
@@ -2095,7 +2320,10 @@
         "metabolites": []
       },
       "cui": "C0007788",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "carrot_seed_oil",
@@ -2126,7 +2354,10 @@
         "metabolites": []
       },
       "cui": "C0007788",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cassava",
@@ -2153,7 +2384,10 @@
         "metabolites": []
       },
       "cui": "C1141016",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cassia_nomame",
@@ -2183,7 +2417,10 @@
         "metabolites": []
       },
       "cui": "C3321103",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cat_s_claw_bark",
@@ -2204,7 +2441,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949579",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "catnip_leaf",
@@ -2236,7 +2476,10 @@
         "metabolites": []
       },
       "cui": "C0949987",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "catuaba",
@@ -2254,7 +2497,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0874042",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cauliflower",
@@ -2284,7 +2530,10 @@
         "metabolites": []
       },
       "cui": "C2740760",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cayenne_pepper",
@@ -2316,7 +2565,10 @@
         "metabolites": []
       },
       "cui": "C0006909",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "celastrus_paniculatus",
@@ -2334,7 +2586,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949670",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "celery_seed",
@@ -2368,7 +2623,10 @@
         "metabolites": []
       },
       "cui": "C0007011",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ceylon_cinnamon",
@@ -2397,7 +2655,10 @@
         "metabolites": []
       },
       "cui": "C0008863",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chaga_mushroom_powder",
@@ -2413,7 +2674,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1089270",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "chamomile",
@@ -2444,7 +2708,10 @@
         "metabolites": []
       },
       "cui": "C1510478",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chanca_piedra",
@@ -2466,7 +2733,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C0949896",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chaste_tree",
@@ -2486,7 +2756,10 @@
         "unii": "433OSF3U8A"
       },
       "cui": "C0042640",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chebulic_myrobalan",
@@ -2504,7 +2777,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C0950307",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cherokee_rose_fruit",
@@ -2537,7 +2813,10 @@
         "metabolites": []
       },
       "cui": "C1364437",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chia_seed",
@@ -2568,7 +2847,10 @@
         "metabolites": []
       },
       "cui": "C0950198",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chickweed_herb",
@@ -2599,7 +2881,10 @@
         "metabolites": []
       },
       "cui": "C0331139",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chicory_root",
@@ -2628,7 +2913,10 @@
         "metabolites": []
       },
       "cui": "C0008080",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chili_pepper",
@@ -2643,7 +2931,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0006909",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chinese_dodder_seed",
@@ -2673,7 +2964,10 @@
         "metabolites": []
       },
       "cui": "C0949729",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chinese_licorice",
@@ -2692,7 +2986,10 @@
         "unii": "42B5YD8F0K"
       },
       "cui": "C0949837",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "chlorella_powder",
@@ -2722,7 +3019,10 @@
         "metabolites": []
       },
       "cui": "C0008088",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
     },
     {
       "id": "chokeberry",
@@ -2736,7 +3036,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949547",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cilantro",
@@ -2767,7 +3070,10 @@
         "metabolites": []
       },
       "cui": "C0331198",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cinnamon_bark",
@@ -2787,7 +3093,10 @@
         "unii": "WS4CQ062KM"
       },
       "cui": "C0008863",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cissus_sicyoides",
@@ -2819,7 +3128,10 @@
         "metabolites": []
       },
       "cui": "C1502302",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "citrus_bergamot",
@@ -2834,7 +3146,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1258049",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "citrus_fruit_extract",
@@ -2867,7 +3182,10 @@
         "metabolites": []
       },
       "cui": "C0982043",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cleavers_herb",
@@ -2899,7 +3217,10 @@
         "metabolites": []
       },
       "cui": "C0949810",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cloves",
@@ -2940,7 +3261,10 @@
         "metabolites": []
       },
       "cui": "C0330581",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cnidium",
@@ -2960,7 +3284,10 @@
         "unii": "V1IA3S3CUS"
       },
       "cui": "C0949701",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "codonopsis",
@@ -2977,7 +3304,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949702",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "coffee_fruit",
@@ -3018,7 +3348,10 @@
         "metabolites": []
       },
       "cui": "C1138610",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "coleus_forskohlii_root",
@@ -3051,7 +3384,10 @@
         "metabolites": []
       },
       "cui": "C0949706",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "concord_grape",
@@ -3080,7 +3416,10 @@
         "metabolites": []
       },
       "cui": "C2741435",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "coptis_rhizome",
@@ -3100,7 +3439,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949717",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cordyceps",
@@ -3116,7 +3458,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949718",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cordyceps_mushroom_powder",
@@ -3145,7 +3490,10 @@
         "metabolites": []
       },
       "cui": "C0949718",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "coriander",
@@ -3178,7 +3526,10 @@
         "metabolites": []
       },
       "cui": "C0331198",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "corydalis_yanhusuo_root",
@@ -3196,7 +3547,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C0330282",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "couch_grass",
@@ -3229,7 +3583,10 @@
         "metabolites": []
       },
       "cui": "C0950342",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cowslip",
@@ -3257,7 +3614,10 @@
         "metabolites": []
       },
       "cui": "C0949616",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cramp_bark",
@@ -3288,7 +3648,10 @@
         "metabolites": []
       },
       "cui": "C0949597",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cranberry",
@@ -3325,7 +3688,10 @@
         "metabolites": []
       },
       "cui": "C0010074",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cranberry_fruit",
@@ -3359,7 +3725,10 @@
         "metabolites": []
       },
       "cui": "C0010074",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cranesbill",
@@ -3389,7 +3758,10 @@
         "metabolites": []
       },
       "cui": "C0949814",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cucumber",
@@ -3419,7 +3791,10 @@
         "metabolites": []
       },
       "cui": "C0010441",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cumin_seed",
@@ -3450,7 +3825,10 @@
         "metabolites": []
       },
       "cui": "C0010481",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cutch_tree",
@@ -3478,7 +3856,10 @@
         "metabolites": []
       },
       "cui": "C0949533",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cyperus",
@@ -3495,7 +3876,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949733",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "dandelion",
@@ -3524,7 +3908,10 @@
         "metabolites": []
       },
       "cui": "C0011131",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "dandelion_root",
@@ -3554,7 +3941,10 @@
         "metabolites": []
       },
       "cui": "C0011131",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "danshen",
@@ -3584,7 +3974,10 @@
         "metabolites": []
       },
       "cui": "C0036098",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "dark_sweet_cherry",
@@ -3620,7 +4013,10 @@
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 2 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'sweet cherry powder']"
       ],
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "date",
@@ -3651,7 +4047,10 @@
         "metabolites": []
       },
       "cui": "C0011136",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "devils_claw_tuber",
@@ -3671,7 +4070,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0018263",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "dgl_deglycyrrhizinated_licorice",
@@ -3689,7 +4091,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0023351",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "dill_weed",
@@ -3708,7 +4113,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0011224",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "dong_quai",
@@ -3741,7 +4149,10 @@
         "metabolites": []
       },
       "cui": "C0002836",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "dulse_seaweed",
@@ -3772,7 +4183,10 @@
         "metabolites": []
       },
       "cui": "C3256612",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "echinacea_angustifolia",
@@ -3802,7 +4216,10 @@
         "metabolites": []
       },
       "cui": "C0013479",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "echinacea_purpurea_aerial",
@@ -3820,7 +4237,10 @@
         "unii": "QI7G114Y98"
       },
       "cui": "C0330464",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "echinacea_purpurea_herb",
@@ -3852,7 +4272,10 @@
         "metabolites": []
       },
       "cui": "C0330464",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "echinacea_purpurea_root_extract",
@@ -3886,7 +4309,10 @@
         "metabolites": []
       },
       "cui": "C0330464",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "elder_blossom",
@@ -3916,7 +4342,10 @@
         "metabolites": []
       },
       "cui": "C0036195",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "elderberries",
@@ -3966,7 +4395,10 @@
         "metabolites": []
       },
       "cui": "C0036195",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "eleuthero_stem",
@@ -3999,7 +4431,10 @@
         "metabolites": []
       },
       "cui": "C0013849",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "enokitake",
@@ -4029,7 +4464,10 @@
         "metabolites": []
       },
       "cui": "C0319700",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "essential_oil_blend",
@@ -4046,7 +4484,10 @@
       "notes": "Multi-species essential oil blend covering generic essential oil supplement labels. Composition varies by product. Identity mapping only; not attributable to a single botanical species.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "eucalyptus",
@@ -4061,7 +4502,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0015143",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "eucalyptus_leaf_oil",
@@ -4092,7 +4536,10 @@
         "metabolites": []
       },
       "cui": "C0015143",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "european_ash_seed_fruit",
@@ -4107,7 +4554,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949800",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "evening_primrose_seed_oil",
@@ -4138,7 +4588,10 @@
         "unii": "76UI55V071"
       },
       "cui": "C0014895",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "evodia_fruit",
@@ -4168,7 +4621,10 @@
         "metabolites": []
       },
       "cui": "C0950325",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "eyebright",
@@ -4183,7 +4639,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949777",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "false_unicorn",
@@ -4211,7 +4670,10 @@
         "metabolites": []
       },
       "cui": "C0949787",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "fennel",
@@ -4246,7 +4708,10 @@
         "metabolites": []
       },
       "cui": "C0015569",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "fenugreek_seed",
@@ -4276,7 +4741,10 @@
         "metabolites": []
       },
       "cui": "C0015594",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "feverfew",
@@ -4311,7 +4779,10 @@
         "metabolites": []
       },
       "cui": "C0015636",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "fig",
@@ -4340,7 +4811,10 @@
         "metabolites": []
       },
       "cui": "C0015766",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "forsythia_suspensa",
@@ -4358,7 +4832,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949793",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "fragrant_angelica_root",
@@ -4390,7 +4867,10 @@
         "metabolites": []
       },
       "cui": "C2949322",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "frangula_bark",
@@ -4420,7 +4900,10 @@
         "metabolites": []
       },
       "cui": "C0949793",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "french_melon",
@@ -4436,7 +4919,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0947370",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "fringe_tree",
@@ -4452,7 +4938,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949688",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "fruit_base",
@@ -4464,7 +4953,10 @@
       "notes": "Generic multi-fruit powder blend used as supplement base or flavoring. Composition varies by manufacturer. Identity mapping for non-specific fruit base labels. Not attributable to a single species.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "fruits",
@@ -4494,7 +4986,10 @@
         "metabolites": []
       },
       "cui": "C0016767",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "galega_officinalis",
@@ -4523,7 +5018,10 @@
         "metabolites": []
       },
       "cui": "C0949808",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "garcinia_indica",
@@ -4540,7 +5038,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C3460451",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "gardenia",
@@ -4555,7 +5056,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949811",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "garlic_bulb",
@@ -4594,7 +5098,10 @@
         "metabolites": []
       },
       "cui": "C0993243",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "geranium",
@@ -4610,7 +5117,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0330886",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ginger_extract",
@@ -4642,7 +5152,10 @@
         "metabolites": []
       },
       "cui": "C0017149",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ginger_root",
@@ -4682,7 +5195,10 @@
         "metabolites": []
       },
       "cui": "C0017149",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ginkgo_biloba_leaf",
@@ -4712,7 +5228,10 @@
         "metabolites": []
       },
       "cui": "C0017578",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ginseng_root_panax",
@@ -4742,7 +5261,10 @@
         "unii": "CUQ3A77YXI"
       },
       "cui": "C0017648",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "gleditsia",
@@ -4771,7 +5293,10 @@
         "metabolites": []
       },
       "cui": "C1018317",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "glehnia",
@@ -4800,7 +5325,10 @@
         "metabolites": []
       },
       "cui": "C0949816",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "globe_artichoke",
@@ -4838,7 +5366,10 @@
         "metabolites": []
       },
       "cui": "C0003785",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "goats_rue",
@@ -4870,7 +5401,10 @@
         "metabolites": []
       },
       "cui": "C0949808",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "goji_berry",
@@ -4893,7 +5427,10 @@
         "unii": "930626MWDL"
       },
       "cui": "C0330505",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "goldenrod",
@@ -4922,7 +5459,10 @@
         "metabolites": []
       },
       "cui": "C0038534",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "goldenseal",
@@ -4955,7 +5495,10 @@
         "metabolites": []
       },
       "cui": "C0330520",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "gotu_kola",
@@ -4978,7 +5521,10 @@
         "unii": "7M867G6T1U"
       },
       "cui": "C0007037",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "grape",
@@ -5018,7 +5564,10 @@
         "metabolites": []
       },
       "cui": "C0018208",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "grape_seed",
@@ -5038,7 +5587,10 @@
         "unii": "C34U15ICXA"
       },
       "cui": "C0018208",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "gravel_root",
@@ -5056,7 +5608,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949778",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "graviola",
@@ -5077,7 +5632,10 @@
         "unii": "5EI0SM9VVE"
       },
       "cui": "C1002484",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "celandine",
@@ -5096,7 +5654,10 @@
         "unii": "7E889U5RNN"
       },
       "cui": "C0949680",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "greater_galangal",
@@ -5130,7 +5691,10 @@
         "metabolites": []
       },
       "cui": "C3256845",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "greek_mountain_tea_aerial_parts",
@@ -5158,7 +5722,10 @@
         "metabolites": []
       },
       "cui": "C1074263",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "green_bell_pepper",
@@ -5197,7 +5764,10 @@
         "metabolites": []
       },
       "cui": "C0006909",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "green_cabbage",
@@ -5225,7 +5795,10 @@
         "metabolites": []
       },
       "cui": "C5234656",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "green_onion",
@@ -5243,7 +5816,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0453134",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "green_tea",
@@ -5259,7 +5835,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0039400",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "green_tea_leaf",
@@ -5341,7 +5920,10 @@
         ]
       },
       "cui": "C0039400",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "guava",
@@ -5370,7 +5952,10 @@
         "metabolites": []
       },
       "cui": "C0018338",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "guayusa_leaf",
@@ -5399,7 +5984,10 @@
         "metabolites": []
       },
       "cui": "C0950097",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "guggul",
@@ -5431,7 +6019,10 @@
         "metabolites": []
       },
       "cui": "C0949715",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "gymnema_sylvestre",
@@ -5460,7 +6051,10 @@
         "metabolites": []
       },
       "cui": "C0949826",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "gynostemma",
@@ -5489,7 +6083,10 @@
         "metabolites": []
       },
       "cui": "C0949828",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "hawthorn_flowering_tops",
@@ -5510,7 +6107,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0010196",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "henbane",
@@ -5539,7 +6139,10 @@
         "metabolites": []
       },
       "cui": "C0331199",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "hesperidin",
@@ -5574,7 +6177,10 @@
         "metabolites": []
       },
       "cui": "C0019593",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "himematsutake",
@@ -5604,7 +6210,10 @@
         "metabolites": []
       },
       "cui": "C1086056",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "hiratake",
@@ -5620,7 +6229,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0319683",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "holy_basil_leaf",
@@ -5659,7 +6271,10 @@
         "metabolites": []
       },
       "cui": "C0950004",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "hoodia_gordonii",
@@ -5677,7 +6292,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1218366",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "horehound",
@@ -5706,7 +6324,10 @@
         "metabolites": []
       },
       "cui": "C0024879",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "horny_goat_weed",
@@ -5730,7 +6351,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949767",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "horse_chestnut_seed",
@@ -5761,7 +6385,10 @@
         "metabolites": []
       },
       "cui": "C0001443",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "horsemint_leaf",
@@ -5791,7 +6418,10 @@
         "metabolites": []
       },
       "cui": "C1007813",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "horseradish",
@@ -5820,7 +6450,10 @@
         "metabolites": []
       },
       "cui": "C0020424",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "horsetail_aerial_parts",
@@ -5858,7 +6491,10 @@
         "metabolites": []
       },
       "cui": "C0014825",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "huito",
@@ -5886,7 +6522,10 @@
         "metabolites": []
       },
       "cui": "C1020875",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "hydrangea_root",
@@ -5904,7 +6543,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949855",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "hyssop",
@@ -5921,7 +6563,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0020443",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "indian_elecampane_root",
@@ -5949,7 +6594,10 @@
         "metabolites": []
       },
       "cui": "C0123799",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "indian_kino_tree",
@@ -5979,7 +6627,10 @@
         "metabolites": []
       },
       "cui": "C0949602",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "indian_madder",
@@ -5993,7 +6644,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950179",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "indian_tinospora",
@@ -6025,7 +6679,10 @@
         "metabolites": []
       },
       "cui": "C0950313",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "irvingia_gabonensis",
@@ -6043,7 +6700,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1033652",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ivy",
@@ -6060,7 +6720,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949841",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "jambolan_seed",
@@ -6091,7 +6754,10 @@
         "metabolites": []
       },
       "cui": "C0330680",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "japanese_honeysuckle",
@@ -6123,7 +6789,10 @@
         "metabolites": []
       },
       "cui": "C0949893",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "japanese_knotweed",
@@ -6139,7 +6808,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0331260",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "jatamasi",
@@ -6167,7 +6839,10 @@
         "metabolites": []
       },
       "cui": "C1187331",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "java_tea",
@@ -6198,7 +6873,10 @@
         "metabolites": []
       },
       "cui": "C0950018",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "jerusalem_artichoke",
@@ -6229,7 +6907,10 @@
         "metabolites": []
       },
       "cui": "C0022386",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "jiaogulan_leaf",
@@ -6259,7 +6940,10 @@
         "metabolites": []
       },
       "cui": "C0949828",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "jujube",
@@ -6276,7 +6960,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949612",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "juniper",
@@ -6294,7 +6981,10 @@
         "unii": "O84B5194RL"
       },
       "cui": "C0022563",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "kale",
@@ -6325,7 +7015,10 @@
         "metabolites": []
       },
       "cui": "C3859186",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "kanna_sceletium",
@@ -6358,7 +7051,10 @@
         "metabolites": []
       },
       "cui": "C1462507",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "kawaratake",
@@ -6376,7 +7072,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0319805",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "kelp_powder",
@@ -6417,7 +7116,10 @@
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['ecklonia radiata', 'ecklonia kurome', 'alaria esculenta']"
       ],
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
     },
     {
       "id": "khadeer",
@@ -6449,7 +7151,10 @@
         "metabolites": []
       },
       "cui": "C0331487",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "kiwifruit",
@@ -6467,7 +7172,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0440282",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "kokilaksha",
@@ -6482,7 +7190,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C4774590",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "kola_nut",
@@ -6512,7 +7223,10 @@
         "metabolites": []
       },
       "cui": "C0022651",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "korean_pine",
@@ -6541,7 +7255,10 @@
         "metabolites": []
       },
       "cui": "C1039365",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ladys_mantle_leaf",
@@ -6558,7 +7275,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C1014935",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lavender",
@@ -6586,7 +7306,10 @@
         "unii": "ZBP1YXW0H8"
       },
       "cui": "C0023082",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lemon",
@@ -6615,7 +7338,10 @@
         "metabolites": []
       },
       "cui": "C0023053",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lemon_balm_leaf",
@@ -6648,7 +7374,10 @@
         "metabolites": []
       },
       "cui": "C0025083",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lemon_bioflavonoids",
@@ -6682,7 +7411,10 @@
         "metabolites": []
       },
       "cui": "C0982043",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lemon_oil",
@@ -6717,7 +7449,10 @@
         "metabolites": []
       },
       "cui": "C0304108",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lemongrass",
@@ -6737,7 +7472,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0330621",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "licorice_root",
@@ -6772,7 +7510,10 @@
         "metabolites": []
       },
       "cui": "C0023351",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ligustrum",
@@ -6789,7 +7530,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949889",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lime",
@@ -6807,7 +7551,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0023529",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "linden",
@@ -6836,7 +7583,10 @@
         "metabolites": []
       },
       "cui": "C0040232",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lingonberry",
@@ -6865,7 +7615,10 @@
         "metabolites": []
       },
       "cui": "C0330749",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lions_mane_mushroom_powder",
@@ -6881,7 +7634,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949842",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "lodhra",
@@ -6899,7 +7655,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C3891826",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "long_pepper",
@@ -6930,7 +7689,10 @@
         "metabolites": []
       },
       "cui": "C0330582",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "maca_root",
@@ -6962,7 +7724,10 @@
         "metabolites": []
       },
       "cui": "C0949879",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mace",
@@ -6990,7 +7755,10 @@
         "metabolites": []
       },
       "cui": "C0280578",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "magnolia_phellodendron_blend",
@@ -7006,7 +7774,10 @@
       "notes": "Blend of Magnolia officinalis bark (honokiol, magnolol) and Phellodendron amurense bark (berberine). Relora® is a branded version. Used for cortisol modulation and stress. Botanical bark blend.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "maitake",
@@ -7034,7 +7805,10 @@
         "metabolites": []
       },
       "cui": "C0949824",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "mango",
@@ -7064,7 +7838,10 @@
         "metabolites": []
       },
       "cui": "C0024778",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mango_leaf_extract",
@@ -7093,7 +7870,10 @@
         "metabolites": []
       },
       "cui": "C0024778",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mangosteen",
@@ -7108,7 +7888,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0024793",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "manuka_honey",
@@ -7124,7 +7907,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C2347055",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "animal"
+      }
     },
     {
       "id": "maqui",
@@ -7147,7 +7933,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1067051",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "marshmallow_root",
@@ -7184,7 +7973,10 @@
         "metabolites": []
       },
       "cui": "C0024866",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mashaparni",
@@ -7203,7 +7995,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C1012148",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "matcha_tea_powder",
@@ -7220,7 +8015,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0039400",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "meadowsweet_herb",
@@ -7252,7 +8050,10 @@
         "metabolites": []
       },
       "cui": "C0949788",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "medicinal_mushroom_blend",
@@ -7265,7 +8066,10 @@
       "notes": "Multi-species medicinal mushroom blend typically containing reishi, shiitake, maitake, turkey tail, and/or cordyceps. Identity mapping for generic mushroom blend labels. Composition varies by manufacturer.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "mesima",
@@ -7282,7 +8086,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C4101693",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "milk_thistle",
@@ -7312,7 +8119,10 @@
         "metabolites": []
       },
       "cui": "C0037144",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "milk_thistle_seed",
@@ -7342,7 +8152,10 @@
         "metabolites": []
       },
       "cui": "C0037144",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "millet",
@@ -7374,7 +8187,10 @@
         "metabolites": []
       },
       "cui": "C2347130",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mimosa_pudica",
@@ -7391,7 +8207,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0330829",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "moringa_leaf",
@@ -7409,7 +8228,10 @@
         "unii": "4WET1AWO9B"
       },
       "cui": "C0330514",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "motherwort_herb",
@@ -7441,7 +8263,10 @@
         "metabolites": []
       },
       "cui": "C0023111",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mucuna_pruriens",
@@ -7478,7 +8303,10 @@
         "metabolites": []
       },
       "cui": "C0330541",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mudgaparni",
@@ -7497,7 +8325,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C1038397",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mugwort",
@@ -7516,7 +8347,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0003764",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "muira_puama_bark",
@@ -7549,7 +8383,10 @@
         "metabolites": []
       },
       "cui": "C1136294",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mullein",
@@ -7581,7 +8418,10 @@
         "metabolites": []
       },
       "cui": "C0042658",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "mung_bean",
@@ -7610,7 +8450,10 @@
         "metabolites": []
       },
       "cui": "C2726182",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "myrrh_resin",
@@ -7643,7 +8486,10 @@
         "metabolites": []
       },
       "cui": "C0027171",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "myrrh_resin_extract",
@@ -7677,7 +8523,10 @@
         "metabolites": []
       },
       "cui": "C0027171",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "nagkeshar",
@@ -7696,7 +8545,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C1054049",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "nettle_leaf",
@@ -7725,7 +8577,10 @@
         "metabolites": []
       },
       "cui": "C0028402",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "nettle_root",
@@ -7756,7 +8611,10 @@
         "metabolites": []
       },
       "cui": "C0028402",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "nigella",
@@ -7775,7 +8633,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950001",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "nirgundi",
@@ -7795,7 +8656,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C1643782",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "noni",
@@ -7811,7 +8675,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0330544",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "nori",
@@ -7841,7 +8708,10 @@
         "metabolites": []
       },
       "cui": "C3256731",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
     },
     {
       "id": "oat_generic",
@@ -7880,7 +8750,10 @@
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 6 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['swedish oats beta-glucans', 'swedish oats beta glucans', 'oat beta-glucans', 'oat beta glucans', 'swedish oat', 'swedish oats']"
       ],
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "oat_bran",
@@ -7911,7 +8784,10 @@
         "metabolites": []
       },
       "cui": "C0004756",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "oat_straw",
@@ -7953,7 +8829,10 @@
         "metabolites": []
       },
       "cui": "C0004756",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "okra_fruit",
@@ -7985,7 +8864,10 @@
         "metabolites": []
       },
       "cui": "C1457872",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "olive_leaf_powder",
@@ -8018,7 +8900,10 @@
         "metabolites": []
       },
       "cui": "C0028791",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "oolong_tea_leaf",
@@ -8047,7 +8932,10 @@
         "metabolites": []
       },
       "cui": "C0039400",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "orange",
@@ -8079,7 +8967,10 @@
         "metabolites": []
       },
       "cui": "C0028765",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "orange_essential_oil",
@@ -8109,7 +9000,10 @@
         "metabolites": []
       },
       "cui": "C0254751",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "oregano_herb",
@@ -8143,7 +9037,10 @@
         "metabolites": []
       },
       "cui": "C0028780",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "oregon_grape",
@@ -8162,7 +9059,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949897",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "osha_root",
@@ -8190,7 +9090,10 @@
         "metabolites": []
       },
       "cui": "C1018219",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "paeonia_lactiflora",
@@ -8210,7 +9113,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950031",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "papaya_fruit_powder",
@@ -8241,7 +9147,10 @@
         "metabolites": []
       },
       "cui": "C0030513",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "parsley",
@@ -8285,7 +9194,10 @@
         "metabolites": []
       },
       "cui": "C0030697",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "parsnip",
@@ -8314,7 +9226,10 @@
         "metabolites": []
       },
       "cui": "C0030667",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "passion_flower",
@@ -8333,7 +9248,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0030524",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "passionflower_herb",
@@ -8362,7 +9280,10 @@
         "metabolites": []
       },
       "cui": "C0030524",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "pau_darco_bark",
@@ -8394,7 +9315,10 @@
         "metabolites": []
       },
       "cui": "C0949831",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "pea",
@@ -8425,7 +9349,10 @@
         "metabolites": []
       },
       "cui": "C0030821",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "peach",
@@ -8459,7 +9386,10 @@
         "metabolites": []
       },
       "cui": "C0030792",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "pear",
@@ -8489,7 +9419,10 @@
         "metabolites": []
       },
       "cui": "C0030836",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "peony",
@@ -8503,7 +9436,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950031",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "peppermint",
@@ -8535,7 +9471,10 @@
         "metabolites": []
       },
       "cui": "C0025757",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "peppermint_leaf",
@@ -8564,7 +9503,10 @@
         "metabolites": []
       },
       "cui": "C0025757",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "perilla_leaf",
@@ -8593,7 +9535,10 @@
         "metabolites": []
       },
       "cui": "C0950041",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "phellodendron_bark",
@@ -8618,7 +9563,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950042",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "picrorhiza_kurroa",
@@ -8646,7 +9594,10 @@
         "metabolites": []
       },
       "cui": "C0950050",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "picrorhiza_root",
@@ -8675,7 +9626,10 @@
         "metabolites": []
       },
       "cui": "C0950050",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "plantain",
@@ -8705,7 +9659,10 @@
         "metabolites": []
       },
       "cui": "C0032173",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "plum",
@@ -8735,7 +9692,10 @@
         "metabolites": []
       },
       "cui": "C0032223",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "polypodium_leucotomos",
@@ -8766,7 +9726,10 @@
         "metabolites": []
       },
       "cui": "C1614561",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "polypodium_vulgare",
@@ -8803,7 +9766,10 @@
         "metabolites": []
       },
       "cui": "C0032276",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "pomegranate",
@@ -8838,7 +9804,10 @@
         "metabolites": []
       },
       "cui": "C0032230",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "poria_cocos",
@@ -8858,7 +9827,10 @@
         "unii": "XH37TWY5O4"
       },
       "cui": "C0949607",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "potato",
@@ -8890,7 +9862,10 @@
         "metabolites": []
       },
       "cui": "C0032846",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "prickly_ash",
@@ -8920,7 +9895,10 @@
         "metabolites": []
       },
       "cui": "C0949611",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "prune",
@@ -8950,7 +9928,10 @@
         "metabolites": []
       },
       "cui": "C0032223",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "psyllium_husk",
@@ -8980,7 +9961,10 @@
         "metabolites": []
       },
       "cui": "C0033068",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "pu_erh_tea_leaf",
@@ -8997,7 +9981,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0039400",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "pueraria_mirifica",
@@ -9012,7 +9999,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C5710981",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "pumpkin",
@@ -9055,7 +10045,10 @@
         "metabolites": []
       },
       "cui": "C0032880",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "purple_corn_cob",
@@ -9071,7 +10064,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1446590",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "purple_willow_bark",
@@ -9104,7 +10100,10 @@
         "metabolites": []
       },
       "cui": "C1032339",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "quassia",
@@ -9133,7 +10132,10 @@
         "metabolites": []
       },
       "cui": "C0949614",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "radish",
@@ -9163,7 +10165,10 @@
         "metabolites": []
       },
       "cui": "C0034275",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "raspberry_seed",
@@ -9178,7 +10183,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0034310",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "rauwolfia_vomitoria",
@@ -9207,7 +10215,10 @@
         "metabolites": []
       },
       "cui": "C0034551",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "red_algae",
@@ -9218,7 +10229,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0002033",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
     },
     {
       "id": "red_clover",
@@ -9248,7 +10262,10 @@
         "metabolites": []
       },
       "cui": "C0040718",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "red_clover_flower",
@@ -9277,7 +10294,10 @@
         "metabolites": []
       },
       "cui": "C0040718",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "red_raspberry_fruit",
@@ -9310,7 +10330,10 @@
         "metabolites": []
       },
       "cui": "C0034310",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "red_root",
@@ -9340,7 +10363,10 @@
         "metabolites": []
       },
       "cui": "C0949669",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "reishi_mushroom",
@@ -9371,7 +10397,10 @@
         "metabolites": []
       },
       "cui": "C0017644",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "rhodiola_rosea_root",
@@ -9404,7 +10433,10 @@
         "metabolites": []
       },
       "cui": "C0949608",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "rhododendron_caucasicum",
@@ -9463,7 +10495,10 @@
         "metabolites": []
       },
       "cui": "C0035436",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "rose_hips",
@@ -9485,7 +10520,10 @@
         "unii": "3TNW8D08V3"
       },
       "cui": "C0035738",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "rue",
@@ -9518,7 +10556,10 @@
         "metabolites": []
       },
       "cui": "C0035944",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "safed_musli",
@@ -9546,7 +10587,10 @@
         "metabolites": []
       },
       "cui": "C2629552",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sage_leaf_extract",
@@ -9582,7 +10626,10 @@
         "metabolites": []
       },
       "cui": "C0036100",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sariva",
@@ -9613,7 +10660,10 @@
         "metabolites": []
       },
       "cui": "C1024189",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sarsaparilla",
@@ -9635,7 +10685,10 @@
         "unii": "2H1576D5WG"
       },
       "cui": "C0036312",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "saw_palmetto_berry",
@@ -9665,7 +10718,10 @@
         "metabolites": []
       },
       "cui": "C0036524",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "schisandra_berry",
@@ -9703,7 +10759,10 @@
         "metabolites": []
       },
       "cui": "C0036728",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "schizonepeta",
@@ -9733,7 +10792,10 @@
         "metabolites": []
       },
       "cui": "C0949609",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sea_buckthorn",
@@ -9750,7 +10812,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950378",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "seaweed",
@@ -9763,7 +10828,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C3256731",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
     },
     {
       "id": "sesbania",
@@ -9780,7 +10848,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0330741",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "shankhpushpi",
@@ -9807,7 +10878,10 @@
         "metabolites": []
       },
       "cui": "C3660905",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "shatavari_root",
@@ -9836,7 +10910,10 @@
         "metabolites": []
       },
       "cui": "C0949556",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sheep_sorrel",
@@ -9864,7 +10941,10 @@
         "metabolites": []
       },
       "cui": "C0035943",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "shiitake_mushroom",
@@ -9893,7 +10973,10 @@
         "metabolites": []
       },
       "cui": "C0023144",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "sichuan_lovage",
@@ -9924,7 +11007,10 @@
         "metabolites": []
       },
       "cui": "C0949890",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "skullcap",
@@ -9957,7 +11043,10 @@
         "metabolites": []
       },
       "cui": "C0036763",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "solomons_seal_root",
@@ -9992,7 +11081,10 @@
         "metabolites": []
       },
       "cui": "C0032286",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sophora_japonica",
@@ -10010,7 +11102,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0996856",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sorghum_bran",
@@ -10039,7 +11134,10 @@
         "metabolites": []
       },
       "cui": "C0331571",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "spirulina_powder",
@@ -10069,7 +11167,10 @@
         "metabolites": []
       },
       "cui": "C0037123",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
     },
     {
       "id": "squash",
@@ -10096,7 +11197,10 @@
         "metabolites": []
       },
       "cui": "C2722043",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "squaw_vine",
@@ -10124,7 +11228,10 @@
         "metabolites": []
       },
       "cui": "C0949983",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "st_john_s_wort",
@@ -10160,7 +11267,10 @@
         "metabolites": []
       },
       "cui": "C0020027",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "star_anise",
@@ -10188,7 +11298,10 @@
         "metabolites": []
       },
       "cui": "C0038017",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "stoneroot",
@@ -10221,7 +11334,10 @@
         "metabolites": []
       },
       "cui": "C0949706",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "strawberry",
@@ -10254,7 +11370,10 @@
         "metabolites": []
       },
       "cui": "C0038218",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "suma_root",
@@ -10283,7 +11402,10 @@
         "metabolites": []
       },
       "cui": "C4025984",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sweet_potato",
@@ -10314,7 +11436,10 @@
         "metabolites": []
       },
       "cui": "C0038432",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sweet_wormwood_herb",
@@ -10345,7 +11470,10 @@
         "metabolites": []
       },
       "cui": "C0003763",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sweet_wormwood_leaf_oil",
@@ -10376,7 +11504,10 @@
         "metabolites": []
       },
       "cui": "C0003763",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tangerine",
@@ -10406,7 +11537,10 @@
         "metabolites": []
       },
       "cui": "C0039439",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tart_cherry_fruit",
@@ -10452,7 +11586,10 @@
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'cherry puree', 'tart cherry puree powder']"
       ],
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tea_tree",
@@ -10481,7 +11618,10 @@
         "metabolites": []
       },
       "cui": "C0032087",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "thyme",
@@ -10517,7 +11657,10 @@
         "metabolites": []
       },
       "cui": "C0040081",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tillandsia",
@@ -10531,7 +11674,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1000971",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tomato",
@@ -10566,7 +11712,10 @@
         "metabolites": []
       },
       "cui": "C0040228",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tongkat_ali",
@@ -10599,7 +11748,10 @@
         "metabolites": []
       },
       "cui": "C0949773",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "toothed_clubmoss",
@@ -10630,7 +11782,10 @@
         "metabolites": []
       },
       "cui": "C0949851",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tree_peony_root_bark",
@@ -10659,7 +11814,10 @@
         "metabolites": []
       },
       "cui": "C0950035",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tribulus_terrestris",
@@ -10691,7 +11849,10 @@
         "metabolites": []
       },
       "cui": "C0040820",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "triphala_powder",
@@ -10706,7 +11867,10 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C1958185",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "turkey_rhubarb_root",
@@ -10739,7 +11903,10 @@
         "metabolites": []
       },
       "cui": "C0035436",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "turmeric",
@@ -10769,7 +11936,10 @@
         "metabolites": []
       },
       "cui": "C0041070",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "turmeric_root_powder",
@@ -10801,7 +11971,10 @@
         "metabolites": []
       },
       "cui": "C0041070",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tylophora_leaf",
@@ -10816,7 +11989,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0041148",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "uva_ursi",
@@ -10833,7 +12009,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0003755",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "uva_ursi_leaf",
@@ -10868,7 +12047,10 @@
         "metabolites": []
       },
       "cui": "C0003755",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "valerian_root",
@@ -10900,7 +12082,10 @@
         "metabolites": []
       },
       "cui": "C0042305",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "vegetable_powders",
@@ -10912,7 +12097,10 @@
       "notes": "Generic multi-vegetable powder blend covering non-specific vegetable supplement labels. Composition varies by manufacturer. Identity mapping only. Not attributable to single species.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "vitex",
@@ -10933,7 +12121,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0042640",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wakame",
@@ -10962,7 +12153,10 @@
         "metabolites": []
       },
       "cui": "C1030485",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
     },
     {
       "id": "wasabi_root",
@@ -10995,7 +12189,10 @@
         "metabolites": []
       },
       "cui": "C2937575",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "watercress_herb",
@@ -11028,7 +12225,10 @@
         "metabolites": []
       },
       "cui": "C0043088",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "watermelon",
@@ -11057,7 +12257,10 @@
         "metabolites": []
       },
       "cui": "C0043159",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wheat_germ",
@@ -11087,7 +12290,10 @@
         "metabolites": []
       },
       "cui": "C0043178",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wheat_barley_grass_blend",
@@ -11101,7 +12307,10 @@
       "notes": "Blend of Triticum aestivum (wheat) and Hordeum vulgare (barley) young grass. Alkalizing green food supplement rich in chlorophyll, SOD, and trace minerals. Harvested before jointing (gluten-free).",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wheatgrass_powder",
@@ -11118,7 +12327,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0043178",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "white_grape",
@@ -11148,7 +12360,10 @@
         "metabolites": []
       },
       "cui": "C0018208",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "white_mulberry",
@@ -11176,7 +12391,10 @@
         "metabolites": []
       },
       "cui": "C0330541",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "white_oak",
@@ -11205,7 +12423,10 @@
         "metabolites": []
       },
       "cui": "C0034499",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "white_sandalwood",
@@ -11235,7 +12456,10 @@
         "metabolites": []
       },
       "cui": "C1706570",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "white_willow_bark",
@@ -11268,7 +12492,10 @@
         "metabolites": []
       },
       "cui": "C0036093",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wild_blueberry",
@@ -11302,7 +12529,10 @@
         "metabolites": []
       },
       "cui": "C1443062",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wild_indigo_root",
@@ -11331,7 +12561,10 @@
         "metabolites": []
       },
       "cui": "C0949560",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wild_lettuce",
@@ -11347,7 +12580,10 @@
         "unii": "6D74QW4H67"
       },
       "cui": "C0949875",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wild_yam_root",
@@ -11378,7 +12614,10 @@
         "metabolites": []
       },
       "cui": "C0012165",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "winged_treebine",
@@ -11410,7 +12649,10 @@
         "metabolites": []
       },
       "cui": "C0949693",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wintergreen_leaf",
@@ -11444,7 +12686,10 @@
         "metabolites": []
       },
       "cui": "C0017062",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "witch_hazel_leaf",
@@ -11473,7 +12718,10 @@
         "metabolites": []
       },
       "cui": "C0018545",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "woad",
@@ -11509,7 +12757,10 @@
         "metabolites": []
       },
       "cui": "C0949868",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wood_betony",
@@ -11538,7 +12789,10 @@
         "metabolites": []
       },
       "cui": "C0949619",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wormwood_leaf",
@@ -11572,7 +12826,10 @@
         "metabolites": []
       },
       "cui": "C0003762",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "xanthoparmelia_scabrosa",
@@ -11587,7 +12844,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C5736541",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "yacon_root",
@@ -11614,7 +12874,10 @@
         "metabolites": []
       },
       "cui": "C5981353",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "yarrow_aerial_parts",
@@ -11639,7 +12902,10 @@
         "unii": "2FXJ6SW4PK"
       },
       "cui": "C0000479",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "yellow_dock_root",
@@ -11670,7 +12936,10 @@
         "metabolites": []
       },
       "cui": "C0035944",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "yerba_mate_leaf",
@@ -11704,7 +12973,10 @@
         "metabolites": []
       },
       "cui": "C0024949",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "yucca",
@@ -11724,7 +12996,10 @@
         "unii": "08A0YG3VIC"
       },
       "cui": "C0043408",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "yuzu",
@@ -11739,7 +13014,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1065229",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "zhu_ling",
@@ -11755,7 +13033,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949605",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "chopchini",
@@ -11786,7 +13067,10 @@
         "unii": "B5ZXF484DK"
       },
       "cui": "C1014796",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "zucchini",
@@ -11808,7 +13092,10 @@
       "external_ids": {
         "unii": "EQU1BON34S"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "garbanzo_bean",
@@ -11831,7 +13118,10 @@
       "external_ids": {
         "unii": "N91637DNW9"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "black_bean",
@@ -11851,7 +13141,10 @@
         "review_status": "validated"
       },
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "russian_tarragon",
@@ -11873,7 +13166,10 @@
       "external_ids": {
         "unii": "831MQ9808D"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sweet_clover",
@@ -11893,7 +13189,10 @@
         "review_status": "validated"
       },
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "quinoa",
@@ -11921,7 +13220,10 @@
         "substance_name": "Chenopodium quinoa whole",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "adzuki_bean",
@@ -11949,7 +13251,10 @@
         "substance_name": "Vigna angularis whole",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "amaranth_grain",
@@ -11977,7 +13282,10 @@
         "substance_name": "Amaranthus hybridus leaf",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "kamut",
@@ -12005,7 +13313,10 @@
         "substance_name": "Kamut flour",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "curry_leaf",
@@ -12034,7 +13345,10 @@
         "substance_name": "Curry antigen",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "hemp_protein",
@@ -12057,7 +13371,10 @@
         "substance_name": "Cannabis sativa seed protein",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "betel_leaf",
@@ -12083,7 +13400,10 @@
         "substance_name": "Piper betle leaf",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "catjang_cowpea",
@@ -12109,7 +13429,10 @@
         "substance_name": "Vigna unguiculata whole",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "king_trumpet",
@@ -12135,7 +13458,10 @@
         "substance_name": "Pleurotus eryngii whole",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
     },
     {
       "id": "black_raspberry",
@@ -12162,7 +13488,10 @@
         "substance_name": "Rubus occidentalis whole",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "kombu",
@@ -12191,7 +13520,10 @@
         "substance_name": "Laminaria japonica",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal"
+      }
     },
     {
       "id": "navy_bean",
@@ -12216,7 +13548,10 @@
         "substance_name": "Phaseolus vulgaris seed",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lavandin",
@@ -12242,7 +13577,10 @@
         "substance_name": "Lavandula intermedia",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sacha_inchi",
@@ -12269,7 +13607,10 @@
         "substance_name": "Plukenetia volubilis seed",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lantana_camara",
@@ -12293,7 +13634,10 @@
         "substance_name": "Lantana camara",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "wrightia_tinctoria",
@@ -12317,7 +13661,10 @@
         "substance_name": "Wrightia tinctoria",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "collard_greens",
@@ -12340,7 +13687,10 @@
         "substance_name": "Brassica oleracea acephala",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "sweet_orange",
@@ -12364,7 +13714,10 @@
         "substance_name": "Citrus sinensis",
         "substance_class": "structurally diverse"
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "cynanchum_wilfordii",
@@ -12398,7 +13751,10 @@
         "metabolites": []
       },
       "cui": "C1463421",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "phlomoides_umbrosa",
@@ -12433,7 +13789,10 @@
         "metabolites": []
       },
       "cui": "C4576738",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "tamarind",
@@ -12463,7 +13822,10 @@
       "notes": "Tamarindus indica fruit — legume-family tropical fruit used for dietary fiber and polyphenols. Source of tartaric acid and malic acid. Used in gummies and chewables as natural flavor + fiber source.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "green_bean",
@@ -12486,7 +13848,10 @@
       "external_ids": {},
       "cui": "C0016968",
       "cui_verified_source": "UMLS (pre-verified; GeneralizedOrganism concept)",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "lima_bean",
@@ -12510,7 +13875,10 @@
       "external_ids": {},
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Phaseolus lunatus at supplement-ingredient level; track governed-null per protocol.",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ecklonia_radiata",
@@ -12531,7 +13899,10 @@
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "ecklonia_kurome",
@@ -12551,7 +13922,10 @@
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "alaria_esculenta",
@@ -12573,7 +13947,10 @@
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     }
   ]
 }

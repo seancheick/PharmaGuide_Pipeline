@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
-    "schema_version": "5.3.0",
+    "schema_version": "5.4.0",
     "last_updated": "2026-04-30",
     "total_entries": 673,
     "functional_roles_field": {
@@ -19,7 +19,8 @@
       }
     },
     "field_contract_changes": {
-      "v5.3.0": "2026-04-30 Phase 4c — category canonicalization. Renamed 241 → ~30 values per CLINICIAN_REVIEW.md Section 2B. Each category now equals either a functional_roles vocab ID or a transitional bucket (label_descriptor / active_pending_relocation / manual_review). No Flutter impact — Flutter reads functional_roles[], not category."
+      "v5.3.0": "2026-04-30 Phase 4c — category canonicalization. Renamed 241 → ~30 values per CLINICIAN_REVIEW.md Section 2B. Each category now equals either a functional_roles vocab ID or a transitional bucket (label_descriptor / active_pending_relocation / manual_review). No Flutter impact — Flutter reads functional_roles[], not category.",
+      "v5.4.0": "2026-04-30 Phase 6 — V1.1 attributes scaffolding. Added attributes object with is_branded_complex on heuristic-detected branded ingredient complexes (BioCell, Tonalin, AstraGin, etc.) — those flagged is_active_only AND with brand-marker name patterns."
     }
   },
   "other_ingredients": [
@@ -1712,7 +1713,10 @@
       "last_updated": "2026-02-22",
       "external_ids": {},
       "functional_roles": [],
-      "is_active_only": true
+      "is_active_only": true,
+      "attributes": {
+        "is_branded_complex": true
+      }
     },
     {
       "id": "NHA_ATPRO",
@@ -13592,7 +13596,10 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "functional_roles": [],
-      "is_active_only": true
+      "is_active_only": true,
+      "attributes": {
+        "is_branded_complex": true
+      }
     },
     {
       "id": "NHA_NONIONIC_SURFACTANT_DESCRIPTOR",
@@ -21790,7 +21797,10 @@
       "last_updated": "2025-12-04",
       "external_ids": {},
       "functional_roles": [],
-      "is_active_only": true
+      "is_active_only": true,
+      "attributes": {
+        "is_branded_complex": true
+      }
     },
     {
       "id": "PII_VINITROX_BRANDED_BLEND",
