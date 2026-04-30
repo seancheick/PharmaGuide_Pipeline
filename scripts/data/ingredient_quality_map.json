@@ -7844,7 +7844,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -8959,7 +8959,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "antioxidants",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -13579,7 +13579,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fibers",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "relationships": [
       {
@@ -13768,7 +13768,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -17155,7 +17155,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -17341,7 +17341,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -17505,7 +17505,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -17681,7 +17681,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fibers",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -19273,7 +19273,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "proteins",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 1.0,
@@ -19675,7 +19675,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fibers",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -19805,7 +19805,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fibers",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -22736,7 +22736,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -23604,7 +23604,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.9,
       "missing_fields": [],
@@ -24569,7 +24569,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "cui_note": "No confirmed ingredient-level UMLS concept for Chlorella Growth Factor.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -26496,7 +26496,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -32070,7 +32070,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "herbs",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
@@ -32145,7 +32145,7 @@
       "parent_id": "vitamin_b3_niacin",
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "vitamins",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "relationships": [
       {
@@ -32239,7 +32239,7 @@
       "parent_id": "vitamin_b3_niacin",
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "vitamins",
     "relationships": [
       {
         "type": "form_of",
@@ -33226,7 +33226,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -37223,7 +37223,7 @@
       "vitamins": 17
     },
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-26",
+    "last_updated": "2026-04-30",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -38987,7 +38987,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
@@ -39427,7 +39427,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fatty_acids",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -39488,7 +39488,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fatty_acids",
     "cui_note": "Mapped to taurursodiol, the closest ingredient-level UMLS concept for TUDCA.",
     "data_quality": {
       "completeness": 1.0,
@@ -45954,7 +45954,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fibers",
     "cui_note": "Corrected from inositol hexaphosphate-polyethylene glycol concept to phytic acid / IP6 ingredient concept.",
     "data_quality": {
       "completeness": 1.0,
@@ -47930,7 +47930,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
@@ -48028,7 +48028,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fatty_acids",
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
@@ -48379,7 +48379,7 @@
         ]
       }
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "external_ids": {
       "unii": "0UE22Q87VC"
     },
@@ -51389,7 +51389,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -51617,7 +51617,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -52801,7 +52801,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "herbs",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -53117,7 +53117,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "minerals",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -53822,7 +53822,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "antioxidants",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.2,
@@ -54155,7 +54155,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "proteins",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.2,
@@ -54267,7 +54267,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "proteins",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 0.2,
@@ -54399,7 +54399,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 0.2,
@@ -54905,7 +54905,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
       "completeness": 0.2,
@@ -57698,7 +57698,7 @@
     "notes": "Potassium-rich coconut liquid endosperm used in hydration and electrolyte support products.",
     "cui": "C4271504",
     "rxcui": "1799143",
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
@@ -59171,7 +59171,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "cui_note": "No UMLS concept for touchi extract specifically",
     "rxcui_note": "No RxNorm concept",
     "data_quality": {
@@ -60334,7 +60334,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fibers",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -60491,7 +60491,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -60651,7 +60651,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fatty_acids",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -60842,7 +60842,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "fatty_acids",
     "data_quality": {
       "completeness": 0.9,
       "missing_fields": [],
