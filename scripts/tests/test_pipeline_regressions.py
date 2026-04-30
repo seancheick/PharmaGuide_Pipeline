@@ -1902,7 +1902,12 @@ class TestBatch11WrapperAndSummaryRows:
         }
 
         assert "High Choline Lecithin" not in active_names
-        assert active_by_name["Phosphatidyl Choline"]["standardName"] == "Choline"
+        # Batch 5 IQM gap fill (2026-04-29): Phosphatidyl Choline now maps
+        # to the new dedicated `phosphatidylcholine` IQM parent rather than
+        # being treated as a Choline-content disclosure. This is more
+        # accurate — Phosphatidyl Choline IS phosphatidylcholine, the
+        # phospholipid molecule, not just a choline source.
+        assert active_by_name["Phosphatidyl Choline"]["standardName"] == "Phosphatidylcholine"
         assert display_by_raw["High Choline Lecithin"]["score_included"] is False
         assert display_by_raw["High Choline Lecithin"]["source_section"] == "activeIngredients"
 

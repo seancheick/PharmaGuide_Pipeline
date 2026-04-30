@@ -1,6 +1,6 @@
-# PharmaGuide Scoring README (v3.4.0 / Data Schema 5.1.0)
+# PharmaGuide Scoring README (v3.5.0 / Data Schema 5.3.0)
 
-> Last updated: 2026-04-22
+> Last updated: 2026-04-29
 
 This document is the implementation-facing guide for the current scorer:
 
@@ -8,7 +8,37 @@ This document is the implementation-facing guide for the current scorer:
 - Config: `scripts/config/scoring_config.json`
 - Spec: `scripts/SCORING_ENGINE_SPEC.md`
 
-It is aligned to the current `v3.4.0` behavior in code and config.
+It is aligned to the current `v3.5.0` behavior in code and config.
+
+## v3.5.0 changes (2026-04-29)
+
+Three-batch accuracy uplift:
+
+1. **Active/inactive role gate** in `enrich_supplements_v3.py:_check_banned_substances`.
+   Banned-substance entries marked `match_mode: 'active'` no longer fire on
+   ingredients tagged `_source_section: 'inactive'`. Eliminates ~2,000+
+   false-positive HIGH_RISK fires across the catalog (talc as tablet
+   glidant, titanium dioxide as inactive coating, simethicone/PDMS as
+   softgel defoamer).
+
+2. **Section C evidence retune** in `scoring_config.json`:
+   - `evidence_level_multipliers.ingredient-human`: `0.65` → `0.80`
+   - `evidence_level_multipliers.branded-rct`: `0.80` → `0.90`
+   - `top_n_weights`: `[1.0, 0.5, 0.25]` → `[1.0, 0.7, 0.5, 0.3]`
+   Rewards evidence-rich premium formulations (Thorne, Pure Encapsulations,
+   Transparent Labs) without inflating multivitamins (5th+ ingredient still 0).
+
+3. **Final-DB data integrity gate** in `build_final_db.py:validate_export_contract`.
+   `verdict='NOT_SCORED'`, null score on a non-blocked verdict, and
+   incomplete A/B/C/D breakdowns are now quarantined to `excluded_by_gate`
+   (review_queue) and never reach Flutter. Ensures the contract:
+   *"if a number/verdict appears in final_db, it is correct."*
+   BLOCKED, UNSAFE, CAUTION, POOR, SAFE all continue to ship with their
+   verdict + reason payload.
+
+4. **Heavy-metal alias hardening** in `banned_recalled_ingredients.json`:
+   removed dangerous single/two-letter chemistry-symbol aliases (`as`,
+   `pb`, `hg`, `cd`) that posed FP collision risk.
 
 ## 1) What The Scorer Does
 
@@ -224,7 +254,7 @@ The scorer also emits per-blend evidence payloads used for explainability.
 - Sub-clinical dose guard: multiply by `sub_clinical_dose_guard_multiplier` (default 0.25) when product dose < `min_clinical_dose`. Adds `SUB_CLINICAL_DOSE_DETECTED`.
 - Supra-clinical flag: adds `SUPRA_CLINICAL_DOSE` when product dose > `supra_clinical_multiple` × max studied dose (default 3.0, informational only).
 - Per-ingredient cap: `cap_per_ingredient` (default **7**).
-- **Top-N diminishing-returns aggregation** (new in v3.4, `top_n_weights`, default `[1.0, 0.5, 0.25]`): per-ingredient scores sorted descending and multiplied by positional weights before summing. Prevents multivitamin inflation — best ingredient 100%, 2nd 50%, 3rd 25%, 4th+ 0%.
+- **Top-N diminishing-returns aggregation** (`top_n_weights`, v3.5 default `[1.0, 0.7, 0.5, 0.3]`): per-ingredient scores sorted descending and multiplied by positional weights before summing. Prevents multivitamin inflation while rewarding targeted formulations — best ingredient 100%, 2nd 70%, 3rd 50%, 4th 30%, 5th+ 0%. (Pre-v3.5 was `[1.0, 0.5, 0.25]`.)
 - **Depth bonus** (new in v3.4, `depth_bonus_bands` `[[20, 0.25], [40, 0.5]]`): reads `published_studies_count` from matched reference entry. 0-19 trials → +0.0, 20-39 → +0.25, ≥40 → +0.5. Added after top-N aggregation.
 - Section cap: `cap_total` (default **20**).
 

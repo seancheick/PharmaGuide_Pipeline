@@ -1931,7 +1931,12 @@ def test_batch25_softgels_active_exact_aliases_and_new_botanicals_map(normalizer
 @pytest.mark.parametrize(
     "name,expected",
     [
-        ("Khadeer", "Khadeer"),
+        # Khadeer is the Ayurvedic name for Acacia catechu (Senegalia catechu).
+        # After Batch 5 IQM gap fill (2026-04-29), it maps to the new IQM
+        # acacia_catechu parent entry which gives it a real quality score
+        # rather than just botanical recognition. This is more accurate —
+        # Khadeer ≡ Acacia catechu.
+        ("Khadeer", "Acacia Catechu"),
         ("Sariva", "Sariva"),
         ("Corydalis yanhusuo root 10:1 extract", "Corydalis"),
         ("Triphala fruit extract", "Triphala"),

@@ -143,7 +143,8 @@ class TestClinicalSchemaCompatibility:
         }
         section_c = scorer._score_section_c(product, [])
         assert section_c["depth_bonus"] == pytest.approx(0.5)
-        assert section_c["score"] == pytest.approx(3.1, abs=0.01)
+        # rct_single (4) * ingredient-human (0.80, v3.5 from 0.65) + depth 0.5 = 3.7
+        assert section_c["score"] == pytest.approx(3.7, abs=0.01)
 
 
 class TestAuditRegressionData:

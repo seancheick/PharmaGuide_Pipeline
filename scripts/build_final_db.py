@@ -336,7 +336,29 @@ EXPORT_REQUIRED_IQD_FIELDS = {
 
 
 def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
-    """Validate the minimum upstream contract needed for final DB export."""
+    """Validate the minimum upstream contract needed for final DB export.
+
+    Includes the Batch 3 data-integrity gate:
+
+    Products SHIP (verdict appears in app, with reason) for verdicts:
+        SAFE, CAUTION, POOR, BLOCKED, UNSAFE, NUTRITION_ONLY
+
+    Products are QUARANTINED (excluded_by_gate; never reach Flutter) when:
+      - verdict == NOT_SCORED  (mapping/dosage gate failure upstream)
+      - score_100_equivalent is None on a non-BLOCKED/UNSAFE verdict
+      - any breakdown.{A,B,C,D}.score is missing or non-numeric on
+        non-BLOCKED/UNSAFE verdicts
+
+    BLOCKED/UNSAFE products may legitimately have null scores — the recall
+    or ban reason is the data the user needs.
+
+    Gate failure messages contain the phrase 'review_queue' so the existing
+    `_classify_export_error` taxonomy routes them into the
+    `excluded_by_gate` bucket (non-blocking quarantine that doesn't fail
+    the Supabase sync gate).
+    """
+    import math
+
     issues = []
 
     if not safe_str(enriched.get("dsld_id")):
@@ -359,6 +381,77 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         issues.append("missing scored.section_scores")
     if "scoring_metadata" not in scored:
         issues.append("missing scored.scoring_metadata")
+
+    # ── Batch 3 data integrity gate ────────────────────────────────────
+    verdict = safe_str(scored.get("verdict")).upper()
+    score_optional = verdict in {"BLOCKED", "UNSAFE"}
+
+    if verdict == "NOT_SCORED":
+        issues.append(
+            "review_queue: NOT_SCORED verdict — mapping/dosage gate "
+            "failed upstream; product cannot ship without a coherent "
+            "score (Batch 3 data integrity gate)."
+        )
+    elif not score_optional:
+        s100 = scored.get("score_100_equivalent")
+        if s100 is None:
+            issues.append(
+                f"review_queue: verdict={verdict} requires score_100_equivalent "
+                "but field is null (Batch 3 data integrity gate)."
+            )
+        else:
+            try:
+                f = float(s100)
+                if not math.isfinite(f):
+                    issues.append(
+                        f"review_queue: score_100_equivalent={s100!r} is not "
+                        "finite (Batch 3 data integrity gate)."
+                    )
+            except (TypeError, ValueError):
+                issues.append(
+                    f"review_queue: score_100_equivalent={s100!r} is not "
+                    "a number (Batch 3 data integrity gate)."
+                )
+
+        # Section scores: the public-facing score breakdown that
+        # build_core_row writes into products_core. Each must carry a
+        # finite numeric score.
+        ss = safe_dict(scored.get("section_scores"))
+        section_keys = (
+            "A_ingredient_quality",
+            "B_safety_purity",
+            "C_evidence_research",
+            "D_brand_trust",
+        )
+        for sk in section_keys:
+            sec_obj = ss.get(sk)
+            if not isinstance(sec_obj, dict):
+                issues.append(
+                    f"review_queue: section_scores.{sk} missing or not an "
+                    "object (Batch 3 data integrity gate)."
+                )
+                continue
+            sec_score = sec_obj.get("score")
+            if sec_score is None:
+                issues.append(
+                    f"review_queue: section_scores.{sk}.score is null "
+                    "(Batch 3 data integrity gate)."
+                )
+                continue
+            try:
+                f = float(sec_score)
+                if not math.isfinite(f):
+                    issues.append(
+                        f"review_queue: section_scores.{sk}.score="
+                        f"{sec_score!r} is not finite "
+                        "(Batch 3 data integrity gate)."
+                    )
+            except (TypeError, ValueError):
+                issues.append(
+                    f"review_queue: section_scores.{sk}.score="
+                    f"{sec_score!r} is not a number "
+                    "(Batch 3 data integrity gate)."
+                )
 
     return issues
 
@@ -1213,6 +1306,10 @@ _EXPORT_ERROR_TAXONOMY: List[Tuple[str, "re.Pattern[str]"]] = [
             # E1.6 defense gate: 100% of raw actives became inactive — almost
             # always a cleaner classifier bug (see commit 4d05a74).
             r"|all raw actives reclassified as inactive — likely cleaner classifier bug"
+            # Batch 3 data integrity gate: NOT_SCORED verdicts and
+            # incomplete scoring breakdowns are quarantined (never shipped
+            # to Flutter) but are non-blocking by design.
+            r"|review_queue:"
         ),
     ),
     (

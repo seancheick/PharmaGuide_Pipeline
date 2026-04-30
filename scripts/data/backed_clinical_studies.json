@@ -5063,7 +5063,10 @@
       "standard_name": "Garlic Extract",
       "aliases": [
         "allium sativum",
-        "aged garlic extract"
+        "aged garlic extract",
+        "garlic",
+        "garlic bulb",
+        "garlic powder"
       ],
       "category": "cardiovascular",
       "evidence_level": "ingredient-human",
@@ -5553,7 +5556,9 @@
       "standard_name": "S-Adenosylmethionine",
       "aliases": [
         "same",
-        "s-adenosyl-l-methionine"
+        "s-adenosyl-l-methionine",
+        "sam-e",
+        "s adenosyl methionine"
       ],
       "category": "mood/joint",
       "evidence_level": "ingredient-human",
@@ -6770,7 +6775,19 @@
       "aliases": [
         "epa",
         "dha",
-        "fish oil"
+        "fish oil",
+        "eicosapentaenoic acid",
+        "docosahexaenoic acid",
+        "epa (eicosapentaenoic acid)",
+        "dha (docosahexaenoic acid)",
+        "epa+dha",
+        "epa & dha",
+        "epa and dha",
+        "alpha-linolenic acid",
+        "ala omega-3",
+        "krill oil",
+        "algal oil",
+        "marine omega-3"
       ],
       "category": "cardiovascular / anti-inflammatory",
       "evidence_level": "ingredient-human",
@@ -8047,7 +8064,11 @@
       "standard_name": "Ginger Root",
       "aliases": [
         "zingiber officinale extract",
-        "gingerol"
+        "gingerol",
+        "ginger",
+        "ginger extract",
+        "ginger root extract",
+        "ginger rhizome"
       ],
       "category": "digestive / anti-inflammatory",
       "evidence_level": "ingredient-human",
@@ -8413,7 +8434,10 @@
       "standard_name": "Milk Thistle (Silymarin)",
       "aliases": [
         "silymarin",
-        "silybum marianum"
+        "silybum marianum",
+        "milk thistle",
+        "milk thistle extract",
+        "milk thistle seed extract"
       ],
       "category": "liver support",
       "evidence_level": "ingredient-human",
@@ -9630,7 +9654,10 @@
       "standard_name": "Cranberry Extract",
       "aliases": [
         "vaccinium macrocarpon",
-        "cranberry proanthocyanidins"
+        "cranberry proanthocyanidins",
+        "cranberry",
+        "cranberry juice extract",
+        "whole cranberry"
       ],
       "category": "urinary health",
       "evidence_level": "ingredient-human",
@@ -9752,7 +9779,10 @@
       "standard_name": "Cinnamon Extract",
       "aliases": [
         "cinnamomum cassia",
-        "cinnulin pf"
+        "cinnulin pf",
+        "cinnamon",
+        "cinnamon bark",
+        "cinnamon bark extract"
       ],
       "category": "blood sugar",
       "evidence_level": "ingredient-human",

@@ -1612,36 +1612,60 @@ class SupplementEnricherV3:
         if not study_name:
             return None
 
-        candidate_pairs: List[Tuple[str, str]] = []
+        # Comparison uses TWO normalizations:
+        #   1. _normalize_text — case + symbols + dashes (preserves hyphens)
+        #   2. make_normalized_key — additionally collapses hyphens/spaces
+        #      so "Alpha-Lipoic Acid" matches "Alpha Lipoic Acid"
+        #
+        # Bug 2026-04-29: clinical_studies entries are inconsistent about
+        # hyphens ("Alpha-Lipoic Acid" vs "Alpha Lipoic Acid") and so are
+        # supplement labels. Without the key-level pass, real evidence
+        # silently fails to match — Pure Encapsulations Alpha Lipoic Acid
+        # 100mg, NAC, Coenzyme Q10, L-Carnitine, etc. were all hitting C=0.
+        candidate_pairs: List[Tuple[str, str, str]] = []
         for candidate in candidates:
             norm = self._normalize_text(candidate)
-            if norm:
-                candidate_pairs.append((str(candidate), norm))
+            key = norm_module.make_normalized_key(candidate)
+            if norm or key:
+                candidate_pairs.append((str(candidate), norm, key))
         if not candidate_pairs:
             return None
 
-        excluded = {
-            self._normalize_text(value)
-            for value in (study.get("exclude_aliases") or [])
-            if self._normalize_text(value)
-        }
-        if excluded and any(norm in excluded for _, norm in candidate_pairs):
+        excluded_norms = set()
+        excluded_keys = set()
+        for value in (study.get("exclude_aliases") or []):
+            n = self._normalize_text(value)
+            k = norm_module.make_normalized_key(value)
+            if n: excluded_norms.add(n)
+            if k: excluded_keys.add(k)
+        if excluded_norms and any(norm in excluded_norms for _, norm, _ in candidate_pairs):
+            return None
+        if excluded_keys and any(key in excluded_keys for _, _, key in candidate_pairs):
             return None
 
         target_norm = self._normalize_text(study_name)
-        if any(norm == target_norm for _, norm in candidate_pairs):
+        target_key = norm_module.make_normalized_key(study_name)
+        if any(norm == target_norm for _, norm, _ in candidate_pairs):
             return {"method": "standard_name", "matched_term": study_name}
+        if target_key and any(key == target_key for _, _, key in candidate_pairs):
+            return {"method": "standard_name_key", "matched_term": study_name}
 
-        alias_map = {}
+        alias_map_norm = {}
+        alias_map_key = {}
         for alias in self._collect_clinical_aliases(study):
-            alias_norm = self._normalize_text(alias)
-            if alias_norm:
-                alias_map[alias_norm] = alias
+            an = self._normalize_text(alias)
+            ak = norm_module.make_normalized_key(alias)
+            if an: alias_map_norm[an] = alias
+            if ak: alias_map_key[ak] = alias
 
-        for _, norm in candidate_pairs:
-            matched_alias = alias_map.get(norm)
-            if matched_alias and norm not in excluded:
+        for _, norm, key in candidate_pairs:
+            matched_alias = alias_map_norm.get(norm)
+            if matched_alias and norm not in excluded_norms:
                 return {"method": "alias", "matched_term": matched_alias}
+        for _, norm, key in candidate_pairs:
+            matched_alias = alias_map_key.get(key)
+            if matched_alias and key not in excluded_keys:
+                return {"method": "alias_key", "matched_term": matched_alias}
 
         return None
 
@@ -2966,11 +2990,25 @@ class SupplementEnricherV3:
                 or ingredient.get('isProprietaryBlend', False)
             )
         ):
-            has_dose_pre, _ = self._has_valid_therapeutic_dose(ingredient)
-            return (
-                SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose_pre
-                else SKIP_REASON_BLEND_HEADER_NO_DOSE
+            # Round 2 fix (2026-04-30): a "proprietary blend" by FDA/DSLD
+            # convention has UNDISCLOSED individual amounts. When the parent
+            # carries proprietaryBlend=True but ALL nested children expose
+            # specific doses, the label is fully transparent and the parent
+            # is a branded single-active (e.g., BioCell Collagen 1000mg with
+            # nested 'hydrolyzed Collagen 600mg' disclosure, Turmeric blend
+            # with disclosed extract+root amounts). Don't skip these — they
+            # are real scorable actives, not opaque blends.
+            _all_nested_have_dose = all(
+                self._has_valid_therapeutic_dose(n)[0]
+                for n in nested_pre if isinstance(n, dict)
             )
+            if not _all_nested_have_dose:
+                has_dose_pre, _ = self._has_valid_therapeutic_dose(ingredient)
+                return (
+                    SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose_pre
+                    else SKIP_REASON_BLEND_HEADER_NO_DOSE
+                )
+            # Else: fully-disclosed parent — fall through to scorable path.
 
         # =================================================================
         # GROUP A: Structural flags from cleaning
@@ -3090,14 +3128,20 @@ class SupplementEnricherV3:
         # B4: LOW-CONFIDENCE patterns WITH dose — skip if structural evidence
         # says this is a blend header carrying total weight, not a real active.
         # Evidence: proprietaryBlend flag, ingredientGroup contains "blend",
-        # or hierarchyType indicates summary/header.
+        # or hierarchyType indicates summary/blend_header.
+        #
+        # Round 2 fix (2026-04-30): hierarchy_type='source' was previously
+        # treated as blend evidence, but it just describes ingredient ORIGIN
+        # ("Chicken Sternal Cartilage" for BioCell Collagen, "Curcuma longa"
+        # for Turmeric). Source descriptors don't make a parent a blend.
+        # Restrict to true blend-header signals: 'summary' and 'blend_header'.
         is_structural_blend = (
             ingredient.get('proprietaryBlend', False)
             or ingredient.get('isProprietaryBlend', False)
             or ('blend' in ingredient_group and 'blend' not in name_lower.split()[-1:])
         )
         hierarchy_type = ingredient.get('hierarchyType', '')
-        is_header_hierarchy = hierarchy_type in ('summary', 'source', 'blend_header')
+        is_header_hierarchy = hierarchy_type in ('summary', 'blend_header')
 
         if has_dose and (is_structural_blend or is_header_hierarchy):
             for pattern in BLEND_HEADER_PATTERNS_LOW_CONFIDENCE:
@@ -6990,6 +7034,9 @@ class SupplementEnricherV3:
             ing_name = ingredient.get('name', '')
             std_name = ingredient.get('standardName', '') or ing_name
             ing_name_lower = ing_name.lower()
+            # Source section tag set by _evaluate_safety_data wrapper (active vs inactive).
+            # Untagged ingredients default to 'active' so legacy callers preserve behavior.
+            ing_source_section = ingredient.get('_source_section', 'active')
 
             for section_key, banned_item in banned_items_with_category:
                 if not isinstance(banned_item, dict):
@@ -7004,6 +7051,17 @@ class SupplementEnricherV3:
                 match_rules = banned_item.get('match_rules', {}) or {}
                 match_mode = banned_item.get('match_mode') or match_rules.get('match_mode', 'active')
                 if match_mode in ('disabled', 'historical'):
+                    continue
+
+                # P0c: Active/inactive role gate. Substances flagged with
+                # match_mode='active' (the default) are dangerous as actives
+                # but acceptable as common excipients (talc as glidant, TiO2
+                # as coating, docusate as softgel emulsifier). Skip the
+                # banned-item check when the ingredient came from the
+                # inactives list and the entry isn't explicitly 'any'/'inactive'.
+                # Product entries are matched against product identity, not
+                # ingredient sections, so they bypass this gate.
+                if entity_type != 'product' and match_mode == 'active' and ing_source_section == 'inactive':
                     continue
 
                 # Product-level recalls/bans should match product identity
@@ -10141,6 +10199,11 @@ class SupplementEnricherV3:
         r'active\s*cell(?:s)?(?:\([^)]*\))?',
         r'cfu(?:s)?(?:\([^)]*\))?',
         r'colony\s*forming\s*unit(?:s)?(?:\([^)]*\))?',
+        # Round 2 fix (2026-04-30): "Organism(s)" is the DSLD-standard unit
+        # for probiotic CFU on many products (e.g., GNC Probiotic Complex
+        # 1 declares 1,000,000,000 Organism(s) = 1 billion CFU). Without
+        # this pattern, 22+ probiotic products lost their CFU bonus.
+        r'organism(?:s)?(?:\([^)]*\))?',
     ]
 
     def _is_cfu_equivalent_unit(self, unit: str) -> bool:

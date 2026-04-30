@@ -248,9 +248,9 @@
         }
       },
       "vitamin a (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": false,
-        "score": 5,
+        "score": 6,
         "absorption": "good (retinol/retinyl ester class baseline)",
         "notes": "The supplement label does not specify which form of Vitamin A is used. Could be preformed (retinyl esters) or provitamin A (beta-carotene). Scored conservatively since the actual bioavailability cannot be determined. B26 audit 2026-04-25: vitamin A class baseline.",
         "aliases": [
@@ -2635,9 +2635,9 @@
         }
       },
       "b12 (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 9,
         "natural": false,
-        "score": 7,
+        "score": 9,
         "absorption": "form unspecified; assume ~1-2% passive absorption at supplemental dose",
         "notes": "The supplement label does not specify which form of B12 is used. Cheap supplements typically use cyanocobalamin; premium ones use methylcobalamin or adenosylcobalamin. The form matters significantly for people with MTHFR variants or absorption issues. Evidence update 2026-04-25: Batch 10 audit verified PMIDs via PubMed eutils. ALL 5 supplied \"well-known\" reference PMIDs were misattributions (Carmel/Heaney/Shieh/Sato/Schurgers reassigned to verified PMIDs 18709891, 28187226, 23140417, 17158229, 11356998). D2 vs D3 difference corrected from \"15.69 nmol/L\" to verified 10.39 nmol/L (van den Heuvel 2024 PMID:37865222). MK-4 confirmed undetectable at nutritional doses (Sato 2012 PMID:23140417) — bio inflation flagged. B12 active-form bio inflation flagged: oral F is identical (~1-2% passive) across methyl/adenosyl/hydroxo/cyano forms; metabolic advantage is post-absorption.",
         "aliases": [
@@ -5170,9 +5170,9 @@
         }
       },
       "phosphorus (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 8,
         "natural": false,
-        "score": 6,
+        "score": 8,
         "absorption": "moderate (phosphate class baseline)",
         "notes": "The supplement label does not specify the phosphorus source. Most people get adequate phosphorus from diet — supplemental phosphorus is rarely needed except in specific medical conditions (renal phosphorus wasting, refeeding syndrome). B32 audit 2026-04-25: phosphate class.",
         "aliases": [
@@ -7368,9 +7368,9 @@
         }
       },
       "unspecified astaxanthin": {
-        "bio_score": 10,
+        "bio_score": 12,
         "natural": false,
-        "score": 10,
+        "score": 12,
         "absorption": "low/variable when fat-matrix unknown; reference Cmax ~3.86 µg/mL (Khayyal 2024)",
         "notes": "The supplement label says astaxanthin but does not specify natural (algae-derived) or synthetic. This distinction matters — natural astaxanthin from Haematococcus pluvialis has far more clinical support. If the source isn't specified, it may be the cheaper synthetic version. Evidence update 2026-04-24: Khayyal 2024 (PMID:38748358, n=12 males, 8mg crossover) reference (non-micellar) astaxanthin gave Cmax only 3.86 µg/mL vs 7.21 µg/mL for micellar formulation, confirming unformulated/unspecified astaxanthin defaults to lower bioavailability than fat-optimized forms.",
         "aliases": [
@@ -7811,9 +7811,9 @@
         }
       },
       "creatine monohydrate ((unspecified))": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": false,
-        "score": 5,
+        "score": 6,
         "absorption": "form-unverified monohydrate; assume class-typical F",
         "notes": "Generic creatine listing without a specified form. Could be monohydrate, HCl, or another salt. Since creatine monohydrate is the gold standard with the most research, products that don't specify the form may be using a less-studied variant. Conservative score applied. Evidence update 2026-04-25 (Batch 14): Creatine audit — 9 PMIDs WebFetch-verified. CLASS FINDING: creatine salts (HCl, citrate, nitrate, Mg-chelate) and KA-buffered ALL dissociate to deliver identical creatine ion via SLC6A8/CRT transporter. F class-equivalent to monohydrate (~99%) per Persky 2003 (PMID:12793840) and Jäger 2007 (PMID:17997838) head-to-head. Counter-ions affect Cmax/Tmax not absolute F. CEE EXCEPTION: covalent ester pro-drug hydrolyzes to creatinine pre-absorption (Gufford 2013 PMID:23957855 + Giese 2009 PMID:19585404 + Spillane 2009 PMID:19228401). Misattributions caught: \"Schedel 2000\" non-existent → Persky 2003; \"Greenwood 2003 citrate\" non-existent → Jäger 2007.",
         "aliases": [
@@ -8131,9 +8131,9 @@
         }
       },
       "atp (adenosine triphosphate) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 14,
         "natural": false,
-        "score": 5,
+        "score": 14,
         "absorption": "unknown",
         "notes": "Generic ATP listing without a specified salt form. Cannot determine bioavailability or purity. Conservative score applied — look for Peak ATP (disodium salt) for the clinically studied version. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -8203,6 +8203,605 @@
           "unii": "3WH6OPR0RH"
         }
       ],
+      "metabolites": []
+    },
+    "aliases": []
+  },
+  "whey_protein": {
+    "standard_name": "Whey Protein",
+    "category": "proteins",
+    "cui": "C1883555",
+    "rxcui_note": "No single RxNorm concept for cow-milk whey protein supplement; UNII 8617Z5FMF6 (WHEY) and CAS 9100-88-1 are canonical.",
+    "forms": {
+      "whey protein isolate": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "excellent (~90% protein content; rapid amino acid release)",
+        "notes": "Cow-milk-derived whey protein at the highest purity tier (≥90% protein by weight, minimal lactose/fat). Highest-grade form for muscle protein synthesis (MPS) — leucine content drives mTOR activation, with peak amino acid concentration ~60-90 min post-ingestion. Strong clinical evidence for resistance-training adaptation and post-exercise recovery at 20-40 g/serving. Cross-flow microfiltration retains bioactive peptides (lactoferrin, immunoglobulins) better than ion-exchange isolation.",
+        "aliases": [
+          "whey protein isolate",
+          "wpi",
+          "whey isolate",
+          "whey protein isolate (wpi)",
+          "cross-flow whey protein isolate",
+          "microfiltered whey protein isolate",
+          "ion-exchange whey protein isolate",
+          "instantized whey protein isolate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.9,
+          "range_low": 0.85,
+          "range_high": 0.95,
+          "quality": "excellent"
+        }
+      },
+      "hydrolyzed whey protein": {
+        "bio_score": 12,
+        "natural": true,
+        "score": 15,
+        "absorption": "excellent (pre-digested di- and tripeptides; fastest gastric emptying)",
+        "notes": "Enzymatically pre-hydrolyzed whey — di- and tripeptides absorb faster than free amino acids and intact protein. Used in clinical/medical-food formulations and fast-acting peri-workout protein. Bitter taste limits palatability. Score parity with WPI on quality, distinct on absorption-kinetics profile.",
+        "aliases": [
+          "hydrolyzed whey protein",
+          "hydrolysed whey protein",
+          "whey protein hydrolysate",
+          "whey hydrolysate",
+          "whey peptides",
+          "whey protein peptides"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.92,
+          "range_low": 0.88,
+          "range_high": 0.97,
+          "quality": "excellent"
+        }
+      },
+      "whey protein concentrate": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "good (~70-80% protein; retains lactose/fat fraction)",
+        "notes": "Whey protein concentrate (WPC) — 70-80% protein content with retained lactose and milk-fat fractions. More cost-effective than isolate but lower MPS efficiency per gram and lactose content matters for sensitive populations. Standard form in mass-market protein powders.",
+        "aliases": [
+          "whey protein concentrate",
+          "wpc",
+          "whey concentrate",
+          "whey protein concentrate (wpc)"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good"
+        }
+      },
+      "whey protein (unspecified)": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "good (label does not specify isolate vs concentrate)",
+        "notes": "Generic 'Whey Protein' declaration without specifying isolate / concentrate / hydrolysate. Defaulted to peer-min (concentrate equivalent) per Batch 5 unspecified-form policy.",
+        "aliases": [
+          "whey protein",
+          "whey",
+          "whey powder",
+          "milk whey protein"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.75,
+          "range_low": 0.65,
+          "range_high": 0.85,
+          "quality": "good"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "proteins",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-29"
+    },
+    "external_ids": {
+      "unii": "8617Z5FMF6",
+      "cas": "91082-88-1"
+    },
+    "gsrs": {
+      "substance_name": "WHEY",
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [
+        "21 CFR 184.1979",
+        "21 CFR 184.1979C"
+      ],
+      "dsld_count": 117,
+      "dsld_info_raw": "Dietary Supplement Label Database|Protein|Whey | 640 (Number of products:117)",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": []
+  },
+  "casein": {
+    "standard_name": "Casein",
+    "category": "proteins",
+    "cui": "C0007332",
+    "rxcui": "1440974",
+    "forms": {
+      "micellar casein": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "slow-release (gel-forms in stomach; 7-8 hour amino acid release)",
+        "notes": "Native micellar casein retains the natural micelle structure intact, gelating in stomach acid for slow gastric emptying — sustained amino acid delivery over 7-8 hours. Optimal for overnight muscle protein retention and inter-meal anti-catabolism. Distinct profile from whey (which is rapid-release). Strong clinical evidence at 20-40g pre-bed for muscle preservation in resistance-trained populations.",
+        "aliases": [
+          "micellar casein",
+          "native micellar casein",
+          "milk micellar casein"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.85,
+          "range_low": 0.8,
+          "range_high": 0.92,
+          "quality": "good"
+        }
+      },
+      "calcium caseinate": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (alkaline-precipitated; loses native micelle structure)",
+        "notes": "Acid- or alkali-precipitated casein bound to calcium for solubility. Loses native micellar structure and slow-release kinetics — performs more like an intermediate-rate protein. Common in mass-market protein blends.",
+        "aliases": [
+          "calcium caseinate",
+          "milk caseinate",
+          "calcium-caseinate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.78,
+          "range_low": 0.7,
+          "range_high": 0.85,
+          "quality": "moderate"
+        }
+      },
+      "casein (unspecified)": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (label does not specify micellar vs caseinate)",
+        "notes": "Generic 'Casein' declaration. Defaulted to peer-min (caseinate equivalent) per Batch 5 unspecified-form policy.",
+        "aliases": [
+          "casein",
+          "milk casein",
+          "casein protein"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.78,
+          "range_low": 0.7,
+          "range_high": 0.85,
+          "quality": "moderate"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": "casein_hydrolysate",
+      "confidence": "high"
+    },
+    "category_enum": "proteins",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-29"
+    },
+    "external_ids": {
+      "unii": "48268V50D5",
+      "cas": "9000-71-9"
+    },
+    "gsrs": {
+      "substance_name": "CASEIN",
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": 83,
+      "dsld_info_raw": "Dietary Supplement Label Database|protein|Casein | 2416 (Number of products:83)",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": []
+  },
+  "black_cherry": {
+    "standard_name": "Black Cherry",
+    "category": "antioxidants",
+    "cui": "C5551209",
+    "rxcui_note": "No RxNorm concept for whole-fruit botanical concentrate (Prunus avium); UNII A77056YJ4K and UMLS CUI C5551209 are the canonical identifiers.",
+    "forms": {
+      "black cherry concentrate": {
+        "bio_score": 6,
+        "natural": true,
+        "score": 9,
+        "absorption": "moderate (anthocyanin oral PK ~1-2% intact; metabolites detectable)",
+        "notes": "Concentrate / juice extract from Prunus avium (sweet black cherry) — botanically distinct from tart cherry / Montmorency (Prunus cerasus). Marketed primarily for gout / uric acid management based on anthocyanin (cyanidin-3-glucoside, cyanidin-3-rutinoside) inhibition of xanthine oxidase. Pilot RCT evidence for serum urate reduction (Zhang 2012, n=633 cohort study; small RCTs at 8 oz juice/day equivalent show acute urate reduction). Anti-inflammatory and antioxidant via anthocyanin and chlorogenic acid content. Anthocyanin oral PK is poor (~1-2% appears intact in plasma) but metabolites have measurable activity. Score reflects moderate evidence base with characterised mechanism; sits below tart cherry forms because most published RCTs use tart-cherry specifically.",
+        "aliases": [
+          "black cherry",
+          "black cherry concentrate",
+          "black cherry extract",
+          "black cherry fruit extract",
+          "black cherry juice concentrate",
+          "black cherry juice extract",
+          "sweet cherry extract",
+          "sweet cherry concentrate",
+          "prunus avium",
+          "prunus avium extract",
+          "prunus avium fruit extract"
+        ],
+        "dosage_importance": 0.85,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.01,
+          "range_high": 0.15,
+          "quality": "low"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "antioxidants",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-29"
+    },
+    "external_ids": {
+      "unii": "A77056YJ4K",
+      "cas": "84604-07-9"
+    },
+    "gsrs": {
+      "substance_name": "BLACK CHERRY",
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": 3,
+      "dsld_info_raw": "Dietary Supplement Label Database|botanical|Black cherry | 3888 (Number of products:3)",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": []
+  },
+  "phosphatidylcholine": {
+    "standard_name": "Phosphatidylcholine",
+    "category": "fatty_acids",
+    "cui": "C1959616",
+    "rxcui": "2109751",
+    "forms": {
+      "soy phosphatidylcholine": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "good (lecithin-derived; hydrolysed and re-synthesised in enterocytes)",
+        "notes": "Most abundant cell-membrane phospholipid and the major lecithin component (~20-25% of soy lecithin). Major dietary choline source — supports acetylcholine synthesis (cognitive), VLDL assembly (liver/lipid metabolism), and lung surfactant. Soy-derived form is the most extensively studied; oral PC is hydrolysed to lyso-PC and free fatty acids in the gut, then re-esterified to PC in enterocytes — meaning intact PC is delivered to the bloodstream. Strong clinical evidence for liver health (NAFLD support, alcohol-related liver injury) at 1-3 g/day. Polyenylphosphatidylcholine (PPC) is a clinical-grade enriched form used in NAFLD trials.",
+        "aliases": [
+          "phosphatidylcholine",
+          "phosphatidyl-choline",
+          "phosphatidyl choline complex",
+          "phosphatidylcholine complex",
+          "soy phosphatidylcholine",
+          "soybean phosphatidylcholine",
+          "soy-derived phosphatidylcholine",
+          "polyenylphosphatidylcholine",
+          "polyenyl phosphatidylcholine",
+          "ppc",
+          "lecithin phosphatidylcholine",
+          "1,2-diacyl-sn-glycero-3-phosphocholine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.85,
+          "range_low": 0.75,
+          "range_high": 0.92,
+          "quality": "good"
+        }
+      },
+      "sunflower phosphatidylcholine": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "good (lecithin-derived; soy-free alternative)",
+        "notes": "Sunflower-lecithin-derived phosphatidylcholine — used as a soy-free alternative for allergic populations. Bioavailability and clinical effects are equivalent to soy-PC. Sunflower lecithin contains slightly higher PC fraction (~25-30%) than soy lecithin.",
+        "aliases": [
+          "sunflower phosphatidylcholine",
+          "sunflower-derived phosphatidylcholine",
+          "non-soy phosphatidylcholine",
+          "soy-free phosphatidylcholine"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.85,
+          "range_low": 0.75,
+          "range_high": 0.92,
+          "quality": "good"
+        }
+      },
+      "phosphatidylcholine (unspecified)": {
+        "bio_score": 11,
+        "natural": true,
+        "score": 14,
+        "absorption": "good (estimated; default for unsourced PC)",
+        "notes": "Unspecified phosphatidylcholine (label does not declare soy / sunflower / synthetic source). Slightly lower default score because source-specific bioavailability and allergen profile cannot be confirmed.",
+        "aliases": [
+          "phosphatidyl choline (unspecified)",
+          "pc (unspecified)"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.8,
+          "range_low": 0.7,
+          "range_high": 0.9,
+          "quality": "good"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "fatty_acids",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-29"
+    },
+    "external_ids": {
+      "unii": "1T6N4D9YV6",
+      "cas": "97281-47-5"
+    },
+    "gsrs": {
+      "substance_name": "SOYBEAN PHOSPHATIDYLCHOLINE",
+      "substance_class": "mixture",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": []
+  },
+  "acacia_catechu": {
+    "standard_name": "Acacia Catechu",
+    "category": "herbs",
+    "cui": "C0949533",
+    "rxcui": "1650239",
+    "forms": {
+      "acacia catechu wood and bark extract": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate (catechin/epicatechin oral PK ~30%)",
+        "notes": "Heartwood and bark extract from Acacia catechu (Senegalia catechu, Fabaceae). Traditional Ayurvedic name 'Khadira' or 'Khadeer'. Standardised joint-formula extracts (Univestin = Acacia catechu + Morus alba) carry RCT evidence for osteoarthritis pain reduction at 250-500 mg/day. Active flavonoids include (+)-catechin, (-)-epicatechin, and procyanidin oligomers; oral bioavailability of monomeric catechins is ~25-35% with first-pass methylation. Distinct from Acacia gum (gum arabic) and from Acacia Senegal — those are different botanicals despite the shared genus name. Mechanism appears to be COX-2 / 5-LOX dual inhibition.",
+        "aliases": [
+          "acacia catechu",
+          "acacia catechu extract",
+          "acacia catechu bark",
+          "acacia catechu bark extract",
+          "acacia catechu wood",
+          "acacia catechu wood extract",
+          "acacia catechu wood and bark",
+          "acacia catechu wood and bark extract",
+          "acacia catechu wood & bark",
+          "acacia catechu wood & bark extract",
+          "acacia catechu heartwood",
+          "acacia catechu heartwood extract",
+          "senegalia catechu",
+          "senegalia catechu extract",
+          "khadeer",
+          "khadira",
+          "catechu",
+          "black catechu",
+          "cutch tree",
+          "cutch"
+        ],
+        "dosage_importance": 0.85,
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.25,
+          "range_high": 0.35,
+          "quality": "moderate"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-29"
+    },
+    "external_ids": {
+      "unii": "TJ6XA84OQF"
+    },
+    "gsrs": {
+      "substance_name": "SENEGALIA CATECHU WHOLE",
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": []
+  },
+  "phellodendron_amurense": {
+    "standard_name": "Phellodendron Amurense",
+    "category": "herbs",
+    "cui": "C1027031",
+    "rxcui": "1307947",
+    "forms": {
+      "phellodendron amurense bark extract": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "low (oral berberine PK ~5%)",
+        "notes": "Bark of the Amur cork tree (Huang Bai) — a classical TCM heat-clearing, dampness-drying botanical. Active compounds include berberine (~3-7%), jatrorrhizine, magnoflorine, and phellodendrine. Berberine is the dominant pharmacologically-active alkaloid; oral PK is poor (~5% systemic bioavailability) due to P-gp efflux and first-pass metabolism, but local GI activity drives much of the clinical effect. Most commonly co-formulated with Magnolia officinalis bark in stress/cortisol-modulation products (Relora-class). Independent supplementation supports immune balance, gastric inflammation, and blood-sugar regulation. Animal-source: none — fully botanical bark extract.",
+        "aliases": [
+          "phellodendron",
+          "phellodendron amurense",
+          "phellodendron amurense bark",
+          "phellodendron amurense extract",
+          "phellodendron amurense bark extract",
+          "phellodendron bark",
+          "phellodendron extract",
+          "phellodendron bark extract",
+          "huang bai",
+          "amur cork tree",
+          "amur cork tree bark",
+          "phellodendron (phellodendron amurense) extract",
+          "phellodendron amurense (bark) extract"
+        ],
+        "dosage_importance": 0.85,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.03,
+          "range_high": 0.1,
+          "quality": "low"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "herbs",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-29"
+    },
+    "external_ids": {
+      "unii": "PBG27B754G"
+    },
+    "gsrs": {
+      "substance_name": "PHELLODENDRON AMURENSE BARK",
+      "substance_class": "structurallyDiverse",
+      "cfr_sections": [],
+      "dsld_count": null,
+      "dsld_info_raw": null,
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
+      "metabolites": []
+    },
+    "aliases": []
+  },
+  "pepsin": {
+    "standard_name": "Pepsin",
+    "category": "enzymes",
+    "cui": "C0030909",
+    "rxcui": "8016",
+    "forms": {
+      "pepsin enzyme": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 13,
+        "absorption": "limited (acid-pH dependent)",
+        "notes": "Gastric protease that cleaves dietary protein at acidic pH (1.5-3.5). Most active in the stomach lumen and rapidly denatured as chyme passes into the alkaline duodenum, so its functional role is local proteolysis rather than systemic absorption. Commonly co-formulated with betaine HCl to ensure activating pH in users with hypochlorhydria (low stomach acid is common in elderly populations and chronic PPI users). Animal-sourced (porcine or bovine stomach mucosa). FDA-recognized: 21 CFR 184.1595 (GRAS food substance) and 21 CFR 310.540 (in OTC drug products). Score reflects genuine proteolytic activity bounded by acid-pH-only window of action.",
+        "aliases": [
+          "pepsin",
+          "pepsin enzyme",
+          "pepsin powder",
+          "pepsin a",
+          "pepsin, pure",
+          "pure pepsin",
+          "digestive pepsin",
+          "porcine pepsin",
+          "bovine pepsin",
+          "pepsin 1:10000",
+          "pepsin 1:3000",
+          "lactated pepsin"
+        ],
+        "dosage_importance": 0.85,
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.2,
+          "range_high": 0.45,
+          "quality": "moderate"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    },
+    "category_enum": "enzymes",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-29"
+    },
+    "external_ids": {
+      "unii": "GID333S43J",
+      "cas": "9001-75-6"
+    },
+    "gsrs": {
+      "substance_name": "PEPSIN",
+      "substance_class": "protein",
+      "cfr_sections": [
+        "21 CFR 184.1595",
+        "21 CFR 310.540"
+      ],
+      "dsld_count": 255,
+      "dsld_info_raw": "Dietary Supplement Label Database|Enzyme|Pepsin | 153 (Number of products:255)",
+      "active_moiety": null,
+      "salt_parents": [],
+      "metabolic_relationships": [],
       "metabolites": []
     },
     "aliases": []
@@ -8442,9 +9041,9 @@
         }
       },
       "resveratrol (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "low-moderate (resveratrol class baseline; rapid glucuronidation)",
         "notes": "Generic resveratrol listing without specifying the isomer or source. Could be trans- or cis-resveratrol, or a mix. Only trans-resveratrol has established bioactivity. Conservative score applied — look for products specifying 'trans-resveratrol' content for a meaningful dose. B33 audit 2026-04-25: resveratrol class baseline.",
         "aliases": [
@@ -8794,9 +9393,9 @@
         }
       },
       "saw palmetto (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "moderate (lipid extract class; form-dependent)",
         "notes": "Generic saw palmetto listing without specifying the extraction method or standardization level. Could be a potent CO2 extract or a basic powder — impossible to determine quality. Look for products standardized to 85–95% fatty acids for clinically relevant potency. Conservative score applied. B33 audit 2026-04-25: saw palmetto lipid class.",
         "aliases": [
@@ -8922,9 +9521,9 @@
         }
       },
       "stinging nettle (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 13,
         "natural": false,
-        "score": 5,
+        "score": 13,
         "absorption": "good (stinging nettle phenolic + lectin class)",
         "notes": "Generic nettle listing without specifying root or leaf. This matters because the root and leaf have different active compounds and clinical uses — root for prostate/BPH, leaf for allergies and minerals. Conservative score applied since the specific plant part cannot be determined. B33 audit 2026-04-25: stinging nettle class.",
         "aliases": [
@@ -9015,9 +9614,9 @@
         }
       },
       "pygeum (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 14,
         "natural": false,
-        "score": 5,
+        "score": 14,
         "absorption": "unknown",
         "notes": "Generic pygeum listing without specifying standardization or extraction method. Look for products standardized to 14% triterpenes and 0.5% n-docosanol for clinical-grade potency. Conservative score applied. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -9168,9 +9767,9 @@
         }
       },
       "vanadyl sulfate (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "very_low (V class baseline ~1-3%)",
         "notes": "Generic vanadium listing without specifying the salt form. Most supplements use vanadyl sulfate, but the form matters significantly for bioavailability. Conservative score applied. B25 audit 2026-04-25: V class baseline (PMID:23982218).",
         "aliases": [
@@ -9802,9 +10401,9 @@
         }
       },
       "chromium (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": false,
-        "score": 5,
+        "score": 6,
         "absorption": "poor (Cr class baseline ~1-3%; all forms similar)",
         "notes": "The label doesn't specify which chromium form is used. This gets a conservative score because it could be anything from cheap chromium chloride (very poorly absorbed) to premium picolinate. Look for the specific form name on your label for a more accurate score. B32 audit 2026-04-25: Cr class baseline (~1-3%).",
         "aliases": [
@@ -10015,9 +10614,9 @@
         }
       },
       "iodine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "excellent (default to iodide class; KI/NaI ~97%)",
         "notes": "The label doesn't specify which iodine form is used. This gets a conservative score. Most iodine forms absorb well, but without knowing the source we can't confirm quality. Look for 'potassium iodide' or 'kelp' on your label for a more accurate score. B28 audit 2026-04-25: iodide class baseline (KI/NaI 0.97 companions).",
         "aliases": [
@@ -10591,9 +11190,9 @@
         }
       },
       "molybdenum (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "very_good (Mo class baseline ~91%)",
         "notes": "The label doesn't specify which molybdenum form is used. Conservative score. Most molybdenum forms actually absorb reasonably well, but without knowing the source we can't confirm. Look for 'glycinate' or 'sodium molybdate' on your label. B32 audit 2026-04-25: Mo class baseline (~91%).",
         "aliases": [
@@ -10805,9 +11404,9 @@
         }
       },
       "boron (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "excellent (>98%)",
         "notes": "The label doesn't specify which boron form is used. All boron forms absorb at >98%, so the conservative score here reflects uncertainty about tolerability and clinical evidence rather than absorption. Check your label for FruiteX-B or glycinate for a more specific score.",
         "aliases": [
@@ -11061,9 +11660,9 @@
         }
       },
       "potassium (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
+        "score": 8,
         "absorption": "very_good (K class baseline ~80-95%; mineral)",
         "notes": "The label doesn't specify which potassium salt is used. Most potassium forms absorb at ~90%, so the conservative score reflects uncertainty about tolerability rather than absorption. Look for 'citrate' or 'gluconate' on your label for a more specific score. B33 audit 2026-04-25: K class baseline.",
         "aliases": [
@@ -11659,9 +12258,9 @@
         }
       },
       "pqq (pyrroloquinoline quinone) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "moderate (PQQ class baseline; form-dependent)",
         "notes": "The label doesn't specify which PQQ form is used. Most likely disodium PQQ (BioPQQ), which is by far the most common commercial form. Conservative score. Look for 'BioPQQ' or 'disodium' on your label. B33 audit 2026-04-25: PQQ class baseline.",
         "aliases": [
@@ -12195,9 +12794,9 @@
         }
       },
       "quercetin (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": true,
-        "score": 8,
+        "score": 9,
         "absorption": "poor (quercetin class-poor; <10% F)",
         "notes": "The label doesn't specify which quercetin form is used. Standard quercetin absorbs very poorly (~2%), so this gets a conservative score. Look for 'Quercefit,' 'Phytosome,' or 'EMIQ' on your label — those forms absorb 17-40x better. B33 audit 2026-04-25: quercetin class-poor (B19).",
         "aliases": [
@@ -12673,9 +13272,9 @@
         }
       },
       "probiotics (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": true,
-        "score": 8,
+        "score": 11,
         "absorption": "framework_mismatch (mixed live-organism + fermented-substrate)",
         "notes": "Strain not specified on label. Conservative score — without knowing the specific strain, delivery format, and CFU count, we can't assess viability or clinical evidence. Look for named strains (e.g., LGG, BB-12, DE111) for an accurate score. B33 audit 2026-04-25: framework-mismatch null pending Dr Pham harmonization.",
         "aliases": [
@@ -12931,9 +13530,9 @@
         }
       },
       "prebiotics (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 13,
         "natural": false,
-        "score": 5,
+        "score": 13,
         "absorption": "category_error (default to fermentation framework)",
         "notes": "Type not specified on label. Conservative score — different prebiotics feed different bacterial populations. Look for specific types (FOS, GOS, inulin, HMO) for a more accurate score. B28 audit 2026-04-25: CATEGORY ERROR default (B22 framework).",
         "aliases": [
@@ -13143,9 +13742,9 @@
         }
       },
       "choline (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
+        "score": 8,
         "absorption": "very_good (choline class baseline; PC ~95%)",
         "notes": "Form not specified on label. Conservative score — big difference between budget bitartrate and premium Alpha-GPC/citicoline. Look for a specific form name for an accurate score. B33 audit 2026-04-25: choline class baseline.",
         "aliases": [
@@ -13468,9 +14067,9 @@
         }
       },
       "phosphatidylserine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "moderate (PS class baseline; form-dependent)",
         "notes": "PS form not specified on label. Scored conservatively — soy-derived PS and Sharp-PS forms score higher with better clinical data. B33 audit 2026-04-25: PS class baseline.",
         "aliases": [
@@ -14133,9 +14732,9 @@
         }
       },
       "tmg (trimethylglycine) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "very_good (TMG class baseline; well-absorbed)",
         "notes": "TMG/betaine form not specified. Scored conservatively — betaine anhydrous is the most studied and effective supplemental form. B33 audit 2026-04-25: TMG class baseline.",
         "aliases": [
@@ -15961,9 +16560,9 @@
         }
       },
       "gaba (gamma-aminobutyric acid) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": false,
-        "score": 5,
+        "score": 6,
         "absorption": "low (BBB barrier unproven; PK-strict baseline)",
         "notes": "GABA form not specified on label. Scored conservatively. Oral GABA has documented gut absorption but limited/unproven direct BBB crossing; clinical effects likely via gut-brain axis (Boonstra 2015). B24 audit 2026-04-25: PK-strict 0.05 (BBB barrier per PMID:26500584). Companions 0.40-0.45 pending Dr Pham E1.",
         "aliases": [
@@ -16421,9 +17020,9 @@
         }
       },
       "sulforaphane (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "low-moderate (myrosinase-dependent; raw vs activated)",
         "notes": "Sulforaphane form not specified on label. Scored conservatively. Stabilized/pre-formed sulforaphane has the best bioavailability (~70% urinary recovery, Egner 2011). Glucoraphanin alone converts poorly (~5%) without myrosinase co-administration. B33 audit 2026-04-25: sulforaphane myrosinase-dependent class.",
         "aliases": [
@@ -16691,9 +17290,9 @@
         }
       },
       "spirulina (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "composite_food_pending (Dr Pham E2 decision)",
         "notes": "Spirulina form not specified on label. Scored conservatively. Human protein digestibility of dried spirulina is ~85% (PMC6179135). Spirulina has a peptidoglycan cell wall (more digestible than chlorella's cellulose wall). B24 audit 2026-04-25: composite food — pending Dr Pham E2 reclassification (PMID:34836173).",
         "aliases": [
@@ -16881,9 +17480,9 @@
         }
       },
       "chlorella (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "low-moderate (cell-wall-dependent; broken-cell-wall higher F)",
         "notes": "Chlorella form not specified on label. Scored conservatively. Human data (PMID:39610880): intact cell chlorella has near-zero amino acid absorption; broken/split cell achieves ~64% of milk protein. Cell wall is sporopollenin/algaenan, NOT cellulose (PMC8759652). Cell wall disruption status is the single most important factor. B33 audit 2026-04-25: cell-wall-dependent class baseline.",
         "aliases": [
@@ -17052,9 +17651,9 @@
         }
       },
       "hyaluronic acid (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "unknown (MW-dependent; HMW fiber-like, vLMW mouse-only)",
         "notes": "HA molecular weight not specified. All oral HA has very low systemic bioavailability (~0.2% intact; PMID:37182970). Smaller MW forms have modestly better absorption. Clinical skin/joint benefits are real but mediated through degradation products and gut-immune signaling, not intact HA reaching target tissues. Sodium hyaluronate is the sodium salt form. Commercial HA is produced by bacterial fermentation. B28 audit 2026-04-25: no human PK; MW-dependent (PMID:37081790 mouse only). Ghost catches: Oe 2014, Kimura 2016 fabricated.",
         "aliases": [
@@ -17340,9 +17939,9 @@
         }
       },
       "alpha lipoic acid (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "low (unspecified; defaults to racemic ~30%)",
         "notes": "ALA form/enantiomer not specified. Scored conservatively. Na-RALA (sodium R-lipoate) has the best human PK data with 10x+ Cmax vs free R-ALA (Carlson 2007, PMID:18069903). R-ALA has 38% absolute bioavailability (Breithaupt-Grogler 1999). Racemic ALA is the most common form at ~30% overall F%. B24 audit 2026-04-25: unspecified defaults to racemic baseline (PMID:14551180).",
         "aliases": [
@@ -17485,9 +18084,9 @@
         }
       },
       "msm (methylsulfonylmethane) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "unknown",
         "notes": "MSM form not specified. Small water-soluble molecule (MW 94.13) with apparent high oral absorption based on rat data (PMID:17263509). OptiMSM is the gold-standard distillation-purified form. Scored conservatively until exact form is identified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -17762,9 +18361,9 @@
         }
       },
       "ashwagandha (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "low (withanolide class-poor; Crominex pattern)",
         "notes": "Form not specified on the label. Ashwagandha (Withania somnifera) products range from raw root powder to highly concentrated extracts like KSM-66 and Sensoril. Withanolide content and bioavailability vary widely. Scored conservatively until the exact form is identified. B30 audit 2026-04-25: ashwagandha withanolide class baseline (B21).",
         "aliases": [
@@ -17937,9 +18536,9 @@
         }
       },
       "rhodiola (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "low-moderate (rosavin + salidroside class)",
         "notes": "Form not specified on the label. Rhodiola rosea is valued for rosavins and salidroside, but potency varies widely between raw root powder and standardized extracts. Scored conservatively until the exact form is identified. B33 audit 2026-04-25: rosavin/salidroside class.",
         "aliases": [
@@ -18090,9 +18689,9 @@
         }
       },
       "ginkgo (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "moderate (flavonoid + terpene lactone class)",
         "notes": "Form not specified. Ginkgo terpene lactones have 79-88% oral F (PMID:7631288) in standardized extracts, but crude preparations vary enormously (PMID:20041430). Scored conservatively until form is confirmed. B33 audit 2026-04-25: ginkgo class baseline.",
         "aliases": [
@@ -18275,9 +18874,9 @@
         }
       },
       "milk thistle (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "very_low (silymarin total F 0.45±0.28%)",
         "notes": "Form not specified on the label. Milk thistle (Silybum marianum) products range from crude seed powder to phytosome-complexed silybin. Silymarin content and bioavailability vary dramatically between forms. Scored conservatively until the exact form is identified. B24 audit 2026-04-25: silymarin total F 0.45% (PMID:23072776). Class-poor unspecified.",
         "aliases": [
@@ -18443,9 +19042,9 @@
         }
       },
       "l-theanine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "good (theanine amino-acid-class transport)",
         "notes": "Form not specified on the label. L-Theanine is an amino acid found naturally in tea leaves (Camellia sinensis) but most supplements use enzymatic fermentation. Suntheanine is a patented pure L-isomer form; generic products vary in purity. Well-absorbed orally (~70% when pure L-isomer) with good blood-brain barrier penetration. Scored conservatively until form details confirmed. B32 audit 2026-04-25: theanine class.",
         "aliases": [
@@ -18550,6 +19149,7 @@
           "Eggshell Membrane Collagen, Fermented",
           "PeptPure",
           "Verisol Collagen Peptides",
+          "Verisol Bioactive Collagen Peptides",
           "Bovine Collagen, Hydrolyzed",
           "bovine collagen hydrolyzed",
           "bovine hydrolyzed collagen",
@@ -18645,9 +19245,9 @@
         }
       },
       "collagen (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "very_good (default to hydrolyzed peptide class)",
         "notes": "Form not specified on the label. Collagen products range from intact gelatin to highly hydrolyzed peptides and tripeptides, with dramatically different absorption profiles. Type (I, II, III) and source (bovine, marine, chicken) also vary. Scored conservatively until the exact form is identified. B31 audit 2026-04-25: collagen class default = hydrolyzed peptides.",
         "aliases": [
@@ -18819,9 +19419,9 @@
         }
       },
       "melatonin (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "low (oral absolute F ~15%; first-pass dominant)",
         "notes": "Form not specified. Oral melatonin F = 14.3-15.9% (PMID:10883420, DeMuro 2000) with high inter-individual variability (9-33%, PMID:26008214). Extensive first-pass CYP1A2 metabolism. Despite low F, clinically effective at 0.5-5 mg doses. Scored conservatively until form is confirmed. B24 audit 2026-04-25: oral F ~15% (PMID:10883420). Ghost trap caught: PMID:10843432 is NOT DeMuro.",
         "aliases": [
@@ -19046,9 +19646,9 @@
         }
       },
       "glucosamine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
+        "score": 8,
         "absorption": "moderate (glucosamine class baseline)",
         "notes": "Form not specified on the label. Glucosamine is available as HCl (highest concentration), crystalline sulfate (most studied), NAG (gut-focused), and non-crystalline sulfate (least stable). Salt form significantly affects both potency and absorption. Scored conservatively until form is confirmed. B31 audit 2026-04-25: glucosamine class baseline.",
         "aliases": [
@@ -19180,9 +19780,9 @@
         }
       },
       "chondroitin (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "low (chondroitin class baseline ~10-15%)",
         "notes": "Form not specified on the label. Chondroitin sulfate is a large glycosaminoglycan molecule with inherently poor oral absorption (~13–15% for standard form). Low-molecular-weight and phytosome forms improve this significantly. Source (shark, bovine, or avian) and molecular weight affect bioavailability. Scored conservatively. B32 audit 2026-04-25: chondroitin class baseline.",
         "aliases": [
@@ -19357,9 +19957,9 @@
         }
       },
       "green tea extract (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "very_low (EGCG class-poor; F ~0.1-1%)",
         "notes": "Form not specified. EGCG oral F is <1% even for standardized extracts (PMID:12960117). Greenselect Phytosome provides ~3x enhancement (PMID:9861443). Scored conservatively until form and EGCG content are confirmed. B24 audit 2026-04-25: EGCG class-poor (PMID:11205489).",
         "aliases": [
@@ -19533,9 +20133,9 @@
         }
       },
       "grape seed extract (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "poor (OPC/proanthocyanidin class-poor; <10% F)",
         "notes": "Form not specified. Grape seed OPCs have very low intact absorption — only monomers (5-10% of extract) are well-absorbed (PMID:12834296). Scored conservatively until OPC standardization level is confirmed. B32 audit 2026-04-25: OPC class-poor.",
         "aliases": [
@@ -19618,9 +20218,9 @@
         }
       },
       "red wine extract (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "unknown",
         "notes": "Form not specified. Red wine polyphenols have very low bioavailability — free resveratrol F <1% (PMID:15333514). Proanthocyanidins same limitations as grape seed OPCs. Scored conservatively. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -19735,9 +20335,9 @@
         }
       },
       "pine bark extract (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "poor (OPC/proanthocyanidin class-poor; <5% F)",
         "notes": "Form not specified. Pine bark procyanidins are poorly absorbed intact — only monomers and microbial catabolites are bioavailable (PMID:38757126). Pycnogenol is the gold-standard branded form. Scored conservatively. B33 audit 2026-04-25: OPC class-poor (B19).",
         "aliases": [
@@ -19945,9 +20545,9 @@
         }
       },
       "ginseng (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "low (ginsenoside biotransformation-dependent)",
         "notes": "Form not specified on the label. Ginseng products span multiple species (Panax ginseng, P. quinquefolius, Eleutherococcus), processing methods (white, red, black, fermented), and ginsenoside profiles. Bioavailability and effects vary substantially by form. Scored conservatively until species and preparation are confirmed. B33 audit 2026-04-25: ginsenoside biotransformation-dep.",
         "aliases": [
@@ -20127,9 +20727,9 @@
         }
       },
       "echinacea (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "low-moderate (alkamide class; partial absorption)",
         "notes": "Form not specified on the label. Echinacea products span three species (purpurea, angustifolia, pallida), different plant parts (root, aerial, whole herb), and both standardized extracts and raw powders. Immune-active compounds (alkylamides, cichoric acid) vary significantly between species and preparations. Scored conservatively. B32 audit 2026-04-25: alkamide class.",
         "aliases": [
@@ -20346,9 +20946,9 @@
         }
       },
       "turmeric (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "low (curcumin class-poor baseline ~1-3%)",
         "notes": "Form not specified on the label. Turmeric/curcumin products range from raw powder (~3% curcuminoids, very poor absorption) to advanced delivery systems (liposomal, phytosome, piperine-enhanced) that can increase bioavailability 20–50x. Form choice dramatically affects clinical benefit. Scored conservatively. B28 audit 2026-04-25: curcumin class-poor (B8).",
         "aliases": [
@@ -20550,9 +21150,9 @@
         }
       },
       "garlic (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "low-moderate (allicin instability; aged > raw stability)",
         "notes": "Form not specified on the label. Garlic supplements vary dramatically: aged garlic extract (water-soluble SAC), fresh garlic concentrates (allicin-releasing), dehydrated powders, and black garlic (fermented). Each has a different active compound profile and absorption pattern. Scored conservatively. B33 audit 2026-04-25: garlic class (preparation-dep).",
         "aliases": [
@@ -20724,9 +21324,9 @@
         }
       },
       "cranberry (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
+        "score": 8,
         "absorption": "very_low (PAC + anthocyanin class-poor; <1% intact F)",
         "notes": "Form not specified on the label. Cranberry products range from standardized PAC extracts (proanthocyanidins) to juice concentrates and whole fruit powders. PAC type (A-type vs B-type) and concentration determine anti-adhesion activity against urinary tract bacteria. Scored conservatively. B32 audit 2026-04-25: PAC/anthocyanin class-poor.",
         "aliases": [
@@ -20871,9 +21471,9 @@
         }
       },
       "bilberry (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
+        "score": 8,
         "absorption": "very_low (anthocyanin class-poor; <1% intact F)",
         "notes": "Form not specified on the label. Bilberry (Vaccinium myrtillus) products range from standardized 25% anthocyanoside extracts to whole fruit powders and juice concentrates. Anthocyanin content and bioavailability vary significantly between forms. Scored conservatively until form is confirmed. B32 audit 2026-04-25: anthocyanin class-poor.",
         "aliases": [
@@ -21077,9 +21677,9 @@
         }
       },
       "elderberry (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "poor (anthocyanin class-poor; <5% intact F)",
         "notes": "Form not specified on the label. Elderberry (Sambucus nigra/canadensis) products range from standardized anthocyanin extracts (Sambucol, ElderCraft) to syrups, powders, and juice concentrates. Anthocyanin content and immune-stimulating potency vary substantially between forms. Scored conservatively. B32 audit 2026-04-25: anthocyanin class-poor.",
         "aliases": [
@@ -22111,9 +22711,9 @@
         }
       },
       "paba (para-aminobenzoic acid) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -22613,9 +23213,9 @@
         }
       },
       "dmae (dimethylaminoethanol) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -22744,9 +23344,9 @@
         }
       },
       "dhea (dehydroepiandrosterone) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -22900,9 +23500,9 @@
         }
       },
       "superoxide dismutase (sod) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "category_error (protein digestion barrier)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B24 audit 2026-04-25: 6TH CATEGORY ERROR — protein digestion.",
         "aliases": [
@@ -22975,9 +23575,9 @@
         }
       },
       "synephrine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. p-Synephrine is a protoalkaloid from Citrus aurantium with beta-3 adrenergic activity; unspecified forms are typically the HCl salt but exact bioavailability depends on manufacturer preparation. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -23056,9 +23656,9 @@
         }
       },
       "same (s-adenosyl-l-methionine) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -23161,9 +23761,9 @@
         }
       },
       "rna/dna (nucleic acids) (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": false,
-        "score": 5,
+        "score": 7,
         "absorption": "poor (digestion barrier; nucleotides absorbed not RNA)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B30 audit 2026-04-25: nucleic acid digestion barrier.",
         "aliases": [
@@ -27127,9 +27727,9 @@
     "dosage_importance": 1.0,
     "forms": {
       "fiber (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": true,
-        "score": 8,
+        "score": 12,
         "absorption": "category_error (fiber; luminal mechanism)",
         "notes": "Generic dietary fiber without type specification. Fiber acts via luminal mechanisms (viscosity, fermentation to SCFAs, bile acid sequestration) not systemic absorption. Efficacy is type-dependent: soluble viscous fibers (glucomannan, psyllium) have strongest lipid/glycemic evidence. See konjac glucomannan form for specific clinical data. B25 audit 2026-04-25: 7TH CATEGORY ERROR — fiber luminal mechanism (PMID:14983741).",
         "aliases": [
@@ -29526,9 +30126,9 @@
         }
       },
       "phytosterols (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "poor (phytosterol class-poor; <2% F)",
         "notes": "Plant-derived sterols (beta-sitosterol, campesterol, stigmasterol) that competitively inhibit intestinal cholesterol absorption. EFSA/FDA-approved health claim for LDL reduction at 1.5-3 g/day. Form unspecified; conservative scoring applied. B32 audit 2026-04-25: phytosterol class-poor.",
         "aliases": [
@@ -29862,7 +30462,6 @@
         "notes": "Generic protein stub for labels that do not specify source. True DIAAS ranges from 0.37 (rice concentrate) to 1.09 (whey isolate; PMID 28382889). Conservative score applied — check specific protein parents (whey_protein, casein_protein, pea_protein) for accurate scoring. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
           "protein",
-          "Whey Protein Isolate",
           "Alpha-Lactalbumin I.P",
           "milk protein isolate",
           "milk protein",
@@ -29870,12 +30469,9 @@
           "hydrolyzed lactalbumin",
           "lactalbumin",
           "Alpha-Lactalbumin",
-          "whey protein",
-          "whey protein concentrate",
           "cvh 15 whey protein hydrolysate",
           "provon 292 rbst free whey protein isolate",
           "truly grass fed whey protein isolate",
-          "casein protein",
           "milk protein concentrate",
           "soy protein isolate",
           "soy protein isolate supplement",
@@ -30616,9 +31212,9 @@
     "dosage_importance": 0.1,
     "forms": {
       "silica (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 9,
         "natural": true,
-        "score": 10,
+        "score": 12,
         "absorption": "unknown",
         "notes": "Dietary silica (SiO2) as silicon source for collagen cross-linking, bone mineralization, and connective tissue integrity. Amorphous dietary silica: 27-44% oral bioavailability by urinary Si excretion (PMID 19356271, PMC2744664). Distinct from silicon dioxide used as excipient flow agent in capsules.",
         "aliases": [
@@ -31524,9 +32120,9 @@
         }
       },
       "nicotinamide riboside (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 13,
         "natural": false,
-        "score": 5,
+        "score": 13,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -31618,9 +32214,9 @@
         }
       },
       "nicotinamide mononucleotide (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -31788,9 +32384,9 @@
         }
       },
       "mullein (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "low (unspecified; bioflavonoid class-poor floor)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B23 audit 2026-04-25: bioflavonoid class-poor floor.",
         "aliases": [
@@ -31880,9 +32476,9 @@
         }
       },
       "goldenseal (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "low (unspecified; berberine class-poor floor)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B23 audit 2026-04-25: berberine class-poor (PMID:19269122).",
         "aliases": [
@@ -31959,9 +32555,9 @@
         }
       },
       "sarsaparilla (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "low (saponin class baseline)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B30 audit 2026-04-25: saponin class.",
         "aliases": [
@@ -32418,9 +33014,9 @@
         }
       },
       "gymnema sylvestre (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "low-moderate (gymnemic acid saponin class; variable)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: gymnemic acid class.",
         "aliases": [
@@ -32796,9 +33392,9 @@
         }
       },
       "di-calcium phosphate (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 11,
         "natural": false,
-        "score": 6,
+        "score": 11,
         "absorption": "low-moderate (Ca phosphate class baseline)",
         "notes": "Dicalcium phosphate (DCP) provides both calcium (~29%) and phosphorus (~23%). Used as tablet filler and calcium source. Absorption comparable to milk calcium at ~30% efficiency. B30 audit 2026-04-25: Ca phosphate class.",
         "aliases": [
@@ -32948,9 +33544,9 @@
         }
       },
       "coenzymated complex (unspecified)": {
-        "bio_score": 6,
-        "natural": false,
-        "score": 6,
+        "bio_score": 14,
+        "natural": true,
+        "score": 17,
         "absorption": "unknown",
         "notes": "Pre-activated B-vitamin complex containing coenzymated forms (P5P, methylcobalamin, MTHF, riboflavin-5-phosphate). Bypasses hepatic activation step; may benefit those with genetic polymorphisms affecting vitamin metabolism. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=6 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -33095,9 +33691,9 @@
         }
       },
       "5-htp (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 14,
         "natural": false,
-        "score": 10,
+        "score": 14,
         "absorption": "aromatic AA decarboxylase substrate; oral F mean 69.2% (Magnussen 1980)",
         "notes": "Direct precursor to serotonin; bypasses rate-limiting tryptophan conversion step. Source/form unspecified. Evidence update 2026-04-25 (Batch 22): Mixed-cluster audit — 7 PMIDs WebFetch-verified. FOUR major findings: (1) Prebiotics inulin + larch AG CATEGORY ERROR (3rd confirmation after manuka Batch 18 + organ extracts Batch 20) — Holscher 2017 (PMID:28165863) explicit on non-digestibility. (2) BHB salts ≠ creatine salts pattern: Stubbs 2017 (PMID:29163194) shows salts deliver ~50% inactive L-βHB enantiomer, ester delivers pure D-βHB. (3) BCAA peptides confirm Silk pattern (Batch 20): kinetic faster but extent same ~90%. (4) D-chiro-inositol = myo-inositol class-equivalent (Lepore 2021 PMID:34202683). 5 ghost references caught: Stubbs PMID:28261556 (actually Korean diet paper), DPA PMID:29618497 (SCFA letter), \"Crittenden 2007 inulin\" NOT FOUND, \"Larrosa 2010 inulin\" NOT FOUND, TUDCA human oral F NOT FOUND.",
         "aliases": [
@@ -33194,9 +33790,9 @@
         }
       },
       "acetyl-l-carnitine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
+        "score": 8,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -33477,9 +34073,9 @@
         }
       },
       "ginger (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "good (gingerol/shogaol class baseline)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: gingerol class.",
         "aliases": [
@@ -33625,9 +34221,9 @@
         }
       },
       "lion's mane (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -33715,7 +34311,7 @@
         }
       },
       "bacopa (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 9,
         "natural": true,
         "absorption": "low (no published bacoside PK; unstandardized content ≤ extracts)",
         "notes": "Generic Bacopa herb extract without stated bacoside standardization; conservative scoring. Evidence update 2026-04-24: Inversion fix — prior value=0.55 exceeded the standardized bacosides 45%/50% forms (0.18/0.22) under this same parent. Unspecified forms must be at least as conservative as their specified counterparts. Corrected to 0.15.",
@@ -33738,7 +34334,7 @@
           "bacopa monnieri whole herb extract",
           "Bacopasides"
         ],
-        "score": 9,
+        "score": 12,
         "dosage_importance": 1.0,
         "absorption_structured": {
           "value": 0.15,
@@ -33826,9 +34422,9 @@
         }
       },
       "reishi (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "good (reishi triterpene + polysaccharide class)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B33 audit 2026-04-25: reishi triterpene class (higher than standard mushroom B1 framework due to lipid-soluble actives).",
         "aliases": [
@@ -33930,9 +34526,9 @@
         }
       },
       "maitake (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "notes": "Grifola frondosa mushroom (maitake); contains beta-glucans (D-fraction, MD-fraction) with immunomodulatory properties. Preclinical evidence for blood glucose regulation. Form not specified; conservative scoring applied. B32 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -34028,9 +34624,9 @@
         }
       },
       "shiitake (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "notes": "Lentinula edodes mushroom (shiitake); source of lentinan (beta-1,3-glucan) with documented immunostimulatory activity. Contains eritadenine for cholesterol reduction. Form not specified; conservative scoring applied. B33 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -34117,9 +34713,9 @@
         }
       },
       "turkey tail (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "notes": "Trametes versicolor mushroom (turkey tail); source of PSK (polysaccharide-K) and PSP with clinical evidence in oncology adjuvant therapy. Japanese approval for cancer immunotherapy support. Form not specified. B33 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -34201,9 +34797,9 @@
         }
       },
       "chaga (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "low (mushroom class-poor; chitin shell barrier)",
         "notes": "Inonotus obliquus mushroom (chaga); rich in betulinic acid, melanin, and polysaccharides. Traditional Siberian medicine for immune and GI support. Limited human clinical data; most evidence preclinical. Form not specified. B32 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -34288,9 +34884,9 @@
         }
       },
       "cordyceps (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "low (cordyceps class baseline; militaris/sinensis range)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B31 audit 2026-04-25: cordyceps class baseline. Cordycepin metabolite-only absorption (PMID:31673018).",
         "aliases": [
@@ -34412,9 +35008,9 @@
         }
       },
       "maca (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "good (macamide + glucosinolate class)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: maca class.",
         "aliases": [
@@ -34717,9 +35313,9 @@
         }
       },
       "psyllium (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "category_error (soluble fiber; not systemically absorbed)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B24 audit 2026-04-25: 5TH CATEGORY ERROR — fiber mechanism.",
         "aliases": [
@@ -34913,9 +35509,9 @@
         }
       },
       "lactobacillus acidophilus (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": true,
-        "score": 8,
+        "score": 15,
         "absorption": "low (live organism class; B18 framework)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: live-organism class (B18). Companions inflated under older framework — pending harmonization.",
         "aliases": [
@@ -35803,9 +36399,9 @@
         }
       },
       "lactobacillus casei (unspecified)": {
-        "bio_score": 12,
+        "bio_score": 13,
         "natural": true,
-        "score": 15,
+        "score": 16,
         "absorption": "good",
         "notes": "A versatile probiotic strain that supports digestive health and immune function. Often confused with L. paracasei due to genetic similarity.",
         "aliases": [
@@ -36014,9 +36610,9 @@
         }
       },
       "saccharomyces boulardii (unspecified)": {
-        "bio_score": 14,
+        "bio_score": 15,
         "natural": true,
-        "score": 17,
+        "score": 18,
         "absorption": "excellent",
         "notes": "Probiotic yeast with inherent acid resistance (viable pH 2-8) and natural antibiotic resistance. Extensive clinical evidence for antibiotic-associated diarrhea and C. difficile. Does not require enteric coating for GI survival. One of the most clinically validated probiotic organisms.",
         "aliases": [
@@ -36085,9 +36681,9 @@
         }
       },
       "lactobacillus paracasei (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 13,
         "natural": true,
-        "score": 8,
+        "score": 16,
         "absorption": "low (live organism class; B18 framework)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: live-organism class (B18).",
         "aliases": [
@@ -36183,9 +36779,9 @@
         }
       },
       "streptococcus thermophilus (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": true,
-        "score": 8,
+        "score": 14,
         "absorption": "unknown",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -36288,9 +36884,9 @@
         }
       },
       "feverfew (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 11,
         "natural": false,
-        "score": 5,
+        "score": 11,
         "absorption": "moderate (parthenolide class baseline)",
         "notes": "Form not specified; conservative scoring applied. Consider using a standardized extract for better parthenolide consistency. B32 audit 2026-04-25: parthenolide class.",
         "aliases": [
@@ -39127,9 +39723,9 @@
         }
       },
       "boswellia (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "natural": true,
-        "score": 9,
+        "score": 10,
         "absorption": "unspecified Boswellia form; assume class-poor absolute F (~1-7%)",
         "notes": "Boswellia serrata resin containing boswellic acids (AKBA). Anti-inflammatory via 5-LOX inhibition. Form not specified; conservative scoring applied. Evidence update 2026-04-25 (Batch 16): Boswellia audit — 5 PMIDs WebFetch-verified. CLASS FINDING: NO human absolute oral F study exists for any boswellic acid form. Sterk 2004 (PMID:15643550) is the only human PK paper — measured Cmax/AUC food-effect only with NO IV reference. Class F inferred ~1-7% from lipophilicity. AFLAPIN FINDING: \"+51.78% bioavailability vs 5-Loxin\" cited industry-wide is RAT-ONLY (Sengupta 2011 PMID:21479939, Sprague-Dawley) — same rat-vs-human conflation pattern as Mg threonate (Batch 15), tocotrienol (Batch 13). Clinical OA RCTs (Sengupta 2008 PMID:18667054, Sengupta 2010 PMID:21060724, Vishal 2011 PMID:22022214) measured WOMAC outcomes — clinical efficacy, NOT bioavailability. 2 misattributions caught BEFORE introduction: Sterk 2004 ≠ PMID:15047492 (cytokine paper); Vishal 2011 ≠ PMID:21235550 (transgenic fish paper).",
         "aliases": [
@@ -39289,9 +39885,9 @@
         }
       },
       "black seed (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 8,
         "natural": true,
-        "score": 9,
+        "score": 11,
         "absorption": "low (TQ class-poor; unspecified default)",
         "notes": "Nigella sativa (black seed/black cumin). Contains thymoquinone, thymol, and essential fatty acids. Traditional Islamic medicine use. Form/processing unspecified; conservative scoring. B25 audit 2026-04-25: TQ class baseline (PMID:38590120).",
         "aliases": [
@@ -39431,9 +40027,9 @@
         }
       },
       "sea buckthorn (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 8,
         "natural": true,
-        "score": 9,
+        "score": 11,
         "absorption": "form unknown; assume mid-range mixed F",
         "notes": "Hippophae rhamnoides berry/seed oil; rich in palmitoleic acid (omega-7), flavonoids, and vitamins C/E. Traditional Tibetan/Ayurvedic medicine. Form unspecified. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
@@ -39576,9 +40172,9 @@
         }
       },
       "shilajit (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "natural": true,
-        "score": 9,
+        "score": 10,
         "absorption": "unspecified shilajit form; conservative class default",
         "notes": "Mineral pitch (mumijo) from Himalayan rock exudate; contains fulvic acid, dibenzo-alpha-pyrones, and trace minerals. Ayurvedic adaptogen. Form unspecified; conservative scoring. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
@@ -39684,9 +40280,9 @@
         }
       },
       "fenugreek (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "natural": true,
-        "score": 9,
+        "score": 10,
         "absorption": "form unknown; assume class-poor saponin F (~1-5%)",
         "notes": "Trigonella foenum-graecum seed containing furostanol saponins (protodioscin), galactomannan fiber, and 4-hydroxyisoleucine. Supports glycemic control and testosterone. Form unspecified. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
@@ -39818,9 +40414,9 @@
         }
       },
       "black cohosh (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "natural": true,
-        "score": 9,
+        "score": 10,
         "absorption": "low (class baseline; conservative default)",
         "notes": "Actaea racemosa (Cimicifuga) rhizome; contains triterpene glycosides (actein, 23-epi-26-deoxyactein). Evidence for menopausal vasomotor symptoms. Form unspecified; conservative scoring. B28 audit 2026-04-25: class baseline (Crominex).",
         "aliases": [
@@ -39932,9 +40528,9 @@
         }
       },
       "st john's wort (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 8,
         "natural": true,
-        "score": 9,
+        "score": 11,
         "absorption": "moderate-low (unspecified; conservative)",
         "notes": "Hypericum perforatum herb; contains hypericin and hyperforin. Well-documented antidepressant for mild-moderate depression (Cochrane review). CYP3A4/P-gp inducer. Form unspecified. B23 audit 2026-04-25: class floor (PMID:9684946).",
         "aliases": [
@@ -40047,9 +40643,9 @@
         }
       },
       "valerian (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 8,
         "natural": true,
-        "score": 9,
+        "score": 11,
         "absorption": "moderate-low (unspecified; conservative)",
         "notes": "Valeriana officinalis root; contains valerenic acid and valepotriates. GABA-A receptor modulator for sleep and anxiolysis. European Pharmacopoeia monograph. Form unspecified; conservative scoring. B23 audit 2026-04-25: unspecified form set to conservative class-extract floor (PMID:20878691).",
         "aliases": [
@@ -40158,9 +40754,9 @@
         }
       },
       "chasteberry (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "natural": true,
-        "score": 9,
+        "score": 10,
         "absorption": "low (vitex class baseline)",
         "notes": "Vitex agnus-castus berry; contains diterpenes (rotundifuran) and iridoids (agnuside, aucubin). Dopaminergic action reduces prolactin. Evidence for PMS and menstrual irregularities. Form unspecified. B30 audit 2026-04-25: vitex class.",
         "aliases": [
@@ -40266,9 +40862,9 @@
         }
       },
       "bergamot (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 12,
         "natural": true,
-        "score": 9,
+        "score": 15,
         "absorption": "low (citrus flavonoid class-poor)",
         "notes": "Citrus bergamia extract; contains statin-like HMG-CoA reductase inhibitors (brutieridin, melitidin). Evidence for LDL/triglyceride reduction. Form unspecified; conservative scoring. B32 audit 2026-04-25: bergamot class-poor.",
         "aliases": [
@@ -40353,9 +40949,9 @@
         }
       },
       "guava (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 8,
         "natural": true,
-        "score": 9,
+        "score": 11,
         "absorption": "low (unspecified; bioflavonoid class-poor)",
         "notes": "Psidium guajava leaf extract; contains quercetin glycosides and gallic acid. Traditional anti-diarrheal and antidiabetic use. Form unspecified; conservative scoring. B23 audit 2026-04-25: bioflavonoid class-poor floor.",
         "aliases": [
@@ -40922,9 +41518,9 @@
         }
       },
       "bioflavonoids (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 11,
         "natural": true,
-        "score": 12,
+        "score": 14,
         "absorption": "bioflavonoid class poor F (~1-10% systemic); gut microbiota dominant",
         "notes": "Bioflavonoid form not specified. Conservative scoring. Bioflavonoids are a diverse class of plant polyphenols that support antioxidant defense and vascular health. Check label for specific composition. Evidence update 2026-04-25 (Batch 19): Fenugreek/SB/hemp/bioflavonoid audit — 10 PMIDs WebFetch-verified. CLASS FINDINGS: (1) Fenugreek saponin F is class-poor (~1-5%); testofen bio=14 was Crominex-pattern (clinical, not PK). (2) Sea buckthorn berry oil palmitoleic content does NOT translate to plasma palmitoleic delivery — Johansson 2000 (PMID:11120446) explicitly shows plasma FA UNCHANGED at 5g/4wk. (3) Bioflavonoids class-poor F: hesperidin 4-8% urinary (Manach 2003 PMID:12571654), rutin systemic 1-5% (Hollman 1995 PMID:7491892). (4) Hemp organic ≡ cold-pressed (same TG chemistry); refined retains TG/F structure. EMIQ exists as separately-absorbed bioflavonoid form (SGLT1-mediated) — should be added as separate parent if not already.",
         "aliases": [
@@ -41006,9 +41602,9 @@
         }
       },
       "silk amino acids (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 11,
         "natural": true,
-        "score": 13,
+        "score": 14,
         "absorption": "high (~95% as free amino acids); standard AA absorption",
         "notes": "Silk amino acid form not specified. Conservative scoring. Derived from silkworm cocoon protein. Rich in serine, glycine, and alanine. Check label for hydrolyzed or peptide specification. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
@@ -41133,9 +41729,9 @@
         }
       },
       "organ extracts (unspecified)": {
-        "bio_score": 9,
+        "bio_score": 10,
         "natural": true,
-        "score": 12,
+        "score": 13,
         "absorption": "composite food; no unified F; check label for source/processing",
         "notes": "Organ extract form not specified. Conservative scoring. Desiccated organ supplements provide concentrated nutrients from animal organs (liver, heart, kidney). Check label for source animal, organ type, and processing method. Evidence update 2026-04-25 (Batch 20): Ceramides/silk/organ extracts audit — 6 PMIDs WebFetch-verified. THREE FRAMEWORK FINDINGS: (1) Ceramides hydrolyzed pre-absorption to sphingoid bases (Sugawara 2022 PMID:35905137 + Yamashita 2021 PMID:34208952) — same biology as ester forms in Batches 14, 17. Skin RCTs are PD endpoints (Guillou 2011 PMID:20646083), not PK. (2) Silk peptide F advantage not supported (delivered as AAs ~95% via PepT-1). (3) Organ extracts CATEGORY ERROR similar to manuka (Batch 18) — composite food, no unified F. Misattributions caught: \"Bizot 2017 Lipowheat\" GHOST → Guillou 2011; \"Tomonaga 2017 silk peptide\" GHOST; PMID:447109 author-surname trap (Silk DB 1979 = fish protein, NOT silkworm fibroin); 4 more wrong-topic PMIDs flagged.",
         "aliases": [
@@ -41396,9 +41992,9 @@
         }
       },
       "calamari oil (unspecified)": {
-        "bio_score": 11,
+        "bio_score": 13,
         "natural": true,
-        "score": 14,
+        "score": 16,
         "absorption": "form unspecified; default to general marine TG/PL class",
         "notes": "Calamari oil form not specified. Conservative scoring. Squid-derived omega-3 naturally high in DHA. Check label for triglyceride or phospholipid specification. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
@@ -41477,9 +42073,9 @@
         }
       },
       "tuna oil (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 11,
         "natural": true,
-        "score": 13,
+        "score": 14,
         "absorption": "form unspecified; mixed marine TG/EE blend default",
         "notes": "Tuna oil form not specified. Conservative scoring. Tuna oil provides DHA-rich omega-3. Mercury contamination is a concern — verify third-party testing or molecular distillation. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
@@ -41579,9 +42175,9 @@
         }
       },
       "cod liver oil (unspecified)": {
-        "bio_score": 10,
+        "bio_score": 11,
         "natural": true,
-        "score": 13,
+        "score": 14,
         "absorption": "TG-class assumed; CLO form/processing not specified",
         "notes": "Cod liver oil form not specified. Conservative scoring. Cod liver oil uniquely provides omega-3 + vitamins A and D. Form affects vitamin retention — check label for processing method. Evidence update 2026-04-25: Omega-3 absolute oral F is class-HIGH (~0.70-0.97) across all chemical forms when co-ingested with dietary fat ≥15g. Dyerberg 2010 (PMID:20638827, n=72, 2-week) ranked rTG=124% > TG=100% > FFA=91% > EE=73% relative to CLO reference — these are plasma-rise relative numbers, NOT absolute F. EE catches up to TG at steady-state per long-term studies. Krill phospholipid advantage is CONTESTED — recent meta-analyses suggest krill ≈ fish oil at dose-equivalent EPA+DHA. struct.value populated using framework analysis from quarterly audit research subagent (training-data based; select PMID replacements suggested but require live verification before introduction).",
         "aliases": [
@@ -42897,9 +43493,9 @@
         }
       },
       "oregano (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 12,
         "natural": false,
-        "score": 5,
+        "score": 12,
         "absorption": "good (carvacrol + thymol class baseline)",
         "notes": "Form not specified; conservative scoring applied. Consider using a specific form for better bioavailability. B32 audit 2026-04-25: carvacrol/thymol class.",
         "aliases": [
@@ -43946,9 +44542,9 @@
         }
       },
       "tongkat ali (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 9,
         "natural": true,
-        "score": 9,
+        "score": 12,
         "absorption": "moderate (~50%)",
         "notes": "Tongkat Ali ingredient without form/standardization details; conservative scoring.",
         "aliases": [
@@ -44055,9 +44651,9 @@
         }
       },
       "gotu kola (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 9,
         "natural": true,
-        "score": 9,
+        "score": 12,
         "absorption": "moderate (~50%)",
         "notes": "Gotu kola (Centella asiatica) without form/standardization specified. Standardized extracts (ECa 233, TTFCA) deliver measurable asiatic acid levels; unstandardized whole-plant powder has variable triterpene content.",
         "aliases": [
@@ -44128,9 +44724,9 @@
         }
       },
       "immunoglobulin (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 14,
         "natural": false,
-        "score": 5,
+        "score": 14,
         "absorption": "unknown",
         "notes": "Bovine-derived immunoglobulin concentrate (IgG); supports mucosal immunity and GI barrier function. Serum-derived bovine immunoglobulin/protein isolate (SBI) has clinical evidence. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -44196,9 +44792,9 @@
         }
       },
       "borage seed oil (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 14,
         "natural": false,
-        "score": 5,
+        "score": 14,
         "absorption": "unknown",
         "notes": "Borago officinalis seed oil; richest botanical source of gamma-linolenic acid (GLA, ~23%). Anti-inflammatory via DGLA/prostaglandin E1 pathway. Used for atopic dermatitis and RA. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -44272,9 +44868,9 @@
         }
       },
       "herring roe extract (unspecified)": {
-        "bio_score": 5,
-        "natural": false,
-        "score": 5,
+        "bio_score": 13,
+        "natural": true,
+        "score": 16,
         "absorption": "unknown",
         "notes": "Clupea harengus roe extract; naturally phospholipid-bound omega-3 (DHA/EPA) with superior brain bioavailability vs triglyceride fish oil. Contains choline and astaxanthin. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -44354,9 +44950,9 @@
         }
       },
       "butterbur (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 7,
         "natural": true,
-        "score": 9,
+        "score": 10,
         "absorption": "unknown (petasin first-pass; no human PK)",
         "notes": "Unspecified butterbur extract. May or may not be PA-free. Lower score due to safety uncertainty. B25 audit 2026-04-25: no human PK (PMID:29341029).",
         "aliases": [
@@ -46292,9 +46888,9 @@
         }
       },
       "pomegranate (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": true,
-        "score": 8,
+        "score": 9,
         "absorption": "moderate (ellagitannin → urolithin metabolite class)",
         "notes": "Punica granatum fruit extract; contains punicalagins (ellagitannins) metabolized to urolithin A by gut microbiota. Evidence for cardiovascular and prostate health. Form unspecified. B33 audit 2026-04-25: ellagitannin → urolithin class.",
         "aliases": [
@@ -46663,9 +47259,9 @@
         }
       },
       "amla (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 9,
         "natural": true,
-        "score": 10,
+        "score": 12,
         "absorption": "moderate (vitamin C + tannin matrix; class baseline)",
         "notes": "Phyllanthus emblica (Indian gooseberry); richest natural source of vitamin C (600-900 mg/100g). Ayurvedic Rasayana with antioxidant and anti-inflammatory properties. Form unspecified. B32 audit 2026-04-25: amla class baseline.",
         "aliases": [
@@ -46780,9 +47376,9 @@
         }
       },
       "fo-ti (unspecified)": {
-        "bio_score": 4,
+        "bio_score": 5,
         "natural": true,
-        "score": 7,
+        "score": 8,
         "absorption": "low-moderate (Polygonum stilbene + anthraquinone class)",
         "notes": "Unspecified form of fo-ti. Processing status unknown. FDA hepatotoxicity warning. B32 audit 2026-04-25: fo-ti class.",
         "aliases": [
@@ -46880,9 +47476,9 @@
         }
       },
       "dong quai (unspecified)": {
-        "bio_score": 6,
+        "bio_score": 8,
         "natural": true,
-        "score": 9,
+        "score": 11,
         "absorption": "low-moderate (ferulic acid + ligustilide class)",
         "notes": "Angelica sinensis root (female ginseng); contains ligustilide, ferulic acid, and polysaccharides. Traditional Chinese medicine for gynecological conditions. May potentiate anticoagulants. Form unspecified. B32 audit 2026-04-25: dong quai class.",
         "aliases": [
@@ -46978,9 +47574,9 @@
         }
       },
       "rosemary (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 13,
         "natural": false,
-        "score": 5,
+        "score": 13,
         "absorption": "good (rosmarinic + carnosic acid class)",
         "notes": "Rosmarinus officinalis leaf; contains carnosic acid, rosmarinic acid, and ursolic acid. EFSA-approved antioxidant. Cognitive and anti-inflammatory effects. Form unspecified; conservative scoring. B33 audit 2026-04-25: rosmarinic + carnosic class.",
         "aliases": [
@@ -47105,9 +47701,9 @@
         }
       },
       "holy basil (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 13,
         "natural": false,
-        "score": 5,
+        "score": 13,
         "absorption": "good (eugenol + ursolic acid class)",
         "notes": "Ocimum tenuiflorum (tulsi); Ayurvedic adaptogen containing eugenol, ursolic acid, and rosmarinic acid. Evidence for stress reduction, blood glucose regulation, and immune support. Form unspecified. B32 audit 2026-04-25: tulsi class.",
         "aliases": [
@@ -47202,9 +47798,9 @@
         }
       },
       "chinese skullcap (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 13,
         "natural": false,
-        "score": 5,
+        "score": 13,
         "absorption": "good (baicalein/baicalin class baseline)",
         "notes": "Scutellaria baicalensis root; contains baicalin, baicalein, and wogonin. Anti-inflammatory, antiviral, and neuroprotective properties. Used in traditional Chinese medicine. Form unspecified. B32 audit 2026-04-25: baicalein class.",
         "aliases": [
@@ -47307,9 +47903,9 @@
         }
       },
       "irish sea moss (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "moderate (polysaccharide + iodide class)",
         "notes": "Chondrus crispus red algae; source of carrageenan polysaccharides, iodine, and trace minerals. Traditional Irish/Caribbean food. Thyroid-sensitive due to iodine content. Form unspecified. B32 audit 2026-04-25: sea moss class.",
         "aliases": [
@@ -47407,9 +48003,9 @@
         }
       },
       "phosphatidylethanolamine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": false,
-        "score": 5,
+        "score": 10,
         "absorption": "moderate (PE phospholipid class baseline)",
         "notes": "PE is a major phospholipid in cell membranes, constituting ~25% of all phospholipids. Supports membrane fluidity and autophagy. Found in eggs, soybeans, and organ meats. Form unspecified. B32 audit 2026-04-25: PE class baseline.",
         "aliases": [
@@ -47512,9 +48108,9 @@
         }
       },
       "beta-carotene (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 11,
         "natural": false,
-        "score": 7,
+        "score": 11,
         "absorption": "5-25%",
         "notes": "Unspecified form, conservative scoring due to quality uncertainty. May be synthetic all-trans or natural mixed-carotenoid source; absorption typically 10-65% depending on dose, matrix, and dietary fat co-ingestion (NIH ODS vitamin A fact sheet).",
         "aliases": [
@@ -47593,8 +48189,8 @@
         ]
       },
       "guarana (unspecified)": {
-        "bio_score": 5,
-        "score": 8,
+        "bio_score": 8,
+        "score": 11,
         "natural": true,
         "absorption": "excellent (caffeine class baseline)",
         "absorption_structured": {
@@ -47714,8 +48310,8 @@
         ]
       },
       "algae oil (unspecified)": {
-        "bio_score": 5,
-        "score": 8,
+        "bio_score": 12,
+        "score": 15,
         "natural": true,
         "absorption": "very_good (algal omega-3 class baseline)",
         "absorption_structured": {
@@ -48025,9 +48621,9 @@
         }
       },
       "lithium (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": false,
-        "score": 5,
+        "score": 8,
         "absorption": "excellent (mineral; full ionic dissociation)",
         "notes": "Alkali metal; prescription lithium carbonate treats bipolar disorder. Low-dose lithium orotate supplements (5-20 mg elemental) proposed for neuroprotection. Narrow therapeutic index. Form unspecified. B25 audit 2026-04-25: lithium F class-equivalent 95-100% (PMID:18072162).",
         "aliases": [
@@ -48089,9 +48685,9 @@
     "rxcui": "17511",
     "forms": {
       "alpha-ketoglutarate (unspecified)": {
-        "bio_score": 8,
+        "bio_score": 9,
         "natural": false,
-        "score": 8,
+        "score": 9,
         "absorption": "low-moderate (split-dose human F ~40% w/water)",
         "notes": "AKG is a key Krebs cycle intermediate and nitrogen carrier. Calcium AKG (Ca-AKG) lifespan extension data in mice (PMID 32877690). Supports glutamine/glutamate metabolism. Form unspecified. B24 audit 2026-04-25: AKG split-dose human F ~40% w/water (PMID:20572756); dose/matrix sensitive. Conservative 0.20.",
         "aliases": [
@@ -48240,9 +48836,9 @@
         }
       },
       "hawthorn (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "good (oligomeric proanthocyanidin + flavonoid class)",
         "notes": "Crataegus spp. berry/leaf/flower; contains vitexin, hyperoside, and oligomeric procyanidins. Evidence for mild heart failure (NYHA I-II) and cardioprotection. German Commission E approved. Form unspecified. B32 audit 2026-04-25: hawthorn class.",
         "aliases": [
@@ -48366,9 +48962,9 @@
         }
       },
       "capsaicin (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "good (capsaicinoid class baseline; passive diffusion)",
         "notes": "Vanilloid alkaloid from Capsicum peppers; TRPV1 agonist with analgesic, thermogenic, and metabolic effects. Topical FDA-approved (Qutenza). Oral capsaicin for weight management. Form unspecified. B32 audit 2026-04-25: capsaicin class baseline.",
         "aliases": [
@@ -48525,9 +49121,9 @@
         }
       },
       "tribulus (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Tribulus terrestris fruit/root; contains protodioscin (furostanol saponin). Marketed for testosterone support; meta-analyses show no significant T increase in healthy men. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -48608,9 +49204,9 @@
         }
       },
       "theacrine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 10,
         "natural": true,
-        "score": 8,
+        "score": 13,
         "absorption": "unknown",
         "notes": "Purine alkaloid from Camellia assamica var. kucha (TeaCrine). Adenosine receptor antagonist with PDE inhibition. No habituation tolerance vs caffeine over 8 weeks (PMID 27164800). Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -48685,9 +49281,9 @@
         }
       },
       "agmatine (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 9,
         "natural": false,
-        "score": 5,
+        "score": 9,
         "absorption": "unknown",
         "notes": "Decarboxylated arginine; endogenous neuromodulator that inhibits NMDA receptors and modulates NO synthesis. Evidence for neuropathic pain (PMID 20863897). Produced by gut bacteria. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -48905,9 +49501,9 @@
         }
       },
       "guggul (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Commiphora mukul oleogum resin; contains guggulsterones (E and Z forms). Ayurvedic medicine for hyperlipidemia; meta-analysis shows mixed results. Thyroid-stimulating activity. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -48993,9 +49589,9 @@
         }
       },
       "devil's claw (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "low-moderate (harpagoside class baseline)",
         "notes": "Harpagophytum procumbens tuber; contains harpagoside (iridoid glycoside). Evidence for low back pain and osteoarthritis (ESCOP monograph). Anti-inflammatory via COX-2 and NF-kB. Form unspecified. B32 audit 2026-04-25: harpagoside class.",
         "aliases": [
@@ -49271,9 +49867,9 @@
         }
       },
       "mucuna pruriens (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "unknown",
         "notes": "Velvet bean containing L-DOPA (3-6% in seeds). Ayurvedic use for Parkinson-like symptoms and testosterone support. L-DOPA crosses BBB; dopaminergic effects. Caution with MAO inhibitors. Form unspecified. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "aliases": [
@@ -49695,9 +50291,9 @@
     "rxcui": "596718",
     "forms": {
       "butyric acid (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": true,
-        "score": 8,
+        "score": 9,
         "absorption": "good",
         "notes": "Butyric acid (C4 SCFA) naturally produced by colonic bacterial fermentation of dietary fiber. Primary colonocyte energy substrate (~70% of energy needs). Inhibits histone deacetylases (HDACs) modulating NF-kB-driven inflammation. Tributyrin (glycerol triester) form provides superior oral delivery vs free acid (PMID 28381011). Protective against colorectal cancer in preclinical models.",
         "aliases": [
@@ -50188,9 +50784,9 @@
         }
       },
       "royal sun blazei (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "low (mushroom class-poor; unspecified)",
         "notes": "Form not specified; conservative scoring applied. Agaricus blazei Murill mushroom (Himematsutake). Immune-modulating beta-glucans. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -53145,6 +53741,7 @@
         "aliases": [
           "acai berry",
           "acai",
+          "acai extract",
           "acai berry extract",
           "acai berry whole fruit extract",
           "acai fruit extract",
@@ -55045,9 +55642,9 @@
         }
       },
       "tart cherry (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": true,
-        "score": 8,
+        "score": 9,
         "absorption": "poor (anthocyanin class baseline; matches vitacherry)",
         "notes": "Prunus cerasus (Montmorency cherry) fruit; rich in anthocyanins (cyanidin-3-glucosylrutinoside) and melatonin. Evidence for sleep quality, post-exercise recovery, and uric acid reduction. Form unspecified. B31 audit 2026-04-25: anthocyanin class (PMID:20218618).",
         "aliases": [
@@ -55148,9 +55745,9 @@
         }
       },
       "spearmint (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 6,
         "natural": true,
-        "score": 8,
+        "score": 9,
         "absorption": "low (class baseline; conservative default)",
         "notes": "Mentha spicata herb; contains rosmarinic acid, carvone, and limonene. Evidence for PCOS anti-androgen activity (PMID 19585478) and cognitive enhancement (Neumentix). Form unspecified. B28 audit 2026-04-25: class baseline.",
         "aliases": [
@@ -55232,9 +55829,9 @@
         }
       },
       "button mushroom (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "low (mushroom class-poor; unspecified)",
         "notes": "Agaricus bisporus (white/cremini mushroom); contains ergothioneine, beta-glucans, and conjugated linoleic acid. Only natural food source of ergothioneine. Aromatase-inhibiting properties. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -55319,9 +55916,9 @@
         }
       },
       "auricularia (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "low (mushroom class-poor; unspecified default)",
         "notes": "Auricularia auricula-judae (wood ear/black fungus) mushroom; contains polysaccharides with anticoagulant and hypoglycemic properties. Traditional Chinese medicine for blood stasis. Form unspecified. B30 audit 2026-04-25: mushroom class-poor (B1).",
         "aliases": [
@@ -55424,9 +56021,9 @@
         }
       },
       "andrographis (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "low (andrographolide class baseline)",
         "notes": "Generic andrographis listing without standardization specified. Clinical RCTs use extracts standardized to 10% andrographolide at 400-1200 mg/day for immune support and upper respiratory symptoms. B25 audit 2026-04-25: andrographolide class (PMID:11081986).",
         "aliases": [
@@ -55523,9 +56120,9 @@
         }
       },
       "sage (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "low (class baseline; conservative default)",
         "notes": "Salvia officinalis herb; contains rosmarinic acid, carnosic acid, and thujone. Evidence for cognitive enhancement, menopausal hot flashes, and sore throat. German Commission E approved. Form unspecified. B28 audit 2026-04-25: class baseline.",
         "aliases": [
@@ -55612,9 +56209,9 @@
         }
       },
       "kefir (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 7,
         "natural": true,
-        "score": 8,
+        "score": 10,
         "absorption": "low (live organism class baseline)",
         "notes": "Symbiotic culture of bacteria and yeast (SCOBY) producing fermented milk. Contains Lactobacillus kefiranofaciens, L. kefiri, and kefiran polysaccharide. Evidence for gut health and bone density. Form unspecified. B30 audit 2026-04-25: live-organism class.",
         "aliases": [
@@ -55803,9 +56400,9 @@
         }
       },
       "garcinia cambogia (unspecified)": {
-        "bio_score": 5,
+        "bio_score": 8,
         "natural": true,
-        "score": 8,
+        "score": 11,
         "absorption": "moderate (HCA class baseline)",
         "notes": "Garcinia gummi-gutta fruit rind; contains hydroxycitric acid (HCA). ATP citrate lyase inhibitor reducing lipogenesis. Meta-analyses show modest weight loss (~0.88 kg vs placebo). Hepatotoxicity reports. Form unspecified. B32 audit 2026-04-25: HCA class.",
         "aliases": [
@@ -55930,8 +56527,8 @@
         }
       },
       "streptococcus salivarius (unspecified)": {
-        "bio_score": 5,
-        "score": 8,
+        "bio_score": 14,
+        "score": 17,
         "natural": true,
         "absorption": "good (S. salivarius class — companion harmonization flag)",
         "notes": "Strain not specified on label. Conservative score — look for a specific strain designation for an accurate score. B33 audit 2026-04-25: probiotic harmonization flag (B18 vs older nutrient-density framework).",
@@ -55984,9 +56581,9 @@
     "rxcui": "285156",
     "forms": {
       "lactobacillus reuteri (unspecified)": {
-        "bio_score": 13,
+        "bio_score": 14,
         "natural": true,
-        "score": 16,
+        "score": 17,
         "absorption": "very good",
         "notes": "A strain known for its ability to produce antimicrobial substances (reuterin) and its benefits for infant colic, oral health, and gut barrier integrity. Often branded as DSM 17938 or Protectis.",
         "aliases": [
@@ -56305,8 +56902,8 @@
         }
       },
       "bifidobacterium breve (unspecified)": {
-        "bio_score": 5,
-        "score": 8,
+        "bio_score": 14,
+        "score": 17,
         "natural": true,
         "absorption": "unknown — strain not specified",
         "notes": "Strain not specified on label. Conservative score — look for a specific strain designation for an accurate score. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
@@ -57081,9 +57678,9 @@
         }
       },
       "coconut water (unspecified)": {
-        "bio_score": 7,
+        "bio_score": 8,
         "natural": true,
-        "score": 10,
+        "score": 11,
         "absorption": "very_good (electrolyte hydration class)",
         "notes": "Coconut water ingredient without a specified powder or concentrate form. Conservative scoring. B30 audit 2026-04-25: electrolyte solution class.",
         "aliases": [

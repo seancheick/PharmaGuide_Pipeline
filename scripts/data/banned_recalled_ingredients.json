@@ -6593,7 +6593,6 @@
         "arsenite",
         "arsenate",
         "arsenic (inorganic)",
-        "as",
         "inorganic arsenic"
       ],
       "reason": "Inorganic arsenic is an IARC Group 1 human carcinogen linked to skin, lung, bladder, and kidney cancers at chronic dietary exposure levels. It also causes peripheral neuropathy, cardiovascular disease, and diabetes. Organic arsenic (found in seafood) is less toxic. EPA MCL for arsenic in drinking water: 10 mcg/L. California Prop 65 NSRL: 10 mcg/day. FDA action level for rice-based infant cereal: 100 ppb inorganic arsenic. In supplements, arsenic contamination is most common in rice protein, kelp, spirulina, certain Ayurvedic preparations, and marine-sourced ingredients. Testing for organic vs. inorganic speciation is essential for accurate risk assessment.",
@@ -6755,8 +6754,7 @@
       "aliases": [
         "cadmium contamination",
         "cadmium compounds",
-        "cadmium",
-        "cd"
+        "cadmium"
       ],
       "reason": "Cadmium is a heavy metal contaminant that accumulates in the kidneys over decades, causing progressive renal tubular damage and ultimately kidney failure (itai-itai disease at high environmental exposures). It also causes bone demineralization by interfering with vitamin D metabolism. IARC Group 1 carcinogen (lung cancer, endometrial cancer evidence). California Prop 65 MADL: 4.1 mcg/day. WHO provisional tolerable monthly intake: 25 mcg/kg bw. Common in plant-based supplements grown in cadmium-rich soils (cocoa, leafy greens, grains). FDA has no specific cadmium limit for dietary supplements but monitors under general adulteration provisions.",
       "status": "high_risk",
@@ -6891,8 +6889,7 @@
         "lead compounds",
         "lead contamination",
         "plumbum",
-        "lead",
-        "pb"
+        "lead"
       ],
       "reason": "Lead is a cumulative neurotoxin with no established safe blood level, particularly for cognitive development in children. It distributes to bone, brain, kidney, and liver. Chronic low-level exposure impairs IQ, attention, and impulse control in children; in adults it raises cardiovascular risk. IARC Group 2A (probable human carcinogen, inorganic lead). California Prop 65 maximum daily intake: 0.5 mcg/day (MADL). FDA has no specific supplement lead limit but has proposed action levels. Lead contamination in supplements is common in mineral products, certain botanicals, and products manufactured with inadequate heavy metal testing.",
       "status": "high_risk",
@@ -7029,8 +7026,7 @@
         "mercury contamination",
         "methylmercury",
         "mercury compounds",
-        "mercury",
-        "hg"
+        "mercury"
       ],
       "reason": "Mercury — particularly organic methylmercury — is a potent neurotoxin that crosses the blood-brain barrier and placenta. It causes irreversible neurological damage, especially in the developing brain (prenatal and early childhood exposure). EPA/FDA reference dose for methylmercury: 0.1 mcg/kg bw/day. IARC: Group 2B (inorganic mercury), Group 1 for methylmercury from occupational data. In supplements, mercury contamination is most common in fish oils, certain botanical powders, and traditional medicinal preparations. Pregnant women and young children are at highest risk.",
       "status": "high_risk",

@@ -752,13 +752,42 @@ class SupplementScorer:
             self._parent_total_warned = True
 
         is_single = supp_type in {"single", "single_nutrient"}
+        # Pre-compute: count of NON-blend candidates that would otherwise
+        # contribute to A1. If any exist, blend parents are excluded
+        # (the disclosed children/siblings are the real signal). If NONE
+        # exist, the blend parent IS the dose-bearer and must be scored
+        # (e.g. Thorne I3C/DIM Complex 200mg — single-row "complex" named
+        # ingredient with no children, treated as proprietary by name
+        # pattern but is actually the only thing on the label). Without
+        # this exemption ~3+ products silently score A=0.
+        _non_blend_candidates = sum(
+            1 for ing in ingredients
+            if not ing.get("is_proprietary_blend")
+            and not ing.get("is_parent_total")
+            and self._has_usable_individual_dose(ing)
+        )
+
         weighted_values: List[Tuple[float, float]] = []
         for ing in ingredients:
             # Blend containers are opacity signals, not quality signals.
             # Their cost is captured by B5; including them in A1 would
             # double-penalise and pollute the quality average with a
             # meaningless "unspecified form" score of 5.
-            if ing.get("is_proprietary_blend"):
+            #
+            # Round 2 fix (2026-04-30): skip blend parent when EITHER
+            # (a) there is another non-blend candidate to fall back to, OR
+            # (b) the blend parent is not mapped to a real IQM form
+            #     (opaque marketing blends with no IQM identity).
+            # Only score the blend parent when it IS the sole candidate
+            # AND it maps to a known IQM form (e.g., Thorne I3C/DIM Complex
+            # 200mg mapped to DIM, or BioCell Collagen Complex mapped to
+            # Collagen). This preserves the opacity-blocking intent for
+            # genuine black-box blends while restoring legitimate
+            # single-row branded actives that happen to be flagged
+            # is_proprietary_blend by name pattern.
+            if ing.get("is_proprietary_blend") and (
+                _non_blend_candidates > 0 or not ing.get("mapped", False)
+            ):
                 continue
             # Parent nutrient totals are informational rows when nested forms
             # are present; include child forms only to avoid double-counting.

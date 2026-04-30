@@ -4354,10 +4354,24 @@ class EnhancedDSLDNormalizer:
         # has_forms: flag real supplement-source salts (e.g. "Sodium as
         # Sodium Chloride") vs Nutrition-Facts-panel disclosure (bare "Sodium").
         _raw_has_forms = bool(ing.get("forms"))
+        # Extract gram-equivalent quantity for the protein supplement-dose
+        # bypass (Batch 14a). Pulled from quantity[].amount when in Gram(s).
+        _quantity_g = None
+        _qty_data = ing.get("quantity")
+        if isinstance(_qty_data, list) and _qty_data:
+            _q = _qty_data[0]
+            if isinstance(_q, dict):
+                _u = str(_q.get("unit") or "").lower().strip()
+                if _u in {"g", "gram", "grams", "gram(s)"}:
+                    try:
+                        _quantity_g = float(_q.get("quantity") or _q.get("amount") or 0)
+                    except (TypeError, ValueError):
+                        _quantity_g = None
         if self._is_nutrition_fact(
             name, ingredient_group, unit_raw,
             dsld_category=ing.get("category"),
             has_forms=_raw_has_forms,
+            quantity_g=_quantity_g,
         ):
             logger.debug(f"Skipping nutrition fact: {name} (group: {ingredient_group}, unit: {unit_raw})")
             return None
@@ -6522,6 +6536,7 @@ class EnhancedDSLDNormalizer:
         unit: str = None,
         dsld_category: str = None,
         has_forms: bool = False,
+        quantity_g: float = None,
     ) -> bool:
         """
         Check if ingredient name is a label phrase or nutrition fact to exclude.
@@ -6594,6 +6609,13 @@ class EnhancedDSLDNormalizer:
             "enzyme",
             "non-nutrient/non-botanical",
             "animal part or source",  # glandular supplements
+            # Batch 14a (2026-04-29): Protein and fiber are real supplement
+            # categories (whey/casein/pea protein, psyllium/inulin/glucomannan).
+            # DSLD's own categorization is the source of truth — trust it.
+            # Bare "Protein" or "Fiber" panel disclosures (sub-10g) are
+            # caught by the protein-supplement-dose check below.
+            "protein",
+            "fiber",
         }
         _bypass_name_match = _cat_lower in _SUPPLEMENT_INGREDIENT_CATEGORIES
 
@@ -6749,11 +6771,95 @@ class EnhancedDSLDNormalizer:
             # Strip braces if present so we accept both forms.
             if unit_lower.startswith("{") and unit_lower.endswith("}"):
                 unit_lower = unit_lower[1:-1].strip()
+        else:
+            unit_lower = ""
+
+        # Batch 14a (2026-04-29): Bare "Protein" without unit AND without
+        # supplement-magnitude quantity is always a panel disclosure. This
+        # check fires before the unit-specific path so it catches the
+        # ambiguous case (no unit declared).
+        _name_token_for_bare_check = (name or "").lower().strip()
+        if (
+            (dsld_category or "").lower().strip() == "protein"
+            and _name_token_for_bare_check == "protein"
+            and (quantity_g is None or quantity_g < 10.0)
+        ):
+            logger.debug(
+                "Batch 14a: bare 'Protein' (qty=%s) — filtering as panel",
+                quantity_g,
+            )
+            return True
+
+        if unit:
             # Exclude if the unit itself is a panel-scale unit — these are
             # Nutrition Facts disclosures (Calories, total Gram weights).
-            if unit_lower in _NUTRITION_PANEL_UNITS:
-                logger.debug(f"Excluding via unit pattern: {name} (unit: {unit})")
+            #
+            # Batch 5 fix: Gram(s) is also a legitimate dose unit for
+            # single-active powders (Creatine 4g, L-Glutamine 5g, MSM 3g,
+            # Inositol 2g, Beta-Sitosterol 1g, Whey Protein 25g, etc.).
+            # Without the bypass, ~429 single-active powder products were
+            # silently dropped because their dose looked like a nutrition-
+            # facts row. When DSLD itself classifies the row as a real
+            # supplement (vitamin / mineral / amino acid / fatty acid /
+            # enzyme / non-nutrient-non-botanical / animal part), trust
+            # that classification over the gram-unit heuristic.
+            #
+            # Calorie units stay strictly excluded — they are NEVER a real
+            # supplement unit, even with category bypass.
+            _CALORIE_PANEL_UNITS = {"calories", "calorie", "kcal", "cal"}
+            _GRAM_PANEL_UNITS = {"g", "gram", "grams", "gram(s)"}
+            if unit_lower in _CALORIE_PANEL_UNITS:
+                logger.debug(f"Excluding via calorie unit: {name} (unit: {unit})")
                 return True
+            if unit_lower in _GRAM_PANEL_UNITS:
+                # Panel-disclosure ingredient groups override the supplement-
+                # category bypass. DSLD tags "Sugar Alcohols 2g" with
+                # category=non-nutrient/non-botanical (matching the bypass list)
+                # but it IS a Nutrition Facts panel row, never a real active.
+                # The ingredientGroup gives us a reliable disambiguator.
+                _PANEL_DISCLOSURE_GROUPS = {
+                    "sugar alcohol", "sugar alcohols",
+                }
+                _group_lower = (ingredient_group or "").lower().strip()
+                if _group_lower in _PANEL_DISCLOSURE_GROUPS:
+                    logger.debug(
+                        f"Excluding via panel-disclosure group: {name} "
+                        f"(group: {ingredient_group}, unit: {unit})"
+                    )
+                    return True
+
+                # Batch 14a (2026-04-29): Protein-category rows are
+                # dual-context. Bare "Protein" without a supplement-magnitude
+                # quantity is a nutrition-panel disclosure on a multivitamin/
+                # gummy and must be filtered (overrides the supplement-
+                # category bypass). Named protein ("Whey Protein", "Pea
+                # Protein") OR supplement-magnitude dose (≥10g) keeps the
+                # bypass. Missing quantity defaults to panel-disclosure
+                # (safer when ambiguous).
+                _PROTEIN_SUPPLEMENT_DOSE_G = 10.0
+                _name_token = (name or "").lower().strip()
+                _is_bare_protein = _name_token == "protein"
+                if _cat_lower == "protein" and _is_bare_protein:
+                    if quantity_g is None or quantity_g < _PROTEIN_SUPPLEMENT_DOSE_G:
+                        logger.debug(
+                            "Batch 14a: bare 'Protein' at sub-supplement dose "
+                            "(%s) — filtering as Nutrition-Facts disclosure",
+                            quantity_g,
+                        )
+                        return True
+                # When DSLD itself classifies the row as a real supplement
+                # (vitamin / mineral / amino acid / fatty acid / enzyme /
+                # non-nutrient-non-botanical / animal part), trust that over
+                # the gram-unit heuristic. Without this bypass, ~429
+                # single-active powder products (Creatine 4g, L-Glutamine 5g,
+                # MSM 3g, Inositol 2g, Beta-Sitosterol 1g, Whey Protein 25g)
+                # were silently dropped. (Batch 5 cleaner fix.)
+                elif not _bypass_name_match:
+                    logger.debug(
+                        f"Excluding via gram unit (no supplement category): "
+                        f"{name} (unit: {unit}, cat: {dsld_category!r})"
+                    )
+                    return True
             # D1.3 + E1.6: Sugar/Fat/Carb rows are Nutrition Facts panel
             # disclosures by default — UNLESS the ingredientGroup matches a
             # known supplement-active (allowlist below). This preserves the
@@ -6783,12 +6889,31 @@ class EnhancedDSLDNormalizer:
                     )
                     return True
 
+            # Protein-supplement preservation is fully handled in the
+            # gram-unit block above (Batch 14a). category=protein is now in
+            # _SUPPLEMENT_INGREDIENT_CATEGORIES, so non-bare protein names
+            # (Whey Protein / Pea Protein / Casein) bypass cleanly. Bare
+            # "Protein" with sub-10g quantity is filtered as panel disclosure.
+
         # Preprocess the name for comparison
         processed_name = self.matcher.preprocess_text(name)
 
+        # Batch 14a: protein-supplement-magnitude rows bypass the name-based
+        # nutrition-facts exclusion list too. Without this, the bare "Protein"
+        # name still hits _preprocessed_excluded_nutrition and gets filtered
+        # despite the gram-unit-block letting it through.
+        _is_protein_supplement = (
+            _cat_lower == "protein"
+            and unit and unit.lower().strip().strip("{}") in {"g", "gram", "grams", "gram(s)"}
+            and quantity_g is not None
+            and quantity_g >= 10.0
+        )
+
         # Name-based exclusion for nutrition facts — bypassed when DSLD itself
         # tagged the row as vitamin/mineral (they are real supplement ingredients).
-        if not _bypass_name_match and processed_name in self._preprocessed_excluded_nutrition:
+        if (not _bypass_name_match
+                and not _is_protein_supplement
+                and processed_name in self._preprocessed_excluded_nutrition):
             return True
 
         # Check against preprocessed label phrases

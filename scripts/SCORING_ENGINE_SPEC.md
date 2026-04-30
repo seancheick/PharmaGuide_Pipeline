@@ -1,7 +1,21 @@
 # SCORING_ENGINE_SPEC.md
 
-> Scoring version: **3.4.0** / Data schema: **5.1.0** / Last updated: **2026-04-22**
+> Scoring version: **3.5.0** / Data schema: **5.3.0** / Last updated: **2026-04-29**
 > Aligned to current `score_supplements.py` and `config/scoring_config.json`.
+
+## v3.5.0 highlights
+
+- **Banned-substance role gate** (enricher): `match_mode='active'` entries no longer
+  fire on inactive-section ingredients. Eliminates ~2,000+ FP HIGH_RISK fires
+  (talc/TiO2/simethicone as excipients).
+- **Section C retune**: `ingredient-human` 0.65 → 0.80, `branded-rct` 0.80 → 0.90,
+  `top_n_weights` [1.0, 0.5, 0.25] → [1.0, 0.7, 0.5, 0.3]. Rewards evidence-rich
+  formulations (Thorne / PE / Transparent Labs) without multivitamin inflation.
+- **Final-DB data integrity gate**: NOT_SCORED + null-score products are quarantined
+  to `excluded_by_gate` (review_queue) instead of leaking into final_db with
+  NULL scores. BLOCKED / UNSAFE / CAUTION / POOR / SAFE / NUTRITION_ONLY all ship.
+- **Heavy-metal alias hardening**: removed risky `as`/`pb`/`hg`/`cd` chemistry-symbol
+  aliases from heavy-metal entries.
 
 ## Scope
 
