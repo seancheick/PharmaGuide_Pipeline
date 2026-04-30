@@ -35,7 +35,7 @@
         "Euterpe oleracea"
       ],
       "category": "fruit",
-      "notes": "Euterpe oleracea (Arecaceae) fruit. High anthocyanin and polyphenol content (ORAC >15,000 \u00b5mol TE/100g). Used as antioxidant-rich superfood; freeze-dried powder retains more anthocyanins than juice. Not standardized to specific compounds.",
+      "notes": "Euterpe oleracea (Arecaceae) fruit. High anthocyanin and polyphenol content (ORAC >15,000 µmol TE/100g). Used as antioxidant-rich superfood; freeze-dried powder retains more anthocyanins than juice. Not standardized to specific compounds.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "46AM2VJ0AW"
@@ -52,7 +52,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1054955"
+      "cui": "C1054955",
+      "functional_roles": []
     },
     {
       "id": "acerola_cherry",
@@ -67,10 +68,11 @@
         "Acerola Cherry juice powder"
       ],
       "category": "fruit",
-      "notes": "Malpighia emarginata (Malpighiaceae) fruit. Natural vitamin C source (1,000\u20134,500 mg/100g fresh weight). Often used in supplements as whole-food C source, but botanical form is not standardized to specific ascorbic acid percentage.",
+      "notes": "Malpighia emarginata (Malpighiaceae) fruit. Natural vitamin C source (1,000–4,500 mg/100g fresh weight). Often used in supplements as whole-food C source, but botanical form is not standardized to specific ascorbic acid percentage.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950505"
+      "cui": "C0950505",
+      "functional_roles": []
     },
     {
       "id": "african_geranium",
@@ -98,7 +100,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1090842"
+      "cui": "C1090842",
+      "functional_roles": []
     },
     {
       "id": "agarikon",
@@ -113,7 +116,8 @@
       "notes": "Laricifomes officinalis (Fomitopsidaceae) fruiting body. Ancient polypore mushroom traditionally used for respiratory infections. Contains agaric acid and beta-glucans. Rare in the wild; some cultivated sources available.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1662787"
+      "cui": "C1662787",
+      "functional_roles": []
     },
     {
       "id": "akkalkara_root",
@@ -143,7 +147,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1669961"
+      "cui": "C1669961",
+      "functional_roles": []
     },
     {
       "id": "alfalfa_leaf",
@@ -176,7 +181,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0085839"
+      "cui": "C0085839",
+      "functional_roles": []
     },
     {
       "id": "aloe_vera",
@@ -200,7 +206,8 @@
       "external_ids": {
         "unii": "ZY81Z83H0X"
       },
-      "cui": "C0718405"
+      "cui": "C0718405",
+      "functional_roles": []
     },
     {
       "id": "aloe_vera_concentrated_gel",
@@ -221,7 +228,8 @@
       "notes": "Aloe barbadensis (Asphodelaceae) concentrated inner leaf gel. Acemannan-rich preparation with anthraquinone latex removed. Used for GI soothing and immune modulation. Not the same as whole-leaf aloe.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0002707"
+      "cui": "C0002707",
+      "functional_roles": []
     },
     {
       "id": "amadou",
@@ -237,7 +245,8 @@
       "notes": "Fomes fomentarius (Polyporaceae) fruiting body. Tinder polypore historically used in traditional European medicine as styptic. Contains polysaccharides and triterpenes; minimal clinical evidence for supplement use.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0319810"
+      "cui": "C0319810",
+      "functional_roles": []
     },
     {
       "id": "amla_fruit",
@@ -274,7 +283,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0971862"
+      "cui": "C0971862",
+      "functional_roles": []
     },
     {
       "id": "andrographis",
@@ -310,7 +320,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1256659"
+      "cui": "C1256659",
+      "functional_roles": []
     },
     {
       "id": "angelica_archangelica",
@@ -345,7 +356,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331174"
+      "cui": "C0331174",
+      "functional_roles": []
     },
     {
       "id": "angelica_gigas",
@@ -361,7 +373,8 @@
       "notes": "Angelica gigas (Apiaceae) root. Korean angelica (Cham-Dang-Gui) used in traditional Korean medicine. Contains decursin and decursinol angelate. Botanical form is unstandardized root powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1006839"
+      "cui": "C1006839",
+      "functional_roles": []
     },
     {
       "id": "apocynum_venetum_leaf",
@@ -376,7 +389,7 @@
         "Apocynum venetum"
       ],
       "category": "leaf",
-      "notes": "Apocynum venetum (Apocynaceae) leaf. Venetron\u00ae is a commercial extract used for mild anxiety and sleep support. Traditional Chinese herb (Luo-Bu-Ma). Contains hyperoside and isoquercitrin flavonoids.",
+      "notes": "Apocynum venetum (Apocynaceae) leaf. Venetron® is a commercial extract used for mild anxiety and sleep support. Traditional Chinese herb (Luo-Bu-Ma). Contains hyperoside and isoquercitrin flavonoids.",
       "last_updated": "2026-03-13",
       "external_ids": {
         "unii": "33E68BI71Z"
@@ -392,7 +405,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949822"
+      "cui": "C0949822",
+      "functional_roles": []
     },
     {
       "id": "apple_cider_vinegar",
@@ -420,7 +434,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1178459"
+      "cui": "C1178459",
+      "functional_roles": []
     },
     {
       "id": "apple_fiber",
@@ -436,7 +451,8 @@
       "notes": "Malus domestica (Rosaceae) fruit fiber. Pectin-rich dietary fiber from apple pomace. Used as prebiotic and bulking agent in supplements. Not standardized to pectin content.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0330653"
+      "cui": "C0330653",
+      "functional_roles": []
     },
     {
       "id": "apricot",
@@ -466,7 +482,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0003607"
+      "cui": "C0003607",
+      "functional_roles": []
     },
     {
       "id": "artists_conk",
@@ -492,7 +509,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0319803"
+      "cui": "C0319803",
+      "functional_roles": []
     },
     {
       "id": "ashoka",
@@ -504,7 +522,7 @@
         "Saraca asoca"
       ],
       "category": "bark",
-      "notes": "Saraca asoca (Fabaceae/Caesalpinioideae), commonly called Ashoka. Ayurvedic botanical used in women\u2019s health formulas. Added for exact identity coverage.",
+      "notes": "Saraca asoca (Fabaceae/Caesalpinioideae), commonly called Ashoka. Ayurvedic botanical used in women’s health formulas. Added for exact identity coverage.",
       "last_updated": "2026-03-13",
       "external_ids": {
         "unii": "OO7O919190"
@@ -520,7 +538,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0885753"
+      "cui": "C0885753",
+      "functional_roles": []
     },
     {
       "id": "ashwagandha",
@@ -533,7 +552,8 @@
       "notes": "Withania somnifera (Solanaceae) whole herb. Adaptogenic Ayurvedic rasayana. Contains withanolides and sitoindosides. This entry covers generic/whole-herb ashwagandha powder not standardized to specific withanolide content.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1061163"
+      "cui": "C1061163",
+      "functional_roles": []
     },
     {
       "id": "ashwagandha_root",
@@ -563,7 +583,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1061163"
+      "cui": "C1061163",
+      "functional_roles": []
     },
     {
       "id": "asparagus",
@@ -591,7 +612,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0003741"
+      "cui": "C0003741",
+      "functional_roles": []
     },
     {
       "id": "astragalus_root",
@@ -611,7 +633,8 @@
       "notes": "Astragalus membranaceus (Fabaceae) root. Huang Qi in TCM, used as qi tonic and immune modulator. Contains astragalosides and polysaccharides. Botanical form is dried root powder, not standardized.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0004133"
+      "cui": "C0004133",
+      "functional_roles": []
     },
     {
       "id": "atractylodes",
@@ -640,7 +663,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949568"
+      "cui": "C0949568",
+      "functional_roles": []
     },
     {
       "id": "avocado_fruit",
@@ -671,7 +695,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2722027"
+      "cui": "C2722027",
+      "functional_roles": []
     },
     {
       "id": "avocado_oil",
@@ -701,7 +726,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3265002"
+      "cui": "C3265002",
+      "functional_roles": []
     },
     {
       "id": "bacopa",
@@ -718,7 +744,8 @@
       "notes": "Bacopa monnieri (Plantaginaceae) aerial parts. Brahmi in Ayurveda, used for cognitive enhancement. Contains bacosides A and B. This botanical form is whole-herb powder, not standardized to bacoside content.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950097"
+      "cui": "C0950097",
+      "functional_roles": []
     },
     {
       "id": "barberry_root",
@@ -750,7 +777,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004747"
+      "cui": "C0004747",
+      "functional_roles": []
     },
     {
       "id": "barley_grass_powder",
@@ -781,7 +809,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004755"
+      "cui": "C0004755",
+      "functional_roles": []
     },
     {
       "id": "barley_juice",
@@ -811,7 +840,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004755"
+      "cui": "C0004755",
+      "functional_roles": []
     },
     {
       "id": "bayberry",
@@ -827,7 +857,8 @@
       "notes": "Myrica cerifera (Myricaceae) root bark. Traditional astringent herb used for sore throat, diarrhea, and circulatory stimulation. Contains myricitrin flavonoid and triterpenes. Not standardized.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949964"
+      "cui": "C0949964",
+      "functional_roles": []
     },
     {
       "id": "beet_root",
@@ -857,7 +888,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004749"
+      "cui": "C0004749",
+      "functional_roles": []
     },
     {
       "id": "beetroot",
@@ -886,7 +918,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004749"
+      "cui": "C0004749",
+      "functional_roles": []
     },
     {
       "id": "belleric_myrobalan",
@@ -904,7 +937,8 @@
       "notes": "Terminalia bellirica (Combretaceae) fruit. Bibhitaki in Ayurveda, one of three Triphala fruits. Contains gallic acid and ellagic acid tannins. Traditional digestive and rejuvenation remedy.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950296"
+      "cui": "C0950296",
+      "functional_roles": []
     },
     {
       "id": "bhringraj",
@@ -922,7 +956,8 @@
       "notes": "Eclipta prostrata (syn. Eclipta alba), commonly called Bhringraj. Ayurvedic herb used in liver and hair-support formulas. Added for exact identity coverage.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C1017586"
+      "cui": "C1017586",
+      "functional_roles": []
     },
     {
       "id": "bilberry",
@@ -949,7 +984,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0795673"
+      "cui": "C0795673",
+      "functional_roles": []
     },
     {
       "id": "bilberry_fruit",
@@ -977,7 +1013,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004843"
+      "cui": "C0004843",
+      "functional_roles": []
     },
     {
       "id": "bitter_melon_fruit",
@@ -1010,7 +1047,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004811"
+      "cui": "C0004811",
+      "functional_roles": []
     },
     {
       "id": "black_cherry",
@@ -1040,7 +1078,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330497"
+      "cui": "C0330497",
+      "functional_roles": []
     },
     {
       "id": "black_garlic",
@@ -1076,7 +1115,8 @@
         ],
         "metabolites": []
       },
-      "cui": "C0993243"
+      "cui": "C0993243",
+      "functional_roles": []
     },
     {
       "id": "black_ginger",
@@ -1106,7 +1146,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3178990"
+      "cui": "C3178990",
+      "functional_roles": []
     },
     {
       "id": "black_gram",
@@ -1136,7 +1177,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0996864"
+      "cui": "C0996864",
+      "functional_roles": []
     },
     {
       "id": "black_pepper",
@@ -1165,7 +1207,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0030934"
+      "cui": "C0030934",
+      "functional_roles": []
     },
     {
       "id": "black_radish",
@@ -1179,7 +1222,8 @@
       "notes": "Raphanus sativus var. niger (Brassicaceae) root. Traditional European choleretic used for gallbladder and liver support. Contains glucosinolates and isothiocyanates. Botanical powder, not standardized.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C3254856"
+      "cui": "C3254856",
+      "functional_roles": []
     },
     {
       "id": "black_soybean_hull",
@@ -1193,7 +1237,8 @@
       "notes": "Glycine max (Fabaceae) black soybean seed coat. Rich in anthocyanins (cyanidin-3-glucoside) and proanthocyanidins. Used as antioxidant and phytoestrogen source. Hull-specific preparation.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0037733"
+      "cui": "C0037733",
+      "functional_roles": []
     },
     {
       "id": "black_tea_leaf",
@@ -1228,7 +1273,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0039400"
+      "cui": "C0039400",
+      "functional_roles": []
     },
     {
       "id": "blackcurrant",
@@ -1245,7 +1291,8 @@
       "notes": "Ribes nigrum (Grossulariaceae) fruit. Exceptionally rich in vitamin C (180 mg/100g) and anthocyanins (250-400 mg/100g). Contains gamma-linolenic acid (GLA) in seed oil. Botanical fruit powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0004842"
+      "cui": "C0004842",
+      "functional_roles": []
     },
     {
       "id": "blessed_thistle",
@@ -1273,7 +1320,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330621"
+      "cui": "C0330621",
+      "functional_roles": []
     },
     {
       "id": "blue_cohosh",
@@ -1286,10 +1334,11 @@
         "blue cohosh root extract"
       ],
       "category": "root",
-      "notes": "Caulophyllum thalictroides (Berberidaceae) root. Contains caulosaponin and methylcytisine alkaloids. Traditional parturient herb \u2014 safety concern in pregnancy due to uterotonic and nicotinic effects.",
+      "notes": "Caulophyllum thalictroides (Berberidaceae) root. Contains caulosaponin and methylcytisine alkaloids. Traditional parturient herb — safety concern in pregnancy due to uterotonic and nicotinic effects.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0331048"
+      "cui": "C0331048",
+      "functional_roles": []
     },
     {
       "id": "blue_flag_root",
@@ -1316,7 +1365,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949872"
+      "cui": "C0949872",
+      "functional_roles": []
     },
     {
       "id": "blue_vervain",
@@ -1345,7 +1395,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949588"
+      "cui": "C0949588",
+      "functional_roles": []
     },
     {
       "id": "blueberry",
@@ -1384,7 +1435,8 @@
       "cui": "C1027331",
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['blueberry juice powder', 'blueberry juice', 'organic blueberry juice powder']"
-      ]
+      ],
+      "functional_roles": []
     },
     {
       "id": "blueberry_fruit",
@@ -1414,7 +1466,8 @@
       "cui": "C0004843",
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 1 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['blueberry juice powder']"
-      ]
+      ],
+      "functional_roles": []
     },
     {
       "id": "boldo_leaf",
@@ -1431,7 +1484,8 @@
       "notes": "Peumus boldus (Monimiaceae) leaf. Chilean native tree used for hepatobiliary and digestive support. Contains boldine alkaloid and essential oil. Traditional choleretic. Botanical leaf powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950026"
+      "cui": "C0950026",
+      "functional_roles": []
     },
     {
       "id": "boneset_herb",
@@ -1460,7 +1514,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949776"
+      "cui": "C0949776",
+      "functional_roles": []
     },
     {
       "id": "boswellia_serrata_resin",
@@ -1490,7 +1545,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1260643"
+      "cui": "C1260643",
+      "functional_roles": []
     },
     {
       "id": "brassaiopsis_glomerulata",
@@ -1504,7 +1560,8 @@
       "notes": "Brassaiopsis glomerulata (Araliaceae) stem bark. Vietnamese traditional medicine plant. Contains triterpene saponins. Marketed for testosterone and aromatase inhibition; very limited clinical evidence.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1234684"
+      "cui": "C1234684",
+      "functional_roles": []
     },
     {
       "id": "broccoli",
@@ -1538,7 +1595,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330498"
+      "cui": "C0330498",
+      "functional_roles": []
     },
     {
       "id": "brussels_sprout",
@@ -1573,7 +1631,8 @@
       "cui": "C2740606",
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 1 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['brussels']"
-      ]
+      ],
+      "functional_roles": []
     },
     {
       "id": "buchu_leaf",
@@ -1606,7 +1665,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0996116"
+      "cui": "C0996116",
+      "functional_roles": []
     },
     {
       "id": "buckthorn_bark",
@@ -1638,7 +1698,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949619"
+      "cui": "C0949619",
+      "functional_roles": []
     },
     {
       "id": "buckwheat_seed",
@@ -1669,7 +1730,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330501"
+      "cui": "C0330501",
+      "functional_roles": []
     },
     {
       "id": "bulbine_natalensis",
@@ -1681,7 +1743,8 @@
       "category": "root",
       "notes": "Bulbine natalensis (Asphodelaceae) root/stem. South African succulent marketed for testosterone support. Contains mesembrenone alkaloids and saponins. Limited human clinical evidence; mostly animal studies.",
       "last_updated": "2026-03-01",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "bupleurum_root",
@@ -1700,7 +1763,8 @@
       "notes": "Bupleurum chinense (Apiaceae) root. Chai Hu in TCM, one of the most commonly prescribed herbs. Contains saikosaponins (a, c, d). Used for liver qi stagnation and as harmonizing herb.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949630"
+      "cui": "C0949630",
+      "functional_roles": []
     },
     {
       "id": "burdock_root_powder",
@@ -1734,7 +1798,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0003780"
+      "cui": "C0003780",
+      "functional_roles": []
     },
     {
       "id": "butchers_broom_root",
@@ -1744,8 +1809,8 @@
         "butcher's broom dried extract",
         "ruscus aculeatus",
         "ruscus aculeatus root extract",
-        "butcher\u2019s broom",
-        "butcher\u2019s broom root",
+        "butcher’s broom",
+        "butcher’s broom root",
         "butcher's broom",
         "Butcher's Broom 10% extract",
         "Butchers Broom"
@@ -1768,7 +1833,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330653"
+      "cui": "C0330653",
+      "functional_roles": []
     },
     {
       "id": "butternut",
@@ -1784,7 +1850,8 @@
       "notes": "Juglans cinerea (Juglandaceae) inner bark. Traditional Eclectic medicine laxative containing juglone and juglandin. Gentle cathartic used for constipation and liver support. Botanical bark powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0330973"
+      "cui": "C0330973",
+      "functional_roles": []
     },
     {
       "id": "cabbage",
@@ -1814,7 +1881,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2740612"
+      "cui": "C2740612",
+      "functional_roles": []
     },
     {
       "id": "cacao_powder",
@@ -1844,7 +1912,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0006879"
+      "cui": "C0006879",
+      "functional_roles": []
     },
     {
       "id": "california_poppy",
@@ -1874,7 +1943,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949771"
+      "cui": "C0949771",
+      "functional_roles": []
     },
     {
       "id": "caralluma",
@@ -1903,7 +1973,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3178930"
+      "cui": "C3178930",
+      "functional_roles": []
     },
     {
       "id": "caralluma_fimbriata",
@@ -1931,7 +2002,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3178930"
+      "cui": "C3178930",
+      "functional_roles": []
     },
     {
       "id": "cardamom",
@@ -1961,7 +2033,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0006761"
+      "cui": "C0006761",
+      "functional_roles": []
     },
     {
       "id": "carob",
@@ -1991,7 +2064,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0006820"
+      "cui": "C0006820",
+      "functional_roles": []
     },
     {
       "id": "carrot",
@@ -2020,7 +2094,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0007788"
+      "cui": "C0007788",
+      "functional_roles": []
     },
     {
       "id": "carrot_seed_oil",
@@ -2050,7 +2125,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0007788"
+      "cui": "C0007788",
+      "functional_roles": []
     },
     {
       "id": "cassava",
@@ -2076,7 +2152,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1141016"
+      "cui": "C1141016",
+      "functional_roles": []
     },
     {
       "id": "cassia_nomame",
@@ -2105,7 +2182,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3321103"
+      "cui": "C3321103",
+      "functional_roles": []
     },
     {
       "id": "cat_s_claw_bark",
@@ -2122,10 +2200,11 @@
         "Uncaria tomentosa"
       ],
       "category": "bark",
-      "notes": "Uncaria tomentosa (Rubiaceae) inner bark. U\u00f1a de Gato from Peruvian Amazon. Contains pentacyclic oxindole alkaloids (POAs). Used for immune modulation and joint inflammation. Botanical bark form.",
+      "notes": "Uncaria tomentosa (Rubiaceae) inner bark. Uña de Gato from Peruvian Amazon. Contains pentacyclic oxindole alkaloids (POAs). Used for immune modulation and joint inflammation. Botanical bark form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949579"
+      "cui": "C0949579",
+      "functional_roles": []
     },
     {
       "id": "catnip_leaf",
@@ -2156,7 +2235,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949987"
+      "cui": "C0949987",
+      "functional_roles": []
     },
     {
       "id": "catuaba",
@@ -2173,7 +2253,8 @@
       "notes": "Trichilia catigua (Meliaceae) bark. Brazilian traditional aphrodisiac and nervine tonic. Note: 'catuaba' refers to multiple unrelated species (Erythroxylum, Anemopaegma). This entry covers Trichilia catigua bark.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0874042"
+      "cui": "C0874042",
+      "functional_roles": []
     },
     {
       "id": "cauliflower",
@@ -2202,7 +2283,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2740760"
+      "cui": "C2740760",
+      "functional_roles": []
     },
     {
       "id": "cayenne_pepper",
@@ -2233,7 +2315,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0006909"
+      "cui": "C0006909",
+      "functional_roles": []
     },
     {
       "id": "celastrus_paniculatus",
@@ -2250,7 +2333,8 @@
       "notes": "Celastrus paniculatus (Celastraceae) seed. Jyotishmati in Ayurveda, traditional nootropic and nerve tonic. Seed oil contains sesquiterpenes and polyesters. Limited clinical evidence for cognitive enhancement.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949670"
+      "cui": "C0949670",
+      "functional_roles": []
     },
     {
       "id": "celery_seed",
@@ -2266,7 +2350,7 @@
         "Celery 10:1 extract"
       ],
       "category": "seed",
-      "notes": "Apium graveolens (Apiaceae) seed. Contains 3-n-butylphthalide (NBP) and apigenin. Traditional remedy for gout and joint pain. Also contains furanocoumarins \u2014 photosensitivity possible. Botanical seed form.",
+      "notes": "Apium graveolens (Apiaceae) seed. Contains 3-n-butylphthalide (NBP) and apigenin. Traditional remedy for gout and joint pain. Also contains furanocoumarins — photosensitivity possible. Botanical seed form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "1G1EAA320L"
@@ -2283,7 +2367,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0007011"
+      "cui": "C0007011",
+      "functional_roles": []
     },
     {
       "id": "ceylon_cinnamon",
@@ -2311,7 +2396,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0008863"
+      "cui": "C0008863",
+      "functional_roles": []
     },
     {
       "id": "chaga_mushroom_powder",
@@ -2326,7 +2412,8 @@
       "notes": "Inonotus obliquus (Hymenochaetaceae) sclerotium. Parasitic birch fungus rich in betulinic acid, melanin, and beta-glucans. Traditional Siberian and Scandinavian remedy. High ORAC value. Botanical powder form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1089270"
+      "cui": "C1089270",
+      "functional_roles": []
     },
     {
       "id": "chamomile",
@@ -2356,7 +2443,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1510478"
+      "cui": "C1510478",
+      "functional_roles": []
     },
     {
       "id": "chanca_piedra",
@@ -2377,7 +2465,8 @@
       "notes": "Phyllanthus niruri (Phyllanthaceae) aerial parts. 'Stone breaker' used in Ayurveda and South American folk medicine for kidney stones and liver support. Contains lignans (phyllanthin, hypophyllanthin).",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C0949896"
+      "cui": "C0949896",
+      "functional_roles": []
     },
     {
       "id": "chaste_tree",
@@ -2396,7 +2485,8 @@
       "external_ids": {
         "unii": "433OSF3U8A"
       },
-      "cui": "C0042640"
+      "cui": "C0042640",
+      "functional_roles": []
     },
     {
       "id": "chebulic_myrobalan",
@@ -2413,7 +2503,8 @@
       "notes": "Terminalia chebula (Combretaceae) fruit. Haritaki in Ayurveda, one of three Triphala fruits. Rich in chebulic acid, gallic acid, and ellagic acid. Traditional rejuvenation and digestive remedy.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C0950307"
+      "cui": "C0950307",
+      "functional_roles": []
     },
     {
       "id": "cherokee_rose_fruit",
@@ -2445,7 +2536,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1364437"
+      "cui": "C1364437",
+      "functional_roles": []
     },
     {
       "id": "chia_seed",
@@ -2475,7 +2567,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950198"
+      "cui": "C0950198",
+      "functional_roles": []
     },
     {
       "id": "chickweed_herb",
@@ -2505,7 +2598,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331139"
+      "cui": "C0331139",
+      "functional_roles": []
     },
     {
       "id": "chicory_root",
@@ -2533,7 +2627,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0008080"
+      "cui": "C0008080",
+      "functional_roles": []
     },
     {
       "id": "chili_pepper",
@@ -2547,7 +2642,8 @@
       "notes": "Capsicum annuum (Solanaceae) fruit. Contains capsaicinoids (capsaicin, dihydrocapsaicin) with thermogenic and analgesic properties. Covers generic chili/hot pepper label variants. Botanical powder form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0006909"
+      "cui": "C0006909",
+      "functional_roles": []
     },
     {
       "id": "chinese_dodder_seed",
@@ -2576,7 +2672,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949729"
+      "cui": "C0949729",
+      "functional_roles": []
     },
     {
       "id": "chinese_licorice",
@@ -2594,7 +2691,8 @@
       "external_ids": {
         "unii": "42B5YD8F0K"
       },
-      "cui": "C0949837"
+      "cui": "C0949837",
+      "functional_roles": []
     },
     {
       "id": "chlorella_powder",
@@ -2623,7 +2721,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0008088"
+      "cui": "C0008088",
+      "functional_roles": []
     },
     {
       "id": "chokeberry",
@@ -2636,7 +2735,8 @@
       "notes": "Aronia melanocarpa (Rosaceae) fruit. Among the highest anthocyanin content of any berry (1,480 mg/100g). Rich in proanthocyanidins and chlorogenic acid. Potent antioxidant. Botanical fruit powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949547"
+      "cui": "C0949547",
+      "functional_roles": []
     },
     {
       "id": "cilantro",
@@ -2666,7 +2766,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331198"
+      "cui": "C0331198",
+      "functional_roles": []
     },
     {
       "id": "cinnamon_bark",
@@ -2685,7 +2786,8 @@
       "external_ids": {
         "unii": "WS4CQ062KM"
       },
-      "cui": "C0008863"
+      "cui": "C0008863",
+      "functional_roles": []
     },
     {
       "id": "cissus_sicyoides",
@@ -2716,7 +2818,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1502302"
+      "cui": "C1502302",
+      "functional_roles": []
     },
     {
       "id": "citrus_bergamot",
@@ -2730,7 +2833,8 @@
       "notes": "Citrus bergamia (Rutaceae) fruit. Southern Italian citrus rich in flavanones (neoeriocitrin, naringin, neohesperidin). RCT evidence for lipid management (PMID 26268692). Botanical fruit powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1258049"
+      "cui": "C1258049",
+      "functional_roles": []
     },
     {
       "id": "citrus_fruit_extract",
@@ -2762,7 +2866,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0982043"
+      "cui": "C0982043",
+      "functional_roles": []
     },
     {
       "id": "cleavers_herb",
@@ -2793,7 +2898,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949810"
+      "cui": "C0949810",
+      "functional_roles": []
     },
     {
       "id": "cloves",
@@ -2833,7 +2939,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330581"
+      "cui": "C0330581",
+      "functional_roles": []
     },
     {
       "id": "cnidium",
@@ -2852,7 +2959,8 @@
       "external_ids": {
         "unii": "V1IA3S3CUS"
       },
-      "cui": "C0949701"
+      "cui": "C0949701",
+      "functional_roles": []
     },
     {
       "id": "codonopsis",
@@ -2868,7 +2976,8 @@
       "notes": "Codonopsis pilosula (Campanulaceae) root. Dang Shen in TCM, used as a gentler substitute for Panax ginseng. Contains codonopilate saponins and polysaccharides. Qi-tonifying adaptogenic herb.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949702"
+      "cui": "C0949702",
+      "functional_roles": []
     },
     {
       "id": "coffee_fruit",
@@ -2891,7 +3000,7 @@
         "Coffea arabica"
       ],
       "category": "fruit",
-      "notes": "Coffea arabica (Rubiaceae) whole fruit (cherry). Contains chlorogenic acids and polyphenols distinct from coffee bean. NeuroFactor\u00ae studies show BDNF elevation from coffee fruit extract. Botanical fruit form.",
+      "notes": "Coffea arabica (Rubiaceae) whole fruit (cherry). Contains chlorogenic acids and polyphenols distinct from coffee bean. NeuroFactor® studies show BDNF elevation from coffee fruit extract. Botanical fruit form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "HOX6BEK27Q"
@@ -2908,7 +3017,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1138610"
+      "cui": "C1138610",
+      "functional_roles": []
     },
     {
       "id": "coleus_forskohlii_root",
@@ -2940,7 +3050,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949706"
+      "cui": "C0949706",
+      "functional_roles": []
     },
     {
       "id": "concord_grape",
@@ -2968,7 +3079,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2741435"
+      "cui": "C2741435",
+      "functional_roles": []
     },
     {
       "id": "coptis_rhizome",
@@ -2987,7 +3099,8 @@
       "notes": "Coptis chinensis (Ranunculaceae) rhizome. Huang Lian in TCM, one of the richest natural sources of berberine alkaloid (5-8%). Bitter cold herb used for heat-clearing and antimicrobial purposes.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949717"
+      "cui": "C0949717",
+      "functional_roles": []
     },
     {
       "id": "cordyceps",
@@ -3002,7 +3115,8 @@
       "notes": "Cordyceps militaris (Cordycipitaceae) fruiting body or mycelium. Contains cordycepin (3'-deoxyadenosine) and beta-glucans. Traditional Tibetan/Chinese tonic for endurance and kidney yang. Botanical powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949718"
+      "cui": "C0949718",
+      "functional_roles": []
     },
     {
       "id": "cordyceps_mushroom_powder",
@@ -3030,7 +3144,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949718"
+      "cui": "C0949718",
+      "functional_roles": []
     },
     {
       "id": "coriander",
@@ -3062,7 +3177,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331198"
+      "cui": "C0331198",
+      "functional_roles": []
     },
     {
       "id": "corydalis_yanhusuo_root",
@@ -3079,7 +3195,8 @@
       "notes": "Corydalis yanhusuo root, a traditional East Asian botanical used in pain-support formulas. Added for exact Softgels label coverage.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C0330282"
+      "cui": "C0330282",
+      "functional_roles": []
     },
     {
       "id": "couch_grass",
@@ -3111,7 +3228,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950342"
+      "cui": "C0950342",
+      "functional_roles": []
     },
     {
       "id": "cowslip",
@@ -3121,7 +3239,7 @@
         "Primula veris"
       ],
       "category": "flower",
-      "notes": "Primula veris (Primulaceae) flower. European traditional expectorant containing saponins (primulasaponin) and flavonoids. Component of Sinupret\u00ae for sinusitis. Botanical flower preparation.",
+      "notes": "Primula veris (Primulaceae) flower. European traditional expectorant containing saponins (primulasaponin) and flavonoids. Component of Sinupret® for sinusitis. Botanical flower preparation.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "W6LFQ57E4M"
@@ -3138,7 +3256,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949616"
+      "cui": "C0949616",
+      "functional_roles": []
     },
     {
       "id": "cramp_bark",
@@ -3168,7 +3287,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949597"
+      "cui": "C0949597",
+      "functional_roles": []
     },
     {
       "id": "cranberry",
@@ -3204,7 +3324,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0010074"
+      "cui": "C0010074",
+      "functional_roles": []
     },
     {
       "id": "cranberry_fruit",
@@ -3237,7 +3358,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0010074"
+      "cui": "C0010074",
+      "functional_roles": []
     },
     {
       "id": "cranesbill",
@@ -3266,7 +3388,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949814"
+      "cui": "C0949814",
+      "functional_roles": []
     },
     {
       "id": "cucumber",
@@ -3295,7 +3418,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0010441"
+      "cui": "C0010441",
+      "functional_roles": []
     },
     {
       "id": "cumin_seed",
@@ -3325,7 +3449,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0010481"
+      "cui": "C0010481",
+      "functional_roles": []
     },
     {
       "id": "cutch_tree",
@@ -3352,7 +3477,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949533"
+      "cui": "C0949533",
+      "functional_roles": []
     },
     {
       "id": "cyperus",
@@ -3368,7 +3494,8 @@
       "notes": "Cyperus rotundus (Cyperaceae) rhizome. Xiang Fu in TCM, Musta in Ayurveda. Contains sesquiterpenes (cyperotundone, alpha-cyperone). Used for menstrual regulation and digestive stagnation.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949733"
+      "cui": "C0949733",
+      "functional_roles": []
     },
     {
       "id": "dandelion",
@@ -3396,7 +3523,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0011131"
+      "cui": "C0011131",
+      "functional_roles": []
     },
     {
       "id": "dandelion_root",
@@ -3425,7 +3553,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0011131"
+      "cui": "C0011131",
+      "functional_roles": []
     },
     {
       "id": "danshen",
@@ -3454,7 +3583,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036098"
+      "cui": "C0036098",
+      "functional_roles": []
     },
     {
       "id": "dark_sweet_cherry",
@@ -3489,7 +3619,8 @@
       "cui": "C0330505",
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 2 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'sweet cherry powder']"
-      ]
+      ],
+      "functional_roles": []
     },
     {
       "id": "date",
@@ -3519,7 +3650,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0011136"
+      "cui": "C0011136",
+      "functional_roles": []
     },
     {
       "id": "devils_claw_tuber",
@@ -3528,17 +3660,18 @@
       "aliases": [
         "devil's claw extract",
         "devils claw extract",
-        "devil\u2019s claw extract",
+        "devil’s claw extract",
         "harpagophytum procumbens extract",
         "harpagophytum zeyheri extract",
-        "devil\u2019s claw (harpagophytum procumbens and harpagophytum zeyheri) extract",
+        "devil’s claw (harpagophytum procumbens and harpagophytum zeyheri) extract",
         "Harpagophytum procumbens"
       ],
       "category": "tuber",
       "notes": "Harpagophytum procumbens (Pedaliaceae) secondary root tuber. Contains harpagoside iridoid glycoside. European HMPC-approved for musculoskeletal pain. RCT evidence for osteoarthritis (PMID 14669258).",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0018263"
+      "cui": "C0018263",
+      "functional_roles": []
     },
     {
       "id": "dgl_deglycyrrhizinated_licorice",
@@ -3555,7 +3688,8 @@
       "notes": "Glycyrrhiza glabra (Fabaceae) root with glycyrrhizin removed (<3%). DGL retains flavonoids while eliminating aldosterone-mimetic effects. Used for gastric mucosal protection and peptic ulcer support.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0023351"
+      "cui": "C0023351",
+      "functional_roles": []
     },
     {
       "id": "dill_weed",
@@ -3573,7 +3707,8 @@
       "notes": "Anethum graveolens (Apiaceae) aerial parts. Contains carvone and limonene monoterpenes. Traditional carminative and digestive herb. Used in supplements for mild GI complaints. Botanical herb powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0011224"
+      "cui": "C0011224",
+      "functional_roles": []
     },
     {
       "id": "dong_quai",
@@ -3605,7 +3740,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0002836"
+      "cui": "C0002836",
+      "functional_roles": []
     },
     {
       "id": "dulse_seaweed",
@@ -3635,7 +3771,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3256612"
+      "cui": "C3256612",
+      "functional_roles": []
     },
     {
       "id": "echinacea_angustifolia",
@@ -3664,7 +3801,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0013479"
+      "cui": "C0013479",
+      "functional_roles": []
     },
     {
       "id": "echinacea_purpurea_aerial",
@@ -3681,7 +3819,8 @@
       "external_ids": {
         "unii": "QI7G114Y98"
       },
-      "cui": "C0330464"
+      "cui": "C0330464",
+      "functional_roles": []
     },
     {
       "id": "echinacea_purpurea_herb",
@@ -3712,7 +3851,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330464"
+      "cui": "C0330464",
+      "functional_roles": []
     },
     {
       "id": "echinacea_purpurea_root_extract",
@@ -3745,7 +3885,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330464"
+      "cui": "C0330464",
+      "functional_roles": []
     },
     {
       "id": "elder_blossom",
@@ -3774,7 +3915,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036195"
+      "cui": "C0036195",
+      "functional_roles": []
     },
     {
       "id": "elderberries",
@@ -3823,7 +3965,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036195"
+      "cui": "C0036195",
+      "functional_roles": []
     },
     {
       "id": "eleuthero_stem",
@@ -3855,7 +3998,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0013849"
+      "cui": "C0013849",
+      "functional_roles": []
     },
     {
       "id": "enokitake",
@@ -3884,7 +4028,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0319700"
+      "cui": "C0319700",
+      "functional_roles": []
     },
     {
       "id": "essential_oil_blend",
@@ -3900,7 +4045,8 @@
       "category": "essential oil",
       "notes": "Multi-species essential oil blend covering generic essential oil supplement labels. Composition varies by product. Identity mapping only; not attributable to a single botanical species.",
       "last_updated": "2026-03-01",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "eucalyptus",
@@ -3914,7 +4060,8 @@
       "notes": "Eucalyptus globulus (Myrtaceae) leaf. Contains 1,8-cineole (eucalyptol, 60-85% of essential oil). Traditional respiratory herb. Used as inhalant and in supplements for sinus and bronchial support.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0015143"
+      "cui": "C0015143",
+      "functional_roles": []
     },
     {
       "id": "eucalyptus_leaf_oil",
@@ -3944,7 +4091,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0015143"
+      "cui": "C0015143",
+      "functional_roles": []
     },
     {
       "id": "european_ash_seed_fruit",
@@ -3958,7 +4106,8 @@
       "notes": "Fraxinus excelsior (Oleaceae) seed/fruit (samara). Contains secoiridoids (oleuropein analogs) and hydroxycoumarins. European traditional remedy for joint health. Botanical seed/fruit form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949800"
+      "cui": "C0949800",
+      "functional_roles": []
     },
     {
       "id": "evening_primrose_seed_oil",
@@ -3988,7 +4137,8 @@
       "external_ids": {
         "unii": "76UI55V071"
       },
-      "cui": "C0014895"
+      "cui": "C0014895",
+      "functional_roles": []
     },
     {
       "id": "evodia_fruit",
@@ -4017,7 +4167,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950325"
+      "cui": "C0950325",
+      "functional_roles": []
     },
     {
       "id": "eyebright",
@@ -4031,7 +4182,8 @@
       "notes": "Euphrasia officinalis (Orobanchaceae) aerial parts. Traditional European herb for eye inflammation and hay fever. Contains aucubin iridoid, caffeic acid, and flavonoids. Limited clinical evidence.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949777"
+      "cui": "C0949777",
+      "functional_roles": []
     },
     {
       "id": "false_unicorn",
@@ -4058,7 +4210,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949787"
+      "cui": "C0949787",
+      "functional_roles": []
     },
     {
       "id": "fennel",
@@ -4092,7 +4245,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0015569"
+      "cui": "C0015569",
+      "functional_roles": []
     },
     {
       "id": "fenugreek_seed",
@@ -4121,7 +4275,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0015594"
+      "cui": "C0015594",
+      "functional_roles": []
     },
     {
       "id": "feverfew",
@@ -4155,7 +4310,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0015636"
+      "cui": "C0015636",
+      "functional_roles": []
     },
     {
       "id": "fig",
@@ -4183,7 +4339,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0015766"
+      "cui": "C0015766",
+      "functional_roles": []
     },
     {
       "id": "forsythia_suspensa",
@@ -4200,7 +4357,8 @@
       "notes": "Forsythia suspensa (Oleaceae) fruit. Lian Qiao in TCM, paired with honeysuckle (Yin Qiao San). Contains forsythiaside and phillyrin lignans. Heat-clearing and detoxifying herb.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949793"
+      "cui": "C0949793",
+      "functional_roles": []
     },
     {
       "id": "fragrant_angelica_root",
@@ -4231,7 +4389,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2949322"
+      "cui": "C2949322",
+      "functional_roles": []
     },
     {
       "id": "frangula_bark",
@@ -4260,7 +4419,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949793"
+      "cui": "C0949793",
+      "functional_roles": []
     },
     {
       "id": "french_melon",
@@ -4275,7 +4435,8 @@
       "notes": "Cucumis melo (Cucurbitaceae) fruit. SOD-rich melon variety (Cucumis melo LC) from southern France. Source of plant-derived superoxide dismutase. Used in antioxidant supplements. Botanical fruit extract.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0947370"
+      "cui": "C0947370",
+      "functional_roles": []
     },
     {
       "id": "fringe_tree",
@@ -4290,7 +4451,8 @@
       "notes": "Chionanthus virginicus (Oleaceae) bark. Traditional Eclectic medicine remedy for liver and gallbladder complaints. Contains phyllyrin and saponins. Gentle hepatic alterative. Botanical bark powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949688"
+      "cui": "C0949688",
+      "functional_roles": []
     },
     {
       "id": "fruit_base",
@@ -4301,7 +4463,8 @@
       "category": "fruit",
       "notes": "Generic multi-fruit powder blend used as supplement base or flavoring. Composition varies by manufacturer. Identity mapping for non-specific fruit base labels. Not attributable to a single species.",
       "last_updated": "2026-03-01",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "fruits",
@@ -4330,7 +4493,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0016767"
+      "cui": "C0016767",
+      "functional_roles": []
     },
     {
       "id": "galega_officinalis",
@@ -4358,7 +4522,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949808"
+      "cui": "C0949808",
+      "functional_roles": []
     },
     {
       "id": "garcinia_indica",
@@ -4374,7 +4539,8 @@
       "notes": "Garcinia indica (Clusiaceae) fruit rind. Kokum fruit containing garcinol and hydroxycitric acid (HCA, lower than G. cambogia). Traditional Indian Ayurvedic digestive aid. Botanical rind extract.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C3460451"
+      "cui": "C3460451",
+      "functional_roles": []
     },
     {
       "id": "gardenia",
@@ -4388,7 +4554,8 @@
       "notes": "Gardenia jasminoides (Rubiaceae) fruit. Zhi Zi in TCM, heat-clearing herb. Contains geniposide and crocin (yellow pigment). Used for liver heat patterns and inflammation. Botanical fruit powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949811"
+      "cui": "C0949811",
+      "functional_roles": []
     },
     {
       "id": "garlic_bulb",
@@ -4401,7 +4568,7 @@
         "Allium sativum"
       ],
       "category": "bulb",
-      "notes": "Allium sativum (Amaryllidaceae) fresh/dried bulb. Contains alliin \u2192 allicin (via alliinase on crushing). RCT evidence for blood pressure and lipids (PMID 23590705). Botanical bulb form, unstandardized.",
+      "notes": "Allium sativum (Amaryllidaceae) fresh/dried bulb. Contains alliin → allicin (via alliinase on crushing). RCT evidence for blood pressure and lipids (PMID 23590705). Botanical bulb form, unstandardized.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "V1V998DC17"
@@ -4426,7 +4593,8 @@
         ],
         "metabolites": []
       },
-      "cui": "C0993243"
+      "cui": "C0993243",
+      "functional_roles": []
     },
     {
       "id": "geranium",
@@ -4441,7 +4609,8 @@
       "notes": "Pelargonium graveolens (Geraniaceae) aerial parts. Rose geranium used in aromatherapy and herbal preparations. Contains citronellol and geraniol monoterpenes. Botanical herb powder, not standardized.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0330886"
+      "cui": "C0330886",
+      "functional_roles": []
     },
     {
       "id": "ginger_extract",
@@ -4472,7 +4641,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0017149"
+      "cui": "C0017149",
+      "functional_roles": []
     },
     {
       "id": "ginger_root",
@@ -4511,7 +4681,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0017149"
+      "cui": "C0017149",
+      "functional_roles": []
     },
     {
       "id": "ginkgo_biloba_leaf",
@@ -4523,7 +4694,7 @@
         "Ginkgo biloba"
       ],
       "category": "leaf",
-      "notes": "Ginkgo biloba (Ginkgoaceae) leaf. Contains flavone glycosides (quercetin, kaempferol) and terpene lactones (ginkgolides, bilobalide). Botanical leaf form, distinct from standardized EGb 761\u00ae extract.",
+      "notes": "Ginkgo biloba (Ginkgoaceae) leaf. Contains flavone glycosides (quercetin, kaempferol) and terpene lactones (ginkgolides, bilobalide). Botanical leaf form, distinct from standardized EGb 761® extract.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "19FUJ2C58T"
@@ -4540,7 +4711,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0017578"
+      "cui": "C0017578",
+      "functional_roles": []
     },
     {
       "id": "ginseng_root_panax",
@@ -4569,7 +4741,8 @@
       "external_ids": {
         "unii": "CUQ3A77YXI"
       },
-      "cui": "C0017648"
+      "cui": "C0017648",
+      "functional_roles": []
     },
     {
       "id": "gleditsia",
@@ -4597,7 +4770,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1018317"
+      "cui": "C1018317",
+      "functional_roles": []
     },
     {
       "id": "glehnia",
@@ -4625,7 +4799,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949816"
+      "cui": "C0949816",
+      "functional_roles": []
     },
     {
       "id": "globe_artichoke",
@@ -4662,7 +4837,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0003785"
+      "cui": "C0003785",
+      "functional_roles": []
     },
     {
       "id": "goats_rue",
@@ -4676,7 +4852,7 @@
         "french lilac"
       ],
       "category": "herb",
-      "notes": "Galega officinalis (Fabaceae) aerial parts. Same as galega_officinalis \u2014 Goat's Rue. Traditional galactagogue. Contains galegine guanidine derivative. Botanical herb form. See also galega entry.",
+      "notes": "Galega officinalis (Fabaceae) aerial parts. Same as galega_officinalis — Goat's Rue. Traditional galactagogue. Contains galegine guanidine derivative. Botanical herb form. See also galega entry.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "BIA2SO6F5B"
@@ -4693,7 +4869,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949808"
+      "cui": "C0949808",
+      "functional_roles": []
     },
     {
       "id": "goji_berry",
@@ -4715,7 +4892,8 @@
       "external_ids": {
         "unii": "930626MWDL"
       },
-      "cui": "C0330505"
+      "cui": "C0330505",
+      "functional_roles": []
     },
     {
       "id": "goldenrod",
@@ -4743,7 +4921,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0038534"
+      "cui": "C0038534",
+      "functional_roles": []
     },
     {
       "id": "goldenseal",
@@ -4775,7 +4954,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330520"
+      "cui": "C0330520",
+      "functional_roles": []
     },
     {
       "id": "gotu_kola",
@@ -4797,7 +4977,8 @@
       "external_ids": {
         "unii": "7M867G6T1U"
       },
-      "cui": "C0007037"
+      "cui": "C0007037",
+      "functional_roles": []
     },
     {
       "id": "grape",
@@ -4836,7 +5017,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0018208"
+      "cui": "C0018208",
+      "functional_roles": []
     },
     {
       "id": "grape_seed",
@@ -4855,7 +5037,8 @@
       "external_ids": {
         "unii": "C34U15ICXA"
       },
-      "cui": "C0018208"
+      "cui": "C0018208",
+      "functional_roles": []
     },
     {
       "id": "gravel_root",
@@ -4872,7 +5055,8 @@
       "notes": "Eutrochium purpureum (syn. Eupatorium purpureum, Asteraceae) root. Traditional Eclectic medicine remedy for kidney stones and urinary complaints. Contains euparin and flavonoids. Botanical root powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949778"
+      "cui": "C0949778",
+      "functional_roles": []
     },
     {
       "id": "graviola",
@@ -4892,7 +5076,8 @@
       "external_ids": {
         "unii": "5EI0SM9VVE"
       },
-      "cui": "C1002484"
+      "cui": "C1002484",
+      "functional_roles": []
     },
     {
       "id": "celandine",
@@ -4910,7 +5095,8 @@
       "external_ids": {
         "unii": "7E889U5RNN"
       },
-      "cui": "C0949680"
+      "cui": "C0949680",
+      "functional_roles": []
     },
     {
       "id": "greater_galangal",
@@ -4943,7 +5129,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3256845"
+      "cui": "C3256845",
+      "functional_roles": []
     },
     {
       "id": "greek_mountain_tea_aerial_parts",
@@ -4970,7 +5157,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1074263"
+      "cui": "C1074263",
+      "functional_roles": []
     },
     {
       "id": "green_bell_pepper",
@@ -5008,7 +5196,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0006909"
+      "cui": "C0006909",
+      "functional_roles": []
     },
     {
       "id": "green_cabbage",
@@ -5035,7 +5224,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C5234656"
+      "cui": "C5234656",
+      "functional_roles": []
     },
     {
       "id": "green_onion",
@@ -5052,7 +5242,8 @@
       "notes": "Allium fistulosum (Amaryllidaceae) leaf/bulb. Scallion/spring onion containing organosulfur compounds and quercetin. Used in whole-food supplement blends for antioxidant content.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0453134"
+      "cui": "C0453134",
+      "functional_roles": []
     },
     {
       "id": "green_tea",
@@ -5067,7 +5258,8 @@
       "notes": "Camellia sinensis (Theaceae) unoxidized leaf. Contains epigallocatechin gallate (EGCG, 25-40% of catechins) and L-theanine. Extensive RCT evidence for metabolic and cardiovascular benefits.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0039400"
+      "cui": "C0039400",
+      "functional_roles": []
     },
     {
       "id": "green_tea_leaf",
@@ -5148,7 +5340,8 @@
           }
         ]
       },
-      "cui": "C0039400"
+      "cui": "C0039400",
+      "functional_roles": []
     },
     {
       "id": "guava",
@@ -5176,7 +5369,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0018338"
+      "cui": "C0018338",
+      "functional_roles": []
     },
     {
       "id": "guayusa_leaf",
@@ -5188,7 +5382,7 @@
         "Ilex guayusa"
       ],
       "category": "leaf",
-      "notes": "Ilex guayusa (Aquifoliaceae) leaf. Amazonian holly related to yerba mat\u00e9. Contains caffeine (1.7-3.5%), chlorogenic acids, and L-theanine. Traditional Ecuadorian stimulant tea. Botanical leaf form.",
+      "notes": "Ilex guayusa (Aquifoliaceae) leaf. Amazonian holly related to yerba maté. Contains caffeine (1.7-3.5%), chlorogenic acids, and L-theanine. Traditional Ecuadorian stimulant tea. Botanical leaf form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "92860L6OY2"
@@ -5204,7 +5398,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950097"
+      "cui": "C0950097",
+      "functional_roles": []
     },
     {
       "id": "guggul",
@@ -5235,7 +5430,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949715"
+      "cui": "C0949715",
+      "functional_roles": []
     },
     {
       "id": "gymnema_sylvestre",
@@ -5263,7 +5459,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949826"
+      "cui": "C0949826",
+      "functional_roles": []
     },
     {
       "id": "gynostemma",
@@ -5291,7 +5488,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949828"
+      "cui": "C0949828",
+      "functional_roles": []
     },
     {
       "id": "hawthorn_flowering_tops",
@@ -5311,7 +5509,8 @@
       "notes": "Crataegus monogyna (Rosaceae) flowering tops (leaf, flower, berry). Contains vitexin, hyperoside, and OPCs. European HMPC-approved for mild heart failure support (NYHA I-II). Well-studied cardiotonic.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0010196"
+      "cui": "C0010196",
+      "functional_roles": []
     },
     {
       "id": "henbane",
@@ -5339,7 +5538,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331199"
+      "cui": "C0331199",
+      "functional_roles": []
     },
     {
       "id": "hesperidin",
@@ -5373,7 +5573,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0019593"
+      "cui": "C0019593",
+      "functional_roles": []
     },
     {
       "id": "himematsutake",
@@ -5402,7 +5603,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1086056"
+      "cui": "C1086056",
+      "functional_roles": []
     },
     {
       "id": "hiratake",
@@ -5417,7 +5619,8 @@
       "notes": "Pleurotus ostreatus (Pleurotaceae) fruiting body. Oyster mushroom containing pleuran beta-glucan, lovastatin (trace), and ergothioneine. Culinary mushroom with immune-modulating properties.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0319683"
+      "cui": "C0319683",
+      "functional_roles": []
     },
     {
       "id": "holy_basil_leaf",
@@ -5455,7 +5658,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950004"
+      "cui": "C0950004",
+      "functional_roles": []
     },
     {
       "id": "hoodia_gordonii",
@@ -5472,7 +5676,8 @@
       "notes": "Hoodia gordonii (Apocynaceae) stem. Southern African succulent used by San people as appetite suppressant. Contains P57 steroidal glycoside. CITES-listed. Clinical trials showed modest effects; safety concerns.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1218366"
+      "cui": "C1218366",
+      "functional_roles": []
     },
     {
       "id": "horehound",
@@ -5500,7 +5705,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0024879"
+      "cui": "C0024879",
+      "functional_roles": []
     },
     {
       "id": "horny_goat_weed",
@@ -5523,7 +5729,8 @@
       "notes": "Epimedium spp. (Berberidaceae) aerial parts. Yin Yang Huo in TCM. Contains icariin prenylated flavonol with PDE5-inhibitory activity. Traditional kidney yang tonic. Several Epimedium species used.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949767"
+      "cui": "C0949767",
+      "functional_roles": []
     },
     {
       "id": "horse_chestnut_seed",
@@ -5553,7 +5760,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0001443"
+      "cui": "C0001443",
+      "functional_roles": []
     },
     {
       "id": "horsemint_leaf",
@@ -5582,7 +5790,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1007813"
+      "cui": "C1007813",
+      "functional_roles": []
     },
     {
       "id": "horseradish",
@@ -5593,7 +5802,7 @@
         "Armoracia rusticana"
       ],
       "category": "root",
-      "notes": "Armoracia rusticana (Brassicaceae) root. Contains sinigrin glucosinolate \u2192 allyl isothiocyanate (pungent). Traditional antimicrobial and sinus-clearing herb. Botanical root powder.",
+      "notes": "Armoracia rusticana (Brassicaceae) root. Contains sinigrin glucosinolate → allyl isothiocyanate (pungent). Traditional antimicrobial and sinus-clearing herb. Botanical root powder.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "8DS6G120HJ"
@@ -5610,7 +5819,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0020424"
+      "cui": "C0020424",
+      "functional_roles": []
     },
     {
       "id": "horsetail_aerial_parts",
@@ -5647,7 +5857,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0014825"
+      "cui": "C0014825",
+      "functional_roles": []
     },
     {
       "id": "huito",
@@ -5674,7 +5885,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1020875"
+      "cui": "C1020875",
+      "functional_roles": []
     },
     {
       "id": "hydrangea_root",
@@ -5691,7 +5903,8 @@
       "notes": "Hydrangea arborescens (Hydrangeaceae) root. Traditional Cherokee and Eclectic medicine remedy for kidney stones and urinary complaints. Contains hydrangin coumarin. Botanical root powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949855"
+      "cui": "C0949855",
+      "functional_roles": []
     },
     {
       "id": "hyssop",
@@ -5707,7 +5920,8 @@
       "notes": "Hyssopus officinalis (Lamiaceae) aerial parts. Biblical herb containing pinocamphone ketone and marrubiin. Traditional expectorant and carminative. Used for respiratory and digestive complaints.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0020443"
+      "cui": "C0020443",
+      "functional_roles": []
     },
     {
       "id": "indian_elecampane_root",
@@ -5734,7 +5948,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0123799"
+      "cui": "C0123799",
+      "functional_roles": []
     },
     {
       "id": "indian_kino_tree",
@@ -5763,7 +5978,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949602"
+      "cui": "C0949602",
+      "functional_roles": []
     },
     {
       "id": "indian_madder",
@@ -5776,7 +5992,8 @@
       "notes": "Rubia cordifolia (Rubiaceae) root. Manjistha in Ayurveda. Contains purpurin and munjistin anthraquinones. Traditional blood-purifying and skin-clarifying herb. Botanical root powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950179"
+      "cui": "C0950179",
+      "functional_roles": []
     },
     {
       "id": "indian_tinospora",
@@ -5807,7 +6024,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950313"
+      "cui": "C0950313",
+      "functional_roles": []
     },
     {
       "id": "irvingia_gabonensis",
@@ -5824,7 +6042,8 @@
       "notes": "Irvingia gabonensis (Irvingiaceae) seed kernel. African mango containing IGOB131 extract. RCT evidence for weight management (PMID 19254366). Contains soluble fiber and fatty acids. Botanical seed form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1033652"
+      "cui": "C1033652",
+      "functional_roles": []
     },
     {
       "id": "ivy",
@@ -5840,7 +6059,8 @@
       "notes": "Hedera helix (Araliaceae) leaf. English ivy containing alpha-hederin saponin. European HMPC-approved for productive cough in children and adults. Well-studied expectorant. Botanical leaf form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949841"
+      "cui": "C0949841",
+      "functional_roles": []
     },
     {
       "id": "jambolan_seed",
@@ -5870,7 +6090,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330680"
+      "cui": "C0330680",
+      "functional_roles": []
     },
     {
       "id": "japanese_honeysuckle",
@@ -5901,7 +6122,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949893"
+      "cui": "C0949893",
+      "functional_roles": []
     },
     {
       "id": "japanese_knotweed",
@@ -5916,7 +6138,8 @@
       "notes": "Reynoutria japonica (syn. Polygonum cuspidatum, Polygonaceae) root. Hu Zhang in TCM. Richest dietary source of trans-resveratrol (not standardized in botanical form). Also contains emodin anthraquinone.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0331260"
+      "cui": "C0331260",
+      "functional_roles": []
     },
     {
       "id": "jatamasi",
@@ -5943,7 +6166,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1187331"
+      "cui": "C1187331",
+      "functional_roles": []
     },
     {
       "id": "java_tea",
@@ -5973,7 +6197,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950018"
+      "cui": "C0950018",
+      "functional_roles": []
     },
     {
       "id": "jerusalem_artichoke",
@@ -6003,7 +6228,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0022386"
+      "cui": "C0022386",
+      "functional_roles": []
     },
     {
       "id": "jiaogulan_leaf",
@@ -6032,7 +6258,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949828"
+      "cui": "C0949828",
+      "functional_roles": []
     },
     {
       "id": "jujube",
@@ -6048,7 +6275,8 @@
       "notes": "Ziziphus jujuba (Rhamnaceae) fruit. Da Zao in TCM. Contains jujubosides, betulinic acid, and cAMP nucleotide. Traditional nervine and qi-tonifying fruit. Used for sleep and anxiety support.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949612"
+      "cui": "C0949612",
+      "functional_roles": []
     },
     {
       "id": "juniper",
@@ -6065,7 +6293,8 @@
       "external_ids": {
         "unii": "O84B5194RL"
       },
-      "cui": "C0022563"
+      "cui": "C0022563",
+      "functional_roles": []
     },
     {
       "id": "kale",
@@ -6095,7 +6324,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3859186"
+      "cui": "C3859186",
+      "functional_roles": []
     },
     {
       "id": "kanna_sceletium",
@@ -6127,7 +6357,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1462507"
+      "cui": "C1462507",
+      "functional_roles": []
     },
     {
       "id": "kawaratake",
@@ -6144,7 +6375,8 @@
       "notes": "Trametes versicolor (Polyporaceae) fruiting body. Turkey tail mushroom (Japanese: Kawaratake). Contains PSK (polysaccharide-K) and PSP (polysaccharopeptide). Extensively studied in Japan for immune support.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0319805"
+      "cui": "C0319805",
+      "functional_roles": []
     },
     {
       "id": "kelp_powder",
@@ -6164,7 +6396,7 @@
         "alaria esculenta"
       ],
       "category": "seaweed",
-      "notes": "Laminaria digitata / Ascophyllum nodosum (Laminariaceae) thallus. Brown seaweed naturally rich in iodine (1,500-8,000 \u00b5g/g). Contains fucoidan and alginate polysaccharides. Botanical seaweed powder.",
+      "notes": "Laminaria digitata / Ascophyllum nodosum (Laminariaceae) thallus. Brown seaweed naturally rich in iodine (1,500-8,000 µg/g). Contains fucoidan and alginate polysaccharides. Botanical seaweed powder.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "168S4EO8YJ"
@@ -6184,7 +6416,8 @@
       "cui": "C0022628",
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['ecklonia radiata', 'ecklonia kurome', 'alaria esculenta']"
-      ]
+      ],
+      "functional_roles": []
     },
     {
       "id": "khadeer",
@@ -6215,7 +6448,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331487"
+      "cui": "C0331487",
+      "functional_roles": []
     },
     {
       "id": "kiwifruit",
@@ -6232,7 +6466,8 @@
       "notes": "Actinidia deliciosa (Actinidiaceae) fruit. Rich in vitamin C (92 mg/100g), actinidin enzyme, and dietary fiber. RCT evidence for constipation relief and sleep quality (PMID 21669584). Botanical fruit powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0440282"
+      "cui": "C0440282",
+      "functional_roles": []
     },
     {
       "id": "kokilaksha",
@@ -6246,7 +6481,8 @@
       "notes": "Hygrophila auriculata identity mapping for kokilaksha Ayurvedic label rows.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C4774590"
+      "cui": "C4774590",
+      "functional_roles": []
     },
     {
       "id": "kola_nut",
@@ -6275,7 +6511,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0022651"
+      "cui": "C0022651",
+      "functional_roles": []
     },
     {
       "id": "korean_pine",
@@ -6303,7 +6540,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1039365"
+      "cui": "C1039365",
+      "functional_roles": []
     },
     {
       "id": "ladys_mantle_leaf",
@@ -6319,7 +6557,8 @@
       "notes": "Alchemilla vulgaris leaf botanical identity used in supplement labels as women's-herb leaf extract preparations.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C1014935"
+      "cui": "C1014935",
+      "functional_roles": []
     },
     {
       "id": "lavender",
@@ -6346,7 +6585,8 @@
       "external_ids": {
         "unii": "ZBP1YXW0H8"
       },
-      "cui": "C0023082"
+      "cui": "C0023082",
+      "functional_roles": []
     },
     {
       "id": "lemon",
@@ -6374,7 +6614,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0023053"
+      "cui": "C0023053",
+      "functional_roles": []
     },
     {
       "id": "lemon_balm_leaf",
@@ -6406,7 +6647,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0025083"
+      "cui": "C0025083",
+      "functional_roles": []
     },
     {
       "id": "lemon_bioflavonoids",
@@ -6439,7 +6681,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0982043"
+      "cui": "C0982043",
+      "functional_roles": []
     },
     {
       "id": "lemon_oil",
@@ -6473,7 +6716,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0304108"
+      "cui": "C0304108",
+      "functional_roles": []
     },
     {
       "id": "lemongrass",
@@ -6492,7 +6736,8 @@
       "notes": "Cymbopogon citratus (Poaceae) aerial parts. Contains citral (geranial + neral, 65-85% of essential oil). Traditional carminative, febrifuge, and antimicrobial herb. Botanical herb powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0330621"
+      "cui": "C0330621",
+      "functional_roles": []
     },
     {
       "id": "licorice_root",
@@ -6526,7 +6771,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0023351"
+      "cui": "C0023351",
+      "functional_roles": []
     },
     {
       "id": "ligustrum",
@@ -6539,10 +6785,11 @@
         "privet fruit"
       ],
       "category": "berry",
-      "notes": "Ligustrum lucidum (Oleaceae) berry. N\u00fc Zhen Zi in TCM. Contains oleanolic acid and ursolic acid triterpenes. Yin-nourishing herb for liver-kidney deficiency patterns. Botanical berry powder.",
+      "notes": "Ligustrum lucidum (Oleaceae) berry. Nü Zhen Zi in TCM. Contains oleanolic acid and ursolic acid triterpenes. Yin-nourishing herb for liver-kidney deficiency patterns. Botanical berry powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949889"
+      "cui": "C0949889",
+      "functional_roles": []
     },
     {
       "id": "lime",
@@ -6559,7 +6806,8 @@
       "notes": "Citrus aurantiifolia (Rutaceae) fruit. Rich in vitamin C, citric acid, and flavonoids (hesperidin, naringenin). Botanical fruit powder, not standardized. Identity mapping for lime supplement labels.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0023529"
+      "cui": "C0023529",
+      "functional_roles": []
     },
     {
       "id": "linden",
@@ -6587,7 +6835,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040232"
+      "cui": "C0040232",
+      "functional_roles": []
     },
     {
       "id": "lingonberry",
@@ -6615,7 +6864,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330749"
+      "cui": "C0330749",
+      "functional_roles": []
     },
     {
       "id": "lions_mane_mushroom_powder",
@@ -6630,7 +6880,8 @@
       "notes": "Hericium erinaceus (Hericiaceae) fruiting body. Contains hericenones and erinacines that stimulate NGF synthesis. RCT evidence for cognitive function (PMID 18844328). Botanical mushroom powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949842"
+      "cui": "C0949842",
+      "functional_roles": []
     },
     {
       "id": "lodhra",
@@ -6647,7 +6898,8 @@
       "notes": "Symplocos racemosa, commonly called Lodhra or Lodhtree. Ayurvedic botanical used in women's health and astringent formulas.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C3891826"
+      "cui": "C3891826",
+      "functional_roles": []
     },
     {
       "id": "long_pepper",
@@ -6677,7 +6929,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330582"
+      "cui": "C0330582",
+      "functional_roles": []
     },
     {
       "id": "maca_root",
@@ -6708,7 +6961,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949879"
+      "cui": "C0949879",
+      "functional_roles": []
     },
     {
       "id": "mace",
@@ -6735,7 +6989,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0280578"
+      "cui": "C0280578",
+      "functional_roles": []
     },
     {
       "id": "magnolia_phellodendron_blend",
@@ -6748,9 +7003,10 @@
         "huang bai powder"
       ],
       "category": "bark",
-      "notes": "Blend of Magnolia officinalis bark (honokiol, magnolol) and Phellodendron amurense bark (berberine). Relora\u00ae is a branded version. Used for cortisol modulation and stress. Botanical bark blend.",
+      "notes": "Blend of Magnolia officinalis bark (honokiol, magnolol) and Phellodendron amurense bark (berberine). Relora® is a branded version. Used for cortisol modulation and stress. Botanical bark blend.",
       "last_updated": "2026-03-01",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "maitake",
@@ -6777,7 +7033,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949824"
+      "cui": "C0949824",
+      "functional_roles": []
     },
     {
       "id": "mango",
@@ -6806,7 +7063,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0024778"
+      "cui": "C0024778",
+      "functional_roles": []
     },
     {
       "id": "mango_leaf_extract",
@@ -6834,7 +7092,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0024778"
+      "cui": "C0024778",
+      "functional_roles": []
     },
     {
       "id": "mangosteen",
@@ -6848,7 +7107,8 @@
       "notes": "Garcinia mangostana (Clusiaceae) fruit pericarp. 'Queen of fruits' containing alpha-mangostin and gamma-mangostin xanthones. Potent antioxidant. Botanical pericarp powder, not standardized.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0024793"
+      "cui": "C0024793",
+      "functional_roles": []
     },
     {
       "id": "manuka_honey",
@@ -6863,7 +7123,8 @@
       "notes": "Leptospermum scoparium (Myrtaceae) nectar-derived honey. Contains methylglyoxal (MGO) as unique antimicrobial compound. UMF/MGO ratings measure antibacterial potency. New Zealand origin. Not a botanical per se.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C2347055"
+      "cui": "C2347055",
+      "functional_roles": []
     },
     {
       "id": "maqui",
@@ -6885,7 +7146,8 @@
       "notes": "Aristotelia chilensis (Elaeocarpaceae) berry. Chilean Patagonian berry with highest known anthocyanin content (138 mg/g freeze-dried). Contains delphinidins. Potent antioxidant. Botanical berry powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1067051"
+      "cui": "C1067051",
+      "functional_roles": []
     },
     {
       "id": "marshmallow_root",
@@ -6921,7 +7183,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0024866"
+      "cui": "C0024866",
+      "functional_roles": []
     },
     {
       "id": "mashaparni",
@@ -6939,7 +7202,8 @@
       "notes": "Teramnus labialis, commonly transliterated as Mashaparni/Mashparnee in Ayurvedic formulas. Added for exact identity coverage from raw DSLD label text.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C1012148"
+      "cui": "C1012148",
+      "functional_roles": []
     },
     {
       "id": "matcha_tea_powder",
@@ -6955,7 +7219,8 @@
       "notes": "Camellia sinensis (Theaceae) stone-ground shade-grown leaf. Higher L-theanine and EGCG than standard green tea due to shade cultivation. Whole-leaf consumption provides more catechins than infusion.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0039400"
+      "cui": "C0039400",
+      "functional_roles": []
     },
     {
       "id": "meadowsweet_herb",
@@ -6986,7 +7251,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949788"
+      "cui": "C0949788",
+      "functional_roles": []
     },
     {
       "id": "medicinal_mushroom_blend",
@@ -6998,7 +7264,8 @@
       "category": "mushroom",
       "notes": "Multi-species medicinal mushroom blend typically containing reishi, shiitake, maitake, turkey tail, and/or cordyceps. Identity mapping for generic mushroom blend labels. Composition varies by manufacturer.",
       "last_updated": "2026-03-01",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "mesima",
@@ -7014,7 +7281,8 @@
       "notes": "Phellinus linteus (Hymenochaetaceae) fruiting body. Korean medicinal mushroom (Mesima/Sangwhang). Contains hispidin and beta-glucans. Studied for immune modulation and anti-tumor properties in Korean medicine.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C4101693"
+      "cui": "C4101693",
+      "functional_roles": []
     },
     {
       "id": "milk_thistle",
@@ -7043,7 +7311,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0037144"
+      "cui": "C0037144",
+      "functional_roles": []
     },
     {
       "id": "milk_thistle_seed",
@@ -7072,7 +7341,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0037144"
+      "cui": "C0037144",
+      "functional_roles": []
     },
     {
       "id": "millet",
@@ -7103,7 +7373,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2347130"
+      "cui": "C2347130",
+      "functional_roles": []
     },
     {
       "id": "mimosa_pudica",
@@ -7119,7 +7390,8 @@
       "notes": "Mimosa pudica (Fabaceae) seed/whole plant. Sensitive plant/touch-me-not. Contains mimosine and tannins. Used in Ayurveda for wound healing and as GI cleansing agent. Botanical seed/herb powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0330829"
+      "cui": "C0330829",
+      "functional_roles": []
     },
     {
       "id": "moringa_leaf",
@@ -7136,7 +7408,8 @@
       "external_ids": {
         "unii": "4WET1AWO9B"
       },
-      "cui": "C0330514"
+      "cui": "C0330514",
+      "functional_roles": []
     },
     {
       "id": "motherwort_herb",
@@ -7167,7 +7440,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0023111"
+      "cui": "C0023111",
+      "functional_roles": []
     },
     {
       "id": "mucuna_pruriens",
@@ -7203,7 +7477,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330541"
+      "cui": "C0330541",
+      "functional_roles": []
     },
     {
       "id": "mudgaparni",
@@ -7221,7 +7496,8 @@
       "notes": "Vigna trilobata, commonly transliterated as Mudgaparni/Mudgaparnee in Ayurvedic formulas. Added for exact identity coverage from raw DSLD label text.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C1038397"
+      "cui": "C1038397",
+      "functional_roles": []
     },
     {
       "id": "mugwort",
@@ -7239,7 +7515,8 @@
       "notes": "Artemisia vulgaris (Asteraceae) aerial parts. Contains thujone (trace), flavonoids, and sesquiterpene lactones. Traditional European bitter tonic and emmenagogue. Used in moxibustion (TCM). Botanical herb.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0003764"
+      "cui": "C0003764",
+      "functional_roles": []
     },
     {
       "id": "muira_puama_bark",
@@ -7271,7 +7548,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1136294"
+      "cui": "C1136294",
+      "functional_roles": []
     },
     {
       "id": "mullein",
@@ -7302,7 +7580,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0042658"
+      "cui": "C0042658",
+      "functional_roles": []
     },
     {
       "id": "mung_bean",
@@ -7330,7 +7609,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2726182"
+      "cui": "C2726182",
+      "functional_roles": []
     },
     {
       "id": "myrrh_resin",
@@ -7362,7 +7642,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0027171"
+      "cui": "C0027171",
+      "functional_roles": []
     },
     {
       "id": "myrrh_resin_extract",
@@ -7395,7 +7676,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0027171"
+      "cui": "C0027171",
+      "functional_roles": []
     },
     {
       "id": "nagkeshar",
@@ -7413,7 +7695,8 @@
       "notes": "Mesua ferrea, commonly called Nagkeshar/Nagakesar. Ayurvedic floral botanical used in traditional gynecologic and digestive formulas.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C1054049"
+      "cui": "C1054049",
+      "functional_roles": []
     },
     {
       "id": "nettle_leaf",
@@ -7441,7 +7724,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0028402"
+      "cui": "C0028402",
+      "functional_roles": []
     },
     {
       "id": "nettle_root",
@@ -7454,7 +7738,7 @@
         "Urtica dioica"
       ],
       "category": "root",
-      "notes": "Urtica dioica (Urticaceae) root. Distinct from leaf in bioactive profile \u2014 contains lectins, sterols, and lignans. European HMPC-approved for BPH symptoms. Botanical root form.",
+      "notes": "Urtica dioica (Urticaceae) root. Distinct from leaf in bioactive profile — contains lectins, sterols, and lignans. European HMPC-approved for BPH symptoms. Botanical root form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "J8HE8A6E5T"
@@ -7471,7 +7755,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0028402"
+      "cui": "C0028402",
+      "functional_roles": []
     },
     {
       "id": "nigella",
@@ -7489,7 +7774,8 @@
       "notes": "Nigella sativa (Ranunculaceae) seed. Black seed/black cumin containing thymoquinone (primary bioactive). RCT evidence for glycemic and lipid control (PMID 28068824). Botanical seed powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950001"
+      "cui": "C0950001",
+      "functional_roles": []
     },
     {
       "id": "nirgundi",
@@ -7508,7 +7794,8 @@
       "notes": "Vitex negundo, commonly called Nirgundi/Nirgundee or five-leaf chaste tree. Ayurvedic botanical used in classical joint and women's health formulas.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C1643782"
+      "cui": "C1643782",
+      "functional_roles": []
     },
     {
       "id": "noni",
@@ -7523,7 +7810,8 @@
       "notes": "Morinda citrifolia (Rubiaceae) fruit. Noni juice rich in iridoids (deacetylasperulosidic acid) and scopoletin. Traditional Polynesian remedy. Novel food approved in EU (2003). Botanical fruit form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0330544"
+      "cui": "C0330544",
+      "functional_roles": []
     },
     {
       "id": "nori",
@@ -7552,7 +7840,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3256731"
+      "cui": "C3256731",
+      "functional_roles": []
     },
     {
       "id": "oat_generic",
@@ -7590,7 +7879,8 @@
       "cui": "C0004756",
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 6 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['swedish oats beta-glucans', 'swedish oats beta glucans', 'oat beta-glucans', 'oat beta glucans', 'swedish oat', 'swedish oats']"
-      ]
+      ],
+      "functional_roles": []
     },
     {
       "id": "oat_bran",
@@ -7620,7 +7910,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004756"
+      "cui": "C0004756",
+      "functional_roles": []
     },
     {
       "id": "oat_straw",
@@ -7645,7 +7936,7 @@
         "Avena sativa"
       ],
       "category": "grain",
-      "notes": "Avena sativa (Poaceae) aerial parts (straw). Contains avenacosides and flavonoids. Traditional nervine and nutritive herb. Neuravena\u00ae extract studied for cognitive function. Botanical herb form.",
+      "notes": "Avena sativa (Poaceae) aerial parts (straw). Contains avenacosides and flavonoids. Traditional nervine and nutritive herb. Neuravena® extract studied for cognitive function. Botanical herb form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "WQ0UW3VFG5"
@@ -7661,7 +7952,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0004756"
+      "cui": "C0004756",
+      "functional_roles": []
     },
     {
       "id": "okra_fruit",
@@ -7692,7 +7984,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1457872"
+      "cui": "C1457872",
+      "functional_roles": []
     },
     {
       "id": "olive_leaf_powder",
@@ -7724,7 +8017,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0028791"
+      "cui": "C0028791",
+      "functional_roles": []
     },
     {
       "id": "oolong_tea_leaf",
@@ -7752,7 +8046,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0039400"
+      "cui": "C0039400",
+      "functional_roles": []
     },
     {
       "id": "orange",
@@ -7783,7 +8078,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0028765"
+      "cui": "C0028765",
+      "functional_roles": []
     },
     {
       "id": "orange_essential_oil",
@@ -7812,7 +8108,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0254751"
+      "cui": "C0254751",
+      "functional_roles": []
     },
     {
       "id": "oregano_herb",
@@ -7845,7 +8142,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0028780"
+      "cui": "C0028780",
+      "functional_roles": []
     },
     {
       "id": "oregon_grape",
@@ -7863,7 +8161,8 @@
       "notes": "Mahonia aquifolium (Berberidaceae) root. Contains berberine (1-3%) and canadine alkaloids. Traditional Eclectic medicine alterative for skin conditions. Distinct from Berberis vulgaris.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949897"
+      "cui": "C0949897",
+      "functional_roles": []
     },
     {
       "id": "osha_root",
@@ -7890,7 +8189,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1018219"
+      "cui": "C1018219",
+      "functional_roles": []
     },
     {
       "id": "paeonia_lactiflora",
@@ -7909,7 +8209,8 @@
       "notes": "Paeonia lactiflora (Paeoniaceae) root. Bai Shao in TCM. Contains paeoniflorin monoterpene glycoside. Blood-nourishing and liver-softening herb. Used in Xiao Yao San and Si Wu Tang formulas.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950031"
+      "cui": "C0950031",
+      "functional_roles": []
     },
     {
       "id": "papaya_fruit_powder",
@@ -7939,7 +8240,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0030513"
+      "cui": "C0030513",
+      "functional_roles": []
     },
     {
       "id": "parsley",
@@ -7982,7 +8284,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0030697"
+      "cui": "C0030697",
+      "functional_roles": []
     },
     {
       "id": "parsnip",
@@ -8010,7 +8313,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0030667"
+      "cui": "C0030667",
+      "functional_roles": []
     },
     {
       "id": "passion_flower",
@@ -8028,7 +8332,8 @@
       "notes": "Passiflora incarnata (Passifloraceae) aerial parts. Contains chrysin and vitexin flavonoids with GABAergic activity. European HMPC-approved for mild anxiety and sleep disturbances. RCT evidence (PMID 11679026).",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0030524"
+      "cui": "C0030524",
+      "functional_roles": []
     },
     {
       "id": "passionflower_herb",
@@ -8056,7 +8361,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0030524"
+      "cui": "C0030524",
+      "functional_roles": []
     },
     {
       "id": "pau_darco_bark",
@@ -8066,7 +8372,7 @@
         "pau d'arco extract",
         "pau d'arco",
         "lapacho bark",
-        "Pau d\u2019Arco",
+        "Pau d’Arco",
         "pau d'arco bark extract",
         "Handroanthus impetiginosus"
       ],
@@ -8087,7 +8393,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949831"
+      "cui": "C0949831",
+      "functional_roles": []
     },
     {
       "id": "pea",
@@ -8117,7 +8424,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0030821"
+      "cui": "C0030821",
+      "functional_roles": []
     },
     {
       "id": "peach",
@@ -8150,7 +8458,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0030792"
+      "cui": "C0030792",
+      "functional_roles": []
     },
     {
       "id": "pear",
@@ -8179,7 +8488,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0030836"
+      "cui": "C0030836",
+      "functional_roles": []
     },
     {
       "id": "peony",
@@ -8192,21 +8502,22 @@
       "notes": "Paeonia lactiflora (Paeoniaceae) root. Generic peony entry covering non-specific labels. Contains paeoniflorin glycoside. TCM blood-nourishing and liver-softening herb. See also paeonia_lactiflora entry.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950031"
+      "cui": "C0950031",
+      "functional_roles": []
     },
     {
       "id": "peppermint",
       "standard_name": "Peppermint",
-      "latin_name": "Mentha \u00d7 piperita",
+      "latin_name": "Mentha × piperita",
       "aliases": [
         "mint",
         "mentha piperita",
         "peppermint leaf",
         "peppermint supercritical extract",
-        "Mentha \u00d7 piperita"
+        "Mentha × piperita"
       ],
       "category": "leaf",
-      "notes": "Mentha \u00d7 piperita (Lamiaceae) leaf. Contains menthol (30-55%) and menthone. RCT evidence for IBS (enteric-coated oil, PMID 17420159). European HMPC-approved for GI spasms. Botanical leaf form.",
+      "notes": "Mentha × piperita (Lamiaceae) leaf. Contains menthol (30-55%) and menthone. RCT evidence for IBS (enteric-coated oil, PMID 17420159). European HMPC-approved for GI spasms. Botanical leaf form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "V95R5KMY2B"
@@ -8223,19 +8534,20 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0025757"
+      "cui": "C0025757",
+      "functional_roles": []
     },
     {
       "id": "peppermint_leaf",
       "standard_name": "Peppermint Leaf",
-      "latin_name": "Mentha \u00d7 piperita",
+      "latin_name": "Mentha × piperita",
       "aliases": [
         "mentha piperita leaf",
         "peppermint powder",
-        "Mentha \u00d7 piperita"
+        "Mentha × piperita"
       ],
       "category": "leaf",
-      "notes": "Mentha \u00d7 piperita (Lamiaceae) leaf. Same species as peppermint entry; covers leaf-specific labels. Rich in menthol and rosmarinic acid. Traditional carminative and digestive herb.",
+      "notes": "Mentha × piperita (Lamiaceae) leaf. Same species as peppermint entry; covers leaf-specific labels. Rich in menthol and rosmarinic acid. Traditional carminative and digestive herb.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "A389O33LX6"
@@ -8251,7 +8563,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0025757"
+      "cui": "C0025757",
+      "functional_roles": []
     },
     {
       "id": "perilla_leaf",
@@ -8279,7 +8592,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950041"
+      "cui": "C0950041",
+      "functional_roles": []
     },
     {
       "id": "phellodendron_bark",
@@ -8300,10 +8614,11 @@
         "phellodendron amurense bark extract"
       ],
       "category": "bark",
-      "notes": "Phellodendron amurense (Rutaceae) bark. Huang Bai in TCM. Contains berberine (2-5%) and phellodendrine. Damp-heat clearing herb for lower jiao. Component of Er Miao San and Relora\u00ae.",
+      "notes": "Phellodendron amurense (Rutaceae) bark. Huang Bai in TCM. Contains berberine (2-5%) and phellodendrine. Damp-heat clearing herb for lower jiao. Component of Er Miao San and Relora®.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950042"
+      "cui": "C0950042",
+      "functional_roles": []
     },
     {
       "id": "picrorhiza_kurroa",
@@ -8330,7 +8645,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950050"
+      "cui": "C0950050",
+      "functional_roles": []
     },
     {
       "id": "picrorhiza_root",
@@ -8358,7 +8674,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950050"
+      "cui": "C0950050",
+      "functional_roles": []
     },
     {
       "id": "plantain",
@@ -8377,7 +8694,7 @@
         "unii": "I4U55R240N"
       },
       "gsrs": {
-        "substance_name": "Musa \u00d7 paradisiaca whole",
+        "substance_name": "Musa × paradisiaca whole",
         "substance_class": "structurallyDiverse",
         "cfr_sections": [],
         "dsld_count": null,
@@ -8387,7 +8704,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032173"
+      "cui": "C0032173",
+      "functional_roles": []
     },
     {
       "id": "plum",
@@ -8416,7 +8734,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032223"
+      "cui": "C0032223",
+      "functional_roles": []
     },
     {
       "id": "polypodium_leucotomos",
@@ -8430,7 +8749,7 @@
         "Polypodium leucotomos"
       ],
       "category": "leaf",
-      "notes": "Polypodium leucotomos (Polypodiaceae) rhizome. Central American fern. Contains caffeic and ferulic acid derivatives. RCT evidence for photoprotection (PMID 25064166). Fernblock\u00ae is branded extract.",
+      "notes": "Polypodium leucotomos (Polypodiaceae) rhizome. Central American fern. Contains caffeic and ferulic acid derivatives. RCT evidence for photoprotection (PMID 25064166). Fernblock® is branded extract.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "BG58BW230G"
@@ -8446,7 +8765,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1614561"
+      "cui": "C1614561",
+      "functional_roles": []
     },
     {
       "id": "polypodium_vulgare",
@@ -8482,7 +8802,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032276"
+      "cui": "C0032276",
+      "functional_roles": []
     },
     {
       "id": "pomegranate",
@@ -8516,7 +8837,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032230"
+      "cui": "C0032230",
+      "functional_roles": []
     },
     {
       "id": "poria_cocos",
@@ -8535,7 +8857,8 @@
       "external_ids": {
         "unii": "XH37TWY5O4"
       },
-      "cui": "C0949607"
+      "cui": "C0949607",
+      "functional_roles": []
     },
     {
       "id": "potato",
@@ -8566,7 +8889,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032846"
+      "cui": "C0032846",
+      "functional_roles": []
     },
     {
       "id": "prickly_ash",
@@ -8595,7 +8919,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949611"
+      "cui": "C0949611",
+      "functional_roles": []
     },
     {
       "id": "prune",
@@ -8624,7 +8949,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032223"
+      "cui": "C0032223",
+      "functional_roles": []
     },
     {
       "id": "psyllium_husk",
@@ -8653,7 +8979,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0033068"
+      "cui": "C0033068",
+      "functional_roles": []
     },
     {
       "id": "pu_erh_tea_leaf",
@@ -8669,7 +8996,8 @@
       "notes": "Camellia sinensis var. assamica (Theaceae) post-fermented leaf. Microbially fermented tea containing theabrownins, gallic acid, and lovastatin (trace). Yunnan specialty with lipid-lowering properties.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0039400"
+      "cui": "C0039400",
+      "functional_roles": []
     },
     {
       "id": "pueraria_mirifica",
@@ -8683,7 +9011,8 @@
       "notes": "Pueraria mirifica (Fabaceae) root. Thai herb containing miroestrol and deoxymiroestrol, potent phytoestrogens. Traditional use for menopausal symptoms. Caution: strong estrogenic activity.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C5710981"
+      "cui": "C5710981",
+      "functional_roles": []
     },
     {
       "id": "pumpkin",
@@ -8725,7 +9054,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032880"
+      "cui": "C0032880",
+      "functional_roles": []
     },
     {
       "id": "purple_corn_cob",
@@ -8740,7 +9070,8 @@
       "notes": "Zea mays var. purple (Poaceae) cob. Peruvian purple corn rich in cyanidin-3-glucoside anthocyanin. Higher antioxidant content than blueberries. Used as natural colorant and supplement ingredient.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1446590"
+      "cui": "C1446590",
+      "functional_roles": []
     },
     {
       "id": "purple_willow_bark",
@@ -8772,7 +9103,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1032339"
+      "cui": "C1032339",
+      "functional_roles": []
     },
     {
       "id": "quassia",
@@ -8800,7 +9132,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949614"
+      "cui": "C0949614",
+      "functional_roles": []
     },
     {
       "id": "radish",
@@ -8829,7 +9162,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0034275"
+      "cui": "C0034275",
+      "functional_roles": []
     },
     {
       "id": "raspberry_seed",
@@ -8843,7 +9177,8 @@
       "notes": "Rubus idaeus (Rosaceae) seed. Rich in ellagic acid, alpha-linolenic acid, and vitamin E. Seed oil has favorable omega-3:omega-6 ratio. Botanical seed powder, not standardized.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0034310"
+      "cui": "C0034310",
+      "functional_roles": []
     },
     {
       "id": "rauwolfia_vomitoria",
@@ -8871,7 +9206,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0034551"
+      "cui": "C0034551",
+      "functional_roles": []
     },
     {
       "id": "red_algae",
@@ -8881,7 +9217,8 @@
       "notes": "Rhodophyta division covering non-specific red algae/seaweed labels. May include Chondrus, Lithothamnion, or Palmaria species. Natural calcium and mineral source. Identity mapping only.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0002033"
+      "cui": "C0002033",
+      "functional_roles": []
     },
     {
       "id": "red_clover",
@@ -8910,7 +9247,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040718"
+      "cui": "C0040718",
+      "functional_roles": []
     },
     {
       "id": "red_clover_flower",
@@ -8938,7 +9276,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040718"
+      "cui": "C0040718",
+      "functional_roles": []
     },
     {
       "id": "red_raspberry_fruit",
@@ -8970,7 +9309,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0034310"
+      "cui": "C0034310",
+      "functional_roles": []
     },
     {
       "id": "red_root",
@@ -8999,7 +9339,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949669"
+      "cui": "C0949669",
+      "functional_roles": []
     },
     {
       "id": "reishi_mushroom",
@@ -9029,7 +9370,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0017644"
+      "cui": "C0017644",
+      "functional_roles": []
     },
     {
       "id": "rhodiola_rosea_root",
@@ -9061,7 +9403,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949608"
+      "cui": "C0949608",
+      "functional_roles": []
     },
     {
       "id": "rhododendron_caucasicum",
@@ -9089,7 +9432,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1496360"
+      "cui": "C1496360",
+      "functional_roles": []
     },
     {
       "id": "rhubarb",
@@ -9118,7 +9462,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0035436"
+      "cui": "C0035436",
+      "functional_roles": []
     },
     {
       "id": "rose_hips",
@@ -9139,7 +9484,8 @@
       "external_ids": {
         "unii": "3TNW8D08V3"
       },
-      "cui": "C0035738"
+      "cui": "C0035738",
+      "functional_roles": []
     },
     {
       "id": "rue",
@@ -9155,7 +9501,7 @@
         "ruta graveolens extract"
       ],
       "category": "herb",
-      "notes": "Ruta graveolens (Rutaceae) aerial parts. Contains rutin flavonoid (named after this plant), furanocoumarins, and acridone alkaloids. Traditional emmenagogue. Phototoxic \u2014 handle with care.",
+      "notes": "Ruta graveolens (Rutaceae) aerial parts. Contains rutin flavonoid (named after this plant), furanocoumarins, and acridone alkaloids. Traditional emmenagogue. Phototoxic — handle with care.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "N94C2U587S"
@@ -9171,7 +9517,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0035944"
+      "cui": "C0035944",
+      "functional_roles": []
     },
     {
       "id": "safed_musli",
@@ -9198,7 +9545,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2629552"
+      "cui": "C2629552",
+      "functional_roles": []
     },
     {
       "id": "sage_leaf_extract",
@@ -9233,7 +9581,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036100"
+      "cui": "C0036100",
+      "functional_roles": []
     },
     {
       "id": "sariva",
@@ -9263,7 +9612,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1024189"
+      "cui": "C1024189",
+      "functional_roles": []
     },
     {
       "id": "sarsaparilla",
@@ -9284,7 +9634,8 @@
       "external_ids": {
         "unii": "2H1576D5WG"
       },
-      "cui": "C0036312"
+      "cui": "C0036312",
+      "functional_roles": []
     },
     {
       "id": "saw_palmetto_berry",
@@ -9313,7 +9664,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036524"
+      "cui": "C0036524",
+      "functional_roles": []
     },
     {
       "id": "schisandra_berry",
@@ -9350,7 +9702,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036728"
+      "cui": "C0036728",
+      "functional_roles": []
     },
     {
       "id": "schizonepeta",
@@ -9379,7 +9732,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949609"
+      "cui": "C0949609",
+      "functional_roles": []
     },
     {
       "id": "sea_buckthorn",
@@ -9395,7 +9749,8 @@
       "notes": "Hippophae rhamnoides (Elaeagnaceae) berry. Rich in omega-7 (palmitoleic acid, 16-22%), vitamin C (200-600 mg/100g), and carotenoids. Traditional Tibetan and Ayurvedic remedy.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0950378"
+      "cui": "C0950378",
+      "functional_roles": []
     },
     {
       "id": "seaweed",
@@ -9407,7 +9762,8 @@
       "notes": "Generic seaweed/marine algae covering non-specific seaweed supplement labels. May contain brown, red, or green macroalgae. Natural iodine source. Identity mapping only, not species-specific.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C3256731"
+      "cui": "C3256731",
+      "functional_roles": []
     },
     {
       "id": "sesbania",
@@ -9423,7 +9779,8 @@
       "notes": "Sesbania grandiflora (Fabaceae) flower/leaf. Agati in Ayurveda. Contains saponins and flavonoids. Traditional remedy for headache and nasal catarrh. Limited supplement use.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0330741"
+      "cui": "C0330741",
+      "functional_roles": []
     },
     {
       "id": "shankhpushpi",
@@ -9449,7 +9806,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C3660905"
+      "cui": "C3660905",
+      "functional_roles": []
     },
     {
       "id": "shatavari_root",
@@ -9477,7 +9835,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949556"
+      "cui": "C0949556",
+      "functional_roles": []
     },
     {
       "id": "sheep_sorrel",
@@ -9504,7 +9863,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0035943"
+      "cui": "C0035943",
+      "functional_roles": []
     },
     {
       "id": "shiitake_mushroom",
@@ -9532,7 +9892,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0023144"
+      "cui": "C0023144",
+      "functional_roles": []
     },
     {
       "id": "sichuan_lovage",
@@ -9562,7 +9923,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949890"
+      "cui": "C0949890",
+      "functional_roles": []
     },
     {
       "id": "skullcap",
@@ -9594,7 +9956,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036763"
+      "cui": "C0036763",
+      "functional_roles": []
     },
     {
       "id": "solomons_seal_root",
@@ -9628,7 +9991,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032286"
+      "cui": "C0032286",
+      "functional_roles": []
     },
     {
       "id": "sophora_japonica",
@@ -9645,7 +10009,8 @@
       "notes": "Styphnolobium japonicum (syn. Sophora japonica, Fabaceae) flower bud. Huai Hua in TCM. Natural source of rutin bioflavonoid (up to 20% dry weight). Used for venous and capillary health.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0996856"
+      "cui": "C0996856",
+      "functional_roles": []
     },
     {
       "id": "sorghum_bran",
@@ -9673,7 +10038,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0331571"
+      "cui": "C0331571",
+      "functional_roles": []
     },
     {
       "id": "spirulina_powder",
@@ -9702,7 +10068,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0037123"
+      "cui": "C0037123",
+      "functional_roles": []
     },
     {
       "id": "squash",
@@ -9728,7 +10095,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2722043"
+      "cui": "C2722043",
+      "functional_roles": []
     },
     {
       "id": "squaw_vine",
@@ -9755,7 +10123,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949983"
+      "cui": "C0949983",
+      "functional_roles": []
     },
     {
       "id": "st_john_s_wort",
@@ -9790,7 +10159,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0020027"
+      "cui": "C0020027",
+      "functional_roles": []
     },
     {
       "id": "star_anise",
@@ -9817,7 +10187,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0038017"
+      "cui": "C0038017",
+      "functional_roles": []
     },
     {
       "id": "stoneroot",
@@ -9849,22 +10220,23 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949706"
+      "cui": "C0949706",
+      "functional_roles": []
     },
     {
       "id": "strawberry",
       "standard_name": "Strawberry",
-      "latin_name": "Fragaria \u00d7 ananassa",
+      "latin_name": "Fragaria × ananassa",
       "aliases": [
         "organic Strawberries",
         "Strawberry fruit powder",
         "Strawberry Extract, Natural",
         "Non-GMO Strawberry extract",
         "non-gmo strawberry extract",
-        "Fragaria \u00d7 ananassa"
+        "Fragaria × ananassa"
       ],
       "category": "fruit",
-      "notes": "Fragaria \u00d7 ananassa (Rosaceae) fruit. Rich in pelargonidin-3-glucoside anthocyanin, ellagic acid, and vitamin C (59 mg/100g). Botanical fruit powder used in supplement blends.",
+      "notes": "Fragaria × ananassa (Rosaceae) fruit. Rich in pelargonidin-3-glucoside anthocyanin, ellagic acid, and vitamin C (59 mg/100g). Botanical fruit powder used in supplement blends.",
       "last_updated": "2026-03-13",
       "external_ids": {
         "unii": "4J2TY8Y81V"
@@ -9881,7 +10253,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0038218"
+      "cui": "C0038218",
+      "functional_roles": []
     },
     {
       "id": "suma_root",
@@ -9909,7 +10282,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C4025984"
+      "cui": "C4025984",
+      "functional_roles": []
     },
     {
       "id": "sweet_potato",
@@ -9922,7 +10296,7 @@
         "yam"
       ],
       "category": "vegetable",
-      "notes": "Ipomoea batatas (Convolvulaceae) tuber. Orange varieties rich in beta-carotene (8,510 \u00b5g/100g). Purple varieties contain peonidin anthocyanins. Used in whole-food supplement blends.",
+      "notes": "Ipomoea batatas (Convolvulaceae) tuber. Orange varieties rich in beta-carotene (8,510 µg/100g). Purple varieties contain peonidin anthocyanins. Used in whole-food supplement blends.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "M9WGG9Z9GK"
@@ -9939,7 +10313,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0038432"
+      "cui": "C0038432",
+      "functional_roles": []
     },
     {
       "id": "sweet_wormwood_herb",
@@ -9969,7 +10344,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0003763"
+      "cui": "C0003763",
+      "functional_roles": []
     },
     {
       "id": "sweet_wormwood_leaf_oil",
@@ -9999,7 +10375,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0003763"
+      "cui": "C0003763",
+      "functional_roles": []
     },
     {
       "id": "tangerine",
@@ -10028,7 +10405,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0039439"
+      "cui": "C0039439",
+      "functional_roles": []
     },
     {
       "id": "tart_cherry_fruit",
@@ -10073,7 +10451,8 @@
       "cui": "C0330504",
       "audit_trail": [
         "Sprint D2.5 (2026-04-20): added 3 aliases to close silently-mapped rows surfaced by deep accuracy audit: ['cherry puree powder', 'cherry puree', 'tart cherry puree powder']"
-      ]
+      ],
+      "functional_roles": []
     },
     {
       "id": "tea_tree",
@@ -10101,7 +10480,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0032087"
+      "cui": "C0032087",
+      "functional_roles": []
     },
     {
       "id": "thyme",
@@ -10136,7 +10516,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040081"
+      "cui": "C0040081",
+      "functional_roles": []
     },
     {
       "id": "tillandsia",
@@ -10149,7 +10530,8 @@
       "notes": "Tillandsia usneoides (Bromeliaceae) aerial parts. Spanish moss, an epiphytic bromeliad. Traditional remedy for hemorrhoids and diabetes in Latin American folk medicine. Limited supplement use.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1000971"
+      "cui": "C1000971",
+      "functional_roles": []
     },
     {
       "id": "tomato",
@@ -10183,7 +10565,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040228"
+      "cui": "C0040228",
+      "functional_roles": []
     },
     {
       "id": "tongkat_ali",
@@ -10215,7 +10598,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949773"
+      "cui": "C0949773",
+      "functional_roles": []
     },
     {
       "id": "toothed_clubmoss",
@@ -10245,7 +10629,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949851"
+      "cui": "C0949851",
+      "functional_roles": []
     },
     {
       "id": "tree_peony_root_bark",
@@ -10273,7 +10658,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0950035"
+      "cui": "C0950035",
+      "functional_roles": []
     },
     {
       "id": "tribulus_terrestris",
@@ -10304,7 +10690,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0040820"
+      "cui": "C0040820",
+      "functional_roles": []
     },
     {
       "id": "triphala_powder",
@@ -10318,7 +10705,8 @@
       "notes": "Ayurvedic formula of three fruits: Amalaki (Phyllanthus emblica), Bibhitaki (Terminalia bellirica), Haritaki (Terminalia chebula). Traditional rasayana and GI tonic. Equal parts blend.",
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "cui": "C1958185"
+      "cui": "C1958185",
+      "functional_roles": []
     },
     {
       "id": "turkey_rhubarb_root",
@@ -10350,7 +10738,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0035436"
+      "cui": "C0035436",
+      "functional_roles": []
     },
     {
       "id": "turmeric",
@@ -10379,7 +10768,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0041070"
+      "cui": "C0041070",
+      "functional_roles": []
     },
     {
       "id": "turmeric_root_powder",
@@ -10410,7 +10800,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0041070"
+      "cui": "C0041070",
+      "functional_roles": []
     },
     {
       "id": "tylophora_leaf",
@@ -10424,7 +10815,8 @@
       "notes": "Tylophora indica (Apocynaceae) leaf. Contains tylophorine and tylophorinine alkaloids. Traditional Ayurvedic remedy for asthma and allergies. RCT evidence for bronchial asthma (PMID 18288292).",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0041148"
+      "cui": "C0041148",
+      "functional_roles": []
     },
     {
       "id": "uva_ursi",
@@ -10440,7 +10832,8 @@
       "notes": "Arctostaphylos uva-ursi (Ericaceae) leaf. Same species as uva_ursi_leaf; covers generic label variants. Contains arbutin urinary antiseptic. European HMPC-approved for uncomplicated UTI.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0003755"
+      "cui": "C0003755",
+      "functional_roles": []
     },
     {
       "id": "uva_ursi_leaf",
@@ -10474,7 +10867,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0003755"
+      "cui": "C0003755",
+      "functional_roles": []
     },
     {
       "id": "valerian_root",
@@ -10505,7 +10899,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0042305"
+      "cui": "C0042305",
+      "functional_roles": []
     },
     {
       "id": "vegetable_powders",
@@ -10516,7 +10911,8 @@
       "category": "vegetable",
       "notes": "Generic multi-vegetable powder blend covering non-specific vegetable supplement labels. Composition varies by manufacturer. Identity mapping only. Not attributable to single species.",
       "last_updated": "2026-03-01",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "vitex",
@@ -10536,7 +10932,8 @@
       "notes": "Vitex agnus-castus (Lamiaceae) berry. Same species as chaste_tree; covers generic vitex labels. Contains diterpenes acting on dopamine D2 receptors. Traditional female reproductive herb.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0042640"
+      "cui": "C0042640",
+      "functional_roles": []
     },
     {
       "id": "wakame",
@@ -10564,7 +10961,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1030485"
+      "cui": "C1030485",
+      "functional_roles": []
     },
     {
       "id": "wasabi_root",
@@ -10596,7 +10994,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C2937575"
+      "cui": "C2937575",
+      "functional_roles": []
     },
     {
       "id": "watercress_herb",
@@ -10628,7 +11027,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0043088"
+      "cui": "C0043088",
+      "functional_roles": []
     },
     {
       "id": "watermelon",
@@ -10656,7 +11056,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0043159"
+      "cui": "C0043159",
+      "functional_roles": []
     },
     {
       "id": "wheat_germ",
@@ -10685,7 +11086,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0043178"
+      "cui": "C0043178",
+      "functional_roles": []
     },
     {
       "id": "wheat_barley_grass_blend",
@@ -10698,7 +11100,8 @@
       "category": "grass",
       "notes": "Blend of Triticum aestivum (wheat) and Hordeum vulgare (barley) young grass. Alkalizing green food supplement rich in chlorophyll, SOD, and trace minerals. Harvested before jointing (gluten-free).",
       "last_updated": "2026-03-01",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "wheatgrass_powder",
@@ -10714,7 +11117,8 @@
       "notes": "Triticum aestivum (Poaceae) young grass. Harvested before jointing stage. Rich in chlorophyll, SOD enzyme, and vitamins. Popularized by Ann Wigmore. Gluten-free when harvested at grass stage.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0043178"
+      "cui": "C0043178",
+      "functional_roles": []
     },
     {
       "id": "white_grape",
@@ -10743,7 +11147,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0018208"
+      "cui": "C0018208",
+      "functional_roles": []
     },
     {
       "id": "white_mulberry",
@@ -10770,7 +11175,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0330541"
+      "cui": "C0330541",
+      "functional_roles": []
     },
     {
       "id": "white_oak",
@@ -10798,7 +11204,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0034499"
+      "cui": "C0034499",
+      "functional_roles": []
     },
     {
       "id": "white_sandalwood",
@@ -10827,7 +11234,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1706570"
+      "cui": "C1706570",
+      "functional_roles": []
     },
     {
       "id": "white_willow_bark",
@@ -10859,7 +11267,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0036093"
+      "cui": "C0036093",
+      "functional_roles": []
     },
     {
       "id": "wild_blueberry",
@@ -10892,7 +11301,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1443062"
+      "cui": "C1443062",
+      "functional_roles": []
     },
     {
       "id": "wild_indigo_root",
@@ -10903,7 +11313,7 @@
         "baptisia tinctoria"
       ],
       "category": "root",
-      "notes": "Baptisia tinctoria (Fabaceae) root. Contains isoflavones and polysaccharides. Traditional Eclectic immune stimulant. Component of Esberitox\u00ae with Echinacea and Thuja. Botanical root form.",
+      "notes": "Baptisia tinctoria (Fabaceae) root. Contains isoflavones and polysaccharides. Traditional Eclectic immune stimulant. Component of Esberitox® with Echinacea and Thuja. Botanical root form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "5EF0HWI5WU"
@@ -10920,7 +11330,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949560"
+      "cui": "C0949560",
+      "functional_roles": []
     },
     {
       "id": "wild_lettuce",
@@ -10935,7 +11346,8 @@
       "external_ids": {
         "unii": "6D74QW4H67"
       },
-      "cui": "C0949875"
+      "cui": "C0949875",
+      "functional_roles": []
     },
     {
       "id": "wild_yam_root",
@@ -10965,7 +11377,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0012165"
+      "cui": "C0012165",
+      "functional_roles": []
     },
     {
       "id": "winged_treebine",
@@ -10996,7 +11409,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949693"
+      "cui": "C0949693",
+      "functional_roles": []
     },
     {
       "id": "wintergreen_leaf",
@@ -11029,7 +11443,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0017062"
+      "cui": "C0017062",
+      "functional_roles": []
     },
     {
       "id": "witch_hazel_leaf",
@@ -11057,7 +11472,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0018545"
+      "cui": "C0018545",
+      "functional_roles": []
     },
     {
       "id": "woad",
@@ -11092,7 +11508,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949868"
+      "cui": "C0949868",
+      "functional_roles": []
     },
     {
       "id": "wood_betony",
@@ -11120,7 +11537,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0949619"
+      "cui": "C0949619",
+      "functional_roles": []
     },
     {
       "id": "wormwood_leaf",
@@ -11153,7 +11571,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0003762"
+      "cui": "C0003762",
+      "functional_roles": []
     },
     {
       "id": "xanthoparmelia_scabrosa",
@@ -11167,7 +11586,8 @@
       "notes": "Xanthoparmelia scabrosa (Parmeliaceae) thallus. Lichen marketed for male sexual function enhancement. Contains salazinic acid. Very limited clinical evidence; safety profile poorly characterized.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C5736541"
+      "cui": "C5736541",
+      "functional_roles": []
     },
     {
       "id": "yacon_root",
@@ -11193,7 +11613,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C5981353"
+      "cui": "C5981353",
+      "functional_roles": []
     },
     {
       "id": "yarrow_aerial_parts",
@@ -11217,7 +11638,8 @@
       "external_ids": {
         "unii": "2FXJ6SW4PK"
       },
-      "cui": "C0000479"
+      "cui": "C0000479",
+      "functional_roles": []
     },
     {
       "id": "yellow_dock_root",
@@ -11247,7 +11669,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0035944"
+      "cui": "C0035944",
+      "functional_roles": []
     },
     {
       "id": "yerba_mate_leaf",
@@ -11280,7 +11703,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0024949"
+      "cui": "C0024949",
+      "functional_roles": []
     },
     {
       "id": "yucca",
@@ -11299,7 +11723,8 @@
       "external_ids": {
         "unii": "08A0YG3VIC"
       },
-      "cui": "C0043408"
+      "cui": "C0043408",
+      "functional_roles": []
     },
     {
       "id": "yuzu",
@@ -11313,7 +11738,8 @@
       "notes": "Citrus junos (Rutaceae) fruit. Japanese citrus rich in limonene, linalool, and naringin flavonoid. Contains hesperidin and nomilin limonoid. Used in aromatherapy and as vitamin C source.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C1065229"
+      "cui": "C1065229",
+      "functional_roles": []
     },
     {
       "id": "zhu_ling",
@@ -11328,7 +11754,8 @@
       "notes": "Polyporus umbellatus (Polyporaceae) sclerotium. Zhu Ling in TCM, diuretic mushroom. Contains ergosterol and polysaccharides (beta-glucans). Traditional remedy for edema and urinary difficulty.",
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "cui": "C0949605"
+      "cui": "C0949605",
+      "functional_roles": []
     },
     {
       "id": "chopchini",
@@ -11353,12 +11780,13 @@
         "smilax china l. root"
       ],
       "category": "root",
-      "notes": "Smilax china L. (Smilacaceae) root \u2014 traditional Ayurvedic (madhusnuhi) and Chinese medicine (tu fuling) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). Distinct from Smilax ornata (sarsaparilla) and from Smilax regelii. Clinical evidence sparse \u2014 primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
+      "notes": "Smilax china L. (Smilacaceae) root — traditional Ayurvedic (madhusnuhi) and Chinese medicine (tu fuling) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). Distinct from Smilax ornata (sarsaparilla) and from Smilax regelii. Clinical evidence sparse — primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
       "last_updated": "2026-03-17",
       "external_ids": {
         "unii": "B5ZXF484DK"
       },
-      "cui": "C1014796"
+      "cui": "C1014796",
+      "functional_roles": []
     },
     {
       "id": "zucchini",
@@ -11379,7 +11807,8 @@
       },
       "external_ids": {
         "unii": "EQU1BON34S"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "garbanzo_bean",
@@ -11401,7 +11830,8 @@
       },
       "external_ids": {
         "unii": "N91637DNW9"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "black_bean",
@@ -11420,7 +11850,8 @@
         "completeness": 0.7,
         "review_status": "validated"
       },
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "russian_tarragon",
@@ -11441,7 +11872,8 @@
       },
       "external_ids": {
         "unii": "831MQ9808D"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "sweet_clover",
@@ -11460,7 +11892,8 @@
         "completeness": 0.7,
         "review_status": "validated"
       },
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "quinoa",
@@ -11477,7 +11910,7 @@
         "quinoa seed"
       ],
       "category": "grain",
-      "notes": "Chenopodium quinoa \u2014 pseudocereal grain. Complete protein with all 9 essential amino acids. Rich in manganese, phosphorus, magnesium, folate. Gluten-free. Commonly featured in whole-food supplement blends.",
+      "notes": "Chenopodium quinoa — pseudocereal grain. Complete protein with all 9 essential amino acids. Rich in manganese, phosphorus, magnesium, folate. Gluten-free. Commonly featured in whole-food supplement blends.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "9KMA964L92",
@@ -11487,7 +11920,8 @@
       "gsrs": {
         "substance_name": "Chenopodium quinoa whole",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "adzuki_bean",
@@ -11504,7 +11938,7 @@
         "red bean"
       ],
       "category": "legume",
-      "notes": "Vigna angularis \u2014 East Asian legume, rich in protein, fiber, and flavonoids.",
+      "notes": "Vigna angularis — East Asian legume, rich in protein, fiber, and flavonoids.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "IO64JGK313",
@@ -11514,7 +11948,8 @@
       "gsrs": {
         "substance_name": "Vigna angularis whole",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "amaranth_grain",
@@ -11531,7 +11966,7 @@
         "amaranth seed"
       ],
       "category": "grain",
-      "notes": "Amaranthus spp. \u2014 pseudocereal grain, gluten-free complete protein. Distinct from FD&C Red #2 artificial dye (also named \"amaranth\").",
+      "notes": "Amaranthus spp. — pseudocereal grain, gluten-free complete protein. Distinct from FD&C Red #2 artificial dye (also named \"amaranth\").",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "07L86FJ69J",
@@ -11541,7 +11976,8 @@
       "gsrs": {
         "substance_name": "Amaranthus hybridus leaf",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "kamut",
@@ -11559,7 +11995,7 @@
         "khorasan wheat"
       ],
       "category": "grain",
-      "notes": "Khorasan wheat \u2014 ancient wheat variety. Higher protein and selenium than common wheat. Contains gluten.",
+      "notes": "Khorasan wheat — ancient wheat variety. Higher protein and selenium than common wheat. Contains gluten.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C1440855"
@@ -11568,7 +12004,8 @@
       "gsrs": {
         "substance_name": "Kamut flour",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "curry_leaf",
@@ -11587,7 +12024,7 @@
         "curry leaf extract"
       ],
       "category": "herb",
-      "notes": "Murraya koenigii \u2014 Indian aromatic herb. Traditional uses for digestion; antioxidant compounds.",
+      "notes": "Murraya koenigii — Indian aromatic herb. Traditional uses for digestion; antioxidant compounds.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C1440524"
@@ -11596,7 +12033,8 @@
       "gsrs": {
         "substance_name": "Curry antigen",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "hemp_protein",
@@ -11611,14 +12049,15 @@
         "Cannabis sativa protein"
       ],
       "category": "protein",
-      "notes": "Hemp seed protein \u2014 complete plant protein, ~50% protein by weight, rich in arginine.",
+      "notes": "Hemp seed protein — complete plant protein, ~50% protein by weight, rich in arginine.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
       "gsrs": {
         "substance_name": "Cannabis sativa seed protein",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "betel_leaf",
@@ -11633,7 +12072,7 @@
         "betel"
       ],
       "category": "leaf",
-      "notes": "Piper betle leaf \u2014 traditional Ayurvedic botanical. Modern formulas use leaf extract (not betel quid with areca).",
+      "notes": "Piper betle leaf — traditional Ayurvedic botanical. Modern formulas use leaf extract (not betel quid with areca).",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "NT24A1359E",
@@ -11643,7 +12082,8 @@
       "gsrs": {
         "substance_name": "Piper betle leaf",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "catjang_cowpea",
@@ -11658,7 +12098,7 @@
         "kulthi extract"
       ],
       "category": "legume",
-      "notes": "Vigna unguiculata / Dolichos biflorus \u2014 Ayurvedic legume extract used for kidney/urinary support.",
+      "notes": "Vigna unguiculata / Dolichos biflorus — Ayurvedic legume extract used for kidney/urinary support.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "A15VFT1NFM",
@@ -11668,7 +12108,8 @@
       "gsrs": {
         "substance_name": "Vigna unguiculata whole",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "king_trumpet",
@@ -11683,7 +12124,7 @@
         "eryngii mushroom"
       ],
       "category": "fungus",
-      "notes": "Pleurotus eryngii \u2014 gourmet edible mushroom with beta-glucan content.",
+      "notes": "Pleurotus eryngii — gourmet edible mushroom with beta-glucan content.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "2WGH02ZJ1G",
@@ -11693,7 +12134,8 @@
       "gsrs": {
         "substance_name": "Pleurotus eryngii whole",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "black_raspberry",
@@ -11709,7 +12151,7 @@
         "wild black raspberry"
       ],
       "category": "fruit",
-      "notes": "Rubus occidentalis \u2014 distinct from red raspberry. Rich in anthocyanins and ellagitannins.",
+      "notes": "Rubus occidentalis — distinct from red raspberry. Rich in anthocyanins and ellagitannins.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "QEN9684SNX",
@@ -11719,7 +12161,8 @@
       "gsrs": {
         "substance_name": "Rubus occidentalis whole",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "kombu",
@@ -11737,7 +12180,7 @@
         "dried kombu"
       ],
       "category": "seaweed",
-      "notes": "Laminaria japonica / Saccharina japonica \u2014 edible brown seaweed. Richest natural iodine source.",
+      "notes": "Laminaria japonica / Saccharina japonica — edible brown seaweed. Richest natural iodine source.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "WE98HW412B",
@@ -11747,7 +12190,8 @@
       "gsrs": {
         "substance_name": "Laminaria japonica",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "navy_bean",
@@ -11764,14 +12208,15 @@
         "white bean"
       ],
       "category": "legume",
-      "notes": "Navy bean (Phaseolus vulgaris) \u2014 small white bean, common in whole-food supplement matrices. Rich in protein, fiber, folate.",
+      "notes": "Navy bean (Phaseolus vulgaris) — small white bean, common in whole-food supplement matrices. Rich in protein, fiber, folate.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
       "gsrs": {
         "substance_name": "Phaseolus vulgaris seed",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "lavandin",
@@ -11789,14 +12234,15 @@
         "essence of organic lavandin oil"
       ],
       "category": "herb",
-      "notes": "Lavandula x intermedia (Lavandin) \u2014 hybrid of true lavender and spike lavender. Essential oil used for fragrance and aromatherapy.",
+      "notes": "Lavandula x intermedia (Lavandin) — hybrid of true lavender and spike lavender. Essential oil used for fragrance and aromatherapy.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
       "gsrs": {
         "substance_name": "Lavandula intermedia",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "sacha_inchi",
@@ -11813,7 +12259,7 @@
         "sacha inchi seed"
       ],
       "category": "seed",
-      "notes": "Plukenetia volubilis \u2014 Amazonian vine producing edible seeds. Richest plant source of omega-3 ALA (~50% of seed oil), plus protein and tocopherols.",
+      "notes": "Plukenetia volubilis — Amazonian vine producing edible seeds. Richest plant source of omega-3 ALA (~50% of seed oil), plus protein and tocopherols.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C1640937"
@@ -11822,7 +12268,8 @@
       "gsrs": {
         "substance_name": "Plukenetia volubilis seed",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "lantana_camara",
@@ -11836,7 +12283,7 @@
         "lantana"
       ],
       "category": "herb",
-      "notes": "Lantana camara \u2014 traditional South Asian medicinal plant. Caution: known phototoxicity; supplement-grade use limited.",
+      "notes": "Lantana camara — traditional South Asian medicinal plant. Caution: known phototoxicity; supplement-grade use limited.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C0331282"
@@ -11845,7 +12292,8 @@
       "gsrs": {
         "substance_name": "Lantana camara",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "wrightia_tinctoria",
@@ -11859,7 +12307,7 @@
         "pala indigo plant"
       ],
       "category": "herb",
-      "notes": "Wrightia tinctoria \u2014 Ayurvedic botanical from India. Traditional uses for skin conditions.",
+      "notes": "Wrightia tinctoria — Ayurvedic botanical from India. Traditional uses for skin conditions.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C2785511"
@@ -11868,7 +12316,8 @@
       "gsrs": {
         "substance_name": "Wrightia tinctoria",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "collard_greens",
@@ -11883,14 +12332,15 @@
         "Brassica oleracea acephala"
       ],
       "category": "vegetable",
-      "notes": "Brassica oleracea var. acephala \u2014 cruciferous leafy green. Vitamin K, A, C source; glucosinolate content.",
+      "notes": "Brassica oleracea var. acephala — cruciferous leafy green. Vitamin K, A, C source; glucosinolate content.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
       "gsrs": {
         "substance_name": "Brassica oleracea acephala",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "sweet_orange",
@@ -11906,14 +12356,15 @@
         "orange peel extract"
       ],
       "category": "fruit",
-      "notes": "Citrus sinensis (Sweet Orange) \u2014 flavor/aromatic botanical. Peel contains limonene; fruit vitamin C and bioflavonoids.",
+      "notes": "Citrus sinensis (Sweet Orange) — flavor/aromatic botanical. Peel contains limonene; fruit vitamin C and bioflavonoids.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
       "gsrs": {
         "substance_name": "Citrus sinensis",
         "substance_class": "structurally diverse"
-      }
+      },
+      "functional_roles": []
     },
     {
       "id": "cynanchum_wilfordii",
@@ -11930,7 +12381,7 @@
         "wilford's swallowwort"
       ],
       "category": "herb",
-      "notes": "Cynanchum wilfordii (Apocynaceae) root. Korean traditional herb used in women's health / menopause formulations (component of Estromon). Contains cynandione A, gagaminine, acetophenones. IMPORTANT: adulteration risk \u2014 historically confused/substituted with Polygonum multiflorum (He Shou Wu, hepatotoxic) on US market. Verify binomial on label.",
+      "notes": "Cynanchum wilfordii (Apocynaceae) root. Korean traditional herb used in women's health / menopause formulations (component of Estromon). Contains cynandione A, gagaminine, acetophenones. IMPORTANT: adulteration risk — historically confused/substituted with Polygonum multiflorum (He Shou Wu, hepatotoxic) on US market. Verify binomial on label.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "0YW1513318"
@@ -11946,7 +12397,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C1463421"
+      "cui": "C1463421",
+      "functional_roles": []
     },
     {
       "id": "phlomoides_umbrosa",
@@ -11964,7 +12416,7 @@
         "korean phlomis root"
       ],
       "category": "herb",
-      "notes": "Phlomoides umbrosa (Lamiaceae; formerly Phlomis umbrosa) root. Korean traditional herb, component of Estromon women's-health formulation. Contains iridoid glycosides (shanzhiside methyl ester, sesamoside, phlomiol). Note: Korean vernacular 'Sok-Dan' overlaps with TCM Xu Duan (Dipsacus) \u2014 verify binomial, not common name.",
+      "notes": "Phlomoides umbrosa (Lamiaceae; formerly Phlomis umbrosa) root. Korean traditional herb, component of Estromon women's-health formulation. Contains iridoid glycosides (shanzhiside methyl ester, sesamoside, phlomiol). Note: Korean vernacular 'Sok-Dan' overlaps with TCM Xu Duan (Dipsacus) — verify binomial, not common name.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "8J1RE3K5G5"
@@ -11980,7 +12432,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C4576738"
+      "cui": "C4576738",
+      "functional_roles": []
     },
     {
       "id": "tamarind",
@@ -12007,9 +12460,10 @@
         "pubchem_cid": null,
         "unii": null
       },
-      "notes": "Tamarindus indica fruit \u2014 legume-family tropical fruit used for dietary fiber and polyphenols. Source of tartaric acid and malic acid. Used in gummies and chewables as natural flavor + fiber source.",
+      "notes": "Tamarindus indica fruit — legume-family tropical fruit used for dietary fiber and polyphenols. Source of tartaric acid and malic acid. Used in gummies and chewables as natural flavor + fiber source.",
       "added_by": "sprint_d2.5",
-      "last_updated": "2026-04-20"
+      "last_updated": "2026-04-20",
+      "functional_roles": []
     },
     {
       "id": "green_bean",
@@ -12026,12 +12480,13 @@
         "organic green bean powder"
       ],
       "category": "botanical",
-      "notes": "Green Bean (Phaseolus vulgaris) \u2014 edible legume used in whole-food supplement blends for plant protein + fiber.",
+      "notes": "Green Bean (Phaseolus vulgaris) — edible legume used in whole-food supplement blends for plant protein + fiber.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "cui": "C0016968",
-      "cui_verified_source": "UMLS (pre-verified; GeneralizedOrganism concept)"
+      "cui_verified_source": "UMLS (pre-verified; GeneralizedOrganism concept)",
+      "functional_roles": []
     },
     {
       "id": "lima_bean",
@@ -12049,12 +12504,13 @@
         "butter bean"
       ],
       "category": "botanical",
-      "notes": "Lima Bean (Phaseolus lunatus) \u2014 edible legume used in whole-food supplement blends for plant protein + fiber.",
+      "notes": "Lima Bean (Phaseolus lunatus) — edible legume used in whole-food supplement blends for plant protein + fiber.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "cui_status": "no_confirmed_umls_match",
-      "cui_note": "No confirmed single UMLS concept for Phaseolus lunatus at supplement-ingredient level; track governed-null per protocol."
+      "cui_note": "No confirmed single UMLS concept for Phaseolus lunatus at supplement-ingredient level; track governed-null per protocol.",
+      "functional_roles": []
     },
     {
       "id": "ecklonia_radiata",
@@ -12071,10 +12527,11 @@
       "category": "botanical",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Ecklonia radiata; marine kelp species, tracked governed-null per protocol.",
-      "notes": "Ecklonia radiata \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
+      "notes": "Ecklonia radiata — brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "ecklonia_kurome",
@@ -12090,10 +12547,11 @@
       "category": "botanical",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Ecklonia kurome; marine kelp species, tracked governed-null per protocol.",
-      "notes": "Ecklonia kurome \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
+      "notes": "Ecklonia kurome — brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     },
     {
       "id": "alaria_esculenta",
@@ -12111,10 +12569,11 @@
       "category": "botanical",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Alaria esculenta; marine kelp species, tracked governed-null per protocol.",
-      "notes": "Alaria esculenta \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
+      "notes": "Alaria esculenta — brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
-      "external_ids": {}
+      "external_ids": {},
+      "functional_roles": []
     }
   ]
 }
