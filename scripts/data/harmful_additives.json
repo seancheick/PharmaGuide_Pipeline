@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
-    "schema_version": "5.2.0",
+    "schema_version": "5.3.0",
     "last_updated": "2026-04-30",
     "total_entries": 115,
     "functional_roles_field": {
@@ -133,7 +133,10 @@
     },
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-04-18",
-    "review_round": "full_authoring_pass_v1"
+    "review_round": "full_authoring_pass_v1",
+    "field_contract_changes": {
+      "v5.3.0": "2026-04-30 Phase 4b — category canonicalization. Renamed 21 → 12 canonical safety values per CLINICIAN_REVIEW.md Section 2A. Granular functional info now lives in functional_roles[]. Renames: artificial_color→colorant_artificial; fat_oil→excipient; flavor→excipient; preservative_antioxidant→preservative; sweetener→sweetener_natural. Transitional holdouts (Phase 4c): mineral_compound, nutrient_synthetic, stimulant_laxative."
+    }
   },
   "harmful_additives": [
     {
@@ -938,7 +941,7 @@
         "artificially flavoured",
         "FLAVOR,ARTIFICIAL"
       ],
-      "category": "flavor",
+      "category": "excipient",
       "mechanism_of_harm": "Synthetic chemicals designed to mimic natural flavors. Exact composition is often proprietary and undisclosed on supplement labels. Some individual flavoring compounds have been linked to allergic reactions, headaches, and behavioral effects in sensitive individuals, though the category as a whole is FDA GRAS-approved.",
       "regulatory_status": {
         "US": "FDA approved under GRAS (21 CFR 101.22). Manufacturers not required to disclose individual flavoring chemicals.",
@@ -2457,7 +2460,7 @@
         "potassium aluminum silicate-based colorant",
         "pearlescent pigment"
       ],
-      "category": "colorant",
+      "category": "excipient",
       "mechanism_of_harm": "Mica-based pearlescent pigment coated with titanium dioxide. TiO2 (E171) has been banned in the EU since 2022 due to genotoxicity concerns. Nanoparticle accumulation risk in gut tissues. Used purely for cosmetic appearance with no functional benefit.",
       "regulatory_status": {
         "US": "FDA approved for cosmetic use, allowed in supplements",
@@ -2588,7 +2591,7 @@
         "sugar cane molasses",
         "unsulphured molasses"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "mechanism_of_harm": "Sugar byproduct used as sweetener in supplements. While containing trace minerals (iron, calcium, potassium), primarily an added sugar. Contributes to glycemic load. Signals cost-driven formulation.",
       "regulatory_status": {
         "US": "FDA GRAS",
@@ -2719,7 +2722,7 @@
         "unrefined cane sugar",
         "dehydrated cane juice"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "mechanism_of_harm": "Added sugar (sucrose) in supplement formulation with no nutritional benefit beyond calories. Contributes to glycemic load. FDA considers 'evaporated cane juice' a misleading term that should be labeled as 'sugar'. Signals lower manufacturing quality standards.",
       "regulatory_status": {
         "US": "FDA GRAS (sugar)",
@@ -2864,7 +2867,7 @@
         "trace amounts of canola oil",
         "CAS 8002-13-9"
       ],
-      "category": "fat_oil",
+      "category": "excipient",
       "notes": "A highly refined vegetable oil used as a carrier or softgel fill in supplements. High-heat refining (deodorization at 200–270°C) may generate lipid oxidation products and trace trans fats. Predominantly omega-6 linoleic acid; chronic high intake may shift omega-6/omega-3 balance. Not banned anywhere. Quality concern rather than acute toxicity.",
       "last_updated": "2026-03-24",
       "mechanism_of_harm": "Refined canola oil undergoes high-heat processing (bleaching, deodorization at 200–270°C) that may generate lipid oxidation products (aldehydes, peroxides) and trace trans fatty acids. High omega-6 content (~20% linoleic acid) may contribute to pro-inflammatory eicosanoid pathways when dietary omega-6/omega-3 ratio is already elevated. Modern canola is bred for low erucic acid (<2%) to avoid cardiotoxicity concerns of traditional rapeseed. Primarily a quality/formulation signal rather than acute harm.",
@@ -3912,7 +3915,7 @@
         "maize oil",
         "corn oil refined"
       ],
-      "category": "fat_oil",
+      "category": "excipient",
       "notes": "Refined corn oil used as a carrier/filler in supplements. High omega-6 linoleic acid content (~55-60%) may contribute to pro-inflammatory eicosanoid production when omega-6/omega-3 ratio is elevated, but no direct toxicological mechanism at supplement carrier oil quantities. FDA GRAS (21 CFR 184.1245). Severity is low — this is a quality/formulation signal rather than a safety hazard.",
       "last_updated": "2026-03-24",
       "mechanism_of_harm": "High omega-6 linoleic acid content (~55-60%) contributes to pro-inflammatory eicosanoid production when dietary omega-6/omega-3 ratio is already elevated. Refining process may generate trace lipid oxidation products. No direct toxicological mechanism at supplement carrier oil quantities. Quality/formulation signal rather than acute hazard.",
@@ -4736,7 +4739,7 @@
         "tapioca dextrose",
         "dextrose monohydrate"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "mechanism_of_harm": "Rapidly absorbed glucose that spikes blood sugar and insulin. Excess intake contributes to metabolic dysfunction and dental caries.",
       "regulatory_status": {
         "US": "FDA GRAS status"
@@ -5031,7 +5034,7 @@
         "mannose powder",
         "pure d-mannose"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "notes": "D-Mannose is a natural simple sugar with evidence-based use for urinary tract health (prevents E. coli adhesion to bladder wall). As a supplement active it is legitimate and tracked in IQM. Penalized here only when used as a bulking sweetener in non-UTI products, where it adds empty sugar calories. Low severity because the sugar load per serving is typically small in supplement contexts.",
       "last_updated": "2026-03-24",
       "mechanism_of_harm": "D-Mannose is a naturally occurring simple sugar found in cranberries and other fruits. When used as a supplement active ingredient (e.g., for urinary tract health), it is legitimate — it prevents E. coli adhesion to bladder wall. However, when used as a bulk sweetener or filler in other supplements, it adds unnecessary sugar calories with high glycemic impact.",
@@ -5876,7 +5879,7 @@
         "iron oxide yellow",
         "iron oxide black"
       ],
-      "category": "colorant",
+      "category": "colorant_natural",
       "mechanism_of_harm": "Inorganic colorant (Fe2O3/Fe3O4) used in supplement capsule and tablet coatings. Iron from oxide colorants is poorly bioavailable and does not meaningfully contribute to iron intake. Primary concern is nanoparticle exposure: EFSA has requested additional characterization data on particle size distribution in E172. No evidence of systemic toxicity at approved use levels (max 5 mg elemental Fe/day from colorants).",
       "regulatory_status": {
         "US": "FDA approved for dietary supplement tablets and capsules (21 CFR 73.1200, effective 2018-12-04). Limit: 5 mg elemental iron/day from color additive use. Exempt from batch certification.",
@@ -6846,7 +6849,7 @@
         "larixinic acid",
         "maltol flavoring"
       ],
-      "category": "flavor",
+      "category": "excipient",
       "mechanism_of_harm": "Naturally occurring flavor enhancer (found in larch bark, chicory, roasted malt). Enhances sweetness perception at sub-threshold concentrations. No evidence of toxicity at food/supplement use levels. JECFA established ADI 0-1 mg/kg bw/day.",
       "regulatory_status": {
         "US": "FDA: permitted as synthetic flavoring substance and adjuvant (21 CFR 172.515).",
@@ -7622,7 +7625,7 @@
         "accent",
         "vetsin"
       ],
-      "category": "flavor",
+      "category": "excipient",
       "mechanism_of_harm": "Provides glutamate for umami taste receptors. Excitotoxicity concerns are theoretical at supplement doses; human pharmacokinetic data does not support significant elevation of systemic glutamate at normal dietary intake. Self-reported 'MSG sensitivity' is not consistently reproduced in double-blind placebo-controlled conditions.",
       "regulatory_status": {
         "US": "FDA GRAS status but requires labeling",
@@ -8439,7 +8442,7 @@
         "refined palm oil",
         "crude palm oil"
       ],
-      "category": "fat_oil",
+      "category": "excipient",
       "mechanism_of_harm": "High in saturated fat (~50% palmitic acid) which may raise LDL cholesterol. Refined palm oil can contain 3-MCPD and glycidyl ester contaminants formed during high-temperature processing. EFSA 2018 identified glycidyl esters as genotoxic and carcinogenic. In supplement context, amounts are small (capsule coatings, softgel fill) but flagged as quality signal.",
       "regulatory_status": {
         "US": "FDA GRAS. No specific CFR listing (common food ingredient).",
@@ -10166,7 +10169,7 @@
         "purefruit",
         "pure fruit select"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "mechanism_of_harm": "Proprietary fruit-based sweetener concentrate. While derived from natural sources, still functions as added sugar in supplement formulation. Limited independent safety data for concentrated form.",
       "regulatory_status": {
         "US": "Not separately evaluated by FDA",
@@ -11182,7 +11185,7 @@
         "SlimSweet(R)",
         "Slim Sweet(R)"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "mechanism_of_harm": "Proprietary sweetener blend with limited publicly available safety data. Proprietary formulations make independent verification of ingredients difficult. May contain undisclosed sweetener compounds.",
       "regulatory_status": {
         "US": "Not separately evaluated by FDA",
@@ -15529,7 +15532,7 @@
         "ethyl vanillin",
         "vanillin powder"
       ],
-      "category": "flavor",
+      "category": "excipient",
       "mechanism_of_harm": "Flavoring compound that may be synthetically produced (from petrochemicals or wood pulp lignin). Even 'natural' vanillin may be produced via bioengineered fermentation rather than vanilla bean extraction. Purely cosmetic additive with no nutritional benefit.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 182.60) as synthetic flavoring substance.",
@@ -16075,7 +16078,7 @@
         "butylated hydroxyanisole",
         "butylated hydroxyanisole (bha)"
       ],
-      "category": "preservative_antioxidant",
+      "category": "preservative",
       "severity_level": "high",
       "reason": "A petroleum-derived antioxidant classified as a possible human carcinogen (IARC Group 2B). It is also an endocrine disruptor that can accumulate in body fat. 2024 research continues to raise concerns about long-term exposure effects.",
       "match_rules": {
@@ -16228,7 +16231,7 @@
         "2,6-di-tert-butyl-p-cresol",
         "butylated hydroxytoluene (bht)"
       ],
-      "category": "preservative_antioxidant",
+      "category": "preservative",
       "severity_level": "moderate",
       "reason": "A petroleum-derived preservative that is a potential allergen and has been linked to liver, kidney, and thyroid issues in animal studies. Often used in combination with BHA for synergistic antioxidant effects. 2024 research continues to raise concerns about long-term exposure.",
       "match_rules": {
@@ -16369,7 +16372,7 @@
         "coconut oil hydrogenated",
         "coconut oil (partially hydrogenated)"
       ],
-      "category": "fat_oil",
+      "category": "excipient",
       "severity_level": "high",
       "reason": "MODERATE RISK: Hydrogenation process creates trans fats in coconut oil. Unlike natural coconut oil, hydrogenated form contains harmful trans fatty acids that increase cardiovascular disease risk and inflammation. FDA has banned partially hydrogenated oils in foods.",
       "match_rules": {
@@ -16831,7 +16834,7 @@
         "artificial antioxidants",
         "synthetic antioxidants"
       ],
-      "category": "preservative_antioxidant",
+      "category": "preservative",
       "severity_level": "high",
       "reason": "Used to prevent oxidation but may have unintended biological effects. Some forms banned in certain countries due to safety concerns.",
       "match_rules": {
@@ -16951,7 +16954,7 @@
         "MTBHQ",
         "tertiary butylhydroquinone (tbhq)"
       ],
-      "category": "preservative_antioxidant",
+      "category": "preservative",
       "severity_level": "high",
       "reason": "A petroleum-derived preservative linked to vision disturbances, liver enlargement, and DNA damage in studies. May harm the immune system. Not approved in Japan. Increasingly avoided despite FDA approval.",
       "match_rules": {
@@ -17089,7 +17092,7 @@
         "corn oil (partially hydrogenated)",
         "hydrogenated corn oil"
       ],
-      "category": "fat_oil",
+      "category": "excipient",
       "severity_level": "high",
       "reason": "Moderate risk: partially hydrogenated oils are the major industrial source of artificial trans fat and are no longer GRAS for food use under FDA action.",
       "match_rules": {
@@ -17718,7 +17721,7 @@
         "D-fructose",
         "fructose syrup"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "mechanism_of_harm": "Metabolized primarily by the liver via fructokinase, bypassing phosphofructokinase regulation. Excessive intake drives de novo lipogenesis, uric acid production, and insulin resistance. Chronic high intake contributes to non-alcoholic fatty liver disease (NAFLD), visceral fat accumulation, and elevated triglycerides.",
       "regulatory_status": {
         "US": "FDA GRAS (21 CFR 184.1857). No specific intake limit.",
@@ -17895,7 +17898,7 @@
         "glucose-fructose syrup",
         "isoglucose"
       ],
-      "category": "sweetener",
+      "category": "sweetener_natural",
       "mechanism_of_harm": "Industrially processed mixture of glucose and fructose (typically 42-55% fructose) derived from corn starch. Same hepatic fructose metabolism concerns as crystalline fructose, compounded by ubiquitous use leading to higher aggregate exposure. Associated with obesity, metabolic syndrome, and NAFLD in epidemiological studies. Higher GI than pure fructose (~65-73 depending on formulation).",
       "regulatory_status": {
         "US": "FDA GRAS. FDA rejected petition to rename HFCS to 'corn sugar' (2012).",
@@ -18598,7 +18601,7 @@
       ],
       "severity_level": "moderate",
       "penalty_points": -1.0,
-      "category": "artificial_color",
+      "category": "colorant_artificial",
       "notes": "Generic FD&C aluminum lake without specific color identification. Aluminum lakes are water-insoluble forms of FD&C dyes adsorbed onto alumina substrate. All specific FD&C aluminum lakes carry moderate severity. When the specific color is not labeled, the generic penalty applies.",
       "entity_type": "ingredient",
       "external_ids": {},
