@@ -137,6 +137,9 @@ C_FAMILY = [
     ("C10", "ingredient_quality_map",   "citrus_bergamot",      "oral_contraceptives",     "monitor"),
     # 2E partial — goldenseal CYP2D6 extension (clinician C5 mechanism noted "Also affects CYP2D6")
     ("C5b", "ingredient_quality_map",   "goldenseal",           "cyp2d6_substrates",       "avoid"),
+    # 2E follow-up (clinician email 2026-04-30)
+    ("E1",  "botanical_ingredients",    "bupleurum_root",       "cyp2d6_substrates",       "caution"),
+    ("E2",  "ingredient_quality_map",   "st_johns_wort",        "cyp2d6_substrates",       "monitor"),
 ]
 
 

@@ -19,7 +19,7 @@
 | 2B. MAO inhibitors (M1-M8) | ✓ SHIPPED | all 8 applied (M2 tyramine shipped via new harmful_additives entry ADD_TYRAMINE_RICH_EXTRACT) |
 | 2C. Lithium (L1-L7) | ✓ SHIPPED | all 7 applied |
 | 2D. CYP3A4 / grapefruit (C1-C10) | ✓ SHIPPED | all 10 applied (C1-C3, C8-C10 use citrus_bergamot subject_ref) |
-| 2E. CYP2D6 (partial) | ✓ SHIPPED (partial) | goldenseal × cyp2d6_substrates added (extends C5; clinician C5 mechanism noted "Also affects CYP2D6"). Bupleurum + St. John's Wort × CYP2D6 still need clinician sign-off |
+| 2E. CYP2D6 | ✓ SHIPPED | goldenseal (C5b avoid), bupleurum_root (E1 caution), st_johns_wort high-dose (E2 monitor). Clinician email 2026-04-30 closed the open severities. |
 | 3C. Pregnancy/lactation hybrid gap-fill | ✓ SHIPPED | 100% coverage (10 Option A, 7 Option B, 88 Option C) |
 | 3D. Schema additions | ✓ SHIPPED | evidence_level field present on every rule; canonical enum: no_data / limited / moderate / strong (legacy: established / probable / theoretical accepted) |
 | 4. Severity vocab JSON (V1.1) | DEFERRED | covered by REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md P0 batch |
@@ -36,8 +36,11 @@
 - **`harmful_additives.ADD_TYRAMINE_RICH_EXTRACT`** — covers aged-yeast, fermented bovine, biogenic-amine extracts; severity_level=high; population_warning targets MAOI users.
 - standardized_botanicals.bromelain `attributes.no_iqm_parent_reason` removed; `attributes.iqm_parent_id: bromelain` added (matches §5b.1 pattern).
 
-**Still deferred (clinician sign-off required):**
-- **2E broader CYP2D6 rules** — Bupleurum × CYP2D6 substrates and high-dose St. John's Wort × CYP2D6 substrates. Clinician scoped these to "next batch" without per-rule severity locks; not authored here. Goldenseal CYP2D6 is the only 2E rule shipped because the C5 clinician text already documented the mechanism.
+**Still deferred:** none — all clinician-locked sections shipped as of 2026-04-30.
+
+**2E CYP2D6 follow-up (clinician email 2026-04-30):**
+- **E1 Bupleurum × CYP2D6 substrates → caution** — saikosaponins inhibit CYP2D6 in vitro/animal models; clinical evidence limited. Subject_ref `botanical_ingredients.bupleurum_root`. Action verb: "consider discussing" (encouragement-toned for caution tier per clinician note). Pregnancy=caution (emmenagogue activity in TCM literature), lactation=no_data.
+- **E2 St. John's Wort high-dose × CYP2D6 substrates → monitor** — at ≥900 mg/day standardized extract; effect direction is mixed (some induction, some weak inhibition reported). Distinct from the dominant CYP3A4 contraindication (C4) — severity gap is intentional and must not be harmonized. Action verb: "your prescriber may want to monitor for changes in drug effect" (monitor-tier action, not avoidance). Pregnancy/lactation mirror existing C4 SJW values (avoid/caution).
 
 ---
 

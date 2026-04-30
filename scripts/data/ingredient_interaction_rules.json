@@ -4,9 +4,9 @@
     "purpose": "interaction_alert_rules",
     "schema_version": "5.3.0",
     "last_updated": "2026-04-30",
-    "total_entries": 144,
+    "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
-    "total_rules": 144,
+    "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
     "flutter_schema_version": "5.3.0",
     "migration": {
@@ -2573,6 +2573,20 @@
           "alert_headline": "May cause contraception failure",
           "alert_body": "If you take oral contraceptives, do not combine with this product. St. John's Wort lowers the level of birth-control pills in your blood and can lead to unintended pregnancy.",
           "informational_note": "St. John's Wort reduces oral contraceptive efficacy."
+        },
+        {
+          "drug_class_id": "cyp2d6_substrates",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "At ≥900 mg/day standardized extract, SJW has measurable CYP2D6 effect — the direction is mixed across studies (some induction, some weak inhibition reported). This is distinct from SJW's dramatic and consistent CYP3A4 induction (see contraindicated rule with CYP3A4-substrate drugs). Effect at typical lower doses is not clinically significant.",
+          "action": "If you take a CYP2D6-substrate prescription drug at high-dose St. John's Wort (≥900 mg/day), your prescriber may want to monitor for changes in drug effect. The CYP3A4 interaction at any dose is the dominant clinical concern — see the existing contraindication.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/10976546/",
+            "https://pubmed.ncbi.nlm.nih.gov/15054636/"
+          ],
+          "alert_headline": "High-dose may shift drug levels",
+          "alert_body": "If you take a CYP2D6-substrate prescription drug, your prescriber may want to monitor for changes in drug effect at high-dose St. John's Wort (≥900 mg/day).",
+          "informational_note": "SJW at ≥900 mg/day has mixed-direction CYP2D6 effect — distinct from its dominant CYP3A4 induction."
         }
       ],
       "dose_thresholds": [],
@@ -10105,6 +10119,43 @@
         "alert_headline": "Talk to your clinician",
         "alert_body": "Concentrated tyramine sources can elevate blood pressure and sympathetic tone. Discuss with your obstetrician or pediatrician before use during pregnancy or breastfeeding.",
         "informational_note": "Tyramine elevates sympathetic tone — pregnancy/lactation guidance recommended."
+      },
+      "last_reviewed": "2026-04-30",
+      "review_owner": "pharmaguide_clinical_team"
+    },
+    {
+      "id": "RULE_BOTAN_BUPLEURUM_CYP2D6",
+      "subject_ref": {
+        "db": "botanical_ingredients",
+        "canonical_id": "bupleurum_root"
+      },
+      "condition_rules": [],
+      "drug_class_rules": [
+        {
+          "drug_class_id": "cyp2d6_substrates",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Saikosaponins inhibit CYP2D6 in vitro and in animal models. Clinical evidence in humans is limited but consistent in mechanism. Bupleurum often appears in multi-herb TCM formulas (Xiao Yao San, Bupleurum & Dragon Bone) where users may not recognize it on the ingredient label.",
+          "action": "If you take a CYP2D6-substrate prescription drug, consider discussing this supplement with your prescriber. Especially relevant for many SSRIs/SNRIs, tricyclics, codeine, tramadol, and tamoxifen.",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/24509137/",
+            "https://pubmed.ncbi.nlm.nih.gov/19548302/"
+          ],
+          "alert_headline": "May affect prescription drug levels",
+          "alert_body": "If you take a CYP2D6-substrate prescription drug, consider discussing bupleurum with your prescriber. Bupleurum may slow how some antidepressants and pain medications are processed.",
+          "informational_note": "Bupleurum inhibits CYP2D6 in preclinical evidence — relevant to anyone on antidepressants, opioids, or tamoxifen."
+        }
+      ],
+      "dose_thresholds": [],
+      "pregnancy_lactation": {
+        "pregnancy_category": "caution",
+        "lactation_category": "no_data",
+        "evidence_level": "limited",
+        "mechanism": "Emmenagogue activity in TCM literature; limited modern safety data in pregnancy. Lactation safety data absent.",
+        "notes": "Use caution in pregnancy due to traditional emmenagogue activity. Lactation safety not established — clinician guidance recommended.",
+        "alert_headline": "Talk to your clinician",
+        "alert_body": "Bupleurum has traditional emmenagogue activity and limited safety data in pregnancy. Talk to your obstetrician before use during pregnancy or breastfeeding.",
+        "informational_note": "Bupleurum has limited pregnancy safety data — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"

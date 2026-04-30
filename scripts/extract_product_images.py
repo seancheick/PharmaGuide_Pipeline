@@ -36,10 +36,17 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 PDF_CACHE_DIR = "/tmp/dsld_pdf_cache"
-MAX_CONCURRENT_DOWNLOADS = 5
-BATCH_DELAY_SECONDS = 0.5
+MAX_CONCURRENT_DOWNLOADS = 2
+BATCH_DELAY_SECONDS = 1.5
 WEBP_QUALITY = 80
 MAX_WIDTH_PX = 600
+
+# Retry / rate-limit handling
+HTTP_USER_AGENT = "PharmaGuide-DataPipeline/1.0 (+https://github.com/seancheick/dsld_clean)"
+HTTP_TIMEOUT_SECONDS = 30
+MAX_RETRIES = 4
+RETRY_BACKOFF_BASE_SECONDS = 5  # 5s, 15s, 45s, 135s
+RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
 
 # ---------------------------------------------------------------------------
 # PDF download
@@ -55,19 +62,55 @@ def cached_pdf_path(dsld_id: str) -> str:
 
 
 def download_pdf(dsld_id: str, url: str) -> str:
-    """Download PDF to cache. Returns path on success, raises on failure."""
+    """Download PDF to cache with retry/backoff. Returns path on success, raises on failure."""
     import requests
 
     dest = cached_pdf_path(dsld_id)
     if os.path.exists(dest) and os.path.getsize(dest) > 0:
         return dest
 
-    resp = requests.get(url, timeout=30)
-    resp.raise_for_status()
+    headers = {"User-Agent": HTTP_USER_AGENT}
+    last_exc = None
 
-    with open(dest, "wb") as f:
-        f.write(resp.content)
-    return dest
+    for attempt in range(MAX_RETRIES):
+        try:
+            resp = requests.get(url, timeout=HTTP_TIMEOUT_SECONDS, headers=headers)
+
+            if resp.status_code in RETRYABLE_STATUS_CODES:
+                # Honor Retry-After header if present (seconds form), else exponential backoff
+                retry_after = resp.headers.get("Retry-After")
+                if retry_after and retry_after.isdigit():
+                    sleep_for = int(retry_after)
+                else:
+                    sleep_for = RETRY_BACKOFF_BASE_SECONDS * (3 ** attempt)
+                if attempt < MAX_RETRIES - 1:
+                    logger.info("HTTP %d on %s, retrying in %ds (attempt %d/%d)",
+                                resp.status_code, dsld_id, sleep_for, attempt + 1, MAX_RETRIES)
+                    time.sleep(sleep_for)
+                    continue
+                resp.raise_for_status()  # final attempt — raise
+
+            resp.raise_for_status()
+
+            # Atomic write: temp file + rename to avoid corrupt cache on interrupt
+            tmp_dest = dest + ".tmp"
+            with open(tmp_dest, "wb") as f:
+                f.write(resp.content)
+            os.replace(tmp_dest, dest)
+            return dest
+
+        except requests.exceptions.RequestException as exc:
+            last_exc = exc
+            if attempt < MAX_RETRIES - 1:
+                sleep_for = RETRY_BACKOFF_BASE_SECONDS * (3 ** attempt)
+                logger.info("Network error on %s: %s — retrying in %ds (attempt %d/%d)",
+                            dsld_id, exc, sleep_for, attempt + 1, MAX_RETRIES)
+                time.sleep(sleep_for)
+                continue
+            raise
+
+    # Should be unreachable, but be defensive
+    raise last_exc if last_exc else RuntimeError(f"download_pdf exhausted retries for {dsld_id}")
 
 
 # ---------------------------------------------------------------------------
