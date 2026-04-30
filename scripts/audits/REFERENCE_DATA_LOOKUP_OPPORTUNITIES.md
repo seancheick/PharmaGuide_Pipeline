@@ -27,22 +27,42 @@ Each opportunity has:
 ## P0 — Highest ROI (do these first, ~5 vocabs)
 
 ### 1. 🔥 `verdict_vocab.json`
-- **Size:** 6 IDs (`BLOCKED`, `UNSAFE`, `CAUTION`, `POOR`, `SAFE`, `NOT_SCORED`)
+- **Size:** **5 IDs** — final canonical set per pipeline + Flutter alignment 2026-04-30: **`SAFE`, `CAUTION`, `POOR`, `BLOCKED`, `UNSAFE`** *(NOT_SCORED dropped — products that fail to score get sent to the review queue, not shipped)*
 - **Today:**
-  - Pipeline emits `verdict` field on every product blob
-  - Flutter renders via `verdict_badge.dart` lines 61-88 — **hardcoded label map in Dart**
-  - User-facing explanation copy currently inlined OR missing per verdict
+  - Pipeline emits `verdict` on every shipped product blob (NOT_SCORED → review queue, never reaches Flutter)
+  - Flutter renders via `verdict_badge.dart` lines 61-88 — **hardcoded label map in Dart** (just migrated to surface SAFE/CAUTION/POOR per Flutter sprint commit `bb621eb`; BLOCKED/UNSAFE shown via dedicated alert page)
+  - User-facing explanation copy currently inlined per verdict
 - **Vocab payload per entry:** display label, color/icon hint, when-to-show guidance, suggested user action, regulatory rationale
+- **Seed labels (clinician-reviewed by Flutter team, ready to ship):**
+  | ID | Display label | UX surface |
+  |---|---|---|
+  | `SAFE` | Safe | green chip + score badge |
+  | `CAUTION` | Caution | yellow chip + score badge |
+  | `POOR` | Poor | orange chip + score badge |
+  | `BLOCKED` | (blocked product alert page) | dedicated full-screen alert (existing page) |
+  | `UNSAFE` | (unsafe product alert page) | dedicated full-screen alert (existing page) |
 - **Why P0:** every product carries a verdict; user-facing copy currently scattered between Dart strings + blob `top_warnings` text. Centralizing locks the taxonomy + saves bytes.
+- **Pipeline contract reminder:** Flutter NEVER receives a NOT_SCORED verdict in shipped blobs. NOT_SCORED products live exclusively in the review queue. Vocab must NOT include NOT_SCORED — shipping it would be a dead ID.
 
 ### 2. 🔥 `severity_vocab.json`
-- **Size:** 6 IDs (`contraindicated`, `avoid`, `caution`, `monitor`, `safe`, `info`)
+- **Size:** 6 IDs — **canonical: `contraindicated`, `avoid`, `caution`, `monitor`, `informational`, `safe`** *(Flutter team locked `informational` over `info` per 2026-04-30 feedback — self-documenting, matches what's already shipped)*
 - **Today:**
-  - Pipeline files using it: `ingredient_interaction_rules` (437 occurrences across condition/drug/pregnancy/lactation), `allergens` (15), `harmful_additives` (59), `functional_ingredient_groupings` (7), `banned_recalled_ingredients`
-  - Flutter `lib/core/constants/severity.dart` — **enum-embedded labels**
+  - Pipeline files using `info` (**need pipeline-side rename to `informational` as prerequisite**): `ingredient_interaction_rules.json` (29 occurrences), `ingredient_interaction_rules_Reviewed.json` (9), `clinical_risk_taxonomy.json` (1) — **39 total renames**
+  - Plus Python emitters in `build_final_db.py` (~6 sites where `severity = "info"` is generated)
+  - Flutter `lib/core/constants/severity.dart` — **enum-embedded labels (already canonical at `informational`)**
   - UX color/icon mapping currently scattered in widgets
 - **Vocab payload per entry:** display label, action verb (e.g. "Do not use" / "Use caution"), color hint, icon hint, plain-English description
+- **Seed labels (clinician-reviewed by Flutter team, ready to ship):**
+  | ID | Display label |
+  |---|---|
+  | `contraindicated` | Do not use |
+  | `avoid` | Not recommended |
+  | `caution` | Use caution |
+  | `monitor` | Monitor |
+  | `informational` | Informational |
+  | `safe` | Safe |
 - **Why P0:** This is the most-repeated descriptive token in the entire blob ecosystem. Every interaction warning, every allergen flag, every banned-recalled hit references one of 6 severity values. Centralizing pays for itself many times over.
+- **Prerequisite work:** rename `info` → `informational` across 39 data-file occurrences + ~6 Python emitter sites + any tests pinning the old value. ~0.5 day. Must land before vocab ships.
 
 ### 3. 🔥 `condition_vocab.json`
 - **Size:** ~14-20 IDs (`pregnancy`, `lactation`, `kidney_disease`, `liver_disease`, `hypertension`, `diabetes`, etc.)
@@ -174,11 +194,47 @@ Each opportunity has:
 
 | Tier | Vocabs | Total vocab size (asset) | Per-blob savings | Implementation effort |
 |---|---|---|---|---|
-| P0 (5) | verdict, severity, condition, drug_class, user_goals | ~25 KB total | ~50-100 bytes/warning × ~5-10 warnings/product = **0.5-1 KB/blob** | 5-7 days |
+| P0 (5) | verdict (5 IDs), severity (6 IDs), condition (~14), drug_class (~13), user_goals (~18) | ~25 KB total | ~50-100 bytes/warning × ~5-10 warnings/product = **0.5-1 KB/blob** | 5-7 days **+ 0.5d severity rename prereq** |
 | P1 (10) | evidence_level, study_type, clinical_indication, iqm_category, banned_status, clinical_risk, legal_status, ban_context, effect_direction, signal_strength | ~40 KB total | ~30-60 bytes per affected blob | 7-10 days |
 | P2 (9) | allergen_prevalence, allergen_regulatory, manufacturer_trust, efsa_status, efsa_genotoxicity, match_mode, confidence_tier, score_contribution_tier, primary_outcome | ~30 KB total | ~10-30 bytes/blob | 5-7 days |
 
 **Net Flutter asset bundle:** all 24 vocabs ≈ **95 KB** (one-time per app install). **Net per-blob savings:** ~1-2 KB/product × millions of blobs = **multi-GB catalog savings**.
+
+---
+
+## Sequencing & co-render rules (per Flutter team feedback 2026-04-30)
+
+### Ship `severity_vocab` + `verdict_vocab` in the SAME release
+
+These two vocabs co-render on multiple Flutter surfaces — `alert_summary_card`, `severity_pill`, `banner`, `score_breakdown_card`. Shipping one without the other leaves **mixed-source labels on a single screen** (some from vocab, some from old hardcoded Dart maps) which looks like a regression.
+
+**Rule:** P0 #1 (verdict) and P0 #2 (severity) must merge to main + ship to Flutter as a single coordinated release. If only one is ready, defer both.
+
+### Migration test seed (mandatory per vocab)
+
+When migrating a hardcoded Flutter label map to a vocab asset, add a **drift contract test** that asserts every formerly-hardcoded label EQUALS its `vocab[id].name` post-migration. This catches accidental copy drift during cutover.
+
+Template (Dart side):
+```dart
+// test/contract/severity_vocab_drift_test.dart
+test('severity_vocab labels match severity.dart enum (no drift during cutover)', () async {
+  final vocab = await loadSeverityVocab();
+  expect(vocab['contraindicated'].name, 'Do not use');
+  expect(vocab['avoid'].name,           'Not recommended');
+  expect(vocab['caution'].name,         'Use caution');
+  expect(vocab['monitor'].name,         'Monitor');
+  expect(vocab['informational'].name,   'Informational');
+  expect(vocab['safe'].name,            'Safe');
+});
+```
+
+This test is the cutover safety net — keeps both sources of truth in lockstep until the hardcoded map is physically removed from Dart code.
+
+### `ReferenceDataRepository` parallel-load capability check
+
+The Flutter `ReferenceDataRepository` (`lib/data/repositories/reference_data_repository.dart`) already exists with per-asset caching, but **confirm it supports parallel cold-start fetch** (e.g. `Future.wait([_loadJson(a), _loadJson(b), ...])` in `init()`) before P0 ships. Otherwise 5 sequential P0 asset loads on app boot = noticeable first-render delay (5 × ~10 KB load + parse).
+
+If the loader is sequential today, adding a `Future.wait` is a one-line fix; the catalog currently assumes parallel-load is supported.
 
 ---
 
