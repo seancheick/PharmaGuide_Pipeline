@@ -59,8 +59,7 @@ BROMELAIN_IQM = {
                 "pineapple enzyme",
                 "pineapple bromelain",
                 "stem bromelain",
-                "fruit bromelain",
-            ],
+                "fruit bromelain"],
             "dosage_importance": 1.0,
         },
     },
@@ -90,8 +89,7 @@ TYRAMINE_HARMFUL = {
         "fermented bovine extract",
         "biogenic amine extract",
         "tyramine-containing extract",
-        "fermented protein hydrolysate",
-    ],
+        "fermented protein hydrolysate"],
     "category": "biogenic_amine",
     "mechanism_of_harm": "Tyramine is a sympathomimetic biogenic amine. Combined with MAO-inhibitor medication, dietary or supplemental tyramine produces hypertensive crisis ('cheese reaction') — severe blood-pressure spike with documented fatalities. Concentrated in aged, fermented, and bacterially-processed extracts (aged-yeast, fermented bovine, certain protein hydrolysates).",
     "regulatory_status": {
@@ -101,16 +99,14 @@ TYRAMINE_HARMFUL = {
     },
     "population_warnings": [
         "Anyone taking MAO inhibitors (phenelzine, tranylcypromine, isocarboxazid, selegiline) — contraindicated; severe hypertensive reaction risk",
-        "Anyone with hypertension — concentrated tyramine sources elevate sympathetic tone",
-    ],
+        "Anyone with hypertension — concentrated tyramine sources elevate sympathetic tone"],
     "notes": "Tyramine itself is not toxic at dietary levels in most people; the safety issue is exclusively the MAOI interaction. Fermented and aged supplement extracts can contain markedly higher tyramine than fresh ingredients. See ingredient_interaction_rules for the MAOI rule.",
     "severity_level": "high",
     "confidence": "high",
     "evidence_basis": "Established pharmacological interaction (Gillman 2018 Br J Clin Pharmacol; Shulman 2013 Drug Saf).",
     "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/29380410/",
-        "https://www.efsa.europa.eu/en/efsajournal/pub/2393",
-    ],
+        
+        "https://www.efsa.europa.eu/en/efsajournal/pub/2393"],
 }
 
 
@@ -125,8 +121,7 @@ W10_BROMELAIN_RULE = {
     "mechanism": "Mild fibrinolytic / antiplatelet activity at high dose (≥500 mg/day). Bromelain enhances plasmin generation and modestly inhibits platelet aggregation. Clinical bleeding events with warfarin are rare but documented in case reports.",
     "action": "If you take warfarin or an antiplatelet, mention bromelain supplements ≥500 mg/day to your prescriber. Watch for unusual bruising or bleeding.",
     "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/11577981/",
-    ],
+        "https://pubmed.ncbi.nlm.nih.gov/11577981/"],
     "alert_headline": "Mild bleeding risk at high dose",
     "alert_body": "High-dose bromelain (500 mg/day or more) has mild blood-thinning activity. Combined with warfarin or antiplatelet drugs, this can slightly raise bleeding risk.",
     "informational_note": "Bromelain has fibrinolytic activity at clinical doses — relevant to anyone on blood thinners.",
@@ -138,9 +133,7 @@ M2_TYRAMINE_RULE = {
     "evidence_level": "established",
     "mechanism": "Tyramine is a sympathomimetic biogenic amine and MAO substrate. With MAO-inhibitor medication, ingested tyramine cannot be metabolized normally, producing massive norepinephrine release and severe hypertensive crisis ('cheese reaction'). Documented fatalities in the clinical literature.",
     "action": "Do not combine tyramine-rich extracts with MAOIs. Read supplement labels for aged-yeast, fermented bovine, or tyramine-containing protein hydrolysates if you take an MAOI.",
-    "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/29380410/",
-    ],
+    "sources": [],
     "alert_headline": "Do not combine with MAOIs",
     "alert_body": "Tyramine-rich supplement extracts combined with MAO-inhibitor antidepressants can cause a life-threatening blood pressure spike. This is the same 'cheese reaction' that requires dietary restrictions on MAOIs.",
     "informational_note": "Tyramine is the classic MAOI dietary contraindication — relevant to anyone on phenelzine, tranylcypromine, isocarboxazid, or selegiline.",
@@ -152,9 +145,7 @@ GOLDENSEAL_CYP2D6_RULE = {
     "evidence_level": "established",
     "mechanism": "Berberine and hydrastine inhibit CYP2D6 in addition to CYP3A4. CYP2D6 metabolizes a large class of psychiatric drugs (many SSRIs, tricyclics), opioids (codeine, tramadol — for activation), and tamoxifen.",
     "action": "If you take a CYP2D6-substrate prescription drug, avoid goldenseal unless your prescriber clears it. Especially relevant for codeine, tramadol, tamoxifen, paroxetine, and fluoxetine.",
-    "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/18180278/",
-    ],
+    "sources": [],
     "alert_headline": "Affects how many drugs are processed",
     "alert_body": "Goldenseal blocks the CYP2D6 enzyme that activates codeine and tramadol and metabolizes many antidepressants. This can change the effectiveness or side-effect profile of those drugs.",
     "informational_note": "Goldenseal inhibits CYP2D6 in addition to CYP3A4 — relevant to anyone on antidepressants, opioids for pain, or tamoxifen.",
@@ -258,8 +249,7 @@ def main():
                 "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
                 "alert_headline": "Limited safety data",
                 "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-                "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-                "sources": [],
+                "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
             },
             "last_reviewed": "2026-04-30",
             "review_owner": "pharmaguide_clinical_team",
@@ -285,8 +275,7 @@ def main():
                 "notes": "Concentrated tyramine extracts may elevate sympathetic tone — talk to your clinician before use during pregnancy or breastfeeding.",
                 "alert_headline": "Talk to your clinician",
                 "alert_body": "Concentrated tyramine sources can elevate blood pressure and sympathetic tone. Discuss with your obstetrician or pediatrician before use during pregnancy or breastfeeding.",
-                "informational_note": "Tyramine elevates sympathetic tone — pregnancy/lactation guidance recommended.",
-                "sources": [],
+                "informational_note": "Tyramine elevates sympathetic tone — pregnancy/lactation guidance recommended."
             },
             "last_reviewed": "2026-04-30",
             "review_owner": "pharmaguide_clinical_team",

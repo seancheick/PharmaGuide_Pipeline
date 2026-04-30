@@ -210,9 +210,9 @@ def fill_pregnancy_lactation(pl: dict, classification: str) -> bool:
             pl["informational_note"] = OPTION_C_INFO_NOTE
             changed = True
 
-    if "sources" not in pl:
-        pl["sources"] = []
-        changed = True
+    # Don't synthesize an empty sources: [] list — db_integrity rejects empty
+    # arrays as missing_or_non_list. Sources are optional; absent or populated
+    # are both valid.
     return changed
 
 

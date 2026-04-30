@@ -458,7 +458,8 @@
           "mechanism": "Additive glucose-lowering comparable to metformin. Also inhibits CYP3A4/CYP2D6, potentially increasing drug levels of co-administered medications.",
           "action": "Avoid unsupervised co-administration. Requires clinician-guided glucose monitoring and potential dose adjustment.",
           "sources": [
-            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know",
+            "https://medlineplus.gov/druginfo/natural/1126.html"
           ],
           "alert_headline": "May boost your diabetes medication",
           "alert_body": "Berberine lowers blood sugar with effects comparable to metformin. If you take a diabetes medication, monitor glucose closely and talk to your prescriber before adding berberine.",
@@ -472,7 +473,7 @@
           "action": "Avoid combining berberine with high-dose CYP3A4-metabolized statins without prescriber oversight. If combined, start with lower statin doses and monitor for muscle symptoms (myalgia, weakness, dark urine).",
           "sources": [
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
-            "https://pubmed.ncbi.nlm.nih.gov/26312811/"
+            "https://medlineplus.gov/druginfo/natural/1126.html"
           ],
           "alert_headline": "May affect statin tolerability",
           "alert_body": "Berberine shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding berberine and watch for new muscle aches.",
@@ -486,7 +487,7 @@
           "action": "Avoid combining berberine with MAOIs. If transitioning from MAOI to berberine-containing supplements, observe a minimum 14-day washout. Alert prescriber to use.",
           "sources": [
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science",
-            "https://pubmed.ncbi.nlm.nih.gov/26312811/"
+            "https://medlineplus.gov/druginfo/natural/1126.html"
           ],
           "alert_headline": "Potential interaction with MAOI antidepressants",
           "alert_body": "Berberine has shown MAO-inhibiting activity in laboratory studies. If you take an MAOI antidepressant, talk to your prescriber before adding berberine.",
@@ -499,7 +500,7 @@
           "mechanism": "In-vitro CYP3A4 inhibition; clinical effect modest at typical doses (≥500 mg/day). Increasingly common in metabolic-health supplements.",
           "action": "If you take a CYP3A4-substrate prescription drug, talk to your prescriber before adding a berberine supplement.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/22931302/"
+            "https://medlineplus.gov/druginfo/natural/1126.html"
           ],
           "alert_headline": "May affect prescription drug levels",
           "alert_body": "Berberine can mildly slow the breakdown of certain prescription drugs. Mention berberine use to your prescriber if you take other medications.",
@@ -699,7 +700,8 @@
           "mechanism": "Caffeine increases renal clearance of lithium → reduced levels and reduced efficacy. Withdrawal of caffeine raises levels → toxicity risk. Bidirectional risk: keep caffeine intake CONSISTENT, not just low.",
           "action": "If you take lithium, keep your daily caffeine intake steady. Sudden increases or decreases in caffeine can change your lithium levels.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/7775360/"
+            "https://medlineplus.gov/caffeine.html",
+            "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much"
           ],
           "alert_headline": "Keep caffeine intake consistent",
           "alert_body": "Caffeine changes how your kidneys clear lithium. Big changes in coffee, tea, or caffeine pill use can swing lithium levels in either direction. Talk to your prescriber if your caffeine habits are c...",
@@ -889,7 +891,8 @@
           "mechanism": "Coumarin content plus antiplatelet phytochemicals. Multiple case reports of INR elevation in patients on warfarin.",
           "action": "If you take warfarin or an antiplatelet, avoid dong quai unless cleared by your prescriber.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/10440462/"
+            "https://www.nccih.nih.gov/health/dong-quai",
+            "https://medlineplus.gov/druginfo/natural/936.html"
           ],
           "alert_headline": "Bleeding risk with blood thinners",
           "alert_body": "If you take anticoagulants, do not combine with this product. Dong quai contains natural coumarins and antiplatelet compounds. Combined with warfarin, this can dangerously raise INR.",
@@ -1173,7 +1176,8 @@
           "mechanism": "Allicin/ajoene give garlic mild antiplatelet activity at supplement doses (≥600 mg/day extract). Standalone risk modest; severity escalates when combined with antiplatelets.",
           "action": "If you take warfarin or an antiplatelet, monitor for bruising or bleeding when adding a garlic supplement.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17875983/"
+            "https://www.nccih.nih.gov/health/garlic",
+            "https://medlineplus.gov/druginfo/natural/300.html"
           ],
           "alert_headline": "Mild bleeding risk with blood thinners",
           "alert_body": "High-dose garlic supplements can mildly thin the blood. Combined with warfarin or aspirin-type drugs, this can increase bleeding risk.",
@@ -1186,7 +1190,8 @@
           "mechanism": "Potential additive platelet inhibition.",
           "action": "Monitor for bruising or bleeding.",
           "sources": [
-            "https://www.nccih.nih.gov/health/garlic"
+            "https://www.nccih.nih.gov/health/garlic",
+            "https://medlineplus.gov/druginfo/natural/300.html"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Garlic has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding garlic.",
@@ -1199,7 +1204,8 @@
           "mechanism": "Additive blood pressure lowering may cause symptomatic hypotension.",
           "action": "Monitor BP when combining garlic supplements with antihypertensive medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/garlic"
+            "https://www.nccih.nih.gov/health/garlic",
+            "https://medlineplus.gov/druginfo/natural/300.html"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Garlic can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding garlic.",
@@ -1213,7 +1219,7 @@
           "action": "Monitor lipid levels when combining garlic supplements with statin therapy. Report any muscle symptoms.",
           "sources": [
             "https://www.nccih.nih.gov/health/garlic",
-            "https://pubmed.ncbi.nlm.nih.gov/38659110/"
+            "https://medlineplus.gov/druginfo/natural/300.html"
           ],
           "alert_headline": "May affect statin tolerability",
           "alert_body": "Garlic shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding garlic and watch for new muscle aches.",
@@ -1401,7 +1407,9 @@
           "mechanism": "Increases metabolism of calcium channel blockers, reducing their plasma levels and antihypertensive effect.",
           "action": "Monitor BP control when combining with calcium channel blockers.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/14598602/"
+            "https://pubmed.ncbi.nlm.nih.gov/14598602/",
+            "https://www.nccih.nih.gov/health/ginkgo",
+            "https://medlineplus.gov/druginfo/natural/333.html"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Ginkgo can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding ginkgo.",
@@ -1414,8 +1422,8 @@
           "mechanism": "Ginkgo inhibits platelet aggregation (PAF antagonism). Bleeding risk amplified with warfarin or antiplatelet therapy.",
           "action": "If you take warfarin, aspirin, or another antiplatelet/anticoagulant, avoid ginkgo unless your prescriber clears it.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/26604801/",
-            "https://pubmed.ncbi.nlm.nih.gov/9355003/"
+            "https://www.nccih.nih.gov/health/ginkgo",
+            "https://medlineplus.gov/druginfo/natural/333.html"
           ],
           "alert_headline": "Bleeding risk with blood thinners",
           "alert_body": "If you take anticoagulants, do not combine with this product. Ginkgo can thin the blood and may increase bleeding when combined with warfarin or antiplatelet medication.",
@@ -1428,7 +1436,8 @@
           "mechanism": "Additive antiplatelet effect via PAF inhibition combined with COX/ADP pathway inhibition from aspirin/clopidogrel.",
           "action": "Monitor for increased bruising or bleeding. Inform prescriber.",
           "sources": [
-            "https://www.nccih.nih.gov/health/ginkgo"
+            "https://www.nccih.nih.gov/health/ginkgo",
+            "https://medlineplus.gov/druginfo/natural/333.html"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Ginkgo has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding ginkgo.",
@@ -1517,7 +1526,8 @@
           "mechanism": "Mild additive glucose-lowering effect.",
           "action": "Monitor for hypoglycemia symptoms.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/25063071/"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://medlineplus.gov/druginfo/natural/1000.html"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
@@ -1530,7 +1540,8 @@
           "mechanism": "Mixed evidence — some studies show reduced INR (efficacy reduction); others null. Effect appears variable across products and individuals.",
           "action": "If you take warfarin, talk to your prescriber before using ginseng. INR may need re-checking after starting.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/15226167/"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://medlineplus.gov/druginfo/natural/1000.html"
           ],
           "alert_headline": "May affect warfarin levels",
           "alert_body": "Panax ginseng has mixed evidence for changing how warfarin works. INR monitoring is recommended if you start a ginseng supplement.",
@@ -1543,7 +1554,8 @@
           "mechanism": "Multiple case reports of hypertensive episodes when combined with MAOIs (especially phenelzine). Evidence is thinner than M1-M5 but real.",
           "action": "If you take an MAOI, talk to your prescriber before using Panax or American ginseng.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/3624381/"
+            "https://www.nccih.nih.gov/health/asian-ginseng",
+            "https://medlineplus.gov/druginfo/natural/1000.html"
           ],
           "alert_headline": "May raise blood pressure with MAOIs",
           "alert_body": "Panax ginseng combined with MAO-inhibitor antidepressants has been linked to high blood pressure in case reports.",
@@ -1608,7 +1620,8 @@
           "mechanism": "Strong CYP3A4 inhibitor in vitro and in vivo (berberine + hydrastine). Also affects CYP2D6.",
           "action": "If you take prescription drugs metabolized by CYP3A4 or CYP2D6, avoid goldenseal unless your prescriber clears it.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/18180278/"
+            "https://www.nccih.nih.gov/health/goldenseal",
+            "https://medlineplus.gov/druginfo/natural/943.html"
           ],
           "alert_headline": "Affects how many drugs are processed",
           "alert_body": "If you take cyp3a4 substrates, do not combine with this product. Goldenseal blocks two enzymes that break down many prescription drugs. This can raise drug levels and side-effect risk.",
@@ -1621,7 +1634,8 @@
           "mechanism": "Berberine and hydrastine inhibit CYP2D6 in addition to CYP3A4. CYP2D6 metabolizes a large class of psychiatric drugs (many SSRIs, tricyclics), opioids (codeine, tramadol — for activation), and tamoxifen.",
           "action": "If you take a CYP2D6-substrate prescription drug, avoid goldenseal unless your prescriber clears it. Especially relevant for codeine, tramadol, tamoxifen, paroxetine, and fluoxetine.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/18180278/"
+            "https://www.nccih.nih.gov/health/goldenseal",
+            "https://medlineplus.gov/druginfo/natural/943.html"
           ],
           "alert_headline": "Affects how many drugs are processed",
           "alert_body": "If you take cyp2d6 substrates, do not combine with this product. Goldenseal blocks the CYP2D6 enzyme that activates codeine and tramadol and metabolizes many antidepressants. This can change the ef...",
@@ -1889,7 +1903,7 @@
           "mechanism": "Lithium is goitrogenic; supplemental iodine combined with lithium amplifies hypothyroidism risk. Both substances independently affect thyroid function. Iodine/kelp is common in 'thyroid support' formulas where users may not connect the dots.",
           "action": "If you take lithium, talk to your prescriber before using iodine, kelp, or bladderwrack supplements. Routine thyroid monitoring is important.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/19500763/"
+            "https://ods.od.nih.gov/factsheets/Iodine-HealthProfessional/"
           ],
           "alert_headline": "Hypothyroidism risk with lithium",
           "alert_body": "Lithium can suppress thyroid function. Iodine and kelp supplements compound this risk — read labels on 'thyroid support' formulas.",
@@ -2235,7 +2249,7 @@
           "last_reviewed": "2026-04-09",
           "drug_class_id": "thyroid_medications",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/33584551/"
+            "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
           ],
           "evidence_level": "probable",
           "alert_headline": "May affect thyroid medication",
@@ -2249,7 +2263,7 @@
           "mechanism": "May reduce lithium absorption when co-ingested. Separate doses by 2 hours.",
           "action": "If you take lithium, separate magnesium supplements from your lithium dose by at least 2 hours.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/29363269/"
+            "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
           ],
           "alert_headline": "Space doses 2 hours apart",
           "alert_body": "High-dose magnesium taken at the same time as lithium may reduce absorption. Take them at least 2 hours apart.",
@@ -2385,7 +2399,7 @@
           "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
           "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/10479204/"
+            "https://medlineplus.gov/druginfo/natural/866.html"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Psyllium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding psyllium and monitor your glucose more closely at first.",
@@ -2398,7 +2412,7 @@
           "mechanism": "Reduces lithium absorption when taken concurrently. Separate dosing by 1-2 hours.",
           "action": "If you take lithium, separate psyllium and high-fiber supplements from your lithium dose by at least 2 hours.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/2295586/"
+            "https://medlineplus.gov/druginfo/natural/866.html"
           ],
           "alert_headline": "May reduce lithium absorption",
           "alert_body": "Psyllium and other high-fiber supplements can reduce how much lithium your body absorbs if taken at the same time. Space them apart by 2 hours.",
@@ -2462,7 +2476,7 @@
           "action": "Avoid combination. If SJW is discontinued, BP medications may suddenly become more potent, risking hypotension.",
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort",
-            "https://pubmed.ncbi.nlm.nih.gov/24472406/"
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "May reduce blood-pressure medication effect",
           "alert_body": "St John's Wort speeds up drug metabolism via CYP3A4 and can lower levels of blood-pressure drugs. If you take antihypertensive medication, talk to your prescriber before use.",
@@ -2475,8 +2489,8 @@
           "mechanism": "CYP3A4 induction reduces warfarin S-enantiomer exposure → loss of anticoagulation. Documented thrombotic events including strokes and pulmonary emboli.",
           "action": "Do not combine St. John's Wort with warfarin or other vitamin-K antagonists. Discuss alternatives with your prescriber.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12190769/",
-            "https://pubmed.ncbi.nlm.nih.gov/12595722/"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "Do not combine with warfarin",
           "alert_body": "If you take anticoagulants, do not combine with this product. St. John's Wort speeds up the breakdown of warfarin, which can stop it from working and lead to dangerous blood clots.",
@@ -2489,7 +2503,8 @@
           "mechanism": "CYP3A4 induction (opposite mechanism to grapefruit) → reduced exposure to tacrolimus, cyclosporine → therapy failure and transplant rejection.",
           "action": "Do not combine St. John's Wort with transplant immunosuppressants.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12595722/"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "Do not combine with transplant drugs",
           "alert_body": "If you take immunosuppressants, do not combine with this product. St. John's Wort speeds up the breakdown of tacrolimus and cyclosporine. This can cause transplant rejection.",
@@ -2502,7 +2517,8 @@
           "mechanism": "CYP3A4 induction reduces plasma levels of simvastatin, atorvastatin, and other CYP3A4-metabolized statins.",
           "action": "Avoid with CYP3A4-metabolized statins or monitor lipid levels closely.",
           "sources": [
-            "https://www.nccih.nih.gov/health/st-johns-wort"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "May affect statin tolerability",
           "alert_body": "St John's Wort shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding St John's Wort and watch for new muscle aches.",
@@ -2515,7 +2531,8 @@
           "mechanism": "CYP3A4 induction reduces levels of benzodiazepines (alprazolam, midazolam). Also risk of serotonin syndrome if combined with SSRIs/SNRIs.",
           "action": "Avoid unsupervised combination with sedatives or antidepressants.",
           "sources": [
-            "https://www.nccih.nih.gov/health/st-johns-wort"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "May add to sedative drowsiness",
           "alert_body": "St John's Wort has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding St John's Wort — the combination can increase drowsiness.",
@@ -2529,7 +2546,7 @@
           "action": "Do NOT combine St John's Wort with any SSRI or SNRI. If switching, allow 2-week washout. This is a life-threatening interaction.",
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort",
-            "https://pubmed.ncbi.nlm.nih.gov/17868285/"
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "Do not combine with SSRIs or SNRIs",
           "alert_body": "St John's Wort raises serotonin activity. If you take an SSRI or SNRI antidepressant, do not combine — the combination can cause serotonin syndrome.",
@@ -2542,7 +2559,8 @@
           "mechanism": "Hypericin has weak MAO-A inhibition; combination duplicates mechanism → serotonin syndrome and hypertensive risk.",
           "action": "Do not combine St. John's Wort with MAOIs.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12595722/"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. St. John's Wort has its own MAO-inhibiting activity. Combined with prescription MAOIs, this can cause serotonin syndrome or dangerous b...",
@@ -2555,7 +2573,8 @@
           "mechanism": "CYP3A4 induction reduces ethinyl estradiol exposure → contraception failure and breakthrough bleeding documented in clinical literature.",
           "action": "Do not rely on oral contraceptives while using St. John's Wort. Use additional non-hormonal contraception or discontinue St. John's Wort.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12595722/"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "May cause contraception failure",
           "alert_body": "If you take oral contraceptives, do not combine with this product. St. John's Wort lowers the level of birth-control pills in your blood and can lead to unintended pregnancy.",
@@ -2568,8 +2587,8 @@
           "mechanism": "At ≥900 mg/day standardized extract, SJW has measurable CYP2D6 effect — the direction is mixed across studies (some induction, some weak inhibition reported). This is distinct from SJW's dramatic and consistent CYP3A4 induction (see contraindicated rule with CYP3A4-substrate drugs). Effect at typical lower doses is not clinically significant.",
           "action": "If you take a CYP2D6-substrate prescription drug at high-dose St. John's Wort (≥900 mg/day), your prescriber may want to monitor for changes in drug effect. The CYP3A4 interaction at any dose is the dominant clinical concern — see the existing contraindication.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/10976546/",
-            "https://pubmed.ncbi.nlm.nih.gov/15054636/"
+            "https://www.nccih.nih.gov/health/st-johns-wort",
+            "https://medlineplus.gov/druginfo/natural/329.html"
           ],
           "alert_headline": "High-dose may shift drug levels",
           "alert_body": "If you take a CYP2D6-substrate prescription drug, your prescriber may want to monitor for changes in drug effect at high-dose St. John's Wort (≥900 mg/day).",
@@ -2936,8 +2955,8 @@
           "mechanism": "Antiplatelet activity at high doses (≥400 IU/day) via vitamin K-epoxide reductase competition.",
           "action": "If you take warfarin or an antiplatelet, talk to your prescriber before using vitamin E ≥400 IU/day.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17984381/",
-            "https://pubmed.ncbi.nlm.nih.gov/9619397/"
+            "https://ods.od.nih.gov/factsheets/VitaminE-HealthProfessional/",
+            "https://medlineplus.gov/druginfo/natural/954.html"
           ],
           "alert_headline": "Bleeding risk at high doses",
           "alert_body": "Vitamin E above 400 IU/day can mildly thin the blood and raise bleeding risk when combined with warfarin or aspirin-type drugs.",
@@ -3014,8 +3033,7 @@
           "action": "If you take warfarin or another vitamin-K antagonist, do not start, stop, or change vitamin K intake without checking with your prescriber. Keep daily intake consistent.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
-            "https://pubmed.ncbi.nlm.nih.gov/16009864/",
-            "https://pubmed.ncbi.nlm.nih.gov/16027256/"
+            "https://medlineplus.gov/druginfo/natural/983.html"
           ],
           "alert_headline": "May counteract warfarin",
           "alert_body": "Vitamin K can reduce the effect of warfarin and similar blood thinners. Talk to your prescriber before adding a vitamin K supplement and keep your daily intake steady.",
@@ -3053,7 +3071,8 @@
           "mechanism": "Longer half-life menaquinone forms may have prolonged interaction potential with anticoagulants.",
           "action": "Escalate anticoagulant interaction warning for MK-7 forms.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/"
+            "https://ods.od.nih.gov/factsheets/VitaminK-HealthProfessional/",
+            "https://medlineplus.gov/druginfo/natural/983.html"
           ],
           "alert_headline": "MK-7 may prolong warfarin interaction",
           "alert_body": "The MK-7 form of vitamin K has a longer half-life than other forms. If you take warfarin, talk to your prescriber before adding MK-7.",
@@ -3116,7 +3135,9 @@
           "mechanism": "Yohimbe can counter blood pressure-lowering effects.",
           "action": "Avoid co-use with antihypertensive medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/safety"
+            "https://www.nccih.nih.gov/health/safety",
+            "https://www.nccih.nih.gov/health/yohimbe",
+            "https://medlineplus.gov/druginfo/natural/759.html"
           ],
           "alert_headline": "May reduce blood-pressure medication effect",
           "alert_body": "Yohimbe's stimulant activity can work against blood-pressure-lowering drugs. If you take antihypertensive medication, talk to your prescriber before using it.",
@@ -3129,7 +3150,8 @@
           "mechanism": "Alpha-2 antagonist increases norepinephrine release; combined with MAO inhibition → severe hypertension. Common in pre-workout and male-enhancement stacks where users may not connect the dots.",
           "action": "Do not combine yohimbe with MAOIs. Many pre-workout and male-enhancement supplements contain yohimbe — read labels carefully.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/11448560/"
+            "https://www.nccih.nih.gov/health/yohimbe",
+            "https://medlineplus.gov/druginfo/natural/759.html"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. Yohimbe combined with MAO-inhibitor antidepressants can cause severe high blood pressure. Many pre-workout and 'male enhancement' suppl...",
@@ -3654,7 +3676,8 @@
           "mechanism": "Antiplatelet activity at clinical doses (≥500 mg curcuminoids). Multiple case reports of INR elevation with warfarin. Culinary turmeric doses do not interact meaningfully.",
           "action": "If you take warfarin or an antiplatelet, talk to your prescriber before using high-dose turmeric or curcumin extracts (≥500 mg curcuminoids/day).",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/26361079/"
+            "https://www.nccih.nih.gov/health/turmeric",
+            "https://medlineplus.gov/druginfo/natural/662.html"
           ],
           "alert_headline": "May increase bleeding with warfarin",
           "alert_body": "High-dose turmeric or curcumin extracts can thin the blood and raise INR in people on warfarin. Cooking-amount turmeric is fine.",
@@ -3668,7 +3691,8 @@
           "action": "Monitor for signs of increased bleeding when combining turmeric supplements with antiplatelet medications. High-dose curcumin extracts carry more risk than dietary turmeric.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10484074/",
-            "https://pubmed.ncbi.nlm.nih.gov/19501497/"
+            "https://www.nccih.nih.gov/health/turmeric",
+            "https://medlineplus.gov/druginfo/natural/662.html"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Turmeric has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding turmeric.",
@@ -3681,7 +3705,9 @@
           "mechanism": "Curcumin inhibits both COX-1 and 5-lipoxygenase, pathways shared with NSAIDs. Combined use may produce additive GI mucosal effects and platelet inhibition, modestly increasing GI bleeding risk.",
           "action": "Monitor for GI symptoms when combining turmeric/curcumin supplements with NSAIDs. Take NSAIDs with food.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/8510458/"
+            "https://pubmed.ncbi.nlm.nih.gov/8510458/",
+            "https://www.nccih.nih.gov/health/turmeric",
+            "https://medlineplus.gov/druginfo/natural/662.html"
           ],
           "alert_headline": "May add to NSAID bleeding risk",
           "alert_body": "Turmeric has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding turmeric.",
@@ -3694,7 +3720,8 @@
           "mechanism": "NSAID-like prostaglandin inhibition is theoretical for curcumin specifically; clinical lithium-elevation evidence absent. Severity reflects conservative safety posture given lithium's narrow therapeutic index, not an established interaction.",
           "action": "If you take lithium, mention high-dose turmeric or curcumin to your prescriber. Monitoring is precautionary — clinical evidence is limited.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12674015/"
+            "https://www.nccih.nih.gov/health/turmeric",
+            "https://medlineplus.gov/druginfo/natural/662.html"
           ],
           "alert_headline": "Mention to your prescriber",
           "alert_body": "High-dose turmeric or curcumin may theoretically affect lithium levels via NSAID-like mechanisms, though clinical evidence is limited. Precautionary advice only.",
@@ -3942,8 +3969,8 @@
           "mechanism": "Antiplatelet/antithrombotic at high dose. Most dietary doses (1-2 g/day EPA+DHA) clinically insignificant; ≥3 g/day raises bleeding risk in patients on warfarin or antiplatelets.",
           "action": "If you take warfarin or an antiplatelet, talk to your prescriber before using fish oil ≥3 g/day. Doses below 3 g/day are generally well tolerated.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17786535/",
-            "https://pubmed.ncbi.nlm.nih.gov/24620997/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
           "alert_headline": "Bleeding risk at high doses",
           "alert_body": "Fish oil at 3 g/day or higher can thin the blood. Combined with warfarin or antiplatelet medication, this raises bleeding risk.",
@@ -3956,7 +3983,9 @@
           "mechanism": "Additive inhibition of platelet aggregation through independent TXA2 suppression. Combined use of high-dose fish oil with aspirin and warfarin has been associated with subdural hematoma after minor trauma.",
           "action": "Avoid high-dose fish oil (>3 g/day) when combined with antiplatelet medications unless under medical supervision. Monitor for unusual bleeding or bruising.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17192169/"
+            "https://pubmed.ncbi.nlm.nih.gov/17192169/",
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Fish oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding fish oil.",
@@ -3969,7 +3998,8 @@
           "mechanism": "Both fish oil and NSAIDs affect prostaglandin synthesis via COX pathway modulation. Combined use may modestly increase GI bleeding risk through additive reduction in mucosal protective prostaglandins.",
           "action": "Monitor for GI symptoms when combining fish oil with NSAIDs. Take NSAIDs with food.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/10902065/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
           "alert_headline": "May add to NSAID bleeding risk",
           "alert_body": "Fish oil has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding fish oil.",
@@ -4053,7 +4083,8 @@
           "mechanism": "Curcumin has antiplatelet activity at clinical doses (≥500 mg/day). Multiple case reports of INR elevation with warfarin.",
           "action": "If you take warfarin or an antiplatelet, talk to your prescriber before using curcumin extracts ≥500 mg/day.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/26361079/"
+            "https://www.nccih.nih.gov/health/turmeric",
+            "https://medlineplus.gov/druginfo/natural/662.html"
           ],
           "alert_headline": "May increase bleeding with warfarin",
           "alert_body": "High-dose curcumin extracts can thin the blood and raise INR in people on warfarin.",
@@ -4067,8 +4098,9 @@
           "action": "Monitor for signs of increased bleeding when combining curcumin supplements with antiplatelet medications. Avoid high-dose curcumin extracts (>1 g curcumin/day) without medical supervision in patients on dual antiplatelet therapy.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10484074/",
-            "https://pubmed.ncbi.nlm.nih.gov/19501497/",
-            "https://pubmed.ncbi.nlm.nih.gov/25572959/"
+            "https://pubmed.ncbi.nlm.nih.gov/25572959/",
+            "https://www.nccih.nih.gov/health/turmeric",
+            "https://medlineplus.gov/druginfo/natural/662.html"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Curcumin has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding curcumin.",
@@ -4082,7 +4114,8 @@
           "action": "Monitor for GI symptoms (stomach pain, dark stools) when combining curcumin supplements with NSAIDs.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/8510458/",
-            "https://pubmed.ncbi.nlm.nih.gov/19501497/"
+            "https://www.nccih.nih.gov/health/turmeric",
+            "https://medlineplus.gov/druginfo/natural/662.html"
           ],
           "alert_headline": "May add to NSAID bleeding risk",
           "alert_body": "Curcumin has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding curcumin.",
@@ -4095,7 +4128,8 @@
           "mechanism": "Theoretical NSAID-like mechanism; no documented clinical lithium-elevation cases. Conservative posture given lithium's narrow therapeutic index.",
           "action": "If you take lithium, mention curcumin extracts to your prescriber.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12674015/"
+            "https://www.nccih.nih.gov/health/turmeric",
+            "https://medlineplus.gov/druginfo/natural/662.html"
           ],
           "alert_headline": "Mention to your prescriber",
           "alert_body": "High-dose curcumin extracts may theoretically affect lithium levels. Clinical evidence is limited; the advice is precautionary.",
@@ -4787,7 +4821,8 @@
           "action": "If you take warfarin, monitor INR when using cranberry extract or drinking ≥1 L cranberry juice/day.",
           "sources": [
             "https://www.gov.uk/drug-safety-update/cranberry-juice-and-warfarin",
-            "https://pubmed.ncbi.nlm.nih.gov/16846311/"
+            "https://www.nccih.nih.gov/health/cranberry",
+            "https://medlineplus.gov/druginfo/natural/958.html"
           ],
           "alert_headline": "May raise INR on warfarin",
           "alert_body": "High-dose cranberry extracts or large amounts of cranberry juice can raise INR in people on warfarin. Mention cranberry use to your prescriber.",
@@ -4800,7 +4835,10 @@
           "mechanism": "Cranberry flavonoids may have mild antiplatelet properties in vitro. No established clinical interaction with antiplatelet drugs. The primary interaction concern for cranberry is with warfarin via CYP2C9.",
           "action": "No specific action required for antiplatelet combinations at dietary cranberry amounts.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17322161/"
+            "https://pubmed.ncbi.nlm.nih.gov/17322161/",
+            "https://www.nccih.nih.gov/health/cranberry",
+            "https://medlineplus.gov/druginfo/natural/958.html",
+            "https://www.gov.uk/drug-safety-update/cranberry-juice-and-warfarin"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Cranberry has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding cranberry.",
@@ -4813,7 +4851,10 @@
           "mechanism": "No established direct pharmacokinetic or pharmacodynamic interaction between cranberry and NSAIDs on coagulation or platelet function.",
           "action": "No specific action required.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17322161/"
+            "https://pubmed.ncbi.nlm.nih.gov/17322161/",
+            "https://www.nccih.nih.gov/health/cranberry",
+            "https://medlineplus.gov/druginfo/natural/958.html",
+            "https://www.gov.uk/drug-safety-update/cranberry-juice-and-warfarin"
           ],
           "alert_headline": "May add to NSAID bleeding risk",
           "alert_body": "Cranberry has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding cranberry.",
@@ -5778,7 +5819,8 @@
           "mechanism": "Structural similarity to vitamin K; mild reduction in warfarin effect at high dose (≥100 mg/day). Effect is small but documented.",
           "action": "If you take warfarin, mention CoQ10 supplements to your prescriber. INR monitoring may need to be adjusted.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/15100776/"
+            "https://www.nccih.nih.gov/health/coenzyme-q10",
+            "https://medlineplus.gov/druginfo/natural/938.html"
           ],
           "alert_headline": "May mildly reduce warfarin effect",
           "alert_body": "CoQ10 is structurally similar to vitamin K and can slightly reduce how well warfarin works at higher doses.",
@@ -5791,8 +5833,8 @@
           "mechanism": "Statins deplete endogenous CoQ10 by blocking the mevalonate pathway. CoQ10 supplementation is commonly used to mitigate statin-associated myopathy. No adverse pharmacokinetic interaction between CoQ10 and statins has been demonstrated.",
           "action": "CoQ10 100–300 mg/day may be used alongside statins, particularly if myopathy symptoms are present. Safe to co-administer.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/19528564/",
-            "https://pubmed.ncbi.nlm.nih.gov/12622602/"
+            "https://www.nccih.nih.gov/health/coenzyme-q10",
+            "https://medlineplus.gov/druginfo/natural/938.html"
           ],
           "alert_headline": "May affect statin tolerability",
           "alert_body": "CoQ10 shares muscle or liver pathways with statins. If you take a statin, talk to your prescriber before adding CoQ10 and watch for new muscle aches.",
@@ -5892,7 +5934,9 @@
           "mechanism": "Furanocoumarins inhibit intestinal CYP3A4 → ↑ statin AUC 5-15× → rhabdomyolysis risk. Affects simvastatin and lovastatin most; atorvastatin smaller effect; pravastatin and rosuvastatin minimal.",
           "action": "If you take simvastatin or lovastatin, avoid grapefruit and bergamot products. Pravastatin or rosuvastatin are safer alternatives if grapefruit cannot be eliminated.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+            "https://pubmed.ncbi.nlm.nih.gov/23184849/",
+            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://medlineplus.gov/druginfo/natural/1027.html"
           ],
           "alert_headline": "Muscle-toxicity risk with statins",
           "alert_body": "If you take statins, do not combine with this product. Grapefruit and bergamot block an enzyme that breaks down certain statins, dramatically raising drug levels and the risk of muscle damage.",
@@ -5905,7 +5949,9 @@
           "mechanism": "Same CYP3A4 inhibition mechanism. Increased exposure to felodipine and nifedipine raises hypotension and edema risk.",
           "action": "If you take a calcium channel blocker, avoid grapefruit and bergamot products. Talk to your prescriber.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+            "https://pubmed.ncbi.nlm.nih.gov/23184849/",
+            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://medlineplus.gov/druginfo/natural/1027.html"
           ],
           "alert_headline": "May lower blood pressure too much",
           "alert_body": "If you take calcium channel blockers, do not combine with this product. Grapefruit and bergamot can boost levels of calcium channel blockers, leading to dangerously low blood pressure or swelling.",
@@ -5918,7 +5964,8 @@
           "mechanism": "Same CYP3A4 mechanism. Tacrolimus and cyclosporine have narrow therapeutic indices; toxic levels cause nephrotoxicity.",
           "action": "If you take tacrolimus or cyclosporine, do not consume grapefruit or bergamot products. This is a strict contraindication.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/26929736/"
+            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://medlineplus.gov/druginfo/natural/1027.html"
           ],
           "alert_headline": "Do not combine with transplant drugs",
           "alert_body": "If you take immunosuppressants, do not combine with this product. Grapefruit and bergamot can push tacrolimus and cyclosporine to toxic levels, damaging the kidneys. Strict avoidance is required.",
@@ -5931,7 +5978,8 @@
           "mechanism": "CYP3A4 inhibition combined with amiodarone's intrinsic QT-prolongation amplifies torsades de pointes risk. Documented cases.",
           "action": "If you take amiodarone, avoid grapefruit and bergamot products.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/10691759/"
+            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://medlineplus.gov/druginfo/natural/1027.html"
           ],
           "alert_headline": "Heart-rhythm risk with amiodarone",
           "alert_body": "If you take antiarrhythmics, do not combine with this product. Grapefruit and bergamot raise amiodarone levels and increase the risk of dangerous heart rhythms.",
@@ -5944,7 +5992,8 @@
           "mechanism": "CYP3A4 + P-gp inhibition increases DOAC (apixaban, rivaroxaban) exposure → bleeding risk.",
           "action": "If you take apixaban or rivaroxaban, talk to your prescriber before using grapefruit or bergamot products.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/23590328/"
+            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://medlineplus.gov/druginfo/natural/1027.html"
           ],
           "alert_headline": "May increase bleeding risk",
           "alert_body": "Grapefruit and bergamot can raise levels of newer blood thinners like apixaban and rivaroxaban, increasing bleeding risk.",
@@ -5957,7 +6006,8 @@
           "mechanism": "CYP3A4 inhibition may modestly increase ethinyl estradiol exposure. Effect is documented but small.",
           "action": "If you take oral contraceptives, mention regular grapefruit or bergamot intake to your prescriber.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/8961038/"
+            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://medlineplus.gov/druginfo/natural/1027.html"
           ],
           "alert_headline": "Mildly raises hormone levels",
           "alert_body": "Grapefruit and bergamot can mildly increase estrogen levels from birth-control pills. Effect is small but documented.",
@@ -6503,7 +6553,8 @@
           "action": "Contraindicated with calcineurin inhibitors (tacrolimus, cyclosporine) and mTOR inhibitors without therapeutic drug monitoring. If clinically necessary, initiate TDM immediately and titrate immunosuppressant dose downward.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32250458/",
-            "https://pubmed.ncbi.nlm.nih.gov/33802239/"
+            "https://pubmed.ncbi.nlm.nih.gov/33802239/",
+            "https://medlineplus.gov/druginfo/natural/376.html"
           ],
           "alert_headline": "Caution with immunosuppressants",
           "alert_body": "Schisandra has mild immune-modulating activity. If you take immunosuppressive medication, talk to your specialist before adding schisandra.",
@@ -6516,7 +6567,8 @@
           "action": "Monitor for excessive sedation when combining with benzodiazepines or other sedatives. Note that CYP3A4 inhibition by schisandra can elevate levels of CYP3A4-metabolized sedatives.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/21130851/",
-            "https://pubmed.ncbi.nlm.nih.gov/32250458/"
+            "https://pubmed.ncbi.nlm.nih.gov/32250458/",
+            "https://medlineplus.gov/druginfo/natural/376.html"
           ],
           "drug_class_id": "sedatives",
           "alert_headline": "May add to sedative drowsiness",
@@ -6530,7 +6582,7 @@
           "mechanism": "Schizandrol-rich extracts inhibit CYP3A4. Some clinical interactions documented with tacrolimus and sirolimus. Common in adaptogen blends used by transplant-recovery population.",
           "action": "If you take a CYP3A4-substrate prescription drug, talk to your prescriber before using schisandra. Especially relevant for transplant patients on tacrolimus or sirolimus.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17877974/"
+            "https://medlineplus.gov/druginfo/natural/376.html"
           ],
           "alert_headline": "May affect prescription drug levels",
           "alert_body": "Schisandra can change levels of certain prescription drugs by inhibiting a key liver enzyme. Especially important for transplant patients.",
@@ -7378,7 +7430,7 @@
           "action": "Do not combine with SSRIs or SNRIs. If transitioning off an antidepressant, observe a washout period before initiating 5-HTP. Seek prescriber guidance.",
           "sources": [
             "https://www.nccih.nih.gov/health/5-htp",
-            "https://pubmed.ncbi.nlm.nih.gov/9861593/"
+            "https://medlineplus.gov/druginfo/natural/794.html"
           ],
           "alert_headline": "Do not combine with SSRIs or SNRIs",
           "alert_body": "5-HTP raises serotonin directly. If you take an SSRI or SNRI antidepressant, do not combine — the pairing can cause serotonin syndrome.",
@@ -7391,7 +7443,7 @@
           "mechanism": "Serotonin precursor combined with MAOI inhibition → serotonin syndrome.",
           "action": "Do not combine 5-HTP with MAOIs. Allow appropriate washout between MAOI discontinuation and 5-HTP use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/9764773/"
+            "https://medlineplus.gov/druginfo/natural/794.html"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. 5-HTP raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
@@ -8319,7 +8371,7 @@
           "action": "Monitor blood pressure and fluid status when using dandelion with diuretic antihypertensives. Alert prescriber.",
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion",
-            "https://pubmed.ncbi.nlm.nih.gov/21538168/"
+            "https://medlineplus.gov/druginfo/natural/706.html"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Dandelion can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding dandelion.",
@@ -8333,7 +8385,7 @@
           "action": "Monitor blood glucose when using dandelion with antidiabetic drugs. Warn of possible additive hypoglycemia, particularly with sulfonylureas.",
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion",
-            "https://pubmed.ncbi.nlm.nih.gov/21538168/"
+            "https://medlineplus.gov/druginfo/natural/706.html"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Dandelion can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding dandelion and monitor your glucose more closely at first.",
@@ -8346,7 +8398,9 @@
           "mechanism": "Diuretic effect → potential lithium concentration via fluid/sodium depletion. Same mechanism family as the established lithium-thiazide warning. Common in 'detox' and 'liver support' supplements.",
           "action": "If you take lithium, talk to your prescriber before using dandelion extract. Watch for signs of lithium toxicity (tremor, confusion, GI upset).",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/19678785/"
+            "https://pubmed.ncbi.nlm.nih.gov/19678785/",
+            "https://www.nccih.nih.gov/health/dandelion",
+            "https://medlineplus.gov/druginfo/natural/706.html"
           ],
           "alert_headline": "May raise lithium levels",
           "alert_body": "Dandelion is a mild diuretic. Like prescription diuretics, it can raise lithium levels. Common in 'detox' and 'liver support' supplements.",
@@ -9363,7 +9417,8 @@
           "action": "Monitor INR/bleeding time more frequently. Watch for signs of bruising or bleeding. Inform prescriber.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
-            "https://pubmed.ncbi.nlm.nih.gov/29136493/"
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Fish oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding fish oil and ask about INR or bleeding checks.",
@@ -9376,8 +9431,9 @@
           "mechanism": "Additive antiplatelet effects. Omega-3 fatty acids inhibit platelet aggregation via thromboxane A2 suppression, which may compound the effects of antiplatelet agents like aspirin or clopidogrel.",
           "action": "Monitor for increased bruising or bleeding. Inform prescriber of omega-3 supplementation.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/29136493/",
-            "https://www.nccih.nih.gov/health/omega-3-supplements"
+            "https://www.nccih.nih.gov/health/omega-3-supplements",
+            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
+            "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Fish oil has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding fish oil.",
@@ -9866,7 +9922,7 @@
           "mechanism": "PEA is a direct MAO substrate; combination with MAOIs causes hypertensive crisis.",
           "action": "Do not combine PEA-containing supplements with MAOIs. Discontinue MAOI for the appropriate washout period before any PEA-containing product.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/8854272/"
+            "https://medlineplus.gov/druginfo/natural/980.html"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. PEA combined with MAO-inhibitor antidepressants can cause a dangerous spike in blood pressure.",
@@ -9901,7 +9957,8 @@
           "mechanism": "Serotonin precursor combined with MAOI inhibition → serotonin syndrome.",
           "action": "Do not combine L-tryptophan with MAOIs.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/9764773/"
+            "https://medlineplus.gov/druginfo/natural/326.html",
+            "https://ods.od.nih.gov/factsheets/Tryptophan/"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. L-tryptophan raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
@@ -9936,7 +9993,7 @@
           "mechanism": "Hordenine is a β-PEA analog and direct MAO substrate. Often combined with PEA in pre-workout / fat-burner stacks, compounding the risk.",
           "action": "Do not combine hordenine with MAOIs. Avoid pre-workout and fat-burner products listing hordenine if you take an MAOI.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17612452/"
+            "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. Hordenine works like PEA and can cause dangerous blood pressure changes with MAO-inhibitor antidepressants.",
@@ -9971,7 +10028,8 @@
           "mechanism": "Methyl donor with antidepressant activity; serotonergic potentiation when combined with MAOIs raises serotonin syndrome risk.",
           "action": "If you take an MAOI, avoid SAMe unless cleared by your prescriber. Allow washout if switching.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12420308/"
+            "https://www.nccih.nih.gov/health/same",
+            "https://medlineplus.gov/druginfo/natural/786.html"
           ],
           "alert_headline": "Avoid combining with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. SAMe has antidepressant-like activity. Combined with MAO-inhibitor antidepressants, it can raise the risk of serotonin syndrome.",
@@ -10006,7 +10064,7 @@
           "mechanism": "High sodium intake increases lithium clearance. Low sodium increases lithium retention → toxicity risk. Like caffeine, the principle is consistency.",
           "action": "If you take lithium, keep sodium intake stable. Avoid sudden low-sodium diets or salt-tablet supplements without prescriber approval.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/8590902/"
+            "https://ods.od.nih.gov/factsheets/Sodium-HealthProfessional/"
           ],
           "alert_headline": "Keep sodium intake stable",
           "alert_body": "Big swings in sodium intake change your lithium levels. Talk to your prescriber before starting a low-sodium diet or salt supplement.",
@@ -10041,7 +10099,9 @@
           "mechanism": "Mild fibrinolytic / antiplatelet activity at high dose (≥500 mg/day). Bromelain enhances plasmin generation and modestly inhibits platelet aggregation. Clinical bleeding events with warfarin are rare but documented in case reports.",
           "action": "If you take warfarin or an antiplatelet, mention bromelain supplements ≥500 mg/day to your prescriber. Watch for unusual bruising or bleeding.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/11577981/"
+            "https://pubmed.ncbi.nlm.nih.gov/11577981/",
+            "https://www.nccih.nih.gov/health/bromelain",
+            "https://medlineplus.gov/druginfo/natural/895.html"
           ],
           "alert_headline": "Mild bleeding risk at high dose",
           "alert_body": "High-dose bromelain (500 mg/day or more) has mild blood-thinning activity. Combined with warfarin or antiplatelet drugs, this can slightly raise bleeding risk.",
@@ -10076,7 +10136,8 @@
           "mechanism": "Tyramine is a sympathomimetic biogenic amine and MAO substrate. With MAO-inhibitor medication, ingested tyramine cannot be metabolized normally, producing massive norepinephrine release and severe hypertensive crisis ('cheese reaction'). Documented fatalities in the clinical literature.",
           "action": "Do not combine tyramine-rich extracts with MAOIs. Read supplement labels for aged-yeast, fermented bovine, or tyramine-containing protein hydrolysates if you take an MAOI.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/29380410/"
+            "https://www.fda.gov/drugs/drug-safety-and-availability",
+            "https://medlineplus.gov/druginfo/meds/a682040.html"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. Tyramine-rich supplement extracts combined with MAO-inhibitor antidepressants can cause a life-threatening blood pressure spike. This i...",
@@ -10111,8 +10172,7 @@
           "mechanism": "Saikosaponins inhibit CYP2D6 in vitro and in animal models. Clinical evidence in humans is limited but consistent in mechanism. Bupleurum often appears in multi-herb TCM formulas (Xiao Yao San, Bupleurum & Dragon Bone) where users may not recognize it on the ingredient label.",
           "action": "If you take a CYP2D6-substrate prescription drug, consider discussing this supplement with your prescriber. Especially relevant for many SSRIs/SNRIs, tricyclics, codeine, tramadol, and tamoxifen.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/24509137/",
-            "https://pubmed.ncbi.nlm.nih.gov/19548302/"
+            "https://medlineplus.gov/druginfo/natural/1071.html"
           ],
           "alert_headline": "May affect prescription drug levels",
           "alert_body": "If you take a CYP2D6-substrate prescription drug, consider discussing bupleurum with your prescriber. Bupleurum may slow how some antidepressants and pain medications are processed.",

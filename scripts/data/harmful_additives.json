@@ -18747,7 +18747,7 @@
       ],
       "notes": "Tyramine itself is not toxic at dietary levels in most people; the safety issue is exclusively the MAOI interaction. Fermented and aged supplement extracts can contain markedly higher tyramine than fresh ingredients. See ingredient_interaction_rules for the MAOI rule.",
       "scientific_references": [
-        "https://pubmed.ncbi.nlm.nih.gov/29380410/",
+        "https://medlineplus.gov/druginfo/meds/a682040.html",
         "https://www.efsa.europa.eu/en/efsajournal/pub/2393"
       ],
       "last_updated": "2026-04-30",
@@ -18759,16 +18759,6 @@
       },
       "references_structured": [
         {
-          "type": "systematic_review",
-          "authority": "OTHER",
-          "title": "Gillman 2018 — Monoamine oxidase inhibitors: a review concerning dietary tyramine and drug interactions",
-          "citation": "Gillman PK. Br J Clin Pharmacol. 2018;84(8):1772-1787.",
-          "url": "https://pubmed.ncbi.nlm.nih.gov/29380410/",
-          "published_date": "2018-08-01",
-          "evidence_grade": "A",
-          "supports_claims": []
-        },
-        {
           "type": "guidance",
           "authority": "EFSA",
           "title": "EFSA Scientific Opinion on risk-based control of biogenic amine formation in fermented foods",
@@ -18776,6 +18766,16 @@
           "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2393",
           "published_date": "2011-10-26",
           "evidence_grade": "A",
+          "supports_claims": []
+        },
+        {
+          "type": "guidance",
+          "authority": "OTHER",
+          "title": "MedlinePlus: MAOI Antidepressants Patient Information",
+          "citation": "MedlinePlus drug info.",
+          "url": "https://medlineplus.gov/druginfo/meds/a682040.html",
+          "published_date": null,
+          "evidence_grade": "B",
           "supports_claims": []
         }
       ],
@@ -18813,6 +18813,11 @@
             "date": "2026-04-30",
             "change": "Created entry to support M2 (tyramine × MAOIs) interaction rule per clinician batch 2026-04-30.",
             "reason": "subject_ref creation for INTERACTION_RULES_REVIEW.md Section 2B M2"
+          },
+          {
+            "date": "2026-04-30",
+            "change": "Replaced unverified PMID 29380410 with NCCIH-quality authority URLs (MedlinePlus + EFSA). Mechanism text unchanged; only the citations were unverified.",
+            "reason": "audit_pmid_content_verification"
           }
         ]
       },

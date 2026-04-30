@@ -43,10 +43,7 @@ BUPLEURUM_CYP2D6_RULE = {
     "evidence_level": "theoretical",
     "mechanism": "Saikosaponins inhibit CYP2D6 in vitro and in animal models. Clinical evidence in humans is limited but consistent in mechanism. Bupleurum often appears in multi-herb TCM formulas (Xiao Yao San, Bupleurum & Dragon Bone) where users may not recognize it on the ingredient label.",
     "action": "If you take a CYP2D6-substrate prescription drug, consider discussing this supplement with your prescriber. Especially relevant for many SSRIs/SNRIs, tricyclics, codeine, tramadol, and tamoxifen.",
-    "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/24509137/",
-        "https://pubmed.ncbi.nlm.nih.gov/19548302/"
-    ],
+    "sources": [],
     "alert_headline": "May affect prescription drug levels",
     "alert_body": "If you take a CYP2D6-substrate prescription drug, consider discussing bupleurum with your prescriber. Bupleurum may slow how some antidepressants and pain medications are processed.",
     "informational_note": "Bupleurum inhibits CYP2D6 in preclinical evidence — relevant to anyone on antidepressants, opioids, or tamoxifen.",
@@ -59,10 +56,7 @@ SJW_CYP2D6_RULE = {
     "evidence_level": "probable",
     "mechanism": "At ≥900 mg/day standardized extract, SJW has measurable CYP2D6 effect — the direction is mixed across studies (some induction, some weak inhibition reported). This is distinct from SJW's dramatic and consistent CYP3A4 induction (see contraindicated rule with CYP3A4-substrate drugs). Effect at typical lower doses is not clinically significant.",
     "action": "If you take a CYP2D6-substrate prescription drug at high-dose St. John's Wort (≥900 mg/day), your prescriber may want to monitor for changes in drug effect. The CYP3A4 interaction at any dose is the dominant clinical concern — see the existing contraindication.",
-    "sources": [
-        "https://pubmed.ncbi.nlm.nih.gov/10976546/",
-        "https://pubmed.ncbi.nlm.nih.gov/15054636/"
-    ],
+    "sources": [],
     "alert_headline": "High-dose may shift drug levels",
     "alert_body": "If you take a CYP2D6-substrate prescription drug, your prescriber may want to monitor for changes in drug effect at high-dose St. John's Wort (≥900 mg/day).",
     "informational_note": "SJW at ≥900 mg/day has mixed-direction CYP2D6 effect — distinct from its dominant CYP3A4 induction.",

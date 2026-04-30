@@ -73,7 +73,7 @@ W_RULES = [
         "May counteract warfarin",
         "Vitamin K can reduce the effect of warfarin and similar blood thinners. Talk to your prescriber before adding a vitamin K supplement and keep your daily intake steady.",
         "Vitamin K affects how warfarin works — relevant to anyone on warfarin or coumarin anticoagulants.",
-        [f"{SRC_NIH_K}", f"{SRC_PUBMED}/16009864/", f"{SRC_PUBMED}/16027256/"],
+        [f"{SRC_NIH_K}"],
     )),
     # W2 Ginkgo × anticoagulants/antiplatelets
     ("ingredient_quality_map", "ginkgo", "anticoagulants", w_rule(
@@ -83,7 +83,7 @@ W_RULES = [
         "Bleeding risk with blood thinners",
         "Ginkgo can thin the blood and may increase bleeding when combined with warfarin or antiplatelet medication.",
         "Ginkgo has antiplatelet activity — relevant to anyone on blood-thinning medication.",
-        [f"{SRC_PUBMED}/26604801/", f"{SRC_PUBMED}/9355003/"],
+        [],
     )),
     # W3 Garlic × anticoagulants/antiplatelets
     ("ingredient_quality_map", "garlic", "anticoagulants", w_rule(
@@ -93,7 +93,7 @@ W_RULES = [
         "Mild bleeding risk with blood thinners",
         "High-dose garlic supplements can mildly thin the blood. Combined with warfarin or aspirin-type drugs, this can increase bleeding risk.",
         "Garlic supplements at high dose can affect platelet function — relevant to anyone on blood thinners.",
-        [f"{SRC_PUBMED}/17875983/"],
+        [],
     )),
     # W4 Fish oil / omega-3 × anticoagulants/antiplatelets
     ("ingredient_quality_map", "fish_oil", "anticoagulants", w_rule(
@@ -103,7 +103,7 @@ W_RULES = [
         "Bleeding risk at high doses",
         "Fish oil at 3 g/day or higher can thin the blood. Combined with warfarin or antiplatelet medication, this raises bleeding risk.",
         "Omega-3 has dose-dependent antiplatelet activity — most relevant at total EPA+DHA ≥3 g/day.",
-        [f"{SRC_PUBMED}/17786535/", f"{SRC_PUBMED}/24620997/"],
+        [],
     )),
     # W5 Turmeric × anticoagulants
     ("ingredient_quality_map", "turmeric", "anticoagulants", w_rule(
@@ -113,7 +113,7 @@ W_RULES = [
         "May increase bleeding with warfarin",
         "High-dose turmeric or curcumin extracts can thin the blood and raise INR in people on warfarin. Cooking-amount turmeric is fine.",
         "Standardized curcumin extracts have antiplatelet activity at clinical doses — relevant to anyone on blood thinners.",
-        [f"{SRC_PUBMED}/26361079/"],
+        [],
     )),
     ("ingredient_quality_map", "curcumin", "anticoagulants", w_rule(
         "caution",
@@ -122,7 +122,7 @@ W_RULES = [
         "May increase bleeding with warfarin",
         "High-dose curcumin extracts can thin the blood and raise INR in people on warfarin.",
         "Curcumin has antiplatelet activity at clinical doses — relevant to anyone on blood thinners.",
-        [f"{SRC_PUBMED}/26361079/"],
+        [],
     )),
     # W6 St John's Wort × warfarin (CYP3A4 induction)
     ("ingredient_quality_map", "st_johns_wort", "anticoagulants", w_rule(
@@ -132,7 +132,7 @@ W_RULES = [
         "Do not combine with warfarin",
         "St. John's Wort speeds up the breakdown of warfarin, which can stop it from working and lead to dangerous blood clots.",
         "St. John's Wort is a strong CYP3A4 inducer — relevant to anyone on warfarin or many other prescription drugs.",
-        [f"{SRC_PUBMED}/12190769/", f"{SRC_PUBMED}/12595722/"],
+        [],
     )),
     # W7 CoQ10 × warfarin
     ("ingredient_quality_map", "coq10", "anticoagulants", w_rule(
@@ -142,7 +142,7 @@ W_RULES = [
         "May mildly reduce warfarin effect",
         "CoQ10 is structurally similar to vitamin K and can slightly reduce how well warfarin works at higher doses.",
         "CoQ10 may affect INR at high doses — relevant to anyone on warfarin.",
-        [f"{SRC_PUBMED}/15100776/"],
+        [],
     )),
     # W8 Dong Quai × anticoagulants
     ("ingredient_quality_map", "dong_quai", "anticoagulants", w_rule(
@@ -152,7 +152,7 @@ W_RULES = [
         "Bleeding risk with blood thinners",
         "Dong quai contains natural coumarins and antiplatelet compounds. Combined with warfarin, this can dangerously raise INR.",
         "Dong quai has documented warfarin interaction — relevant to anyone on blood thinners.",
-        [f"{SRC_PUBMED}/10440462/"],
+        [],
     )),
     # W9 Ginseng × warfarin
     ("ingredient_quality_map", "ginseng", "anticoagulants", w_rule(
@@ -162,7 +162,7 @@ W_RULES = [
         "May affect warfarin levels",
         "Panax ginseng has mixed evidence for changing how warfarin works. INR monitoring is recommended if you start a ginseng supplement.",
         "Ginseng may interact with warfarin — relevant to anyone on anticoagulants.",
-        [f"{SRC_PUBMED}/15226167/"],
+        [],
     )),
     # W10 Bromelain — DEFERRED (no subject_ref in current refs)
     # W11 Vitamin E × anticoagulants
@@ -173,7 +173,7 @@ W_RULES = [
         "Bleeding risk at high doses",
         "Vitamin E above 400 IU/day can mildly thin the blood and raise bleeding risk when combined with warfarin or aspirin-type drugs.",
         "Vitamin E at high dose has antiplatelet effect — relevant to anyone on blood thinners.",
-        [f"{SRC_PUBMED}/17984381/", f"{SRC_PUBMED}/9619397/"],
+        [],
     )),
     # W12 Cranberry × warfarin
     ("ingredient_quality_map", "cranberry", "anticoagulants", w_rule(
@@ -183,9 +183,8 @@ W_RULES = [
         "May raise INR on warfarin",
         "High-dose cranberry extracts or large amounts of cranberry juice can raise INR in people on warfarin. Mention cranberry use to your prescriber.",
         "Cranberry may increase warfarin levels at high doses — UK MHRA issued an advisory.",
-        [SRC_MHRA_CRANBERRY, f"{SRC_PUBMED}/16846311/"],
-    )),
-]
+        [SRC_MHRA_CRANBERRY],
+    ))]
 
 
 def m_rule(severity, mech, action, headline, body, note, sources, evidence_level="established"):
@@ -201,7 +200,7 @@ M_RULES = [
         "Do not combine with MAOIs",
         "PEA combined with MAO-inhibitor antidepressants can cause a dangerous spike in blood pressure.",
         "PEA is an MAO substrate — relevant to anyone taking phenelzine, tranylcypromine, selegiline, or related drugs.",
-        [f"{SRC_PUBMED}/8854272/"],
+        [],
     )),
     # M2 Tyramine — DEFERRED
     # M3 5-HTP × MAOIs
@@ -212,7 +211,7 @@ M_RULES = [
         "Do not combine with MAOIs",
         "5-HTP raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
         "5-HTP increases serotonin — relevant to anyone on MAOIs, SSRIs, SNRIs, or other serotonergic drugs.",
-        [f"{SRC_PUBMED}/9764773/"],
+        [],
     )),
     # M3 alt — L-Tryptophan × MAOIs (new rule entry — l_tryptophan has no rule yet)
     ("ingredient_quality_map", "l_tryptophan", "maois", m_rule(
@@ -222,7 +221,7 @@ M_RULES = [
         "Do not combine with MAOIs",
         "L-tryptophan raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
         "L-tryptophan increases serotonin — relevant to anyone on MAOIs, SSRIs, SNRIs, or other serotonergic drugs.",
-        [f"{SRC_PUBMED}/9764773/"],
+        [],
     )),
     # M4 St John's Wort × MAOIs
     ("ingredient_quality_map", "st_johns_wort", "maois", m_rule(
@@ -232,7 +231,7 @@ M_RULES = [
         "Do not combine with MAOIs",
         "St. John's Wort has its own MAO-inhibiting activity. Combined with prescription MAOIs, this can cause serotonin syndrome or dangerous blood pressure changes.",
         "St. John's Wort has serotonergic and MAO-A activity — relevant to anyone on MAOIs.",
-        [f"{SRC_PUBMED}/12595722/"],
+        [],
     )),
     # M5 Yohimbe × MAOIs (Section 6 Position A: contraindicated)
     ("ingredient_quality_map", "yohimbe", "maois", m_rule(
@@ -242,7 +241,7 @@ M_RULES = [
         "Do not combine with MAOIs",
         "Yohimbe combined with MAO-inhibitor antidepressants can cause severe high blood pressure. Many pre-workout and 'male enhancement' supplements contain yohimbe.",
         "Yohimbe is a sympathomimetic — relevant to anyone on MAOIs.",
-        [f"{SRC_PUBMED}/11448560/"],
+        [],
     )),
     # M6 Ginseng × MAOIs (caution)
     ("ingredient_quality_map", "ginseng", "maois", m_rule(
@@ -252,7 +251,7 @@ M_RULES = [
         "May raise blood pressure with MAOIs",
         "Panax ginseng combined with MAO-inhibitor antidepressants has been linked to high blood pressure in case reports.",
         "Ginseng may interact with MAOIs — relevant to anyone on phenelzine or similar drugs.",
-        [f"{SRC_PUBMED}/3624381/"],
+        [],
         evidence_level="possible",
     )),
     # M7 Hordenine × MAOIs
@@ -263,7 +262,7 @@ M_RULES = [
         "Do not combine with MAOIs",
         "Hordenine works like PEA and can cause dangerous blood pressure changes with MAO-inhibitor antidepressants.",
         "Hordenine is an MAO substrate — relevant to anyone on MAOIs.",
-        [f"{SRC_PUBMED}/17612452/"],
+        [],
     )),
     # M8 SAMe × MAOIs
     ("ingredient_quality_map", "same", "maois", m_rule(
@@ -273,9 +272,8 @@ M_RULES = [
         "Avoid combining with MAOIs",
         "SAMe has antidepressant-like activity. Combined with MAO-inhibitor antidepressants, it can raise the risk of serotonin syndrome.",
         "SAMe is serotonergic — relevant to anyone on MAOIs or other antidepressants.",
-        [f"{SRC_PUBMED}/12420308/"],
-    )),
-]
+        [],
+    ))]
 
 
 def l_rule(severity, mech, action, headline, body, note, sources, evidence_level="established"):
@@ -291,7 +289,7 @@ L_RULES = [
         "Keep caffeine intake consistent",
         "Caffeine changes how your kidneys clear lithium. Big changes in coffee, tea, or caffeine pill use can swing lithium levels in either direction. Talk to your prescriber if your caffeine habits are changing.",
         "Caffeine affects lithium clearance — relevant to anyone on lithium therapy.",
-        [f"{SRC_PUBMED}/7775360/"],
+        [],
     )),
     # L2 Psyllium × lithium
     ("ingredient_quality_map", "psyllium", "lithium", l_rule(
@@ -301,7 +299,7 @@ L_RULES = [
         "May reduce lithium absorption",
         "Psyllium and other high-fiber supplements can reduce how much lithium your body absorbs if taken at the same time. Space them apart by 2 hours.",
         "Psyllium can interfere with lithium absorption — relevant to anyone on lithium.",
-        [f"{SRC_PUBMED}/2295586/"],
+        [],
     )),
     # L3 Sodium × lithium (new subject_ref)
     ("ingredient_quality_map", "sodium", "lithium", l_rule(
@@ -311,7 +309,7 @@ L_RULES = [
         "Keep sodium intake stable",
         "Big swings in sodium intake change your lithium levels. Talk to your prescriber before starting a low-sodium diet or salt supplement.",
         "Sodium intake affects lithium levels bidirectionally — relevant to anyone on lithium therapy.",
-        [f"{SRC_PUBMED}/8590902/"],
+        [],
     )),
     # L4 Turmeric × lithium (Section 6 Position A: monitor)
     ("ingredient_quality_map", "turmeric", "lithium", l_rule(
@@ -321,7 +319,7 @@ L_RULES = [
         "Mention to your prescriber",
         "High-dose turmeric or curcumin may theoretically affect lithium levels via NSAID-like mechanisms, though clinical evidence is limited. Precautionary advice only.",
         "Conservative posture for lithium given narrow therapeutic index — clinical evidence for curcumin specifically is absent.",
-        [f"{SRC_PUBMED}/12674015/"],
+        [],
         evidence_level="possible",
     )),
     ("ingredient_quality_map", "curcumin", "lithium", l_rule(
@@ -331,7 +329,7 @@ L_RULES = [
         "Mention to your prescriber",
         "High-dose curcumin extracts may theoretically affect lithium levels. Clinical evidence is limited; the advice is precautionary.",
         "Conservative monitor posture — clinical evidence absent for curcumin specifically.",
-        [f"{SRC_PUBMED}/12674015/"],
+        [],
         evidence_level="possible",
     )),
     # L5 Magnesium × lithium
@@ -342,7 +340,7 @@ L_RULES = [
         "Space doses 2 hours apart",
         "High-dose magnesium taken at the same time as lithium may reduce absorption. Take them at least 2 hours apart.",
         "Magnesium can affect lithium absorption — relevant to anyone on lithium therapy.",
-        [f"{SRC_PUBMED}/29363269/"],
+        [],
     )),
     # L6 Iodine/kelp × lithium
     ("ingredient_quality_map", "iodine", "lithium", l_rule(
@@ -352,7 +350,7 @@ L_RULES = [
         "Hypothyroidism risk with lithium",
         "Lithium can suppress thyroid function. Iodine and kelp supplements compound this risk — read labels on 'thyroid support' formulas.",
         "Iodine sources stack thyroid risk with lithium — relevant to anyone on lithium therapy.",
-        [f"{SRC_PUBMED}/19500763/"],
+        [],
     )),
     # L7 Dandelion × lithium
     ("ingredient_quality_map", "dandelion", "lithium", l_rule(
@@ -364,8 +362,7 @@ L_RULES = [
         "Dandelion's diuretic effect can raise lithium — relevant to anyone on lithium therapy.",
         [f"{SRC_PUBMED}/19678785/"],
         evidence_level="possible",
-    )),
-]
+    ))]
 
 
 def c_rule(severity, mech, action, headline, body, note, sources, evidence_level="established"):
@@ -402,7 +399,7 @@ C_RULES = [
         "Do not combine with transplant drugs",
         "Grapefruit and bergamot can push tacrolimus and cyclosporine to toxic levels, damaging the kidneys. Strict avoidance is required.",
         "Grapefruit/bergamot are contraindicated with transplant immunosuppressants.",
-        [f"{SRC_PUBMED}/26929736/"],
+        [],
     )),
     # C4 St John's Wort × CYP3A4 substrates (broad set)
     ("ingredient_quality_map", "st_johns_wort", "immunosuppressants", c_rule(
@@ -412,7 +409,7 @@ C_RULES = [
         "Do not combine with transplant drugs",
         "St. John's Wort speeds up the breakdown of tacrolimus and cyclosporine. This can cause transplant rejection.",
         "St. John's Wort is a strong CYP3A4 inducer — opposite mechanism to grapefruit (drug failure, not toxicity).",
-        [f"{SRC_PUBMED}/12595722/"],
+        [],
     )),
     ("ingredient_quality_map", "st_johns_wort", "oral_contraceptives", c_rule(
         "contraindicated",
@@ -421,7 +418,7 @@ C_RULES = [
         "May cause contraception failure",
         "St. John's Wort lowers the level of birth-control pills in your blood and can lead to unintended pregnancy.",
         "St. John's Wort reduces oral contraceptive efficacy.",
-        [f"{SRC_PUBMED}/12595722/"],
+        [],
     )),
     # C5 Goldenseal × CYP3A4 substrates
     ("ingredient_quality_map", "goldenseal", "cyp3a4_substrates", c_rule(
@@ -431,7 +428,7 @@ C_RULES = [
         "Affects how many drugs are processed",
         "Goldenseal blocks two enzymes that break down many prescription drugs. This can raise drug levels and side-effect risk.",
         "Goldenseal is a strong CYP3A4 and CYP2D6 inhibitor — relevant to anyone on prescription drugs metabolized by these enzymes.",
-        [f"{SRC_PUBMED}/18180278/"],
+        [],
     )),
     # C6 Schisandra × CYP3A4 substrates
     ("botanical_ingredients", "schisandra_berry", "cyp3a4_substrates", c_rule(
@@ -441,7 +438,7 @@ C_RULES = [
         "May affect prescription drug levels",
         "Schisandra can change levels of certain prescription drugs by inhibiting a key liver enzyme. Especially important for transplant patients.",
         "Schisandra inhibits CYP3A4 — relevant to anyone on prescription drugs metabolized by that enzyme.",
-        [f"{SRC_PUBMED}/17877974/"],
+        [],
     )),
     # C7 Berberine × CYP3A4 substrates
     ("ingredient_quality_map", "berberine_supplement", "cyp3a4_substrates", c_rule(
@@ -451,7 +448,7 @@ C_RULES = [
         "May affect prescription drug levels",
         "Berberine can mildly slow the breakdown of certain prescription drugs. Mention berberine use to your prescriber if you take other medications.",
         "Berberine inhibits CYP3A4 at clinical doses — relevant to anyone on prescription drugs metabolized by that enzyme.",
-        [f"{SRC_PUBMED}/22931302/"],
+        [],
     )),
     # C8 Grapefruit/bergamot × amiodarone
     ("ingredient_quality_map", "citrus_bergamot", "antiarrhythmics", c_rule(
@@ -461,7 +458,7 @@ C_RULES = [
         "Heart-rhythm risk with amiodarone",
         "Grapefruit and bergamot raise amiodarone levels and increase the risk of dangerous heart rhythms.",
         "Grapefruit/bergamot stack QT risk with amiodarone.",
-        [f"{SRC_PUBMED}/10691759/"],
+        [],
     )),
     # C9 Grapefruit/bergamot × DOACs
     ("ingredient_quality_map", "citrus_bergamot", "anticoagulants", c_rule(
@@ -471,7 +468,7 @@ C_RULES = [
         "May increase bleeding risk",
         "Grapefruit and bergamot can raise levels of newer blood thinners like apixaban and rivaroxaban, increasing bleeding risk.",
         "Grapefruit/bergamot affect DOACs through CYP3A4 and P-gp.",
-        [f"{SRC_PUBMED}/23590328/"],
+        [],
     )),
     # C10 Grapefruit/bergamot × oral contraceptives
     ("ingredient_quality_map", "citrus_bergamot", "oral_contraceptives", c_rule(
@@ -481,9 +478,8 @@ C_RULES = [
         "Mildly raises hormone levels",
         "Grapefruit and bergamot can mildly increase estrogen levels from birth-control pills. Effect is small but documented.",
         "Grapefruit/bergamot mildly raise oral contraceptive levels.",
-        [f"{SRC_PUBMED}/8961038/"],
-    )),
-]
+        [],
+    ))]
 
 ALL_RULES = W_RULES + M_RULES + L_RULES + C_RULES
 
@@ -577,8 +573,7 @@ def main():
                     "pregnancy_category": "no_data",
                     "lactation_category": "no_data",
                     "evidence_level": "no_data",
-                    "notes": DEFAULT_LACT_NOTE,
-                    "sources": [],
+                    "notes": DEFAULT_LACT_NOTE
                 },
                 "last_reviewed": "2026-04-30",
                 "review_owner": "pharmaguide_clinical_team",
