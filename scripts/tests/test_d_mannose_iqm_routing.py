@@ -185,6 +185,8 @@ class TestBrandedFiberRouting:
         assert source_db == "other_ingredients"
 
     def test_vitafiber_entry_schema(self) -> None:
+        """Phase 4c (2026-04-30) canonicalized `fiber_plant` → `filler`. The
+        prebiotic-fiber dimension now lives in `functional_roles[]`."""
         data = json.loads((DATA_DIR / "other_ingredients.json").read_text())
         entries = [
             e for e in data.get("other_ingredients", [])
@@ -192,11 +194,13 @@ class TestBrandedFiberRouting:
         ]
         assert len(entries) == 1
         entry = entries[0]
-        assert entry.get("category") == "fiber_plant"
+        assert entry.get("category") == "filler"
+        assert "prebiotic_fiber" in (entry.get("functional_roles") or [])
         assert entry.get("is_additive") is True
         assert entry.get("cui_status") == "governed_null"
 
     def test_creafibe_entry_schema(self) -> None:
+        """Phase 4c canonicalized `fiber_plant` → `filler`."""
         data = json.loads((DATA_DIR / "other_ingredients.json").read_text())
         entries = [
             e for e in data.get("other_ingredients", [])
@@ -204,5 +208,6 @@ class TestBrandedFiberRouting:
         ]
         assert len(entries) == 1
         entry = entries[0]
-        assert entry.get("category") == "fiber_plant"
+        assert entry.get("category") == "filler"
+        assert "prebiotic_fiber" in (entry.get("functional_roles") or [])
         assert entry.get("is_additive") is True

@@ -3,7 +3,7 @@
     "description": "Ingredients backed by clinical research and studies - Enhanced for Section C v3.4.0",
     "purpose": "evidence_scoring",
     "schema_version": "5.3.0",
-    "last_updated": "2026-04-02",
+    "last_updated": "2026-04-30",
     "total_entries": 197,
     "changelog": [
       "auto (2026-04-02): backfill-auditability updated 47 high-impact entries with registry counts, endpoint tags, and effect_direction auditability fields.",
@@ -64,7 +64,7 @@
         "curcumin phytosome",
         "indena meriva"
       ],
-      "category": "anti-inflammatory",
+      "category": "anti_inflammatory",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -214,7 +214,7 @@
         "Ash66",
         "KSM-66 ashwagandha"
       ],
-      "category": "adaptogen",
+      "category": "adaptogen_stress",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -298,7 +298,7 @@
         "sensoril",
         "natreon ashwagandha"
       ],
-      "category": "adaptogen",
+      "category": "adaptogen_stress",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -399,7 +399,7 @@
         "bcm95",
         "curcugreen"
       ],
-      "category": "anti-inflammatory",
+      "category": "anti_inflammatory",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT",
@@ -510,7 +510,7 @@
         "theracurmin",
         "nano curcumin"
       ],
-      "category": "anti-inflammatory",
+      "category": "anti_inflammatory",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -649,7 +649,7 @@
       "aliases": [
         "forceval multivitamin"
       ],
-      "category": "multivitamin",
+      "category": "vitamin_supplement",
       "evidence_level": "branded-rct",
       "published_studies": [
         "SmPC",
@@ -702,7 +702,7 @@
         "super bio-curcumin",
         "life extension bcm-95"
       ],
-      "category": "anti-inflammatory",
+      "category": "anti_inflammatory",
       "evidence_level": "branded-rct",
       "published_studies": [
         "ingredient",
@@ -1093,7 +1093,7 @@
         "bioastin",
         "zanthin"
       ],
-      "category": "antioxidant / eye health",
+      "category": "eye_health",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT",
@@ -1263,7 +1263,7 @@
         "kaneka coq10",
         "kaneka qh"
       ],
-      "category": "coenzyme q10",
+      "category": "vitamin_supplement",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -1373,7 +1373,7 @@
         "ester-c",
         "calcium ascorbate-threonate"
       ],
-      "category": "vitamin c",
+      "category": "vitamin_supplement",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT",
@@ -1481,7 +1481,7 @@
         "zylofresh",
         "alfalfa extract"
       ],
-      "category": "alfalfa",
+      "category": "vitamin_supplement",
       "evidence_level": "preclinical",
       "published_studies": [
         "animal"
@@ -1540,7 +1540,7 @@
         "german creatine",
         "alzchem creapure"
       ],
-      "category": "sports nutrition",
+      "category": "sports_performance",
       "evidence_level": "branded-rct",
       "published_studies": [
         "controlled trial",
@@ -1622,7 +1622,7 @@
         "traacs",
         "chelated minerals"
       ],
-      "category": "mineral absorption",
+      "category": "mineral_supplement",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT",
@@ -1735,7 +1735,7 @@
         "5-mthf",
         "methylfolate"
       ],
-      "category": "b-vitamin",
+      "category": "vitamin_supplement",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -1833,7 +1833,7 @@
         "circadin",
         "pr melatonin"
       ],
-      "category": "sleep",
+      "category": "sleep_mood",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT",
@@ -1985,7 +1985,7 @@
         "optiferrin",
         "lactoferrin"
       ],
-      "category": "iron/immunity",
+      "category": "immune",
       "evidence_level": "branded-rct",
       "published_studies": [
         "systematic_review",
@@ -2090,7 +2090,7 @@
         "carnipure",
         "lonza l-carnitine"
       ],
-      "category": "energy/fat metabolism",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -2210,7 +2210,7 @@
         "seakelp",
         "organic kelp"
       ],
-      "category": "thyroid support",
+      "category": "hormonal_endocrine",
       "evidence_level": "branded-rct",
       "published_studies": [
         "brand",
@@ -2291,7 +2291,7 @@
         "phosphatidylserine",
         "ps"
       ],
-      "category": "cognitive",
+      "category": "cognitive_neurological",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -2387,7 +2387,7 @@
         "silymarin mediherb",
         "mediherb milk thistle"
       ],
-      "category": "liver support",
+      "category": "liver_detox",
       "evidence_level": "branded-rct",
       "published_studies": [
         "brand",
@@ -2497,7 +2497,7 @@
         "mitoq",
         "mitoquinone"
       ],
-      "category": "mitochondrial",
+      "category": "mitochondrial_energy",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT"
@@ -2582,7 +2582,7 @@
         "citicoline",
         "cdp-choline"
       ],
-      "category": "cognitive",
+      "category": "cognitive_neurological",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -2658,7 +2658,7 @@
         "suntheanine",
         "l-theanine"
       ],
-      "category": "calm/focus",
+      "category": "cognitive_neurological",
       "evidence_level": "branded-rct",
       "published_studies": [
         "brand",
@@ -2875,7 +2875,7 @@
         "optisharp",
         "lutein zeaxanthin"
       ],
-      "category": "eye health",
+      "category": "eye_health",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -3085,7 +3085,7 @@
         "piperine",
         "black pepper extract"
       ],
-      "category": "absorption enhancer",
+      "category": "general_herbs",
       "evidence_level": "product-human",
       "published_studies": [
         "clinical trial"
@@ -3268,7 +3268,7 @@
         "msm",
         "methylsulfonylmethane"
       ],
-      "category": "joint/connective tissue",
+      "category": "joint_bone",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT"
@@ -3378,7 +3378,7 @@
         "marine calcium",
         "marine magnesium"
       ],
-      "category": "mineral complex",
+      "category": "mineral_supplement",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT"
@@ -3457,7 +3457,7 @@
         "optimized curcumin",
         "solid lipid curcumin"
       ],
-      "category": "anti-inflammatory",
+      "category": "anti_inflammatory",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT",
@@ -3573,7 +3573,7 @@
         "sabinsa curcumin",
         "curcuminoids complex"
       ],
-      "category": "anti-inflammatory",
+      "category": "anti_inflammatory",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT",
@@ -3651,7 +3651,7 @@
         "undenatured collagen ii",
         "interhealth uc-ii"
       ],
-      "category": "joint health",
+      "category": "joint_bone",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT",
@@ -3750,7 +3750,7 @@
         "biocell collagen ii",
         "hydrolyzed collagen complex"
       ],
-      "category": "joint/skin health",
+      "category": "joint_bone",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT"
@@ -3903,7 +3903,7 @@
         "nr",
         "chromadex niagen"
       ],
-      "category": "anti-aging",
+      "category": "aging_longevity",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT"
@@ -4018,7 +4018,7 @@
         "mk-7",
         "nattopharma k2"
       ],
-      "category": "bone/cardiovascular",
+      "category": "joint_bone",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT"
@@ -4139,7 +4139,7 @@
         "affron",
         "pharmactive saffron"
       ],
-      "category": "mood/sleep",
+      "category": "sleep_mood",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT"
@@ -4301,7 +4301,7 @@
         "relora",
         "magnolia phellodendron extract"
       ],
-      "category": "stress/weight",
+      "category": "adaptogen_stress",
       "evidence_level": "product-human",
       "published_studies": [
         "clinical trial"
@@ -4359,7 +4359,7 @@
         "tebonin",
         "ginkgo egb"
       ],
-      "category": "cognitive",
+      "category": "cognitive_neurological",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT",
@@ -4476,7 +4476,7 @@
         "urolithin a",
         "timeline mitopure"
       ],
-      "category": "mitochondrial",
+      "category": "mitochondrial_energy",
       "evidence_level": "product-human",
       "published_studies": [
         "RCT"
@@ -4573,7 +4573,7 @@
         "beta alanine",
         "carnosyn"
       ],
-      "category": "sports nutrition",
+      "category": "sports_performance",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -4675,7 +4675,7 @@
         "citrulline",
         "citrulline malate"
       ],
-      "category": "vascular/exercise",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -4796,7 +4796,7 @@
         "collagen hydrolysate",
         "collagen powder"
       ],
-      "category": "joint/skin",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -4943,7 +4943,7 @@
         "hyaluronan",
         "sodium hyaluronate"
       ],
-      "category": "joint/skin",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -5151,7 +5151,7 @@
         "menaquinone-7",
         "vitamin k2"
       ],
-      "category": "bone/cardiovascular",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT"
@@ -5299,7 +5299,7 @@
         "selenomethionine",
         "selenium yeast"
       ],
-      "category": "antioxidant/thyroid",
+      "category": "hormonal_endocrine",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -5459,7 +5459,7 @@
         "5-htp",
         "griffonia simplicifolia extract"
       ],
-      "category": "mood/appetite",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -5560,7 +5560,7 @@
         "sam-e",
         "s adenosyl methionine"
       ],
-      "category": "mood/joint",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -5661,7 +5661,7 @@
         "caffeine anhydrous",
         "natural caffeine"
       ],
-      "category": "energy/focus",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -5843,7 +5843,7 @@
         "berberine hydrochloride",
         "berberine hcl"
       ],
-      "category": "metabolic health",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -5938,7 +5938,7 @@
         "(-)-epicatechin",
         "dark chocolate extract"
       ],
-      "category": "cardiovascular/exercise",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -6015,7 +6015,7 @@
         "rhodiola 3% salidroside",
         "standardized rhodiola"
       ],
-      "category": "adaptogen",
+      "category": "adaptogen_stress",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -6131,7 +6131,7 @@
         "magnesium bisglycinate",
         "magnesium glycinate chelate"
       ],
-      "category": "mineral / nervous system",
+      "category": "mineral_supplement",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -6236,7 +6236,7 @@
         "nac",
         "acetylcysteine"
       ],
-      "category": "antioxidant / detox",
+      "category": "antioxidant",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -6342,7 +6342,7 @@
         "quercetin dihydrate",
         "quercetin phytosome"
       ],
-      "category": "flavonoid / immune",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -6443,7 +6443,7 @@
         "theanine",
         "pure l-theanine"
       ],
-      "category": "amino acid / cognitive",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -6553,7 +6553,7 @@
         "bacopa extract",
         "brahmi"
       ],
-      "category": "adaptogen / cognitive",
+      "category": "adaptogen_stress",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -6653,7 +6653,7 @@
         "coq10",
         "ubiquinone"
       ],
-      "category": "mitochondrial / cardiovascular",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -6789,7 +6789,7 @@
         "algal oil",
         "marine omega-3"
       ],
-      "category": "cardiovascular / anti-inflammatory",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -6872,7 +6872,7 @@
         "cholecalciferol",
         "vitamin d"
       ],
-      "category": "hormonal / immune",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -6974,7 +6974,7 @@
       "aliases": [
         "zinc"
       ],
-      "category": "mineral / immune",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -7096,7 +7096,7 @@
         "marigold extract",
         "floraglo"
       ],
-      "category": "carotenoid / eye health",
+      "category": "eye_health",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -7176,7 +7176,7 @@
         "vitamin b7",
         "d-biotin"
       ],
-      "category": "vitamin / hair & skin",
+      "category": "skin_hair_collagen",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "open-label",
@@ -7273,7 +7273,7 @@
         "melatonin",
         "n-acetyl-5-methoxytryptamine"
       ],
-      "category": "hormone / sleep",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -7372,7 +7372,7 @@
         "ginseng extract",
         "asian ginseng"
       ],
-      "category": "adaptogen / energy",
+      "category": "adaptogen_stress",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -7494,7 +7494,7 @@
         "rhodiola extract",
         "golden root"
       ],
-      "category": "adaptogen / stress",
+      "category": "adaptogen_stress",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -7588,7 +7588,7 @@
         "cobalamin",
         "methylcobalamin"
       ],
-      "category": "vitamin / energy",
+      "category": "mitochondrial_energy",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -7660,7 +7660,7 @@
         "probiotics",
         "probiotic blend"
       ],
-      "category": "gut health / immune",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -7796,7 +7796,7 @@
         "turmeric extract",
         "curcuminoids"
       ],
-      "category": "anti-inflammatory / antioxidant",
+      "category": "anti_inflammatory",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -7930,7 +7930,7 @@
         "ascorbic acid",
         "vitamin c"
       ],
-      "category": "vitamin / immune",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -8070,7 +8070,7 @@
         "ginger root extract",
         "ginger rhizome"
       ],
-      "category": "digestive / anti-inflammatory",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -8220,7 +8220,7 @@
         "withania somnifera",
         "indian ginseng"
       ],
-      "category": "adaptogen / stress",
+      "category": "adaptogen_stress",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -8327,7 +8327,7 @@
         "green tea catechins",
         "camellia sinensis"
       ],
-      "category": "antioxidant / metabolic",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -8439,7 +8439,7 @@
         "milk thistle extract",
         "milk thistle seed extract"
       ],
-      "category": "liver support",
+      "category": "liver_detox",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -8538,7 +8538,7 @@
         "lion's mane extract",
         "yamabushitake"
       ],
-      "category": "nootropic / nerve health",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -8661,7 +8661,7 @@
         "aminoacetic acid",
         "glycine powder"
       ],
-      "category": "amino acid / sleep",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -8787,7 +8787,7 @@
         "sour cherry extract",
         "prunus cerasus"
       ],
-      "category": "natural melatonin / sleep",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -8929,7 +8929,7 @@
         "elderberry syrup",
         "elderberry"
       ],
-      "category": "immune / antiviral",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -9044,7 +9044,7 @@
         "methi",
         "fenugreek seed"
       ],
-      "category": "blood sugar / testosterone",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -9159,7 +9159,7 @@
         "karela",
         "bitter gourd"
       ],
-      "category": "blood sugar / metabolic",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -9230,7 +9230,7 @@
         "ala",
         "thioctic acid"
       ],
-      "category": "antioxidant / blood sugar",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -9490,7 +9490,7 @@
         "glucosamine",
         "crystalline glucosamine sulfate"
       ],
-      "category": "joint health",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -9581,7 +9581,7 @@
         "chondroitin",
         "chondroitin sulphate"
       ],
-      "category": "joint health",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -9659,7 +9659,7 @@
         "cranberry juice extract",
         "whole cranberry"
       ],
-      "category": "urinary health",
+      "category": "urinary_genitourinary",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -9784,7 +9784,7 @@
         "cinnamon bark",
         "cinnamon bark extract"
       ],
-      "category": "blood sugar",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -9889,7 +9889,7 @@
         "protease",
         "amylase"
       ],
-      "category": "digestive",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -9994,7 +9994,7 @@
         "prebiotic fiber",
         "fos"
       ],
-      "category": "prebiotic",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -10138,7 +10138,7 @@
         "gentle iron",
         "ferrous bisglycinate"
       ],
-      "category": "mineral",
+      "category": "mineral_supplement",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -10224,7 +10224,7 @@
         "methylfolate",
         "metafolin"
       ],
-      "category": "b-vitamin",
+      "category": "vitamin_supplement",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -10455,7 +10455,7 @@
         "valeriana officinalis",
         "valerian extract"
       ],
-      "category": "sleep",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -10540,7 +10540,7 @@
         "passiflora incarnata",
         "passion flower"
       ],
-      "category": "anxiety/sleep",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -10657,7 +10657,7 @@
         "melissa officinalis",
         "lemon balm"
       ],
-      "category": "calming/cognitive",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -10731,7 +10731,7 @@
         "fisetin",
         "flavonol fisetin"
       ],
-      "category": "senolytic",
+      "category": "aging_longevity",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
@@ -10803,7 +10803,7 @@
         "spermidine",
         "polyamine spermidine"
       ],
-      "category": "autophagy",
+      "category": "aging_longevity",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
@@ -10916,7 +10916,7 @@
         "ca-akg",
         "alpha ketoglutarate"
       ],
-      "category": "metabolic/anti-aging",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
@@ -11021,7 +11021,7 @@
         "apigenin",
         "chamomile apigenin"
       ],
-      "category": "anti-inflammatory/sleep",
+      "category": "anti_inflammatory",
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
@@ -11102,7 +11102,7 @@
         "luteolin",
         "flavonoid luteolin"
       ],
-      "category": "anti-inflammatory",
+      "category": "anti_inflammatory",
       "evidence_level": "preclinical",
       "score_contribution": "tier_3",
       "key_endpoints": [
@@ -11176,7 +11176,7 @@
         "amino sulfonic acid",
         "l-taurine"
       ],
-      "category": "cardiometabolic / vascular",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -11397,7 +11397,7 @@
         "nadh",
         "reduced nicotinamide adenine dinucleotide"
       ],
-      "category": "energy",
+      "category": "mitochondrial_energy",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -11554,7 +11554,7 @@
         "trimethylglycine",
         "tmg"
       ],
-      "category": "methyl donor",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -11854,7 +11854,7 @@
         "broccoli sprout extract",
         "glucoraphanin"
       ],
-      "category": "antioxidant / detox",
+      "category": "antioxidant",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -11994,7 +11994,7 @@
         "dimethyl resveratrol",
         "blueberry stilbene"
       ],
-      "category": "antioxidant / cognitive",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
@@ -12077,7 +12077,7 @@
         "artichoke leaf",
         "cynara scolymus"
       ],
-      "category": "liver / lipids",
+      "category": "liver_detox",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -12289,7 +12289,7 @@
         "licorice root extract",
         "glycyrrhizin-free licorice"
       ],
-      "category": "gut / mucosal",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -12441,7 +12441,7 @@
         "polaprezinc",
         "zinc-l-carnosine"
       ],
-      "category": "gut / barrier",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -12668,7 +12668,7 @@
         "boswellic acids",
         "frankincense extract"
       ],
-      "category": "inflammation / joint",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -12794,7 +12794,7 @@
         "club moss extract",
         "huperzia serrata"
       ],
-      "category": "cognitive / nootropic",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -12960,7 +12960,7 @@
         "cordycepin",
         "cs-4"
       ],
-      "category": "energy / adaptogen",
+      "category": "adaptogen_stress",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -13095,7 +13095,7 @@
         "betaine hydrochloride",
         "digestive betaine"
       ],
-      "category": "digestive / acid support",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
@@ -13218,7 +13218,7 @@
         "crocetin",
         "saffron stigma"
       ],
-      "category": "mood / eye health",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -13335,7 +13335,7 @@
         "chromium",
         "chromium picolinate"
       ],
-      "category": "metabolic / blood sugar",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -13486,7 +13486,7 @@
         "alcar",
         "acetyl carnitine"
       ],
-      "category": "cognitive / mitochondrial",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -13592,7 +13592,7 @@
         "nmn",
         "nad precursor"
       ],
-      "category": "anti-aging / metabolic",
+      "category": "aging_longevity",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -13792,7 +13792,7 @@
         "pqq",
         "pyrroloquinoline quinone"
       ],
-      "category": "mitochondrial / cognitive",
+      "category": "mitochondrial_energy",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_2",
       "key_endpoints": [
@@ -13904,7 +13904,7 @@
         "resveratrol",
         "trans-resveratrol"
       ],
-      "category": "antioxidant / anti-aging",
+      "category": "aging_longevity",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -14129,7 +14129,7 @@
         "standard curcumin",
         "turmeric curcumin"
       ],
-      "category": "anti-inflammatory",
+      "category": "anti_inflammatory",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -14286,7 +14286,7 @@
         "berberine sulfate",
         "standard berberine"
       ],
-      "category": "metabolic",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "score_contribution": "tier_1",
       "key_endpoints": [
@@ -14621,7 +14621,7 @@
         "arginine silicate",
         "ASI"
       ],
-      "category": "sports nutrition / cognitive",
+      "category": "sports_performance",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -14779,7 +14779,7 @@
         "eurycoma longifolia",
         "tongkat ali lj100"
       ],
-      "category": "testosterone / adaptogen",
+      "category": "adaptogen_stress",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -14882,7 +14882,7 @@
         "shoden ashwagandha",
         "35% withanolide glycosides"
       ],
-      "category": "adaptogen",
+      "category": "adaptogen_stress",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -15013,7 +15013,7 @@
         "fenugreek testofen",
         "fenuside"
       ],
-      "category": "testosterone / sports",
+      "category": "sports_performance",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -15129,7 +15129,7 @@
         "mgt",
         "magnesium threonate"
       ],
-      "category": "cognitive / sleep",
+      "category": "cognitive_neurological",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -15245,7 +15245,7 @@
         "partially hydrolyzed guar gum",
         "guar fiber"
       ],
-      "category": "prebiotic / digestive",
+      "category": "digestive_gut",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -15352,7 +15352,7 @@
         "cynatine hns",
         "solubilized keratin"
       ],
-      "category": "hair / skin / nails",
+      "category": "skin_hair_collagen",
       "evidence_level": "branded-rct",
       "study_type": "rct_single",
       "published_studies": [
@@ -15424,7 +15424,7 @@
         "tamarind turmeric",
         "tamarind extract joint"
       ],
-      "category": "joint health",
+      "category": "joint_bone",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -15546,7 +15546,7 @@
         "hmb free acid",
         "calcium hmb"
       ],
-      "category": "sports nutrition / muscle",
+      "category": "sports_performance",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -15707,7 +15707,7 @@
         "mango leaf extract",
         "mangiferin"
       ],
-      "category": "cognitive / energy",
+      "category": "cognitive_neurological",
       "evidence_level": "branded-rct",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -15866,7 +15866,7 @@
         "lactiplantibacillus plantarum heal9",
         "probi mental health"
       ],
-      "category": "probiotic / stress",
+      "category": "probiotics",
       "evidence_level": "strain-clinical",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -15974,7 +15974,7 @@
         "marigold lutein zeaxanthin",
         "lutein zeaxanthin isomers"
       ],
-      "category": "eye health / visual performance",
+      "category": "eye_health",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT",
@@ -16120,7 +16120,7 @@
         "purified shilajit",
         "fulvic acid shilajit"
       ],
-      "category": "energy / men's health",
+      "category": "sports_performance",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT",
@@ -16233,7 +16233,7 @@
         "lipid metabolite vitamin c",
         "ascorbic acid lipid complex"
       ],
-      "category": "vitamin c / immune",
+      "category": "immune",
       "evidence_level": "product-human",
       "published_studies": [
         "clinical trial",
@@ -16342,7 +16342,7 @@
         "hypericum perforatum",
         "hypericum extract"
       ],
-      "category": "mood support",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -16450,7 +16450,7 @@
         "mixed tocopherols",
         "tocotrienols"
       ],
-      "category": "vitamin / antioxidant",
+      "category": "vitamin_supplement",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -16527,7 +16527,7 @@
         "beta-carotene",
         "provitamin a"
       ],
-      "category": "vitamin / eye health",
+      "category": "eye_health",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -16690,7 +16690,7 @@
         "magnesium chloride",
         "magnesium lactate"
       ],
-      "category": "mineral / neuromuscular",
+      "category": "mineral_supplement",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -16829,7 +16829,7 @@
         "calcium citrate",
         "calcium phosphate"
       ],
-      "category": "mineral / bone health",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -16945,7 +16945,7 @@
         "p5p",
         "pyridoxal phosphate"
       ],
-      "category": "vitamin / neurological",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -17048,7 +17048,7 @@
         "thiamine",
         "thiamin"
       ],
-      "category": "vitamin / metabolic",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -17244,7 +17244,7 @@
         "pantothenic acid",
         "d-calcium pantothenate"
       ],
-      "category": "vitamin / metabolic",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "clinical",
@@ -17376,7 +17376,7 @@
         "vitamin b2",
         "riboflavin"
       ],
-      "category": "vitamin / neurological",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -17503,7 +17503,7 @@
         "potassium chloride",
         "potassium gluconate"
       ],
-      "category": "mineral / cardiovascular",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -17568,7 +17568,7 @@
         "iodide",
         "kelp iodine"
       ],
-      "category": "mineral / thyroid",
+      "category": "mineral_supplement",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "clinical",
@@ -17692,7 +17692,7 @@
         "manganese gluconate",
         "manganese sulfate"
       ],
-      "category": "mineral / antioxidant enzyme support",
+      "category": "mineral_supplement",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "clinical",
@@ -17750,7 +17750,7 @@
         "copper bisglycinate",
         "cupric sulfate"
       ],
-      "category": "mineral / immune-hematologic",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "clinical",
@@ -17810,7 +17810,7 @@
         "calcium phosphate",
         "potassium phosphate"
       ],
-      "category": "mineral / bone-energy metabolism",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "clinical",
@@ -17868,7 +17868,7 @@
         "plantago ovata",
         "soluble fiber psyllium"
       ],
-      "category": "fiber / cardiometabolic",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -17983,7 +17983,7 @@
         "boron glycinate",
         "calcium fructoborate"
       ],
-      "category": "trace mineral / bone-hormonal",
+      "category": "joint_bone",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -18166,7 +18166,7 @@
         "astragalus membranaceus",
         "huang qi"
       ],
-      "category": "immune / adaptogen",
+      "category": "adaptogen_stress",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -18238,7 +18238,7 @@
         "pineapple enzyme",
         "ananas comosus enzyme"
       ],
-      "category": "digestive / inflammation support",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "systematic_review",
@@ -18313,7 +18313,7 @@
         "bee propolis",
         "propolis extract"
       ],
-      "category": "immune / oral health",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -18380,7 +18380,7 @@
         "echinacea angustifolia",
         "echinacea extract"
       ],
-      "category": "immune / respiratory",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -18456,7 +18456,7 @@
         "medical grade honey",
         "manuka honey"
       ],
-      "category": "upper respiratory / oral soothing",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -18623,7 +18623,7 @@
         "diindolylmethane",
         "3,3'-diindolylmethane"
       ],
-      "category": "hormonal metabolism",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -18734,7 +18734,7 @@
         "shilajit",
         "fulvic acid complex"
       ],
-      "category": "mitochondrial / energy",
+      "category": "mitochondrial_energy",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -18840,7 +18840,7 @@
         "levagen",
         "pea palmitoylethanolamide"
       ],
-      "category": "pain / inflammation modulation",
+      "category": "anti_inflammatory",
       "evidence_level": "ingredient-human",
       "published_studies": [
         "RCT",
@@ -18916,7 +18916,7 @@
         "micronized creatine monohydrate",
         "creatine powder"
       ],
-      "category": "sports performance / neuromuscular",
+      "category": "sports_performance",
       "evidence_level": "ingredient-human",
       "study_type": "systematic_review_meta",
       "published_studies": [
@@ -19024,7 +19024,7 @@
         "mentha piperita oil",
         "enteric-coated peppermint oil"
       ],
-      "category": "gastrointestinal support",
+      "category": "digestive_gut",
       "evidence_level": "ingredient-human",
       "study_type": "systematic_review_meta",
       "published_studies": [
@@ -19495,7 +19495,7 @@
         "pharma gaba",
         "pharmagaba"
       ],
-      "category": "stress / sleep support",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "study_type": "systematic_review_meta",
       "published_studies": [
@@ -19560,7 +19560,7 @@
         "matricaria recutita",
         "german chamomile"
       ],
-      "category": "sleep / anxiety support",
+      "category": "sleep_mood",
       "evidence_level": "ingredient-human",
       "study_type": "systematic_review_meta",
       "published_studies": [
@@ -19637,7 +19637,7 @@
         "dietary nitrate",
         "nitrate beetroot"
       ],
-      "category": "exercise performance / cardiovascular",
+      "category": "sports_performance",
       "evidence_level": "ingredient-human",
       "study_type": "systematic_review_meta",
       "published_studies": [
@@ -19743,7 +19743,7 @@
         "whey protein concentrate",
         "whey hydrolysate"
       ],
-      "category": "protein / muscle performance",
+      "category": "sports_performance",
       "evidence_level": "ingredient-human",
       "study_type": "systematic_review_meta",
       "published_studies": [
@@ -19851,7 +19851,7 @@
         "cdp choline",
         "cytidine diphosphate choline"
       ],
-      "category": "cognitive / neurological",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -19955,7 +19955,7 @@
         "l-alpha glycerylphosphorylcholine",
         "choline alphoscerate"
       ],
-      "category": "cognitive / cholinergic",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "study_type": "systematic_review_meta",
       "published_studies": [
@@ -20100,7 +20100,7 @@
         "undecylenic acid",
         "undecenoic acid"
       ],
-      "category": "antifungal",
+      "category": "immune",
       "evidence_level": "ingredient-human",
       "study_type": "in_vitro",
       "published_studies": [
@@ -20162,7 +20162,7 @@
         "benfotiamine",
         "S-benzoylthiamine O-monophosphate"
       ],
-      "category": "b_vitamins",
+      "category": "vitamin_supplement",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -20214,7 +20214,7 @@
         "QH",
         "kaneka ubiquinol"
       ],
-      "category": "antioxidants",
+      "category": "antioxidant",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -20267,7 +20267,7 @@
         "bis-pantethine",
         "pantethine supplement"
       ],
-      "category": "b_vitamins",
+      "category": "vitamin_supplement",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -20318,7 +20318,7 @@
         "berberine sulfate",
         "berberine supplement"
       ],
-      "category": "metabolic_support",
+      "category": "metabolic_blood_sugar",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -20413,7 +20413,7 @@
         "saw palmetto berry",
         "permixon"
       ],
-      "category": "prostate_health",
+      "category": "urinary_genitourinary",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -20595,7 +20595,7 @@
         "vitamin b3",
         "niacin"
       ],
-      "category": "vitamins",
+      "category": "vitamin_supplement",
       "evidence_level": "ingredient-human",
       "study_type": "rct_single",
       "published_studies": [
@@ -20661,7 +20661,7 @@
       "aliases": [
         "molybdenum"
       ],
-      "category": "minerals",
+      "category": "mineral_supplement",
       "evidence_level": "ingredient-human",
       "study_type": "rct_single",
       "published_studies": [
@@ -20934,7 +20934,7 @@
       "aliases": [
         "branched chain amino acids"
       ],
-      "category": "amino_acids",
+      "category": "cognitive_neurological",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -21002,7 +21002,7 @@
         "black seed oil",
         "nigella sativa"
       ],
-      "category": "herbs",
+      "category": "general_herbs",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -21085,7 +21085,7 @@
       "aliases": [
         "sea buckthorn"
       ],
-      "category": "herbs",
+      "category": "general_herbs",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -21153,7 +21153,7 @@
       "aliases": [
         "slippery elm"
       ],
-      "category": "herbs",
+      "category": "general_herbs",
       "evidence_level": "ingredient-human",
       "study_type": "rct_single",
       "published_studies": [
@@ -21206,7 +21206,7 @@
       "aliases": [
         "bilberry"
       ],
-      "category": "herbs",
+      "category": "general_herbs",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -21417,7 +21417,7 @@
       "aliases": [
         "black cohosh"
       ],
-      "category": "herbs",
+      "category": "general_herbs",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
@@ -21489,7 +21489,7 @@
       "aliases": [
         "ceramides"
       ],
-      "category": "fatty_acids",
+      "category": "cardiovascular",
       "evidence_level": "ingredient-human",
       "study_type": "rct_multiple",
       "published_studies": [
