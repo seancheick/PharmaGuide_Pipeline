@@ -473,7 +473,16 @@ Used to classify ingredients as active vs inactive.
 ---
 
 ### 17. ingredient_interaction_rules.json
-**Purpose:** `interaction_rules` | **Entries:** 129 | **Schema:** 5.1.0
+**Purpose:** `interaction_rules` | **Entries:** 142 | **Schema:** 5.3.0
+
+**Schema 5.3.0 (2026-04-30, clinician-locked):** added W/M/L/C drug-class
+families (warfarin/anticoagulants 11 rules, MAO inhibitors 7, lithium 7,
+CYP3A4/grapefruit 10) and locked the pregnancy_lactation `evidence_level`
+enum: `no_data | limited | moderate | strong` (legacy `established | probable
+| theoretical` accepted for migration). 100% pregnancy/lactation coverage
+via hybrid gap-fill (Option A bulk-default `monitor` for low-risk RDA-range
+nutrients, Option B `contraindicated` for banned/recalled, Option C
+`no_data` default for everything else).
 
 Primary key: `interaction_rules` (array)
 
