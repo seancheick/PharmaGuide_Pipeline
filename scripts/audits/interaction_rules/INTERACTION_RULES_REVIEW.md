@@ -15,24 +15,29 @@
 | 1A. Severity distribution | ✓ LOCKED | distribution intact |
 | 1B. Common-ingredient calibration | ✓ LOCKED | W5 turmeric × anticoagulants now overrides any generic turmeric rule (clinician dedupe note) |
 | 1C. Existing high-stakes rules | ✓ LOCKED | spot-checks confirmed |
-| 2A. Warfarin / anticoagulants (W1-W12) | ✓ SHIPPED | 11 of 12 applied; W10 bromelain deferred (no subject_ref) |
-| 2B. MAO inhibitors (M1-M8) | ✓ SHIPPED | 7 of 8 applied; M2 tyramine deferred (no subject_ref) |
+| 2A. Warfarin / anticoagulants (W1-W12) | ✓ SHIPPED | all 12 applied (W10 bromelain shipped via dedicated IQM entry creation) |
+| 2B. MAO inhibitors (M1-M8) | ✓ SHIPPED | all 8 applied (M2 tyramine shipped via new harmful_additives entry ADD_TYRAMINE_RICH_EXTRACT) |
 | 2C. Lithium (L1-L7) | ✓ SHIPPED | all 7 applied |
 | 2D. CYP3A4 / grapefruit (C1-C10) | ✓ SHIPPED | all 10 applied (C1-C3, C8-C10 use citrus_bergamot subject_ref) |
-| 2E. CYP2D6 (next batch) | DEFERRED | non-blocking for V1 |
+| 2E. CYP2D6 (partial) | ✓ SHIPPED (partial) | goldenseal × cyp2d6_substrates added (extends C5; clinician C5 mechanism noted "Also affects CYP2D6"). Bupleurum + St. John's Wort × CYP2D6 still need clinician sign-off |
 | 3C. Pregnancy/lactation hybrid gap-fill | ✓ SHIPPED | 100% coverage (10 Option A, 7 Option B, 88 Option C) |
 | 3D. Schema additions | ✓ SHIPPED | evidence_level field present on every rule; canonical enum: no_data / limited / moderate / strong (legacy: established / probable / theoretical accepted) |
 | 4. Severity vocab JSON (V1.1) | DEFERRED | covered by REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md P0 batch |
-| 6. Open severity calls | ✓ LOCKED to Position A | M5 yohimbe=contraindicated, L4 turmeric=monitor; M2 deferred |
+| 6. Open severity calls | ✓ LOCKED to Position A | M5 yohimbe=contraindicated, M2 tyramine=contraindicated, L4 turmeric=monitor |
 
 **Implementation artifacts:**
 - `scripts/audits/interaction_rules/batch_W_M_L_C/backfill.py` — 36 drug-class rules + pregnancy pre-seeds, idempotent
+- `scripts/audits/interaction_rules/batch_W_M_L_C/add_deferred_subjects.py` — bromelain IQM entry, tyramine harmful_additives entry, +3 rules (W10, M2, goldenseal CYP2D6)
 - `scripts/audits/interaction_rules/batch_pl_gapfill/backfill.py` — hybrid gap-fill (A/B/C), idempotent
-- `scripts/tests/test_interaction_rules_w_m_l_c_batch.py` — 91 regression tests, all passing
+- `scripts/tests/test_interaction_rules_w_m_l_c_batch.py` — 95 regression tests, all passing
 
-**Deferred to next batch (subject_ref required first):**
-- **W10 Bromelain × anticoagulants** (severity: monitor) — bromelain has no IQM entry; folding it into `digestive_enzymes` would over-broaden the rule. Recommend adding a dedicated `bromelain` IQM entry.
-- **M2 Tyramine-rich extracts × MAOIs** (severity: contraindicated, Section 6 open call) — tyramine isn't a single canonical ingredient but a class of fermented/aged compounds (aged-yeast, fermented bovine extracts, certain protein hydrolysates). Recommend a new `tyramine_rich_extract` entry in harmful_additives or other_ingredients.
+**New subject_refs introduced:**
+- **`ingredient_quality_map.bromelain`** — verified UNII U182GP2CF3, CUI C0006217, CAS 9001-00-7 (cross-referenced from existing standardized_botanicals entry, no hallucinated identifiers).
+- **`harmful_additives.ADD_TYRAMINE_RICH_EXTRACT`** — covers aged-yeast, fermented bovine, biogenic-amine extracts; severity_level=high; population_warning targets MAOI users.
+- standardized_botanicals.bromelain `attributes.no_iqm_parent_reason` removed; `attributes.iqm_parent_id: bromelain` added (matches §5b.1 pattern).
+
+**Still deferred (clinician sign-off required):**
+- **2E broader CYP2D6 rules** — Bupleurum × CYP2D6 substrates and high-dose St. John's Wort × CYP2D6 substrates. Clinician scoped these to "next batch" without per-rule severity locks; not authored here. Goldenseal CYP2D6 is the only 2E rule shipped because the C5 clinician text already documented the mechanism.
 
 ---
 

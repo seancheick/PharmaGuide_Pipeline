@@ -38789,7 +38789,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 610,
+    "total_entries": 617,
     "total_ingredients": 1322,
     "data_quality": {
       "review_status": "stub"
@@ -62037,5 +62037,42 @@
       "Lactobacillus delbrueckii bulgaricus",
       "C0317591"
     ]
+  },
+  "bromelain": {
+    "standard_name": "Bromelain",
+    "category": "enzymes",
+    "category_enum": "enzymes",
+    "cui": "C0006217",
+    "external_ids": {
+      "unii": "U182GP2CF3",
+      "cas": "9001-00-7"
+    },
+    "forms": {
+      "bromelain": {
+        "bio_score": 10,
+        "natural": true,
+        "score": 12,
+        "absorption": "Local-action enzyme; systemic absorption is partial via Peyer's patches. Activity-based dosing (GDU/g or MCU/mg), not mass-based.",
+        "notes": "Pineapple-stem proteolytic enzyme. Standardized by activity (2400 GDU/g standard). Clinical use in osteoarthritis, sinusitis, and post-surgical inflammation (NCCIH monograph). Has mild fibrinolytic / antiplatelet activity at supplement doses ≥500 mg/day — see ingredient_interaction_rules for anticoagulant interaction.",
+        "aliases": [
+          "bromelain enzyme",
+          "pineapple enzyme",
+          "pineapple bromelain",
+          "stem bromelain",
+          "fruit bromelain"
+        ],
+        "dosage_importance": 1.0
+      }
+    },
+    "aliases": [
+      "bromelain"
+    ],
+    "match_rules": {
+      "priority": 0,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "high"
+    }
   }
 }

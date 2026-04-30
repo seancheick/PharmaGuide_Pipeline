@@ -1468,7 +1468,7 @@
       "min_threshold": 2400,
       "threshold_source": "2400 GDU/g — activity unit threshold",
       "attributes": {
-        "no_iqm_parent_reason": "Pineapple enzyme — no IQM enzymes parent yet; consider adding for V1.1"
+        "iqm_parent_id": "bromelain"
       }
     },
     {

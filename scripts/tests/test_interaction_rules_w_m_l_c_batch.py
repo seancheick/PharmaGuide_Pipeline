@@ -54,6 +54,7 @@ W_FAMILY = [
     ("W9",  "ingredient_quality_map", "ginseng",        "anticoagulants", "caution"),
     ("W11", "ingredient_quality_map", "vitamin_e",      "anticoagulants", "caution"),
     ("W12", "ingredient_quality_map", "cranberry",      "anticoagulants", "monitor"),
+    ("W10", "ingredient_quality_map", "bromelain",      "anticoagulants", "monitor"),
 ]
 
 
@@ -80,6 +81,7 @@ M_FAMILY = [
     ("M6",  "ingredient_quality_map",        "ginseng",           "mao_inhibitors", "caution"),
     ("M7",  "banned_recalled_ingredients",   "ADD_HORDENINE",     "mao_inhibitors", "contraindicated"),
     ("M8",  "ingredient_quality_map",        "same",              "mao_inhibitors", "avoid"),
+    ("M2",  "harmful_additives",             "ADD_TYRAMINE_RICH_EXTRACT", "mao_inhibitors", "contraindicated"),
 ]
 
 
@@ -133,6 +135,8 @@ C_FAMILY = [
     ("C8",  "ingredient_quality_map",   "citrus_bergamot",      "antiarrhythmics",         "avoid"),
     ("C9",  "ingredient_quality_map",   "citrus_bergamot",      "anticoagulants",          "caution"),
     ("C10", "ingredient_quality_map",   "citrus_bergamot",      "oral_contraceptives",     "monitor"),
+    # 2E partial — goldenseal CYP2D6 extension (clinician C5 mechanism noted "Also affects CYP2D6")
+    ("C5b", "ingredient_quality_map",   "goldenseal",           "cyp2d6_substrates",       "avoid"),
 ]
 
 

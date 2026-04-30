@@ -4,7 +4,7 @@
     "purpose": "penalty_scoring",
     "schema_version": "5.4.0",
     "last_updated": "2026-04-30",
-    "total_entries": 115,
+    "total_entries": 116,
     "functional_roles_field": {
       "added_in": "5.2.0",
       "type": "string[]",
@@ -18719,6 +18719,39 @@
       "functional_roles": [
         "emulsifier",
         "surfactant"
+      ]
+    },
+    {
+      "id": "ADD_TYRAMINE_RICH_EXTRACT",
+      "standard_name": "Tyramine-Rich Extracts",
+      "aliases": [
+        "tyramine",
+        "tyramine extract",
+        "aged yeast extract",
+        "fermented bovine",
+        "fermented bovine extract",
+        "biogenic amine extract",
+        "tyramine-containing extract",
+        "fermented protein hydrolysate"
+      ],
+      "category": "biogenic_amine",
+      "mechanism_of_harm": "Tyramine is a sympathomimetic biogenic amine. Combined with MAO-inhibitor medication, dietary or supplemental tyramine produces hypertensive crisis ('cheese reaction') — severe blood-pressure spike with documented fatalities. Concentrated in aged, fermented, and bacterially-processed extracts (aged-yeast, fermented bovine, certain protein hydrolysates).",
+      "regulatory_status": {
+        "US": "Not specifically regulated in supplements; FDA Drug Safety Communications warn of MAOI-tyramine interaction.",
+        "EU": "EFSA risk assessment for histamine and tyramine in fermented foods (EFSA Journal 2011;9:2393).",
+        "WHO": "Recognized contraindication with MAO-A inhibitors."
+      },
+      "population_warnings": [
+        "Anyone taking MAO inhibitors (phenelzine, tranylcypromine, isocarboxazid, selegiline) — contraindicated; severe hypertensive reaction risk",
+        "Anyone with hypertension — concentrated tyramine sources elevate sympathetic tone"
+      ],
+      "notes": "Tyramine itself is not toxic at dietary levels in most people; the safety issue is exclusively the MAOI interaction. Fermented and aged supplement extracts can contain markedly higher tyramine than fresh ingredients. See ingredient_interaction_rules for the MAOI rule.",
+      "severity_level": "high",
+      "confidence": "high",
+      "evidence_basis": "Established pharmacological interaction (Gillman 2018 Br J Clin Pharmacol; Shulman 2013 Drug Saf).",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/29380410/",
+        "https://www.efsa.europa.eu/en/efsajournal/pub/2393"
       ]
     }
   ]
