@@ -224,6 +224,41 @@ Per clinician copy review (`CLINICIAN_REVIEW.md` Section 5): "V1.1 should pair e
 
 ### 6.2 [P1] Filter UX driven by attributes (covered by 2.2, 2.3)
 
+### 6.3 [P0/P1] Reference-data lookup vocabs (24 opportunities) *(Effort: 5-7 days P0 + 7-10 days P1 + 5-7 days P2)*
+
+Pipeline + Flutter audit found 24 opportunities to apply the same reference-data lookup pattern that worked for `functional_roles_vocab.json`. Full catalog: **`scripts/audits/REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md`**.
+
+**P0 (5 vocabs — biggest impact):**
+- `verdict_vocab.json` (6 IDs) — replaces hardcoded labels in Flutter `verdict_badge.dart`
+- `severity_vocab.json` (6 IDs) — replaces 437+ inline severity strings across interaction_rules + Flutter `severity.dart` enum
+- `condition_vocab.json` (~14 IDs) — replaces hardcoded `conditionLabels` map in Flutter `schema_ids.dart`
+- `drug_class_vocab.json` (~13 IDs) — replaces hardcoded `drugClassLabels` map
+- `user_goals_vocab.json` (~18 IDs) — replaces hardcoded `goalLabels` map
+
+**P1 (10 vocabs — strong yes):**
+- `evidence_level_vocab.json` (3-5 IDs)
+- `study_type_vocab.json` (7 IDs)
+- `clinical_indication_vocab.json` (22 IDs — the buckets we just canonicalized)
+- `iqm_category_vocab.json` (12 IDs)
+- `banned_status_vocab.json` (4 IDs)
+- `clinical_risk_vocab.json` (5 IDs)
+- `legal_status_vocab.json` (10 IDs)
+- `ban_context_vocab.json` (5 IDs)
+- `effect_direction_vocab.json` (4 IDs)
+- `signal_strength_vocab.json` (3 IDs)
+
+**P2 (9 vocabs — good hygiene):**
+- allergen_prevalence, allergen_regulatory, manufacturer_trust, efsa_status, efsa_genotoxicity, match_mode, confidence_tier, score_contribution_tier, primary_outcome
+
+**Net impact:**
+- Bundle size: all 24 vocabs ≈ 95 KB (one-time per app install)
+- Per-blob savings: ~1-2 KB/product × millions of blobs = **multi-GB catalog savings**
+- Architectural: clinician owns user-facing copy (no Dart code edits needed for taxonomy changes)
+- i18n-ready: vocab schema migrates cleanly to localized `Map<locale, string>` payloads
+- **Offline-first** (no network at render time)
+
+**Reusable Flutter scaffolding** already exists (`FunctionalRole` template + `ReferenceDataRepository` central loader). Future vocabs cost ~1 day vocab authoring + 1 day Flutter wiring.
+
 ---
 
 ## 7. Data quality / testing
