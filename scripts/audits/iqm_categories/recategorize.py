@@ -84,6 +84,35 @@ RECATEGORIZE = {
     "methylliberine":            "herbs",
     "berberine_supplement":      "herbs",
     "synephrine":                "herbs",
+
+    # Round 2 (2026-04-30) — second-pass audit on remaining 'other' bucket
+
+    # other → proteins
+    "apoaequorin":               "proteins",        # jellyfish photoprotein
+
+    # other → vitamins (B-vitamin family / NAD precursors)
+    "inositol":                  "vitamins",        # formerly vit B8
+    "nad_precursors":            "vitamins",        # NAD+ = B3 family
+
+    # other → functional_foods
+    "sea_cucumber":              "functional_foods", # marine functional food
+
+    # other → minerals
+    "humic_acid":                "minerals",         # humic substance / soil mineral
+    "shuddha_laksha":            "minerals",         # Ayurvedic mineral preparation
+
+    # other → amino_acids (amine / amino-derivative compounds)
+    "dmae":                      "amino_acids",      # dimethylaminoethanol
+    "phenylethylamine":          "amino_acids",      # PEA — amino acid metabolite
+    "same":                      "amino_acids",      # S-adenosyl-methionine
+    "centrophenoxine":           "amino_acids",      # DMAE ester (meclofenoxate)
+
+    # other → antioxidants
+    "ipriflavone":               "antioxidants",     # isoflavone
+    "raspberry_ketones":         "antioxidants",     # phenolic ketone
+
+    # other → fibers
+    "d_mannose":                 "fibers",           # FDA dietary fiber (UTI use)
 }
 
 VALID_CATEGORIES = {

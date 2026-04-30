@@ -9865,7 +9865,7 @@
   },
   "inositol": {
     "standard_name": "Inositol",
-    "category": "other",
+    "category": "vitamins",
     "cui": "C0021547",
     "rxcui": "5833",
     "forms": {
@@ -9941,7 +9941,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "vitamins",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -22300,7 +22300,7 @@
   },
   "d_mannose": {
     "standard_name": "D-Mannose",
-    "category": "other",
+    "category": "fibers",
     "cui": "C0024742",
     "forms": {
       "d-mannose": {
@@ -22363,11 +22363,11 @@
       "cui": "C0024742"
     },
     "rxcui_note": "D-Mannose is a simple sugar / dietary ingredient; RxCUI tracking is reserved for Rx/OTC drug concepts. No canonical RxNorm concept applies.",
-    "category_enum": "other"
+    "category_enum": "fibers"
   },
   "nad_precursors": {
     "standard_name": "NAD+ Precursors",
-    "category": "other",
+    "category": "vitamins",
     "forms": {
       "nicotinamide riboside (NR)": {
         "bio_score": 12,
@@ -22573,7 +22573,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "vitamins",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "data_quality": {
       "completeness": 1.0,
@@ -23183,7 +23183,7 @@
   },
   "dmae": {
     "standard_name": "DMAE (Dimethylaminoethanol)",
-    "category": "other",
+    "category": "amino_acids",
     "cui": "C0011064",
     "rxcui": "3116",
     "forms": {
@@ -23238,7 +23238,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -23619,7 +23619,7 @@
   },
   "same": {
     "standard_name": "SAMe (S-Adenosyl-L-Methionine)",
-    "category": "other",
+    "category": "amino_acids",
     "cui": "C0445247",
     "rxcui": "9504",
     "forms": {
@@ -23683,7 +23683,7 @@
       "parent_id": null,
       "confidence": "high"
     },
-    "category_enum": "other",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 1.0,
       "missing_fields": [],
@@ -46647,7 +46647,7 @@
   },
   "raspberry_ketones": {
     "standard_name": "Raspberry Ketones",
-    "category": "other",
+    "category": "antioxidants",
     "cui": "C0616813",
     "forms": {
       "raspberry ketones": {
@@ -46678,7 +46678,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "antioxidants",
     "cui_note": "Mapped to 4-(p-hydroxyphenyl)-2-butanone, the accepted ingredient-level concept for raspberry ketones.",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "data_quality": {
@@ -50464,7 +50464,7 @@
   },
   "sea_cucumber": {
     "standard_name": "Sea Cucumber",
-    "category": "other",
+    "category": "functional_foods",
     "cui": "C1612884",
     "forms": {
       "sea cucumber (unspecified)": {
@@ -50498,7 +50498,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "functional_foods",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -50525,7 +50525,7 @@
   },
   "humic_acid": {
     "standard_name": "Humic Acid",
-    "category": "other",
+    "category": "minerals",
     "cui": "C0020166",
     "forms": {
       "humic acid (unspecified)": {
@@ -50558,7 +50558,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "minerals",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -51058,7 +51058,7 @@
   },
   "apoaequorin": {
     "standard_name": "Apoaequorin",
-    "category": "other",
+    "category": "proteins",
     "cui": "C0052166",
     "forms": {
       "apoaequorin (unspecified)": {
@@ -51091,7 +51091,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "proteins",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -51720,7 +51720,7 @@
   },
   "ipriflavone": {
     "standard_name": "Ipriflavone",
-    "category": "other",
+    "category": "antioxidants",
     "cui": "C0123903",
     "rxcui": "51487",
     "forms": {
@@ -51754,7 +51754,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "antioxidants",
     "cui_note": "No UMLS entry for botanical/novel compound",
     "data_quality": {
       "completeness": 0.6,
@@ -52844,7 +52844,7 @@
     "aliases": []
   },
   "centrophenoxine": {
-    "category": "other",
+    "category": "amino_acids",
     "cui": "C0007710",
     "cui_note": "Mapped to meclofenoxate, the accepted UMLS concept for centrophenoxine.",
     "forms": {
@@ -52881,7 +52881,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -56247,7 +56247,7 @@
   },
   "phenylethylamine": {
     "standard_name": "Phenylethylamine",
-    "category": "other",
+    "category": "amino_acids",
     "cui": "C0253326",
     "forms": {
       "phenylethylamine (unspecified)": {
@@ -56279,7 +56279,7 @@
       "parent_id": null,
       "confidence": "medium"
     },
-    "category_enum": "other",
+    "category_enum": "amino_acids",
     "data_quality": {
       "completeness": 0.6,
       "missing_fields": [],
@@ -57944,7 +57944,7 @@
   },
   "shuddha_laksha": {
     "standard_name": "Shuddha Laksha",
-    "category": "other",
+    "category": "minerals",
     "description": "Purified lac insect resin used in traditional Ayurvedic formulations",
     "forms": {
       "shuddha laksha": {
@@ -57971,7 +57971,7 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-03-16"
     },
-    "category_enum": "other",
+    "category_enum": "minerals",
     "cui_note": "No confirmed exact UMLS concept found for Shuddha Laksha.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "match_rules": {
