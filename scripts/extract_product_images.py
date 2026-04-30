@@ -226,8 +226,8 @@ def run_extraction(
     ensure_cache_dir()
     os.makedirs(output_dir, exist_ok=True)
 
-    products = load_products_from_db(db_path)
-    total = len(products)
+    all_products = load_products_from_db(db_path)
+    total = len(all_products)
     logger.info("Found %d products with PDF image URLs", total)
 
     index = {}
@@ -236,12 +236,38 @@ def run_extraction(
     failed = 0
     errors = []
 
-    # Process in batches of max_workers with delay between batches
+    # ── Pre-filter: separate already-done from work-to-do ──
+    # The batch_delay (1.5s) was firing between every batch even when all
+    # entries were skip-on-disk-exists. With 3,991 batches that's ~100 min
+    # of pure sleep. Pre-filtering means the rate-limit delay only applies
+    # to batches that actually hit the network.
+    pending = []
+    pre_skip_start = time.time()
+    for dsld_id, url in all_products:
+        webp_path = os.path.join(output_dir, f"{dsld_id}.webp")
+        if os.path.exists(webp_path) and os.path.getsize(webp_path) > 0:
+            skipped += 1
+            index[dsld_id] = {
+                "filename": f"{dsld_id}.webp",
+                "size_bytes": os.path.getsize(webp_path),
+                "sha256": file_sha256(webp_path),
+            }
+        else:
+            pending.append((dsld_id, url))
+
+    pre_skip_elapsed = time.time() - pre_skip_start
+    logger.info(
+        "Pre-scan: %d already done (skipped), %d to download. (%.1fs)",
+        skipped, len(pending), pre_skip_elapsed,
+    )
+
+    # Process pending in batches of max_workers with delay between batches
     start = time.time()
     batch_num = 0
+    pending_total = len(pending)
 
-    for batch_start in range(0, total, max_workers):
-        batch = products[batch_start : batch_start + max_workers]
+    for batch_start in range(0, pending_total, max_workers):
+        batch = pending[batch_start : batch_start + max_workers]
         batch_num += 1
 
         if batch_num > 1:
@@ -278,7 +304,7 @@ def run_extraction(
                     errors.append(result)
 
         processed = downloaded + skipped + failed
-        if processed % 100 < max_workers or batch_start + max_workers >= total:
+        if processed % 100 < max_workers or batch_start + max_workers >= pending_total:
             elapsed = time.time() - start
             logger.info(
                 "Progress: %d/%d (downloaded=%d, skipped=%d, failed=%d) %.1fs",

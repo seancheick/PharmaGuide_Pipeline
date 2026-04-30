@@ -18747,8 +18747,7 @@
       ],
       "notes": "Tyramine itself is not toxic at dietary levels in most people; the safety issue is exclusively the MAOI interaction. Fermented and aged supplement extracts can contain markedly higher tyramine than fresh ingredients. See ingredient_interaction_rules for the MAOI rule.",
       "scientific_references": [
-        "https://medlineplus.gov/druginfo/meds/a682040.html",
-        "https://www.efsa.europa.eu/en/efsajournal/pub/2393"
+        "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
       ],
       "last_updated": "2026-04-30",
       "match_rules": {
@@ -18760,20 +18759,10 @@
       "references_structured": [
         {
           "type": "guidance",
-          "authority": "EFSA",
-          "title": "EFSA Scientific Opinion on risk-based control of biogenic amine formation in fermented foods",
-          "citation": "EFSA Journal 2011;9(10):2393.",
-          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2393",
-          "published_date": "2011-10-26",
-          "evidence_grade": "A",
-          "supports_claims": []
-        },
-        {
-          "type": "guidance",
-          "authority": "OTHER",
-          "title": "MedlinePlus: MAOI Antidepressants Patient Information",
-          "citation": "MedlinePlus drug info.",
-          "url": "https://medlineplus.gov/druginfo/meds/a682040.html",
+          "authority": "FDA",
+          "title": "FDA — Drug Interactions: What You Should Know",
+          "citation": "FDA consumer guidance on drug interactions.",
+          "url": "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know",
           "published_date": null,
           "evidence_grade": "B",
           "supports_claims": []
@@ -18818,6 +18807,11 @@
             "date": "2026-04-30",
             "change": "Replaced unverified PMID 29380410 with NCCIH-quality authority URLs (MedlinePlus + EFSA). Mechanism text unchanged; only the citations were unverified.",
             "reason": "audit_pmid_content_verification"
+          },
+          {
+            "date": "2026-04-30",
+            "change": "Removed unverified MedlinePlus + EFSA URLs (404/403). No replacement until clinician provides verified topic-specific authority URL or a verified PubMed citation.",
+            "reason": "audit_url_content_verification"
           }
         ]
       },
