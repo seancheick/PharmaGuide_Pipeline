@@ -11283,7 +11283,10 @@
         "unii": null
       },
       "safety_summary": "A proprietary sweetener blend with limited public safety data. Proprietary formulations can be harder to independently verify.",
-      "safety_summary_one_liner": "Proprietary sweetener with limited public data."
+      "safety_summary_one_liner": "Proprietary sweetener with limited public data.",
+      "functional_roles": [
+        "sweetener_natural"
+      ]
     },
     {
       "id": "ADD_SODIUM_ALUMINUM_PHOSPHATE",
@@ -11451,7 +11454,11 @@
         "metabolites": []
       },
       "safety_summary": "Releases bioavailable aluminum during digestion, same as calcium aluminum phosphate. Worth choosing products without aluminum-phosphate processing aids.",
-      "safety_summary_one_liner": "Aluminum source — accumulation concern."
+      "safety_summary_one_liner": "Aluminum source — accumulation concern.",
+      "functional_roles": [
+        "ph_regulator",
+        "processing_aid"
+      ]
     },
     {
       "id": "ADD_SODIUM_BENZOATE",
@@ -11581,7 +11588,10 @@
         "metabolites": []
       },
       "safety_summary": "A preservative that can form trace benzene when combined with vitamin C under heat or light — worth choosing products without the benzoate + vitamin C pairing.",
-      "safety_summary_one_liner": "Benzoate preservative with vitamin C pairing concern."
+      "safety_summary_one_liner": "Benzoate preservative with vitamin C pairing concern.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_SODIUM_CASEINATE",
@@ -11706,7 +11716,11 @@
         "metabolites": []
       },
       "safety_summary": "A milk-derived emulsifier. Primary concern is dairy allergen exposure — worth knowing if you have a milk allergy.",
-      "safety_summary_one_liner": "Dairy-derived emulsifier — matters with milk allergy."
+      "safety_summary_one_liner": "Dairy-derived emulsifier — matters with milk allergy.",
+      "functional_roles": [
+        "emulsifier",
+        "stabilizer"
+      ]
     },
     {
       "id": "ADD_SODIUM_COPPER_CHLOROPHYLLIN",
@@ -11876,7 +11890,10 @@
         "metabolites": []
       },
       "safety_summary": "A chlorophyll-derived colorant. Copper content is well below toxicity thresholds at typical colorant doses — low overall concern.",
-      "safety_summary_one_liner": "Chlorophyll-derived colorant — low concern at typical use."
+      "safety_summary_one_liner": "Chlorophyll-derived colorant — low concern at typical use.",
+      "functional_roles": [
+        "colorant_natural"
+      ]
     },
     {
       "id": "ADD_SODIUM_HEXAMETAPHOSPHATE",
@@ -12009,7 +12026,11 @@
       },
       "cui": "C0074759",
       "safety_summary": "A polyphosphate emulsifier contributing highly absorbable inorganic phosphorus. High intake can disrupt mineral balance — worth noting for long-term daily use.",
-      "safety_summary_one_liner": "Phosphate emulsifier — mineral-balance concern."
+      "safety_summary_one_liner": "Phosphate emulsifier — mineral-balance concern.",
+      "functional_roles": [
+        "emulsifier",
+        "ph_regulator"
+      ]
     },
     {
       "id": "ADD_SODIUM_LAURYL_SULFATE",
@@ -12202,7 +12223,11 @@
         "metabolites": []
       },
       "safety_summary": "A surfactant that can irritate mucosal tissues at high concentrations. Oral safety at trace levels is considered acceptable, but worth choosing products without it where possible.",
-      "safety_summary_one_liner": "Surfactant with mucosal-irritation concerns."
+      "safety_summary_one_liner": "Surfactant with mucosal-irritation concerns.",
+      "functional_roles": [
+        "emulsifier",
+        "surfactant"
+      ]
     },
     {
       "id": "ADD_SODIUM_METABISULFITE",
@@ -12389,7 +12414,11 @@
         "metabolites": []
       },
       "safety_summary": "A sulfite preservative that releases sulfur dioxide. Can trigger asthma attacks in sulfite-sensitive people — worth checking labels if you have sulfite sensitivity.",
-      "safety_summary_one_liner": "Sulfite preservative — matters if sulfite-sensitive."
+      "safety_summary_one_liner": "Sulfite preservative — matters if sulfite-sensitive.",
+      "functional_roles": [
+        "preservative",
+        "antioxidant"
+      ]
     },
     {
       "id": "ADD_SODIUM_SULFITE",
@@ -12575,7 +12604,11 @@
         "metabolites": []
       },
       "safety_summary": "A sulfite preservative. Same asthma-trigger concern as metabisulfite in sulfite-sensitive people — worth checking labels if sensitive.",
-      "safety_summary_one_liner": "Sulfite preservative — matters if sulfite-sensitive."
+      "safety_summary_one_liner": "Sulfite preservative — matters if sulfite-sensitive.",
+      "functional_roles": [
+        "preservative",
+        "antioxidant"
+      ]
     },
     {
       "id": "ADD_SODIUM_TRIPOLYPHOSPHATE",
@@ -12728,7 +12761,10 @@
         "metabolites": []
       },
       "safety_summary": "A phosphate additive. Excessive phosphate intake can disrupt calcium-phosphorus balance and affect bone and kidney health — worth moderating sources.",
-      "safety_summary_one_liner": "Phosphate additive — mineral-balance concern."
+      "safety_summary_one_liner": "Phosphate additive — mineral-balance concern.",
+      "functional_roles": [
+        "ph_regulator"
+      ]
     },
     {
       "id": "ADD_SORBIC_ACID",
@@ -12884,7 +12920,10 @@
         "metabolites": []
       },
       "safety_summary": "A preservative that may cause mild skin or mucous-membrane irritation in sensitive people. Generally low concern at food levels.",
-      "safety_summary_one_liner": "Common preservative — low overall concern."
+      "safety_summary_one_liner": "Common preservative — low overall concern.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_SORBITAN_MONOSTEARATE",
@@ -13055,7 +13094,11 @@
         "metabolites": []
       },
       "safety_summary": "A non-ionic surfactant-emulsifier. Poorly absorbed and hydrolyzed in the gut — low overall concern at typical levels.",
-      "safety_summary_one_liner": "Emulsifier — low overall concern."
+      "safety_summary_one_liner": "Emulsifier — low overall concern.",
+      "functional_roles": [
+        "emulsifier",
+        "surfactant"
+      ]
     },
     {
       "id": "ADD_SORBITOL",
@@ -13209,7 +13252,11 @@
         "metabolites": []
       },
       "safety_summary": "A sugar alcohol. Can cause bloating, gas, and loose stools at higher intakes, especially in people with IBS.",
-      "safety_summary_one_liner": "Sugar alcohol that can cause GI discomfort."
+      "safety_summary_one_liner": "Sugar alcohol that can cause GI discomfort.",
+      "functional_roles": [
+        "sweetener_sugar_alcohol",
+        "humectant"
+      ]
     },
     {
       "id": "ADD_SOY_MONOGLYCERIDES",
@@ -13325,7 +13372,10 @@
       "severity_level": "moderate",
       "cui": "C0026481",
       "safety_summary": "A soy-derived emulsifier. Carries soy allergen exposure and preclinical gut-lining signals — worth knowing if you avoid soy.",
-      "safety_summary_one_liner": "Soy-derived emulsifier — matters with soy allergy."
+      "safety_summary_one_liner": "Soy-derived emulsifier — matters with soy allergy.",
+      "functional_roles": [
+        "emulsifier"
+      ]
     },
     {
       "id": "ADD_STEARIC_ACID",
@@ -13581,7 +13631,10 @@
         "metabolites": []
       },
       "safety_summary": "A common saturated fatty acid used as a tablet lubricant. Found naturally in many foods — low overall concern.",
-      "safety_summary_one_liner": "Common tablet lubricant — low overall concern."
+      "safety_summary_one_liner": "Common tablet lubricant — low overall concern.",
+      "functional_roles": [
+        "lubricant"
+      ]
     },
     {
       "id": "ADD_SUCRALOSE",
@@ -13747,7 +13800,10 @@
         "metabolites": []
       },
       "safety_summary": "A chlorinated artificial sweetener. Studies link it to changes in gut microbiome and bile-acid signaling — worth noting if you are avoiding artificial sweeteners.",
-      "safety_summary_one_liner": "Artificial sweetener linked to gut-microbiome changes."
+      "safety_summary_one_liner": "Artificial sweetener linked to gut-microbiome changes.",
+      "functional_roles": [
+        "sweetener_artificial"
+      ]
     },
     {
       "id": "ADD_SUGAR_ALCOHOLS",
@@ -13920,6 +13976,9 @@
       "safety_summary_one_liner": "Sugar alcohol class linked to GI discomfort.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) — they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
+      ],
+      "functional_roles": [
+        "sweetener_sugar_alcohol"
       ]
     },
     {
@@ -14105,7 +14164,11 @@
         "metabolites": []
       },
       "safety_summary": "A sulfite-class preservative that can trigger asthma attacks in sulfite-sensitive people — worth checking labels if you are sulfite-sensitive.",
-      "safety_summary_one_liner": "Sulfite preservative — matters if sulfite-sensitive."
+      "safety_summary_one_liner": "Sulfite preservative — matters if sulfite-sensitive.",
+      "functional_roles": [
+        "preservative",
+        "antioxidant"
+      ]
     },
     {
       "id": "ADD_SYNTHETIC_B_VITAMINS",
@@ -14260,7 +14323,8 @@
         "unii": null
       },
       "safety_summary": "A class of synthetic B-vitamin forms. Key concern is synthetic folic acid, which may accumulate as unmetabolized folic acid at high intake — methylfolate is preferred.",
-      "safety_summary_one_liner": "Synthetic B vitamins — methylfolate is preferred."
+      "safety_summary_one_liner": "Synthetic B vitamins — methylfolate is preferred.",
+      "functional_roles": []
     },
     {
       "id": "ADD_SYNTHETIC_VITAMINS",
@@ -14405,7 +14469,8 @@
         "unii": null
       },
       "safety_summary": "A class of synthetic vitamin forms. Synthetic dl-alpha-tocopherol has about half the bioactivity of natural vitamin E — natural forms are often preferred.",
-      "safety_summary_one_liner": "Synthetic vitamins — natural forms often preferred."
+      "safety_summary_one_liner": "Synthetic vitamins — natural forms often preferred.",
+      "functional_roles": []
     },
     {
       "id": "ADD_SYRUPS",
@@ -14574,6 +14639,9 @@
       "safety_summary_one_liner": "Concentrated added sugar, some can carry trace arsenic.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) — they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
+      ],
+      "functional_roles": [
+        "sweetener_natural"
       ]
     },
     {
@@ -14723,7 +14791,10 @@
         "metabolites": []
       },
       "safety_summary": "A refined tapioca starch filler that spikes blood sugar quickly. Minimal nutritional value — worth moderating daily intake.",
-      "safety_summary_one_liner": "Refined starch filler — spikes blood sugar fast."
+      "safety_summary_one_liner": "Refined starch filler — spikes blood sugar fast.",
+      "functional_roles": [
+        "filler"
+      ]
     },
     {
       "id": "ADD_TETRASODIUM_DIPHOSPHATE",
@@ -14887,7 +14958,10 @@
         "metabolites": []
       },
       "safety_summary": "A phosphate additive. Contributes to cumulative phosphate intake that can disrupt mineral balance — worth moderating sources.",
-      "safety_summary_one_liner": "Phosphate additive — mineral-balance concern."
+      "safety_summary_one_liner": "Phosphate additive — mineral-balance concern.",
+      "functional_roles": [
+        "ph_regulator"
+      ]
     },
     {
       "id": "ADD_THAUMATIN",
@@ -15026,7 +15100,10 @@
         "metabolites": []
       },
       "safety_summary": "A sweet-tasting plant protein used at very low levels. Generally well-tolerated and low overall concern.",
-      "safety_summary_one_liner": "Plant-protein sweetener — generally well-tolerated."
+      "safety_summary_one_liner": "Plant-protein sweetener — generally well-tolerated.",
+      "functional_roles": [
+        "sweetener_natural"
+      ]
     },
     {
       "id": "ADD_TIME_SORB",
@@ -15138,7 +15215,8 @@
         "unii": null
       },
       "safety_summary": "A proprietary sustained-release coating. Proprietary formulations can be harder to independently verify — low direct safety concern.",
-      "safety_summary_one_liner": "Proprietary coating — low direct concern."
+      "safety_summary_one_liner": "Proprietary coating — low direct concern.",
+      "functional_roles": []
     },
     {
       "id": "ADD_TIN",
@@ -15311,7 +15389,8 @@
         "unii": "387GMG9FH5"
       },
       "safety_summary": "A trace metal contaminant from packaging or raw materials. Inorganic tin has low absorption; organotins are more concerning — worth choosing products tested for heavy metals.",
-      "safety_summary_one_liner": "Trace metal contaminant — testing matters."
+      "safety_summary_one_liner": "Trace metal contaminant — testing matters.",
+      "functional_roles": []
     },
     {
       "id": "ADD_UNSPECIFIED_COLORS",
@@ -15434,7 +15513,10 @@
         "unii": null
       },
       "safety_summary": "The label does not specify the color source, which limits transparency and can mask artificial dye use. Worth choosing products that disclose the specific colorant.",
-      "safety_summary_one_liner": "Undisclosed colorant — transparency concern."
+      "safety_summary_one_liner": "Undisclosed colorant — transparency concern.",
+      "functional_roles": [
+        "colorant_artificial"
+      ]
     },
     {
       "id": "ADD_VANILLIN",
@@ -15569,7 +15651,10 @@
         "metabolites": []
       },
       "safety_summary": "A flavoring compound often synthetically produced. Even 'natural' vanillin may come from bioengineered or wood-pulp sources — transparency concern rather than toxicity.",
-      "safety_summary_one_liner": "Flavoring — transparency concern rather than toxicity."
+      "safety_summary_one_liner": "Flavoring — transparency concern rather than toxicity.",
+      "functional_roles": [
+        "flavor_artificial"
+      ]
     },
     {
       "id": "ADD_YELLOW5",
@@ -15762,7 +15847,10 @@
         "metabolites": []
       },
       "safety_summary": "A synthetic azo dye (Tartrazine / E102). Associated with hyperactivity in children and hypersensitivity reactions — worth noting, especially for kids.",
-      "safety_summary_one_liner": "Synthetic yellow dye linked to hyperactivity in children."
+      "safety_summary_one_liner": "Synthetic yellow dye linked to hyperactivity in children.",
+      "functional_roles": [
+        "colorant_artificial"
+      ]
     },
     {
       "id": "ADD_YELLOW6",
@@ -15968,7 +16056,10 @@
         "metabolites": []
       },
       "safety_summary": "A synthetic azo dye (Sunset Yellow FCF / E110). Linked to hypersensitivity reactions in sensitive people.",
-      "safety_summary_one_liner": "Synthetic yellow dye linked to hypersensitivity in some."
+      "safety_summary_one_liner": "Synthetic yellow dye linked to hypersensitivity in some.",
+      "functional_roles": [
+        "colorant_artificial"
+      ]
     },
     {
       "id": "ADD_BHA",
@@ -16841,7 +16932,11 @@
         "See individual entries: ADD_BHA (IARC 2B, Prop 65), ADD_BHT (IARC Group 3), ADD_TBHQ (banned in Japan)"
       ],
       "safety_summary": "An umbrella class covering BHA, BHT, and TBHQ. Safety profiles vary by compound, but BHA and TBHQ carry more concern — worth checking labels.",
-      "safety_summary_one_liner": "Synthetic antioxidant class — concern varies by compound."
+      "safety_summary_one_liner": "Synthetic antioxidant class — concern varies by compound.",
+      "functional_roles": [
+        "preservative",
+        "antioxidant"
+      ]
     },
     {
       "id": "ADD_TBHQ",
@@ -16979,7 +17074,11 @@
         "Clean-label conscious — increasingly removed by major retailers (Walmart, Kroger, Whole Foods)"
       ],
       "safety_summary": "A synthetic antioxidant preservative. Some lab studies raise immune-activity concerns — worth choosing products without it where possible.",
-      "safety_summary_one_liner": "Synthetic preservative — immune-activity signals."
+      "safety_summary_one_liner": "Synthetic preservative — immune-activity signals.",
+      "functional_roles": [
+        "preservative",
+        "antioxidant"
+      ]
     },
     {
       "id": "ADD_PARTIALLY_HYDROGENATED_CORN_OIL",
@@ -17414,7 +17513,10 @@
         "metabolites": []
       },
       "safety_summary": "A nitrite preservative that can form nitrosamines under stomach acid. Nitrosamines are linked to cancer risk — worth avoiding in supplements.",
-      "safety_summary_one_liner": "Nitrite preservative — nitrosamine formation concern."
+      "safety_summary_one_liner": "Nitrite preservative — nitrosamine formation concern.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_SODIUM_NITRATE",
@@ -17600,7 +17702,10 @@
         "metabolites": []
       },
       "safety_summary": "A nitrate preservative converted to nitrite by mouth bacteria. Follows the same nitrosamine-formation pathway as sodium nitrite — worth avoiding in supplements.",
-      "safety_summary_one_liner": "Nitrate preservative — nitrosamine formation concern."
+      "safety_summary_one_liner": "Nitrate preservative — nitrosamine formation concern.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_FRUCTOSE",
@@ -18479,6 +18584,9 @@
       "safety_summary_one_liner": "Sugar alcohol with GI and emerging cardiovascular signals.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) — they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
+      ],
+      "functional_roles": [
+        "sweetener_sugar_alcohol"
       ]
     },
     {
