@@ -79,8 +79,11 @@ def test_batch_3_deferred_empty(by_id):
 
 
 def test_harmful_additives_total_coverage_after_batch_3(by_id):
-    """After batch 3, harmful_additives should be at 102/115 = 89% populated."""
+    """After batch 3, harmful_additives is at 103/116 populated.
+    +1 from ADD_TYRAMINE_RICH_EXTRACT (added 2026-04-30 to support M2
+    interaction rule); the new entry carries functional_roles=["preservative"].
+    """
     populated = sum(1 for e in by_id.values() if e.get("functional_roles"))
-    assert populated == 102, (
-        f"expected 102/115 populated after batch 3; got {populated}"
+    assert populated == 103, (
+        f"expected 103/116 populated after batch 3 + tyramine entry; got {populated}"
     )
