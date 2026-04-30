@@ -2539,19 +2539,6 @@
           "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
-          "mechanism": "St John's Wort has weak MAOI activity. Combined with pharmaceutical MAOIs, risk of serotonin syndrome and hypertensive crisis.",
-          "action": "Do NOT combine St John's Wort with MAOIs. Life-threatening interaction.",
-          "sources": [
-            "https://www.nccih.nih.gov/health/st-johns-wort"
-          ],
-          "alert_headline": "Do not combine with MAOI antidepressants",
-          "alert_body": "St John's Wort has weak MAOI activity. If you take an MAOI antidepressant, do not combine — the combination risks serotonin syndrome and hypertensive crisis.",
-          "informational_note": "St John's Wort has MAOI-like activity — relevant to people on MAOI antidepressants."
-        },
-        {
-          "drug_class_id": "maois",
-          "severity": "contraindicated",
-          "evidence_level": "established",
           "mechanism": "Hypericin has weak MAO-A inhibition; combination duplicates mechanism → serotonin syndrome and hypertensive risk.",
           "action": "Do not combine St. John's Wort with MAOIs.",
           "sources": [
@@ -7396,20 +7383,6 @@
           "alert_headline": "Do not combine with SSRIs or SNRIs",
           "alert_body": "5-HTP raises serotonin directly. If you take an SSRI or SNRI antidepressant, do not combine — the pairing can cause serotonin syndrome.",
           "informational_note": "5-HTP raises serotonin — relevant to people on SSRI or SNRI antidepressants."
-        },
-        {
-          "drug_class_id": "maois",
-          "severity": "contraindicated",
-          "evidence_level": "established",
-          "mechanism": "MAO-A is the primary enzyme degrading serotonin. MAO inhibitors prevent serotonin catabolism; combined with the serotonin precursor 5-HTP, this produces severe serotonin excess. Life-threatening serotonin syndrome (hyperpyrexia, rigidity, cardiovascular collapse) is a well-documented risk.",
-          "action": "Absolutely contraindicated with MAOIs. Do not initiate 5-HTP within 14 days of stopping an MAOI.",
-          "sources": [
-            "https://www.nccih.nih.gov/health/5-htp",
-            "https://pubmed.ncbi.nlm.nih.gov/9861593/"
-          ],
-          "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "5-HTP raises serotonin while MAOIs block its breakdown. If you take an MAOI, do not combine — this pairing is life-threatening.",
-          "informational_note": "5-HTP raises serotonin — relevant to people on MAOI antidepressants."
         },
         {
           "drug_class_id": "maois",
