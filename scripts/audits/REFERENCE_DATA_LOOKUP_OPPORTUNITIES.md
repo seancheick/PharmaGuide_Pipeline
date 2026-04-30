@@ -6,6 +6,8 @@
 
 This doc lists **24 concrete opportunities** found across the pipeline + Flutter, ranked by ROI. Already shipped: `functional_roles_vocab.json`.
 
+**Build cadence (locked 2026-04-30):** P0 + P1 + P2 ship in the **same release**. Tier ordering below is informational priority signal for review/clinician sequencing inside the build, not a multi-release schedule. The doc still tiers by ROI so reviewers know which vocabs to scrutinize first; nothing gets deferred to a later sprint.
+
 ---
 
 ## How to read this catalog
@@ -24,6 +26,46 @@ Each opportunity has:
 
 ---
 
+## Display Contract Ownership (cross-cutting rule, locked 2026-04-30)
+
+**Rule:** vocab owns presentation, Flutter renders. Per second-opinion review (2026-04-30): when a vocab feeds a UI surface, the vocab entry MUST carry the full display contract — not just a label. Flutter is a renderer, not a decision-maker for tone/color/icon/action.
+
+**Required fields on UI-bound vocabs (severity, verdict, banned_status, clinical_risk, allergen_prevalence, signal_strength, confidence_tier, score_contribution_tier):**
+
+```json
+{
+  "id": "caution",
+  "name": "Use caution",
+  "short_label": "Caution",
+  "tone": "warning",
+  "ui_color": "orange",
+  "ui_icon": "warning",
+  "action": "Monitor usage",
+  "notes": "..."
+}
+```
+
+| Field | Purpose | Allowed values (initial) |
+|---|---|---|
+| `name` | Full display label | clinician-authored string |
+| `short_label` | Compact chip / pill label | ≤12 chars |
+| `tone` | Semantic intent for theming | `positive` \| `neutral` \| `info` \| `warning` \| `danger` |
+| `ui_color` | Color hint (Flutter resolves to theme color) | `green` \| `blue` \| `gray` \| `yellow` \| `orange` \| `red` |
+| `ui_icon` | Icon hint (Flutter resolves to icon asset) | `check` \| `info` \| `warning` \| `alert` \| `block` |
+| `action` | Suggested user action verb-phrase | clinician-authored string ≤40 chars |
+
+**Why this earns its keep:**
+- Flutter cannot drift on tone/color across surfaces — `severity_pill`, `banner`, `alert_summary_card`, `score_breakdown_card` all read the same contract
+- Voice/tone tunable without a Flutter release (vocab JSON ships as bundled asset; future hot-deploy via API is straightforward)
+- Clinician owns "Avoid" vs "Not recommended" wording AND the orange-vs-red signal — single review surface
+- Catches the bug class that produced the allergen `evidence` leak (raw IDs surfacing because Flutter inferred presentation from a raw string)
+
+**Vocabs that DON'T need display contract:** internal taxonomy IDs not directly user-facing — `iqm_category_vocab`, `study_type_vocab`, `match_mode_vocab`, `efsa_status_vocab`, `efsa_genotoxicity_vocab`, `effect_direction_vocab`. These keep the lean 5-field shape (`id`, `name`, `notes`, `references[]`, `examples[]`).
+
+**What stays per-row, NOT in vocab:** alert text, mechanism explanations, ingredient-specific warnings, management copy. Hard rule: vocab is for repeated descriptive tokens; per-row narrative copy stays on the row.
+
+---
+
 ## P0 — Highest ROI (do these first, ~5 vocabs)
 
 ### 1. 🔥 `verdict_vocab.json`
@@ -33,14 +75,14 @@ Each opportunity has:
   - Flutter renders via `verdict_badge.dart` lines 61-88 — **hardcoded label map in Dart** (just migrated to surface SAFE/CAUTION/POOR per Flutter sprint commit `bb621eb`; BLOCKED/UNSAFE shown via dedicated alert page)
   - User-facing explanation copy currently inlined per verdict
 - **Vocab payload per entry:** display label, color/icon hint, when-to-show guidance, suggested user action, regulatory rationale
-- **Seed labels (clinician-reviewed by Flutter team, ready to ship):**
-  | ID | Display label | UX surface |
-  |---|---|---|
-  | `SAFE` | Safe | green chip + score badge |
-  | `CAUTION` | Caution | yellow chip + score badge |
-  | `POOR` | Poor | orange chip + score badge |
-  | `BLOCKED` | (blocked product alert page) | dedicated full-screen alert (existing page) |
-  | `UNSAFE` | (unsafe product alert page) | dedicated full-screen alert (existing page) |
+- **Seed display contract (clinician-reviewed, locks tone+color+icon as part of vocab):**
+  | ID | name | short_label | tone | ui_color | ui_icon | action |
+  |---|---|---|---|---|---|---|
+  | `SAFE` | Safe | Safe | positive | green | check | Use as directed |
+  | `CAUTION` | Caution | Caution | warning | yellow | warning | Review before use |
+  | `POOR` | Poor quality | Poor | warning | orange | warning | Consider alternatives |
+  | `BLOCKED` | Do not use | Blocked | danger | red | block | Do not use |
+  | `UNSAFE` | Unsafe | Unsafe | danger | red | alert | Do not use |
 - **Why P0:** every product carries a verdict; user-facing copy currently scattered between Dart strings + blob `top_warnings` text. Centralizing locks the taxonomy + saves bytes.
 - **Pipeline contract reminder:** Flutter NEVER receives a NOT_SCORED verdict in shipped blobs. NOT_SCORED products live exclusively in the review queue. Vocab must NOT include NOT_SCORED — shipping it would be a dead ID.
 
@@ -52,15 +94,15 @@ Each opportunity has:
   - Flutter `lib/core/constants/severity.dart` — **enum-embedded labels (already canonical at `informational`)**
   - UX color/icon mapping currently scattered in widgets
 - **Vocab payload per entry:** display label, action verb (e.g. "Do not use" / "Use caution"), color hint, icon hint, plain-English description
-- **Seed labels (clinician-reviewed by Flutter team, ready to ship):**
-  | ID | Display label |
-  |---|---|
-  | `contraindicated` | Do not use |
-  | `avoid` | Not recommended |
-  | `caution` | Use caution |
-  | `monitor` | Monitor |
-  | `informational` | Informational |
-  | `safe` | Safe |
+- **Seed display contract (clinician-reviewed, locks tone+color+icon as part of vocab):**
+  | ID | name | short_label | tone | ui_color | ui_icon | action |
+  |---|---|---|---|---|---|---|
+  | `contraindicated` | Do not use | Do not use | danger | red | block | Avoid completely |
+  | `avoid` | Not recommended | Avoid | danger | red | alert | Skip this product |
+  | `caution` | Use caution | Caution | warning | orange | warning | Use under guidance |
+  | `monitor` | Monitor | Monitor | warning | yellow | warning | Track for effects |
+  | `informational` | Informational | Info | info | blue | info | Read context |
+  | `safe` | Safe | Safe | positive | green | check | Use as directed |
 - **Why P0:** This is the most-repeated descriptive token in the entire blob ecosystem. Every interaction warning, every allergen flag, every banned-recalled hit references one of 6 severity values. Centralizing pays for itself many times over.
 - **Prerequisite work:** rename `info` → `informational` across 39 data-file occurrences + ~6 Python emitter sites + any tests pinning the old value. ~0.5 day. Must land before vocab ships.
 
@@ -194,9 +236,11 @@ Each opportunity has:
 
 | Tier | Vocabs | Total vocab size (asset) | Per-blob savings | Implementation effort |
 |---|---|---|---|---|
-| P0 (5) | verdict (5 IDs), severity (6 IDs), condition (~14), drug_class (~13), user_goals (~18) | ~25 KB total | ~50-100 bytes/warning × ~5-10 warnings/product = **0.5-1 KB/blob** | 5-7 days **+ 0.5d severity rename prereq** |
-| P1 (10) | evidence_level, study_type, clinical_indication, iqm_category, banned_status, clinical_risk, legal_status, ban_context, effect_direction, signal_strength | ~40 KB total | ~30-60 bytes per affected blob | 7-10 days |
-| P2 (9) | allergen_prevalence, allergen_regulatory, manufacturer_trust, efsa_status, efsa_genotoxicity, match_mode, confidence_tier, score_contribution_tier, primary_outcome | ~30 KB total | ~10-30 bytes/blob | 5-7 days |
+| P0 (5) | verdict (5 IDs), severity (6 IDs), condition (~14), drug_class (~13), user_goals (~18) | ~25 KB total | ~50-100 bytes/warning × ~5-10 warnings/product = **0.5-1 KB/blob** | included in single-release total |
+| P1 (10) | evidence_level, study_type, clinical_indication, iqm_category, banned_status, clinical_risk, legal_status, ban_context, effect_direction, signal_strength | ~40 KB total | ~30-60 bytes per affected blob | included in single-release total |
+| P2 (9) | allergen_prevalence, allergen_regulatory, manufacturer_trust, efsa_status, efsa_genotoxicity, match_mode, confidence_tier, score_contribution_tier, primary_outcome | ~30 KB total | ~10-30 bytes/blob | included in single-release total |
+
+**Total release effort:** ~17-22 days end-to-end (vocab authoring + clinician review + integrity-gate wiring + Flutter migration + drift tests + 0.5d severity rename prereq). All tiers ship together per build-cadence decision 2026-04-30.
 
 **Net Flutter asset bundle:** all 24 vocabs ≈ **95 KB** (one-time per app install). **Net per-blob savings:** ~1-2 KB/product × millions of blobs = **multi-GB catalog savings**.
 
@@ -204,11 +248,11 @@ Each opportunity has:
 
 ## Sequencing & co-render rules (per Flutter team feedback 2026-04-30)
 
-### Ship `severity_vocab` + `verdict_vocab` in the SAME release
+### All 24 vocabs ship in a single coordinated release
 
-These two vocabs co-render on multiple Flutter surfaces — `alert_summary_card`, `severity_pill`, `banner`, `score_breakdown_card`. Shipping one without the other leaves **mixed-source labels on a single screen** (some from vocab, some from old hardcoded Dart maps) which looks like a regression.
+Per build-cadence decision (2026-04-30): P0 + P1 + P2 land together. The original "ship severity + verdict together" rule is now subsumed — *everything* ships together. Co-render risk (mixed-source labels on `alert_summary_card`, `severity_pill`, `banner`, `score_breakdown_card`) is structurally eliminated because no vocab is left in the old hardcoded state at release time.
 
-**Rule:** P0 #1 (verdict) and P0 #2 (severity) must merge to main + ship to Flutter as a single coordinated release. If only one is ready, defer both.
+**Rule:** vocabs do not merge to main piecemeal. The release branch must carry all 24 LOCKED vocab JSONs + their integrity-gate wiring + Flutter migration commits before merging. Half-shipped state never reaches users.
 
 ### Migration test seed (mandatory per vocab)
 
@@ -243,7 +287,7 @@ If the loader is sequential today, adding a `Future.wait` is a one-line fix; the
 Already proven with `functional_roles_vocab.json`. For each new vocab:
 
 1. **Inventory** distinct values + cardinality (script: scan all data files for the field)
-2. **Design** the vocab (5-field lean: `id`, `name`, `notes` ≤200 char, `references[]`, `examples[]` — extend per vocab needs)
+2. **Design** the vocab. Internal taxonomy → 5-field lean shape (`id`, `name`, `notes` ≤200 char, `references[]`, `examples[]`). UI-bound (severity, verdict, banned_status, clinical_risk, allergen_prevalence, signal_strength, confidence_tier, score_contribution_tier) → extend with the **Display Contract** fields (`short_label`, `tone`, `ui_color`, `ui_icon`, `action`) per the cross-cutting rule above.
 3. **Clinician sign-off** on labels + descriptions (CLINICIAN_REVIEW.md per vocab)
 4. **Author** `<field>_vocab.json` with `_metadata.status: "LOCKED"`
 5. **Add 2 contract tests:**
