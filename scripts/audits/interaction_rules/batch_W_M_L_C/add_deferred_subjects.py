@@ -133,7 +133,7 @@ W10_BROMELAIN_RULE = {
 }
 
 M2_TYRAMINE_RULE = {
-    "drug_class_id": "mao_inhibitors",
+    "drug_class_id": "maois",
     "severity": "contraindicated",
     "evidence_level": "established",
     "mechanism": "Tyramine is a sympathomimetic biogenic amine and MAO substrate. With MAO-inhibitor medication, ingested tyramine cannot be metabolized normally, producing massive norepinephrine release and severe hypertensive crisis ('cheese reaction'). Documented fatalities in the clinical literature.",

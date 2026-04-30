@@ -62041,19 +62041,14 @@
   "bromelain": {
     "standard_name": "Bromelain",
     "category": "enzymes",
-    "category_enum": "enzymes",
     "cui": "C0006217",
-    "external_ids": {
-      "unii": "U182GP2CF3",
-      "cas": "9001-00-7"
-    },
     "forms": {
       "bromelain": {
         "bio_score": 10,
         "natural": true,
-        "score": 12,
+        "score": 13,
         "absorption": "Local-action enzyme; systemic absorption is partial via Peyer's patches. Activity-based dosing (GDU/g or MCU/mg), not mass-based.",
-        "notes": "Pineapple-stem proteolytic enzyme. Standardized by activity (2400 GDU/g standard). Clinical use in osteoarthritis, sinusitis, and post-surgical inflammation (NCCIH monograph). Has mild fibrinolytic / antiplatelet activity at supplement doses ≥500 mg/day — see ingredient_interaction_rules for anticoagulant interaction.",
+        "notes": "Pineapple-stem proteolytic enzyme. Standardized by activity (2400 GDU/g standard). Clinical use in osteoarthritis, sinusitis, and post-surgical inflammation. Has mild fibrinolytic / antiplatelet activity at supplement doses ≥500 mg/day — see ingredient_interaction_rules for anticoagulant interaction.",
         "aliases": [
           "bromelain enzyme",
           "pineapple enzyme",
@@ -62061,18 +62056,36 @@
           "stem bromelain",
           "fruit bromelain"
         ],
-        "dosage_importance": 1.0
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.05,
+          "range_low": 0.04,
+          "range_high": 0.08,
+          "quality": "low"
+        }
       }
     },
-    "aliases": [
-      "bromelain"
-    ],
     "match_rules": {
       "priority": 0,
       "match_mode": "alias_and_fuzzy",
       "exclusions": [],
       "parent_id": null,
       "confidence": "high"
-    }
+    },
+    "category_enum": "enzymes",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "data_quality": {
+      "completeness": 1.0,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-04-30"
+    },
+    "external_ids": {
+      "unii": "U182GP2CF3",
+      "cas": "9001-00-7"
+    },
+    "aliases": [
+      "bromelain"
+    ]
   }
 }

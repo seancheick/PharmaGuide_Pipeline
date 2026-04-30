@@ -73,15 +73,15 @@ def test_w_family_rule_exists_at_locked_severity(rules, label, db, cid, drug_cla
 # ---------------------------------------------------------------------------
 
 M_FAMILY = [
-    ("M1",  "ingredient_quality_map",        "phenylethylamine",  "mao_inhibitors", "contraindicated"),
-    ("M3a", "ingredient_quality_map",        "5_htp",             "mao_inhibitors", "contraindicated"),
-    ("M3b", "ingredient_quality_map",        "l_tryptophan",      "mao_inhibitors", "contraindicated"),
-    ("M4",  "ingredient_quality_map",        "st_johns_wort",     "mao_inhibitors", "contraindicated"),
-    ("M5",  "ingredient_quality_map",        "yohimbe",           "mao_inhibitors", "contraindicated"),
-    ("M6",  "ingredient_quality_map",        "ginseng",           "mao_inhibitors", "caution"),
-    ("M7",  "banned_recalled_ingredients",   "ADD_HORDENINE",     "mao_inhibitors", "contraindicated"),
-    ("M8",  "ingredient_quality_map",        "same",              "mao_inhibitors", "avoid"),
-    ("M2",  "harmful_additives",             "ADD_TYRAMINE_RICH_EXTRACT", "mao_inhibitors", "contraindicated"),
+    ("M1",  "ingredient_quality_map",        "phenylethylamine",  "maois", "contraindicated"),
+    ("M3a", "ingredient_quality_map",        "5_htp",             "maois", "contraindicated"),
+    ("M3b", "ingredient_quality_map",        "l_tryptophan",      "maois", "contraindicated"),
+    ("M4",  "ingredient_quality_map",        "st_johns_wort",     "maois", "contraindicated"),
+    ("M5",  "ingredient_quality_map",        "yohimbe",           "maois", "contraindicated"),
+    ("M6",  "ingredient_quality_map",        "ginseng",           "maois", "caution"),
+    ("M7",  "banned_recalled_ingredients",   "ADD_HORDENINE",     "maois", "contraindicated"),
+    ("M8",  "ingredient_quality_map",        "same",              "maois", "avoid"),
+    ("M2",  "harmful_additives",             "ADD_TYRAMINE_RICH_EXTRACT", "maois", "contraindicated"),
 ]
 
 
@@ -263,7 +263,7 @@ def test_pregnancy_pre_seed_locked(rules, cid, expected):
 
 def test_section6_yohimbe_mao_locked_contraindicated(rules):
     """M5 Yohimbe × MAOIs locked to Position A: contraindicated."""
-    dcr = find_drug_class_rule(rules, "ingredient_quality_map", "yohimbe", "mao_inhibitors")
+    dcr = find_drug_class_rule(rules, "ingredient_quality_map", "yohimbe", "maois")
     assert dcr is not None
     assert dcr["severity"] == "contraindicated", (
         "Section 6 open call M5: clinician locked Position A (contraindicated). "

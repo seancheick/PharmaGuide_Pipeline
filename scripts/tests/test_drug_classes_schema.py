@@ -54,6 +54,7 @@ EXPECTED_CLASSES = {
     "class:proton_pump_inhibitors",
     "class:bisphosphonates",
     "class:antiplatelet_agents",
+    "class:thiazide_diuretics",
 }
 
 # Sanity anchors: drugs we *must* be able to find in these classes.
@@ -158,7 +159,7 @@ def test_all_expected_classes_present(classes):
 
 
 def test_exactly_twenty_four_classes(classes):
-    assert len(classes) == 28
+    assert len(classes) == 29
 
 
 # --------------------------------------------------------------------------- #

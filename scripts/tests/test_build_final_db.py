@@ -308,7 +308,9 @@ def test_other_ingredient_reference_prefers_standard_name_over_generic_alias():
     ref = resolve_other_ingredient_reference("Hypromellose", "Hydroxypropyl Methylcellulose")
 
     assert ref["standard_name"] == "Hydroxypropyl Methylcellulose"
-    assert ref["category"] == "capsule_shell"
+    # Phase 4c canonicalized capsule_shell → coating (functional_roles carries
+    # the prebiotic_fiber/capsule-material nuance; category is the lean enum).
+    assert ref["category"] == "coating"
 
 
 def test_non_gmo_project_verified_flows_to_core_row_and_blob_audit():

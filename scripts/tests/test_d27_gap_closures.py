@@ -228,6 +228,12 @@ class TestGlycolipidsEntryExists:
                    if isinstance(e, dict) and e.get("id") == "NHA_GLYCOLIPIDS"]
         assert len(entries) == 1
         entry = entries[0]
-        assert entry.get("category") == "lipid_structural"
+        # Phase 4c canonicalized free-text categories. Glycolipids needed
+        # clinician triage to decide between functional_roles (e.g. emulsifier
+        # or filler) vs active-component reclassification, so the override
+        # placed the entry in the `manual_review` transitional bucket. The
+        # original `lipid_structural` descriptor is preserved in
+        # `legacy_category` for reference.
+        assert entry.get("category") == "manual_review"
         assert entry.get("is_additive") is True
         assert entry.get("cui_status") == "no_confirmed_umls_match"

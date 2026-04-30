@@ -176,8 +176,7 @@
         "notes": "Banned/recalled or high-risk substance — avoid in pregnancy regardless of underlying mechanism.",
         "alert_headline": "Do not use in pregnancy",
         "alert_body": "This substance is banned, recalled, or high-risk and should not be used during pregnancy or breastfeeding under any circumstances.",
-        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated.",
-        "sources": []
+        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -278,8 +277,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -411,8 +409,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team"
@@ -705,7 +702,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/7775360/"
           ],
           "alert_headline": "Keep caffeine intake consistent",
-          "alert_body": "Caffeine changes how your kidneys clear lithium. Big changes in coffee, tea, or caffeine pill use can swing lithium levels in either direction. Talk to your prescriber if your caffeine habits are changing.",
+          "alert_body": "Caffeine changes how your kidneys clear lithium. Big changes in coffee, tea, or caffeine pill use can swing lithium levels in either direction. Talk to your prescriber if your caffeine habits are c...",
           "informational_note": "Caffeine affects lithium clearance — relevant to anyone on lithium therapy."
         }
       ],
@@ -808,8 +805,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -858,8 +854,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -897,7 +892,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/10440462/"
           ],
           "alert_headline": "Bleeding risk with blood thinners",
-          "alert_body": "Dong quai contains natural coumarins and antiplatelet compounds. Combined with warfarin, this can dangerously raise INR.",
+          "alert_body": "If you take anticoagulants, do not combine with this product. Dong quai contains natural coumarins and antiplatelet compounds. Combined with warfarin, this can dangerously raise INR.",
           "informational_note": "Dong quai has documented warfarin interaction — relevant to anyone on blood thinners."
         }
       ],
@@ -1102,8 +1097,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -1256,8 +1250,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -1331,8 +1324,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
@@ -1426,7 +1418,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/9355003/"
           ],
           "alert_headline": "Bleeding risk with blood thinners",
-          "alert_body": "Ginkgo can thin the blood and may increase bleeding when combined with warfarin or antiplatelet medication.",
+          "alert_body": "If you take anticoagulants, do not combine with this product. Ginkgo can thin the blood and may increase bleeding when combined with warfarin or antiplatelet medication.",
           "informational_note": "Ginkgo has antiplatelet activity — relevant to anyone on blood-thinning medication."
         },
         {
@@ -1451,8 +1443,7 @@
         "lactation_category": "caution",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team",
@@ -1546,9 +1537,9 @@
           "informational_note": "Ginseng may interact with warfarin — relevant to anyone on anticoagulants."
         },
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "caution",
-          "evidence_level": "possible",
+          "evidence_level": "probable",
           "mechanism": "Multiple case reports of hypertensive episodes when combined with MAOIs (especially phenelzine). Evidence is thinner than M1-M5 but real.",
           "action": "If you take an MAOI, talk to your prescriber before using Panax or American ginseng.",
           "sources": [
@@ -1620,8 +1611,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/18180278/"
           ],
           "alert_headline": "Affects how many drugs are processed",
-          "alert_body": "Goldenseal blocks two enzymes that break down many prescription drugs. This can raise drug levels and side-effect risk.",
-          "informational_note": "Goldenseal is a strong CYP3A4 and CYP2D6 inhibitor — relevant to anyone on prescription drugs metabolized by these enzymes."
+          "alert_body": "If you take cyp3a4 substrates, do not combine with this product. Goldenseal blocks two enzymes that break down many prescription drugs. This can raise drug levels and side-effect risk.",
+          "informational_note": "Goldenseal is a strong CYP3A4 and CYP2D6 inhibitor — relevant to anyone on prescription drugs metabolized by these en..."
         },
         {
           "drug_class_id": "cyp2d6_substrates",
@@ -1633,8 +1624,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/18180278/"
           ],
           "alert_headline": "Affects how many drugs are processed",
-          "alert_body": "Goldenseal blocks the CYP2D6 enzyme that activates codeine and tramadol and metabolizes many antidepressants. This can change the effectiveness or side-effect profile of those drugs.",
-          "informational_note": "Goldenseal inhibits CYP2D6 in addition to CYP3A4 — relevant to anyone on antidepressants, opioids for pain, or tamoxifen."
+          "alert_body": "If you take cyp2d6 substrates, do not combine with this product. Goldenseal blocks the CYP2D6 enzyme that activates codeine and tramadol and metabolizes many antidepressants. This can change the ef...",
+          "informational_note": "Goldenseal inhibits CYP2D6 in addition to CYP3A4 — relevant to anyone on antidepressants, opioids for pain, or tamoxi..."
         }
       ],
       "dose_thresholds": [],
@@ -1711,8 +1702,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team",
@@ -1773,8 +1763,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -1838,8 +1827,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -2005,8 +1993,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -2069,8 +2056,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -2277,8 +2263,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team",
@@ -2365,8 +2350,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -2428,8 +2412,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team",
@@ -2496,7 +2479,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12595722/"
           ],
           "alert_headline": "Do not combine with warfarin",
-          "alert_body": "St. John's Wort speeds up the breakdown of warfarin, which can stop it from working and lead to dangerous blood clots.",
+          "alert_body": "If you take anticoagulants, do not combine with this product. St. John's Wort speeds up the breakdown of warfarin, which can stop it from working and lead to dangerous blood clots.",
           "informational_note": "St. John's Wort is a strong CYP3A4 inducer — relevant to anyone on warfarin or many other prescription drugs."
         },
         {
@@ -2509,7 +2492,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12595722/"
           ],
           "alert_headline": "Do not combine with transplant drugs",
-          "alert_body": "St. John's Wort speeds up the breakdown of tacrolimus and cyclosporine. This can cause transplant rejection.",
+          "alert_body": "If you take immunosuppressants, do not combine with this product. St. John's Wort speeds up the breakdown of tacrolimus and cyclosporine. This can cause transplant rejection.",
           "informational_note": "St. John's Wort is a strong CYP3A4 inducer — opposite mechanism to grapefruit (drug failure, not toxicity)."
         },
         {
@@ -2566,7 +2549,7 @@
           "informational_note": "St John's Wort has MAOI-like activity — relevant to people on MAOI antidepressants."
         },
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "Hypericin has weak MAO-A inhibition; combination duplicates mechanism → serotonin syndrome and hypertensive risk.",
@@ -2575,7 +2558,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12595722/"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "St. John's Wort has its own MAO-inhibiting activity. Combined with prescription MAOIs, this can cause serotonin syndrome or dangerous blood pressure changes.",
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. St. John's Wort has its own MAO-inhibiting activity. Combined with prescription MAOIs, this can cause serotonin syndrome or dangerous b...",
           "informational_note": "St. John's Wort has serotonergic and MAO-A activity — relevant to anyone on MAOIs."
         },
         {
@@ -2588,7 +2571,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12595722/"
           ],
           "alert_headline": "May cause contraception failure",
-          "alert_body": "St. John's Wort lowers the level of birth-control pills in your blood and can lead to unintended pregnancy.",
+          "alert_body": "If you take oral contraceptives, do not combine with this product. St. John's Wort lowers the level of birth-control pills in your blood and can lead to unintended pregnancy.",
           "informational_note": "St. John's Wort reduces oral contraceptive efficacy."
         }
       ],
@@ -2865,8 +2848,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-03-18",
       "review_owner": "pharmaguide_clinical_team"
@@ -3047,8 +3029,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team"
@@ -3085,8 +3066,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -3142,7 +3122,7 @@
           "informational_note": "Yohimbe is a stimulant — relevant to people on antihypertensive medications."
         },
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "Alpha-2 antagonist increases norepinephrine release; combined with MAO inhibition → severe hypertension. Common in pre-workout and male-enhancement stacks where users may not connect the dots.",
@@ -3151,7 +3131,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/11448560/"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "Yohimbe combined with MAO-inhibitor antidepressants can cause severe high blood pressure. Many pre-workout and 'male enhancement' supplements contain yohimbe.",
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. Yohimbe combined with MAO-inhibitor antidepressants can cause severe high blood pressure. Many pre-workout and 'male enhancement' suppl...",
           "informational_note": "Yohimbe is a sympathomimetic — relevant to anyone on MAOIs."
         }
       ],
@@ -3219,8 +3199,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-02-28",
       "review_owner": "pharmaguide_clinical_team",
@@ -3710,7 +3689,7 @@
         {
           "drug_class_id": "lithium",
           "severity": "monitor",
-          "evidence_level": "possible",
+          "evidence_level": "probable",
           "mechanism": "NSAID-like prostaglandin inhibition is theoretical for curcumin specifically; clinical lithium-elevation evidence absent. Severity reflects conservative safety posture given lithium's narrow therapeutic index, not an established interaction.",
           "action": "If you take lithium, mention high-dose turmeric or curcumin to your prescriber. Monitoring is precautionary — clinical evidence is limited.",
           "sources": [
@@ -3740,8 +3719,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -3777,8 +3755,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -3915,8 +3892,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -4028,8 +4004,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -4115,7 +4090,7 @@
         {
           "drug_class_id": "lithium",
           "severity": "monitor",
-          "evidence_level": "possible",
+          "evidence_level": "probable",
           "mechanism": "Theoretical NSAID-like mechanism; no documented clinical lithium-elevation cases. Conservative posture given lithium's narrow therapeutic index.",
           "action": "If you take lithium, mention curcumin extracts to your prescriber.",
           "sources": [
@@ -4156,8 +4131,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -4236,8 +4210,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -4352,8 +4325,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -4599,8 +4571,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -4689,8 +4660,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -4781,8 +4751,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -4858,8 +4827,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -4937,8 +4905,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5042,8 +5009,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5118,8 +5084,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5166,8 +5131,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team",
@@ -5219,8 +5183,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team",
@@ -5272,8 +5235,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5321,8 +5283,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
@@ -5374,8 +5335,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5424,8 +5384,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-23",
       "review_owner": "pharmaguide_clinical_team"
@@ -5479,8 +5438,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5531,8 +5489,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5583,8 +5540,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5635,8 +5591,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5687,8 +5642,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5724,8 +5678,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5760,8 +5713,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team",
@@ -5854,8 +5806,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5906,8 +5857,7 @@
         "notes": "Banned/recalled or high-risk substance — avoid in pregnancy regardless of underlying mechanism.",
         "alert_headline": "Do not use in pregnancy",
         "alert_body": "This substance is banned, recalled, or high-risk and should not be used during pregnancy or breastfeeding under any circumstances.",
-        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated.",
-        "sources": []
+        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -5944,7 +5894,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23184849/"
           ],
           "alert_headline": "Muscle-toxicity risk with statins",
-          "alert_body": "Grapefruit and bergamot block an enzyme that breaks down certain statins, dramatically raising drug levels and the risk of muscle damage.",
+          "alert_body": "If you take statins, do not combine with this product. Grapefruit and bergamot block an enzyme that breaks down certain statins, dramatically raising drug levels and the risk of muscle damage.",
           "informational_note": "Grapefruit/bergamot interact with simvastatin and lovastatin — relevant to anyone on those statins."
         },
         {
@@ -5957,7 +5907,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23184849/"
           ],
           "alert_headline": "May lower blood pressure too much",
-          "alert_body": "Grapefruit and bergamot can boost levels of calcium channel blockers, leading to dangerously low blood pressure or swelling.",
+          "alert_body": "If you take calcium channel blockers, do not combine with this product. Grapefruit and bergamot can boost levels of calcium channel blockers, leading to dangerously low blood pressure or swelling.",
           "informational_note": "Grapefruit/bergamot affect calcium channel blockers — relevant to anyone on felodipine, nifedipine, or related drugs."
         },
         {
@@ -5970,7 +5920,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/26929736/"
           ],
           "alert_headline": "Do not combine with transplant drugs",
-          "alert_body": "Grapefruit and bergamot can push tacrolimus and cyclosporine to toxic levels, damaging the kidneys. Strict avoidance is required.",
+          "alert_body": "If you take immunosuppressants, do not combine with this product. Grapefruit and bergamot can push tacrolimus and cyclosporine to toxic levels, damaging the kidneys. Strict avoidance is required.",
           "informational_note": "Grapefruit/bergamot are contraindicated with transplant immunosuppressants."
         },
         {
@@ -5983,7 +5933,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/10691759/"
           ],
           "alert_headline": "Heart-rhythm risk with amiodarone",
-          "alert_body": "Grapefruit and bergamot raise amiodarone levels and increase the risk of dangerous heart rhythms.",
+          "alert_body": "If you take antiarrhythmics, do not combine with this product. Grapefruit and bergamot raise amiodarone levels and increase the risk of dangerous heart rhythms.",
           "informational_note": "Grapefruit/bergamot stack QT risk with amiodarone."
         },
         {
@@ -6021,8 +5971,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -6326,8 +6275,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -6416,8 +6364,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -6518,8 +6465,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -6598,8 +6544,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -6741,8 +6686,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -6933,8 +6877,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -7065,8 +7008,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -7197,8 +7139,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -7352,8 +7293,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -7401,8 +7341,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-04-09",
       "review_owner": "pharmaguide_clinical_team"
@@ -7459,7 +7398,7 @@
           "informational_note": "5-HTP raises serotonin — relevant to people on MAOI antidepressants."
         },
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "Serotonin precursor combined with MAOI inhibition → serotonin syndrome.",
@@ -7468,7 +7407,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/9764773/"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "5-HTP raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. 5-HTP raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
           "informational_note": "5-HTP increases serotonin — relevant to anyone on MAOIs, SSRIs, SNRIs, or other serotonergic drugs."
         }
       ],
@@ -7480,8 +7419,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -7705,8 +7643,7 @@
         "notes": "No severe pregnancy-specific evidence at RDA-range doses; talk to your clinician before use, especially at higher doses.",
         "alert_headline": "Standard nutrient — clinician guidance suggested",
         "alert_body": "At RDA-range doses, this nutrient has no specific pregnancy or lactation concerns. Higher therapeutic doses may have a different safety profile — talk to your clinician.",
-        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases.",
-        "sources": []
+        "informational_note": "RDA-range standard nutrient — generally compatible with pregnancy and lactation; high-dose forms have separate evidence bases."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -7756,8 +7693,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -7892,8 +7828,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8000,8 +7935,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8100,8 +8034,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -8200,8 +8133,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -8251,8 +8183,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8317,8 +8248,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8366,8 +8296,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -8426,7 +8355,7 @@
         {
           "drug_class_id": "lithium",
           "severity": "monitor",
-          "evidence_level": "possible",
+          "evidence_level": "probable",
           "mechanism": "Diuretic effect → potential lithium concentration via fluid/sodium depletion. Same mechanism family as the established lithium-thiazide warning. Common in 'detox' and 'liver support' supplements.",
           "action": "If you take lithium, talk to your prescriber before using dandelion extract. Watch for signs of lithium toxicity (tremor, confusion, GI upset).",
           "sources": [
@@ -8445,8 +8374,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8511,8 +8439,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8605,8 +8532,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8657,8 +8583,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8694,8 +8619,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8760,8 +8684,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8826,8 +8749,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8877,8 +8799,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8929,8 +8850,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -8995,8 +8915,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -9032,8 +8951,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -9132,8 +9050,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -9198,8 +9115,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -9235,8 +9151,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "pharmaguide_clinical_team"
@@ -9299,8 +9214,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "pharmaguide_clinical_team"
@@ -9411,8 +9325,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9526,8 +9439,7 @@
         "notes": "Omega-3 (particularly DHA) is recommended during pregnancy for fetal brain development. FDA advises keeping total omega-3 intake from supplements and food below 3g/day.",
         "alert_headline": "Continue omega-3 under prenatal care",
         "alert_body": "Omega-3 (especially DHA) is recommended during pregnancy for fetal brain development. If you are pregnant or nursing, discuss dosing with your clinician and keep total omega-3 under 3 g per day.",
-        "informational_note": "Omega-3 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding.",
-        "sources": []
+        "informational_note": "Omega-3 is part of standard prenatal support — relevant to anyone pregnant or breastfeeding."
       },
       "last_reviewed": "2026-04-24",
       "review_owner": "drug_label_mining"
@@ -9645,8 +9557,7 @@
         "notes": "FDA strongly advises against CBD during pregnancy and breastfeeding. Animal studies show developmental toxicity. CBD transfers to breast milk.",
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
-        "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy.",
-        "sources": []
+        "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy."
       },
       "last_reviewed": "2026-04-14",
       "review_owner": "drug_label_mining"
@@ -9682,8 +9593,7 @@
         "notes": "Banned/recalled or high-risk substance — avoid in pregnancy regardless of underlying mechanism.",
         "alert_headline": "Do not use in pregnancy",
         "alert_body": "This substance is banned, recalled, or high-risk and should not be used during pregnancy or breastfeeding under any circumstances.",
-        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated.",
-        "sources": []
+        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9719,8 +9629,7 @@
         "notes": "Banned/recalled or high-risk substance — avoid in pregnancy regardless of underlying mechanism.",
         "alert_headline": "Do not use in pregnancy",
         "alert_body": "This substance is banned, recalled, or high-risk and should not be used during pregnancy or breastfeeding under any circumstances.",
-        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated.",
-        "sources": []
+        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9767,8 +9676,7 @@
         "notes": "Banned/recalled or high-risk substance — avoid in pregnancy regardless of underlying mechanism.",
         "alert_headline": "Do not use in pregnancy",
         "alert_body": "This substance is banned, recalled, or high-risk and should not be used during pregnancy or breastfeeding under any circumstances.",
-        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated.",
-        "sources": []
+        "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9803,8 +9711,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9838,8 +9745,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9873,8 +9779,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9908,8 +9813,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9955,8 +9859,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -9970,7 +9873,7 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "PEA is a direct MAO substrate; combination with MAOIs causes hypertensive crisis.",
@@ -9979,7 +9882,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/8854272/"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "PEA combined with MAO-inhibitor antidepressants can cause a dangerous spike in blood pressure.",
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. PEA combined with MAO-inhibitor antidepressants can cause a dangerous spike in blood pressure.",
           "informational_note": "PEA is an MAO substrate — relevant to anyone taking phenelzine, tranylcypromine, selegiline, or related drugs."
         }
       ],
@@ -9989,7 +9892,6 @@
         "lactation_category": "no_data",
         "evidence_level": "no_data",
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "sources": [],
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
         "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
@@ -10006,7 +9908,7 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "Serotonin precursor combined with MAOI inhibition → serotonin syndrome.",
@@ -10015,7 +9917,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/9764773/"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "L-tryptophan raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. L-tryptophan raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
           "informational_note": "L-tryptophan increases serotonin — relevant to anyone on MAOIs, SSRIs, SNRIs, or other serotonergic drugs."
         }
       ],
@@ -10025,7 +9927,6 @@
         "lactation_category": "no_data",
         "evidence_level": "no_data",
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "sources": [],
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
         "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
@@ -10042,7 +9943,7 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "Hordenine is a β-PEA analog and direct MAO substrate. Often combined with PEA in pre-workout / fat-burner stacks, compounding the risk.",
@@ -10051,7 +9952,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/17612452/"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "Hordenine works like PEA and can cause dangerous blood pressure changes with MAO-inhibitor antidepressants.",
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. Hordenine works like PEA and can cause dangerous blood pressure changes with MAO-inhibitor antidepressants.",
           "informational_note": "Hordenine is an MAO substrate — relevant to anyone on MAOIs."
         }
       ],
@@ -10061,7 +9962,6 @@
         "lactation_category": "avoid",
         "evidence_level": "moderate",
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "sources": [],
         "alert_headline": "Do not use in pregnancy",
         "alert_body": "This substance is banned, recalled, or high-risk and should not be used during pregnancy or breastfeeding under any circumstances.",
         "informational_note": "Banned/recalled or high-risk substance — pregnancy default is contraindicated."
@@ -10078,7 +9978,7 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "avoid",
           "evidence_level": "established",
           "mechanism": "Methyl donor with antidepressant activity; serotonergic potentiation when combined with MAOIs raises serotonin syndrome risk.",
@@ -10087,7 +9987,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12420308/"
           ],
           "alert_headline": "Avoid combining with MAOIs",
-          "alert_body": "SAMe has antidepressant-like activity. Combined with MAO-inhibitor antidepressants, it can raise the risk of serotonin syndrome.",
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. SAMe has antidepressant-like activity. Combined with MAO-inhibitor antidepressants, it can raise the risk of serotonin syndrome.",
           "informational_note": "SAMe is serotonergic — relevant to anyone on MAOIs or other antidepressants."
         }
       ],
@@ -10097,7 +9997,6 @@
         "lactation_category": "no_data",
         "evidence_level": "no_data",
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "sources": [],
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
         "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
@@ -10133,7 +10032,6 @@
         "lactation_category": "no_data",
         "evidence_level": "no_data",
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
-        "sources": [],
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
         "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
@@ -10152,7 +10050,7 @@
         {
           "drug_class_id": "anticoagulants",
           "severity": "monitor",
-          "evidence_level": "limited",
+          "evidence_level": "theoretical",
           "mechanism": "Mild fibrinolytic / antiplatelet activity at high dose (≥500 mg/day). Bromelain enhances plasmin generation and modestly inhibits platelet aggregation. Clinical bleeding events with warfarin are rare but documented in case reports.",
           "action": "If you take warfarin or an antiplatelet, mention bromelain supplements ≥500 mg/day to your prescriber. Watch for unusual bruising or bleeding.",
           "sources": [
@@ -10171,8 +10069,7 @@
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
-        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended.",
-        "sources": []
+        "informational_note": "Pregnancy/lactation safety data is limited — clinician guidance recommended."
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"
@@ -10186,7 +10083,7 @@
       "condition_rules": [],
       "drug_class_rules": [
         {
-          "drug_class_id": "mao_inhibitors",
+          "drug_class_id": "maois",
           "severity": "contraindicated",
           "evidence_level": "established",
           "mechanism": "Tyramine is a sympathomimetic biogenic amine and MAO substrate. With MAO-inhibitor medication, ingested tyramine cannot be metabolized normally, producing massive norepinephrine release and severe hypertensive crisis ('cheese reaction'). Documented fatalities in the clinical literature.",
@@ -10195,8 +10092,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/29380410/"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "Tyramine-rich supplement extracts combined with MAO-inhibitor antidepressants can cause a life-threatening blood pressure spike. This is the same 'cheese reaction' that requires dietary restrictions on MAOIs.",
-          "informational_note": "Tyramine is the classic MAOI dietary contraindication — relevant to anyone on phenelzine, tranylcypromine, isocarboxazid, or selegiline."
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. Tyramine-rich supplement extracts combined with MAO-inhibitor antidepressants can cause a life-threatening blood pressure spike. This i...",
+          "informational_note": "Tyramine is the classic MAOI dietary contraindication — relevant to anyone on phenelzine, tranylcypromine, isocarboxa..."
         }
       ],
       "dose_thresholds": [],
@@ -10207,8 +10104,7 @@
         "notes": "Concentrated tyramine extracts may elevate sympathetic tone — talk to your clinician before use during pregnancy or breastfeeding.",
         "alert_headline": "Talk to your clinician",
         "alert_body": "Concentrated tyramine sources can elevate blood pressure and sympathetic tone. Discuss with your obstetrician or pediatrician before use during pregnancy or breastfeeding.",
-        "informational_note": "Tyramine elevates sympathetic tone — pregnancy/lactation guidance recommended.",
-        "sources": []
+        "informational_note": "Tyramine elevates sympathetic tone — pregnancy/lactation guidance recommended."
       },
       "last_reviewed": "2026-04-30",
       "review_owner": "pharmaguide_clinical_team"

@@ -194,7 +194,7 @@ def m_rule(severity, mech, action, headline, body, note, sources, evidence_level
 
 M_RULES = [
     # M1 PEA × MAOIs
-    ("ingredient_quality_map", "phenylethylamine", "mao_inhibitors", m_rule(
+    ("ingredient_quality_map", "phenylethylamine", "maois", m_rule(
         "contraindicated",
         "PEA is a direct MAO substrate; combination with MAOIs causes hypertensive crisis.",
         "Do not combine PEA-containing supplements with MAOIs. Discontinue MAOI for the appropriate washout period before any PEA-containing product.",
@@ -205,7 +205,7 @@ M_RULES = [
     )),
     # M2 Tyramine — DEFERRED
     # M3 5-HTP × MAOIs
-    ("ingredient_quality_map", "5_htp", "mao_inhibitors", m_rule(
+    ("ingredient_quality_map", "5_htp", "maois", m_rule(
         "contraindicated",
         "Serotonin precursor combined with MAOI inhibition → serotonin syndrome.",
         "Do not combine 5-HTP with MAOIs. Allow appropriate washout between MAOI discontinuation and 5-HTP use.",
@@ -215,7 +215,7 @@ M_RULES = [
         [f"{SRC_PUBMED}/9764773/"],
     )),
     # M3 alt — L-Tryptophan × MAOIs (new rule entry — l_tryptophan has no rule yet)
-    ("ingredient_quality_map", "l_tryptophan", "mao_inhibitors", m_rule(
+    ("ingredient_quality_map", "l_tryptophan", "maois", m_rule(
         "contraindicated",
         "Serotonin precursor combined with MAOI inhibition → serotonin syndrome.",
         "Do not combine L-tryptophan with MAOIs.",
@@ -225,7 +225,7 @@ M_RULES = [
         [f"{SRC_PUBMED}/9764773/"],
     )),
     # M4 St John's Wort × MAOIs
-    ("ingredient_quality_map", "st_johns_wort", "mao_inhibitors", m_rule(
+    ("ingredient_quality_map", "st_johns_wort", "maois", m_rule(
         "contraindicated",
         "Hypericin has weak MAO-A inhibition; combination duplicates mechanism → serotonin syndrome and hypertensive risk.",
         "Do not combine St. John's Wort with MAOIs.",
@@ -235,7 +235,7 @@ M_RULES = [
         [f"{SRC_PUBMED}/12595722/"],
     )),
     # M5 Yohimbe × MAOIs (Section 6 Position A: contraindicated)
-    ("ingredient_quality_map", "yohimbe", "mao_inhibitors", m_rule(
+    ("ingredient_quality_map", "yohimbe", "maois", m_rule(
         "contraindicated",
         "Alpha-2 antagonist increases norepinephrine release; combined with MAO inhibition → severe hypertension. Common in pre-workout and male-enhancement stacks where users may not connect the dots.",
         "Do not combine yohimbe with MAOIs. Many pre-workout and male-enhancement supplements contain yohimbe — read labels carefully.",
@@ -245,7 +245,7 @@ M_RULES = [
         [f"{SRC_PUBMED}/11448560/"],
     )),
     # M6 Ginseng × MAOIs (caution)
-    ("ingredient_quality_map", "ginseng", "mao_inhibitors", m_rule(
+    ("ingredient_quality_map", "ginseng", "maois", m_rule(
         "caution",
         "Multiple case reports of hypertensive episodes when combined with MAOIs (especially phenelzine). Evidence is thinner than M1-M5 but real.",
         "If you take an MAOI, talk to your prescriber before using Panax or American ginseng.",
@@ -256,7 +256,7 @@ M_RULES = [
         evidence_level="possible",
     )),
     # M7 Hordenine × MAOIs
-    ("banned_recalled_ingredients", "ADD_HORDENINE", "mao_inhibitors", m_rule(
+    ("banned_recalled_ingredients", "ADD_HORDENINE", "maois", m_rule(
         "contraindicated",
         "Hordenine is a β-PEA analog and direct MAO substrate. Often combined with PEA in pre-workout / fat-burner stacks, compounding the risk.",
         "Do not combine hordenine with MAOIs. Avoid pre-workout and fat-burner products listing hordenine if you take an MAOI.",
@@ -266,7 +266,7 @@ M_RULES = [
         [f"{SRC_PUBMED}/17612452/"],
     )),
     # M8 SAMe × MAOIs
-    ("ingredient_quality_map", "same", "mao_inhibitors", m_rule(
+    ("ingredient_quality_map", "same", "maois", m_rule(
         "avoid",
         "Methyl donor with antidepressant activity; serotonergic potentiation when combined with MAOIs raises serotonin syndrome risk.",
         "If you take an MAOI, avoid SAMe unless cleared by your prescriber. Allow washout if switching.",

@@ -3,7 +3,7 @@
     "description": "Controlled clinical risk taxonomy for condition and medication-class interaction alerts",
     "purpose": "interaction_alert_taxonomy",
     "schema_version": "5.1.0",
-    "last_updated": "2026-04-27",
+    "last_updated": "2026-04-30",
     "total_entries": 42,
     "flutter_top_level_key": "clinical_risk_taxonomy",
     "drug_classes_count": 15
@@ -50,7 +50,7 @@
       "label": "Diabetes",
       "category": "metabolic",
       "display_priority": 7,
-      "note": "Covers type 1 and type 2. Merged from diabetes_type1/diabetes_type2 \u2014 supplement interactions are the same for both types (blood sugar impact, hypoglycemic risk)."
+      "note": "Covers type 1 and type 2. Merged from diabetes_type1/diabetes_type2 — supplement interactions are the same for both types (blood sugar impact, hypoglycemic risk)."
     },
     {
       "id": "bleeding_disorders",
@@ -193,6 +193,42 @@
       "category": "cardiology",
       "display_priority": 14,
       "description": "Thiazide and thiazide-like diuretics. Distinct from other diuretics because they retain calcium (relevant for vitamin D + calcium supplements)."
+    },
+    {
+      "id": "lithium",
+      "label": "Lithium",
+      "category": "psychiatric",
+      "display_priority": 16
+    },
+    {
+      "id": "calcium_channel_blockers",
+      "label": "Calcium Channel Blockers",
+      "category": "cardiovascular",
+      "display_priority": 17
+    },
+    {
+      "id": "oral_contraceptives",
+      "label": "Oral Contraceptives",
+      "category": "endocrine",
+      "display_priority": 18
+    },
+    {
+      "id": "antiarrhythmics",
+      "label": "Antiarrhythmics",
+      "category": "cardiovascular",
+      "display_priority": 19
+    },
+    {
+      "id": "cyp3a4_substrates",
+      "label": "CYP3A4-Metabolized Drugs",
+      "category": "drug_metabolism",
+      "display_priority": 20
+    },
+    {
+      "id": "cyp2d6_substrates",
+      "label": "CYP2D6-Metabolized Drugs",
+      "category": "drug_metabolism",
+      "display_priority": 21
     }
   ],
   "severity_levels": [
@@ -225,6 +261,12 @@
       "label": "Informational",
       "color": "gray",
       "weight": 1
+    },
+    {
+      "id": "no_data",
+      "label": "No Data",
+      "color": "gray",
+      "weight": 0
     }
   ],
   "evidence_levels": [

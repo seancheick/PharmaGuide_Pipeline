@@ -18734,7 +18734,7 @@
         "tyramine-containing extract",
         "fermented protein hydrolysate"
       ],
-      "category": "biogenic_amine",
+      "category": "contaminant",
       "mechanism_of_harm": "Tyramine is a sympathomimetic biogenic amine. Combined with MAO-inhibitor medication, dietary or supplemental tyramine produces hypertensive crisis ('cheese reaction') — severe blood-pressure spike with documented fatalities. Concentrated in aged, fermented, and bacterially-processed extracts (aged-yeast, fermented bovine, certain protein hydrolysates).",
       "regulatory_status": {
         "US": "Not specifically regulated in supplements; FDA Drug Safety Communications warn of MAOI-tyramine interaction.",
@@ -18746,12 +18746,89 @@
         "Anyone with hypertension — concentrated tyramine sources elevate sympathetic tone"
       ],
       "notes": "Tyramine itself is not toxic at dietary levels in most people; the safety issue is exclusively the MAOI interaction. Fermented and aged supplement extracts can contain markedly higher tyramine than fresh ingredients. See ingredient_interaction_rules for the MAOI rule.",
-      "severity_level": "high",
-      "confidence": "high",
-      "evidence_basis": "Established pharmacological interaction (Gillman 2018 Br J Clin Pharmacol; Shulman 2013 Drug Saf).",
-      "sources": [
+      "scientific_references": [
         "https://pubmed.ncbi.nlm.nih.gov/29380410/",
         "https://www.efsa.europa.eu/en/efsajournal/pub/2393"
+      ],
+      "last_updated": "2026-04-30",
+      "match_rules": {
+        "match_mode": "alias_and_fuzzy",
+        "fuzzy_threshold": 0.78,
+        "case_sensitive": false,
+        "preferred_alias": "Tyramine-Rich Extracts"
+      },
+      "references_structured": [
+        {
+          "type": "systematic_review",
+          "authority": "OTHER",
+          "title": "Gillman 2018 — Monoamine oxidase inhibitors: a review concerning dietary tyramine and drug interactions",
+          "citation": "Gillman PK. Br J Clin Pharmacol. 2018;84(8):1772-1787.",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/29380410/",
+          "published_date": "2018-08-01",
+          "evidence_grade": "A",
+          "supports_claims": []
+        },
+        {
+          "type": "guidance",
+          "authority": "EFSA",
+          "title": "EFSA Scientific Opinion on risk-based control of biogenic amine formation in fermented foods",
+          "citation": "EFSA Journal 2011;9(10):2393.",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2393",
+          "published_date": "2011-10-26",
+          "evidence_grade": "A",
+          "supports_claims": []
+        }
+      ],
+      "jurisdictional_statuses": [
+        {
+          "authority": "US",
+          "jurisdiction": "US",
+          "status_code": "permitted_with_limit",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-04-30",
+            "end": null
+          },
+          "source_ref": "FDA Drug Safety Communication on MAOI-tyramine interaction"
+        },
+        {
+          "authority": "EU",
+          "jurisdiction": "EU",
+          "status_code": "permitted_with_limit",
+          "scope": "supplement",
+          "effective_range": {
+            "start": "2026-04-30",
+            "end": null
+          },
+          "source_ref": "https://www.efsa.europa.eu/en/efsajournal/pub/2393"
+        }
+      ],
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-04-30",
+        "reviewed_by": "pharmaguide_clinical_team",
+        "next_review_due": "2027-04-30",
+        "change_log": [
+          {
+            "date": "2026-04-30",
+            "change": "Created entry to support M2 (tyramine × MAOIs) interaction rule per clinician batch 2026-04-30.",
+            "reason": "subject_ref creation for INTERACTION_RULES_REVIEW.md Section 2B M2"
+          }
+        ]
+      },
+      "confidence": "high",
+      "severity_level": "high",
+      "dose_thresholds": [],
+      "cui": null,
+      "external_ids": {
+        "cas": "51-67-2"
+      },
+      "rxcui": null,
+      "gsrs": null,
+      "safety_summary": "Concentrated tyramine in fermented or aged extracts is contraindicated with MAO-inhibitor medication ('cheese reaction'). At typical doses for non-MAOI users, no acute concern.",
+      "safety_summary_one_liner": "Tyramine extracts and MAOIs: documented hypertensive-crisis combination.",
+      "functional_roles": [
+        "preservative"
       ]
     }
   ]
