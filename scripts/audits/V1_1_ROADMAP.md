@@ -125,6 +125,14 @@ TiO2 itself is in `banned_recalled_ingredients.json` already. The attribute woul
 
 41 + 13 = 54 entries reclassified out of `other` bucket. `other` shrunk 77 → 23. Remaining 23 are legitimately ambiguous (hormones, nucleotides, organic acids, sulfur compounds, plant alkaloids without clear botanical origin).
 
+### 4.0 [DONE] Cross-file categorization sweep *(2026-04-30)*
+
+Comprehensive scan of category-like fields across all 14 JSON reference files. Findings + targeted safe fixes applied:
+- `botanical_ingredients.json` — 1 entry (rhododendron_caucasicum) with `unspecified` category → fixed to `herb`
+- `backed_clinical_studies.json` — probiotic spelling normalization: `probiotic` (4) + `probiotic strain` (4) + `probiotics` (3) → all `probiotics` (11 entries normalized)
+- `backed_clinical_studies.json` — Spirulina + Chlorella moved out of `other` → `antioxidant`
+- All other reference files (allergens, absorption_enhancers, clinical_risk_taxonomy, proprietary_blends, functional_ingredient_groupings) — categorically clean
+
 **Final 'other' bucket (23 entries — staying):**
 - Hormones (3): 7-Keto DHEA, DHEA, Melatonin
 - Nucleotides (5): Adenosine, ATP, D-Ribose, Inosine, Uridine-5'-Monophosphate, RNA/DNA
@@ -167,6 +175,34 @@ Per clinician handoff: "Out of scope for this work; flagged for the safety-logic
 - Sheep/goat glandular from prion-endemic regions → B0 high_risk
 
 Needs a `country_of_origin` attribute on the ingredient + a per-product label-claim parse.
+
+---
+
+## 5b. Reference-data category audits — deferred to clinician
+
+### 5b.1 [P1] `standardized_botanicals.json` — 41 entries with non-botanical categories *(Effort: 2-3 days clinician + 1 day ours)*
+
+**The issue:** the file is supposed to hold branded/standardized BOTANICAL extracts, but ~17% of entries (41/239) carry categories that aren't plant-part descriptors:
+
+- **`standardized` / `standardized_extract` (19 entries):** branded extracts without their underlying plant part exposed in the category. E.g. `cran_max` (cranberry → fruit), `pine_bark_extract` (→ bark), `morosil` (blood orange → fruit), `slendesta` (potato → vegetable), `enxtra` (alpinia galanga rhizome → root). Should be re-categorized to the plant-part of the source.
+- **`active_compound` / `polyphenol` / `polysaccharide` / `fatty_acid_amide` / `tripeptide` (10 entries):** chemical-class categories on entries like `gingerols`, `curcumin`, `wellmune` (beta-glucan), `levagen` (PEA), `setria` (glutathione). Either re-categorize to source plant-part OR move out of standardized_botanicals to chemistry-specific refs.
+- **`mineral` / `mineral_chelate` / `mineral_complex` / `algal_oil` / `structural_protein` / `amino_acid` / `nootropic` / `hormone_analog` / `fermentate` (12 entries):** these aren't botanicals at all. Branded mineral chelates (`chromax`, `sunactive_iron`), branded amino acids (`alphawave_l_theanine`), branded fatty acids (`life_s_dha`, `levagen`), branded proteins (`keraglo`), branded fibers (`wellmune`), branded fermentates (`epicor`), branded hormone (`microactive_melatonin`). Should be migrated to their respective IQM-style references.
+- **`standardized` (10 of 19) entries with brands like `bil_max`, `blue_max`, `pacran`, `flowens`, `sharp_ps_green`** — need clinician verification of the underlying source plant part.
+
+**What to do:** clinician audit + per-entry rename to canonical plant-part categories. Migrate truly-non-botanical entries to actives/IQM. Conservative — no changes without clinician sign-off (sample table delivered for review).
+
+### 5b.2 [P1] `backed_clinical_studies.json` — 148 distinct categories *(Effort: 2-3 days clinician + 0.5 day ours)*
+
+**The issue:** the file holds 197 clinical-evidence entries with **148 distinct `category` values** — most appear ONLY ONCE (128/148 are single-occurrence). Categories describe clinical APPLICATION/INDICATION (e.g. "anti-inflammatory", "joint health", "cognitive"), not ingredient class.
+
+**What's already done (2026-04-30):** safe normalizations applied — probiotic spelling collapse (3 → 1), Spirulina/Chlorella out of "other".
+
+**What to do:** clinician-driven canonicalization to ~20 controlled clinical-application buckets:
+- anti-inflammatory, antioxidant, cognitive/neurological, cardiovascular, joint/bone, skin/hair/collagen, digestive/gut, liver/detox, sleep/mood, sports/performance, immune, metabolic/blood-sugar, weight management, prebiotic/fiber, mitochondrial, hormonal, eye/vision, vitamin/nutrient, adaptogen/stress, probiotics
+- Multi-benefit entries (e.g. "antioxidant / detox") use comma-separated multi-tag, not new compound categories
+- Build the canonical set first, then per-entry remap with clinician spot-check
+
+This is similar in spirit to the functional_roles vocab work but for a different taxonomic axis (clinical indication, not ingredient role).
 
 ---
 

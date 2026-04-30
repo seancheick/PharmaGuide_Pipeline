@@ -996,7 +996,7 @@
         "florastor",
         "saccharomyces boulardii cncm i-745"
       ],
-      "category": "probiotic",
+      "category": "probiotics",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT",
@@ -1205,7 +1205,7 @@
         "megasporebiotic",
         "spore probiotic"
       ],
-      "category": "probiotic",
+      "category": "probiotics",
       "evidence_level": "branded-rct",
       "published_studies": [
         "brand",
@@ -2772,7 +2772,7 @@
         "lactospore",
         "bacillus coagulans mtcc 5856"
       ],
-      "category": "probiotic",
+      "category": "probiotics",
       "evidence_level": "branded-rct",
       "published_studies": [
         "RCT"
@@ -14450,7 +14450,7 @@
         "limosilactobacillus reuteri atcc pta 5289",
         "limosilactobacillus reuteri dsm 17938"
       ],
-      "category": "probiotic",
+      "category": "probiotics",
       "evidence_level": "strain-clinical",
       "published_studies": [
         "RCT",
@@ -19144,7 +19144,7 @@
         "lgg",
         "atcc 53103"
       ],
-      "category": "probiotic strain",
+      "category": "probiotics",
       "evidence_level": "strain-clinical",
       "study_type": "clinical_strain",
       "published_studies": [
@@ -19255,7 +19255,7 @@
         "bb-12",
         "bb12"
       ],
-      "category": "probiotic strain",
+      "category": "probiotics",
       "evidence_level": "strain-clinical",
       "study_type": "clinical_strain",
       "published_studies": [
@@ -19375,7 +19375,7 @@
         "hn019",
         "dr10"
       ],
-      "category": "probiotic strain",
+      "category": "probiotics",
       "evidence_level": "strain-clinical",
       "study_type": "clinical_strain",
       "published_studies": [
@@ -20026,7 +20026,7 @@
         "s. boulardii",
         "cncm i-745"
       ],
-      "category": "probiotic strain",
+      "category": "probiotics",
       "evidence_level": "strain-clinical",
       "study_type": "clinical_strain",
       "published_studies": [
@@ -20712,7 +20712,7 @@
       "aliases": [
         "spirulina"
       ],
-      "category": "other",
+      "category": "antioxidant",
       "evidence_level": "ingredient-human",
       "study_type": "rct_single",
       "published_studies": [
@@ -20867,7 +20867,7 @@
       "aliases": [
         "chlorella"
       ],
-      "category": "other",
+      "category": "antioxidant",
       "evidence_level": "ingredient-human",
       "study_type": "rct_single",
       "published_studies": [

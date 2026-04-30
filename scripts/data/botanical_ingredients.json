@@ -10447,7 +10447,7 @@
         "rhododendron caucasicum extract",
         "Rhododendron caucasicum"
       ],
-      "category": "unspecified",
+      "category": "herb",
       "notes": "Rhododendron caucasicum botanical identity used on Garden of Life labels as an extract disclosure. Maintained conservatively without assuming a narrower plant part than the label provides.",
       "last_updated": "2026-03-13",
       "external_ids": {
@@ -10465,7 +10465,10 @@
         "metabolites": []
       },
       "cui": "C1496360",
-      "functional_roles": []
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
     },
     {
       "id": "rhubarb",
