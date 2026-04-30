@@ -3,7 +3,7 @@
     "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
     "purpose": "ingredient_mapping_and_standardization",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-15",
+    "last_updated": "2026-04-30",
     "total_entries": 239,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight.",
     "required_fields": [
@@ -250,7 +250,11 @@
       "category": "amino_acid",
       "external_ids": {},
       "data_quality": "complete",
-      "min_threshold": 100
+      "min_threshold": 100,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (amino_acids)"
+      }
     },
     {
       "standard_name": "American Ginseng",
@@ -1140,7 +1144,7 @@
       "last_updated": "2025-11-17",
       "id": "black_pepper_extract",
       "notes": "Bioavailability enhancer standardized for 95% piperine (BioPerine®). Added to turmeric and other supplements to enhance absorption.",
-      "category": "standardized_extract",
+      "category": "seed_fruit",
       "external_ids": {
         "unii": "KM66971LVF"
       },
@@ -1463,7 +1467,11 @@
       },
       "cui": "C0006217",
       "min_threshold": 2400,
-      "threshold_source": "2400 GDU/g — activity unit threshold"
+      "threshold_source": "2400 GDU/g — activity unit threshold",
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (enzymes)"
+      }
     },
     {
       "standard_name": "Burdock Root",
@@ -1912,7 +1920,11 @@
         "pubchem_cid": 151932
       },
       "data_quality": "complete",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (minerals)"
+      }
     },
     {
       "standard_name": "Cinnamon",
@@ -2129,7 +2141,7 @@
         "proanthocyanidins",
         "polyphenols"
       ],
-      "category": "standardized",
+      "category": "seed_fruit",
       "priority": "medium",
       "notes": "Branded grape seed extract standardized for cognitive health benefits.",
       "last_updated": "2026-01-05",
@@ -2152,7 +2164,11 @@
       "category": "nootropic",
       "external_ids": {},
       "data_quality": "complete",
-      "min_threshold": 99
+      "min_threshold": 99,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (amino_acids)"
+      }
     },
     {
       "standard_name": "Coleus Forskohlii",
@@ -2224,7 +2240,7 @@
       "last_updated": "2026-01-05",
       "id": "cran_max",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
-      "category": "standardized",
+      "category": "fruit",
       "external_ids": {},
       "branded_form": true
     },
@@ -2279,7 +2295,7 @@
       "last_updated": "2026-01-05",
       "id": "cranrx",
       "notes": "CranRx — cranberry (Vaccinium macrocarpon) extract. Standardized to 36 mg PAC/dose by BL-DMAC method.",
-      "category": "standardized_extract",
+      "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
       "min_threshold": 36,
@@ -2341,7 +2357,7 @@
       "min_threshold": 95,
       "priority": "high",
       "standardization": "95% curcuminoids",
-      "category": "polyphenol",
+      "category": "root",
       "last_updated": "2026-01-15",
       "notes": "Anti-inflammatory compound standardized for 95% curcuminoids. C3 Complex is the most studied form.",
       "external_ids": {
@@ -2440,7 +2456,11 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0024742"
+      "cui": "C0024742",
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "DUPLICATE — already in ingredient_quality_map.json (fibers)"
+      }
     },
     {
       "standard_name": "Damiana",
@@ -2746,7 +2766,7 @@
       "last_updated": "2026-01-05",
       "id": "enovita",
       "notes": "Enovita — grape seed extract (Vitis vinifera). Standardized to ≥95% OPCs.",
-      "category": "standardized_extract",
+      "category": "seed_fruit",
       "external_ids": {},
       "data_quality": "complete",
       "min_threshold": 95
@@ -2764,7 +2784,7 @@
       "last_updated": "2026-01-05",
       "id": "enxtra",
       "notes": "EnXtra — Alpinia galanga rhizome extract by Laila Nutraceuticals. Standardized to ACA profile (exact threshold proprietary).",
-      "category": "standardized_extract",
+      "category": "root",
       "external_ids": {},
       "data_quality": "complete",
       "branded_form": true
@@ -2786,7 +2806,11 @@
       "category": "fermentate",
       "external_ids": {},
       "data_quality": "complete",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (functional_foods)"
+      }
     },
     {
       "standard_name": "EPs 7630",
@@ -3080,7 +3104,11 @@
       "category": "mineral_complex",
       "external_ids": {},
       "data_quality": "complete",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (minerals)"
+      }
     },
     {
       "standard_name": "Galdieria",
@@ -3234,7 +3262,7 @@
       ],
       "priority": "high",
       "standardization": "5% total gingerols",
-      "category": "active_compound",
+      "category": "root",
       "last_updated": "2025-11-17",
       "id": "gingerols",
       "notes": "Botanical ingredient standardized for 6-gingerol, 8-gingerol. Commonly used in dietary supplements.",
@@ -3299,7 +3327,7 @@
       ],
       "priority": "high",
       "standardization": "6% terpene lactones",
-      "category": "active_compound",
+      "category": "leaf",
       "last_updated": "2025-11-17",
       "id": "ginkgolides",
       "notes": "Botanical ingredient standardized for ginkgolide A, ginkgolide B. Commonly used in dietary supplements.",
@@ -3471,7 +3499,7 @@
       "last_updated": "2026-01-15",
       "id": "grape_seed_extract",
       "notes": "Cardiovascular antioxidant standardized for 95% OPCs (oligomeric proanthocyanidins).",
-      "category": "standardized_extract",
+      "category": "seed_fruit",
       "external_ids": {
         "unii": "RDS2V6DVY5"
       },
@@ -4131,7 +4159,11 @@
       "category": "structural_protein",
       "external_ids": {},
       "data_quality": "complete",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (proteins)"
+      }
     },
     {
       "standard_name": "Kola Nut",
@@ -4330,7 +4362,11 @@
         "metabolites": []
       },
       "data_quality": "complete",
-      "min_threshold": 98
+      "min_threshold": 98,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (fatty_acids)"
+      }
     },
     {
       "standard_name": "Licorice",
@@ -4394,7 +4430,11 @@
       "category": "algal_oil",
       "external_ids": {},
       "data_quality": "complete",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (fatty_acids)"
+      }
     },
     {
       "standard_name": "Linden Flower",
@@ -4722,7 +4762,11 @@
       "category": "hormone_analog",
       "external_ids": {},
       "data_quality": "complete",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (other — hormones)"
+      }
     },
     {
       "standard_name": "Milk Thistle",
@@ -4819,7 +4863,7 @@
       "last_updated": "2026-01-05",
       "id": "morosil",
       "notes": "Morosil — Moro blood orange extract (Citrus sinensis cv. Moro). Standardized to ≥5% anthocyanins.",
-      "category": "standardized_extract",
+      "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
       "min_threshold": 5
@@ -5018,7 +5062,7 @@
         "chlorogenic acid",
         "polyphenols"
       ],
-      "category": "standardized",
+      "category": "fruit",
       "priority": "high",
       "notes": "Patented coffee fruit extract shown to increase BDNF (brain-derived neurotrophic factor).",
       "last_updated": "2026-01-05",
@@ -5141,7 +5185,7 @@
       "last_updated": "2026-03-16",
       "id": "optiberry",
       "notes": "Branded multiple-berry anthocyanin blend. Raw DSLD OpriBerry(R) rows match the documented OptiBerry composition of cranberry, elderberry, raspberry, strawberry, bilberry, and blueberry/wild blueberry.",
-      "category": "standardized",
+      "category": "berry",
       "external_ids": {},
       "branded_form": true
     },
@@ -5193,7 +5237,11 @@
       "notes": "Proprietary blend — not a single-ingredient brand. Insufficient public data for standardization markers.",
       "category": "blend",
       "external_ids": {},
-      "data_quality": "stub"
+      "data_quality": "stub",
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "BLEND — proprietary, defer per-entry analysis"
+      }
     },
     {
       "standard_name": "Pacran",
@@ -5208,7 +5256,7 @@
       "last_updated": "2026-01-05",
       "id": "pacran",
       "notes": "Brand/standardized extract added from unmapped list; markers unknown if not specified.",
-      "category": "standardized",
+      "category": "fruit",
       "external_ids": {},
       "branded_form": true
     },
@@ -5399,7 +5447,11 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0301704"
+      "cui": "C0301704",
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (fatty_acids)"
+      }
     },
     {
       "standard_name": "Pine Bark Extract",
@@ -5419,7 +5471,7 @@
       "last_updated": "2025-11-17",
       "id": "pine_bark_extract",
       "notes": "Standardized botanical extract with procyanidins, catechins as primary marker compounds.",
-      "category": "standardized_extract",
+      "category": "bark",
       "external_ids": {
         "unii": "50JZ5Z98QY"
       },
@@ -5527,7 +5579,7 @@
       "last_updated": "2026-01-05",
       "id": "proanthoplex",
       "notes": "Proanthoplex — grape seed OPC extract. Standardized to ≥95% OPCs.",
-      "category": "standardized_extract",
+      "category": "seed_fruit",
       "external_ids": {},
       "data_quality": "complete",
       "min_threshold": 95
@@ -6237,7 +6289,11 @@
       "category": "tripeptide",
       "external_ids": {},
       "data_quality": "complete",
-      "min_threshold": 98
+      "min_threshold": 98,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (amino_acids)"
+      }
     },
     {
       "standard_name": "Sharp-PS Green",
@@ -6367,7 +6423,7 @@
       ],
       "priority": "high",
       "standardization": "dehydrated gingerols",
-      "category": "active_compound",
+      "category": "root",
       "last_updated": "2025-11-17",
       "id": "shogaols",
       "notes": "Botanical ingredient standardized for 6-shogaol, 8-shogaol. Commonly used in dietary supplements.",
@@ -6412,7 +6468,7 @@
       "markers": [
         "proteinase inhibitor II"
       ],
-      "category": "standardized",
+      "category": "tuber",
       "priority": "medium",
       "notes": "Patented potato protein extract that promotes satiety by triggering CCK release.",
       "last_updated": "2026-01-05",
@@ -6433,7 +6489,7 @@
       "last_updated": "2026-01-05",
       "id": "slimbione",
       "notes": "Slimbione — bitter melon (Momordica charantia) extract. Standardized to charantin + polypeptide-p (proprietary ratio).",
-      "category": "standardized_extract",
+      "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
       "branded_form": true
@@ -6658,7 +6714,11 @@
       "category": "mineral",
       "external_ids": {},
       "data_quality": "complete",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (minerals)"
+      }
     },
     {
       "standard_name": "Tart Cherry",
@@ -6699,7 +6759,11 @@
       "category": "mineral",
       "external_ids": {},
       "data_quality": "requires_verification",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (minerals)"
+      }
     },
     {
       "standard_name": "Thyme",
@@ -6929,7 +6993,11 @@
       "category": "structural_protein",
       "external_ids": {},
       "data_quality": "complete",
-      "branded_form": true
+      "branded_form": true,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (proteins)"
+      }
     },
     {
       "standard_name": "Uva Ursi",
@@ -7007,7 +7075,11 @@
       "category": "polysaccharide",
       "external_ids": {},
       "data_quality": "complete",
-      "min_threshold": 75
+      "min_threshold": 75,
+      "attributes": {
+        "is_misclassified_in_botanicals": true,
+        "v1_1_relocation_target": "ingredient_quality_map.json (fibers)"
+      }
     },
     {
       "standard_name": "Wheatgrass",
