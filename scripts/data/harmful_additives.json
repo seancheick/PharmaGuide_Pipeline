@@ -5851,7 +5851,10 @@
         "metabolites": []
       },
       "safety_summary": "A blend of sugar alcohols. Like other polyols, can cause bloating, gas, and diarrhea at higher intakes in sensitive people.",
-      "safety_summary_one_liner": "Sugar alcohol blend, can cause GI discomfort."
+      "safety_summary_one_liner": "Sugar alcohol blend, can cause GI discomfort.",
+      "functional_roles": [
+        "sweetener_sugar_alcohol"
+      ]
     },
     {
       "id": "ADD_IRON_OXIDE",
@@ -6014,7 +6017,10 @@
         "metabolites": []
       },
       "safety_summary": "An inorganic iron-based colorant used in coatings. Poorly absorbed and generally considered safe at typical levels.",
-      "safety_summary_one_liner": "Mineral colorant — low overall concern."
+      "safety_summary_one_liner": "Mineral colorant — low overall concern.",
+      "functional_roles": [
+        "colorant_natural"
+      ]
     },
     {
       "id": "ADD_ISOMALTOOLIGOSACCHARIDE",
@@ -6121,7 +6127,11 @@
         "unii": null
       },
       "safety_summary": "Marketed as a prebiotic fiber but mostly digested into glucose in the small intestine. FDA excluded it from the dietary fiber definition — worth noting for fiber tracking.",
-      "safety_summary_one_liner": "Marketed as fiber but mostly digested as sugar."
+      "safety_summary_one_liner": "Marketed as fiber but mostly digested as sugar.",
+      "functional_roles": [
+        "sweetener_natural",
+        "prebiotic_fiber"
+      ]
     },
     {
       "id": "ADD_MAGNESIUM_CITRATE_LAURATE",
@@ -6211,7 +6221,10 @@
         "unii": null
       },
       "safety_summary": "A composite flow agent used in tablet manufacturing. Similar to magnesium stearate — low overall concern.",
-      "safety_summary_one_liner": "Flow agent — low overall concern."
+      "safety_summary_one_liner": "Flow agent — low overall concern.",
+      "functional_roles": [
+        "lubricant"
+      ]
     },
     {
       "id": "ADD_MAGNESIUM_LAURATE",
@@ -6330,7 +6343,10 @@
         "metabolites": []
       },
       "safety_summary": "A magnesium-salt flow agent used as a tablet lubricant. Similar to magnesium stearate — low overall concern.",
-      "safety_summary_one_liner": "Flow agent — low overall concern."
+      "safety_summary_one_liner": "Flow agent — low overall concern.",
+      "functional_roles": [
+        "lubricant"
+      ]
     },
     {
       "id": "ADD_MAGNESIUM_STEARATE",
@@ -6483,7 +6499,11 @@
         "metabolites": []
       },
       "safety_summary": "A widely-used flow agent in supplement manufacturing. Claims of harm at the amounts used are not supported by evidence — low overall concern.",
-      "safety_summary_one_liner": "Common flow agent — low overall concern."
+      "safety_summary_one_liner": "Common flow agent — low overall concern.",
+      "functional_roles": [
+        "lubricant",
+        "anti_caking_agent"
+      ]
     },
     {
       "id": "ADD_MALTITOL_MALITOL",
@@ -6652,6 +6672,9 @@
       "safety_summary_one_liner": "Sugar alcohol linked to GI discomfort at higher doses.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) — they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
+      ],
+      "functional_roles": [
+        "sweetener_sugar_alcohol"
       ]
     },
     {
@@ -6808,6 +6831,9 @@
       "safety_summary_one_liner": "Maltodextrin — spikes blood sugar fast.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) — they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
+      ],
+      "functional_roles": [
+        "filler"
       ]
     },
     {
@@ -6987,7 +7013,11 @@
         "metabolites": []
       },
       "safety_summary": "A flavor enhancer that boosts sweetness perception. No meaningful safety concern at typical levels.",
-      "safety_summary_one_liner": "Natural flavor enhancer — low overall concern."
+      "safety_summary_one_liner": "Natural flavor enhancer — low overall concern.",
+      "functional_roles": [
+        "flavor_natural",
+        "flavor_enhancer"
+      ]
     },
     {
       "id": "ADD_MALTOTAME",
@@ -7113,7 +7143,10 @@
         "unii": null
       },
       "safety_summary": "An experimental artificial sweetener rarely used in US supplements. Limited toxicology data is available — worth avoiding until more safety research is published.",
-      "safety_summary_one_liner": "Experimental sweetener with limited safety data."
+      "safety_summary_one_liner": "Experimental sweetener with limited safety data.",
+      "functional_roles": [
+        "sweetener_artificial"
+      ]
     },
     {
       "id": "ADD_MICROCRYSTALLINE_CELLULOSE",
@@ -7268,7 +7301,11 @@
         "metabolites": []
       },
       "safety_summary": "An inert cellulose filler that passes through unabsorbed. Generally considered safe — low overall concern.",
-      "safety_summary_one_liner": "Inert cellulose filler — low overall concern."
+      "safety_summary_one_liner": "Inert cellulose filler — low overall concern.",
+      "functional_roles": [
+        "filler",
+        "binder"
+      ]
     },
     {
       "id": "ADD_MINERAL_OIL",
@@ -7414,7 +7451,11 @@
         "metabolites": []
       },
       "safety_summary": "A petroleum-derived lubricant. EFSA raised long-term exposure concerns due to contaminant classes in mineral oil — worth choosing products with food-grade or plant-based alternatives.",
-      "safety_summary_one_liner": "Petroleum lubricant — long-term exposure concerns."
+      "safety_summary_one_liner": "Petroleum lubricant — long-term exposure concerns.",
+      "functional_roles": [
+        "lubricant",
+        "carrier_oil"
+      ]
     },
     {
       "id": "ADD_MODIFIED_STARCH",
@@ -7562,7 +7603,12 @@
       },
       "cui_note": "CUI C0038179 maps to generic 'starch'; no specific UMLS concept for 'modified food starch' class.",
       "safety_summary": "A class of chemically modified starches used as thickeners or binders. Generally considered safe at food levels — low overall concern.",
-      "safety_summary_one_liner": "Modified starch — low overall concern."
+      "safety_summary_one_liner": "Modified starch — low overall concern.",
+      "functional_roles": [
+        "filler",
+        "binder",
+        "thickener"
+      ]
     },
     {
       "id": "ADD_MSG",
@@ -7751,7 +7797,10 @@
         "metabolites": []
       },
       "safety_summary": "Monosodium glutamate. Human data does not support excitotoxicity concerns at supplement doses — low overall concern.",
-      "safety_summary_one_liner": "Common flavoring — low overall concern."
+      "safety_summary_one_liner": "Common flavoring — low overall concern.",
+      "functional_roles": [
+        "flavor_enhancer"
+      ]
     },
     {
       "id": "ADD_NEOTAME",
@@ -7921,7 +7970,10 @@
         "metabolites": []
       },
       "safety_summary": "An aspartame-derived artificial sweetener. Some preclinical studies suggest possible gut-lining effects at high doses — worth noting if you prefer unsweetened or naturally sweetened products.",
-      "safety_summary_one_liner": "Aspartame-family sweetener with early gut-lining signals."
+      "safety_summary_one_liner": "Aspartame-family sweetener with early gut-lining signals.",
+      "functional_roles": [
+        "sweetener_artificial"
+      ]
     },
     {
       "id": "ADD_NICKEL",
@@ -8102,7 +8154,8 @@
       },
       "rxcui": "1311629",
       "safety_summary": "A trace metal contaminant poorly absorbed orally. Can trigger contact dermatitis in nickel-sensitive people — worth knowing if you have nickel allergy.",
-      "safety_summary_one_liner": "Trace metal contaminant — matters if nickel-sensitive."
+      "safety_summary_one_liner": "Trace metal contaminant — matters if nickel-sensitive.",
+      "functional_roles": []
     },
     {
       "id": "ADD_POTASSIUM_NITRITE",
@@ -8232,7 +8285,10 @@
         "metabolites": []
       },
       "safety_summary": "A nitrite preservative that can form nitrosamines under stomach acid. Nitrosamines are linked to cancer risk — worth avoiding in supplements.",
-      "safety_summary_one_liner": "Nitrite preservative — nitrosamine formation concern."
+      "safety_summary_one_liner": "Nitrite preservative — nitrosamine formation concern.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_POTASSIUM_NITRATE",
@@ -8362,7 +8418,10 @@
         "metabolites": []
       },
       "safety_summary": "A nitrate preservative that can convert to nitrite and form nitrosamines under stomach acid. Worth avoiding in supplements where possible.",
-      "safety_summary_one_liner": "Nitrate preservative — nitrosamine formation concern."
+      "safety_summary_one_liner": "Nitrate preservative — nitrosamine formation concern.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_PALM_OIL",
@@ -8523,6 +8582,9 @@
       "safety_summary_one_liner": "Tropical oil with processing-contaminant concerns.",
       "audit_trail": [
         "Sprint D1.3 (2026-04-20): marked severity_level='low' for formulation sugar/sweetener/fat/carrier rows. These are low-quality supplement additives (caloric sweeteners, bulk fillers) — they deserve a small penalty, not the full harmful-additive hammer. Nutrition-Facts-panel disclosures of these same substances route to nutritionalInfo via the cleaner's _is_nutrition_fact filter; only genuine formulation-use rows reach the scorer and get this low-severity penalty."
+      ],
+      "functional_roles": [
+        "carrier_oil"
       ]
     },
     {
@@ -8709,7 +8771,10 @@
         "metabolites": []
       },
       "safety_summary": "A synthetic glucose polymer classified as dietary fiber by FDA. Can cause gas and laxative effects at higher doses.",
-      "safety_summary_one_liner": "Synthetic fiber with laxative effects at higher doses."
+      "safety_summary_one_liner": "Synthetic fiber with laxative effects at higher doses.",
+      "functional_roles": [
+        "filler"
+      ]
     },
     {
       "id": "ADD_POLYETHYLENE_GLYCOL",
@@ -8854,7 +8919,11 @@
         "unii": "B697894SGQ"
       },
       "safety_summary": "A synthetic solvent-carrier. Trace glycol contaminants have been detected in some tests — worth choosing products with cleaner delivery systems where possible.",
-      "safety_summary_one_liner": "Synthetic carrier with contaminant concerns."
+      "safety_summary_one_liner": "Synthetic carrier with contaminant concerns.",
+      "functional_roles": [
+        "solvent",
+        "humectant"
+      ]
     },
     {
       "id": "ADD_POLYSORBATE80",
@@ -9093,7 +9162,11 @@
         "metabolites": []
       },
       "safety_summary": "A synthetic emulsifier (P80). Animal and preclinical studies show gut-microbiome disruption and low-grade inflammation — worth choosing products without it where possible.",
-      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals."
+      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals.",
+      "functional_roles": [
+        "emulsifier",
+        "surfactant"
+      ]
     },
     {
       "id": "ADD_POLYSORBATE_40",
@@ -9257,7 +9330,11 @@
         "metabolites": []
       },
       "safety_summary": "A polysorbate-class synthetic emulsifier. Same gut-microbiome concerns as polysorbate 80 — worth choosing products without it where possible.",
-      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals."
+      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals.",
+      "functional_roles": [
+        "emulsifier",
+        "surfactant"
+      ]
     },
     {
       "id": "ADD_POLYSORBATE_65",
@@ -9427,7 +9504,11 @@
         "metabolites": []
       },
       "safety_summary": "A polysorbate-class synthetic emulsifier. Same gut-microbiome concerns as polysorbate 80 — worth choosing products without it where possible.",
-      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals."
+      "safety_summary_one_liner": "Synthetic emulsifier with gut-disruption signals.",
+      "functional_roles": [
+        "emulsifier",
+        "surfactant"
+      ]
     },
     {
       "id": "ADD_POLYVINYLPYRROLIDONE",
@@ -9570,7 +9651,10 @@
         "metabolites": []
       },
       "safety_summary": "A synthetic binder used in tablets. Not absorbed at the molecular weights used — low overall concern.",
-      "safety_summary_one_liner": "Tablet binder — low overall concern."
+      "safety_summary_one_liner": "Tablet binder — low overall concern.",
+      "functional_roles": [
+        "binder"
+      ]
     },
     {
       "id": "ADD_POTASSIUM_HYDROXIDE",
@@ -9746,7 +9830,11 @@
         "metabolites": []
       },
       "safety_summary": "A strong alkali used only as a processing aid for pH adjustment. Residual amounts are negligible — low overall concern.",
-      "safety_summary_one_liner": "Processing aid — low overall concern."
+      "safety_summary_one_liner": "Processing aid — low overall concern.",
+      "functional_roles": [
+        "ph_regulator",
+        "processing_aid"
+      ]
     },
     {
       "id": "ADD_POTASSIUM_SORBATE",
@@ -9883,7 +9971,10 @@
         "metabolites": []
       },
       "safety_summary": "A common preservative generally considered safe at food levels. Mild irritation is possible in sensitive people — low overall concern.",
-      "safety_summary_one_liner": "Common preservative — low overall concern."
+      "safety_summary_one_liner": "Common preservative — low overall concern.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_PROPYLENE_GLYCOL",
@@ -10061,7 +10152,11 @@
         "metabolites": []
       },
       "safety_summary": "A synthetic solvent and penetration enhancer. Can cause allergic reactions in sensitive people — worth checking labels if you react to it.",
-      "safety_summary_one_liner": "Synthetic solvent — matters if sensitive."
+      "safety_summary_one_liner": "Synthetic solvent — matters if sensitive.",
+      "functional_roles": [
+        "solvent",
+        "humectant"
+      ]
     },
     {
       "id": "ADD_PUREFRUIT_SELECT",
@@ -10173,7 +10268,10 @@
         "unii": null
       },
       "safety_summary": "A proprietary fruit-based sweetener concentrate. Still functions as added sugar in a supplement formulation — worth noting if you are tracking added sugars.",
-      "safety_summary_one_liner": "Proprietary sweetener that still counts as added sugar."
+      "safety_summary_one_liner": "Proprietary sweetener that still counts as added sugar.",
+      "functional_roles": [
+        "sweetener_natural"
+      ]
     },
     {
       "id": "ADD_RED40",
@@ -10367,7 +10465,10 @@
         "metabolites": []
       },
       "safety_summary": "A synthetic azo dye. Associated with hyperactivity signals in children and hypersensitivity reactions — worth noting, especially for kids.",
-      "safety_summary_one_liner": "Synthetic red dye linked to hyperactivity in children."
+      "safety_summary_one_liner": "Synthetic red dye linked to hyperactivity in children.",
+      "functional_roles": [
+        "colorant_artificial"
+      ]
     },
     {
       "id": "ADD_SACCHARIN",
@@ -10552,7 +10653,10 @@
         "metabolites": []
       },
       "safety_summary": "An older artificial sweetener once carrying a carcinogenicity warning; the warning was removed in 2000 and it is now FDA-approved. Low overall concern at typical intake.",
-      "safety_summary_one_liner": "Artificial sweetener with historical warning now removed."
+      "safety_summary_one_liner": "Artificial sweetener with historical warning now removed.",
+      "functional_roles": [
+        "sweetener_artificial"
+      ]
     },
     {
       "id": "ADD_SENNA",
@@ -10710,7 +10814,8 @@
         "metabolites": []
       },
       "safety_summary": "A stimulant laxative active ingredient. EFSA concluded hydroxyanthracene derivatives should be considered genotoxic — worth choosing gentler laxatives for regular use.",
-      "safety_summary_one_liner": "Stimulant laxative — EFSA genotoxicity concern."
+      "safety_summary_one_liner": "Stimulant laxative — EFSA genotoxicity concern.",
+      "functional_roles": []
     },
     {
       "id": "ADD_SHELLAC",
@@ -10873,7 +10978,11 @@
         "metabolites": []
       },
       "safety_summary": "An insect-derived resin used as a tablet coating. Not a toxicity concern — primary issue is non-vegan status.",
-      "safety_summary_one_liner": "Insect-derived coating — non-vegan concern."
+      "safety_summary_one_liner": "Insect-derived coating — non-vegan concern.",
+      "functional_roles": [
+        "coating",
+        "glazing_agent"
+      ]
     },
     {
       "id": "ADD_SILICON_DIOXIDE",
@@ -11058,7 +11167,11 @@
         "metabolites": []
       },
       "safety_summary": "An inert anti-caking agent used in tablets and capsules. FDA- and EFSA-approved at the levels used — low overall concern.",
-      "safety_summary_one_liner": "Anti-caking agent — low overall concern."
+      "safety_summary_one_liner": "Anti-caking agent — low overall concern.",
+      "functional_roles": [
+        "anti_caking_agent",
+        "glidant"
+      ]
     },
     {
       "id": "ADD_SLIMSWEET",
@@ -16297,7 +16410,10 @@
         "Note: FULLY hydrogenated coconut oil contains NO trans fats and is NOT subject to PHO ban"
       ],
       "safety_summary": "Partial hydrogenation creates artificial trans fats, which raise LDL cholesterol and cardiovascular risk. Worth avoiding in any supplement.",
-      "safety_summary_one_liner": "Partially hydrogenated oil — contains trans fats."
+      "safety_summary_one_liner": "Partially hydrogenated oil — contains trans fats.",
+      "functional_roles": [
+        "carrier_oil"
+      ]
     },
     {
       "id": "ADD_METHYLPARABEN",
@@ -16448,7 +16564,10 @@
         "Environmental concern — France 2025 CLH proposal for environmental endocrine disrupter classification"
       ],
       "safety_summary": "The weakest of the parabens, with mild estrogen-like activity. Generally considered safe at food-grade levels but paraben-free products are available.",
-      "safety_summary_one_liner": "Weakest paraben, mild estrogen-like activity."
+      "safety_summary_one_liner": "Weakest paraben, mild estrogen-like activity.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_PROPYLPARABEN",
@@ -16600,7 +16719,10 @@
         "California consumers — banned in food effective January 1, 2027 (California Food Safety Act)"
       ],
       "safety_summary": "A paraben with stronger estrogen-like and antiandrogenic activity than methylparaben. Worth choosing paraben-free products where possible.",
-      "safety_summary_one_liner": "Paraben with endocrine-activity concerns."
+      "safety_summary_one_liner": "Paraben with endocrine-activity concerns.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_SYNTHETIC_ANTIOXIDANTS",
@@ -16973,7 +17095,10 @@
         "All consumers — FDA banned all PHOs; presence in a supplement indicates non-compliance or pre-ban inventory"
       ],
       "safety_summary": "Partial hydrogenation creates artificial trans fats, which raise LDL cholesterol and cardiovascular risk. Worth avoiding in any supplement.",
-      "safety_summary_one_liner": "Partially hydrogenated oil — contains trans fats."
+      "safety_summary_one_liner": "Partially hydrogenated oil — contains trans fats.",
+      "functional_roles": [
+        "carrier_oil"
+      ]
     },
     {
       "id": "ADD_POTASSIUM_BENZOATE",
@@ -17076,7 +17201,10 @@
         "metabolites": []
       },
       "safety_summary": "A benzoate preservative. Can form trace benzene when combined with vitamin C under heat or light — worth choosing products without the benzoate + vitamin C pairing.",
-      "safety_summary_one_liner": "Benzoate preservative with vitamin C pairing concern."
+      "safety_summary_one_liner": "Benzoate preservative with vitamin C pairing concern.",
+      "functional_roles": [
+        "preservative"
+      ]
     },
     {
       "id": "ADD_SODIUM_NITRITE",
@@ -18469,7 +18597,11 @@
       },
       "confidence": "medium",
       "safety_summary": "A polysorbate-class emulsifier. May affect gut-lining integrity at higher intakes; overall concern is lower than P80 but worth noting.",
-      "safety_summary_one_liner": "Polysorbate emulsifier — lower-end gut signals."
+      "safety_summary_one_liner": "Polysorbate emulsifier — lower-end gut signals.",
+      "functional_roles": [
+        "emulsifier",
+        "surfactant"
+      ]
     }
   ]
 }
