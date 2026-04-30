@@ -2,7 +2,7 @@
   "_metadata": {
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
-    "schema_version": "5.1.0",
+    "schema_version": "5.2.0",
     "last_updated": "2026-04-30",
     "total_entries": 673,
     "functional_roles_field": {
@@ -11,7 +11,13 @@
       "vocab_source": "data/functional_roles_vocab.json (v1.0.0, 32 LOCKED IDs)",
       "purpose": "Multi-valued functional role(s) for the Flutter UI tap-to-learn chip layer. Display-only — no scoring impact in V1. May be empty in V1 entries; populated in Phase 3 backfill batches per scripts/audits/functional_roles/. Final 100% completeness enforced by coverage_gate.py in Phase 5."
     },
-    "additive_type_field_status": "DEPRECATED (Phase 4) — to be dropped after backfill batches complete. Replaced by functional_roles[] which expresses multi-valued roles correctly. Do not add new values to additive_type going forward."
+    "additive_type_field_status": "DEPRECATED (Phase 4) — to be dropped after backfill batches complete. Replaced by functional_roles[] which expresses multi-valued roles correctly. Do not add new values to additive_type going forward.",
+    "field_contract_additions": {
+      "v5.2.0": {
+        "is_label_descriptor": "Phase 4a flag (2026-04-30): true on label-noise entries (marketing_descriptor / phytochemical_marker / source_descriptor / etc.). Suppressed from Flutter inactive_ingredients[] blob.",
+        "is_active_only": "Phase 4a flag (2026-04-30): true on entries that will relocate to the active-ingredient pipeline in V1.1 (botanical_extract, glandular_tissue, branded complexes, amino_acid_derivative, phytocannabinoids, marine extracts). Suppressed from inactive_ingredients[]."
+      }
+    }
   },
   "other_ingredients": [
     {
@@ -112,7 +118,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_25000_IU_MIXED_CAROTENES",
@@ -130,7 +137,8 @@
       ],
       "last_updated": "2026-02-17",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_AKIC",
@@ -150,7 +158,8 @@
       "last_updated": "2026-02-24",
       "external_ids": {},
       "cui": "C0659251",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ACACIA_GUM",
@@ -439,7 +448,8 @@
         "metabolites": []
       },
       "cui": "C0001613",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_AEROSIL",
@@ -560,7 +570,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_ALCOHOL",
@@ -670,7 +681,8 @@
       "last_updated": "2026-03-09",
       "external_ids": {},
       "cui": "C0002028",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_ALGAL_OIL_CARRIER",
@@ -807,7 +819,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_ALPHA_TERPINEOL",
@@ -1046,7 +1059,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_AND_AS_MAGNESIUM_CITRATE",
@@ -1065,7 +1079,8 @@
       "last_updated": "2026-02-17",
       "external_ids": {},
       "cui": "C0126774",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_ANNATTO_VARIANTS",
@@ -1196,7 +1211,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_ANTI_FUNGI_11X_88",
@@ -1214,7 +1230,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_AORTA_TISSUE",
@@ -1234,7 +1251,8 @@
       "last_updated": "2026-02-24",
       "external_ids": {},
       "cui": "C0003483",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_APPLE_CIDER_VINEGAR",
@@ -1277,7 +1295,8 @@
         "metabolites": []
       },
       "cui": "C1178459",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_APPLE_FLAVOR",
@@ -1428,7 +1447,8 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C5980844",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_ARABINOSE",
@@ -1530,7 +1550,8 @@
         "metabolites": []
       },
       "cui": "C0052430",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_ASCORBIC_ACID_PRESERVATIVE",
@@ -1687,7 +1708,8 @@
       ],
       "last_updated": "2026-02-22",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ATPRO",
@@ -1706,7 +1728,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_AVOCADO_SOY_UNSAPONIFIABLES",
@@ -1809,7 +1832,8 @@
         "metabolites": []
       },
       "cui": "C0795585",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_BEEF_TISSUE",
@@ -1829,7 +1853,8 @@
       ],
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_BEESWAX",
@@ -2066,7 +2091,8 @@
         "unii": "779A7KPL0Y"
       },
       "cui": "C0013495",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_BETAINE_MONOHYDRATE",
@@ -2128,7 +2154,8 @@
         "metabolites": []
       },
       "cui": "C0005304",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_BIO_ENHANCED",
@@ -2146,7 +2173,8 @@
       ],
       "last_updated": "2026-02-17",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_BIOACCELERATOR_COMPLEX",
@@ -2167,7 +2195,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_BIOCORE_OPTIMUM_COMPLETE_BRANDED_BLEND",
@@ -2185,7 +2214,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_BISMUTH_CITRATE",
@@ -2341,7 +2371,8 @@
         "metabolites": []
       },
       "cui": "C0939867",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_BLACK_STRAP_MOLASSES",
@@ -2417,7 +2448,8 @@
         "metabolites": []
       },
       "cui": "C1083174",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_BLUEBERRY_JUICE_COLOR",
@@ -2489,7 +2521,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0005953",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_BOTANICAL_WAX",
@@ -2557,7 +2590,8 @@
       "last_updated": "2026-02-24",
       "external_ids": {},
       "cui": "C0440746",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_BRAND_COMPLEX_DESCRIPTOR",
@@ -2637,7 +2671,8 @@
       "last_updated": "2026-02-18",
       "external_ids": {},
       "cui": "C1269100",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_RICE_PROTEIN_MAG_CHELATE",
@@ -3296,7 +3331,8 @@
         "metabolites": []
       },
       "cui": "C0054593",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_CANNABINOL",
@@ -3333,7 +3369,8 @@
         "metabolites": []
       },
       "cui": "C0006865",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_CANOLA_SOURCE_DESCRIPTOR",
@@ -3370,7 +3407,8 @@
         "metabolites": []
       },
       "cui": "C5703431",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_CANOLA_LECITHIN",
@@ -3648,7 +3686,8 @@
       "last_updated": "2026-02-24",
       "external_ids": {},
       "cui": "C0053396",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_CARROT_EXTRACT_COLOR",
@@ -3822,7 +3861,8 @@
       "last_updated": "2025-08-15",
       "external_ids": {},
       "cui": "C0007367",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_CELLULOSE_GUM",
@@ -3911,7 +3951,8 @@
         "metabolites": []
       },
       "cui": "C0439963",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_CHERRY_FLAVOR",
@@ -4110,7 +4151,8 @@
         "metabolites": []
       },
       "cui": "C1123028",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_CINNAMON_FLAVORING",
@@ -4536,7 +4578,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_COCONUT_SOURCE_DESCRIPTOR",
@@ -4572,7 +4615,8 @@
         "metabolites": []
       },
       "cui": "C3257521",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_COCONUT_DERIVATIVES",
@@ -4683,7 +4727,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_GENERIC_COLOR_TERMS",
@@ -4749,7 +4794,8 @@
         "metabolites": []
       },
       "cui": "C0009413",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_CONJUGATED_BILE_ACID",
@@ -4794,7 +4840,8 @@
       ],
       "last_updated": "2025-09-19",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_CORAL_MINERALS",
@@ -4838,7 +4885,8 @@
         "unii": "0N8672707O"
       },
       "cui": "C1138842",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_CORN_OIL",
@@ -5011,7 +5059,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_CROSCARMELLOSE",
@@ -5139,7 +5188,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_CYCLOASTRAGENOL",
@@ -5177,7 +5227,8 @@
         "metabolites": []
       },
       "cui": "C0056730",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_CYCLODEXTRIN",
@@ -5230,7 +5281,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_D_LIMONENE",
@@ -5362,7 +5414,8 @@
       ],
       "last_updated": "2026-02-17",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_DECAGLYCEROL_MONOLAURATE",
@@ -5432,7 +5485,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_DEXTRIN",
@@ -5483,7 +5537,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_DIPAC",
@@ -5533,7 +5588,8 @@
         "pubchem_cid": 71475145
       },
       "cui": "C0002712",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_DIATOMACEOUS_EARTH",
@@ -5568,7 +5624,8 @@
         "metabolites": []
       },
       "cui": "C0022683",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_DICALCIUM_PHOSPHATE",
@@ -5661,7 +5718,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_DIMETHYLGLYCINE",
@@ -5703,7 +5761,8 @@
         "metabolites": []
       },
       "cui": "C0058265",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_DIOSMETIN",
@@ -5910,7 +5969,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_DRIED_CANOLA_OIL",
@@ -5997,7 +6057,8 @@
       "last_updated": "2025-12-04",
       "external_ids": {},
       "cui": "C0752270",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_ECOGANIC_BLEND_DESCRIPTOR",
@@ -6016,7 +6077,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_ECOGANIC_SUPER_FRUITS",
@@ -6034,7 +6096,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_EDIBLE_HEMOGLOBIN",
@@ -6066,7 +6129,8 @@
         "metabolites": []
       },
       "cui": "C0019046",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_EGG_ALBUMIN",
@@ -6113,7 +6177,8 @@
       "last_updated": "2025-12-04",
       "external_ids": {},
       "cui": "C1095913",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ELDERBERRY_JUICE_COLOR",
@@ -6157,7 +6222,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_EMOTHION",
@@ -6175,7 +6241,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_EMU_OIL",
@@ -6263,7 +6330,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_EP107",
@@ -6285,7 +6353,8 @@
         "cas": "10138-36-0",
         "pubchem_cid": 202332
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ERGOGEN_XT",
@@ -6304,7 +6373,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ERYTHRODIOL",
@@ -6359,7 +6429,8 @@
       "last_updated": "2026-02-18",
       "external_ids": {},
       "cui": "C0028910",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_ESTROG100_BRANDED_BLEND",
@@ -6379,7 +6450,8 @@
       "last_updated": "2026-02-23",
       "external_ids": {},
       "cui": "C3493688",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ETAS",
@@ -6397,7 +6469,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_ETHYL_ACRYLATE_COPOLYMER",
@@ -6568,7 +6641,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_EXTRA_VIRGIN_COCONUT_OIL",
@@ -6876,7 +6950,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_FLAVANOLS",
@@ -6895,7 +6970,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C2348678",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_FLAXSEED_OIL",
@@ -6997,7 +7073,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_FRAC",
@@ -7017,7 +7094,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_FRACTIONATED_COCONUT_OIL_BEESWAX",
@@ -7728,7 +7806,8 @@
         "pubchem_cid": 22620
       },
       "cui": "C0061030",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_GAMMA_GLUTAMYLCYSTEINES",
@@ -7748,7 +7827,8 @@
       "last_updated": "2026-02-24",
       "external_ids": {},
       "cui": "C0061060",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_GBBGO",
@@ -7766,7 +7846,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_GELATIN_CAPSULE",
@@ -7894,7 +7975,8 @@
         "metabolites": []
       },
       "cui": "C0939895",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_GINGER_FLAVOR",
@@ -7952,7 +8034,8 @@
       "external_ids": {
         "pubchem_cid": 138756235
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_GLUCODOX_MARKETING_DESCRIPTOR",
@@ -7971,7 +8054,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_GLUCOSE_LIQUID",
@@ -8302,7 +8386,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0036189",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_GLYCYRRHIZIN_SWEETENER",
@@ -8618,7 +8703,8 @@
       "last_updated": "2026-02-23",
       "external_ids": {},
       "cui": "C1272575",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_HEMP_EXTRACT",
@@ -8667,7 +8753,8 @@
         "metabolites": []
       },
       "cui": "C1504050",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_HEMP_ISOLATE_99",
@@ -8685,7 +8772,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_HERBAFLOR_BRANDED_BLEND",
@@ -8703,7 +8791,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_HERBAL_EXTRACT_GENERIC",
@@ -8723,7 +8812,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_HERBATONIN",
@@ -8741,7 +8831,8 @@
       ],
       "last_updated": "2026-02-22",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_HIGH_OLEIC_SAFFLOWER_SUNFLOWER_OIL",
@@ -8781,7 +8872,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_HONEY",
@@ -9235,7 +9327,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_IMMUNOLIN",
@@ -9253,7 +9346,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_INK_DESCRIPTOR",
@@ -9295,7 +9389,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_INTRINSIC_FACTOR",
@@ -9330,7 +9425,8 @@
         "metabolites": []
       },
       "cui": "C0021918",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_INULIN",
@@ -9411,7 +9507,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_IPRIFLAVONE",
@@ -9492,7 +9589,8 @@
         "metabolites": []
       },
       "cui": "C3256412",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_ISOLASE",
@@ -9512,7 +9610,8 @@
       "last_updated": "2026-02-22",
       "external_ids": {},
       "cui": "C1576838",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ISOMALTOOLIGOSACCHARIDES",
@@ -9636,7 +9735,8 @@
         "metabolites": []
       },
       "cui": "C0628325",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_JASMINE_RICE_BRAN",
@@ -9771,7 +9871,8 @@
       "last_updated": "2026-02-23",
       "external_ids": {},
       "cui": "C0022646",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_KOLLIDON",
@@ -9876,7 +9977,8 @@
         "metabolites": []
       },
       "cui": "C0003995",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_LACITOL",
@@ -10109,7 +10211,8 @@
         "cas": "117592-45-7",
         "pubchem_cid": 10351433
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_LACTOSE_MONOHYDRATE",
@@ -10178,7 +10281,8 @@
         "pubchem_cid": 9949212
       },
       "cui": "C0063506",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_LANOLIN",
@@ -10222,7 +10326,8 @@
         "metabolites": []
       },
       "cui": "C0023024",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_LECITHIN_OIL",
@@ -10284,7 +10389,8 @@
         "metabolites": []
       },
       "cui": "C1008143",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_LEMON_FLAVOR_OIL",
@@ -10386,7 +10492,8 @@
         "metabolites": []
       },
       "cui": "C0724618",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_LITHOTHAMNION_CALCAREA",
@@ -10422,7 +10529,8 @@
         "metabolites": []
       },
       "cui": "C3727339",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_LONG_CHAIN_TRIGLYCERIDES",
@@ -10463,7 +10571,8 @@
       ],
       "last_updated": "2026-02-22",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_LYMPH_GLANDULAR",
@@ -10482,7 +10591,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0024202",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_LYSINE_MONOHYDROCHLORIDE",
@@ -10509,7 +10619,8 @@
         "unii": "JNJ23Q2COM"
       },
       "cui": "C0024340",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_MACADAMIA_NUT_OIL",
@@ -10805,7 +10916,8 @@
         "unii": "817L1N4CKP"
       },
       "cui": "C0220873",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_MALIC_ACID",
@@ -11164,7 +11276,8 @@
       ],
       "last_updated": "2026-02-18",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_METAL_SALTS_DESCRIPTOR",
@@ -11183,7 +11296,8 @@
       ],
       "last_updated": "2026-03-09",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_MICA_COLORANT",
@@ -11346,7 +11460,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_MILLET_FLOUR",
@@ -11405,7 +11520,8 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C0026162",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_MINOR_CANNABINOIDS",
@@ -11423,7 +11539,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_MINOR_GLYCOLIPIDS_DESCRIPTOR",
@@ -11442,7 +11559,8 @@
       ],
       "last_updated": "2026-03-09",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_MIRTOGENOL",
@@ -11461,7 +11579,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C2603941",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_MISC_FOODS_EXTRACTS_DESCRIPTOR",
@@ -11483,7 +11602,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0600183",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_MISC_JUICE_CONCENTRATES",
@@ -11577,7 +11697,8 @@
       ],
       "last_updated": "2026-02-17",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_MITOPURE_UROLITHIN_A",
@@ -11618,7 +11739,8 @@
         ]
       },
       "cui": "C5854318",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_MOBILEE",
@@ -11636,7 +11758,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_MODIFIED_FOOD_STARCH",
@@ -11848,7 +11971,8 @@
       ],
       "last_updated": "2026-02-18",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_MUSCLE_DESCRIPTOR",
@@ -11867,7 +11991,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C4083049",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_MUSHROOM_EXTRACTS",
@@ -11894,7 +12019,8 @@
       "last_updated": "2025-12-04",
       "external_ids": {},
       "cui": "C5891183",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_MYCELIATED_RICE",
@@ -11938,7 +12064,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_N_BUTYL_ALCOHOL",
@@ -12027,7 +12154,8 @@
         "metabolites": []
       },
       "cui": "C0079883",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_NATURAL_APPLE_FLAVOR",
@@ -13399,7 +13527,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_NEOHESPERIDIN",
@@ -13459,7 +13588,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_NONIONIC_SURFACTANT_DESCRIPTOR",
@@ -13689,7 +13819,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_OLEAMIDE",
@@ -14003,7 +14134,8 @@
       ],
       "last_updated": "2026-02-22",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ORGANIC_CANE_SYRUP",
@@ -14049,7 +14181,8 @@
       ],
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_ORGANIC_EVAPORATED_CANE_JUICE",
@@ -14094,7 +14227,8 @@
       "last_updated": "2026-02-23",
       "external_ids": {},
       "cui": "C0029939",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_OXALIC_ACID",
@@ -14292,7 +14426,8 @@
         "unii": "2F399MM81J"
       },
       "cui": "C0600556",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_OXIFEND_BRANDED_BLEND",
@@ -14311,7 +14446,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_OYSTER_EXTRACT",
@@ -14344,7 +14480,8 @@
         "metabolites": []
       },
       "cui": "C2962915",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_PAEONIFLORIN",
@@ -14367,7 +14504,8 @@
         "unii": "21AIQ4EV64"
       },
       "cui": "C0070320",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_PAK_MARKETING_DESCRIPTOR",
@@ -14385,7 +14523,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_PALATINOSE",
@@ -14455,7 +14594,8 @@
         "pubchem_cid": 2723
       },
       "cui": "C0230373",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_PALM_KERNEL_STEARATE",
@@ -14475,7 +14615,8 @@
       ],
       "last_updated": "2025-11-17",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_PALM_STEARIN",
@@ -14517,7 +14658,8 @@
       "last_updated": "2026-02-23",
       "external_ids": {},
       "cui": "C0030274",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_PAPRIKA_EXTRACT",
@@ -14594,7 +14736,8 @@
         "metabolites": []
       },
       "cui": "C0030580",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_PARTECK",
@@ -14714,7 +14857,8 @@
         "metabolites": []
       },
       "cui": "C0795652",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_PEA_FIBER",
@@ -14810,7 +14954,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_PECTIN",
@@ -14905,7 +15050,8 @@
         "metabolites": []
       },
       "cui": "C0030909",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_PEPTONE",
@@ -14989,7 +15135,8 @@
         "unii": "CU9S17279X"
       },
       "cui": "C0031562",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_PHOSPHOLIPID_DESCRIPTOR",
@@ -15012,7 +15159,8 @@
       "last_updated": "2026-02-18",
       "external_ids": {},
       "cui": "C0031676",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_PHOSPHORIC_ACID",
@@ -15071,7 +15219,8 @@
       "last_updated": "2026-02-18",
       "external_ids": {},
       "cui": "C5669193",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_PHYTONUTRIENT_COMPLEX_DESCRIPTOR",
@@ -15092,7 +15241,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_PHYTOPIN",
@@ -15112,7 +15262,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_PHYTOSURE",
@@ -15131,7 +15282,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_PINEAL_TISSUE",
@@ -15166,7 +15318,8 @@
         "metabolites": []
       },
       "cui": "C0031939",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_PITUITARY_TISSUE",
@@ -15186,7 +15339,8 @@
       "last_updated": "2026-02-23",
       "external_ids": {},
       "cui": "C0032002",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_CELLULOSE_PLANT",
@@ -15837,7 +15991,8 @@
       ],
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_PROPOLIS",
@@ -15876,7 +16031,8 @@
         "metabolites": []
       },
       "cui": "C0033488",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_PROPRIETARY_FOOD_EMULSIFIER",
@@ -16186,7 +16342,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_RIBONUCLEIC_ACID",
@@ -16207,7 +16364,8 @@
       "last_updated": "2026-02-18",
       "external_ids": {},
       "cui": "C0035668",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_RICE_BRAN_EXTRACT",
@@ -16612,7 +16770,8 @@
         "metabolites": []
       },
       "cui": "C0073603",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_RUTAECARPINE",
@@ -16634,7 +16793,8 @@
         "pubchem_cid": 65752
       },
       "cui": "C0073716",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_S7_BRANDED_BLEND",
@@ -16654,7 +16814,8 @@
       "last_updated": "2026-02-23",
       "external_ids": {},
       "cui": "C1706319",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_SACCHAROMYCES_CEREVISIAE",
@@ -16778,7 +16939,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_SALT",
@@ -16878,7 +17040,8 @@
         "metabolites": []
       },
       "cui": "C0036228",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_SEAWEED_EXTRACT",
@@ -16901,7 +17064,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C3256731",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_SEDITOL_BRANDED_BLEND",
@@ -16919,7 +17083,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_SENACTIV",
@@ -16941,7 +17106,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_SESAME_SEED_OIL",
@@ -17048,7 +17214,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_SIENNA_COLOR",
@@ -18059,7 +18226,8 @@
       ],
       "last_updated": "2026-02-22",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_SOLARPLAST",
@@ -18318,7 +18486,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_SOY_BEAN_OIL",
@@ -18514,7 +18683,8 @@
         "cas": "38641-94-0",
         "pubchem_cid": 38078
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_SPICES",
@@ -18587,7 +18757,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0037993",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_SPRING_WATER",
@@ -19071,7 +19242,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C2341740",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_SUNFIBER",
@@ -19138,7 +19310,8 @@
       "last_updated": "2026-03-09",
       "external_ids": {},
       "cui": "C0018874",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_LECITHIN_SUNFLOWER",
@@ -19316,7 +19489,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_SYRINGIC_ACID",
@@ -20151,7 +20325,8 @@
       "last_updated": "2025-12-04",
       "external_ids": {},
       "cui": "C0039561",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_TEST1700_MARKETING_DESCRIPTOR",
@@ -20169,7 +20344,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_TESTOSTERONE_SUPPORT_MARKETING_DESCRIPTOR",
@@ -20270,7 +20446,8 @@
           }
         ]
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_THYMUS_GLANDULAR",
@@ -20292,7 +20469,8 @@
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C1015036",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_THYROID_SUBSTANCE",
@@ -20328,7 +20506,8 @@
         "metabolites": []
       },
       "cui": "C3163618",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_TOCOPHEROL_PRESERVATIVE",
@@ -20468,7 +20647,8 @@
       "last_updated": "2026-02-24",
       "external_ids": {},
       "cui": "C0201914",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_TOTAL_CULTURES",
@@ -20486,7 +20666,8 @@
       ],
       "last_updated": "2026-02-17",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_TOTAL_RESVERATROLS",
@@ -20504,7 +20685,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_TOTAL_SULFUR",
@@ -20542,7 +20724,8 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_TOTAL_TERPENE_LACTONES",
@@ -20560,7 +20743,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_TRACE_METALS",
@@ -20579,7 +20763,8 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C0723796",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_TRACE_MINERAL_COMPLEX",
@@ -20603,7 +20788,8 @@
       "last_updated": "2026-02-23",
       "external_ids": {},
       "cui": "C0040577",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_TRANSPORT_C_PLUS",
@@ -20623,7 +20809,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_TREHALOSE",
@@ -20891,7 +21078,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_TRUMASK",
@@ -20994,7 +21182,8 @@
       ],
       "last_updated": "2026-03-01",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_UNSWEETENED_CHOCOLATE",
@@ -21015,7 +21204,8 @@
       ],
       "last_updated": "2026-03-13",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_URSOLIC_OLEANOLIC_ACIDS",
@@ -21033,7 +21223,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_VEGAN_CAPSULE_SHELL_DESCRIPTOR",
@@ -21089,7 +21280,8 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C0042440",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_VEGETABLE_ACETOGLYCERIDES",
@@ -21594,7 +21786,8 @@
       ],
       "last_updated": "2025-12-04",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_VINITROX_BRANDED_BLEND",
@@ -21613,7 +21806,8 @@
       ],
       "last_updated": "2026-02-23",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_VITABERRY_BRANDED_BLEND",
@@ -21636,7 +21830,8 @@
       ],
       "last_updated": "2026-04-20",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_VITAMIN_F_DESCRIPTOR",
@@ -21668,7 +21863,8 @@
         "metabolites": []
       },
       "cui": "C0003695",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_VITAMIN_PREMIX",
@@ -21689,7 +21885,8 @@
       ],
       "last_updated": "2026-02-18",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_VITAMIN_U",
@@ -21729,7 +21926,8 @@
         "metabolites": []
       },
       "cui": "C0042889",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_WEST_INDIAN_CHERRY",
@@ -21931,7 +22129,8 @@
       ],
       "last_updated": "2026-03-09",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_WHITE_MILO",
@@ -22011,7 +22210,8 @@
       ],
       "last_updated": "2026-03-08",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_WHOLE_BROWN_RICE",
@@ -22076,7 +22276,8 @@
       ],
       "last_updated": "2026-02-18",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_XANTHAN_GUM",
@@ -22139,7 +22340,8 @@
       "last_updated": "2026-02-24",
       "external_ids": {},
       "cui": "C1257855",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_XYLANASE",
@@ -22162,7 +22364,8 @@
         "cas": "9025-56-3",
         "pubchem_cid": 171706620
       },
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_XYLO_OLIGOSACCHARIDE",
@@ -22212,7 +22415,8 @@
       ],
       "last_updated": "2026-02-24",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_YELLOW_OCHRE",
@@ -22525,7 +22729,8 @@
       "last_updated": "2026-03-13",
       "external_ids": {},
       "cui": "C5980783",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_CLA_OIL_INACTIVE",
@@ -22718,7 +22923,8 @@
       ],
       "last_updated": "2026-03-16",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_MORTIERELLA_ALPINA_OIL",
@@ -22780,7 +22986,8 @@
         "metabolites": []
       },
       "cui": "C1700283",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "OI_BETA_CARYOPHYLLENE",
@@ -22820,7 +23027,8 @@
         "metabolites": []
       },
       "cui": "C0525503",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_KRILL_OIL",
@@ -22923,7 +23131,8 @@
       ],
       "last_updated": "2026-03-16",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "PII_SACHA_INCHI_OIL",
@@ -23135,7 +23344,8 @@
       "notes": "Generic \"vegetable\" descriptor — non-specific label indicating plant source without identified species.",
       "last_updated": "2026-04-20",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_IONIC_OCEAN_MINERALS",
@@ -23155,7 +23365,8 @@
       "notes": "Generic marketing descriptor for trace mineral mix derived from seawater. Non-specific composition.",
       "last_updated": "2026-04-20",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "OI_RAW_FOOD_VITAMIN_U",
@@ -23176,7 +23387,8 @@
       "notes": "Vitamin U (S-methylmethionine) — not a true vitamin. Found in raw cabbage; historical stomach-ulcer research (Cheney 1952). Not RDA-defined.",
       "last_updated": "2026-04-20",
       "external_ids": {},
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     },
     {
       "id": "NHA_VITAFIBER_IMO",

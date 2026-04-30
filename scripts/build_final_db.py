@@ -2283,6 +2283,20 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         harmful_ref = resolve_harmful_reference(harmful_hit)
         other_ref = resolve_other_ingredient_reference(name, std_name_ing)
 
+        # Phase 4a (2026-04-30): suppress label-noise + move-to-actives entries
+        # from the Flutter inactive_ingredients[] blob. Entries flagged
+        # is_label_descriptor=true are descriptive label fragments (marketing
+        # copy, source descriptors, phytochemical markers) — not real
+        # ingredients and should never render as chips. Entries flagged
+        # is_active_only=true are bioactives that will physically relocate to
+        # the active-ingredient pipeline in V1.1 (botanical_extract,
+        # glandular_tissue, branded complexes, amino_acid_derivative,
+        # phytocannabinoids, marine extracts) — meanwhile suppress here so
+        # they don't pollute the inactive section.
+        # Source of truth: scripts/audits/functional_roles/categorize.py
+        if other_ref.get("is_label_descriptor") or other_ref.get("is_active_only"):
+            continue
+
         # Notes priority: harmful_ref (safety) > enrichment-embedded > other_ingredients ref
         notes_text = (
             safe_str(harmful_ref.get("notes"))
