@@ -386,7 +386,7 @@ B = clamp(0, 30, B_raw)
 
 base_score = 25
 bonuses  = min(5, B3 + B4a + B4b + B4c + B_hypoallergenic)
-penalties = B0_moderate + B1 + B2 + B5 + B6 + B7 + B8
+penalties = B0_moderate + B1 + B2 + B5 + B6 + B7 + B8   # B8 = 0 since 2026-04-30 (disabled, see B8 section)
 ```
 
 - `base_score` (25) and `bonus_pool_cap` (5) are read from config
@@ -619,22 +619,49 @@ Evidence payload (per penalized ingredient):
 
 ---
 
-### B8 CAERS Adverse Event Penalty (max penalty 5)
+### B8 CAERS Adverse Event Penalty — DISABLED 2026-04-30 (formerly max penalty 5)
 
-**Design intent:** FDA CAERS (Center for Food Safety and Applied Nutrition Adverse Event
-Reporting System) contains real-world pharmacovigilance reports — consumers and healthcare
-providers reporting adverse events from dietary supplements. This is the only real-world
-safety signal in the pipeline. An ingredient can be legal (passes B0 banned check),
-well-formulated (high IQM), but still have hundreds of hospitalizations and deaths in CAERS.
+**Status:** disabled in production (`B8_caers_adverse_events.enabled = false`).
+Penalty math, data file, and Section B output keys (`B8_penalty`, `B8_caers_evidence`)
+remain wired for forward compatibility — `B8_penalty` always emits `0.0` and
+`B8_caers_evidence` emits `[]`. No code or schema changes required to re-enable;
+flip the config flag once the dataset is normalized.
 
-**Distinct from other safety sub-components:**
-- B0 (banned/recalled): regulatory actions FDA has already taken
-- B1 (harmful additives): formulation quality of excipients
-- B8 (CAERS): statistical volume of real-world adverse event reports on active ingredients
+**Why disabled:** raw CAERS report counts are exposure-confounded — they measure
+*popularity* far more than *risk*. The original `strong` tier (≥100 serious reports → −4.0)
+penalized RDA staples at the same magnitude as genuinely dangerous substances:
 
-Input:
-- `caers_adverse_event_signals.json` — loaded once at scorer init
-- Each product ingredient's `canonical_id` is looked up against the signals map
+| ingredient | serious_reports | reality |
+|---|---|---|
+| calcium | 2,145 | RDA staple, in every multivitamin |
+| vitamin D | 1,301 | RDA staple |
+| fiber | 1,252 | benign |
+| fish-oil omega-3 | 831 | clinically beneficial |
+| **kratom** | **759** | **261 deaths attributed** |
+| magnesium | 610 | RDA staple |
+| protein | 505 | inert macro |
+
+A plain multivitamin (Ca + D + Mg + Zn + Fe) hit the −5.0 cap instantly with zero
+attributable risk, while kratom got the same penalty bucket. ~1,966 SAFE-tier
+products in the corpus were dragged below 50 by this base-rate confound.
+
+Genuinely dangerous CAERS-flagged ingredients (kratom, ephedra, yohimbe, garcinia
+cambogia, DMAA, DHEA at high dose, comfrey, kava) are already enforced by:
+- **B0 banned_recalled** — regulatory actions, BLOCKED/UNSAFE verdicts
+- **B1 harmful_additives** — formulation-level hazards
+
+So disabling B8 does not weaken safety enforcement; it removes a popularity tax.
+
+**Re-enabling (future work):** require either
+1. **PRR/ROR-normalized signals** — divide each ingredient's reports by total CAERS
+   volume (proportional reporting ratio / reporting odds ratio) so popularity
+   cancels out, OR
+2. **Curated causally-attributable allowlist** — only penalize ingredients with
+   ≥1 death/transplant/hospitalization with established causation (≈10–15 entries:
+   kratom, ephedra, yohimbe, garcinia, green-tea-extract at hepatotoxic doses,
+   DHEA, 5-HTP, black cohosh, licorice, goldenseal, raspberry ketones).
+
+**Preserved for reference (the disabled formula):**
 
 ```text
 for each ingredient with a CAERS signal:
@@ -643,18 +670,15 @@ for each ingredient with a CAERS signal:
     if signal_strength == "weak" (10-24 serious reports):    penalty = 1.0
     add flag CAERS_SIGNAL_{ingredient}
 
-B8 = min(cap, sum(ingredient_penalties))
+B8 = min(cap, sum(ingredient_penalties))   # cap = 5.0
 ```
 
-Config defaults (scoring_config.json → B8_caers_adverse_events):
-- `strong_penalty`: 4.0 — e.g. kratom (261 deaths), green tea extract (80 hospitalizations)
-- `moderate_penalty`: 2.0
-- `weak_penalty`: 1.0
-- `cap`: 5.0 — maximum total B8 penalty
-- `enabled`: true — can be disabled without code change
-- `data_file`: `data/caers_adverse_event_signals.json`
+Config (`scoring_config.json → B8_caers_adverse_events`):
+- `enabled`: **false** *(was true; disabled 2026-04-30)*
+- `strong_penalty`: 4.0, `moderate_penalty`: 2.0, `weak_penalty`: 1.0, `cap`: 5.0
+- `data_file`: `data/caers_adverse_event_signals.json` (159 ingredients, schema 1.0.0, retained)
 
-Evidence payload (per penalized ingredient):
+Evidence payload (per penalized ingredient, when re-enabled):
 ```json
 {
   "ingredient": "kratom",
@@ -665,11 +689,11 @@ Evidence payload (per penalized ingredient):
 }
 ```
 
-**Note on base-rate filtering:** The ingestion script (`ingest_caers.py`) filters out
-multi-ingredient products (multivitamins, "Centrum", "One A Day", etc.) to prevent
-inflating ubiquitous ingredients like calcium/vitamin D. Products with >3 extracted
-ingredients are also dropped. This ensures signals reflect targeted single-ingredient
-supplement reports, not noise from combo products.
+**Note on prior base-rate filtering:** the ingestion script (`ingest_caers.py`)
+already drops multi-ingredient combo products (multivitamins, "Centrum", "One A
+Day", products with >3 extracted ingredients) to limit noise — but this filters
+the *report* side only, not the *exposure* side, which is why the popularity
+confound persisted at scoring time and is the reason for full disablement.
 
 ---
 
@@ -722,9 +746,9 @@ Evidence multipliers:
 | evidence_level | multiplier |
 |---|---|
 | product-human / product-rct / product | 1.0 |
-| branded-rct | 0.8 |
-| ingredient-human | 0.65 |
-| strain-clinical | 0.6 |
+| branded-rct | **0.9** *(v3.5: was 0.8 — branded RCTs on the actual product warrant near-product-tier credit)* |
+| ingredient-human | **0.8** *(v3.5: was 0.65 — generic ingredient-form RCTs are still high-quality evidence; old multiplier under-rewarded the bulk of the corpus)* |
+| strain-clinical | 0.65 |
 | preclinical | 0.3 |
 | unknown | 0.0 |
 
@@ -762,11 +786,17 @@ default to `positive_strong (1.0x)` for backward compatibility.
 
 Observational / preclinical entries bypass enrollment quality adjustment.
 
-**Top-N diminishing-returns aggregation** (config: `top_n_weights`, default
-`[1.0, 0.5, 0.25]`): after per-ingredient caps, the per-ingredient scores are
-sorted descending and each rank is multiplied by its positional weight before
-summing. Prevents multivitamin inflation — the best ingredient scores at 100%,
-2nd at 50%, 3rd at 25%, 4th+ at 0% (truncated to weights list length).
+**Top-N diminishing-returns aggregation** (config: `top_n_weights`, **v3.5
+default `[1.0, 0.7, 0.5, 0.3]`**, was `[1.0, 0.5, 0.25]` pre-v3.5): after
+per-ingredient caps, the per-ingredient scores are sorted descending and each
+rank is multiplied by its positional weight before summing. Prevents
+multivitamin inflation while still rewarding evidence-rich targeted formulations
+— the best ingredient scores at 100%, 2nd at 70%, 3rd at 50%, 4th at 30%, 5th+
+at 0% (truncated to weights list length). The pre-v3.5 [1.0, 0.5, 0.25] curve
+collapsed too aggressively: a 4-ingredient stack with strong evidence on each
+was indistinguishable from a 1-ingredient product, under-crediting honest
+combination products. The v3.5 curve restores ~50% headroom on ranks 2-4 while
+still asymptoting to zero.
 
 **Depth bonus** (config: `depth_bonus_bands`, discrete thresholds):
 
@@ -915,7 +945,7 @@ Non-gate configurable switches (same file, different sections):
 | `section_A_ingredient_quality.probiotic_cfu_adequacy.enabled` | true | Per-strain CFU adequacy uplift active (max 5) |
 | `section_A_ingredient_quality.omega3_dose_bonus.fish_oil_parent_mass_fallback.enabled` | true | Infer EPA+DHA from parent fish/krill oil mass when individual NP |
 | `section_B_safety_purity.B1_dietary_sugar_penalty.enabled` | true | Amount-based sugar penalty layered on B1 |
-| `section_B_safety_purity.B8_caers_adverse_events.enabled` | true | FDA CAERS pharmacovigilance penalty active |
+| `section_B_safety_purity.B8_caers_adverse_events.enabled` | **false** | DISABLED 2026-04-30 — raw CAERS counts confound popularity with risk (calcium 2,145 reports vs kratom 759 hit same penalty bucket); genuine danger covered by B0 + B1. Re-enable only with PRR/ROR-normalized data or curated allowlist. |
 
 ---
 
@@ -1005,11 +1035,11 @@ without `is_parent_total` retain old A1 behavior.
 | `enzyme_recognition` bonus | n/a | n/a | n/a | added — max 2.5 (Sprint E1.3.4) |
 | `probiotic_cfu_adequacy` uplift | n/a | n/a | n/a | added — per-strain CFU adequacy, max 5 (Sprint E1.3.2.c) |
 | `fish_oil_parent_mass_fallback` | n/a | n/a | n/a | added — infer EPA+DHA from parent mass (Sprint E1.3.3) |
-| Section C aggregation | simple sum of per-ingredient points | same | same | **Top-N diminishing returns** (`top_n_weights`, default `[1.0, 0.5, 0.25]`) |
+| Section C aggregation | simple sum of per-ingredient points | same | same | v3.4: **Top-N diminishing returns** (`top_n_weights`, default `[1.0, 0.5, 0.25]`); **v3.5: retuned to `[1.0, 0.7, 0.5, 0.3]`** + multiplier bumps (`branded-rct` 0.8→0.9, `ingredient-human` 0.65→0.8) |
 | Section C effect direction | ignored | ignored | ignored | **`effect_direction_multipliers`** applied per match |
 | Section C enrollment quality | ignored | ignored | ignored | **`enrollment_quality_bands`** (RCT / meta only) |
 | Section C depth bonus | n/a | n/a | n/a | **`depth_bonus_bands`** from `published_studies_count` |
-| B8 CAERS pharmacovigilance | n/a | n/a | n/a | added — per-ingredient FDA adverse-event penalty, max 5 |
+| B8 CAERS pharmacovigilance | n/a | n/a | n/a | added v3.4 — per-ingredient FDA adverse-event penalty, max 5; **DISABLED v3.5 (2026-04-30)** — raw counts confound popularity with risk; genuine danger covered by B0 + B1 |
 
 ---
 

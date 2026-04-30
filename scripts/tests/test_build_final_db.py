@@ -433,7 +433,7 @@ def make_enriched():
                 "allergen_id": "ALLERGEN_SOY",
                 "allergen_name": "Soy Lecithin",
                 "presence_type": "contains",
-                "evidence": "labelText.parsed.allergens: soy",
+                "evidence": "Contains: Soy",
                 "matched_text": "soy",
                 "severity_level": "low",
             }

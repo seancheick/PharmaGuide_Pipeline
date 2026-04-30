@@ -206,8 +206,24 @@ class TestB8CAERSScoring:
 
     @pytest.fixture
     def b_cfg(self, scorer):
-        """Section B config dict — needed for direct _compute_caers_penalty calls."""
-        return scorer.config.get("section_B_safety_purity", {})
+        """Section B config dict — needed for direct _compute_caers_penalty calls.
+
+        B8 is disabled by default in production config (2026-04-30: raw CAERS
+        counts are confounded by exposure base-rate). For unit tests of the
+        penalty-math function itself we override enabled=True locally AND
+        force-load the signals data (init-time skipped it because of the gate)
+        so the scoring logic stays under test.
+        """
+        import copy
+        import json
+        from pathlib import Path
+        cfg = copy.deepcopy(scorer.config.get("section_B_safety_purity", {}))
+        cfg.setdefault("B8_caers_adverse_events", {})["enabled"] = True
+        if not scorer._caers_signals:
+            data_file = Path(__file__).parent.parent / "data" / "caers_adverse_event_signals.json"
+            with open(data_file, "r", encoding="utf-8") as f:
+                scorer._caers_signals = json.load(f).get("signals", {})
+        return cfg
 
     def _make_product(self, ingredient_ids):
         return {
@@ -278,21 +294,33 @@ class TestB8CAERSScoring:
         assert penalty <= 5.0
 
     def test_penalty_appears_in_section_b(self, scorer):
+        """B8 evidence keys must always be present in Section B output, even
+        when disabled — Flutter contract relies on the key existing."""
         product = self._make_product(["kratom"])
         product["supplement_type"] = {"category": "herbs"}
         flags = []
         section_b = scorer._compute_safety_purity_score(product, "herbs", 0.0, flags)
         assert "B8_penalty" in section_b
-        assert section_b["B8_penalty"] > 0.0
         assert "B8_caers_evidence" in section_b
 
-    def test_penalty_included_in_total_penalties(self, scorer):
+    def test_b8_disabled_by_default_no_penalty(self, scorer):
+        """B8 is disabled in production config (2026-04-30): kratom should
+        produce zero B8 penalty via the full Section B path. Genuine kratom
+        risk is enforced by B0 banned_recalled, not B8."""
         product = self._make_product(["kratom"])
         product["supplement_type"] = {"category": "herbs"}
         flags = []
         section_b = scorer._compute_safety_purity_score(product, "herbs", 0.0, flags)
-        # B8 penalty should be counted in the penalties total
-        assert section_b["penalties"] >= section_b["B8_penalty"]
+        assert section_b["B8_penalty"] == 0.0
+        assert section_b["B8_caers_evidence"] == []
+
+    def test_penalty_included_in_total_penalties(self, scorer, b_cfg):
+        """When B8 is enabled (via b_cfg override), its penalty contributes
+        to the penalties total — function-level invariant, not config state."""
+        product = self._make_product(["kratom"])
+        flags = []
+        b8_pen, _ = scorer._compute_caers_penalty(product, flags, b_cfg)
+        assert b8_pen == 4.0  # strong signal
 
     def test_disabled_config_no_penalty(self):
         """When B8 is disabled in config, no penalty should apply."""

@@ -350,8 +350,8 @@
       "cap": 3.0
     },
     "B8_caers_adverse_events": {
-      "_description": "Penalty based on FDA CAERS adverse event signal strength for active ingredients. Thresholds are on serious_reports count (hospitalizations, deaths, ER visits, etc.). Strong signals include ingredients with 100+ serious reports (e.g. kratom: 261 deaths, green tea extract: 80 hospitalizations).",
-      "enabled": true,
+      "_description": "DISABLED 2026-04-30: raw CAERS report counts are confounded by exposure base-rate (e.g. calcium has 2,145 serious reports because it is in every multivitamin, not because it is dangerous). Strong tier penalized RDA staples (calcium, vit D, fiber, fish oil, magnesium, protein) the same as kratom. Genuinely dangerous CAERS ingredients (kratom, ephedra, yohimbe, garcinia, DMAA) are already covered by B0 banned_recalled and B1 harmful_additives. Re-enable only with a PRR/ROR-normalized dataset or a curated causally-attributable allowlist.",
+      "enabled": false,
       "strong_penalty": 4.0,
       "moderate_penalty": 2.0,
       "weak_penalty": 1.0,

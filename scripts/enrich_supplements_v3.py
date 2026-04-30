@@ -7570,7 +7570,7 @@ class SupplementEnricherV3:
                             "allergen_name": allergen.get('standard_name', ''),
                             "presence_type": "contains",  # Parsed allergens imply contains
                             "source": "label_parsed",
-                            "evidence": f"labelText.parsed.allergens: {allergen_text}",
+                            "evidence": f"Contains: {allergen_text.strip().title()}",
                             "matched_text": allergen_text,
                             "severity_level": allergen.get('severity_level', 'low'),
                             "regulatory_status": allergen.get('regulatory_status', ''),
