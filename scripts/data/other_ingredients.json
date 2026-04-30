@@ -2,9 +2,16 @@
   "_metadata": {
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
-    "schema_version": "5.0.0",
-    "last_updated": "2026-04-20",
-    "total_entries": 673
+    "schema_version": "5.1.0",
+    "last_updated": "2026-04-30",
+    "total_entries": 673,
+    "functional_roles_field": {
+      "added_in": "5.1.0",
+      "type": "string[]",
+      "vocab_source": "data/functional_roles_vocab.json (v1.0.0, 32 LOCKED IDs)",
+      "purpose": "Multi-valued functional role(s) for the Flutter UI tap-to-learn chip layer. Display-only — no scoring impact in V1. May be empty in V1 entries; populated in Phase 3 backfill batches per scripts/audits/functional_roles/. Final 100% completeness enforced by coverage_gate.py in Phase 5."
+    },
+    "additive_type_field_status": "DEPRECATED (Phase 4) — to be dropped after backfill batches complete. Replaced by functional_roles[] which expresses multi-valued roles correctly. Do not add new values to additive_type going forward."
   },
   "other_ingredients": [
     {

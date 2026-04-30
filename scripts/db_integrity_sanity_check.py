@@ -163,6 +163,67 @@ def _check_list_of_strings(
             )
 
 
+# ---------------------------------------------------------------------------
+# functional_roles vocab gate (added v3.5.1, 2026-04-30)
+#
+# Loads the locked 32-role vocab once and asserts every populated
+# `functional_roles[]` array on harmful_additives / other_ingredients /
+# botanical_ingredients entries contains only known role IDs. Empty arrays
+# are allowed in V1 (Phase 3 backfill is incremental); the strict
+# completeness gate is enforced separately by coverage_gate.py in Phase 5.
+# ---------------------------------------------------------------------------
+
+_FUNCTIONAL_ROLES_VOCAB_IDS: set | None = None
+
+
+def _load_functional_roles_vocab_ids() -> set:
+    global _FUNCTIONAL_ROLES_VOCAB_IDS
+    if _FUNCTIONAL_ROLES_VOCAB_IDS is None:
+        path = Path(__file__).parent / "data" / "functional_roles_vocab.json"
+        try:
+            with open(path, encoding="utf-8") as f:
+                v = json.load(f)
+            _FUNCTIONAL_ROLES_VOCAB_IDS = {r["id"] for r in v.get("functional_roles", [])}
+        except (FileNotFoundError, json.JSONDecodeError, KeyError):
+            _FUNCTIONAL_ROLES_VOCAB_IDS = set()
+    return _FUNCTIONAL_ROLES_VOCAB_IDS
+
+
+def _check_functional_roles(
+    findings: List[Finding],
+    file: str,
+    entry: Dict[str, Any],
+    idx: int,
+) -> None:
+    """If `functional_roles` is present, must be a list of vocab IDs.
+    Empty list is OK in V1 (Phase 3 backfill is incremental)."""
+    if "functional_roles" not in entry:
+        return
+    roles = entry["functional_roles"]
+    if not isinstance(roles, list):
+        findings.append(Finding(
+            "error", file, f"[{idx}].functional_roles",
+            "type_mismatch", "list", _type_name(roles),
+        ))
+        return
+    vocab = _load_functional_roles_vocab_ids()
+    if not vocab:
+        return  # vocab file missing — separate test catches that
+    for j, role in enumerate(roles):
+        if not isinstance(role, str):
+            findings.append(Finding(
+                "error", file, f"[{idx}].functional_roles[{j}]",
+                "type_mismatch", "str", _type_name(role),
+            ))
+            continue
+        if role not in vocab:
+            findings.append(Finding(
+                "error", file, f"[{idx}].functional_roles[{j}]",
+                "unknown_role_id (not in functional_roles_vocab.json v1.0.0)",
+                "vocab_id", role,
+            ))
+
+
 def _check_camel_case_drift(
     findings: List[Finding],
     file: str,
@@ -701,6 +762,7 @@ def check_harmful_additives(findings: List[Finding], data: Dict[str, Any], file:
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str), ("severity_level", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=True)
         _check_enum(findings, file, e, i, "severity_level", {"critical", "high", "moderate", "low", "none"})
+        _check_functional_roles(findings, file, e, i)
 
 
 def check_banned(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
@@ -746,6 +808,7 @@ def check_other_ingredients(findings: List[Finding], data: Dict[str, Any], file:
         # enhanced_normalizer uses direct indexing e["standard_name"]
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=True)
+        _check_functional_roles(findings, file, e, i)
 
 
 def check_top_manufacturers(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
@@ -831,6 +894,7 @@ def check_botanical_ingredients(findings: List[Finding], data: Dict[str, Any], f
             continue
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str), ("category", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=True)
+        _check_functional_roles(findings, file, e, i)
 
 
 def check_clinically_relevant_strains(findings: List[Finding], data: Dict[str, Any], file: str) -> None:

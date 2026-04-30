@@ -10,6 +10,13 @@ This document is the implementation-facing guide for the current scorer:
 
 It is aligned to the current `v3.5.0` behavior in code and config.
 
+## v3.5.1 changes (2026-04-30) — display layer only, no scoring impact
+
+- **`functional_roles[]` field added** to `harmful_additives.json` (5.2.0), `other_ingredients.json` (5.1.0), `botanical_ingredients.json` (5.1.0). Multi-valued role IDs from new `data/functional_roles_vocab.json` v1.0.0 (32 LOCKED roles, clinician sign-off 2026-04-30). Display-only — no scoring impact in V1; populated per Phase 3 backfill batches under `scripts/audits/functional_roles/`.
+- **`additive_type` dropped from Flutter blob** (`build_final_db.py:2294-2331`). Replaced by `functional_roles[]` which expresses multi-valued roles correctly. Internal pipeline references kept until Phase 4.
+- **B8 CAERS penalty disabled** (`enabled: false`) — raw report counts confound popularity with risk; calcium/vit D/fiber/fish oil hit the same penalty bucket as kratom. Genuine danger covered by B0 + B1.
+- **Allergen `evidence` field user-facing** — was leaking dotted dev path `labelText.parsed.allergens: fish` into UI; now reads `Contains: Fish` matching FDA label convention.
+
 ## v3.5.0 changes (2026-04-29)
 
 Three-batch accuracy uplift:

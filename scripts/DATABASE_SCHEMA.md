@@ -239,7 +239,7 @@ Core fields (always present):
 ---
 
 ### 6. botanical_ingredients.json
-**Purpose:** `ingredient_mapping` | **Entries:** 433
+**Purpose:** `ingredient_mapping` | **Entries:** 459 | **Schema:** 5.1.0
 
 Primary key: `botanical_ingredients` (array)
 
@@ -251,6 +251,7 @@ Primary key: `botanical_ingredients` (array)
 | `category` | string | YES | `herb`, `botanical`, `mushroom`, etc. |
 | `notes` | string | NO | Context |
 | `last_updated` | string | NO | ISO date |
+| `functional_roles` | string[] | NO (added v5.1.0) | Multi-valued role IDs from `functional_roles_vocab.json` v1.0.0 — most botanicals are actives (no role assigned), but some serve as colorants (turmeric), flavorings, or carriers in formulation context. Per-entry assignment in Phase 3 backfill. |
 
 ---
 
@@ -337,8 +338,42 @@ Used to detect and penalize vague supplement labeling (e.g., "proprietary blend"
 
 ---
 
+### 13b. functional_roles_vocab.json
+**Purpose:** `display_vocabulary` | **Entries:** 32 | **Schema:** 1.0.0 (LOCKED, clinician-signed 2026-04-30)
+
+Primary key: `functional_roles` (array)
+
+Controlled vocabulary of excipient/inactive-ingredient functional roles for the Flutter app's tap-to-learn UI. Single source of truth for the `functional_roles[]` field across `harmful_additives.json`, `other_ingredients.json`, and `botanical_ingredients.json`. Display-only — **no scoring impact in V1**.
+
+Lean schema, 5 fields per role:
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `id` | string | YES | Stable snake_case ID — used as the value in entries' `functional_roles[]` arrays |
+| `name` | string | YES | User-facing chip label (e.g. `"Lubricant"`, `"pH Regulator"`) |
+| `notes` | string ≤200 char | YES | Plain-English description shown in tap modal |
+| `regulatory_references` | object[] | YES | `[{jurisdiction, code}]` — tappable "Learn more" links to FDA CFR / EU E-numbers |
+| `examples` | string[] | YES | 1-5 ingredient names users might recognize on labels |
+
+Locked roles (32) by category:
+- **Tablet/capsule mechanics (5):** binder, disintegrant, lubricant, glidant, coating
+- **Bulk (1):** filler
+- **Texture/structure (6):** emulsifier, surfactant, thickener, stabilizer, gelling_agent, humectant
+- **Preservation (2):** preservative, antioxidant
+- **Sensory (5):** colorant_natural, colorant_artificial, flavor_natural, flavor_artificial, flavor_enhancer
+- **Sweeteners (3):** sweetener_natural, sweetener_artificial, sweetener_sugar_alcohol
+- **Manufacturing aids (4):** anti_caking_agent, anti_foaming_agent, processing_aid, solvent
+- **Delivery/chemistry (5):** carrier_oil, acidulant, ph_regulator, propellant, glazing_agent
+- **Fiber/gut health (1):** prebiotic_fiber
+
+**Distribution to Flutter:** vocab ships as a bundled asset in the Flutter app (`assets/data/functional_roles_vocab.json`) — **NOT embedded per-blob**. Saves ~6 KB × millions of blobs. Vocab updates ship via app release. Aligned with FDA 21 CFR 170.3(o)(1-32) + EU E-numbers + FAO/JECFA INS classes.
+
+Adding/removing roles requires a new clinician sign-off cycle and is gated by `tests/test_functional_roles_vocab_contract.py`.
+
+---
+
 ### 14. harmful_additives.json
-**Purpose:** `penalty_scoring` | **Entries:** 115 | **Schema:** 5.1.0
+**Purpose:** `penalty_scoring` | **Entries:** 115 | **Schema:** 5.2.0
 
 Primary key: `harmful_additives` (array)
 
@@ -372,10 +407,13 @@ No `critical` tier — substances posing immediate hazards belong in `banned_rec
 | `review` | object | YES | Governance metadata with `change_log` |
 | `confidence` | string | YES | `high`, `medium`, `low` |
 | `dose_thresholds` | object/null | NO | ADI/TDI with value, unit, source |
+| `functional_roles` | string[] | NO (added v5.2.0) | Multi-valued role IDs from `functional_roles_vocab.json` v1.0.0. Display-only — surfaced to Flutter inactive_ingredients[]. May be empty in V1; populated incrementally per `scripts/audits/functional_roles/batch_NN/`. **Contaminants do NOT receive functional_roles** — they are unintended impurities, not functional ingredients. |
 
 Category enum (20 values): `colorant`, `colorant_artificial`, `colorant_natural`, `contaminant`, `emulsifier`, `excipient`, `fat_oil`, `filler`, `flavor`, `mineral_compound`, `nutrient_synthetic`, `phosphate`, `preservative`, `preservative_antioxidant`, `processing_aid`, `stimulant_laxative`, `sweetener`, `sweetener_artificial`, `sweetener_natural`, `sweetener_sugar_alcohol`
 
 **Removed in v5.1:** `CUI` (top-level duplicate), `label_tokens`, `regex`, `exposure_context`, `entity_type` (when "ingredient"), `class_tags`, `severity_score`, `critical` severity tier.
+
+**Added in v5.2 (2026-04-30):** `functional_roles[]` field. **Phase 4 cleanup (after backfill batches):** the 20-value `category` enum will collapse to ~12 canonical values (artificial_color → colorant_artificial, fat_oil → carrier_oil context, preservative_antioxidant split into both functional_roles), and entries `Senna`, `Synthetic B Vitamins`, `Cupric Sulfate` will move to the active-ingredient pipeline per clinician decision.
 
 ---
 
@@ -540,7 +578,7 @@ Documents schema migration history. Contains counts, alias collision resolutions
 ---
 
 ### 23. other_ingredients.json
-**Purpose:** `inactive_ingredient_classification` | **Entries:** 662
+**Purpose:** `inactive_ingredient_classification` | **Entries:** 673 | **Schema:** 5.1.0
 
 Primary key: `other_ingredients` (array)
 
@@ -549,12 +587,20 @@ Primary key: `other_ingredients` (array)
 | `id` | string | YES | Unique ID (e.g., `OI_GELATIN`) |
 | `standard_name` | string | YES | Canonical name |
 | `aliases` | string[] | YES | Alternative names |
-| `category` | string | YES | `filler`, `binder`, `coating`, `sweetener`, etc. |
-| `additive_type` | string | YES | Additive classification |
+| `category` | string | YES | Will collapse to ~30 canonical values in Phase 4 cleanup (currently 241 distinct, of which 132 appear only once). |
+| `additive_type` | string | DEPRECATED | **Slated for removal in Phase 4** — replaced by `functional_roles[]`. 226 distinct un-standardized values; do not add new values going forward. |
 | `clean_label_score` | float | YES | Clean label quality (0-10) |
 | `is_additive` | bool | YES | Whether it's an additive |
 | `severity_level` | string | NO | Concern level |
 | `allergen_flag` | bool | NO | Allergen warning needed |
+| `functional_roles` | string[] | NO (added v5.1.0) | Multi-valued role IDs from `functional_roles_vocab.json` v1.0.0. Display-only — surfaced to Flutter `inactive_ingredients[]` via `build_final_db.py`. May be empty in V1; populated incrementally per `scripts/audits/functional_roles/batch_NN/`. **Concentration-aware in some cases:** ethanol → `["solvent","preservative"]` at ≥14-20% v/v vs `["solvent"]` at residual; activated carbon → default `["processing_aid"]`, add `colorant_natural` only when product clearly uses as black pigment. Per-entry verification (no auto-defaulting) for TiO2 and pearlescent mineral colorants. |
+
+**Phase 4 cleanup (clinician-locked, after backfill batches):**
+- `additive_type` field dropped entirely (was redundant with `category`; multi-role expression handled by `functional_roles[]`)
+- 5 descriptor categories retired (~50 entries): `marketing_descriptor`, `descriptor_component`, `source_descriptor`, `phytochemical_marker`, `label_descriptor`
+- Move-to-actives: `botanical_extract` (14), `animal_glandular_tissue` (10), `glandular_tissue` (4), `amino_acid_derivative` (7), branded complexes (~27), Black Pepper Extract
+- New `is_branded_complex: bool` flag (V1.1) replaces `branded_botanical_complex` / `branded_complex` categories
+- 132 single-occurrence categories decomposed via mechanical concatenation rule (e.g. `binder_coating_thickener` → `["binder","coating","thickener"]`) with 10% clinician spot-check per batch
 
 ---
 

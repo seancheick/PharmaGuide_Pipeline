@@ -2,9 +2,15 @@
   "_metadata": {
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
-    "schema_version": "5.0.0",
-    "last_updated": "2026-04-20",
+    "schema_version": "5.1.0",
+    "last_updated": "2026-04-30",
     "total_entries": 459,
+    "functional_roles_field": {
+      "added_in": "5.1.0",
+      "type": "string[]",
+      "vocab_source": "data/functional_roles_vocab.json (v1.0.0, 32 LOCKED IDs)",
+      "purpose": "Multi-valued functional role(s) for the Flutter UI tap-to-learn chip layer. Display-only — no scoring impact in V1. Most botanicals are actives (no role assigned), but some serve as colorants (turmeric), flavorings, or carriers in formulation context. Per-entry assignment in Phase 3 backfill."
+    },
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
     "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders."

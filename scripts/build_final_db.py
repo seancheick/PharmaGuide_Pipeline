@@ -2299,9 +2299,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "forms": safe_list(ing.get("forms")),
             "category": safe_str(ing.get("category") or other_ref.get("category")),
             "is_additive": safe_bool(ing.get("isAdditive") or other_ref.get("is_additive")),
-            "additive_type": safe_str(
-                ing.get("additiveType")
-                or other_ref.get("additive_type")
+            "functional_roles": safe_list(
+                ing.get("functional_roles")
+                or other_ref.get("functional_roles")
+                or (harmful_ref or {}).get("functional_roles")
             ),
             "standard_name": safe_str(
                 harmful_ref.get("standard_name")

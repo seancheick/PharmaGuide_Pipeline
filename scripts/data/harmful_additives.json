@@ -2,9 +2,16 @@
   "_metadata": {
     "description": "Comprehensive database of harmful additives, contaminants, and concerning ingredients found in dietary supplements. Used for scoring penalties and consumer warnings.",
     "purpose": "penalty_scoring",
-    "schema_version": "5.1.0",
-    "last_updated": "2026-04-19T19:21:00Z",
+    "schema_version": "5.2.0",
+    "last_updated": "2026-04-30",
     "total_entries": 115,
+    "functional_roles_field": {
+      "added_in": "5.2.0",
+      "type": "string[]",
+      "vocab_source": "data/functional_roles_vocab.json (v1.0.0, 32 LOCKED IDs)",
+      "purpose": "Multi-valued functional role(s) for the Flutter UI tap-to-learn chip layer. Display-only — no scoring impact in V1. May be empty in V1 entries; populated in Phase 3 backfill batches per scripts/audits/functional_roles/. Final 100% completeness enforced by coverage_gate.py in Phase 5.",
+      "note": "`contaminant`-category entries do NOT receive functional_roles[] — they are unintended impurities, not functional ingredients."
+    },
     "scoring_rule": "Apply penalty points based on severity_level. High: -2.0, Moderate: -1.0, Low: -0.5. Multiple additives are cumulative. Scored in B1 section of score_supplements.py.",
     "severity_level_definitions": {
       "high": "Significant health concerns with strong evidence (e.g., IARC 2A/2B carcinogens, trans fats, heavy metal contaminants, endocrine disruptors)",
