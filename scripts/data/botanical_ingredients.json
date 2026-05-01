@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-01",
-    "total_entries": 471,
+    "total_entries": 472,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -945,17 +945,15 @@
         "bayberry root bark",
         "myrica cerifera",
         "bayberry extract",
-        "yum berry",
-        "yumberry",
-        "myrica rubra",
-        "yangmei",
-        "chinese bayberry"
+        "morella cerifera",
+        "southern bayberry",
+        "wax myrtle"
       ],
       "category": "bark",
-      "notes": "Myrica cerifera (Myricaceae) root bark. Traditional astringent herb used for sore throat, diarrhea, and circulatory stimulation. Contains myricitrin flavonoid and triterpenes. Not standardized.",
+      "notes": "Myrica cerifera (Myricaceae; modern: Morella cerifera) root bark. North American astringent herb used traditionally for sore throat, diarrhea, and circulatory stimulation. Contains myricitrin flavonoid and triterpenes. Not standardized. Distinct from Myrica/Morella rubra (Yangmei) — see yangmei entry.",
       "last_updated": "2026-05-01",
       "external_ids": {},
-      "cui": "C0949964",
+      "cui": "C0697160",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -12916,6 +12914,32 @@
         "metabolites": []
       },
       "cui": "C5981353",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "yangmei",
+      "standard_name": "Yangmei",
+      "latin_name": "Myrica rubra",
+      "aliases": [
+        "myrica rubra",
+        "morella rubra",
+        "yum berry",
+        "yumberry",
+        "yang mei",
+        "chinese bayberry",
+        "japanese bayberry",
+        "red bayberry",
+        "myrica rubra fruit",
+        "myrica rubra fruit extract"
+      ],
+      "category": "fruit",
+      "notes": "Myrica rubra (Myricaceae; modern: Morella rubra) fruit. East Asian (China/Japan/Korea) edible berry — distinct from North American Myrica cerifera (Bayberry root bark). Rich in anthocyanins (cyanidin-3-O-glucoside dominant), proanthocyanidins, ellagic acid, and myricetin. Studied for antioxidant and metabolic-health applications. UMLS canonical name uses modern Morella rubra taxonomy.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C1688280",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

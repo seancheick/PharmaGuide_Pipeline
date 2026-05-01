@@ -44,4 +44,4 @@ def test_all_botanicals_have_empty_roles_in_v1(botanicals):
 
 
 def test_botanical_total_count_unchanged(botanicals):
-    assert len(botanicals) == 459
+    assert len(botanicals) == 472

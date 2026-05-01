@@ -33,12 +33,12 @@ KNOWN_ATTRIBUTE_KEYS = {
 
 
 def test_botanical_source_origin_coverage():
-    """All 459 botanicals get source_origin (rhododendron_caucasicum was
+    """All botanicals must carry source_origin (rhododendron_caucasicum was
     fixed in the 2026-04-30 cross-file audit — was 'unspecified', now 'herb'
-    with source_origin=plant)."""
+    with source_origin=plant). Count tracks total botanicals."""
     populated = [e for e in BOT if (e.get("attributes") or {}).get("source_origin")]
-    assert len(populated) == 459, (
-        f"expected 459 botanicals with source_origin; got {len(populated)}"
+    assert len(populated) == len(BOT), (
+        f"every botanical must carry source_origin; got {len(populated)}/{len(BOT)}"
     )
 
 
