@@ -3113,11 +3113,62 @@ class SupplementScorer:
         dose_data = self._compute_epa_dha_per_day(product)
 
         if not dose_data.get("has_explicit_dose"):
-            return {
+            # Transparency flag: when EPA/DHA bonus is 0 because the
+            # ingredient is buried in an opaque proprietary blend, surface
+            # the reason so the UI can distinguish "doesn't contain omega-3"
+            # from "contains omega-3 but undisclosed". Per executive feedback
+            # 2026-05-01: do NOT estimate the dose (would violate the
+            # deterministic principle); only flag the cause.
+            blends = (
+                safe_list(product.get("proprietary_blends"))
+                or safe_list((product.get("proprietary_data") or {}).get("blends"))
+                or []
+            )
+            opaque_omega3_blend = False
+            for b in blends:
+                if not isinstance(b, dict):
+                    continue
+                if b.get("disclosure_level") != "none":
+                    continue
+                blend_name = (b.get("name") or "").lower()
+                # Pattern check: blend name contains an omega-3 indicator
+                if any(t in blend_name for t in (
+                    "omega", "fish oil", "krill", "marine lipid",
+                    "epa", "dha", "n-3", "n3", "fatty acid",
+                )):
+                    opaque_omega3_blend = True
+                    break
+                # Or any child ingredient is omega-3-class
+                for child in (
+                    b.get("ingredients") or b.get("subIngredients")
+                    or b.get("components") or []
+                ):
+                    if not isinstance(child, dict):
+                        continue
+                    cname = (child.get("name") or "").lower()
+                    if any(t in cname for t in (
+                        "fish oil", "krill", "epa", "dha", "omega",
+                        "marine lipid",
+                    )):
+                        opaque_omega3_blend = True
+                        break
+                if opaque_omega3_blend:
+                    break
+
+            result = {
                 "score": 0.0,
                 "max": 0.0,       # 0 max signals "not applicable" to callers / display
                 "applicable": False,
             }
+            if opaque_omega3_blend:
+                result["bonus_missed_due_to_opacity"] = True
+                result["bonus_missed_reason"] = (
+                    "EPA/DHA breakdown not disclosed (ingredient appears in a "
+                    "proprietary blend without per-component amounts)."
+                )
+                if "OMEGA3_BONUS_MISSED_OPAQUE_BLEND" not in flags:
+                    flags.append("OMEGA3_BONUS_MISSED_OPAQUE_BLEND")
+            return result
 
         # Use midpoint of min/max daily range for band lookup
         per_day = as_float(dose_data.get("per_day_mid"), 0.0) or 0.0

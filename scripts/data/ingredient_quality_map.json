@@ -9054,130 +9054,6 @@
       "C0163151"
     ]
   },
-  "resolvin_d5": {
-    "standard_name": "Resolvin D5",
-    "category": "fatty_acids",
-    "category_enum": "fatty_acids",
-    "cui": "C3492734",
-    "cui_note": "C3492734 = MSH 'resolvin D5' organic chemical / pharmacologic substance. PubChem CID 24932575 (per executive verification 2026-05-01). DISTINCT compound from 17-HDHA precursor — not aliased to omega_3/SPM-precursor entry.",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "description": "Resolvin D5 — D-series resolvin, a Specialized Pro-resolving Mediator (SPM) derived from DHA via the 17-HDHA pathway. Distinct chemical entity from its 17-HDHA precursor (CUI C0639949). Endogenously short-lived; commercial supplements rarely contain measurable preformed Resolvin D5 — most 'SPM' products deliver the precursor (HDHA) which the body converts. This entry exists for label-identity matching only when products explicitly name 'Resolvin D5'.",
-    "forms": {
-      "resolvin d5 (label-identity)": {
-        "bio_score": 7,
-        "natural": true,
-        "score": 10,
-        "absorption": "unverified for preformed Resolvin D5; conservative pending clinical review",
-        "notes": "Identity verified via UMLS C3492734 + PubChem CID 24932575. Clinical bio_score and absorption pending clinician validation per CLINICIAN_REVIEW_REQUEST_2026-05-01.md Priority 2. No human PK data published for oral preformed Resolvin D5 supplementation. Conservative bio_score=7 placeholder until reviewed.",
-        "aliases": [
-          "Resolvin D5",
-          "resolvin d5",
-          "RvD5",
-          "rvd5"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.3,
-          "range_low": 0.1,
-          "range_high": 0.5,
-          "quality": "unknown"
-        },
-        "external_ids": {
-          "pubchem_cid": 24932575
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 1,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [
-        "17-hdha",
-        "resolvin d1",
-        "resolvin d2",
-        "resolvin d3",
-        "resolvin d4",
-        "resolvin d6",
-        "resolvin e1",
-        "protectin"
-      ],
-      "parent_id": null,
-      "confidence": "medium"
-    },
-    "data_quality": {
-      "completeness": 0.5,
-      "review_status": "needs_review",
-      "last_reviewed_at": "2026-05-01",
-      "research_status": "unverified"
-    },
-    "confidence_level": "verified",
-    "clinical_notes": "Identity verified (UMLS + PubChem). Clinical role and bio_score pending clinician validation — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
-    "aliases": [
-      "Resolvin D5"
-    ],
-    "external_ids": {
-      "pubchem_cid": 24932575
-    }
-  },
-  "protectin_dx": {
-    "standard_name": "Protectin DX",
-    "category": "fatty_acids",
-    "category_enum": "fatty_acids",
-    "cui": "C3886642",
-    "cui_note": "C3886642 = MSH 'protectin DX' organic chemical. PubChem CID 11968800 (per executive verification 2026-05-01). DISTINCT compound from 17-HDHA precursor and from Protectin D1 — not aliased to omega_3/SPM-precursor entry.",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "description": "Protectin DX (PDX) — DHA-derived double-lipoxygenase Specialized Pro-resolving Mediator (SPM). Stereoisomer-distinct from Protectin D1; biologically less active per published mediator-lipidomics data but still a distinct chemical entity. Endogenously short-lived; commercial supplements rarely contain measurable preformed Protectin DX. This entry exists for label-identity matching only.",
-    "forms": {
-      "protectin dx (label-identity)": {
-        "bio_score": 7,
-        "natural": true,
-        "score": 10,
-        "absorption": "unverified for preformed Protectin DX; conservative pending clinical review",
-        "notes": "Identity verified via UMLS C3886642 + PubChem CID 11968800. Clinical bio_score and absorption pending clinician validation per CLINICIAN_REVIEW_REQUEST_2026-05-01.md Priority 2. No human PK data published for oral preformed Protectin DX supplementation. Conservative bio_score=7 placeholder until reviewed.",
-        "aliases": [
-          "Protectin DX",
-          "protectin dx",
-          "PDX",
-          "pdx"
-        ],
-        "dosage_importance": 1.0,
-        "absorption_structured": {
-          "value": 0.3,
-          "range_low": 0.1,
-          "range_high": 0.5,
-          "quality": "unknown"
-        },
-        "external_ids": {
-          "pubchem_cid": 11968800
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 1,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [
-        "17-hdha",
-        "protectin d1",
-        "neuroprotectin",
-        "resolvin"
-      ],
-      "parent_id": null,
-      "confidence": "medium"
-    },
-    "data_quality": {
-      "completeness": 0.5,
-      "review_status": "needs_review",
-      "last_reviewed_at": "2026-05-01",
-      "research_status": "unverified"
-    },
-    "confidence_level": "verified",
-    "clinical_notes": "Identity verified (UMLS + PubChem). Clinical role and bio_score pending clinician validation — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
-    "aliases": [
-      "Protectin DX"
-    ],
-    "external_ids": {
-      "pubchem_cid": 11968800
-    }
-  },
   "resveratrol": {
     "standard_name": "Resveratrol",
     "category": "antioxidants",
@@ -53421,68 +53297,6 @@
     },
     "aliases": []
   },
-  "algae_protein": {
-    "standard_name": "Algae Protein (Generic / Multi-Source)",
-    "category": "protein",
-    "category_enum": "proteins",
-    "cui": "C0600607",
-    "cui_note": "C0600607 = generic 'Algal Proteins' MSH concept. Source-specific entries (chlorella, spirulina, schizochytrium) have their own CUIs and bio_scores; this entry covers label-only listings without source disambiguation.",
-    "rxcui_note": "No RxNorm concept for supplement ingredient",
-    "description": "Generic algae protein listing where the label does not specify the algal source (Spirulina, Chlorella, Schizochytrium, mixed microalgae, etc.). Per Executive Decision 2026-05-01 (Source Disambiguation rule): products listing 'Algae Protein' or 'Algal Protein' without source identification map here as a non-bioactive ambiguous category. When source IS disclosed, route to the species-specific entry: chlorella (whole cell — has its own poor-absorption profile per PMID 39610880); spirulina; or other algal entries.",
-    "forms": {
-      "algae protein (unspecified source)": {
-        "bio_score": 5,
-        "natural": true,
-        "score": 8,
-        "absorption": "low-moderate (algal class-poor; cell wall barrier; conservative due to source uncertainty)",
-        "notes": "Generic algae protein entry — source not specified on label. Chlorella whole-cell has documented near-zero amino acid bioavailability (PMID:39610880, PMC8759652 sporopollenin cell wall). Spirulina protein digestibility in vitro is higher (~70-80%) but cell-wall barrier still applies. Conservative bio_score=5 reflects source uncertainty per strict-rule policy. When source is disclosed (Spirulina/Chlorella/Schizochytrium) prefer the species-specific entry. CLINICIAN POLICY 2026-05-01 (CONFIRMED): treat this entry as a generic, low-confidence ingredient — should NOT carry strong scoring weight. confidence_level=inferred is intentional. Downstream scoring should consider this entry's contribution as informational rather than dose-weighted.",
-        "aliases": [
-          "Algae Protein",
-          "algae protein",
-          "Algal Protein",
-          "algal protein",
-          "whole Algal Protein",
-          "Whole Algal protein",
-          "whole algal protein",
-          "algae protein powder",
-          "algal protein concentrate",
-          "Green Algae Whole Plant Extract",
-          "green algae whole plant extract"
-        ],
-        "dosage_importance": 0.5,
-        "absorption_structured": {
-          "value": 0.2,
-          "range_low": 0.1,
-          "range_high": 0.4,
-          "quality": "poor"
-        }
-      }
-    },
-    "match_rules": {
-      "priority": 1,
-      "match_mode": "alias_and_fuzzy",
-      "exclusions": [
-        "chlorella",
-        "spirulina",
-        "schizochytrium",
-        "haematococcus"
-      ],
-      "parent_id": null,
-      "confidence": "low"
-    },
-    "data_quality": {
-      "completeness": 0.5,
-      "review_status": "reviewed",
-      "last_reviewed_at": "2026-05-01",
-      "research_status": "partially_verified"
-    },
-    "confidence_level": "inferred",
-    "aliases": [
-      "Algae Protein",
-      "Algal Protein"
-    ],
-    "external_ids": {}
-  },
   "alfalfa": {
     "category": "herbs",
     "cui": "C0002022",
@@ -59204,6 +59018,9 @@
         "natural": true,
         "score": 16,
         "absorption": "krill PL: F~0.7-0.97 with fat; equivalent to fish-TG at matched dose (Yurko-Mauro 2015)",
+        "epa_percent": 0.12,
+        "dha_percent": 0.07,
+        "epa_dha_composition_source": "Aker BioMarine Superba published composition + Neptune Krill Oil published composition; representative 12% EPA / 7% DHA per total krill oil mg. confidence_level=inferred — actual brand-specific values vary 8-15% EPA, 5-9% DHA. Used by score_supplements EPA+DHA dose-adequacy calculation when label discloses krill oil mg without EPA/DHA breakdown.",
         "notes": "Standard phospholipid-bound krill oil. EPA/DHA in phospholipid form (~40% phospholipids). ~33% higher AUC than standard fish oil triglycerides (Schuchardt et al. 2011, PMC3168413). Natural astaxanthin provides antioxidant protection against lipid oxidation. Shellfish allergen. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "100% krill oil",
@@ -59253,6 +59070,9 @@
         "natural": true,
         "score": 17,
         "absorption": "NKO branded: same PL chemistry; F equivalent to fish-TG (Yurko-Mauro 2015)",
+        "epa_percent": 0.12,
+        "dha_percent": 0.07,
+        "epa_dha_composition_source": "NKO published composition (~12% EPA / 7% DHA per total mg). confidence_level=inferred. Used by score_supplements EPA+DHA dose-adequacy when label lacks breakdown.",
         "notes": "Neptune Krill Oil (NKO) — original branded krill oil with FDA NDI notification acceptance. Standardized phospholipid-bound omega-3s with astaxanthin. Manufactured by Neptune Technologies (Canada). Well-studied clinically for cardiovascular and PMS support. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "NKO",
@@ -59274,6 +59094,9 @@
         "natural": true,
         "score": 17,
         "absorption": "Superba branded: GRAS status ≠ better F; class-equivalent to fish-TG",
+        "epa_percent": 0.13,
+        "dha_percent": 0.07,
+        "epa_dha_composition_source": "Aker BioMarine Superba published composition (~13% EPA / 7% DHA per total mg; Superba2 concentrated form may exceed). confidence_level=inferred. Used by score_supplements EPA+DHA dose-adequacy when label lacks breakdown.",
         "notes": "Superba Krill Oil by Aker BioMarine (Norway) — GRAS-notified, MSC-certified sustainable harvest. Superba2 is a concentrated upgrade. SuperbaBoost targets higher EPA/DHA density. ArcticPure is a retail brand using Superba. Evidence update 2026-04-25 (Batch 18): Marine oils + specialty audit — 9 PMIDs WebFetch-verified. CLASS FINDINGS: krill PL is class-equivalent to fish-TG at matched n-3 dose per Yurko-Mauro 2015 (PMID:26328782, definitive n=66 dose-matched RCT). Schuchardt \"+33% AUC\" was non-significant trend (p=0.057, n=12) confounded by free-FA contamination. CATEGORY ERROR caught: manuka honey MGO is LOCAL-ACTION antibacterial (Tenci 2017 PMID:27789370), not systemically absorbed — bio_score in absorption framework is mismatched. CROMINEX-PATTERN RELAPSE on PrimaVie shilajit: Pandit 2016 (PMID:26395129) is endpoint RCT not PK. GHOST REFERENCES caught: Wilson 2011 fulvic acid PK (NOT FOUND); Alkharfy 2015 human TQ PK (actual PMID:26434126 is a RAT glibenclamide study, not human TQ PK).",
         "aliases": [
           "Superba2 Krill",

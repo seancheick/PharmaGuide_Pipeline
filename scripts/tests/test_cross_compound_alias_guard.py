@@ -211,38 +211,54 @@ def test_specific_spm_compounds_have_distinct_entries():
     """Regression guard for the 2026-05-01 SPM ontology fix.
 
     Resolvin D5 and Protectin DX must each have their OWN entry with
-    PubChem CID, NOT be aliased onto the 17-HDHA precursor."""
-    data = _load_iqm()
+    distinct PubChem CIDs, NOT be aliased onto the 17-HDHA precursor.
 
-    # Both must exist as distinct top-level entries
-    assert "resolvin_d5" in data, (
-        "resolvin_d5 IQM entry missing — Resolvin D5 has distinct PubChem "
-        "CID 24932575 and must not be aliased to 17-HDHA precursor"
+    Per IQM-purity rule (clinician 2026-05-01) the entries live in
+    other_ingredients.json (no verified scoring data) rather than IQM.
+    They will be promoted to IQM only after clinician validation of
+    bio_score and clinical role."""
+    iqm_data = _load_iqm()
+
+    # Must NOT be in IQM (purity rule — no placeholder scores)
+    assert "resolvin_d5" not in iqm_data, (
+        "resolvin_d5 must NOT be in IQM — has placeholder bio_score=7 only. "
+        "Lives in other_ingredients.json until clinician approves real bio_score."
     )
-    assert "protectin_dx" in data, (
-        "protectin_dx IQM entry missing — Protectin DX has distinct PubChem "
-        "CID 11968800 and must not be aliased to 17-HDHA precursor"
+    assert "protectin_dx" not in iqm_data, (
+        "protectin_dx must NOT be in IQM — has placeholder bio_score=7 only. "
+        "Lives in other_ingredients.json until clinician approves real bio_score."
     )
 
-    # Verify identifiers
-    rvd5 = data["resolvin_d5"]
+    # Must be in other_ingredients with verified identifiers
+    oth_path = ROOT / "data" / "other_ingredients.json"
+    oth = json.loads(oth_path.read_text())
+    by_id = {e.get("id"): e for e in oth.get("other_ingredients", []) if isinstance(e, dict)}
+
+    assert "NHA_RESOLVIN_D5" in by_id, (
+        "NHA_RESOLVIN_D5 entry missing from other_ingredients.json"
+    )
+    assert "NHA_PROTECTIN_DX" in by_id, (
+        "NHA_PROTECTIN_DX entry missing from other_ingredients.json"
+    )
+
+    rvd5 = by_id["NHA_RESOLVIN_D5"]
     assert rvd5.get("cui") == "C3492734", (
-        f"resolvin_d5 CUI must be C3492734 (verified UMLS), got {rvd5.get('cui')}"
+        f"NHA_RESOLVIN_D5 CUI must be C3492734 (verified UMLS), got {rvd5.get('cui')}"
     )
     assert rvd5.get("external_ids", {}).get("pubchem_cid") == 24932575, (
-        "resolvin_d5 PubChem CID must be 24932575"
+        "NHA_RESOLVIN_D5 PubChem CID must be 24932575"
     )
 
-    pdx = data["protectin_dx"]
+    pdx = by_id["NHA_PROTECTIN_DX"]
     assert pdx.get("cui") == "C3886642", (
-        f"protectin_dx CUI must be C3886642 (verified UMLS), got {pdx.get('cui')}"
+        f"NHA_PROTECTIN_DX CUI must be C3886642 (verified UMLS), got {pdx.get('cui')}"
     )
     assert pdx.get("external_ids", {}).get("pubchem_cid") == 11968800, (
-        "protectin_dx PubChem CID must be 11968800"
+        "NHA_PROTECTIN_DX PubChem CID must be 11968800"
     )
 
-    # 17-HDHA must NOT alias them
-    omega3 = data.get("omega_3", {})
+    # 17-HDHA precursor (still in IQM) must NOT alias the specific compounds
+    omega3 = iqm_data.get("omega_3", {})
     hdha_form = (omega3.get("forms") or {}).get(
         "17-hydroxy-docosahexaenoic acid (17-HDHA)"
     ) or {}

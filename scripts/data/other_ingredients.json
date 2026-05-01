@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-05-01",
-    "total_entries": 676,
+    "total_entries": 679,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -23731,6 +23731,96 @@
       "added_by": "sprint_d3.6",
       "last_updated": "2026-04-20",
       "external_ids": {},
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_RESOLVIN_D5",
+      "standard_name": "Resolvin D5",
+      "aliases": [
+        "Resolvin D5",
+        "RvD5",
+        "resolvin d5",
+        "resolvin d5 (label-identity)",
+        "rvd5"
+      ],
+      "category": "fatty_acid_derivative",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Resolvin D5 — D-series resolvin, a Specialized Pro-resolving Mediator (SPM) derived from DHA via the 17-HDHA pathway. Distinct chemical entity from its 17-HDHA precursor (CUI C0639949). Endogenously short-lived; commercial supplements rarely contain measurable preformed Resolvin D5 — most 'SPM' products deliver the precursor (HDHA) which the body converts. Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule: no verified clinical bio_score data exists for oral preformed Resolvin D5 supplementation. Identity verified (UMLS C3492734 + PubChem CID 24932575). When/if clinical PK + efficacy data emerge, can be promoted to IQM.",
+      "common_uses": [
+        "SPM-marker label-identity matching"
+      ],
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "pubchem_cid": 24932575
+      },
+      "cui": "C3492734",
+      "cui_status": "verified",
+      "confidence_level": "verified",
+      "clinical_notes": "Identity verified. Clinical role pending — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_PROTECTIN_DX",
+      "standard_name": "Protectin DX",
+      "aliases": [
+        "protectin dx (label-identity)",
+        "PDX",
+        "protectin dx",
+        "Protectin DX",
+        "pdx"
+      ],
+      "category": "fatty_acid_derivative",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Protectin DX (PDX) — DHA-derived double-lipoxygenase Specialized Pro-resolving Mediator (SPM). Stereoisomer-distinct from Protectin D1; biologically less active per published mediator-lipidomics data but still a distinct chemical entity. Endogenously short-lived; commercial supplements rarely contain measurable preformed Protectin DX. Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule: no verified clinical bio_score data exists for oral preformed Protectin DX supplementation. Identity verified (UMLS C3886642 + PubChem CID 11968800).",
+      "common_uses": [
+        "SPM-marker label-identity matching"
+      ],
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "pubchem_cid": 11968800
+      },
+      "cui": "C3886642",
+      "cui_status": "verified",
+      "confidence_level": "verified",
+      "clinical_notes": "Identity verified. Clinical role pending — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
+      "functional_roles": []
+    },
+    {
+      "id": "NHA_ALGAE_PROTEIN_GENERIC",
+      "standard_name": "Algae Protein (Generic / Multi-Source)",
+      "aliases": [
+        "algae protein (unspecified source)",
+        "algal protein concentrate",
+        "whole algal protein",
+        "algal protein",
+        "Algal Protein",
+        "Whole Algal protein",
+        "algae protein",
+        "whole Algal Protein",
+        "algae protein powder",
+        "Green Algae Whole Plant Extract",
+        "Algae Protein",
+        "green algae whole plant extract"
+      ],
+      "category": "protein_descriptor",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Generic algae protein listing where the source is not specified (Spirulina, Chlorella, Schizochytrium, mixed microalgae). Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule + clinician 'no strong scoring weight' policy: this entry is for label-identity only, NOT for protein-quality scoring. When source IS disclosed, the species-specific IQM entries (chlorella, spirulina) handle scoring with their verified bio_scores. Chlorella whole-cell has documented near-zero amino acid bioavailability (PMID:39610880); spirulina protein digestibility ~70-80% but cell-wall barrier still applies.",
+      "common_uses": [
+        "Generic algae protein descriptor"
+      ],
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C0600607",
+      "cui_status": "verified",
+      "cui_note": "C0600607 = generic 'Algal Proteins' MSH concept. Source-specific entries (chlorella, spirulina) carry their own scoring; this descriptor entry routes label-only generic listings.",
+      "confidence_level": "inferred",
+      "clinical_notes": "Generic descriptor. Source-specific entries should be preferred when label discloses the algal species.",
       "functional_roles": []
     }
   ]
