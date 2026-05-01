@@ -74,10 +74,44 @@ if raw_category == "blend":
             # → header role + children disclosed below.
             # Score the children individually. Skip the parent row from scorable.
         else:
-            return "BLEND_HEADER"
-            # → orphan label row (no children disclosed in nestedRows).
-            # Skip from scorable. Children may exist as top-level siblings on
-            # this product's ingredientRows — those are scored independently.
+            # AMBIGUOUS — DSLD sometimes flat-encodes children as top-level
+            # siblings instead of nesting them. Disambiguate via lookahead:
+            # if the next 1-N rows in ingredientRows are valid ingredients
+            # (non-blend category + real quantity), this is a true header
+            # whose children DSLD failed to nest. Otherwise it's an opaque
+            # standalone blend with no composition disclosed.
+            if has_valid_following_ingredients(this_index, all_ingredient_rows):
+                return "BLEND_HEADER"
+                # → header; children exist as top-level siblings (DSLD ingestion
+                # didn't preserve the nesting). Skip parent from scorable.
+            else:
+                return "OPAQUE_BLEND"
+                # → standalone opaque blend with no composition anywhere.
+                # Score as real active; route through B5 transparency penalty.
+
+# Lookahead helper:
+def has_valid_following_ingredients(idx, rows, lookahead=4):
+    """Check if rows immediately after `idx` look like valid ingredient
+    entries (non-blend category, real quantity). DSLD's flat-encoded
+    blend children appear as adjacent top-level siblings."""
+    VALID_CATEGORIES = {
+        "vitamin", "mineral", "amino acid", "fat", "botanical", "fatty acid",
+        "carbohydrate", "protein", "non-nutrient/non-botanical", "fiber",
+        "carotenoid", "flavonoid", "enzyme", "probiotic"
+    }
+    found_valid = 0
+    for j in range(idx + 1, min(idx + 1 + lookahead, len(rows))):
+        next_row = rows[j]
+        next_cat = (next_row.get("category") or "").lower()
+        next_qty = (next_row.get("quantity") or [{}])[0]
+        next_unit = next_qty.get("unit", "")
+        next_quantity = next_qty.get("quantity", 0)
+        if next_cat in VALID_CATEGORIES and next_unit != "NP" and next_quantity > 0:
+            found_valid += 1
+        # Stop scanning once we hit another blend header (next group)
+        elif next_cat == "blend":
+            break
+    return found_valid >= 1
 
     elif quantity > 0:
         if len(nestedRows) == 0:
