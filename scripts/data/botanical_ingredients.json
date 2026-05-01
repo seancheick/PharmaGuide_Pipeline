@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-01",
-    "total_entries": 475,
+    "total_entries": 476,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -2043,22 +2043,52 @@
     },
     {
       "id": "butternut",
-      "standard_name": "Butternut",
+      "standard_name": "Butternut (Tree Bark)",
       "latin_name": "Juglans cinerea",
       "aliases": [
+        "butternut",
         "butternut bark",
+        "butternut root bark",
+        "butternut branch bark",
         "juglans cinerea",
+        "Juglans cinerea",
         "butternut extract",
         "white walnut",
-        "butternut squash powder",
-        "butternut squash",
-        "cucurbita moschata"
+        "white walnut bark"
       ],
       "category": "bark",
-      "notes": "Juglans cinerea (Juglandaceae) inner bark. Traditional Eclectic medicine laxative containing juglone and juglandin. Gentle cathartic used for constipation and liver support. Botanical bark powder.",
+      "notes": "Juglans cinerea (Juglandaceae) inner bark — TREE bark, NOT to be confused with Cucurbita moschata (butternut squash, vegetable — separate entry: butternut_squash). Traditional Eclectic medicine laxative containing juglone and juglandin. Gentle cathartic used for constipation and liver support. UNII Z11Q755I6W (whole) / 48FZ1BHO18 (branch bark/root bark). Audit 2026-05-01: stripped 'butternut squash powder', 'butternut squash', 'cucurbita moschata' aliases per strict species rule (different family Cucurbitaceae vs Juglandaceae).",
       "last_updated": "2026-05-01",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "Z11Q755I6W"
+      },
       "cui": "C0330973",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "butternut_squash",
+      "standard_name": "Butternut Squash",
+      "latin_name": "Cucurbita moschata",
+      "aliases": [
+        "cucurbita moschata",
+        "Cucurbita moschata",
+        "butternut squash",
+        "butternut squash powder",
+        "butternut squash extract",
+        "organic butternut squash",
+        "organic butternut squash powder",
+        "winter squash"
+      ],
+      "category": "fruit",
+      "notes": "Cucurbita moschata (Cucurbitaceae) fruit — butternut squash, a winter squash cultivar. Distinct from Juglans cinerea ('butternut tree', see butternut entry — different family entirely). Source of beta-carotene, lutein, zeaxanthin, polysaccharides, and dietary fiber. Used in food and supplement formulations as a whole-food carotenoid source. UNII 6D4613H8ZL (whole) / 4O338K8OH3 (seed).",
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "unii": "6D4613H8ZL"
+      },
+      "cui": "C0996747",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
