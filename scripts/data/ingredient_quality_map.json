@@ -8630,7 +8630,21 @@
           "catechu",
           "black catechu",
           "cutch tree",
-          "cutch"
+          "cutch",
+          "cutch tree extract",
+          "cutch tree bark",
+          "cutch tree bark extract",
+          "cutch tree wood",
+          "cutch tree wood extract",
+          "cutch tree wood and bark",
+          "cutch tree wood and bark extract",
+          "cutch tree wood & bark extract",
+          "cutch extract",
+          "khair",
+          "khair extract",
+          "khadira extract",
+          "black catechu extract",
+          "catechu extract"
         ],
         "dosage_importance": 0.85,
         "absorption_structured": {
@@ -35639,7 +35653,8 @@
           "Bifidobacterium animalis lactis HN019",
           "HN019",
           "DR10",
-          "HOWARU Bifido"
+          "HOWARU Bifido",
+          "bifidobacterium lactis strain hn019"
         ],
         "score": 18,
         "dosage_importance": 1.0,
@@ -35664,7 +35679,9 @@
           "Bifidobacterium animalis lactis Bi-04",
           "Bifidobacterium lactis BI-04",
           "b. lactis bi-04",
-          "Bi-04"
+          "Bi-04",
+          "bifidobacterium lactis strain bl-04",
+          "bifidobacterium lactis bl04"
         ],
         "score": 16,
         "dosage_importance": 1.0,
@@ -35690,7 +35707,9 @@
           "BI07",
           "Bifidobacterium animalis Bi-07",
           "HOWARU Protect",
-          "bifidobacterium lactis bi07"
+          "bifidobacterium lactis bi07",
+          "bifidobacterium lactis strain bl-07",
+          "bifidobacterium animalis lactis bi-07"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -35745,7 +35764,10 @@
           "SD-5219",
           "Bifidobacterium lactis SD-5219",
           "Bifidobacterium animalis sub. lactis",
-          "B. animalis sub. lactis"
+          "B. animalis sub. lactis",
+          "bifidobacterium animalis lactis cul-34",
+          "bifidobacterium lactis uabia-12",
+          "bifidobacterium lactis uabla-12"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37223,7 +37245,7 @@
       "vitamins": 17
     },
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-30",
+    "last_updated": "2026-05-01",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -55061,7 +55083,10 @@
           "decursinol-50",
           "decursinol-50 (angelica gigas nakai) extract",
           "decursinol-50 extract",
-          "angelica gigas extract"
+          "angelica gigas extract",
+          "angelica gigas nakai root",
+          "angelica gigas nakai root extract",
+          "angelica gigas nakai extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
