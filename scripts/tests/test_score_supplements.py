@@ -3187,8 +3187,11 @@ class TestSectionEDoseAdequacy:
 
     # ---- _compute_legacy_section_e band boundaries ----
 
-    # v3.4.x: band scores bumped. aha_cvd 1.5 -> 2.0, high_clinical 2.0 -> 2.5,
-    # prescription_dose 2.0 -> 3.0 (omega3 max raised from 2.0 to 3.0).
+    # v3.4.5 (clinician decision 2026-05-01): omega3 max capped at 2.0.
+    # AHA evidence-based dose is 1g/day; above that, marginal benefit is
+    # unclear and bleeding risk rises. Bands redistributed within 0–2 cap:
+    #   aha_cvd 2.0 -> 1.6, high_clinical 2.5 -> 1.75,
+    #   prescription_dose 3.0 -> 2.0 (still flagged with PRESCRIPTION_DOSE_OMEGA3).
     @pytest.mark.parametrize("per_day,exp_score,exp_band", [
         (0,    0.0, "below_efsa_ai"),
         (100,  0.0, "below_efsa_ai"),
@@ -3197,12 +3200,12 @@ class TestSectionEDoseAdequacy:
         (499,  0.5, "efsa_ai_zone"),
         (500,  1.0, "general_health"),  # FDA QHC / general health
         (999,  1.0, "general_health"),
-        (1000, 2.0, "aha_cvd"),         # AHA CVD recommendation
-        (1999, 2.0, "aha_cvd"),
-        (2000, 2.5, "high_clinical"),   # EFSA triglyceride claim
-        (3999, 2.5, "high_clinical"),
-        (4000, 3.0, "prescription_dose"),  # AHA/ACC prescription dose
-        (5000, 3.0, "prescription_dose"),
+        (1000, 1.6, "aha_cvd"),         # AHA CVD recommendation
+        (1999, 1.6, "aha_cvd"),
+        (2000, 1.75, "high_clinical"),  # EFSA triglyceride claim
+        (3999, 1.75, "high_clinical"),
+        (4000, 2.0, "prescription_dose"),  # AHA/ACC prescription dose (cap)
+        (5000, 2.0, "prescription_dose"),
     ])
     def test_band_boundaries(self, scorer, per_day, exp_score, exp_band):
         """Each dose boundary maps to the correct band and score."""
@@ -3266,7 +3269,8 @@ class TestSectionEDoseAdequacy:
         prod["ingredient_quality_data"]["ingredients_scorable"].extend([epa_ing, dha_ing])
         prod["serving_basis"] = {"min_servings_per_day": 2, "max_servings_per_day": 2}
         # per_day = (500+250) × 2 = 1500 mg/day → aha_cvd band
-        # v3.4.x: omega3_dose_bonus.max raised 2.0 -> 3.0, aha_cvd band raised 1.5 -> 2.0
+        # v3.4.5 (clinician decision 2026-05-01): omega3_dose_bonus capped at
+        # 2.0 (was 3.0 in v3.4.x). aha_cvd band 1000-1999 mg/day → 1.6.
 
         result = scorer.score_product(prod)
         assert result["verdict"] in {"SAFE", "POOR", "CAUTION"}
@@ -3275,8 +3279,8 @@ class TestSectionEDoseAdequacy:
         assert "E_dose_adequacy" in section_scores
         e = section_scores["E_dose_adequacy"]
         assert e["applicable"] is True
-        assert e["score"] == pytest.approx(2.0, abs=0.001)
-        assert e["max"] == pytest.approx(3.0, abs=0.001)
+        assert e["score"] == pytest.approx(1.6, abs=0.001)
+        assert e["max"] == pytest.approx(2.0, abs=0.001)
 
         e_bd = result.get("breakdown", {}).get("E", {})
         assert e_bd["dose_band"] == "aha_cvd"
@@ -4885,17 +4889,26 @@ class TestShipNowConfigLockdown:
             "A2.max must be 5 to reward products that stack 4+ premium forms."
         )
 
-    def test_omega3_max_raised_to_3(self, scorer):
+    def test_omega3_max_capped_at_2(self, scorer):
+        """v3.4.5 (clinician decision 2026-05-01): omega3 bonus capped at 2.0.
+
+        AHA evidence-based dose is 1g/day for cardiovascular protection — above
+        that, marginal benefit is unclear and bleeding risk rises. The 80-pt
+        quality-led model shouldn't be derailed by a single nutrient's dose.
+        Prescription-dose products still get the PRESCRIPTION_DOSE_OMEGA3 flag
+        for visibility.
+        """
         o3 = scorer.config["section_A_ingredient_quality"]["omega3_dose_bonus"]
-        assert o3["max"] == 3.0, (
-            "omega3_dose_bonus.max must be 3.0 to restore the pre-merge "
-            "value from standalone Section E."
+        assert o3["max"] == 2.0, (
+            "omega3_dose_bonus.max must be 2.0 (clinician cap 2026-05-01). "
+            "AHA evidence-based dose is 1g/day; bands redistributed within "
+            "the 0–2 range to maintain tier differentiation."
         )
-        # Top band must actually reach 3.0 — otherwise raising max is cosmetic.
+        # Top band must actually reach the cap — otherwise the cap is cosmetic.
         top_band_score = max(float(b.get("score", 0.0)) for b in o3.get("bands", []))
-        assert top_band_score >= 3.0, (
-            f"omega3 top band only reaches {top_band_score}; raising max to "
-            "3.0 is meaningless unless a band actually earns it."
+        assert top_band_score == 2.0, (
+            f"omega3 top band reaches {top_band_score} but cap is 2.0. "
+            "prescription_dose band should sit at exactly 2.0."
         )
 
     def test_b1_cap_raised_to_15(self, scorer):

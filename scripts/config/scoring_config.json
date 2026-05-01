@@ -210,27 +210,27 @@
         "epa_dha_fraction_of_parent": 0.5,
         "eligible_parent_blends": ["fish oil", "krill oil"]
       },
-      "max": 3.0,
-      "_max_rationale": "Raised from 2.0 to 3.0 to restore the pre-merge value when EPA/DHA dose adequacy was standalone Section E. Still capped by category_bonus_pool.max_contribution=5 when stacked with probiotic. Bands redistributed so top tiers actually hit 3.0.",
+      "max": 2.0,
+      "_max_rationale": "Capped at 2.0 (clinician decision 2026-05-01). AHA evidence-based dose is 1g/day for cardiovascular protection — above that, marginal benefit is unclear and bleeding risk rises (anticoagulant interaction). The 80-pt quality-led model shouldn't be derailed by a single nutrient's dose, and prescription-dose users still see the PRESCRIPTION_DOSE_OMEGA3 flag separately. Bands redistributed below to maintain tier differentiation within the 0–2 range. Previous 3.0 cap (v3.4.x) inflated omega-3 weight beyond AHA's evidence-based threshold.",
       "_description": "EPA+DHA daily dose adequacy bonus (omega-3 products only). Applied only when explicit per-unit EPA and/or DHA amounts are labelled. Formerly standalone Section E, now a category bonus within Ingredient Quality.",
       "_applicable": "Products where ingredient_quality_data contains ingredients with canonical_id 'epa', 'dha', or 'epa_dha' and a usable quantity field.",
       "_band_lookup": "Uses per_day_mid = (min_serving/day + max_serving/day) / 2 x EPA+DHA mg per unit. Highest matching threshold wins.",
       "bands": [
         {
           "min_mg_day": 4000,
-          "score": 3.0,
+          "score": 2.0,
           "label": "prescription_dose",
           "flag": "PRESCRIPTION_DOSE_OMEGA3"
         },
         {
           "min_mg_day": 2000,
-          "score": 2.5,
+          "score": 1.75,
           "label": "high_clinical",
           "flag": null
         },
         {
           "min_mg_day": 1000,
-          "score": 2.0,
+          "score": 1.6,
           "label": "aha_cvd",
           "flag": null
         },
@@ -458,27 +458,27 @@
     "D3_D4_D5_combined_cap": 2.0
   },
   "section_E_dose_adequacy": {
-    "_max": 3.0,
-    "_max_rationale": "v3.4.x: synced from section_A_ingredient_quality.omega3_dose_bonus.max. Legacy compat block kept so consumers reading section_scores['E_dose_adequacy'] see the same value as the canonical omega3_dose_bonus.",
+    "_max": 2.0,
+    "_max_rationale": "v3.4.5 (clinician decision 2026-05-01): synced from section_A_ingredient_quality.omega3_dose_bonus.max=2.0. Legacy compat block kept so consumers reading section_scores['E_dose_adequacy'] see the same value as the canonical omega3_dose_bonus. AHA evidence-based dose is 1g/day for cardiovascular protection — bands above 1g still differentiate within the 0–2 cap rather than expanding to 3.0.",
     "_description": "EPA+DHA daily dose adequacy bonus (omega-3 products only). Applied only when explicit per-unit EPA and/or DHA amounts are labelled. Score is an additive bonus within the overall 80-pt quality ceiling.",
     "_applicable": "Products where ingredient_quality_data contains ingredients with canonical_id 'epa', 'dha', or 'epa_dha' and a usable quantity field.",
     "_band_lookup": "Uses per_day_mid = (min_serving/day + max_serving/day) / 2 × EPA+DHA mg per unit. Highest matching threshold wins.",
     "bands": [
       {
         "min_mg_day": 4000,
-        "score": 3.0,
+        "score": 2.0,
         "label": "prescription_dose",
         "flag": "PRESCRIPTION_DOSE_OMEGA3"
       },
       {
         "min_mg_day": 2000,
-        "score": 2.5,
+        "score": 1.75,
         "label": "high_clinical",
         "flag": null
       },
       {
         "min_mg_day": 1000,
-        "score": 2.0,
+        "score": 1.6,
         "label": "aha_cvd",
         "flag": null
       },

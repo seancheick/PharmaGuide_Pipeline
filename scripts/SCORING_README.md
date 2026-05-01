@@ -181,10 +181,12 @@ A = min(25, core_quality + category_bonus_total)
   - tier points: `low=0`, `adequate=1`, `good=2`, `excellent=3`
   - support-level caps: `high=1.0x`, `moderate=0.75x`, `weak=0.5x`
   - hard gates: blend-member without individual dose → 0; tier=None → 0; blend-total inference forbidden
-- **Omega-3 dose bonus** (max 3 — config-driven):
+- **Omega-3 dose bonus** (max 2 — config-driven; clinician cap 2026-05-01):
   - only for products with explicit labelled EPA / DHA / EPA+DHA
-  - bands: `≥4000`=3.0 (+`PRESCRIPTION_DOSE_OMEGA3`), `≥2000`=2.5, `≥1000`=2.0, `≥500`=1.0, `≥250`=0.5
-  - parent-mass fallback (Sprint E1.3.3): when EPA/DHA individually NP but parent fish/krill oil carries total mass, infer `EPA+DHA = parent_mass * epa_dha_fraction_of_parent` (default 0.5); flags `omega3_dose_source="inferred_from_parent_mass"`
+  - bands: `≥4000`=2.0 (+`PRESCRIPTION_DOSE_OMEGA3`), `≥2000`=1.75, `≥1000`=1.6, `≥500`=1.0, `≥250`=0.5
+  - **Cap rationale**: AHA evidence-based dose for cardiovascular protection is 1g/day. Above that, marginal benefit is unclear and bleeding risk rises (anticoagulant interaction). The 80-pt quality-led model shouldn't be derailed by a single nutrient's dose; prescription-dose products still surface the `PRESCRIPTION_DOSE_OMEGA3` flag for visibility. Bands redistributed within 0–2 to preserve tier differentiation.
+  - parent-mass fallback (Sprint E1.3.3): when EPA/DHA individually NP but parent fish/krill oil carries total mass, infer `EPA+DHA = parent_mass * epa_dha_fraction_of_parent` (default 0.5); flags `omega3_dose_source="inferred_from_parent_mass"`. Krill-oil entries also carry per-form `epa_percent`/`dha_percent` (Aker/Neptune published composition; `confidence_level=inferred`).
+  - opacity transparency: when EPA/DHA bonus is 0 because the omega-class ingredient is buried in an opaque proprietary blend (`disclosure_level=none`), scorer emits `bonus_missed_due_to_opacity=true` + flag `OMEGA3_BONUS_MISSED_OPAQUE_BLEND` so the UI can distinguish "doesn't contain omega-3" from "contains omega-3 but undisclosed".
   - contributes through the Section A category bonus pool
 - **Enzyme recognition bonus** (Sprint E1.3.4, max 2.5 — config-driven):
   - small credit for enzyme-containing products whose individual enzyme doses are labelled NP
@@ -307,14 +309,16 @@ where:
 
 Band table (highest matching threshold wins):
 
-| Threshold (mg/day EPA+DHA) | Score | Label               | Clinical Anchor                                                                     |
-| -------------------------- | ----- | ------------------- | ----------------------------------------------------------------------------------- |
-| ≥ 4000                     | 3.0   | `prescription_dose` | AHA/ACC Rx dose for hypertriglyceridemia; also adds `PRESCRIPTION_DOSE_OMEGA3` flag |
-| ≥ 2000                     | 2.5   | `high_clinical`     | EFSA health claim for blood triglycerides                                           |
-| ≥ 1000                     | 2.0   | `aha_cvd`           | AHA recommendation for CVD patients                                                 |
-| ≥ 500                      | 1.0   | `general_health`    | FDA qualified health claim minimum                                                  |
-| ≥ 250                      | 0.5   | `efsa_ai_zone`      | EFSA Adequate Intake for general population                                         |
-| ≥ 0                        | 0.0   | `below_efsa_ai`     | Below EFSA AI                                                                       |
+| Threshold (mg/day EPA+DHA) | Score | Label               | Clinical Anchor                                                                                              |
+| -------------------------- | ----- | ------------------- | ------------------------------------------------------------------------------------------------------------ |
+| ≥ 4000                     | 2.0   | `prescription_dose` | AHA/ACC Rx dose for hypertriglyceridemia; cap reached, also adds `PRESCRIPTION_DOSE_OMEGA3` flag             |
+| ≥ 2000                     | 1.75  | `high_clinical`     | EFSA health claim for blood triglycerides; clear step above 1g without dominating cap                        |
+| ≥ 1000                     | 1.6   | `aha_cvd`           | AHA recommendation for CVD patients (anchor "high adequacy"; clean separation from 500 mg)                   |
+| ≥ 500                      | 1.0   | `general_health`    | FDA qualified health claim minimum (solid general intake)                                                    |
+| ≥ 250                      | 0.5   | `efsa_ai_zone`      | EFSA Adequate Intake for general population (baseline adequacy)                                              |
+| ≥ 0                        | 0.0   | `below_efsa_ai`     | Below EFSA AI                                                                                                |
+
+> **Cap = 2.0** (clinician decision 2026-05-01). AHA evidence-based dose is 1 g/day; above that, marginal benefit is unclear and bleeding risk rises. Bands redistributed within the 0–2 cap rather than expanding to 3.0. Prescription-dose products still flagged `PRESCRIPTION_DOSE_OMEGA3` for visibility.
 
 Ingredient inclusion rules for the EPA+DHA sum:
 

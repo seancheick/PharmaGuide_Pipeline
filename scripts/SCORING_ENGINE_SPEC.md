@@ -328,7 +328,7 @@ points; multi-strain blends and `tier=None` always contribute 0.
 
 Feeds the Section A category bonus pool (not standalone).
 
-### Omega-3 Dose Bonus (category bonus, max 3)
+### Omega-3 Dose Bonus (category bonus, max 2)
 
 Config: `section_A_ingredient_quality.omega3_dose_bonus`. EPA+DHA daily dose
 adequacy bonus for products with explicit labelled EPA and/or DHA amounts.
@@ -340,12 +340,18 @@ Formerly standalone Section E; now a Section A category bonus.
 
 | min_mg_day | score | label | flag |
 |---|---|---|---|
-| ≥ 4000 | 3.0 | prescription_dose | `PRESCRIPTION_DOSE_OMEGA3` |
-| ≥ 2000 | 2.5 | high_clinical | — |
-| ≥ 1000 | 2.0 | aha_cvd | — |
-| ≥ 500  | 1.0 | general_health | — |
-| ≥ 250  | 0.5 | efsa_ai_zone | — |
-| ≥ 0    | 0.0 | below_efsa_ai | — |
+| ≥ 4000 | 2.0  | prescription_dose | `PRESCRIPTION_DOSE_OMEGA3` |
+| ≥ 2000 | 1.75 | high_clinical | — |
+| ≥ 1000 | 1.6  | aha_cvd | — |
+| ≥ 500  | 1.0  | general_health | — |
+| ≥ 250  | 0.5  | efsa_ai_zone | — |
+| ≥ 0    | 0.0  | below_efsa_ai | — |
+
+**Cap rationale (clinician decision 2026-05-01):** AHA evidence-based dose for cardiovascular protection is 1g/day. Above that, marginal benefit is unclear and bleeding risk rises (anticoagulant interaction). The 80-pt quality-led model shouldn't be derailed by a single nutrient's dose, and prescription-dose products still surface the `PRESCRIPTION_DOSE_OMEGA3` flag for visibility. Bands redistributed within 0–2 to preserve tier differentiation rather than expanding to 3.0.
+
+**Krill-specific composition fields:** krill_oil entries carry per-form `epa_percent` / `dha_percent` (Aker BioMarine + Neptune published composition; ~12-13% EPA, ~7% DHA; `confidence_level=inferred`). Used by the parent-mass fallback when EPA/DHA are not individually labelled but a krill-oil parent mass is.
+
+**Opacity transparency flag:** when EPA/DHA bonus is 0 because the omega-class ingredient is buried in an opaque proprietary blend (`disclosure_level=none`), the scorer emits `bonus_missed_due_to_opacity=true` + flag `OMEGA3_BONUS_MISSED_OPAQUE_BLEND` so the UI can distinguish "doesn't contain omega-3" from "contains omega-3 but undisclosed." This honors the deterministic principle (no estimation) while still surfacing the cause.
 
 **Parent-mass fallback** (`fish_oil_parent_mass_fallback`, enabled): when EPA
 and DHA are individually NP but the parent fish-oil / krill-oil row carries a

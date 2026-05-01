@@ -1485,6 +1485,7 @@ class SupplementScorer:
 
         return {
             "omega3_dose_bonus": round(bonus_score, 2),
+            "max": round(bonus_max, 2),
             "applicable": True,
             "dose_band": dose_band_label,
             "per_day_mid_mg": dose_data.get("per_day_mid"),
@@ -3228,9 +3229,13 @@ class SupplementScorer:
         """
         o3 = section_a.get("omega3_breakdown", {})
         applicable = o3.get("applicable", False)
+        # Read max from omega3_breakdown (embedded by _compute_omega3_dose_bonus)
+        # so legacy display stays in sync with the canonical config max. Falls
+        # back to 2.0 (current canonical cap) when not present.
+        bonus_max = o3.get("max", 2.0) if applicable else 0.0
         result: Dict[str, Any] = {
             "score": section_a.get("omega3_dose_bonus", 0.0),
-            "max": 2.0 if applicable else 0.0,
+            "max": bonus_max,
             "applicable": applicable,
             "_note": "Legacy compat — omega-3 dose is now a category bonus inside Ingredient Quality",
         }
