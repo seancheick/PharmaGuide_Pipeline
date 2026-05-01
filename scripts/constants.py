@@ -62,6 +62,28 @@ UNIT_CONVERSIONS = {
     "kilogram": {"g": 1000, "mg": 1000000, "mcg": 1000000000},
     "ounce": {"g": 28.35, "mg": 28350},
     "pound": {"g": 453.6, "mg": 453600}
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Ingredient names that typically serve as wrappers/carriers for actual actives
@@ -71,6 +93,28 @@ SOURCE_WRAPPER_NAMES = {
     "sheep's wool",
     "wool fat",
     "fish liver oil",  # Sometimes wraps Vitamin A/D
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Nutritional facts that should NOT be treated as supplement ingredients
@@ -224,6 +268,28 @@ EXCLUDED_NUTRITION_FACTS = {
     "ionic plant-based minerals",
     "bioactive enzymes and proteins",
     "digestive aids and enzymes",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Label phrases and headers that should be excluded from ingredient processing
@@ -435,6 +501,28 @@ EXCLUDED_LABEL_PHRASES = {
     "contains 2% or less:",
     "excipients c.s.p.",
     "vitamin k activity",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)
@@ -448,6 +536,28 @@ NUTRITIONAL_WARNING_FIELDS = {
     "sodium_content": ["sodium", "salt"],
     "trans_fat": ["trans fat", "trans fats"],
     "cholesterol": ["cholesterol", "dietary cholesterol"]
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Required fields for RAW DSLD input validation (before cleaning transforms names)
@@ -475,6 +585,28 @@ REQUIRED_FIELDS = {
         "claims",
         "servingSizes"
     ]
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Severity levels
@@ -577,6 +709,28 @@ CERTIFICATION_PATTERNS = {
     "B-Corporation": r"(Certified\s*)?B[\s-]*Corporation|B[\s-]*Corp",
     "Sustainable": r"Sustainably\s*(Sourced|Harvested)",
     "Fair-Trade": r"Fair\s*Trade\s*Certified"
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Enhanced exclusion patterns for non-ingredients
@@ -640,6 +794,28 @@ ALLERGEN_FREE_PATTERNS = {
         r"(peanut[\s-]*free|contains?\s+no\s+.*?peanut|does\s+not\s+contain\s+.*?peanut)"
     ),
     "yeast": r"(yeast[\s-]*free|contains?\s+no\s+.*?yeast|does\s+not\s+contain\s+.*?yeast)"
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Unsubstantiated claim patterns
@@ -774,6 +950,28 @@ FUZZY_MATCHING_THRESHOLDS = {
     "minimum_fuzzy_length": 6,  # Minimum length for fuzzy matching (prevents short false matches)
     "context_window_size": 20,  # Characters around match for context validation
     "parallel_threshold": 10    # Minimum ingredients to use parallel processing
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # NOTE: SCORING_CONSTANTS and EVIDENCE_SCORING were removed (dead code).
@@ -789,6 +987,28 @@ UNIT_ALIASES = {
     "kg": "kilogram",
     "oz": "ounce",
     "lb": "pound"
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Validation and processing thresholds (for batch_processor.py, NOT scoring)
@@ -805,6 +1025,28 @@ VALIDATION_THRESHOLDS = {
     "minimum_accuracy": 75,          # 75%+ for minimum accuracy
     "excellent_mapping": 90.0,       # 90%+ mapping rate for promotion
     "base_score_max": 80             # Maximum base score
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Note: STATUS_* constants defined in "Processing status codes" section above (lines 427-430)
@@ -844,6 +1086,28 @@ NON_THERAPEUTIC_PARENT_DENYLIST = {
     "total omegas", "total fish oil", "fish oil",
     "total omega oil", "total omega oils",
     "total omega-3s", "total omega 3s", "total omega-6s", "total omega 6s", "total omega-9s", "total omega 9s",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Additive types that should be skipped from quality scoring
@@ -860,6 +1124,28 @@ ADDITIVE_TYPES_SKIP_SCORING = {
     "solvent", "carrier",
     "emulsifier", "stabilizer", "thickener",
     "unspecified",  # Generic additive without therapeutic function
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # HIGH-CONFIDENCE blend headers - skip even WITH dose present
@@ -947,6 +1233,28 @@ BLEND_HEADER_EXACT_NAMES = {
     "fruit and vegetable juice blend",
     "72 naturally occurring trace minerals",
     "nas",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # LOW-CONFIDENCE blend headers - only skip if NO DOSE present
@@ -1101,6 +1409,28 @@ EXCIPIENT_NEVER_PROMOTE = {
     # Generic food-as-ingredient patterns
     "fruit powder", "vegetable powder", "veggie powder",
     "whole food powder", "whole foods powder",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Patterns for detecting non-therapeutic food ingredients
@@ -1157,6 +1487,28 @@ PSEUDO_UNITS_INVALID = {
     "n/a", "na", "none", "unknown", "—", "-", "–", "",
     "piece", "pieces", "pack", "packs", "packet", "packets",
     "dose", "doses", "portion", "portions",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Branded ingredient tokens that should be extracted from compound names
@@ -1418,6 +1770,28 @@ BRANDED_INGREDIENT_TOKENS = {
     "paradoxine": "Paradoxine",
     "dhqvital": "DHQVital",
     "ac-11": "AC-11",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Deterministic serving unit normalization map
@@ -1516,6 +1890,28 @@ SERVING_UNIT_NORMALIZATION_MAP = {
     "fl oz": "fl oz",
     "fluid ounce": "fl oz",
     "fluid ounces": "fl oz",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
 
 # Absorption enhancers that may be promoted even without explicit dose
@@ -1539,4 +1935,26 @@ ABSORPTION_ENHANCERS_PROMOTE_EXCEPTION = {
     # NOT be promoted. Only add true branded bioavailability ingredients.)
     "astragin", "astragin extract",
     "micosolle", "micosolle complex",
+    # Group 2A verified blend headers (2026-05-01 audit, trailing-colon + children verified)
+    "sports blend",
+    "sports blend:",
+    "hardcore test amplifier",
+    "hardcore test amplifier:",
+    "energy support blend",
+    "energy support blend:",
+    "joint & skin support",
+    "joint & skin support:",
+    "joint and skin support",
+    "circulatory support complex",
+    "circulatory support complex:",
+    "performance energy & metabolism blend",
+    "performance energy & metabolism blend:",
+    "performance, energy & metabolism blend",
+    "performance, energy & metabolism blend:",
+    "cholesterol support blend",
+    "cholesterol support blend:",
+    "men's health blend",
+    "men's health blend:",
+    "joint & skin support blend",
+    "joint & skin support blend:",
 }
