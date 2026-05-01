@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-01",
-    "total_entries": 476,
+    "total_entries": 480,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -9034,7 +9034,14 @@
       "aliases": [
         "orange oil",
         "cold-pressed orange oil",
-        "Citrus sinensis"
+        "Citrus sinensis",
+        "essence of organic orange (peel) oil",
+        "Essence of organic Orange (peel) oil",
+        "essence of organic orange oil",
+        "organic orange essential oil",
+        "organic orange peel oil",
+        "essential oil of orange",
+        "Essential Oil of Orange"
       ],
       "category": "essential oil",
       "notes": "Citrus sinensis (Rutaceae) peel essential oil. Cold-pressed, containing D-limonene (90-95%). Used as flavoring agent and aromatherapy. GRAS status. Botanical essential oil form.",
@@ -9055,6 +9062,118 @@
         "metabolites": []
       },
       "cui": "C0254751",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "chamomile_essential_oil",
+      "standard_name": "Chamomile Essential Oil",
+      "latin_name": "Matricaria chamomilla",
+      "aliases": [
+        "chamomile oil",
+        "chamomile flower oil",
+        "matricaria chamomilla flowering top oil",
+        "german chamomile oil",
+        "essence of organic chamomile (leaf) oil",
+        "Essence of organic Chamomile (leaf) oil",
+        "essence of organic chamomile oil",
+        "organic chamomile oil",
+        "chamomile essential oil",
+        "essential oil of chamomile"
+      ],
+      "category": "essential oil",
+      "notes": "Matricaria chamomilla (Asteraceae) flower-top essential oil. Distinct from chamomile herb (chamomile entry) — the steam-distilled oil concentrates volatile compounds (chamazulene, alpha-bisabolol, farnesene). Used as flavor and aromatherapy. UNII SA8AR2W4ER (Matricaria chamomilla flowering top oil); generic 'chamomile flower oil' UNII 60F80Z61A9. CUI C0109265.",
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "unii": "SA8AR2W4ER"
+      },
+      "cui": "C0109265",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "bergamot_essential_oil",
+      "standard_name": "Bergamot Essential Oil",
+      "latin_name": "Citrus bergamia",
+      "aliases": [
+        "bergamot oil",
+        "Citrus bergamia",
+        "citrus bergamia leaf oil",
+        "citrus aurantium bergamia (bergamot) leaf oil",
+        "essence of organic bergamot (fruit) oil",
+        "Essence of organic Bergamot (fruit) oil",
+        "essence of organic bergamot oil",
+        "organic bergamot essential oil",
+        "essential oil of bergamot",
+        "bergamot peel oil"
+      ],
+      "category": "essential oil",
+      "notes": "Citrus bergamia (Rutaceae) peel/leaf essential oil. Cold-pressed peel oil contains bergaptene (a furocoumarin), linalyl acetate, and limonene. DISTINCT from citrus_bergamot IQM extract entry (the polyphenolic flavonoid-rich extract used for cardiovascular indications) — the essential oil is a different product class with different chemistry. UNII 39W1PKE3JI (bergamot oil); leaf oil UNII ZVY8741I1V. CUI C0105754. Photosensitivity caution: furocoumarins.",
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "unii": "39W1PKE3JI"
+      },
+      "cui": "C0105754",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "nutmeg_essential_oil",
+      "standard_name": "Nutmeg Essential Oil",
+      "latin_name": "Myristica fragrans",
+      "aliases": [
+        "nutmeg oil",
+        "Myristica fragrans",
+        "myristica fragrans (nutmeg) kernel oil",
+        "nutmeg kernel oil",
+        "essence of organic nutmeg (seed) oil",
+        "Essence of organic Nutmeg (seed) Oil",
+        "essence of organic nutmeg oil",
+        "organic nutmeg essential oil",
+        "essential oil of nutmeg"
+      ],
+      "category": "essential oil",
+      "notes": "Myristica fragrans (Myristicaceae) kernel essential oil. Steam-distilled, containing alpha-pinene, beta-pinene, sabinene, myristicin, and elemicin. Flavor and aromatherapy use. SAFETY: myristicin and elemicin are psychoactive at high oral doses (≥5g whole nutmeg) — supplement-relevant doses are well below; flavor-grade use is GRAS. UNII Z1CLM48948. CUI C0301248.",
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "unii": "Z1CLM48948"
+      },
+      "cui": "C0301248",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "geranium_essential_oil",
+      "standard_name": "Geranium Essential Oil",
+      "latin_name": "Pelargonium graveolens",
+      "aliases": [
+        "geranium oil",
+        "Pelargonium graveolens",
+        "pelargonium graveolens flower oil",
+        "pelargonium graveolens leaf oil",
+        "geranium oil, algerian type",
+        "essence of organic geranium (aerial parts) oil",
+        "Essence of organic Geranium (aerial parts) oil",
+        "essence of organic geranium oil",
+        "organic geranium essential oil",
+        "essential oil of geranium",
+        "rose geranium oil"
+      ],
+      "category": "essential oil",
+      "notes": "Pelargonium graveolens (Geraniaceae) flower/aerial essential oil. Steam-distilled from the rose-geranium cultivar group; main volatiles citronellol, geraniol, linalool, isomenthone. Used as flavor and aromatherapy. NOTE: 'Geranium' as a label term sometimes refers to other Pelargonium species (P. capitatum, P. radens, P. roseum, P. odoratissimum, P. peltatum, P. graveolens × radens, all with their own UNIIs in fda_unii_cache); P. graveolens is the standard commercial source. UNII 3K0J1S7QGC (P. graveolens flower oil). CUI C0304136.",
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "unii": "3K0J1S7QGC"
+      },
+      "cui": "C0304136",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
