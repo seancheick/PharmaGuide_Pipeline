@@ -45279,6 +45279,84 @@
           "range_high": 0.75,
           "quality": "good"
         }
+      },
+      "cetyl myristate": {
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
+        "absorption": "good",
+        "notes": "Hexadecyl tetradecanoate (C30H60O2). Component of the Celadrin / cetylated-fatty-acid complex (CMO complex). Individual clinical evidence is sparse; clinical efficacy data is on the complex as a whole (PubMed: 8 cetylated-fatty-acid RCTs incl. Hesslink 2002). PubChem CID 75779.",
+        "aliases": [
+          "cetyl myristate",
+          "hexadecyl myristate",
+          "hexadecyl tetradecanoate",
+          "cetyl tetradecanoate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good"
+        }
+      },
+      "cetyl laurate": {
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
+        "absorption": "good",
+        "notes": "Hexadecyl dodecanoate (C28H56O2). Component of the Celadrin / cetylated-fatty-acid complex. Evidence base is on the complex. PubChem CID 88709, CAS 20834-06-4.",
+        "aliases": [
+          "cetyl laurate",
+          "hexadecyl laurate",
+          "hexadecyl dodecanoate",
+          "cetyl dodecanoate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good"
+        }
+      },
+      "cetyl oleate": {
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
+        "absorption": "good",
+        "notes": "Hexadecyl (Z)-octadec-9-enoate (C34H66O2). Unsaturated cetyl ester. Component of the Celadrin / cetylated-fatty-acid complex. PubChem CID 5377655, CAS 22393-86-8.",
+        "aliases": [
+          "cetyl oleate",
+          "hexadecyl oleate",
+          "hexadecyl octadec-9-enoate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good"
+        }
+      },
+      "cetyl palmitoleate": {
+        "bio_score": 8,
+        "natural": false,
+        "score": 8,
+        "absorption": "good",
+        "notes": "Hexadecyl (Z)-hexadec-9-enoate (C32H62O2). Unsaturated cetyl ester. Component of the Celadrin / cetylated-fatty-acid complex (closely related to cetyl myristoleate). PubChem CID 5363258, CAS 22393-83-5.",
+        "aliases": [
+          "cetyl palmitoleate",
+          "hexadecyl palmitoleate",
+          "hexadecyl hexadec-9-enoate"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.65,
+          "range_low": 0.55,
+          "range_high": 0.75,
+          "quality": "good"
+        }
       }
     },
     "match_rules": {
@@ -45292,10 +45370,17 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-05-01"
     },
     "category_enum": "fatty_acids",
-    "external_ids": {},
+    "external_ids": {
+      "cas_components": [
+        "2599-01-1",
+        "20834-06-4",
+        "22393-86-8",
+        "22393-83-5"
+      ]
+    },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
