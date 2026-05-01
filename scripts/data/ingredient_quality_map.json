@@ -13297,8 +13297,6 @@
           "probiotic cultures",
           "probiotics",
           "lactococcus lactis strain plasma",
-          "l. lactis",
-          "lactococcus lactis",
           "l lactis",
           "lab4 probiotics",
           "l acidophilus la-5(r) and bifidobacterium bb-12(r)",
@@ -38811,7 +38809,7 @@
       "vitamins"
     ],
     "cleanup_notes": "Resolved within-ingredient alias collisions; removed 63 redundant unspecified forms",
-    "total_entries": 617,
+    "total_entries": 621,
     "total_ingredients": 1322,
     "data_quality": {
       "review_status": "stub"
@@ -62197,5 +62195,185 @@
     "aliases": [
       "bromelain"
     ]
+  },
+  "lactococcus_lactis": {
+    "standard_name": "Lactococcus Lactis",
+    "category": "probiotics",
+    "cui": "C0038408",
+    "forms": {
+      "lactococcus lactis (unspecified)": {
+        "bio_score": 8,
+        "natural": true,
+        "score": 11,
+        "absorption": "moderate colonization (~50%)",
+        "notes": "Lactococcus lactis (formerly Lactobacillus lactis subsp. cremoris/lactis until reclassification). NCBI taxid 1358. Cheese-fermentation organism with documented immunomodulatory and lactic-acid production properties. GRAS status. Generic-strain entry — branded probiotic strains may carry stronger evidence.",
+        "aliases": [
+          "lactococcus lactis",
+          "lactobacillus lactis",
+          "l. lactis",
+          "lc. lactis"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate"
+        },
+        "external_ids": {}
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-01"
+    },
+    "category_enum": "probiotics",
+    "external_ids": {},
+    "rxcui_note": "Lactococcus lactis NCBI taxid 1358; no specific RxNorm concept",
+    "aliases": []
+  },
+  "lactobacillus_crispatus": {
+    "standard_name": "Lactobacillus Crispatus",
+    "category": "probiotics",
+    "cui": "C0317614",
+    "forms": {
+      "lactobacillus crispatus (unspecified)": {
+        "bio_score": 9,
+        "natural": true,
+        "score": 12,
+        "absorption": "moderate colonization vagina/gut",
+        "notes": "Lactobacillus crispatus. NCBI taxid 47770. Dominant healthy-vaginal-microbiome species; multiple RCTs for bacterial vaginosis prevention and recurrence reduction. Strain UALcr-35 is the UAS Labs commercial form; CTV-05 (LACTIN-V) FDA-validated for BV.",
+        "aliases": [
+          "lactobacillus crispatus",
+          "l. crispatus",
+          "lactobacillus crispatus ualcr-35",
+          "ualcr-35"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.6,
+          "range_low": 0.5,
+          "range_high": 0.75,
+          "quality": "good"
+        },
+        "external_ids": {}
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-01"
+    },
+    "category_enum": "probiotics",
+    "external_ids": {},
+    "rxcui_note": "Lactobacillus crispatus NCBI taxid 47770; no specific RxNorm concept",
+    "aliases": []
+  },
+  "lactobacillus_jensenii": {
+    "standard_name": "Lactobacillus Jensenii",
+    "category": "probiotics",
+    "cui": "C0317589",
+    "forms": {
+      "lactobacillus jensenii (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate vaginal colonization",
+        "notes": "Lactobacillus jensenii. NCBI taxid 109790. One of the canonical healthy-vaginal-microbiome species (alongside L. crispatus, L. gasseri, L. iners). Less individually-studied than L. crispatus; commonly co-formulated for women's health.",
+        "aliases": [
+          "lactobacillus jensenii",
+          "l. jensenii"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate"
+        },
+        "external_ids": {}
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-01"
+    },
+    "category_enum": "probiotics",
+    "external_ids": {},
+    "rxcui_note": "Lactobacillus jensenii NCBI taxid 109790; no specific RxNorm concept",
+    "aliases": []
+  },
+  "pediococcus_pentosaceus": {
+    "standard_name": "Pediococcus Pentosaceus",
+    "category": "probiotics",
+    "cui": "C0445656",
+    "forms": {
+      "pediococcus pentosaceus (unspecified)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "moderate gut colonization",
+        "notes": "Pediococcus pentosaceus. NCBI taxid 1255. Lactic-acid bacterium with bacteriocin (pediocin) production for inhibiting pathogens. Clinical evidence is moderate but smaller body than Lactobacillus genera. Strain CUL 15 is the Cultech commercial form.",
+        "aliases": [
+          "pediococcus pentosaceus",
+          "p. pentosaceus",
+          "pediococcus pentosaceus cul 15",
+          "pediococcus pentosaceus (cul 15)",
+          "cul 15",
+          "cul-15"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.5,
+          "range_low": 0.4,
+          "range_high": 0.65,
+          "quality": "moderate"
+        },
+        "external_ids": {}
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.7,
+      "missing_fields": [],
+      "review_status": "validated",
+      "last_reviewed_at": "2026-05-01"
+    },
+    "category_enum": "probiotics",
+    "external_ids": {},
+    "rxcui_note": "Pediococcus pentosaceus NCBI taxid 1255; no specific RxNorm concept",
+    "aliases": []
   }
 }
