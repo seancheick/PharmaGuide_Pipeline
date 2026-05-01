@@ -3874,6 +3874,8 @@
         "notes": "A distinct class of vitamin E found in palm oil, rice bran, and annatto. Emerging research shows tocotrienols (especially delta and gamma forms) have potent antioxidant, neuroprotective, and cholesterol-lowering properties that tocopherols lack. A cutting-edge vitamin E category. Evidence update 2026-04-25 (Batch 13): Vitamin C/E audit — 11 PMIDs WebFetch-verified. CLASS FINDING 1: vit C whole-food superiority is POST-absorption (bioflavonoid retention/recycling per Uchida 2011 PMID:22040889), NOT absolute F — SVCT1 saturable, all ascorbate sources class-equivalent at low doses (Carr & Vissers 2013 PMID:24067392). CLASS FINDING 2: tocotrienols are SEPARATE class from tocopherols — α-TTP affinity only ~12% of RRR-α-tocopherol (Hosomi 1997 PMID:9199513), poor tissue retention. CLASS FINDING 3: pre-absorption hydrolysis recurs for tocopheryl succinate ester (F tracks freed d-alpha-tocopherol). Misattributions caught: \"Yap 2003 tocotrienol\" was rat study (PMID:12625867); \"Carr 2018\" does not exist; \"Padayatty/Levine 2001 PMID:11401949\" wrong paper. Cited evidence: Yap & Yuen 2004 tocotrienol PMID:15288344.",
         "aliases": [
           "palm tocotrienols",
+          "palm fruit tocotrienols",
+          "Palm fruit Tocotrienols",
           "rice bran tocotrienols",
           "mixed tocotrienols",
           "vitamin e tocotrienols",
@@ -13440,7 +13442,9 @@
           "xylooligosaccharide",
           "PreticX XOS prebiotic",
           "PreticX xylooligosaccharide",
-          "prebiotic xylooligosaccharides"
+          "prebiotic xylooligosaccharides",
+          "PreticX Xylooligosacharides",
+          "preticx xylooligosacharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -41260,7 +41264,9 @@
       "eicosapentaenoic acid",
       "epa",
       "epa omega-3",
-      "epa from fish oil"
+      "epa from fish oil",
+      "omega-3 epa",
+      "Omega-3 EPA"
     ],
     "forms": {
       "EPA fish oil ethyl ester": {

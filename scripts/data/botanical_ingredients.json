@@ -5460,7 +5460,11 @@
         "goji",
         "Goji Berry Fruit Extract",
         "Goji Berry Juice, Powder",
-        "Lycium barbarum"
+        "Lycium barbarum",
+        "Lycium barbarum L.",
+        "lycium barbarum l.",
+        "organic Lycium barbarum L.",
+        "organic lycium barbarum l."
       ],
       "category": "fruit",
       "notes": "Lycium barbarum (Solanaceae) fruit. Gou Qi Zi in TCM. Rich in zeaxanthin, Lycium barbarum polysaccharides (LBPs), and betaine. Traditional liver-kidney tonic. Botanical dried fruit powder.",
@@ -10236,6 +10240,8 @@
       "latin_name": "Rubus idaeus",
       "aliases": [
         "raspberry seed concentrate",
+        "raspberry seed concenatrate",
+        "Raspberry seed concenatrate",
         "Rubus idaeus",
         "red raspberry seed oil",
         "raspberry seed oil",
@@ -14216,7 +14222,9 @@
         "rosy polypore",
         "organic rosy polypore",
         "red-belted conk",
-        "red belt conk"
+        "red belt conk",
+        "rosy polyphore",
+        "organic rosy polyphore"
       ],
       "category": "mushroom",
       "notes": "Fomitopsis pinicola (Fomitopsidaceae) red-belted polypore on conifers. Triterpenoid and lanostane content. Used in fermented mushroom blends.",
