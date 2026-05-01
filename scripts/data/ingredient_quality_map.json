@@ -1150,7 +1150,10 @@
           "niacin niacinamide & inositol hexanicotinate",
           "Niacinamide and Niacin",
           "Niacina",
-          "vit b3"
+          "vit b3",
+          "poten-zyme niacinamide",
+          "poten zyme niacinamide",
+          "fermented niacinamide"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -1766,7 +1769,10 @@
           "vitamin b6 activated",
           "activated vitamin b6",
           "vitamin b-6",
-          "vit b6"
+          "vit b6",
+          "poten-zyme vitamin b6",
+          "poten zyme vitamin b6",
+          "fermented vitamin b6"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -7483,7 +7489,9 @@
           "pmf-source citrus flavones",
           "polymethoxyflavones",
           "pmf source citrus flavones",
-          "lemon-lime citrus bioflavonoids"
+          "lemon-lime citrus bioflavonoids",
+          "citrus bioflavonoids 95%",
+          "citrus bioflavonoids 95"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14855,7 +14863,12 @@
           "l-glutamine, micronized",
           "glutamine, micronized",
           "glutamic acid and glutamine",
-          "glutamic acid & glutamine"
+          "glutamic acid & glutamine",
+          "l-glutamine ot2",
+          "l-glutamine, ot2",
+          "glutamine ot2",
+          "pepform glutamine peptides",
+          "pepform glutamine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -21803,7 +21816,6 @@
           "biocore(r) edge",
           "biocore dairy",
           "dairy digestive enzymes",
-          "Lactase Enzyme",
           "DigeZyme",
           "Zygest Lactase enzyme",
           "Fungal Protease",
@@ -21952,13 +21964,11 @@
           "Protease I",
           "ProteaseGL",
           "ProteaseCW",
-          "Alkaline Protease",
           "proteases",
           "protease complex",
           "plant proteases",
           "microbial proteases",
           "dipeptidyl peptidase",
-          "dipeptidyl peptidase iv",
           "dpp-iv",
           "dpp4",
           "endopeptidase",
@@ -22085,7 +22095,27 @@
           "rennet",
           "physioprotease",
           "prolyl endopeptidase",
-          "n-zimes"
+          "n-zimes",
+          "dpp iv protease",
+          "dpp-iv protease",
+          "dipeptidyl peptidase iv",
+          "semi-alkaline protease",
+          "semi alkaline protease",
+          "alkaline protease",
+          "neut. bacterial protease",
+          "neutral bacterial protease",
+          "bacterial protease",
+          "lastase",
+          "lactase enzyme",
+          "protease sp plus blend",
+          "prohydrolase protease blend",
+          "aspergillus melleus protease",
+          "aspergillus oryzae protease",
+          "carbohydrate digestive enzymes",
+          "carbohydrate enzymes",
+          "amylase enzyme",
+          "protease enzyme",
+          "lipase enzyme"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22843,7 +22873,10 @@
           "vegan leucine",
           "L-Leucine, Micronized",
           "L-Leucine, Instantized",
-          "instantized l-leucine"
+          "instantized l-leucine",
+          "l-leucine ot2",
+          "l-leucine, ot2",
+          "leucine ot2"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -40857,7 +40890,6 @@
         "notes": "Bergamot Polyphenolic Fraction — patented extract from Citrus bergamia (Calabria, Italy). Standardized to naringin, neoeriocitrin, and neohesperidin. Clinical RCTs show significant LDL-C and triglyceride reduction at 500-1000 mg/day. H&AD (Herbal & Antioxidant Derivatives) is the patent holder. May improve endothelial function. Evidence update 2026-04-25 (Batch 21): Class-application from Batches 6/10/11/12/15-20. Liposomal forms apply Batch 6/10/15 evidence-thin pattern. Brown rice chelate forms apply Batch 11 marketing finding. Branded clinical-only forms apply Crominex pattern (Batches 16-19). Active coenzymes (P5P) apply Batch 12 dephosphorylation finding. Phytosomes apply Batch 19 bioflavonoid class-poor framework with EMIQ separately SGLT1-absorbed exception. Probiotic strains apply manuka category-error framework (Batch 18) — live organism F = gut survival. Phosphatidylserine branded forms apply ceramide pre-absorption hydrolysis pattern (Batch 20). NO new research; class-equivalent population only.",
         "aliases": [
           "bpf bergamot",
-          "bergamonte",
           "bergavit",
           "bergavit 40 bergamot",
           "bergavit 40 bergamot (citrus bergamia) extract",
@@ -40908,7 +40940,11 @@
           "citrus bergamia",
           "Bergamot Phytosome",
           "bergamot orange extract",
-          "bergamonte citrus bergamot polyphenolic extract"
+          "bergamonte citrus bergamot polyphenolic extract",
+          "melitidin",
+          "neoeriocitrin",
+          "bergamonte",
+          "bergamonte citrus bergamia risso extract complex"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45110,7 +45146,10 @@
           "fucoxanthin",
           "concentrated fucoxanthin",
           "xanthosight oil",
-          "fucoxanthin extract"
+          "fucoxanthin extract",
+          "brown seaweed fucoxanthin",
+          "brown seaweed fucoxanthin concentrate",
+          "fucoxanthin concentrate"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {

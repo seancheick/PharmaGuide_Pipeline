@@ -2051,11 +2051,14 @@
         "butternut bark",
         "juglans cinerea",
         "butternut extract",
-        "white walnut"
+        "white walnut",
+        "butternut squash powder",
+        "butternut squash",
+        "cucurbita moschata"
       ],
       "category": "bark",
       "notes": "Juglans cinerea (Juglandaceae) inner bark. Traditional Eclectic medicine laxative containing juglone and juglandin. Gentle cathartic used for constipation and liver support. Botanical bark powder.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C0330973",
       "functional_roles": [],
