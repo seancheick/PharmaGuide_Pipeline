@@ -3,8 +3,8 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-04-30",
-    "total_entries": 459,
+    "last_updated": "2026-05-01",
+    "total_entries": 468,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -6190,11 +6190,15 @@
         "agaricus blazei",
         "royal sun agaricus",
         "almond mushroom",
-        "brazilian mushroom"
+        "brazilian mushroom",
+        "organic blazei",
+        "blazei",
+        "agaricus blazei murill",
+        "agaricus brasiliensis"
       ],
       "category": "mushroom",
       "notes": "Agaricus blazei (Agaricaceae) fruiting body. Royal Sun agaricus mushroom rich in beta-glucans (beta-1,6-D-glucan). Japanese health food (Himematsutake). Immune-modulating properties. Botanical mushroom powder.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "11MSQ4JG7G"
       },
@@ -7065,11 +7069,16 @@
         "turkey tail",
         "coriolus versicolor",
         "yun zhi",
-        "coriolus (coriolus versicolor) fruiting body extract"
+        "coriolus (coriolus versicolor) fruiting body extract",
+        "organic turkey tails",
+        "organic turkey tails (trametes versicolor) mycelia",
+        "turkey tails",
+        "organic trametes versicolor",
+        "organic kawaratake"
       ],
       "category": "mushroom",
       "notes": "Trametes versicolor (Polyporaceae) fruiting body. Turkey tail mushroom (Japanese: Kawaratake). Contains PSK (polysaccharide-K) and PSP (polysaccharopeptide). Extensively studied in Japan for immune support.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C0319805",
       "functional_roles": [],
@@ -9818,11 +9827,16 @@
         "fu ling",
         "indian bread",
         "Poria (Poria cocos) sclerotium double extract",
-        "Wolfiporia extensa"
+        "Wolfiporia extensa",
+        "fuling",
+        "organic fuling",
+        "organic wolfiporia cocos",
+        "wolfiporia cocos",
+        "fuling mushroom"
       ],
       "category": "mushroom",
       "notes": "Wolfiporia extensa (syn. Poria cocos, Polyporaceae) sclerotium. Fu Ling in TCM, most-used medicinal mushroom in Chinese formulas. Contains pachymic acid and beta-glucans. Qi-tonifying and diuretic.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "XH37TWY5O4"
       },
@@ -13029,11 +13043,15 @@
       "aliases": [
         "polyporus umbellatus",
         "umbrella polypore",
-        "zhu ling mushroom"
+        "zhu ling mushroom",
+        "organic polyporus umbellatus mycelia",
+        "organic polyporus umbellatus",
+        "organic zhuling",
+        "organic zhu ling"
       ],
       "category": "mushroom",
       "notes": "Polyporus umbellatus (Polyporaceae) sclerotium. Zhu Ling in TCM, diuretic mushroom. Contains ergosterol and polysaccharides (beta-glucans). Traditional remedy for edema and urinary difficulty.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C0949605",
       "functional_roles": [],
@@ -13950,6 +13968,209 @@
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "wood_ear_mushroom",
+      "standard_name": "Wood Ear Mushroom",
+      "latin_name": "Auricularia auricula-judae",
+      "aliases": [
+        "auricularia auricula-judae",
+        "auricularia auricula",
+        "auricularia auricular",
+        "organic auricularia auricular",
+        "wood ear",
+        "tree ear",
+        "jew's ear",
+        "mu er",
+        "black wood ear",
+        "auricularia"
+      ],
+      "category": "mushroom",
+      "notes": "Auricularia auricula-judae (Auriculariaceae) gelatinous wood-decay fungus. TCM use for cardiovascular and immune support. Beta-glucan rich. Gardens of Life and other mushroom-blend formulas use mycelium and fruiting body forms.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C1002916",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
+    },
+    {
+      "id": "annulohypoxylon_stygium",
+      "standard_name": "Annulohypoxylon stygium",
+      "latin_name": "Annulohypoxylon stygium",
+      "aliases": [
+        "annulohypoxylon stygium",
+        "annulohypoxylon",
+        "organic annulohypoxylon stygium",
+        "organic annulohypoxylon"
+      ],
+      "category": "mushroom",
+      "notes": "Annulohypoxylon stygium (Xylariaceae) wood-decay ascomycete. Used in commercial mushroom-blend supplements (Garden of Life formulas). Limited individual clinical evidence; included in fermented mushroom complexes.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C1644676",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
+    },
+    {
+      "id": "pink_conk",
+      "standard_name": "Pink Conk",
+      "latin_name": "Fomitopsis cajanderi",
+      "aliases": [
+        "fomitopsis cajanderi",
+        "organic fomitopsis cajanderi",
+        "pink conk",
+        "organic pink conk"
+      ],
+      "category": "mushroom",
+      "notes": "Fomitopsis cajanderi (Fomitopsidaceae) wood-decay polypore. Found in commercial fermented mushroom blends. Limited individual research; contributes triterpenoid and polysaccharide content to multi-mushroom formulas.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C1653464",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
+    },
+    {
+      "id": "rosy_polypore",
+      "standard_name": "Rosy Polypore",
+      "latin_name": "Fomitopsis pinicola",
+      "aliases": [
+        "fomitopsis pinicola",
+        "organic fomitopsis pinicola",
+        "rosy polypore",
+        "organic rosy polypore",
+        "red-belted conk",
+        "red belt conk"
+      ],
+      "category": "mushroom",
+      "notes": "Fomitopsis pinicola (Fomitopsidaceae) red-belted polypore on conifers. Triterpenoid and lanostane content. Used in fermented mushroom blends.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C0319808",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
+    },
+    {
+      "id": "wu_yao",
+      "standard_name": "Wu Yao",
+      "latin_name": "Lindera aggregata",
+      "aliases": [
+        "lindera aggregata",
+        "lindera (lindera aggregata) extract",
+        "lindera aggregata extract",
+        "wu yao",
+        "wu-yao",
+        "lindera root"
+      ],
+      "category": "herb",
+      "notes": "Lindera aggregata (Lauraceae) root. TCM use for digestive and circulatory complaints; contains sesquiterpene lactones. Limited Western clinical data.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C2646199",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "antrodia_camphorata",
+      "standard_name": "Antrodia camphorata",
+      "latin_name": "Antrodia camphorata",
+      "aliases": [
+        "antrodia camphorata",
+        "antrodia cinnamomea",
+        "taiwanofungus camphoratus",
+        "niu chang chih",
+        "niu-chang-chih",
+        "stout camphor fungus"
+      ],
+      "category": "mushroom",
+      "notes": "Antrodia camphorata (= Taiwanofungus camphoratus, Fomitopsidaceae) Taiwanese medicinal mushroom. Triterpenoid- and polysaccharide-rich. Hepatoprotective and immunomodulatory research. Reclassified taxonomically; UMLS uses Taiwanofungus name.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C1650306",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
+    },
+    {
+      "id": "tremella_fuciformis",
+      "standard_name": "Tremella fuciformis",
+      "latin_name": "Tremella fuciformis",
+      "aliases": [
+        "tremella fuciformis",
+        "organic tremella fuciformis mycelia",
+        "white wood ear",
+        "white jelly mushroom",
+        "snow fungus",
+        "yin er",
+        "organic white wood ear"
+      ],
+      "category": "mushroom",
+      "notes": "Tremella fuciformis (Tremellaceae) gelatinous mushroom. TCM and skincare use. Polysaccharides for hydration and immune support.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C1093837",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal"
+      }
+    },
+    {
+      "id": "crateva_nurvala",
+      "standard_name": "Crateva nurvala",
+      "latin_name": "Crateva nurvala",
+      "aliases": [
+        "crateva nurvala",
+        "cratevo three-leaf caper (crateva nurvala) extract",
+        "cratevox three-leaf caper",
+        "varuna",
+        "three-leaf caper",
+        "crataeva nurvala"
+      ],
+      "category": "herb",
+      "notes": "Crateva nurvala (Capparaceae) bark. Ayurvedic urolithic and urinary tract use; contains lupeol and quercetin. Limited Western clinical evidence.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C3436896",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "arugula",
+      "standard_name": "Arugula",
+      "latin_name": "Eruca sativa",
+      "aliases": [
+        "eruca sativa",
+        "arugula",
+        "rocket plant",
+        "rocket plant leaf extract",
+        "rocket leaf",
+        "rocket",
+        "garden rocket",
+        "roquette",
+        "eruca vesicaria sativa",
+        "green leaf sprout-arugula (eruca sativa) powder"
+      ],
+      "category": "vegetable",
+      "notes": "Eruca sativa (Brassicaceae) leafy vegetable. Modern taxonomy treats as Eruca vesicaria subsp. sativa. Glucosinolate content (erucin, glucoerucin); shares cruciferous health properties with broccoli/kale.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C4538278",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
