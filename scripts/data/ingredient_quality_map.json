@@ -297,7 +297,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "81G40H8B0T"
@@ -674,7 +675,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "X66NSO3N35"
@@ -916,7 +918,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "TLM2976OFR"
@@ -1176,7 +1179,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2679MF687A"
@@ -1524,7 +1528,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "19F5HK2737"
@@ -1795,7 +1800,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "KV2JZ1BI6Z"
@@ -2037,7 +2043,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "6SO6U10H04"
@@ -2448,7 +2455,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "cui_note": "Folic acid is the closest ingredient-level UMLS concept for folate supplementation.",
     "external_ids": {
@@ -2688,7 +2696,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "P6YC3EG204"
@@ -3232,7 +3241,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "aliases": [
       "quali-c",
@@ -3755,7 +3765,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9VU1KI44GP"
@@ -4200,7 +4211,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "KP2MW85SSQ"
@@ -4598,7 +4610,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "aliases": [
       "K2 Vital Delta",
@@ -5113,7 +5126,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "SY7Q814VUP"
@@ -5246,7 +5260,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "27YLU75U4W"
@@ -5757,7 +5772,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "aliases": [
       "Magnesium Chelate",
@@ -6257,7 +6273,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "E1UOL152H7"
@@ -6634,7 +6651,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "J41CSQ7QDS"
@@ -6785,7 +6803,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "63POE2M46Y"
@@ -7252,7 +7271,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "aliases": [
       "SelenoExcell",
@@ -7421,7 +7441,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-26",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "8XPW32PR7I"
@@ -7601,7 +7622,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "BD70459I50"
@@ -7866,7 +7888,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9603LN7R2Q"
@@ -8024,7 +8047,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {}
   },
@@ -8089,7 +8113,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "681HV46001"
@@ -8179,7 +8204,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "8L70Q75FXE"
@@ -8329,7 +8355,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-29"
+      "last_reviewed_at": "2026-04-29",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "8617Z5FMF6",
@@ -8427,7 +8454,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-29"
+      "last_reviewed_at": "2026-04-29",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "48268V50D5",
@@ -8492,7 +8520,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-29"
+      "last_reviewed_at": "2026-04-29",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "A77056YJ4K",
@@ -8596,7 +8625,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-29"
+      "last_reviewed_at": "2026-04-29",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "1T6N4D9YV6",
@@ -8684,7 +8714,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-29"
+      "last_reviewed_at": "2026-04-29",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "TJ6XA84OQF"
@@ -8750,7 +8781,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-29"
+      "last_reviewed_at": "2026-04-29",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "PBG27B754G"
@@ -8815,7 +8847,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-29"
+      "last_reviewed_at": "2026-04-29",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "GID333S43J",
@@ -8885,7 +8918,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "968JKA7T33"
@@ -8995,7 +9029,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-19"
+      "last_reviewed_at": "2026-04-19",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "SSZ9HQT61Z",
@@ -9071,7 +9106,8 @@
     "data_quality": {
       "completeness": 0.5,
       "review_status": "needs_review",
-      "last_reviewed_at": "2026-05-01"
+      "last_reviewed_at": "2026-05-01",
+      "research_status": "unverified"
     },
     "confidence_level": "verified",
     "clinical_notes": "Identity verified (UMLS + PubChem). Clinical role and bio_score pending clinician validation — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
@@ -9130,7 +9166,8 @@
     "data_quality": {
       "completeness": 0.5,
       "review_status": "needs_review",
-      "last_reviewed_at": "2026-05-01"
+      "last_reviewed_at": "2026-05-01",
+      "research_status": "unverified"
     },
     "confidence_level": "verified",
     "clinical_notes": "Identity verified (UMLS + PubChem). Clinical role and bio_score pending clinician validation — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
@@ -9248,7 +9285,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "Q369O8926L"
@@ -9592,7 +9630,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "J7WWH9M8QS"
@@ -9710,7 +9749,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "710FLW4U46"
@@ -9797,7 +9837,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "709HYI14M4"
@@ -9998,7 +10039,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "6DU9Y533FA"
@@ -10099,7 +10141,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "4L6452S749"
@@ -10353,7 +10396,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "789U1901C5"
@@ -10632,7 +10676,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0R0008Q3JB"
@@ -10805,7 +10850,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9679TC07X4"
@@ -11173,7 +11219,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "42Z2K6ZL8P"
@@ -11401,7 +11448,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "81AH48963U"
@@ -11620,7 +11668,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -11899,7 +11948,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "aliases": [
       "potassium sulfate",
@@ -12061,7 +12111,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "71M78END5S"
@@ -12347,7 +12398,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "EJ27X76M46"
@@ -12478,7 +12530,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "cui_note": "No confirmed ingredient-level UMLS concept for generic PQQ; current UMLS hits skew to salts, cofactors, or dosage forms.",
@@ -12811,7 +12864,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-27",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "full spectrum curcumin"
@@ -12992,7 +13046,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9IKM0I5T1E"
@@ -13139,7 +13194,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "GAN16C9B8O"
@@ -13207,7 +13263,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "relationships": [
       {
@@ -13493,7 +13550,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -13765,7 +13823,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "89NA02M4RX"
@@ -13939,7 +13998,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "N91BDP6H0X"
@@ -14290,7 +14350,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "394XK0IH40"
@@ -14337,7 +14398,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -14428,7 +14490,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "1EQV5MLY3D"
@@ -14528,7 +14591,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "BDZ3DQM98W"
@@ -14748,7 +14812,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0G389FZZ9M"
@@ -14928,7 +14993,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "aliases": [
       "betaine",
@@ -15077,7 +15143,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0RH81L854J"
@@ -15243,7 +15310,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "94ZLA3W45F"
@@ -15463,7 +15531,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "K3Z4F929H6"
@@ -15714,7 +15783,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "42HK56048U"
@@ -15813,7 +15883,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "K848JZ4886"
@@ -15916,7 +15987,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9DLQ4CIU6V"
@@ -15997,7 +16069,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -16041,7 +16114,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "OF5P57N2ZX"
@@ -16115,7 +16189,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "4QD397987E"
@@ -16215,7 +16290,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "452VLY9402"
@@ -16284,7 +16360,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "3KX376GY7L"
@@ -16446,7 +16523,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "E524N2IXA3"
@@ -16550,7 +16628,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -16597,7 +16676,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "8DUH1N11BX"
@@ -16769,7 +16849,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "cui_note": "Corrected from dosage-form CUI to ingredient-level gamma-aminobutyric acid concept.",
     "aliases": [
@@ -16896,7 +16977,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "11P2JDE17B"
@@ -16996,7 +17078,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "trans-lutein",
@@ -17078,7 +17161,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "CV0IB81ORO"
@@ -17240,7 +17324,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "GA49J4310U"
@@ -17339,7 +17424,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-30"
+      "last_reviewed_at": "2026-03-30",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "U87FK77H25"
@@ -17525,7 +17611,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "aliases": [
       "Arthrospira platensis"
@@ -17690,7 +17777,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -17865,7 +17953,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "S270N0TRQY"
@@ -17928,7 +18017,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -18151,7 +18241,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "73Y7P0K73Y"
@@ -18297,7 +18388,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9H4PO4Z4FT"
@@ -18574,7 +18666,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Withania somnifera",
@@ -18640,7 +18733,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -18749,7 +18843,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -18899,7 +18994,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "19FUJ2C58T"
@@ -19150,7 +19246,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "U946SH95EE"
@@ -19253,7 +19350,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "8021PR16QO"
@@ -19458,7 +19556,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2G86QN327L"
@@ -19628,7 +19727,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "JL5DK93RCL"
@@ -19859,7 +19959,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "N08U5BOQ1K"
@@ -19989,7 +20090,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -20177,7 +20279,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [
@@ -20353,7 +20456,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "RDS2V6DVY5"
@@ -20434,7 +20538,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -20549,7 +20654,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "50JZ5Z98QY"
@@ -20773,7 +20879,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "CUQ3A77YXI"
@@ -20942,7 +21049,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "4N9P6CC1DX"
@@ -21176,7 +21284,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "856YO1Z64F"
@@ -21390,7 +21499,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "V1V998DC17"
@@ -21538,7 +21648,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0MVO31Q3QS"
@@ -21690,7 +21801,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9P2U39H18W"
@@ -21901,7 +22013,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Sambucus nigra",
@@ -22302,7 +22415,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -22373,7 +22487,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "H81695M5OP"
@@ -22432,7 +22547,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "7QWM220FJH"
@@ -22489,7 +22605,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "GFD7C86Q1W"
@@ -22570,7 +22687,8 @@
       "review_status": "reviewed",
       "reviewed_by": "sprint_d1.4",
       "reviewed_date": "2026-04-20",
-      "review_notes": "D1.4: added IQM entry so D-Mannose actives score correctly instead of misrouting to harmful_additives. Cross-DB overlap with harmful_additives (bulk-sweetener misuse) and standardized_botanicals (evidence bonus) is intentional — each DB applies in its context."
+      "review_notes": "D1.4: added IQM entry so D-Mannose actives score correctly instead of misrouting to harmful_additives. Cross-DB overlap with harmful_additives (bulk-sweetener misuse) and standardized_botanicals (evidence bonus) is intentional — each DB applies in its context.",
+      "research_status": "partially_verified"
     },
     "aliases": [],
     "external_ids": {
@@ -22796,7 +22914,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "Class entry spanning multiple NAD+ precursor compounds (NR, NMN, niacin). No single UMLS concept.",
     "cui_status": "no_single_umls_concept",
@@ -22875,7 +22994,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "SB0N2N0WV6"
@@ -22958,7 +23078,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "Corrected from multivitamin product concept to para-aminobenzoic acid ingredient concept.",
     "aliases": [
@@ -23062,7 +23183,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "GMW67QNF9C"
@@ -23146,7 +23268,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "HG18B9YRS7"
@@ -23225,7 +23348,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "04Y7590D77"
@@ -23295,7 +23419,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2ZD004190S"
@@ -23383,7 +23508,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "29VT07BGDA"
@@ -23463,7 +23589,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "Corrected from unrelated DMAE x NHS code to deanol / dimethylaminoethanol ingredient concept.",
     "aliases": [
@@ -23594,7 +23721,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "Corrected from laboratory measurement concept to prasterone / dehydroepiandrosterone ingredient concept.",
     "aliases": [
@@ -23750,7 +23878,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "W2T4YRA9AD"
@@ -23829,7 +23958,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-06"
+      "last_reviewed_at": "2026-03-06",
+      "research_status": "validated"
     },
     "rxcui_note": "No RxCUI assigned for this dietary ingredient / protoalkaloid identity.",
     "external_ids": {
@@ -23908,7 +24038,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "7LP2MPO46S"
@@ -24013,7 +24144,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "Class entry spanning RNA and DNA nucleic acid supplements. No single UMLS concept.",
     "cui_status": "no_single_umls_concept",
@@ -24060,7 +24192,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "81I2215OVK"
@@ -24144,7 +24277,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -24191,7 +24325,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "AS293HR5XQ"
@@ -24259,7 +24394,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "delta6,9,12-cis-gamma-linolenic acid"
@@ -24330,7 +24466,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "P4CEK3495O"
@@ -24389,7 +24526,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "6ZIB13GI33"
@@ -24459,7 +24597,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -24507,7 +24646,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -24559,7 +24699,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -24609,7 +24750,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "4SWT01T54O"
@@ -24672,7 +24814,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {
@@ -24737,7 +24880,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "G960R9S5SK"
@@ -24799,7 +24943,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -24849,7 +24994,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -24903,7 +25049,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -24956,7 +25103,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "BQM438CTEL"
@@ -25021,7 +25169,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "46627O600J"
@@ -25107,7 +25256,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -25159,7 +25309,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -25209,7 +25360,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "7413S0WMH6"
@@ -25271,7 +25423,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "PJ788634QY"
@@ -25335,7 +25488,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "227D367Y57"
@@ -25398,7 +25552,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "81R3X99M15"
@@ -25461,7 +25616,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -25514,7 +25670,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "UZ29E6L2X8"
@@ -25579,7 +25736,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -25629,7 +25787,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "K72T3FS567"
@@ -25704,7 +25863,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "JB24Q0OT9G"
@@ -25766,7 +25926,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -25818,7 +25979,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -25870,7 +26032,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "W41H6S09F4"
@@ -25935,7 +26098,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0RBV727H71"
@@ -26012,7 +26176,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -26065,7 +26230,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "Q6NK5V5B5O",
@@ -26139,7 +26305,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -26186,7 +26353,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Flavone from chamomile, parsley, and celery. CD38 inhibitor (preclinical), GABA-A modulator, emerging NAD+ research.",
     "external_ids": {
@@ -26252,7 +26420,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "C5INA23HXF"
@@ -26332,7 +26501,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "TM5RQ949K7"
@@ -26402,7 +26572,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -26452,7 +26623,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2G52GS8UML"
@@ -26517,7 +26689,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -26568,7 +26741,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "4G6A18707N"
@@ -26633,7 +26807,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "24WE03BX2T"
@@ -26725,7 +26900,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "3G6A5W338E"
@@ -26923,7 +27099,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_single_umls_concept",
     "external_ids": {},
@@ -26975,7 +27152,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "JCX5L7JIC2"
@@ -27054,7 +27232,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -27146,7 +27325,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "00WNZ48OR9"
@@ -27218,7 +27398,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "AMX2I57A98"
@@ -27283,7 +27464,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -27336,7 +27518,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "6287WC5J2L"
@@ -27408,7 +27591,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "EM6MD4AEHE"
@@ -27477,7 +27661,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "K49P2K8WLX"
@@ -27546,7 +27731,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -27596,7 +27782,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "19YRN3ZS9P"
@@ -27667,7 +27854,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "KA46RNI6HN"
@@ -27738,7 +27926,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -27793,7 +27982,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "3T8H1794QW"
@@ -27856,7 +28046,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "C0032615",
@@ -27911,7 +28102,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "AVM951ZWST"
@@ -28010,7 +28202,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "C0012173"
@@ -28060,7 +28253,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -28110,7 +28304,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "295DQC67BJ"
@@ -28186,7 +28381,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -28249,7 +28445,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -28302,7 +28499,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -28351,7 +28549,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "632XD903SP"
@@ -28436,7 +28635,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "HEJ6575V1X"
@@ -28504,7 +28704,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -28560,7 +28761,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "DH2M523P0H"
@@ -28635,7 +28837,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "3K198YD54P"
@@ -28699,7 +28902,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -28749,7 +28953,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "92M5F28TVF"
@@ -28818,7 +29023,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -28873,7 +29079,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0111871I23"
@@ -28957,7 +29164,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "VNM47R2QSQ"
@@ -29021,7 +29229,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "J2R4J4M5NH"
@@ -29098,7 +29307,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "JOS53KRJ01"
@@ -29178,7 +29388,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [
@@ -29233,7 +29444,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [
@@ -29294,7 +29506,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -29343,7 +29556,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -29391,7 +29605,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "1160N9NU9U"
@@ -29516,7 +29731,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0I3V7S25AW"
@@ -29646,7 +29862,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -29720,7 +29937,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -29771,7 +29989,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "D81QY6I88E"
@@ -29833,7 +30052,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9KJL21T0QJ"
@@ -29959,7 +30179,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "KUX1ZNC9J2"
@@ -30024,7 +30245,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "86E2ZU4ETY"
@@ -30087,7 +30309,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -30139,7 +30362,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "N7TD9J649B"
@@ -30204,7 +30428,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_single_umls_concept",
     "external_ids": {},
@@ -30391,7 +30616,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "C0106127",
@@ -30494,7 +30720,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "U71XL721QK"
@@ -30563,7 +30790,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -30611,7 +30839,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -30663,7 +30892,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -30728,7 +30958,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -30781,7 +31012,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "Z9W8997416"
@@ -30841,7 +31073,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_single_umls_concept",
     "external_ids": {},
@@ -30890,7 +31123,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "MQE6XG29YI"
@@ -30957,7 +31191,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "BXI92R2VUJ"
@@ -31044,7 +31279,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "C1GQ844199"
@@ -31106,7 +31342,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -31159,7 +31396,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {
@@ -31246,7 +31484,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "S7946O4P76"
@@ -31354,7 +31593,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -31406,7 +31646,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {
@@ -31509,7 +31750,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "ETJ7Z6XBU4",
@@ -31578,7 +31820,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "C0039294"
@@ -31633,7 +31876,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "OBD445WZ5P"
@@ -31755,7 +31999,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_single_umls_concept",
     "aliases": [
@@ -31809,7 +32054,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -31863,7 +32109,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -31915,7 +32162,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "P3M2575F3F"
@@ -31987,7 +32235,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "3TGX09BD5B"
@@ -32050,7 +32299,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "COL14PJW3X"
@@ -32114,7 +32364,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9M140C3R39"
@@ -32179,7 +32430,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9VP70K75OK"
@@ -32245,7 +32497,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Oils, Volatile"
@@ -32300,7 +32553,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -32381,7 +32635,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0I8H2M0L7N"
@@ -32474,7 +32729,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2KG6QX4W0V"
@@ -32541,7 +32797,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "26R60S6A5I"
@@ -32639,7 +32896,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -32728,7 +32986,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "ZW3Z11D0JV"
@@ -32808,7 +33067,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2H1576D5WG"
@@ -32916,7 +33176,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "4J24DQ0916"
@@ -32996,7 +33257,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "cui_note": "No confirmed exact UMLS concept for larch arabinogalactan as a supplement ingredient.",
@@ -33081,7 +33343,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "7A4S6N2EG2"
@@ -33168,7 +33431,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Velvet of antler"
@@ -33269,7 +33533,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -33338,7 +33603,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "73R90F7MQ8"
@@ -33454,7 +33720,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0I8Y3P32UF"
@@ -33580,7 +33847,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -33645,7 +33913,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "dicalcium phosphate",
@@ -33711,7 +33980,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "AE28F7PNPL"
@@ -33798,7 +34068,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -33866,7 +34137,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "A034SE7857"
@@ -33960,7 +34232,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -34050,7 +34323,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "6DH1W9VH8Q"
@@ -34153,7 +34427,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "WYQ7N0BPYC"
@@ -34366,7 +34641,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "C5529G5JPQ"
@@ -34474,7 +34750,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -34589,7 +34866,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "DUB5K84ELI"
@@ -34683,7 +34961,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "TKD8LH0X2Z"
@@ -34787,7 +35066,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "A1U5YJI0Z8"
@@ -34885,7 +35165,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -34974,7 +35255,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -35058,7 +35340,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI established for Inonotus obliquus as a supplement ingredient",
     "external_ids": {},
@@ -35169,7 +35452,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "8Q1GYP08KU"
@@ -35279,7 +35563,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Lepidium meyenii"
@@ -35379,7 +35664,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -35479,7 +35765,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Conjugated linoleic acid",
@@ -35577,7 +35864,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -35651,7 +35939,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -35832,7 +36121,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "1PRR1V42V5"
@@ -36053,7 +36343,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "cui_note": "Corrected from the bifidum concept to the accepted Bifidobacterium animalis / lactis lineage concept.",
     "external_ids": {
@@ -36235,7 +36526,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9601IVB87J"
@@ -36372,7 +36664,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "QFC21096ON"
@@ -36575,7 +36868,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "831AQW699W"
@@ -36674,7 +36968,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "SA940P2U00"
@@ -36805,7 +37100,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "cui_note": "Corrected from the breve concept to the accepted Bifidobacterium bifidum concept.",
     "external_ids": {
@@ -36887,7 +37183,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [
@@ -36971,7 +37268,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "N1G291SC6Q"
@@ -37047,7 +37345,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27"
+      "last_reviewed_at": "2026-02-27",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "T8F3MOB0CG"
@@ -37157,7 +37456,8 @@
       "completeness": 0.95,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "Z64FK7P217"
@@ -37214,7 +37514,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-06"
+      "last_reviewed_at": "2026-03-06",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -37261,7 +37562,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-06"
+      "last_reviewed_at": "2026-03-06",
+      "research_status": "validated"
     },
     "aliases": [
       "Triticum aestivum"
@@ -37321,7 +37623,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-06"
+      "last_reviewed_at": "2026-03-06",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -37371,7 +37674,8 @@
         "rxcui"
       ],
       "review_status": "pending",
-      "last_reviewed_at": "2026-03-31"
+      "last_reviewed_at": "2026-03-31",
+      "research_status": "unverified"
     },
     "aliases": [],
     "external_ids": {
@@ -39097,7 +39401,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "Z4152N8IUI"
@@ -39155,7 +39460,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "Q80VPU408O"
@@ -39233,7 +39539,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "60M22SGW66"
@@ -39379,7 +39686,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -39422,7 +39730,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "docosapentaenoic acid",
@@ -39468,7 +39777,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "116Z6MZN1M"
@@ -39530,7 +39840,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -39574,7 +39885,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -39617,7 +39929,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_single_umls_concept",
     "external_ids": {},
@@ -39689,7 +40002,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "Corrected from combination product concept to beta-hydroxybutyrate ingredient concept.",
     "aliases": [
@@ -39750,7 +40064,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "taurursodiol",
@@ -39822,7 +40137,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Probiotics"
@@ -40018,7 +40334,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "C0873038"
@@ -40176,7 +40493,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "CS4U38E731",
@@ -40316,7 +40634,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -40463,7 +40782,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "XII14C5FXV"
@@ -40598,7 +40918,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [
@@ -40710,7 +41031,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "K73E24S6X9"
@@ -40831,7 +41153,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "UFH8805FKA"
@@ -40935,7 +41258,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "JWF5YAW3QW"
@@ -41058,7 +41382,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [
@@ -41156,7 +41481,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Bergavit 40",
@@ -41240,7 +41566,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "PM0F263X0Y"
@@ -41413,7 +41740,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "ZAD9OKH9JC"
@@ -41569,7 +41897,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "AAN7QOV9EA"
@@ -41715,7 +42044,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {}
   },
@@ -41814,7 +42144,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {}
   },
@@ -41900,7 +42231,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "V0L00EX1IA"
@@ -42078,7 +42410,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_single_umls_concept",
     "external_ids": {
@@ -42187,7 +42520,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "69VJ1LPN1S"
@@ -42288,7 +42622,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {}
   },
@@ -42369,7 +42704,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {}
   },
@@ -42488,7 +42824,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "BBL281NWFG"
@@ -42636,7 +42973,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {}
   },
@@ -42989,7 +43327,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "XGF7L72M0F"
@@ -43056,7 +43395,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "6Y8XYV2NOF"
@@ -43121,7 +43461,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "L497I37F0C"
@@ -43194,7 +43535,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "NU0OLX06F8"
@@ -43256,7 +43598,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "KU94FIY6JB"
@@ -43396,7 +43739,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -43458,7 +43802,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "FGL3685T2X"
@@ -43532,7 +43877,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -43664,7 +44010,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -43787,7 +44134,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "0E5AT8T16U"
@@ -43856,7 +44204,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {}
@@ -43927,7 +44276,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "205MXS71H7"
@@ -43990,7 +44340,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -44063,7 +44414,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "5M609NV974"
@@ -44129,7 +44481,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "39981FM375"
@@ -44190,7 +44543,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Passiflora",
@@ -44254,7 +44608,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "V95R5KMY2B"
@@ -44342,7 +44697,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "5S29HWU6QB"
@@ -44418,7 +44774,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "253RUG1X1A"
@@ -44487,7 +44844,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "9755T40D11"
@@ -44575,7 +44933,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "61ZBX54883"
@@ -44637,7 +44996,8 @@
     "data_quality": {
       "review_status": "validated",
       "completeness": 0.7,
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "YZS2RPE8LE"
@@ -44710,7 +45070,8 @@
       "review_status": "validated",
       "last_reviewed_at": "2026-02-26",
       "completeness": 0.9,
-      "missing_fields": []
+      "missing_fields": [],
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "47E5O17Y3R"
@@ -44859,7 +45220,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI assigned; Eurycoma longifolia not indexed in UMLS",
     "external_ids": {
@@ -44948,7 +45310,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -45018,7 +45381,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -45085,7 +45449,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "F8XAG1755S"
@@ -45163,7 +45528,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -45252,7 +45618,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "aliases": [
@@ -45303,7 +45670,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "external_ids": {
@@ -45363,7 +45731,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "antioxidants",
     "external_ids": {
@@ -45423,7 +45792,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "antioxidants",
     "external_ids": {
@@ -45480,7 +45850,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "antioxidants",
     "external_ids": {
@@ -45614,7 +45985,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-05-01"
+      "last_reviewed_at": "2026-05-01",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "external_ids": {
@@ -45667,7 +46039,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "functional_foods",
     "aliases": [
@@ -45714,7 +46087,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "proteins",
     "external_ids": {},
@@ -45763,7 +46137,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -45859,7 +46234,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "aliases": [
@@ -45918,7 +46294,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -45962,7 +46339,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -46021,7 +46399,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "27YG812J1I"
@@ -46107,7 +46486,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -46157,7 +46537,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -46205,7 +46586,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "4V59G5UW9X"
@@ -46264,7 +46646,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -46314,7 +46697,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "phytic acid",
@@ -46422,7 +46806,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "cui_status": "no_confirmed_umls_match",
@@ -46477,7 +46862,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "other",
     "aliases": [
@@ -46546,7 +46932,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "antioxidants",
     "external_ids": {
@@ -46602,7 +46989,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -46667,7 +47055,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "cui_status": "no_confirmed_umls_match",
@@ -46717,7 +47106,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -46782,7 +47172,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -46830,7 +47221,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -46917,7 +47309,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "external_ids": {
@@ -46990,7 +47383,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "cui_status": "no_confirmed_umls_match",
@@ -47039,7 +47433,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "4-(p-hydroxyphenyl)-2-butanone"
@@ -47090,7 +47485,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "AB6MNQ6J6L"
@@ -47278,7 +47674,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "56687D1Z4D"
@@ -47339,7 +47736,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "58RXI817UT"
@@ -47397,7 +47795,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -47463,7 +47862,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "7Q50F46595"
@@ -47542,7 +47942,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -47661,7 +48062,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {
@@ -47772,7 +48174,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {}
@@ -47870,7 +48273,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {}
@@ -47985,7 +48389,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "IJ67X351P9"
@@ -48093,7 +48498,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "external_ids": {},
@@ -48194,7 +48600,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "external_ids": {},
@@ -48291,7 +48698,8 @@
       "completeness": 0.8,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "aliases": [
       "Chondrus crispus"
@@ -48389,7 +48797,8 @@
       "completeness": 0.8,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "7CMB6B4449"
@@ -48422,7 +48831,8 @@
     "data_quality": {
       "completeness": 1.0,
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "forms": {
       "natural beta-carotene (from dunaliella salina)": {
@@ -48519,7 +48929,8 @@
     "data_quality": {
       "completeness": 0.8,
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "forms": {
       "guarana standardized extract": {
@@ -48597,7 +49008,8 @@
     "data_quality": {
       "completeness": 0.8,
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "forms": {
       "algae oil (dha)": {
@@ -48704,7 +49116,8 @@
     "data_quality": {
       "completeness": 0.8,
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "apple cider vinegar (unspecified)": {
@@ -48802,7 +49215,8 @@
         "absorption_quantified"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "6R8T1UDM3V"
@@ -48859,7 +49273,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "amino_acids",
     "external_ids": {
@@ -48925,7 +49340,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "antioxidants",
     "external_ids": {
@@ -49008,7 +49424,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "minerals",
     "external_ids": {
@@ -49094,7 +49511,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "amino_acids",
     "external_ids": {
@@ -49241,7 +49659,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "cui_note": "Corrected from a branded oral capsule concept to the hawthorn berry concept.",
@@ -49359,7 +49778,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "cui_note": "Corrected from topical cream product concept to capsaicin ingredient concept.",
@@ -49515,7 +49935,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -49590,7 +50011,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -49666,7 +50088,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "amino_acids",
     "external_ids": {
@@ -49728,7 +50151,8 @@
       "completeness": 0.5,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -49794,7 +50218,8 @@
       "completeness": 0.5,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -49892,7 +50317,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "aliases": [
@@ -50002,7 +50428,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "aliases": [
@@ -50053,7 +50480,8 @@
       "completeness": 0.5,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "aliases": [
@@ -50108,7 +50536,8 @@
       "completeness": 0.5,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "aliases": [
@@ -50170,7 +50599,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "cui_note": "Corrected from monolaurin capsule/tablet product concept to glyceryl 1-laurate ingredient concept.",
@@ -50259,7 +50689,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "category_enum": "herbs",
     "external_ids": {
@@ -50320,7 +50751,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -50374,7 +50806,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -50423,7 +50856,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "description": "Cyclic amino acid metabolite; cognition-supporting supplement",
@@ -50555,7 +50989,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "description": "Calcium salt of pyruvic acid; glycolysis intermediate",
@@ -50621,7 +51056,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "external_ids": {
@@ -50704,7 +51140,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "description": "Short-chain fatty acid (SCFA) produced by gut bacterial fermentation",
@@ -50791,7 +51228,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "description": "Purine nucleoside; ATP biosynthesis intermediate",
@@ -50859,7 +51297,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -50919,7 +51358,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -50967,7 +51407,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51033,7 +51474,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "external_ids": {
@@ -51088,7 +51530,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51175,7 +51618,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "cui_note": "No confirmed exact UMLS concept found for Royal Sun Blazei.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51229,7 +51673,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No confirmed exact UMLS concept found for rhaponticin; search results collapse to rhapontin.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51277,7 +51722,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "external_ids": {
@@ -51337,7 +51783,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "description": "Trace mineral; central atom of vitamin B12 but inorganic form has no separate indication",
@@ -51403,7 +51850,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -51452,7 +51900,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51507,7 +51956,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No confirmed exact UMLS concept found for split gill polypore.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51568,7 +52018,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No confirmed exact UMLS concept found for dimethyl glycine; broad UMLS hits are chemically unrelated.",
     "description": "Methylated amino acid metabolite; choline catabolism intermediate",
@@ -51634,7 +52085,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "external_ids": {
@@ -51698,7 +52150,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51750,7 +52203,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51812,7 +52266,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No confirmed exact UMLS concept found for meshima mushroom.",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -51872,7 +52327,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
@@ -51928,7 +52384,8 @@
       "missing_fields": [],
       "review_status": "validated",
       "last_reviewed_at": "2026-02-28",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -51978,7 +52435,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "Corrected from a branded brewer's yeast concept to the generic Brewer's yeast concept.",
     "aliases": [
@@ -52056,7 +52514,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "E849G4X5YJ"
@@ -52116,7 +52575,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Synthetic isoflavone for postmenopausal bone density preservation",
     "external_ids": {
@@ -52184,7 +52644,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Exercise-induced myokine (beta-aminoisobutyric acid); promotes fat oxidation via PPARa",
     "cui_status": "no_confirmed_umls_match",
@@ -52240,7 +52701,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {
@@ -52289,7 +52751,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -52339,7 +52802,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -52387,7 +52851,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Oxidative metabolite of vitamin C; threonate chelate ligand for magnesium BBB transport",
     "external_ids": {
@@ -52453,7 +52918,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "KD8QND6427"
@@ -52512,7 +52978,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -52563,7 +53030,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Carbonized microporous material for GI adsorption of toxins; emergency medicine standard-of-care",
     "external_ids": {
@@ -52639,7 +53107,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [
@@ -52692,7 +53161,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "IWY3IWX2G8"
@@ -52759,7 +53229,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "L9153EKV2Y"
@@ -52822,7 +53293,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -52880,7 +53352,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-09"
+      "last_reviewed_at": "2026-03-09",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -52929,7 +53402,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "D9108TZ9KG"
@@ -52999,7 +53473,8 @@
     "data_quality": {
       "completeness": 0.5,
       "review_status": "reviewed",
-      "last_reviewed_at": "2026-05-01"
+      "last_reviewed_at": "2026-05-01",
+      "research_status": "partially_verified"
     },
     "confidence_level": "inferred",
     "aliases": [
@@ -53056,7 +53531,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "DJO934BRBD"
@@ -53116,7 +53592,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
@@ -53164,7 +53641,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Non-essential alkali metal trace element; no established dietary role",
     "external_ids": {
@@ -53225,7 +53703,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "1,3-dimethylxanthine; naturally in tea/cacao; pharmaceutical bronchodilator with narrow therapeutic index",
     "severity_level": "caution",
@@ -53305,7 +53784,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Synthetic nootropic (meclofenoxate); DMAE ester — FDA-classified unapproved drug in supplements",
     "severity_level": "caution",
@@ -53375,7 +53855,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -53422,7 +53903,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "aliases": [
       "Piptoporus betulinus"
@@ -53474,7 +53956,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Heavy metal GI agent (Pepto-Bismol); topical antimicrobial vs H. pylori",
     "external_ids": {
@@ -53541,7 +54024,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "description": "Volcanic ash smectite clay; GI adsorption of mycotoxins/pathogens",
     "external_ids": {
@@ -53608,7 +54092,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {
@@ -53648,7 +54133,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "taxifolin (unspecified)": {
@@ -53709,7 +54195,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "aloe ferox (unspecified)": {
@@ -53760,7 +54247,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "pau d'arco (unspecified)": {
@@ -53827,7 +54315,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "noni (unspecified)": {
@@ -53880,7 +54369,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "goji berry (unspecified)": {
@@ -53940,7 +54430,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "african mango (unspecified)": {
@@ -53994,7 +54485,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "chanca piedra (unspecified)": {
@@ -54049,7 +54541,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "l-norvaline (unspecified)": {
@@ -54111,7 +54604,8 @@
         "detailed_scores"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "forms": {
       "theaflavins (unspecified)": {
@@ -54197,7 +54691,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -54247,7 +54742,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -54318,7 +54814,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -54392,7 +54889,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -54458,7 +54956,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -54511,7 +55010,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -54580,7 +55080,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -54630,7 +55131,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "aliases": [
@@ -54692,7 +55194,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -54753,7 +55256,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "aliases": [
@@ -54824,7 +55328,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No confirmed ingredient-level UMLS concept for yeast fermentate; UMLS hits skew to device terms.",
     "cui_status": "no_confirmed_umls_match",
@@ -54882,7 +55387,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -54947,7 +55453,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No confirmed exact UMLS concept found for maqui berry.",
     "cui_status": "no_confirmed_umls_match",
@@ -55040,7 +55547,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -55090,7 +55598,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -55140,7 +55649,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -55201,7 +55711,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -55266,7 +55777,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -55330,7 +55842,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -55383,7 +55896,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "Corrected from allergenic extract concept to Vigna radiata plant concept.",
     "aliases": [
@@ -55451,7 +55965,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No confirmed exact UMLS concept found for French oak extract.",
     "cui_status": "no_confirmed_umls_match",
@@ -55508,7 +56023,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -55557,7 +56073,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -55619,7 +56136,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No confirmed exact UMLS concept found for purple tea extract.",
     "cui_status": "no_confirmed_umls_match",
@@ -55670,7 +56188,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {},
@@ -55719,7 +56238,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -55788,7 +56308,8 @@
     "data_quality": {
       "completeness": 0.2,
       "last_reviewed_at": "2026-02-28",
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "cui_note": "No UMLS CUI for supplement ingredient",
     "external_ids": {
@@ -55850,7 +56371,8 @@
     "data_quality": {
       "completeness": 0.2,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "5Z33R5TKO7"
@@ -55933,7 +56455,8 @@
     "data_quality": {
       "completeness": 0.2,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "unverified"
     },
     "external_ids": {},
     "aliases": []
@@ -55987,7 +56510,8 @@
     "data_quality": {
       "completeness": 0.2,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "unverified"
     },
     "external_ids": {},
     "aliases": [
@@ -56108,7 +56632,8 @@
     "data_quality": {
       "completeness": 0.4,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-25"
+      "last_reviewed_at": "2026-02-25",
+      "research_status": "unverified"
     },
     "external_ids": {},
     "aliases": []
@@ -56199,7 +56724,8 @@
     "data_quality": {
       "completeness": 0.3,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-25"
+      "last_reviewed_at": "2026-02-25",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "J7I2T6IV1N"
@@ -56283,7 +56809,8 @@
     "data_quality": {
       "completeness": 0.3,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-25"
+      "last_reviewed_at": "2026-02-25",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "54C8E6W6JY"
@@ -56373,7 +56900,8 @@
     "data_quality": {
       "completeness": 0.3,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-25"
+      "last_reviewed_at": "2026-02-25",
+      "research_status": "unverified"
     },
     "aliases": [
       "Auricularia",
@@ -56479,7 +57007,8 @@
       "completeness": 0.4,
       "review_status": "stub",
       "last_reviewed_at": "2026-02-25",
-      "last_reviewed": "2026-02-28"
+      "last_reviewed": "2026-02-28",
+      "research_status": "unverified"
     },
     "external_ids": {},
     "aliases": [
@@ -56577,7 +57106,8 @@
     "data_quality": {
       "completeness": 0.4,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-25"
+      "last_reviewed_at": "2026-02-25",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "065C5D077J"
@@ -56663,7 +57193,8 @@
     "data_quality": {
       "completeness": 0.3,
       "review_status": "stub",
-      "last_reviewed_at": "2026-02-25"
+      "last_reviewed_at": "2026-02-25",
+      "research_status": "unverified"
     },
     "cui_status": "no_single_umls_concept",
     "external_ids": {},
@@ -56708,7 +57239,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -56767,7 +57299,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-28"
+      "last_reviewed_at": "2026-02-28",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [
@@ -56865,7 +57398,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-26"
+      "last_reviewed_at": "2026-02-26",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "8W94T9026R"
@@ -56979,7 +57513,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-27",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57103,7 +57638,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-27",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57160,7 +57696,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-28",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57222,7 +57759,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-28",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57279,7 +57817,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-28",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57354,7 +57893,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-27",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57514,7 +58054,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-27",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57599,7 +58140,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-27",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57654,7 +58196,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-28",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "external_ids": {
@@ -57708,7 +58251,8 @@
     "category_enum": "probiotics",
     "data_quality": {
       "last_reviewed_at": "2026-02-28",
-      "review_status": "validated"
+      "review_status": "validated",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS CUI for species-level probiotic parent",
     "rxcui_note": "No RxNorm concept for probiotic species",
@@ -57761,7 +58305,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-03"
+      "last_reviewed_at": "2026-03-03",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "K3D86KJ24N"
@@ -57852,7 +58397,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-09"
+      "last_reviewed_at": "2026-03-09",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
@@ -57919,7 +58465,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-08"
+      "last_reviewed_at": "2026-03-08",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS entry for botanical/novel compound",
@@ -57979,7 +58526,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-09"
+      "last_reviewed_at": "2026-03-09",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "cui_note": "No confirmed exact UMLS concept found for extra virgin olive oil without collapsing to a broader olive oil term.",
@@ -58066,7 +58614,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-08"
+      "last_reviewed_at": "2026-03-08",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "external_ids": {}
@@ -58134,7 +58683,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-08"
+      "last_reviewed_at": "2026-03-08",
+      "research_status": "validated"
     },
     "cui_note": "No UMLS entry for botanical/novel compound",
     "external_ids": {
@@ -58187,7 +58737,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-13"
+      "last_reviewed_at": "2026-03-13",
+      "research_status": "validated"
     },
     "cui_note": "No dedicated UMLS entry used for supplement stereoisomer mapping",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
@@ -58236,7 +58787,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-13"
+      "last_reviewed_at": "2026-03-13",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -58264,7 +58816,8 @@
       "completeness": 0.6,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-13"
+      "last_reviewed_at": "2026-03-13",
+      "research_status": "validated"
     },
     "forms": {
       "trans-geranylgeraniol": {
@@ -58333,7 +58886,8 @@
       "completeness": 0.95,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-16"
+      "last_reviewed_at": "2026-03-16",
+      "research_status": "validated"
     },
     "category_enum": "fatty_acids",
     "cui_note": "No UMLS concept linked in this DB entry",
@@ -58393,7 +58947,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-16"
+      "last_reviewed_at": "2026-03-16",
+      "research_status": "validated"
     },
     "category_enum": "minerals",
     "cui_note": "No confirmed exact UMLS concept found for Shuddha Laksha.",
@@ -58446,7 +59001,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-16"
+      "last_reviewed_at": "2026-03-16",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -58488,7 +59044,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-16"
+      "last_reviewed_at": "2026-03-16",
+      "research_status": "validated"
     },
     "cui_status": "no_confirmed_umls_match",
     "external_ids": {
@@ -58549,7 +59106,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-16"
+      "last_reviewed_at": "2026-03-16",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -58591,7 +59149,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-16"
+      "last_reviewed_at": "2026-03-16",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "77OAK567AO"
@@ -58636,7 +59195,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-17"
+      "last_reviewed_at": "2026-03-17",
+      "research_status": "validated"
     },
     "forms": {
       "standard krill oil": {
@@ -58771,7 +59331,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-17"
+      "last_reviewed_at": "2026-03-17",
+      "research_status": "validated"
     },
     "forms": {
       "OptiBerry IH141": {
@@ -58846,7 +59407,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-03-25"
+      "last_reviewed_at": "2026-03-25",
+      "research_status": "validated"
     },
     "aliases": [
       "xylitol",
@@ -58922,7 +59484,8 @@
         "unii"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59010,7 +59573,8 @@
         "unii"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59078,7 +59642,8 @@
         "cas"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59145,7 +59710,8 @@
       "completeness": 0.95,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59213,7 +59779,8 @@
       "completeness": 0.95,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59399,7 +59966,8 @@
         "unii"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59470,7 +60038,8 @@
         "cas"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [
       "C1457892"
@@ -59544,7 +60113,8 @@
         "unii"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59609,7 +60179,8 @@
         "unii"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59663,7 +60234,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59733,7 +60305,8 @@
         "unii"
       ],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-03"
+      "last_reviewed_at": "2026-04-03",
+      "research_status": "validated"
     },
     "aliases": [],
     "external_ids": {
@@ -59789,7 +60362,8 @@
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "SST07NLK7J",
@@ -59861,7 +60435,8 @@
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "9RMU91N5K2",
@@ -59937,7 +60512,8 @@
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "T538276W1L"
@@ -60003,7 +60579,8 @@
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "2334LJD2E9",
@@ -60036,7 +60613,8 @@
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "4VBP01X99F",
@@ -60110,7 +60688,8 @@
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "X43D4L3DQC"
@@ -60159,7 +60738,8 @@
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "G025DAL7CE"
@@ -60210,7 +60790,8 @@
     "data_quality": {
       "completeness": 0.8,
       "missing_fields": [],
-      "review_status": "stub"
+      "review_status": "stub",
+      "research_status": "unverified"
     },
     "external_ids": {
       "unii": "824G7B958Y"
@@ -60302,7 +60883,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": [],
@@ -60359,7 +60941,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2UMI9U37CP"
@@ -60410,7 +60993,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2968PHW8QP"
@@ -60461,7 +61045,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "731P2LE49E"
@@ -60509,7 +61094,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -60558,7 +61144,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "HN5425SBF2"
@@ -60611,7 +61198,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "00J9J9XKDE"
@@ -60663,7 +61251,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "L7HT8F1ZOD"
@@ -60715,7 +61304,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "3W1JG795YI"
@@ -60768,7 +61358,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -60820,7 +61411,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "331KBJ17RK"
@@ -60873,7 +61465,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "61H4T033E5"
@@ -60925,7 +61518,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "R60QEP13IC"
@@ -60978,7 +61572,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "209B6YPZ4I"
@@ -61028,7 +61623,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "HB6PN45W4J"
@@ -61085,7 +61681,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-14"
+      "last_reviewed_at": "2026-04-14",
+      "research_status": "validated"
     },
     "external_ids": {},
     "aliases": []
@@ -61127,7 +61724,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-19"
+      "last_reviewed_at": "2026-04-19",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "Q32ZN48698",
@@ -61208,7 +61806,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-19"
+      "last_reviewed_at": "2026-04-19",
+      "research_status": "validated"
     },
     "external_ids": {},
     "gsrs": {
@@ -61275,7 +61874,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-19"
+      "last_reviewed_at": "2026-04-19",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "2V16EO95H1",
@@ -61344,7 +61944,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "LYR4M0NH37",
@@ -61417,7 +62018,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "268IL53Q7O"
@@ -61480,7 +62082,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "ZS98O42YBB"
@@ -61541,7 +62144,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic strain.",
@@ -61600,7 +62204,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic strain.",
@@ -61665,7 +62270,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic strain.",
@@ -61724,7 +62330,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic strain.",
@@ -61783,7 +62390,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic strain.",
@@ -61842,7 +62450,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic strain.",
@@ -61901,7 +62510,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -61961,7 +62571,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -62020,7 +62631,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -62080,7 +62692,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -62140,7 +62753,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -62200,7 +62814,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -62259,7 +62874,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -62319,7 +62935,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -62379,7 +62996,8 @@
       "completeness": 0.85,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic/fermentation microorganism.",
@@ -62445,7 +63063,8 @@
       "completeness": 0.9,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-20"
+      "last_reviewed_at": "2026-04-20",
+      "research_status": "validated"
     },
     "external_ids": {},
     "rxcui_note": "No RxCUI assigned — probiotic strain.",
@@ -62506,7 +63125,8 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-04-30"
+      "last_reviewed_at": "2026-04-30",
+      "research_status": "validated"
     },
     "external_ids": {
       "unii": "U182GP2CF3",
@@ -62554,7 +63174,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-05-01"
+      "last_reviewed_at": "2026-05-01",
+      "research_status": "validated"
     },
     "category_enum": "probiotics",
     "external_ids": {},
@@ -62599,7 +63220,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-05-01"
+      "last_reviewed_at": "2026-05-01",
+      "research_status": "validated"
     },
     "category_enum": "probiotics",
     "external_ids": {},
@@ -62642,7 +63264,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-05-01"
+      "last_reviewed_at": "2026-05-01",
+      "research_status": "validated"
     },
     "category_enum": "probiotics",
     "external_ids": {},
@@ -62691,7 +63314,8 @@
       "completeness": 0.7,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-05-01"
+      "last_reviewed_at": "2026-05-01",
+      "research_status": "validated"
     },
     "category_enum": "probiotics",
     "external_ids": {},

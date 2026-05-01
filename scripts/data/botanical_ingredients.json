@@ -13402,7 +13402,8 @@
       "last_updated": "2026-04-03",
       "data_quality": {
         "completeness": 0.7,
-        "review_status": "validated"
+        "review_status": "validated",
+        "research_status": "validated"
       },
       "external_ids": {
         "unii": "EQU1BON34S"
@@ -13428,7 +13429,8 @@
       "last_updated": "2026-04-03",
       "data_quality": {
         "completeness": 0.7,
-        "review_status": "validated"
+        "review_status": "validated",
+        "research_status": "validated"
       },
       "external_ids": {
         "unii": "N91637DNW9"
@@ -13453,7 +13455,8 @@
       "last_updated": "2026-04-03",
       "data_quality": {
         "completeness": 0.7,
-        "review_status": "validated"
+        "review_status": "validated",
+        "research_status": "validated"
       },
       "external_ids": {},
       "functional_roles": [],
@@ -13476,7 +13479,8 @@
       "last_updated": "2026-04-03",
       "data_quality": {
         "completeness": 0.7,
-        "review_status": "validated"
+        "review_status": "validated",
+        "research_status": "validated"
       },
       "external_ids": {
         "unii": "831MQ9808D"
@@ -13501,7 +13505,8 @@
       "last_updated": "2026-04-03",
       "data_quality": {
         "completeness": 0.7,
-        "review_status": "validated"
+        "review_status": "validated",
+        "research_status": "validated"
       },
       "external_ids": {},
       "functional_roles": [],

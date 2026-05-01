@@ -617,6 +617,11 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
     valid_priorities = {0, 1, 2}
     valid_abs_quality = {"unknown", "poor", "low", "moderate", "good", "very_good", "excellent", "variable"}
     valid_review_statuses = {"stub", "draft", "reviewed", "verified", "validated", "needs_review", "pending", "provisional"}
+    # research_status — 2026-05-01 clinician policy: more actionable
+    # replacement for the vague "stub" review_status. New entries should
+    # set research_status; legacy entries still on review_status are
+    # being migrated. See CLINICAL_DECISIONS_LOG.md.
+    valid_research_statuses = {"unverified", "partially_verified", "validated"}
 
     ingredient_keys = [k for k in data.keys() if not str(k).startswith("_")]
     for ing_key in ingredient_keys:
@@ -650,6 +655,10 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
             rs = dq.get("review_status")
             if rs is not None and rs not in valid_review_statuses:
                 findings.append(Finding("warning", file, f"{ing_key}.data_quality.review_status", "enum_value_not_supported", "|".join(sorted(valid_review_statuses)), str(rs)))
+            # research_status — new field; not yet required on all entries
+            rsh = dq.get("research_status")
+            if rsh is not None and rsh not in valid_research_statuses:
+                findings.append(Finding("error", file, f"{ing_key}.data_quality.research_status", "enum_value_not_supported", "|".join(sorted(valid_research_statuses)), str(rsh)))
             comp = dq.get("completeness")
             if comp is not None and not isinstance(comp, (int, float)):
                 findings.append(Finding("warning", file, f"{ing_key}.data_quality.completeness", "type_mismatch", "number", _type_name(comp)))
