@@ -114,6 +114,57 @@ Key behavior:
 - intentional-null entries should carry both `cui_status` and `cui_note`
 - `--apply` remains conservative and only writes safe exact-match fills by default
 
+### `audit_species_alignment.py`
+
+Purpose:
+
+- Cross-species/chemistry alias-alignment audit across all reference data files.
+- Catches two failure classes:
+  - SAME_GENUS_DIFFERENT_SPECIES — alias has 'Genus species2' on entry whose primary binomial is 'Genus species1' (the Myrica cerifera vs Myrica rubra pattern).
+  - CROSS_GENUS — alias has a binomial whose genus differs from entry's stated genus (the butternut tree Juglans cinerea vs butternut squash Cucurbita moschata family-level pattern).
+
+Inputs:
+
+- `scripts/data/botanical_ingredients.json`
+- `scripts/data/ingredient_quality_map.json`
+- `scripts/data/harmful_additives.json`
+- `scripts/data/banned_recalled_ingredients.json`
+- `scripts/data/standardized_botanicals.json`
+- `scripts/data/other_ingredients.json`
+
+Outputs:
+
+- Stdout report grouped by file with SAME_GENUS (high risk) and CROSS_GENUS (review) findings.
+- Each candidate must be hand-verified via `verify_cui.py` — false positives are common (taxonomy synonyms, regex-parsed word pairs).
+
+Common commands:
+
+```bash
+python3 scripts/api_audit/audit_species_alignment.py
+python3 scripts/api_audit/audit_species_alignment.py --file botanical_ingredients.json
+python3 scripts/api_audit/audit_species_alignment.py --strict   # release gate; exit 1 if SAME_GENUS issues remain
+```
+
+Audit history:
+
+- 2026-05-01 found 6 real chemistry violations across botanical_ingredients.json (Myrica cerifera/rubra, chopchini, sarsaparilla, catjang_cowpea, butternut tree/squash) and ingredient_quality_map.json (auricularia genus-level CUI). All fixed in commits 4efa6be, ba8fbe3, 295520a, 78fe738.
+
+Known false positives in current data (do NOT treat as findings):
+
+- `aloe_vera` — Aloe barbadensis ↔ Aloe vera (taxonomy synonyms, same plant)
+- `andrographis` — regex parses "Andrographis aerial parts extract" as binomial "Andrographis aerial"
+- `astragalus_root` — alias "Astragalus membranaceous" is a Latin spelling typo of correct "membranaceus", same plant
+- `carrot` — Daucus carota ↔ Daucus sativus (taxonomy synonyms)
+- `polypodium_vulgare` — alias "Polypodium vulgar powder" is typo of "vulgare"
+- `auricularia` (IQM) — description deliberately mentions A. polytricha as DISTINCT species for clinician clarity; regex picks it up
+- `PII_SACCHAROMYCES_CEREVISIAE` — aliases include intentional misspellings ("cerevisae", "cereviseiae") for typo-tolerant matching
+
+Use it when:
+
+- adding new botanicals/probiotics/IQM entries (release gate before ship)
+- after large alias-batch additions
+- as a quarterly drift check across reference data
+
 ### `audit_banned_recalled_accuracy.py`
 
 Purpose:
