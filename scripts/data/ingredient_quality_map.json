@@ -7482,7 +7482,8 @@
           "citrus bioflavonoid-rutin complex",
           "pmf-source citrus flavones",
           "polymethoxyflavones",
-          "pmf source citrus flavones"
+          "pmf source citrus flavones",
+          "lemon-lime citrus bioflavonoids"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12165,7 +12166,11 @@
           "coq10 complex",
           "ubiquinone complex",
           "Microactive",
-          "microactive technology"
+          "microactive technology",
+          "raw food-created co-enzyme q10",
+          "raw food-created coenzyme q10",
+          "food-created coenzyme q10",
+          "food-created coq10"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -12628,7 +12633,9 @@
           "curcuminoid II",
           "liposomal curcumin",
           "curcumin and other curcuminoids",
-          "curcumin & other curcuminoids"
+          "curcumin & other curcuminoids",
+          "bisdemethoxy curcumin",
+          "demethoxy curcumin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -24224,7 +24231,10 @@
           "flavones supplement",
           "plant flavones supplement",
           "citrus flavones supplement",
-          "flavone complex supplement"
+          "flavone complex supplement",
+          "citrus polymethoxylated flavones",
+          "pmf",
+          "pmfs"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -58574,7 +58584,11 @@
           "glycocyamine",
           "gaa",
           "micronized guanidinoacetate",
-          "n-amidinoglycine"
+          "n-amidinoglycine",
+          "guanidoacetic acid",
+          "guanido-acetic acid",
+          "guanidoacetic",
+          "n-amidino glycine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
