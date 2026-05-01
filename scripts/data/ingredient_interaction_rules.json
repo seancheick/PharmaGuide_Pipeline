@@ -923,8 +923,7 @@
           "mechanism": "Fenugreek is one of the most widely used galactagogues globally. Proposed mechanism involves stimulation of sweat glands (structurally similar to mammary glands) via phytoestrogens, and possibly dopaminergic pathways affecting prolactin. While some women report increased milk volume, a 2022 Australian cross-sectional survey found widespread use with incomplete evidence of efficacy. Fenugreek's volatile compounds (diosgenin, 4-hydroxyisoleucine) are excreted in breast milk and may cause GI upset (colic, diarrhea, unusual maple-syrup body odor) in the nursing infant.",
           "action": "Fenugreek is widely used as a galactagogue but evidence for efficacy is inconsistent. If used, monitor nursing infant for GI symptoms (excessive gas, diarrhea, colic). Do not use in infants with maple syrup urine disease family history. Avoid doses >3g/day without lactation consultant guidance.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/35236166/",
-            "https://pubmed.ncbi.nlm.nih.gov/12192964/"
+            "https://pubmed.ncbi.nlm.nih.gov/35236166/"
           ],
           "alert_headline": "Not recommended during pregnancy",
           "alert_body": "Fenugreek has uterotonic activity and can lower maternal blood sugar. If you are pregnant, talk to your obstetrician; during breastfeeding, use under clinician guidance for milk-supply support.",
@@ -2419,8 +2418,7 @@
           "mechanism": "St. John's Wort induces CYP3A4 and P-glycoprotein, reducing plasma levels of calcium channel blockers (nifedipine, amlodipine, verapamil) and potentially other antihypertensives.",
           "action": "Avoid if taking calcium channel blockers or other CYP3A4-metabolized BP medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/st-johns-wort",
-            "https://pubmed.ncbi.nlm.nih.gov/24472406/"
+            "https://www.nccih.nih.gov/health/st-johns-wort"
           ],
           "alert_headline": "Caution with high blood pressure",
           "alert_body": "St John's Wort can influence blood pressure. If you have high blood pressure, talk to your clinician before adding St John's Wort and monitor your readings.",
@@ -2677,8 +2675,7 @@
           "mechanism": "Retinol (preformed vitamin A) is stored in hepatic stellate cells (Ito cells) as retinyl esters. Chronic liver disease impairs retinol clearance and stellate cell function, causing accumulation even at doses below standard UL. Hypervitaminosis A induces stellate cell hypertrophy and proliferation, leading to progressive fibrosis, non-cirrhotic portal hypertension, and eventual cirrhosis. CYP2E1 induction (common in alcoholic liver disease) enhances retinol hepatotoxicity via microsomal oxidative activation. Clinically relevant injury has been reported at supplemental doses ≥25,000 IU/day in individuals with underlying liver disease.",
           "action": "Limit supplemental preformed vitamin A (retinol/retinyl esters) to ≤5,000 IU/day in patients with liver disease. Beta-carotene is preferred. Monitor LFTs and clinical signs of hypervitaminosis (hepatomegaly, ascites). Avoid multivitamins with high retinol doses.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/2103414/",
-            "https://pubmed.ncbi.nlm.nih.gov/12579996/"
+            "https://pubmed.ncbi.nlm.nih.gov/2103414/"
           ],
           "alert_headline": "Caution with liver disease",
           "alert_body": "Vitamin A is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Vitamin A.",
@@ -3178,7 +3175,8 @@
           "mechanism": "Caulophyllum thalictroides contains caulosaponin and methylcytisine, which stimulate uterine contractions. Case reports document neonatal stroke, heart failure, and multi-organ injury following maternal use near term.",
           "action": "Do not use during pregnancy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/blue-cohosh"
+            "https://www.nccih.nih.gov/health/blue-cohosh",
+            "https://pubmed.ncbi.nlm.nih.gov/15070161/"
           ],
           "alert_headline": "Do not use during pregnancy",
           "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
@@ -3259,7 +3257,7 @@
           "mechanism": "Ruta graveolens contains furanoquinoline alkaloids (dictamnine, skimmianine) and furanocoumarins with established abortifacient activity. Animal studies confirm embryotoxic and teratogenic effects at moderate doses.",
           "action": "Do not use during pregnancy.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/19146936/"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "alert_headline": "Do not use during pregnancy",
           "alert_body": "Rue has established abortifacient activity and teratogenic effects in animal studies. If you are pregnant, do not use rue-containing products.",
@@ -3274,9 +3272,6 @@
         "evidence_level": "probable",
         "mechanism": "Ruta alkaloids cause uterine smooth muscle contraction and have embryotoxic effects demonstrated in animal models.",
         "notes": "Rue is a well-documented traditional abortifacient. Avoid all preparations during pregnancy and lactation.",
-        "sources": [
-          "https://pubmed.ncbi.nlm.nih.gov/19146936/"
-        ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Rue has established abortifacient activity and teratogenic effects in animal studies. If you are pregnant, do not use rue-containing products.",
         "informational_note": "Rue has abortifacient activity — relevant to anyone pregnant or planning pregnancy."
@@ -3689,8 +3684,7 @@
           "mechanism": "Silymarin (the active flavonolignan complex from Silybum marianum) is hepatoprotective and widely used in liver disease patients — it reduces oxidative stress, inhibits inflammatory signaling, and has antifibrotic properties. However, silymarin and its constituents (especially silybin A, isosilybin A/B, silychristin) are mechanism-based inhibitors of CYP3A4 and also inhibit P-glycoprotein. In liver disease patients who are on hepatically-cleared medications (antivirals, immunosuppressants, anticoagulants), this CYP3A4 inhibition can elevate drug plasma levels to toxic ranges. The herb itself does not cause hepatotoxicity at standard doses.",
           "action": "Milk thistle is generally beneficial in liver disease but requires monitoring for drug interactions in patients on CYP3A4-metabolized medications. Review the full medication list before initiating. Preferred formulation: standardized silymarin 70–80%, 140–420 mg/day.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/23801821/",
-            "https://pubmed.ncbi.nlm.nih.gov/15072439/"
+            "https://pubmed.ncbi.nlm.nih.gov/23801821/"
           ],
           "alert_headline": "Caution with liver disease",
           "alert_body": "Milk thistle is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of milk thistle.",
@@ -4298,7 +4292,6 @@
           "mechanism": "Vitamin D does not directly affect platelet aggregation at physiological or supplemental doses. However, high-dose vitamin D supplementation may interact with warfarin sensitivity in patients with concurrent vitamin K deficiency by affecting the vitamin K-dependent carboxylation of coagulation factors (II, VII, IX, X). The vitamin D endocrine system and vitamin K share overlapping roles in gamma-carboxylation of hepatic Gla-proteins.",
           "action": "Vitamin D at standard supplemental doses (up to 4000 IU/day) is not a clinically significant bleeding risk on its own. Monitor if taking high-dose vitamin D (>10,000 IU/day) with anticoagulants.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/21155624/",
             "https://pubmed.ncbi.nlm.nih.gov/32486167/"
           ],
           "alert_headline": "Caution with bleeding disorders",
@@ -4312,7 +4305,7 @@
           "last_reviewed": "2026-04-09",
           "condition_id": "autoimmune",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/41717291/"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "evidence_level": "probable",
           "alert_headline": "Caution with autoimmune conditions",
@@ -4381,8 +4374,8 @@
           "mechanism": "High-dose vitamin D (>10,000 IU/day) has been associated with altered warfarin sensitivity in some patients. The proposed mechanism involves shared metabolic pathways with vitamin K: vitamin D may modulate hepatic expression of vitamin K-dependent coagulation factors (II, VII, IX, X), and vitamin D deficiency itself affects coagulation factor synthesis. Vitamin D and K have documented synergistic effects on Gla-protein carboxylation, and disruption of this balance at supraphysiological vitamin D doses may affect INR stability in warfarin patients.",
           "action": "Monitor INR stability when significantly changing vitamin D supplementation dose, particularly at high doses (>10,000 IU/day). Routine supplementation doses (1000-4000 IU/day) typically do not require INR monitoring changes.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/21155624/",
-            "https://pubmed.ncbi.nlm.nih.gov/8983860/"
+            "https://pubmed.ncbi.nlm.nih.gov/8983860/",
+            "https://pubmed.ncbi.nlm.nih.gov/35718837/"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Vitamin D has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding Vitamin D and ask about INR or bleeding checks.",
@@ -4395,7 +4388,7 @@
           "mechanism": "No established direct interaction between vitamin D supplementation and antiplatelet drug activity. Monitoring recommended at high doses due to broader hemostatic pathway involvement.",
           "action": "No specific action required at standard supplemental doses. Monitor for unusual bleeding if taking high-dose vitamin D with antiplatelet medications.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/21155624/"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Vitamin D has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding Vitamin D.",
@@ -4408,7 +4401,7 @@
           "mechanism": "No established pharmacokinetic or pharmacodynamic interaction between vitamin D and NSAIDs on platelet or coagulation pathways. Theoretical concern at high doses given shared anti-inflammatory regulatory roles.",
           "action": "No specific action required at standard supplemental doses.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/21155624/"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "alert_headline": "May add to NSAID bleeding risk",
           "alert_body": "Vitamin D has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding Vitamin D.",
@@ -4421,7 +4414,7 @@
           "last_reviewed": "2026-04-09",
           "drug_class_id": "immunosuppressants",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/41717291/"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "evidence_level": "probable",
           "alert_headline": "Caution with immunosuppressants",
@@ -5209,7 +5202,7 @@
           "last_reviewed": "2026-04-09",
           "condition_id": "thyroid_disorder",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/41717291/"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "evidence_level": "probable",
           "alert_headline": "Caution with thyroid conditions",
@@ -5359,7 +5352,6 @@
           "condition_id": "autoimmune",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/39452214/",
-            "https://pubmed.ncbi.nlm.nih.gov/21726792/",
             "https://pubmed.ncbi.nlm.nih.gov/15115689/"
           ],
           "evidence_level": "probable",
@@ -6045,8 +6037,7 @@
           "mechanism": "DHEA (dehydroepiandrosterone) supplementation at 75 mg/day for ≥12 weeks has been studied in women with diminished ovarian reserve (DOR) undergoing IVF. The DITTO RCT protocol targeted women with AFC ≤10 and AMH ≤5 pmol/L. A controlled case-series (Barad & Gleicher 2006) showed significant improvements in fertilized oocytes, normal Day-3 embryo count, and embryos transferred after DHEA treatment. Proposed mechanism: DHEA converts to androgens and estrogens in follicular cells, improving follicular microenvironment and reducing follicle apoptosis. DHEA should not be used without hormonal workup confirming DOR, as it may disrupt normal hormonal balance in women without ovarian reserve issues.",
           "action": "DHEA at 75 mg/day may be considered for women with confirmed diminished ovarian reserve, ideally under reproductive endocrinologist guidance. Monitor DHEA-S and androgen levels. Not appropriate for general TTC use without confirmed DOR diagnosis.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/16997936/",
-            "https://pubmed.ncbi.nlm.nih.gov/25296654/"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "alert_headline": "Continue under prenatal care",
           "alert_body": "DHEA used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of DHEA with your clinician.",
@@ -6710,7 +6701,6 @@
           "action": "Avoid licorice root supplements in hypertension. DGL (deglycyrrhizinated licorice) is not subject to this interaction. Disclose all licorice supplement use to prescriber.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/31605160/",
-            "https://pubmed.ncbi.nlm.nih.gov/28617146/",
             "https://pubmed.ncbi.nlm.nih.gov/3808407/"
           ],
           "alert_headline": "May raise blood pressure",
@@ -6754,8 +6744,7 @@
           "mechanism": "Glycyrrhizin causes sodium retention and blood pressure elevation via pseudoaldosteronism, directly opposing the pharmacodynamic effect of all antihypertensive drug classes (ACE inhibitors, ARBs, calcium channel blockers, diuretics, beta-blockers). Clinical case series have documented failed BP control in patients consuming licorice while on antihypertensive therapy.",
           "action": "Discontinue licorice root supplements in patients on antihypertensive therapy. DGL (deglycyrrhizinated licorice) does not carry this interaction. Inform prescriber of any licorice supplement use.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/31605160/",
-            "https://pubmed.ncbi.nlm.nih.gov/28617146/"
+            "https://pubmed.ncbi.nlm.nih.gov/31605160/"
           ],
           "alert_headline": "May reduce blood-pressure medication effect",
           "alert_body": "Licorice's sodium-retaining effect works against antihypertensive therapy. If you take a blood-pressure medication, talk to your prescriber; DGL licorice is unaffected.",
@@ -7144,7 +7133,7 @@
           "mechanism": "High-dose caffeine (the primary active compound in guarana) lowers the seizure threshold by antagonizing adenosine receptors, which normally exert inhibitory control over neuronal excitability. Case reports document caffeine-triggered seizures in susceptible individuals, and animal studies confirm proconvulsant effects at high doses. Standard-dose guarana supplements provide caffeine equivalent to 1-4 cups of coffee.",
           "action": "Use caution with guarana in patients with seizure disorders or epilepsy. Limit total daily caffeine from all sources. Inform neurologist of guarana supplement use. Avoid energy drink and pre-workout products containing guarana.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/12609386/"
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "alert_headline": "Caution with seizure disorder",
           "alert_body": "Guarana may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding guarana.",
