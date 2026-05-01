@@ -2676,6 +2676,32 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "violation_penalty": safe_float(breakdown_raw.get("violation_penalty"), 0),
     }
 
+    # Sprint 2026-05-01 — omega3 dose adequacy detail block.
+    # Surfaces the EPA+DHA bonus alongside the new transparency fields
+    # (`bonus_missed_due_to_opacity`, `bonus_missed_reason`) so Flutter can
+    # show "EPA/DHA breakdown not disclosed" copy when the bonus is 0
+    # because the omega-3 ingredient is buried in an opaque proprietary
+    # blend. Score impact remains zero — informational only.
+    e_raw = safe_dict(breakdown_raw.get("E"))
+    omega3_detail = {
+        "score": safe_float(e_raw.get("score"), 0),
+        "max": safe_float(e_raw.get("max"), 0),
+        "applicable": bool(e_raw.get("applicable", False)),
+        "dose_band": safe_str(e_raw.get("dose_band")),
+        "per_day_mid_mg": e_raw.get("per_day_mid_mg"),
+        "per_day_min_mg": e_raw.get("per_day_min_mg"),
+        "per_day_max_mg": e_raw.get("per_day_max_mg"),
+        "epa_mg_per_unit": e_raw.get("epa_mg_per_unit"),
+        "dha_mg_per_unit": e_raw.get("dha_mg_per_unit"),
+        "prescription_dose": bool(e_raw.get("prescription_dose", False)),
+        # Transparency flag — true when omega-3 bonus is 0 because the
+        # ingredient is buried in an opaque proprietary blend.
+        "bonus_missed_due_to_opacity": bool(
+            e_raw.get("bonus_missed_due_to_opacity", False)
+        ),
+        "bonus_missed_reason": safe_str(e_raw.get("bonus_missed_reason")),
+    }
+
     cd = safe_dict(enriched.get("certification_data"))
     serving = safe_dict(enriched.get("serving_basis"))
     evidence_data = safe_dict(enriched.get("evidence_data"))
@@ -2697,6 +2723,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         # `warnings` and apply their own filter instead.
         "warnings_profile_gated": warnings_profile_gated,
         "section_breakdown": section_breakdown,
+        # Sprint 2026-05-01 — omega-3 dose adequacy + transparency block.
+        # Includes bonus_missed_due_to_opacity / bonus_missed_reason for
+        # products with EPA/DHA hidden in opaque proprietary blends.
+        "omega3_detail": omega3_detail,
         "compliance_detail": safe_dict(enriched.get("compliance_data")),
         "certification_detail": {
             "third_party_programs": cd.get("third_party_programs"),
@@ -2764,6 +2794,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "total_billion_count": probiotic_data.get("total_billion_count"),
             "guarantee_type": probiotic_data.get("guarantee_type"),
             "has_cfu": probiotic_data.get("has_cfu"),
+            # clinical_strains entries may carry per-strain is_inactivated /
+            # is_postbiotic / is_blocked / postbiotic_note / block_reason flags
+            # added 2026-05-01. Flutter can render strain-level postbiotic /
+            # rejected badges from these fields.
             "clinical_strains": safe_list(probiotic_data.get("clinical_strains")),
             "clinical_strain_count": probiotic_data.get("clinical_strain_count", 0),
             "prebiotic_present": probiotic_data.get("prebiotic_present", False),
@@ -2771,6 +2805,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "has_survivability_coating": probiotic_data.get("has_survivability_coating", False),
             "survivability_reason": safe_str(probiotic_data.get("survivability_reason")),
             "probiotic_blends": safe_list(probiotic_data.get("probiotic_blends")),
+            # Sprint 2026-05-01 — product-level postbiotic indicator.
+            # Independent of clinical_strain matching; surfaces postbiotic
+            # content even when strains aren't in the high-quality clinical
+            # bonus DB. Flutter can show "Contains postbiotic strains" badge.
+            "has_postbiotic_strains": probiotic_data.get("has_postbiotic_strains", False),
+            "detected_postbiotic_patterns": safe_list(
+                probiotic_data.get("detected_postbiotic_patterns")
+            ),
         }
 
     # Synergy cluster detail — matched clusters with ingredient doses

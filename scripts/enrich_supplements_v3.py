@@ -10230,6 +10230,72 @@ class SupplementEnricherV3:
             probiotic_blends[0]['cfu_data'] if probiotic_blends else None,
         )
 
+        # Sprint 2026-05-01: product-level postbiotic detection.
+        # Independent of clinical_strains matching (which is a high-quality
+        # bonus path). Scans every probiotic_blend's name + strains for
+        # heat-killed / inactivated / tyndallized / postbiotic / paraprobiotic
+        # patterns so products carrying postbiotic content surface a flag for
+        # Flutter even when the strain isn't in the clinical_strains DB.
+        _POSTBIOTIC_PATTERNS_PRODUCT_LEVEL = (
+            "heat-killed", "heat killed",
+            "heat-inactivated", "heat inactivated",
+            "tyndallized", "tyndalized",
+            "postbiotic",
+            "paraprobiotic",
+            "inactivated probiotic",
+            "non-viable",
+            "ghost probiotic",
+        )
+        has_postbiotic_strains = False
+        detected_postbiotic_patterns: List[str] = []
+        for _b in probiotic_blends:
+            if not isinstance(_b, dict):
+                continue
+            haystack_parts = [str(_b.get("name") or ""), str(_b.get("blend_name") or "")]
+            haystack_parts.extend(str(s) for s in (_b.get("strains") or []))
+            haystack = " ".join(haystack_parts).lower()
+            for _p in _POSTBIOTIC_PATTERNS_PRODUCT_LEVEL:
+                if _p in haystack and _p not in detected_postbiotic_patterns:
+                    detected_postbiotic_patterns.append(_p)
+                    has_postbiotic_strains = True
+
+        # Secondary scan: activeIngredients carries postbiotic qualifier in
+        # structured fields when the cleaner stripped it from the surface
+        # name. Sources scanned (in order):
+        #   1. activeIngredients[].name / standardName (surface label)
+        #   2. activeIngredients[].forms[].prefix (DSLD form qualifier,
+        #      e.g. "heat-killed")
+        #   3. ingredient_quality_data.ingredients[].matched_form (IQM
+        #      form key — already encodes "(heat-killed/postbiotic)" for
+        #      L. plantarum L-137 etc.)
+        # Scoped to structured fields only; we don't scan loose marketing
+        # copy (e.g., "postbiotic benefits" claims).
+        for _ai in (product.get("activeIngredients") or []):
+            if not isinstance(_ai, dict):
+                continue
+            _ai_name = str(_ai.get("name") or _ai.get("standardName") or "").lower()
+            for _f in (_ai.get("forms") or []):
+                if isinstance(_f, dict):
+                    _ai_name += " " + str(_f.get("prefix") or "").lower()
+                    _ai_name += " " + str(_f.get("form_key") or "").lower()
+            if not _ai_name.strip():
+                continue
+            for _p in _POSTBIOTIC_PATTERNS_PRODUCT_LEVEL:
+                if _p in _ai_name and _p not in detected_postbiotic_patterns:
+                    detected_postbiotic_patterns.append(_p)
+                    has_postbiotic_strains = True
+
+        for _iq in ((product.get("ingredient_quality_data") or {}).get("ingredients") or []):
+            if not isinstance(_iq, dict):
+                continue
+            _matched = str(_iq.get("matched_form") or _iq.get("form_id") or "").lower()
+            if not _matched:
+                continue
+            for _p in _POSTBIOTIC_PATTERNS_PRODUCT_LEVEL:
+                if _p in _matched and _p not in detected_postbiotic_patterns:
+                    detected_postbiotic_patterns.append(_p)
+                    has_postbiotic_strains = True
+
         return {
             "is_probiotic": True,  # Top-level flag for quick filtering
             "is_probiotic_product": True,
@@ -10246,7 +10312,14 @@ class SupplementEnricherV3:
             "prebiotic_present": prebiotic_found,
             "prebiotic_name": prebiotic_name,
             "has_survivability_coating": has_survivability_coating,
-            "survivability_reason": survivability_reason
+            "survivability_reason": survivability_reason,
+            # Product-level postbiotic indicator (Sprint 2026-05-01).
+            # True when ANY probiotic_blend name/strain text contains a
+            # postbiotic pattern. Independent of clinical_strain matching;
+            # CFU credit still gated by per-strain is_inactivated flag in
+            # clinical_strains[].
+            "has_postbiotic_strains": has_postbiotic_strains,
+            "detected_postbiotic_patterns": detected_postbiotic_patterns,
         }
 
     # CFU-equivalent unit patterns — must match the ENTIRE unit string

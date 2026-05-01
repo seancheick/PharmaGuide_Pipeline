@@ -66,6 +66,13 @@ class NutrientAdequacyResult:
     warnings: List[str]
     age_group: str
     sex_group: str
+    # Sprint E1.5.X-5 (2026-05-01): consolidate highest_ul into adequacy_results
+    # so both `analyzed_ingredients[]` and `adequacy_results[]` carry the same
+    # field. Eliminates the prior split where Flutter's anonymous-user UL
+    # fallback only worked via analyzed_ingredients[]. Per dev decision: ONE
+    # canonical highest_ul field surfaced wherever the per-nutrient record
+    # appears.
+    highest_ul: Optional[float] = None
 
     def to_dict(self) -> Dict:
         return {
@@ -88,7 +95,8 @@ class NutrientAdequacyResult:
             "notes": self.notes,
             "warnings": self.warnings,
             "age_group": self.age_group,
-            "sex_group": self.sex_group
+            "sex_group": self.sex_group,
+            "highest_ul": self.highest_ul,
         }
 
 
@@ -331,6 +339,18 @@ class RDAULCalculator:
             # Still eligible but points may be 0 or negative
             pass
 
+        # Sprint E1.5.X-5 (2026-05-01): pull highest_ul from the RDA file so
+        # adequacy_results[].highest_ul matches analyzed_ingredients[].highest_ul.
+        # Coerced to float when stored as string.
+        _highest_ul_raw = nutrient_data.get("highest_ul")
+        if isinstance(_highest_ul_raw, str):
+            try:
+                _highest_ul_raw = float(_highest_ul_raw)
+            except (TypeError, ValueError):
+                _highest_ul_raw = None
+        elif _highest_ul_raw is not None and not isinstance(_highest_ul_raw, (int, float)):
+            _highest_ul_raw = None
+
         return NutrientAdequacyResult(
             nutrient=nutrient,
             amount=amount,
@@ -351,7 +371,8 @@ class RDAULCalculator:
             notes=notes,
             warnings=warnings,
             age_group=norm_age,
-            sex_group=norm_sex
+            sex_group=norm_sex,
+            highest_ul=_highest_ul_raw,
         )
 
     def get_safety_flags(self, adequacy_results: List[NutrientAdequacyResult]) -> List[SafetyFlag]:
