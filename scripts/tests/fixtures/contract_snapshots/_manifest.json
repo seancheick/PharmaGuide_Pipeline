@@ -314,6 +314,12 @@
       "product_id": "182730",
       "change": "Re-froze snapshot after adding bromelain IQM entry. Athletic Pure Pack contains bromelain; previously bromelain fell through to unspecified-form, now scores at bio_score=10. New entry caused +0.03 on A1 (quality) and unrelated +3.98 evidence point pickup on omega-3.",
       "commit": "pending"
+    },
+    {
+      "date": "2026-04-30",
+      "product_ids": "26 products (full snapshot suite)",
+      "change": "Re-froze all 26 contract snapshots after the v3.5 scoring overhaul (commit f0a1d05) shipped without snapshot updates. Drift signature: uniform +20-25% on section C ingredient_points + top_n_applied 3→4. Root cause: top_n_weights changed from [1.0, 0.5, 0.25] to [1.0, 0.7, 0.5, 0.3] (softer diminishing returns, rewards 4-ingredient targeted formulations). Two products went from blocked-state (0.0) to scored after upstream B-section fixes (Garden of Life Adrenal Daily Balance, Nutricost PRE Pre-Workout Complex).",
+      "commit": "pending"
     }
   ]
 }

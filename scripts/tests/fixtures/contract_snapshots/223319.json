@@ -71,11 +71,11 @@
       "depth_bonus": 0.0,
       "ingredient_points": {
         "bioperine black pepper extract": 2.4,
-        "ksm 66": 4.0
+        "ksm 66": 4.5
       },
       "matched_entries": 2,
       "max": 20.0,
-      "score": 5.2,
+      "score": 6.18,
       "top_n_applied": 2
     },
     "D": {
@@ -93,7 +93,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 53.2,
+    "quality_raw": 54.18,
     "violation_penalty": 0.0
   },
   "dsld_id": "223319",
@@ -104,8 +104,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "KSM-66 600 mg",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 66.5,
-  "score_80": 53.2,
+  "score_100_equivalent": 67.7,
+  "score_80": 54.2,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -122,7 +122,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 5.2
+      "score": 6.18
     },
     "D_brand_trust": {
       "max": 5.0,

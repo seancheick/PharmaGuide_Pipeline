@@ -85,12 +85,12 @@
     "C": {
       "depth_bonus": 0.5,
       "ingredient_points": {
-        "bifidobacterium bifidum": 3.58,
-        "bifidobacterium longum": 2.86
+        "bifidobacterium bifidum": 4.4,
+        "bifidobacterium longum": 3.52
       },
       "matched_entries": 2,
       "max": 20.0,
-      "score": 5.51,
+      "score": 7.36,
       "top_n_applied": 2
     },
     "D": {
@@ -108,7 +108,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 61.09,
+    "quality_raw": 62.94,
     "violation_penalty": 0.0
   },
   "dsld_id": "16125",
@@ -119,8 +119,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "FloraMend Prime Probiotic",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 76.4,
-  "score_80": 61.1,
+  "score_100_equivalent": 78.7,
+  "score_80": 62.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -137,7 +137,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 5.51
+      "score": 7.36
     },
     "D_brand_trust": {
       "max": 5.0,

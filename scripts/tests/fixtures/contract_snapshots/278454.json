@@ -70,17 +70,17 @@
     "C": {
       "depth_bonus": 0.0,
       "ingredient_points": {
-        "boron": 0.33,
-        "magnesium generic": 4.68,
-        "vitamin b12": 0.98,
-        "vitamin d3": 4.29,
-        "vitamin e": 2.81,
-        "vitamin k2 mk 7": 1.95
+        "boron": 0.4,
+        "magnesium generic": 5.76,
+        "vitamin b12": 1.2,
+        "vitamin d3": 5.28,
+        "vitamin e": 3.46,
+        "vitamin k2 mk 7": 2.4
       },
       "matched_entries": 6,
       "max": 20.0,
-      "score": 7.53,
-      "top_n_applied": 3
+      "score": 11.9,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 2.0,
@@ -97,7 +97,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 59.39,
+    "quality_raw": 63.76,
     "violation_penalty": 0.0
   },
   "dsld_id": "278454",
@@ -108,8 +108,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "Essential for Women Mint Essenced",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 74.2,
-  "score_80": 59.4,
+  "score_100_equivalent": 79.7,
+  "score_80": 63.8,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -126,7 +126,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 7.53
+      "score": 11.9
     },
     "D_brand_trust": {
       "max": 5.0,

@@ -70,22 +70,22 @@
     "C": {
       "depth_bonus": 0.0,
       "ingredient_points": {
-        "calcium": 4.68,
-        "chromium picolinate": 2.57,
-        "magnesium generic": 4.68,
-        "pantothenic acid vitamin b5": 1.1,
-        "potassium": 4.68,
-        "vitamin b1 thiamine": 1.87,
-        "vitamin b12": 0.98,
-        "vitamin b2 riboflavin": 4.68,
-        "vitamin b6": 3.9,
-        "vitamin c": 3.98,
-        "zinc picolinate": 4.29
+        "calcium": 5.76,
+        "chromium picolinate": 3.17,
+        "magnesium generic": 5.76,
+        "pantothenic acid vitamin b5": 1.36,
+        "potassium": 5.76,
+        "vitamin b1 thiamine": 2.3,
+        "vitamin b12": 1.2,
+        "vitamin b2 riboflavin": 5.76,
+        "vitamin b6": 4.8,
+        "vitamin c": 4.9,
+        "zinc picolinate": 5.28
       },
       "matched_entries": 11,
       "max": 20.0,
-      "score": 8.19,
-      "top_n_applied": 3
+      "score": 14.4,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 2.0,
@@ -102,19 +102,19 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 59.51,
+    "quality_raw": 65.72,
     "violation_penalty": 0.0
   },
   "dsld_id": "64058",
   "evaluation_stage": "scoring",
   "flags": [],
-  "grade": "Good",
+  "grade": "Excellent",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",
   "product_name": "Catalyte Lemon Lime Flavored",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 74.4,
-  "score_80": 59.5,
+  "score_100_equivalent": 82.2,
+  "score_80": 65.7,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -131,7 +131,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 8.19
+      "score": 14.4
     },
     "D_brand_trust": {
       "max": 5.0,

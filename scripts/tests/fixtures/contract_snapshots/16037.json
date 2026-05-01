@@ -64,15 +64,16 @@
     "C": {
       "depth_bonus": 0.5,
       "ingredient_points": {
-        "bilberry": 2.6,
-        "grape seed extract": 3.25,
-        "green tea extract": 3.98,
-        "quercetin": 3.32
+        "bilberry": 3.2,
+        "grape seed extract": 4.0,
+        "green tea extract": 4.9,
+        "milk thistle silymarin": 4.8,
+        "quercetin": 4.08
       },
-      "matched_entries": 4,
+      "matched_entries": 5,
       "max": 20.0,
-      "score": 6.95,
-      "top_n_applied": 3
+      "score": 12.0,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 2.0,
@@ -89,19 +90,19 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 51.72,
+    "quality_raw": 56.77,
     "violation_penalty": 0.0
   },
   "dsld_id": "16037",
   "evaluation_stage": "scoring",
   "flags": [],
-  "grade": "Fair",
+  "grade": "Good",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",
   "product_name": "Planti-Oxidants",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 64.6,
-  "score_80": 51.7,
+  "score_100_equivalent": 71.0,
+  "score_80": 56.8,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -118,7 +119,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 6.95
+      "score": 12.0
     },
     "D_brand_trust": {
       "max": 5.0,

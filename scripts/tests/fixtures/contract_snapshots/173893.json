@@ -3,7 +3,7 @@
   "brand_name": "Garden of Life MyKind Organics",
   "breakdown": {
     "A": {
-      "A1": 8.53,
+      "A1": 8.72,
       "A2": 0.0,
       "A3": 1.0,
       "A4": 3.0,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.03,
+      "core_quality": 15.22,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -36,7 +36,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 15.03
+      "score": 15.22
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -107,27 +107,29 @@
     "C": {
       "depth_bonus": 0.5,
       "ingredient_points": {
-        "biotin": 3.12,
-        "chromium picolinate": 2.57,
-        "curcumin": 6.24,
-        "green tea extract": 3.98,
-        "manganese": 1.1,
-        "pantothenic acid vitamin b5": 1.1,
-        "selenium": 4.68,
-        "sulforaphane": 3.12,
-        "vitamin a beta carotene": 4.68,
-        "vitamin b1 thiamine": 1.87,
-        "vitamin b2 riboflavin": 4.68,
-        "vitamin b3 niacin": 3.12,
-        "vitamin b6": 3.9,
-        "vitamin c": 3.98,
-        "vitamin e": 2.81,
-        "zinc picolinate": 4.29
+        "biotin": 3.84,
+        "chromium picolinate": 3.17,
+        "curcumin": 7.68,
+        "garlic extract": 4.9,
+        "ginger root": 4.8,
+        "green tea extract": 4.9,
+        "manganese": 1.36,
+        "pantothenic acid vitamin b5": 1.36,
+        "selenium": 5.76,
+        "sulforaphane": 3.84,
+        "vitamin a beta carotene": 5.76,
+        "vitamin b1 thiamine": 2.3,
+        "vitamin b2 riboflavin": 5.76,
+        "vitamin b3 niacin": 3.84,
+        "vitamin b6": 4.8,
+        "vitamin c": 4.9,
+        "vitamin e": 3.46,
+        "zinc picolinate": 5.28
       },
-      "matched_entries": 17,
+      "matched_entries": 19,
       "max": 20.0,
-      "score": 10.25,
-      "top_n_applied": 3
+      "score": 16.14,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 0.0,
@@ -144,7 +146,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 40.78,
+    "quality_raw": 46.86,
     "violation_penalty": 0.0
   },
   "dsld_id": "173893",
@@ -157,17 +159,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "Organic Plant Collagen Builder",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 51.0,
-  "score_80": 40.8,
+  "score_100_equivalent": 58.6,
+  "score_80": 46.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 15.03,
+      "core_quality": 15.22,
       "max": 25.0,
-      "score": 15.03
+      "score": 15.22
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -175,7 +177,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 10.25
+      "score": 16.14
     },
     "D_brand_trust": {
       "max": 5.0,

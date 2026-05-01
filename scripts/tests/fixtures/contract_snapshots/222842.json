@@ -3,7 +3,7 @@
   "brand_name": "Garden of Life Baby",
   "breakdown": {
     "A": {
-      "A1": 8.28,
+      "A1": 8.32,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 3.0,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 12.78,
+      "core_quality": 12.82,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -36,7 +36,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 12.78
+      "score": 12.82
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -86,23 +86,23 @@
     "C": {
       "depth_bonus": 0.5,
       "ingredient_points": {
-        "biotin": 3.12,
-        "chromium picolinate": 2.57,
-        "manganese": 1.1,
-        "pantothenic acid vitamin b5": 1.1,
-        "selenium": 4.68,
-        "vitamin b1 thiamine": 1.87,
-        "vitamin b2 riboflavin": 4.68,
-        "vitamin b3 niacin": 3.12,
-        "vitamin b6": 3.9,
-        "vitamin c": 3.98,
-        "vitamin e": 2.81,
-        "zinc picolinate": 4.29
+        "biotin": 3.84,
+        "chromium picolinate": 3.17,
+        "manganese": 1.36,
+        "pantothenic acid vitamin b5": 1.36,
+        "selenium": 5.76,
+        "vitamin b1 thiamine": 2.3,
+        "vitamin b2 riboflavin": 5.76,
+        "vitamin b3 niacin": 3.84,
+        "vitamin b6": 4.8,
+        "vitamin c": 4.9,
+        "vitamin e": 3.46,
+        "zinc picolinate": 5.28
       },
       "matched_entries": 12,
       "max": 20.0,
-      "score": 8.59,
-      "top_n_applied": 3
+      "score": 14.4,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 0.0,
@@ -119,7 +119,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 43.87,
+    "quality_raw": 49.72,
     "violation_penalty": 0.0
   },
   "dsld_id": "222842",
@@ -127,22 +127,22 @@
   "flags": [
     "PROPRIETARY_BLEND_PRESENT"
   ],
-  "grade": "Below Avg",
+  "grade": "Fair",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",
   "product_name": "Multivitamin Liquid",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 54.8,
-  "score_80": 43.9,
+  "score_100_equivalent": 62.1,
+  "score_80": 49.7,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 12.78,
+      "core_quality": 12.82,
       "max": 25.0,
-      "score": 12.78
+      "score": 12.82
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -150,7 +150,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 8.59
+      "score": 14.4
     },
     "D_brand_trust": {
       "max": 5.0,

@@ -3,7 +3,7 @@
   "brand_name": "Garden Of Life",
   "breakdown": {
     "A": {
-      "A1": 8.11,
+      "A1": 8.49,
       "A2": 0.0,
       "A3": 1.0,
       "A4": 3.0,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 12.86,
+      "core_quality": 13.24,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -52,7 +52,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 12.86
+      "score": 13.24
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -72,7 +72,7 @@
           "children_without_amount_count": 4,
           "computed_blend_penalty": -7.0,
           "computed_blend_penalty_magnitude": 7.0,
-          "dedupe_fingerprint": "perfect green juice blend|organic alfalfa,organic barley,organic oat,organic wheat grass|2800.000|activeingredients[5]",
+          "dedupe_fingerprint": "perfect green juice blend|organic alfalfa,organic barley,organic oat,organic wheat grass|2800.000|activeingredients[6]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": 2800.0,
@@ -82,7 +82,7 @@
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[5]",
+          "source_path": "activeIngredients[6]",
           "unit_conversion_failed": false
         },
         {
@@ -114,7 +114,7 @@
           "children_without_amount_count": 7,
           "computed_blend_penalty": -7.0,
           "computed_blend_penalty_magnitude": 7.0,
-          "dedupe_fingerprint": "proprietary whole food berry antioxidant blend combination|acerola cherry extract,blackberry,blueberry,cherry,citrus bioflavonoids,raspberry,strawberry|1600.000|activeingredients[14]",
+          "dedupe_fingerprint": "proprietary whole food berry antioxidant blend combination|acerola cherry extract,blackberry,blueberry,cherry,citrus bioflavonoids,raspberry,strawberry|1600.000|activeingredients[15]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": 1600.0,
@@ -124,7 +124,7 @@
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[14]",
+          "source_path": "activeIngredients[15]",
           "unit_conversion_failed": false
         },
         {
@@ -133,19 +133,19 @@
           "blend_total_mg": 800.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 17,
-          "computed_blend_penalty": -7.0,
-          "computed_blend_penalty_magnitude": 7.0,
-          "dedupe_fingerprint": "perfect veggie blend|asparagus,beet,bell pepper,brussels sprout,cabbage,cauliflower,celery,cucumber,garlic,ginger,onion,organic broccoli,organic carrot,organic kale,organic spinach,organic tomato,parsley|800.000|activeingredients[21]",
+          "computed_blend_penalty": -4.8643,
+          "computed_blend_penalty_magnitude": 4.8643,
+          "dedupe_fingerprint": "perfect veggie blend|asparagus,beet,bell pepper,brussels sprout,cabbage,cauliflower,celery,cucumber,garlic,ginger,onion,organic broccoli,organic carrot,organic kale,organic spinach,organic tomato,parsley|800.000|activeingredients[22]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": 800.0,
           "impact_floor_applied": false,
-          "impact_ratio": 1.0,
+          "impact_ratio": 0.572861,
           "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[21]",
+          "source_path": "activeIngredients[22]",
           "unit_conversion_failed": false
         },
         {
@@ -154,19 +154,19 @@
           "blend_total_mg": 740.0,
           "children_with_amount_count": 0,
           "children_without_amount_count": 14,
-          "computed_blend_penalty": -7.0,
-          "computed_blend_penalty_magnitude": 7.0,
-          "dedupe_fingerprint": "poten zyme fermented whole food matrix herb botanical|adzuki bean,amaranth,barley grass,chia,garbanzo bean,lentil,millet,organic buckwheat,organic flax seed,organic oat grass,pumpkin,quinoa,sesame,sunflower|740.000|activeingredients[38]",
+          "computed_blend_penalty": -4.6495,
+          "computed_blend_penalty_magnitude": 4.6495,
+          "dedupe_fingerprint": "poten zyme fermented whole food matrix herb botanical|adzuki bean,amaranth,barley grass,chia,garbanzo bean,lentil,millet,organic buckwheat,organic flax seed,organic oat grass,pumpkin,quinoa,sesame,sunflower|740.000|activeingredients[39]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": 740.0,
           "impact_floor_applied": false,
-          "impact_ratio": 1.0,
+          "impact_ratio": 0.529896,
           "impact_source": "mg_share",
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[38]",
+          "source_path": "activeIngredients[39]",
           "unit_conversion_failed": false
         },
         {
@@ -177,7 +177,7 @@
           "children_without_amount_count": 10,
           "computed_blend_penalty": -2.5,
           "computed_blend_penalty_magnitude": 2.5,
-          "dedupe_fingerprint": "probiotic blend|bifidobacterium animalis lactis,bifidobacterium bifidum,bifidobacterium breve,bifidobacterium longum,lactobacillus acidophilus,lactobacillus casei,lactobacillus paracasei,lactobacillus plantarum,lactobacillus rhamnosus,lactobacillus salivarius|7.000|activeingredients[52]",
+          "dedupe_fingerprint": "probiotic blend|bifidobacterium animalis lactis,bifidobacterium bifidum,bifidobacterium breve,bifidobacterium longum,lactobacillus acidophilus,lactobacillus casei,lactobacillus paracasei,lactobacillus plantarum,lactobacillus rhamnosus,lactobacillus salivarius|7.000|activeingredients[53]",
           "disclosed_child_mg_sum": 0.0,
           "disclosure_tier": "none",
           "hidden_mass_mg": 7.0,
@@ -187,7 +187,7 @@
           "presence_penalty": 2.0,
           "proportional_coef": 5.0,
           "source_field": "activeIngredients",
-          "source_path": "activeIngredients[52]",
+          "source_path": "activeIngredients[53]",
           "unit_conversion_failed": false
         }
       ],
@@ -207,22 +207,24 @@
     "C": {
       "depth_bonus": 0.5,
       "ingredient_points": {
-        "bifidobacterium bifidum": 3.58,
-        "bifidobacterium longum": 2.86,
-        "calcium": 4.68,
-        "chlorella": 2.08,
-        "iodine": 2.21,
-        "lactobacillus acidophilus": 3.25,
-        "potassium": 4.68,
-        "spirulina": 2.08,
-        "sulforaphane": 3.12,
-        "vitamin a beta carotene": 4.68,
-        "vitamin c": 3.98
+        "bifidobacterium bifidum": 4.4,
+        "bifidobacterium longum": 3.52,
+        "calcium": 5.76,
+        "chlorella": 2.56,
+        "garlic extract": 4.9,
+        "ginger root": 4.8,
+        "iodine": 2.72,
+        "lactobacillus acidophilus": 4.0,
+        "potassium": 5.76,
+        "spirulina": 2.56,
+        "sulforaphane": 3.84,
+        "vitamin a beta carotene": 5.76,
+        "vitamin c": 4.9
       },
-      "matched_entries": 11,
+      "matched_entries": 13,
       "max": 20.0,
-      "score": 8.69,
-      "top_n_applied": 3
+      "score": 14.64,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 2.0,
@@ -239,7 +241,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 37.55,
+    "quality_raw": 43.88,
     "violation_penalty": 0.0
   },
   "dsld_id": "173734",
@@ -247,22 +249,22 @@
   "flags": [
     "PROPRIETARY_BLEND_PRESENT"
   ],
-  "grade": "Low",
+  "grade": "Below Avg",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",
   "product_name": "Perfect Food Berry Super Green Fruit & Veggie Formula",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 46.9,
-  "score_80": 37.5,
+  "score_100_equivalent": 54.9,
+  "score_80": 43.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 12.86,
+      "core_quality": 13.24,
       "max": 25.0,
-      "score": 12.86
+      "score": 13.24
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -270,7 +272,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 8.69
+      "score": 14.64
     },
     "D_brand_trust": {
       "max": 5.0,

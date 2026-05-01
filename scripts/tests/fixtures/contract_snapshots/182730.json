@@ -3,7 +3,7 @@
   "brand_name": "Pure Encapsulations",
   "breakdown": {
     "A": {
-      "A1": 10.55,
+      "A1": 10.77,
       "A2": 3.0,
       "A3": 2.0,
       "A4": 3.0,
@@ -15,7 +15,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 1.0,
-      "core_quality": 20.3,
+      "core_quality": 20.52,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": true,
@@ -43,7 +43,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 21.3
+      "score": 21.52
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -115,39 +115,40 @@
       "depth_bonus": 0.5,
       "ingredient_points": {
         "alpha ketoglutarate": 0.51,
-        "biotin": 3.12,
-        "boron": 0.33,
-        "calcium": 4.68,
-        "chromium picolinate": 2.57,
-        "coenzyme q10": 3.9,
-        "copper": 1.1,
-        "creatine monohydrate": 3.9,
-        "grape seed extract": 3.25,
-        "green tea extract": 3.98,
-        "iodine": 2.21,
-        "lutein": 4.68,
-        "magnesium generic": 4.68,
-        "manganese": 1.1,
-        "omega 3 fatty acids": 3.98,
-        "pantothenic acid vitamin b5": 1.1,
-        "potassium": 4.68,
-        "quercetin": 3.32,
-        "selenium": 4.68,
-        "vitamin a beta carotene": 4.68,
-        "vitamin b1 thiamine": 1.87,
-        "vitamin b12": 0.98,
-        "vitamin b2 riboflavin": 4.68,
-        "vitamin b3 niacin": 3.12,
-        "vitamin b6": 3.9,
-        "vitamin c": 3.98,
-        "vitamin d3": 4.29,
-        "vitamin e": 2.81,
-        "zinc picolinate": 4.29
+        "alpha lipoic acid": 4.08,
+        "biotin": 3.84,
+        "boron": 0.4,
+        "calcium": 5.76,
+        "chromium picolinate": 3.17,
+        "coenzyme q10": 4.8,
+        "copper": 1.36,
+        "creatine monohydrate": 4.8,
+        "grape seed extract": 4.0,
+        "green tea extract": 4.9,
+        "iodine": 2.72,
+        "lutein": 5.76,
+        "magnesium generic": 5.76,
+        "manganese": 1.36,
+        "omega 3 fatty acids": 4.9,
+        "pantothenic acid vitamin b5": 1.36,
+        "potassium": 5.76,
+        "quercetin": 4.08,
+        "selenium": 5.76,
+        "vitamin a beta carotene": 5.76,
+        "vitamin b1 thiamine": 2.3,
+        "vitamin b12": 1.2,
+        "vitamin b2 riboflavin": 5.76,
+        "vitamin b3 niacin": 3.84,
+        "vitamin b6": 4.8,
+        "vitamin c": 4.9,
+        "vitamin d3": 5.28,
+        "vitamin e": 3.46,
+        "zinc picolinate": 5.28
       },
-      "matched_entries": 29,
+      "matched_entries": 30,
       "max": 20.0,
-      "score": 8.69,
-      "top_n_applied": 3
+      "score": 14.9,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 2.0,
@@ -171,7 +172,7 @@
       "prescription_dose": false,
       "score": 1.0
     },
-    "quality_raw": 55.49,
+    "quality_raw": 61.92,
     "violation_penalty": 0.0
   },
   "dsld_id": "182730",
@@ -179,22 +180,22 @@
   "flags": [
     "PROPRIETARY_BLEND_PRESENT"
   ],
-  "grade": "Fair",
+  "grade": "Good",
   "mapped_coverage": 1.0,
   "output_schema_version": "3.4.0",
   "product_name": "Athletic Pure Pack",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 69.4,
-  "score_80": 55.5,
+  "score_100_equivalent": 77.4,
+  "score_80": 61.9,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 1.0,
-      "core_quality": 20.3,
+      "core_quality": 20.52,
       "max": 25.0,
-      "score": 21.3
+      "score": 21.52
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -202,7 +203,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 8.69
+      "score": 14.9
     },
     "D_brand_trust": {
       "max": 5.0,

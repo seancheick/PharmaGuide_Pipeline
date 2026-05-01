@@ -9,7 +9,7 @@
   "brand_name": "CVS Health",
   "breakdown": {
     "A": {
-      "A1": 8.14,
+      "A1": 8.55,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 3.0,
@@ -21,7 +21,7 @@
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 11.89,
+      "core_quality": 12.3,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -42,7 +42,7 @@
         "probiotic_bonus": 0.0,
         "survivability": 0.0
       },
-      "score": 11.89
+      "score": 12.3
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -70,22 +70,22 @@
     "C": {
       "depth_bonus": 0.0,
       "ingredient_points": {
-        "biotin": 3.12,
-        "iodine": 2.21,
-        "pantothenic acid vitamin b5": 1.1,
-        "selenium": 4.68,
-        "vitamin a beta carotene": 4.68,
-        "vitamin b12": 0.98,
-        "vitamin b6": 3.9,
-        "vitamin c": 3.98,
-        "vitamin d3": 4.29,
-        "vitamin e": 2.81,
-        "zinc picolinate": 4.29
+        "biotin": 3.84,
+        "iodine": 2.72,
+        "pantothenic acid vitamin b5": 1.36,
+        "selenium": 5.76,
+        "vitamin a beta carotene": 5.76,
+        "vitamin b12": 1.2,
+        "vitamin b6": 4.8,
+        "vitamin c": 4.9,
+        "vitamin d3": 5.28,
+        "vitamin e": 3.46,
+        "zinc picolinate": 5.28
       },
       "matched_entries": 11,
       "max": 20.0,
-      "score": 8.09,
-      "top_n_applied": 3
+      "score": 14.02,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 0.0,
@@ -102,7 +102,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 48.48,
+    "quality_raw": 54.82,
     "violation_penalty": 0.0
   },
   "dsld_id": "239600",
@@ -113,17 +113,17 @@
   "output_schema_version": "3.4.0",
   "product_name": "Men's Daily Gummies Complete Multivitamin",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 60.6,
-  "score_80": 48.5,
+  "score_100_equivalent": 68.5,
+  "score_80": 54.8,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 0.0,
-      "core_quality": 11.89,
+      "core_quality": 12.3,
       "max": 25.0,
-      "score": 11.89
+      "score": 12.3
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -131,7 +131,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 8.09
+      "score": 14.02
     },
     "D_brand_trust": {
       "max": 5.0,

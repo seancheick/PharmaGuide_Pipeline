@@ -64,11 +64,11 @@
     "C": {
       "depth_bonus": 0.0,
       "ingredient_points": {
-        "vitamin d3": 4.29
+        "vitamin d3": 5.28
       },
       "matched_entries": 1,
       "max": 20.0,
-      "score": 4.29,
+      "score": 5.28,
       "top_n_applied": 1
     },
     "D": {
@@ -86,7 +86,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 53.29,
+    "quality_raw": 54.28,
     "violation_penalty": 0.0
   },
   "dsld_id": "15756",
@@ -97,8 +97,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "Vitamin D",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 66.6,
-  "score_80": 53.3,
+  "score_100_equivalent": 67.8,
+  "score_80": 54.3,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -115,7 +115,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 4.29
+      "score": 5.28
     },
     "D_brand_trust": {
       "max": 5.0,

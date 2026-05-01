@@ -70,16 +70,16 @@
     "C": {
       "depth_bonus": 0.0,
       "ingredient_points": {
-        "omega 3 fatty acids": 3.98,
-        "vitamin a beta carotene": 4.68,
-        "vitamin c": 3.98,
-        "vitamin d3": 4.29,
-        "vitamin e": 2.81
+        "omega 3 fatty acids": 4.9,
+        "vitamin a beta carotene": 5.76,
+        "vitamin c": 4.9,
+        "vitamin d3": 5.28,
+        "vitamin e": 3.46
       },
       "matched_entries": 5,
       "max": 20.0,
-      "score": 7.82,
-      "top_n_applied": 3
+      "score": 13.37,
+      "top_n_applied": 4
     },
     "D": {
       "D1": 0.0,
@@ -96,7 +96,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 48.01,
+    "quality_raw": 53.56,
     "violation_penalty": 0.0
   },
   "dsld_id": "18141",
@@ -107,8 +107,8 @@
   "output_schema_version": "3.4.0",
   "product_name": "Omega-3 100 mg",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 60.0,
-  "score_80": 48.0,
+  "score_100_equivalent": 67.0,
+  "score_80": 53.6,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
@@ -125,7 +125,7 @@
     },
     "C_evidence_research": {
       "max": 20.0,
-      "score": 7.82
+      "score": 13.37
     },
     "D_brand_trust": {
       "max": 5.0,
