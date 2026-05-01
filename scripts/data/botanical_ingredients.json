@@ -9144,7 +9144,7 @@
         "bergamot peel oil"
       ],
       "category": "essential oil",
-      "notes": "Citrus bergamia (Rutaceae) peel/leaf essential oil. Cold-pressed peel oil contains bergaptene (a furocoumarin), linalyl acetate, and limonene. DISTINCT from citrus_bergamot IQM extract entry (the polyphenolic flavonoid-rich extract used for cardiovascular indications) — the essential oil is a different product class with different chemistry. UNII 39W1PKE3JI (bergamot oil); leaf oil UNII ZVY8741I1V. CUI C0105754. Photosensitivity caution: furocoumarins.",
+      "notes": "Citrus bergamia (Rutaceae) peel/leaf essential oil. Cold-pressed peel oil contains bergaptene (a furocoumarin), linalyl acetate, and limonene. DISTINCT from citrus_bergamot IQM extract entry (the polyphenolic flavonoid-rich extract used for cardiovascular indications) — the essential oil is a different product class with different chemistry. UNII 39W1PKE3JI (bergamot oil); leaf oil UNII ZVY8741I1V. CUI C0105754. SAFETY: furocoumarins (bergaptene) are documented for topical photosensitivity. Per clinician decision 2026-05-01: this ingredient is treated as a WARNING NOTE only, NOT a B1 safety penalty — supplement-form oral use at flavor-grade doses is below documented phototoxicity threshold and the photosensitivity concern is primarily topical. Display the warning to users; do not deduct from score.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "39W1PKE3JI"
@@ -9171,7 +9171,7 @@
         "essential oil of nutmeg"
       ],
       "category": "essential oil",
-      "notes": "Myristica fragrans (Myristicaceae) kernel essential oil. Steam-distilled, containing alpha-pinene, beta-pinene, sabinene, myristicin, and elemicin. Flavor and aromatherapy use. SAFETY: myristicin and elemicin are psychoactive at high oral doses (≥5g whole nutmeg) — supplement-relevant doses are well below; flavor-grade use is GRAS. UNII Z1CLM48948. CUI C0301248.",
+      "notes": "Myristica fragrans (Myristicaceae) kernel essential oil. Steam-distilled, containing alpha-pinene, beta-pinene, sabinene, myristicin, and elemicin. Used for flavor and aromatherapy. SAFETY: myristicin and elemicin can cause neurological effects at very high oral doses (large single ingestion of whole nutmeg, generally documented ≥5 g range). Supplement-relevant flavor doses are far below this threshold; flavor-grade use is GRAS per FDA. Display safety information without scoring penalty. UNII Z1CLM48948. CUI C0301248.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "Z1CLM48948"
@@ -13378,7 +13378,7 @@
         "sarsaparilla rhizome (tu fu ling)"
       ],
       "category": "rhizome",
-      "notes": "Smilax glabra Roxb. (Smilacaceae) rhizome — primary TCM herb (土茯苓). Distinct species from Smilax china (Chopchini, CUI C1014796) and Smilax ornata (Sarsaparilla, CUI C4277519). Contains astilbin, engeletin, smilagenin, and steroidal saponins. Traditional TCM use: clears damp-heat, detoxifies (used historically for syphilis, mercury poisoning, rheumatic conditions, skin disorders). Clinical evidence: limited human data; in vitro and animal studies show anti-inflammatory and hepatoprotective activity (astilbin-mediated). No FDA safety alerts.",
+      "notes": "Smilax glabra Roxb. (Smilacaceae) rhizome. Distinct species from Smilax china (Chopchini, CUI C1014796) and Smilax ornata (Sarsaparilla, CUI C4277519). Contains astilbin, engeletin, smilagenin, and steroidal saponins. Traditionally used in Asian herbal medicine as an anti-inflammatory and detoxifying tonic, particularly for skin conditions and joint discomfort. Clinical evidence: limited human data; in vitro and animal studies show anti-inflammatory and liver-supportive activity (astilbin-mediated). No FDA safety alerts.",
       "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C2810601",

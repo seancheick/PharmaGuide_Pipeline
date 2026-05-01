@@ -52961,7 +52961,7 @@
         "natural": true,
         "score": 8,
         "absorption": "low-moderate (algal class-poor; cell wall barrier; conservative due to source uncertainty)",
-        "notes": "Generic algae protein entry — source not specified on label. Chlorella whole-cell has documented near-zero amino acid bioavailability (PMID:39610880, PMC8759652 sporopollenin cell wall). Spirulina protein digestibility in vitro is higher (~70-80%) but cell-wall barrier still applies. Conservative bio_score=5 reflects source uncertainty per strict-rule policy. When source is disclosed (Spirulina/Chlorella/Schizochytrium) prefer the species-specific entry.",
+        "notes": "Generic algae protein entry — source not specified on label. Chlorella whole-cell has documented near-zero amino acid bioavailability (PMID:39610880, PMC8759652 sporopollenin cell wall). Spirulina protein digestibility in vitro is higher (~70-80%) but cell-wall barrier still applies. Conservative bio_score=5 reflects source uncertainty per strict-rule policy. When source is disclosed (Spirulina/Chlorella/Schizochytrium) prefer the species-specific entry. CLINICIAN POLICY 2026-05-01 (CONFIRMED): treat this entry as a generic, low-confidence ingredient — should NOT carry strong scoring weight. confidence_level=inferred is intentional. Downstream scoring should consider this entry's contribution as informational rather than dose-weighted.",
         "aliases": [
           "Algae Protein",
           "algae protein",
@@ -52975,7 +52975,7 @@
           "Green Algae Whole Plant Extract",
           "green algae whole plant extract"
         ],
-        "dosage_importance": 1.0,
+        "dosage_importance": 0.5,
         "absorption_structured": {
           "value": 0.2,
           "range_low": 0.1,

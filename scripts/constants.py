@@ -894,6 +894,34 @@ BLEND_HEADER_PATTERNS_HIGH_CONFIDENCE = [
     r"^mitoheal$",
 ]
 
+# Probiotic strains explicitly REJECTED per clinician decision 2026-05-01.
+# These will NEVER be added as IQM probiotic entries. Products listing these
+# strains remain unmapped; downstream scoring should not credit them as
+# probiotic content.
+# Reference: scripts/audits/unmapped_triage/CLINICAL_DECISIONS_LOG.md
+BLOCKED_PROBIOTIC_STRAINS = {
+    # S. uberis is historically a bovine mastitis pathogen.
+    "s. uberis kj2",
+    "streptococcus uberis kj2",
+    # S. oralis includes opportunistic-pathogen strains; JH145 strain-level
+    # human-use efficacy data insufficient.
+    "s. oralis jh145",
+    "streptococcus oralis jh145",
+}
+
+# Probiotic strains placed on HOLD per clinician decision 2026-05-01.
+# Same effect as BLOCKED for now (do not score), but flagged for re-review
+# when stronger strain-level human safety + efficacy data becomes available.
+HOLD_PROBIOTIC_STRAINS = {
+    # S. rattus is dental-caries-associated; need confirmation JH145 is
+    # non-cariogenic before scoring.
+    "s. rattus jh145",
+    "streptococcus rattus jh145",
+    # S. oralis KJ3 — same reasoning as JH145.
+    "s. oralis kj3",
+    "streptococcus oralis kj3",
+}
+
 # Exact blend-header labels seen in DSLD where dose is blend total, not per-active dose.
 BLEND_HEADER_EXACT_NAMES = {
     "acid comfort",
