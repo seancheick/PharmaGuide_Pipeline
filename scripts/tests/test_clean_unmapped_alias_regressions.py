@@ -2120,7 +2120,7 @@ def test_batch32_softgels_inactive_alias_and_parser_targets_map(normalizer, name
     "name,expected",
     [
         ("Sonova-400", "Gamma-Linolenic Acid"),
-        ("Smilax officinalis root powder", "Sarsaparilla"),
+        ("Smilax officinalis root powder", "Sarsaparilla (Honduran)"),
         ("Sandalwood", "White Sandalwood"),
     ],
 )

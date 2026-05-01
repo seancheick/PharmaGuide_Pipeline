@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-01",
-    "total_entries": 472,
+    "total_entries": 475,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -10707,21 +10707,50 @@
       "standard_name": "Sarsaparilla",
       "latin_name": "Smilax ornata",
       "aliases": [
-        "smilax officinalis",
-        "smilax species",
+        "smilax ornata",
+        "Smilax ornata",
+        "smilax ornata root",
+        "smilax ornata root extract",
+        "sarsaparilla",
         "sarsaparilla root",
-        "honduras sarsaparilla",
-        "smilax officinalis root powder",
-        "Smilax officinalis root powder",
-        "Smilax ornata"
+        "sarsaparilla root extract",
+        "jamaican sarsaparilla"
       ],
       "category": "root",
-      "notes": "Smilax ornata (Smilacaceae) root. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. Botanical root powder.",
-      "last_updated": "2026-03-01",
+      "notes": "Smilax ornata (Smilacaceae) root — Jamaican Sarsaparilla. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. NOTE: 'Sarsaparilla' is a commercial trade name applied to multiple Smilax species — S. ornata (this entry, CUI C4277519), S. officinalis (CUI C3388298, Honduran), S. regelii, S. aristolochiifolia (Mexican). Strict policy: only S. ornata is mapped here. Products labeled 'Smilax officinalis' or 'Honduras Sarsaparilla' will surface in unmapped triage and require separate entries if confirmed. Old CUI C0036312 was a stale identifier (not present in current UMLS); corrected to C4277519 via verify_cui.py audit 2026-05-01.",
+      "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "2H1576D5WG"
       },
-      "cui": "C0036312",
+      "cui": "C4277519",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "sarsaparilla_honduran",
+      "standard_name": "Sarsaparilla (Honduran)",
+      "latin_name": "Smilax officinalis",
+      "aliases": [
+        "smilax officinalis",
+        "Smilax officinalis",
+        "smilax officinalis root",
+        "smilax officinalis whole",
+        "smilax officinalis root powder",
+        "Smilax officinalis root powder",
+        "smilax officinalis extract",
+        "honduran sarsaparilla",
+        "honduras sarsaparilla"
+      ],
+      "category": "root",
+      "notes": "Smilax officinalis Kunth (Smilacaceae) root — Honduran/Honduras Sarsaparilla. DISTINCT species from Smilax ornata (Jamaican Sarsaparilla, CUI C4277519) and Smilax regelii (CUI C3749755) — historically conflated in commerce under the generic 'Sarsaparilla' label, but UMLS treats as separate concepts. Contains sarsasapogenin, smilagenin, and related steroidal saponins. Used in traditional herbal medicine for similar indications as S. ornata (blood purification, anti-inflammatory, skin conditions). Audit 2026-05-01 split this from sarsaparilla entry per strict same-species chemistry rule.",
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "unii": "KDX23MP2GS",
+        "cui": "C3388298"
+      },
+      "cui": "C3388298",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -13122,21 +13151,42 @@
         "smilax china",
         "Smilax china",
         "smilax china root",
-        "smilax glabra",
-        "Smilax glabra",
-        "smilax glabra root",
-        "tu fuling",
         "madhusnuhi",
         "smilax china l.",
         "smilax china l. root"
       ],
       "category": "root",
-      "notes": "Smilax china L. (Smilacaceae) root — traditional Ayurvedic (madhusnuhi) and Chinese medicine (tu fuling) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). Distinct from Smilax ornata (sarsaparilla) and from Smilax regelii. Clinical evidence sparse — primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
+      "notes": "Smilax china L. (Smilacaceae) root — traditional Ayurvedic (madhusnuhi) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). DISTINCT from Smilax glabra (Tu Fu Ling, CUI C2810601 — different species, primary TCM herb for damp-heat clearing) and from Smilax ornata/regelii (sarsaparilla). Clinical evidence sparse — primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
       "last_updated": "2026-03-17",
       "external_ids": {
         "unii": "B5ZXF484DK"
       },
       "cui": "C1014796",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "tu_fu_ling",
+      "standard_name": "Tu Fu Ling",
+      "latin_name": "Smilax glabra",
+      "aliases": [
+        "smilax glabra",
+        "Smilax glabra",
+        "smilax glabra root",
+        "smilax glabra rhizome",
+        "tu fu ling",
+        "tufuling",
+        "tu fuling",
+        "glabrous greenbrier",
+        "sarsaparilla rhizome (tu fu ling)"
+      ],
+      "category": "rhizome",
+      "notes": "Smilax glabra Roxb. (Smilacaceae) rhizome — primary TCM herb (土茯苓). Distinct species from Smilax china (Chopchini, CUI C1014796) and Smilax ornata (Sarsaparilla, CUI C4277519). Contains astilbin, engeletin, smilagenin, and steroidal saponins. Traditional TCM use: clears damp-heat, detoxifies (used historically for syphilis, mercury poisoning, rheumatic conditions, skin disorders). Clinical evidence: limited human data; in vitro and animal studies show anti-inflammatory and hepatoprotective activity (astilbin-mediated). No FDA safety alerts.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C2810601",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -13480,25 +13530,63 @@
       "standard_name": "Catjang Cowpea",
       "latin_name": "Vigna unguiculata",
       "aliases": [
-        "Catjang Cowpea (Dolichos biflorus) extract",
+        "vigna unguiculata",
+        "Vigna unguiculata",
+        "vigna unguiculata extract",
+        "vigna unguiculata subsp. unguiculata",
+        "catjang cowpea",
         "catjang cowpea extract",
-        "Dolichos biflorus extract",
-        "Vigna unguiculata extract",
-        "horse gram extract",
-        "kulthi extract"
+        "cowpea",
+        "cowpea extract",
+        "black-eyed pea"
       ],
       "category": "legume",
-      "notes": "Vigna unguiculata / Dolichos biflorus — Ayurvedic legume extract used for kidney/urinary support.",
-      "last_updated": "2026-04-20",
+      "notes": "Vigna unguiculata (Fabaceae) seed/legume — cowpea / black-eyed pea, including the catjang cultivar group. UNII A15VFT1NFM. DISTINCT from horse gram (Macrotyloma uniflorum, formerly Dolichos biflorus, CUI C1477450) — Dolichos biflorus is the obsolete name for horse gram, NOT cowpea. The Catjang/Dolichos confusion is an old taxonomic error perpetuated in some commercial labeling. Audit 2026-05-01 corrected: stripped 'Dolichos biflorus extract', 'horse gram extract', 'kulthi extract' aliases (different species — see horse_gram entry); fixed external_ids.cui from C0058663 (which is dolichos biflorus AGGLUTININ protein, not the plant) to C0996865 (Vigna unguiculata).",
+      "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "A15VFT1NFM",
-        "cui": "C0058663"
+        "cui": "C0996865"
       },
       "rxcui": null,
       "gsrs": {
-        "substance_name": "Vigna unguiculata whole",
+        "substance_name": "Vigna unguiculata subsp. unguiculata whole",
         "substance_class": "structurally diverse"
       },
+      "cui": "C0996865",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "horse_gram",
+      "standard_name": "Horse Gram",
+      "latin_name": "Macrotyloma uniflorum",
+      "aliases": [
+        "macrotyloma uniflorum",
+        "Macrotyloma uniflorum",
+        "macrotyloma uniflorum extract",
+        "macrotyloma uniflorum seed",
+        "macrotyloma uniflorum whole",
+        "horse gram",
+        "horse gram extract",
+        "horsegram",
+        "kulthi",
+        "kulthi extract",
+        "kulattha",
+        "dolichos biflorus",
+        "Dolichos biflorus",
+        "dolichos biflorus extract",
+        "Catjang Cowpea (Dolichos biflorus) extract"
+      ],
+      "category": "legume",
+      "notes": "Macrotyloma uniflorum (Fabaceae) seed/legume — horse gram / kulthi / kulattha. Modern accepted name; OLD synonym Dolichos biflorus is widely used in Ayurvedic and older commercial labeling but refers to this species, NOT cowpea (Vigna unguiculata). Traditional Ayurvedic use for kidney stones, urinary calculi, weight management, hyperlipidemia. Contains polyphenols, phytic acid, and protease inhibitors. UNII 379916QREU (whole). Note: 'Dolichos biflorus' is also used in lab biology to refer to Dolichos biflorus agglutinin (DBA, CUI C0058663) — that's a lectin protein, not a botanical extract.",
+      "last_updated": "2026-05-01",
+      "external_ids": {
+        "unii": "379916QREU",
+        "cui": "C1477450"
+      },
+      "cui": "C1477450",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
