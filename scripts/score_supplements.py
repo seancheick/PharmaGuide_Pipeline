@@ -1460,10 +1460,21 @@ class SupplementScorer:
         dose_data = self._compute_epa_dha_per_day(product)
 
         if not dose_data.get("has_explicit_dose"):
-            return {
+            # No EPA/DHA detected. If an opaque omega blend is present,
+            # surface the cause (informational only — no score change).
+            result = {
                 "omega3_dose_bonus": 0.0,
                 "applicable": False,
             }
+            if self._has_opaque_omega3_blend(product):
+                result["bonus_missed_due_to_opacity"] = True
+                result["bonus_missed_reason"] = (
+                    "EPA/DHA breakdown not disclosed (ingredient appears in a "
+                    "proprietary blend without per-component amounts)."
+                )
+                if "OMEGA3_BONUS_MISSED_OPAQUE_BLEND" not in flags:
+                    flags.append("OMEGA3_BONUS_MISSED_OPAQUE_BLEND")
+            return result
 
         per_day = as_float(dose_data.get("per_day_mid"), 0.0) or 0.0
         bonus_score = 0.0
@@ -1483,7 +1494,7 @@ class SupplementScorer:
                         flags.append(band_flag)
                 break
 
-        return {
+        result = {
             "omega3_dose_bonus": round(bonus_score, 2),
             "max": round(bonus_max, 2),
             "applicable": True,
@@ -1495,6 +1506,27 @@ class SupplementScorer:
             "dha_mg_per_unit": dose_data.get("dha_mg_per_unit"),
             "prescription_dose": prescription_dose,
         }
+
+        # Partial-disclosure opacity flag (informational, no score change):
+        # Some EPA/DHA was labeled but per_day is below the smallest scoring
+        # band (250 mg) AND an opaque omega-class blend is present. Catches
+        # the "Real Krill" pattern: 63 mg labeled + hidden Antarctic Krill
+        # Oil Complex. The B5 transparency penalty already handles the
+        # opacity scoring side; this flag only explains WHY the bonus is 0
+        # so the UI distinguishes "below threshold" from "below threshold AND
+        # undisclosed amounts hidden in opaque blend". We want to be accurate
+        # without being harsh on real products — strict trigger so products
+        # earning ANY partial credit (efsa_ai_zone 0.5+) do NOT trigger.
+        if bonus_score == 0.0 and self._has_opaque_omega3_blend(product):
+            result["bonus_missed_due_to_opacity"] = True
+            result["bonus_missed_reason"] = (
+                "Labeled EPA+DHA below scoring threshold; additional omega-3 "
+                "amounts may be in an undisclosed proprietary blend."
+            )
+            if "OMEGA3_BONUS_MISSED_OPAQUE_BLEND" not in flags:
+                flags.append("OMEGA3_BONUS_MISSED_OPAQUE_BLEND")
+
+        return result
 
     def _build_section_a_zero_diagnostic(self, product: Dict[str, Any]) -> Dict[str, Any]:
         """Build diagnostic detail when Section A scores 0.0.
@@ -3114,6 +3146,50 @@ class SupplementScorer:
             "omega3_dose_source": _omega3_source,
         }
 
+    @staticmethod
+    def _has_opaque_omega3_blend(product: Dict[str, Any]) -> bool:
+        """Detect if the product carries an opaque proprietary blend
+        (`disclosure_level=none`) whose name OR child ingredients suggest
+        omega-3 content. Used to flag bonus_missed_due_to_opacity in two
+        cases:
+
+        1. Zero EPA/DHA detected at all — bonus would be 0 anyway.
+        2. Some EPA/DHA detected but per_day below the smallest scoring
+           band (250 mg) — could be undisclosed amounts buried in the blend.
+
+        Per executive principle 2026-05-01: this DETECTS the opacity, it
+        does NOT estimate the dose. UI surfaces the cause without inflating
+        the score.
+        """
+        blends = (
+            safe_list(product.get("proprietary_blends"))
+            or safe_list((product.get("proprietary_data") or {}).get("blends"))
+            or []
+        )
+        OMEGA_INDICATORS = (
+            "omega", "fish oil", "krill", "marine lipid",
+            "epa", "dha", "n-3", "n3", "fatty acid",
+        )
+        for b in blends:
+            if not isinstance(b, dict):
+                continue
+            if b.get("disclosure_level") != "none":
+                continue
+            blend_name = (b.get("name") or "").lower()
+            if any(t in blend_name for t in OMEGA_INDICATORS):
+                return True
+            # Or any child ingredient is omega-3-class
+            for child in (
+                b.get("ingredients") or b.get("subIngredients")
+                or b.get("components") or []
+            ):
+                if not isinstance(child, dict):
+                    continue
+                cname = (child.get("name") or "").lower()
+                if any(t in cname for t in OMEGA_INDICATORS):
+                    return True
+        return False
+
     def _compute_legacy_section_e(self, product: Dict[str, Any], flags: List[str]) -> Dict[str, Any]:
         """Section E – EPA+DHA Dose Adequacy (up to 2.0 bonus points).
 
@@ -3134,41 +3210,7 @@ class SupplementScorer:
             # from "contains omega-3 but undisclosed". Per executive feedback
             # 2026-05-01: do NOT estimate the dose (would violate the
             # deterministic principle); only flag the cause.
-            blends = (
-                safe_list(product.get("proprietary_blends"))
-                or safe_list((product.get("proprietary_data") or {}).get("blends"))
-                or []
-            )
-            opaque_omega3_blend = False
-            for b in blends:
-                if not isinstance(b, dict):
-                    continue
-                if b.get("disclosure_level") != "none":
-                    continue
-                blend_name = (b.get("name") or "").lower()
-                # Pattern check: blend name contains an omega-3 indicator
-                if any(t in blend_name for t in (
-                    "omega", "fish oil", "krill", "marine lipid",
-                    "epa", "dha", "n-3", "n3", "fatty acid",
-                )):
-                    opaque_omega3_blend = True
-                    break
-                # Or any child ingredient is omega-3-class
-                for child in (
-                    b.get("ingredients") or b.get("subIngredients")
-                    or b.get("components") or []
-                ):
-                    if not isinstance(child, dict):
-                        continue
-                    cname = (child.get("name") or "").lower()
-                    if any(t in cname for t in (
-                        "fish oil", "krill", "epa", "dha", "omega",
-                        "marine lipid",
-                    )):
-                        opaque_omega3_blend = True
-                        break
-                if opaque_omega3_blend:
-                    break
+            opaque_omega3_blend = self._has_opaque_omega3_blend(product)
 
             result = {
                 "score": 0.0,
@@ -3206,7 +3248,7 @@ class SupplementScorer:
                         flags.append(band_flag)
                 break
 
-        return {
+        result = {
             "score": round(e_score, 2),
             "max": round(section_max, 2),
             "applicable": True,
@@ -3218,6 +3260,35 @@ class SupplementScorer:
             "dha_mg_per_unit": dose_data.get("dha_mg_per_unit"),
             "prescription_dose": prescription_dose,
         }
+
+        # Partial-disclosure opacity flag (extension 2026-05-01):
+        # Fire OMEGA3_BONUS_MISSED_OPAQUE_BLEND when SOME EPA/DHA was
+        # detected but per_day is below the smallest scoring band (250 mg)
+        # AND an opaque omega-class blend is present. This catches the
+        # "Real Krill" pattern: 63 mg labeled + hidden Antarctic Krill Oil
+        # Complex. The flag is INFORMATIONAL (no score change) — it only
+        # explains WHY the bonus is 0 so the UI can distinguish "below
+        # threshold" from "below threshold AND undisclosed amounts hidden
+        # in opaque blend". Product is NOT penalized further (B5 penalty
+        # already handles the opacity scoring side); we want to be
+        # accurate without being harsh on real products.
+        #
+        # Strict trigger:
+        #   - e_score == 0 (no omega-3 bonus earned at all)
+        #   - has_explicit_dose=True (some EPA/DHA labeled, just sub-threshold)
+        #   - opaque omega blend present
+        # Products that earned ANY partial credit (efsa_ai_zone 0.5+) do
+        # NOT trigger this flag.
+        if e_score == 0.0 and self._has_opaque_omega3_blend(product):
+            result["bonus_missed_due_to_opacity"] = True
+            result["bonus_missed_reason"] = (
+                "Labeled EPA+DHA below scoring threshold; additional omega-3 "
+                "amounts may be in an undisclosed proprietary blend."
+            )
+            if "OMEGA3_BONUS_MISSED_OPAQUE_BLEND" not in flags:
+                flags.append("OMEGA3_BONUS_MISSED_OPAQUE_BLEND")
+
+        return result
 
     @staticmethod
     def _build_legacy_section_e(section_a: Dict[str, Any]) -> Dict[str, Any]:
@@ -3244,6 +3315,11 @@ class SupplementScorer:
                         "epa_mg_per_unit", "dha_mg_per_unit", "prescription_dose"):
                 if key in o3:
                     result[key] = o3[key]
+        # Always propagate transparency fields if set (apply equally to
+        # not-applicable + applicable-but-zero-score cases)
+        for key in ("bonus_missed_due_to_opacity", "bonus_missed_reason"):
+            if key in o3:
+                result[key] = o3[key]
         return result
 
     # ---------------------------------------------------------------------
