@@ -56055,10 +56055,10 @@
     "category_enum": "herbs",
     "source": "botanical_extract",
     "priority": "low",
-    "description": "Black fungus / wood ear mushroom (Auricularia auricula-judae). Traditional Chinese medicine mushroom rich in polysaccharides and melanin. Animal models show antioxidant, anti-aging (extends nematode lifespan ~20%), and metabolic effects. Limited human clinical trials.",
+    "description": "Black fungus / wood ear mushroom (Auricularia auricula-judae). Traditional Chinese medicine mushroom rich in polysaccharides and melanin. Animal models show antioxidant, anti-aging (extends nematode lifespan ~20%), and metabolic effects. Limited human clinical trials. DISTINCT from Auricularia polytricha (Cloud Ear / Hairy Wood Ear, CUI C1081597) — different species in the same genus, often used interchangeably in commerce but pharmacology and TCM indications differ. Old CUI C0997521 was the genus-level concept; corrected 2026-05-01 audit to species-specific C1002916.",
     "dosage_importance": 0.1,
-    "cui": "C0997521",
-    "cui_note": "No UMLS CUI for supplement ingredient",
+    "cui": "C1002916",
+    "cui_note": "C1002916 = species-specific Auricularia auricula-judae (corrected from genus-level C0997521 per 2026-05-01 audit). Mirrors botanical_ingredients.json wood_ear_mushroom entry.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "auricularia fruiting body extract": {
@@ -56124,7 +56124,8 @@
     },
     "aliases": [
       "Auricularia",
-      "Auricularia polytricha"
+      "Auricularia auricula-judae",
+      "Auricularia auricula"
     ],
     "external_ids": {}
   },
