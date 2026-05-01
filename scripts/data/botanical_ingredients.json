@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-01",
-    "total_entries": 468,
+    "total_entries": 471,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -14196,6 +14196,76 @@
       "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C4538278",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "leek",
+      "standard_name": "Leek",
+      "latin_name": "Allium ampeloprasum (= Allium porrum)",
+      "aliases": [
+        "leek",
+        "organic leek",
+        "allium ampeloprasum",
+        "allium porrum",
+        "leek bulb",
+        "garden leek"
+      ],
+      "category": "vegetable",
+      "notes": "Allium ampeloprasum / A. porrum (Amaryllidaceae). Common culinary allium with allicin-related sulfur compounds. Modest individual clinical evidence; functional grouping with garlic / onion / chive for cardiovascular and immune support.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C1262901",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "sphaeranthus_indicus",
+      "standard_name": "Sphaeranthus indicus",
+      "latin_name": "Sphaeranthus indicus",
+      "aliases": [
+        "sphaeranthus indicus",
+        "east indian globe thistle",
+        "indian globe thistle",
+        "mundi",
+        "kottakkarantai",
+        "holimel",
+        "meratrim"
+      ],
+      "category": "herb",
+      "notes": "Sphaeranthus indicus (Asteraceae). Ayurvedic herb; flower extracts standardized to 7-hydroxyfrullanolide and other sesquiterpene lactones. Trade names Holimel and Meratrim (combination with Garcinia mangostana) marketed for weight management; clinical RCTs in obesity/metabolic-syndrome populations.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C3531007",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant"
+      }
+    },
+    {
+      "id": "ajwain",
+      "standard_name": "Ajwain",
+      "latin_name": "Trachyspermum ammi (= Carum copticum)",
+      "aliases": [
+        "ajwain",
+        "ajowan",
+        "trachyspermum ammi",
+        "carum copticum",
+        "carom seed",
+        "carom",
+        "trachyspermum ammi fruit extract",
+        "ajowan caraway",
+        "bishop's weed"
+      ],
+      "category": "herb",
+      "notes": "Trachyspermum ammi / Carum copticum (Apiaceae) seed. Indian/Middle-Eastern culinary spice. Thymol and p-cymene constituents; traditional digestive use. Modest clinical research on dyspepsia and antimicrobial activity.",
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": "C0950083",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
