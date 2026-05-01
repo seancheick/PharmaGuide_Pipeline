@@ -11875,12 +11875,23 @@
         "natural": true,
         "score": 14,
         "absorption": "moderate (SPM precursor; class-distinct)",
-        "notes": "17-HDHA — hydroxylated DHA metabolite, precursor to D-series resolvins (RvD1-6) and protectins. Specialized Pro-resolving Mediator (SPM). Present in fish-oil SPM concentrates. B29 audit 2026-04-25: SPM precursor class-distinct; conservative.",
+        "notes": "17-HDHA — hydroxylated DHA metabolite, precursor to D-series resolvins (RvD1-6) and protectins. Specialized Pro-resolving Mediator (SPM). Present in fish-oil SPM concentrates. B29 audit 2026-04-25: SPM precursor class-distinct; conservative. EXECUTIVE DECISION 2026-05-01 (SPM Mapping Policy): products labeled 'Resolvins', 'Protectins', 'Resolvin D5', 'Protectin DX' are mapped here as ALIAS — most supplement products labeling these terms contain SPM PRECURSORS (HDHA/HEPE), not the resolvins/protectins themselves. The actual resolvins are short-lived endogenous metabolites; commercial fish-oil SPM concentrates deliver precursors that the body converts. This avoids overclaiming label content while preserving omega-3 attribution.",
         "aliases": [
           "17-Hydroxydocosahexaenoic Acid",
           "17-Hydroxy-Docosahexaenoic Acid",
           "17-HDHA",
-          "17-HDoHE"
+          "17-HDoHE",
+          "Resolvins",
+          "resolvins",
+          "Protectins",
+          "protectins",
+          "Resolvin D5",
+          "resolvin d5",
+          "Protectin DX",
+          "protectin dx",
+          "specialized pro-resolving mediators",
+          "SPMs",
+          "SPM precursors"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -52817,6 +52828,67 @@
       "metabolites": []
     },
     "aliases": []
+  },
+  "algae_protein": {
+    "standard_name": "Algae Protein (Generic / Multi-Source)",
+    "category": "protein",
+    "category_enum": "proteins",
+    "cui": "C0600607",
+    "cui_note": "C0600607 = generic 'Algal Proteins' MSH concept. Source-specific entries (chlorella, spirulina, schizochytrium) have their own CUIs and bio_scores; this entry covers label-only listings without source disambiguation.",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Generic algae protein listing where the label does not specify the algal source (Spirulina, Chlorella, Schizochytrium, mixed microalgae, etc.). Per Executive Decision 2026-05-01 (Source Disambiguation rule): products listing 'Algae Protein' or 'Algal Protein' without source identification map here as a non-bioactive ambiguous category. When source IS disclosed, route to the species-specific entry: chlorella (whole cell — has its own poor-absorption profile per PMID 39610880); spirulina; or other algal entries.",
+    "forms": {
+      "algae protein (unspecified source)": {
+        "bio_score": 5,
+        "natural": true,
+        "score": 8,
+        "absorption": "low-moderate (algal class-poor; cell wall barrier; conservative due to source uncertainty)",
+        "notes": "Generic algae protein entry — source not specified on label. Chlorella whole-cell has documented near-zero amino acid bioavailability (PMID:39610880, PMC8759652 sporopollenin cell wall). Spirulina protein digestibility in vitro is higher (~70-80%) but cell-wall barrier still applies. Conservative bio_score=5 reflects source uncertainty per strict-rule policy. When source is disclosed (Spirulina/Chlorella/Schizochytrium) prefer the species-specific entry.",
+        "aliases": [
+          "Algae Protein",
+          "algae protein",
+          "Algal Protein",
+          "algal protein",
+          "whole Algal Protein",
+          "Whole Algal protein",
+          "whole algal protein",
+          "algae protein powder",
+          "algal protein concentrate",
+          "Green Algae Whole Plant Extract",
+          "green algae whole plant extract"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.2,
+          "range_low": 0.1,
+          "range_high": 0.4,
+          "quality": "poor"
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "chlorella",
+        "spirulina",
+        "schizochytrium",
+        "haematococcus"
+      ],
+      "parent_id": null,
+      "confidence": "low"
+    },
+    "data_quality": {
+      "completeness": 0.5,
+      "review_status": "reviewed",
+      "last_reviewed_at": "2026-05-01"
+    },
+    "confidence_level": "inferred",
+    "aliases": [
+      "Algae Protein",
+      "Algal Protein"
+    ],
+    "external_ids": {}
   },
   "alfalfa": {
     "category": "herbs",
