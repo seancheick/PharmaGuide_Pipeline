@@ -2727,7 +2727,10 @@
         "matricaria chamomilla",
         "chamomile flower",
         "organic chamomile",
-        "german chamomile"
+        "german chamomile",
+        "camomile",
+        "camomile flower",
+        "Camomile Flower"
       ],
       "category": "flower",
       "notes": "Matricaria chamomilla (Asteraceae) flower. Contains apigenin, bisabolol, and chamazulene. RCT evidence for mild anxiolytic and sleep-promoting effects (PMID 27912875). Most-studied calming botanical.",
@@ -3367,7 +3370,11 @@
         "green coffee seed extract",
         "green coffee (beans) pe",
         "organic neurofactor whole coffee",
-        "Coffea arabica"
+        "Coffea arabica",
+        "Slimpure decaffeinated green coffee extract",
+        "Slimpure(R) Decaffeinated Green Coffee Extract",
+        "slimpure green coffee extract",
+        "decaffeinated green coffee extract"
       ],
       "category": "fruit",
       "notes": "Coffea arabica (Rubiaceae) whole fruit (cherry). Contains chlorogenic acids and polyphenols distinct from coffee bean. NeuroFactor® studies show BDNF elevation from coffee fruit extract. Botanical fruit form.",
@@ -6851,7 +6858,13 @@
       "aliases": [
         "Japanese Knotweed Root Extract",
         "Reynoutria japonica",
-        "japanese knotweed"
+        "japanese knotweed",
+        "RAW Fermented Wildcrafted Japanese Knotweed",
+        "raw fermented wildcrafted japanese knotweed",
+        "fermented japanese knotweed",
+        "wildcrafted japanese knotweed",
+        "polygonum cuspidatum",
+        "Polygonum cuspidatum"
       ],
       "category": "root",
       "notes": "Reynoutria japonica (syn. Polygonum cuspidatum, Polygonaceae) root. Hu Zhang in TCM. Richest dietary source of trans-resveratrol (not standardized in botanical form). Also contains emodin anthraquinone.",
@@ -13202,10 +13215,15 @@
         "mate extract",
         "mate yerba mate powder",
         "mate leaf extract",
-        "Ilex paraguariensis"
+        "Ilex paraguariensis",
+        "Guayaki yerba mate",
+        "guayaki yerba mate extract",
+        "organic Guayaki(R) Yerba Mate extract",
+        "organic guayaki yerba mate extract",
+        "organic yerba mate"
       ],
       "category": "leaf",
-      "notes": "Ilex paraguariensis (Aquifoliaceae) leaf. South American stimulant containing caffeine (1-2%), theobromine, and chlorogenic acids. Rich in saponins (matesaponins). Traditional social beverage.",
+      "notes": "Ilex paraguariensis (Aquifoliaceae) leaf. South American stimulant containing caffeine (1-2%), theobromine, and chlorogenic acids. Rich in saponins (matesaponins). Traditional social beverage. Guayaki is a major US-market commercial brand of yerba mate (same plant, brand alias only).",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "1Q953B4O4F"

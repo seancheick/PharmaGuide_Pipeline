@@ -3182,7 +3182,10 @@
           "natures c with qpower",
           "ultra potent-c",
           "Vitamin C",
-          "vit c"
+          "vit c",
+          "RAW Whole Food Vitamin C",
+          "raw whole food vitamin c",
+          "whole food vitamin c"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -3726,7 +3729,10 @@
           "Vitamin D",
           "Vitamin D USP",
           "vit d",
-          "vitamin d-"
+          "vitamin d-",
+          "Poten-Zyme Vitamin D",
+          "Poten-Zyme(R) Vitamin D",
+          "poten-zyme vitamin d"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22114,12 +22120,23 @@
           "protease sp plus blend",
           "prohydrolase protease blend",
           "aspergillus melleus protease",
+          "aspergillus melleus",
+          "Aspergillus melleus",
           "aspergillus oryzae protease",
           "carbohydrate digestive enzymes",
           "carbohydrate enzymes",
           "amylase enzyme",
           "protease enzyme",
-          "lipase enzyme"
+          "lipase enzyme",
+          "diatase",
+          "Diatase",
+          "diastase",
+          "Diastase",
+          "acid function protease",
+          "Acid Function Protease",
+          "protein-digesting enzyme blend",
+          "Protein-Digesting Enzyme Blend",
+          "protein digesting enzyme blend"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
