@@ -37509,7 +37509,9 @@
   "gamma_butyrobetaine_ethyl_ester": {
     "standard_name": "Gamma-Butyrobetaine Ethyl Ester (GBB)",
     "category": "amino_acids",
-    "cui_note": "No exact UMLS concept for gamma-butyrobetaine ethyl ester; parent GBB is C0061030 but this is the ester prodrug form.",
+    "cui": null,
+    "cui_status": "governed_null",
+    "cui_note": "No exact UMLS concept for gamma-butyrobetaine ethyl ester; parent GBB is C0061030 but this entry is the ester prodrug form (distinct compound). Documented as governed_null per 2026-05-01 audit. Identifier coverage via PubChem CID 30902 + UNII G7BMF1URO9 in external_ids.",
     "rxcui_note": "No RxNorm concept; not an approved drug substance.",
     "forms": {
       "gbb ethyl ester hcl": {
@@ -55100,6 +55102,8 @@
     "source": "fermented",
     "priority": "medium",
     "description": "Dried yeast fermentate/hydrolysate. Postbiotic rich in beta-glucans, mannans, and metabolites. Immune support ingredient.",
+    "cui": "C3856454",
+    "cui_note": "C3856454 = 'Yeast Fermenters' (closest UMLS concept; supplement-market term has no exact UMLS entry). Verified 2026-05-01 audit.",
     "dosage_importance": 0.1,
     "forms": {
       "yeast fermentate (unspecified)": {
@@ -55145,8 +55149,8 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No confirmed ingredient-level UMLS concept for yeast fermentate; UMLS hits skew to device terms.",
-    "cui_status": "no_confirmed_umls_match",
+    "cui_note": "C3856454 = 'Yeast Fermenters' (closest UMLS concept; supplement-market term has no exact UMLS entry). Verified 2026-05-01 audit.",
+    "cui_status": "verified",
     "external_ids": {},
     "aliases": []
   },
@@ -55228,6 +55232,8 @@
     "source": "botanical_extract",
     "priority": "medium",
     "description": "Aristotelia chilensis berry from Patagonia. Highest known ORAC value among berries. Rich in delphinidins. Studied for eye health (dry eye) and blood sugar.",
+    "cui": "C1067051",
+    "cui_note": "C1067051 = Aristotelia chilensis (UMLS-verified 2026-05-01 audit). Matches the botanical 'maqui' entry CUI in botanical_ingredients.json.",
     "dosage_importance": 0.1,
     "forms": {
       "maqui berry (unspecified)": {
@@ -55270,8 +55276,8 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No confirmed exact UMLS concept found for maqui berry.",
-    "cui_status": "no_confirmed_umls_match",
+    "cui_note": "C1067051 = Aristotelia chilensis (UMLS-verified 2026-05-01 audit). Matches the 'maqui' botanical_ingredients.json entry CUI.",
+    "cui_status": "verified",
     "external_ids": {},
     "aliases": []
   },
@@ -55740,6 +55746,8 @@
     "source": "botanical_extract",
     "priority": "medium",
     "description": "Quercus robur heartwood extract. Contains roburins (ellagitannins). Antioxidant, anti-fatigue. Studied for chronic fatigue and recovery.",
+    "cui": "C0330306",
+    "cui_note": "C0330306 = Quercus robur (UMLS-verified 2026-05-01 audit). The IQM entry covers the wood extract; UMLS concept is at species level.",
     "dosage_importance": 0.1,
     "forms": {
       "french oak extract (unspecified)": {
@@ -55782,8 +55790,8 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No confirmed exact UMLS concept found for French oak extract.",
-    "cui_status": "no_confirmed_umls_match",
+    "cui_note": "C0330306 = Quercus robur (UMLS-verified 2026-05-01 audit). The IQM entry covers the wood extract; UMLS concept is at species level.",
+    "cui_status": "verified",
     "external_ids": {},
     "aliases": []
   },
@@ -55914,6 +55922,9 @@
     "source": "botanical_extract",
     "priority": "medium",
     "description": "Camellia sinensis cultivar TRFK 306/1 from Kenya. Contains unique GHG (1,2-di-galloyl-4,6-hexahydroxydiphenoyl-glucose) compounds not found in green/black tea.",
+    "cui": null,
+    "cui_status": "governed_null",
+    "cui_note": "No UMLS concept exists for purple tea cultivar (Camellia sinensis varietal). Generic Camellia sinensis (C3275244) covers parent species but not varietal-specific GHG chemistry. Verified 2026-05-01 audit (verify_cui.py search).",
     "dosage_importance": 0.1,
     "forms": {
       "purple tea (unspecified)": {
@@ -56948,7 +56959,9 @@
     "priority": "low",
     "description": "Traditional fermented kefir starter culture containing a symbiotic consortium of lactic acid bacteria, acetic acid bacteria, and yeasts embedded in kefir grains. Provides diverse probiotic strains plus beta-glucan polysaccharides from kefir grain matrix. Evidence supports gut microbiome diversity, immune modulation, and lactose digestion improvement.",
     "dosage_importance": 0.1,
-    "cui_note": "Culture entry spanning multiple bacteria and yeasts. No single UMLS concept is accurate.",
+    "cui": null,
+    "cui_status": "governed_null",
+    "cui_note": "Culture entry spanning multiple bacteria and yeasts. No single UMLS concept is accurate. Documented as governed_null per 2026-05-01 audit.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "kefir culture (fermented)": {
