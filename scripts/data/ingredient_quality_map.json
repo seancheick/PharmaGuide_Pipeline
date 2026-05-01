@@ -9019,6 +9019,128 @@
       "C0163151"
     ]
   },
+  "resolvin_d5": {
+    "standard_name": "Resolvin D5",
+    "category": "fatty_acids",
+    "category_enum": "fatty_acids",
+    "cui": "C3492734",
+    "cui_note": "C3492734 = MSH 'resolvin D5' organic chemical / pharmacologic substance. PubChem CID 24932575 (per executive verification 2026-05-01). DISTINCT compound from 17-HDHA precursor — not aliased to omega_3/SPM-precursor entry.",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Resolvin D5 — D-series resolvin, a Specialized Pro-resolving Mediator (SPM) derived from DHA via the 17-HDHA pathway. Distinct chemical entity from its 17-HDHA precursor (CUI C0639949). Endogenously short-lived; commercial supplements rarely contain measurable preformed Resolvin D5 — most 'SPM' products deliver the precursor (HDHA) which the body converts. This entry exists for label-identity matching only when products explicitly name 'Resolvin D5'.",
+    "forms": {
+      "resolvin d5 (label-identity)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "unverified for preformed Resolvin D5; conservative pending clinical review",
+        "notes": "Identity verified via UMLS C3492734 + PubChem CID 24932575. Clinical bio_score and absorption pending clinician validation per CLINICIAN_REVIEW_REQUEST_2026-05-01.md Priority 2. No human PK data published for oral preformed Resolvin D5 supplementation. Conservative bio_score=7 placeholder until reviewed.",
+        "aliases": [
+          "Resolvin D5",
+          "resolvin d5",
+          "RvD5",
+          "rvd5"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "unknown"
+        },
+        "external_ids": {
+          "pubchem_cid": 24932575
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "17-hdha",
+        "resolvin d1",
+        "resolvin d2",
+        "resolvin d3",
+        "resolvin d4",
+        "resolvin d6",
+        "resolvin e1",
+        "protectin"
+      ],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.5,
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-05-01"
+    },
+    "confidence_level": "verified",
+    "clinical_notes": "Identity verified (UMLS + PubChem). Clinical role and bio_score pending clinician validation — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
+    "aliases": [
+      "Resolvin D5"
+    ],
+    "external_ids": {
+      "pubchem_cid": 24932575
+    }
+  },
+  "protectin_dx": {
+    "standard_name": "Protectin DX",
+    "category": "fatty_acids",
+    "category_enum": "fatty_acids",
+    "cui": "C3886642",
+    "cui_note": "C3886642 = MSH 'protectin DX' organic chemical. PubChem CID 11968800 (per executive verification 2026-05-01). DISTINCT compound from 17-HDHA precursor and from Protectin D1 — not aliased to omega_3/SPM-precursor entry.",
+    "rxcui_note": "No RxNorm concept for supplement ingredient",
+    "description": "Protectin DX (PDX) — DHA-derived double-lipoxygenase Specialized Pro-resolving Mediator (SPM). Stereoisomer-distinct from Protectin D1; biologically less active per published mediator-lipidomics data but still a distinct chemical entity. Endogenously short-lived; commercial supplements rarely contain measurable preformed Protectin DX. This entry exists for label-identity matching only.",
+    "forms": {
+      "protectin dx (label-identity)": {
+        "bio_score": 7,
+        "natural": true,
+        "score": 10,
+        "absorption": "unverified for preformed Protectin DX; conservative pending clinical review",
+        "notes": "Identity verified via UMLS C3886642 + PubChem CID 11968800. Clinical bio_score and absorption pending clinician validation per CLINICIAN_REVIEW_REQUEST_2026-05-01.md Priority 2. No human PK data published for oral preformed Protectin DX supplementation. Conservative bio_score=7 placeholder until reviewed.",
+        "aliases": [
+          "Protectin DX",
+          "protectin dx",
+          "PDX",
+          "pdx"
+        ],
+        "dosage_importance": 1.0,
+        "absorption_structured": {
+          "value": 0.3,
+          "range_low": 0.1,
+          "range_high": 0.5,
+          "quality": "unknown"
+        },
+        "external_ids": {
+          "pubchem_cid": 11968800
+        }
+      }
+    },
+    "match_rules": {
+      "priority": 1,
+      "match_mode": "alias_and_fuzzy",
+      "exclusions": [
+        "17-hdha",
+        "protectin d1",
+        "neuroprotectin",
+        "resolvin"
+      ],
+      "parent_id": null,
+      "confidence": "medium"
+    },
+    "data_quality": {
+      "completeness": 0.5,
+      "review_status": "needs_review",
+      "last_reviewed_at": "2026-05-01"
+    },
+    "confidence_level": "verified",
+    "clinical_notes": "Identity verified (UMLS + PubChem). Clinical role and bio_score pending clinician validation — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
+    "aliases": [
+      "Protectin DX"
+    ],
+    "external_ids": {
+      "pubchem_cid": 11968800
+    }
+  },
   "resveratrol": {
     "standard_name": "Resveratrol",
     "category": "antioxidants",
@@ -11875,7 +11997,7 @@
         "natural": true,
         "score": 14,
         "absorption": "moderate (SPM precursor; class-distinct)",
-        "notes": "17-HDHA — hydroxylated DHA metabolite, precursor to D-series resolvins (RvD1-6) and protectins. Specialized Pro-resolving Mediator (SPM). Present in fish-oil SPM concentrates. B29 audit 2026-04-25: SPM precursor class-distinct; conservative. EXECUTIVE DECISION 2026-05-01 (SPM Mapping Policy): products labeled 'Resolvins', 'Protectins', 'Resolvin D5', 'Protectin DX' are mapped here as ALIAS — most supplement products labeling these terms contain SPM PRECURSORS (HDHA/HEPE), not the resolvins/protectins themselves. The actual resolvins are short-lived endogenous metabolites; commercial fish-oil SPM concentrates deliver precursors that the body converts. This avoids overclaiming label content while preserving omega-3 attribution.",
+        "notes": "17-HDHA — hydroxylated DHA metabolite, precursor to D-series resolvins (RvD1-6) and protectins. Specialized Pro-resolving Mediator (SPM). Present in fish-oil SPM concentrates. B29 audit 2026-04-25: SPM precursor class-distinct; conservative. POLICY 2026-05-01 (SPM Mapping, post-correction): GENERIC label terms 'Resolvins', 'Protectins', 'SPMs', 'SPM precursors' route here because most supplement products labeling these terms contain SPM PRECURSORS (HDHA/HEPE) rather than the actual short-lived endogenous resolvins. SPECIFIC NAMED COMPOUNDS (Resolvin D5, Protectin DX, etc.) have their own distinct PubChem CIDs and are routed to their own entries (see resolvin_d5, protectin_dx). The 2026-05-01 first-pass aliasing of these specific compounds onto 17-HDHA was reverted as an ontology violation — distinct compounds must not alias to a precursor.",
         "aliases": [
           "17-Hydroxydocosahexaenoic Acid",
           "17-Hydroxy-Docosahexaenoic Acid",
@@ -11885,10 +12007,6 @@
           "resolvins",
           "Protectins",
           "protectins",
-          "Resolvin D5",
-          "resolvin d5",
-          "Protectin DX",
-          "protectin dx",
           "specialized pro-resolving mediators",
           "SPMs",
           "SPM precursors"
