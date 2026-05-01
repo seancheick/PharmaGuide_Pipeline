@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-04-30",
-    "total_entries": 673,
+    "last_updated": "2026-05-01",
+    "total_entries": 674,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -11767,6 +11767,31 @@
       "external_ids": {},
       "functional_roles": [],
       "is_active_only": true
+    },
+    {
+      "id": "NHA_MODCARB",
+      "standard_name": "ModCarb",
+      "aliases": [
+        "modcarb",
+        "ModCarb",
+        "Modcarb",
+        "MODCARB"
+      ],
+      "category": "carbohydrate",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "ModCarb (Lonza-trademarked) — branded multi-source modified-carbohydrate complex used in sports/endurance nutrition. Polysaccharide blend; no single-compound CAS/CID/UNII identifier. Distinct from generic Modified Food Starch (NHA_MODIFIED_FOOD_STARCH) and from Highly Branched Cyclic Dextrin (HBCD/Glico Cluster Dextrin — different branded carb). Function: rapidly-available carbohydrate fuel source. Source plant composition is brand-disclosed (manufacturer documentation) but not standardized across products labeled 'ModCarb'.",
+      "common_uses": [
+        "carbohydrate fuel",
+        "sports nutrition energy source"
+      ],
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": null,
+      "cui_status": "governed_null",
+      "cui_note": "Branded multi-source dextrin polymer; no UMLS concept exists for the trademark. Generic parent class is Dextrin (NHA_DEXTRIN, CUI C0054527) but ModCarb is a distinct multi-source branded blend.",
+      "functional_roles": []
     },
     {
       "id": "NHA_MODIFIED_FOOD_STARCH",
