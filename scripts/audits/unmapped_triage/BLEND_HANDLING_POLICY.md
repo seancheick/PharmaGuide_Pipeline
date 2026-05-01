@@ -60,24 +60,72 @@ Proprietary Fat Burn Blend     1200 mg   ← OPAQUE ACTIVE (score it, low confid
 
 ---
 
-## The structural rule (auto-detection target)
+## The structural rule (auto-detection target) — CORRECTED 4-state classifier
 
-Add this rule to the cleaner / enricher:
+**Important correction (per dev review 2026-05-01):** the rule must use a 4-state classifier, not a 2-case binary. My initial draft incorrectly treated "category=blend AND quantity=NP" as always being a header, which would drop valid disclosed-blend actives. Corrected rule:
 
+```python
+# PRIMARY signal — structural truth from raw DSLD
+if raw_category == "blend":
+
+    if quantity_unit == "NP":
+        if len(nestedRows) > 0:
+            return "DISCLOSED_BLEND"
+            # → header role + children disclosed below.
+            # Score the children individually. Skip the parent row from scorable.
+        else:
+            return "BLEND_HEADER"
+            # → orphan label row (no children disclosed in nestedRows).
+            # Skip from scorable. Children may exist as top-level siblings on
+            # this product's ingredientRows — those are scored independently.
+
+    elif quantity > 0:
+        if len(nestedRows) == 0:
+            return "OPAQUE_BLEND"
+            # → manufacturer disclosed blend total but no per-ingredient
+            # composition. Score as a real active. Apply B5 transparency
+            # penalty (already exists in scorer for proprietaryBlend).
+        else:
+            # FAKE TRANSPARENCY DETECTION: children listed but their
+            # individual quantities are unknown.
+            if all(child_qty in (0, None) or child_unit == "NP"
+                   for child in nestedRows):
+                return "OPAQUE_BLEND"  # children listed but no per-active doses → still opaque
+            else:
+                return "DISCLOSED_BLEND"  # children with real doses → fully disclosed
+
+# SECONDARY fallback — pattern-name matching for malformed/missing category
+elif (ingredient_name.rstrip().endswith(':')
+      and not has_quantity(ingredient)
+      and ingredient_name in BLEND_HEADER_EXACT_NAMES):
+    return "BLEND_HEADER"  # safety net for cases where DSLD source lacks category tagging
 ```
-IF (ingredient.name ends with ":")
-   AND (next_sibling_ingredient_rows_exist())
-   AND (those siblings have individual doses)
-THEN
-   → classify as BLEND_HEADER
-   → set is_blend_header = true
-   → exclude from scorable count
-ELSE IF (ingredient.name matches blend pattern AND quantity present AND no siblings below)
-   → classify as OPAQUE_BLEND_ACTIVE
-   → set is_active = true, composition = "unknown"
-   → downgrade quality confidence (e.g. -10% on Section A)
-   → flag for B5 disclosure-level penalty (already exists in scoring)
-```
+
+### State → scoring action mapping
+
+| State | Scorable count | Children scored | Confidence handling |
+|---|---|---|---|
+| `BLEND_HEADER` | exclude parent | n/a (no children) | n/a |
+| `DISCLOSED_BLEND` | exclude parent | yes, individually | full confidence per child |
+| `OPAQUE_BLEND` | **include** parent as active | n/a (no per-active doses) | route through existing B5 transparency penalty system (count-based + mass-based; see `score_supplements.py:B5` for the canonical implementation) — DO NOT use a fixed multiplier |
+| Fake-transparency (subcase of OPAQUE_BLEND) | **include** parent as active | n/a | same B5 path; the "children listed but NP" pattern is handled identically to no-children-listed |
+
+### Why the corrected rule matters
+
+**Without the nestedRows check:** treating `category=blend + quantity=NP` as always BLEND_HEADER would drop labeled disclosed blends (Antioxidant Support Complex with CoQ10/Betaine/Lutemax/Zeaxanthin children) entirely from scoring. We'd lose those 4 valid actives + their evidence-research bonuses. Real product impact: ~20-30% of section A score on multi-blend products.
+
+**Without fake-transparency detection:** manufacturers can game disclosed-blend by listing children without per-active doses. Without this check we'd score them as fully disclosed (high confidence) when in reality the user has no idea how much of each is in the bottle.
+
+### Confidence — DO NOT use ×0.7 multiplier
+
+My initial draft suggested `confidence × 0.7` for opaque blends. **Replace this with the existing B5 transparency penalty system** in `score_supplements.py`:
+
+- B5 already counts `proprietaryBlend` flagged ingredients
+- Penalty scales with: number of opaque blends + total opaque mass / total formula mass
+- A fixed ×0.7 multiplier ignores severity (one tiny opaque blend vs three large opaque blends — same multiplier)
+- The B5 system is the canonical place; OPAQUE_BLEND classification just feeds a flag into it
+
+**Implementation hook:** when a row is classified `OPAQUE_BLEND`, set `proprietaryBlend = true` on the enriched output. The scorer's existing B5 logic picks it up via the existing transparency-mass calculation. No new confidence multiplier needed.
 
 **Implementation file:** `scripts/enrich_supplements_v3.py` — `_should_skip_from_scoring` Group B (header rows).
 
