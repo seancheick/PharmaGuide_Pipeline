@@ -198,3 +198,27 @@ Audit pass on all 213 unique PMID URLs in `scripts/data/ingredient_interaction_r
 | 8298118 | Antes G 1993 | nac, nac | Antes 1993 — turning maneuver for intubation. Unrelated to NAC. |
 | 9161097 | Kałuza J 1997 | pygeum | Kałuza 1997 — paraneoplastic syndrome testicular seminoma. Unrelated to pygeum. |
 | 9600579 | Bagdy G 1998 | blue_cohosh | Bagdy 1998 — oxytocin/TSH endocrinology. Unrelated to blue cohosh pregnancy. |
+
+---
+
+## Clinician Triage Round 2 — Discrepancy Found
+
+**Clinician's verdict on PMID 15070161** (Somova 2004): "KEEP — Lists blue cohosh (Caulophyllum thalictroides) as a uterine stimulant and teratogen‑like agent; mechanistically relevant for blue cohosh × pregnancy."
+
+**Verified against PubMed E-utils — does NOT match clinician's description.**
+
+Actual paper:
+- **Title:** "Cardiotonic and antidysrhythmic effects of oleanolic and ursolic acids, methyl maslinate and uvaol."
+- **Journal:** Phytomedicine (2004)
+- **Subject:** Triterpenoid derivatives isolated from leaves of African wild olive (*Olea europaea*) — beta-adrenergic antagonism, cardiotonic, antidysrhythmic activity in animal models.
+- **Mention of blue cohosh:** none in title or first 800 chars of abstract.
+
+**Action taken:** PMID 15070161 stripped from `RULE_BOTAN_BLUE_COHOSH_PREGNANCY` per the always-verify rule. Rule's `cond:pregnancy` source list now carries only the FDA generic fallback URL.
+
+**Asks for clinician follow-up:**
+1. Did you intend a different PMID for the blue cohosh uterine-stimulant claim? Common candidates that do match the topic:
+   - PMID **8830601** — Jones 1998 — Profound neonatal congestive heart failure caused by maternal consumption of blue cohosh herbal medication for induction of labor
+   - PMID **9989415** — Edmunds 1999 — Blue cohosh and perinatal stroke (case report)
+   - PMID **22203324** — Datta et al. — pharmacology of blue cohosh
+2. Same question for the other PMIDs you cited as "alternatives" in your triage notes (PMID 15993582 / PMC1490168 ginkgo bleeding; PMC11508935 ginseng; PMID 218-type milk thistle pharm interactions). I'll content-verify each before adding to data.
+3. We should add `verify_pubmed_references.py` to a release-gate test that runs nightly so future PMID drift gets caught automatically.
