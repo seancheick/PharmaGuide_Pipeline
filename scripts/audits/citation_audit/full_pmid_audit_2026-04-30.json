@@ -1,0 +1,1781 @@
+{
+  "matches": 126,
+  "mismatches": [
+    [
+      "10479204",
+      {
+        "first_author": "Liu S",
+        "year": "1999",
+        "title": "Whole-grain consumption and risk of coronary heart disease: results from the Nurses' Health Study."
+      },
+      [
+        [
+          "RULE_IQM_PSYLLIUM_DIABETES",
+          "psyllium",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "10902065",
+      {
+        "first_author": "Heck AM",
+        "year": "2000",
+        "title": "Potential interactions between alternative therapies and warfarin."
+      },
+      [
+        [
+          "RULE_IQM_SAW_PALMETTO_LIVER",
+          "saw_palmetto",
+          "anticoagulants"
+        ],
+        [
+          "RULE_INGREDIENT_OMEGA_3",
+          "omega_3",
+          "nsaids"
+        ],
+        [
+          "RULE_INGREDIENT_EVENING_PRIMROSE_OIL",
+          "evening_primrose_oil",
+          "anticoagulants"
+        ],
+        [
+          "RULE_INGREDIENT_CHAMOMILE",
+          "chamomile",
+          "anticoagulants"
+        ],
+        [
+          "RULE_INGREDIENT_CHAMOMILE",
+          "chamomile",
+          "antiplatelets"
+        ],
+        [
+          "RULE_INGREDIENT_CHAMOMILE",
+          "chamomile",
+          "nsaids"
+        ],
+        [
+          "RULE_INGREDIENT_CHAMOMILE",
+          "chamomile",
+          "cond:bleeding_disorders"
+        ],
+        [
+          "RULE_INGREDIENT_CAT_S_CLAW",
+          "cat_s_claw",
+          "anticoagulants"
+        ],
+        [
+          "RULE_INGREDIENT_DEVILS_CLAW",
+          "devils_claw",
+          "anticoagulants"
+        ],
+        [
+          "RULE_INGREDIENT_DEVILS_CLAW",
+          "devils_claw",
+          "antiplatelets"
+        ],
+        [
+          "RULE_INGREDIENT_DEVILS_CLAW",
+          "devils_claw",
+          "nsaids"
+        ],
+        [
+          "RULE_INGREDIENT_DEVILS_CLAW",
+          "devils_claw",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "10940988",
+      {
+        "first_author": "Zhu XJ",
+        "year": "2000",
+        "title": "First Experimental Observation on Different Ionic States of both Methylthio (CH(3)S(.)) and Methoxy (CH(3)O(.)) Radicals This research was supported by the National Natural Science Foundation of China, Contract No. 29 673 049. M.F.G. gratefully acknowledges the support of the K. C. Wong Education Foundation, Hong Kong. X.J.Z., Z.S., and J.W. would like to thank the Chinese Academy of Sciences for receipt of scholarships over the period of this work."
+      },
+      [
+        [
+          "RULE_IQM_SENNA_PREGNANCY",
+          "senna",
+          "cardiac_glycosides"
+        ],
+        [
+          "RULE_IQM_SENNA_PREGNANCY",
+          "senna",
+          "cond:kidney_disease"
+        ],
+        [
+          "RULE_IQM_CASCARA_SAGRADA_PREGNANCY",
+          "cascara_sagrada",
+          "cardiac_glycosides"
+        ],
+        [
+          "RULE_IQM_CASCARA_SAGRADA_PREGNANCY",
+          "cascara_sagrada",
+          "cond:pregnancy"
+        ],
+        [
+          "RULE_IQM_CASCARA_SAGRADA_PREGNANCY",
+          "cascara_sagrada",
+          "cond:kidney_disease"
+        ]
+      ]
+    ],
+    [
+      "11176247",
+      {
+        "first_author": "Sawyer MH",
+        "year": "2001",
+        "title": "Enterovirus infections: diagnosis and treatment."
+      },
+      [
+        [
+          "RULE_IQM_VANADIUM_DIABETES",
+          "vanadyl_sulfate",
+          "hypoglycemics"
+        ],
+        [
+          "RULE_IQM_VANADIUM_DIABETES",
+          "vanadyl_sulfate",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "11302778",
+      {
+        "first_author": "MacKay D",
+        "year": "2001",
+        "title": "Hemorrhoids and varicose veins: a review of treatment options."
+      },
+      [
+        [
+          "RULE_IQM_GINKGO_HYPERTENSION",
+          "ginkgo",
+          "cond:surgery_scheduled"
+        ]
+      ]
+    ],
+    [
+      "11507730",
+      {
+        "first_author": "Koshy AS",
+        "year": "2001",
+        "title": "Impact of certain flavonoids on lipid profiles--potential action of Garcinia cambogia flavonoids."
+      },
+      [
+        [
+          "RULE_IQM_FORSKOLIN_ANTIHYPERTENSIVES",
+          "forskolin",
+          "antihypertensives"
+        ],
+        [
+          "RULE_IQM_FORSKOLIN_ANTIHYPERTENSIVES",
+          "forskolin",
+          "anticoagulants"
+        ]
+      ]
+    ],
+    [
+      "11869656",
+      {
+        "first_author": "Shaw K",
+        "year": "2002",
+        "title": "Tryptophan and 5-hydroxytryptophan for depression."
+      },
+      [
+        [
+          "RULE_IQM_L_TYROSINE_THYROID",
+          "l_tyrosine",
+          "maois"
+        ],
+        [
+          "RULE_IQM_L_TYROSINE_THYROID",
+          "l_tyrosine",
+          "thyroid_medications"
+        ],
+        [
+          "RULE_IQM_L_TYROSINE_THYROID",
+          "l_tyrosine",
+          "cond:thyroid_disorder"
+        ]
+      ]
+    ],
+    [
+      "12065157",
+      {
+        "first_author": "Dhawan K",
+        "year": "2002",
+        "title": "Suppression of alcohol-cessation-oriented hyper-anxiety by the benzoflavone moiety of Passiflora incarnata Linneaus in mice."
+      },
+      [
+        [
+          "RULE_IQM_QUERCETIN_THYROID",
+          "quercetin",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_QUERCETIN_THYROID",
+          "quercetin",
+          "cond:thyroid_disorder"
+        ]
+      ]
+    ],
+    [
+      "12162764",
+      {
+        "first_author": "Wenig BL",
+        "year": "2002",
+        "title": "The role of intratumoral therapy with cisplatin/epinephrine injectable gel in the management of advanced squamous cell carcinoma of the head and neck."
+      },
+      [
+        [
+          "RULE_IQM_BACOPA_THYROID",
+          "bacopa",
+          "thyroid_medications"
+        ],
+        [
+          "RULE_IQM_BACOPA_THYROID",
+          "bacopa",
+          "sedatives"
+        ],
+        [
+          "RULE_IQM_BACOPA_THYROID",
+          "bacopa",
+          "cond:thyroid_disorder"
+        ]
+      ]
+    ],
+    [
+      "12192964",
+      {
+        "first_author": "Gabay MP",
+        "year": "2002",
+        "title": "Galactogogues: medications that induce lactation."
+      },
+      [
+        [
+          "RULE_IQM_FENUGREEK_DIABETES",
+          "fenugreek",
+          "cond:lactation"
+        ]
+      ]
+    ],
+    [
+      "12197782",
+      {
+        "first_author": "Kidd PM",
+        "year": "2002",
+        "title": "Autism, an extreme challenge to integrative medicine. Part: 1: The knowledge base."
+      },
+      [
+        [
+          "RULE_IQM_WHITE_WILLOW_BARK_BLEEDING",
+          "white_willow_bark",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_WHITE_WILLOW_BARK_BLEEDING",
+          "white_willow_bark",
+          "antiplatelets"
+        ],
+        [
+          "RULE_IQM_WHITE_WILLOW_BARK_BLEEDING",
+          "white_willow_bark",
+          "nsaids"
+        ],
+        [
+          "RULE_IQM_WHITE_WILLOW_BARK_BLEEDING",
+          "white_willow_bark",
+          "cond:bleeding_disorders"
+        ],
+        [
+          "RULE_IQM_WHITE_WILLOW_BARK_BLEEDING",
+          "white_willow_bark",
+          "cond:surgery_scheduled"
+        ]
+      ]
+    ],
+    [
+      "12495553",
+      {
+        "first_author": "Kressmann S",
+        "year": "2002",
+        "title": "Influence of pharmaceutical quality on the bioavailability of active components from Ginkgo biloba preparations."
+      },
+      [
+        [
+          "RULE_BOTAN_RUE_PREGNANCY",
+          "rue",
+          "cond:pregnancy"
+        ],
+        [
+          "RULE_BOTAN_RUE_PREGNANCY",
+          "rue",
+          "pl"
+        ]
+      ]
+    ],
+    [
+      "12579996",
+      {
+        "first_author": "Levine PH",
+        "year": "2003",
+        "title": "Stellate-cell lipidosis in liver biopsy specimens. Recognition and significance."
+      },
+      [
+        [
+          "RULE_IQM_VITAMIN_A_PREGNANCY_DOSE",
+          "vitamin_a",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "12609386",
+      {
+        "first_author": "Spinella M",
+        "year": "2001",
+        "title": "Herbal Medicines and Epilepsy: The Potential for Benefit and Adverse Effects."
+      },
+      [
+        [
+          "RULE_IQM_GUARANA",
+          "guarana",
+          "cond:seizure_disorder"
+        ]
+      ]
+    ],
+    [
+      "15070161",
+      {
+        "first_author": "Somova LI",
+        "year": "2004",
+        "title": "Cardiotonic and antidysrhythmic effects of oleanolic and ursolic acids, methyl maslinate and uvaol."
+      },
+      [
+        [
+          "RULE_BOTAN_BLUE_COHOSH_PREGNANCY",
+          "blue_cohosh",
+          "cond:pregnancy"
+        ]
+      ]
+    ],
+    [
+      "15072439",
+      {
+        "first_author": "Zhou S",
+        "year": "2004",
+        "title": "Herbal modulation of P-glycoprotein."
+      },
+      [
+        [
+          "RULE_IQM_MILK_THISTLE_LIVER",
+          "milk_thistle",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "15133406",
+      {
+        "first_author": "Wilburn AJ",
+        "year": "2004",
+        "title": "The natural treatment of hypertension."
+      },
+      [
+        [
+          "RULE_INGREDIENT_GARLIC",
+          "garlic",
+          "cond:hypertension"
+        ],
+        [
+          "RULE_IQM_L_ARGININE_HYPERTENSION",
+          "l_arginine",
+          "antihypertensives"
+        ],
+        [
+          "RULE_IQM_L_ARGININE_HYPERTENSION",
+          "l_arginine",
+          "cond:hypertension"
+        ],
+        [
+          "RULE_IQM_L_ARGININE_HYPERTENSION",
+          "l_arginine",
+          "cond:heart_disease"
+        ]
+      ]
+    ],
+    [
+      "15266021",
+      {
+        "first_author": "Huang H",
+        "year": "2004",
+        "title": "p38 Mitogen-activated protein kinase mediates synergistic induction of inducible nitric-oxide synthase by lipopolysaccharide and interferon-gamma through signal transducer and activator of transcription 1 Ser727 phosphorylation in murine aortic endothelial cells."
+      },
+      [
+        [
+          "RULE_INGREDIENT_GINSENG",
+          "ginseng",
+          "cond:surgery_scheduled"
+        ]
+      ]
+    ],
+    [
+      "15470137",
+      {
+        "first_author": "Hasegawa H",
+        "year": "2004",
+        "title": "Laminar patterning in the developing neocortex by temporally coordinated fibroblast growth factor signaling."
+      },
+      [
+        [
+          "RULE_IQM_ALCAR_THYROID",
+          "acetyl_l_carnitine",
+          "thyroid_medications"
+        ],
+        [
+          "RULE_IQM_ALCAR_THYROID",
+          "acetyl_l_carnitine",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_ALCAR_THYROID",
+          "acetyl_l_carnitine",
+          "cond:thyroid_disorder"
+        ]
+      ]
+    ],
+    [
+      "15764334",
+      {
+        "first_author": "Caldas ED",
+        "year": "2004",
+        "title": "Chronic dietary risk for pesticide residues in food in Brazil: an update."
+      },
+      [
+        [
+          "RULE_IQM_GINKGO_HYPERTENSION",
+          "ginkgo",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "15857459",
+      {
+        "first_author": "Paulsen E",
+        "year": "2005",
+        "title": "A double-blind, placebo-controlled study of a commercial Aloe vera gel in the treatment of slight to moderate psoriasis vulgaris."
+      },
+      [
+        [
+          "RULE_IQM_CORDYCEPS_AUTOIMMUNE",
+          "cordyceps",
+          "immunosuppressants"
+        ],
+        [
+          "RULE_IQM_CORDYCEPS_AUTOIMMUNE",
+          "cordyceps",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_CORDYCEPS_AUTOIMMUNE",
+          "cordyceps",
+          "cond:autoimmune"
+        ]
+      ]
+    ],
+    [
+      "16112024",
+      {
+        "first_author": "Guzman VB",
+        "year": "2005",
+        "title": "Characterization of CD28, CTLA4, and ICOS polymorphisms in three Brazilian ethnic groups."
+      },
+      [
+        [
+          "RULE_IQM_HORNY_GOAT_WEED_HEART",
+          "icariin",
+          "antihypertensives"
+        ],
+        [
+          "RULE_IQM_HORNY_GOAT_WEED_HEART",
+          "icariin",
+          "cond:heart_disease"
+        ]
+      ]
+    ],
+    [
+      "16236036",
+      {
+        "first_author": "Holmes G",
+        "year": "2005",
+        "title": "Pharmacokinetics of insulin aspart in obesity, renal impairment, or hepatic impairment."
+      },
+      [
+        [
+          "RULE_BOTAN_MUGWORT_PREGNANCY",
+          "mugwort",
+          "cond:pregnancy"
+        ],
+        [
+          "RULE_BOTAN_MUGWORT_PREGNANCY",
+          "mugwort",
+          "pl"
+        ]
+      ]
+    ],
+    [
+      "16243026",
+      {
+        "first_author": "Wilkie TM",
+        "year": "2005",
+        "title": "New roles for Galpha and RGS proteins: communication continues despite pulling sisters apart."
+      },
+      [
+        [
+          "RULE_IQM_RESVERATROL_BLEEDING",
+          "resveratrol",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_RESVERATROL_BLEEDING",
+          "resveratrol",
+          "antiplatelets"
+        ],
+        [
+          "RULE_IQM_RESVERATROL_BLEEDING",
+          "resveratrol",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "16894152",
+      {
+        "first_author": "Zilh\u00e3o J",
+        "year": "2006",
+        "title": "Analysis of Aurignacian interstratification at the Chatelperronian-type site and implications for the behavioral modernity of Neandertals."
+      },
+      [
+        [
+          "RULE_IQM_L_ARGININE_HYPERTENSION",
+          "l_arginine",
+          "cond:heart_disease"
+        ]
+      ]
+    ],
+    [
+      "16923387",
+      {
+        "first_author": "Ogura Y",
+        "year": "2006",
+        "title": "The inflammasome: first line of the immune response to cell stress."
+      },
+      [
+        [
+          "RULE_IQM_CASCARA_SAGRADA_PREGNANCY",
+          "cascara_sagrada",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "16997936",
+      {
+        "first_author": "Barad D",
+        "year": "2006",
+        "title": "Effect of dehydroepiandrosterone on oocyte and embryo yields, embryo grade and cell number in IVF."
+      },
+      [
+        [
+          "RULE_IQM_DHEA_TTC",
+          "dhea",
+          "cond:ttc"
+        ]
+      ]
+    ],
+    [
+      "17301931",
+      {
+        "first_author": "Andersen K",
+        "year": "2007",
+        "title": "[Cerebral imaging for Wilson disease]."
+      },
+      [
+        [
+          "RULE_IQM_MANGANESE_LIVER",
+          "manganese",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "17490952",
+      {
+        "first_author": "Maintz L",
+        "year": "2007",
+        "title": "Histamine and histamine intolerance."
+      },
+      [
+        [
+          "RULE_IQM_DHA_BLEEDING",
+          "dha",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_DHA_BLEEDING",
+          "dha",
+          "antiplatelets"
+        ],
+        [
+          "RULE_IQM_DHA_BLEEDING",
+          "dha",
+          "cond:bleeding_disorders"
+        ],
+        [
+          "RULE_IQM_EPA_BLEEDING",
+          "epa",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_EPA_BLEEDING",
+          "epa",
+          "antiplatelets"
+        ],
+        [
+          "RULE_IQM_EPA_BLEEDING",
+          "epa",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "17569230",
+      {
+        "first_author": "Mont\u00e9 CP",
+        "year": "2007",
+        "title": "The ictal bradycardia syndrome."
+      },
+      [
+        [
+          "RULE_IQM_SILYMARIN_LIVER",
+          "milk_thistle",
+          "immunosuppressants"
+        ],
+        [
+          "RULE_IQM_SILYMARIN_LIVER",
+          "milk_thistle",
+          "statins"
+        ],
+        [
+          "RULE_IQM_SILYMARIN_LIVER",
+          "milk_thistle",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "18090773",
+      {
+        "first_author": "Beckert BW",
+        "year": "2007",
+        "title": "The effect of herbal medicines on platelet function: an in vivo experiment and review of the literature."
+      },
+      [
+        [
+          "RULE_IQM_SAW_PALMETTO_LIVER",
+          "saw_palmetto",
+          "antiplatelets"
+        ],
+        [
+          "RULE_IQM_SAW_PALMETTO_LIVER",
+          "saw_palmetto",
+          "nsaids"
+        ],
+        [
+          "RULE_IQM_SAW_PALMETTO_LIVER",
+          "saw_palmetto",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "18381752",
+      {
+        "first_author": "?",
+        "year": "",
+        "title": ""
+      },
+      [
+        [
+          "RULE_IQM_NIACIN_DIABETES",
+          "vitamin_b3_niacin",
+          "hypoglycemics"
+        ],
+        [
+          "RULE_IQM_NIACIN_DIABETES",
+          "vitamin_b3_niacin",
+          "cond:diabetes"
+        ],
+        [
+          "RULE_IQM_NIACIN_DIABETES",
+          "vitamin_b3_niacin",
+          "cond:high_cholesterol"
+        ]
+      ]
+    ],
+    [
+      "18989760",
+      {
+        "first_author": "Dong GC",
+        "year": "2009",
+        "title": "Blocking effect of an immuno-suppressive agent, cynarin, on CD28 of T-cell receptor."
+      },
+      [
+        [
+          "RULE_INGREDIENT_ECHINACEA__AUTOIMMUNE",
+          "echinacea",
+          "immunosuppressants"
+        ]
+      ]
+    ],
+    [
+      "19146936",
+      {
+        "first_author": "Andrade-Cetto A",
+        "year": "2009",
+        "title": "Ethnobotanical study of the medicinal plants from Tlanchinol, Hidalgo, M\u00e9xico."
+      },
+      [
+        [
+          "RULE_BOTAN_RUE_PREGNANCY",
+          "rue",
+          "cond:pregnancy"
+        ],
+        [
+          "RULE_BOTAN_RUE_PREGNANCY",
+          "rue",
+          "pl"
+        ]
+      ]
+    ],
+    [
+      "20109089",
+      {
+        "first_author": "Scollie S",
+        "year": "2010",
+        "title": "Evaluation of the NAL-NL1 and DSL v4.1 prescriptions for children: Preference in real world use."
+      },
+      [
+        [
+          "RULE_IQM_LIONS_MANE_ANTICOAGULANTS",
+          "lions_mane",
+          "anticoagulants"
+        ]
+      ]
+    ],
+    [
+      "21155624",
+      {
+        "first_author": "Kidd PM",
+        "year": "2010",
+        "title": "Vitamins D and K as pleiotropic nutrients: clinical importance to the skeletal and cardiovascular systems and preliminary evidence for synergy."
+      },
+      [
+        [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "vitamin_d",
+          "anticoagulants"
+        ],
+        [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "vitamin_d",
+          "antiplatelets"
+        ],
+        [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "vitamin_d",
+          "nsaids"
+        ],
+        [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "vitamin_d",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "21537493",
+      {
+        "first_author": "Stohs SJ",
+        "year": "2011",
+        "title": "Effects of p-synephrine alone and in combination with selected bioflavonoids on resting metabolism, blood pressure, heart rate and self-reported mood changes."
+      },
+      [
+        [
+          "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+          "black_seed_oil",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+          "black_seed_oil",
+          "hypoglycemics"
+        ],
+        [
+          "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+          "black_seed_oil",
+          "antihypertensives"
+        ],
+        [
+          "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+          "black_seed_oil",
+          "cond:diabetes"
+        ],
+        [
+          "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+          "black_seed_oil",
+          "cond:hypertension"
+        ],
+        [
+          "RULE_IQM_BLACK_SEED_OIL_DIABETES",
+          "black_seed_oil",
+          "cond:pregnancy"
+        ]
+      ]
+    ],
+    [
+      "21538168",
+      {
+        "first_author": "Padwal R",
+        "year": "2011",
+        "title": "Bariatric surgery: a systematic review of the clinical and economic evidence."
+      },
+      [
+        [
+          "RULE_IQM_DANDELION_KIDNEY",
+          "dandelion",
+          "cond:kidney_disease"
+        ]
+      ]
+    ],
+    [
+      "21676849",
+      {
+        "first_author": "Moaddeb J",
+        "year": "2011",
+        "title": "Hypertensive Urgency Associated With Xenadrine EFX Use."
+      },
+      [
+        [
+          "RULE_IQM_GUARANA",
+          "guarana",
+          "antihypertensives"
+        ],
+        [
+          "RULE_IQM_GUARANA",
+          "guarana",
+          "sedatives"
+        ],
+        [
+          "RULE_IQM_GUARANA",
+          "guarana",
+          "cond:hypertension"
+        ],
+        [
+          "RULE_IQM_GUARANA",
+          "guarana",
+          "cond:heart_disease"
+        ]
+      ]
+    ],
+    [
+      "21726792",
+      {
+        "first_author": "Ritchie MR",
+        "year": "2011",
+        "title": "Effects of Echinaforce\u00ae treatment on ex vivo-stimulated blood cells."
+      },
+      [
+        [
+          "RULE_INGREDIENT_ECHINACEA__AUTOIMMUNE",
+          "echinacea",
+          "cond:autoimmune"
+        ]
+      ]
+    ],
+    [
+      "22566672",
+      {
+        "first_author": "Raubenheimer D",
+        "year": "2012",
+        "title": "Match and mismatch: conservation physiology, nutritional ecology and the timescales of biological adaptation."
+      },
+      [
+        [
+          "RULE_IQM_BUTTERBUR_PREGNANCY",
+          "butterbur",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "23098397",
+      {
+        "first_author": "Kuznetsov VA",
+        "year": "2012",
+        "title": "[Biomarkers of inflammation in patients with chronic heart failure and implanted devices for cardiac resynchronization therapy]."
+      },
+      [
+        [
+          "RULE_IQM_STINGING_NETTLE_DIABETES",
+          "stinging_nettle",
+          "antihypertensives"
+        ],
+        [
+          "RULE_IQM_STINGING_NETTLE_DIABETES",
+          "stinging_nettle",
+          "hypoglycemics"
+        ],
+        [
+          "RULE_IQM_STINGING_NETTLE_DIABETES",
+          "stinging_nettle",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "23397375",
+      {
+        "first_author": "Hansen DK",
+        "year": "2013",
+        "title": "Cardiovascular toxicity of Citrus aurantium in exercised rats."
+      },
+      [
+        [
+          "RULE_BANNED_BITTER_ORANGE_HYPERTENSION",
+          "RISK_BITTER_ORANGE",
+          "antihypertensives"
+        ],
+        [
+          "RULE_BANNED_BITTER_ORANGE_HYPERTENSION",
+          "RISK_BITTER_ORANGE",
+          "cond:hypertension"
+        ]
+      ]
+    ],
+    [
+      "23653088",
+      {
+        "first_author": "Sarris J",
+        "year": "2013",
+        "title": "Plant-based medicines for anxiety disorders, part 2: a review of clinical studies with supporting preclinical evidence."
+      },
+      [
+        [
+          "RULE_IQM_GOTU_KOLA_HEPATOTOXICITY",
+          "gotu_kola",
+          "sedatives"
+        ],
+        [
+          "RULE_IQM_GOTU_KOLA_HEPATOTOXICITY",
+          "gotu_kola",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "23946031",
+      {
+        "first_author": "Dumont Z",
+        "year": "2013",
+        "title": "Warfarin: its highs and lows."
+      },
+      [
+        [
+          "RULE_INGREDIENT_GLUCOSAMINE",
+          "glucosamine",
+          "anticoagulants"
+        ]
+      ]
+    ],
+    [
+      "24130475",
+      {
+        "first_author": "Suderman R",
+        "year": "2013",
+        "title": "Machines vs. ensembles: effective MAPK signaling through heterogeneous sets of protein complexes."
+      },
+      [
+        [
+          "RULE_IQM_OLIVE_LEAF_DIABETES",
+          "olive_leaf",
+          "antihypertensives"
+        ],
+        [
+          "RULE_IQM_OLIVE_LEAF_DIABETES",
+          "olive_leaf",
+          "hypoglycemics"
+        ],
+        [
+          "RULE_IQM_OLIVE_LEAF_DIABETES",
+          "olive_leaf",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "24378636",
+      {
+        "first_author": "Cheng YJ",
+        "year": "2013",
+        "title": "Enhanced salt stress tolerance in transgenic potato plants expressing IbMYB1, a sweet potato transcription factor."
+      },
+      [
+        [
+          "RULE_IQM_FENUGREEK_DIABETES",
+          "fenugreek",
+          "hypoglycemics"
+        ],
+        [
+          "RULE_IQM_FENUGREEK_DIABETES",
+          "fenugreek",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "24472406",
+      {
+        "first_author": "Markert C",
+        "year": "2014",
+        "title": "Influence of St. John's wort on the steady-state pharmacokinetics and metabolism of bosentan."
+      },
+      [
+        [
+          "RULE_INGREDIENT_ST_JOHNS_WORT",
+          "st_johns_wort",
+          "cond:hypertension"
+        ]
+      ]
+    ],
+    [
+      "24573804",
+      {
+        "first_author": "Stojanovska N",
+        "year": "2014",
+        "title": "Analysis of amphetamine-type substances and piperazine analogues using desorption electrospray ionisation mass spectrometry."
+      },
+      [
+        [
+          "RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS",
+          "huperzine_a",
+          "anticholinergics"
+        ],
+        [
+          "RULE_IQM_HUPERZINE_A_ANTICHOLINERGICS",
+          "huperzine_a",
+          "cond:seizure_disorder"
+        ]
+      ]
+    ],
+    [
+      "25230580",
+      {
+        "first_author": "Yang Y",
+        "year": "2014",
+        "title": "A review of melatonin as a suitable antioxidant against myocardial ischemia-reperfusion injury and clinical heart diseases."
+      },
+      [
+        [
+          "RULE_IQM_GINGER_BLEEDING",
+          "ginger",
+          "antiplatelets"
+        ],
+        [
+          "RULE_IQM_GINGER_BLEEDING",
+          "ginger",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "25296654",
+      {
+        "first_author": "Jayaprakasan K",
+        "year": "2014",
+        "title": "Efficacy of dehydroepiandrosterone to overcome the effect of ovarian ageing (DITTO): a proof of principle randomised controlled trial protocol."
+      },
+      [
+        [
+          "RULE_IQM_DHEA_TTC",
+          "dhea",
+          "cond:ttc"
+        ]
+      ]
+    ],
+    [
+      "25630523",
+      {
+        "first_author": "Meister S",
+        "year": "2015",
+        "title": "The presence of FCGR2B promoter or transmembrane region variant alleles leads to reduced serum IL-6 levels in rheumatoid arthritis."
+      },
+      [
+        [
+          "RULE_IQM_FEVERFEW_PREGNANCY",
+          "feverfew",
+          "cond:pregnancy"
+        ],
+        [
+          "RULE_IQM_FEVERFEW_PREGNANCY",
+          "feverfew",
+          "pl"
+        ]
+      ]
+    ],
+    [
+      "25747286",
+      {
+        "first_author": "Pope L",
+        "year": "2015",
+        "title": "Viewers vs. doers. The relationship between watching food television and BMI."
+      },
+      [
+        [
+          "RULE_IQM_MAGNESIUM_HYPERTENSION",
+          "magnesium",
+          "cond:kidney_disease"
+        ]
+      ]
+    ],
+    [
+      "26312811",
+      {
+        "first_author": "?",
+        "year": "",
+        "title": ""
+      },
+      [
+        [
+          "RULE_IQM_BERBERINE_DIABETES",
+          "berberine_supplement",
+          "cond:diabetes"
+        ],
+        [
+          "RULE_IQM_BERBERINE_DIABETES",
+          "berberine_supplement",
+          "cond:high_cholesterol"
+        ]
+      ]
+    ],
+    [
+      "26949700",
+      {
+        "first_author": "Wang CZ",
+        "year": "2015",
+        "title": "Commonly Used Dietary Supplements on Coagulation Function during Surgery."
+      },
+      [
+        [
+          "RULE_IQM_CHONDROITIN",
+          "chondroitin",
+          "cond:surgery_scheduled"
+        ]
+      ]
+    ],
+    [
+      "27402097",
+      {
+        "first_author": "Brown AC",
+        "year": "2017",
+        "title": "Liver toxicity related to herbs and dietary supplements: Online table of case reports. Part 2 of 5 series."
+      },
+      [
+        [
+          "RULE_IQM_NIACIN_DIABETES",
+          "vitamin_b3_niacin",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "27885969",
+      {
+        "first_author": "Bateman RM",
+        "year": "2016",
+        "title": "36th International Symposium on Intensive Care and Emergency Medicine : Brussels, Belgium. 15-18 March 2016."
+      },
+      [
+        [
+          "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED",
+          "probiotics",
+          "cond:autoimmune"
+        ]
+      ]
+    ],
+    [
+      "28133296",
+      {
+        "first_author": "Murayama M",
+        "year": "2016",
+        "title": "[A Case of Malignant Colonic Obstruction Bearing Another Synchronous Obstructive Lesion in the Anal Side of the Colon]."
+      },
+      [
+        [
+          "RULE_IQM_LICORICE_HYPERTENSION",
+          "licorice",
+          "pl"
+        ],
+        [
+          "RULE_BOTANICAL_LICORICE_ROOT",
+          "licorice_root",
+          "pl"
+        ]
+      ]
+    ],
+    [
+      "28617146",
+      {
+        "first_author": "Othong R",
+        "year": "2017",
+        "title": "Diospyros rhodocalyx (Tako-Na), a Thai folk medicine, associated with hypokalemia and generalized muscle weakness: a case series."
+      },
+      [
+        [
+          "RULE_BOTANICAL_LICORICE_ROOT",
+          "licorice_root",
+          "antihypertensives"
+        ],
+        [
+          "RULE_BOTANICAL_LICORICE_ROOT",
+          "licorice_root",
+          "cond:hypertension"
+        ]
+      ]
+    ],
+    [
+      "28981338",
+      {
+        "first_author": "Brown AC",
+        "year": "2018",
+        "title": "Heart Toxicity Related to Herbs and Dietary Supplements: Online Table of Case Reports. Part 4 of 5."
+      },
+      [
+        [
+          "RULE_BOTANICAL_LICORICE_ROOT",
+          "licorice_root",
+          "cond:heart_disease"
+        ]
+      ]
+    ],
+    [
+      "29136493",
+      {
+        "first_author": "Powell KE",
+        "year": "2017",
+        "title": "Systems Thinking and Simulation Modeling to Inform Childhood Obesity Policy and Practice."
+      },
+      [
+        [
+          "RULE_IQM_FISH_OIL_BLEEDING",
+          "fish_oil",
+          "cond:bleeding_disorders"
+        ],
+        [
+          "RULE_IQM_FISH_OIL_BLEEDING",
+          "fish_oil",
+          "cond:surgery_scheduled"
+        ]
+      ]
+    ],
+    [
+      "29806946",
+      {
+        "first_author": "Weiss KH",
+        "year": "2018",
+        "title": "WTX101 - an investigational drug for the treatment of Wilson disease."
+      },
+      [
+        [
+          "RULE_IQM_COPPER_LIVER",
+          "copper",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "29953177",
+      {
+        "first_author": "Bedi O",
+        "year": "2016",
+        "title": "Herbal Induced Hepatoprotection and Hepatotoxicity: A Critical Review."
+      },
+      [
+        [
+          "RULE_IQM_ANDROGRAPHIS",
+          "andrographis",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "30417375",
+      {
+        "first_author": "Najafi M",
+        "year": "2019",
+        "title": "Cancer stem cells (CSCs) in cancer progression and therapy."
+      },
+      [
+        [
+          "RULE_BANNED_CBD_INTERACTIONS",
+          "BANNED_CBD_US",
+          "anticonvulsants"
+        ],
+        [
+          "RULE_BANNED_CBD_INTERACTIONS",
+          "BANNED_CBD_US",
+          "immunosuppressants"
+        ],
+        [
+          "RULE_BANNED_CBD_INTERACTIONS",
+          "BANNED_CBD_US",
+          "anticoagulants"
+        ],
+        [
+          "RULE_BANNED_CBD_INTERACTIONS",
+          "BANNED_CBD_US",
+          "cond:liver_disease"
+        ],
+        [
+          "RULE_BANNED_CBD_INTERACTIONS",
+          "BANNED_CBD_US",
+          "cond:seizure_disorder"
+        ]
+      ]
+    ],
+    [
+      "30980598",
+      {
+        "first_author": "Dhariwala MY",
+        "year": "2019",
+        "title": "An overview of herbal alternatives in androgenetic alopecia."
+      },
+      [
+        [
+          "RULE_IQM_SAW_PALMETTO_LIVER",
+          "saw_palmetto",
+          "cond:ttc"
+        ]
+      ]
+    ],
+    [
+      "31927673",
+      {
+        "first_author": "Song Y",
+        "year": "2020",
+        "title": "The Microbiota in Hematologic Malignancies."
+      },
+      [
+        [
+          "RULE_IQM_PROBIOTICS_IMMUNOCOMPROMISED",
+          "probiotics",
+          "immunosuppressants"
+        ]
+      ]
+    ],
+    [
+      "32444096",
+      {
+        "first_author": "Zijlstra JG",
+        "year": "2020",
+        "title": "AKI: an enlightening acronym with a shadow side."
+      },
+      [
+        [
+          "RULE_IQM_CHINESE_SKULLCAP_LIVER",
+          "chinese_skullcap",
+          "cond:pregnancy"
+        ],
+        [
+          "RULE_IQM_CHINESE_SKULLCAP_LIVER",
+          "chinese_skullcap",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "32478963",
+      {
+        "first_author": "Tan CSS",
+        "year": "2021",
+        "title": "Warfarin and food, herbal or dietary supplement interactions: A systematic review."
+      },
+      [
+        [
+          "RULE_INGREDIENT_CHAMOMILE",
+          "chamomile",
+          "anticoagulants"
+        ],
+        [
+          "RULE_INGREDIENT_CHAMOMILE",
+          "chamomile",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "32486167",
+      {
+        "first_author": "Cozzolino M",
+        "year": "2020",
+        "title": "Current Therapy in CKD Patients Can Affect Vitamin K Status."
+      },
+      [
+        [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "vitamin_d",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "32750587",
+      {
+        "first_author": "Arshad H",
+        "year": "2020",
+        "title": "Toxic effects of Red-S3B dye on soil microbial activities, wheat yield, and their alleviation by pressmud application."
+      },
+      [
+        [
+          "RULE_IQM_BITTER_MELON_DIABETES",
+          "bitter_melon",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "33091497",
+      {
+        "first_author": "Kolodziejczyk-Czepas J",
+        "year": "2021",
+        "title": "Extracts from Uncaria tomentosa as antiplatelet agents and thrombin inhibitors - The in vitro and in silico study."
+      },
+      [
+        [
+          "RULE_INGREDIENT_CAT_S_CLAW",
+          "cat_s_claw",
+          "anticoagulants"
+        ],
+        [
+          "RULE_INGREDIENT_CAT_S_CLAW",
+          "cat_s_claw",
+          "antiplatelets"
+        ],
+        [
+          "RULE_INGREDIENT_CAT_S_CLAW",
+          "cat_s_claw",
+          "nsaids"
+        ],
+        [
+          "RULE_INGREDIENT_CAT_S_CLAW",
+          "cat_s_claw",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "33584551",
+      {
+        "first_author": "Miccoli P",
+        "year": "2020",
+        "title": "Levothyroxine Therapy in Thyrodectomized Patients."
+      },
+      [
+        [
+          "RULE_IQM_CHROMIUM_GLUCOSE",
+          "chromium",
+          "thyroid_medications"
+        ],
+        [
+          "RULE_IQM_GLUCOMANNAN_DIABETES",
+          "fiber",
+          "thyroid_medications"
+        ],
+        [
+          "RULE_IQM_IRON_HYPERTENSION",
+          "iron",
+          "thyroid_medications"
+        ],
+        [
+          "RULE_IQM_CALCIUM",
+          "calcium",
+          "thyroid_medications"
+        ]
+      ]
+    ],
+    [
+      "33676282",
+      {
+        "first_author": "Martinefski MR",
+        "year": "2021",
+        "title": "Coenzyme Q10 deficiency in patients with hereditary hemochromatosis."
+      },
+      [
+        [
+          "RULE_IQM_IRON_HYPERTENSION",
+          "iron",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "34036101",
+      {
+        "first_author": "Dai C",
+        "year": "2021",
+        "title": "A Novel Review of Homocysteine and Pregnancy Complications."
+      },
+      [
+        [
+          "RULE_IQM_VITAMIN_B12_COBALAMIN_TTC",
+          "vitamin_b12_cobalamin",
+          "cond:ttc"
+        ],
+        [
+          "RULE_IQM_VITAMIN_B12_COBALAMIN_TTC",
+          "vitamin_b12_cobalamin",
+          "pl"
+        ]
+      ]
+    ],
+    [
+      "34853508",
+      {
+        "first_author": "?",
+        "year": "2021",
+        "title": "Erratum: Hearing Protection Outcomes of Analog Electrode Arrays Coated with Different Drug-Eluting Polymer Films Implanted into Guinea Pig Cochleae [Corrigendum]."
+      },
+      [
+        [
+          "RULE_IQM_ALPHA_LIPOIC_ACID_DIABETES",
+          "alpha_lipoic_acid",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "36017706",
+      {
+        "first_author": "Dal Forno GO",
+        "year": "2023",
+        "title": "Peripubertal soy isoflavone consumption leads to subclinical hypothyroidism in male Wistar rats."
+      },
+      [
+        [
+          "RULE_INGREDIENT_GENISTEIN__THYROID",
+          "genistein",
+          "thyroid_medications"
+        ],
+        [
+          "RULE_INGREDIENT_GENISTEIN__THYROID",
+          "genistein",
+          "cond:thyroid_disorder"
+        ]
+      ]
+    ],
+    [
+      "36220193",
+      {
+        "first_author": "Delorme M",
+        "year": "2023",
+        "title": "Noninvasive Ventilation Automated Technologies: A Bench Evaluation of Device Responses to Sleep-Related Respiratory Events."
+      },
+      [
+        [
+          "RULE_INGREDIENT_ALOE_VERA",
+          "aloe_vera",
+          "hypoglycemics"
+        ],
+        [
+          "RULE_INGREDIENT_ALOE_VERA",
+          "aloe_vera",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "36771367",
+      {
+        "first_author": "Khongrum J",
+        "year": "2023",
+        "title": "Safety and Effects of Lactobacillus paracasei TISTR 2593 Supplementation on Improving Cholesterol Metabolism and Atherosclerosis-Related Parameters in Subjects with Hypercholesterolemia: A Randomized, Double-Blind, Placebo-Controlled Clinical Trial."
+      },
+      [
+        [
+          "RULE_IQM_GLUCOMANNAN_DIABETES",
+          "fiber",
+          "hypoglycemics"
+        ],
+        [
+          "RULE_IQM_GLUCOMANNAN_DIABETES",
+          "fiber",
+          "cond:diabetes"
+        ]
+      ]
+    ],
+    [
+      "36992844",
+      {
+        "first_author": "Anushree A",
+        "year": "2023",
+        "title": "Generalized Dystonia as Presenting Feature of Wilson Disease: A Case Report."
+      },
+      [
+        [
+          "RULE_IQM_COPPER_LIVER",
+          "copper",
+          "cond:liver_disease"
+        ]
+      ]
+    ],
+    [
+      "37988295",
+      {
+        "first_author": "Moran C",
+        "year": "2024",
+        "title": "Approach to the Patient With Raised Thyroid Hormones and Nonsuppressed TSH."
+      },
+      [
+        [
+          "RULE_IQM_VITAMIN_B7_BIOTIN",
+          "vitamin_b7_biotin",
+          "cond:thyroid_disorder"
+        ]
+      ]
+    ],
+    [
+      "41717291",
+      {
+        "first_author": "Delgadillo F",
+        "year": "2026",
+        "title": "Immunopathogenesis, Diagnosis, and Treatment of Hashimoto's Thyroiditis."
+      },
+      [
+        [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "vitamin_d",
+          "immunosuppressants"
+        ],
+        [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "vitamin_d",
+          "cond:autoimmune"
+        ],
+        [
+          "RULE_IQM_SELENIUM",
+          "selenium",
+          "cond:thyroid_disorder"
+        ]
+      ]
+    ],
+    [
+      "7906886",
+      {
+        "first_author": "Wolfman C",
+        "year": "1994",
+        "title": "Possible anxiolytic effects of chrysin, a central benzodiazepine receptor ligand isolated from Passiflora coerulea."
+      },
+      [
+        [
+          "RULE_INGREDIENT_PASSIONFLOWER__SEDATIVES",
+          "passionflower",
+          "sedatives"
+        ]
+      ]
+    ],
+    [
+      "8247568",
+      {
+        "first_author": "Amble FR",
+        "year": "1993",
+        "title": "Middle ear adenoma and adenocarcinoma."
+      },
+      [
+        [
+          "RULE_IQM_ALPHA_GPC_ANTICHOLINERGICS",
+          "alpha_gpc",
+          "anticholinergics"
+        ]
+      ]
+    ],
+    [
+      "8298118",
+      {
+        "first_author": "Antes G",
+        "year": "1993",
+        "title": "[The \"turning maneuver\"--an intubation aid in enteroclysis]."
+      },
+      [
+        [
+          "RULE_IQM_NAC_BLEEDING",
+          "nac",
+          "anticoagulants"
+        ],
+        [
+          "RULE_IQM_NAC_BLEEDING",
+          "nac",
+          "cond:bleeding_disorders"
+        ]
+      ]
+    ],
+    [
+      "8983860",
+      {
+        "first_author": "Palareti G",
+        "year": "1996",
+        "title": "Warfarin withdrawal. Pharmacokinetic-pharmacodynamic considerations."
+      },
+      [
+        [
+          "RULE_INGREDIENT_VITAMIN_D",
+          "vitamin_d",
+          "anticoagulants"
+        ]
+      ]
+    ],
+    [
+      "9161097",
+      {
+        "first_author": "Ka\u0142uza J",
+        "year": "1997",
+        "title": "Paraneoplastic syndrome simulating encephalitis in the course of testicular seminoma."
+      },
+      [
+        [
+          "RULE_IQM_PYGEUM_NSAIDS",
+          "pygeum",
+          "nsaids"
+        ]
+      ]
+    ],
+    [
+      "9600579",
+      {
+        "first_author": "Bagdy G",
+        "year": "1998",
+        "title": "Gender-dependent dissociation between oxytocin but not ACTH, cortisol or TSH responses to m-chlorophenylpiperazine in healthy subjects."
+      },
+      [
+        [
+          "RULE_BOTAN_BLUE_COHOSH_PREGNANCY",
+          "blue_cohosh",
+          "cond:pregnancy"
+        ]
+      ]
+    ]
+  ],
+  "not_found": []
+}
