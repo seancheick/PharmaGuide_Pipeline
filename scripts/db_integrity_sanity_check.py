@@ -1474,6 +1474,23 @@ def check_ingredient_interaction_rules(findings: List[Finding], data: Dict[str, 
                         sev = str(value).strip().lower()
                         if sev not in valid_severity:
                             findings.append(Finding("error", file, f"[{i}].pregnancy_lactation.{field}", "enum_value_not_supported", "valid severity id", sev))
+                # 2026-04-30 audit: pregnancy_lactation.evidence_level was a
+                # latent integrity gap — used in 145 rules with values
+                # {established, probable, theoretical, limited, moderate,
+                # no_data} but never validated against canonical taxonomy
+                # evidence_levels. The hybrid gap-fill (Option C) wrote
+                # `no_data` which wasn't in the taxonomy until this commit.
+                ev_value = pregnancy_block.get("evidence_level")
+                if ev_value is not None:
+                    ev_norm = str(ev_value).strip().lower()
+                    if ev_norm not in valid_evidence:
+                        findings.append(Finding("error", file, f"[{i}].pregnancy_lactation.evidence_level", "enum_value_not_supported", "valid evidence id", ev_norm))
+                # 2026-04-30 audit: legacy lactation_severity / lactation_evidence
+                # fields drift out of sync with canonical lactation_category /
+                # evidence_level (12 disagreements found). Reject as deprecated.
+                for legacy_field in ("lactation_severity", "lactation_evidence"):
+                    if legacy_field in pregnancy_block:
+                        findings.append(Finding("error", file, f"[{i}].pregnancy_lactation.{legacy_field}", "deprecated_field", "use lactation_category / evidence_level instead", "present"))
                 sources = pregnancy_block.get("sources")
                 if sources is not None:
                     if not isinstance(sources, list) or not sources:

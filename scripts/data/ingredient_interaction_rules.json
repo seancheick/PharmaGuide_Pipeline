@@ -125,10 +125,7 @@
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Ephedra carries serious cardiovascular and neurologic risks and is FDA-banned as a supplement ingredient. If you are pregnant, do not use ephedra-containing products.",
-        "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant to anyone pregnant or planning pregnancy.",
-        "lactation_severity": "contraindicated",
-        "lactation_evidence": "established",
-        "lactation_notes": "Ephedrine is stimulant-like and can affect infants. Do not use in breastfeeding."
+        "informational_note": "Ephedra is an FDA-banned stimulant with cardiovascular risks relevant to anyone pregnant or planning pregnancy."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -345,10 +342,7 @@
         ],
         "alert_headline": "Oral aloe not recommended in pregnancy",
         "alert_body": "Oral aloe products (gel, latex, whole-leaf) raise safety concerns in pregnancy. If you are pregnant, talk to your obstetrician before using any oral aloe supplement.",
-        "informational_note": "Oral aloe has safety concerns relevant to anyone pregnant.",
-        "lactation_severity": "avoid",
-        "lactation_evidence": "probable",
-        "lactation_notes": "Oral anthraquinone-containing products can cause diarrhea and are not good lactation choices. Topical use is different."
+        "informational_note": "Oral aloe has safety concerns relevant to anyone pregnant."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -647,10 +641,7 @@
         ],
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "Black cohosh may have uterotonic and hormone-active effects. If you are pregnant, do not use black cohosh unless specifically directed by your obstetrician.",
-        "informational_note": "Black cohosh is hormone-active — relevant to anyone pregnant or planning pregnancy.",
-        "lactation_severity": "avoid",
-        "lactation_evidence": "probable",
-        "lactation_notes": "Hormonal uncertainty and limited lactation data justify avoidance."
+        "informational_note": "Black cohosh is hormone-active — relevant to anyone pregnant or planning pregnancy."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -738,10 +729,7 @@
         ],
         "alert_headline": "Caffeine adds up — watch total intake",
         "alert_body": "Caffeine crosses the placenta and passes into breast milk. If you are pregnant or nursing, monitor total caffeine from coffee, tea, chocolate, and supplements against a 200 mg/day ceiling.",
-        "informational_note": "Caffeine crosses the placenta and reaches breast milk — relevant to anyone pregnant or breastfeeding.",
-        "lactation_severity": "monitor",
-        "lactation_evidence": "established",
-        "lactation_notes": "Caffeine passes into milk and can affect infant sleep and irritability. Keep intake moderate (≥200 mg/day triggers monitoring) and watch infant tolerance."
+        "informational_note": "Caffeine crosses the placenta and reaches breast milk — relevant to anyone pregnant or breastfeeding."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -2274,7 +2262,7 @@
           "value": 350,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "NIH ODS upper limit for supplemental magnesium is 350 mg/day. https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
         }
       ]
@@ -2583,10 +2571,7 @@
         ],
         "alert_headline": "Not recommended during pregnancy",
         "alert_body": "St John's Wort has been flagged for possible birth-defect risk and major drug interactions. If you are pregnant, talk to a specialist before any use.",
-        "informational_note": "St John's Wort has pregnancy safety concerns relevant to anyone pregnant or planning pregnancy.",
-        "lactation_severity": "caution",
-        "lactation_evidence": "probable",
-        "lactation_notes": "Milk transfer appears limited, but infant CNS effects and major drug interactions remain relevant. Use cautiously and monitor infant + maternal interacting drugs."
+        "informational_note": "St John's Wort has pregnancy safety concerns relevant to anyone pregnant or planning pregnancy."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -2737,10 +2722,7 @@
         ],
         "alert_headline": "Keep preformed vitamin A within prenatal range",
         "alert_body": "Preformed vitamin A (retinol) is dose-sensitive in pregnancy; beta-carotene is not. If you are pregnant or nursing, monitor total preformed retinol intake from all sources and talk to your clinician.",
-        "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding.",
-        "lactation_severity": "caution",
-        "lactation_evidence": "established",
-        "lactation_notes": "Excess retinol can accumulate in milk. Avoid chronic high-dose retinol while breastfeeding (≥10,000 IU/day)."
+        "informational_note": "Preformed retinol is dose-sensitive — relevant to anyone pregnant or breastfeeding."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -3141,10 +3123,7 @@
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
-        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy.",
-        "lactation_severity": "avoid",
-        "lactation_evidence": "probable",
-        "lactation_notes": "Potent adrenergic stimulant with poor lactation safety data. Avoid during breastfeeding."
+        "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy."
       },
       "last_reviewed": "2026-04-26",
       "review_owner": "pharmaguide_clinical_team"
@@ -3235,10 +3214,7 @@
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
-        "informational_note": "Blue cohosh stimulates contractions — relevant to anyone pregnant or planning pregnancy.",
-        "lactation_severity": "contraindicated",
-        "lactation_evidence": "established",
-        "lactation_notes": "Toxicity concern is substantial; not appropriate for lactation."
+        "informational_note": "Blue cohosh stimulates contractions — relevant to anyone pregnant or planning pregnancy."
       },
       "form_scope": null,
       "last_reviewed": "2026-04-26",
@@ -3582,7 +3558,7 @@
           "value": 600,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "Liver injury rarely reported; high-dose precaution. https://pubmed.ncbi.nlm.nih.gov/16800417/"
         }
       ],
@@ -4458,7 +4434,7 @@
           "informational_note": "Vitamin D can affect platelet function — relevant to people on NSAIDs."
         },
         {
-          "severity": "info",
+          "severity": "informational",
           "mechanism": "Vitamin D has additive immunomodulatory effects that may complement immunosuppressant therapy. Standard-dose supplementation is generally considered safe alongside immunosuppressants and may reduce corticosteroid-induced bone loss.",
           "action": "Standard vitamin D supplementation is appropriate alongside immunosuppressants. Monitor 25-OH vitamin D levels annually. High-dose supplementation (>4000 IU/day) requires physician oversight.",
           "last_reviewed": "2026-04-09",
@@ -4514,7 +4490,7 @@
           "value": 10000,
           "unit": "IU",
           "severity_if_met": "monitor",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "Above the Endocrine Society supervised-use ceiling (10,000 IU/day), authored action recommends monitoring when combined with anticoagulation. Endocrine Society CPG 2011 permits ≤6,000–10,000 IU/day therapeutically under clinical supervision; not an absolute avoid."
         },
         {
@@ -4525,7 +4501,7 @@
           "value": 4000,
           "unit": "IU",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "IOM UL for adults is 4,000 IU/day. Above this, authored action requires physician-monitored 25-OH vitamin D levels to avoid toxicity; deficiency treatment in this range may still be appropriate under clinician guidance (Endocrine Society 2011)."
         },
         {
@@ -4536,7 +4512,7 @@
           "value": 4000,
           "unit": "IU",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "IOM UL for adults is 4,000 IU/day. Authored action: standard supplementation is appropriate alongside immunosuppressants; >4,000 IU/day requires physician oversight, not an absolute contraindication."
         },
         {
@@ -4547,7 +4523,7 @@
           "unit": "IU",
           "basis": "per_day",
           "severity_if_met": "monitor",
-          "severity_if_not_met": "info"
+          "severity_if_not_met": "informational"
         },
         {
           "scope": "drug_class",
@@ -5346,7 +5322,7 @@
       },
       "condition_rules": [
         {
-          "severity": "info",
+          "severity": "informational",
           "mechanism": "High-dose biotin (>5 mg/day, common in hair/nail supplements) interferes with biotin-streptavidin immunoassay platforms used for TSH, free T4, free T3, and thyroglobulin measurement. Causes false-low TSH and false-high free thyroid hormone results, mimicking hyperthyroidism. Does not alter actual thyroid function.",
           "action": "Stop biotin supplements at least 2 days before thyroid function testing to prevent assay interference. Inform your healthcare provider about biotin use if thyroid tests are planned.",
           "last_reviewed": "2026-04-09",
@@ -5371,7 +5347,7 @@
           "value": 5,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "Above 5 mg/day, biotin-streptavidin immunoassay interference causes false-low TSH and false-high free T3/T4 (mimicking hyperthyroidism). Does not alter actual thyroid function — stop biotin ≥2 days before thyroid labs."
         }
       ],
@@ -5740,7 +5716,7 @@
         },
         {
           "condition_id": "high_cholesterol",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "established",
           "mechanism": "Statins inhibit HMG-CoA reductase, blocking not only cholesterol synthesis but also the mevalonate pathway used to synthesize CoQ10. Plasma and muscle CoQ10 levels are measurably reduced by statin therapy. CoQ10 depletion is proposed as a contributing mechanism to statin-induced myopathy.",
           "action": "CoQ10 supplementation (100–300 mg/day) is commonly used to address statin-induced muscle symptoms. It is considered safe to combine. Discuss with prescriber whether supplementation is warranted based on symptoms.",
@@ -5754,7 +5730,7 @@
         },
         {
           "condition_id": "ttc",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "probable",
           "mechanism": "CoQ10 is an essential mitochondrial antioxidant. Oocyte quality declines with age partly due to reduced mitochondrial CoQ10 availability and impaired ATP production. Ben-Meir et al. (2015, Aging Cell) demonstrated that CoQ10 supplementation reversed age-related oocyte deficits in mice, prevented premature ovarian failure in Pdss2-deficient animals, and improved meiotic spindle integrity. A 2024 meta-analysis of 20 RCTs (Shang et al.) found CoQ10 improved retrieved oocyte count, high-quality embryo rates, and clinical pregnancy rates in women with ovarian aging, with optimal effect at 30 mg/day for 3 months before ovarian stimulation in women under 35 with diminished ovarian reserve.",
           "action": "CoQ10 supplementation (100–600 mg/day, commonly 200–400 mg/day) may support oocyte quality during the preconception period, especially in women over 35 or those with diminished ovarian reserve. Safe to use during TTC. Discontinue when pregnancy is confirmed to return to standard prenatal supplement regimen.",
@@ -5783,7 +5759,7 @@
         },
         {
           "drug_class_id": "statins",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "established",
           "mechanism": "Statins deplete endogenous CoQ10 by blocking the mevalonate pathway. CoQ10 supplementation is commonly used to mitigate statin-associated myopathy. No adverse pharmacokinetic interaction between CoQ10 and statins has been demonstrated.",
           "action": "CoQ10 100–300 mg/day may be used alongside statins, particularly if myopathy symptoms are present. Safe to co-administer.",
@@ -6137,7 +6113,7 @@
       "condition_rules": [
         {
           "condition_id": "ttc",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "established",
           "mechanism": "Periconceptional folic acid/folate supplementation reduces neural tube defect (NTD) risk by 69% (RR 0.31, 95% CI 0.17–0.58) in Cochrane meta-analysis of 5 RCTs (6708 births). The protective effect operates during neural tube closure (days 21–28 post-conception), before many women know they are pregnant. Supplementation should therefore begin at least 1 month (ideally 3 months) before conception. For women with MTHFR polymorphisms, methylfolate (5-MTHF) is preferred as it bypasses the enzymatic conversion step.",
           "action": "Begin folate/folic acid supplementation at least 1 month before attempting conception. Standard dose: 400–800 mcg/day for low-risk women; 4 mg/day (4000 mcg) for women with prior NTD-affected pregnancy. Prefer methylfolate (5-MTHF) if MTHFR variant is known. Continue through first trimester.",
@@ -6177,7 +6153,7 @@
       "condition_rules": [
         {
           "condition_id": "ttc",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "probable",
           "mechanism": "Myo-inositol (the primary isomer in supplements) is a second messenger in insulin signaling and plays a critical role in ovarian follicle maturation. In PCOS, insulin resistance disrupts the inositol phosphoglycan mediator system. Supplementation at 2–4 g/day myo-inositol (alone or in 40:1 ratio with D-chiro-inositol) improves ovulation rates, menstrual regularity, and fertility outcomes. An RCT (Agrawal et al. 2019) found significantly higher live birth rates with metformin + myo-inositol (55%) vs. metformin alone (26.67%, p=0.002) in PCOS women undergoing ovulation induction.",
           "action": "Myo-inositol (2–4 g/day) is a well-supported supplement for women with PCOS who are TTC. It improves ovulation and insulin sensitivity. Safe for TTC use. Also safe to continue in early pregnancy under clinician guidance. Not specifically indicated for non-PCOS TTC without ovulation issues.",
@@ -6191,7 +6167,7 @@
         },
         {
           "condition_id": "diabetes",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "probable",
           "mechanism": "Inositol can improve insulin signaling and glycemic metrics in some settings.",
           "action": "Monitor for additive glucose lowering.",
@@ -6705,7 +6681,7 @@
       "condition_rules": [
         {
           "condition_id": "ttc",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "established",
           "mechanism": "Vitamin B12 (cobalamin) is essential for DNA synthesis, cell division, and one-carbon metabolism. B12 deficiency elevates homocysteine via impaired methionine synthase activity, and hyperhomocysteinemia is associated with recurrent pregnancy loss (RPL), implantation failure, and embryotoxicity. Case-control studies document significantly lower serum B12 in women with recurrent miscarriage vs. controls (mean 197 vs 300 pg/mL, p=0.004 in one Syrian cohort; 178 vs 269 pg/mL, p<0.001 in a Polish cohort). B12 is a standard component of preconception care and prenatal vitamins. Optimizing B12 status before conception is associated with improved fertility outcomes and reduced RPL risk via homocysteine normalization.",
           "action": "Ensure adequate vitamin B12 status (serum B12 >400 pg/mL is optimal preconceptionally) when trying to conceive. Standard preconception supplementation: 2.4–6 mcg/day (adequate intake) up to higher doses if deficient. B12 supplementation is recommended as part of a comprehensive preconception vitamin regimen for all women TTC, and is particularly important for vegans, vegetarians, those with gastric conditions, or those on metformin (which reduces B12 absorption).",
@@ -6815,7 +6791,7 @@
           "unit": "mg_glycyrrhizin",
           "severity_if_met": "avoid",
           "severity_if_not_met": "caution",
-          "notes": "Corresponds to approximately 3g+ licorice root extract/day. DGL products are exempt."
+          "note": "Corresponds to approximately 3g+ licorice root extract/day. DGL products are exempt."
         }
       ],
       "pregnancy_lactation": {
@@ -7237,7 +7213,7 @@
           "unit": "mg_caffeine_equivalent",
           "severity_if_met": "avoid",
           "severity_if_not_met": "caution",
-          "notes": "Total caffeine from all sources (guarana, coffee, tea, other supplements) should be summed. 1g guarana seed extract ≈ 40-80 mg caffeine."
+          "note": "Total caffeine from all sources (guarana, coffee, tea, other supplements) should be summed. 1g guarana seed extract ≈ 40-80 mg caffeine."
         }
       ],
       "pregnancy_lactation": {
@@ -7468,15 +7444,12 @@
       ],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "lactation_severity": "caution",
-        "lactation_evidence": "probable",
-        "lactation_notes": "Usually lower risk than cascara, but infant GI effects can occur. Use short term if needed and monitor infant stools.",
         "sources": [
           "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
         ],
         "pregnancy_category": "no_data",
-        "lactation_category": "no_data",
-        "evidence_level": "no_data",
+        "lactation_category": "caution",
+        "evidence_level": "probable",
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
@@ -7524,16 +7497,13 @@
       "drug_class_rules": [],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "lactation_severity": "avoid",
-        "lactation_evidence": "probable",
-        "lactation_notes": "Dopaminergic activity can suppress prolactin and reduce milk supply. Avoid if maintaining lactation matters.",
         "sources": [
           "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
           "https://www.nccih.nih.gov/health/chasteberry"
         ],
         "pregnancy_category": "no_data",
-        "lactation_category": "no_data",
-        "evidence_level": "no_data",
+        "lactation_category": "avoid",
+        "evidence_level": "probable",
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
@@ -7612,7 +7582,7 @@
           "unit": "mg",
           "basis": "per_day",
           "severity_if_met": "monitor",
-          "severity_if_not_met": "info"
+          "severity_if_not_met": "informational"
         },
         {
           "scope": "drug_class",
@@ -7756,15 +7726,12 @@
       ],
       "dose_thresholds": [],
       "pregnancy_lactation": {
-        "lactation_severity": "avoid",
-        "lactation_evidence": "probable",
-        "lactation_notes": "Stimulant laxative anthranoids transfer to milk and can cause infant diarrhea. Prefer non-stimulant laxatives.",
         "sources": [
           "https://www.ncbi.nlm.nih.gov/books/NBK501922/"
         ],
         "pregnancy_category": "no_data",
-        "lactation_category": "no_data",
-        "evidence_level": "no_data",
+        "lactation_category": "avoid",
+        "evidence_level": "probable",
         "notes": "Limited data — discuss with your healthcare provider before use during pregnancy or breastfeeding.",
         "alert_headline": "Limited safety data",
         "alert_body": "There isn't enough specific safety data to give a confident recommendation for pregnancy or breastfeeding. Talk to your obstetrician or pediatrician before using this supplement.",
@@ -7991,7 +7958,7 @@
           "value": 2000,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "TXA2 suppression measurably prolongs bleeding time above 2 g/day per authored mechanism."
         },
         {
@@ -8002,7 +7969,7 @@
           "value": 2000,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "INR monitoring warranted above 2 g/day per authored action."
         },
         {
@@ -8013,7 +7980,7 @@
           "value": 3000,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "Authored avoid-threshold for combined antiplatelet therapy without haematology guidance."
         }
       ],
@@ -8090,7 +8057,7 @@
           "value": 2000,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "TXA2→TXA3 substrate shift produces measurable bleeding-time prolongation above 2 g/day per authored mechanism."
         },
         {
@@ -8101,7 +8068,7 @@
           "value": 2000,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "INR monitoring warranted above 2 g/day per authored action."
         },
         {
@@ -8112,7 +8079,7 @@
           "value": 3000,
           "unit": "mg",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "Authored avoid-threshold without haematological oversight."
         }
       ],
@@ -9397,7 +9364,7 @@
           "value": 2000,
           "unit": "mg EPA+DHA",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "Harmonized with individual DHA/EPA rules per clinical-team signoff 2026-04-24. 2 g/day EPA+DHA measurably prolongs bleeding time via TXA2 suppression."
         },
         {
@@ -9408,7 +9375,7 @@
           "value": 2000,
           "unit": "mg EPA+DHA",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "Harmonized with DHA/EPA individual anticoagulant thresholds per clinical-team signoff 2026-04-24. Previous >3000 mg threshold narrowed to >2000 mg to align with omega-3 bleeding-time data."
         },
         {
@@ -9419,7 +9386,7 @@
           "value": 3000,
           "unit": "mg EPA+DHA",
           "severity_if_met": "caution",
-          "severity_if_not_met": "info",
+          "severity_if_not_met": "informational",
           "note": "Preserves the stricter high-dose warning at 3 g/day for antiplatelet co-therapy per FDA labeling of Vascepa/Lovaza. Clinical-team signoff 2026-04-24."
         }
       ],
@@ -9716,7 +9683,7 @@
       "condition_rules": [
         {
           "condition_id": "pregnancy",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "theoretical",
           "mechanism": "Pregnancy data are limited and animal data raise endocrine and uterotonic uncertainty.",
           "action": "Avoid concentrated extracts; culinary use is not the same as supplement use.",
@@ -9750,7 +9717,7 @@
       "condition_rules": [
         {
           "condition_id": "pregnancy",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "theoretical",
           "mechanism": "Human pregnancy safety data are sparse.",
           "action": "Do not present as proven pregnancy support; monitor rather than hard-block.",
@@ -9784,7 +9751,7 @@
       "condition_rules": [
         {
           "condition_id": "diabetes",
-          "severity": "info",
+          "severity": "informational",
           "evidence_level": "probable",
           "mechanism": "May modestly affect fuel utilization and insulin sensitivity.",
           "action": "Monitor glucose trends if used chronically.",

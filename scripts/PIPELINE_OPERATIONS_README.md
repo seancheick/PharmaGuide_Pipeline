@@ -503,6 +503,164 @@ python3 scripts/build_all_final_dbs.py \
   --assemble-release-output /Users/seancheick/Documents/DataSetDsld/builds/release_output
 ```
 
+## 6A. Product image extraction (DSLD label PDFs → WebP)
+
+Generates the fallback product images served when OpenFoodFacts has nothing
+for a UPC. Reads `products_core.image_url` from `pharmaguide_core.db`,
+downloads each DSLD label PDF, renders page 1, and saves as WebP into
+`<output-dir>/`. Writes `product_image_index.json` with filename + size +
+sha256 for every successful render.
+
+These WebPs are picked up automatically by `sync_to_supabase.py` (Section 7)
+and uploaded to the `product-images` bucket. Flutter then references them
+via `products_core.image_thumbnail_url`.
+
+**Source script:** `scripts/extract_product_images.py`
+**Inputs:** `pharmaguide_core.db` (rows where `image_url LIKE '%.pdf'`)
+**Outputs:** `<output-dir>/<dsld_id>.webp` + `<output-dir>/product_image_index.json`
+**PDF cache:** `/tmp/dsld_pdf_cache/` (reused across runs to avoid re-downloads)
+
+### Standard run
+
+```bash
+python3 scripts/extract_product_images.py \
+  --db-path scripts/dist/pharmaguide_core.db \
+  --output-dir scripts/dist/product_images
+```
+
+This is **idempotent** — already-rendered `<dsld_id>.webp` files are
+skipped via a pre-scan, so reruns only process new/missing products.
+
+### Force a full re-render (e.g., after changing render settings)
+
+Use `--force-rerender` to ignore the skip-on-disk check. Existing files
+are overwritten. The PDF cache is still reused, so no re-downloads.
+
+```bash
+python3 scripts/extract_product_images.py \
+  --db-path scripts/dist/pharmaguide_core.db \
+  --output-dir scripts/dist/product_images \
+  --force-rerender
+```
+
+Use this when you've changed `RENDER_ZOOM`, `MAX_WIDTH_PX`, or
+`WEBP_QUALITY` and want every image regenerated at the new settings.
+
+### Tuning runtime concurrency (rarely needed)
+
+Defaults are conservative to avoid NIH 429 rate limits. Bump only if you
+have a clean slate and want to risk getting blocked:
+
+```bash
+python3 scripts/extract_product_images.py \
+  --db-path scripts/dist/pharmaguide_core.db \
+  --output-dir scripts/dist/product_images \
+  --max-workers 4 \
+  --batch-delay 1.0
+```
+
+### Image quality settings — what to tweak and what each does
+
+The three knobs live as module-level constants near the top of
+`scripts/extract_product_images.py`. There is no CLI flag for them
+because changing quality is a deliberate, infrequent decision that
+implies a full `--force-rerender`.
+
+```python
+# scripts/extract_product_images.py:38-43
+PDF_CACHE_DIR = "/tmp/dsld_pdf_cache"
+MAX_CONCURRENT_DOWNLOADS = 2          # NIH-friendly concurrency
+BATCH_DELAY_SECONDS = 1.5              # Pause between batches (rate-limit cushion)
+WEBP_QUALITY = 88                      # ← image-quality knob #1
+MAX_WIDTH_PX = 900                     # ← image-quality knob #2
+RENDER_ZOOM = 8.0                      # ← image-quality knob #3
+```
+
+**`RENDER_ZOOM` (currently 8.0)** — multiplier applied to PDF source
+resolution before LANCZOS downscale. Higher = sharper edges and text.
+- 2.0 = 144 DPI source render (visibly blurry)
+- 4.0 = 288 DPI (readable)
+- **8.0 = 576 DPI (current, sharp)**
+- 10+ = diminishing returns; bottlenecks on raster content baked into
+  the PDF (scanned label panels) regardless of render DPI
+- **File-size impact: NEAR ZERO.** Output dimensions are fixed at
+  `MAX_WIDTH_PX`, so encoded WebP size depends on content complexity,
+  not source render DPI. Bump this freely.
+- **Speed impact: noticeable.** Zoom 8 renders are ~4× slower than
+  zoom 4 per image. NIH download is still the bottleneck though.
+
+**`MAX_WIDTH_PX` (currently 900)** — output width in pixels. Aspect
+ratio is preserved. This is the dominant file-size driver.
+- 600 = ~25 KB/img, ~200 MB total (was the v1 default — too small,
+  visibly soft on retina screens)
+- **900 = ~80 KB/img, ~640 MB total (current)**
+- 1200 = ~140 KB/img, ~1.1 GB total
+- **File-size impact: scales linearly with pixel count**, so width 1200
+  is ~75% larger than width 900.
+- **Speed impact: small** — encoding is fast.
+
+**`WEBP_QUALITY` (currently 88)** — WebP encoder quality, 0-100.
+- 80 = small files, soft text edges (was the v1 default)
+- 85 = balanced (≈ -10% size vs 88, slightly softer text)
+- **88 = sharp text edges, modest file size (current)**
+- 92+ = barely-perceptible improvement, ~25% bigger files
+- **File-size impact: ~+10% per +3 quality points**
+- **Speed impact: trivial.**
+
+**Recommended approach to tweak quality:**
+
+1. Edit the constants in `scripts/extract_product_images.py:38-43`
+2. Sample-render a handful of products to a test directory:
+
+```bash
+python3 -c "
+import sys, os, glob
+sys.path.insert(0, 'scripts')
+from extract_product_images import pdf_page1_to_webp
+os.makedirs('/tmp/quality_test', exist_ok=True)
+# Render the first 8 cached PDFs with current settings
+for pdf in sorted(glob.glob('/tmp/dsld_pdf_cache/*.pdf'))[:8]:
+    dsld = os.path.basename(pdf).replace('.pdf', '')
+    out = f'/tmp/quality_test/{dsld}.webp'
+    size = pdf_page1_to_webp(pdf, out)
+    print(f'  {dsld}: {size/1024:.1f} KB')
+"
+open /tmp/quality_test/    # visual inspect
+```
+
+3. If satisfied, full re-render with `--force-rerender` (see above).
+4. Resync to Supabase (Section 7) — `sync_to_supabase.py` detects size
+   changes and re-uploads everything.
+
+### Settings history
+
+| Date | RENDER_ZOOM | MAX_WIDTH_PX | WEBP_QUALITY | Avg KB | Notes |
+|---|---|---|---|---|---|
+| original | 2.0 | 600 | 80 | ~25 | Visibly blurry, text unreadable on retina |
+| 2026-04-29 | 4.0 | 900 | 85 | ~60 | First sharpening pass — readable |
+| 2026-04-30 | 8.0 | 900 | 88 | ~80 | Current — sharp text, modest file growth |
+
+### Troubleshooting
+
+- **NIH 429 Client Error: Too Many Requests** — the script auto-retries
+  with exponential backoff (5s → 15s → 45s → 135s, max 4 attempts) and
+  honors `Retry-After` headers. If 429s persist, lower `--max-workers`
+  to 1 and bump `--batch-delay` to 3.0.
+- **Some products fail with 404** — those PDFs no longer exist on NIH's
+  CDN (discontinued products). Expected for a small fraction; they stay
+  on the placeholder fallback in Flutter.
+- **Images look fine locally but blurry in the app** — check that
+  Supabase has the latest WebPs (run `sync_to_supabase.py`) and that
+  the Flutter side isn't holding onto a stale `cached_network_image`
+  cache. Force-clear app cache or bump the URL with a version query
+  string.
+- **PDF cache eats too much disk** — `/tmp/dsld_pdf_cache/` is ~7,000
+  PDFs at ~500 KB each (~3.5 GB). Safe to delete (`rm -rf
+  /tmp/dsld_pdf_cache`); next run will re-download from NIH. Keep it
+  if you plan to re-render soon.
+
+---
+
 ## 7. Sync build output to Supabase
 
 Always point at the assembled `release_output` directory, not a single-brand output.

@@ -38,8 +38,43 @@ logger = logging.getLogger(__name__)
 PDF_CACHE_DIR = "/tmp/dsld_pdf_cache"
 MAX_CONCURRENT_DOWNLOADS = 2
 BATCH_DELAY_SECONDS = 1.5
-WEBP_QUALITY = 80
-MAX_WIDTH_PX = 600
+
+# ─────────────────────────────────────────────────────────────────────────
+# IMAGE QUALITY KNOBS — tweak these, then rerun with --force-rerender
+# Full guide: scripts/PIPELINE_OPERATIONS_README.md § 6A
+# ─────────────────────────────────────────────────────────────────────────
+
+# WebP encoder quality (0-100). Dominant text-edge sharpness knob.
+#   80 = soft text, smaller files
+#   85 = balanced
+#   88 = sharp text edges (current)
+#   92+ = diminishing returns, ~25% bigger files
+# File-size impact: ~+10% per +3 quality points.
+WEBP_QUALITY = 88
+
+# Output width in pixels. Aspect ratio is preserved. DOMINANT FILE-SIZE DRIVER.
+#   600  ≈ 25 KB/img,  ~200 MB total — too soft on retina screens
+#   900  ≈ 80 KB/img,  ~640 MB total (current) — sharp on phone
+#   1200 ≈ 140 KB/img, ~1.1 GB total — overkill for thumbnails
+# File-size impact: scales linearly with pixel count (width × height).
+MAX_WIDTH_PX = 900
+
+# Multiplier for PDF source render before LANCZOS downscale. NEAR ZERO file-size impact.
+#   2.0 = 144 DPI source — visibly blurry
+#   4.0 = 288 DPI — readable
+#   8.0 = 576 DPI (current) — sharp
+#   10+ = diminishing returns; baked-in raster scans cap the ceiling
+# Bump this freely — final WebP size is fixed by MAX_WIDTH_PX, not zoom.
+# Speed impact: zoom 8 ≈ 4× slower per render than zoom 4 (NIH download still bottleneck).
+RENDER_ZOOM = 8.0
+
+# Safety cap on raw source bitmap before LANCZOS downscale.
+# Some DSLD label PDFs are oversized panels that, at zoom=8, would produce
+# 1-2+ billion-pixel raw bitmaps (6+ GB RAM each, > PIL's hard limit).
+# When a render would exceed this, zoom is automatically scaled down so the
+# source bitmap fits in this budget. Final WebP output is still at MAX_WIDTH_PX.
+# 150M pixels ≈ 600 MB raw RGB; safe on any modern machine.
+MAX_SOURCE_PIXELS = 150_000_000
 
 # Retry / rate-limit handling
 HTTP_USER_AGENT = "PharmaGuide-DataPipeline/1.0 (+https://github.com/seancheick/dsld_clean)"
@@ -127,11 +162,26 @@ def pdf_page1_to_webp(pdf_path: str, output_path: str) -> int:
     import fitz  # PyMuPDF
     from PIL import Image
 
+    # We trust the input source (NIH DSLD PDFs). Disable PIL's DoS check.
+    # Without this, oversized DSLD label panels trigger DecompressionBombError.
+    Image.MAX_IMAGE_PIXELS = None
+
     doc = fitz.open(pdf_path)
     try:
         page = doc[0]
-        # Render at 2x for quality, then downscale
-        zoom = 2.0
+        # Compute a safe zoom: cap source bitmap at MAX_SOURCE_PIXELS so we
+        # never allocate multi-GB raw images for outlier PDFs (some DSLD
+        # label panels at zoom=8 would produce >2 billion pixels = ~6 GB RAM).
+        rect = page.rect  # in points
+        page_w_pt = max(1.0, rect.width)
+        page_h_pt = max(1.0, rect.height)
+        full_pixels = (page_w_pt * RENDER_ZOOM) * (page_h_pt * RENDER_ZOOM)
+        if full_pixels > MAX_SOURCE_PIXELS:
+            # Scale zoom down so source = MAX_SOURCE_PIXELS exactly
+            scale = (MAX_SOURCE_PIXELS / full_pixels) ** 0.5
+            zoom = RENDER_ZOOM * scale
+        else:
+            zoom = RENDER_ZOOM
         mat = fitz.Matrix(zoom, zoom)
         pix = page.get_pixmap(matrix=mat, alpha=False)
         img_data = pix.tobytes("png")
@@ -173,12 +223,15 @@ def file_sha256(path: str) -> str:
 # ---------------------------------------------------------------------------
 
 
-def process_one(dsld_id: str, image_url: str, output_dir: str) -> dict:
+def process_one(dsld_id: str, image_url: str, output_dir: str,
+                force_rerender: bool = False) -> dict:
     """Download PDF → extract thumbnail → return index entry or error."""
     webp_path = os.path.join(output_dir, f"{dsld_id}.webp")
 
-    # Already exists — skip
-    if os.path.exists(webp_path) and os.path.getsize(webp_path) > 0:
+    # Already exists — skip (unless force_rerender)
+    if (not force_rerender
+            and os.path.exists(webp_path)
+            and os.path.getsize(webp_path) > 0):
         return {"status": "skipped", "dsld_id": dsld_id}
 
     try:
@@ -221,14 +274,22 @@ def run_extraction(
     output_dir: str,
     max_workers: int = MAX_CONCURRENT_DOWNLOADS,
     batch_delay: float = BATCH_DELAY_SECONDS,
+    force_rerender: bool = False,
 ) -> dict:
-    """Main extraction loop. Returns summary dict."""
+    """Main extraction loop. Returns summary dict.
+
+    force_rerender: when True, ignore existing .webp files and regenerate
+    them. PDF cache is still reused (skips re-download), only the render
+    step runs again.
+    """
     ensure_cache_dir()
     os.makedirs(output_dir, exist_ok=True)
 
     all_products = load_products_from_db(db_path)
     total = len(all_products)
     logger.info("Found %d products with PDF image URLs", total)
+    if force_rerender:
+        logger.info("--force-rerender enabled: existing .webp files will be regenerated")
 
     index = {}
     downloaded = 0
@@ -245,7 +306,9 @@ def run_extraction(
     pre_skip_start = time.time()
     for dsld_id, url in all_products:
         webp_path = os.path.join(output_dir, f"{dsld_id}.webp")
-        if os.path.exists(webp_path) and os.path.getsize(webp_path) > 0:
+        if (not force_rerender
+                and os.path.exists(webp_path)
+                and os.path.getsize(webp_path) > 0):
             skipped += 1
             index[dsld_id] = {
                 "filename": f"{dsld_id}.webp",
@@ -275,7 +338,7 @@ def run_extraction(
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = {
-                executor.submit(process_one, dsld_id, url, output_dir): dsld_id
+                executor.submit(process_one, dsld_id, url, output_dir, force_rerender): dsld_id
                 for dsld_id, url in batch
             }
             for future in as_completed(futures):
@@ -380,6 +443,12 @@ def parse_args(argv=None):
         default=BATCH_DELAY_SECONDS,
         help=f"Seconds between download batches (default: {BATCH_DELAY_SECONDS})",
     )
+    parser.add_argument(
+        "--force-rerender",
+        action="store_true",
+        help="Regenerate all .webp files even if they already exist. "
+             "PDF cache is reused, only the render+resize+encode step runs again.",
+    )
     return parser.parse_args(argv)
 
 
@@ -395,6 +464,7 @@ def main(argv=None):
         output_dir=args.output_dir,
         max_workers=args.max_workers,
         batch_delay=args.batch_delay,
+        force_rerender=args.force_rerender,
     )
 
 

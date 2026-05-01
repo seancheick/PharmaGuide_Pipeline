@@ -4,7 +4,7 @@
     "purpose": "interaction_alert_taxonomy",
     "schema_version": "5.1.0",
     "last_updated": "2026-04-30",
-    "total_entries": 49,
+    "total_entries": 52,
     "flutter_top_level_key": "clinical_risk_taxonomy",
     "drug_classes_count": 15
   },
@@ -257,7 +257,7 @@
       "weight": 2
     },
     {
-      "id": "info",
+      "id": "informational",
       "label": "Informational",
       "color": "gray",
       "weight": 1
@@ -285,6 +285,27 @@
     {
       "id": "insufficient",
       "description": "Insufficient evidence for a firm interaction conclusion"
+    },
+    {
+      "id": "limited",
+      "label": "Limited",
+      "weight": 0.5,
+      "color": "yellow",
+      "description": "Some data exists but is sparse or methodologically weak."
+    },
+    {
+      "id": "moderate",
+      "label": "Moderate",
+      "weight": 0.7,
+      "color": "yellow",
+      "description": "Reasonable evidence base; not strong enough for established."
+    },
+    {
+      "id": "no_data",
+      "label": "No Data",
+      "weight": 0.0,
+      "color": "gray",
+      "description": "No evidence — used as gap-fill default in pregnancy_lactation."
     }
   ],
   "sources": [

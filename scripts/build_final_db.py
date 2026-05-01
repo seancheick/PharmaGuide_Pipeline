@@ -2046,7 +2046,7 @@ def build_top_warnings(enriched: Dict) -> List[str]:
             continue
         raw_warnings.append((
             "dietary",
-            safe_str(warning.get("severity"), "info"),
+            safe_str(warning.get("severity"), "informational"),
             safe_str(warning.get("message")),
         ))
     if not dietary_warnings:
@@ -2054,7 +2054,7 @@ def build_top_warnings(enriched: Dict) -> List[str]:
         sodium = safe_dict(ds.get("sodium"))
         if sugar.get("level") in ("moderate", "high"):
             raw_warnings.append((
-                "dietary", "info",
+                "dietary", "informational",
                 f"Sugar: {sugar.get('amount_g', 0)}g ({safe_str(sugar.get('level_display'))})"
             ))
         if sodium.get("level") in ("moderate", "high"):

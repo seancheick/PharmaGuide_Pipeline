@@ -705,7 +705,7 @@ class DosageNormalizer:
         sanitized["error"] = None
         sanitized["conversion_status"] = "not_converted_expected"
         sanitized["nonfatal_reason"] = "no_conversion_rule"
-        sanitized["severity"] = "info"
+        sanitized["severity"] = "informational"
         sanitized["warnings"] = warnings
         sanitized["notes"] = notes
         return sanitized
