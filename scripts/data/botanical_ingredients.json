@@ -1789,7 +1789,11 @@
         "organic Brussels Sprout juice",
         "brussels sprout juice",
         "brussels",
-        "brussels sprout leaf juice"
+        "brussels sprout leaf juice",
+        "Brussel Sprout",
+        "brussel sprout",
+        "Brussel sprout powder",
+        "brussel sprout powder"
       ],
       "category": "vegetable",
       "notes": "Brassica oleracea var. gemmifera (Brassicaceae) axillary bud. Cruciferous vegetable rich in glucosinolates (sinigrin, glucobrassicin) and vitamin K. Used in whole-food supplement blends.",
@@ -3374,7 +3378,12 @@
         "Slimpure decaffeinated green coffee extract",
         "Slimpure(R) Decaffeinated Green Coffee Extract",
         "slimpure green coffee extract",
-        "decaffeinated green coffee extract"
+        "decaffeinated green coffee extract",
+        "Coffee Berry fruit extract",
+        "coffee berry fruit extract",
+        "Coffeeberry fruit powder",
+        "coffeeberry fruit powder",
+        "coffeeberry"
       ],
       "category": "fruit",
       "notes": "Coffea arabica (Rubiaceae) whole fruit (cherry). Contains chlorogenic acids and polyphenols distinct from coffee bean. NeuroFactor® studies show BDNF elevation from coffee fruit extract. Botanical fruit form.",
@@ -7133,7 +7142,10 @@
         "organic turkey tails (trametes versicolor) mycelia",
         "turkey tails",
         "organic trametes versicolor",
-        "organic kawaratake"
+        "organic kawaratake",
+        "organic Turkey Tail mycelia powder",
+        "organic turkey tail mycelia powder",
+        "turkey tail mycelia powder"
       ],
       "category": "mushroom",
       "notes": "Trametes versicolor (Polyporaceae) fruiting body. Turkey tail mushroom (Japanese: Kawaratake). Contains PSK (polysaccharide-K) and PSP (polysaccharopeptide). Extensively studied in Japan for immune support.",
@@ -7853,7 +7865,14 @@
       "latin_name": "Grifola frondosa",
       "aliases": [
         "MaitakeGold MG 404",
-        "Grifola frondosa"
+        "Grifola frondosa",
+        "maitake mushroom",
+        "maitake mycelia",
+        "organic Maitake mycelia powder",
+        "organic maitake mycelia powder",
+        "maitake mycelia powder",
+        "organic Maitake Blend extract",
+        "organic maitake blend extract"
       ],
       "category": "mushroom",
       "notes": "Grifola frondosa (Meripilaceae) fruiting body. Hen-of-the-woods mushroom. Contains maitake D-fraction beta-glucan. RCT evidence for immune modulation (PMID 19367670). Botanical mushroom powder.",
@@ -11796,7 +11815,10 @@
         "Prunus cerasus",
         "cherry puree powder",
         "cherry puree",
-        "tart cherry puree powder"
+        "tart cherry puree powder",
+        "CherryPURE Whole Montmorency Tart Cherry Fruit Powder",
+        "cherrypure whole montmorency tart cherry fruit powder",
+        "Montmorency Tart Cherry"
       ],
       "category": "fruit",
       "notes": "Prunus cerasus (Rosaceae) fruit. Montmorency tart cherry rich in anthocyanins and melatonin. RCT evidence for post-exercise recovery, sleep, and uric acid reduction (PMID 23075559).",

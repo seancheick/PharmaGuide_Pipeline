@@ -14870,6 +14870,10 @@
           "micronized glutamine",
           "l-glutamine hydrochloride",
           "l-glutamine hcl",
+          "Glutamine & Glutamic Acid",
+          "glutamine & glutamic acid",
+          "L-Glutamine & Glutamic Acid",
+          "l-glutamine & glutamic acid",
           "l-glutamine, micronized",
           "glutamine, micronized",
           "glutamic acid and glutamine",
@@ -15040,7 +15044,11 @@
           "l-arginine pyroglutamate",
           "arginine pyroglutamate",
           "l-arginine l-pyroglutamate",
-          "l-arginine, micronized"
+          "l-arginine, micronized",
+          "Arginine, Micronized",
+          "arginine, micronized",
+          "arginine micronized",
+          "micronized arginine"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -22132,11 +22140,16 @@
           "Diatase",
           "diastase",
           "Diastase",
+          "malt diatase",
+          "Malt Diatase",
+          "malt diastase",
           "acid function protease",
           "Acid Function Protease",
           "protein-digesting enzyme blend",
           "Protein-Digesting Enzyme Blend",
-          "protein digesting enzyme blend"
+          "protein digesting enzyme blend",
+          "neutral lipase",
+          "Neutral Lipase"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34356,7 +34369,15 @@
           "bacosides",
           "total bacosides",
           "bacoside a",
-          "bacoside b"
+          "bacoside b",
+          "bacoside a3",
+          "Bacoside A3",
+          "bacopasides ii",
+          "Bacopasides II",
+          "bacopasaponins c",
+          "Bacopasaponins C",
+          "bacosine",
+          "Bacosine"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -41300,7 +41321,9 @@
       "epa omega-3",
       "epa from fish oil",
       "omega-3 epa",
-      "Omega-3 EPA"
+      "Omega-3 EPA",
+      "Omega-3 Eicosapentaenoic Acid",
+      "omega-3 eicosapentaenoic acid"
     ],
     "forms": {
       "EPA fish oil ethyl ester": {
@@ -62453,7 +62476,9 @@
           "pediococcus pentosaceus cul 15",
           "pediococcus pentosaceus (cul 15)",
           "cul 15",
-          "cul-15"
+          "cul-15",
+          "Pendiococcus pentosaceus",
+          "pendiococcus pentosaceus"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
