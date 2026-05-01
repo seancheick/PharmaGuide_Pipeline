@@ -19987,7 +19987,12 @@
           "epicatechin",
           "catechin",
           "tea catechins",
-          "Total Monomeric Phenols"
+          "Total Monomeric Phenols",
+          "organic matcha green tea leaf powder",
+          "organic matcha green tea",
+          "matcha",
+          "matcha green tea",
+          "organic matcha"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -45502,7 +45507,10 @@
           "white tea leaf extract",
           "tea leaf extract",
           "tea theaflavins",
-          "tea leaf theaflavins"
+          "tea leaf theaflavins",
+          "white tea leaves extract",
+          "white tea leaves",
+          "decaffeinated white tea"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -47504,7 +47512,9 @@
           "fallopia multiflora",
           "fleeceflower root",
           "fo-ti root",
-          "he shou wu root"
+          "he shou wu root",
+          "polygonum",
+          "fleeceflower"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -52609,7 +52619,9 @@
           "prickly pear fruit & pad extract",
           "prickly pear fruit and pad extract",
           "prickly pear fruit extract",
-          "prickly pear pad & fruit skins extract"
+          "prickly pear pad & fruit skins extract",
+          "prickley pear cactus leaf extract",
+          "opuntia"
         ],
         "notes": "Opuntia ficus-indica (prickly pear cactus pad); rich in fiber, polyphenols, and betalains. Evidence for postprandial glucose reduction and hangover prevention. Mexican traditional food/medicine. B34 audit 2026-04-25: bulk class-application (unknown w/ bio=5 → low) — mechanical mapping from absorption + bio_score.",
         "natural": true,
@@ -53595,7 +53607,8 @@
           "goji berries",
           "GojiRich",
           "Lycium barbarum Fruit Extract",
-          "Lycium barbarum, Powder"
+          "Lycium barbarum, Powder",
+          "lycium"
         ],
         "notes": "Lycium barbarum fruit. Rich in polysaccharides, zeaxanthin, and betaine. Traditional Chinese medicine tonic.",
         "natural": true,

@@ -944,11 +944,16 @@
         "bayberry bark",
         "bayberry root bark",
         "myrica cerifera",
-        "bayberry extract"
+        "bayberry extract",
+        "yum berry",
+        "yumberry",
+        "myrica rubra",
+        "yangmei",
+        "chinese bayberry"
       ],
       "category": "bark",
       "notes": "Myrica cerifera (Myricaceae) root bark. Traditional astringent herb used for sore throat, diarrhea, and circulatory stimulation. Contains myricitrin flavonoid and triterpenes. Not standardized.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C0949964",
       "functional_roles": [],
@@ -1785,11 +1790,12 @@
         "brussels sprouts",
         "organic Brussels Sprout juice",
         "brussels sprout juice",
-        "brussels"
+        "brussels",
+        "brussels sprout leaf juice"
       ],
       "category": "vegetable",
       "notes": "Brassica oleracea var. gemmifera (Brassicaceae) axillary bud. Cruciferous vegetable rich in glucosinolates (sinigrin, glucobrassicin) and vitamin K. Used in whole-food supplement blends.",
-      "last_updated": "2026-04-20",
+      "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "KHX46H31F8"
       },
@@ -2266,11 +2272,14 @@
         "ceratonia siliqua",
         "carob powder",
         "locust bean",
-        "Carob flavonoid extract"
+        "Carob flavonoid extract",
+        "carob protein",
+        "carob protein hydrolysate",
+        "st johns bread"
       ],
       "category": "seed",
       "notes": "Ceratonia siliqua (Fabaceae) pod. Contains galactomannan gum (locust bean gum), tannins, and D-pinitol. Traditional Mediterranean food used in supplements as thickener and mild antidiarrheal.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "5MG5Z946UO"
       },
@@ -4912,11 +4921,13 @@
       "aliases": [
         "French Melon extract",
         "extramel melon pulp concentrate",
-        "Cucumis melo"
+        "Cucumis melo",
+        "cantaloupe",
+        "muskmelon"
       ],
       "category": "fruit",
       "notes": "Cucumis melo (Cucurbitaceae) fruit. SOD-rich melon variety (Cucumis melo LC) from southern France. Source of plant-derived superoxide dismutase. Used in antioxidant supplements. Botanical fruit extract.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C0947370",
       "functional_roles": [],
@@ -10038,11 +10049,15 @@
         "pumpkin seed extract",
         "Pumpkin (Cucurbita pepo) seed oil",
         "pumpkin seed meal powder",
-        "water soluble pumpkin extract"
+        "water soluble pumpkin extract",
+        "organic pumpkin protein",
+        "pumpkin seed protein",
+        "pumpkin protein",
+        "cucurbita maxima"
       ],
       "category": "fruit",
       "notes": "Cucurbita pepo (Cucurbitaceae) fruit/seed. Rich in carotenoids (beta-carotene, lutein) and cucurbitins in seeds. Seed oil studied for BPH (PMID 26093535). Botanical fruit/seed powder.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "SYW0QUB89Y"
       },
@@ -10190,11 +10205,15 @@
       "latin_name": "Rubus idaeus",
       "aliases": [
         "raspberry seed concentrate",
-        "Rubus idaeus"
+        "Rubus idaeus",
+        "red raspberry seed oil",
+        "raspberry seed oil",
+        "rubus idaeus seed oil",
+        "rubus idaeus seed"
       ],
       "category": "seed",
       "notes": "Rubus idaeus (Rosaceae) seed. Rich in ellagic acid, alpha-linolenic acid, and vitamin E. Seed oil has favorable omega-3:omega-6 ratio. Botanical seed powder, not standardized.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C0034310",
       "functional_roles": [],
@@ -12253,11 +12272,14 @@
       "latin_name": "Citrullus lanatus",
       "aliases": [
         "Watermelon Extract",
-        "Citrullus lanatus"
+        "Citrullus lanatus",
+        "organic watermelon protein",
+        "watermelon seed protein",
+        "watermelon protein"
       ],
       "category": "fruit",
       "notes": "Citrullus lanatus (Cucurbitaceae) fruit. Richest food source of L-citrulline (amino acid, 250 mg/100g). Also contains lycopene. Used in supplements for nitric oxide support.",
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "231473QB6R"
       },
