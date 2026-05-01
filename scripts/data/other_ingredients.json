@@ -4,7 +4,7 @@
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
     "last_updated": "2026-05-01",
-    "total_entries": 674,
+    "total_entries": 675,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -8862,6 +8862,37 @@
       "functional_roles": [
         "carrier_oil"
       ]
+    },
+    {
+      "id": "NHA_HBCD_CLUSTER_DEXTRIN",
+      "standard_name": "Highly Branched Cyclic Dextrin",
+      "aliases": [
+        "highly branched cyclic dextrin",
+        "Highly Branched Cyclic Dextrin",
+        "HBCD",
+        "hbcd",
+        "cluster dextrin",
+        "Cluster Dextrin",
+        "Glico Cluster Dextrin",
+        "cyclic cluster dextrin",
+        "branched cyclic dextrin"
+      ],
+      "category": "carbohydrate",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Highly Branched Cyclic Dextrin (HBCD) — Glico-trademarked 'Cluster Dextrin' is the most prominent commercial form. Produced from waxy maize starch by 1,4-alpha-glucan branching enzyme treatment yielding a high-molecular-weight (typical avg MW ~160k Da) cyclic glucan with low osmolality. Marketed for sports/endurance nutrition (rapid gastric emptying vs. maltodextrin). Distinct from generic Modified Food Starch and from ModCarb (Lonza-branded multi-source dextrin blend, NHA_MODCARB). No single-compound CAS, PubChem CID, or UNII exists — HBCD is a polymer product class, not a single chemical entity. Generic parent class: Dextrin (NHA_DEXTRIN, CUI C0054527). UMLS verification 2026-05-01: no concept exists for 'highly branched cyclic dextrin', 'cluster dextrin', or 'branched dextrin' (verify_cui.py).",
+      "common_uses": [
+        "carbohydrate fuel",
+        "sports nutrition energy source",
+        "endurance fueling"
+      ],
+      "last_updated": "2026-05-01",
+      "external_ids": {},
+      "cui": null,
+      "cui_status": "governed_null",
+      "cui_note": "Polymer product class with no single UMLS concept. Generic dextrin parent CUI C0054527 covers the chemical family but does not represent the highly-branched cyclic structural form.",
+      "functional_roles": []
     },
     {
       "id": "PII_HIGH_QUALITY_PROTEIN_DESCRIPTOR",
