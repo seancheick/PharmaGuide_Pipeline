@@ -2,12 +2,59 @@
 
 **Source triage:** `scripts/audits/unmapped_triage/unmapped_triage_2026-05-01.json` (AMBIGUOUS bucket, 204 items)
 **Last automated pass:** 2026-05-01 (101 items resolved via Batches A–E across 14 commits this session)
-**Remaining:** **103 items**, organized below by decision class.
+**Remaining (after exec decisions D1/D3/D4 applied):** ~63 items
 
 This document is for the team to work through item-by-item. Each section explains:
 - WHY these items can't be auto-resolved
 - WHAT decision is needed
 - HOW to apply the fix when the decision is made
+
+---
+
+## ✅ Executive Decisions — APPLIED 2026-05-01 (commit `0e74c8e`)
+
+| # | Category | Decision | Status |
+|---|---|---|---|
+| **D1** | Trace mineral systems / rare earths (~30 items) | **Option A approved** — single `NHA_TRACE_MINERAL_SOLUTION` entry covering all 50+ rare-earth + heavy elements, no scoring impact. | ✅ DONE |
+| **D2** | Opaque blends | System already correct (4-state classifier + B5 transparency penalty). No action. | ✅ NO-OP |
+| **D3** | Source ambiguity — Algae Protein (high-frequency first) | **Approved** — generic `algae_protein` IQM entry created with multi-source notes; bio_score=5 conservative; species-specific (chlorella/spirulina) excluded so disclosed labels route correctly. | ✅ DONE |
+| **D4** | SPMs (Resolvins / Protectins) | **Approved** — map as omega-3 SPM precursor aliases (17-HDHA form) with notes that products typically contain precursors, not actual resolvins. | ✅ DONE |
+| **D5** | Probiotic strains (S. rattus/uberis/oralis BLIS) | **Require clinician sign-off** — no exceptions. | ⏳ AWAITING CLINICIAN |
+| **D6** | Cleaner artifacts | **Approved** — fix in `clean_dsld_data.py` parser (separate change). | ⏳ TODO (cleaner-side) |
+| **D7** | Alias candidates | **Approved** — proceed with strict API-verification workflow (Section "CATEGORY 7" below). | ⏳ TEAM EXECUTING |
+| **OPT** | `confidence_level` schema field | **Approved** — added to new entries (verified / inferred / unresolved). Backfill across existing entries in follow-on migration. | 🟡 IN PROGRESS |
+
+**After executive decisions, remaining team work is concentrated in:**
+- D5 (clinician sign-off needed) — 4 items
+- D6 (cleaner-side fix) — ~12 items
+- D7 (verifiable alias candidates) — ~15 items
+- Branded blend headers (per-product DSLD verification) — ~20 items
+- Niche single-occurrences requiring research — ~12 items
+
+---
+
+## 🆕 Optional improvement: `confidence_level` field (executive-approved)
+
+New schema field on data entries to track verification state. Three values:
+
+```json
+{
+  "confidence_level": "verified",   // API-verified identifiers + reviewed
+  "confidence_level": "inferred",   // Generic/multi-source; bio_score conservative
+  "confidence_level": "unresolved"  // Pending clinician/policy decision
+}
+```
+
+**Where applied so far:**
+- `NHA_TRACE_MINERAL_SOLUTION` → `verified` (executive policy decision documented)
+- `algae_protein` → `inferred` (generic source, conservative scoring)
+
+**Backfill plan (follow-on PR):**
+- All existing entries with full UNII + CUI + clinical evidence → `verified`
+- Entries with stub data quality or generic CUIs → `inferred`
+- Entries flagged for clinician review → `unresolved`
+
+This enables UI tier display ("Verified" badge), audit gating (release-block on too many unresolved), and avoids silent assumptions.
 
 ---
 
