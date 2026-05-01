@@ -10032,8 +10032,39 @@ class SupplementEnricherV3:
         # attach a per-strain CFU (per dev rule: "No blend-total inference
         # for probiotics"). When cfu_per_day is None the adequacy tier is
         # also None — downstream downgrade handles it gracefully.
+        # Lazy-import code-level constants (clinician decision 2026-05-01).
+        # BLOCKED → reject (S. uberis KJ2, S. oralis JH145).
+        # HOLD    → defer (S. rattus JH145, S. oralis KJ3) — same handling
+        #           as BLOCKED for now.
+        try:
+            from constants import BLOCKED_PROBIOTIC_STRAINS, HOLD_PROBIOTIC_STRAINS
+        except ImportError:  # pragma: no cover - defensive
+            BLOCKED_PROBIOTIC_STRAINS = set()
+            HOLD_PROBIOTIC_STRAINS = set()
+        _BLOCKED_OR_HOLD = (BLOCKED_PROBIOTIC_STRAINS | HOLD_PROBIOTIC_STRAINS)
+
+        # Postbiotic / inactivated-form detection patterns. These products
+        # do NOT contain live probiotic content; CFU thresholds do not apply
+        # and bio_score class differs (cell-wall fragments interact with
+        # gut immune cells locally). Per dev review 2026-05-01.
+        _POSTBIOTIC_PATTERNS = (
+            "heat-killed", "heat killed",
+            "heat-inactivated", "heat inactivated",
+            "tyndallized", "tyndalized",
+            "postbiotic",
+            "paraprobiotic",
+            "inactivated probiotic",
+            "non-viable",
+            "ghost probiotic",
+        )
+
+        def _is_postbiotic(strain_text: str, blend_text: str = "") -> bool:
+            haystack = f"{strain_text} {blend_text}".lower()
+            return any(p in haystack for p in _POSTBIOTIC_PATTERNS)
+
         for blend in probiotic_blends:
             blend_strains = blend.get("strains") or []
+            blend_name = blend.get("name", "") or blend.get("blend_name", "") or ""
             blend_cfu = (blend.get("cfu_data") or {}).get("cfu_count")
             per_strain_cfu = (
                 float(blend_cfu)
@@ -10041,6 +10072,27 @@ class SupplementEnricherV3:
                 else None
             )
             for strain in blend_strains:
+                strain_str = str(strain).strip().lower()
+                # Hard block: clinician-decided REJECT/HOLD strains never
+                # enter the clinical_strains pool (no CFU credit, no
+                # scoring contribution). Surface as a flag for visibility.
+                if any(b in strain_str for b in _BLOCKED_OR_HOLD):
+                    found_clinical_strains.append({
+                        "strain": strain,
+                        "clinical_id": "BLOCKED_OR_HOLD",
+                        "evidence_level": "rejected",
+                        "cfu_per_day": None,
+                        "adequacy_tier": None,
+                        "clinical_support_level": None,
+                        "indication_primary": None,
+                        "is_blocked": True,
+                        "block_reason": "Clinician REJECT/HOLD strain (CLINICAL_DECISIONS_LOG.md 2026-05-01)",
+                        "cfu_confidence": "low",
+                        "dose_basis": "inferred",
+                        "ui_copy_hint": "blend_not_individually_disclosed",
+                    })
+                    continue
+                postbiotic = _is_postbiotic(str(strain), blend_name)
                 for clinical in clinical_strains:
                     clin_name = clinical.get('standard_name', '')
                     clin_aliases = clinical.get('aliases', [])
@@ -10053,7 +10105,7 @@ class SupplementEnricherV3:
                         hybrid = _compute_probiotic_confidence_hybrid(
                             per_strain_cfu, adequacy_tier, support_level,
                         )
-                        found_clinical_strains.append({
+                        entry = {
                             "strain": strain,
                             "clinical_id": clinical.get('id', ''),
                             "evidence_level": clinical.get('evidence_level', 'moderate'),
@@ -10068,7 +10120,19 @@ class SupplementEnricherV3:
                             "cfu_confidence": hybrid["cfu_confidence"],
                             "dose_basis": hybrid["dose_basis"],
                             "ui_copy_hint": hybrid["ui_copy_hint"],
-                        })
+                        }
+                        # Postbiotic / inactivated form — CFU scoring does
+                        # not apply (different mechanism). Scorer hard-gates
+                        # on is_inactivated to skip CFU credit.
+                        if postbiotic:
+                            entry["is_inactivated"] = True
+                            entry["is_postbiotic"] = True
+                            entry["postbiotic_note"] = (
+                                "Heat-killed / inactivated form detected. "
+                                "Different mechanism from live probiotic; CFU "
+                                "thresholds do not apply."
+                            )
+                        found_clinical_strains.append(entry)
                         break
 
         # Check for prebiotic pairing

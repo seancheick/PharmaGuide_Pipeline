@@ -247,6 +247,20 @@ def _compute_probiotic_cfu_adequacy_points(
     for strain in clinical_strains or []:
         if not isinstance(strain, dict):
             continue
+        # Hard gate: postbiotic / heat-killed / tyndallized / paraprobiotic
+        # forms are NOT live probiotics. They have a different mechanism
+        # (cell-wall fragments interact with gut immune cells locally) and
+        # CFU dosing thresholds do not apply. Per dev review 2026-05-01:
+        # is_inactivated → no CFU scoring contribution.
+        if strain.get("is_inactivated") or strain.get("is_postbiotic"):
+            contributions.append({
+                "tier": strain.get("adequacy_tier"),
+                "support": strain.get("clinical_support_level"),
+                "cfu_per_day": strain.get("cfu_per_day"),
+                "points": 0.0,
+                "skipped_reason": "postbiotic_inactivated_no_cfu_credit",
+            })
+            continue
         tier = strain.get("adequacy_tier")
         cfu = strain.get("cfu_per_day")
         # Hard gates: tier missing or cfu missing (multi-strain) → 0.
