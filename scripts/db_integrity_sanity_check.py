@@ -189,6 +189,49 @@ def _load_functional_roles_vocab_ids() -> set:
     return _FUNCTIONAL_ROLES_VOCAB_IDS
 
 
+# ---------------------------------------------------------------------------
+# Generic vocab loader (added 2026-05-02 per integrity-gate-wiring PR).
+#
+# Lazy-loads any controlled vocabulary in `scripts/data/` and caches the
+# canonical ID set. Used to drive `_check_enum` calls in the existing
+# check_* functions so the integrity gate enforces vocab membership for
+# every field that has a backing vocab.
+#
+# Falls back to an empty set if the vocab file is missing — that case
+# is surfaced separately by the per-vocab contract tests in
+# `scripts/tests/test_*_vocab_contract.py`.
+# ---------------------------------------------------------------------------
+
+_VOCAB_ID_CACHE: Dict[str, set] = {}
+
+
+def _load_vocab_ids(vocab_filename: str, list_key: str) -> set:
+    """Load and cache the set of `id` values from a vocab file.
+
+    Args:
+        vocab_filename: filename under scripts/data/ (e.g. "severity_vocab.json").
+        list_key: the top-level array key (e.g. "severities").
+
+    Returns the set of stable IDs, lowercased.
+    """
+    cache_key = f"{vocab_filename}::{list_key}"
+    if cache_key in _VOCAB_ID_CACHE:
+        return _VOCAB_ID_CACHE[cache_key]
+    path = Path(__file__).parent / "data" / vocab_filename
+    try:
+        with open(path, encoding="utf-8") as f:
+            v = json.load(f)
+        ids = {
+            str(e["id"]).strip().lower()
+            for e in v.get(list_key, [])
+            if isinstance(e, dict) and "id" in e
+        }
+    except (FileNotFoundError, json.JSONDecodeError, KeyError):
+        ids = set()
+    _VOCAB_ID_CACHE[cache_key] = ids
+    return ids
+
+
 def _check_functional_roles(
     findings: List[Finding],
     file: str,
@@ -573,25 +616,34 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
         findings.append(Finding("error", file, "backed_clinical_studies", "missing_or_non_list", "list", _type_name(raw)))
         return
 
-    valid_study_types = {
-        "systematic_review_meta",
-        "rct_multiple",
-        "rct_single",
-        "clinical_strain",
-        "observational",
-        "animal_study",
-        "in_vitro",
+    # Vocab-driven validation (added 2026-05-02). Falls back to inline
+    # values if the vocab is missing.
+    valid_study_types = _load_vocab_ids(
+        "study_type_vocab.json", "study_types"
+    ) or {
+        "systematic_review_meta", "rct_multiple", "rct_single",
+        "clinical_strain", "observational", "animal_study", "in_vitro",
     }
-    valid_evidence_levels = {
-        "product-human",
-        "product-rct",
-        "product",
-        "branded-rct",
-        "ingredient-human",
-        "strain-clinical",
-        "preclinical",
-        "unknown",
+    # backed_clinical_studies.evidence_level is the study-design tier
+    # (D2 split); interaction_rules.evidence_level uses the strength tier.
+    valid_evidence_levels = _load_vocab_ids(
+        "evidence_level_vocab.json", "evidence_levels"
+    ) or {
+        "product-human", "product-rct", "product", "branded-rct",
+        "ingredient-human", "strain-clinical", "preclinical", "unknown",
     }
+    valid_score_contribution = _load_vocab_ids(
+        "score_contribution_tier_vocab.json", "score_contribution_tiers"
+    ) or {"tier_1", "tier_2", "tier_3"}
+    valid_clinical_indication = _load_vocab_ids(
+        "clinical_indication_vocab.json", "clinical_indications"
+    )
+    valid_effect_direction = _load_vocab_ids(
+        "effect_direction_vocab.json", "effect_directions"
+    )
+    valid_confidence = _load_vocab_ids(
+        "confidence_tier_vocab.json", "confidence_tiers"
+    )
 
     for i, e in enumerate(raw):
         if not isinstance(e, dict):
@@ -603,7 +655,13 @@ def check_clinical_db(findings: List[Finding], data: Dict[str, Any], file: str) 
         _check_list_of_strings(findings, file, e, i, "exclude_aliases", required=False)
         _check_enum(findings, file, e, i, "study_type", valid_study_types)
         _check_enum(findings, file, e, i, "evidence_level", valid_evidence_levels)
-        _check_enum(findings, file, e, i, "score_contribution", {"tier_1", "tier_2", "tier_3"})
+        _check_enum(findings, file, e, i, "score_contribution", valid_score_contribution)
+        if "category" in e and valid_clinical_indication:
+            _check_enum(findings, file, e, i, "category", valid_clinical_indication)
+        if "effect_direction" in e and valid_effect_direction:
+            _check_enum(findings, file, e, i, "effect_direction", valid_effect_direction)
+        if "effect_direction_confidence" in e and valid_confidence:
+            _check_enum(findings, file, e, i, "effect_direction_confidence", valid_confidence)
         _check_list_of_strings(findings, file, e, i, "health_goals_supported", required=True, allow_empty=False)
         _check_list_of_strings(findings, file, e, i, "key_endpoints", required=True, allow_empty=False)
 
@@ -636,7 +694,10 @@ def check_iqm(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
             findings.append(Finding("error", file, f"{ing_key}.standard_name", "missing_or_wrong_type", "str", _type_name(sn)))
 
         # category_enum: must be one of the 12 canonical categories.
-        VALID_CATEGORIES = {
+        # Vocab-driven (added 2026-05-02) with inline fallback.
+        VALID_CATEGORIES = _load_vocab_ids(
+            "iqm_category_vocab.json", "iqm_categories"
+        ) or {
             "amino_acids", "antioxidants", "enzymes", "fatty_acids",
             "fibers", "functional_foods", "herbs", "minerals",
             "other", "probiotics", "proteins", "vitamins",
@@ -750,6 +811,13 @@ def check_allergens(findings: List[Finding], data: Dict[str, Any], file: str) ->
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "allergens", "missing_or_non_list", "list", _type_name(raw)))
         return
+    # Vocab-driven validation (added 2026-05-02): regulatory_status against
+    # allergen_regulatory_status_vocab. severity_level + prevalence use the
+    # same 3-tier enum (high/moderate/low) — kept as hardcoded set since
+    # they don't map 1:1 to any single vocab.
+    valid_regulatory = _load_vocab_ids(
+        "allergen_regulatory_status_vocab.json", "allergen_regulatory_statuses"
+    )
     for i, e in enumerate(raw):
         if not isinstance(e, dict):
             findings.append(Finding("error", file, f"[{i}]", "entry_not_object", "dict", _type_name(e)))
@@ -757,6 +825,10 @@ def check_allergens(findings: List[Finding], data: Dict[str, Any], file: str) ->
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str), ("severity_level", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=True)
         _check_enum(findings, file, e, i, "severity_level", {"high", "moderate", "low"})
+        if "prevalence" in e:
+            _check_enum(findings, file, e, i, "prevalence", {"high", "moderate", "low"})
+        if "regulatory_status" in e and valid_regulatory:
+            _check_enum(findings, file, e, i, "regulatory_status", valid_regulatory)
 
 
 def check_harmful_additives(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
@@ -764,6 +836,11 @@ def check_harmful_additives(findings: List[Finding], data: Dict[str, Any], file:
     if not isinstance(raw, list):
         findings.append(Finding("error", file, "harmful_additives", "missing_or_non_list", "list", _type_name(raw)))
         return
+    # Vocab-driven validation (added 2026-05-02): confidence against
+    # confidence_tier_vocab.
+    valid_confidence = _load_vocab_ids(
+        "confidence_tier_vocab.json", "confidence_tiers"
+    )
     for i, e in enumerate(raw):
         if not isinstance(e, dict):
             findings.append(Finding("error", file, f"[{i}]", "entry_not_object", "dict", _type_name(e)))
@@ -771,6 +848,8 @@ def check_harmful_additives(findings: List[Finding], data: Dict[str, Any], file:
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str), ("severity_level", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=True)
         _check_enum(findings, file, e, i, "severity_level", {"critical", "high", "moderate", "low", "none"})
+        if "confidence" in e and valid_confidence:
+            _check_enum(findings, file, e, i, "confidence", valid_confidence)
         _check_functional_roles(findings, file, e, i)
 
 
@@ -780,19 +859,24 @@ def check_banned(findings: List[Finding], data: Dict[str, Any], file: str) -> No
         findings.append(Finding("error", file, "ingredients", "missing_or_non_list", "list", _type_name(raw)))
         return
 
-    legal_values = {
-        "banned_federal",
-        "banned_state",
-        "not_lawful_as_supplement",
-        "controlled_substance",
-        "restricted",
-        "under_review",
-        "lawful",
-        "adulterant",
-        "contaminant_risk",
-        "wada_prohibited",
-        "high_risk",
+    # Vocab-driven validation (added 2026-05-02). Falls back to inline
+    # values if vocab files are missing — surfaced by per-vocab contract
+    # tests under scripts/tests/test_*_vocab_contract.py.
+    valid_status = _load_vocab_ids("banned_status_vocab.json", "banned_statuses") or {
+        "banned", "recalled", "high_risk", "watchlist",
     }
+    valid_match_mode = _load_vocab_ids("match_mode_vocab.json", "match_modes") or {
+        "active", "disabled", "historical",
+    }
+    valid_legal = _load_vocab_ids("legal_status_vocab.json", "legal_statuses") or {
+        "banned_federal", "banned_state", "not_lawful_as_supplement",
+        "controlled_substance", "restricted", "lawful", "adulterant",
+        "contaminant_risk", "wada_prohibited", "high_risk",
+    }
+    valid_clinical_risk = _load_vocab_ids(
+        "clinical_risk_vocab.json", "clinical_risks"
+    )
+    valid_ban_context = _load_vocab_ids("ban_context_vocab.json", "ban_contexts")
 
     for i, e in enumerate(raw):
         if not isinstance(e, dict):
@@ -800,9 +884,13 @@ def check_banned(findings: List[Finding], data: Dict[str, Any], file: str) -> No
             continue
         _check_required(findings, file, e, i, [("id", str), ("standard_name", str), ("status", str), ("match_mode", str)])
         _check_list_of_strings(findings, file, e, i, "aliases", required=True)
-        _check_enum(findings, file, e, i, "status", {"banned", "recalled", "high_risk", "watchlist"})
-        _check_enum(findings, file, e, i, "match_mode", {"active", "disabled", "historical"})
-        _check_enum(findings, file, e, i, "legal_status_enum", legal_values)
+        _check_enum(findings, file, e, i, "status", valid_status)
+        _check_enum(findings, file, e, i, "match_mode", valid_match_mode)
+        _check_enum(findings, file, e, i, "legal_status_enum", valid_legal)
+        if "clinical_risk_enum" in e and valid_clinical_risk:
+            _check_enum(findings, file, e, i, "clinical_risk_enum", valid_clinical_risk)
+        if "ban_context" in e and valid_ban_context:
+            _check_enum(findings, file, e, i, "ban_context", valid_ban_context)
 
 
 def check_other_ingredients(findings: List[Finding], data: Dict[str, Any], file: str) -> None:
@@ -1278,27 +1366,48 @@ def check_ingredient_interaction_rules(findings: List[Finding], data: Dict[str, 
         findings.append(Finding("error", file, "interaction_rules", "missing_or_non_list", "list", _type_name(raw)))
         return
 
-    taxonomy = _load_json(DATA_DIR / "clinical_risk_taxonomy.json")
-    valid_conditions = {
-        str(e.get("id")).strip().lower()
-        for e in (taxonomy.get("conditions", []) if isinstance(taxonomy, dict) else [])
-        if isinstance(e, dict) and e.get("id")
-    }
-    valid_drug_classes = {
-        str(e.get("id")).strip().lower()
-        for e in (taxonomy.get("drug_classes", []) if isinstance(taxonomy, dict) else [])
-        if isinstance(e, dict) and e.get("id")
-    }
-    valid_severity = {
-        str(e.get("id")).strip().lower()
-        for e in (taxonomy.get("severity_levels", []) if isinstance(taxonomy, dict) else [])
-        if isinstance(e, dict) and e.get("id")
-    }
-    valid_evidence = {
-        str(e.get("id")).strip().lower()
-        for e in (taxonomy.get("evidence_levels", []) if isinstance(taxonomy, dict) else [])
-        if isinstance(e, dict) and e.get("id")
-    }
+    # Validation IDs sourced from the controlled vocabularies (locked
+    # 2026-04-30..2026-05-02 per REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md).
+    # Falls back to clinical_risk_taxonomy.json if a vocab file is missing
+    # — that case is surfaced by the per-vocab contract tests under
+    # scripts/tests/test_*_vocab_contract.py.
+    valid_conditions = _load_vocab_ids("condition_vocab.json", "conditions")
+    valid_drug_classes = _load_vocab_ids("drug_class_vocab.json", "drug_classes")
+    valid_severity = _load_vocab_ids("severity_vocab.json", "severities")
+    # interaction_rules.evidence_level uses the strength tier (D2 split):
+    # established/probable/theoretical/limited/moderate/no_data.
+    valid_evidence = _load_vocab_ids(
+        "evidence_strength_vocab.json", "evidence_strengths"
+    )
+
+    if not (valid_conditions and valid_drug_classes and valid_severity and valid_evidence):
+        # Vocab missing — fall back to the legacy taxonomy so the gate
+        # still runs. Per-vocab contract tests will catch the missing file.
+        taxonomy = _load_json(DATA_DIR / "clinical_risk_taxonomy.json")
+        if not valid_conditions:
+            valid_conditions = {
+                str(e.get("id")).strip().lower()
+                for e in (taxonomy.get("conditions", []) if isinstance(taxonomy, dict) else [])
+                if isinstance(e, dict) and e.get("id")
+            }
+        if not valid_drug_classes:
+            valid_drug_classes = {
+                str(e.get("id")).strip().lower()
+                for e in (taxonomy.get("drug_classes", []) if isinstance(taxonomy, dict) else [])
+                if isinstance(e, dict) and e.get("id")
+            }
+        if not valid_severity:
+            valid_severity = {
+                str(e.get("id")).strip().lower()
+                for e in (taxonomy.get("severity_levels", []) if isinstance(taxonomy, dict) else [])
+                if isinstance(e, dict) and e.get("id")
+            }
+        if not valid_evidence:
+            valid_evidence = {
+                str(e.get("id")).strip().lower()
+                for e in (taxonomy.get("evidence_levels", []) if isinstance(taxonomy, dict) else [])
+                if isinstance(e, dict) and e.get("id")
+            }
 
     iqm = _load_json(DATA_DIR / "ingredient_quality_map.json")
     iqm_ids = {k for k in iqm.keys() if isinstance(iqm, dict) and not str(k).startswith("_")}

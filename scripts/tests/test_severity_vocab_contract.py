@@ -45,17 +45,21 @@ def severities(vocab):
 
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
-    assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 6
+    # 1.1.0 added `no_data` as 7th severity tier per integrity-gate audit
+    # (2026-05-02). Was used by interaction_rules.pregnancy_lactation but
+    # missing from the v1.0.0 vocab — caused the new vocab-driven gate to
+    # fail. See REFERENCE_DATA_LOOKUP_OPPORTUNITIES.md.
+    assert md["schema_version"] == "1.1.0"
+    assert md["total_entries"] == 7
     assert "LOCKED" in md["status"]
     assert md["char_limit_short_label"] == 12
     assert md["char_limit_action"] == 40
     assert md["char_limit_notes"] == 200
 
 
-def test_exactly_6_severities_locked(severities):
-    assert len(severities) == 6, (
-        f"Vocab is locked at 6 severities; got {len(severities)}."
+def test_exactly_7_severities_locked(severities):
+    assert len(severities) == 7, (
+        f"Vocab is locked at 7 severities; got {len(severities)}."
     )
 
 
@@ -85,10 +89,12 @@ def test_every_id_unique_and_lowercase_snake(severities):
         assert ID_PATTERN.match(sid), f"severity id {sid!r} not snake_case"
 
 
-def test_canonical_6_ids_present(severities):
+def test_canonical_7_ids_present(severities):
+    # `no_data` added 2026-05-02 (v1.1.0) — needed by interaction_rules
+    # pregnancy_lactation entries where evidence is unavailable.
     expected = {
         "contraindicated", "avoid", "caution",
-        "monitor", "informational", "safe",
+        "monitor", "informational", "safe", "no_data",
     }
     actual = {s["id"] for s in severities}
     missing = expected - actual
@@ -149,6 +155,7 @@ SEED_DISPLAY_CONTRACT = {
     "monitor":         {"tone": "warning", "ui_color": "yellow", "ui_icon": "warning", "short_label": "Monitor"},
     "informational":   {"tone": "info", "ui_color": "blue", "ui_icon": "info", "short_label": "Info"},
     "safe":            {"tone": "positive", "ui_color": "green", "ui_icon": "check", "short_label": "Safe"},
+    "no_data":         {"tone": "neutral", "ui_color": "gray", "ui_icon": "info", "short_label": "No data"},
 }
 
 

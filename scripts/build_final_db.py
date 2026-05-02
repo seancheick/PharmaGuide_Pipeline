@@ -4459,6 +4459,28 @@ def build_final_db(
     ]
     for key, value in local_manifest_rows:
         c.execute("INSERT OR REPLACE INTO export_manifest VALUES (?,?)", (key, value))
+
+    # Defensive sweep: NOT_SCORED products MUST NOT reach products_core per
+    # validate_export_contract() review-queue gate (line 389). This sweep
+    # cleans any stale rows left from builds that pre-date the gate, in case
+    # the source product no longer appears in the current input batch (so
+    # the per-product DELETE at line 4341 wouldn't fire). Sweep is logged
+    # and counted in the manifest for observability.
+    not_scored_swept = c.execute(
+        "DELETE FROM products_core WHERE verdict = ?",
+        ("NOT_SCORED",),
+    ).rowcount
+    if not_scored_swept > 0:
+        logger.warning(
+            "Defensive sweep removed %d stale NOT_SCORED rows from products_core "
+            "(per review-queue gate; expected from pre-gate builds)",
+            not_scored_swept,
+        )
+        c.execute(
+            "INSERT OR REPLACE INTO export_manifest VALUES (?,?)",
+            ("not_scored_swept_count", str(not_scored_swept)),
+        )
+
     conn.commit()
     conn.close()
 
