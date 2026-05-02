@@ -4973,3 +4973,73 @@ class TestShipNowConfigLockdown:
             f"Expected B1_penalty=15.0 for 5 critical additives (raw 15.0 "
             f"== new cap 15), got {section_b['B1_penalty']}"
         )
+
+
+class TestOpaqueOmega3BlendDetection:
+    @pytest.mark.parametrize(
+        "blend_name",
+        [
+            "Adaptogenic Preparation Complex",
+            "Department Blend",
+            "Departure Formula",
+            "Prepared Cocoa Blend",
+            "Dharma Wellness Blend",
+            "Sundha Greens",
+        ],
+    )
+    def test_opaque_omega3_blend_ignores_substring_false_positives(self, blend_name):
+        product = {
+            "proprietary_blends": [
+                {
+                    "name": blend_name,
+                    "disclosure_level": "none",
+                    "ingredients": [],
+                }
+            ]
+        }
+
+        assert SupplementScorer._has_opaque_omega3_blend(product) is False
+
+    @pytest.mark.parametrize(
+        "blend_name",
+        [
+            "Omega-3 Complex",
+            "Fish Oil Proprietary Blend",
+            "EPA DHA Matrix",
+            "Marine Lipid Blend",
+            "N-3 Fatty Acids",
+        ],
+    )
+    def test_opaque_omega3_blend_matches_real_indicators(self, blend_name):
+        product = {
+            "proprietary_blends": [
+                {
+                    "name": blend_name,
+                    "disclosure_level": "none",
+                    "ingredients": [],
+                }
+            ]
+        }
+
+        assert SupplementScorer._has_opaque_omega3_blend(product) is True
+
+    @pytest.mark.parametrize(
+        "blend_name",
+        [
+            "OmegaXanthin Blend",
+            "OmegaCare Complex",
+            "DHA-Forte",
+        ],
+    )
+    def test_opaque_omega3_blend_matches_compound_words(self, blend_name):
+        product = {
+            "proprietary_blends": [
+                {
+                    "name": blend_name,
+                    "disclosure_level": "none",
+                    "ingredients": [],
+                }
+            ]
+        }
+
+        assert SupplementScorer._has_opaque_omega3_blend(product) is True

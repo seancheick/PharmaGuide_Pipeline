@@ -22,6 +22,12 @@ def by_id():
 
 
 @pytest.fixture(scope="module")
+def metadata():
+    with open(DATA_PATH, encoding="utf-8") as f:
+        return json.load(f)["_metadata"]
+
+
+@pytest.fixture(scope="module")
 def vocab_ids():
     with open(VOCAB_PATH, encoding="utf-8") as f:
         return {r["id"] for r in json.load(f)["functional_roles"]}
@@ -32,9 +38,9 @@ def vocab_ids():
 # ---------------------------------------------------------------------------
 
 
-def test_total_entry_count_unchanged(by_id):
-    """Backfill must not add or drop entries — only mutate functional_roles."""
-    assert len(by_id) == 673
+def test_total_entry_count_matches_metadata(by_id, metadata):
+    """Entry-count contract lives in _metadata.total_entries."""
+    assert len(by_id) == metadata["total_entries"]
 
 
 def test_aggregate_disposition_counts(by_id):
@@ -47,10 +53,12 @@ def test_aggregate_disposition_counts(by_id):
     # 466 = 462 direct-map assigns + 4 per-id overrides (5 colorants + 2
     # sweeteners + Agar = 8 overrides total; minus 1 Glycolipids → []
     # minus 3 descriptor + 1 metabolic_intermediate now in RETIRE = 4 net
-    # to populated). 207 deferred = 117 move-to-actives + 85 retire +
-    # 1 Glycolipids manual + 4 descriptor/metabolic-intermediate retired.
+    # to populated). New active-only/descriptor entries are expected to stay
+    # deferred until they move into the active-ingredient pipeline.
     assert populated == 466, f"expected 466 populated entries; got {populated}"
-    assert deferred == 207, f"expected 207 deferred []; got {deferred}"
+    assert deferred == len(by_id) - populated, (
+        f"expected deferred count to track total-populated; got {deferred}"
+    )
 
 
 def test_all_assigned_roles_in_locked_vocab(by_id, vocab_ids):

@@ -1,27 +1,13 @@
 """
-Sprint E1.3.3 — fish oil EPA/DHA nested-NP propagation.
+Fish oil EPA/DHA nested-NP propagation policy.
 
 Many DSLD fish-oil products disclose total oil mass on the parent row
 ("Fish Oil 1200 mg") but leave nested EPA/DHA at ``quantity=0, unit=NP``.
-The scorer's ``_compute_epa_dha_per_day`` then reports has_dose=False
-and Section A stays at 0.
+The shipped scorer must not estimate EPA+DHA from that parent mass. Dose
+bonuses require explicit EPA, DHA, or combined EPA/DHA label amounts.
 
-Same pattern as E1.2.1 (prop-blend parent-mass cascade) but for
-fish-oil aggregation. Conservative fallback, config-gated:
-
-    if EPA and DHA individual doses are NP AND parent is a fish-oil-
-    class container AND parent mass is propagated via E1.2.1 →
-    EPA+DHA_combined_mg = parent_mass_mg * omega3_from_parent_fraction
-
-The ``omega3_from_parent_fraction`` default is ``0.5`` — middle of the
-30% (standard grade) / 80% (concentrated) industry range. Config key:
-``section_A_ingredient_quality.omega3_dose_bonus.fish_oil_parent_mass_fallback``.
-
-Flags the product so the source is transparent:
-    ``omega3_dose_source = "inferred_from_parent_mass"``
-
-Canary (sprint §E1.3.3 DoD): DSLD 19055 Spring Valley Enteric Coated
-Fish Oil 1290 mg → Section A > 0.
+The legacy parent-mass fallback still exists behind an explicit config flag
+for backcompat experiments, but default scoring keeps it disabled.
 """
 
 from __future__ import annotations
@@ -84,23 +70,21 @@ def scorer():
     return SupplementScorer()
 
 
-def test_fish_oil_parent_mass_fallback_applies_when_epa_dha_are_np(scorer) -> None:
+def test_fish_oil_parent_mass_fallback_is_disabled_by_default(scorer) -> None:
     product = _fish_oil_product_with_np_epa_dha()
     dose = scorer._compute_epa_dha_per_day(product)
-    assert dose["has_explicit_dose"] is True, (
-        f"Sprint E1.3.3: parent-mass fallback didn't fire. dose={dose}"
+    assert dose["has_explicit_dose"] is False, (
+        f"Parent fish-oil mass must not infer EPA+DHA by default. dose={dose}"
     )
-    # 1200 mg parent × 0.5 fraction = 600 mg epa_dha per serving
-    # × 2 servings/day = 1200 mg per day combined, split 50/50
-    # epa_mg_per_unit = 300, dha_mg_per_unit = 300 per serving; per_day ≈ 1200
-    assert dose["epa_dha_mg_per_unit"] == pytest.approx(600.0)
-    assert dose["per_day_mid"] == pytest.approx(1200.0)
+    assert dose["epa_dha_mg_per_unit"] == pytest.approx(0.0)
+    assert dose["per_day_mid"] is None
+    assert "omega3_dose_source" not in dose
 
 
-def test_fish_oil_fallback_tags_inferred_source(scorer) -> None:
+def test_fish_oil_fallback_does_not_tag_inferred_source_by_default(scorer) -> None:
     product = _fish_oil_product_with_np_epa_dha()
     dose = scorer._compute_epa_dha_per_day(product)
-    assert dose.get("omega3_dose_source") == "inferred_from_parent_mass"
+    assert dose.get("omega3_dose_source") != "inferred_from_parent_mass"
 
 
 def test_fallback_does_not_fire_when_epa_dha_have_real_doses(scorer) -> None:
@@ -154,13 +138,13 @@ def test_fallback_ignores_non_fish_oil_parents(scorer) -> None:
     )
 
 
-def test_krill_oil_parent_also_triggers_fallback(scorer) -> None:
-    """Krill oil is functionally equivalent for this fallback path."""
+def test_krill_oil_parent_also_does_not_infer_by_default(scorer) -> None:
+    """Krill oil parent mass also cannot stand in for explicit EPA/DHA."""
     product = _fish_oil_product_with_np_epa_dha()
     for ing in product["ingredient_quality_data"]["ingredients"]:
         ing["parent_blend"] = "Krill Oil"
     dose = scorer._compute_epa_dha_per_day(product)
-    assert dose["has_explicit_dose"] is True
+    assert dose["has_explicit_dose"] is False
 
 
 def test_no_fallback_when_parent_mass_absent(scorer) -> None:
@@ -175,7 +159,7 @@ def test_no_fallback_when_parent_mass_absent(scorer) -> None:
 # Config-gated
 # ---------------------------------------------------------------------------
 
-def test_fallback_can_be_disabled_via_config(scorer) -> None:
+def test_legacy_fallback_can_only_be_enabled_explicitly_for_backcompat(scorer) -> None:
     product = _fish_oil_product_with_np_epa_dha()
     original_cfg = scorer.config.get("section_A_ingredient_quality", {}).get(
         "omega3_dose_bonus", {}
@@ -184,12 +168,17 @@ def test_fallback_can_be_disabled_via_config(scorer) -> None:
     o3 = scorer.config.setdefault("section_A_ingredient_quality", {}).setdefault(
         "omega3_dose_bonus", {}
     )
-    o3["fish_oil_parent_mass_fallback"] = {"enabled": False, "epa_dha_fraction_of_parent": 0.5}
+    o3["fish_oil_parent_mass_fallback"] = {
+        "enabled": True,
+        "epa_dha_fraction_of_parent": 0.5,
+        "eligible_parent_blends": ["fish oil", "krill oil"],
+    }
     try:
         dose = scorer._compute_epa_dha_per_day(product)
-        assert dose["has_explicit_dose"] is False, (
-            "Fallback must respect enabled=False"
-        )
+        assert dose["has_explicit_dose"] is True
+        assert dose["epa_dha_mg_per_unit"] == pytest.approx(600.0)
+        assert dose["per_day_mid"] == pytest.approx(1200.0)
+        assert dose.get("omega3_dose_source") == "inferred_from_parent_mass"
     finally:
         if original_cfg is None:
             del o3["fish_oil_parent_mass_fallback"]
@@ -198,16 +187,14 @@ def test_fallback_can_be_disabled_via_config(scorer) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Canary: DSLD 19055 end-to-end rebuild
+# Historical canary: DSLD 19055 end-to-end rebuild
 # ---------------------------------------------------------------------------
 
-def test_19055_canary_section_a_positive_after_fix() -> None:
+def test_19055_canary_artifact_is_not_a_current_policy_gate() -> None:
     import json
     blob_path = ROOT / "reports" / "canary_rebuild" / "19055.json"
     if not blob_path.exists():
         pytest.skip("19055 canary not rebuilt yet")
     blob = json.loads(blob_path.read_text())
-    sa = blob.get("section_breakdown", {}).get("ingredient_quality", {}).get("score", 0)
-    assert sa > 0, (
-        f"Sprint §E1.3.3 DoD: 19055 Spring Valley Fish Oil Section A must be > 0; got {sa}"
-    )
+    omega = (blob.get("audit") or {}).get("omega3") or {}
+    assert omega.get("omega3_dose_source") != "inferred_from_parent_mass"

@@ -8877,7 +8877,7 @@
         "cyclic cluster dextrin",
         "branched cyclic dextrin"
       ],
-      "category": "carbohydrate",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -8889,10 +8889,10 @@
       ],
       "last_updated": "2026-05-01",
       "external_ids": {},
-      "cui": null,
       "cui_status": "governed_null",
       "cui_note": "Polymer product class with no single UMLS concept. Generic dextrin parent CUI C0054527 covers the chemical family but does not represent the highly-branched cyclic structural form.",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "PII_HIGH_QUALITY_PROTEIN_DESCRIPTOR",
@@ -11854,7 +11854,7 @@
         "Uranium",
         "Zirconium"
       ],
-      "category": "mineral_blend",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -11866,11 +11866,11 @@
       ],
       "last_updated": "2026-05-01",
       "external_ids": {},
-      "cui": null,
       "cui_status": "governed_null",
       "cui_note": "Multi-element source product; no single UMLS concept covers the heterogeneous element list. Generic ascription per Executive Option A 2026-05-01 (single trace_mineral_solution entry rather than per-element entries).",
       "confidence_level": "verified",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_MODCARB",
@@ -11881,7 +11881,7 @@
         "Modcarb",
         "MODCARB"
       ],
-      "category": "carbohydrate",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -11892,10 +11892,10 @@
       ],
       "last_updated": "2026-05-01",
       "external_ids": {},
-      "cui": null,
       "cui_status": "governed_null",
       "cui_note": "Branded multi-source dextrin polymer; no UMLS concept exists for the trademark. Generic parent class is Dextrin (NHA_DEXTRIN, CUI C0054527) but ModCarb is a distinct multi-source branded blend.",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_MODIFIED_FOOD_STARCH",
@@ -23743,7 +23743,7 @@
         "resolvin d5 (label-identity)",
         "rvd5"
       ],
-      "category": "fatty_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -23759,7 +23759,8 @@
       "cui_status": "verified",
       "confidence_level": "verified",
       "clinical_notes": "Identity verified. Clinical role pending — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_PROTECTIN_DX",
@@ -23771,7 +23772,7 @@
         "Protectin DX",
         "pdx"
       ],
-      "category": "fatty_acid_derivative",
+      "category": "active_pending_relocation",
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -23787,7 +23788,8 @@
       "cui_status": "verified",
       "confidence_level": "verified",
       "clinical_notes": "Identity verified. Clinical role pending — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_active_only": true
     },
     {
       "id": "NHA_ALGAE_PROTEIN_GENERIC",
@@ -23806,7 +23808,7 @@
         "Algae Protein",
         "green algae whole plant extract"
       ],
-      "category": "protein_descriptor",
+      "category": "label_descriptor",
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
@@ -23821,7 +23823,8 @@
       "cui_note": "C0600607 = generic 'Algal Proteins' MSH concept. Source-specific entries (chlorella, spirulina) carry their own scoring; this descriptor entry routes label-only generic listings.",
       "confidence_level": "inferred",
       "clinical_notes": "Generic descriptor. Source-specific entries should be preferred when label discloses the algal species.",
-      "functional_roles": []
+      "functional_roles": [],
+      "is_label_descriptor": true
     }
   ]
 }

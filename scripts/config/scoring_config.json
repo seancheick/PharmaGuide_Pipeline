@@ -204,9 +204,9 @@
     },
     "omega3_dose_bonus": {
       "fish_oil_parent_mass_fallback": {
-        "_description": "Sprint E1.3.3 — when EPA and DHA are individually labelled NP but the parent fish-oil / krill-oil row carries a total mass (propagated via E1.2.1), infer a conservative EPA+DHA estimate = parent_mass_mg * fraction. Flags omega3_dose_source='inferred_from_parent_mass' on the dose dict for transparency.",
-        "_default_fraction_rationale": "0.5 is the midpoint between standard-grade fish oil (~30% EPA+DHA) and concentrated forms (~80%). Conservative enough to avoid overclaim on low-grade oils.",
-        "enabled": true,
+        "_description": "Disabled by product policy: do not infer EPA+DHA from total fish-oil / krill-oil parent mass. EPA/DHA dose bonuses require explicit EPA, DHA, or combined EPA+DHA label amounts.",
+        "_historical_fraction_rationale": "Retained only for explicit backcompat experiments. The former 0.5 fallback was the midpoint between standard-grade fish oil (~30% EPA+DHA) and concentrated forms (~80%), but it is no longer used in shipped scoring.",
+        "enabled": false,
         "epa_dha_fraction_of_parent": 0.5,
         "eligible_parent_blends": ["fish oil", "krill oil"]
       },

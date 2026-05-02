@@ -3193,7 +3193,6 @@
           "Vitamin C",
           "vit c",
           "RAW Whole Food Vitamin C",
-          "raw whole food vitamin c",
           "whole food vitamin c"
         ],
         "dosage_importance": 1.0,
@@ -3741,8 +3740,7 @@
           "vit d",
           "vitamin d-",
           "Poten-Zyme Vitamin D",
-          "Poten-Zyme(R) Vitamin D",
-          "poten-zyme vitamin d"
+          "Poten-Zyme(R) Vitamin D"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -3892,7 +3890,6 @@
         "aliases": [
           "palm tocotrienols",
           "palm fruit tocotrienols",
-          "Palm fruit Tocotrienols",
           "rice bran tocotrienols",
           "mixed tocotrienols",
           "vitamin e tocotrienols",
@@ -11930,9 +11927,7 @@
           "17-HDHA",
           "17-HDoHE",
           "Resolvins",
-          "resolvins",
           "Protectins",
-          "protectins",
           "specialized pro-resolving mediators",
           "SPMs",
           "SPM precursors"
@@ -13511,9 +13506,7 @@
           "xylooligosaccharide",
           "PreticX XOS prebiotic",
           "PreticX xylooligosaccharide",
-          "prebiotic xylooligosaccharides",
-          "PreticX Xylooligosacharides",
-          "preticx xylooligosacharides"
+          "prebiotic xylooligosaccharides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -14942,9 +14935,7 @@
           "l-glutamine hydrochloride",
           "l-glutamine hcl",
           "Glutamine & Glutamic Acid",
-          "glutamine & glutamic acid",
           "L-Glutamine & Glutamic Acid",
-          "l-glutamine & glutamic acid",
           "l-glutamine, micronized",
           "glutamine, micronized",
           "glutamic acid and glutamine",
@@ -15118,7 +15109,6 @@
           "l-arginine l-pyroglutamate",
           "l-arginine, micronized",
           "Arginine, Micronized",
-          "arginine, micronized",
           "arginine micronized",
           "micronized arginine"
         ],
@@ -22247,7 +22237,6 @@
           "prohydrolase protease blend",
           "aspergillus melleus protease",
           "aspergillus melleus",
-          "Aspergillus melleus",
           "aspergillus oryzae protease",
           "carbohydrate digestive enzymes",
           "carbohydrate enzymes",
@@ -22255,19 +22244,13 @@
           "protease enzyme",
           "lipase enzyme",
           "diatase",
-          "Diatase",
           "diastase",
-          "Diastase",
           "malt diatase",
-          "Malt Diatase",
           "malt diastase",
           "acid function protease",
-          "Acid Function Protease",
           "protein-digesting enzyme blend",
-          "Protein-Digesting Enzyme Blend",
           "protein digesting enzyme blend",
-          "neutral lipase",
-          "Neutral Lipase"
+          "neutral lipase"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -34653,13 +34636,9 @@
           "bacoside a",
           "bacoside b",
           "bacoside a3",
-          "Bacoside A3",
           "bacopasides ii",
-          "Bacopasides II",
           "bacopasaponins c",
-          "Bacopasaponins C",
-          "bacosine",
-          "Bacosine"
+          "bacosine"
         ],
         "score": 12,
         "dosage_importance": 1.0,
@@ -37509,9 +37488,8 @@
   "gamma_butyrobetaine_ethyl_ester": {
     "standard_name": "Gamma-Butyrobetaine Ethyl Ester (GBB)",
     "category": "amino_acids",
-    "cui": null,
-    "cui_status": "governed_null",
-    "cui_note": "No exact UMLS concept for gamma-butyrobetaine ethyl ester; parent GBB is C0061030 but this entry is the ester prodrug form (distinct compound). Documented as governed_null per 2026-05-01 audit. Identifier coverage via PubChem CID 30902 + UNII G7BMF1URO9 in external_ids.",
+    "cui_status": "no_confirmed_umls_match",
+    "cui_note": "No exact UMLS concept for gamma-butyrobetaine ethyl ester; parent GBB is C0061030 but this entry is the ester prodrug form (distinct compound). Identifier coverage via PubChem CID 30902 + UNII G7BMF1URO9 in external_ids.",
     "rxcui_note": "No RxNorm concept; not an approved drug substance.",
     "forms": {
       "gbb ethyl ester hcl": {
@@ -37579,8 +37557,7 @@
       ],
       "metabolic_relationships": [],
       "metabolites": []
-    },
-    "cui_status": "no_confirmed_umls_match"
+    }
   },
   "_metadata": {
     "name": "Ingredient Quality Map",
@@ -39833,11 +39810,9 @@
           "Beta Hydroxybutyrate",
           "calcium beta-hydroxybutyrate",
           "Calcium Beta Hydroxybutyrate",
-          "calcium beta hydroxybutyrate",
           "sodium beta-hydroxybutyrate",
           "Sodium Beta Hydroxybutyrate",
           "magnesium beta-hydroxybutyrate",
-          "Magnesium Beta Hydroxybutyrate",
           "potassium beta-hydroxybutyrate",
           "Potassium Beta Hydroxybutyrate",
           "calcium bhb",
@@ -39846,13 +39821,9 @@
           "potassium bhb",
           "bhb salts",
           "Calcium Ketone Salts",
-          "calcium ketone salts",
           "Sodium Ketone Salts",
-          "sodium ketone salts",
           "Magnesium Ketone Salts",
-          "magnesium ketone salts",
           "Potassium Ketone Salts",
-          "potassium ketone salts",
           "ketone salts",
           "ketone salt",
           "goBHB",
@@ -55102,8 +55073,6 @@
     "source": "fermented",
     "priority": "medium",
     "description": "Dried yeast fermentate/hydrolysate. Postbiotic rich in beta-glucans, mannans, and metabolites. Immune support ingredient.",
-    "cui": "C3856454",
-    "cui_note": "C3856454 = 'Yeast Fermenters' (closest UMLS concept; supplement-market term has no exact UMLS entry). Verified 2026-05-01 audit.",
     "dosage_importance": 0.1,
     "forms": {
       "yeast fermentate (unspecified)": {
@@ -55149,8 +55118,8 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "C3856454 = 'Yeast Fermenters' (closest UMLS concept; supplement-market term has no exact UMLS entry). Verified 2026-05-01 audit.",
-    "cui_status": "verified",
+    "cui_note": "No confirmed exact UMLS concept for supplement-market yeast fermentate. C3856454 ('Yeast Fermenters') is a generic/nearby concept, not an identity match.",
+    "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
     "aliases": []
   },
@@ -55233,7 +55202,6 @@
     "priority": "medium",
     "description": "Aristotelia chilensis berry from Patagonia. Highest known ORAC value among berries. Rich in delphinidins. Studied for eye health (dry eye) and blood sugar.",
     "cui": "C1067051",
-    "cui_note": "C1067051 = Aristotelia chilensis (UMLS-verified 2026-05-01 audit). Matches the botanical 'maqui' entry CUI in botanical_ingredients.json.",
     "dosage_importance": 0.1,
     "forms": {
       "maqui berry (unspecified)": {
@@ -55747,7 +55715,6 @@
     "priority": "medium",
     "description": "Quercus robur heartwood extract. Contains roburins (ellagitannins). Antioxidant, anti-fatigue. Studied for chronic fatigue and recovery.",
     "cui": "C0330306",
-    "cui_note": "C0330306 = Quercus robur (UMLS-verified 2026-05-01 audit). The IQM entry covers the wood extract; UMLS concept is at species level.",
     "dosage_importance": 0.1,
     "forms": {
       "french oak extract (unspecified)": {
@@ -55922,8 +55889,7 @@
     "source": "botanical_extract",
     "priority": "medium",
     "description": "Camellia sinensis cultivar TRFK 306/1 from Kenya. Contains unique GHG (1,2-di-galloyl-4,6-hexahydroxydiphenoyl-glucose) compounds not found in green/black tea.",
-    "cui": null,
-    "cui_status": "governed_null",
+    "cui_status": "no_confirmed_umls_match",
     "cui_note": "No UMLS concept exists for purple tea cultivar (Camellia sinensis varietal). Generic Camellia sinensis (C3275244) covers parent species but not varietal-specific GHG chemistry. Verified 2026-05-01 audit (verify_cui.py search).",
     "dosage_importance": 0.1,
     "forms": {
@@ -55964,8 +55930,6 @@
       "review_status": "stub",
       "research_status": "unverified"
     },
-    "cui_note": "No confirmed exact UMLS concept found for purple tea extract.",
-    "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
     "aliases": []
   },
@@ -56959,9 +56923,8 @@
     "priority": "low",
     "description": "Traditional fermented kefir starter culture containing a symbiotic consortium of lactic acid bacteria, acetic acid bacteria, and yeasts embedded in kefir grains. Provides diverse probiotic strains plus beta-glucan polysaccharides from kefir grain matrix. Evidence supports gut microbiome diversity, immune modulation, and lactose digestion improvement.",
     "dosage_importance": 0.1,
-    "cui": null,
-    "cui_status": "governed_null",
-    "cui_note": "Culture entry spanning multiple bacteria and yeasts. No single UMLS concept is accurate. Documented as governed_null per 2026-05-01 audit.",
+    "cui_status": "no_single_umls_concept",
+    "cui_note": "Culture entry spanning multiple bacteria and yeasts. No single UMLS concept is accurate.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "forms": {
       "kefir culture (fermented)": {
@@ -57023,7 +56986,6 @@
       "last_reviewed_at": "2026-02-25",
       "research_status": "unverified"
     },
-    "cui_status": "no_single_umls_concept",
     "external_ids": {},
     "aliases": []
   },
@@ -63126,8 +63088,7 @@
           "pediococcus pentosaceus (cul 15)",
           "cul 15",
           "cul-15",
-          "Pendiococcus pentosaceus",
-          "pendiococcus pentosaceus"
+          "Pendiococcus pentosaceus"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

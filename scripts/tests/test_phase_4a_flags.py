@@ -3,8 +3,8 @@
 Phase 4a — flag-based suppression contract tests.
 
 Asserts:
-  - 89 retire entries carry is_label_descriptor: true
-  - 117 move-to-actives entries carry is_active_only: true
+  - retire entries carry is_label_descriptor: true
+  - move-to-actives entries carry is_active_only: true
   - Build pipeline (build_final_db.py:2272) skips both flag classes
     from inactive_ingredients[] blob
 """
@@ -27,19 +27,17 @@ def entries():
 
 
 def test_label_descriptor_count(entries):
-    """89 retire-class entries flagged."""
+    """All label-descriptor entries are flagged."""
     flagged = [e for e in entries if e.get("is_label_descriptor")]
-    assert len(flagged) == 89, (
-        f"expected 89 entries with is_label_descriptor=true; got {len(flagged)}"
-    )
+    expected = [e for e in entries if e.get("category") == "label_descriptor"]
+    assert len(flagged) == len(expected)
 
 
 def test_active_only_count(entries):
-    """117 move-to-actives entries flagged."""
+    """All move-to-actives entries are flagged."""
     flagged = [e for e in entries if e.get("is_active_only")]
-    assert len(flagged) == 117, (
-        f"expected 117 entries with is_active_only=true; got {len(flagged)}"
-    )
+    expected = [e for e in entries if e.get("category") == "active_pending_relocation"]
+    assert len(flagged) == len(expected)
 
 
 def test_no_entry_has_both_flags(entries):

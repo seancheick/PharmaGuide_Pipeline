@@ -64,6 +64,11 @@ except ImportError:
 # product, no bioactive scoring — banned/harmful flags still apply".
 SCORE_BASIS_NUTRITION_ONLY = "nutrition_only_food_shape"
 
+_OPAQUE_OMEGA3_BLEND_PATTERN = re.compile(
+    r"(?:\bomega|\bfish\s*oil\b|\bkrill\b|\bmarine\s*lipid\b|\bepa\b|\bdha\b|\bn-?3\b|\bfatty\s*acid\b)s?",
+    re.IGNORECASE,
+)
+
 # Food-shape product_name keywords. Substring match, case-insensitive.
 # Curated from real Bucket C examples in the 20-brand corpus.
 _FOOD_SHAPE_NAME_KEYWORDS = (
@@ -3166,17 +3171,13 @@ class SupplementScorer:
             or safe_list((product.get("proprietary_data") or {}).get("blends"))
             or []
         )
-        OMEGA_INDICATORS = (
-            "omega", "fish oil", "krill", "marine lipid",
-            "epa", "dha", "n-3", "n3", "fatty acid",
-        )
         for b in blends:
             if not isinstance(b, dict):
                 continue
             if b.get("disclosure_level") != "none":
                 continue
-            blend_name = (b.get("name") or "").lower()
-            if any(t in blend_name for t in OMEGA_INDICATORS):
+            blend_name = b.get("name") or ""
+            if _OPAQUE_OMEGA3_BLEND_PATTERN.search(blend_name):
                 return True
             # Or any child ingredient is omega-3-class
             for child in (
@@ -3185,8 +3186,8 @@ class SupplementScorer:
             ):
                 if not isinstance(child, dict):
                     continue
-                cname = (child.get("name") or "").lower()
-                if any(t in cname for t in OMEGA_INDICATORS):
+                cname = child.get("name") or ""
+                if _OPAQUE_OMEGA3_BLEND_PATTERN.search(cname):
                     return True
         return False
 
