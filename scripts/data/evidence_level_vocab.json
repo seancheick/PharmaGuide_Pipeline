@@ -29,21 +29,21 @@
       "id": "branded-rct",
       "name": "Branded ingredient RCT",
       "notes": "Randomized controlled trial on a specific branded raw material used in the product (e.g. KSM-66 ashwagandha). Strong because the trial used the same supplier-batched ingredient.",
-      "multiplier": 0.8,
+      "multiplier": 0.9,
       "tier": 2
     },
     {
       "id": "ingredient-human",
       "name": "Generic ingredient human study",
       "notes": "Human study on the generic ingredient (not branded). Applicable but less specific to the formulation.",
-      "multiplier": 0.65,
+      "multiplier": 0.8,
       "tier": 3
     },
     {
       "id": "strain-clinical",
       "name": "Probiotic strain clinical study",
       "notes": "Clinical trial on a specific probiotic strain used in the product. Strain identity is essential for probiotic evidence transfer.",
-      "multiplier": 0.6,
+      "multiplier": 0.65,
       "tier": 3
     },
     {

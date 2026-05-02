@@ -70,6 +70,17 @@ def test_multiplier_in_range(levels):
         )
 
 
+def test_multipliers_match_scoring_config(levels):
+    cfg_path = os.path.join(
+        os.path.dirname(__file__), "..", "config", "scoring_config.json"
+    )
+    with open(cfg_path, encoding="utf-8") as f:
+        cfg = json.load(f)
+    expected = cfg["section_C_evidence_research"]["evidence_level_multipliers"]
+    actual = {entry["id"]: entry["multiplier"] for entry in levels}
+    assert actual == expected
+
+
 def test_tier_in_range(levels):
     for l in levels:
         t = l["tier"]
