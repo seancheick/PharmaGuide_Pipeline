@@ -2,13 +2,13 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "5.3.0",
-    "last_updated": "2026-04-30",
+    "schema_version": "5.3.1",
+    "last_updated": "2026-05-05",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
     "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
-    "flutter_schema_version": "5.3.0",
+    "flutter_schema_version": "5.3.1",
     "migration": {
       "completed_migrations": [
         {
@@ -16,6 +16,12 @@
           "to": "5.2.0",
           "date": "2026-04-17",
           "summary": "Path C authored safety copy fields + flutter_top_level_key invariant"
+        },
+        {
+          "from": "5.3.0",
+          "to": "5.3.1",
+          "date": "2026-05-05",
+          "summary": "Diabetes-rule clinical accuracy patch: removed ghost PMID 10479204 (psyllium); dropped beta-cell regeneration overclaim (gymnema); downgraded magnesium evidence (established → probable); upgraded aloe evidence (theoretical → limited) and scoped to oral; softened bitter melon plant-insulin-analog framing; reframed cinnamon evidence (probable → limited); downgraded garlic diabetes severity (caution → monitor); downgraded tribulus evidence (probable → limited, single-RCT note); added PMID 24438170 (fenugreek) and PMID 34467577 (gymnema); refreshed alert_headlines from generic 'Caution with diabetes' to specific phrasing. No schema fields added; backward-compatible."
         }
       ]
     },
@@ -303,15 +309,15 @@
         {
           "condition_id": "diabetes",
           "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "Aloe gel polysaccharides (acemannan) may stimulate insulin secretion and improve glucose uptake. Limited clinical evidence but preclinical data is suggestive.",
-          "action": "Monitor glucose if combining oral aloe supplements with diabetes medications.",
+          "evidence_level": "limited",
+          "mechanism": "Limited human evidence suggests oral aloe vera may modestly reduce fasting glucose and HbA1c in people with type-2 diabetes; topical aloe is not implicated.",
+          "action": "Applies to oral aloe (gel/latex/whole-leaf) only. Monitor glucose if combining oral aloe with diabetes medications. No alert for topical aloe.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://www.nccih.nih.gov/health/aloe-vera"
           ],
-          "alert_headline": "Caution with diabetes",
-          "alert_body": "Aloe vera can lower blood sugar. If you have diabetes, talk to your clinician before adding aloe vera and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Aloe vera affects blood sugar — relevant to people with diabetes."
+          "alert_headline": "May lower blood sugar",
+          "alert_body": "Oral aloe vera supplements may lower blood sugar; topical aloe does not. If you have diabetes and use oral aloe, talk to your clinician and monitor your glucose.",
+          "informational_note": "Oral aloe affects blood sugar — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -546,12 +552,13 @@
           "condition_id": "diabetes",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Contains charantin, polypeptide-p (plant insulin analog), and vicine which stimulate beta cells and increase glucose utilization. RCT showed significant fasting glucose reduction.",
-          "action": "Additive hypoglycemia risk with diabetes medications. Do not use as a substitute for prescribed medications. Monitor glucose.",
+          "mechanism": "Bitter melon contains compounds (charantin, polypeptide-p, vicine) that may influence glucose use and insulin signaling; clinical trials report fasting glucose reductions in some patients.",
+          "action": "Additive hypoglycemia risk when combined with diabetes medications. Do not use as a substitute for prescribed medications. Monitor glucose.",
           "sources": [
-            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know",
+            "https://www.ncbi.nlm.nih.gov/books/NBK590483/"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May lower blood sugar",
           "alert_body": "Bitter melon can lower blood sugar. If you have diabetes, talk to your clinician before adding bitter melon and monitor your glucose, especially in the first weeks.",
           "informational_note": "Bitter melon affects blood sugar — relevant to people with diabetes."
         }
@@ -803,15 +810,15 @@
         {
           "condition_id": "diabetes",
           "severity": "monitor",
-          "evidence_level": "probable",
-          "mechanism": "Cinnamon may lower blood glucose in some individuals.",
-          "action": "Track glucose trends when adding supplemental cinnamon.",
+          "evidence_level": "limited",
+          "mechanism": "Cinnamon supplements may modestly affect fasting glucose in some studies, but results are mixed and overall evidence does not clearly support a clinically meaningful effect. Product forms (Ceylon vs cassia) and doses also vary widely.",
+          "action": "Track glucose trends if adding supplemental cinnamon. Avoid relying on cinnamon for glucose control.",
           "sources": [
             "https://www.nccih.nih.gov/health/cinnamon"
           ],
-          "alert_headline": "Caution with diabetes",
-          "alert_body": "Cinnamon can lower blood sugar. If you have diabetes, talk to your clinician before adding cinnamon and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Cinnamon affects blood sugar — relevant to people with diabetes."
+          "alert_headline": "May affect glucose trends in some people",
+          "alert_body": "Cinnamon supplements may slightly affect blood sugar in some people, but the evidence is mixed. If you have diabetes, talk to your clinician before relying on cinnamon and monitor your glucose.",
+          "informational_note": "Cinnamon may modestly affect blood sugar — relevant to people with diabetes."
         }
       ],
       "drug_class_rules": [
@@ -907,12 +914,13 @@
           "condition_id": "diabetes",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Galactomannan fiber delays carbohydrate absorption and 4-hydroxyisoleucine stimulates insulin secretion. Meta-analysis shows FBG reduction of 0.96 mmol/L.",
+          "mechanism": "Galactomannan fiber delays carbohydrate absorption and 4-hydroxyisoleucine may stimulate insulin secretion. A meta-analysis (Neelakantan 2014) reported a fasting glucose reduction of approximately 0.96 mmol/L and HbA1c reduction of 0.85% across trials.",
           "action": "Additive blood sugar lowering with diabetes medications. Separate dosing from oral medications by 2 hours (fiber impairs drug absorption). Monitor glucose.",
           "sources": [
-            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know",
+            "https://pubmed.ncbi.nlm.nih.gov/24438170/"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May lower blood sugar — monitor on diabetes meds",
           "alert_body": "Fenugreek can lower blood sugar. If you have diabetes, talk to your clinician before adding fenugreek and monitor your glucose, especially in the first weeks.",
           "informational_note": "Fenugreek affects blood sugar — relevant to people with diabetes."
         },
@@ -1132,15 +1140,15 @@
         },
         {
           "condition_id": "diabetes",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Garlic can modestly lower glucose and may add to insulin or sulfonylurea effects.",
-          "action": "Monitor for hypoglycemia if used with diabetes meds.",
+          "severity": "monitor",
+          "evidence_level": "limited",
+          "mechanism": "Garlic supplements may reduce blood sugar to a small extent in people with diabetes; the glucose-only signal is modest, but additive effects are plausible with insulin or sulfonylureas.",
+          "action": "Monitor for hypoglycemia if combining garlic supplements with insulin or sulfonylureas.",
           "sources": [
             "https://www.nccih.nih.gov/health/garlic"
           ],
-          "alert_headline": "May lower blood sugar",
-          "alert_body": "Garlic can modestly lower blood glucose and may add to insulin or sulfonylurea effects. If you take diabetes medication, watch for low blood sugar.",
+          "alert_headline": "May modestly lower blood sugar",
+          "alert_body": "Garlic supplements may modestly lower blood glucose and could add to insulin or sulfonylurea effects. If you take diabetes medication, watch for low blood sugar.",
           "informational_note": "Garlic can modestly affect blood sugar — relevant to people with diabetes."
         }
       ],
@@ -1707,12 +1715,13 @@
           "condition_id": "diabetes",
           "severity": "caution",
           "evidence_level": "probable",
-          "mechanism": "Gymnemic acids reduce intestinal glucose absorption and may stimulate beta-cell regeneration and insulin secretion. Clinical studies show FBG and HbA1c reductions.",
+          "mechanism": "Gymnemic acids reduce intestinal glucose absorption and may influence insulin secretion. Meta-analysis of clinical studies shows FBG, post-prandial, and HbA1c reductions.",
           "action": "Additive hypoglycemia risk with oral hypoglycemics and insulin. Dose adjustments may be necessary. Monitor glucose.",
           "sources": [
-            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know",
+            "https://pubmed.ncbi.nlm.nih.gov/34467577/"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May lower blood sugar",
           "alert_body": "Gymnema can lower blood sugar. If you have diabetes, talk to your clinician before adding gymnema and monitor your glucose, especially in the first weeks.",
           "informational_note": "Gymnema affects blood sugar — relevant to people with diabetes."
         }
@@ -2177,13 +2186,13 @@
         {
           "condition_id": "diabetes",
           "severity": "monitor",
-          "evidence_level": "established",
-          "mechanism": "Magnesium may modestly help insulin sensitivity, but high doses can cause GI loss and electrolyte issues.",
+          "evidence_level": "probable",
+          "mechanism": "Higher dietary magnesium intake is associated with lower type-2 diabetes risk in observational data, and supplementation may modestly support insulin sensitivity, but trial evidence for an interaction with diabetes medications is not established.",
           "action": "Track glucose and tolerance if using high doses.",
           "sources": [
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
           ],
-          "alert_headline": "May affect glucose control",
+          "alert_headline": "May modestly support glucose metabolism",
           "alert_body": "Magnesium may modestly support insulin sensitivity, but high doses can cause GI losses and electrolyte issues. If you use it with diabetes, track glucose and tolerance."
         }
       ],
@@ -2340,13 +2349,13 @@
           "condition_id": "diabetes",
           "severity": "monitor",
           "evidence_level": "established",
-          "mechanism": "Soluble viscous fiber delays gastric emptying and slows carbohydrate absorption, reducing postprandial glucose spikes. RCT showed 11% reduction in all-day postprandial glucose.",
+          "mechanism": "Soluble viscous fiber delays gastric emptying and slows carbohydrate absorption, which can reduce postprandial glucose spikes.",
           "action": "Separate dosing from oral diabetes medications by at least 2 hours (fiber delays drug absorption). Monitor glucose.",
           "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/10479204/"
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
-          "alert_headline": "Caution with diabetes",
-          "alert_body": "Psyllium can lower blood sugar. If you have diabetes, talk to your clinician before adding psyllium and monitor your glucose, especially in the first weeks.",
+          "alert_headline": "May reduce glucose after meals",
+          "alert_body": "Psyllium can lower post-meal blood sugar and may delay absorption of oral diabetes medications. If you have diabetes, talk to your clinician and monitor glucose, especially in the first weeks.",
           "informational_note": "Psyllium affects blood sugar — relevant to people with diabetes."
         }
       ],
@@ -6331,15 +6340,15 @@
         {
           "condition_id": "diabetes",
           "severity": "monitor",
-          "evidence_level": "probable",
-          "mechanism": "Tribulus terrestris demonstrated significant blood glucose-lowering effects in a randomized controlled trial of diabetic women (1000 mg/day vs placebo, 3 months; p<0.05 for fasting glucose, 2-hr postprandial glucose, and HbA1c). Additive effect with hypoglycemic medications risks hypoglycemia.",
-          "action": "Monitor blood glucose when combining with insulin or oral hypoglycemic agents. Dose adjustment of diabetes medications may be required. Caution in patients prone to hypoglycemia.",
+          "evidence_level": "limited",
+          "mechanism": "A single small RCT (n=98 diabetic women, 1000 mg/day vs placebo over 3 months) reported preliminary glucose-lowering effects with Tribulus terrestris. Evidence is single-trial and not yet replicated; additive risk with insulin or sulfonylureas remains plausible.",
+          "action": "Monitor blood glucose when combining with insulin or oral hypoglycemic agents. Caution in patients prone to hypoglycemia.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27840471/"
           ],
-          "alert_headline": "Caution with diabetes",
-          "alert_body": "Tribulus can lower blood sugar. If you have diabetes, talk to your clinician before adding tribulus and monitor your glucose, especially in the first weeks.",
-          "informational_note": "Tribulus affects blood sugar — relevant to people with diabetes."
+          "alert_headline": "May affect glucose trends in some people",
+          "alert_body": "Preliminary evidence suggests tribulus may modestly lower blood sugar. If you have diabetes, talk to your clinician before adding tribulus and monitor your glucose.",
+          "informational_note": "Tribulus may affect blood sugar — relevant to people with diabetes."
         },
         {
           "condition_id": "hypertension",
