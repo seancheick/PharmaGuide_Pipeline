@@ -22,6 +22,7 @@ Two scopes:
 import json
 import sys
 from pathlib import Path
+from typing import Optional
 
 import pytest
 
@@ -100,11 +101,26 @@ def test_placeholder_matched_forms_emit_unknown():
 
 # -- Integration: scan real build output if present --------------------------
 
-DETAIL_BLOBS_DIR = REPO_ROOT / "scripts" / "final_db_output" / "detail_blobs"
+# Probe the canonical release path first (scripts/dist/detail_blobs — what
+# release_full.sh emits) then fall back to the legacy build dir.
+_CANDIDATE_BLOB_DIRS = (
+    REPO_ROOT / "scripts" / "dist" / "detail_blobs",
+    REPO_ROOT / "scripts" / "final_db_output" / "detail_blobs",
+)
+
+
+def _resolve_detail_blobs_dir() -> Optional[Path]:
+    for d in _CANDIDATE_BLOB_DIRS:
+        if d.is_dir() and any(d.iterdir()):
+            return d
+    return None
+
+
+DETAIL_BLOBS_DIR = _resolve_detail_blobs_dir()
 
 
 def _iter_blob_paths(limit: int | None = None):
-    if not DETAIL_BLOBS_DIR.is_dir():
+    if DETAIL_BLOBS_DIR is None:
         return
     for i, path in enumerate(sorted(DETAIL_BLOBS_DIR.iterdir())):
         if limit is not None and i >= limit:
@@ -127,7 +143,7 @@ def _build_carries_contract(blob_path: Path) -> bool:
 
 
 @pytest.mark.skipif(
-    not DETAIL_BLOBS_DIR.is_dir(),
+    DETAIL_BLOBS_DIR is None,
     reason="No build output to scan — run scripts/build_final_db.py first.",
 )
 def test_no_form_sensitive_violations_in_build_output():
