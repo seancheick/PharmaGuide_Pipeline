@@ -93,6 +93,13 @@ from constants import (
 )
 from supplement_type_utils import infer_supplement_type
 
+# Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
+# postbiotic / prebiotic / vitamin-mineral form patterns. Replaces 3-5
+# hardcoded keyword lists previously scattered here, in score_supplements,
+# and in enhanced_normalizer. Imported at module level so nested helper
+# functions inside _collect_probiotic_data can close over it cleanly.
+import form_vocab as _form_vocab  # noqa: E402
+
 # Import scoring hardening modules
 from unit_converter import UnitConverter, ConversionResult
 from dosage_normalizer import DosageNormalizer, DosageNormalizationResult
@@ -3839,7 +3846,17 @@ class SupplementEnricherV3:
         elif match_result:
             bio_score = match_result.get('bio_score', 5)
             natural = match_result.get('natural', False)
-            score = match_result.get('score', bio_score + (3 if natural else 0))
+            # v3.6.0: `score` is now an alias of bio_score (no natural-source
+            # bonus). The legacy formula `bio_score + 3 if natural` was retired
+            # because A1/A2/A6 in the scorer now read bio_score directly, and
+            # the natural-source signal moved to A5e where sourcing belongs.
+            # The field is still emitted for backward compatibility during the
+            # v3.6.x shadow window — older scorers reading `score` will get
+            # the same answer as bio_score (sourcing-neutral).
+            # Force sourcing-neutral. Ignore any legacy pre-computed `score`
+            # value in the IQM data file (which still has natural+3 baked in
+            # — see ingredient_quality_map.json). v3.6.0 contract: score == bio_score.
+            score = bio_score
             used_form_fallback = match_result.get('match_status') == 'FORM_UNMAPPED_FALLBACK'
 
             # Track form fallbacks for audit report
@@ -4532,14 +4549,17 @@ class SupplementEnricherV3:
             if form_match and matched_candidate:
                 bio_score = form_match.get('bio_score', 5)
                 natural = form_match.get('natural', False)
-                # Use pre-computed score from database, fall back to calculation only if missing
-                score = form_match.get('score', bio_score + (3 if natural else 0))
+                # v3.6.0: force sourcing-neutral. Ignore any legacy
+                # pre-computed `score` (IQM data still has natural+3
+                # baked in — see ingredient_quality_map.json). Contract:
+                # score == bio_score.
+                score = bio_score
                 matched_forms.append({
                     'form_key': form_match.get('form_id'),
                     'canonical_id': form_match.get('canonical_id'),
                     'bio_score': bio_score,
                     'natural': natural,
-                    'score': score,  # Pre-computed from database
+                    'score': score,  # v3.6.0: deprecated alias of bio_score
                     'match_method': form_match.get('match_tier', 'unknown'),
                     'matched_candidate': matched_candidate,
                     'percent_share': percent_share,
@@ -5422,8 +5442,10 @@ class SupplementEnricherV3:
 
             bio_score = _as_float(form_data.get('bio_score', 5), 5.0)
             natural = bool(form_data.get('natural', False))
-            expected_score = bio_score + (3.0 if natural else 0.0)
-            score = _as_float(form_data.get('score', expected_score), expected_score)
+            # v3.6.0: force sourcing-neutral. Ignore legacy IQM `score` field
+            # (still has natural+3 baked in). Contract: score == bio_score.
+            # Natural signal is consumed by A5e in the scorer.
+            score = bio_score
 
             # Conservative runtime cap for provisional IQM entries until validated.
             # Prevents provisional records from receiving premium-form credit.
@@ -9926,24 +9948,27 @@ class SupplementEnricherV3:
     # PROBIOTIC-SPECIFIC DATA COLLECTOR
     # =========================================================================
 
-    # Survivability coating keywords for probiotic scoring
-    # P1.2: Enhanced with additional common phrases
-    SURVIVABILITY_KEYWORDS = [
-        "enteric coated", "enteric-coated", "enteric coating",
-        "delayed release", "delayed-release", "dr caps", "drcaps",
+    # Branded / marketing survivability markers. Canonical delivery
+    # technologies (spore-based, microencapsulated, acid-resistant,
+    # delayed-release, enteric-coated) live in
+    # scripts/data/form_keywords_vocab.json under the
+    # ``probiotic_delivery`` category — the canonical-form match runs
+    # through form_vocab.matches_probiotic_delivery() at use sites.
+    # This list captures branded names (BIO-tract, LiveBac, DRcaps) and
+    # marketing copy ("survives stomach acid") that aren't chemistry
+    # forms but still indicate survivability technology on the label.
+    SURVIVABILITY_BRAND_MARKERS = [
         "bio-tract", "biotract", "livebac",
-        "acid-resistant", "acid resistant", "acid-protected",
+        "dr caps", "drcaps",
         "survives stomach acid", "stomach acid resistant",
         "patented delivery", "targeted release",
-        "spore-based", "spore-forming", "spore forming",
-        "bacillus coagulans", "bacillus subtilis",  # Inherently spore-forming
-        # P1.2: Additional keywords from plan
+        "bacillus coagulans", "bacillus subtilis",  # inherently spore-forming species
         "protected by an outer layer", "protected by patented",
         "outer protective layer", "proprietary coating",
-        "microencapsulated", "acid-resistant coating",
+        "acid-resistant coating",
         "protective coating", "survives digestive tract",
         "survives gi tract", "gastric bypass",
-        "protected strain", "protected probiotic"
+        "protected strain", "protected probiotic",
     ]
 
     def _collect_probiotic_data(self, product: Dict) -> Dict:
@@ -10043,24 +10068,15 @@ class SupplementEnricherV3:
             HOLD_PROBIOTIC_STRAINS = set()
         _BLOCKED_OR_HOLD = (BLOCKED_PROBIOTIC_STRAINS | HOLD_PROBIOTIC_STRAINS)
 
-        # Postbiotic / inactivated-form detection patterns. These products
-        # do NOT contain live probiotic content; CFU thresholds do not apply
-        # and bio_score class differs (cell-wall fragments interact with
-        # gut immune cells locally). Per dev review 2026-05-01.
-        _POSTBIOTIC_PATTERNS = (
-            "heat-killed", "heat killed",
-            "heat-inactivated", "heat inactivated",
-            "tyndallized", "tyndalized",
-            "postbiotic",
-            "paraprobiotic",
-            "inactivated probiotic",
-            "non-viable",
-            "ghost probiotic",
-        )
-
+        # Postbiotic / inactivated-form detection. Patterns sourced from
+        # scripts/data/form_keywords_vocab.json (postbiotic_keywords
+        # category). These products do NOT contain live probiotic
+        # content; CFU thresholds do not apply and bio_score class
+        # differs (cell-wall fragments interact with gut immune cells
+        # locally). Per dev review 2026-05-01.
         def _is_postbiotic(strain_text: str, blend_text: str = "") -> bool:
-            haystack = f"{strain_text} {blend_text}".lower()
-            return any(p in haystack for p in _POSTBIOTIC_PATTERNS)
+            haystack = f"{strain_text} {blend_text}"
+            return _form_vocab.matches_postbiotic(haystack)
 
         for blend in probiotic_blends:
             blend_strains = blend.get("strains") or []
@@ -10189,11 +10205,19 @@ class SupplementEnricherV3:
 
         combined_text = ' '.join(texts_to_check)
 
-        for keyword in self.SURVIVABILITY_KEYWORDS:
-            if keyword in combined_text:
-                has_survivability_coating = True
-                survivability_reason = keyword
-                break
+        # Two-pass survivability check: canonical chemistry forms come
+        # from the shared form vocab (single source of truth); branded
+        # markers stay local because they're product-specific copy, not
+        # canonical chemistry.
+        if _form_vocab.matches_probiotic_delivery(combined_text):
+            has_survivability_coating = True
+            survivability_reason = "canonical_delivery_form"
+        else:
+            for keyword in self.SURVIVABILITY_BRAND_MARKERS:
+                if keyword in combined_text:
+                    has_survivability_coating = True
+                    survivability_reason = keyword
+                    break
 
         # Calculate aggregate CFU data from blends
         total_cfu = 0
@@ -10231,21 +10255,15 @@ class SupplementEnricherV3:
         )
 
         # Sprint 2026-05-01: product-level postbiotic detection.
-        # Independent of clinical_strains matching (which is a high-quality
-        # bonus path). Scans every probiotic_blend's name + strains for
-        # heat-killed / inactivated / tyndallized / postbiotic / paraprobiotic
-        # patterns so products carrying postbiotic content surface a flag for
-        # Flutter even when the strain isn't in the clinical_strains DB.
-        _POSTBIOTIC_PATTERNS_PRODUCT_LEVEL = (
-            "heat-killed", "heat killed",
-            "heat-inactivated", "heat inactivated",
-            "tyndallized", "tyndalized",
-            "postbiotic",
-            "paraprobiotic",
-            "inactivated probiotic",
-            "non-viable",
-            "ghost probiotic",
-        )
+        # Patterns sourced from form_keywords_vocab.json
+        # (postbiotic_keywords category). Independent of clinical_strains
+        # matching — scans every probiotic_blend's name + strains so
+        # products carrying postbiotic content surface a flag for Flutter
+        # even when the strain isn't in the clinical_strains DB.
+        # extract_forms() returns the canonical names that matched, so
+        # detected_postbiotic_patterns reports canonical tokens
+        # (heat-killed / inactivated / lysate / postbiotic) instead of
+        # the raw label strings — single canonical per concept.
         has_postbiotic_strains = False
         detected_postbiotic_patterns: List[str] = []
         for _b in probiotic_blends:
@@ -10253,10 +10271,10 @@ class SupplementEnricherV3:
                 continue
             haystack_parts = [str(_b.get("name") or ""), str(_b.get("blend_name") or "")]
             haystack_parts.extend(str(s) for s in (_b.get("strains") or []))
-            haystack = " ".join(haystack_parts).lower()
-            for _p in _POSTBIOTIC_PATTERNS_PRODUCT_LEVEL:
-                if _p in haystack and _p not in detected_postbiotic_patterns:
-                    detected_postbiotic_patterns.append(_p)
+            haystack = " ".join(haystack_parts)
+            for canonical in _form_vocab.extract_forms(haystack, categories=["postbiotic_keywords"]):
+                if canonical not in detected_postbiotic_patterns:
+                    detected_postbiotic_patterns.append(canonical)
                     has_postbiotic_strains = True
 
         # Secondary scan: activeIngredients carries postbiotic qualifier in
@@ -10280,9 +10298,9 @@ class SupplementEnricherV3:
                     _ai_name += " " + str(_f.get("form_key") or "").lower()
             if not _ai_name.strip():
                 continue
-            for _p in _POSTBIOTIC_PATTERNS_PRODUCT_LEVEL:
-                if _p in _ai_name and _p not in detected_postbiotic_patterns:
-                    detected_postbiotic_patterns.append(_p)
+            for canonical in _form_vocab.extract_forms(_ai_name, categories=["postbiotic_keywords"]):
+                if canonical not in detected_postbiotic_patterns:
+                    detected_postbiotic_patterns.append(canonical)
                     has_postbiotic_strains = True
 
         for _iq in ((product.get("ingredient_quality_data") or {}).get("ingredients") or []):
@@ -10291,9 +10309,9 @@ class SupplementEnricherV3:
             _matched = str(_iq.get("matched_form") or _iq.get("form_id") or "").lower()
             if not _matched:
                 continue
-            for _p in _POSTBIOTIC_PATTERNS_PRODUCT_LEVEL:
-                if _p in _matched and _p not in detected_postbiotic_patterns:
-                    detected_postbiotic_patterns.append(_p)
+            for canonical in _form_vocab.extract_forms(_matched, categories=["postbiotic_keywords"]):
+                if canonical not in detected_postbiotic_patterns:
+                    detected_postbiotic_patterns.append(canonical)
                     has_postbiotic_strains = True
 
         return {
@@ -12186,12 +12204,32 @@ class SupplementEnricherV3:
                     if quantity_float == 0:
                         continue
 
+                    # The IQM matcher already resolved the canonical form
+                    # (e.g. "retinyl palmitate") via alias matching, but
+                    # `unit_converter._detect_vitamin_a_form` runs an
+                    # independent regex over the bare ingredient_name.
+                    # When DSLD has stripped the form into a separate
+                    # field — e.g. label "Vitamin A 25,000 IU" comes
+                    # through as `name="Vitamin A"`, `matched_form=
+                    # "retinyl palmitate"` — the converter sees only
+                    # "Vitamin A", misses retinol_patterns, and falls
+                    # through to vitamin_a_unknown → skip_ul_check.
+                    # Forwarding the IQM-resolved form lets the regex
+                    # hit. Skipped when matched_form is empty or the
+                    # placeholder default 'standard'.
+                    matched_form = (ingredient.get('matched_form') or '').strip()
+                    form_hint_name = (
+                        f"{ing_name} {matched_form}"
+                        if matched_form and matched_form.lower() != 'standard'
+                        else ing_name
+                    )
+
                     # Step 1: Convert units with form detection
                     conversion = self.unit_converter.convert_nutrient(
                         nutrient=std_name,
                         amount=quantity_float,
                         from_unit=unit,
-                        ingredient_name=ing_name
+                        ingredient_name=form_hint_name
                     )
 
                     conv_evidence = conversion.to_dict()

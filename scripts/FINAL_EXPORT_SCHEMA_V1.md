@@ -1,9 +1,9 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 1.4.0 — 2026-04-16
+> Version: 1.5.0 — 2026-05-05
 > Consumes: current scorer output (v3.4.0 as of 2026-04-05), enrichment schema v5.1.0
-> Status: ACTIVE — v1.4.0 enhancements approved
-> Updated: **v1.4.0 adds `image_thumbnail_url` TEXT column (91 cols) and `normalize_upc` field; image upload pipeline via `extract_product_images.py`. v1.3.4 added CAERS B8 penalty scoring (159 adverse event signals) and offline UNII cache (172K substances). v1.3.3 expanded interaction rules to 129 (was 98) and added 4 new drug classes. v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 91 columns (up from 90 in v1.3.2–v1.3.4, 87 in v1.3.0, 65 in v1.2.x); `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
+> Status: ACTIVE — v1.5.0 canonical ingredient contract approved
+> Updated: **v1.5.0 introduces the canonical active + inactive ingredient contract: `display_form_label` / `form_status` / `form_match_status` / `dose_status` on actives; `display_label` / `display_role_label` / `severity_status` / `is_safety_concern` on inactives. Flutter renders these directly without local inference. Legacy fields (`form`, `is_harmful`) kept for back-compat and documented as deprecated — Flutter migrates first, then they get deleted. v1.4.0 adds `image_thumbnail_url` TEXT column (91 cols) and `normalize_upc` field; image upload pipeline via `extract_product_images.py`. v1.3.4 added CAERS B8 penalty scoring (159 adverse event signals) and offline UNII cache (172K substances). v1.3.3 expanded interaction rules to 129 (was 98) and added 4 new drug classes. v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 91 columns; `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
 >
 > Previous updates: scoring v3.4 alignment, omega-3 bonus export note, interaction_summary, dose_threshold_evaluation, condition/drug_class mapping, and Flutter convenience fields (`detail_blob_sha256`, `image_is_pdf`, `interaction_summary_hint`, `decision_highlights`)
 
@@ -495,10 +495,14 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   "matched_form": "retinyl palmitate",
   "matched_forms": [...],
   "extracted_forms": [...],
+  "display_form_label": "Palmitate",
+  "form_status": "known",
+  "form_match_status": "mapped",
   "category": "vitamins",
   "bio_score": 14,
   "natural": false,
   "score": 14,
+  "_score_note": "v3.6.0+: `score` is a deprecated alias of `bio_score` (no natural-source bonus). Pre-v3.6.0 blobs had `score = bio_score + 3*natural` (range 0-18). New consumers should read `bio_score` directly (range 0-15, pure form quality). Sourcing signal lives in section_breakdown.ingredient_quality.sub.A5e.",
   "notes": "The most common preformed Vitamin A in supplements...",
   "mapped": true,
   "safety_hits": [...],
@@ -512,44 +516,88 @@ Source: `scored.unmapped_actives` / `scored.unmapped_actives_total` / `scored.un
   "is_mapped": true,
   "is_harmful": false,
   "harmful_severity": null,
+  "is_safety_concern": false,
   "harmful_notes": null,
   "is_banned": false,
   "is_allergen": false,
-  "identifiers": {"cui": "C0042839", "unii": "81G40H8B0T"}
+  "identifiers": {"cui": "C0042839", "unii": "81G40H8B0T"},
+  "display_label": "Vitamin A (Palmitate)",
+  "display_dose_label": "2000 IU",
+  "dose_status": "disclosed"
 }
 ```
+
+#### Canonical active ingredient contract (v1.5.0)
+
+The pipeline emits explicit display + routing fields so Flutter
+renders directly without local inference. Single source of truth
+per concern.
+
+| Field                 | Type      | Values / Source                                                                                  |
+| --------------------- | --------- | ------------------------------------------------------------------------------------------------ |
+| `display_form_label`  | string?   | User-visible form (e.g. `"Palmitate"`). `null` when form genuinely unknown.                      |
+| `form_status`         | enum      | `"known"` \| `"unknown"`                                                                          |
+| `form_match_status`   | enum      | `"mapped"` (in IQM) \| `"unmapped"` (label disclosed but not in IQM) \| `"n/a"` (status=unknown) |
+| `display_dose_label`  | string    | Pre-formatted: `"600 mcg"` / `"Amount not disclosed"` (blend member) / `"—"` (missing)           |
+| `dose_status`         | enum      | `"disclosed"` \| `"not_disclosed_blend"` \| `"missing"`                                          |
+| `is_safety_concern`   | boolean   | True only when `harmful_severity` is `moderate`/`high`/`critical`. Distinct from `is_harmful`.   |
+
+**Resolution order for `display_form_label`:**
+1. Cleaner `forms[0].name` if present (label-disclosed form).
+2. Enricher `matched_form` prettified if non-placeholder (bridge for cleaner gaps).
+3. Otherwise `null` with `form_status: "unknown"`.
+
+**Deprecated fields** (kept for back-compat — Flutter should migrate then we delete):
+- `form` — bare passthrough of `forms[0].name`. Use `display_form_label` instead.
+- `is_harmful` — provenance flag (presence in `harmful_additives.json`), not a safety signal. Use `is_safety_concern` for routing.
 
 ### Inactive ingredient entry
 
 ```json
 {
-  "raw_source_text": "Soy Lecithin",
-  "name": "Soy Lecithin",
-  "standardName": "Soy Lecithin",
-  "normalized_key": "soy_lecithin",
+  "raw_source_text": "Silicon Dioxide",
+  "name": "Silicon Dioxide",
+  "standardName": "Silicon Dioxide (E551)",
+  "normalized_key": "silicon_dioxide",
   "forms": [],
-  "category": "emulsifier",
+  "category": "flow_agent_anticaking",
   "is_additive": true,
-  "additive_type": "lecithin",
-  "standard_name": "Soy Lecithin",
-  "severity_level": "",
-  "match_method": "",
-  "matched_alias": "",
-  "notes": "Natural emulsifier commonly used in supplements...",
-  "mechanism_of_harm": "",
-  "common_uses": ["emulsifier", "capsule ingredient"],
-  "population_warnings": [],
-  "is_harmful": false,
-  "harmful_severity": null,
-  "harmful_notes": null,
+  "additive_type": "anti_caking_agent",
+  "functional_roles": ["anti_caking", "flow_agent"],
+  "standard_name": "Silicon Dioxide (E551)",
+  "severity_level": "low",
+  "match_method": "alias",
+  "matched_alias": "silicon dioxide",
+  "notes": "Amorphous silicon dioxide used as anti-caking agent...",
+  "mechanism_of_harm": "FDA GRAS at <2% w/w...",
+  "common_uses": ["flow agent", "anti-caking", "tablet glidant"],
+  "population_warnings": ["No specific population concerns at <2% w/w"],
+  "is_harmful": true,
+  "harmful_severity": "low",
+  "harmful_notes": "FDA GRAS, EFSA 2018 data gap (precautionary, not finding of harm)...",
   "identifiers": {
-    "cui": "C0041660",
-    "unii": "K3D86KJ24N",
-    "cas": "112-38-9",
-    "pubchem_cid": 5634
-  }
+    "cui": "C0037098",
+    "cas": "7631-86-9",
+    "pubchem_cid": 24261,
+    "unii": "ETJ7Z6XBU4"
+  },
+  "display_label": "Silicon Dioxide (E551)",
+  "display_role_label": "Anti-caking agent",
+  "severity_status": "suppress",
+  "is_safety_concern": false
 }
 ```
+
+#### Canonical inactive ingredient contract (v1.5.0)
+
+| Field                | Type      | Values / Source                                                                                                                                  |
+| -------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `display_label`      | string    | User-visible name. Prefers `standard_name`, falls back to `name`.                                                                                |
+| `display_role_label` | string?   | Prettified excipient role (e.g. `"Anti-caking agent"`). `null` when the ingredient has no excipient role (bare amino acids etc.).               |
+| `severity_status`    | enum      | `"critical"` (always show) \| `"suppress"` (Tradeoffs only — silicon dioxide, MCC) \| `"informational"` (flagged but not hazardous) \| `"n/a"` (non-additive). |
+| `is_safety_concern`  | boolean   | True only when `harmful_severity` is `moderate`/`high`/`critical`. Distinguishes real risks from tracked-for-transparency excipients.            |
+
+**Why `is_harmful` is not enough:** silicon dioxide and microcrystalline cellulose appear in `harmful_additives.json` (so `is_harmful: true`) but with `severity_level: low` because they're *tracked for transparency*, not because they're risks. The contract's `is_safety_concern` flag and `severity_status` enum lift that distinction out of Flutter so consumers read one field instead of cross-computing three.
 
 ### Warning entry
 
@@ -665,6 +713,35 @@ additional fields are present:
   "source": "dsld"
 }
 ```
+
+### Deprecation roadmap (v1.5.0+)
+
+Fields below are kept for back-compat while Flutter migrates to the
+canonical contract. Once the Flutter PR ships and consumers stop
+reading them, they get deleted from `build_final_db.py` (single
+delete commit per field, with a regression test pin).
+
+**Active ingredient row:**
+
+| Deprecated field | Replacement                  | Removal trigger                                |
+| ---------------- | ---------------------------- | ---------------------------------------------- |
+| `form`           | `display_form_label`         | Flutter migrates to `display_form_label`       |
+| `is_harmful`     | `is_safety_concern` + `severity_status` | Flutter migrates routing logic        |
+
+**Inactive ingredient row:**
+
+| Deprecated field | Replacement                  | Removal trigger                                |
+| ---------------- | ---------------------------- | ---------------------------------------------- |
+| `severity_level` | `harmful_severity` (same value, picked one) | One field for one concept       |
+| `match_method`   | move to `_debug` subkey      | Flutter never reads internal IQM telemetry     |
+| `matched_alias`  | move to `_debug` subkey      | Same — internal pipeline diagnostics           |
+| `is_harmful`     | `is_safety_concern` + `severity_status` | Flutter migrates routing logic        |
+
+**Empty-string defaults:** several inactive fields (`category`,
+`additive_type`, `severity_level`, `match_method`, `matched_alias`,
+`notes`, `mechanism_of_harm`) currently emit `""` when unpopulated.
+Convert to `null` once Flutter handles both — eliminates the empty-vs-null
+ambiguity.
 
 ### Notes on detail blob
 

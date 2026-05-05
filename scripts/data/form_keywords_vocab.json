@@ -1,0 +1,478 @@
+{
+  "_metadata": {
+    "description": "Controlled vocabulary for ingredient FORM KEYWORDS extracted from raw label text. Single source of truth for the cleaner (extracts forms from ingredient names), the scorer (gates premium-form bonuses), and the enricher (matches probiotic delivery / postbiotic patterns). Replaces 3-5 hardcoded duplicate keyword lists previously scattered across enhanced_normalizer.py, score_supplements.py, enrich_supplements_v3.py, constants.py, and ingredient_quality_map.json aliases.",
+    "schema_version": "1.0.0",
+    "last_updated": "2026-05-05",
+    "total_categories": 17,
+    "status": "ACTIVE — v1.5.0 form vocabulary refactor",
+    "purpose": "Extraction patterns + canonical names for every form keyword the pipeline recognizes. Each consumer loads this once at import time, compiles regexes, and reads canonical names. Drift across consumers is no longer possible — they all read this file.",
+    "consumed_by": [
+      "scripts/enhanced_normalizer.py (cleaner — extracts forms[] from ingredient names)",
+      "scripts/score_supplements.py (scorer — gates A2 omega-3 premium-form bonus)",
+      "scripts/enrich_supplements_v3.py (enricher — detects probiotic delivery + postbiotic)",
+      "scripts/form_vocab.py (loader — compiles regex tables from this file)"
+    ],
+    "field_contract": {
+      "categories": "Object keyed by category id. Each category has: description, scoring_relevance, forms.",
+      "forms": "List of form entries (ordered — earlier entries take precedence when patterns overlap). Each entry has: canonical (the canonical name emitted), patterns (regex strings, IGNORECASE).",
+      "canonical": "The single canonical string this form is normalized to. Cleaner emits this into forms[].name; scorer haystack regex matches against this; enricher matches against this for keyword decisions.",
+      "patterns": "List of regex patterns (raw strings, no anchors). Compiled with re.IGNORECASE. Order within the patterns list is irrelevant — the canonical name is what's emitted on any match.",
+      "scoring_relevance": "Free-text note explaining what this category gates. Documentation only — does not affect runtime."
+    },
+    "ordering_rule": "Within a category, more specific forms must come BEFORE less specific ones so the cleaner's first-match wins. e.g. 're-esterified triglyceride' must precede 'triglyceride'."
+  },
+  "categories": {
+    "omega3_molecular_forms": {
+      "description": "Molecular forms of EPA/DHA. Drives the scorer's A2 premium-delivery bonus (score_supplements._PREMIUM_OMEGA3_FORM_PATTERN). rTG > natural TG > TG > phospholipid > monoglyceride > FFA > ethyl ester (cheapest).",
+      "scoring_relevance": "premium_form_bonus_a2",
+      "forms": [
+        {
+          "canonical": "re-esterified triglyceride",
+          "patterns": ["\\brtg\\b", "re-?esterified\\s+triglyceride"]
+        },
+        {
+          "canonical": "natural triglyceride",
+          "patterns": ["\\bnatural\\s+triglyceride\\b"]
+        },
+        {
+          "canonical": "triglyceride",
+          "patterns": ["\\btriglyceride\\b"]
+        },
+        {
+          "canonical": "krill phospholipid",
+          "patterns": ["\\bkrill\\s+phospholipid\\b"]
+        },
+        {
+          "canonical": "phospholipid",
+          "patterns": ["\\bphospholipid\\b"]
+        },
+        {
+          "canonical": "monoglyceride",
+          "patterns": ["\\bmonoglyceride\\b"]
+        },
+        {
+          "canonical": "free fatty acid",
+          "patterns": ["\\bfree\\s+fatty\\s+acid\\b", "\\bffa\\b"]
+        },
+        {
+          "canonical": "ethyl ester",
+          "patterns": ["\\bethyl\\s+ester\\b", "\\bee\\b"]
+        }
+      ]
+    },
+    "omega3_source_oils": {
+      "description": "Source oil for omega-3. UX context (Flutter shows 'DHA from algae' for vegan routing) — not gating any scoring bonus today.",
+      "scoring_relevance": "display_only",
+      "forms": [
+        {
+          "canonical": "algae oil",
+          "patterns": ["\\balg(?:ae|al)\\s+oil\\b", "\\bfrom\\s+algae\\b"]
+        },
+        {
+          "canonical": "krill oil",
+          "patterns": ["\\bkrill\\s+oil\\b"]
+        },
+        {
+          "canonical": "calamari oil",
+          "patterns": ["\\bcalamari\\s+oil\\b", "\\bsquid\\s+oil\\b"]
+        },
+        {
+          "canonical": "fish oil",
+          "patterns": ["\\bfish\\s+oil\\b"]
+        }
+      ]
+    },
+    "probiotic_delivery": {
+      "description": "Carrier / survivability technology for live probiotics. Drives the enricher's probiotic survivability scoring (enrich_supplements_v3._PROBIOTIC_DELIVERY_KEYWORDS).",
+      "scoring_relevance": "probiotic_survivability_bonus",
+      "forms": [
+        {
+          "canonical": "spore-based",
+          "patterns": ["\\bspore[-\\s]?(?:based|forming)\\b"]
+        },
+        {
+          "canonical": "microencapsulated",
+          "patterns": ["\\bmicroencapsulated\\b"]
+        },
+        {
+          "canonical": "acid-resistant",
+          "patterns": ["\\bacid[-\\s]?(?:resistant|stable|protected)\\b"]
+        },
+        {
+          "canonical": "delayed-release",
+          "patterns": ["\\bdelayed[-\\s]?release\\b", "\\bdr\\s*caps?\\b"]
+        },
+        {
+          "canonical": "enteric-coated",
+          "patterns": ["\\benteric[-\\s]?coated\\b"]
+        }
+      ]
+    },
+    "postbiotic_keywords": {
+      "description": "Inactivated / heat-killed probiotic forms. Drives the enricher's _is_postbiotic detection — these strains do NOT receive CFU credit because they are not live (enrich_supplements_v3._POSTBIOTIC_PATTERNS).",
+      "scoring_relevance": "postbiotic_cfu_gate",
+      "forms": [
+        {
+          "canonical": "heat-killed",
+          "patterns": ["\\bheat[-\\s]?killed\\b", "\\btyndalli[sz]ed\\b", "\\bheat[-\\s]?inactivated\\b"]
+        },
+        {
+          "canonical": "inactivated",
+          "patterns": ["\\binactivated\\b", "\\bnon[-\\s]?viable\\b"]
+        },
+        {
+          "canonical": "lysate",
+          "patterns": ["\\b(?:cell|bacterial)\\s+lysate\\b", "\\blysate\\b"]
+        },
+        {
+          "canonical": "postbiotic",
+          "patterns": ["\\bpostbiotic\\b", "\\bparaprobiotic\\b", "\\bghost\\s+probiotic\\b"]
+        }
+      ]
+    },
+    "prebiotic_forms": {
+      "description": "Prebiotic fiber types. Display + future scoring; no bonus today.",
+      "scoring_relevance": "display_only",
+      "forms": [
+        {
+          "canonical": "fructooligosaccharide",
+          "patterns": ["\\bfructooligosaccharide", "\\bfos\\b"]
+        },
+        {
+          "canonical": "galactooligosaccharide",
+          "patterns": ["\\bgalactooligosaccharide", "\\bgos\\b"]
+        },
+        {
+          "canonical": "xylooligosaccharide",
+          "patterns": ["\\bxylooligosaccharide", "\\bxos\\b"]
+        },
+        {
+          "canonical": "resistant starch",
+          "patterns": ["\\bresistant\\s+starch\\b"]
+        },
+        {
+          "canonical": "inulin",
+          "patterns": ["\\binulin\\b"]
+        }
+      ]
+    },
+    "vitamin_a_forms": {
+      "description": "Preformed vitamin A esters and provitamin A. Flutter renders the form helper line; scorer uses bio_score per form via IQM.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "retinyl palmitate",
+          "patterns": ["\\bretinyl\\s*palmitate\\b", "\\bvitamin\\s*a\\s+palmitate\\b"]
+        },
+        {
+          "canonical": "retinyl acetate",
+          "patterns": ["\\bretinyl\\s*acetate\\b", "\\bvitamin\\s*a\\s+acetate\\b"]
+        },
+        {
+          "canonical": "beta-carotene",
+          "patterns": ["\\bbeta[\\s-]*carotene\\b"]
+        }
+      ]
+    },
+    "vitamin_d_forms": {
+      "description": "Vitamin D2 (ergocalciferol, plant) vs D3 (cholecalciferol, animal/lichen). Bio_score differs in IQM. The short codes D3/D2 are emitted alongside the chemical names because Flutter's display logic and IQM aliases historically use both.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "D3",
+          "patterns": ["\\b(?:vitamin\\s*)?d3\\b"]
+        },
+        {
+          "canonical": "D2",
+          "patterns": ["\\b(?:vitamin\\s*)?d2\\b"]
+        },
+        {
+          "canonical": "cholecalciferol",
+          "patterns": ["\\b(?:vitamin\\s*)?d3\\b", "\\bcholecalciferol\\b"]
+        },
+        {
+          "canonical": "ergocalciferol",
+          "patterns": ["\\b(?:vitamin\\s*)?d2\\b", "\\bergocalciferol\\b"]
+        }
+      ]
+    },
+    "vitamin_e_forms": {
+      "description": "Natural d-alpha (bioavailable) vs synthetic dl-alpha tocopheryl acetate.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "d-alpha tocopheryl acetate",
+          "patterns": ["\\bd[\\s-]*alpha[\\s-]*tocopheryl[\\s-]*acetate\\b"]
+        },
+        {
+          "canonical": "dl-alpha tocopheryl acetate",
+          "patterns": ["\\bdl[\\s-]*alpha[\\s-]*tocopheryl[\\s-]*acetate\\b"]
+        },
+        {
+          "canonical": "d-alpha tocopherol",
+          "patterns": ["\\bd[\\s-]*alpha[\\s-]*tocopherol\\b"]
+        }
+      ]
+    },
+    "vitamin_k_forms": {
+      "description": "K1 phylloquinone (plant) vs K2 menaquinones (MK-7 / MK-4, bacterial). Major bio_score difference in IQM.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "menaquinone-7",
+          "patterns": ["\\bmk[-\\s]?7\\b", "\\bmenaquinone[-\\s]?7\\b"]
+        },
+        {
+          "canonical": "menaquinone-4",
+          "patterns": ["\\bmk[-\\s]?4\\b", "\\bmenaquinone[-\\s]?4\\b"]
+        },
+        {
+          "canonical": "phylloquinone",
+          "patterns": ["\\bphylloquinone\\b", "\\bphytonadione\\b"]
+        }
+      ]
+    },
+    "vitamin_c_forms": {
+      "description": "Plain ascorbic acid vs mineral ascorbates. Mineral ascorbates have buffering benefit but same bioavailability.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "calcium ascorbate",
+          "patterns": ["\\bcalcium\\s*ascorbate\\b"]
+        },
+        {
+          "canonical": "magnesium ascorbate",
+          "patterns": ["\\bmagnesium\\s*ascorbate\\b"]
+        },
+        {
+          "canonical": "ascorbic acid",
+          "patterns": ["\\bascorbic\\s*acid\\b"]
+        }
+      ]
+    },
+    "vitamin_b12_forms": {
+      "description": "Methylcobalamin / dibencozide (active) vs cyanocobalamin (synthetic). Major bio_score difference.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "methylcobalamin",
+          "patterns": ["\\bmethylcobalamin\\b"]
+        },
+        {
+          "canonical": "cyanocobalamin",
+          "patterns": ["\\bcyanocobalamin\\b"]
+        },
+        {
+          "canonical": "dibencozide",
+          "patterns": ["\\bdibencozide\\b", "\\bcoenzyme\\s*b12\\b"]
+        }
+      ]
+    },
+    "vitamin_b_active_forms": {
+      "description": "B-vitamin active vs synthetic forms. P5P/R5P/FMN are coenzyme forms (bioavailable); pyridoxine HCl / riboflavin / synthetic niacin are cheaper.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "pyridoxal-5-phosphate",
+          "patterns": ["\\bp[-\\s]?5[-\\s]?p\\b", "\\bpyridoxal[-\\s]?5[-\\s]?phosphate\\b", "\\bplp\\b"]
+        },
+        {
+          "canonical": "pyridoxine",
+          "patterns": ["\\bpyridoxine\\b"]
+        },
+        {
+          "canonical": "riboflavin-5-phosphate",
+          "patterns": ["\\br[-\\s]?5[-\\s]?p\\b", "\\briboflavin[-\\s]?5[-\\s]?phosphate\\b", "\\bfmn\\b"]
+        },
+        {
+          "canonical": "riboflavin",
+          "patterns": ["\\briboflavin\\b"]
+        },
+        {
+          "canonical": "inositol hexanicotinate",
+          "patterns": ["\\binositol\\s*hexanicotinate\\b", "\\bihn\\b"]
+        },
+        {
+          "canonical": "niacinamide",
+          "patterns": ["\\bniacinamide\\b", "\\bnicotinamide\\b"]
+        },
+        {
+          "canonical": "nicotinic acid",
+          "patterns": ["\\bnicotinic\\s*acid\\b"]
+        },
+        {
+          "canonical": "thiamine mononitrate",
+          "patterns": ["\\bthiamin[e]?\\s*mononitrate\\b"]
+        },
+        {
+          "canonical": "thiamine hydrochloride",
+          "patterns": ["\\bthiamine\\s*hcl\\b", "\\bthiamine\\s*hydrochloride\\b"]
+        },
+        {
+          "canonical": "benfotiamine",
+          "patterns": ["\\bbenfotiamine\\b"]
+        },
+        {
+          "canonical": "pantethine",
+          "patterns": ["\\bpantethine\\b"]
+        },
+        {
+          "canonical": "calcium pantothenate",
+          "patterns": ["\\bcalcium\\s*pantothenate\\b", "\\bd[-\\s]?pantothenate\\b"]
+        },
+        {
+          "canonical": "pantothenic acid",
+          "patterns": ["\\bpantothenic\\s*acid\\b"]
+        }
+      ]
+    },
+    "folate_forms": {
+      "description": "Active L-5-MTHF vs synthetic folic acid. Major bio_score difference; methylated form takes precedence when both appear (a label saying 'as L-5-MTHF, not folic acid' must NOT also emit folic acid).",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "exclusive_match": true,
+      "forms": [
+        {
+          "canonical": "5-methyltetrahydrofolate",
+          "patterns": [
+            "\\bl[-\\s]?5[-\\s]?mthf\\b",
+            "\\b5[-\\s]?mthf\\b",
+            "\\bmethylfolate\\b",
+            "\\b5[-\\s]?methyltetrahydrofolate\\b"
+          ]
+        },
+        {
+          "canonical": "folic acid",
+          "patterns": ["\\bfolic\\s*acid\\b"]
+        }
+      ]
+    },
+    "mineral_salts": {
+      "description": "Mineral salt / chelate suffixes. Bisglycinate / chelate are bioavailable; oxide is poor; sulfate / hcl are common cheap salts.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "bisglycinate",
+          "patterns": ["\\bbisglycinate\\b"]
+        },
+        {
+          "canonical": "glycinate",
+          "patterns": ["\\bglycinate\\b"]
+        },
+        {
+          "canonical": "picolinate",
+          "patterns": ["\\bpicolinate\\b"]
+        },
+        {
+          "canonical": "citrate",
+          "patterns": ["\\bcitrate\\b"]
+        },
+        {
+          "canonical": "malate",
+          "patterns": ["\\bmalate\\b"]
+        },
+        {
+          "canonical": "taurate",
+          "patterns": ["\\btaurate\\b"]
+        },
+        {
+          "canonical": "carbonate",
+          "patterns": ["\\bcarbonate\\b"]
+        },
+        {
+          "canonical": "oxide",
+          "patterns": ["\\boxide\\b"]
+        },
+        {
+          "canonical": "gluconate",
+          "patterns": ["\\bgluconate\\b"]
+        },
+        {
+          "canonical": "lactate",
+          "patterns": ["\\blactate\\b"]
+        },
+        {
+          "canonical": "fumarate",
+          "patterns": ["\\bfumarate\\b"]
+        },
+        {
+          "canonical": "aspartate",
+          "patterns": ["\\baspartate\\b"]
+        },
+        {
+          "canonical": "orotate",
+          "patterns": ["\\borotate\\b"]
+        },
+        {
+          "canonical": "threonate",
+          "patterns": ["\\bthreonate\\b"]
+        },
+        {
+          "canonical": "succinate",
+          "patterns": ["\\bsuccinate\\b"]
+        },
+        {
+          "canonical": "pidolate",
+          "patterns": ["\\bpidolate\\b"]
+        },
+        {
+          "canonical": "sulfate",
+          "patterns": ["\\bsulf?ate\\b", "\\bsulphate\\b"]
+        },
+        {
+          "canonical": "hydrochloride",
+          "patterns": ["\\bhcl\\b", "\\bhydrochloride\\b"]
+        }
+      ]
+    },
+    "selenium_forms": {
+      "description": "Organic L-selenomethionine (bioavailable) vs inorganic sodium selenate / selenite.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "selenomethionine",
+          "patterns": ["\\b(?:l[-\\s]?)?selenomethionine\\b"]
+        },
+        {
+          "canonical": "sodium selenate",
+          "patterns": ["\\bsodium\\s*selenate\\b"]
+        },
+        {
+          "canonical": "sodium selenite",
+          "patterns": ["\\bsodium\\s*selenite\\b"]
+        }
+      ]
+    },
+    "coq10_forms": {
+      "description": "Reduced ubiquinol (body-ready, expensive) vs oxidized ubiquinone (cheaper synthetic).",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "ubiquinol",
+          "patterns": ["\\bubiquinol\\b"]
+        },
+        {
+          "canonical": "ubiquinone",
+          "patterns": ["\\bubiquinone\\b"]
+        }
+      ]
+    },
+    "choline_forms": {
+      "description": "Alpha-GPC and citicoline (CDP-choline) are bioavailable; bitartrate is the cheap salt.",
+      "scoring_relevance": "iqm_bio_score_lookup",
+      "forms": [
+        {
+          "canonical": "alpha-gpc",
+          "patterns": ["\\balpha[-\\s]?gpc\\b", "\\bglycerophosphocholine\\b"]
+        },
+        {
+          "canonical": "citicoline",
+          "patterns": ["\\bciticoline\\b", "\\bcdp[-\\s]?choline\\b"]
+        },
+        {
+          "canonical": "choline bitartrate",
+          "patterns": ["\\bcholine\\s*bitartrate\\b"]
+        }
+      ]
+    }
+  }
+}

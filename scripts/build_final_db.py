@@ -56,7 +56,7 @@ from supplement_type_utils import infer_supplement_type
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "1.4.0"  # v1.4.0 adds image_thumbnail_url (91 cols)
+EXPORT_SCHEMA_VERSION = "1.5.0"  # v1.5.0 adds canonical form/dose/severity contract on active+inactive rows
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -147,6 +147,215 @@ def safe_list(value: Any) -> list:
 
 def safe_dict(value: Any) -> dict:
     return value if isinstance(value, dict) else {}
+
+
+def _first_form_name(forms: Any) -> str:
+    """Return the first DSLD-declared form name, e.g. 'Palmitate'.
+
+    The cleaner emits forms[] from DSLD's parsed forms array or from
+    name-extraction. When it succeeds, this is the user-visible label form.
+    When it fails (cleaner regex misses inline forms like
+    'Vitamin A Palmitate'), the canonical contract falls back to the
+    enricher's matched_form via _compute_form_contract.
+    """
+    if forms and isinstance(forms, list) and isinstance(forms[0], dict):
+        return safe_str(forms[0].get("name"))
+    return ""
+
+
+# Placeholder tokens IQM uses when no specific form was matched. A
+# matched_form equal to any of these (or carrying an "(unspecified)"
+# parenthetical) means the enricher fell back to the parent canonical
+# and does NOT carry a real label form.
+_FORM_PLACEHOLDER_TOKENS = {"", "standard", "unspecified", "default", "generic"}
+_FORM_PLACEHOLDER_PARENS = ("(unspecified)", "(unmapped)", "(generic)")
+
+# Common parent-nutrient prefixes stripped from matched_form when
+# prettifying for display. e.g. 'vitamin a palmitate' -> 'Palmitate'.
+_FORM_PARENT_PREFIXES = (
+    "vitamin a ", "vitamin d ", "vitamin e ", "vitamin k ",
+    "vitamin b1 ", "vitamin b2 ", "vitamin b3 ", "vitamin b5 ",
+    "vitamin b6 ", "vitamin b7 ", "vitamin b9 ", "vitamin b12 ",
+    "vitamin c ",
+)
+
+
+def _is_placeholder_form(matched_form: str) -> bool:
+    if not matched_form:
+        return True
+    s = matched_form.strip().lower()
+    if s in _FORM_PLACEHOLDER_TOKENS:
+        return True
+    return any(tag in s for tag in _FORM_PLACEHOLDER_PARENS)
+
+
+def _prettify_matched_form(matched_form: str) -> str:
+    """Convert IQM canonical form ('retinyl palmitate') to display label
+    ('Retinyl Palmitate'). Strips parent-nutrient prefix when the form
+    string redundantly carries it (e.g. 'vitamin a palmitate' -> 'Palmitate').
+    Preserves alphanumeric tokens like D3/K2/MK-7/B12 in upper case.
+    """
+    s = safe_str(matched_form).strip()
+    if not s:
+        return ""
+    low = s.lower()
+    for prefix in _FORM_PARENT_PREFIXES:
+        if low.startswith(prefix):
+            s = s[len(prefix):]
+            break
+    return " ".join(_prettify_token(tok) for tok in s.split())
+
+
+def _prettify_token(tok: str) -> str:
+    """Title-case one whitespace-separated token. Hyphen segments
+    handled independently so 'menaquinone-7' becomes 'Menaquinone-7'
+    while short identifiers (D3, K2, MK-7, B12) stay upper.
+    """
+    if "-" in tok:
+        return "-".join(_prettify_token(p) for p in tok.split("-"))
+    if not tok:
+        return tok
+    if tok.isdigit():
+        return tok
+    alpha = "".join(c for c in tok if c.isalpha())
+    has_digit = any(c.isdigit() for c in tok)
+    # Short identifier (≤3 alpha chars): D3, K2, MK, B12 -> upper.
+    if len(alpha) <= 3 and (has_digit or len(alpha) <= 2):
+        return tok.upper()
+    return tok.capitalize()
+
+
+def _compute_form_contract(
+    ingredient: Dict[str, Any], match: Dict[str, Any]
+) -> Dict[str, Any]:
+    """Canonical form-disclosure contract for one active ingredient.
+
+    Three fields, always set together so Flutter never has to decide
+    whether a form is known or where to read it:
+
+      display_form_label  user-visible form, or None when truly unknown
+      form_status         'known' | 'unknown'
+      form_match_status   'mapped' | 'unmapped' | 'n/a' (n/a when unknown)
+
+    Resolution order:
+      1. Cleaner forms[0].name present     -> known
+      2. Enricher matched_form non-placeholder -> known (bridge for cleaner gaps)
+      3. Otherwise                          -> unknown
+    """
+    label_form = _first_form_name(ingredient.get("forms"))
+    matched = safe_str(match.get("matched_form") or ingredient.get("matched_form"))
+    matched_is_real = not _is_placeholder_form(matched)
+
+    if label_form:
+        return {
+            "display_form_label": label_form,
+            "form_status": "known",
+            "form_match_status": "mapped" if matched_is_real else "unmapped",
+        }
+    if matched_is_real:
+        return {
+            "display_form_label": _prettify_matched_form(matched),
+            "form_status": "known",
+            "form_match_status": "mapped",
+        }
+    return {
+        "display_form_label": None,
+        "form_status": "unknown",
+        "form_match_status": "n/a",
+    }
+
+
+# Curated user-facing role names for the most common excipient categories.
+# Keys match the controlled vocabularies used in `additive_type` and
+# `category` on inactive ingredients (see scripts/audits/functional_roles).
+# Fallback for unmapped values: snake-case to "Title case".
+_INACTIVE_ROLE_LABELS = {
+    "anti_caking_agent": "Anti-caking agent",
+    "anticaking_agent": "Anti-caking agent",
+    "flow_agent_anticaking": "Anti-caking / flow agent",
+    "flow_agent": "Flow agent",
+    "glidant": "Glidant",
+    "lubricant": "Lubricant",
+    "binder": "Binder",
+    "disintegrant": "Disintegrant",
+    "filler": "Filler",
+    "diluent": "Filler / diluent",
+    "capsule_shell": "Capsule shell",
+    "capsule_coating": "Capsule coating",
+    "coating": "Coating",
+    "release_agent": "Release agent",
+    "emulsifier": "Emulsifier",
+    "lecithin": "Lecithin (emulsifier)",
+    "humectant": "Humectant",
+    "thickener": "Thickener",
+    "stabilizer": "Stabilizer",
+    "preservative": "Preservative",
+    "sweetener": "Sweetener",
+    "colorant": "Colorant",
+    "color": "Color",
+    "flavoring": "Flavoring",
+    "flavor": "Flavor",
+}
+
+
+def _compute_inactive_role_label(ingredient: Dict[str, Any], other_ref: Dict[str, Any]) -> Optional[str]:
+    """Return the user-visible role string for an inactive ingredient.
+    Prefers the more specific `additive_type` over the broader `category`,
+    then maps through the curated label table, with a snake_case
+    fallback for vocabulary entries not yet curated.
+    """
+    candidates = [
+        safe_str(ingredient.get("additiveType")),
+        safe_str(ingredient.get("additive_type")),
+        safe_str(ingredient.get("category")),
+        safe_str(other_ref.get("additive_type")),
+        safe_str(other_ref.get("category")),
+    ]
+    for raw in candidates:
+        key = raw.strip().lower()
+        if not key:
+            continue
+        if key in _INACTIVE_ROLE_LABELS:
+            return _INACTIVE_ROLE_LABELS[key]
+        # Generic snake_case -> "Snake case" prettifier for vocabulary
+        # entries not yet curated. Single source so no parallel logic.
+        return key.replace("_", " ").capitalize()
+    return None
+
+
+def _compute_inactive_severity_status(
+    is_additive: bool, is_harmful: bool, harmful_severity: Optional[str]
+) -> str:
+    """Single-enum routing decision for Flutter so it never has to
+    cross-compute is_harmful + harmful_severity + is_additive locally.
+
+      critical       hazardous excipient (moderate/high severity) -> always show
+      suppress       low-severity excipient (silicon dioxide, MCC) -> Tradeoffs only,
+                     hidden from Review-Before-Use
+      informational  flagged but not hazardous (rare, e.g. regulated
+                     dyes with population notes but low harm score)
+      n/a            non-additive or non-harmful inactive (leucine,
+                     hypromellose) -> render in Other Ingredients only
+    """
+    sev = (harmful_severity or "").strip().lower()
+    if is_harmful and sev in ("moderate", "high", "critical"):
+        return "critical"
+    if is_harmful and sev == "low":
+        return "suppress"
+    if is_harmful:
+        return "informational"
+    return "n/a"
+
+
+def _compute_is_safety_concern(is_harmful: bool, harmful_severity: Optional[str]) -> bool:
+    """Semantic flag — True only when an inactive is an actual safety
+    concern, not just a tracked excipient. ``is_harmful`` records DB
+    provenance (presence in harmful_additives.json) and is True for
+    low-severity excipients like silicon dioxide that are tracked for
+    transparency but aren't risks. ``is_safety_concern`` lifts the
+    severity check into the contract so callers don't have to."""
+    sev = (harmful_severity or "").strip().lower()
+    return bool(is_harmful) and sev in ("moderate", "high", "critical")
 
 
 def normalize_text(value: Any) -> str:
@@ -1745,6 +1954,31 @@ def _compute_display_dose_label(ingredient: Dict[str, Any]) -> str:
     return _EM_DASH
 
 
+def _compute_dose_status(ingredient: Dict[str, Any]) -> str:
+    """Canonical dose-disclosure enum, mirrors _compute_display_dose_label.
+
+    Returns one of:
+      disclosed           individually disclosed quantity + therapeutic unit
+      not_disclosed_blend prop-blend member with no own dose
+      missing             no dose, not in a blend
+    """
+    qty_raw = ingredient.get("quantity")
+    qty = safe_float(qty_raw, 0) if qty_raw is not None else 0.0
+    unit = safe_str(ingredient.get("unit")).strip().lower()
+    has_real_unit = unit not in _NP_SENTINELS
+    has_real_dose = isinstance(qty, (int, float)) and qty > 0 and has_real_unit
+    if has_real_dose:
+        return "disclosed"
+    is_blend_member = bool(
+        ingredient.get("isNestedIngredient")
+        or ingredient.get("proprietaryBlend")
+        or ingredient.get("is_in_proprietary_blend")
+    )
+    if is_blend_member:
+        return "not_disclosed_blend"
+    return "missing"
+
+
 def _validate_banned_preflight_propagation(
     blob: Dict[str, Any], enriched: Dict[str, Any], dsld_id: str
 ) -> None:
@@ -2200,6 +2434,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         qty = ing.get("quantity")
         # Sprint E1.3.2 — look up adequacy by strain name (case-insensitive).
         _strain_adequacy = probiotic_strain_adequacy.get(name.strip().lower()) or {}
+        # Canonical form + dose contract for Flutter. Single source of
+        # truth: pipeline emits explicit states, Flutter renders them.
+        form_contract = _compute_form_contract(ing, m)
         ingredients.append({
             "raw_source_text": raw,
             "name": name,
@@ -2209,10 +2446,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "quantity": safe_float(qty),
             "unit": safe_str(ing.get("unit")),
             "standard_name": safe_str(m.get("standard_name")),
-            "form": safe_str(m.get("form")),
+            "form": _first_form_name(ing.get("forms")),
             "matched_form": safe_str(m.get("matched_form")),
             "matched_forms": safe_list(m.get("matched_forms")),
             "extracted_forms": safe_list(m.get("extracted_forms")),
+            "display_form_label": form_contract["display_form_label"],
+            "form_status": form_contract["form_status"],
+            "form_match_status": form_contract["form_match_status"],
             "category": safe_str(m.get("category")),
             "bio_score": safe_float(m.get("bio_score")),
             "natural": bool(m.get("natural")),
@@ -2228,8 +2468,15 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "dosage_unit": safe_str(ing.get("unit")),
             "normalized_value": safe_float(ne.get("normalized_amount")),
             "is_mapped": safe_bool(m.get("mapped", ing.get("mapped"))),
+            # See provenance comment on the inactive row — `is_harmful`
+            # records DB presence; `is_safety_concern` records the
+            # actual hazard signal (severity moderate/high/critical).
             "is_harmful": bool(harmful_hit),
             "harmful_severity": harmful_hit.get("severity_level") if harmful_hit else None,
+            "is_safety_concern": _compute_is_safety_concern(
+                bool(harmful_hit),
+                harmful_hit.get("severity_level") if harmful_hit else None,
+            ),
             "harmful_notes": (
                 safe_str(harmful_ref.get("mechanism_of_harm"))
                 or safe_str(harmful_ref.get("notes"))
@@ -2245,6 +2492,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "display_label": _compute_display_label(ing),
             # Sprint E1.2.2.b — pre-computed Flutter dose label
             "display_dose_label": _compute_display_dose_label(ing),
+            "dose_status": _compute_dose_status(ing),
             # Sprint E1.2.2.c — standardization claim (None when not known)
             "standardization_note": _compute_standardization_note({
                 "matched_form": m.get("matched_form") or ing.get("matched_form"),
@@ -2305,6 +2553,16 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         )
         mechanism_text = safe_str(harmful_ref.get("mechanism_of_harm"))
 
+        std_name_resolved = safe_str(
+            harmful_ref.get("standard_name")
+            or (harmful_hit or {}).get("canonical_name")
+            or (harmful_hit or {}).get("additive_name")
+            or other_ref.get("standard_name")
+        )
+        is_additive_resolved = safe_bool(ing.get("isAdditive") or other_ref.get("is_additive"))
+        is_harmful_resolved = bool(harmful_hit)
+        harmful_severity_resolved = harmful_hit.get("severity_level") if harmful_hit else None
+
         inactive.append({
             "raw_source_text": raw,
             "name": name,
@@ -2312,18 +2570,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
             "category": safe_str(ing.get("category") or other_ref.get("category")),
-            "is_additive": safe_bool(ing.get("isAdditive") or other_ref.get("is_additive")),
+            "is_additive": is_additive_resolved,
             "functional_roles": safe_list(
                 ing.get("functional_roles")
                 or other_ref.get("functional_roles")
                 or (harmful_ref or {}).get("functional_roles")
             ),
-            "standard_name": safe_str(
-                harmful_ref.get("standard_name")
-                or (harmful_hit or {}).get("canonical_name")
-                or (harmful_hit or {}).get("additive_name")
-                or other_ref.get("standard_name")
-            ),
+            "standard_name": std_name_resolved,
             "severity_level": safe_str((harmful_hit or {}).get("severity_level")),
             "match_method": safe_str((harmful_hit or {}).get("match_method")),
             "matched_alias": safe_str((harmful_hit or {}).get("matched_alias")),
@@ -2334,8 +2587,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 harmful_ref.get("population_warnings")
                 or (harmful_hit or {}).get("population_warnings")
             ),
-            "is_harmful": bool(harmful_hit),
-            "harmful_severity": harmful_hit.get("severity_level") if harmful_hit else None,
+            # Provenance flag: True iff the ingredient appears in
+            # harmful_additives.json. NOT a semantic safety claim — low-
+            # severity entries (silicon dioxide, MCC, calcium laurate)
+            # are tracked for transparency but aren't safety risks. Use
+            # `is_safety_concern` or `severity_status` for routing.
+            "is_harmful": is_harmful_resolved,
+            "harmful_severity": harmful_severity_resolved,
             "harmful_notes": (
                 mechanism_text
                 or notes_text
@@ -2343,6 +2601,16 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 or safe_str((harmful_hit or {}).get("category"))
             ) if harmful_hit else None,
             "identifiers": extract_identifiers(harmful_ref or other_ref),
+            # Canonical inactive contract — Flutter renders these
+            # directly without local inference.
+            "display_label": std_name_resolved or name,
+            "display_role_label": _compute_inactive_role_label(ing, other_ref),
+            "severity_status": _compute_inactive_severity_status(
+                is_additive_resolved, is_harmful_resolved, harmful_severity_resolved
+            ),
+            "is_safety_concern": _compute_is_safety_concern(
+                is_harmful_resolved, harmful_severity_resolved
+            ),
         })
 
     # Warnings
@@ -2435,9 +2703,21 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         h_notes = safe_str(h.get("notes") or h_ref.get("notes"))
         h_mechanism = safe_str(h.get("mechanism_of_harm") or h_ref.get("mechanism_of_harm"))
         h_pop_warnings = h.get("population_warnings") or h_ref.get("population_warnings") or []
+        h_severity = safe_str(h.get("severity_level"), "moderate").lower()
+        # Tier display by severity. High/moderate additives (e.g.
+        # titanium dioxide EU-ban, formaldehyde-releasing preservatives)
+        # are substance-level hazards — always promote to RBU. Low
+        # severity (silicon dioxide, microcrystalline cellulose, etc.)
+        # are excipient quality signals tracked in `harmful_additives.json`
+        # itself as "non-nutritive quality signal, not a safety risk".
+        # They belong in the Tradeoffs filler-load badge, NOT in the
+        # personalized Review-Before-Use card. `suppress` keeps them in
+        # the catalog row but tells Flutter's profile filter to drop
+        # them unless a profile rule explicitly upgrades them.
+        h_dm = "suppress" if h_severity == "low" else "critical"
         warnings.append({
             "type": "harmful_additive",
-            "severity": safe_str(h.get("severity_level"), "moderate"),
+            "severity": h_severity or "moderate",
             "title": f"Contains {safe_str(h.get('additive_name') or h.get('ingredient'))}",
             "detail": h_mechanism or h_notes or f"Category: {safe_str(h.get('category'))}",
             "notes": h_notes,
@@ -2449,8 +2729,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # Path C authored fields (user-facing calm copy; 115 entries).
             "safety_summary": h_ref.get("safety_summary"),
             "safety_summary_one_liner": h_ref.get("safety_summary_one_liner"),
-            # Harmful additives are substance-level hazards — always show.
-            "display_mode_default": "critical",
+            "display_mode_default": h_dm,
         })
 
     for a in safe_list(enriched.get("allergen_hits")):
@@ -2715,6 +2994,21 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         "ingredients": ingredients,
         "inactive_ingredients": inactive,
         "warnings": warnings,
+        # Phase 8: structured per-allergen array for client-side
+        # personalized matching against profile.allergens. Exact
+        # allergen_id matching only. The display-ready summary string
+        # (`allergen_summary` column on products_core) and the legacy
+        # warnings[] entries with type='allergen' continue to power the
+        # generic non-personalized banner.
+        "allergens": build_structured_allergens(enriched),
+        # Phase 8: positive gluten-free signal — orthogonal to the
+        # negative allergen flow above. True when the label carries a
+        # validated gluten-free claim (compliance_data.gluten_free) AND
+        # no contradicting wheat/gluten ingredient hits. Surfaces as a
+        # green "Gluten-Free Verified" badge; never as an allergen flag.
+        "gluten_free_validated": safe_bool(
+            enriched.get("claim_gluten_free_validated")
+        ),
         # Profile-gated subset — see build logic above. Flutter should
         # render this by default to avoid firing scary-looking rules at
         # users who have no matching profile (e.g., berberine +
@@ -2918,6 +3212,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         bonuses.append({"id": "A5c", "label": "Synergy cluster qualified", "score": a_sub["A5c"]})
     if safe_float(a_sub.get("A5d"), 0) > 0:
         bonuses.append({"id": "A5d", "label": "Non-GMO Project Verified", "score": a_sub["A5d"]})
+    if safe_float(a_sub.get("A5e"), 0) > 0:
+        # v3.6.0: natural-source bonus moved here from A1.
+        bonuses.append({"id": "A5e", "label": "Natural-source ingredients", "score": a_sub["A5e"]})
     if safe_float(a_sub.get("A6"), 0) > 0:
         bonuses.append({"id": "A6", "label": "Single-nutrient premium form", "score": a_sub["A6"]})
     if safe_float(a_sub.get("probiotic_bonus"), 0) > 0:
@@ -3823,6 +4120,47 @@ def generate_net_contents_summary(enriched: Dict) -> Dict:
         "net_contents_quantity": quantity,
         "net_contents_unit": unit,
     }
+
+
+def build_structured_allergens(enriched: Dict) -> List[Dict]:
+    """Phase 8: structured per-allergen array for client-side personalization.
+
+    The legacy `warnings[]` array carries display-ready strings for the
+    generic AllergenSummaryBanner; this array is the structured contract
+    for Flutter's personalized allergen matcher (matchAllergens against
+    profile.allergens). Exact `allergen_id` matching only — no substring.
+
+    Sort: presence_type priority (contains → may_contain →
+    manufactured_in_facility) so callers can render the most actionable
+    rows first without re-sorting.
+    """
+    presence_priority = {
+        "contains": 0,
+        "may_contain": 1,
+        "manufactured_in_facility": 2,
+    }
+    severity_priority = {"high": 0, "moderate": 1, "low": 2}
+    out: List[Dict] = []
+    for hit in safe_list(enriched.get("allergen_hits")):
+        if not isinstance(hit, dict):
+            continue
+        allergen_id = safe_str(hit.get("allergen_id"))
+        if not allergen_id:
+            continue
+        out.append({
+            "allergen_id": allergen_id,
+            "display_name": safe_str(
+                hit.get("allergen_name") or hit.get("standard_name")
+            ),
+            "presence_type": safe_str(hit.get("presence_type"), "contains"),
+            "severity_level": safe_str(hit.get("severity_level"), "moderate"),
+            "evidence": safe_str(hit.get("evidence")),
+        })
+    out.sort(key=lambda x: (
+        presence_priority.get(x["presence_type"], 99),
+        severity_priority.get(x["severity_level"], 99),
+    ))
+    return out
 
 
 def generate_allergen_summary(enriched: Dict) -> str:

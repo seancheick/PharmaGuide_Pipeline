@@ -1458,8 +1458,7 @@
       "id": "PII_ARABINOSE",
       "standard_name": "Arabinose",
       "aliases": [
-        "arabinose",
-        "l-arabinose"
+        "arabinose"
       ],
       "category": "sweetener_natural",
       "is_additive": true,
@@ -1941,11 +1940,9 @@
         "beet juice color",
         "beet juice powder",
         "beet root juice color",
-        "beetroot powder",
         "natural beet color",
         "natural red beet color",
         "red beet color",
-        "red beet powder",
         "red beet root juice",
         "Beet, Natural",
         "beet natural"
@@ -2385,9 +2382,7 @@
       "id": "NHA_BLACK_STRAP_MOLASSES",
       "standard_name": "Blackstrap Molasses",
       "aliases": [
-        "Black Strap Molasses",
-        "blackstrap molasses",
-        "molasses"
+        "Black Strap Molasses"
       ],
       "category": "sweetener_natural",
       "is_additive": true,
@@ -2922,9 +2917,7 @@
     {
       "id": "PII_CALCIUM_CHLORIDE_EXCIPIENT",
       "standard_name": "Calcium Chloride (Excipient)",
-      "aliases": [
-        "Calcium Chloride"
-      ],
+      "aliases": [],
       "category": "ph_regulator",
       "is_additive": true,
       "additive_type": "mineral_excipient",
@@ -3447,14 +3440,7 @@
         "capsules",
         "delayed release capsule",
         "delayed-release capsules",
-        "enteric-coated capsule",
-        "hydropropyl methylcellulose",
-        "hydroxypropyl methylcellulose",
-        "hydroxy propyl methyl cellulose",
-        "hypromellose capsules",
-        "organic vegetable pullulan capsules",
-        "pullulan capsule",
-        "pullulan polysaccharide"
+        "enteric-coated capsule"
       ],
       "category": "coating",
       "is_additive": true,
@@ -3553,9 +3539,7 @@
       "standard_name": "Carboxymethyl Cellulose",
       "aliases": [
         "carboxymethyl cellulose",
-        "cellulose gum",
         "cmc",
-        "sodium carboxymethylcellulose",
         "wood cellulose"
       ],
       "category": "binder",
@@ -3875,11 +3859,8 @@
       "id": "OI_CELLULOSE_GUM",
       "standard_name": "Cellulose Gum",
       "aliases": [
-        "carboxymethyl cellulose",
         "cellulose gum",
-        "cmc",
         "E466",
-        "sodium carboxymethylcellulose",
         "vegetable modified cellulose gum"
       ],
       "category": "thickener",
@@ -4637,7 +4618,6 @@
         "coconut oil, refined",
         "coconut oil, virgin",
         "desiccated coconut",
-        "fractionated coconut oil",
         "MCT powder",
         "natural coconut oil",
         "organic virgin coconut oil",
@@ -5453,7 +5433,6 @@
         "DI Water",
         "distilled water",
         "Dl water",
-        "purified water",
         "water, deionized",
         "water, distilled"
       ],
@@ -5502,7 +5481,6 @@
         "dextrates",
         "dextrin",
         "dextrin powder",
-        "modified starch",
         "potato dextrin",
         "wheat dextrin"
       ],
@@ -7240,9 +7218,6 @@
       "id": "NHA_FRUIT_VEG_POWDERS",
       "standard_name": "Fruit & Vegetable Powders",
       "aliases": [
-        "annatto",
-        "beet juice powder",
-        "beet powder",
         "berry powder",
         "Beta-Carotene",
         "carrot powder",
@@ -7281,7 +7256,6 @@
         "blackberry juice concentrate",
         "blackcurrant juice concentrate",
         "blueberry juice concentrate",
-        "carrot juice concentrate",
         "cherry juice concentrate",
         "chokeberry juice concentrate",
         "hibiscus juice concentrate",
@@ -8139,8 +8113,7 @@
         "fatty acid ester",
         "glycerin fatty acid ester",
         "glycerol esters",
-        "glycerol fatty acid ester",
-        "mono and diglycerides"
+        "glycerol fatty acid ester"
       ],
       "category": "emulsifier",
       "is_additive": true,
@@ -8165,10 +8138,8 @@
         "diacetylated monoglycerides",
         "glycerin fatty acid esters",
         "glyceryl fatty acid esters",
-        "mono and diglycerides",
         "mono- and diglycerides",
         "monoglyceride",
-        "monoglycerides",
         "mono-and diglycerides",
         "Glycerin Fatty Ester"
       ],
@@ -8196,7 +8167,6 @@
       "standard_name": "Glycerol Monooleate",
       "aliases": [
         "glycerol monooleate",
-        "glyceryl monooleate",
         "monoolein",
         "Glycerin Monooleate",
         "Glyceryl Oleate",
@@ -9001,9 +8971,6 @@
       "id": "OI_HPMC_COMPOSITE",
       "standard_name": "HPMC Composite Capsule Shell",
       "aliases": [
-        "Glycerin (from vegetable source) gelcap",
-        "Glycerin (vegetable source) Gelcap",
-        "Glycerin Gelcap",
         "high and low viscosity Hydroxypropyl Methyl Cellulose",
         "high and low viscosity Hydroxypropyl Methyl Cellulose and Calcium Citrate Laurate",
         "high and low viscosity Hydroxypropyl Methyl-Cellulose",
@@ -9015,10 +8982,8 @@
         "high and low viscosity Hydroxypropyl Methylcellulose and Magnesium Citrate Laurate",
         "High and low viscosity hydroxypropyl methylcellulose and Magnesium CitrateLaurate",
         "High and low viscosity hydroxypropyl methylcellulose and MagnesiumCitrateLaurate",
-        "Hydroxypropyl Methyl Cellulose",
         "Hydroxypropylmethlcellulose",
-        "Hydroxypropylmethylcellulose",
-        "purified Water and Glycerin (vegetable source) gelcap"
+        "Hydroxypropylmethylcellulose"
       ],
       "category": "coating",
       "is_additive": true,
@@ -9916,15 +9881,9 @@
       "id": "PII_KOLLIDON",
       "standard_name": "Kollidon (Polyvinylpyrrolidone)",
       "aliases": [
-        "crospovidone",
         "kollidon",
-        "kollidon cl",
-        "polyvinylpolypyrrolidone",
-        "polyvinylpyrrolidone",
-        "povidone",
         "povidone k-30",
-        "povidone k30",
-        "pvp"
+        "povidone k30"
       ],
       "category": "filler",
       "is_additive": true,
@@ -10891,8 +10850,7 @@
         "magnesium silicate, hydrated",
         "magnesium trisilicate",
         "magnesium trisilicate anhydrous",
-        "syloid",
-        "vegetable magnesium silicate"
+        "syloid"
       ],
       "category": "ph_regulator",
       "is_additive": true,
@@ -11172,7 +11130,6 @@
       "id": "NHA_MAPLE_MOLASSES",
       "standard_name": "Maple Syrup & Molasses",
       "aliases": [
-        "blackstrap molasses",
         "maple syrup",
         "maple syrup crystals",
         "molasses"
@@ -11701,8 +11658,7 @@
         "natural Strawberry-Banana flavor",
         "natural Tart Cherry flavor",
         "Passionfruit flavor",
-        "raspberry flavor, natural",
-        "natural cherry flavour"
+        "raspberry flavor, natural"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -11812,7 +11768,6 @@
         "Ocean-derived trace minerals in a base of green alfalfa grass",
         "Concentrace",
         "ConcenTrace",
-        "ionic trace minerals",
         "Minerals",
         "trace minerals blend",
         "Lanthanum",
@@ -11909,7 +11864,6 @@
         "modified corn starch",
         "modified food and corn starch",
         "modified food starch",
-        "modified starch",
         "modified vegetable starch",
         "non-GMO modified Corn Starch",
         "Non-GMO modified cornstarch",
@@ -12336,7 +12290,6 @@
       "standard_name": "Natural Berry Flavor",
       "aliases": [
         "berry flavoring",
-        "mixed berry flavor",
         "natural berries",
         "natural berry flavor"
       ],
@@ -12360,13 +12313,10 @@
       "id": "NHA_NATURAL_BERRY_FLAVORS",
       "standard_name": "Natural Berry Flavors",
       "aliases": [
-        "mixed berry flavor",
-        "natural berry flavor",
         "natural berry flavoring",
         "natural blackberry flavor",
         "natural blueberry flavor",
         "natural fruit punch flavor",
-        "natural strawberry flavor",
         "strawberry flavor natural",
         "wildberry flavor"
       ],
@@ -12523,7 +12473,6 @@
         "natural citrus flavors",
         "natural citrus orange flavor",
         "natural citrus-orange flavors",
-        "natural orange flavor",
         "natural orange tangerine flavor",
         "natural tangerine flavor",
         "orange tangerine flavor",
@@ -12554,7 +12503,6 @@
       "aliases": [
         "natural color",
         "natural color additive",
-        "natural coloring",
         "natural pigments"
       ],
       "category": "colorant_natural",
@@ -12603,7 +12551,6 @@
       "standard_name": "Natural Colors from Plants",
       "aliases": [
         "anthocyanidin",
-        "anthocyanins",
         "beet root color",
         "beta carotene color",
         "betalains",
@@ -12622,14 +12569,12 @@
         "natural caramel colour",
         "natural caramel flavor",
         "natural carotene coloring",
-        "natural color",
         "natural colors",
         "natural colour",
         "natural colours",
         "natural food coloring",
         "natural mandarin orange color",
         "natural orange color",
-        "natural yellow orange coloring",
         "plant-based colors",
         "radish, natural",
         "red cabbage",
@@ -12720,7 +12665,6 @@
         "natural anise flavor",
         "natural apple flavors",
         "natural apricot flavor",
-        "natural berry flavor",
         "natural blueberry flavour",
         "natural cherry flavor",
         "natural chocolate flavor",
@@ -12749,9 +12693,7 @@
         "natural mango and peach flavors",
         "natural mango flavor",
         "natural masking agent",
-        "natural mint flavor",
         "natural orange extract flavor",
-        "natural orange flavor",
         "natural orange flavors",
         "natural organic flavors",
         "natural papaya flavor",
@@ -12765,14 +12707,12 @@
         "natural sour cherry flavor",
         "natural sour flavors",
         "natural strawberry creme flavor",
-        "natural strawberry flavor",
         "natural tropical flavor",
         "natural tropical fruit flavor",
         "natural tropical fruit flavors",
         "natural tropical fruit punch flavor",
         "natural Tutti Frutti flavor",
         "Natural Vanilla and Orange Flavoring",
-        "natural vanilla flavor",
         "natural vanilla flavour",
         "oolong tea flavor, natural",
         "orange cream flavor",
@@ -12804,7 +12744,6 @@
         "sd lemon flavor",
         "soda flavor",
         "sour tart flavor, natural",
-        "spice extracts",
         "Strawberry Essence",
         "strawberry flavor natural",
         "super punch",
@@ -12934,7 +12873,6 @@
       "standard_name": "Natural Glaze",
       "aliases": [
         "botanical coating",
-        "confectioner's glaze",
         "confectioners glaze",
         "natural coating",
         "plant-based glaze",
@@ -12985,19 +12923,11 @@
       "id": "NHA_NATURAL_GUMS",
       "standard_name": "Natural Gums",
       "aliases": [
-        "acacia gum",
         "E410",
-        "E412",
-        "E414",
-        "E415",
         "E418",
         "gellan gum",
-        "guar gum",
-        "gum acacia",
-        "gum arabic",
         "locust bean gum",
         "organic locust",
-        "xanthan gum",
         "hydrolyzed guar gum",
         "sunfiber hydrolyzed guar gum",
         "carob bean gum",
@@ -13088,11 +13018,9 @@
       "aliases": [
         "mint natural flavor",
         "natural menthol flavor",
-        "natural mint flavor",
         "natural peppermint flavor",
         "natural peppermint flavoring",
-        "peppermint flavor natural",
-        "natural mint oil"
+        "peppermint flavor natural"
       ],
       "category": "flavor_natural",
       "is_additive": false,
@@ -13171,7 +13099,6 @@
       "aliases": [
         "blood orange flavor natural",
         "natural blood orange flavor",
-        "natural orange flavor",
         "natural orange flavoring",
         "orange flavor, natural",
         "orange flavoring natural",
@@ -13276,15 +13203,9 @@
       "standard_name": "Natural Preservatives",
       "aliases": [
         "ascorbyl palmitate",
-        "d-alpha tocopherol acetate",
-        "d-alpha-tocopherol acetate",
         "E304",
-        "E306",
-        "mixed tocopherols",
         "natural antioxidants",
-        "natural vitamin E",
         "rosemary extract",
-        "tocopherol blend",
         "vitamin C ester",
         "ascorbate palmitate",
         "non-gmo rosemary extract",
@@ -13492,7 +13413,6 @@
         "french vanilla flavor",
         "natural french vanilla flavor",
         "natural vanilla",
-        "natural vanilla flavor",
         "natural vanillin",
         "natural Vanillin crystals",
         "organic vanilla extract",
@@ -13532,7 +13452,6 @@
       "id": "OI_NATURAL_VANILLA_FLAVOR",
       "standard_name": "Natural Vanilla Flavor",
       "aliases": [
-        "natural vanilla",
         "natural vanilla flavor",
         "vanilla extract flavor",
         "vanilla flavor, natural",
@@ -13617,10 +13536,8 @@
         "organic copernicia cerifera wax",
         "palm leaf glaze, natural",
         "palm wax",
-        "plant wax",
         "rice bran wax",
         "sunflower wax",
-        "vegetable wax",
         "vegetable waxes",
         "wax"
       ],
@@ -14221,7 +14138,6 @@
       "aliases": [
         "natural & artificial orange flavor",
         "natural and artificial orange flavor",
-        "natural orange flavor",
         "orange flavor"
       ],
       "category": "flavor_natural",
@@ -15490,7 +15406,6 @@
         "cotton cellulose",
         "organic cellulose",
         "plant cellulose",
-        "plant fiber",
         "wood pulp cellulose",
         "non-gmo vegetable cellulose dual-layer capsules",
         "non-gmo vegetable cellulose capsule"
@@ -15841,9 +15756,7 @@
       "standard_name": "Polyvinyl Pyrrolidone",
       "aliases": [
         "polyvinyl pyrrolidone",
-        "polyvinylpyrrolidone",
-        "povidone",
-        "pvp"
+        "polyvinylpyrrolidone"
       ],
       "category": "binder",
       "is_additive": true,
@@ -16306,8 +16219,6 @@
       "standard_name": "Purified Water",
       "aliases": [
         "aqua",
-        "deionized water",
-        "distilled water",
         "filtered water",
         "H2O",
         "pure Water",
@@ -16522,7 +16433,6 @@
         "rice extract",
         "rice flower",
         "rice hull extract",
-        "rice hulls",
         "rice polishings",
         "stabilized rice bran",
         "white rice bran"
@@ -17402,8 +17312,7 @@
         "silicon dioxide (amorphous)",
         "silicon dioxide, colloidal",
         "SiO2",
-        "synthetic amorphous silica",
-        "vegetable magnesium silicate"
+        "synthetic amorphous silica"
       ],
       "category": "glidant",
       "is_additive": true,
@@ -17806,7 +17715,6 @@
         "non-gmo sodium citrate",
         "sodium citrate",
         "sodium citrate dihydrate",
-        "trisodium citrate",
         "trisodium citrate dihydrate",
         "trysodium citrate"
       ],
@@ -18147,7 +18055,6 @@
       "aliases": [
         "carboxymethyl starch",
         "explotab",
-        "primojel",
         "sodium carboxymethyl starch",
         "sodium starch glyconate",
         "SSG"
@@ -18186,11 +18093,8 @@
       "id": "NHA_SODIUM_STARCH_GLYCOLATE",
       "standard_name": "Sodium Starch Glycolate",
       "aliases": [
-        "sodium starch glycolate",
         "carboxymethyl starch sodium",
-        "sodium carboxymethyl starch",
         "sodium starch glycolate type a",
-        "explotab",
         "primojel"
       ],
       "category": "disintegrant",
@@ -19412,7 +19316,6 @@
       "id": "NHA_SUNFIBER_AG",
       "standard_name": "Sunfiber AG",
       "aliases": [
-        "sunfiber",
         "sunfiber ag"
       ],
       "category": "filler",
@@ -21457,8 +21360,6 @@
         "colors from fruit and vegetables",
         "colors from fruits and vegetables",
         "colors from natural sources",
-        "fruit and vegetable concentrates",
-        "fruit and vegetable juice",
         "fruit and vegetable juice color",
         "fruit and vegetable juice concentrates",
         "fruit and vegetable juices",
@@ -21466,7 +21367,6 @@
         "fruit concentrate",
         "fruit extract",
         "fruit juice color",
-        "natural color",
         "natural colors added",
         "natural colors from fruits",
         "vegetable and fruit juice color",
@@ -21519,13 +21419,7 @@
         "cellulose bulking agent",
         "cellulose derivatives",
         "cellulose fiber",
-        "cellulose powder",
-        "cellulose, plant",
-        "MCC",
-        "microcrystalline cellulose",
         "natural mineral or vegetable source cellulose",
-        "plant cellulose",
-        "plant fiber",
         "veg. cellulose",
         "vegetable cellulose",
         "vegetable polysaccharide",
@@ -21777,8 +21671,6 @@
       "id": "NHA_VEGETABLE_LUBRICANTS",
       "standard_name": "Vegetable Lubricants",
       "aliases": [
-        "plant-based lubricant",
-        "vegetable lubricant",
         "vegetable lubricants"
       ],
       "category": "lubricant",
@@ -21882,9 +21774,7 @@
         "vegetable calcium stearate",
         "vegetable fatty acid",
         "vegetable fatty acids",
-        "vegetable magnesium stearate",
         "vegetable stearate",
-        "vegetable stearic acid",
         "vegetable-derived stearate"
       ],
       "category": "lubricant",
@@ -22403,7 +22293,6 @@
       "aliases": [
         "Certified organic Concentrates",
         "certified organic vegetable & fruit concentrates",
-        "fruit and vegetable concentrates",
         "organic fruit and vegetable concentrates",
         "whole food base"
       ],
@@ -23497,8 +23386,7 @@
         "ionic ocean based minerals",
         "ionic ocean minerals",
         "ocean based minerals",
-        "sea trace minerals",
-        "ionic sea minerals"
+        "sea trace minerals"
       ],
       "category": "label_descriptor",
       "is_additive": true,
@@ -23516,7 +23404,6 @@
       "aliases": [
         "RAW Food-Created Vitamin U",
         "raw food-created vitamin u",
-        "vitamin u",
         "S-methylmethionine",
         "methylmethioninesulfonium",
         "SMM",

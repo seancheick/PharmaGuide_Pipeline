@@ -96,7 +96,9 @@ class TestParentFallbackFinalStateGuard:
         for row in dc_rows:
             assert row.get("matched_form") == "devil's claw standardized (harpagoside)"
             assert row.get("bio_score") == 9.0
-            assert row.get("score") == 12.0
+            # v3.6.0+: `score` is an alias of `bio_score` (no natural-source
+            # bonus). Pre-v3.6.0 had `score = bio_score + 3*natural`.
+            assert row.get("score") == row.get("bio_score")
 
     @pytest.mark.parametrize("product_id", ["185102", "185106"])
     def test_no_transient_parent_fallback_telemetry_emitted(

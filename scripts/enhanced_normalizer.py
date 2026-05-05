@@ -5479,15 +5479,28 @@ class EnhancedDSLDNormalizer:
             return str(field_data) if field_data else ""
 
     def _extract_forms_from_ingredient_name(self, ingredient_name: str) -> List[str]:
-        """Extract form information from ingredient name for precise scoring"""
+        """Extract form information from ingredient name for precise scoring.
+
+        Two passes:
+          1. Parenthetical extraction — DSLD ``(as Form)`` / ``(form: ...)``
+             patterns and a curated common-paren-forms list.
+          2. Form-keyword vocab — extract canonical forms from the name
+             body via scripts/data/form_keywords_vocab.json (the single
+             source of truth shared with the scorer and enricher).
+
+        Generic descriptors (extract / standardized / chelated /
+        organic / natural) are detected here as flat tokens — they're
+        not chemical forms but UX-meaningful context, so they live
+        outside the controlled vocabulary.
+        """
         name = ingredient_name.lower()
         extracted_forms = []
 
-        # Enhanced parenthetical extraction for complex DSLD formats
+        # Pass 1 — Parenthetical extraction for complex DSLD formats
         paren_matches = re.findall(r'\(([^)]+)\)', name)
         for match in paren_matches:
             clean_match = match.strip().lower()
-            
+
             # Handle complex DSLD parenthetical formats like "Form: as D3 (Alt. Name: Cholecalciferol)"
             if "form:" in clean_match or "as " in clean_match:
                 # Split on " and as " to handle multiple forms in one parenthetical
@@ -5495,134 +5508,60 @@ class EnhancedDSLDNormalizer:
                 as_parts = re.split(r',?\s+and\s+as\s+', clean_match)
 
                 for part in as_parts:
-                    # Extract after "as " or "form: as "
                     if "as " in part:
                         form_part = part.split("as ", 1)[1]
-                        # Handle nested parentheses like "as D3 (Alt. Name: Cholecalciferol)"
                         if "(" in form_part:
                             form_part = form_part.split("(")[0].strip()
-
-                        # CLEANUP: Remove source descriptors to get clean chemical form name
-                        # Split on common separators: " and ", " from ", ",", " with "
-                        # This ensures we extract just the form (e.g., "ascorbic acid")
-                        # without source info (e.g., "from ferment media")
+                        # Strip source descriptors so we keep just the chemical form
+                        # (e.g. "ascorbic acid" out of "ascorbic acid from ferment media")
                         for separator in [" and ", " from ", " with "]:
                             if separator in form_part:
                                 form_part = form_part.split(separator)[0]
                                 break
-
-                        # Remove trailing punctuation and whitespace
                         form_part = form_part.strip().rstrip('.,;:')
-
-                        if form_part:  # Only add non-empty forms
+                        if form_part:
                             extracted_forms.append(form_part)
             else:
-                # Direct parenthetical forms - expanded list
+                # Direct parenthetical forms — curated list of canonical
+                # chemical names that commonly appear bare in DSLD parens.
                 common_paren_forms = [
                     'cholecalciferol', 'ergocalciferol', 'ascorbic acid', 'calcium ascorbate',
-                    'retinyl palmitate', 'retinyl acetate', 'beta-carotene', 
+                    'retinyl palmitate', 'retinyl acetate', 'beta-carotene',
                     'd-alpha tocopherol', 'd-alpha tocopheryl acetate', 'dl-alpha tocopheryl acetate',
                     'methylcobalamin', 'cyanocobalamin', 'dibencozide', 'coenzyme b12'
                 ]
                 if clean_match in common_paren_forms:
                     extracted_forms.append(clean_match)
-        
-        # Extract form identifiers from the main name
-        form_identifiers = []
-        
-        # Vitamin D forms
-        if re.search(r'\b(?:vitamin\s*)?d3\b', name) or re.search(r'\bcholecalciferol\b', name):
-            form_identifiers.append('D3')
-            if 'cholecalciferol' not in extracted_forms:
-                form_identifiers.append('cholecalciferol')
-        elif re.search(r'\b(?:vitamin\s*)?d2\b', name) or re.search(r'\bergocalciferol\b', name):
-            form_identifiers.append('D2')
-            if 'ergocalciferol' not in extracted_forms:
-                form_identifiers.append('ergocalciferol')
-        
-        # Vitamin C forms
-        if re.search(r'\bascorbic\s*acid\b', name):
-            form_identifiers.append('ascorbic acid')
-        elif re.search(r'\bcalcium\s*ascorbate\b', name):
-            form_identifiers.append('calcium ascorbate')
-        elif re.search(r'\bmagnesium\s*ascorbate\b', name):
-            form_identifiers.append('magnesium ascorbate')
-        
-        # Enhanced vitamin forms
-        if re.search(r'\bretinyl\s*palmitate\b', name):
-            form_identifiers.append('retinyl palmitate')
-        if re.search(r'\bretinyl\s*acetate\b', name):
-            form_identifiers.append('retinyl acetate')
-        if re.search(r'\bbeta[\s-]*carotene\b', name):
-            form_identifiers.append('beta-carotene')
-        
-        # Vitamin E forms
-        if re.search(r'\bd[\s-]*alpha[\s-]*tocopherol\b', name):
-            form_identifiers.append('d-alpha tocopherol')
-        elif re.search(r'\bd[\s-]*alpha[\s-]*tocopheryl[\s-]*acetate\b', name):
-            form_identifiers.append('d-alpha tocopheryl acetate')
-        elif re.search(r'\bdl[\s-]*alpha[\s-]*tocopheryl[\s-]*acetate\b', name):
-            form_identifiers.append('dl-alpha tocopheryl acetate')
-        
-        # B12 forms
-        if re.search(r'\bmethylcobalamin\b', name):
-            form_identifiers.append('methylcobalamin')
-        elif re.search(r'\bcyanocobalamin\b', name):
-            form_identifiers.append('cyanocobalamin')
-        elif re.search(r'\bdibencozide\b', name) or re.search(r'\bcoenzyme\s*b12\b', name):
-            form_identifiers.append('dibencozide')
-        
-        # Common mineral forms (existing)
-        # TODO(M9-DEFER): Missing forms (threonate, orotate, fumarate, lactate, gluconate, aspartate, chelate).
-        # Expanding this list is safe-but-redundant: enrich_supplements_v3._build_form_info_from_cleaned()
-        # already covers these via _SALT_QUALIFIERS + IQM aliases — which is the authoritative path.
-        # The correct fix is to remove this secondary detector and rely solely on the enricher's
-        # _SALT_QUALIFIERS frozenset. Defer until enrichment contract validation confirms no regression.
-        mineral_forms = ['bisglycinate', 'picolinate', 'citrate', 'glycinate', 'malate', 'taurate', 'carbonate', 'oxide']
-        for mineral_form in mineral_forms:
-            if re.search(rf'\b{mineral_form}\b', name):
-                form_identifiers.append(mineral_form)
-        
-        # FIXED ISSUE #1: Sulfate forms detection
-        sulfate_forms = ['sulfate', 'sulphate']  # Handle both spellings
-        for sulfate_form in sulfate_forms:
-            if re.search(rf'\b{sulfate_form}\b', name):
-                form_identifiers.append('sulfate')
-                break  # Only add sulfate once
-        
-        # FIXED ISSUE #2: HCl/Hydrochloride forms detection
-        if re.search(r'\bhcl\b', name) or re.search(r'\bhydrochloride\b', name):
-            form_identifiers.append('hydrochloride')
-        
-        # FIXED ISSUE #3: Extract forms detection
+
+        # Pass 2 — Form-keyword vocab (single source of truth)
+        # Replaces ~230 lines of hardcoded regex previously mirrored
+        # across cleaner / scorer / enricher. Vocab lives at
+        # scripts/data/form_keywords_vocab.json.
+        from form_vocab import extract_forms as _vocab_extract_forms
+        form_identifiers = list(_vocab_extract_forms(name))
+
+        # Generic descriptors — not chemical forms, kept here because
+        # they're contextual tokens the vocab deliberately does NOT
+        # codify (would be too noisy as canonicals).
         if re.search(r'\bextract\b', name):
             form_identifiers.append('extract')
-        
-        # FIXED ISSUE #4: Standardized forms detection
         if re.search(r'\bstandardized\b', name) or re.search(r'\bstandardised\b', name):
             form_identifiers.append('standardized')
-        
-        # Chelated forms
         if re.search(r'\bchelate\b', name) or re.search(r'\bchelated\b', name):
             form_identifiers.append('chelated')
-        
-        # Organic/natural indicators
         if re.search(r'\borganic\b', name):
             form_identifiers.append('organic')
         if re.search(r'\bnatural\b', name) and not re.search(r'\bnatural\s+flavor', name):
             form_identifiers.append('natural')
-        
-        # Combine all extracted forms
+
+        # Combine + dedupe while preserving order
         all_forms = extracted_forms + form_identifiers
-        
-        # Remove duplicates while preserving order
         seen = set()
         unique_forms = []
         for form in all_forms:
             if form not in seen:
                 seen.add(form)
                 unique_forms.append(form)
-                
         return unique_forms
     
     def _validate_upc(self, upc: str) -> bool:

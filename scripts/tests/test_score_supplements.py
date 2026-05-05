@@ -437,35 +437,20 @@ class TestV30Scoring:
 
         assert section_single_nutrient["A1"] == pytest.approx(section_single["A1"], rel=1e-6)
 
-    def test_a6_uses_score_first_when_both_score_and_bio_score_exist(self, scorer):
+    def test_a6_prefers_bio_score_over_legacy_score(self, scorer):
+        """v3.6.0: A6 reads bio_score first (form quality, 0-15), falling
+        back to legacy `score` only for blobs from older pipelines.
+        Even when both are present, bio_score wins. With recalibrated
+        tiers (>=14/12/10 → 3/2/1), bio_score=12 yields 2 pts (mid tier).
+        """
         product = make_base_product()
         product["ingredient_quality_data"]["total_active"] = 1
         product["ingredient_quality_data"]["ingredients_scorable"] = [
             {
                 "name": "Test Ingredient",
                 "standard_name": "Test Ingredient",
-                "score": 16,
-                "bio_score": 12,
-                "dosage_importance": 1.0,
-                "mapped": True,
-                "quantity": 100,
-                "unit": "mg",
-                "has_dose": True,
-            }
-        ]
-        product["ingredient_quality_data"]["ingredients"] = deepcopy(
-            product["ingredient_quality_data"]["ingredients_scorable"]
-        )
-        assert scorer._compute_single_efficiency_bonus(product, "single") == pytest.approx(3.0)
-
-    def test_a6_falls_back_to_bio_score_when_score_missing(self, scorer):
-        product = make_base_product()
-        product["ingredient_quality_data"]["total_active"] = 1
-        product["ingredient_quality_data"]["ingredients_scorable"] = [
-            {
-                "name": "Fallback Ingredient",
-                "standard_name": "Fallback Ingredient",
-                "bio_score": 14,
+                "score": 16,        # legacy score (would be top tier in v3.5)
+                "bio_score": 12,    # v3.6.0 reads this — mid tier (2 pts)
                 "dosage_importance": 1.0,
                 "mapped": True,
                 "quantity": 100,
@@ -477,6 +462,31 @@ class TestV30Scoring:
             product["ingredient_quality_data"]["ingredients_scorable"]
         )
         assert scorer._compute_single_efficiency_bonus(product, "single") == pytest.approx(2.0)
+
+    def test_a6_falls_back_to_score_when_bio_score_missing(self, scorer):
+        """v3.6.0 backward-compat: blobs from older pipelines have only
+        `score`. Scorer falls back to it (post-v3.6.0 enricher emits
+        score == bio_score so this is a no-op in practice).
+        """
+        product = make_base_product()
+        product["ingredient_quality_data"]["total_active"] = 1
+        product["ingredient_quality_data"]["ingredients_scorable"] = [
+            {
+                "name": "Fallback Ingredient",
+                "standard_name": "Fallback Ingredient",
+                "score": 14,        # legacy-only blob, no bio_score field
+                "dosage_importance": 1.0,
+                "mapped": True,
+                "quantity": 100,
+                "unit": "mg",
+                "has_dose": True,
+            }
+        ]
+        product["ingredient_quality_data"]["ingredients"] = deepcopy(
+            product["ingredient_quality_data"]["ingredients_scorable"]
+        )
+        # 14 hits the >=14 tier under the new scale → 3 pts top tier.
+        assert scorer._compute_single_efficiency_bonus(product, "single") == pytest.approx(3.0)
 
     def test_a6_only_applies_to_single_types(self, scorer):
         product = make_base_product()
@@ -1146,7 +1156,7 @@ class TestB5ProprietaryBlendRedesign:
         assert penalty == pytest.approx(1.75, abs=0.01)
         expected_avg = (14 + 12) / 2.0
         # v3.4.x: A1.max raised 15 -> 18, so the scale factor is now 18/18.
-        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.01)
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 15.0) * 18.0, abs=0.01)
         assert "PROPRIETARY_BLEND_PRESENT" in flags
 
     def test_partial_child_without_amount_not_counted_for_a1_or_disclosed_mass(self, scorer):
@@ -1198,7 +1208,7 @@ class TestB5ProprietaryBlendRedesign:
         assert penalty == pytest.approx(3.4, abs=0.01)
         # Only Caffeine contributes (Rhodiola has no usable dose, blend container excluded)
         # v3.4.x: A1.max raised 15 -> 18.
-        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((14.0 / 18.0) * 18.0, abs=0.01)
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((14.0 / 15.0) * 18.0, abs=0.01)
 
     def test_duplicate_blends_deduped_once(self, scorer):
         p = make_base_product()
@@ -1297,7 +1307,7 @@ class TestB5ProprietaryBlendRedesign:
         assert scorer._compute_proprietary_blend_penalty(p, []) == pytest.approx(0.0, abs=0.01)
         expected_avg = (14 + 12) / 2.0
         # v3.4.x: A1.max raised 15 -> 18.
-        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.01)
+        assert scorer._compute_bioavailability_score(p, "targeted") == pytest.approx((expected_avg / 15.0) * 18.0, abs=0.01)
 
     def test_no_mg_data_uses_count_share_fallback(self, scorer):
         p = make_base_product()
@@ -1417,7 +1427,7 @@ class TestA1BlendContainerExclusion:
 
         # v3.4.x: A1.max raised 15 -> 18, so expected = (15/18) * 18 = 15.0
         # (blend container excluded; only Vitamin C counted).
-        assert score_with == pytest.approx((15.0 / 18.0) * 18.0, abs=0.1)
+        assert score_with == pytest.approx((15.0 / 15.0) * 18.0, abs=0.1)
 
     def test_a1_not_contaminated_by_stub_score(self, scorer):
         """Blend container with stub score=5 must not drag A1 below the
@@ -1425,25 +1435,26 @@ class TestA1BlendContainerExclusion:
         p = self._product_with_blend_container(blend_score=5)
         a1_score = scorer._compute_bioavailability_score(p, "targeted")
         # v3.4.x: A1.max raised 15 -> 18.
-        disclosed_only = (15.0 / 18.0) * 18.0
-        would_be_dragged = (10.0 / 18.0) * 18.0
+        disclosed_only = (15.0 / 15.0) * 18.0
+        would_be_dragged = (10.0 / 15.0) * 18.0
         assert a1_score > would_be_dragged + 1.0
         assert a1_score == pytest.approx(disclosed_only, abs=0.1)
 
     def test_a1_with_no_blend_containers_unchanged(self, scorer):
-        """Standard product with no blend containers: A1 unchanged."""
+        """Standard product with no blend containers: A1 unchanged.
+        v3.6.0: fixtures use bio_score (0-15). A1 = (avg/15)*18 clamped to 18."""
         p = make_base_product()
         # Both ingredients have is_proprietary_blend=False (default)
         p["ingredient_quality_data"]["ingredients_scorable"] = [
-            {"name": "Mg Glycinate", "score": 18, "dosage_importance": 1.0,
+            {"name": "Mg Glycinate", "bio_score": 15, "dosage_importance": 1.0,
              "mapped": True, "is_proprietary_blend": False, "quantity": 200, "unit": "mg", "has_dose": True},
-            {"name": "Vitamin D3", "score": 15, "dosage_importance": 1.5,
+            {"name": "Vitamin D3", "bio_score": 15, "dosage_importance": 1.5,
              "mapped": True, "is_proprietary_blend": False, "quantity": 1000, "unit": "IU", "has_dose": True},
         ]
         score = scorer._compute_bioavailability_score(p, "targeted")
-        expected_avg = (18 * 1.0 + 15 * 1.5) / (1.0 + 1.5)
-        # v3.4.x: A1.max raised 15 -> 18.
-        assert score == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.1)
+        expected_avg = (15 * 1.0 + 15 * 1.5) / (1.0 + 1.5)  # = 15.0
+        # v3.6.0: A1 = (avg_bio_score / 15) * 18, clamped to A1.max=18.
+        assert score == pytest.approx(min(18.0, (expected_avg / 15.0) * 18.0), abs=0.1)
 
     def test_a1_all_blend_containers_returns_zero(self, scorer):
         """If every ingredient is a proprietary blend container, A1 = 0."""
@@ -1506,7 +1517,7 @@ class TestA1ParentTotalExclusion:
         a1 = scorer._compute_bioavailability_score(p, "targeted")
         expected_avg = (11.0 + 13.0) / 2.0
         # v3.4.x: A1.max raised 15 -> 18.
-        assert a1 == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.01)
+        assert a1 == pytest.approx((expected_avg / 15.0) * 18.0, abs=0.01)
 
     def test_a1_keeps_non_nested_top_level_rows(self, scorer):
         p = make_base_product()
@@ -1540,16 +1551,20 @@ class TestA1ParentTotalExclusion:
         a1 = scorer._compute_bioavailability_score(p, "targeted")
         expected_avg = (12.0 + 15.0) / 2.0
         # v3.4.x: A1.max raised 15 -> 18.
-        assert a1 == pytest.approx((expected_avg / 18.0) * 18.0, abs=0.01)
+        assert a1 == pytest.approx((expected_avg / 15.0) * 18.0, abs=0.01)
 
     def test_a2_skips_parent_total_rows(self, scorer):
+        # v3.6.0: A2 reads bio_score, threshold 12 (was score, threshold 14).
+        # Folic acid bio_score=10 (below threshold), vitamin D bio_score=14
+        # (premium). Parent-total row is excluded. Only one premium form
+        # remains; with skip_first_premium_form=True, A2 = 0.
         p = make_base_product()
         p["ingredient_quality_data"]["ingredients_scorable"] = [
             {
                 "name": "Folate",
                 "standard_name": "Folate",
                 "canonical_id": "folate_total_row",
-                "score": 18,
+                "bio_score": 15,
                 "dosage_importance": 1.0,
                 "mapped": True,
                 "is_parent_total": True,
@@ -1561,7 +1576,7 @@ class TestA1ParentTotalExclusion:
                 "name": "Folic Acid",
                 "standard_name": "Folate",
                 "canonical_id": "folate",
-                "score": 13,
+                "bio_score": 10,  # below v3.6.0 A2 threshold (12) — not premium
                 "dosage_importance": 1.0,
                 "mapped": True,
                 "quantity": 400,
@@ -1572,7 +1587,7 @@ class TestA1ParentTotalExclusion:
                 "name": "Vitamin D3",
                 "standard_name": "Vitamin D",
                 "canonical_id": "vitamin_d",
-                "score": 14,
+                "bio_score": 14,  # premium under v3.6.0 (>=12)
                 "dosage_importance": 1.0,
                 "mapped": True,
                 "quantity": 1000,
@@ -2028,17 +2043,19 @@ class TestCategoryPercentiles:
         return SupplementScorer()
 
     def test_batch_assigns_category_percentiles_for_sufficient_cohort(self, scorer, tmp_path):
+        # v3.6.0: bio_score is on /15 scale. Spread values across the achievable
+        # range so each product's A1 is distinct (no ties at the clamp).
         products = []
-        for idx, score in enumerate([18, 16, 14, 12, 10], start=1):
+        for idx, bio_score in enumerate([15, 13, 11, 9, 7], start=1):
             product = make_base_product()
             product["dsld_id"] = f"pct-{idx}"
             product["product_name"] = f"Greens Powder {idx}"
             product["supplement_type"] = {"type": "greens"}
             product["form"] = "powder"
             for ingredient in product["ingredient_quality_data"]["ingredients_scorable"]:
-                ingredient["score"] = score
+                ingredient["bio_score"] = bio_score
             for ingredient in product["ingredient_quality_data"]["ingredients"]:
-                ingredient["score"] = score
+                ingredient["bio_score"] = bio_score
             products.append(product)
 
         input_file = tmp_path / "enriched_batch.json"
@@ -4873,21 +4890,76 @@ class TestShipNowConfigLockdown:
     def scorer(self):
         return SupplementScorer()
 
-    def test_a1_max_raised_to_18(self, scorer):
+    def test_a1_max_18_with_bio_score_15_range(self, scorer):
+        """v3.6.0: A1 reads pure bio_score (0-15) but keeps max=18 — the
+        rescale (avg_bio_score / 15) * 18 preserves the per-product budget
+        without inflating with the natural-source bonus.
+        """
         a1 = scorer.config["section_A_ingredient_quality"]["A1_bioavailability_form"]
         assert a1["max"] == 18, (
-            "A1.max must be 18 to stop compressing the enricher's 0-18 raw "
-            "score. If this fails, someone reverted the v3.4.x unclamp."
+            "A1.max must be 18 — the (avg_bio_score / 15) * 18 rescale "
+            "preserves the budget. If this fails, someone reverted v3.6.0."
         )
-        # range_score_field must still be the 0-18 band — otherwise the
-        # scorer's (avg_raw / range_max) * max_points math breaks.
-        assert str(a1.get("range_score_field", "")).endswith("-18")
+        # range_score_field must be 0-15 (bio_score) — A1 no longer reads
+        # the legacy 0-18 score. Sourcing bonus moved to A5e.
+        assert str(a1.get("range_score_field", "")).endswith("-15"), (
+            "A1.range_score_field must be 0-15 (bio_score scale). "
+            "If this fails, someone reverted v3.6.0 or re-coupled natural to A1."
+        )
+        assert a1.get("score_field") == "bio_score", (
+            "A1.score_field must be 'bio_score'. v3.6.0 dropped the legacy "
+            "score field (which had natural+3 inflation)."
+        )
 
     def test_a2_max_raised_to_5(self, scorer):
         a2 = scorer.config["section_A_ingredient_quality"]["A2_premium_forms"]
         assert a2["max"] == 5, (
             "A2.max must be 5 to reward products that stack 4+ premium forms."
         )
+
+    def test_a2_threshold_12_reads_bio_score(self, scorer):
+        """v3.6.0: A2 threshold dropped 14→12 because reads bio_score (0-15)
+        instead of legacy score (0-18). 12 on bio_score is the same 80%
+        percentile (UI Excellent tier).
+        """
+        a2 = scorer.config["section_A_ingredient_quality"]["A2_premium_forms"]
+        assert a2.get("threshold_score") == 12, (
+            "A2.threshold_score must be 12 (bio_score scale). "
+            "If this is 14, someone reverted v3.6.0 — that threshold "
+            "double-counted natural-mid forms (food-folate, etc.) as premium."
+        )
+        assert a2.get("score_field") == "bio_score"
+
+    def test_a5_max_4_with_natural_source(self, scorer):
+        """v3.6.0: A5.max raised 3→4 to absorb natural-source signal moved
+        from A1. Sourcing lives in A5 alongside organic, standardized, non-GMO.
+        """
+        a5 = scorer.config["section_A_ingredient_quality"]["A5_formulation_excellence"]
+        assert a5["max"] == 4, (
+            "A5.max must be 4 (raised from 3 to absorb A5e_natural_source). "
+            "If this fails, someone reverted v3.6.0."
+        )
+        assert a5.get("natural_source") == 1, (
+            "A5.natural_source must be 1 — sourcing tiebreaker, not tier. "
+            "Was +3 in A1; now +1 in A5 where it conceptually belongs."
+        )
+
+    def test_a6_tiers_recalibrated_to_bio_score(self, scorer):
+        """v3.6.0: A6 tiers recalibrated to bio_score (0-15) scale.
+        Old >=16/14/12 against legacy score (0-18); new >=14/12/10
+        preserves granularity within bio_score's achievable range.
+        """
+        a6 = scorer.config["section_A_ingredient_quality"]["A6_single_ingredient_efficiency"]
+        tiers = a6.get("tiers", {})
+        assert tiers.get(">=14") == 3, "A6 top tier must be >=14 → 3 pts on bio_score scale"
+        assert tiers.get(">=12") == 2, "A6 mid tier must be >=12 → 2 pts"
+        assert tiers.get(">=10") == 1, "A6 entry tier must be >=10 → 1 pt"
+        # Old top tier >=16 must be gone — unreachable on bio_score (max=15).
+        assert ">=16" not in tiers, (
+            "A6.tiers must not contain >=16 (unreachable on bio_score scale). "
+            "If present, someone reverted v3.6.0."
+        )
+        assert a6.get("score_field") == "bio_score"
 
     def test_omega3_max_capped_at_2(self, scorer):
         """v3.4.5 (clinician decision 2026-05-01): omega3 bonus capped at 2.0.
@@ -4929,8 +5001,11 @@ class TestShipNowConfigLockdown:
         assert pro.get("extended_max") == 10
 
     def test_a1_end_to_end_perfect_ingredient_earns_18(self, scorer):
-        """End-to-end proof: a single ingredient with upstream score=18
-        (premium form + natural bonus) now lands at A1=18 instead of 15."""
+        """v3.6.0: A perfect bio_score=15 ingredient earns A1=18 via the
+        (avg_bio_score / 15) * 18 rescale. No natural-source bonus —
+        synthetic premium forms (methylcobalamin, glycinate) get the
+        same A1 as natural premium forms (mixed tocopherols). Sourcing
+        signal lives in A5e."""
         product = make_base_product()
         product["supplement_type"]["type"] = "single"
         product["ingredient_quality_data"]["total_active"] = 1
@@ -4938,7 +5013,8 @@ class TestShipNowConfigLockdown:
             {
                 "name": "Magnesium Glycinate",
                 "standard_name": "Magnesium",
-                "score": 18,
+                "bio_score": 15,
+                "natural": False,  # synthetic premium form — still earns full A1
                 "dosage_importance": 1.0,
                 "mapped": True,
                 "quantity": 200,
@@ -4951,8 +5027,8 @@ class TestShipNowConfigLockdown:
         )
         section_a = scorer._compute_ingredient_quality_score(product, "single")
         assert section_a["A1"] == pytest.approx(18.0, rel=1e-6), (
-            f"Expected A1=18.0 for a perfect upstream score=18 ingredient, "
-            f"got {section_a['A1']}"
+            f"Expected A1=18.0 for a perfect bio_score=15 ingredient "
+            f"(rescaled to /18), got {section_a['A1']}"
         )
 
     def test_b1_end_to_end_five_critical_additives_counts_fully(self, scorer):

@@ -1,11 +1,13 @@
 {
   "_documentation": {
-    "version": "3.4.0",
+    "version": "3.6.0",
     "description": "PharmaGuide scoring configuration — modular category bonus architecture",
     "total_points": "80 calculated server-side (A+B+C+D), 20 fit score computed on device",
-    "last_updated": "2026-02-26",
+    "last_updated": "2026-05-04",
     "author": "PharmaGuide Team",
     "changelog": [
+      "3.6.0: bio_score/score honesty pass. A1 reads pure bio_score (0-15, form quality only) — no more natural-source bonus inflating per-ingredient form claims. A1.max stays 18; (avg_bio_score / 15) * 18 rescale preserves the per-product budget. A2 threshold 14→12 and reads bio_score (was 'score' which double-counted natural premium forms). A5.max 3→4 with new A5e_natural_source +1 — sourcing signal lives where it belongs (alongside organic, standardized, non-GMO). A6 tiers recalibrated to bio_score scale (>=14/12/10 → 3/2/1). Empirical impact (250-product sample): synthetic-premium products gain ~2-3pt in Section A (deserved); natural-mid products lose ~0.5-1pt (corrected — they weren't actually premium); natural-premium unchanged.",
+      "3.5.1: Metadata sync — bumped version + last_updated to reflect 2026-05-02 clinician decisions already present in body (omega3_dose_bonus.max=2.0 cap, redistributed bands, opacity flag for partial-disclosure omega-3 blends). No body changes.",
       "3.4.0: Section C evidence scoring overhaul — Top-N diminishing returns aggregation (configurable weights, default [1.0, 0.5, 0.25]) to prevent multivitamin inflation. Added effect_direction multipliers (positive_strong/positive_weak/mixed/null/negative) to distinguish well-studied-effective from well-studied-ineffective.",
       "3.3.0: Moved Section E (EPA/DHA dose adequacy) into Ingredient Quality as omega3_dose_bonus category bonus. Added category_bonus_pool.max_contribution=5 cap to prevent bonus stacking. Semantic naming convention: compute_*_score(), compute_*_bonus(), compute_*_penalty().",
       "3.2.0: Added Section E dose adequacy (EPA+DHA, max 2.0 pts). Bands anchored to EFSA AI 250 mg, FDA QHC 500 mg, AHA CVD 1 g, EFSA TG claim 2 g, AHA/ACC Rx 4 g. PRESCRIPTION_DOSE_OMEGA3 flag at ≥4000 mg/day. A1/A2 parent-total dedup via is_parent_total field.",
@@ -66,15 +68,19 @@
     "_max": 25,
     "A1_bioavailability_form": {
       "max": 18,
-      "_max_rationale": "Matches enricher's 0-18 raw bio_score range (premium form +15 plus natural +3). Previously clamped at 15 which threw away the natural-form bonus earned upstream.",
-      "range_score_field": "0-18",
+      "_max_rationale": "v3.6.0: A1 reads pure bio_score (0-15, form quality only). Natural-source bonus moved to A5e where sourcing belongs. A1.max stays 18 — the (avg_bio_score / 15) * 18 rescale preserves the per-product budget without per-ingredient bias. A1 measures form/absorption only; sourcing lives in A5.",
+      "range_score_field": "0-15",
+      "score_field": "bio_score",
+      "_score_field_note": "Scorer reads ingredient.bio_score (form quality, 0-15). The legacy 'score' field (= bio_score + 3 if natural; 0-18) is deprecated and emitted as an alias of bio_score during the v3.6.x shadow window.",
       "multivitamin_smoothing_factor": 0.7,
       "multivitamin_floor": 9
     },
     "A2_premium_forms": {
       "max": 5,
-      "_max_rationale": "Raised from 3 to 5 to reward products that stack 4+ premium forms (e.g. chelated Mg + methylated B12 + K2-MK7 + D3 cholecalciferol). Previous cap compressed differentiation between good and best.",
-      "threshold_score": 14,
+      "_max_rationale": "Stacking bonus for 4+ premium forms (e.g. chelated Mg + methylated B12 + K2-MK7 + D3). v3.6.0: threshold dropped 14→12 because reads bio_score (0-15) instead of legacy score (0-18). 12 on bio_score is the same 'Excellent form' tier the Flutter UI surfaces (matches FormAbsorptionSection threshold), and stops counting natural-mid forms (e.g. food-folate, bio_score=11, score=14) as premium.",
+      "threshold_score": 12,
+      "score_field": "bio_score",
+      "_threshold_calibration_note": "12 on bio_score (=80%) corresponds to 14 on the legacy 0-18 score scale (=78%) — same percentile, applied to the cleaner field.",
       "points_per_additional_premium_form": 0.5,
       "skip_first_premium_form": true
     },
@@ -93,7 +99,8 @@
       "_note": "Scoring reads enriched absorption_enhancer_paired boolean"
     },
     "A5_formulation_excellence": {
-      "max": 3,
+      "max": 4,
+      "_max_rationale": "v3.6.0: cap raised 3→4 to absorb the new natural-source signal (A5e) without displacing existing organic/standardized/synergy signals. A5 sub-component sum is now 4.5 (1+1+1+0.5+1); products earning all five clip by 0.5 — same shape as today's clip pattern (3.5 raw → 3 cap). Empirically rare to hit; no real product earns all 5 sourcing signals.",
       "organic": 1,
       "standardized_botanical": 1,
       "synergy_cluster": {
@@ -103,7 +110,9 @@
         "tier_3_promising": 0.5,
         "tier_4_popular": 0.25
       },
-      "non_gmo_project_verified": 0.5
+      "non_gmo_project_verified": 0.5,
+      "natural_source": 1,
+      "_natural_source_note": "v3.6.0: natural-source signal moved here from A1 (was +3 in A1 inflating the form/absorption score with sourcing). Now +1 in A5 where it conceptually belongs alongside organic, standardized, non-GMO. Detection: majority of active scorable ingredients have natural=true. Tiebreaker, not tier."
     },
     "A6_single_ingredient_efficiency": {
       "max": 3,
@@ -112,10 +121,12 @@
         "single_nutrient"
       ],
       "tiers": {
-        ">=16": 3,
-        ">=14": 2,
-        ">=12": 1
-      }
+        ">=14": 3,
+        ">=12": 2,
+        ">=10": 1
+      },
+      "score_field": "bio_score",
+      "_tiers_calibration_note": "v3.6.0: tiers recalibrated to bio_score scale (was >=16/14/12 against legacy 0-18 score). On bio_score (0-15): >=14 = top-tier form (methylcobalamin, K2-MK7, glycinate); >=12 = excellent (matches Flutter UI Excellent threshold); >=10 = very good. Old top tier >=16 was unreachable on bio_score (max=15) — that tier disappears, the others shift one band down to preserve granularity within the achievable range."
     },
     "enzyme_recognition": {
       "_description": "Sprint E1.3.4 — small recognition credit for enzyme-containing products whose individual enzyme doses are labelled NP. Prevents misleading Section A = 0 on enzyme-dominated formulas while staying conservative. Deduplicated by canonical enzyme name; capped at max_points.",

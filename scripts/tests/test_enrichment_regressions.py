@@ -552,27 +552,46 @@ class TestSurvivabilityKeywords:
     def enricher(self):
         return SupplementEnricherV3()
 
+    # v1.5.0 form vocab refactor split survivability into two paths:
+    #   - canonical chemistry forms live in form_keywords_vocab.json
+    #     under ``probiotic_delivery`` (microencapsulated, spore-based,
+    #     acid-resistant, delayed-release, enteric-coated)
+    #   - branded / marketing phrases stay in SURVIVABILITY_BRAND_MARKERS
+    #     (BIO-tract, "protected by an outer layer", etc.) because
+    #     they're not chemistry forms
+    # Tests below verify both paths cover the previously-supported phrases.
+
     def test_protected_by_outer_layer(self, enricher):
-        """'protected by an outer layer' is recognized"""
-        assert 'protected by an outer layer' in enricher.SURVIVABILITY_KEYWORDS
+        """Marketing phrase routes through SURVIVABILITY_BRAND_MARKERS."""
+        assert 'protected by an outer layer' in enricher.SURVIVABILITY_BRAND_MARKERS
 
     def test_microencapsulated(self, enricher):
-        """'microencapsulated' is recognized"""
-        assert 'microencapsulated' in enricher.SURVIVABILITY_KEYWORDS
+        """Canonical delivery form routes through the shared form vocab."""
+        import form_vocab
+        assert form_vocab.matches_probiotic_delivery('microencapsulated capsule')
 
     def test_all_expected_keywords_present(self, enricher):
-        """All P1.2 keywords are in the list"""
-        expected = [
+        """Every previously-supported keyword is still recognized via
+        either the vocab (canonical forms) or the brand markers list."""
+        import form_vocab
+
+        # Branded / marketing phrases — local list only.
+        for keyword in (
             'protected by an outer layer',
             'protected by patented',
             'outer protective layer',
             'proprietary coating',
-            'microencapsulated',
-            'acid-resistant coating'
-        ]
+            'acid-resistant coating',
+        ):
+            assert keyword in enricher.SURVIVABILITY_BRAND_MARKERS, (
+                f"Missing brand marker: {keyword}"
+            )
 
-        for keyword in expected:
-            assert keyword in enricher.SURVIVABILITY_KEYWORDS, f"Missing keyword: {keyword}"
+        # Canonical delivery forms — shared vocab.
+        for canonical_text in ('microencapsulated', 'spore-based', 'acid-resistant'):
+            assert form_vocab.matches_probiotic_delivery(canonical_text), (
+                f"Vocab missed canonical delivery form: {canonical_text}"
+            )
 
 
 class TestColorsIntegrationCleanToEnrich:

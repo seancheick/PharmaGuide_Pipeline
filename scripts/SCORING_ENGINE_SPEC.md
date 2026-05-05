@@ -185,6 +185,12 @@ under a shared cap so they enhance, not define, ingredient-quality differentiati
 
 ### A1 Bioavailability Form (max 18)
 
+**v3.6.0 honesty pass:** A1 reads pure `bio_score` (0-15, form quality only). The legacy
+`score` field (= `bio_score + 3*natural`; 0-18) is deprecated and now emitted as an alias of
+`bio_score`. The natural-source bonus moved to A5e where sourcing belongs architecturally —
+A1 measures form/absorption only, never sourcing. The (avg_bio_score / 15) × 18 rescale
+preserves A1's per-product budget without per-ingredient bias toward natural-source forms.
+
 Input:
 - `ingredient_quality_data.ingredients_scorable` fallback `ingredient_quality_data.ingredients`
 
@@ -201,8 +207,9 @@ nutrient. Detection uses cleaned-data structural fields (`is_nested_ingredient`,
 propagated through enrichment and resolved in a post-pass by `_mark_parent_total_rows()`.
 
 Per ingredient (non-blend, non-parent-total):
-- mapped: use `score` and `dosage_importance`
-- unmapped: fallback `score=9.0`, `weight=1.0`
+- mapped: use `bio_score` and `dosage_importance` (fall back to legacy `score` for blobs
+  enriched by pre-v3.6.0 pipelines)
+- unmapped: fallback `bio_score=9.0`, `weight=1.0`
 
 Supplement-type effects:
 - `single` / `single_nutrient`: all weights forced to `1.0`
@@ -215,23 +222,29 @@ to A1.
 Final (both cap and range driven by `A1_bioavailability_form.max` / `range_score_field`):
 ```text
 A1 = clamp(0, max_points, (weighted_avg / range_max) * max_points)
-# current config: max_points = 18, range_max = 18 (from "0-18")
+# v3.6.0 config: max_points = 18, range_max = 15 (from "0-15"), score_field = "bio_score"
+# A perfect bio_score=15 ingredient lands at A1 = (15/15) × 18 = 18.
 ```
 
 ### A2 Premium Forms (max 5)
 
-Config: `A2_premium_forms.{max, threshold_score, points_per_additional_premium_form, skip_first_premium_form}`.
+**v3.6.0:** A2 reads `bio_score` (was legacy `score`). Default threshold dropped 14→12 to
+match the same percentile on the cleaner field — 12/15 = 80% = the same "Excellent form" tier
+the Flutter UI surfaces. Stops counting natural-mid forms (e.g. food-folate at bio_score=11,
+legacy score=14) as premium.
+
+Config: `A2_premium_forms.{max, threshold_score, score_field, points_per_additional_premium_form, skip_first_premium_form}`.
 
 Rule (fully config-driven):
-- Count unique canonical ingredients with `score >= threshold_score` (default 14)
+- Count unique canonical ingredients with `bio_score >= threshold_score` (default 12)
 - Excludes `is_proprietary_blend`, `is_parent_total`, and rows without a usable
   individual dose (same dose-anchored rule as A1/A6)
 - Deduplicated by `canon_key(canonical_id or standard_name)` via set
 - `effective = max(0, count - 1)` when `skip_first_premium_form: true`, else `count`
 - `A2 = clamp(0, max, points_per_additional_premium_form * effective)`
-- Current config: `max=5`, `points_per_additional_premium_form=0.5`, `skip_first=true`
-  → stacking 4+ premium forms (e.g. chelated Mg + methylated B12 + K2-MK7 + D3)
-  can reach the full 5 pts.
+- Current config: `max=5`, `threshold_score=12`, `points_per_additional_premium_form=0.5`,
+  `skip_first=true` → stacking 4+ premium forms (e.g. chelated Mg + methylated B12 +
+  K2-MK7 + D3) can reach the full 5 pts.
 
 ### A3 Delivery System (max 3)
 
@@ -257,28 +270,41 @@ Note: enricher uses `standard_name` field (not `name`) when looking up enhancers
 `absorption_enhancers.json`. Bonus requires an absorptive enhancer paired with a target
 ingredient; an enhancer-only product does not qualify.
 
-### A5 Formulation Excellence (max 3)
+### A5 Formulation Excellence (max 4)
+
+**v3.6.0:** cap raised 3→4 to absorb the new A5e natural-source signal that moved out of A1
+(was +3 in A1 inflating per-ingredient form/absorption claims; now +1 in A5 where sourcing
+belongs alongside organic, standardized, non-GMO).
 
 Subcomponents:
 - A5a organic: +1 when USDA verified or valid claim path
 - A5b standardized botanical: +1 when threshold/flag met
 - A5c synergy cluster: +1 when cluster qualifying logic met
 - A5d non-GMO verified: +0.5 (gated — requires `enable_non_gmo_bonus: true`)
+- A5e natural-source: +1 when majority of active scorable ingredients have `natural=true`
+  (single trace ingredient doesn't earn the badge — tiebreaker, not tier)
 
-`A5 = min(3, A5a + A5b + A5c + A5d)`
+`A5 = min(4, A5a + A5b + A5c + A5d + A5e)`
+
+Sub-component sum is 4.5; products earning all five clip by 0.5 — same shape as A5's
+pre-v3.6.0 cap pattern (3.5 raw → 3 cap). Empirically rare to hit (no product in current
+8.3K-product cohort earns all 5 sourcing signals).
 
 ### A6 Single-Ingredient Efficiency (max 3)
 
 Applies only when `supp_type in {"single", "single_nutrient"}`.
 
-Uses the highest bio score among scorable ingredients:
+Uses the highest bio score among scorable ingredients. **v3.6.0** tiers recalibrated to the
+bio_score (0-15) scale. Old top tier `>= 16` was unreachable on bio_score (it was reachable
+only via the legacy +3 natural bonus on `score`). New tiers preserve granularity within
+bio_score's achievable range:
 
-| bio_score threshold | Points |
-|---|---|
-| >= 16 | 3 |
-| >= 14 | 2 |
-| >= 12 | 1 |
-| < 12 | 0 |
+| bio_score threshold | Points | Examples |
+|---|---|---|
+| >= 14 | 3 | methylcobalamin, K2-MK7, magnesium glycinate |
+| >= 12 | 2 | high-quality but not top-tier |
+| >= 10 | 1 | very good |
+| < 10 | 0 | mid or worse |
 
 ### Probiotic Bonus
 

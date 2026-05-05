@@ -69,6 +69,15 @@ _OPAQUE_OMEGA3_BLEND_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# Premium-form recognition for EPA/DHA. When EPA/DHA dose is disclosed but
+# the haystack contains none of the canonical forms from the
+# ``omega3_molecular_forms`` vocab category, the A2 premium-delivery credit
+# is not awarded. UI then explains: "EPA/DHA dose is disclosed, but omega-3
+# form is not specified on the label, so no premium-form credit was
+# awarded." Sourced from scripts/data/form_keywords_vocab.json — single
+# source of truth shared with the cleaner and enricher.
+import form_vocab as _form_vocab  # noqa: E402
+
 # Food-shape product_name keywords. Substring match, case-insensitive.
 # Curated from real Bucket C examples in the 20-brand corpus.
 _FOOD_SHAPE_NAME_KEYWORDS = (
@@ -818,7 +827,16 @@ class SupplementScorer:
                 continue
             mapped = bool(ing.get("mapped", False))
             if mapped:
-                raw_score = as_float(ing.get("score"), None)
+                # v3.6.0: A1 reads pure bio_score (0-15, form quality only).
+                # Natural-source bonus moved to A5e where sourcing belongs.
+                # The legacy `score` field (= bio_score + 3*natural; 0-18) is
+                # accepted as a fallback during the v3.6.x shadow window for
+                # blobs enriched by older versions of the pipeline; new blobs
+                # emit `score == bio_score` so the fallback yields the same
+                # result.
+                raw_score = as_float(ing.get("bio_score"), None)
+                if raw_score is None:
+                    raw_score = as_float(ing.get("score"), None)
                 s_i = raw_score if raw_score is not None else 9.0
                 raw_weight = as_float(ing.get("dosage_importance"), None)
                 w_i = raw_weight if raw_weight is not None else 1.0
@@ -846,13 +864,16 @@ class SupplementScorer:
 
         max_points = as_float(
             a1_cfg.get("max"),
-            15.0,
-        ) or 15.0
-        range_score_field = str(a1_cfg.get("range_score_field", "0-18"))
+            18.0,
+        ) or 18.0
+        # v3.6.0 default: range_score_field is "0-15" (bio_score scale).
+        # A1 budget rescales (avg_bio_score / 15) * 18 to preserve the
+        # per-product budget while reading the cleaner field.
+        range_score_field = str(a1_cfg.get("range_score_field", "0-15"))
         range_match = re.search(r"(\d+(?:\.\d+)?)\s*$", range_score_field)
-        range_max = as_float(range_match.group(1), 18.0) if range_match else 18.0
+        range_max = as_float(range_match.group(1), 15.0) if range_match else 15.0
         if range_max is None or range_max <= 0:
-            range_max = 18.0
+            range_max = 15.0
         return clamp(0.0, max_points, (avg_raw / range_max) * max_points)
 
     def _compute_premium_forms_bonus(self, product: Dict[str, Any]) -> float:
@@ -861,7 +882,12 @@ class SupplementScorer:
             .get("A2_premium_forms", {})
             or {}
         )
-        threshold_score = as_float(a2_cfg.get("threshold_score"), 14.0) or 14.0
+        # v3.6.0: A2 reads pure bio_score (0-15) instead of legacy `score`
+        # (which inflated mid-tier natural forms — e.g. food-folate at
+        # bio_score=11, score=14 — into the "premium" count). Default
+        # threshold dropped 14→12 to match the same percentile on the
+        # cleaner field (12 on /15 = 80% = Flutter UI Excellent tier).
+        threshold_score = as_float(a2_cfg.get("threshold_score"), 12.0) or 12.0
         points_per_form = as_float(
             a2_cfg.get("points_per_additional_premium_form"), 0.5
         )
@@ -880,7 +906,13 @@ class SupplementScorer:
                 continue
             if not self._has_usable_individual_dose(ing):
                 continue
-            score = as_float(ing.get("score"), None)
+            # Read bio_score (form quality, 0-15). Fall back to legacy
+            # `score` field for blobs enriched by older pipelines —
+            # v3.6.0+ enricher emits score == bio_score so the fallback
+            # yields identical results.
+            score = as_float(ing.get("bio_score"), None)
+            if score is None:
+                score = as_float(ing.get("score"), None)
             if score is None:
                 continue
             if score >= threshold_score:
@@ -1028,11 +1060,38 @@ class SupplementScorer:
 
         a5d = 0.5 if (self._feature_on("enable_non_gmo_bonus", default=True) and non_gmo_verified) else 0.0
 
+        # v3.6.0: A5e natural-source bonus (moved from A1 where it was
+        # +3 inflating per-ingredient form/absorption claims). Detection
+        # uses majority rule across active scorable ingredients — a
+        # single trace ingredient shouldn't earn the badge. Tiebreaker,
+        # not tier: +1 in A5 vs the old +3 in A1.
+        a5e_cfg = (
+            self.config.get("section_A_ingredient_quality", {})
+            .get("A5_formulation_excellence", {})
+            or {}
+        )
+        natural_pts = as_float(a5e_cfg.get("natural_source"), 1.0) or 1.0
+        natural_count = 0
+        scorable_count = 0
+        for ing in self._get_active_ingredients(product):
+            if ing.get("is_proprietary_blend") or ing.get("is_parent_total"):
+                continue
+            if not self._has_usable_individual_dose(ing):
+                continue
+            scorable_count += 1
+            if bool(ing.get("natural", False)):
+                natural_count += 1
+        majority_natural = (
+            scorable_count > 0 and natural_count * 2 >= scorable_count
+        )
+        a5e = float(natural_pts) if majority_natural else 0.0
+
         return {
             "A5a_organic": 1.0 if is_organic else 0.0,
             "A5b_standardized_botanical": round(std_bonus, 1),
             "A5c_synergy_cluster": round(synergy_bonus, 2),
             "A5d_non_gmo_verified": a5d,
+            "A5e_natural_source": a5e,
         }
 
     def _compute_single_efficiency_bonus(self, product: Dict[str, Any], supp_type: str) -> float:
@@ -1057,18 +1116,21 @@ class SupplementScorer:
             return 0.0
 
         ing = candidates[0]
-        # A6 tiers are calibrated to IQM form score ranges used by A1/A2.
-        # Prefer score, then fall back to bio_score when score is unavailable.
-        form_score = as_float(ing.get("score"), None)
+        # v3.6.0: A6 reads pure bio_score (0-15). Old tiers (>=16/14/12)
+        # were calibrated to legacy 0-18 score where 16+ was reachable
+        # only via natural-source bonus. New tiers (>=14/12/10 → 3/2/1)
+        # preserve granularity within bio_score's achievable range.
+        # Falls back to legacy `score` field for blobs from older pipelines.
+        form_score = as_float(ing.get("bio_score"), None)
         if form_score is None:
-            form_score = as_float(ing.get("bio_score"), None)
+            form_score = as_float(ing.get("score"), None)
         if form_score is None:
             return 0.0
 
-        # Tiers come from config — keys are strings like ">=16", ">=14", ">=12".
+        # Tiers come from config — keys are strings like ">=14", ">=12", ">=10".
         # Parse each "op threshold" key into a (threshold, points) pair and
         # walk them in descending threshold order.
-        tiers_cfg = a6_cfg.get("tiers") or {">=16": 3.0, ">=14": 2.0, ">=12": 1.0}
+        tiers_cfg = a6_cfg.get("tiers") or {">=14": 3.0, ">=12": 2.0, ">=10": 1.0}
         parsed_tiers: List[Tuple[float, float]] = []
         for key, pts in tiers_cfg.items():
             # Accept ">=N", "N", or bare numeric — default to >= semantics.
@@ -1499,6 +1561,12 @@ class SupplementScorer:
                         flags.append(band_flag)
                 break
 
+        # Premium-form disclosure check: if EPA/DHA dose is disclosed but
+        # the molecular form (rTG/EE/PL/...) is not specified on the label,
+        # the scorer cannot award A2 premium-delivery credit. Surface the
+        # reason informationally so the UI explains why.
+        form_disclosed = self._is_omega3_form_disclosed(product)
+
         result = {
             "omega3_dose_bonus": round(bonus_score, 2),
             "max": round(bonus_max, 2),
@@ -1510,7 +1578,16 @@ class SupplementScorer:
             "epa_mg_per_unit": dose_data.get("epa_mg_per_unit"),
             "dha_mg_per_unit": dose_data.get("dha_mg_per_unit"),
             "prescription_dose": prescription_dose,
+            "form_disclosed": form_disclosed,
         }
+        if not form_disclosed:
+            result["a2_no_premium_form_credit_reason"] = (
+                "EPA/DHA dose is disclosed, but the omega-3 molecular form "
+                "(rTG / re-esterified triglyceride / ethyl ester / phospholipid) "
+                "is not specified on the label, so no premium-form credit was awarded."
+            )
+            if "OMEGA3_FORM_NOT_DISCLOSED" not in flags:
+                flags.append("OMEGA3_FORM_NOT_DISCLOSED")
 
         # Partial-disclosure opacity flag (informational, no score change):
         # Some EPA/DHA was labeled but per_day is below the smallest scoring
@@ -1608,7 +1685,9 @@ class SupplementScorer:
         a3 = self._compute_delivery_score(product)
         a4 = self._compute_absorption_bonus(product)
         a5_parts = self._compute_formulation_bonus(product)
-        a5_cap = as_float(a_cfg.get("A5_formulation_excellence", {}).get("max"), 3.0)
+        # v3.6.0: A5.max raised 3→4 to absorb new A5e_natural_source signal
+        # (moved from A1). Default updated to match new config.
+        a5_cap = as_float(a_cfg.get("A5_formulation_excellence", {}).get("max"), 4.0)
         a5 = min(a5_cap, sum(a5_parts.values()))
         a6 = self._compute_single_efficiency_bonus(product, supp_type)
         probiotic = self._compute_probiotic_category_bonus(product, supp_type)
@@ -1650,6 +1729,7 @@ class SupplementScorer:
             "A5b": round(a5_parts["A5b_standardized_botanical"], 2),
             "A5c": round(a5_parts["A5c_synergy_cluster"], 2),
             "A5d": round(a5_parts.get("A5d_non_gmo_verified", 0.0), 2),
+            "A5e": round(a5_parts.get("A5e_natural_source", 0.0), 2),
             "A6": round(a6, 2),
             "probiotic_bonus": round(probiotic_bonus, 2),
             "probiotic_breakdown": probiotic,
@@ -3150,6 +3230,45 @@ class SupplementScorer:
             # inferred via the fish-oil parent-mass fallback.
             "omega3_dose_source": _omega3_source,
         }
+
+    @classmethod
+    def _is_omega3_form_disclosed(cls, product: Dict[str, Any]) -> bool:
+        """Scan EPA/DHA active ingredient form/source text for premium-form
+        keywords (rTG, ethyl ester, phospholipid, etc.). Returns True when
+        ANY EPA/DHA ingredient discloses a recognized molecular form.
+
+        Used to emit form_disclosed=False on the omega3_breakdown so the UI
+        can explain why no premium-form credit (A2) was awarded even though
+        EPA/DHA dose is disclosed.
+        """
+        ingredients = (
+            safe_list(product.get("activeIngredients"))
+            or safe_list(product.get("active_ingredients"))
+            or safe_list(product.get("ingredient_quality_data"))
+            or []
+        )
+        for ing in ingredients:
+            if not isinstance(ing, dict):
+                continue
+            cid = norm_text(ing.get("canonical_id") or "")
+            if cid not in cls._EPA_DHA_CANONICAL_IDS:
+                continue
+            # Build a haystack from any free-text form descriptors on the entry
+            haystack_parts = [
+                ing.get("matched_form") or "",
+                ing.get("form") or "",
+                ing.get("source") or "",
+            ]
+            for form in safe_list(ing.get("forms")):
+                if isinstance(form, dict):
+                    haystack_parts.append(form.get("name") or "")
+                    haystack_parts.append(form.get("ingredientGroup") or "")
+                elif isinstance(form, str):
+                    haystack_parts.append(form)
+            haystack = " ".join(p for p in haystack_parts if p)
+            if _form_vocab.matches_premium_omega3_form(haystack):
+                return True
+        return False
 
     @staticmethod
     def _has_opaque_omega3_blend(product: Dict[str, Any]) -> bool:

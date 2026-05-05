@@ -16,16 +16,19 @@
 #                                  in sync with final_db_output/ (or when
 #                                  another upstream — e.g. snapshot — staged
 #                                  it directly).
-#   3. Rebuild interaction DB      (rebuild_interaction_db.sh)
+#   3. Extract DSLD product images (extract_product_images.py)
+#                                  AUTO-SKIPS when dist/ image backfill is
+#                                  already complete and current.
+#   4. Rebuild interaction DB      (rebuild_interaction_db.sh)
 #                                  AUTO-SKIPS when no rule-data file is
 #                                  newer than the bundled interaction_db.
-#   4. Sync to Supabase            (sync_to_supabase.py --cleanup)
+#   5. Sync to Supabase            (sync_to_supabase.py --cleanup)
 #                                  Trusts sync_to_supabase's built-in
 #                                  "up_to_date" detection (manifest checksum).
-#   5. Atomic Flutter bundle       (Flutter import_catalog_artifact.sh)
+#   6. Atomic Flutter bundle       (Flutter import_catalog_artifact.sh)
 #                                  AUTO-SKIPS when Flutter assets/db/
 #                                  manifests already match dist/ checksums.
-#   6. Prune .previous backups     (assets/db/*.previous)
+#   7. Prune .previous backups     (assets/db/*.previous)
 #                                  No-ops cleanly when none exist.
 #
 # Usage:
@@ -38,6 +41,7 @@
 #     # Skip cloud/device steps (local-only iteration):
 #     bash scripts/release_full.sh --skip-supabase
 #     bash scripts/release_full.sh --skip-flutter
+#     bash scripts/release_full.sh --skip-product-images
 #
 #     # Preview Supabase sync without uploading:
 #     bash scripts/release_full.sh --supabase-dry-run
@@ -74,6 +78,7 @@ FLUTTER_REPO="/Users/seancheick/PharmaGuide ai"
 FORCE=0
 SKIP_SUPABASE=0
 SKIP_FLUTTER=0
+SKIP_PRODUCT_IMAGES=0
 SUPABASE_DRY_RUN=0
 KEEP_VERSIONS=2
 
@@ -87,6 +92,7 @@ while (($# > 0)); do
     --skip-assemble)     shift ;;  # accepted for backward compat; no-op now
     --skip-supabase)     SKIP_SUPABASE=1; shift ;;
     --skip-flutter)      SKIP_FLUTTER=1; shift ;;
+    --skip-product-images) SKIP_PRODUCT_IMAGES=1; shift ;;
     --supabase-dry-run)  SUPABASE_DRY_RUN=1; shift ;;
     --keep-versions)     KEEP_VERSIONS="${2:?--keep-versions requires N}"; shift 2 ;;
     --flutter-repo)      FLUTTER_REPO="${2:?--flutter-repo requires path}"; shift 2 ;;
@@ -107,6 +113,8 @@ skip()  { printf '\033[2m[release] —\033[0m %s\n' "$*"; }
 DIST_DIR="$REPO_ROOT/scripts/dist"
 FINAL_DB_DIR="$REPO_ROOT/scripts/final_db_output"
 ASSETS_DIR="$FLUTTER_REPO/assets/db"
+DIST_PRODUCT_IMAGES_DIR="$DIST_DIR/product_images"
+DIST_PRODUCT_IMAGE_INDEX="$DIST_PRODUCT_IMAGES_DIR/product_image_index.json"
 
 START_TS=$(date +%s)
 
@@ -118,6 +126,7 @@ if (( FORCE == 1 )); then
 else
   info "MODE: auto-detect (each step decides if it has work to do)"
 fi
+info "skip-product-images: $SKIP_PRODUCT_IMAGES"
 info "skip-supabase:    $SKIP_SUPABASE  (supabase-dry-run: $SUPABASE_DRY_RUN)"
 info "skip-flutter:     $SKIP_FLUTTER"
 info "keep-versions:    $KEEP_VERSIONS"
@@ -232,14 +241,14 @@ step1_needs_run() {
 }
 
 if step1_needs_run; then
-  info "Step 1/6: Per-brand outputs newer than catalog (or catalog missing) — assembling..."
+  info "Step 1/7: Per-brand outputs newer than catalog (or catalog missing) — assembling..."
   # build_all_final_dbs.py defaults its scan dir to scripts/ but per-brand
   # pipeline outputs live in scripts/products/output_*/. Always pass an
   # explicit --scan-dir so the auto-discovery actually finds them.
   python3 scripts/build_all_final_dbs.py --scan-dir scripts/products --output-dir scripts/final_db_output
   ok "Final DB assembled (scripts/final_db_output/)"
 else
-  skip "Step 1/6: Catalog up to date with per-brand outputs — skipping assembly"
+  skip "Step 1/7: Catalog up to date with per-brand outputs — skipping assembly"
 fi
 
 # ---------------------------------------------------------------------------
@@ -262,7 +271,7 @@ step2_needs_run() {
   fi
   # If neither catalog exists, this is a hard fail (caller bug)
   if [[ ! -f "$DIST_CATALOG" && ! -f "$FINAL_CATALOG" ]]; then
-    err "Step 2/6: No catalog anywhere — step 1 should have caught this."
+    err "Step 2/7: No catalog anywhere — step 1 should have caught this."
     err "         Run 'bash scripts/build_all_final_dbs.py' or rebuild_dashboard_snapshot.sh."
     exit 1
   fi
@@ -270,15 +279,82 @@ step2_needs_run() {
 }
 
 if step2_needs_run; then
-  info "Step 2/6: final_db_output newer than dist/ — staging catalog..."
+  info "Step 2/7: final_db_output newer than dist/ — staging catalog..."
   python3 scripts/release_catalog_artifact.py
   ok "Catalog staged"
 else
-  skip "Step 2/6: dist/ catalog already current — skipping stage"
+  skip "Step 2/7: dist/ catalog already current — skipping stage"
 fi
 
 # ---------------------------------------------------------------------------
-# Step 3: Rebuild interaction DB (delegates verify → build → stage)
+# Step 3: Extract/backfill DSLD product images into dist/
+#
+# Skip when: dist/product_images/product_image_index.json exists, the dist/
+# catalog DB is not newer than that index, the DB already has
+# product-images-backed thumbnail paths for every PDF-label product, and the
+# corresponding .webp count is not short.
+# ---------------------------------------------------------------------------
+
+step3_needs_run() {
+  (( FORCE == 1 )) && return 0
+  [[ ! -f "$DIST_CATALOG" ]] && return 0
+  [[ ! -d "$DIST_PRODUCT_IMAGES_DIR" ]] && return 0
+  [[ ! -f "$DIST_PRODUCT_IMAGE_INDEX" ]] && return 0
+  [[ "$DIST_CATALOG" -nt "$DIST_PRODUCT_IMAGE_INDEX" ]] && return 0
+
+  local status
+  status="$(
+    python3 - "$DIST_CATALOG" "$DIST_PRODUCT_IMAGES_DIR" <<'PY'
+import os
+import sqlite3
+import sys
+
+db_path, image_dir = sys.argv[1], sys.argv[2]
+conn = sqlite3.connect(db_path)
+try:
+    eligible = conn.execute(
+        "SELECT COUNT(*) FROM products_core "
+        "WHERE image_url IS NOT NULL AND image_url != '' "
+        "AND LOWER(image_url) LIKE '%.pdf'"
+    ).fetchone()[0]
+    backfilled = conn.execute(
+        "SELECT COUNT(*) FROM products_core "
+        "WHERE image_url IS NOT NULL AND image_url != '' "
+        "AND LOWER(image_url) LIKE '%.pdf' "
+        "AND image_thumbnail_url LIKE 'product-images/%'"
+    ).fetchone()[0]
+finally:
+    conn.close()
+
+webp_count = 0
+if os.path.isdir(image_dir):
+    for name in os.listdir(image_dir):
+        if name.endswith(".webp"):
+            path = os.path.join(image_dir, name)
+            if os.path.isfile(path) and os.path.getsize(path) > 0:
+                webp_count += 1
+
+needs_run = backfilled < eligible or webp_count < eligible
+print("run" if needs_run else "skip")
+PY
+  )"
+  [[ "$status" == "run" ]]
+}
+
+if (( SKIP_PRODUCT_IMAGES == 0 )); then
+  if step3_needs_run; then
+    info "Step 3/7: Catalog/images out of sync — extracting DSLD product images..."
+    python3 scripts/extract_product_images.py --db-path "$DIST_CATALOG"
+    ok "DSLD product images extracted + DB backfilled"
+  else
+    skip "Step 3/7: DSLD product images already current — skipping extraction"
+  fi
+else
+  skip "Step 3/7: DSLD product image extraction skipped (--skip-product-images)"
+fi
+
+# ---------------------------------------------------------------------------
+# Step 4: Rebuild interaction DB (delegates verify → build → stage)
 #
 # Skip when: dist/interaction_db.sqlite is newer than every interaction-rule
 # input file. The inputs are the curated drafts, the System A rules JSON,
@@ -294,21 +370,21 @@ INTERACTION_INPUTS=(
   "$REPO_ROOT/scripts/interaction_db_output/research_pairs.json"
 )
 
-step3_needs_run() {
+step4_needs_run() {
   (( FORCE == 1 )) && return 0
   any_newer_input "$DIST_INTERACTION" "${INTERACTION_INPUTS[@]}"
 }
 
-if step3_needs_run; then
-  info "Step 3/6: Interaction-rule inputs newer than bundled DB — rebuilding..."
+if step4_needs_run; then
+  info "Step 4/7: Interaction-rule inputs newer than bundled DB — rebuilding..."
   bash scripts/rebuild_interaction_db.sh
   ok "Interaction DB rebuilt + staged"
 else
-  skip "Step 3/6: Interaction DB up to date with rule sources — skipping rebuild"
+  skip "Step 4/7: Interaction DB up to date with rule sources — skipping rebuild"
 fi
 
 # ---------------------------------------------------------------------------
-# Step 4: Sync to Supabase (with full cleanup)
+# Step 5: Sync to Supabase (with full cleanup)
 #
 # We do NOT pre-skip this step — sync_to_supabase.py has built-in
 # checksum-based "up_to_date" detection that is more reliable than mtime
@@ -318,20 +394,20 @@ fi
 
 if (( SKIP_SUPABASE == 0 )); then
   if (( SUPABASE_DRY_RUN == 1 )); then
-    info "Step 4/6: Syncing dist/ to Supabase (DRY-RUN)..."
+    info "Step 5/7: Syncing dist/ to Supabase (DRY-RUN)..."
     python3 scripts/sync_to_supabase.py "$DIST_DIR" --dry-run
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
-    info "Step 4/6: Syncing dist/ to Supabase (with --cleanup, content-checksum-aware)..."
+    info "Step 5/7: Syncing dist/ to Supabase (with --cleanup, content-checksum-aware)..."
     python3 scripts/sync_to_supabase.py "$DIST_DIR" --cleanup --cleanup-keep "$KEEP_VERSIONS"
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
 else
-  skip "Step 4/6: Supabase sync skipped (--skip-supabase)"
+  skip "Step 5/7: Supabase sync skipped (--skip-supabase)"
 fi
 
 # ---------------------------------------------------------------------------
-# Step 5: Atomic Flutter bundle import
+# Step 6: Atomic Flutter bundle import
 #
 # Skip when: Flutter assets/db/ checksums already match dist/ — both
 # catalog AND interaction manifests. This avoids a 22 MB LFS upload on
@@ -362,18 +438,18 @@ if (( SKIP_FLUTTER == 0 )); then
     exit 1
   fi
   if step5_needs_run; then
-    info "Step 5/6: Checksums differ between dist/ and Flutter assets/ — importing..."
+    info "Step 6/7: Checksums differ between dist/ and Flutter assets/ — importing..."
     "$FLUTTER_REPO/scripts/import_catalog_artifact.sh" "$DIST_DIR"
     ok "Flutter bundle updated"
   else
-    skip "Step 5/6: Flutter bundle checksums already match dist/ — skipping import"
+    skip "Step 6/7: Flutter bundle checksums already match dist/ — skipping import"
   fi
 else
-  skip "Step 5/6: Flutter import skipped (--skip-flutter)"
+  skip "Step 6/7: Flutter import skipped (--skip-flutter)"
 fi
 
 # ---------------------------------------------------------------------------
-# Step 6: Prune .previous backups in Flutter assets/db/
+# Step 7: Prune .previous backups in Flutter assets/db/
 # (No-op when none exist — always safe to attempt.)
 # ---------------------------------------------------------------------------
 
@@ -382,17 +458,17 @@ if (( SKIP_FLUTTER == 0 )); then
   PREVS=("$ASSETS_DIR"/*.previous)
   shopt -u nullglob
   if (( ${#PREVS[@]} > 0 )); then
-    info "Step 6/6: Pruning ${#PREVS[@]} .previous backup(s) in $ASSETS_DIR..."
+    info "Step 7/7: Pruning ${#PREVS[@]} .previous backup(s) in $ASSETS_DIR..."
     for p in "${PREVS[@]}"; do
       info "  removing $(basename "$p")"
       rm -f "$p"
     done
     ok "Pruned"
   else
-    skip "Step 6/6: No .previous backups to prune"
+    skip "Step 7/7: No .previous backups to prune"
   fi
 else
-  skip "Step 6/6: Skipped (Flutter step disabled)"
+  skip "Step 7/7: Skipped (Flutter step disabled)"
 fi
 
 ELAPSED=$(($(date +%s) - START_TS))

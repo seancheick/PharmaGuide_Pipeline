@@ -4,7 +4,7 @@
 # Batch Pipeline Runner for All DSLD Datasets
 ###############################################################################
 # Processes child dataset folders through the pipeline → dashboard snapshot →
-# full release (catalog + interaction DB → Supabase → Flutter bundle).
+# full release (catalog + DSLD images + interaction DB → Supabase → Flutter bundle).
 #
 # Stop-on-fail: if any brand fails during clean/enrich/score, the post-pipeline
 # release stages are skipped so partial data never reaches Supabase or Flutter.
@@ -19,12 +19,13 @@
 #   bash batch_run_all_datasets.sh --stages score --targets Nature_Made
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/forms"
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
-#bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
+#   bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
 #
 # Release-stage flags (apply after pipeline + snapshot succeed):
 #   --skip-release            Skip the full release (snapshot only — old behavior)
-#   --skip-supabase           Run snapshot + interaction DB + Flutter, but no Supabase sync
-#   --skip-flutter            Run snapshot + interaction DB + Supabase, but no Flutter import
+#   --skip-product-images     Run release without DSLD image extract/backfill
+#   --skip-supabase           Run snapshot + images + interaction DB + Flutter, but no Supabase sync
+#   --skip-flutter            Run snapshot + images + interaction DB + Supabase, but no Flutter import
 #   --supabase-dry-run        Preview Supabase sync without uploading
 #   --flutter-repo <path>     Override Flutter repo location for the import step
 #
@@ -35,10 +36,11 @@
 #
 # After every successful run:
 #   1. Dashboard snapshot is rebuilt (scripts/dist/ refreshed for streamlit).
-#   2. Interaction DB is rebuilt (verifies CUI/RXCUI live, stages to dist/).
-#   3. dist/ is synced to Supabase with full cleanup (storage + manifest rows).
-#   4. Both DBs are atomically bundled into Flutter assets/db/ (17 gates).
-#   5. .previous backups in Flutter assets/db/ are pruned.
+#   2. DSLD product images are extracted/backfilled into scripts/dist/ when needed.
+#   3. Interaction DB is rebuilt (verifies CUI/RXCUI live, stages to dist/).
+#   4. dist/ is synced to Supabase with full cleanup (storage + manifest rows).
+#   5. Both DBs are atomically bundled into Flutter assets/db/ (17 gates).
+#   6. .previous backups in Flutter assets/db/ are pruned.
 #
 # Set SKIP_SNAPSHOT=1 (legacy) or SKIP_RELEASE=1 to skip the post-pipeline work.
 ###############################################################################
@@ -54,6 +56,7 @@ PYTHON="${PYTHON:-python3}"  # Use python3 by default
 
 # Release-stage flags (passed through to release_full.sh)
 SKIP_RELEASE_FLAG=0          # 1 = skip full release entirely (snapshot still runs)
+RELEASE_SKIP_PRODUCT_IMAGES=0
 RELEASE_SKIP_SUPABASE=0
 RELEASE_SKIP_FLUTTER=0
 RELEASE_SUPABASE_DRY_RUN=0
@@ -76,6 +79,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --skip-release)
             SKIP_RELEASE_FLAG=1
+            shift
+            ;;
+        --skip-product-images)
+            RELEASE_SKIP_PRODUCT_IMAGES=1
             shift
             ;;
         --skip-supabase)
@@ -323,7 +330,7 @@ if [ ! -x "$RELEASE_SCRIPT" ]; then
 fi
 
 echo -e "${BLUE}=========================================="
-echo "FULL RELEASE: interaction DB → Supabase → Flutter"
+echo "FULL RELEASE: DSLD images → interaction DB → Supabase → Flutter"
 echo "==========================================${NC}"
 echo ""
 
@@ -332,6 +339,7 @@ echo ""
 # rebuild_dashboard_snapshot.sh runs, the catalog is fresh in dist/, and
 # release_full's step 1+2 detection skips both. No --skip-assemble needed.
 RELEASE_ARGS=()
+[ "$RELEASE_SKIP_PRODUCT_IMAGES" = "1" ] && RELEASE_ARGS+=(--skip-product-images)
 [ "$RELEASE_SKIP_SUPABASE" = "1" ]    && RELEASE_ARGS+=(--skip-supabase)
 [ "$RELEASE_SKIP_FLUTTER" = "1" ]     && RELEASE_ARGS+=(--skip-flutter)
 [ "$RELEASE_SUPABASE_DRY_RUN" = "1" ] && RELEASE_ARGS+=(--supabase-dry-run)

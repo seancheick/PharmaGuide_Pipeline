@@ -807,6 +807,108 @@ def test_detail_blob_warnings_cover_banned_allergen_interaction_dietary_and_stat
     assert ps["date"] == "2025-12-31"
 
 
+def test_detail_blob_emits_structured_allergens_array():
+    """Phase 8: detail_blob.allergens[] is the structured contract for
+    Flutter's personalized allergen matcher (matchAllergens against
+    profile.allergens). Distinct from the legacy warnings[] array which
+    powers the generic display banner.
+    """
+    enriched = make_enriched()
+    enriched["allergen_hits"] = [
+        {
+            "allergen_id": "ALLERGEN_SOY",
+            "allergen_name": "Soy & Soy Lecithin",
+            "presence_type": "contains",
+            "severity_level": "low",
+            "evidence": "Contains: Soy",
+        },
+        {
+            "allergen_id": "ALLERGEN_TREE_NUTS",
+            "allergen_name": "Tree Nuts",
+            "presence_type": "may_contain",
+            "severity_level": "high",
+            "evidence": "May contain tree nuts",
+        },
+        {
+            "allergen_id": "ALLERGEN_PEANUTS",
+            "allergen_name": "Peanuts",
+            "presence_type": "manufactured_in_facility",
+            "severity_level": "high",
+            "evidence": "Manufactured in a facility that also processes peanuts",
+        },
+    ]
+
+    blob = build_detail_blob(enriched, make_scored())
+    allergens = blob["allergens"]
+
+    assert len(allergens) == 3
+    # Sort: contains → may_contain → manufactured_in_facility
+    assert allergens[0]["allergen_id"] == "ALLERGEN_SOY"
+    assert allergens[0]["presence_type"] == "contains"
+    assert allergens[1]["allergen_id"] == "ALLERGEN_TREE_NUTS"
+    assert allergens[1]["presence_type"] == "may_contain"
+    assert allergens[2]["allergen_id"] == "ALLERGEN_PEANUTS"
+    assert allergens[2]["presence_type"] == "manufactured_in_facility"
+    # Field passthrough — exact field names Flutter consumes.
+    assert allergens[0]["display_name"] == "Soy & Soy Lecithin"
+    assert allergens[0]["severity_level"] == "low"
+    assert allergens[0]["evidence"] == "Contains: Soy"
+
+
+def test_detail_blob_allergens_empty_when_no_hits():
+    enriched = make_enriched()
+    enriched["allergen_hits"] = []
+    blob = build_detail_blob(enriched, make_scored())
+    assert blob["allergens"] == []
+
+
+def test_detail_blob_allergens_skips_entries_missing_allergen_id():
+    """Defensive: hits without an `allergen_id` cannot be matched to a
+    user profile (which stores canonical IDs), so they are skipped from
+    the structured array. They still count for the legacy warnings[]
+    summary because the display string only needs `allergen_name`."""
+    enriched = make_enriched()
+    enriched["allergen_hits"] = [
+        {
+            "allergen_name": "Unknown Allergen",
+            "presence_type": "contains",
+            "severity_level": "moderate",
+            # no allergen_id — should be skipped
+        },
+        {
+            "allergen_id": "ALLERGEN_MILK",
+            "allergen_name": "Milk",
+            "presence_type": "contains",
+            "severity_level": "moderate",
+        },
+    ]
+    blob = build_detail_blob(enriched, make_scored())
+    assert len(blob["allergens"]) == 1
+    assert blob["allergens"][0]["allergen_id"] == "ALLERGEN_MILK"
+
+
+def test_detail_blob_emits_gluten_free_validated_flag():
+    """Phase 8: positive gluten-free signal — orthogonal to the negative
+    allergen flow. True when the label carries a validated gluten-free
+    claim AND no contradicting wheat/gluten ingredient hits.
+    """
+    # Note: build_final_db's safe_bool returns int (1/0) for SQLite
+    # interop, not Python True/False. Truthiness is what matters.
+    enriched = make_enriched()
+    enriched["claim_gluten_free_validated"] = True
+    blob = build_detail_blob(enriched, make_scored())
+    assert bool(blob["gluten_free_validated"]) is True
+
+    enriched["claim_gluten_free_validated"] = False
+    blob = build_detail_blob(enriched, make_scored())
+    assert bool(blob["gluten_free_validated"]) is False
+
+    # Missing (older blobs) → defaults to False
+    enriched.pop("claim_gluten_free_validated", None)
+    blob = build_detail_blob(enriched, make_scored())
+    assert bool(blob["gluten_free_validated"]) is False
+
+
 def test_watchlist_is_exported_as_warning_but_not_blocking_reason():
     enriched = make_enriched()
     enriched["contaminant_data"]["banned_substances"]["substances"] = [
@@ -1316,8 +1418,8 @@ class TestDetailBlobNutritionAndUnmapped:
         assert len(row) == 91
         assert CORE_COLUMN_COUNT == 91
 
-    def test_schema_version_bumped_to_140(self):
-        assert EXPORT_SCHEMA_VERSION == "1.4.0"
+    def test_schema_version_bumped_to_150(self):
+        assert EXPORT_SCHEMA_VERSION == "1.5.0"
 
     def test_end_to_end_nutrition_and_unmapped_both_populate(self):
         """Smoke: realistic enriched with calories + unmapped actives → column and blob both correct."""

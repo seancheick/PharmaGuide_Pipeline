@@ -379,6 +379,9 @@ def run_extraction(
     with open(index_path, "w", encoding="utf-8") as f:
         json.dump(index, f, indent=2, sort_keys=True)
 
+    backfill = backfill_image_thumbnail_urls(db_path, output_dir, index)
+    manifest_update = refresh_export_manifest_checksum(db_path)
+
     elapsed = time.time() - start
 
     summary = {
@@ -387,6 +390,8 @@ def run_extraction(
         "skipped": skipped,
         "failed": failed,
         "index_entries": len(index),
+        "thumbnail_urls_updated": backfill["updated"],
+        "manifest_checksum_updated": manifest_update["updated"],
         "elapsed_seconds": round(elapsed, 1),
     }
 
@@ -397,6 +402,8 @@ def run_extraction(
     print(f"  Skipped (exist): {skipped}")
     print(f"  Failed:          {failed}")
     print(f"  Index entries:   {len(index)}")
+    print(f"  DB thumbnails:   {backfill['updated']} updated")
+    print(f"  Manifest:        {'checksum updated' if manifest_update['updated'] else 'not found'}")
     print(f"  Time:            {elapsed:.1f}s")
     print(f"  Output:          {output_dir}")
     print(f"  Index:           {index_path}")
@@ -410,6 +417,54 @@ def run_extraction(
             print(f"  ... and {len(errors) - 20} more")
 
     return summary
+
+
+def default_output_dir_for_db(db_path: str) -> str:
+    """Default to a product_images folder next to the core DB."""
+    return os.path.join(os.path.dirname(os.path.abspath(db_path)), "product_images")
+
+
+def backfill_image_thumbnail_urls(db_path: str, image_dir: str, index: dict) -> dict:
+    """Populate products_core.image_thumbnail_url for extracted thumbnails.
+
+    The value intentionally includes the Supabase bucket prefix for compatibility
+    with the v1.4.0 export schema (`product-images/{dsld_id}.webp`). Flutter
+    normalizes this to an object key before building the public URL.
+    """
+    updated = 0
+    conn = sqlite3.connect(db_path)
+    try:
+        for dsld_id, entry in index.items():
+            filename = entry.get("filename") or f"{dsld_id}.webp"
+            webp_path = os.path.join(image_dir, filename)
+            if not os.path.exists(webp_path) or os.path.getsize(webp_path) <= 0:
+                continue
+            conn.execute(
+                "UPDATE products_core SET image_thumbnail_url = ? WHERE dsld_id = ?",
+                (f"product-images/{filename}", str(dsld_id)),
+            )
+            updated += 1
+        conn.commit()
+    finally:
+        conn.close()
+    return {"updated": updated, "missing": len(index) - updated}
+
+
+def refresh_export_manifest_checksum(db_path: str) -> dict:
+    """Refresh export_manifest checksum after in-place DB thumbnail backfill."""
+    manifest_path = os.path.join(os.path.dirname(os.path.abspath(db_path)), "export_manifest.json")
+    if not os.path.exists(manifest_path):
+        return {"updated": False}
+
+    digest = file_sha256(db_path)
+    with open(manifest_path, "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    manifest["checksum"] = f"sha256:{digest}"
+    manifest["checksum_sha256"] = digest
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False)
+        f.write("\n")
+    return {"updated": True, "checksum": f"sha256:{digest}"}
 
 
 # ---------------------------------------------------------------------------
@@ -428,8 +483,9 @@ def parse_args(argv=None):
     )
     parser.add_argument(
         "--output-dir",
-        required=True,
-        help="Directory to write .webp thumbnails and index JSON",
+        default=None,
+        help="Directory to write .webp thumbnails and index JSON "
+             "(default: <db-dir>/product_images)",
     )
     parser.add_argument(
         "--max-workers",
@@ -459,9 +515,11 @@ def main(argv=None):
         print(f"Error: DB not found: {args.db_path}")
         sys.exit(1)
 
+    output_dir = args.output_dir or default_output_dir_for_db(args.db_path)
+
     run_extraction(
         db_path=args.db_path,
-        output_dir=args.output_dir,
+        output_dir=output_dir,
         max_workers=args.max_workers,
         batch_delay=args.batch_delay,
         force_rerender=args.force_rerender,

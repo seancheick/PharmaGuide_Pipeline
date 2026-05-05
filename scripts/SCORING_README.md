@@ -1,6 +1,6 @@
-# PharmaGuide Scoring README (v3.5.0 / Data Schema 5.3.0)
+# PharmaGuide Scoring README (v3.6.0 / Data Schema 5.3.0)
 
-> Last updated: 2026-04-29
+> Last updated: 2026-05-04
 
 This document is the implementation-facing guide for the current scorer:
 
@@ -8,7 +8,36 @@ This document is the implementation-facing guide for the current scorer:
 - Config: `scripts/config/scoring_config.json`
 - Spec: `scripts/SCORING_ENGINE_SPEC.md`
 
-It is aligned to the current `v3.5.0` behavior in code and config.
+It is aligned to the current `v3.6.0` behavior in code and config.
+
+## v3.6.0 changes (2026-05-04) — bio_score / score honesty pass
+
+The legacy `score` field combined two unrelated signals: form quality (`bio_score`, 0-15)
+plus a +3 sourcing bonus when `natural=true`. Reading `score` in A1 inflated per-ingredient
+form/absorption claims with sourcing — methylcobalamin (synthetic premium) scored below
+food-folate (natural mid). v3.6.0 separates the two cleanly:
+
+- **A1 reads pure `bio_score` (0-15).** A1.max stays 18; the `(avg_bio_score / 15) × 18`
+  rescale preserves the per-product budget. Synthetic premium forms now get the full A1
+  credit they earn.
+- **A2 reads `bio_score`, threshold 14→12.** Same 80% percentile, applied to the cleaner
+  field. Stops counting natural-mid forms as premium.
+- **A5.max raised 3→4 with new A5e_natural_source +1.** Sourcing signal lives where it
+  conceptually belongs (alongside organic, standardized, non-GMO). Tiebreaker, not tier.
+  Detection: majority of active scorable ingredients have `natural=true`.
+- **A6 tiers recalibrated to bio_score scale.** `>=14`/`>=12`/`>=10` → 3/2/1 (was
+  `>=16`/`>=14`/`>=12` against legacy 0-18 score; the old >=16 tier was unreachable on
+  bio_score).
+- **`enrich_supplements_v3.py` emits `score == bio_score`.** The natural+3 calculation is
+  retired. The `score` field is retained on the wire as a deprecated alias for backward
+  compat during the v3.6.x shadow window.
+- **Flutter `FormAbsorptionSection` updated** — `maxScore` 18→15, explainer copy `0–18`→
+  `0–15`, tier ranges adjusted. Per-ingredient bars now agree with Section A's pillar math.
+
+Empirical impact (250-product live sample): synthetic-premium products gain ~2-3pt in
+Section A (deserved); natural-mid products lose ~0.5-1pt (corrected — they weren't
+actually premium); natural-premium products unchanged. Mean Section A nudges slightly up;
+no big losers (>2pt drops eliminated).
 
 ## v3.5.1 changes (2026-04-30) — display layer only, no scoring impact
 
@@ -147,27 +176,40 @@ category_bonus_total = min(5, probiotic_bonus + omega3_dose_bonus + future_bonus
 A = min(25, core_quality + category_bonus_total)
 ```
 
-- A1 (max 18, config-driven): weighted bioavailability score.
+- A1 (max 18, config-driven): weighted bioavailability score. **v3.6.0:** reads pure
+  `bio_score` (0-15, form quality only). Natural-source bonus moved to A5e — A1 measures
+  form/absorption only.
   - Excludes blend containers (`is_proprietary_blend=true`).
   - Excludes rows without usable individual dose.
   - Excludes parent-total rows (`is_parent_total=true`) to prevent double-counting
     when a label lists both a nutrient total and its sub-forms.
-  - Mapped row uses `score` and `dosage_importance`.
-  - Unmapped row fallback is score `9.0`, weight `1.0`.
+  - Mapped row uses `bio_score` and `dosage_importance` (falls back to legacy `score`
+    field for blobs from pre-v3.6.0 pipelines).
+  - Unmapped row fallback is bio_score `9.0`, weight `1.0`.
   - `single` and `single_nutrient`: force all weights to `1.0`.
   - `multivitamin`: smoothing `avg = 0.7*avg + 0.3*9.0` (factor and floor both config-driven).
-  - Final: `clamp(0, max, (avg / range_max) * max)` where `range_max` comes from `range_score_field` (currently `0-18`).
-- A2 (max 5, config-driven): premium forms bonus — count of unique ingredients with `score >= threshold_score` (default 14), scored as `points_per_additional_premium_form * max(0, count - 1)` when `skip_first_premium_form=true`.
+  - Final: `clamp(0, max, (avg / range_max) * max)` where `range_max` comes from
+    `range_score_field` (v3.6.0: `0-15`). The (avg_bio_score / 15) × 18 rescale preserves
+    the per-product budget without per-ingredient bias.
+- A2 (max 5, config-driven): premium forms bonus. **v3.6.0:** reads `bio_score` (was
+  `score`); default threshold dropped 14→12 (same 80% percentile, cleaner field). Stops
+  counting natural-mid forms (food-folate, etc.) as premium.
+  - count of unique ingredients with `bio_score >= threshold_score` (default 12)
+  - scored as `points_per_additional_premium_form * max(0, count - 1)` when `skip_first_premium_form=true`
   - excludes blend containers (`is_proprietary_blend=true`)
   - excludes parent-total rows (`is_parent_total=true`)
   - requires usable individual dose (same dose-anchored rule as A1/A6)
   - stacking 4+ premium forms can reach the full 5 pts
 - A3 (max 3): delivery tier points (tier 1 → 3, tier 2 → 2, tier 3 → 1).
 - A4 (max 3): absorption enhancer paired boolean.
-- A5 (max 3): organic + standardized botanical + synergy cluster (+ optional gated non-GMO contribution).
-- A6 (max 3): single-ingredient efficiency bonus for `supp_type in {single, single_nutrient}` using IQM form score tiers (`>=16`=3, `>=14`=2, `>=12`=1).
-  - uses `score` as primary value
-  - falls back to `bio_score` only when `score` is missing
+- A5 (max 4): organic + standardized botanical + synergy cluster + non-GMO + natural-source.
+  **v3.6.0:** cap raised 3→4 to absorb new A5e_natural_source signal (moved from A1).
+- A6 (max 3): single-ingredient efficiency bonus for `supp_type in {single, single_nutrient}`.
+  **v3.6.0:** tiers recalibrated to bio_score (0-15) scale: `>=14`=3, `>=12`=2, `>=10`=1.
+  Old `>=16` tier removed (unreachable on bio_score; was only reachable via legacy +3
+  natural bonus on `score`).
+  - uses `bio_score` as primary value
+  - falls back to legacy `score` only when `bio_score` is missing (older blobs)
 - Category bonus pool (`category_bonus_pool.max_contribution`, default **5**):
   - Pools `probiotic_bonus + omega3_dose_bonus + enzyme_recognition_bonus + probiotic_cfu_adequacy_uplift`
   - Prevents stacked niche bonuses from dominating core ingredient quality
