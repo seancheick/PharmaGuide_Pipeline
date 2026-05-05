@@ -436,6 +436,24 @@ def stage_release(
                 f"{validation['checksum_sha256']}. Copy corrupted."
             )
 
+        # Preserve the rendered product image cache across the rename-swap.
+        # `product_images/` is expensive to regenerate (PDF→WebP for ~8 K
+        # products, hours on first run) but is a pure derivative of
+        # `image_url` rows in the catalog DB — `extract_product_images.py`
+        # idempotently re-uses any existing `<dsld_id>.webp` file. Carrying
+        # it forward into the new staging dir means step 3 of the release
+        # runner can skip already-rendered files instead of re-rendering
+        # 100 % of the catalog every time the catalog DB changes.
+        #
+        # Intentionally narrow: ONLY `product_images/` is preserved.
+        # Everything else in `dist/` (interaction_db.sqlite, detail_blobs/,
+        # detail_index.json, export_audit_report.json) is correctly wiped
+        # so downstream steps regenerate fresh artifacts from the new
+        # catalog DB.
+        preserved_image_dir = output_dir / "product_images"
+        if preserved_image_dir.is_dir():
+            shutil.move(str(preserved_image_dir), str(staging_dir / "product_images"))
+
         if output_dir.exists():
             shutil.rmtree(output_dir)
         staging_dir.rename(output_dir)
