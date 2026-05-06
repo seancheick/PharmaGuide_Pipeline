@@ -4383,8 +4383,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/12817526/",
             "https://www.nccih.nih.gov/health/hawthorn"
           ],
-          "alert_headline": "May add to heart medication effects",
-          "alert_body": "Hawthorn can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding hawthorn.",
+          "alert_headline": "Use with clinician guidance in heart disease",
+          "alert_body": "Hawthorn may affect heart function and has been studied in heart failure. If you use heart medications, review hawthorn with your clinician.",
           "informational_note": "Hawthorn can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -4860,8 +4860,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
           ],
-          "alert_headline": "May affect blood pressure and heart healing",
-          "alert_body": "L-arginine can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding L-arginine.",
+          "alert_headline": "Review L-arginine with your heart clinician",
+          "alert_body": "L-arginine affects blood vessel function and may not be appropriate for all heart conditions. If you have a heart condition, use only with clinician guidance.",
           "informational_note": "L-arginine can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5182,7 +5182,7 @@
         },
         {
           "condition_id": "heart_disease",
-          "severity": "monitor",
+          "severity": "informational",
           "evidence_level": "probable",
           "mechanism": "Magnesium plays a critical role in cardiac electrophysiology, stabilizing cardiac membranes and modulating ion channels. Hypomagnesemia is associated with cardiac arrhythmias. However, in patients with heart disease who also have renal impairment (common comorbidity), magnesium supplements can accumulate and cause hypermagnesemia, leading to bradycardia, cardiac conduction block, and potentially cardiac arrest.",
           "action": "Use magnesium supplements with caution in heart disease patients, especially those with reduced kidney function. Do not exceed recommended doses without renal function assessment. Monitor for signs of hypermagnesemia (weakness, bradycardia).",
@@ -5190,8 +5190,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/25864370/",
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
           ],
-          "alert_headline": "Discuss with your heart clinician",
-          "alert_body": "Magnesium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding magnesium.",
+          "alert_headline": "Discuss magnesium with your clinician",
+          "alert_body": "Magnesium is relevant in some heart contexts, but excess can be an issue with kidney disease or certain medications. Ask your clinician about dose and monitoring.",
           "informational_note": "Magnesium can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5518,7 +5518,7 @@
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
           ],
           "alert_headline": "May raise potassium with heart medications",
-          "alert_body": "Potassium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding potassium.",
+          "alert_body": "If you have a heart condition and take medications that raise potassium (ACE inhibitors, ARBs, spironolactone), extra potassium can be risky. Ask your clinician before adding potassium.",
           "informational_note": "Potassium can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8715,7 +8715,7 @@
       "condition_rules": [
         {
           "condition_id": "heart_disease",
-          "severity": "monitor",
+          "severity": "informational",
           "evidence_level": "established",
           "mechanism": "Omega-3 fatty acids (EPA/DHA) have established cardioprotective effects, reducing major cardiovascular events (RR 0.95), MI (RR 0.90), and cardiovascular death (RR 0.94) in meta-analysis of 15 RCTs. However, high-dose prescription omega-3 supplementation (≥3g EPA+DHA/day) is associated with a significantly increased risk of atrial fibrillation (RR 1.25, 95% CI 1.10–1.41). This dose-dependent AFib risk is most prominent in populations with existing cardiovascular disease.",
           "action": "Low to moderate doses (≤2g/day) are generally cardioprotective. High doses (≥3g/day) should only be used under prescriber supervision with ECG monitoring for AFib in patients with heart disease or existing AFib risk factors.",
@@ -8723,8 +8723,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/36103100/",
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
           ],
-          "alert_headline": "Discuss high-dose omega-3 with clinician",
-          "alert_body": "Omega-3 can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Omega-3.",
+          "alert_headline": "Review high-dose omega-3 with clinician",
+          "alert_body": "Omega-3s may be appropriate for some heart-risk profiles, but high doses can matter for bleeding risk, rhythm history, or medication plans. Review with your clinician.",
           "informational_note": "Omega-3 can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -9959,8 +9959,8 @@
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/21505219/"
           ],
-          "alert_headline": "Discuss high-dose vitamin D with clinician",
-          "alert_body": "Vitamin D can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Vitamin D.",
+          "alert_headline": "High-dose vitamin D needs monitoring",
+          "alert_body": "Normal vitamin D is generally fine, but very high doses can cause hypercalcemia. If you have a heart condition, use blood levels and clinician guidance for dosing.",
           "informational_note": "Vitamin D can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -11661,8 +11661,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/23951541/",
             "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
           ],
-          "alert_headline": "High-dose calcium may raise heart risk",
-          "alert_body": "Calcium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding calcium.",
+          "alert_headline": "Supplemental calcium — review with clinician",
+          "alert_body": "Some studies link calcium supplements with a modest increase in cardiovascular events. If you have a heart condition, review your total calcium intake with your clinician.",
           "informational_note": "Calcium can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12689,7 +12689,7 @@
       "condition_rules": [
         {
           "condition_id": "heart_disease",
-          "severity": "monitor",
+          "severity": "informational",
           "evidence_level": "probable",
           "mechanism": "CoQ10 (ubiquinone/ubiquinol) is involved in mitochondrial ATP synthesis in cardiac myocytes. Supplementation has shown modest benefit in heart failure (improved ejection fraction and symptom class in Q-SYMBIO trial). However, CoQ10 may interfere with anticoagulation therapy (warfarin), an important consideration in cardiac patients.",
           "action": "CoQ10 may be beneficial in heart failure under clinician guidance. Monitor INR closely if on warfarin, as CoQ10 has been associated with increased bleeding risk (OR 3.69 in longitudinal study). Discuss with cardiologist before initiating.",
@@ -12697,8 +12697,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/12083489/"
           ],
-          "alert_headline": "Discuss with your heart clinician",
-          "alert_body": "CoQ10 can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding CoQ10.",
+          "alert_headline": "Discuss CoQ10 with your heart clinician",
+          "alert_body": "CoQ10 has been studied in some heart conditions, but it should not replace prescribed heart medication. Ask your clinician if it fits your care plan.",
           "informational_note": "CoQ10 can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -14606,8 +14606,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/26661577/"
           ],
-          "alert_headline": "Stimulant — may stress the heart",
-          "alert_body": "Yerba mate can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding yerba mate.",
+          "alert_headline": "Stimulant — review with heart clinician",
+          "alert_body": "Yerba mate contains caffeine that can affect heart rate and blood pressure. If you have a heart condition, review caffeine-containing supplements with your clinician.",
           "informational_note": "Yerba mate can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -14803,7 +14803,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/21954510/"
           ],
           "alert_headline": "May affect blood pressure and heart rhythm",
-          "alert_body": "Licorice root can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding licorice root.",
+          "alert_body": "Licorice can lower potassium and raise blood pressure, which may matter if you have a heart condition or take heart medications. This does not apply to DGL licorice.",
           "informational_note": "Licorice root can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15644,8 +15644,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/21676849/",
             "https://pubmed.ncbi.nlm.nih.gov/15961987/"
           ],
-          "alert_headline": "Stimulant — may stress the heart",
-          "alert_body": "Guarana can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding guarana.",
+          "alert_headline": "Stimulant — review with heart clinician",
+          "alert_body": "Guarana adds caffeine that can affect heart rate and blood pressure. If you have a heart condition, review caffeine-containing supplements with your clinician.",
           "informational_note": "Guarana can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -18891,8 +18891,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30342950/"
           ],
-          "alert_headline": "PDE5-like effect — caution with heart meds",
-          "alert_body": "Icariin can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding icariin.",
+          "alert_headline": "PDE5-like effect — review with clinician",
+          "alert_body": "Icariin may have PDE5-inhibitor-like effects on blood vessels. If you have a heart condition or take nitrates or blood pressure medicines, review use with your clinician.",
           "informational_note": "Icariin can affect cardiovascular pathways — relevant to people with heart conditions.",
           "profile_gate": {
             "gate_type": "condition",
