@@ -15203,13 +15203,13 @@
           "alert_body": "If you are severely immunocompromised, on chemotherapy, or post-transplant, live probiotics carry a small infection risk. Most autoimmune users can use them safely.",
           "informational_note": "Probiotic infection risk is for severe immunocompromise, not general autoimmune conditions.",
           "profile_gate": {
-            "gate_type": "condition",
+            "gate_type": "profile_flag",
             "requires": {
-              "conditions_any": [
-                "autoimmune"
-              ],
+              "conditions_any": [],
               "drug_classes_any": [],
-              "profile_flags_any": []
+              "profile_flags_any": [
+                "severely_immunocompromised"
+              ]
             },
             "excludes": {
               "conditions_any": [],

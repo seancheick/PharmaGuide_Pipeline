@@ -44,6 +44,7 @@ EXPECTED_FLAG_IDS = {
     "surgery_scheduled",
     "hypoglycemia_history",
     "bleeding_history",
+    "severely_immunocompromised",
 }
 
 
@@ -89,7 +90,7 @@ def test_no_trimester_subflags(flags):
 
 
 def test_categories_are_recognized(flags):
-    valid_categories = {"reproductive", "perioperative", "metabolic", "hematologic"}
+    valid_categories = {"reproductive", "perioperative", "metabolic", "hematologic", "immune"}
     for flag in flags:
         assert flag["category"] in valid_categories, (
             f"flag {flag['id']} has unknown category {flag['category']!r}; "

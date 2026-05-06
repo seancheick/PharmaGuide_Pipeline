@@ -372,6 +372,12 @@
       "label": "Bleeding History",
       "category": "hematologic",
       "description": "User has a personal/family bleeding-disorder history. Used to escalate antiplatelet/anticoagulant interaction severity."
+    },
+    {
+      "id": "severely_immunocompromised",
+      "label": "Severely immunocompromised",
+      "category": "immune",
+      "description": "User is severely immunocompromised (e.g. chemotherapy, organ transplant, high-dose immunosuppressants). Gates probiotic infection risk and other severe-only warnings."
     }
   ],
   "product_forms": [
