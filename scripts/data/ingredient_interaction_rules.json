@@ -4532,8 +4532,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/29791909/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Excess iodine may disrupt thyroid",
-          "alert_body": "Iodine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding iodine and monitor your labs.",
+          "alert_headline": "High iodine may disrupt thyroid control",
+          "alert_body": "Iodine is essential for thyroid function, but high-dose iodine or kelp supplements can disrupt thyroid control in people with thyroid disease. Review iodine dose with your clinician.",
           "informational_note": "Iodine affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -11798,7 +11798,7 @@
       },
       "condition_rules": [
         {
-          "severity": "caution",
+          "severity": "monitor",
           "mechanism": "Soy isoflavones including genistein inhibit thyroid peroxidase (TPO), the enzyme required for thyroid hormone synthesis. Peripubertal and high-dose exposure associated with subclinical hypothyroidism via disruption of the hypothalamic-pituitary-thyroid axis.",
           "action": "Individuals with thyroid disorders should discuss soy isoflavone supplementation with their healthcare provider. Monitor thyroid function tests if using high-dose soy isoflavone supplements.",
           "last_reviewed": "2026-04-09",
@@ -11807,8 +11807,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/36017706/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "May inhibit thyroid hormone synthesis",
-          "alert_body": "Genistein can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding genistein and monitor your labs.",
+          "alert_headline": "Isoflavones may affect thyroid balance",
+          "alert_body": "High-dose isoflavone supplements may affect thyroid hormone synthesis, especially when iodine intake is low or thyroid disease is present. Review concentrated isoflavone use with your clinician.",
           "informational_note": "Genistein affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -11885,7 +11885,7 @@
       },
       "condition_rules": [
         {
-          "severity": "caution",
+          "severity": "informational",
           "mechanism": "Selenium is essential for iodothyronine deiodinase (type I/II/III) function required to convert T4 to active T3. Selenium supplementation may benefit Hashimoto thyroiditis by reducing thyroid peroxidase antibody titers. However, excess selenium (>400 mcg/day) can paradoxically impair thyroid function and is toxic.",
           "action": "Selenium supplementation in thyroid disorders should be guided by serum selenium levels. Doses above 200 mcg/day should only be used under medical supervision.",
           "last_reviewed": "2026-04-09",
@@ -11894,8 +11894,8 @@
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Affects thyroid hormone activation",
-          "alert_body": "Selenium can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding selenium and monitor your labs.",
+          "alert_headline": "Keep selenium within thyroid-safe range",
+          "alert_body": "Selenium is involved in thyroid hormone metabolism, but excessive intake can be harmful. If you have thyroid disease, avoid stacking multiple high-selenium products without clinician guidance.",
           "informational_note": "Selenium affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12005,8 +12005,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/31203475/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "May raise thyroid hormone levels",
-          "alert_body": "Ashwagandha can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding ashwagandha and monitor your labs.",
+          "alert_headline": "May raise thyroid hormone activity",
+          "alert_body": "Ashwagandha has been linked to increased thyroid hormone activity and rare thyrotoxicosis reports. If you have thyroid disease or take thyroid medication, review use with your clinician.",
           "informational_note": "Ashwagandha affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12092,9 +12092,9 @@
             "https://pubmed.ncbi.nlm.nih.gov/40417451/",
             "https://pubmed.ncbi.nlm.nih.gov/37988295/"
           ],
-          "evidence_level": "probable",
+          "evidence_level": "established",
           "alert_headline": "May interfere with thyroid lab tests",
-          "alert_body": "Biotin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding Biotin and monitor your labs.",
+          "alert_body": "High-dose biotin can distort some thyroid blood tests, including TSH and thyroid hormone assays. Tell your clinician and lab if you take biotin before thyroid testing.",
           "informational_note": "Biotin affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15441,15 +15441,15 @@
         },
         {
           "condition_id": "thyroid_disorder",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "The soy isoflavones genistein and daidzein — present in red clover at significant concentrations — are established inhibitors of thyroid peroxidase (TPO), the enzyme responsible for thyroid hormone synthesis. In vitro data demonstrate that genistein and daidzein competitively inhibit TPO at nutritional concentrations. In iodine-deficient individuals or those on thyroid replacement therapy, this inhibition can impair thyroid hormone synthesis and reduce circulating T3/T4.",
           "action": "Use caution in patients with hypothyroidism or those on levothyroxine. Separate red clover isoflavone supplements from thyroid medications by at least 4 hours. Monitor thyroid function (TSH) if initiating high-dose red clover supplements.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/9464451/"
           ],
-          "alert_headline": "Isoflavones may affect thyroid",
-          "alert_body": "Red clover can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding red clover and monitor your labs.",
+          "alert_headline": "Isoflavones may affect thyroid balance",
+          "alert_body": "Red clover contains isoflavones that may affect thyroid enzyme activity. If you have thyroid disease, review concentrated red clover supplements with your clinician.",
           "informational_note": "Red clover affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -17815,15 +17815,15 @@
       "condition_rules": [
         {
           "condition_id": "thyroid_disorder",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "theoretical",
           "mechanism": "Bacopa monnieri has been shown in animal studies to increase thyroid hormone levels (T4 specifically) via stimulation of thyroid iodide uptake and thyroglobulin synthesis. The clinical relevance in humans is uncertain but persons with hyperthyroidism or Graves disease may be at greater risk.",
           "action": "Use with caution in thyroid disorders, particularly hyperthyroidism. Monitor thyroid function tests (TSH, free T4) periodically during use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27912958/"
           ],
-          "alert_headline": "May raise thyroid hormone levels",
-          "alert_body": "Bacopa can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding bacopa and monitor your labs.",
+          "alert_headline": "Thyroid effects are uncertain",
+          "alert_body": "Animal studies suggest bacopa may affect thyroid hormone levels, but human relevance is unclear. If you have thyroid disease, monitor symptoms and labs with your clinician.",
           "informational_note": "Bacopa affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -18239,8 +18239,8 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
           ],
-          "alert_headline": "May reduce thyroid hormone activity",
-          "alert_body": "Acetyl-L-carnitine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding Acetyl-L-carnitine and monitor your labs.",
+          "alert_headline": "May affect thyroid hormone action",
+          "alert_body": "L-carnitine may reduce some thyroid hormone effects in tissues. If you have thyroid disease or use thyroid medication, review use with your clinician.",
           "informational_note": "Acetyl-L-carnitine affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -18671,8 +18671,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33795250/"
           ],
-          "alert_headline": "Thyroid hormone precursor — monitor",
-          "alert_body": "L-tyrosine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding L-tyrosine and monitor your labs.",
+          "alert_headline": "Thyroid hormone precursor — use caution",
+          "alert_body": "L-tyrosine is used to make thyroid hormones, but supplement effects vary. If you have thyroid disease or take thyroid medication, review high-dose tyrosine with your clinician.",
           "informational_note": "L-tyrosine affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -19792,15 +19792,15 @@
       "condition_rules": [
         {
           "condition_id": "thyroid_disorder",
-          "severity": "caution",
-          "evidence_level": "probable",
+          "severity": "monitor",
+          "evidence_level": "theoretical",
           "mechanism": "Quercetin inhibits thyroid peroxidase (TPO), the enzyme responsible for iodinating tyrosine residues in thyroglobulin to form T3 and T4. At high supplemental doses (>500 mg/day), this TPO inhibition may impair thyroid hormone synthesis, contributing to goitre formation or worsening hypothyroidism, particularly in individuals with borderline iodine intake.",
           "action": "Use with caution in thyroid disorders, especially hypothyroidism. Limit dose to under 500 mg/day. Monitor TSH periodically and inform endocrinologist of use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/29127724/"
           ],
-          "alert_headline": "May inhibit thyroid hormone synthesis",
-          "alert_body": "Quercetin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding quercetin and monitor your labs.",
+          "alert_headline": "High-dose quercetin may affect thyroid",
+          "alert_body": "Quercetin may affect thyroid-related enzymes in preclinical research. Clinical relevance is uncertain. If you have thyroid disease, use high-dose supplements with clinician guidance.",
           "informational_note": "Quercetin affects thyroid pathways — relevant to people with thyroid conditions.",
           "profile_gate": {
             "gate_type": "condition",
