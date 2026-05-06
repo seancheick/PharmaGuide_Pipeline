@@ -3108,11 +3108,25 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # Probiotic detail — strains, CFU, clinical matches
     probiotic_data = safe_dict(enriched.get("probiotic_data"))
     if probiotic_data.get("is_probiotic_product"):
+        # Pre-format the user-facing CFU label so Flutter renders without
+        # re-deciding rounding rules — same pattern as display_dose_label
+        # on ingredient rows. e.g. 25.0 → "25 billion CFU"; 5.5 → "5.5
+        # billion CFU"; 0/None → "" (empty hides the chip).
+        billion = probiotic_data.get("total_billion_count")
+        if isinstance(billion, (int, float)) and billion > 0:
+            if billion == int(billion):
+                _cfu_label = f"{int(billion)} billion CFU"
+            else:
+                _cfu_label = f"{billion:g} billion CFU"
+        else:
+            _cfu_label = ""
+
         blob["probiotic_detail"] = {
             "is_probiotic": True,
             "total_strain_count": probiotic_data.get("total_strain_count"),
             "total_cfu": probiotic_data.get("total_cfu"),
             "total_billion_count": probiotic_data.get("total_billion_count"),
+            "total_cfu_label": _cfu_label,
             "guarantee_type": probiotic_data.get("guarantee_type"),
             "has_cfu": probiotic_data.get("has_cfu"),
             # clinical_strains entries may carry per-strain is_inactivated /
