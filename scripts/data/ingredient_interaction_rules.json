@@ -2,13 +2,13 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "5.3.1",
+    "schema_version": "5.3.2",
     "last_updated": "2026-05-05",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
     "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
-    "flutter_schema_version": "5.3.1",
+    "flutter_schema_version": "5.3.2",
     "migration": {
       "completed_migrations": [
         {
@@ -22,6 +22,12 @@
           "to": "5.3.1",
           "date": "2026-05-05",
           "summary": "Diabetes-rule clinical accuracy patch: removed ghost PMID 10479204 (psyllium); dropped beta-cell regeneration overclaim (gymnema); downgraded magnesium evidence (established → probable); upgraded aloe evidence (theoretical → limited) and scoped to oral; softened bitter melon plant-insulin-analog framing; reframed cinnamon evidence (probable → limited); downgraded garlic diabetes severity (caution → monitor); downgraded tribulus evidence (probable → limited, single-RCT note); added PMID 24438170 (fenugreek) and PMID 34467577 (gymnema); refreshed alert_headlines from generic 'Caution with diabetes' to specific phrasing. No schema fields added; backward-compatible."
+        },
+        {
+          "from": "5.3.1",
+          "to": "5.3.2",
+          "date": "2026-05-05",
+          "summary": "Pregnancy-rule clinical accuracy patch: softened 5-HTP mechanism (removed organogenesis framing in favor of 'limited human pregnancy data + serotonergic pharmacology'); softened black seed oil mechanism (preclinical animal signal, not proven human risk); reframed butterbur mechanism to make PA-free vs raw distinction explicit (severity stays contraindicated as defensive default for unverified products); refreshed 10 generic 'Not recommended during pregnancy' headlines with reason-specific phrasing (hormone-active, uterine activity, FDA-advised, stimulant laxative, etc.). No schema fields added; backward-compatible."
         }
       ]
     },
@@ -59,7 +65,7 @@
             "https://www.fda.gov/food/dietary-supplements/dietary-supplement-ingredient-directory",
             "https://www.fda.gov/food/hfp-constituent-updates/fda-launches-new-directory-ingredients-used-products-marketed"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "Hormone-active — avoid in pregnancy",
           "alert_body": "7-Keto DHEA has hormone-active properties and is not established as safe in pregnancy. If you are pregnant, talk to your obstetrician before using any product containing it.",
           "informational_note": "7-Keto DHEA is hormonally active — relevant to anyone pregnant or planning pregnancy."
         }
@@ -611,7 +617,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-cohosh"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "May affect uterine activity",
           "alert_body": "Black cohosh may have uterotonic and hormone-active effects. If you are pregnant, do not use black cohosh unless specifically directed by your obstetrician.",
           "informational_note": "Black cohosh is hormone-active — relevant to anyone pregnant or planning pregnancy."
         },
@@ -865,7 +871,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "May affect uterine activity",
           "alert_body": "Dong quai has traditional uterine and hormone-active effects with no established pregnancy safety. If you are pregnant, talk to your obstetrician before any use.",
           "informational_note": "Dong quai is hormone-active — relevant to anyone pregnant or planning pregnancy."
         }
@@ -1579,7 +1585,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "Newborn bilirubin risk near term",
           "alert_body": "Goldenseal contains berberine and raises newborn jaundice concerns. If you are pregnant, talk to your obstetrician and do not use goldenseal.",
           "informational_note": "Goldenseal has neonatal safety concerns relevant to anyone pregnant or planning pregnancy."
         }
@@ -2416,7 +2422,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "Birth-defect signal — avoid in pregnancy",
           "alert_body": "St John's Wort has been flagged for possible birth-defect risk and major drug interactions. If you are pregnant, talk to a specialist before any use.",
           "informational_note": "St John's Wort has pregnancy safety concerns relevant to anyone pregnant or planning pregnancy."
         },
@@ -6527,7 +6533,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/30735081/",
             "https://pubmed.ncbi.nlm.nih.gov/21800902/"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "Hormone-active — avoid in pregnancy",
           "alert_body": "Wild yam contains diosgenin, a phytoestrogen with hormone-active effects. If you are pregnant, do not use wild yam unless directed by your obstetrician.",
           "informational_note": "Wild yam is hormone-active — relevant to anyone pregnant or planning pregnancy."
         },
@@ -7311,13 +7317,13 @@
           "condition_id": "pregnancy",
           "severity": "avoid",
           "evidence_level": "theoretical",
-          "mechanism": "5-HTP is a direct precursor to serotonin via aromatic L-amino acid decarboxylase. Elevated maternal serotonin during organogenesis has been associated with cardiac and craniofacial developmental abnormalities in animal models; human safety data are absent.",
-          "action": "Avoid 5-HTP during pregnancy. No human safety data exist; consult an obstetrician before any use.",
+          "mechanism": "5-HTP is a direct precursor to serotonin and has serotonergic pharmacology. Human pregnancy safety data are absent, so use is precautionary rather than evidence-driven; conservative practice is to avoid until safety is established.",
+          "action": "Avoid 5-HTP during pregnancy unless your obstetric clinician specifically recommends it. Use is precautionary because human safety data are lacking.",
           "sources": [
             "https://www.nccih.nih.gov/health/5-htp",
             "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "Pregnancy safety is unclear",
           "alert_body": "5-HTP raises serotonin and has no human pregnancy safety data. If you are pregnant, talk to your obstetrician before any 5-HTP use.",
           "informational_note": "5-HTP raises serotonin — relevant to anyone pregnant or planning pregnancy."
         }
@@ -7446,7 +7452,7 @@
             "https://www.nccih.nih.gov/health/chasteberry",
             "https://pubmed.ncbi.nlm.nih.gov/23136064/"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "Hormone-active — avoid in pregnancy",
           "alert_body": "Chasteberry influences pituitary hormones and is not recommended in pregnancy. If pregnancy is confirmed, talk to your obstetrician about discontinuing.",
           "informational_note": "Chasteberry affects pituitary hormones — relevant to anyone pregnant or planning pregnancy."
         },
@@ -7588,15 +7594,15 @@
           "condition_id": "pregnancy",
           "severity": "contraindicated",
           "evidence_level": "probable",
-          "mechanism": "Raw butterbur (Petasites hybridus) contains pyrrolizidine alkaloids (PAs) including senkirkine and senecionine, which are hepatotoxic and genotoxic. PAs are metabolised by CYP3A4 to pyrrolic esters that form DNA adducts and cause sinusoidal obstruction syndrome. Fetal exposure risk from maternal ingestion is unacceptable.",
-          "action": "Do not use any butterbur product containing pyrrolizidine alkaloids during pregnancy. Even PA-free certified extracts lack adequate human safety data for pregnancy; avoid entirely.",
+          "mechanism": "Raw or non-PA-free butterbur (Petasites hybridus) contains pyrrolizidine alkaloids (senkirkine, senecionine) that are hepatotoxic and genotoxic — fetal exposure is unacceptable. Most commercial butterbur products are not certified PA-free, so the defensive default is contraindication. Even certified PA-free extracts lack human pregnancy safety data and remain not recommended.",
+          "action": "Do not use any butterbur product during pregnancy unless it is certified PA-free AND your obstetric clinician specifically approves. The default assumption for unverified products is contraindication.",
           "sources": [
             "https://www.nccih.nih.gov/health/butterbur",
             "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances"
           ],
-          "alert_headline": "Not recommended during pregnancy",
-          "alert_body": "Raw butterbur contains liver-toxic alkaloids. If you are pregnant, do not use butterbur — even PA-free extracts lack pregnancy safety data.",
-          "informational_note": "Butterbur contains hepatotoxic alkaloids — relevant to anyone pregnant or planning pregnancy."
+          "alert_headline": "Liver-toxic alkaloid risk in pregnancy",
+          "alert_body": "If you are pregnant, do not use butterbur. Most products are not certified PA-free and contain liver-toxic alkaloids; PA-free extracts also lack pregnancy data. Talk to your obstetrician.",
+          "informational_note": "Butterbur PA content makes it unsafe in pregnancy — relevant to anyone pregnant or planning pregnancy."
         },
         {
           "condition_id": "liver_disease",
@@ -7642,7 +7648,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/cascara-sagrada"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "Stimulant laxative — avoid in pregnancy",
           "alert_body": "Cascara sagrada stimulates colonic muscle and passes into breast milk. If you are pregnant, talk to your obstetrician about a gentler laxative instead.",
           "informational_note": "Cascara sagrada is a stimulant laxative — relevant to anyone pregnant."
         },
@@ -7720,7 +7726,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "Pregnancy safety is unclear",
           "alert_body": "Chinese skullcap lacks human pregnancy safety data and animal studies suggest teratogenic signals. If you are pregnant, talk to your obstetrician before any use.",
           "informational_note": "Chinese skullcap lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy."
         },
@@ -7789,14 +7795,14 @@
           "condition_id": "pregnancy",
           "severity": "avoid",
           "evidence_level": "probable",
-          "mechanism": "Nigella sativa seed oil has demonstrated uterine contraction-stimulating activity in animal models (oxytocic effect), attributed to thymoquinone stimulation of uterine smooth muscle. High-dose use has been associated with abortifacient effects in animal studies.",
-          "action": "Avoid black seed oil during pregnancy, especially in the first and third trimesters. Inform obstetrician of use.",
+          "mechanism": "Black seed oil (Nigella sativa) has limited human pregnancy safety data, and preclinical (animal) studies have signaled uterine-effect activity at high doses. Human pregnancy effects are not established; conservative practice is to avoid until data exist.",
+          "action": "Avoid black seed oil during pregnancy unless your obstetric clinician specifically recommends it. Use is precautionary because human pregnancy data are lacking.",
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed"
           ],
-          "alert_headline": "Not recommended during pregnancy",
-          "alert_body": "Black seed oil has demonstrated uterine-stimulating activity in animal studies. If you are pregnant, talk to your obstetrician before use, especially in the first and third trimesters.",
-          "informational_note": "Black seed oil has uterotonic activity relevant to anyone pregnant."
+          "alert_headline": "Pregnancy safety is unclear",
+          "alert_body": "Black seed oil has limited pregnancy safety data and animal studies have flagged uterine-effect signals. If you are pregnant, talk to your obstetrician before use.",
+          "informational_note": "Black seed oil pregnancy data are limited — relevant to anyone pregnant."
         }
       ],
       "drug_class_rules": [
@@ -9352,7 +9358,7 @@
           "sources": [
             "https://www.fda.gov/consumers/consumer-updates/what-you-need-know-and-what-were-working-find-out-about-products-containing-cannabis-or-cannabis"
           ],
-          "alert_headline": "Not recommended during pregnancy",
+          "alert_headline": "FDA advises against use in pregnancy",
           "alert_body": "FDA strongly advises against CBD use in pregnancy based on animal studies. If you are pregnant, talk to your obstetrician before any CBD product.",
           "informational_note": "CBD lacks pregnancy safety data — relevant to anyone pregnant or planning pregnancy."
         }
