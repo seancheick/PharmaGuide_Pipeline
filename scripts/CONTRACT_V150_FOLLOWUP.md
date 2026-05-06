@@ -174,6 +174,18 @@ Sequencing matters: the contract migration MUST land before Phase 4 (ingredient 
 
 ---
 
+## Probiotic UX follow-ups (dev audit 2026-05-05)
+
+| # | Item | Status |
+|---|---|---|
+| 1 | `ProbioticDetailSection` reads non-existent `strains` / `survivability` keys; `total_cfu` via `safeString` on a numeric | ✅ Fixed — Flutter `f190890` |
+| 2 | CFU not formatted for display | ✅ Fixed — pipeline emits `total_cfu_label` (`2a3b893`); Flutter has numeric fallback for older blobs |
+| 3 | Per-strain `cfu_per_day` / `evidence_level` not consumed | ✅ Fixed — Flutter `f190890` (`_StrainRow` renders `clinical_strains[]` with CFU + evidence + postbiotic badge) |
+| 4 | Active-row "Amount not disclosed" wording on probiotic blend members reads as opacity | ✅ Fixed — pipeline overrides to "Per-strain dose not listed" when ingredient is a probiotic strain in a probiotic product |
+| 5 | DSLD source gaps for some SKUs (e.g. PureProbiotic) — DSLD's structured import didn't capture CFU even though the label shows it | ⏸ DEFERRED — out of session scope. Two paths: (a) manual override JSON for popular SKUs (small, durable); (b) manufacturer-feed enrichment (bigger lift, right answer long-term). Re-evaluate after T7D rebuild surfaces how many real products are affected. |
+
+---
+
 ## Definition of done — status as of 2026-05-05
 
 - [x] Fresh pipeline run completes; corpus carries v1.5.0 contract fields. (8331 blobs in `scripts/dist/detail_blobs/`, schema v1.5.0)

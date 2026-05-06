@@ -1905,6 +1905,7 @@ def _compute_standardization_note(ingredient: Dict[str, Any]) -> Optional[str]:
 # Never infer member dose from blend total; never leak raw "NP".
 _EM_DASH = "—"
 _NOT_DISCLOSED_TEXT = "Amount not disclosed"
+_PROBIOTIC_STRAIN_NOT_LISTED_TEXT = "Per-strain dose not listed"
 _NP_SENTINELS = {"np", "n/p", "not provided", ""}
 
 
@@ -1917,9 +1918,18 @@ def _format_dose_number(qty: float) -> str:
     return f"{qty:g}"
 
 
-def _compute_display_dose_label(ingredient: Dict[str, Any]) -> str:
+def _compute_display_dose_label(
+    ingredient: Dict[str, Any],
+    is_probiotic_strain: bool = False,
+) -> str:
     """Produce the user-facing dose string. Three classes only; never
     infers from blend totals, never leaks the internal "NP" sentinel.
+
+    ``is_probiotic_strain`` swaps the Class-2 wording from the generic
+    "Amount not disclosed" to "Per-strain dose not listed" so the user
+    isn't misled into thinking the manufacturer hid information — per-
+    strain CFU is rarely listed even on transparent probiotic labels
+    and the product-level total appears on ProbioticDetailSection.
     """
     qty_raw = ingredient.get("quantity")
     qty = safe_float(qty_raw, 0) if qty_raw is not None else 0.0
@@ -1946,7 +1956,10 @@ def _compute_display_dose_label(ingredient: Dict[str, Any]) -> str:
 
     # Class 2 — prop-blend member without an individual dose.
     if is_blend_member:
-        return _NOT_DISCLOSED_TEXT
+        return (
+            _PROBIOTIC_STRAIN_NOT_LISTED_TEXT if is_probiotic_strain
+            else _NOT_DISCLOSED_TEXT
+        )
 
     # Class 3 — truly missing.
     return _EM_DASH
@@ -2380,6 +2393,24 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     elif isinstance(norm_raw, dict):
         norm_data = norm_raw
 
+    # Probiotic context for active-row dose-label override. When a
+    # probiotic strain is a blend member without an individual dose,
+    # the bare "Amount not disclosed" label implies the manufacturer
+    # hid information — but for probiotics the per-strain dose is
+    # rarely listed even on transparent labels, and the product-level
+    # CFU is shown on the ProbioticDetailSection. Swap the wording to
+    # "Per-strain dose not listed" so users don't read it as opacity.
+    _probiotic_data_block = safe_dict(enriched.get("probiotic_data"))
+    _is_probiotic_product = bool(_probiotic_data_block.get("is_probiotic_product"))
+    probiotic_strain_names: set[str] = set()
+    if _is_probiotic_product:
+        for blend in safe_list(_probiotic_data_block.get("probiotic_blends")):
+            if not isinstance(blend, dict):
+                continue
+            for s in safe_list(blend.get("strains")):
+                if isinstance(s, str) and s.strip():
+                    probiotic_strain_names.add(s.strip().lower())
+
     # Sprint E1.3.2 — per-strain probiotic adequacy lookup, keyed by the
     # strain name as matched in the enricher. Build-time adapter attaches
     # ``adequacy_tier`` + ``clinical_support_level`` onto the ingredient
@@ -2486,8 +2517,17 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             ),
             # Sprint E1.2.2.a — pre-computed Flutter display label
             "display_label": _compute_display_label(ing),
-            # Sprint E1.2.2.b — pre-computed Flutter dose label
-            "display_dose_label": _compute_display_dose_label(ing),
+            # Sprint E1.2.2.b — pre-computed Flutter dose label.
+            # Probiotic blend members override the generic "Amount not
+            # disclosed" copy with "Per-strain dose not listed" so users
+            # don't read it as the manufacturer hiding information —
+            # per-strain CFU is rarely listed even on transparent
+            # probiotic labels and the product-level total is shown on
+            # ProbioticDetailSection.
+            "display_dose_label": _compute_display_dose_label(
+                ing,
+                is_probiotic_strain=name.strip().lower() in probiotic_strain_names,
+            ),
             "dose_status": _compute_dose_status(ing),
             # Sprint E1.2.2.c — standardization claim (None when not known)
             "standardization_note": _compute_standardization_note({
