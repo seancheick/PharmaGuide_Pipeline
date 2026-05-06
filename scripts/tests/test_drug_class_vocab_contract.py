@@ -8,7 +8,7 @@ selectable) plus 8 rule-only drug classes referenced by interaction
 rules but not surfaced as profile picks (CYP substrates, narrow families).
 
 Locked decisions:
-  - Exactly 21 drug classes (13 user_selectable + 8 rule-only)
+  - Exactly 22 drug classes (14 user_selectable + 8 rule-only)
   - Lean schema + extras: id, name, notes, examples, rx_status, user_selectable
   - All IDs lowercase snake_case
   - rx_status enum: rx_only | otc | mixed
@@ -40,20 +40,20 @@ def drug_classes(vocab):
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 21
-    assert md["user_selectable_count"] == 13
+    assert md["total_entries"] == 22
+    assert md["user_selectable_count"] == 14
     assert md["rule_only_count"] == 8
     assert "LOCKED" in md["status"]
 
 
-def test_exactly_21_drug_classes_locked(drug_classes):
-    assert len(drug_classes) == 21
+def test_exactly_22_drug_classes_locked(drug_classes):
+    assert len(drug_classes) == 22
 
 
 def test_user_selectable_split_correct(drug_classes):
     selectable = [d for d in drug_classes if d.get("user_selectable")]
     rule_only = [d for d in drug_classes if not d.get("user_selectable")]
-    assert len(selectable) == 13, f"expected 13 user_selectable; got {len(selectable)}"
+    assert len(selectable) == 14, f"expected 14 user_selectable; got {len(selectable)}"
     assert len(rule_only) == 8, f"expected 8 rule-only; got {len(rule_only)}"
 
 
@@ -83,7 +83,8 @@ def test_user_selectable_13_match_schema_ids_dart(drug_classes):
     lib/core/constants/schema_ids.dart"""
     expected = {
         "anticoagulants", "antiplatelets", "nsaids", "antihypertensives",
-        "hypoglycemics", "thyroid_medications", "sedatives",
+        "hypoglycemics_high_risk", "hypoglycemics_lower_risk",
+        "thyroid_medications", "sedatives",
         "immunosuppressants", "statins", "antidepressants_ssri_snri",
         "maois", "cardiac_glycosides", "anticholinergics",
     }
@@ -144,8 +145,9 @@ def test_every_interaction_rule_drug_class_id_in_vocab(drug_classes):
     found = set()
     for relpath in (
         "ingredient_interaction_rules.json",
-        "ingredient_interaction_rules_Reviewed.json",
         "clinical_risk_taxonomy.json",
+        # ingredient_interaction_rules_Reviewed.json excluded — frozen at
+        # schema 5.2.0 (pre-hypoglycemics split), used only for diffing.
     ):
         path = os.path.join(os.path.dirname(__file__), "..", "data", relpath)
         if not os.path.exists(path):

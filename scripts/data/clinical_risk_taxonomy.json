@@ -131,8 +131,14 @@
       "display_priority": 4
     },
     {
-      "id": "hypoglycemics",
-      "label": "Glucose-Lowering Medications",
+      "id": "hypoglycemics_high_risk",
+      "label": "Glucose-Lowering Medications (High-Risk)",
+      "category": "metabolic",
+      "display_priority": 5
+    },
+    {
+      "id": "hypoglycemics_lower_risk",
+      "label": "Glucose-Lowering Medications (Lower-Risk)",
       "category": "metabolic",
       "display_priority": 5
     },
