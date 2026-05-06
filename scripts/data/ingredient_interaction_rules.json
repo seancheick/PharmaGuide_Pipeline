@@ -2818,8 +2818,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/some-medication-supplement-interactions-can-be-serious"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Garlic can reduce platelet activity and raise bleeding risk around procedures. If you have surgery scheduled, talk to your surgeon about pausing garlic supplements.",
+          "alert_headline": "Garlic supplements may increase bleeding",
+          "alert_body": "If you have surgery scheduled, tell your surgical team about garlic supplements. They can affect platelet aggregation and may need to be paused.",
           "informational_note": "Garlic affects platelet function — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -3163,8 +3163,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/ginger"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Ginger can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing ginger about two weeks before the procedure.",
+          "alert_headline": "Concentrated ginger — pause before surgery",
+          "alert_body": "Concentrated ginger supplements may affect platelet function. Tell your surgical team and pause before surgery if instructed. Normal food-level ginger is generally fine.",
           "informational_note": "Ginger can affect perioperative bleeding — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -3405,8 +3405,8 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Ginkgo increases bleeding risk around procedures. If you have surgery scheduled, discuss pausing ginkgo at least two weeks beforehand with your surgeon.",
+          "alert_headline": "Ginkgo may increase surgical bleeding risk",
+          "alert_body": "If you have surgery scheduled, stop ginkgo at least 2 weeks before unless your surgical team advises otherwise. It may increase perioperative bleeding.",
           "informational_note": "Ginkgo affects platelet function — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -3672,8 +3672,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/asian-ginseng"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Ginseng can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing ginseng about two weeks before the procedure.",
+          "alert_headline": "Ginseng may affect bleeding or glucose",
+          "alert_body": "Ginseng may affect platelet function and blood sugar. Tell your surgical team before a procedure, especially if you use blood thinners or diabetes medication.",
           "informational_note": "Ginseng can affect perioperative bleeding — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -7259,15 +7259,15 @@
       "condition_rules": [
         {
           "condition_id": "surgery_scheduled",
-          "severity": "avoid",
+          "severity": "monitor",
           "evidence_level": "established",
           "mechanism": "Vitamin K intake changes coagulation balance around perioperative anticoagulation management.",
           "action": "Coordinate supplement use with surgeon and stop unless explicitly instructed to continue.",
           "sources": [
             "https://www.nccih.nih.gov/health/know-science/how-medications-and-supplements-can-interact/some-medication-supplement-interactions-can-be-serious"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Vitamin K affects coagulation and may complicate perioperative anticoagulation plans. If you have surgery scheduled, talk to your surgeon about supplement timing.",
+          "alert_headline": "Vitamin K plan depends on warfarin care",
+          "alert_body": "If you take warfarin and have surgery scheduled, follow your anticoagulation plan from your surgical team. Do not change vitamin K intake without guidance.",
           "informational_note": "Vitamin K affects clotting — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -7570,39 +7570,7 @@
         "db": "other_ingredients",
         "canonical_id": "NHA_GINGER_EXTRACT"
       },
-      "condition_rules": [
-        {
-          "condition_id": "surgery_scheduled",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Concentrated ginger extracts may affect platelet function.",
-          "action": "Review pre-op supplement use.",
-          "sources": [
-            "https://www.nccih.nih.gov/health/ginger"
-          ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Ginger extract can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing ginger extract about two weeks before the procedure.",
-          "informational_note": "Ginger extract can affect perioperative bleeding — relevant to anyone preparing for surgery.",
-          "profile_gate": {
-            "gate_type": "profile_flag",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [
-                "surgery_scheduled"
-              ]
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        }
-      ],
+      "condition_rules": [],
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
@@ -8211,8 +8179,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/11489067/",
             "https://pubmed.ncbi.nlm.nih.gov/15195032/"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Saw palmetto can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing saw palmetto about two weeks before the procedure.",
+          "alert_headline": "Review saw palmetto before surgery",
+          "alert_body": "Case reports have linked saw palmetto to intraoperative bleeding. Tell your surgical team and pause before surgery if instructed.",
           "informational_note": "Saw palmetto can affect perioperative bleeding — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -8778,38 +8746,6 @@
       },
       "condition_rules": [
         {
-          "condition_id": "surgery_scheduled",
-          "severity": "caution",
-          "evidence_level": "probable",
-          "mechanism": "Antiplatelet effects of EPA and DHA via TXA2 suppression may theoretically increase perioperative bleeding risk. Large randomized trials (OPERA, n=1516) found no significant increase in surgical bleeding, but case series with high-dose use (6 g/day) combined with other anticoagulants have reported serious hemorrhagic events including subdural hematoma.",
-          "action": "Inform your surgeon of fish oil use before planned procedures. High-dose fish oil (>3 g/day) combined with other anticoagulants or antiplatelets warrants discussion with the surgical team. Current evidence does not mandate routine discontinuation for standard doses.",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/30571332/",
-            "https://pubmed.ncbi.nlm.nih.gov/17192169/"
-          ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Omega-3 can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing Omega-3 about two weeks before the procedure.",
-          "informational_note": "Omega-3 can affect perioperative bleeding — relevant to anyone preparing for surgery.",
-          "profile_gate": {
-            "gate_type": "profile_flag",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [
-                "surgery_scheduled"
-              ]
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
-        {
           "condition_id": "heart_disease",
           "severity": "monitor",
           "evidence_level": "established",
@@ -9099,7 +9035,7 @@
         },
         {
           "condition_id": "surgery_scheduled",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "Antiplatelet effects via TXA2 suppression may theoretically increase perioperative bleeding risk. A large RCT (OPERA, n=1516) found no significant increase in surgical bleeding at standard doses; however, high-dose use (6 g/day) combined with anticoagulants has produced serious hemorrhagic events.",
           "action": "Inform your surgeon of fish oil use before planned procedures. High-dose fish oil (>3 g/day) combined with other anticoagulants or antiplatelets warrants discussion with the surgical team.",
@@ -9107,8 +9043,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/30571332/",
             "https://pubmed.ncbi.nlm.nih.gov/17192169/"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
+          "alert_headline": "Review high-dose omega-3 before surgery",
+          "alert_body": "High-dose EPA/DHA may affect platelet function, but large trials have not shown a clear increase in bleeding. Tell your surgical team about omega-3 use before a procedure.",
           "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -15645,7 +15581,7 @@
         },
         {
           "condition_id": "surgery_scheduled",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "Chondroitin sulfate's structural heparin-like properties and documented case reports of INR elevation with warfarin raise concern for perioperative bleeding risk. Standard pre-surgical supplement cessation guidance recommends discontinuing chondroitin approximately 2 weeks before elective surgery, consistent with practice for other supplements with anticoagulant potential.",
           "action": "Discontinue chondroitin supplements at least 2 weeks before elective surgery. Inform surgeon and anesthesiologist of recent supplement use.",
@@ -15653,8 +15589,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/26949700/",
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Chondroitin can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing chondroitin about two weeks before the procedure.",
+          "alert_headline": "Review if using blood thinners",
+          "alert_body": "Chondroitin has weak structural similarity to heparin and case reports link it to altered INR with warfarin. Tell your surgical team if you take blood thinners.",
           "informational_note": "Chondroitin can affect perioperative bleeding — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -18450,8 +18386,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25997859/"
           ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "White willow bark inhibits platelets for the life of the platelet. If you have surgery scheduled, talk to your surgeon about pausing it 7-10 days beforehand.",
+          "alert_headline": "Salicylate-like — stop before surgery",
+          "alert_body": "White willow bark contains salicylate-like compounds that may affect platelet function. If surgery is scheduled, ask your surgical team when to stop it.",
           "informational_note": "White willow bark is aspirin-like — relevant to anyone preparing for surgery.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -20230,39 +20166,7 @@
         "db": "ingredient_quality_map",
         "canonical_id": "fish_oil"
       },
-      "condition_rules": [
-        {
-          "condition_id": "surgery_scheduled",
-          "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "Omega-3 fatty acids may increase perioperative bleeding risk due to antiplatelet effects. Multiple FDA drug labels recommend caution with concurrent anticoagulant/antiplatelet therapy.",
-          "action": "Consider discontinuing omega-3 supplements 7-10 days before planned surgery. Inform surgeon and anesthesiologist.",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/35311615/"
-          ],
-          "alert_headline": "Pause before scheduled surgery",
-          "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
-          "informational_note": "Fish oil can affect perioperative bleeding — relevant to anyone preparing for surgery.",
-          "profile_gate": {
-            "gate_type": "profile_flag",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [
-                "surgery_scheduled"
-              ]
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        }
-      ],
+      "condition_rules": [],
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
