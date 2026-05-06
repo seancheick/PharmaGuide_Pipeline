@@ -8274,8 +8274,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/30980598/",
             "https://www.nccih.nih.gov/health/saw-palmetto"
           ],
-          "alert_headline": "Stop if you become pregnant",
-          "alert_body": "Saw palmetto has antiandrogenic activity and no established fetal safety. If you are trying to conceive, discuss dosing with your clinician and plan to stop saw palmetto at confirmed pregnancy.",
+          "alert_headline": "Hormone-active — discuss while TTC",
+          "alert_body": "Saw palmetto may affect androgen pathways. If you are trying to conceive, review use with your clinician because fertility goals can differ by sex and treatment plan.",
           "informational_note": "Saw palmetto is typically discontinued at confirmed pregnancy — relevant to people trying to conceive.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -10181,8 +10181,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/28500824/",
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
           ],
-          "alert_headline": "Discuss vitamin D in preconception care",
-          "alert_body": "Vitamin D used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin D with your clinician.",
+          "alert_headline": "Use labs to guide vitamin D",
+          "alert_body": "Vitamin D status is often checked in preconception care. Use blood levels and clinician guidance to avoid under- or over-supplementing.",
           "informational_note": "Vitamin D is continued under clinician guidance — relevant to people planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -12952,7 +12952,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/39019217/"
           ],
           "alert_headline": "Discuss CoQ10 with fertility clinician",
-          "alert_body": "CoQ10 used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of CoQ10 with your clinician.",
+          "alert_body": "CoQ10 is commonly studied in fertility care, especially around oocyte mitochondrial function and ovarian aging. Evidence is still evolving, so use it as part of a clinician-guided plan.",
           "informational_note": "CoQ10 is continued under clinician guidance — relevant to people planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -13613,8 +13613,8 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "DHEA — only with fertility clinician",
-          "alert_body": "DHEA used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of DHEA with your clinician.",
+          "alert_headline": "DHEA — fertility clinician only",
+          "alert_body": "DHEA is hormone-active and has been studied in specific fertility-clinic settings. Do not use it casually while trying to conceive; use only with clinician monitoring.",
           "informational_note": "DHEA is continued under clinician guidance — relevant to people planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -13722,8 +13722,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/26662928/",
             "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
           ],
-          "alert_headline": "Folate is recommended preconception",
-          "alert_body": "Folate used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Folate with your clinician.",
+          "alert_headline": "Folic acid is recommended preconception",
+          "alert_body": "Folic acid before and during early pregnancy helps reduce neural tube defect risk. If you could become pregnant, aim for 400–800 mcg/day unless your clinician recommends otherwise.",
           "informational_note": "Folate is continued under clinician guidance — relevant to people planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -13800,7 +13800,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/29183107/"
           ],
           "alert_headline": "May support PCOS-related fertility",
-          "alert_body": "Inositol used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of inositol with your clinician.",
+          "alert_body": "Myo-inositol may support insulin signaling and ovulatory function in some people with PCOS. Ask your clinician whether the dose and formulation fit your fertility plan.",
           "informational_note": "Inositol is continued under clinician guidance — relevant to people planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -14688,8 +14688,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30735081/"
           ],
-          "alert_headline": "Phytoestrogen — caution preconception",
-          "alert_body": "Wild yam used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of wild yam with your clinician.",
+          "alert_headline": "Hormone claims are uncertain",
+          "alert_body": "Wild yam is marketed for hormone support, but human fertility and pregnancy-safety data are limited. If you are trying to conceive, review use with your clinician.",
           "informational_note": "Wild yam is continued under clinician guidance — relevant to people planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -16581,8 +16581,8 @@
             "https://www.nccih.nih.gov/health/chasteberry",
             "https://pubmed.ncbi.nlm.nih.gov/23136064/"
           ],
-          "alert_headline": "Stop if you become pregnant",
-          "alert_body": "Chasteberry has hormonal activity and no established pregnancy safety data. If you are trying to conceive, discuss dosing with your clinician and plan to stop chasteberry at confirmed pregnancy.",
+          "alert_headline": "Hormone-active — discuss while TTC",
+          "alert_body": "Chasteberry can affect prolactin and reproductive hormone signaling. If you are trying to conceive, use it with clinician guidance. If pregnancy is confirmed, ask your clinician whether to stop.",
           "informational_note": "Chasteberry is typically discontinued at confirmed pregnancy — relevant to people trying to conceive.",
           "profile_gate": {
             "gate_type": "profile_flag",
