@@ -147,7 +147,7 @@
 | `vitamin_k` | no_data | no_data | no_data |  |
 | `white_mulberry` | no_data | no_data | no_data |  |
 | `white_willow_bark` | no_data | no_data | no_data |  |
-| `wild_yam` | avoid | avoid | probable | Diosgenin (steroidal sapogenin) in wild yam has documented phytoestrogenic activity. Human conversion to progesterone does not occur in vivo. Safety during pregnancy and lactation… |
+| `wild_yam` | avoid | caution | probable | Diosgenin (steroidal sapogenin) in wild yam has documented phytoestrogenic activity. Human conversion to progesterone does not occur in vivo. Safety during pregnancy and lactation… |
 | `yerba_mate` | no_data | no_data | no_data |  |
 | `yohimbe` | contraindicated | avoid | probable | Safety data are limited and stimulant effects raise risk concerns. |
 | `zinc` | monitor | monitor | limited |  |

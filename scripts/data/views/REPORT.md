@@ -5,7 +5,7 @@
 Auto-generated counts. Hand-written docs live in `README.md` (not overwritten).
 
 - **14** condition views — `by_condition/<condition>.md`
-- **21** drug-class views — `by_drug_class/<drug_class>.md`
+- **23** drug-class views — `by_drug_class/<drug_class>.md`
 - **1** pregnancy/lactation aggregate — `pregnancy_lactation.md`
 
 Regenerate: `python3 scripts/tools/split_rules_by_condition.py`

@@ -6,7 +6,7 @@
 
 | canonical_id | db | severity | evidence | alert_headline | mechanism |
 |---|---|---|---|---|---|
-| `fenugreek` | ingredient_quality_map | monitor | probable | Not recommended during pregnancy | Fenugreek is one of the most widely used galactagogues globally. Proposed mechanism involves stimulation of sweat glands (structurally similar to mammary glands) via phytoestrogen… |
-| `sage` | ingredient_quality_map | caution | probable | Concentrated sage may affect milk supply | Salvia officinalis (sage) is traditionally used to suppress lactation (antilactogenic effect). The mechanism involves thujone, camphor, and other volatile terpenes which may have … |
+| `fenugreek` | ingredient_quality_map | monitor | probable | May affect milk supply and digestion | Fenugreek is one of the most widely used galactagogues globally. Proposed mechanism involves stimulation of sweat glands (structurally similar to mammary glands) via phytoestrogen… |
+| `sage` | ingredient_quality_map | caution | limited | May reduce milk supply | Salvia officinalis (sage) is traditionally used to suppress lactation (antilactogenic effect). The mechanism involves thujone, camphor, and other volatile terpenes which may have … |
 | `vitamin_b6_pyridoxine` | ingredient_quality_map | caution | probable | High-dose B6 may affect milk supply | High-dose pyridoxine (vitamin B6) has been investigated as a pharmacologic agent to suppress postpartum lactation. At doses of 450–600 mg/day for 5–7 days, two trials found ~95% i… |
-| `wild_yam` | ingredient_quality_map | avoid | probable | Not recommended while breastfeeding | The estrogenic and phytoestrogenic properties of diosgenin in wild yam carry theoretical risk during lactation. Safety data in lactating humans is absent. Phytoestrogens can be tr… |
+| `wild_yam` | ingredient_quality_map | caution | theoretical | Hormone-active claims are uncertain | Wild yam contains diosgenin, a steroidal saponin marketed as a natural hormone precursor. The human body does not convert diosgenin into progesterone. Breastfeeding safety data in… |

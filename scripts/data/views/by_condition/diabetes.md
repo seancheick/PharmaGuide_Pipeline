@@ -28,4 +28,4 @@
 | `vanadyl_sulfate` | ingredient_quality_map | caution | probable | Insulin-mimetic — may lower glucose | Vanadium is insulin-mimetic: activates insulin receptor substrate, inhibits PTP-1B, and reduces hepatic glucose production. Clinical studies showed FBG and HbA1c reductions at 150… |
 | `vitamin_b3_niacin` | ingredient_quality_map | caution | established | High-dose niacin may raise blood sugar | At pharmacologic doses (>=1g/day), niacin increases hepatic glucose output and decreases insulin sensitivity. FPG increases of 4-5% and HbA1c increases up to 0.3% documented. |
 | `vitamin_d` | ingredient_quality_map | monitor | probable | May improve insulin sensitivity | Repleting deficiency can improve insulin sensitivity in some patients. |
-| `white_mulberry` | botanical_ingredients | caution | established | May lower glucose after meals | Alpha-glucosidase inhibition slows carbohydrate absorption. |
+| `white_mulberry` | botanical_ingredients | caution | probable | May lower glucose after meals | Alpha-glucosidase inhibition slows carbohydrate absorption. |
