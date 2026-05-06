@@ -287,9 +287,8 @@ def test_thorne_vitamin_a_palmitate_bridges_form_when_cleaner_missed_it():
     assert palmitate["form_status"] == "known"
     assert palmitate["form_match_status"] == "mapped"
     assert palmitate["dose_status"] == "disclosed"
-    # Legacy field stays empty (sourced from cleaner forms[]) — kept for
-    # back-compat; Flutter should migrate to display_form_label.
-    assert palmitate["form"] == ""
+    # Legacy `form` field deleted in v1.5.x deprecation cleanup.
+    assert "form" not in palmitate
 
 
 def test_thorne_vitamin_a_unspecified_emits_explicit_unknown():

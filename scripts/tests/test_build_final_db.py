@@ -717,7 +717,11 @@ def test_detail_blob_preserves_real_upstream_field_names_for_active_ingredients(
         "quantity",
         "unit",
         "standard_name",
-        "form",
+        # v1.5.x: legacy `form` field deleted (deprecation cleanup);
+        # consumers read `display_form_label` from the canonical contract.
+        "display_form_label",
+        "form_status",
+        "form_match_status",
         "matched_form",
         "matched_forms",
         "extracted_forms",

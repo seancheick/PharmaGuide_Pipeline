@@ -2446,7 +2446,6 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "quantity": safe_float(qty),
             "unit": safe_str(ing.get("unit")),
             "standard_name": safe_str(m.get("standard_name")),
-            "form": _first_form_name(ing.get("forms")),
             "matched_form": safe_str(m.get("matched_form")),
             "matched_forms": safe_list(m.get("matched_forms")),
             "extracted_forms": safe_list(m.get("extracted_forms")),
