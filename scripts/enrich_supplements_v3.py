@@ -11911,6 +11911,7 @@ class SupplementEnricherV3:
                         "alert_headline": cond_rule.get("alert_headline"),
                         "alert_body": cond_rule.get("alert_body"),
                         "informational_note": cond_rule.get("informational_note"),
+                        "profile_gate": cond_rule.get("profile_gate"),
                     })
 
                 if pregnancy_block:
@@ -11930,6 +11931,7 @@ class SupplementEnricherV3:
                                 "alert_headline": pregnancy_block.get("alert_headline"),
                                 "alert_body": pregnancy_block.get("alert_body"),
                                 "informational_note": pregnancy_block.get("informational_note"),
+                                "profile_gate": pregnancy_block.get("profile_gate"),
                             })
 
                 for drug_rule in rule.get("drug_class_rules", []) or []:
@@ -11966,6 +11968,7 @@ class SupplementEnricherV3:
                         "alert_headline": drug_rule.get("alert_headline"),
                         "alert_body": drug_rule.get("alert_body"),
                         "informational_note": drug_rule.get("informational_note"),
+                        "profile_gate": drug_rule.get("profile_gate"),
                     })
 
                 if not condition_hits and not drug_hits and not pregnancy_block:
