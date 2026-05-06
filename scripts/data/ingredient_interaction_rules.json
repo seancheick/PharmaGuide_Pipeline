@@ -3225,8 +3225,8 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Ginger has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding ginger.",
+          "alert_headline": "Concentrated ginger may raise bleeding risk",
+          "alert_body": "High-dose ginger supplements may affect platelet activity. If you have a bleeding disorder or use blood thinners, review use with your clinician. Normal food-level ginger is generally fine.",
           "informational_note": "Ginger can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -3405,8 +3405,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/ginkgo"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Ginkgo reduces platelet function and has been reported in rare spontaneous bleeding events. If you have a bleeding disorder, talk to your clinician before use.",
+          "alert_headline": "May increase bleeding risk",
+          "alert_body": "Ginkgo inhibits platelet-activating factor and has been linked to bleeding events in case reports. If you have a bleeding disorder, avoid unless your clinician specifically recommends it.",
           "informational_note": "Ginkgo affects platelet function — relevant to people with bleeding disorders.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8210,8 +8210,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/11489067/",
             "https://pubmed.ncbi.nlm.nih.gov/18090773/"
           ],
-          "alert_headline": "Bleeding risk during surgery",
-          "alert_body": "Saw palmetto has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding saw palmetto.",
+          "alert_headline": "Stop before surgery unless advised",
+          "alert_body": "Saw palmetto has been linked to intraoperative bleeding in case reports. If you have a bleeding disorder or upcoming surgery, discuss stopping with your clinician.",
           "informational_note": "Saw palmetto can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8540,16 +8540,16 @@
         },
         {
           "condition_id": "bleeding_disorders",
-          "severity": "caution",
-          "evidence_level": "established",
+          "severity": "informational",
+          "evidence_level": "probable",
           "mechanism": "Curcumin, the active principle of turmeric, inhibits platelet aggregation induced by multiple agonists including arachidonic acid (AA), platelet-activating factor (PAF), collagen, ADP, and epinephrine. The primary mechanisms are (1) inhibition of thromboxane A2 (TXA2) synthesis via COX-1 suppression, (2) inhibition of Ca2+ mobilization in platelets, and (3) suppression of 12-lipoxygenase and 5-lipoxygenase. At concentrated supplement doses, antiplatelet effects are clinically relevant.",
           "action": "Use with caution in patients with bleeding disorders. High-dose curcumin supplements (>500 mg/day curcumin extract) may meaningfully increase bleeding risk. Avoid in patients with active bleeding.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10484074/",
             "https://pubmed.ncbi.nlm.nih.gov/7784468/"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Turmeric has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding turmeric.",
+          "alert_headline": "Culinary turmeric is generally low-risk",
+          "alert_body": "Culinary turmeric has low bioavailability. High-dose curcumin extract is the real concern for bleeding. If you use concentrated curcumin supplements, see the curcumin-specific warning.",
           "informational_note": "Turmeric can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8808,38 +8808,6 @@
         "canonical_id": "omega_3"
       },
       "condition_rules": [
-        {
-          "condition_id": "bleeding_disorders",
-          "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "EPA and DHA competitively inhibit arachidonic acid metabolism, suppressing thromboxane A2 (TXA2) synthesis and reducing platelet aggregation. At doses >3 g/day of combined EPA+DHA, clinically measurable prolongation of bleeding time has been observed. Additionally, omega-3 PUFAs may decrease circulating factor VII levels, further impairing the coagulation cascade.",
-          "action": "Use with caution in patients with bleeding disorders. Doses above 3 g/day of EPA+DHA may significantly increase bleeding risk. Consult a healthcare provider before use.",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/17192169/",
-            "https://pubmed.ncbi.nlm.nih.gov/14742793/"
-          ],
-          "alert_headline": "High-dose may prolong bleeding time",
-          "alert_body": "Omega-3 has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Omega-3.",
-          "informational_note": "Omega-3 can affect platelet function — relevant to people with a bleeding disorder.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "bleeding_disorders"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
         {
           "condition_id": "surgery_scheduled",
           "severity": "caution",
@@ -9138,8 +9106,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
             "https://pubmed.ncbi.nlm.nih.gov/14742793/"
           ],
-          "alert_headline": "High-dose may prolong bleeding time",
-          "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
+          "alert_headline": "High-dose omega-3 may affect bleeding",
+          "alert_body": "High-dose EPA/DHA (3g+/day) can modestly affect platelet function. If you have a bleeding disorder or use blood thinners, review your omega-3 dose with your clinician.",
           "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -9394,8 +9362,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/25572959/",
             "https://pubmed.ncbi.nlm.nih.gov/7784468/"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Curcumin has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding curcumin.",
+          "alert_headline": "High-dose curcumin may raise bleeding risk",
+          "alert_body": "Concentrated curcumin extract can affect platelet aggregation, especially with piperine or enhanced bioavailability formulas. If you have a bleeding disorder, review use with your clinician.",
           "informational_note": "Curcumin can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -9681,8 +9649,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/1602379/",
             "https://pubmed.ncbi.nlm.nih.gov/8510458/"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Boswellia has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding boswellia.",
+          "alert_headline": "May affect platelet activity",
+          "alert_body": "Boswellic acids may inhibit platelet aggregation. If you have a bleeding disorder or use blood thinners, review use with your clinician.",
           "informational_note": "Boswellia can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -10076,37 +10044,6 @@
         "canonical_id": "vitamin_d"
       },
       "condition_rules": [
-        {
-          "condition_id": "bleeding_disorders",
-          "severity": "monitor",
-          "evidence_level": "theoretical",
-          "mechanism": "Vitamin D does not directly affect platelet aggregation at physiological or supplemental doses. However, high-dose vitamin D supplementation may interact with warfarin sensitivity in patients with concurrent vitamin K deficiency by affecting the vitamin K-dependent carboxylation of coagulation factors (II, VII, IX, X). The vitamin D endocrine system and vitamin K share overlapping roles in gamma-carboxylation of hepatic Gla-proteins.",
-          "action": "Vitamin D at standard supplemental doses (up to 4000 IU/day) is not a clinically significant bleeding risk on its own. Monitor if taking high-dose vitamin D (>10,000 IU/day) with anticoagulants.",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/32486167/"
-          ],
-          "alert_headline": "Modest bleeding signal at high doses",
-          "alert_body": "Vitamin D has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Vitamin D.",
-          "informational_note": "Vitamin D can affect platelet function — relevant to people with a bleeding disorder.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "bleeding_disorders"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
         {
           "severity": "informational",
           "mechanism": "Vitamin D exerts broad immunomodulatory effects, generally shifting immune responses toward tolerance via Treg cell upregulation and Th17 suppression. Low vitamin D status is associated with increased autoimmune risk. Supplementation may be beneficial in Hashimoto thyroiditis and multiple sclerosis, but high doses in active autoimmune disease require monitoring.",
@@ -10722,8 +10659,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
           ],
-          "alert_headline": "Modest bleeding signal in case reports",
-          "alert_body": "Glucosamine has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding glucosamine.",
+          "alert_headline": "Monitor if using blood thinners",
+          "alert_body": "Rare case reports link glucosamine to altered INR in warfarin users. If you use blood thinners and take glucosamine, mention it to your clinician.",
           "informational_note": "Glucosamine can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -10909,8 +10846,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/32478963/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
           ],
-          "alert_headline": "Coumarin-like — may raise bleeding risk",
-          "alert_body": "Chamomile has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding chamomile.",
+          "alert_headline": "May affect blood-thinner stability",
+          "alert_body": "Chamomile contains natural coumarins that may interact with blood-thinning medicines. If you have a bleeding disorder or use anticoagulants, review with your clinician.",
           "informational_note": "Chamomile can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -11089,8 +11026,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17322161/"
           ],
-          "alert_headline": "May affect blood thinner stability",
-          "alert_body": "Cranberry has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding cranberry.",
+          "alert_headline": "May affect warfarin stability",
+          "alert_body": "Cranberry may affect how warfarin is metabolized. If you use warfarin or other blood thinners, monitor your INR and mention cranberry to your clinician.",
           "informational_note": "Cranberry can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -11388,8 +11325,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33091497/"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Cat's claw has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding cat's claw.",
+          "alert_headline": "May affect platelet activity",
+          "alert_body": "Cat’s claw extract may have antiplatelet and antithrombotic effects. If you have a bleeding disorder or use blood thinners, review use with your clinician.",
           "informational_note": "Cat's claw can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -11600,8 +11537,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Devil's claw has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding devil's claw.",
+          "alert_headline": "May affect platelet activity",
+          "alert_body": "Devil’s claw may have mild antiplatelet properties. If you have a bleeding disorder or use blood thinners, review use with your clinician.",
           "informational_note": "Devil's claw can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -13938,8 +13875,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/15801887/",
             "https://pubmed.ncbi.nlm.nih.gov/23653088/"
           ],
-          "alert_headline": "Modest bleeding signal at high doses",
-          "alert_body": "Gotu kola has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding gotu kola.",
+          "alert_headline": "Bleeding evidence is limited",
+          "alert_body": "Gotu kola may affect vascular remodeling at high doses, but clinical bleeding evidence is very limited. If you have a bleeding disorder, mention it to your clinician.",
           "informational_note": "Gotu kola can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15288,8 +15225,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/23292890/",
             "https://pubmed.ncbi.nlm.nih.gov/22771630/"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Andrographis has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding andrographis.",
+          "alert_headline": "May affect platelet activity",
+          "alert_body": "Andrographis may inhibit platelet aggregation. If you have a bleeding disorder or use blood thinners, review use with your clinician.",
           "informational_note": "Andrographis can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15568,15 +15505,15 @@
       "condition_rules": [
         {
           "condition_id": "bleeding_disorders",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "theoretical",
           "mechanism": "Red clover (Trifolium pratense) contains coumestrol and coumarin-like compounds alongside isoflavones (biochanin A, formononetin, genistein, daidzein). Coumarins share structural homology with warfarin. Additionally, isoflavone metabolites may mildly inhibit platelet aggregation. While no direct clinical evidence of red clover-induced bleeding has been documented, the structural pharmacology of its constituents supports a caution-level concern in patients with pre-existing bleeding disorders.",
           "action": "Use caution in patients with bleeding disorders. Avoid high-dose red clover isoflavone extracts (>160 mg/day) in active bleeding. Disclose use to clinician.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/9464451/"
           ],
-          "alert_headline": "Coumarin-like — may raise bleeding risk",
-          "alert_body": "Red clover has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding red clover.",
+          "alert_headline": "Coumarin-like — limited bleeding evidence",
+          "alert_body": "Red clover contains natural coumarins, but clinical bleeding significance at supplement doses is uncertain. If you use blood thinners, mention red clover to your clinician.",
           "informational_note": "Red clover can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15715,8 +15652,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/14986566/",
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
           ],
-          "alert_headline": "Heparin-like — may raise bleeding risk",
-          "alert_body": "Chondroitin has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding chondroitin.",
+          "alert_headline": "Monitor if using blood thinners",
+          "alert_body": "Chondroitin sulfate has weak structural similarity to heparin. Clinical significance at supplement doses is uncertain. If you use blood thinners, mention it to your clinician.",
           "informational_note": "Chondroitin can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -16650,15 +16587,15 @@
       "condition_rules": [
         {
           "condition_id": "bleeding_disorders",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "N-acetylcysteine (NAC) inhibits platelet aggregation by reducing disulfide bonds on platelet surface glycoproteins and by increasing nitric oxide bioavailability. At high doses (>1200 mg/day) this antiplatelet effect may be clinically meaningful in patients with underlying coagulopathy.",
           "action": "Use with caution in bleeding disorders. Avoid high doses (>1200 mg/day) without haematology oversight. Inform prescribers before surgical procedures.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/34208683/"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "NAC has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding NAC.",
+          "alert_headline": "Bleeding signal is limited",
+          "alert_body": "NAC may affect platelet biology at high doses, but clinical bleeding risk in supplement users is not well established. If you have a bleeding disorder, mention NAC to your clinician.",
           "informational_note": "NAC can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -17498,39 +17435,7 @@
         "db": "ingredient_quality_map",
         "canonical_id": "dha"
       },
-      "condition_rules": [
-        {
-          "condition_id": "bleeding_disorders",
-          "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "DHA (docosahexaenoic acid) is incorporated into platelet phospholipid membranes, displacing arachidonic acid and reducing thromboxane A2 (TXA2) synthesis. TXA2 is the primary platelet aggregation amplifier; reduced TXA2 production measurably prolongs bleeding time at doses above 2 g/day.",
-          "action": "Use with caution in bleeding disorders. Limit DHA to doses under 2 g/day unless under physician oversight. Inform surgeon of use before any procedure.",
-          "sources": [
-            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
-          ],
-          "alert_headline": "High-dose may prolong bleeding time",
-          "alert_body": "DHA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding DHA.",
-          "informational_note": "DHA can affect platelet function — relevant to people with a bleeding disorder.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "bleeding_disorders"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        }
-      ],
+      "condition_rules": [],
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
@@ -17723,39 +17628,7 @@
         "db": "ingredient_quality_map",
         "canonical_id": "epa"
       },
-      "condition_rules": [
-        {
-          "condition_id": "bleeding_disorders",
-          "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "EPA (eicosapentaenoic acid) competitively inhibits arachidonic acid conversion to thromboxane A2 via cyclooxygenase, and generates thromboxane A3 (a much weaker platelet aggregator) instead. This antiplatelet mechanism prolongs bleeding time, particularly at doses above 2 g/day.",
-          "action": "Use with caution in bleeding disorders. Limit EPA intake to under 2 g/day without physician oversight. Disclose use to any treating surgeon.",
-          "sources": [
-            "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
-          ],
-          "alert_headline": "High-dose may prolong bleeding time",
-          "alert_body": "EPA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding EPA.",
-          "informational_note": "EPA can affect platelet function — relevant to people with a bleeding disorder.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "bleeding_disorders"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        }
-      ],
+      "condition_rules": [],
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
@@ -18578,7 +18451,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/25997859/"
           ],
           "alert_headline": "Salicylate — raises bleeding risk",
-          "alert_body": "White willow bark acts like aspirin on platelets. If you have a bleeding disorder, talk to your clinician before use — it carries the same bleeding risk as aspirin.",
+          "alert_body": "White willow bark contains salicylate-like compounds. If you have a bleeding disorder or use blood thinners, avoid unless your clinician specifically recommends it.",
           "informational_note": "White willow bark is aspirin-like — relevant to people with bleeding disorders.",
           "profile_gate": {
             "gate_type": "condition",
@@ -20175,8 +20048,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/29737899/"
           ],
-          "alert_headline": "May raise bleeding risk",
-          "alert_body": "Resveratrol has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding resveratrol.",
+          "alert_headline": "May affect platelet activity",
+          "alert_body": "Resveratrol may inhibit platelet aggregation at high doses. If you have a bleeding disorder or use blood thinners, review use with your clinician.",
           "informational_note": "Resveratrol can affect platelet function — relevant to people with a bleeding disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -20421,38 +20294,6 @@
         "canonical_id": "fish_oil"
       },
       "condition_rules": [
-        {
-          "condition_id": "bleeding_disorders",
-          "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "Omega-3 fatty acids (EPA/DHA) prolong bleeding time by inhibiting thromboxane A2-mediated platelet aggregation and reducing platelet-activating factor. FDA drug labels for icosapent ethyl (Vascepa) and omega-3-acid ethyl esters (Lovaza) explicitly warn about increased bleeding risk. Doses >3g/day have potential antithrombotic effects per FDA labeling.",
-          "action": "Monitor for signs of bleeding. Inform prescriber if taking anticoagulants or antiplatelets. Consider dose reduction if >3g EPA+DHA/day.",
-          "sources": [
-            "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
-            "https://pubmed.ncbi.nlm.nih.gov/35311615/"
-          ],
-          "alert_headline": "High-dose may prolong bleeding time",
-          "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
-          "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "bleeding_disorders"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
         {
           "condition_id": "surgery_scheduled",
           "severity": "caution",
