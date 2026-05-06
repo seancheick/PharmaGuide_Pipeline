@@ -20,6 +20,7 @@ _spec = importlib.util.spec_from_file_location("migrate_to_profile_gate", _TOOLS
 _mod = importlib.util.module_from_spec(_spec)  # type: ignore[arg-type]
 _spec.loader.exec_module(_mod)  # type: ignore[union-attr]
 migrate_rules = _mod.migrate_rules
+assert_post_migration_invariants = _mod.assert_post_migration_invariants
 
 
 # --- Deterministic mapping unit tests ---
@@ -294,3 +295,141 @@ def test_excludes_block_starts_empty():
     g = out["interaction_rules"][0]["condition_rules"][0]["profile_gate"]
     for k, v in g["excludes"].items():
         assert v == [], f"excludes.{k} must be empty post-migration; got {v!r}"
+
+
+# --- Hardening: validation + force + assertions ---
+
+
+def test_empty_condition_id_raises():
+    rule = {
+        "id": "RULE_TEST",
+        "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
+        "condition_rules": [{"condition_id": "", "severity": "caution"}],
+        "drug_class_rules": [], "dose_thresholds": [],
+    }
+    with pytest.raises(ValueError, match="empty condition_id"):
+        migrate_rules({"interaction_rules": [rule]})
+
+
+def test_empty_drug_class_id_raises():
+    rule = {
+        "id": "RULE_TEST",
+        "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
+        "condition_rules": [],
+        "drug_class_rules": [{"drug_class_id": "", "severity": "caution"}],
+        "dose_thresholds": [],
+    }
+    with pytest.raises(ValueError, match="empty drug_class_id"):
+        migrate_rules({"interaction_rules": [rule]})
+
+
+def test_dose_threshold_with_scope_but_no_target_raises():
+    rule = {
+        "id": "RULE_TEST",
+        "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
+        "condition_rules": [], "drug_class_rules": [],
+        "dose_thresholds": [{
+            "scope": "condition", "target_id": "",
+            "basis": "per_day", "comparator": ">=", "value": 100, "unit": "mg",
+        }],
+    }
+    with pytest.raises(ValueError, match="empty target_id"):
+        migrate_rules({"interaction_rules": [rule]})
+
+
+def test_force_overwrites_existing_gate():
+    """force=True should replace existing profile_gate even if present."""
+    custom_gate = {"gate_type": "combination", "requires": {"conditions_any": ["x"]}}
+    rule = {
+        "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
+        "condition_rules": [{
+            "condition_id": "diabetes",
+            "severity": "caution",
+            "profile_gate": custom_gate,
+        }],
+        "drug_class_rules": [], "dose_thresholds": [],
+    }
+    out, counts = migrate_rules({"interaction_rules": [rule]}, force=True)
+    g = out["interaction_rules"][0]["condition_rules"][0]["profile_gate"]
+    assert g["gate_type"] == "condition"
+    assert g["requires"]["conditions_any"] == ["diabetes"]
+    assert counts["condition_rules"] == 1
+
+
+def test_assert_post_migration_invariants_clean_passes():
+    rule = {
+        "id": "RULE_TEST",
+        "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
+        "condition_rules": [{"condition_id": "diabetes", "severity": "caution"}],
+        "drug_class_rules": [], "dose_thresholds": [],
+    }
+    out, _ = migrate_rules({"interaction_rules": [rule]})
+    errors = assert_post_migration_invariants(out)
+    assert errors == []
+
+
+def test_assert_post_migration_invariants_catches_missing_gate():
+    """A sub-rule missing profile_gate must be caught."""
+    bad = {
+        "interaction_rules": [{
+            "id": "RULE_TEST",
+            "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
+            "condition_rules": [{"condition_id": "diabetes", "severity": "caution"}],
+            "drug_class_rules": [], "dose_thresholds": [],
+        }]
+    }
+    errors = assert_post_migration_invariants(bad)
+    assert any("missing profile_gate" in e for e in errors)
+
+
+def test_assert_post_migration_invariants_catches_unknown_gate_type():
+    bad = {
+        "interaction_rules": [{
+            "id": "RULE_TEST",
+            "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
+            "condition_rules": [{
+                "condition_id": "diabetes", "severity": "caution",
+                "profile_gate": {
+                    "gate_type": "bogus",
+                    "requires": {"conditions_any": ["diabetes"], "drug_classes_any": [], "profile_flags_any": []},
+                    "excludes": {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": [],
+                                 "product_forms_any": [], "nutrient_forms_any": []},
+                    "dose": None,
+                },
+            }],
+            "drug_class_rules": [], "dose_thresholds": [],
+        }]
+    }
+    errors = assert_post_migration_invariants(bad)
+    assert any("gate_type='bogus'" in e for e in errors)
+
+
+def test_assert_post_migration_invariants_catches_dose_gate_without_dose():
+    bad = {
+        "interaction_rules": [{
+            "id": "RULE_TEST",
+            "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
+            "condition_rules": [], "drug_class_rules": [],
+            "dose_thresholds": [{
+                "scope": "", "target_id": "",
+                "profile_gate": {
+                    "gate_type": "dose",
+                    "requires": {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": []},
+                    "excludes": {"conditions_any": [], "drug_classes_any": [], "profile_flags_any": [],
+                                 "product_forms_any": [], "nutrient_forms_any": []},
+                    "dose": None,
+                },
+            }],
+        }]
+    }
+    errors = assert_post_migration_invariants(bad)
+    assert any("dose requires non-null dose block" in e for e in errors)
+
+
+def test_live_file_passes_post_migration_invariants():
+    """The applied v6.0.0 file must pass every structural invariant."""
+    live = json.loads(
+        (Path(__file__).resolve().parents[1] / "data" / "ingredient_interaction_rules.json").read_text()
+    )
+    errors = assert_post_migration_invariants(live)
+    assert errors == [], f"live file has {len(errors)} invariant violation(s): {errors[:5]}"
