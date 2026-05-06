@@ -414,37 +414,6 @@
             },
             "dose": null
           }
-        },
-        {
-          "condition_id": "pregnancy",
-          "severity": "contraindicated",
-          "evidence_level": "probable",
-          "mechanism": "Stimulant profile and hemodynamic effects present maternal-fetal risk concerns.",
-          "action": "Do not use during pregnancy.",
-          "sources": [
-            "https://www.nccih.nih.gov/health/safety"
-          ],
-          "alert_headline": "Do not use during pregnancy",
-          "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
-          "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy.",
-          "profile_gate": {
-            "gate_type": "profile_flag",
-            "requires": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [
-                "pregnant"
-              ]
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
         }
       ],
       "drug_class_rules": [
@@ -2553,13 +2522,13 @@
           "condition_id": "pregnancy",
           "severity": "contraindicated",
           "evidence_level": "established",
-          "mechanism": "Tanacetum parthenium parthenolide inhibits platelet aggregation and has demonstrated uterotonic activity. Historical emmenagogue use is well-documented. Cochrane and ACOG recommend avoidance during pregnancy.",
+          "mechanism": "Tanacetum parthenium parthenolide inhibits platelet aggregation and has demonstrated uterotonic activity. Historical emmenagogue use is well-documented. It is not recommended during pregnancy due to uterotonic and bleeding concerns.",
           "action": "Do not use during pregnancy.",
           "sources": [
             "https://www.nccih.nih.gov/health/feverfew"
           ],
           "alert_headline": "Do not use during pregnancy",
-          "alert_body": "Feverfew inhibits platelets and shows uterine-stimulating activity. If you are pregnant, do not use feverfew — Cochrane and ACOG both advise against it.",
+          "alert_body": "Feverfew has historical emmenagogue use and uterine-related concerns. If you are pregnant, do not use it unless specifically directed by your obstetric clinician.",
           "informational_note": "Feverfew has uterotonic activity relevant to anyone pregnant or planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -7439,7 +7408,7 @@
             "https://www.nccih.nih.gov/health/safety",
             "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
           ],
-          "alert_headline": "Do not use during pregnancy",
+          "alert_headline": "Stimulant — do not use in pregnancy",
           "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
           "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy.",
           "profile_gate": {
@@ -14556,15 +14525,15 @@
         {
           "condition_id": "pregnancy",
           "severity": "avoid",
-          "evidence_level": "probable",
+          "evidence_level": "theoretical",
           "mechanism": "Wild yam (Dioscorea villosa) contains diosgenin, a steroidal sapogenin with documented estrogenic and phytoestrogenic activity in animal and in vitro models. Diosgenin has been shown to act as a phytoestrogen via endothelium-dependent pathways. Despite the historical use of diosgenin as a synthetic hormone precursor, the in vivo conversion to progesterone does not occur in humans — however, direct estrogenic receptor activity is documented and raises concern for disruption of hormonal milieu during pregnancy.",
           "action": "Do not use wild yam supplements during pregnancy. The estrogenic activity of diosgenin is not established as safe in pregnancy and poses theoretical risk of hormonal disruption.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30735081/",
             "https://pubmed.ncbi.nlm.nih.gov/21800902/"
           ],
-          "alert_headline": "Hormone-active — avoid in pregnancy",
-          "alert_body": "Wild yam contains diosgenin, a phytoestrogen with hormone-active effects. If you are pregnant, do not use wild yam unless directed by your obstetrician.",
+          "alert_headline": "Hormone-active claims are uncertain",
+          "alert_body": "If you are pregnant, avoid concentrated wild yam supplements. Wild yam is marketed for hormone support, but pregnancy safety data are limited.",
           "informational_note": "Wild yam is hormone-active — relevant to anyone pregnant or planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -16347,8 +16316,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/36702448/",
             "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
           ],
-          "alert_headline": "Consult during pregnancy",
-          "alert_body": "Senna has limited pregnancy safety data. If you are pregnant, talk to your obstetrician before adding senna to your supplement routine.",
+          "alert_headline": "Use stimulant laxatives with guidance",
+          "alert_body": "Senna may be used during pregnancy in some cases, but chronic or high-dose use can cause cramping, dehydration, or electrolyte shifts. Use with obstetric guidance.",
           "informational_note": "Senna has limited pregnancy data — relevant to people who are pregnant or planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -16626,7 +16595,7 @@
             "https://www.fda.gov/regulatory-information/search-fda-guidance-documents"
           ],
           "alert_headline": "Use with clinical guidance",
-          "alert_body": "NAC is used clinically, but long-term high-dose supplement use in pregnancy should still be supervised. If you are pregnant, keep use indication-driven and discuss it with your clinician.",
+          "alert_body": "NAC is used clinically in some pregnancy-related contexts, but high-dose or chronic supplement use should be supervised. Use with obstetric guidance.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -16837,8 +16806,8 @@
             "https://www.nccih.nih.gov/health/butterbur",
             "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances"
           ],
-          "alert_headline": "Liver-toxic alkaloid risk in pregnancy",
-          "alert_body": "If you are pregnant, do not use butterbur. Most products are not certified PA-free and contain liver-toxic alkaloids; PA-free extracts also lack pregnancy data. Talk to your obstetrician.",
+          "alert_headline": "PA-containing butterbur is unsafe",
+          "alert_body": "If you are pregnant, do not use butterbur. Raw or non-PA-free products can contain pyrrolizidine alkaloids that are toxic to the liver.",
           "informational_note": "Butterbur PA content makes it unsafe in pregnancy — relevant to anyone pregnant or planning pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -20917,7 +20886,7 @@
       "condition_rules": [
         {
           "condition_id": "pregnancy",
-          "severity": "contraindicated",
+          "severity": "avoid",
           "evidence_level": "probable",
           "mechanism": "Synephrine is a sympathomimetic; pregnancy is not the place for stimulant-driven cardiovascular stress.",
           "action": "Do not use supplement-dose bitter orange in pregnancy.",
@@ -20925,8 +20894,8 @@
             "https://www.nccih.nih.gov/health/bitter-orange",
             "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
           ],
-          "alert_headline": "Not for use in pregnancy",
-          "alert_body": "Supplement-dose bitter orange contains synephrine, a stimulant that can stress the cardiovascular system. If you are pregnant, do not use it.",
+          "alert_headline": "Stimulant — avoid in pregnancy",
+          "alert_body": "Bitter orange contains synephrine, a stimulant that can stress the cardiovascular system. If you are pregnant, avoid supplement-dose bitter orange.",
           "informational_note": "Bitter orange contains synephrine and is not appropriate in pregnancy.",
           "profile_gate": {
             "gate_type": "profile_flag",
