@@ -2,13 +2,13 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "6.0.1",
+    "schema_version": "6.0.2",
     "last_updated": "2026-05-05",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
-    "flutter_schema_version": "6.0.1",
+    "flutter_schema_version": "6.0.2",
     "v60_added_fields": {
       "profile_gate": "deterministic predicate per sub-rule. See scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md. Required field; consumers MUST evaluate the gate against (user_profile, product_context) before rendering an alert."
     },
@@ -49,6 +49,12 @@
           "to": "6.0.1",
           "date": "2026-05-05",
           "summary": "Profile-flag mapping correction per Flutter UI separation. condition_id='pregnancy' now maps to profile_flag=['pregnant'] only (was ['pregnant','trying_to_conceive']). pregnancy_lactation block union gate now ['pregnant','breastfeeding'] (was 3-flag union including 'trying_to_conceive'). TTC is a SEPARATE Flutter toggle today and must not be conflated with pregnancy/breastfeeding alerts. Re-applied via scripts/tools/migrate_to_profile_gate.py --apply --force. Structural pregnancy/lactation split (Option A) deferred — current Flutter combines pregnancy+breastfeeding in one toggle that sets both flags, so the union gate works; pipeline is already future-ready for separate Flutter toggles with no further pipeline change."
+        },
+        {
+          "from": "6.0.1",
+          "to": "6.0.2",
+          "date": "2026-05-05",
+          "summary": "Hand-applied excludes/escalation refinements per ADR §Step 5: (1) vitamin_a pregnancy gate excludes nutrient_forms_any=['beta_carotene','mixed_carotenoids'] so β-carotene products do not trigger the retinol pregnancy alert; (2) aloe_vera pregnancy gate excludes product_forms_any=['topical_only'] so topical aloe is not flagged for oral-aloe pregnancy concerns; (3) curcumin pregnancy gate excludes product_forms_any=['culinary_turmeric'] so food-level turmeric is not flagged for high-dose extract concerns; (4) berberine_supplement diabetes baseline severity softened from avoid → caution — escalations to avoid still occur via the existing dose_threshold (≥1500 mg/day) and the existing drug_class_rule for hypoglycemics, matching the dev's two-rule pattern without adding a duplicate condition_rule entry. Mechanism + alert_body updated to reflect the escalation-via-other-rules model."
         }
       ]
     },
@@ -583,7 +589,9 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [],
-              "product_forms_any": [],
+              "product_forms_any": [
+                "topical_only"
+              ],
               "nutrient_forms_any": []
             },
             "dose": null
@@ -821,15 +829,15 @@
       "condition_rules": [
         {
           "condition_id": "diabetes",
-          "severity": "avoid",
+          "severity": "caution",
           "evidence_level": "established",
-          "mechanism": "Berberine activates AMPK, increases insulin sensitivity, and stimulates GLP-1 secretion. Produces glucose-lowering effects comparable to metformin. Additive hypoglycemia risk is clinically significant.",
-          "action": "Do not combine with diabetes medications without physician oversight. Monitor blood glucose closely.",
+          "mechanism": "Berberine activates AMPK, increases insulin sensitivity, and stimulates GLP-1 secretion, producing meaningful glucose-lowering effects across multiple RCTs. The baseline diabetes alert is caution; severity escalates to avoid by (a) the dose threshold at ≥1,500 mg/day, or (b) the drug-class rule when combined with hypoglycemia-prone medications (insulin, sulfonylureas, meglitinides — currently grouped under the broad hypoglycemics class pending Phase 3 split).",
+          "action": "Talk to your diabetes clinician before adding berberine. Monitor glucose more closely in the first weeks, and review any medication or dose adjustment they recommend.",
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
           "alert_headline": "May lower blood sugar in diabetes",
-          "alert_body": "Berberine lowers blood sugar with effects comparable to metformin. If you have diabetes, talk to your prescriber before adding berberine and monitor glucose closely.",
+          "alert_body": "Berberine can lower blood sugar. If you have diabetes, talk to your prescriber before adding berberine and monitor glucose closely. High doses or hypoglycemia meds may require avoiding it.",
           "informational_note": "Berberine lowers blood sugar — relevant to people with diabetes.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5684,7 +5692,10 @@
               "drug_classes_any": [],
               "profile_flags_any": [],
               "product_forms_any": [],
-              "nutrient_forms_any": []
+              "nutrient_forms_any": [
+                "beta_carotene",
+                "mixed_carotenoids"
+              ]
             },
             "dose": null
           }
@@ -8467,7 +8478,9 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [],
-              "product_forms_any": [],
+              "product_forms_any": [
+                "culinary_turmeric"
+              ],
               "nutrient_forms_any": []
             },
             "dose": null
