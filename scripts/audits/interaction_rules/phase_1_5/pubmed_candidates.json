@@ -1,0 +1,470 @@
+{
+  "pennyroyal_pulegone_hepatotox": {
+    "query": "pennyroyal AND (pulegone OR hepatotoxicity) AND review[pt]",
+    "hits": [
+      {
+        "pmid": "36263486",
+        "title": "Pulegone: An Emerging Oxygenated Cyclic Monoterpene Ketone Scaffold Delineating Synthesis, Chemical Reactivity, and Biological potential.",
+        "source": "Recent advances in anti-infective drug discovery",
+        "pubdate": "2023"
+      },
+      {
+        "pmid": "23121117",
+        "title": "Review article: herbal and dietary supplement hepatotoxicity.",
+        "source": "Alimentary pharmacology & therapeutics",
+        "pubdate": "2013 Jan"
+      },
+      {
+        "pmid": "8633832",
+        "title": "Pennyroyal toxicity: measurement of toxic metabolite levels in two cases and review of the literature.",
+        "source": "Annals of internal medicine",
+        "pubdate": "1996 Apr 15"
+      },
+      {
+        "pmid": "25512112",
+        "title": "A decades-long investigation of acute metabolism-based hepatotoxicity by herbal constituents: a case study of pennyroyal oil.",
+        "source": "Drug metabolism reviews",
+        "pubdate": "2015 Feb"
+      },
+      {
+        "pmid": "37711001",
+        "title": "Mentha Pulegium: A Plant with Several Medicinal Properties.",
+        "source": "Endocrine, metabolic & immune disorders drug targets",
+        "pubdate": "2024"
+      },
+      {
+        "pmid": "34644891",
+        "title": "Toxicity of Insecticides and Skin Care Products of Botanical Origin.",
+        "source": "Veterinary dermatology",
+        "pubdate": "1995 Sep"
+      }
+    ]
+  },
+  "tansy_thujone_tox": {
+    "query": "Tanacetum vulgare AND (thujone OR toxicity)",
+    "hits": [
+      {
+        "pmid": "37653885",
+        "title": "Chemical Profiling and Antioxidant Activity of Tanacetum vulgare L. Wild-Growing in Latvia.",
+        "source": "Plants (Basel, Switzerland)",
+        "pubdate": "2023 May 12"
+      },
+      {
+        "pmid": "37998837",
+        "title": "Antibacterial Efficiency of Tanacetum vulgare Essential Oil against ESKAPE Pathogens and Synergisms with Antibiotics.",
+        "source": "Antibiotics (Basel, Switzerland)",
+        "pubdate": "2023 Nov 17"
+      },
+      {
+        "pmid": "18021597",
+        "title": "Parthenium dermatitis.",
+        "source": "Dermatitis : contact, atopic, occupational, drug",
+        "pubdate": "2007 Dec"
+      },
+      {
+        "pmid": "37630407",
+        "title": "A Study of the Chemical Composition, Antioxidant Potential, and Acute Toxicity of Bulgarian Tanacetum vulgare L. Essential Oil.",
+        "source": "Molecules (Basel, Switzerland)",
+        "pubdate": "2023 Aug 21"
+      },
+      {
+        "pmid": "28472675",
+        "title": "Toxic essential oils. Part V: Behaviour modulating and toxic properties of thujones and thujone-containing essential oils of Salvia officinalis L., Artemisia absinthium L., Thuja occidentalis L. and Tanacetum vulgare L.",
+        "source": "Food and chemical toxicology : an international journal published for the British Industrial Biological Research Association",
+        "pubdate": "2017 Jul"
+      },
+      {
+        "pmid": "40526806",
+        "title": "Efficacy and toxicity of Tanacetum vulgare and Rosmarinus officinalis essential oils novel biocontrol agents for sustainable management of Phthorimaea operculella, the potato moth.",
+        "source": "Natural product research",
+        "pubdate": "2025 Jun 17"
+      }
+    ]
+  },
+  "maca_pregnancy_safety": {
+    "query": "Lepidium meyenii AND (safety OR toxicity OR review)",
+    "hits": [
+      {
+        "pmid": "31951246",
+        "title": "Medicinal effects of Peruvian maca (Lepidium meyenii): a review.",
+        "source": "Food & function",
+        "pubdate": "2020 Jan 29"
+      },
+      {
+        "pmid": "38440178",
+        "title": "Exploring the chemical and pharmacological variability of Lepidium meyenii: a comprehensive review of the effects of maca.",
+        "source": "Frontiers in pharmacology",
+        "pubdate": "2024"
+      },
+      {
+        "pmid": "29744941",
+        "title": "Carvacrol and human health: A comprehensive review.",
+        "source": "Phytotherapy research : PTR",
+        "pubdate": "2018 Sep"
+      },
+      {
+        "pmid": "36987052",
+        "title": "Nootropic Herbs, Shrubs, and Trees as Potential Cognitive Enhancers.",
+        "source": "Plants (Basel, Switzerland)",
+        "pubdate": "2023 Mar 18"
+      },
+      {
+        "pmid": "31643869",
+        "title": "Maca.",
+        "source": "",
+        "pubdate": "2012"
+      },
+      {
+        "pmid": "37697053",
+        "title": "Do \"testosterone boosters\" really increase serum total testosterone? A systematic review.",
+        "source": "International journal of impotence research",
+        "pubdate": "2024 Jun"
+      }
+    ]
+  },
+  "tryptophan_serotonin_MAOI": {
+    "query": "(L-tryptophan OR tryptophan) AND (MAOI OR \"serotonin syndrome\")",
+    "hits": [
+      {
+        "pmid": "31523132",
+        "title": "Serotonin Syndrome: Pathophysiology, Clinical Features, Management, and Potential Future Directions.",
+        "source": "International journal of tryptophan research : IJTR",
+        "pubdate": "2019"
+      },
+      {
+        "pmid": "16023217",
+        "title": "Serotonin a la carte: supplementation with the serotonin precursor 5-hydroxytryptophan.",
+        "source": "Pharmacology & therapeutics",
+        "pubdate": "2006 Mar"
+      },
+      {
+        "pmid": "33375373",
+        "title": "5-Hydroxytryptophan (5-HTP): Natural Occurrence, Analysis, Biosynthesis, Biotechnology, Physiology and Toxicology.",
+        "source": "International journal of molecular sciences",
+        "pubdate": "2020 Dec 26"
+      },
+      {
+        "pmid": "8909274",
+        "title": "Serotonin syndrome.",
+        "source": "Annals of emergency medicine",
+        "pubdate": "1996 Nov"
+      },
+      {
+        "pmid": "2035713",
+        "title": "The serotonin syndrome.",
+        "source": "The American journal of psychiatry",
+        "pubdate": "1991 Jun"
+      },
+      {
+        "pmid": "9828984",
+        "title": "Serotonin and panic.",
+        "source": "The British journal of psychiatry : the journal of mental science",
+        "pubdate": "1998 Jun"
+      }
+    ]
+  },
+  "SAMe_serotonin_MAOI": {
+    "query": "(S-adenosylmethionine OR SAMe) AND (serotonin syndrome OR MAOI)",
+    "hits": [
+      {
+        "pmid": "1356551",
+        "title": "Caffeine and the central nervous system: mechanisms of action, biochemical, metabolic and psychostimulant effects.",
+        "source": "Brain research. Brain research reviews",
+        "pubdate": "1992 May-Aug"
+      },
+      {
+        "pmid": "32809533",
+        "title": "Premenstrual Syndrome.",
+        "source": "",
+        "pubdate": "2026 Jan"
+      },
+      {
+        "pmid": "6398056",
+        "title": "Serotonin antagonists.",
+        "source": "Australian and New Zealand journal of medicine",
+        "pubdate": "1984 Dec"
+      },
+      {
+        "pmid": "17073663",
+        "title": "5-HT3 receptors.",
+        "source": "Current pharmaceutical design",
+        "pubdate": "2006"
+      },
+      {
+        "pmid": "26995510",
+        "title": "[Other therapeutic strategies].",
+        "source": "Presse medicale (Paris, France : 1983)",
+        "pubdate": "2016 Mar"
+      },
+      {
+        "pmid": "7854515",
+        "title": "Serotonin syndrome.",
+        "source": "Neurology",
+        "pubdate": "1995 Feb"
+      }
+    ]
+  },
+  "sodium_lithium_clearance": {
+    "query": "sodium AND lithium AND (clearance OR toxicity OR pharmacokinetics)",
+    "hits": [
+      {
+        "pmid": "9346378",
+        "title": "The validity of lithium clearance as an index of sodium and water delivery from the proximal tubules.",
+        "source": "Nephron",
+        "pubdate": "1997"
+      },
+      {
+        "pmid": "2681925",
+        "title": "Evaluation of lithium clearance as a marker of proximal tubule sodium handling.",
+        "source": "Kidney international",
+        "pubdate": "1989 Jul"
+      },
+      {
+        "pmid": "38230464",
+        "title": "Angiotensin-converting enzyme inhibitors and angiotensin-II-receptor antagonists modulate sodium handling based on endogenous lithium clearance.",
+        "source": "Kardiologia polska",
+        "pubdate": "2024"
+      },
+      {
+        "pmid": "2339283",
+        "title": "Analysis of the relation between lithium clearance and sodium clearance in rats.",
+        "source": "Scandinavian journal of clinical and laboratory investigation",
+        "pubdate": "1990 Apr"
+      },
+      {
+        "pmid": "3941708",
+        "title": "Red-cell lithium-sodium countertransport and renal lithium clearance in hypertension.",
+        "source": "The New England journal of medicine",
+        "pubdate": "1986 Jan 23"
+      },
+      {
+        "pmid": "2182927",
+        "title": "Effect of diuretic and antidiuretic agents on lithium clearance as a marker for proximal delivery.",
+        "source": "Kidney international. Supplement",
+        "pubdate": "1990 Mar"
+      }
+    ]
+  },
+  "mulberry_alpha_glucosidase": {
+    "query": "(white mulberry OR Morus alba) AND alpha-glucosidase AND (postprandial OR randomized)",
+    "hits": [
+      {
+        "pmid": "27974904",
+        "title": "Evaluation of a Standardized Extract from Morus alba against \u03b1-Glucosidase Inhibitory Effect and Postprandial Antihyperglycemic in Patients with Impaired Glucose Tolerance: A Randomized Double-Blind Clinical Trial.",
+        "source": "Evidence-based complementary and alternative medicine : eCAM",
+        "pubdate": "2016"
+      },
+      {
+        "pmid": "36558434",
+        "title": "Analysis of White Mulberry Leaves and Dietary Supplements, ATR-FTIR Combined with Chemometrics for the Rapid Determination of 1-Deoxynojirimycin.",
+        "source": "Nutrients",
+        "pubdate": "2022 Dec 10"
+      },
+      {
+        "pmid": "39055216",
+        "title": "Functional assessments of Psidium guajava L. and Morus alba L. leaf extracts on postprandial glucose control.",
+        "source": "Food science & nutrition",
+        "pubdate": "2024 Jul"
+      },
+      {
+        "pmid": "37265398",
+        "title": "Inhibitory Mechanism of Prenylated Flavonoids Isolated from Mulberry Leaves on \u03b1-Glucosidase by Multi-Spectroscopy and Molecular Dynamics Simulation.",
+        "source": "Journal of agricultural and food chemistry",
+        "pubdate": "2023 Jun 14"
+      },
+      {
+        "pmid": "21631361",
+        "title": "Mulberry leaf extract reduces postprandial hyperglycemia with few side effects by inhibiting \u03b1-glucosidase in normal rats.",
+        "source": "Journal of medicinal food",
+        "pubdate": "2011 Jul-Aug"
+      },
+      {
+        "pmid": "22849553",
+        "title": "In vitro inhibitory effects of plant-based foods and their combinations on intestinal \u03b1-glucosidase and pancreatic \u03b1-amylase.",
+        "source": "BMC complementary and alternative medicine",
+        "pubdate": "2012 Jul 31"
+      }
+    ]
+  },
+  "bromelain_warfarin_bleeding": {
+    "query": "bromelain AND (warfarin OR bleeding OR hemorrhage)",
+    "hits": [
+      {
+        "pmid": "11577981",
+        "title": "Bromelain: biochemistry, pharmacology and medical use.",
+        "source": "Cellular and molecular life sciences : CMLS",
+        "pubdate": "2001 Aug"
+      },
+      {
+        "pmid": "27035499",
+        "title": "Is There a Role for Arnica and Bromelain in Prevention of Post-Procedure Ecchymosis or Edema? A Systematic Review of the Literature.",
+        "source": "Dermatologic surgery : official publication for American Society for Dermatologic Surgery [et al.]",
+        "pubdate": "2016 Apr"
+      },
+      {
+        "pmid": "5910260",
+        "title": "Ananase.",
+        "source": "Drug and therapeutics bulletin",
+        "pubdate": "1966 Apr 29"
+      },
+      {
+        "pmid": "36903535",
+        "title": "Diosmin and Bromelain Stimulate Glutathione and Total Thiols Production in Red Blood Cells.",
+        "source": "Molecules (Basel, Switzerland)",
+        "pubdate": "2023 Mar 1"
+      },
+      {
+        "pmid": "38193087",
+        "title": "Taming the SARS-CoV-2-mediated proinflammatory response with BromAc(\u00ae).",
+        "source": "Frontiers in immunology",
+        "pubdate": "2023"
+      },
+      {
+        "pmid": "31833838",
+        "title": "Burn Debridement: Are We Optimizing Outcomes?",
+        "source": "Wounds : a compendium of clinical research and practice",
+        "pubdate": "2019 Dec"
+      }
+    ]
+  },
+  "bupleurum_CYP3A4": {
+    "query": "(bupleurum OR saikosaponin) AND CYP3A4",
+    "hits": [
+      {
+        "pmid": "33369126",
+        "title": "Effects of saikosaponin-d on CYP3A4 in HepaRG cell and protein-ligand docking study.",
+        "source": "Basic & clinical pharmacology & toxicology",
+        "pubdate": "2021 May"
+      },
+      {
+        "pmid": "40973006",
+        "title": "Network toxicology and cell experiments reveal the mechanism of saikochromone A-induced hepatotoxicity.",
+        "source": "Toxicon : official journal of the International Society on Toxinology",
+        "pubdate": "2025 Nov"
+      },
+      {
+        "pmid": "38590569",
+        "title": "Effects of total saikosaponins on CYP3A4 and CYP1A2 in HepaRG cells.",
+        "source": "Experimental and therapeutic medicine",
+        "pubdate": "2024 May"
+      },
+      {
+        "pmid": "34147617",
+        "title": "Saikosaponins and the deglycosylated metabolites exert liver meridian guiding effect through PXR/CYP3A4 inhibition.",
+        "source": "Journal of ethnopharmacology",
+        "pubdate": "2021 Oct 28"
+      },
+      {
+        "pmid": "39410900",
+        "title": "Multi-target Mechanisms of Si-Ni-San on Anxious Insomnia: An Example of Network-pharmacology and Molecular Docking Analysis.",
+        "source": "Current medicinal chemistry",
+        "pubdate": "2025"
+      },
+      {
+        "pmid": "29902661",
+        "title": "A feasibility study of the toxic responses of human induced pluripotent stem cell-derived hepatocytes to phytochemicals.",
+        "source": "Toxicology in vitro : an international journal published in association with BIBRA",
+        "pubdate": "2018 Oct"
+      }
+    ]
+  },
+  "bupleurum_CYP2D6": {
+    "query": "(bupleurum OR saikosaponin) AND CYP2D6",
+    "hits": [
+      {
+        "pmid": "33273809",
+        "title": "Effects of Saikosaponin D on CYP1A2 and CYP2D6 in HepaRG Cells.",
+        "source": "Drug design, development and therapy",
+        "pubdate": "2020"
+      },
+      {
+        "pmid": "23725846",
+        "title": "Assessment of the effects of Radix bupleuri and vinegar-baked Radix bupleuri on cytochrome 450 activity by a six-drug cocktail approach.",
+        "source": "Chinese journal of natural medicines",
+        "pubdate": "2013 May"
+      }
+    ]
+  },
+  "hordenine_MAOI": {
+    "query": "hordenine AND (monoamine oxidase OR MAO OR sympathomimetic)",
+    "hits": [
+      {
+        "pmid": "2570842",
+        "title": "Deamination of hordenine by monoamine oxidase and its action on vasa deferentia of the rat.",
+        "source": "The Journal of pharmacy and pharmacology",
+        "pubdate": "1989 Jun"
+      },
+      {
+        "pmid": "37500485",
+        "title": "The beer component hordenine inhibits alcohol addiction-associated behaviours in mice.",
+        "source": "Addiction biology",
+        "pubdate": "2023 Aug"
+      },
+      {
+        "pmid": "35709159",
+        "title": "Permeability of dopamine D2 receptor agonist hordenine across the intestinal and blood-brain barrier in vitro.",
+        "source": "PloS one",
+        "pubdate": "2022"
+      },
+      {
+        "pmid": "36985809",
+        "title": "Beneficial Effects of Hordenine on a Model of Ulcerative Colitis.",
+        "source": "Molecules (Basel, Switzerland)",
+        "pubdate": "2023 Mar 21"
+      },
+      {
+        "pmid": "36771401",
+        "title": "Hordenine Activated Dermal Papilla Cells and Promoted Hair Regrowth by Activating Wnt Signaling Pathway.",
+        "source": "Nutrients",
+        "pubdate": "2023 Jan 30"
+      },
+      {
+        "pmid": "34750996",
+        "title": "Quantification of hordenine in a complex plant matrix by direct analysis in real time-high-resolution mass spectrometry: Application to the \"plant of concern\" Sceletium tortuosum.",
+        "source": "Drug testing and analysis",
+        "pubdate": "2022 Apr"
+      }
+    ]
+  },
+  "phenylethylamine_MAOI": {
+    "query": "phenylethylamine AND (MAOI OR \"monoamine oxidase inhibitor\" OR \"hypertensive crisis\")",
+    "hits": [
+      {
+        "pmid": "17612708",
+        "title": "Transdermal selegiline.",
+        "source": "Drugs of today (Barcelona, Spain : 1998)",
+        "pubdate": "2007 Jun"
+      },
+      {
+        "pmid": "31006530",
+        "title": "A Forward Chemical Genetic Screen Reveals Gut Microbiota Metabolites That Modulate Host Physiology.",
+        "source": "Cell",
+        "pubdate": "2019 May 16"
+      },
+      {
+        "pmid": "38057413",
+        "title": "Concomitant use of monoamine oxidase inhibitor and tyrosine in parenteral nutrition.",
+        "source": "European journal of clinical nutrition",
+        "pubdate": "2024 Mar"
+      },
+      {
+        "pmid": "28655495",
+        "title": "Tranylcypromine in mind (Part I): Review of pharmacology.",
+        "source": "European neuropsychopharmacology : the journal of the European College of Neuropsychopharmacology",
+        "pubdate": "2017 Aug"
+      },
+      {
+        "pmid": "37966854",
+        "title": "Classics in Chemical Neuroscience: Selegiline, Isocarboxazid, Phenelzine, and Tranylcypromine.",
+        "source": "ACS chemical neuroscience",
+        "pubdate": "2023 Dec 6"
+      },
+      {
+        "pmid": "4603266",
+        "title": "Another look at the monoamine oxidases and the monoamine oxidase inhibitor drugs.",
+        "source": "Life sciences",
+        "pubdate": "1974 Jun 1"
+      }
+    ]
+  }
+}

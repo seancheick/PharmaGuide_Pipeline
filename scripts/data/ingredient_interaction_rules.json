@@ -2,13 +2,13 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "6.0.2",
-    "last_updated": "2026-05-05",
+    "schema_version": "6.0.3",
+    "last_updated": "2026-05-06",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
-    "flutter_schema_version": "6.0.2",
+    "flutter_schema_version": "6.0.3",
     "v60_added_fields": {
       "profile_gate": "deterministic predicate per sub-rule. See scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md. Required field; consumers MUST evaluate the gate against (user_profile, product_context) before rendering an alert."
     },
@@ -55,6 +55,12 @@
           "to": "6.0.2",
           "date": "2026-05-05",
           "summary": "Hand-applied excludes/escalation refinements per ADR §Step 5: (1) vitamin_a pregnancy gate excludes nutrient_forms_any=['beta_carotene','mixed_carotenoids'] so β-carotene products do not trigger the retinol pregnancy alert; (2) aloe_vera pregnancy gate excludes product_forms_any=['topical_only'] so topical aloe is not flagged for oral-aloe pregnancy concerns; (3) curcumin pregnancy gate excludes product_forms_any=['culinary_turmeric'] so food-level turmeric is not flagged for high-dose extract concerns; (4) berberine_supplement diabetes baseline severity softened from avoid → caution — escalations to avoid still occur via the existing dose_threshold (≥1500 mg/day) and the existing drug_class_rule for hypoglycemics, matching the dev's two-rule pattern without adding a duplicate condition_rule entry. Mechanism + alert_body updated to reflect the escalation-via-other-rules model."
+        },
+        {
+          "from": "6.0.2",
+          "to": "6.0.3",
+          "date": "2026-05-06",
+          "summary": "Phase 1.5 clinical review: replaced 1 ghost PMID (27092496 in white_mulberry), 5 dead NIH URLs, 1 near-ghost NBK, 1 attribution-mismatched mechanism sentence, 1 truncated alert_body/informational_note, 1 generic FDA URL; downgraded white_mulberry evidence_level established→probable"
         }
       ]
     },
@@ -19624,8 +19630,8 @@
           "mechanism": "Pennyroyal contains pulegone and related hepatotoxic constituents; pregnancy use is unsafe because of toxicity and abortifacient concern.",
           "action": "Do not use in pregnancy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/pennyroyal",
-            "https://medlineplus.gov/druginfo/natural/480.html"
+            "https://pubmed.ncbi.nlm.nih.gov/8633832/",
+            "https://pubmed.ncbi.nlm.nih.gov/25512112/"
           ],
           "alert_headline": "Unsafe during pregnancy",
           "alert_body": "Pennyroyal contains toxic compounds that can harm the liver and has abortifacient concern. If you are pregnant, do not use it.",
@@ -19697,8 +19703,7 @@
           "mechanism": "Tansy contains thujone and other toxic constituents; pregnancy exposure is not clinically acceptable.",
           "action": "Do not use in pregnancy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbsataglance",
-            "https://www.ncbi.nlm.nih.gov/books/NBK547852/"
+            "https://pubmed.ncbi.nlm.nih.gov/28472675/"
           ],
           "alert_headline": "Unsafe during pregnancy",
           "alert_body": "Tansy contains thujone and other toxic constituents. If you are pregnant, do not use it.",
@@ -19770,7 +19775,7 @@
           "mechanism": "Synephrine is a sympathomimetic; pregnancy is not the place for stimulant-driven cardiovascular stress.",
           "action": "Do not use supplement-dose bitter orange in pregnancy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/bitterorange",
+            "https://www.nccih.nih.gov/health/bitter-orange",
             "https://www.canada.ca/en/health-canada/services/drugs-health-products/natural-non-prescription/regulation/about-products/synephrine.html"
           ],
           "alert_headline": "Not for use in pregnancy",
@@ -19984,7 +19989,7 @@
           "mechanism": "Human pregnancy safety data are sparse.",
           "action": "Do not present as proven pregnancy support; monitor rather than hard-block.",
           "sources": [
-            "https://www.nccih.nih.gov/health/maca"
+            "https://pubmed.ncbi.nlm.nih.gov/38440178/"
           ],
           "alert_headline": "Pregnancy safety is unclear",
           "alert_body": "Human pregnancy safety data for maca are sparse. If you are pregnant, discuss use with your clinician rather than treating it as proven support.",
@@ -20084,11 +20089,11 @@
         {
           "condition_id": "diabetes",
           "severity": "caution",
-          "evidence_level": "established",
+          "evidence_level": "probable",
           "mechanism": "Alpha-glucosidase inhibition slows carbohydrate absorption.",
           "action": "Monitor if combined with acarbose-like therapy or insulin.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbsataglance"
+            "https://pubmed.ncbi.nlm.nih.gov/27974904/"
           ],
           "alert_headline": "May lower glucose after meals",
           "alert_body": "White mulberry can slow carbohydrate absorption through alpha-glucosidase inhibition. If you use it with acarbose-like therapy or insulin, monitor for low blood sugar.",
@@ -20123,7 +20128,7 @@
           "unit": "mg",
           "severity_if_met": "caution",
           "severity_if_not_met": "monitor",
-          "note": "May potentiate blood-sugar lowering medications. https://pubmed.ncbi.nlm.nih.gov/27092496/",
+          "note": "May potentiate blood-sugar lowering medications. https://pubmed.ncbi.nlm.nih.gov/27974904/",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -20231,7 +20236,7 @@
           "mechanism": "Serotonin precursor combined with MAOI inhibition → serotonin syndrome.",
           "action": "Do not combine L-tryptophan with MAOIs.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Tryptophan/"
+            "https://pubmed.ncbi.nlm.nih.gov/31523132/"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. L-tryptophan raises serotonin levels and can cause serotonin syndrome when combined with MAO-inhibitor antidepressants.",
@@ -20356,7 +20361,7 @@
           "mechanism": "Methyl donor with antidepressant activity; serotonergic potentiation when combined with MAOIs raises serotonin syndrome risk.",
           "action": "If you take an MAOI, avoid SAMe unless cleared by your prescriber. Allow washout if switching.",
           "sources": [
-            "https://www.nccih.nih.gov/health/same"
+            "https://pubmed.ncbi.nlm.nih.gov/38423354/"
           ],
           "alert_headline": "Avoid combining with MAOIs",
           "alert_body": "If you take MAO inhibitors, do not combine with this product. SAMe has antidepressant-like activity. Combined with MAO-inhibitor antidepressants, it can raise the risk of serotonin syndrome.",
@@ -20409,7 +20414,7 @@
           "mechanism": "High sodium intake increases lithium clearance. Low sodium increases lithium retention → toxicity risk. Like caffeine, the principle is consistency.",
           "action": "If you take lithium, keep sodium intake stable. Avoid sudden low-sodium diets or salt-tablet supplements without prescriber approval.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/Sodium-HealthProfessional/",
+            "https://pubmed.ncbi.nlm.nih.gov/9022564/",
             "https://www.cdc.gov/salt/index.html"
           ],
           "alert_headline": "Keep sodium intake stable",
@@ -20460,7 +20465,7 @@
           "drug_class_id": "anticoagulants",
           "severity": "monitor",
           "evidence_level": "theoretical",
-          "mechanism": "Mild fibrinolytic / antiplatelet activity at high dose (≥500 mg/day). Bromelain enhances plasmin generation and modestly inhibits platelet aggregation. Clinical bleeding events with warfarin are rare but documented in case reports.",
+          "mechanism": "Mild fibrinolytic / antiplatelet activity at high dose (≥500 mg/day). Bromelain enhances plasmin generation and modestly inhibits platelet aggregation in preclinical studies.",
           "action": "If you take warfarin or an antiplatelet, mention bromelain supplements ≥500 mg/day to your prescriber. Watch for unusual bruising or bleeding.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/11577981/",
@@ -20520,8 +20525,8 @@
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "alert_headline": "Do not combine with MAOIs",
-          "alert_body": "If you take MAO inhibitors, do not combine with this product. Tyramine-rich supplement extracts combined with MAO-inhibitor antidepressants can cause a life-threatening blood pressure spike. This i...",
-          "informational_note": "Tyramine is the classic MAOI dietary contraindication — relevant to anyone on phenelzine, tranylcypromine, isocarboxa...",
+          "alert_body": "If you take MAO inhibitors, do not combine with this product. Tyramine-rich supplement extracts can trigger a severe hypertensive crisis (the classic MAOI \"cheese reaction\") that may be fatal.",
+          "informational_note": "Tyramine is the classic MAOI dietary contraindication — relevant to anyone on phenelzine or tranylcypromine.",
           "profile_gate": {
             "gate_type": "drug_class",
             "requires": {
@@ -20589,7 +20594,7 @@
           "mechanism": "Saikosaponins inhibit CYP2D6 in vitro and in animal models. Clinical evidence in humans is limited but consistent in mechanism. Bupleurum often appears in multi-herb TCM formulas (Xiao Yao San, Bupleurum & Dragon Bone) where users may not recognize it on the ingredient label.",
           "action": "If you take a CYP2D6-substrate prescription drug, consider discussing this supplement with your prescriber. Especially relevant for many SSRIs/SNRIs, tricyclics, codeine, tramadol, and tamoxifen.",
           "sources": [
-            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+            "https://pubmed.ncbi.nlm.nih.gov/33273809/"
           ],
           "alert_headline": "May affect prescription drug levels",
           "alert_body": "If you take a CYP2D6-substrate prescription drug, consider discussing bupleurum with your prescriber. Bupleurum may slow how some antidepressants and pain medications are processed.",

@@ -1,0 +1,405 @@
+
+========== pennyroyal  PMID:8633832 ==========
+1. Ann Intern Med. 1996 Apr 15;124(8):726-34. doi: 
+10.7326/0003-4819-124-8-199604150-00004.
+
+Pennyroyal toxicity: measurement of toxic metabolite levels in two cases and 
+review of the literature.
+
+Anderson IB(1), Mullen WH, Meeker JE, Khojasteh-BakhtSC, Oishi S, Nelson SD, 
+Blanc PD.
+
+Author information:
+(1)San Francisco Bay Area Regional Poison Control Center, San Francisco General 
+Hospital, CA 94110, USA.
+
+Comment in
+    Ann Intern Med. 1997 Feb 1;126(3):250-1. doi: 
+10.7326/0003-4819-126-3-199702010-00016.
+
+BACKGROUND: Pennyroyal is a widely available herb that has long been used as an 
+abortifacient despite its potentially lethal hepatotoxic effects. However, 
+quantitative data for pennyroyal constituents and their metabolites in humans 
+have not been previously reported.
+OBJECTIVES: To quantify pennyroyal metabolites in human overdose, to correlate 
+these findings with clinical variables, and to place these findings in the 
+context of previously reported cases of pennyroyal toxicity.
+DESIGN: Clinical case series of pennyroyal ingestions; quantification of 
+pennyroyal metabolites by gas chromatography and mass spectrometry; qualitative 
+detection of protein-bound adducts of the metabolites of pennyroyal constituents 
+in human liver by Western blot assay; and review of the literature based on a 
+search of MEDLINE, Index Medicus, and the reference citations of all available 
+publications.
+RESULTS: We report four cases of pennyroyal ingestion. One patient died, one 
+received N-acetylcysteine, and two ingested minimally toxic amounts of 
+pennyroyal and were not treated with N-acetylcysteine. In the fatal case, 
+postmortem examination of a serum sample, which had been obtained 72 hours after 
+the acute ingestion, identified 18 ng of pulegone per mL and 1 ng of menthof
+
+========== pennyroyal_v2  PMID:25512112 ==========
+1. Drug Metab Rev. 2015 Feb;47(1):12-20. doi: 10.3109/03602532.2014.990032. Epub 
+2014 Dec 16.
+
+A decades-long investigation of acute metabolism-based hepatotoxicity by herbal 
+constituents: a case study of pennyroyal oil.
+
+Gordon P(1), Khojasteh SC.
+
+Author information:
+(1)GNF (Novartis) , San Diego, CA , USA and.
+
+Herbal supplements are often regarded as "natural", and are, therefore, 
+considered by many to be safer than pharmaceuticals; however, the adverse 
+effects of these supplements are under-reported in many cases. Many herbal 
+supplements, such as pyrrolizidine alkaloids, kava, chaparral and germander, are 
+known to induce liver injury, which, in general, is one of the main toxicity 
+liabilities observed in the clinic and accounts for about half of total liver 
+failures. One example is the hepatotoxicity of pennyroyal oil, which is ingested 
+as an abortifacient, among other uses. For three decades, the late Professor 
+Sidney Nelson contributed to our understanding of the mechanism of toxicity of 
+pennyroyal and broadened our understanding of chemical toxicology. Here we 
+present the studies and review the findings on acute hepatotoxicity of 
+pennyroyal oil. These studies involved the isolation and characterization of 
+pennyroyal components, determination of the appropriate animal models, 
+identification of the structural requirement for toxicity and determination of 
+the target enzymes and the enzymes involved in the process of bioactivation. 
+Studies with stable isotope labeled pennyroyal metabolites, pulegone and 
+menthofuran, furthered our understanding of the role of cytochrome P450 in the 
+oxidation of these compounds. This review presents the investigational tools 
+used in the study of pennyroyal oil, allowing the reader to not only appreciate 
+these meth
+
+========== tansy  PMID:28472675 ==========
+1. Food Chem Toxicol. 2017 Jul;105:355-369. doi: 10.1016/j.fct.2017.04.044. Epub 
+2017 May 1.
+
+Toxic essential oils. Part V: Behaviour modulating and toxic properties of 
+thujones and thujone-containing essential oils of Salvia officinalis L., 
+Artemisia absinthium L., Thuja occidentalis L. and Tanacetum vulgare L.
+
+Radulović NS(1), Genčić MS(2), Stojanović NM(3), Randjelović PJ(4), 
+Stojanović-Radić ZZ(5), Stojiljković NI(4).
+
+Author information:
+(1)Department of Chemistry, Faculty of Science and Mathematics, University of 
+Niš, Višegradska 33, 18000 Niš, Serbia. Electronic address: 
+nikoradulovic@yahoo.com.
+(2)Department of Chemistry, Faculty of Science and Mathematics, University of 
+Niš, Višegradska 33, 18000 Niš, Serbia.
+(3)Faculty of Medicine, University of Niš, Bulevar Zorana Đinđića 81, 18000 Niš, 
+Serbia.
+(4)Department of Physiology, Faculty of Medicine, University of Niš, Bulevar 
+Zorana Đinđića 81, 18000 Niš, Serbia.
+(5)Department of Biology and Ecology, Faculty of Science and Mathematics, 
+University of Niš, Višegradska 33, 18000 Niš, Serbia.
+
+Neurotoxic thujones (α- and β-diastereoisomers) are common constituents of plant 
+essential oils. In this study, we employed a statistical approach to determine 
+the contribution of thujones to the overall observed behaviour-modulating and 
+toxic effects of essential oils (Salvia officinalis L., Artemisia absinthium L., 
+Thuja occidentalis L. and Tanacetum vulgare L.) containing these monoterpene 
+ketones. The data from three in vivo neuropharmacological tests on rats (open 
+field, light-dark, and diazepam-induced sleep), and toxicity assays (brine 
+shrimp, and antimicrobial activity against a panel of microorganisms), together 
+with the data from detailed chemical analyses, were subjected to a multivariate 
+statistica
+
+========== maca  PMID:31951246 ==========
+1. Food Funct. 2020 Jan 29;11(1):83-92. doi: 10.1039/c9fo02732g.
+
+Medicinal effects of Peruvian maca (Lepidium meyenii): a review.
+
+da Silva Leitão Peres N (1), Cabrera Parra Bortoluzzi L , Medeiros Marques LL , 
+Formigoni M , Fuchs RHB , Droval AA , Reitz Cardoso FA .
+
+Author information:
+(1)Department of Food Engineering, Federal University of Technology - Paraná 
+(UTFPR), Campo Mourão, Paraná 87301-005, Brazil. natalia.utfpr@hotmail.com 
+leticia_cabrera@outlook.com leilamarques@utfpr.edu.br.
+
+Peruvian maca (Lepidium meyenii) is a root native to the Andean region, 
+cultivated for at least 2000 years. Maca is rich in fiber, a large number of 
+essential amino acids, fatty acids, and other nutrients, including vitamin C, 
+copper, iron, and calcium. Besides these essential nutrients, this root contains 
+bioactive compounds responsible for benefits to the human body, which has caused 
+a considerable increase in its consumption in the last 20 years worldwide. This 
+review documents the Peruvian maca composition and the recent findings regarding 
+the medicinal effects of this root in sexual dysfunction regulation, 
+neuroprotective effects, action in memory enhancement, antidepressant, 
+antioxidant, anti-cancer, and anti-inflammatory activities, and skin protection.
+
+DOI: 10.1039/c9fo02732g
+PMID: 31951246 [Indexed for MEDLINE]
+
+========== maca_v2  PMID:38440178 ==========
+1. Front Pharmacol. 2024 Feb 19;15:1360422. doi: 10.3389/fphar.2024.1360422. 
+eCollection 2024.
+
+Exploring the chemical and pharmacological variability of Lepidium meyenii: a 
+comprehensive review of the effects of maca.
+
+Ulloa Del Carpio N(1), Alvarado-Corella D(2), Quiñones-Laveriano DM(3), 
+Araya-Sibaja A(4), Vega-Baudrit J(4), Monagas-Juan M(5), Navarro-Hoyos M(2), 
+Villar-López M(1)(6).
+
+Author information:
+(1)Centro de Investigación Clínica de Medicina Complementaria-CICMEC, Gerencia 
+de Medicina Complementaria, Seguro Social de Salud-EsSalud, Lima, Peru.
+(2)Bioactivity and Sustainable Development (BIODESS) Group, Department of 
+Chemistry, University of Costa Rica (UCR), San Jose, Costa Rica.
+(3)Instituto de Investigaciones de Ciencias Biomédicas, Universidad Ricardo 
+Palma, Lima, Peru.
+(4)Laboratorio Nacional de Nanotecnología, LANOTEC-CeNAT-CONARE, San José, Costa 
+Rica.
+(5)United States Pharmacopeia (USP) Dietary Supplements and Herbal Medicines, 
+Rockville, MD, United States.
+(6)Departamento de Medicina Preventiva y Salud Pública, Facultad de Medicina, 
+Universidad Nacional Mayor de San Marcos, Lima, Peru.
+
+Maca (Lepidium meyenii), a biennial herbaceous plant indigenous to the Andes 
+Mountains, has a rich history of traditional use for its purported health 
+benefits. Maca's chemical composition varies due to ecotypes, growth conditions, 
+and post-harvest processing, contributing to its intricate phytochemical 
+profile, including, macamides, macaenes, and glucosinolates, among other 
+components. This review provides an in-depth revision and analysis of Maca's 
+diverse bioactive metabolites, focusing on the pharmacological properties 
+registered in pre-clinical and clinical studies. Maca is generally safe, with 
+rare adverse effects, supported by preclinical stu
+
+========== tryptophan_MAOI  PMID:31523132 ==========
+1. Int J Tryptophan Res. 2019 Sep 9;12:1178646919873925. doi: 
+10.1177/1178646919873925. eCollection 2019.
+
+Serotonin Syndrome: Pathophysiology, Clinical Features, Management, and 
+Potential Future Directions.
+
+Scotton WJ(1), Hill LJ(2), Williams AC(1), Barnes NM(2).
+
+Author information:
+(1)Department of Neurology, University Hospitals Birmingham NHS Foundation 
+Trust, Birmingham, UK.
+(2)Institute of Clinical Sciences, University of Birmingham, Birmingham, UK.
+
+Comment in
+    Headache. 2023 Feb;63(2):222-232. doi: 10.1111/head.14463.
+
+Serotonin syndrome (SS) (also referred to as serotonin toxicity) is a 
+potentially life-threatening drug-induced toxidrome associated with increased 
+serotonergic activity in both the peripheral (PNS) and central nervous systems 
+(CNS). It is characterised by a dose-relevant spectrum of clinical findings 
+related to the level of free serotonin (5-hydroxytryptamine [5-HT]), or 5-HT 
+receptor activation (predominantly the 5-HT1A and 5-HT2A subtypes), which 
+include neuromuscular abnormalities, autonomic hyperactivity, and mental state 
+changes. Severe SS is only usually precipitated by the simultaneous initiation 
+of 2 or more serotonergic drugs, but the syndrome can also occur after the 
+initiation of a single serotonergic drug in a susceptible individual, the 
+addition of a second or third agent to long-standing doses of a maintenance 
+serotonergic drug, or after an overdose. The combination of a monoamine oxidase 
+inhibitor (MAOI), in particular MAO-A inhibitors that preferentially inhibit the 
+metabolism of 5-HT, with serotonergic drugs is especially dangerous, and may 
+lead to the most severe form of the syndrome, and occasionally death. This 
+review describes our current understanding of the pathophysiology, clinical 
+presentation and 
+
+========== mulberry  PMID:27974904 ==========
+1. Evid Based Complement Alternat Med. 2016;2016:8983232. doi: 
+10.1155/2016/8983232. Epub 2016 Nov 16.
+
+Evaluation of a Standardized Extract from Morus alba against α-Glucosidase 
+Inhibitory Effect and Postprandial Antihyperglycemic in Patients with Impaired 
+Glucose Tolerance: A Randomized Double-Blind Clinical Trial.
+
+Hwang SH(1), Li HM(2), Lim SS(1), Wang Z(1), Hong JS(3), Huang B(4).
+
+Author information:
+(1)Department of Food Science and Nutrition, Hallym University, 1 
+Hallymdeahak-gil, Chuncheon 24252, Republic of Korea.
+(2)Department of Pharmacology, College of Medicine, Hallym University, 1 
+Hallymdeahak-gil, Chuncheon 24252, Republic of Korea.
+(3)Department of Physical Education, Hallym University, 1 Hallymdeahak-gil, 
+Chuncheon 24252, Republic of Korea.
+(4)College of Food Science and Engineering, Jinzhou Medical University, Jinzhou 
+121001, China.
+
+To evaluate the antihyperglycemic effect of a standardized extract of the leaves 
+of Morus alba (SEMA), the present study was designed to investigate the 
+α-glucosidase inhibitory effect and acute single oral toxicity as well as 
+evaluate blood glucose reduction in animals and in patients with impaired 
+glucose tolerance in a randomized double-blind clinical trial. SEMA was found to 
+inhibit α-glucosidase at a fourfold higher level than the positive control 
+(acarbose), in a concentration-dependent manner. Moreover, blood glucose 
+concentration was suppressed by SEMA in vivo. Clinical signs and weight changes 
+were observed when conducting an evaluation of the acute toxicity of SEMA 
+through a single-time administration, with clinical observation conducted more 
+than once each day. After administration of the SEMA, observation was for 14 
+days; all of the animals did not die and did not show any abnormal symptoms. 
+
+========== bupleurum_CYP2D6  PMID:33273809 ==========
+1. Drug Des Devel Ther. 2020 Nov 26;14:5251-5258. doi: 10.2147/DDDT.S268358. 
+eCollection 2020.
+
+Effects of Saikosaponin D on CYP1A2 and CYP2D6 in HepaRG Cells.
+
+Li H(#)(1)(2)(3), Tang Y(#)(1)(4), Wang Y(1)(2)(3), Wei W(1)(2)(3), Yin 
+C(1)(2)(3), Tang F(1)(2)(3).
+
+Author information:
+(1)Department of Clinical Pharmacy, Key Laboratory of Basic Pharmacology of 
+Guizhou Province and School of Pharmacy, Zunyi Medical University, Zunyi 563000, 
+People's Republic of China.
+(2)Key Laboratory of Basic Pharmacology of Ministry of Education and Joint 
+International Research Laboratory of Ethnomedicine of Ministry of Education, 
+Zunyi Medical University, Zunyi 563000, People's Republic of China.
+(3)Key Laboratory of Clinical Pharmacy of Zunyi City, Zunyi Medical University, 
+Zunyi 563000, People's Republic of China.
+(4)Department of Pharmacy, Meitan People's Hospital, Zunyi 564100, People's 
+Republic of China.
+(#)Contributed equally
+
+BACKGROUND: Bupleurum is one of the most important traditional Chinese medicines 
+and an ingredient in many compound preparations. It is widely used together with 
+other drugs in clinical practice, and thus there is great potential for 
+drug-drug interactions. Saikosaponin D (SsD) is a major bioactive triterpenoid 
+saponin extracted from Bupleurum with anti-inflammatory, anticancer, 
+antioxidative, and antihepatic fibrosis effects. Effects of the main components 
+of Bupleurum on cytochromes P450 (CYPs) need to be clarified in the clinical 
+application of combination therapies of formulations containing SsD or 
+Bupleurum.
+PURPOSE: This study aimed to investigate the effects of SsD on the CYP1A2 and 
+CYP2D6 mRNAs, protein expression, and relative enzyme activities in HepaRG 
+cells.
+METHODS: HepaRG cells were cultured with SsD at concentrations of 0.5, 1
+
+========== bupleurum_CYP3A4  PMID:33369126 ==========
+1. Basic Clin Pharmacol Toxicol. 2021 May;128(5):661-668. doi:
+10.1111/bcpt.13552.  Epub 2021 Jan 11.
+
+Effects of saikosaponin-d on CYP3A4 in HepaRG cell and protein-ligand docking 
+study.
+
+Li H(1)(2)(3), Tang Y(1)(4), Wei W(1)(2)(3), Yin C(1)(2)(3), Tang F(1)(2)(3).
+
+Author information:
+(1)Department of Clinical Pharamcy, Key Laboratory of Basic Pharmacology of 
+Guizhou Province and School of Pharmacy, Zunyi Medical University, Zunyi, China.
+(2)Key Laboratory of Basic Pharmacology of Ministry of Education and Joint 
+International Research Laboratory of Ethnomedicine of Ministry of Education, 
+Zunyi Medical University, Zunyi, China.
+(3)Key Laboratory of Clinical Pharmacy of Zunyi City, Zunyi Medical University, 
+Zunyi, China.
+(4)Department of Pharmacy, Meitan People's Hospital, Zunyi, China.
+
+Saikosaponin-d (SSd) is a major bioactive triterpenoid saponin extracted from 
+Bupleurum, which has anti-inflammatory, anticancer, antioxidative and 
+anti-hepatic fibrosis effects. Due to the effects of Bupleurum-related 
+formulations on cytochrome P450 (CYPs) expression still remain unclear, the 
+combination therapies involved formulations containing Bupleurum may sometimes 
+lead to unexpected drug-drug interactions in clinical practice. These 
+interactions can limit the clinical applications of related formulations. In 
+this study, we tried to explore the effects of SSd on CYP3A4 mRNA, protein 
+expression and the enzyme activity in HepaRG cells by real-time quantitative 
+reverse transcription polymerase chain reaction (RT-qPCR), Western blot (WB) and 
+HPLC method, respectively. The interaction between SSd and CYP3A4 was analysed 
+by molecular docking. HepaRG cells were cultured with different concentrations 
+of SSd (0.5, 1, 5 and 10 μmol/L) for 72 hours. It is revealed that SSd c
+
+========== hordenine_MAO  PMID:2570842 ==========
+1. J Pharm Pharmacol. 1989 Jun;41(6):421-3. doi: 
+10.1111/j.2042-7158.1989.tb06492.x.
+
+Deamination of hordenine by monoamine oxidase and its action on vasa deferentia 
+of the rat.
+
+Barwell CJ(1), Basma AN, Lafi MA, Leake LD.
+
+Author information:
+(1)School of Pharmacy, Portsmouth Polytechnic, Hampshire, UK.
+
+The selectivity of the naturally occurring amine, N,N-dimethyltyramine 
+(hordenine) for monoamine oxidase (MAO) and its action upon isolated vasa 
+deferentia of the rat was investigated. Hordenine was deaminated by rat liver 
+MAO with a Michaelis constant of 479 microM and maximum velocity of 128 nmol (mg 
+protein)-1 h-1 compared with 144 microM and 482 nmol (mg protein)-1 h-1 for 
+tyramine. Studies, with selective irreversible inhibitors of MAO, showed that 
+hordenine was a highly selective substrate for MAO-B of liver and that it was 
+not deaminated by the MAO-A of intestinal epithelium. In contrast to tyramine, 
+hordenine did not produce contractions of isolated vasa deferentia. However, 25 
+microM hordenine potentiated contractile responses of vasa, from control 
+animals, to submaximal doses of noradrenaline and inhibited responses to 
+tyramine. It did not alter responses, to noradrenaline, of vasa denervated by 
+chronic pretreatment of rats with guanethidine. Therefore, it appears that 
+hordenine acted as an inhibitor of noradrenaline uptake, in isolated vasa 
+deferentia. These results indicate that dietary-hordenine is unlikely to be 
+deaminated by intestinal MAO as this is predominantly MAO-A. Consequently, it is 
+likely to be absorbed and could affect the sympathetic nervous system, by virtue 
+of its action as an inhibitor of noradrenaline uptake.
+
+DOI: 10.1111/j.2042-7158.1989.tb06492.x
+PMID: 2570842 [Indexed for MEDLINE]
+
+========== PEA_MAOI  PMID:28655495 ==========
+1. Eur Neuropsychopharmacol. 2017 Aug;27(8):697-713. doi: 
+10.1016/j.euroneuro.2017.05.007. Epub 2017 Jun 24.
+
+Tranylcypromine in mind (Part I): Review of pharmacology.
+
+Ulrich S(1), Ricken R(2), Adli M(2).
+
+Author information:
+(1)Aristo Pharma GmbH, Wallenroder Str. 8-10, 13435 Berlin, Germany. Electronic 
+address: sven.ulrich@aristo-pharma.de.
+(2)Department of Psychiatry and Psychotherapy, Charité, Campus Charité Mitte, 
+Charitéplatz 1, 10117 Berlin, Germany.
+
+It has been over 50 years since a review has focused exclusively on the 
+monoamine oxidase (MAO) inhibitor tranylcypromine (TCP). A new review has 
+therefore been conducted for TCP in two parts which are written to be read 
+preferably in close conjunction: Part I - pharmacodynamics, pharmacokinetics, 
+drug interactions, toxicology; and Part II - clinical studies with meta-analysis 
+of controlled studies in depression, practice of TCP treatment, place in 
+therapy. Pharmacological data of this review part I characterize TCP as an 
+irreversible and nonselective MAO-A/B inhibitor at low therapeutic doses of 
+20mg/day with supplementary norepinephrine reuptake inhibition at higher doses 
+of 40-60mg/day. Serotonin, norepinephrine, dopamine, and trace amines, such as 
+the "endogenous amphetamine" phenylethylamine, are increased in brain, which 
+leads to changes in neuroplasticity by e.g. increased neurotrophic growth 
+factors and translates to reduced stress-induced hypersecretion of corticotropin 
+releasing factor (CRF) and positive testing in animal studies of depression. TCP 
+has a pharmacokinetic half-life (t1/2) of only 2h which is considerably lower 
+than for most other antidepressant drugs. However, a very long pharmacodynamic 
+half-life of about one week is found because of the irreversible MAO inhibition. 
+New
+
+========== PEA_MAOI_v2  PMID:37966854 ==========
+1. ACS Chem Neurosci. 2023 Dec 6;14(23):4064-4075. doi: 
+10.1021/acschemneuro.3c00591. Epub 2023 Nov 15.
+
+Classics in Chemical Neuroscience: Selegiline, Isocarboxazid, Phenelzine, and 
+Tranylcypromine.
+
+Hoffman GR(1)(2), Olson MG(1), Schoffstall AM(2), Estévez RF(3)(4), Van den 
+Eynde V(5)(6), Gillman PK(5), Stabio ME(1).
+
+Author information:
+(1)Department of Cell and Developmental Biology, University of Colorado School 
+of Medicine, 13001 E. 17th Place, Aurora, Colorado 80045, United States.
+(2)Department of Chemistry and Biochemistry, University of Colorado Colorado 
+Springs, Colorado Springs, Colorado 80918, United States.
+(3)Department of Psychiatry, University of Central Florida, 4000 Central Florida 
+Boulevard, Orlando, Florida 32816, United States.
+(4)Tampa Bay Neurobehavior Institute, 6311 Sheldon Road, Tampa Bay, Florida 
+33615, United States.
+(5)PsychoTropical Research, Bucasia, Queensland 4740, Australia.
+(6)Department of Psychiatry, RadboudUMC, 6500 Nijmegen, The Netherlands.
+
+The discovery of monoamine oxidase inhibitors (MAOIs) in the 1950s marked a 
+significant breakthrough in medicine, creating a powerful new category of drug: 
+the antidepressant. In the years and decades that followed, MAOIs have been used 
+in the treatment of several pathologies including Parkinson's disease, 
+Alzheimer's disease, and various cancers and as anti-inflammatory agents. 
+Despite once enjoying widespread use, MAOIs have dwindled in popularity due to 
+side effects, food-drug interactions, and the introduction of other 
+antidepressant drug classes such as tricyclic antidepressants (TCAs) and 
+selective serotonin reuptake inhibitors (SSRIs). The recently published 
+prescriber's guide for the use of MAOIs in treating depression has kindled a 
+resurgence of their use in the clin
