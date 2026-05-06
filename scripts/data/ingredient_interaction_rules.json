@@ -2,13 +2,13 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "5.3.2",
+    "schema_version": "5.3.3",
     "last_updated": "2026-05-05",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object.",
     "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
-    "flutter_schema_version": "5.3.2",
+    "flutter_schema_version": "5.3.3",
     "migration": {
       "completed_migrations": [
         {
@@ -28,6 +28,12 @@
           "to": "5.3.2",
           "date": "2026-05-05",
           "summary": "Pregnancy-rule clinical accuracy patch: softened 5-HTP mechanism (removed organogenesis framing in favor of 'limited human pregnancy data + serotonergic pharmacology'); softened black seed oil mechanism (preclinical animal signal, not proven human risk); reframed butterbur mechanism to make PA-free vs raw distinction explicit (severity stays contraindicated as defensive default for unverified products); refreshed 10 generic 'Not recommended during pregnancy' headlines with reason-specific phrasing (hormone-active, uterine activity, FDA-advised, stimulant laxative, etc.). No schema fields added; backward-compatible."
+        },
+        {
+          "from": "5.3.2",
+          "to": "5.3.3",
+          "date": "2026-05-05",
+          "summary": "Cross-condition headline variety pass: replaced 100 generic alert_headlines with reason-specific phrasing across 8 conditions. heart_disease (12): mechanism-specific (potassium/BP-rhythm/stimulant/clinician-review per dev review). bleeding_disorders (26): platelet/omega-3/coumarin/salicylate/heparin-like axes. kidney_disease (9): hyperkalemia, hypermagnesemia, electrolyte loss, creatinine, nephrotoxicity. thyroid_disorder (10): TPO inhibition, hormone modulation, lab interference. seizure_disorder (8): seizure-threshold, GLA, caffeine, cholinergic. liver_disease (14): hepatotoxic, HILI, cholestasis, hepatic clearance. hypertension (14): BP direction (raise/lower), med interactions. autoimmune (6): immunostimulating vs immunomodulatory. high_cholesterol (5): lipid mechanism. diabetes (9 residuals from 5.3.1). ttc (7): preconception care framing. surgery_scheduled (12) intentionally not changed — current headline is purpose-fit. No schema fields added; backward-compatible."
         }
       ]
     },
@@ -273,7 +279,7 @@
           "sources": [
             "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "Lactic acid load — kidney concern",
           "alert_body": "Propylene glycol is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of propylene glycol.",
           "informational_note": "Propylene glycol depends on kidney clearance — relevant to people with kidney conditions."
         }
@@ -375,7 +381,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May lower blood sugar",
           "alert_body": "Alpha-lipoic acid can lower blood sugar. If you have diabetes, talk to your clinician before adding Alpha-lipoic acid and monitor your glucose, especially in the first weeks.",
           "informational_note": "Alpha-lipoic acid affects blood sugar — relevant to people with diabetes."
         }
@@ -448,7 +454,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
           ],
-          "alert_headline": "Consult on cholesterol management",
+          "alert_headline": "May modestly lower LDL-C",
           "alert_body": "Berberine can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding berberine — it may change your lipid-therapy plan.",
           "informational_note": "Berberine affects lipid pathways — relevant to people managing high cholesterol."
         }
@@ -684,7 +690,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23871889/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "Caffeine may raise blood pressure",
           "alert_body": "Caffeine can influence blood pressure. If you have high blood pressure, talk to your clinician before adding caffeine and monitor your readings.",
           "informational_note": "Caffeine can affect blood pressure — relevant to people with high blood pressure."
         }
@@ -759,7 +765,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May modestly affect glucose control",
           "alert_body": "Chromium can lower blood sugar. If you have diabetes, talk to your clinician before adding chromium and monitor your glucose, especially in the first weeks.",
           "informational_note": "Chromium affects blood sugar — relevant to people with diabetes."
         }
@@ -1049,7 +1055,7 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May reduce glucose after meals",
           "alert_body": "Fiber can lower blood sugar. If you have diabetes, talk to your clinician before adding fiber and monitor your glucose, especially in the first weeks.",
           "informational_note": "Fiber affects blood sugar — relevant to people with diabetes."
         }
@@ -1126,7 +1132,7 @@
             "https://www.nccih.nih.gov/health/garlic",
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May modestly lower blood pressure",
           "alert_body": "Garlic can influence blood pressure. If you have high blood pressure, talk to your clinician before adding garlic and monitor your readings.",
           "informational_note": "Garlic can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -1140,7 +1146,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/38659110/",
             "https://www.nccih.nih.gov/health/garlic"
           ],
-          "alert_headline": "Consult on cholesterol management",
+          "alert_headline": "May modestly lower cholesterol",
           "alert_body": "Garlic can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding garlic — it may change your lipid-therapy plan.",
           "informational_note": "Garlic affects lipid pathways — relevant to people managing high cholesterol."
         },
@@ -1276,7 +1282,7 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Ginger has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding ginger.",
           "informational_note": "Ginger can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -1339,7 +1345,7 @@
             "https://www.nccih.nih.gov/health/ginkgo",
             "https://pubmed.ncbi.nlm.nih.gov/14598602/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May lower BP-medication effects",
           "alert_body": "Ginkgo can influence blood pressure. If you have high blood pressure, talk to your clinician before adding ginkgo and monitor your readings.",
           "informational_note": "Ginkgo can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -1353,7 +1359,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/22736461/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with seizure disorder",
+          "alert_headline": "Seed/leaf may lower seizure threshold",
           "alert_body": "Ginkgo may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding ginkgo.",
           "informational_note": "Ginkgo may affect seizure threshold — relevant to people with a seizure disorder."
         },
@@ -1366,7 +1372,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/ginkgo"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Ginkgo reduces platelet function and has been reported in rare spontaneous bleeding events. If you have a bleeding disorder, talk to your clinician before use.",
           "informational_note": "Ginkgo affects platelet function — relevant to people with bleeding disorders."
         },
@@ -1481,7 +1487,7 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May modestly lower blood sugar",
           "alert_body": "Ginseng can lower blood sugar. If you have diabetes, talk to your clinician before adding ginseng and monitor your glucose, especially in the first weeks.",
           "informational_note": "Ginseng affects blood sugar — relevant to people with diabetes."
         },
@@ -1651,7 +1657,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25312732/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May reduce BP-medication absorption",
           "alert_body": "Green tea extract can influence blood pressure. If you have high blood pressure, talk to your clinician before adding green tea extract and monitor your readings.",
           "informational_note": "Green tea extract can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -1777,7 +1783,7 @@
             "https://www.nccih.nih.gov/health/hawthorn",
             "https://pubmed.ncbi.nlm.nih.gov/11807965/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May add to BP-medication effects",
           "alert_body": "Hawthorn can influence blood pressure. If you have high blood pressure, talk to your clinician before adding hawthorn and monitor your readings.",
           "informational_note": "Hawthorn can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -1791,7 +1797,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12817526/",
             "https://www.nccih.nih.gov/health/hawthorn"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "May add to heart medication effects",
           "alert_body": "Hawthorn can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding hawthorn.",
           "informational_note": "Hawthorn can affect cardiovascular pathways — relevant to people with heart conditions."
         }
@@ -1854,7 +1860,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/29791909/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "Excess iodine may disrupt thyroid",
           "alert_body": "Iodine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding iodine and monitor your labs.",
           "informational_note": "Iodine affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -1943,7 +1949,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12957292/",
             "https://pubmed.ncbi.nlm.nih.gov/33676282/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "May worsen iron overload in liver disease",
           "alert_body": "Iron is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of iron.",
           "informational_note": "Iron depends on liver clearance — relevant to people with liver conditions."
         }
@@ -2006,7 +2012,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May modestly lower blood pressure",
           "alert_body": "L-arginine can influence blood pressure. If you have high blood pressure, talk to your clinician before adding L-arginine and monitor your readings.",
           "informational_note": "L-arginine can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -2019,7 +2025,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "May affect blood pressure and heart healing",
           "alert_body": "L-arginine can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding L-arginine.",
           "informational_note": "L-arginine can affect cardiovascular pathways — relevant to people with heart conditions."
         }
@@ -2158,7 +2164,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May modestly lower blood pressure",
           "alert_body": "Magnesium can influence blood pressure. If you have high blood pressure, talk to your clinician before adding magnesium and monitor your readings.",
           "informational_note": "Magnesium can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -2172,7 +2178,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/25864370/",
             "https://ods.od.nih.gov/factsheets/Magnesium-HealthProfessional/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "Discuss with your heart clinician",
           "alert_body": "Magnesium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding magnesium.",
           "informational_note": "Magnesium can affect cardiovascular pathways — relevant to people with heart conditions."
         },
@@ -2185,7 +2191,7 @@
           "sources": [
             "https://www.kidney.org/atoz/content/potassium"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "Hypermagnesemia risk in CKD",
           "alert_body": "In advanced kidney disease (eGFR below 30), supplemental magnesium can build up to risky levels. If you have CKD, talk to your nephrologist before adding magnesium.",
           "informational_note": "Magnesium excretion depends on kidney function — relevant to people with kidney disease."
         },
@@ -2285,7 +2291,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May raise potassium with BP meds",
           "alert_body": "Potassium can influence blood pressure. If you have high blood pressure, talk to your clinician before adding potassium and monitor your readings.",
           "informational_note": "Potassium can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -2298,7 +2304,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "Hyperkalemia risk in CKD",
           "alert_body": "Supplemental potassium can accumulate to dangerous levels in kidney disease. If you have CKD, talk to your nephrologist before using potassium supplements.",
           "informational_note": "Potassium excretion depends on kidney function — relevant to people with kidney disease."
         },
@@ -2311,7 +2317,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "May raise potassium with heart medications",
           "alert_body": "Potassium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding potassium.",
           "informational_note": "Potassium can affect cardiovascular pathways — relevant to people with heart conditions."
         }
@@ -2435,7 +2441,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May reduce BP-medication levels",
           "alert_body": "St John's Wort can influence blood pressure. If you have high blood pressure, talk to your clinician before adding St John's Wort and monitor your readings.",
           "informational_note": "St John's Wort can affect blood pressure — relevant to people with high blood pressure."
         }
@@ -2593,7 +2599,7 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "Insulin-mimetic — may lower glucose",
           "alert_body": "Vanadium can lower blood sugar. If you have diabetes, talk to your clinician before adding vanadium and monitor your glucose, especially in the first weeks.",
           "informational_note": "Vanadium affects blood sugar — relevant to people with diabetes."
         }
@@ -2692,7 +2698,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/2103414/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Hepatotoxic at high doses — caution",
           "alert_body": "Vitamin A is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Vitamin A.",
           "informational_note": "Vitamin A depends on liver clearance — relevant to people with liver conditions."
         }
@@ -2743,7 +2749,7 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "High-dose niacin may raise blood sugar",
           "alert_body": "Niacin can lower blood sugar. If you have diabetes, talk to your clinician before adding Niacin and monitor your glucose, especially in the first weeks.",
           "informational_note": "Niacin affects blood sugar — relevant to people with diabetes."
         },
@@ -2757,7 +2763,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/39416578/",
             "https://pubmed.ncbi.nlm.nih.gov/27402097/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "High-dose niacin — hepatotoxic risk",
           "alert_body": "Niacin is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Niacin.",
           "informational_note": "Niacin depends on liver clearance — relevant to people with liver conditions."
         },
@@ -2770,7 +2776,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17466224/"
           ],
-          "alert_headline": "Consult on cholesterol management",
+          "alert_headline": "High-dose niacin shifts lipids",
           "alert_body": "Niacin can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding Niacin — it may change your lipid-therapy plan.",
           "informational_note": "Niacin affects lipid pathways — relevant to people managing high cholesterol."
         }
@@ -3325,7 +3331,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/12383029/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with seizure disorder",
+          "alert_headline": "May affect seizure medication levels",
           "alert_body": "Kava may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding kava.",
           "informational_note": "Kava may affect seizure threshold — relevant to people with a seizure disorder."
         }
@@ -3380,7 +3386,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/18431248/",
             "https://pubmed.ncbi.nlm.nih.gov/19138557/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Rare liver injury reports",
           "alert_body": "Valerian is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of valerian.",
           "informational_note": "Valerian depends on liver clearance — relevant to people with liver conditions."
         }
@@ -3435,7 +3441,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/16800417/",
             "https://pubmed.ncbi.nlm.nih.gov/16854576/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Rare cholestatic injury reports",
           "alert_body": "Saw palmetto is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of saw palmetto.",
           "informational_note": "Saw palmetto depends on liver clearance — relevant to people with liver conditions."
         },
@@ -3449,7 +3455,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/11489067/",
             "https://pubmed.ncbi.nlm.nih.gov/18090773/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "Bleeding risk during surgery",
           "alert_body": "Saw palmetto has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding saw palmetto.",
           "informational_note": "Saw palmetto can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -3585,7 +3591,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/41255460/",
             "https://pubmed.ncbi.nlm.nih.gov/41281037/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "High-dose extract — liver injury reports",
           "alert_body": "Turmeric is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of turmeric.",
           "informational_note": "Turmeric depends on liver clearance — relevant to people with liver conditions."
         },
@@ -3599,7 +3605,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/10484074/",
             "https://pubmed.ncbi.nlm.nih.gov/7784468/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Turmeric has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding turmeric.",
           "informational_note": "Turmeric can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -3700,7 +3706,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23801821/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Hepatoprotective — discuss with clinician",
           "alert_body": "Milk thistle is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of milk thistle.",
           "informational_note": "Milk thistle depends on liver clearance — relevant to people with liver conditions."
         }
@@ -3736,7 +3742,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
             "https://pubmed.ncbi.nlm.nih.gov/14742793/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "High-dose may prolong bleeding time",
           "alert_body": "Omega-3 has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Omega-3.",
           "informational_note": "Omega-3 can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -3764,7 +3770,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/36103100/",
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "Discuss high-dose omega-3 with clinician",
           "alert_body": "Omega-3 can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Omega-3.",
           "informational_note": "Omega-3 can affect cardiovascular pathways — relevant to people with heart conditions."
         }
@@ -3873,7 +3879,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/17192169/",
             "https://pubmed.ncbi.nlm.nih.gov/14742793/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "High-dose may prolong bleeding time",
           "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
           "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -3989,7 +3995,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/25572959/",
             "https://pubmed.ncbi.nlm.nih.gov/7784468/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Curcumin has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding curcumin.",
           "informational_note": "Curcumin can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -4116,7 +4122,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/1602379/",
             "https://pubmed.ncbi.nlm.nih.gov/8510458/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Boswellia has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding boswellia.",
           "informational_note": "Boswellia can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -4194,7 +4200,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/19783511/",
             "https://pubmed.ncbi.nlm.nih.gov/21499116/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "High-dose GLA may prolong bleeding",
           "alert_body": "Evening primrose oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding evening primrose oil.",
           "informational_note": "Evening primrose oil can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -4208,7 +4214,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/17764919/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with seizure disorder",
+          "alert_headline": "GLA may lower seizure threshold",
           "alert_body": "Evening primrose oil may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding evening primrose oil.",
           "informational_note": "Evening primrose oil may affect seizure threshold — relevant to people with a seizure disorder."
         }
@@ -4308,7 +4314,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32486167/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "Modest bleeding signal at high doses",
           "alert_body": "Vitamin D has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding Vitamin D.",
           "informational_note": "Vitamin D can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -4322,7 +4328,7 @@
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with autoimmune conditions",
+          "alert_headline": "Broad immune effects — discuss",
           "alert_body": "Vitamin D has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding Vitamin D.",
           "informational_note": "Vitamin D affects immune function — relevant to people with autoimmune conditions."
         },
@@ -4336,7 +4342,7 @@
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/21505219/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "Discuss high-dose vitamin D with clinician",
           "alert_body": "Vitamin D can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding Vitamin D.",
           "informational_note": "Vitamin D can affect cardiovascular pathways — relevant to people with heart conditions."
         },
@@ -4350,7 +4356,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/28500824/",
             "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/"
           ],
-          "alert_headline": "Continue under prenatal care",
+          "alert_headline": "Discuss vitamin D in preconception care",
           "alert_body": "Vitamin D used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin D with your clinician.",
           "informational_note": "Vitamin D is continued under clinician guidance — relevant to people planning pregnancy."
         },
@@ -4553,7 +4559,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "Modest bleeding signal in case reports",
           "alert_body": "Glucosamine has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding glucosamine.",
           "informational_note": "Glucosamine can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -4643,7 +4649,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/32478963/",
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "Coumarin-like — may raise bleeding risk",
           "alert_body": "Chamomile has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding chamomile.",
           "informational_note": "Chamomile can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -4733,7 +4739,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17322161/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May affect blood thinner stability",
           "alert_body": "Cranberry has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding cranberry.",
           "informational_note": "Cranberry can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -4811,7 +4817,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/7774533/",
             "https://pubmed.ncbi.nlm.nih.gov/25808116/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "High-dose ALA may prolong bleeding",
           "alert_body": "Flaxseed has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding flaxseed.",
           "informational_note": "Flaxseed can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -4888,7 +4894,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/33091497/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Cat's claw has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding cat's claw.",
           "informational_note": "Cat's claw can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -4992,7 +4998,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/10902065/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Devil's claw has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding devil's claw.",
           "informational_note": "Devil's claw can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -5109,7 +5115,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23951541/",
             "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "High-dose calcium may raise heart risk",
           "alert_body": "Calcium can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding calcium.",
           "informational_note": "Calcium can affect cardiovascular pathways — relevant to people with heart conditions."
         }
@@ -5168,7 +5174,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/36017706/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "May inhibit thyroid hormone synthesis",
           "alert_body": "Genistein can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding genistein and monitor your labs.",
           "informational_note": "Genistein affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -5219,7 +5225,7 @@
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "Affects thyroid hormone activation",
           "alert_body": "Selenium can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding selenium and monitor your labs.",
           "informational_note": "Selenium affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -5268,7 +5274,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/31203475/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "May raise thyroid hormone levels",
           "alert_body": "Ashwagandha can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding ashwagandha and monitor your labs.",
           "informational_note": "Ashwagandha affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -5320,7 +5326,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/37988295/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "May interfere with thyroid lab tests",
           "alert_body": "Biotin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding Biotin and monitor your labs.",
           "informational_note": "Biotin affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -5523,7 +5529,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/37670115/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with autoimmune conditions",
+          "alert_headline": "Immune-stimulating mushroom — caution",
           "alert_body": "Reishi has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding reishi.",
           "informational_note": "Reishi affects immune function — relevant to people with autoimmune conditions."
         }
@@ -5574,7 +5580,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
           ],
-          "alert_headline": "Caution with seizure disorder",
+          "alert_headline": "Mixed effect on seizure threshold",
           "alert_body": "Melatonin may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding melatonin.",
           "informational_note": "Melatonin may affect seizure threshold — relevant to people with a seizure disorder."
         }
@@ -5625,7 +5631,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/17764919/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Caution with seizure disorder",
+          "alert_headline": "GLA may lower seizure threshold",
           "alert_body": "Borage seed oil may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding borage seed oil.",
           "informational_note": "Borage seed oil may affect seizure threshold — relevant to people with a seizure disorder."
         }
@@ -5697,7 +5703,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/17723077/",
             "https://pubmed.ncbi.nlm.nih.gov/12083489/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "Discuss with your heart clinician",
           "alert_body": "CoQ10 can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding CoQ10.",
           "informational_note": "CoQ10 can affect cardiovascular pathways — relevant to people with heart conditions."
         },
@@ -5711,7 +5717,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/19528564/",
             "https://pubmed.ncbi.nlm.nih.gov/12622602/"
           ],
-          "alert_headline": "Consult on cholesterol management",
+          "alert_headline": "May offset statin-related fatigue",
           "alert_body": "CoQ10 can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding CoQ10 — it may change your lipid-therapy plan.",
           "informational_note": "CoQ10 affects lipid pathways — relevant to people managing high cholesterol."
         },
@@ -5725,7 +5731,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/26111777/",
             "https://pubmed.ncbi.nlm.nih.gov/39019217/"
           ],
-          "alert_headline": "Continue under prenatal care",
+          "alert_headline": "Discuss CoQ10 with fertility clinician",
           "alert_body": "CoQ10 used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of CoQ10 with your clinician.",
           "informational_note": "CoQ10 is continued under clinician guidance — relevant to people planning pregnancy."
         }
@@ -5838,7 +5844,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32441543/"
           ],
-          "alert_headline": "Consult on cholesterol management",
+          "alert_headline": "May modestly lower LDL-C",
           "alert_body": "Citrus bergamot can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding citrus bergamot — it may change your lipid-therapy plan.",
           "informational_note": "Citrus bergamot affects lipid pathways — relevant to people managing high cholesterol."
         }
@@ -6053,7 +6059,7 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Continue under prenatal care",
+          "alert_headline": "DHEA — only with fertility clinician",
           "alert_body": "DHEA used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of DHEA with your clinician.",
           "informational_note": "DHEA is continued under clinician guidance — relevant to people planning pregnancy."
         },
@@ -6107,7 +6113,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/26662928/",
             "https://ods.od.nih.gov/factsheets/Folate-HealthProfessional/"
           ],
-          "alert_headline": "Continue under prenatal care",
+          "alert_headline": "Folate is recommended preconception",
           "alert_body": "Folate used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Folate with your clinician.",
           "informational_note": "Folate is continued under clinician guidance — relevant to people planning pregnancy."
         }
@@ -6147,7 +6153,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/30614289/",
             "https://pubmed.ncbi.nlm.nih.gov/29183107/"
           ],
-          "alert_headline": "Continue under prenatal care",
+          "alert_headline": "May support PCOS-related fertility",
           "alert_body": "Inositol used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of inositol with your clinician.",
           "informational_note": "Inositol is continued under clinician guidance — relevant to people planning pregnancy."
         },
@@ -6199,7 +6205,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/15801887/",
             "https://pubmed.ncbi.nlm.nih.gov/21334992/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Rare hepatitis reports",
           "alert_body": "Gotu kola is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of gotu kola.",
           "informational_note": "Gotu kola depends on liver clearance — relevant to people with liver conditions."
         },
@@ -6213,7 +6219,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/15801887/",
             "https://pubmed.ncbi.nlm.nih.gov/23653088/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "Modest bleeding signal at high doses",
           "alert_body": "Gotu kola has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding gotu kola.",
           "informational_note": "Gotu kola can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -6263,7 +6269,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27176566/"
           ],
-          "alert_headline": "Caution with autoimmune conditions",
+          "alert_headline": "Immune effects — caution if autoimmune",
           "alert_body": "Rhodiola has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding rhodiola.",
           "informational_note": "Rhodiola affects immune function — relevant to people with autoimmune conditions."
         },
@@ -6276,7 +6282,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23192943/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May modestly lower blood pressure",
           "alert_body": "Rhodiola can influence blood pressure. If you have high blood pressure, talk to your clinician before adding rhodiola and monitor your readings.",
           "informational_note": "Rhodiola can affect blood pressure — relevant to people with high blood pressure."
         }
@@ -6365,7 +6371,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/34144527/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May modestly lower blood pressure",
           "alert_body": "Tribulus can influence blood pressure. If you have high blood pressure, talk to your clinician before adding tribulus and monitor your readings.",
           "informational_note": "Tribulus can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -6378,7 +6384,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/20667992/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Rare hepatitis case report",
           "alert_body": "Tribulus is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of tribulus.",
           "informational_note": "Tribulus depends on liver clearance — relevant to people with liver conditions."
         },
@@ -6391,7 +6397,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/20667992/"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "Nephrotoxicity case report — caution",
           "alert_body": "Tribulus is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of tribulus.",
           "informational_note": "Tribulus depends on kidney clearance — relevant to people with kidney conditions."
         }
@@ -6455,7 +6461,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/32250458/",
             "https://pubmed.ncbi.nlm.nih.gov/24131672/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "May alter liver-metabolized drugs",
           "alert_body": "Schisandra is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of schisandra.",
           "informational_note": "Schisandra depends on liver clearance — relevant to people with liver conditions."
         }
@@ -6559,7 +6565,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30735081/"
           ],
-          "alert_headline": "Continue under prenatal care",
+          "alert_headline": "Phytoestrogen — caution preconception",
           "alert_body": "Wild yam used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of wild yam with your clinician.",
           "informational_note": "Wild yam is continued under clinician guidance — relevant to people planning pregnancy."
         }
@@ -6599,7 +6605,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/39708247/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "Stimulant — may raise blood pressure",
           "alert_body": "Yerba mate can influence blood pressure. If you have high blood pressure, talk to your clinician before adding yerba mate and monitor your readings.",
           "informational_note": "Yerba mate can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -6612,7 +6618,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/26661577/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "Stimulant — may stress the heart",
           "alert_body": "Yerba mate can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding yerba mate.",
           "informational_note": "Yerba mate can affect cardiovascular pathways — relevant to people with heart conditions."
         }
@@ -6676,7 +6682,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/17693963/",
             "https://pubmed.ncbi.nlm.nih.gov/34036101/"
           ],
-          "alert_headline": "Continue under prenatal care",
+          "alert_headline": "B12 is recommended preconception",
           "alert_body": "Vitamin B12 used while trying to conceive is often continued through pregnancy as part of prenatal care. If you are planning pregnancy, discuss dosing of Vitamin B12 with your clinician.",
           "informational_note": "Vitamin B12 is continued under clinician guidance — relevant to people planning pregnancy."
         }
@@ -6731,7 +6737,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/28981338/",
             "https://pubmed.ncbi.nlm.nih.gov/21954510/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "May affect blood pressure and heart rhythm",
           "alert_body": "Licorice root can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding licorice root.",
           "informational_note": "Licorice root can affect cardiovascular pathways — relevant to people with heart conditions."
         },
@@ -6745,7 +6751,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/31605160/",
             "https://pubmed.ncbi.nlm.nih.gov/393503/"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "Sodium retention — caution in CKD",
           "alert_body": "Licorice root is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of licorice root.",
           "informational_note": "Licorice root depends on kidney clearance — relevant to people with kidney conditions."
         }
@@ -6808,7 +6814,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/35225182/",
             "https://pubmed.ncbi.nlm.nih.gov/24859749/"
           ],
-          "alert_headline": "Caution with autoimmune conditions",
+          "alert_headline": "Caution if severely immunocompromised",
           "alert_body": "Probiotics has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding probiotics.",
           "informational_note": "Probiotics affects immune function — relevant to people with autoimmune conditions."
         }
@@ -6861,7 +6867,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23292890/",
             "https://pubmed.ncbi.nlm.nih.gov/22771630/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Andrographis has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding andrographis.",
           "informational_note": "Andrographis can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -6875,7 +6881,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/28745507/",
             "https://pubmed.ncbi.nlm.nih.gov/21822619/"
           ],
-          "alert_headline": "Caution with autoimmune conditions",
+          "alert_headline": "Immune-stimulating — caution if autoimmune",
           "alert_body": "Andrographis has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding andrographis.",
           "informational_note": "Andrographis affects immune function — relevant to people with autoimmune conditions."
         },
@@ -6890,7 +6896,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/29953177/",
             "https://pubmed.ncbi.nlm.nih.gov/25336950/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Rare HILI case reports",
           "alert_body": "Andrographis is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of andrographis.",
           "informational_note": "Andrographis depends on liver clearance — relevant to people with liver conditions."
         }
@@ -6990,7 +6996,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/9464451/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "Coumarin-like — may raise bleeding risk",
           "alert_body": "Red clover has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding red clover.",
           "informational_note": "Red clover can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -7003,7 +7009,7 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/9464451/"
           ],
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "Isoflavones may affect thyroid",
           "alert_body": "Red clover can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding red clover and monitor your labs.",
           "informational_note": "Red clover affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -7057,7 +7063,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/14986566/",
             "https://pubmed.ncbi.nlm.nih.gov/18363538/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "Heparin-like — may raise bleeding risk",
           "alert_body": "Chondroitin has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding chondroitin.",
           "informational_note": "Chondroitin can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -7122,7 +7128,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/21676849/",
             "https://pubmed.ncbi.nlm.nih.gov/15961987/"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "Stimulant — may raise blood pressure",
           "alert_body": "Guarana can influence blood pressure. If you have high blood pressure, talk to your clinician before adding guarana and monitor your readings.",
           "informational_note": "Guarana can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -7136,7 +7142,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/21676849/",
             "https://pubmed.ncbi.nlm.nih.gov/15961987/"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "Stimulant — may stress the heart",
           "alert_body": "Guarana can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding guarana.",
           "informational_note": "Guarana can affect cardiovascular pathways — relevant to people with heart conditions."
         },
@@ -7149,7 +7155,7 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Caution with seizure disorder",
+          "alert_headline": "Caffeine may lower seizure threshold",
           "alert_body": "Guarana may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding guarana.",
           "informational_note": "Guarana may affect seizure threshold — relevant to people with a seizure disorder."
         }
@@ -7229,7 +7235,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/36992844/",
             "https://pubmed.ncbi.nlm.nih.gov/29806946/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Hepatic clearance impaired in disease",
           "alert_body": "Copper is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of copper.",
           "informational_note": "Copper depends on liver clearance — relevant to people with liver conditions."
         }
@@ -7276,7 +7282,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/9875025/",
             "https://pubmed.ncbi.nlm.nih.gov/9002084/"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Hepatic clearance impaired in disease",
           "alert_body": "Manganese is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of manganese.",
           "informational_note": "Manganese depends on liver clearance — relevant to people with liver conditions."
         }
@@ -7399,7 +7405,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/senna"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "Electrolyte loss with chronic use",
           "alert_body": "Senna is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of senna.",
           "informational_note": "Senna depends on kidney clearance — relevant to people with kidney conditions."
         }
@@ -7505,7 +7511,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/nac-n-acetyl-cysteine"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "NAC has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding NAC.",
           "informational_note": "NAC can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -7674,7 +7680,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/cascara-sagrada"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "Electrolyte loss with chronic use",
           "alert_body": "Cascara sagrada is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of cascara sagrada.",
           "informational_note": "Cascara sagrada depends on kidney clearance — relevant to people with kidney conditions."
         }
@@ -7739,7 +7745,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Linked to herb-induced liver injury",
           "alert_body": "Chinese skullcap is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of chinese skullcap.",
           "informational_note": "Chinese skullcap depends on liver clearance — relevant to people with liver conditions."
         }
@@ -7774,7 +7780,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May lower blood sugar",
           "alert_body": "Black seed oil can lower blood sugar. If you have diabetes, talk to your clinician before adding black seed oil and monitor your glucose, especially in the first weeks.",
           "informational_note": "Black seed oil affects blood sugar — relevant to people with diabetes."
         },
@@ -7787,7 +7793,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/black-seed"
           ],
-          "alert_headline": "Caution with high blood pressure",
+          "alert_headline": "May modestly lower blood pressure",
           "alert_body": "Black seed oil can influence blood pressure. If you have high blood pressure, talk to your clinician before adding black seed oil and monitor your readings.",
           "informational_note": "Black seed oil can affect blood pressure — relevant to people with high blood pressure."
         },
@@ -7875,7 +7881,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "High-dose may prolong bleeding time",
           "alert_body": "DHA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding DHA.",
           "informational_note": "DHA can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -7971,7 +7977,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "High-dose may prolong bleeding time",
           "alert_body": "EPA has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding EPA.",
           "informational_note": "EPA can affect platelet function — relevant to people with a bleeding disorder."
         }
@@ -8117,7 +8123,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/bacopa"
           ],
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "May raise thyroid hormone levels",
           "alert_body": "Bacopa can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding bacopa and monitor your labs.",
           "informational_note": "Bacopa affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -8180,7 +8186,7 @@
             "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/12701816/"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "May raise serum creatinine",
           "alert_body": "Creatine is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of creatine.",
           "informational_note": "Creatine depends on kidney clearance — relevant to people with kidney conditions."
         }
@@ -8227,7 +8233,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion"
           ],
-          "alert_headline": "Caution with kidney disease",
+          "alert_headline": "Diuretic — may shift electrolytes",
           "alert_body": "Dandelion is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of dandelion.",
           "informational_note": "Dandelion depends on kidney clearance — relevant to people with kidney conditions."
         }
@@ -8303,7 +8309,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Carnitine-HealthProfessional/"
           ],
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "May reduce thyroid hormone activity",
           "alert_body": "Acetyl-L-carnitine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding Acetyl-L-carnitine and monitor your labs.",
           "informational_note": "Acetyl-L-carnitine affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -8365,7 +8371,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/white-willow-bark"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "Salicylate — raises bleeding risk",
           "alert_body": "White willow bark acts like aspirin on platelets. If you have a bleeding disorder, talk to your clinician before use — it carries the same bleeding risk as aspirin.",
           "informational_note": "White willow bark is aspirin-like — relevant to people with bleeding disorders."
         },
@@ -8453,7 +8459,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/huperzine-a"
           ],
-          "alert_headline": "Caution with seizure disorder",
+          "alert_headline": "Cholinergic effect — caution with seizures",
           "alert_body": "Huperzine A may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding Huperzine A.",
           "informational_note": "Huperzine A may affect seizure threshold — relevant to people with a seizure disorder."
         }
@@ -8537,7 +8543,7 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/DietarySupplements-HealthProfessional/"
           ],
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "Thyroid hormone precursor — monitor",
           "alert_body": "L-tyrosine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding L-tyrosine and monitor your labs.",
           "informational_note": "L-tyrosine affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -8599,7 +8605,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/milk-thistle"
           ],
-          "alert_headline": "Caution with liver disease",
+          "alert_headline": "Hepatoprotective — discuss with clinician",
           "alert_body": "Silymarin is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of silymarin.",
           "informational_note": "Silymarin depends on liver clearance — relevant to people with liver conditions."
         }
@@ -8709,7 +8715,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
           ],
-          "alert_headline": "Caution with heart conditions",
+          "alert_headline": "PDE5-like effect — caution with heart meds",
           "alert_body": "Icariin can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding icariin.",
           "informational_note": "Icariin can affect cardiovascular pathways — relevant to people with heart conditions."
         }
@@ -8758,7 +8764,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/stinging-nettle"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May modestly lower blood sugar",
           "alert_body": "Stinging nettle can lower blood sugar. If you have diabetes, talk to your clinician before adding stinging nettle and monitor your glucose, especially in the first weeks.",
           "informational_note": "Stinging nettle affects blood sugar — relevant to people with diabetes."
         }
@@ -8855,7 +8861,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
           ],
-          "alert_headline": "Caution with diabetes",
+          "alert_headline": "May lower blood sugar",
           "alert_body": "Olive leaf can lower blood sugar. If you have diabetes, talk to your clinician before adding olive leaf and monitor your glucose, especially in the first weeks.",
           "informational_note": "Olive leaf affects blood sugar — relevant to people with diabetes."
         }
@@ -8951,7 +8957,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
           ],
-          "alert_headline": "Caution with autoimmune conditions",
+          "alert_headline": "Immune-stimulating — caution if autoimmune",
           "alert_body": "Cordyceps has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding cordyceps.",
           "informational_note": "Cordyceps affects immune function — relevant to people with autoimmune conditions."
         }
@@ -9048,7 +9054,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/herbs-at-a-glance"
           ],
-          "alert_headline": "Caution with thyroid conditions",
+          "alert_headline": "May inhibit thyroid hormone synthesis",
           "alert_body": "Quercetin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding quercetin and monitor your labs.",
           "informational_note": "Quercetin affects thyroid pathways — relevant to people with thyroid conditions."
         }
@@ -9109,7 +9115,7 @@
           "sources": [
             "https://www.nccih.nih.gov/health/resveratrol"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "May raise bleeding risk",
           "alert_body": "Resveratrol has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding resveratrol.",
           "informational_note": "Resveratrol can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -9218,7 +9224,7 @@
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
             "https://www.nccih.nih.gov/health/omega-3-supplements"
           ],
-          "alert_headline": "Caution with bleeding disorders",
+          "alert_headline": "High-dose may prolong bleeding time",
           "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
           "informational_note": "Fish oil can affect platelet function — relevant to people with a bleeding disorder."
         },
@@ -9345,7 +9351,7 @@
           "sources": [
             "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
           ],
-          "alert_headline": "Caution with seizure disorder",
+          "alert_headline": "Discuss with your seizure clinician",
           "alert_body": "CBD may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding CBD.",
           "informational_note": "CBD may affect seizure threshold — relevant to people with a seizure disorder."
         },
