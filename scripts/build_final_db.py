@@ -2574,7 +2574,6 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 or (harmful_ref or {}).get("functional_roles")
             ),
             "standard_name": std_name_resolved,
-            "severity_level": safe_str((harmful_hit or {}).get("severity_level")),
             "notes": notes_text,
             "mechanism_of_harm": mechanism_text,
             "common_uses": safe_list(other_ref.get("common_uses")),
