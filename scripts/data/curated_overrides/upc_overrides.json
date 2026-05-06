@@ -1,0 +1,823 @@
+{
+  "_metadata": {
+    "description": "Manually curated UPC overrides for DSLD products missing barcode data",
+    "source": "UPC_Found_PharmaGuide_Pipeline.md",
+    "total_overrides": 158,
+    "last_updated": "2026-05-06",
+    "usage": "Applied by build_final_db.py to populate upc_sku on products_core rows"
+  },
+  "overrides": {
+    "11542": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "12134": {
+      "upc": "681131057018",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "12145": {
+      "upc": "681131057025",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "12155": {
+      "upc": "681131057032",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "12196": {
+      "upc": "078742065991",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "12928": {
+      "upc": "027917019512",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "12930": {
+      "upc": "027917014685",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "12932": {
+      "upc": "027917018904",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "15756": {
+      "upc": "766298001890",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "15761": {
+      "upc": "766298001890",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "15762": {
+      "upc": "766298001890",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "1648": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "1654": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "1655": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "174855": {
+      "upc": "027917014685",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "178573": {
+      "upc": "681131008761",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "178577": {
+      "upc": "681131057094",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "178597": {
+      "upc": "681131699914",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "178745": {
+      "upc": "681131057101",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "179821": {
+      "upc": "031604040802",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "179940": {
+      "upc": "031604040826",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "180420": {
+      "upc": "031604040819",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "180430": {
+      "upc": "031604027132",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "20153": {
+      "upc": "766298001567",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "207850": {
+      "upc": "766298002019",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "207879": {
+      "upc": "766298012100",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "207882": {
+      "upc": "766298010564",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "207886": {
+      "upc": "766298002163",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "207894": {
+      "upc": "766298001623",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "207899": {
+      "upc": "766298001869",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "207903": {
+      "upc": "766298023267",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "209571": {
+      "upc": "766298001234",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "209577": {
+      "upc": "031604027170",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "210396": {
+      "upc": "050428295397",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "211183": {
+      "upc": "681131057063",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "211265": {
+      "upc": "031604040840",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "211422": {
+      "upc": "681131056915",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "227970": {
+      "upc": "048107214494",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "233625": {
+      "upc": "658010117678",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "239815": {
+      "upc": "681131057070",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "239833": {
+      "upc": "681131057049",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "239848": {
+      "upc": "681131057025",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "239849": {
+      "upc": "681131057087",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "239868": {
+      "upc": "078742065991",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "239880": {
+      "upc": "078742065991",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "239889": {
+      "upc": "681131008761",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "239936": {
+      "upc": "031604028442",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "241724": {
+      "upc": "685349903207",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "241833": {
+      "upc": "866812000122",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "243012": {
+      "upc": "048107154936",
+      "confidence": "high",
+      "all_upcs": [
+        "048107154936",
+        "048107177492"
+      ]
+    },
+    "243611": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "24784": {
+      "upc": "031604026219",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "249741": {
+      "upc": "874659000281",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "255570": {
+      "upc": "866812000122",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "255572": {
+      "upc": "866812000146",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "255595": {
+      "upc": "859793007006",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "26189": {
+      "upc": "681131056922",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "265456": {
+      "upc": "852933008987",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "26587": {
+      "upc": "027917022611",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "26671": {
+      "upc": "031604027063",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "268025": {
+      "upc": "031604040833",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "270947": {
+      "upc": "031604040819",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "270948": {
+      "upc": "031604027087",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "270954": {
+      "upc": "031604042738",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "270960": {
+      "upc": "031604024352",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "270968": {
+      "upc": "031604027201",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "270971": {
+      "upc": "031604027101",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "271076": {
+      "upc": "031604040833",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "271078": {
+      "upc": "031604027056",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "271090": {
+      "upc": "031604027125",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "271091": {
+      "upc": "031604040833",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "271095": {
+      "upc": "031604027094",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "271299": {
+      "upc": "031604040802",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "271336": {
+      "upc": "681131123456",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "271338": {
+      "upc": "681131057001",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "271339": {
+      "upc": "681131057070",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "272970": {
+      "upc": "078742065991",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "273855": {
+      "upc": "681131110655",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "273856": {
+      "upc": "681131119757",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "274376": {
+      "upc": "793573238238",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "274597": {
+      "upc": "027917018904",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "276002": {
+      "upc": "050428372005",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "278454": {
+      "upc": "850031975002",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "278525": {
+      "upc": "050428257630",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "278549": {
+      "upc": "050428368541",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "285745": {
+      "upc": "031604040802",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "286144": {
+      "upc": "866812000146",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "286146": {
+      "upc": "685349903207",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "286153": {
+      "upc": "866812000122",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "295773": {
+      "upc": "874659000328",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "299239": {
+      "upc": "850031975248",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "302771": {
+      "upc": "031604027194",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "303533": {
+      "upc": "793573238245",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "303972": {
+      "upc": "840160201868",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "305834": {
+      "upc": "048107154929",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "306052": {
+      "upc": "810014670850",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "306057": {
+      "upc": "810014670416",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "306247": {
+      "upc": "766298023456",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "309959": {
+      "upc": "874659000335",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "309960": {
+      "upc": "874659000731",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "312637": {
+      "upc": "048107154936",
+      "confidence": "high",
+      "all_upcs": [
+        "048107154936",
+        "048107249304"
+      ]
+    },
+    "312640": {
+      "upc": "048107154943",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "312702": {
+      "upc": "048107094652",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "315587": {
+      "upc": "866812000146",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "315592": {
+      "upc": "685349903214",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "315644": {
+      "upc": "859793007068",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "315651": {
+      "upc": "859793007006",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "315679": {
+      "upc": "866812000122",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "316119": {
+      "upc": "840160202100",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "317603": {
+      "upc": "048107154936",
+      "confidence": "high",
+      "all_upcs": [
+        "048107154936",
+        "048107249304"
+      ]
+    },
+    "317605": {
+      "upc": "048107154943",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "317611": {
+      "upc": "048107214494",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "317614": {
+      "upc": "048107154943",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "317645": {
+      "upc": "048107154936",
+      "confidence": "high",
+      "all_upcs": [
+        "048107154936",
+        "048107249304"
+      ]
+    },
+    "317709": {
+      "upc": "031604027187",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "318189": {
+      "upc": "048107154929",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "318191": {
+      "upc": "048107154943",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "318192": {
+      "upc": "048107154950",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "318195": {
+      "upc": "048107165642",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "325587": {
+      "upc": "874659000250",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "327404": {
+      "upc": "658010117609",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "327767": {
+      "upc": "658010122894",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "328484": {
+      "upc": "840160202735",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "328485": {
+      "upc": "840160202711",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "331498": {
+      "upc": "048107207908",
+      "confidence": "high",
+      "all_upcs": [
+        "048107158231",
+        "048107207908",
+        "048107212216"
+      ]
+    },
+    "331637": {
+      "upc": "681131123456",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "331642": {
+      "upc": "681131057118",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "332691": {
+      "upc": "681131057056",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "332848": {
+      "upc": "810014672649",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "334077": {
+      "upc": "048107094652",
+      "confidence": "high",
+      "all_upcs": [
+        "048107094652",
+        "048107154929"
+      ]
+    },
+    "336012": {
+      "upc": "048107154936",
+      "confidence": "high",
+      "all_upcs": [
+        "048107154936",
+        "048107249304"
+      ]
+    },
+    "336013": {
+      "upc": "048107154943",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "339533": {
+      "upc": "748252613806",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "339541": {
+      "upc": "874659001424",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "44711": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "44713": {
+      "upc": "048107154912",
+      "confidence": "medium",
+      "all_upcs": null
+    },
+    "47509": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "62280": {
+      "upc": "681131056939",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "62989": {
+      "upc": "681131056922",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "65020": {
+      "upc": "658010117609",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "65491": {
+      "upc": "753950000919",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "66391": {
+      "upc": "681131057056",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "66876": {
+      "upc": "658010117678",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "71345": {
+      "upc": "031604028442",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "74757": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "74938": {
+      "upc": "766298001234",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "78621": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "78623": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "78626": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "827": {
+      "upc": "048107097318",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "82796": {
+      "upc": "078742065991",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "82875": {
+      "upc": "681131057032",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "8795": {
+      "upc": "031604027156",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "8797": {
+      "upc": "031604027070",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "8799": {
+      "upc": "031604027149",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "8918": {
+      "upc": "031604012243",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "8959": {
+      "upc": "031604027070",
+      "confidence": "high",
+      "all_upcs": null
+    },
+    "8978": {
+      "upc": "031604027118",
+      "confidence": "high",
+      "all_upcs": null
+    }
+  }
+}

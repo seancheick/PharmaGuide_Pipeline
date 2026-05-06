@@ -4844,6 +4844,41 @@ def build_final_db(
         )
     audit_counts["upc_dedup"] = dedup_result
 
+    # ── UPC overrides: backfill manually curated barcodes ──
+    upc_override_path = os.path.join(
+        script_dir, "data", "curated_overrides", "upc_overrides.json"
+    )
+    if os.path.exists(upc_override_path):
+        with open(upc_override_path, encoding="utf-8") as _uf:
+            upc_data = json.load(_uf)
+        upc_overrides = upc_data.get("overrides", {})
+        upc_applied = 0
+        for dsld_id, entry in upc_overrides.items():
+            upc_val = normalize_upc(entry.get("upc", ""))
+            if not upc_val:
+                continue
+            # Only backfill if the product exists and has no UPC
+            existing = c.execute(
+                "SELECT upc_sku FROM products_core WHERE dsld_id = ?",
+                (dsld_id,),
+            ).fetchone()
+            if existing is not None and (
+                not existing[0] or existing[0].strip() == ""
+            ):
+                c.execute(
+                    "UPDATE products_core SET upc_sku = ? WHERE dsld_id = ?",
+                    (upc_val, dsld_id),
+                )
+                upc_applied += 1
+        conn.commit()
+        if upc_applied:
+            logger.info(
+                "UPC overrides: backfilled %d/%d products from curated_overrides/upc_overrides.json",
+                upc_applied,
+                len(upc_overrides),
+            )
+        audit_counts["upc_overrides_applied"] = upc_applied
+
     # Create read-path indexes after bulk insert to avoid incremental index churn.
     c.executescript(CORE_INDEX_SQL)
 
