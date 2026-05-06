@@ -532,8 +532,8 @@
           "sources": [
             "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
           ],
-          "alert_headline": "Lactic acid load — kidney concern",
-          "alert_body": "Propylene glycol is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of propylene glycol.",
+          "alert_headline": "High exposure may matter in CKD",
+          "alert_body": "Propylene glycol is partly cleared by the kidneys. Large or repeated exposures may be more relevant when kidney function is reduced. Typical supplement excipient amounts are small.",
           "informational_note": "Propylene glycol depends on kidney clearance — relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5284,8 +5284,8 @@
           "sources": [
             "https://www.kidney.org/atoz/content/potassium"
           ],
-          "alert_headline": "Hypermagnesemia risk in CKD",
-          "alert_body": "In advanced kidney disease (eGFR below 30), supplemental magnesium can build up to risky levels. If you have CKD, talk to your nephrologist before adding magnesium.",
+          "alert_headline": "Magnesium can accumulate in CKD",
+          "alert_body": "Magnesium from supplements, laxatives, or antacids can accumulate when kidney function is reduced. If you have kidney disease, use magnesium-containing products only with clinician guidance.",
           "informational_note": "Magnesium excretion depends on kidney function — relevant to people with kidney disease.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5550,7 +5550,7 @@
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
           ],
           "alert_headline": "Hyperkalemia risk in CKD",
-          "alert_body": "Supplemental potassium can accumulate to dangerous levels in kidney disease. If you have CKD, talk to your nephrologist before using potassium supplements.",
+          "alert_body": "If you have kidney disease, potassium supplements can raise blood potassium dangerously, especially with ACE inhibitors, ARBs, or potassium-sparing medicines. Talk to your clinician.",
           "informational_note": "Potassium excretion depends on kidney function — relevant to people with kidney disease.",
           "profile_gate": {
             "gate_type": "condition",
@@ -14296,8 +14296,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/20667992/"
           ],
-          "alert_headline": "Nephrotoxicity case report — caution",
-          "alert_body": "Tribulus is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of tribulus.",
+          "alert_headline": "Kidney safety data are limited",
+          "alert_body": "Rare case reports have described kidney injury after tribulus use. If you have kidney disease, review use with your clinician and stop if kidney symptoms or abnormal labs occur.",
           "informational_note": "Tribulus depends on kidney clearance — relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15056,8 +15056,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/31605160/",
             "https://pubmed.ncbi.nlm.nih.gov/393503/"
           ],
-          "alert_headline": "Sodium retention — caution in CKD",
-          "alert_body": "Licorice root is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of licorice root.",
+          "alert_headline": "May affect fluid and potassium balance",
+          "alert_body": "Licorice can raise blood pressure, promote fluid retention, and lower potassium. These effects can be more concerning when kidney function is reduced.",
           "informational_note": "Licorice root depends on kidney clearance — relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -16442,7 +16442,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/36702448/"
           ],
           "alert_headline": "Electrolyte loss with chronic use",
-          "alert_body": "Senna is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of senna.",
+          "alert_body": "Chronic or high-dose stimulant laxative use can cause fluid and electrolyte shifts. If you have kidney disease, use only with clinician guidance, especially with diuretics or heart medicines.",
           "informational_note": "Senna depends on kidney clearance — relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -17047,7 +17047,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/32876395/"
           ],
           "alert_headline": "Electrolyte loss with chronic use",
-          "alert_body": "Cascara sagrada is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of cascara sagrada.",
+          "alert_body": "Chronic or high-dose stimulant laxative use can cause fluid and electrolyte shifts. If you have kidney disease, use only with clinician guidance, especially with diuretics or heart medicines.",
           "informational_note": "Cascara sagrada depends on kidney clearance — relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -18161,8 +18161,8 @@
             "https://ods.od.nih.gov/factsheets/ExerciseAndAthleticPerformance-HealthProfessional/",
             "https://pubmed.ncbi.nlm.nih.gov/12701816/"
           ],
-          "alert_headline": "May raise serum creatinine",
-          "alert_body": "Creatine is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of creatine.",
+          "alert_headline": "May affect creatinine lab results",
+          "alert_body": "Creatine can raise serum creatinine, which may complicate kidney-function interpretation. If you have kidney disease, use only with clinician guidance and lab monitoring.",
           "informational_note": "Creatine depends on kidney clearance — relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -18245,14 +18245,14 @@
         {
           "condition_id": "kidney_disease",
           "severity": "caution",
-          "evidence_level": "probable",
+          "evidence_level": "limited",
           "mechanism": "Dandelion (Taraxacum officinale) acts as a natural diuretic, increasing urine output via inhibition of renal tubular sodium reabsorption. In CKD, fluid management is critical; uncontrolled diuresis can precipitate dehydration, acute kidney injury, and electrolyte derangements (hypokalemia or hyperkalemia depending on residual kidney function).",
           "action": "Avoid unsupervised dandelion supplementation in kidney disease. Any diuretic effect should be managed in consultation with a nephrologist.",
           "sources": [
             "https://www.nccih.nih.gov/health/dandelion"
           ],
-          "alert_headline": "Diuretic — may shift electrolytes",
-          "alert_body": "Dandelion is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of dandelion.",
+          "alert_headline": "Diuretic herb — use caution in CKD",
+          "alert_body": "Dandelion may have diuretic effects. If you have kidney disease or take diuretics, ask your clinician before using concentrated dandelion supplements.",
           "informational_note": "Dandelion depends on kidney clearance — relevant to people with kidney conditions.",
           "profile_gate": {
             "gate_type": "condition",
