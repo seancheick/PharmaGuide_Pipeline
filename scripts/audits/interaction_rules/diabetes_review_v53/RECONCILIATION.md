@@ -16,6 +16,9 @@
 | Phase 1.5 | 6.0.3 | `f6b2478` | 2026-05-06 | Clinical review of 16 new entries: 1 ghost PMID removed, 5 dead URLs replaced, copy fixes |
 | Phase 2 | 6.1.0 | `9bf00d1` + `d7bcd4d` | 2026-05-06 | Hypoglycemics 3-way split (high_risk / lower_risk / unknown) + Flutter adoption |
 | v6.0 profile_gate | 6.0.0 → 6.0.2 | Multiple | 2026-05-05 | profile_gate schema on every sub-rule; Flutter evaluator + drift contract |
+| URL-rot audit | 6.1.0 | `9f227e8` | 2026-05-06 | 23 dead URLs replaced with verified PubMed PMIDs across all 145 entries |
+| Full clinical sweep | 6.1.0 | Multiple | 2026-05-06 | All 14 condition batches reviewed: 210→196 rules, 14 deduped, zero templates remaining |
+| Flutter UX | — | Multiple | 2026-05-06 | Splash, onboarding, medication entry, fit score, product detail, profile labels |
 
 ---
 
