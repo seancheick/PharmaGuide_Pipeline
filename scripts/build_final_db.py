@@ -56,7 +56,7 @@ from supplement_type_utils import infer_supplement_type
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-EXPORT_SCHEMA_VERSION = "1.5.0"  # v1.5.0 adds canonical form/dose/severity contract on active+inactive rows
+EXPORT_SCHEMA_VERSION = "1.6.0"  # v1.6.0 adds profile_gate passthrough on warnings (interaction + drug_interaction); v1.5.0 added canonical form/dose/severity contract on active+inactive rows
 PIPELINE_VERSION = "3.4.0"
 TOP_WARNINGS_MAX = 5
 MIN_APP_VERSION = "1.0.0"
@@ -2854,6 +2854,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "sources": safe_list(ch.get("sources")),
                     "dose_threshold_evaluation": dose_eval if isinstance(dose_eval, dict) else None,
                     "source": "interaction_rules",
+                    "profile_gate": ch.get("profile_gate"),
                 })
         for dh in safe_list(alert.get("drug_class_hits")):
             if isinstance(dh, dict):
@@ -2880,6 +2881,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                     "sources": safe_list(dh.get("sources")),
                     "dose_threshold_evaluation": dose_eval if isinstance(dose_eval, dict) else None,
                     "source": "interaction_rules",
+                    "profile_gate": dh.get("profile_gate"),
                 })
 
     ds = safe_dict(enriched.get("dietary_sensitivity_data"))
