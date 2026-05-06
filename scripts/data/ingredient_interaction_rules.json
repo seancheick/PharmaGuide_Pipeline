@@ -289,8 +289,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23397375/"
           ],
-          "alert_headline": "May raise blood pressure",
-          "alert_body": "Bitter orange (synephrine) has ephedrine-like effects. If you have high blood pressure, talk to your clinician before using it, especially combined with caffeine.",
+          "alert_headline": "Stimulant — may raise blood pressure",
+          "alert_body": "Bitter orange contains synephrine, which can raise blood pressure or heart rate, especially with caffeine. If you have high blood pressure, avoid supplement-dose bitter orange.",
           "informational_note": "Bitter orange has stimulant effects relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -383,39 +383,7 @@
         "db": "banned_recalled_ingredients",
         "canonical_id": "RISK_YOHIMBE"
       },
-      "condition_rules": [
-        {
-          "condition_id": "hypertension",
-          "severity": "contraindicated",
-          "evidence_level": "established",
-          "mechanism": "Adrenergic stimulation can raise blood pressure and heart rate.",
-          "action": "Do not use in hypertension or cardiovascular risk settings.",
-          "sources": [
-            "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
-          ],
-          "alert_headline": "Not recommended with high blood pressure",
-          "alert_body": "Yohimbe raises blood pressure and heart rate. If you have high blood pressure or cardiovascular risk, talk to your clinician and do not use yohimbe products.",
-          "informational_note": "Yohimbe is a stimulant relevant to people with high blood pressure or heart concerns.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "hypertension"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        }
-      ],
+      "condition_rules": [],
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
@@ -1692,7 +1660,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/23871889/"
           ],
           "alert_headline": "Caffeine may raise blood pressure",
-          "alert_body": "Caffeine can influence blood pressure. If you have high blood pressure, talk to your clinician before adding caffeine and monitor your readings.",
+          "alert_body": "Caffeine can acutely raise blood pressure through adenosine antagonism. If you have high blood pressure, review your total caffeine intake with your clinician.",
           "informational_note": "Caffeine can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -2851,7 +2819,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
           ],
           "alert_headline": "May modestly lower blood pressure",
-          "alert_body": "Garlic can influence blood pressure. If you have high blood pressure, talk to your clinician before adding garlic and monitor your readings.",
+          "alert_body": "Garlic supplements may modestly lower blood pressure. If you take blood pressure medication, monitor for dizziness or low BP symptoms.",
           "informational_note": "Garlic can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -3303,7 +3271,7 @@
       "condition_rules": [
         {
           "condition_id": "hypertension",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "Ginkgo biloba increases hepatic CYP450 activity, accelerating metabolism of calcium channel blockers (nicardipine studied) and reducing their antihypertensive effect.",
           "action": "Inform prescriber. Blood pressure may be less well-controlled. Dose adjustment may be needed.",
@@ -3311,8 +3279,8 @@
             "https://www.nccih.nih.gov/health/ginkgo",
             "https://pubmed.ncbi.nlm.nih.gov/14598602/"
           ],
-          "alert_headline": "May lower BP-medication effects",
-          "alert_body": "Ginkgo can influence blood pressure. If you have high blood pressure, talk to your clinician before adding ginkgo and monitor your readings.",
+          "alert_headline": "May affect some BP medications",
+          "alert_body": "Ginkgo may affect drug metabolism and could change effects of some blood pressure medicines. If you take BP medication, review ginkgo use with your clinician.",
           "informational_note": "Ginkgo can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -4073,15 +4041,15 @@
       "condition_rules": [
         {
           "condition_id": "hypertension",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "Green tea catechins (EGCG) inhibit intestinal OATP transporters, reducing oral bioavailability of nadolol and potentially other beta-blockers, diminishing BP control.",
           "action": "Avoid taking green tea extract supplements close in time to beta-blockers. Separate doses by several hours.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/25312732/"
           ],
-          "alert_headline": "May reduce BP-medication absorption",
-          "alert_body": "Green tea extract can influence blood pressure. If you have high blood pressure, talk to your clinician before adding green tea extract and monitor your readings.",
+          "alert_headline": "May reduce nadolol absorption",
+          "alert_body": "Green tea extract may reduce absorption of nadolol through intestinal transporter effects. If you take nadolol or blood pressure medication, ask your clinician about timing.",
           "informational_note": "Green tea extract can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -4384,7 +4352,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/11807965/"
           ],
           "alert_headline": "May add to BP-medication effects",
-          "alert_body": "Hawthorn can influence blood pressure. If you have high blood pressure, talk to your clinician before adding hawthorn and monitor your readings.",
+          "alert_body": "Hawthorn may modestly lower blood pressure. If you take blood pressure medication, review hawthorn use with your clinician to avoid excessive BP lowering.",
           "informational_note": "Hawthorn can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -4862,7 +4830,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/15133406/"
           ],
           "alert_headline": "May modestly lower blood pressure",
-          "alert_body": "L-arginine can influence blood pressure. If you have high blood pressure, talk to your clinician before adding L-arginine and monitor your readings.",
+          "alert_body": "L-arginine may modestly lower blood pressure through nitric oxide pathways. If you take BP medications or nitrates, review use with your clinician.",
           "informational_note": "L-arginine can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -4978,8 +4946,8 @@
             "https://www.nccih.nih.gov/health/licorice-root"
           ],
           "form_exclusion": "DGL (deglycyrrhizinated licorice)",
-          "alert_headline": "May raise blood pressure",
-          "alert_body": "Whole licorice (with glycyrrhizin) can raise blood pressure through sodium retention. If you have high blood pressure, talk to your clinician; DGL licorice does not carry this concern.",
+          "alert_headline": "Licorice may raise blood pressure",
+          "alert_body": "Glycyrrhizin in licorice can raise blood pressure, cause sodium retention, and lower potassium. If you have high blood pressure, avoid licorice unless it is DGL (deglycyrrhizinated).",
           "informational_note": "Licorice with glycyrrhizin raises blood pressure — relevant to people with hypertension.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5487,8 +5455,8 @@
           "sources": [
             "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
           ],
-          "alert_headline": "May raise potassium with BP meds",
-          "alert_body": "Potassium can influence blood pressure. If you have high blood pressure, talk to your clinician before adding potassium and monitor your readings.",
+          "alert_headline": "May raise potassium with some BP meds",
+          "alert_body": "If you take ACE inhibitors, ARBs, or potassium-sparing medicines, extra potassium can raise blood potassium too much. Use potassium supplements only with clinician guidance.",
           "informational_note": "Potassium can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -5862,8 +5830,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/st-johns-wort"
           ],
-          "alert_headline": "May reduce BP-medication levels",
-          "alert_body": "St John's Wort can influence blood pressure. If you have high blood pressure, talk to your clinician before adding St John's Wort and monitor your readings.",
+          "alert_headline": "May reduce some BP medication levels",
+          "alert_body": "St. John’s wort can induce drug-metabolizing enzymes and may reduce levels of some blood pressure medicines. If you take BP medication, review with your clinician before combining.",
           "informational_note": "St John's Wort can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -7433,14 +7401,14 @@
         {
           "condition_id": "hypertension",
           "severity": "contraindicated",
-          "evidence_level": "probable",
+          "evidence_level": "established",
           "mechanism": "Adrenergic stimulation may increase blood pressure and cardiovascular risk.",
           "action": "Do not use in hypertension or cardiovascular risk settings.",
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
           ],
           "alert_headline": "Not recommended with high blood pressure",
-          "alert_body": "Yohimbe's stimulant activity can raise blood pressure and heart rate. If you have high blood pressure, talk to your clinician and do not use it.",
+          "alert_body": "If you have high blood pressure, avoid yohimbe. It stimulates adrenergic activity and may raise blood pressure or heart rate.",
           "informational_note": "Yohimbe is a stimulant — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -13897,8 +13865,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23192943/"
           ],
-          "alert_headline": "May modestly lower blood pressure",
-          "alert_body": "Rhodiola can influence blood pressure. If you have high blood pressure, talk to your clinician before adding rhodiola and monitor your readings.",
+          "alert_headline": "Blood-pressure evidence is limited",
+          "alert_body": "Rhodiola may have mild effects on blood pressure in early research. If you have high blood pressure, mention it to your clinician.",
           "informational_note": "Rhodiola can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -14076,8 +14044,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/34144527/"
           ],
-          "alert_headline": "May modestly lower blood pressure",
-          "alert_body": "Tribulus can influence blood pressure. If you have high blood pressure, talk to your clinician before adding tribulus and monitor your readings.",
+          "alert_headline": "Blood-pressure evidence is limited",
+          "alert_body": "Tribulus may have mild effects on blood pressure in early research. If you have high blood pressure, mention it to your clinician.",
           "informational_note": "Tribulus can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -14607,8 +14575,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/39708247/"
           ],
-          "alert_headline": "Stimulant — may raise blood pressure",
-          "alert_body": "Yerba mate can influence blood pressure. If you have high blood pressure, talk to your clinician before adding yerba mate and monitor your readings.",
+          "alert_headline": "Stimulant source — may raise BP",
+          "alert_body": "Yerba mate contains caffeine that can raise blood pressure. If you have high blood pressure, review caffeine-containing supplements with your clinician.",
           "informational_note": "Yerba mate can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -14824,38 +14792,6 @@
         "canonical_id": "licorice_root"
       },
       "condition_rules": [
-        {
-          "condition_id": "hypertension",
-          "severity": "avoid",
-          "evidence_level": "established",
-          "mechanism": "Glycyrrhizin inhibits 11β-hydroxysteroid dehydrogenase type 2 (11β-HSD2), preventing cortisol inactivation in mineralocorticoid target tissues. This produces pseudoaldosteronism: sodium retention, potassium wasting, and dose-dependent blood pressure elevation. Even doses of 100 mg glycyrrhizin/day (roughly 3–5 g licorice root extract/day) have been documented to raise systolic BP significantly.",
-          "action": "Avoid licorice root supplements in hypertension. DGL (deglycyrrhizinated licorice) is not subject to this interaction. Disclose all licorice supplement use to prescriber.",
-          "sources": [
-            "https://pubmed.ncbi.nlm.nih.gov/31605160/",
-            "https://pubmed.ncbi.nlm.nih.gov/3808407/"
-          ],
-          "alert_headline": "May raise blood pressure",
-          "alert_body": "Whole licorice (with glycyrrhizin) can drive sodium retention and raise blood pressure. If you have hypertension, talk to your clinician; DGL licorice does not carry this concern.",
-          "informational_note": "Licorice with glycyrrhizin raises blood pressure — relevant to people with hypertension.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "hypertension"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        },
         {
           "condition_id": "heart_disease",
           "severity": "caution",
@@ -15676,8 +15612,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/21676849/",
             "https://pubmed.ncbi.nlm.nih.gov/15961987/"
           ],
-          "alert_headline": "Stimulant — may raise blood pressure",
-          "alert_body": "Guarana can influence blood pressure. If you have high blood pressure, talk to your clinician before adding guarana and monitor your readings.",
+          "alert_headline": "Stimulant source — may raise BP",
+          "alert_body": "Guarana adds caffeine load that can raise blood pressure. If you have high blood pressure, review caffeine-containing supplements with your clinician.",
           "informational_note": "Guarana can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
@@ -17103,7 +17039,7 @@
         },
         {
           "condition_id": "hypertension",
-          "severity": "caution",
+          "severity": "monitor",
           "evidence_level": "probable",
           "mechanism": "Thymoquinone inhibits voltage-gated calcium channels and increases endothelial nitric oxide synthase (eNOS) activity, reducing peripheral vascular resistance. Reductions of 5-10 mmHg systolic have been reported in small trials, creating additive hypotension risk with antihypertensive therapy.",
           "action": "Monitor blood pressure when combining with antihypertensive medications. Alert prescriber to use.",
@@ -17111,7 +17047,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May modestly lower blood pressure",
-          "alert_body": "Black seed oil can influence blood pressure. If you have high blood pressure, talk to your clinician before adding black seed oil and monitor your readings.",
+          "alert_body": "Black seed oil may modestly lower blood pressure. If you take blood pressure medication, monitor for dizziness or low BP symptoms and mention it to your clinician.",
           "informational_note": "Black seed oil can affect blood pressure — relevant to people with high blood pressure.",
           "profile_gate": {
             "gate_type": "condition",
