@@ -2839,6 +2839,13 @@ class SupplementScorer:
         ingredient_points: Dict[str, float] = defaultdict(float)
         matched_entry_ids = set()
         dose_map = self._dose_map(product)
+        # T7A: track which canonical ingredients triggered the sub-clinical
+        # dose guard so the build_final_db layer can flag the matching
+        # analyzed_ingredients rows with below_clinical_dose=true. Drives
+        # Flutter's "Low dose" chip on per-ingredient rows. Distinct from
+        # the product-level SUB_CLINICAL_DOSE_DETECTED flag (which fires
+        # if ANY ingredient is below clinical dose).
+        sub_clinical_canonicals: set[str] = set()
 
         for entry in matches:
             entry_id = (
@@ -2911,6 +2918,18 @@ class SupplementScorer:
                         raw *= 0.25
                         if "SUB_CLINICAL_DOSE_DETECTED" not in flags:
                             flags.append("SUB_CLINICAL_DOSE_DETECTED")
+                        # T7A: per-canonical tracker — surfaces below_clinical_dose
+                        # flag on the matching analyzed_ingredients row in the
+                        # final blob. Use the canonical_id when available so
+                        # build_final_db can match exactly; fall back to
+                        # lookup_key (already canonicalized via canon_key).
+                        _entry_canonical = (
+                            entry.get("canonical_id")
+                            or entry.get("ingredient_canonical")
+                            or lookup_key
+                        )
+                        if _entry_canonical:
+                            sub_clinical_canonicals.add(canon_key(_entry_canonical))
                     max_studied_dose = as_float(
                         entry.get("max_studied_clinical_dose")
                         or entry.get("max_clinical_dose")
@@ -2966,6 +2985,9 @@ class SupplementScorer:
             "matched_entries": len(matched_entry_ids),
             "top_n_applied": min(len(capped_scores), len(top_n_weights)),
             "depth_bonus": round(depth, 2),
+            # T7A: canonical IDs that hit the clinical-dose guard. Sorted
+            # for deterministic blob output.
+            "sub_clinical_canonicals": sorted(sub_clinical_canonicals),
         }
 
     # ---------------------------------------------------------------------

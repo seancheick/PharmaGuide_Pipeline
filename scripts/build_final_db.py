@@ -3066,13 +3066,48 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         or rda_ul_data.get("adequacy_results")
         or rda_ul_data.get("count")
     ):
+        # T7A: scorer surfaces sub_clinical_canonicals at
+        # scored.breakdown.C.sub_clinical_canonicals — the canonical
+        # ingredient IDs that fell below the min_clinical_dose threshold.
+        # Mark the matching analyzed_ingredients / adequacy_results rows
+        # so Flutter can render the per-ingredient "Low dose" chip
+        # without re-running the dose check client-side.
+        sub_clinical_set = set(
+            safe_list(
+                safe_dict(safe_dict(scored.get("breakdown")).get("C"))
+                .get("sub_clinical_canonicals")
+            )
+        )
+
+        def _flag_below_clinical(rows):
+            if not isinstance(rows, list):
+                return rows
+            out = []
+            for row in rows:
+                if not isinstance(row, dict):
+                    out.append(row)
+                    continue
+                canon = safe_str(
+                    row.get("canonical_id")
+                    or row.get("ingredient_canonical")
+                    or row.get("normalized_key")
+                )
+                marked = dict(row)
+                marked["below_clinical_dose"] = bool(canon and canon in sub_clinical_set)
+                out.append(marked)
+            return out
+
         blob["rda_ul_data"] = {
             "collection_enabled": rda_ul_data.get("collection_enabled"),
             "collection_reason": rda_ul_data.get("collection_reason"),
             "ingredients_with_rda": rda_ul_data.get("ingredients_with_rda"),
-            "analyzed_ingredients": rda_ul_data.get("analyzed_ingredients"),
+            "analyzed_ingredients": _flag_below_clinical(
+                rda_ul_data.get("analyzed_ingredients")
+            ),
             "count": rda_ul_data.get("count"),
-            "adequacy_results": safe_list(rda_ul_data.get("adequacy_results")),
+            "adequacy_results": _flag_below_clinical(
+                safe_list(rda_ul_data.get("adequacy_results"))
+            ),
             "conversion_evidence": safe_list(rda_ul_data.get("conversion_evidence")),
             "safety_flags": safe_list(rda_ul_data.get("safety_flags")),
             "has_over_ul": rda_ul_data.get("has_over_ul"),
