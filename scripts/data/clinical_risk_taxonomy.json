@@ -143,6 +143,12 @@
       "display_priority": 5
     },
     {
+      "id": "hypoglycemics_unknown",
+      "label": "Glucose-Lowering Medications (Unspecified)",
+      "category": "metabolic",
+      "display_priority": 5
+    },
+    {
       "id": "thyroid_medications",
       "label": "Thyroid Medications",
       "category": "endocrine",

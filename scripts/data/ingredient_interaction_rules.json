@@ -703,6 +703,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "monitor",
+          "evidence_level": "theoretical",
+          "mechanism": "Possible additive glucose-lowering. Oral aloe may also alter drug absorption via laxative effects.",
+          "action": "Monitor glucose and GI symptoms.",
+          "sources": [
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Aloe vera can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding aloe vera and monitor your glucose more closely at first.",
+          "informational_note": "Aloe vera affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "dose_thresholds": [],
@@ -831,6 +862,37 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "hypoglycemics_lower_risk"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive insulin-sensitizing effect may increase hypoglycemia risk, especially with insulin and sulfonylureas.",
+          "action": "Monitor glucose and adjust medication only under clinician supervision.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Alpha-lipoic acid can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Alpha-lipoic acid and monitor your glucose more closely at first.",
+          "informational_note": "Alpha-lipoic acid affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
               ],
               "profile_flags_any": []
             },
@@ -1119,6 +1181,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Additive glucose-lowering comparable to metformin. Also inhibits CYP3A4/CYP2D6, potentially increasing drug levels of co-administered medications.",
+          "action": "Avoid unsupervised co-administration. Requires clinician-guided glucose monitoring and potential dose adjustment.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+          ],
+          "alert_headline": "May boost your diabetes medication",
+          "alert_body": "Berberine lowers blood sugar with effects comparable to metformin. If you take a diabetes medication, monitor glucose closely and talk to your prescriber before adding berberine.",
+          "informational_note": "Berberine has blood-sugar-lowering effects relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -1263,6 +1356,42 @@
               "severity_if_not_met": "monitor"
             }
           }
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "hypoglycemics_unknown",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 1500,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "caution",
+          "note": "Additive hypoglycemia risk with sulfonylureas/insulin/GLP-1RAs is clinically plausible across the 1,000–1,500 mg/day evidence-based dosing band; this threshold starts the avoid alert at the upper end of that band. Sub-1500 mg/day use in compound formulations still warrants prescriber oversight (caution).",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 1500,
+              "unit": "mg",
+              "severity_if_met": "caution",
+              "severity_if_not_met": "caution"
+            }
+          }
         }
       ]
     },
@@ -1356,6 +1485,37 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "hypoglycemics_lower_risk"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive glucose-lowering effect, especially with sulfonylureas and insulin.",
+          "action": "Monitor for hypoglycemia and coordinate with prescriber.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Bitter melon can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding bitter melon and monitor your glucose more closely at first.",
+          "informational_note": "Bitter melon affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
               ],
               "profile_flags_any": []
             },
@@ -1859,6 +2019,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Potential additive glucose-lowering effect.",
+          "action": "Adjust medication only under clinician supervision.",
+          "sources": [
+            "https://ods.od.nih.gov/factsheets/Chromium-HealthProfessional/"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Chromium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding chromium and monitor your glucose more closely at first.",
+          "informational_note": "Chromium affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -1982,6 +2173,37 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "hypoglycemics_lower_risk"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Potential additive glucose-lowering effect with diabetes medications.",
+          "action": "Monitor for hypoglycemia and coordinate with prescriber.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/cinnamon"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Cinnamon can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding cinnamon and monitor your glucose more closely at first.",
+          "informational_note": "Cinnamon affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
               ],
               "profile_flags_any": []
             },
@@ -2239,6 +2461,37 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "hypoglycemics_lower_risk"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive glucose-lowering and fiber-mediated delay of oral medication absorption.",
+          "action": "Separate dosing from oral hypoglycemics by 2 hours. Monitor for hypoglycemia.",
+          "sources": [
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Fenugreek can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fenugreek and monitor your glucose more closely at first.",
+          "informational_note": "Fenugreek affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
               ],
               "profile_flags_any": []
             },
@@ -2522,6 +2775,37 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "thyroid_medications"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
+          "action": "Separate glucomannan from oral diabetes medications by at least 2 hours.",
+          "sources": [
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Fiber can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding fiber and monitor your glucose more closely at first.",
+          "informational_note": "Fiber affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
               ],
               "profile_flags_any": []
             },
@@ -3566,6 +3850,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Mild additive glucose-lowering effect.",
+          "action": "Monitor for hypoglycemia symptoms.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/asian-ginseng"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Ginseng can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding ginseng and monitor your glucose more closely at first.",
+          "informational_note": "Ginseng affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "dose_thresholds": [
@@ -4024,6 +4339,37 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "hypoglycemics_lower_risk"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive glucose-lowering effect via multiple mechanisms.",
+          "action": "Monitor blood glucose closely when combining with diabetes medications.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/diabetes-and-dietary-supplements-what-you-need-to-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Gymnema can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding gymnema and monitor your glucose more closely at first.",
+          "informational_note": "Gymnema affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
               ],
               "profile_flags_any": []
             },
@@ -5454,6 +5800,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "monitor",
+          "evidence_level": "established",
+          "mechanism": "Fiber delays absorption of co-administered oral medications including metformin and sulfonylureas.",
+          "action": "Separate psyllium from oral diabetes medications by at least 2 hours.",
+          "sources": [
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Psyllium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding psyllium and monitor your glucose more closely at first.",
+          "informational_note": "Psyllium affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -5958,6 +6335,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Insulin-mimetic activity creates additive hypoglycemia risk. Narrow therapeutic window.",
+          "action": "Use only under clinician supervision with glucose monitoring.",
+          "sources": [
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Vanadium can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding vanadium and monitor your glucose more closely at first.",
+          "informational_note": "Vanadium affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "pregnancy_lactation": {
@@ -6099,6 +6507,42 @@
               "value": 50,
               "unit": "mg",
               "severity_if_met": "monitor",
+              "severity_if_not_met": "monitor"
+            }
+          }
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "hypoglycemics_unknown",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 50,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "Supplement-range vanadium is 10–100 mcg; pharmacologic insulin-mimetic effects documented in clinical studies at 150 mg/day. A 50 mg cutoff reliably separates trace multivitamin exposure from the pharmacologic band. Clinical-team signoff 2026-04-24: use >= to include the first research-level dose in the caution tier.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 50,
+              "unit": "mg",
+              "severity_if_met": "caution",
               "severity_if_not_met": "monitor"
             }
           }
@@ -6447,6 +6891,37 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "statins"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "established",
+          "mechanism": "Niacin can raise blood glucose, potentially requiring adjustment of diabetes medication doses.",
+          "action": "Monitor glucose closely. Diabetes medication dose adjustment may be needed.",
+          "sources": [
+            "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Niacin can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding Niacin and monitor your glucose more closely at first.",
+          "informational_note": "Niacin affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
               ],
               "profile_flags_any": []
             },
@@ -13937,6 +14412,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "monitor",
+          "evidence_level": "probable",
+          "mechanism": "Additive glucose-lowering effect demonstrated in RCT. Risk of hypoglycemia when combined with insulin, sulfonylureas, or other hypoglycemic agents.",
+          "action": "Monitor blood glucose closely. Advise patient to watch for hypoglycemia symptoms (shakiness, sweating, confusion).",
+          "sources": [
+            "https://pubmed.ncbi.nlm.nih.gov/27840471/"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Tribulus can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding tribulus and monitor your glucose more closely at first.",
+          "informational_note": "Tribulus affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "dose_thresholds": [],
@@ -16940,6 +17446,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Additive glucose-lowering via PPAR-gamma activation and beta-cell stimulation. Risk of symptomatic hypoglycemia particularly with sulfonylureas and insulin.",
+          "action": "Monitor blood glucose more frequently. Avoid unsupervised combinations with insulin or sulfonylureas.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/black-seed"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Black seed oil can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding black seed oil and monitor your glucose more closely at first.",
+          "informational_note": "Black seed oil affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "dose_thresholds": [],
@@ -17850,6 +18387,37 @@
               "conditions_any": [],
               "drug_classes_any": [
                 "lithium"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Dandelion root extract has demonstrated alpha-glucosidase inhibitory activity and modest insulin-sensitising effects in animal models, producing additive glucose-lowering when combined with antidiabetic medications.",
+          "action": "Monitor blood glucose when using dandelion with antidiabetic drugs. Warn of possible additive hypoglycemia, particularly with sulfonylureas.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/dandelion"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Dandelion can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding dandelion and monitor your glucose more closely at first.",
+          "informational_note": "Dandelion affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
               ],
               "profile_flags_any": []
             },
@@ -18842,6 +19410,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Alpha-glucosidase inhibitory and insulin secretagogue properties of nettle extract create additive hypoglycemic risk with antidiabetic drugs, particularly sulfonylureas and insulin.",
+          "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/stinging-nettle"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Stinging nettle can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding stinging nettle and monitor your glucose more closely at first.",
+          "informational_note": "Stinging nettle affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "dose_thresholds": [],
@@ -19042,6 +19641,37 @@
             },
             "dose": null
           }
+        },
+        {
+          "drug_class_id": "hypoglycemics_unknown",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "GLUT4 translocation stimulation and alpha-glucosidase inhibition produce additive blood glucose lowering with antidiabetic agents. Risk of hypoglycemia is greatest with insulin, sulfonylureas, and meglitinides.",
+          "action": "Increase blood glucose monitoring frequency. Advise patients to recognise hypoglycemia symptoms.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+          ],
+          "alert_headline": "May add to diabetes-med effects",
+          "alert_body": "Olive leaf can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding olive leaf and monitor your glucose more closely at first.",
+          "informational_note": "Olive leaf affects blood sugar — relevant to people on diabetes medications.",
+          "profile_gate": {
+            "gate_type": "drug_class",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
         }
       ],
       "dose_thresholds": [
@@ -19185,6 +19815,42 @@
               "value": 500,
               "unit": "mg",
               "severity_if_met": "monitor",
+              "severity_if_not_met": "monitor"
+            }
+          }
+        },
+        {
+          "scope": "drug_class",
+          "target_id": "hypoglycemics_unknown",
+          "basis": "per_day",
+          "comparator": ">=",
+          "value": 500,
+          "unit": "mg",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "monitor",
+          "note": "500 mg/day olive leaf extract is the clinically-active RCT anchor for BP reduction comparable to 25 mg/day captopril and the fasting glucose reductions of 15–25 mg/dL. Below 500 mg, additive effects on BP/glucose are not consistently documented. Clinical-team signoff 2026-04-24: use >= to capture the validated trial dose cleanly.",
+          "profile_gate": {
+            "gate_type": "combination",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [
+                "hypoglycemics_unknown"
+              ],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": {
+              "basis": "per_day",
+              "comparator": ">=",
+              "value": 500,
+              "unit": "mg",
+              "severity_if_met": "caution",
               "severity_if_not_met": "monitor"
             }
           }

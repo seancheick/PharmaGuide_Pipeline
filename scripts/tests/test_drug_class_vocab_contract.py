@@ -40,20 +40,20 @@ def drug_classes(vocab):
 def test_metadata_block_present(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 22
-    assert md["user_selectable_count"] == 14
+    assert md["total_entries"] == 23
+    assert md["user_selectable_count"] == 15
     assert md["rule_only_count"] == 8
     assert "LOCKED" in md["status"]
 
 
-def test_exactly_22_drug_classes_locked(drug_classes):
-    assert len(drug_classes) == 22
+def test_exactly_23_drug_classes_locked(drug_classes):
+    assert len(drug_classes) == 23
 
 
 def test_user_selectable_split_correct(drug_classes):
     selectable = [d for d in drug_classes if d.get("user_selectable")]
     rule_only = [d for d in drug_classes if not d.get("user_selectable")]
-    assert len(selectable) == 14, f"expected 14 user_selectable; got {len(selectable)}"
+    assert len(selectable) == 15, f"expected 15 user_selectable; got {len(selectable)}"
     assert len(rule_only) == 8, f"expected 8 rule-only; got {len(rule_only)}"
 
 
@@ -83,7 +83,7 @@ def test_user_selectable_13_match_schema_ids_dart(drug_classes):
     lib/core/constants/schema_ids.dart"""
     expected = {
         "anticoagulants", "antiplatelets", "nsaids", "antihypertensives",
-        "hypoglycemics_high_risk", "hypoglycemics_lower_risk",
+        "hypoglycemics_high_risk", "hypoglycemics_lower_risk", "hypoglycemics_unknown",
         "thyroid_medications", "sedatives",
         "immunosuppressants", "statins", "antidepressants_ssri_snri",
         "maois", "cardiac_glycosides", "anticholinergics",
