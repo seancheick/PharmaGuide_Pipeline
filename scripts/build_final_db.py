@@ -2465,10 +2465,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "dosage_unit": safe_str(ing.get("unit")),
             "normalized_value": safe_float(ne.get("normalized_amount")),
             "is_mapped": safe_bool(m.get("mapped", ing.get("mapped"))),
-            # See provenance comment on the inactive row — `is_harmful`
-            # records DB presence; `is_safety_concern` records the
-            # actual hazard signal (severity moderate/high/critical).
-            "is_harmful": bool(harmful_hit),
+            # `is_safety_concern` is the semantic safety flag (true only
+            # when severity is moderate/high/critical). Replaced the
+            # confused `is_harmful` provenance flag in v1.5.x.
             "harmful_severity": harmful_hit.get("severity_level") if harmful_hit else None,
             "is_safety_concern": _compute_is_safety_concern(
                 bool(harmful_hit),
@@ -2581,12 +2580,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 harmful_ref.get("population_warnings")
                 or (harmful_hit or {}).get("population_warnings")
             ),
-            # Provenance flag: True iff the ingredient appears in
-            # harmful_additives.json. NOT a semantic safety claim — low-
-            # severity entries (silicon dioxide, MCC, calcium laurate)
-            # are tracked for transparency but aren't safety risks. Use
-            # `is_safety_concern` or `severity_status` for routing.
-            "is_harmful": is_harmful_resolved,
+            # `is_safety_concern` is the semantic safety flag (true only
+            # for moderate/high/critical hazards). The retired `is_harmful`
+            # provenance flag conflated "in harmful_additives.json" with
+            # "actually harmful" — silicon dioxide is in the DB but not a
+            # safety risk. `severity_status` carries the routing decision.
             "harmful_severity": harmful_severity_resolved,
             "harmful_notes": (
                 mechanism_text

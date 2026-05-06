@@ -760,7 +760,11 @@ def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
     vitamin_a = by_name["Vitamin A Palmitate"]
     soy = by_name["Soy Lecithin"]
 
-    assert vitamin_a["is_harmful"] is True
+    # v1.5.x: is_harmful retired in favor of is_safety_concern (semantic)
+    # + harmful_severity (raw enum). Vitamin A Palmitate is high severity
+    # in the test fixture so is_safety_concern fires.
+    assert vitamin_a["is_safety_concern"] is True
+    assert vitamin_a["harmful_severity"] == "high"
     assert vitamin_a["is_banned"] is True
     assert soy["is_allergen"] is True
     assert any(hit["status"] == "banned" for hit in vitamin_a["safety_hits"])

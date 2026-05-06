@@ -320,13 +320,16 @@ class TestSafetyCategoryRouting:
 
 FLUTTER_INGREDIENT_KEYS = {
     "raw_source_text", "name", "standardName", "normalized_key", "forms",
-    "quantity", "unit", "standard_name", "form", "matched_form",
+    "quantity", "unit", "standard_name", "matched_form",
     "matched_forms", "extracted_forms", "category", "bio_score", "natural",
     "score", "notes", "mapped", "safety_hits",
     "normalized_amount", "normalized_unit", "role", "parent_key",
     "dosage", "dosage_unit", "normalized_value",
-    "is_mapped", "is_harmful", "harmful_severity", "harmful_notes",
+    "is_mapped", "harmful_severity", "harmful_notes",
     "is_banned", "is_allergen",
+    # v1.5.x canonical contract — replaces legacy `form` + `is_harmful`.
+    "display_form_label", "form_status", "form_match_status",
+    "is_safety_concern",
 }
 
 

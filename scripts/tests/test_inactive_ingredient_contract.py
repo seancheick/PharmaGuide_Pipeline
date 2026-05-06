@@ -206,18 +206,19 @@ def _find_inactive(blob, name):
 def test_silicon_dioxide_suppresses_to_tradeoffs_only():
     """Silicon Dioxide must carry severity_status='suppress' so
     Flutter's Review-Before-Use filter can drop it without inference.
-    Crucially, is_safety_concern is False even though is_harmful is
-    True — it's tracked for transparency, not because it's a risk."""
+    Crucially, is_safety_concern is False even though it's listed in
+    harmful_additives.json — it's tracked for transparency, not
+    because it's a risk."""
     blob = build_detail_blob(_enriched_with_thorne_inactives(), _scored_minimal())
     sio2 = _find_inactive(blob, "Silicon Dioxide")
     assert sio2["display_label"] == "Silicon Dioxide (E551)"
     assert sio2["display_role_label"] == "Anti-caking agent"
     assert sio2["severity_status"] == "suppress"
-    # Provenance flag (legacy back-compat).
-    assert sio2["is_harmful"] is True
     assert sio2["harmful_severity"] == "low"
     # Semantic safety flag — silicon dioxide is NOT a safety concern.
     assert sio2["is_safety_concern"] is False
+    # Legacy `is_harmful` removed in v1.5.x deprecation cleanup.
+    assert "is_harmful" not in sio2
 
 
 def test_hypromellose_renders_as_neutral_excipient():
@@ -228,5 +229,5 @@ def test_hypromellose_renders_as_neutral_excipient():
     assert hpmc["display_label"] == "Hydroxypropyl Methylcellulose"
     assert hpmc["display_role_label"] == "Capsule coating"
     assert hpmc["severity_status"] == "n/a"
-    assert hpmc["is_harmful"] is False
     assert hpmc["is_safety_concern"] is False
+    assert "is_harmful" not in hpmc
