@@ -1,129 +1,151 @@
 # Diabetes Rule Review — Reconciliation Report
 
 **Reviewer baseline**: `ingredient_interaction_rules_Reviewed.json` @ schema 5.2.0, 129 entries
-**Live baseline**:     `ingredient_interaction_rules.json` @ schema 5.3.0, 145 entries
+**Live baseline**: `ingredient_interaction_rules.json` — started at 5.3.0, now at **6.1.0** (145 entries)
 **Generated**: 2026-05-05
-**Scope**: Phase 1 — content cleanup only. No schema changes. Diabetes condition only.
+**Last updated**: 2026-05-06
+**Scope**: Full reconciliation — Phase 1 (content cleanup), Phase 1.5 (new-entry clinical review), Phase 2 (hypoglycemics split)
 
 ---
 
-## Snapshot delta (5.2.0 → 5.3.0)
+## Ship log
 
-- **126** rules in both files (most reviewer comments still apply directly)
-- **16** rules added since reviewer's snapshot (not analyzed — defer to a later review pass)
+| Phase | Schema | Commits | Date | What shipped |
+|---|---|---|---|---|
+| Phase 1 | 5.3.1 → 5.3.3 | Multiple | 2026-05-05 | 10 APPLY items: mechanism rewrites, evidence-level corrections, headline refresh |
+| Phase 1.5 | 6.0.3 | `f6b2478` | 2026-05-06 | Clinical review of 16 new entries: 1 ghost PMID removed, 5 dead URLs replaced, copy fixes |
+| Phase 2 | 6.1.0 | `9bf00d1` + `d7bcd4d` | 2026-05-06 | Hypoglycemics 3-way split (high_risk / lower_risk / unknown) + Flutter adoption |
+| v6.0 profile_gate | 6.0.0 → 6.0.2 | Multiple | 2026-05-05 | profile_gate schema on every sub-rule; Flutter evaluator + drift contract |
+
+---
+
+## Snapshot delta (5.2.0 → 5.3.0 → 6.1.0)
+
+- **126** rules in both the reviewer's file and the original 5.3.0 baseline
+- **16** rules added since reviewer's snapshot — **all 16 clinically reviewed in Phase 1.5**
 - **1** rule renamed/removed (`silymarin` in 5.2.0 → no exact match in 5.3.0)
+- **3** new drug-class IDs added in Phase 2: `hypoglycemics_high_risk`, `hypoglycemics_lower_risk`, `hypoglycemics_unknown`
 
-### Added since reviewer (out of scope this phase)
+### 16 entries added since reviewer (Phase 1.5 — DONE)
 
-| db | canonical_id |
+| db | canonical_id | Phase 1.5 verdict |
+|---|---|---|
+| banned_recalled_ingredients | ADD_HORDENINE | PASS |
+| banned_recalled_ingredients | BANNED_BITTER_ORANGE | EDIT — URL slug fix |
+| banned_recalled_ingredients | BANNED_PENNYROYAL | EDIT — dead NCCIH URL → PMIDs 8633832 + 25512112 |
+| banned_recalled_ingredients | BANNED_TANSY | EDIT — near-ghost NBK → PMID 28472675 |
+| harmful_additives | ADD_TYRAMINE_RICH_EXTRACT | EDIT — fixed truncated alert_body + informational_note |
+| botanical_ingredients | bupleurum_root | EDIT — generic FDA URL → PMID 33273809 (CYP2D6 primary) |
+| botanical_ingredients | ginkgo_biloba_leaf | PASS |
+| botanical_ingredients | white_mulberry | **BLOCK resolved** — ghost PMID 27092496 removed → PMID 27974904; evidence established→probable |
+| ingredient_quality_map | bromelain | EDIT — removed unsupported warfarin case-report sentence |
+| ingredient_quality_map | holy_basil | PASS (theoretical + generic landing acceptable) |
+| ingredient_quality_map | l_carnitine | PASS |
+| ingredient_quality_map | l_tryptophan | EDIT — dead ODS URL → PMID 31523132 |
+| ingredient_quality_map | maca | EDIT — dead NCCIH URL → PMID 38440178 |
+| ingredient_quality_map | phenylethylamine | PASS |
+| ingredient_quality_map | same | EDIT — dead NCCIH URL → PMID 38423354 |
+| ingredient_quality_map | sodium | EDIT — dead ODS URL → PMID 9022564 |
+
+Full audit trail: `scripts/audits/interaction_rules/phase_1_5/CLINICAL_REVIEW.md`
+
+---
+
+## Reviewer worklist — final status
+
+| # | Ingredient | Reviewer recommendation | Final status | Shipped in |
+|---|---|---|---|---|
+| 1 | aloe_vera | evidence theoretical → limited + oral/topical note | **SHIPPED** | Phase 1 (5.3.1) |
+| 2 | alpha_lipoic_acid | soften severity for low-risk users | **SHIPPED** | Phase 2 (6.1.0) — lower_risk=monitor, high_risk=caution, unknown=caution |
+| 3 | berberine_supplement | caution by default, avoid only with insulin/sulfonylurea | **SHIPPED** | Phase 2 (6.1.0) — high_risk=avoid, lower_risk=caution, unknown=caution |
+| 4 | bitter_melon | remove "plant insulin analog" framing | **SHIPPED** | Phase 1 (5.3.1) |
+| 5 | black_seed_oil | downgrade unless dose/extract standardized | **PARTIALLY SHIPPED** | Phase 2 (6.1.0) — lower_risk=monitor. Full dose gate still needs authoring |
+| 6 | chromium | tighten mechanism wording | **SHIPPED** | Phase 1 (5.3.1) |
+| 7 | cinnamon | acknowledge mixed evidence | **SHIPPED** | Phase 1 (5.3.1) |
+| 8 | fenugreek | action-oriented headline | **SHIPPED** | Phase 1 (5.3.1) |
+| 9 | fiber | add medication-timing informational_note | **SHIPPED** | Phase 1 (5.3.1) |
+| 10 | garlic | diabetes severity caution → monitor | **SHIPPED** | Phase 1 (5.3.1) |
+| 11 | ginseng | keep | **DONE** (no change needed) | — |
+| 12 | gymnema_sylvestre | remove "beta-cell regeneration" claim | **SHIPPED** | Phase 1 (5.3.1) |
+| 13 | inositol | keep | **DONE** (no change needed) | — |
+| 14 | l_carnitine | keep | **DONE** (no change needed) | — |
+| 15 | magnesium | evidence established → probable | **SHIPPED** | Phase 1 (5.3.1) |
+| 16 | olive_leaf | dose/extract gate | **DONE** (already dose-gated) + Phase 2 split | — |
+| 17 | psyllium | add medication-timing note | **SHIPPED** | Phase 1 (5.3.1) |
+| 18 | stinging_nettle | downgrade unless strong extract/dose | **PARTIALLY SHIPPED** | Phase 2 (6.1.0) — lower_risk=monitor. Extract/dose gate still pending |
+| 19 | tribulus | evidence probable → limited | **SHIPPED** | Phase 1 (5.3.1) |
+| 20 | vanadyl_sulfate | add toxicity safety note | **SHIPPED** | Phase 1 (5.3.1) |
+| 21 | vitamin_b3_niacin | dose-gate | **DONE** (already dose-gated) | — |
+| 22 | vitamin_d | downgrade to informational unless deficient | **BLOCKED** | Needs user-profile lab/deficiency state |
+| 23 | white_mulberry | scope to leaf extract / DNJ-standardized | **BLOCKED** | Needs form-scoped variant architecture |
+
+**Scorecard: 17 shipped, 2 partially shipped, 2 blocked, 2 were already done.**
+
+---
+
+## Phase 2: Hypoglycemics split — SHIPPED (6.1.0)
+
+Replaced the single broad `hypoglycemics` drug class with three risk-stratified subclasses:
+
+| Subclass | Drugs | User-facing label |
+|---|---|---|
+| `hypoglycemics_high_risk` | insulin, sulfonylureas, meglitinides | Insulin, Sulfonylureas, Meglitinides |
+| `hypoglycemics_lower_risk` | metformin, GLP-1 RAs, SGLT2i, DPP-4i | Metformin, GLP-1 RAs, SGLT2i, DPP-4i |
+| `hypoglycemics_unknown` | legacy / unrefined profiles | Diabetes medication (tap to specify) |
+
+Severity remapping (18 rules × 3 subclasses = 54 drug_class_rules):
+
+| Rule category | high_risk | lower_risk | unknown |
+|---|---|---|---|
+| 7 monitor rules (cinnamon, chromium, etc.) | monitor | monitor | monitor |
+| 9 caution rules (alpha-lipoic, bitter melon, etc.) | caution | monitor | caution |
+| berberine (avoid) | avoid | caution | caution |
+| niacin (raises glucose — same for all) | caution | caution | caution |
+
+Flutter migration: legacy `hypoglycemics` → `hypoglycemics_unknown` (not false-precision high_risk). Profile-setup shows all three options for refinement. IDs normalized with `trim().toLowerCase()`.
+
+Clinical rationale: per Dr. Pham review — auto-mapping to high_risk creates false precision and perpetuates the over-warning problem. Unknown = honest uncertainty with middle-ground caution.
+
+---
+
+## What's next (remaining backlog)
+
+### Still blocked (needs new architecture)
+
+| Item | Blocker | Effort |
+|---|---|---|
+| vitamin_d — downgrade to informational unless deficient | Engine has no `lab_status` / deficiency state in user profile | ~4h (profile schema + UI + rule gating) |
+| white_mulberry — scope to DNJ-standardized leaf extract | Needs `form_scope` variant architecture (product-level form matching) | ~3h |
+| black_seed_oil — full dose/extract gate | Dose threshold authoring for thymoquinone-standardized extracts | ~2h |
+| stinging_nettle — extract/dose gate | Same pattern as black_seed_oil | ~1h |
+
+### Cross-repo operational
+
+| Item | Status |
 |---|---|
-| banned_recalled_ingredients | ADD_HORDENINE, BANNED_BITTER_ORANGE, BANNED_PENNYROYAL, BANNED_TANSY |
-| harmful_additives | ADD_TYRAMINE_RICH_EXTRACT |
-| botanical_ingredients | bupleurum_root, ginkgo_biloba_leaf, white_mulberry |
-| ingredient_quality_map | bromelain, holy_basil, l_carnitine, l_tryptophan, maca, phenylethylamine, same, sodium |
+| Run pipeline to push v6.1.0 catalog to Supabase production | Pending — `batch_run_all_datasets.sh` |
+| v6.1 cleanup — remove legacy `matchesProfile` fallback in Flutter | ~30 days post-rollout (marked with `TODO(v6.1)`) |
+| Drop pre-6.0 schemas from `import_catalog_artifact.sh` whitelist | Coordinate with v6.1 cleanup |
+| Systemic NIH URL-rot audit (5/9 NCCIH/ODS URLs in Phase 1.5 batch were 404) | Needs a sweep of all 145 entries |
+
+### Source verification (completed for Phase 1.5 entries)
+
+All Phase 1.5 replacement PMIDs were content-verified via PubMed eutils (esummary + efetch abstract). Audit trail in `scripts/audits/interaction_rules/phase_1_5/`:
+- `CLINICAL_REVIEW.md` — per-entry verdicts
+- `pubmed_candidates.json` — search results
+- `abstracts.txt` — fetched abstracts for verified candidates
+
+Phase 1 source URLs (NCCIH, PMC, LiverTox) verified during the original Phase 1 work.
 
 ---
 
-## Reviewer worklist vs. live state
+## Commit reference
 
-Status legend:
-- **APPLY** — change is valid and not yet present in 5.3.0
-- **DONE** — already implemented in 5.3.0 (no action needed)
-- **DEFER-PHASE-2** — requires schema change (medication-aware escalation)
-- **VERIFY** — already implemented but reviewer's source citation should be re-confirmed
-- **N/A** — ingredient missing or out-of-scope
-
-| # | Ingredient | Live state (diabetes) | Reviewer recommendation | Verdict | Phase 1 action |
-|---|---|---|---|---|---|
-| 1 | aloe_vera | monitor / **theoretical** | upgrade evidence to `limited` (oral aloe has human glucose/HbA1c data) | **APPLY** | Edit evidence_level: theoretical → limited; add note distinguishing oral vs topical |
-| 2 | alpha_lipoic_acid | caution / probable + dose_threshold | mild softening of severity in low-risk users | **DEFER-PHASE-2** | Needs medication-class gating; defer |
-| 3 | berberine_supplement | avoid / established + **dose threshold** (≥1500mg→avoid, <1500→caution) + drug-class threshold for hypoglycemics | "caution by default, avoid only with insulin/sulfonylurea" | **DONE** (effectively) | Already dose-gated and drug-class-gated. Mechanism text could drop "comparable to metformin" if present — VERIFY current copy |
-| 4 | bitter_melon | caution / probable | soften "plant insulin analog" copy in mechanism | **APPLY** | Mechanism rewrite (remove insulin-replacement framing) |
-| 5 | black_seed_oil | caution / probable | possibly downgrade unless dose/extract standardized | **DEFER-PHASE-2** | Needs dose gate; not in current threshold set |
-| 6 | chromium | monitor / probable | keep severity; reviewer suggests `limited`-style evidence | **APPLY (low-priority)** | Optional: tighten mechanism wording; severity stays |
-| 7 | cinnamon | monitor / probable | acknowledge mixed evidence in mechanism text | **APPLY** | Mechanism rewrite to acknowledge conflicting trials (per NCCIH) |
-| 8 | fenugreek | caution / probable | improve headline | **APPLY** | Headline: "Caution with diabetes" → "May lower blood sugar — monitor if using diabetes medication" |
-| 9 | fiber | monitor / probable | add medication-timing note | **APPLY** | Add `informational_note` about 2-hour separation from oral meds |
-| 10 | garlic | caution / probable + dose_threshold | downgrade to monitor for glucose alone | **APPLY** | Severity: caution → monitor (glucose alone); the bleeding/anticoagulant rules stay |
-| 11 | ginseng | monitor / probable | keep | **DONE** | None |
-| 12 | gymnema_sylvestre | caution / probable | **REMOVE "beta-cell regeneration" claim** (urgent) | **APPLY (urgent)** | Mechanism rewrite per reviewer's draft text |
-| 13 | inositol | informational / probable | keep | **DONE** | None |
-| 14 | l_carnitine | informational / probable | keep | **DONE** | None |
-| 15 | magnesium | monitor / **established** | downgrade evidence (interaction NOT established) | **APPLY (urgent)** | evidence_level: established → probable |
-| 16 | olive_leaf | caution / probable + dose_threshold | dose/extract gate | **DONE** (dose-gated) | None — verify dose threshold copy |
-| 17 | psyllium | monitor / established | add medication-timing note | **APPLY** | Add `informational_note` about oral-med spacing |
-| 18 | stinging_nettle | caution / probable | downgrade unless strong extract/dose | **DEFER-PHASE-2** | Needs extract/dose gate |
-| 19 | tribulus | monitor / probable | downgrade evidence to `limited` | **APPLY** | evidence_level: probable → limited |
-| 20 | vanadyl_sulfate | caution / probable + dose_threshold | keep + add toxicity warning | **APPLY (low)** | Add safety note about heavy-metal/toxicity to `informational_note` |
-| 21 | vitamin_b3_niacin | caution / established + **dose threshold** (>1000mg→avoid, ≤1000→monitor) | dose-gate (already done) | **DONE** | Already dose-gated; verify multivitamin doses don't trip |
-| 22 | vitamin_d | monitor / probable | downgrade to informational unless deficient | **DEFER-PHASE-2** | Engine has no deficiency state; severity stays `monitor` until user-profile layer carries lab status |
-| 23 | white_mulberry | caution / established + dose_threshold | scope to leaf extract / DNJ-standardized | **DEFER-PHASE-2** | Needs form-scoped variant; touches form_scope architecture |
-
-### Headline copy refresh (cross-cutting)
-
-Reviewer flagged generic "Caution with diabetes" headlines as noisy. Phase 1 rewrites the diabetes `alert_headline` for these rules to condition-specific phrasing (within the 20–60 char limit):
-
-| Pattern | New headline |
-|---|---|
-| Glucose-lowering herb | "May lower blood sugar" |
-| Post-meal glucose ingredient | "May reduce glucose after meals" |
-| High-dose niacin | "High-dose niacin may raise blood sugar" |
-| Fiber/psyllium | "May change med timing and post-meal glucose" |
-| Weak evidence | "May affect glucose trends in some people" |
-
----
-
-## Phase 1 worklist (10 APPLY items)
-
-Atomic, no schema change, all reversible:
-
-1. **gymnema_sylvestre** — rewrite diabetes mechanism (remove "beta-cell regeneration") **[urgent]**
-2. **magnesium** — diabetes evidence_level: `established` → `probable` **[urgent]**
-3. **aloe_vera** — diabetes evidence_level: `theoretical` → `limited`; add oral-vs-topical note
-4. **bitter_melon** — diabetes mechanism rewrite (drop insulin-analog framing)
-5. **cinnamon** — diabetes mechanism rewrite (acknowledge mixed evidence)
-6. **fiber** — add `informational_note` about 2-hour med spacing
-7. **psyllium** — add `informational_note` about med spacing
-8. **garlic** — diabetes severity: `caution` → `monitor` (glucose-only; bleeding rules unchanged)
-9. **tribulus** — diabetes evidence_level: `probable` → `limited`
-10. **fenugreek** — diabetes alert_headline rewrite
-
-Plus headline-only refreshes for: chromium, vanadyl_sulfate (safety note add), berberine (drop "comparable to metformin" if present).
-
-## Phase 2 backlog (7 items, schema change required)
-
-- alpha_lipoic_acid, black_seed_oil, stinging_nettle, vitamin_d, white_mulberry — need medication-class or form-scoped gating
-- vitamin_d — needs user-profile deficiency state
-- Architectural: `severity_escalation[]` field driven by `drug_class_id` / `condition_id` / `user_history`
-
-## Already done in 5.3.0 (5 items)
-
-berberine_supplement, ginseng, inositol, l_carnitine, olive_leaf, vitamin_b3_niacin (6 actually) — verify URL citations during step 3.
-
----
-
-## Source verification queue (step 3)
-
-URLs cited by reviewer that must be content-verified before we ship Phase 1 edits:
-
-- NCCIH: aloe-vera, ginger, asian-ginseng, providers/digest/type-2-diabetes-and-dietary-supplements
-- NIH ODS: Chromium, Magnesium fact sheets
-- PubMed: 18380993 (niacin), 24438170 (fenugreek), 34467577 (gymnema)
-- PMC: PMC5839379 (berberine/metformin), PMC9709280 (berberine), PMC5321430 (mulberry)
-- LiverTox NBK590483 (bitter melon)
-
-Run `scripts/api_audit/verify_pubmed_references.py` on the PMIDs and confirm fact sheet URLs resolve before any commit.
-
----
-
-## Recommended commit cadence
-
-- One commit per APPLY item (10 commits) — never batch.
-- Each commit message includes: ingredient, fields changed, primary source URL.
-- Run after every commit:
-  ```
-  python3 -m pytest scripts/tests/ -k interaction -q
-  python3 scripts/validate_safety_copy.py
-  python3 scripts/tools/split_rules_by_condition.py  # refresh views
-  ```
-- After all 10: bump `_metadata.schema_version` → `5.3.1`, update `last_updated`, push as one PR.
+| Commit | Repo | What |
+|---|---|---|
+| Phase 1 series | dsld_clean | 5.3.1 → 5.3.3 mechanism rewrites, evidence corrections, headlines |
+| `f6b2478` | dsld_clean | Phase 1.5 — ghost PMID, dead URLs, copy fixes (6.0.3) |
+| `9bf00d1` | dsld_clean | Phase 2 — hypoglycemics 2-way split (6.1.0) |
+| `d7bcd4d` | dsld_clean | Phase 2 — add hypoglycemics_unknown bucket |
+| `1778bdd` | Pharmaguide.ai | Flutter — adopt hypoglycemics split + high_risk migration |
+| `297c4fc` | Pharmaguide.ai | Flutter — adopt unknown migration per Dr. Pham review |
