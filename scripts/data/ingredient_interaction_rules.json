@@ -2388,9 +2388,9 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/35236166/"
           ],
-          "alert_headline": "Not recommended during pregnancy",
-          "alert_body": "Fenugreek has uterotonic activity and can lower maternal blood sugar. If you are pregnant, talk to your obstetrician; during breastfeeding, use under clinician guidance for milk-supply support.",
-          "informational_note": "Fenugreek has uterotonic activity — relevant to anyone pregnant or planning pregnancy.",
+          "alert_headline": "May affect milk supply and digestion",
+          "alert_body": "Fenugreek is commonly used for milk supply, but results vary and side effects can occur. If breastfeeding, use with clinician guidance, especially if you or your baby develop digestive symptoms.",
+          "informational_note": "Fenugreek is a common galactagogue — relevant to anyone breastfeeding.",
           "profile_gate": {
             "gate_type": "profile_flag",
             "requires": {
@@ -13424,7 +13424,7 @@
             "https://ods.od.nih.gov/factsheets/VitaminB6-HealthProfessional/"
           ],
           "alert_headline": "High-dose B6 may affect milk supply",
-          "alert_body": "Pharmacologic B6 doses may reduce milk supply via prolactin suppression. If you are breastfeeding, talk to your clinician before using concentrated B6; prenatal-vitamin levels of B6 are appropriate.",
+          "alert_body": "Very high doses of B6 have been studied for suppressing lactation. Normal multivitamin B6 levels do not trigger this concern. Use high-dose B6 while breastfeeding only with clinician guidance.",
           "informational_note": "High-dose B6 can affect lactation — prenatal-dose B6 is appropriate for anyone breastfeeding.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -13452,11 +13452,11 @@
           "scope": "condition",
           "target_id": "lactation",
           "basis": "per_day",
-          "comparator": ">",
-          "value": 50,
+          "comparator": ">=",
+          "value": 200,
           "unit": "mg",
-          "severity_if_met": "avoid",
-          "severity_if_not_met": "monitor",
+          "severity_if_met": "caution",
+          "severity_if_not_met": "informational",
           "profile_gate": {
             "gate_type": "combination",
             "requires": {
@@ -13475,11 +13475,11 @@
             },
             "dose": {
               "basis": "per_day",
-              "comparator": ">",
-              "value": 50,
+              "comparator": ">=",
+              "value": 200,
               "unit": "mg",
-              "severity_if_met": "avoid",
-              "severity_if_not_met": "monitor"
+              "severity_if_met": "caution",
+              "severity_if_not_met": "informational"
             }
           }
         }
@@ -13530,15 +13530,15 @@
         {
           "condition_id": "lactation",
           "severity": "caution",
-          "evidence_level": "probable",
+          "evidence_level": "limited",
           "mechanism": "Salvia officinalis (sage) is traditionally used to suppress lactation (antilactogenic effect). The mechanism involves thujone, camphor, and other volatile terpenes which may have estrogenic and/or dopaminergic effects that reduce prolactin and milk production. Sage tea is used as a traditional remedy to wean nursing infants or reduce painful engorgement. Conversely, nursing mothers who consume sage supplements may experience unwanted milk reduction. Thujone in high concentrations can also be neurotoxic.",
           "action": "Avoid sage supplements during established breastfeeding if continuing lactation is desired, as they may reduce milk supply. Culinary amounts of sage in food are generally safe. High-dose sage extracts should be avoided.",
           "sources": [
             "https://www.nccih.nih.gov/health/safety",
             "https://www.drugs.com/npp/sage.html"
           ],
-          "alert_headline": "Concentrated sage may affect milk supply",
-          "alert_body": "Sage at supplement or concentrated doses may reduce milk supply. If you are breastfeeding, talk to your clinician before using concentrated forms; culinary use at typical amounts is fine.",
+          "alert_headline": "May reduce milk supply",
+          "alert_body": "Concentrated sage is traditionally used to reduce lactation. If you are breastfeeding and trying to maintain supply, avoid concentrated sage supplements unless your clinician recommends it.",
           "informational_note": "Concentrated sage can affect lactation — culinary amounts are appropriate for anyone breastfeeding.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -14650,15 +14650,15 @@
         },
         {
           "condition_id": "lactation",
-          "severity": "avoid",
-          "evidence_level": "probable",
-          "mechanism": "The estrogenic and phytoestrogenic properties of diosgenin in wild yam carry theoretical risk during lactation. Safety data in lactating humans is absent. Phytoestrogens can be transferred to breast milk and may affect infant hormone levels.",
+          "severity": "caution",
+          "evidence_level": "theoretical",
+          "mechanism": "Wild yam contains diosgenin, a steroidal saponin marketed as a natural hormone precursor. The human body does not convert diosgenin into progesterone. Breastfeeding safety data in humans are absent.",
           "action": "Do not use wild yam supplements during breastfeeding due to insufficient safety data and estrogenic activity profile.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/30735081/"
           ],
-          "alert_headline": "Not recommended while breastfeeding",
-          "alert_body": "Wild yam's estrogenic activity has no safety data in lactation and can transfer via breast milk. If you are breastfeeding, talk to your clinician before use.",
+          "alert_headline": "Hormone-active claims are uncertain",
+          "alert_body": "Wild yam is marketed for hormone support, but breastfeeding safety data are limited. If breastfeeding, review use with your clinician before taking concentrated wild yam supplements.",
           "informational_note": "Wild yam is hormone-active — relevant to anyone breastfeeding.",
           "profile_gate": {
             "gate_type": "profile_flag",
@@ -14715,7 +14715,7 @@
       "dose_thresholds": [],
       "pregnancy_lactation": {
         "pregnancy_category": "avoid",
-        "lactation_category": "avoid",
+        "lactation_category": "caution",
         "evidence_level": "probable",
         "mechanism": "Diosgenin (steroidal sapogenin) in wild yam has documented phytoestrogenic activity. Human conversion to progesterone does not occur in vivo. Safety during pregnancy and lactation is not established. Estrogenic activity may disrupt hormonal balance.",
         "notes": "Wild yam is sometimes marketed as a 'natural progesterone' but this claim is not supported by human pharmacokinetics. Avoid during pregnancy and lactation.",
