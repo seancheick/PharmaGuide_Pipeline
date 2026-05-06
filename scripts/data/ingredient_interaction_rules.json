@@ -3374,8 +3374,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/22736461/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Seed/leaf may lower seizure threshold",
-          "alert_body": "Ginkgo may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding ginkgo.",
+          "alert_headline": "Ginkgo may lower seizure threshold",
+          "alert_body": "Ginkgo seed and some products can contain ginkgotoxin, which may provoke seizures. If you have epilepsy or take antiseizure medication, review ginkgo use with your clinician.",
           "informational_note": "Ginkgo may affect seizure threshold — relevant to people with a seizure disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -7958,8 +7958,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/12383029/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "May affect seizure medication levels",
-          "alert_body": "Kava may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding kava.",
+          "alert_headline": "May interact with seizure medications",
+          "alert_body": "Kava can affect the central nervous system and liver drug metabolism. If you take antiseizure medication, review kava with your clinician before use.",
           "informational_note": "Kava may affect seizure threshold — relevant to people with a seizure disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -9822,7 +9822,7 @@
           }
         },
         {
-          "severity": "caution",
+          "severity": "monitor",
           "mechanism": "Evening primrose oil (EPO) contains gamma-linolenic acid (GLA). Concern regarding seizure threshold lowering originated from early case reports in the 1980s. A 2007 review concluded the association was likely spurious and that GLA and linoleic acid may actually have anticonvulsant properties. Risk is low but seizure disorder patients warrant monitoring and physician discussion.",
           "action": "Evening primrose oil is not absolutely contraindicated in seizure disorders based on current evidence, but patients with epilepsy should discuss use with their neurologist. Monitor for any changes in seizure control.",
           "last_reviewed": "2026-04-09",
@@ -9830,9 +9830,9 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17764919/"
           ],
-          "evidence_level": "probable",
-          "alert_headline": "GLA may lower seizure threshold",
-          "alert_body": "Evening primrose oil may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding evening primrose oil.",
+          "evidence_level": "theoretical",
+          "alert_headline": "Seizure evidence is mixed",
+          "alert_body": "Older reports raised concern that evening primrose oil might affect seizure threshold, but later reviews questioned this link. If you have epilepsy, review use with your clinician.",
           "informational_note": "Evening primrose oil may affect seizure threshold — relevant to people with a seizure disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12620,7 +12620,7 @@
       },
       "condition_rules": [
         {
-          "severity": "caution",
+          "severity": "monitor",
           "mechanism": "Melatonin's effects on seizure threshold are debated. While some data suggests anticonvulsant properties via melatonin receptor MT1/MT2 modulation, case reports of seizure exacerbation in predisposed individuals exist. Overall risk is low but warrants physician discussion in active seizure disorders.",
           "action": "Use melatonin with caution in seizure disorders. Start at lowest effective dose and monitor for any changes in seizure frequency.",
           "last_reviewed": "2026-04-09",
@@ -12629,8 +12629,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
           ],
-          "alert_headline": "Mixed effect on seizure threshold",
-          "alert_body": "Melatonin may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding melatonin.",
+          "alert_headline": "Seizure effects can vary",
+          "alert_body": "Melatonin may affect sleep and seizure patterns differently across people. If you have epilepsy, start only with clinician guidance, especially if seizures are unstable.",
           "informational_note": "Melatonin may affect seizure threshold — relevant to people with a seizure disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12707,7 +12707,7 @@
       },
       "condition_rules": [
         {
-          "severity": "caution",
+          "severity": "monitor",
           "mechanism": "Borage seed oil contains high concentrations of gamma-linolenic acid (GLA, ~24%), similar to evening primrose oil. Borage also contains trace pyrrolizidine alkaloids in some preparations, which pose additional neurotoxic risk. Historical concern regarding GLA and seizure threshold lowering applies similarly to borage as to EPO.",
           "action": "Avoid high-dose borage oil in seizure disorders. If used, ensure products are certified pyrrolizidine alkaloid-free. Discuss with prescribing neurologist.",
           "last_reviewed": "2026-04-09",
@@ -12715,9 +12715,9 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17764919/"
           ],
-          "evidence_level": "probable",
-          "alert_headline": "GLA may lower seizure threshold",
-          "alert_body": "Borage seed oil may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding borage seed oil.",
+          "evidence_level": "theoretical",
+          "alert_headline": "Seizure-threshold evidence is limited",
+          "alert_body": "Borage seed oil contains GLA, which has been discussed in older seizure-threshold concerns. Evidence is limited. If you have epilepsy, review use with your clinician.",
           "informational_note": "Borage seed oil may affect seizure threshold — relevant to people with a seizure disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15834,8 +15834,8 @@
           "sources": [
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
-          "alert_headline": "Caffeine may lower seizure threshold",
-          "alert_body": "Guarana may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding guarana.",
+          "alert_headline": "High caffeine may affect seizures",
+          "alert_body": "Guarana can add significant caffeine. High caffeine intake may lower seizure threshold in some people. If you have epilepsy, review high-caffeine supplements with your clinician.",
           "informational_note": "Guarana may affect seizure threshold — relevant to people with a seizure disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -18628,8 +18628,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/19370686/"
           ],
-          "alert_headline": "Cholinergic effect — caution with seizures",
-          "alert_body": "Huperzine A may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding Huperzine A.",
+          "alert_headline": "Cholinergic effect — seizure caution",
+          "alert_body": "Huperzine A affects acetylcholine signaling in the brain. If you have epilepsy or take antiseizure medication, use only with clinician guidance.",
           "informational_note": "Huperzine A may affect seizure threshold — relevant to people with a seizure disorder.",
           "profile_gate": {
             "gate_type": "condition",
@@ -20551,8 +20551,8 @@
           "sources": [
             "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd"
           ],
-          "alert_headline": "Discuss with your seizure clinician",
-          "alert_body": "CBD may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding CBD.",
+          "alert_headline": "CBD — seizure clinician guidance",
+          "alert_body": "Prescription cannabidiol treats specific seizure disorders, but OTC CBD products vary in dose and purity. If you have seizures or take antiseizure medication, use CBD only with clinician guidance.",
           "informational_note": "CBD may affect seizure threshold — relevant to people with a seizure disorder.",
           "profile_gate": {
             "gate_type": "condition",
