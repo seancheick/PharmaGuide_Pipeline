@@ -104,19 +104,16 @@ Minimum tests pinning the new contract reads. Add to `/Users/seancheick/PharmaGu
 
 ## Step 5 — Deprecation cleanup (one delete commit per field)
 
-**Status (2026-05-05): DEFERRED.** Eight call sites in
-`product_detail_screen.dart`, `ingredients_card.dart`,
-`inactive_color.dart`, and `tradeoffs_section.dart` migrated to the new
-contract. Two additional Flutter consumers still read legacy `form` and
-must migrate before pipeline-side deletes are safe:
+**Status (2026-05-05): COMPLETE.** All four legacy fields deleted from
+`build_final_db.py` with regression-test pins. Flutter consumers
+migrated in tandem.
 
-- `lib/features/product_detail/widgets/form_absorption_section.dart:90`
-- `lib/features/product_detail/widgets/ingredient_explain_model.dart:150`
-
-Once those two also migrate, delete the following from
-`build_final_db.py` one commit per field, with a regression test pin
-(see `test_form_vocab.py::test_scorer_has_no_hardcoded_*` for the
-shape).
+| Field | Pipeline commit | Flutter commit |
+|---|---|---|
+| `form` (active row) | `7cac39c` | `66ec68b` |
+| `match_method` + `matched_alias` (inactive) | `8b0f9ea` | n/a — zero Flutter reads |
+| `severity_level` (inactive only) | `7a9748e` | `8354c01` (fallback to harmful_severity) |
+| `is_harmful` (active + inactive) | `8483b0c` | n/a — zero Flutter reads |
 
 ### Active ingredient row
 
@@ -184,5 +181,5 @@ Sequencing matters: the contract migration MUST land before Phase 4 (ingredient 
 - [x] Flutter PR merged: 8 surgical edits + new widget tests green. (commit `f9181e6` on Flutter main; 49 widget tests pass)
 - [x] Release gate `test_no_form_sensitive_violations_in_build_output` runs (no skip) and passes on the rebuilt corpus. (commit `f18c895` patched the gate to probe both `dist/` and `final_db_output/` paths)
 - [x] Snapshot refresh — 30 fixtures regenerated via `freeze_contract_snapshots.py`, manifest changelog entry added.
-- [ ] Deprecation cleanup commits — DEFERRED until `form_absorption_section.dart` and `ingredient_explain_model.dart` migrate to `display_form_label`.
+- [x] Deprecation cleanup commits — DONE 2026-05-05. Four per-field deletes shipped with regression test pins (see Step 5 table for commit hashes).
 - [x] Phase 4 ingredient row redesign unblocked — contract fields are live in production blobs.
