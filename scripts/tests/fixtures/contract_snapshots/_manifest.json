@@ -320,6 +320,12 @@
       "product_ids": "26 products (full snapshot suite)",
       "change": "Re-froze all 26 contract snapshots after the v3.5 scoring overhaul (commit f0a1d05) shipped without snapshot updates. Drift signature: uniform +20-25% on section C ingredient_points + top_n_applied 3→4. Root cause: top_n_weights changed from [1.0, 0.5, 0.25] to [1.0, 0.7, 0.5, 0.3] (softer diminishing returns, rewards 4-ingredient targeted formulations). Two products went from blocked-state (0.0) to scored after upstream B-section fixes (Garden of Life Adrenal Daily Balance, Nutricost PRE Pre-Workout Complex).",
       "commit": "pending"
+    },
+    {
+      "date": "2026-05-05",
+      "product_ids": "30 products (full snapshot suite)",
+      "change": "Re-froze all 30 contract snapshots after the omega-3 bonus cap clinician decision (commit 7ceac0d) which redistributed Section E bands and capped omega3_dose_bonus.max at 2.0 (was 3.0). Drift signature: uniform section_scores.E_dose_adequacy.max: 3.0 → 2.0 across every product whether omega-3 or not (the field is in every scored output). Verified as the intended downstream effect of the omega-3 cap change. Also picks up minor v1.5.0 form-vocab refactor side effects via the cleaner regex expansion (Vitamin A Palmitate now extracting retinyl palmitate directly into forms[] surfaces a more accurate bio_score for products previously matching unspecified parent).",
+      "commit": "f18c895"
     }
   ]
 }

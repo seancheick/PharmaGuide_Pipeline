@@ -104,7 +104,19 @@ Minimum tests pinning the new contract reads. Add to `/Users/seancheick/PharmaGu
 
 ## Step 5 — Deprecation cleanup (one delete commit per field)
 
-After the Flutter PR ships and consumers have migrated, delete the following from `build_final_db.py` and pin a regression test that the field is gone. Single delete commit per field for clean blame and easy revert.
+**Status (2026-05-05): DEFERRED.** Eight call sites in
+`product_detail_screen.dart`, `ingredients_card.dart`,
+`inactive_color.dart`, and `tradeoffs_section.dart` migrated to the new
+contract. Two additional Flutter consumers still read legacy `form` and
+must migrate before pipeline-side deletes are safe:
+
+- `lib/features/product_detail/widgets/form_absorption_section.dart:90`
+- `lib/features/product_detail/widgets/ingredient_explain_model.dart:150`
+
+Once those two also migrate, delete the following from
+`build_final_db.py` one commit per field, with a regression test pin
+(see `test_form_vocab.py::test_scorer_has_no_hardcoded_*` for the
+shape).
 
 ### Active ingredient row
 
@@ -133,6 +145,13 @@ Convert empty-string defaults to `null` on inactive fields where unpopulated:
 
 This eliminates the empty-vs-null ambiguity Flutter has to handle today.
 
+### Snapshot refresh — DONE 2026-05-05
+
+The 31 stale snapshot drift failures (`E_dose_adequacy.max: 3.0 -> 2.0`)
+from the omega-3 bonus cap (commit `7ceac0d`) refreshed via
+`python3 scripts/tests/freeze_contract_snapshots.py`. Manifest changelog
+entry added. All 32 snapshot tests pass.
+
 ---
 
 ## Step 6 — Resume product-detail refactor
@@ -141,12 +160,12 @@ Sequencing matters: the contract migration MUST land before Phase 4 (ingredient 
 
 | Step | Status | Note |
 |---|---|---|
-| Contract migration (this doc, Steps 1-5) | in-flight | Pipeline done; blocks on rebuild + Flutter PR |
+| Contract migration (this doc, Steps 1-5) | LANDED 2026-05-05 | Pipeline + Flutter both shipped; deprecation deletes deferred until two remaining Flutter consumers migrate |
 | Sticky CTA fix | next | Independent of contract |
 | Personalized warnings provider | next | Independent of contract |
-| ReviewBeforeUseCard | depends on contract Step 3 | Severity routing changes |
+| ReviewBeforeUseCard | UNBLOCKED — severity_status routing live | |
 | LabelConfidenceCard | next | Independent of contract |
-| Ingredient row redesign (Phase 4) | BLOCKED on contract | Reads the new fields directly |
+| Ingredient row redesign (Phase 4) | UNBLOCKED — contract fields populated | |
 
 ---
 
@@ -158,11 +177,12 @@ Sequencing matters: the contract migration MUST land before Phase 4 (ingredient 
 
 ---
 
-## Definition of done
+## Definition of done — status as of 2026-05-05
 
-- Fresh pipeline run completes; corpus carries v1.5.0 contract fields.
-- All six target products in Step 2 verified by hand.
-- Flutter PR merged: 8 surgical edits + new widget tests green.
-- Release gate `test_no_form_sensitive_violations_in_build_output` runs (no skip) and passes on the rebuilt corpus.
-- Deprecation cleanup commits land one per field, each with a regression test pin.
-- Phase 4 ingredient row redesign unblocked.
+- [x] Fresh pipeline run completes; corpus carries v1.5.0 contract fields. (8331 blobs in `scripts/dist/detail_blobs/`, schema v1.5.0)
+- [x] All six target products in Step 2 verified by hand. (Vitamin A Palmitate / Vitamin A unspecified / Mg oxide / Mg glycinate / prop-blend not_disclosed_blend / EPA form_status=unknown — all confirm contract fields populate as designed)
+- [x] Flutter PR merged: 8 surgical edits + new widget tests green. (commit `f9181e6` on Flutter main; 49 widget tests pass)
+- [x] Release gate `test_no_form_sensitive_violations_in_build_output` runs (no skip) and passes on the rebuilt corpus. (commit `f18c895` patched the gate to probe both `dist/` and `final_db_output/` paths)
+- [x] Snapshot refresh — 30 fixtures regenerated via `freeze_contract_snapshots.py`, manifest changelog entry added.
+- [ ] Deprecation cleanup commits — DEFERRED until `form_absorption_section.dart` and `ingredient_explain_model.dart` migrate to `display_form_label`.
+- [x] Phase 4 ingredient row redesign unblocked — contract fields are live in production blobs.

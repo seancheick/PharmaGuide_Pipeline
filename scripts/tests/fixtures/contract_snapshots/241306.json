@@ -9,15 +9,16 @@
   "brand_name": "Garden of Life Wobenzym N",
   "breakdown": {
     "A": {
-      "A1": 13.0,
+      "A1": 12.0,
       "A2": 0.0,
       "A3": 0.0,
       "A4": 0.0,
-      "A5": 1.0,
+      "A5": 2.0,
       "A5a": 0.0,
       "A5b": 1.0,
       "A5c": 0.0,
       "A5d": 0.0,
+      "A5e": 1.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 2.0,
@@ -100,7 +101,7 @@
   "flags": [],
   "grade": "Fair",
   "mapped_coverage": 1.0,
-  "output_schema_version": "3.4.0",
+  "output_schema_version": "3.6.0",
   "product_name": "Joint Health",
   "safety_verdict": "SAFE",
   "score_100_equivalent": 61.6,
@@ -130,7 +131,7 @@
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",
       "applicable": false,
-      "max": 3.0,
+      "max": 2.0,
       "score": 0.0
     }
   },

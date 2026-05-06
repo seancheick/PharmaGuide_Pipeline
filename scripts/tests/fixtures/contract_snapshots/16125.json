@@ -9,19 +9,20 @@
   "brand_name": "Thorne Research",
   "breakdown": {
     "A": {
-      "A1": 15.33,
+      "A1": 14.8,
       "A2": 1.0,
       "A3": 2.0,
       "A4": 0.0,
-      "A5": 0.0,
+      "A5": 1.0,
       "A5a": 0.0,
       "A5b": 0.0,
       "A5c": 0.0,
       "A5d": 0.0,
+      "A5e": 1.0,
       "A6": 0.0,
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 4.75,
-      "core_quality": 18.33,
+      "core_quality": 18.8,
       "max": 25.0,
       "omega3_breakdown": {
         "applicable": false,
@@ -57,7 +58,7 @@
         "probiotic_bonus": 4.75,
         "survivability": 1.0
       },
-      "score": 23.08
+      "score": 23.55
     },
     "B": {
       "B0_moderate_penalty": 0.0,
@@ -108,7 +109,7 @@
       "max": 0.0,
       "score": 0.0
     },
-    "quality_raw": 62.94,
+    "quality_raw": 63.41,
     "violation_penalty": 0.0
   },
   "dsld_id": "16125",
@@ -116,20 +117,20 @@
   "flags": [],
   "grade": "Good",
   "mapped_coverage": 1.0,
-  "output_schema_version": "3.4.0",
+  "output_schema_version": "3.6.0",
   "product_name": "FloraMend Prime Probiotic",
   "safety_verdict": "SAFE",
-  "score_100_equivalent": 78.7,
-  "score_80": 62.9,
+  "score_100_equivalent": 79.3,
+  "score_80": 63.4,
   "score_basis": "bioactives_scored",
   "scoring_status": "scored",
   "section_scores": {
     "A_ingredient_quality": {
       "category_bonus_pool_cap": 5.0,
       "category_bonus_total": 4.75,
-      "core_quality": 18.33,
+      "core_quality": 18.8,
       "max": 25.0,
-      "score": 23.08
+      "score": 23.55
     },
     "B_safety_purity": {
       "max": 30.0,
@@ -146,7 +147,7 @@
     "E_dose_adequacy": {
       "_deprecated": "Moved to A_ingredient_quality.omega3_dose_bonus in v3.3",
       "applicable": false,
-      "max": 3.0,
+      "max": 2.0,
       "score": 0.0
     }
   },
