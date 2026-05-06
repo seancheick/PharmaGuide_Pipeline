@@ -10108,7 +10108,7 @@
           }
         },
         {
-          "severity": "caution",
+          "severity": "informational",
           "mechanism": "Vitamin D exerts broad immunomodulatory effects, generally shifting immune responses toward tolerance via Treg cell upregulation and Th17 suppression. Low vitamin D status is associated with increased autoimmune risk. Supplementation may be beneficial in Hashimoto thyroiditis and multiple sclerosis, but high doses in active autoimmune disease require monitoring.",
           "action": "Vitamin D supplementation at standard doses (1000–4000 IU/day) is generally safe in autoimmune conditions. High-dose vitamin D requires physician-monitored 25-OH vitamin D levels to avoid toxicity.",
           "last_reviewed": "2026-04-09",
@@ -10117,8 +10117,8 @@
             "https://www.fda.gov/drugs/resources-you/drug-interactions-what-you-should-know"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Broad immune effects — discuss",
-          "alert_body": "Vitamin D has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding Vitamin D.",
+          "alert_headline": "Use labs to guide vitamin D",
+          "alert_body": "Vitamin D affects immune regulation and is often monitored in autoimmune care. Use blood levels and clinician guidance to avoid under- or over-supplementing.",
           "informational_note": "Vitamin D affects immune function — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -11411,7 +11411,7 @@
           }
         },
         {
-          "severity": "avoid",
+          "severity": "caution",
           "mechanism": "Cat's claw (Uncaria tomentosa) contains immunomodulatory alkaloids and oxindole alkaloids that enhance immune cell function including macrophage and lymphocyte activation. Immune stimulation may exacerbate autoimmune disease.",
           "action": "Avoid in autoimmune conditions. Not suitable for patients on immunosuppressive therapy.",
           "last_reviewed": "2026-04-09",
@@ -11420,8 +11420,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
           ],
-          "alert_headline": "Not recommended in autoimmune conditions",
-          "alert_body": "Cat's claw stimulates immune activity. If you have an autoimmune condition, talk to your clinician before use — it may worsen immune activation.",
+          "alert_headline": "Immune-active herb — use caution",
+          "alert_body": "Cat’s claw may affect immune-cell signaling. If you have an autoimmune condition or take immune-suppressing medication, review use with your clinician.",
           "informational_note": "Cat's claw is immune-stimulating — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12333,7 +12333,7 @@
       },
       "condition_rules": [
         {
-          "severity": "avoid",
+          "severity": "caution",
           "mechanism": "Echinacea stimulates both innate and adaptive immune function, upregulating macrophage activity, natural killer cells, and pro-inflammatory cytokines (TNF-alpha, IL-6, IFN-gamma). This immune activation directly opposes the therapeutic goal of immunosuppression in autoimmune disease management.",
           "action": "Avoid echinacea in autoimmune conditions (e.g., lupus, rheumatoid arthritis, multiple sclerosis, inflammatory bowel disease). Risk of autoimmune flare.",
           "last_reviewed": "2026-04-09",
@@ -12343,8 +12343,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/15115689/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Not recommended in autoimmune conditions",
-          "alert_body": "Echinacea stimulates immune activity. If you have lupus, rheumatoid arthritis, MS, or IBD, talk to your clinician before use — it may trigger flares.",
+          "alert_headline": "Immune-active herb — use caution",
+          "alert_body": "Echinacea may affect immune activity and may interact with immune-suppressing medicines. If you have an autoimmune condition, review use with your clinician.",
           "informational_note": "Echinacea is immune-stimulating — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12422,7 +12422,7 @@
       },
       "condition_rules": [
         {
-          "severity": "avoid",
+          "severity": "caution",
           "mechanism": "Elderberry (Sambucus nigra) extracts stimulate cytokine production including TNF-alpha, IL-1, IL-6, and IL-8. This immune stimulation may exacerbate autoimmune conditions by amplifying the pathological immune response.",
           "action": "Avoid elderberry supplements in autoimmune conditions. Consult a physician before use if on immunosuppressive therapy.",
           "last_reviewed": "2026-04-09",
@@ -12431,8 +12431,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/safety"
           ],
-          "alert_headline": "Not recommended in autoimmune conditions",
-          "alert_body": "Elderberry boosts inflammatory cytokine production. If you have an autoimmune condition, talk to your clinician before use — it may worsen activity.",
+          "alert_headline": "Immune-active supplement — use caution",
+          "alert_body": "Elderberry may affect cytokine and immune signaling. If you have an autoimmune condition or use immune-suppressing medication, review it with your clinician.",
           "informational_note": "Elderberry is immune-stimulating — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12518,8 +12518,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/32190660/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Not recommended in autoimmune conditions",
-          "alert_body": "Astragalus enhances T-cell, B-cell, and NK cell activity. If you have an autoimmune condition, talk to your clinician before use — it may worsen immune activity.",
+          "alert_headline": "Not recommended with autoimmune conditions",
+          "alert_body": "Astragalus may stimulate immune activity and may interfere with immune-suppressing treatment. If you have an autoimmune condition, avoid use unless your clinician specifically recommends it.",
           "informational_note": "Astragalus is immune-stimulating — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12605,8 +12605,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/37670115/"
           ],
           "evidence_level": "probable",
-          "alert_headline": "Immune-stimulating mushroom — caution",
-          "alert_body": "Reishi has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding reishi.",
+          "alert_headline": "Immune-active mushroom — use caution",
+          "alert_body": "Reishi may affect immune signaling. If you have an autoimmune condition or take immune-suppressing medication, review use with your clinician.",
           "informational_note": "Reishi affects immune function — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -14017,15 +14017,15 @@
       "condition_rules": [
         {
           "condition_id": "autoimmune",
-          "severity": "caution",
-          "evidence_level": "probable",
+          "severity": "monitor",
+          "evidence_level": "theoretical",
           "mechanism": "Rhodiola rosea exerts immunomodulatory effects including differential modulation of T-regulatory cell differentiation, IFN-gamma production, and NK-cell activity in vitro and in vivo. Immune stimulation may worsen autoimmune disease activity or counteract immunosuppressive therapy.",
           "action": "Avoid in patients with active autoimmune disease (lupus, MS, rheumatoid arthritis) or those on immunosuppressive therapy. Consult prescribing physician before use.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/27176566/"
           ],
-          "alert_headline": "Immune effects — caution if autoimmune",
-          "alert_body": "Rhodiola has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding rhodiola.",
+          "alert_headline": "May affect immune signaling",
+          "alert_body": "Rhodiola has immune-modulating effects in early research. If your autoimmune condition is active or you use immune-suppressing medicine, review it with your clinician.",
           "informational_note": "Rhodiola affects immune function — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15200,8 +15200,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/24859749/"
           ],
           "alert_headline": "Caution if severely immunocompromised",
-          "alert_body": "Probiotics has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding probiotics.",
-          "informational_note": "Probiotics affects immune function — relevant to people with autoimmune conditions.",
+          "alert_body": "If you are severely immunocompromised, on chemotherapy, or post-transplant, live probiotics carry a small infection risk. Most autoimmune users can use them safely.",
+          "informational_note": "Probiotic infection risk is for severe immunocompromise, not general autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
             "requires": {
@@ -15320,8 +15320,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/28745507/",
             "https://pubmed.ncbi.nlm.nih.gov/21822619/"
           ],
-          "alert_headline": "Immune-stimulating — caution if autoimmune",
-          "alert_body": "Andrographis has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding andrographis.",
+          "alert_headline": "Immune-active herb — use caution",
+          "alert_body": "Andrographis may stimulate immune pathways. If you have an autoimmune condition or take immune-suppressing medication, review use with your clinician.",
           "informational_note": "Andrographis affects immune function — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -19884,8 +19884,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/37513265/"
           ],
-          "alert_headline": "Immune-stimulating — caution if autoimmune",
-          "alert_body": "Cordyceps has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding cordyceps.",
+          "alert_headline": "Immune-active mushroom — use caution",
+          "alert_body": "Cordyceps may affect immune signaling. If you have an autoimmune condition or take immune-suppressing medication, review use with your clinician.",
           "informational_note": "Cordyceps affects immune function — relevant to people with autoimmune conditions.",
           "profile_gate": {
             "gate_type": "condition",
