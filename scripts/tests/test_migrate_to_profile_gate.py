@@ -237,18 +237,50 @@ def test_existing_profile_gate_not_overwritten():
     assert out["interaction_rules"][0]["condition_rules"][0]["profile_gate"] is custom_gate
 
 
-def test_full_file_migration_counts_match_expectation():
-    """Run the migration on the live file and assert it touches every rule."""
+def test_full_file_already_migrated_is_noop():
+    """The live file is migrated as of v6.0.0; re-running must be a no-op."""
     live = json.loads(
         (Path(__file__).resolve().parents[1] / "data" / "ingredient_interaction_rules.json").read_text()
     )
     _, counts = migrate_rules(copy.deepcopy(live))
     assert counts["rules_visited"] == 145
-    # Migration must add at least one gate of each kind across 145 rules
-    assert counts["condition_rules"] > 0
-    assert counts["drug_class_rules"] > 0
-    assert counts["dose_thresholds"] > 0
-    assert counts["pregnancy_lactation_blocks"] > 0
+    # Already-migrated file: no new gates added on second run
+    assert counts["condition_rules"] == 0
+    assert counts["drug_class_rules"] == 0
+    assert counts["dose_thresholds"] == 0
+    assert counts["pregnancy_lactation_blocks"] == 0
+
+
+def test_live_file_has_profile_gate_on_every_subrule():
+    """Post-migration invariant: every condition_rule, drug_class_rule, and
+    dose_threshold has a profile_gate; pregnancy_lactation has one when
+    severity data is non-no_data."""
+    live = json.loads(
+        (Path(__file__).resolve().parents[1] / "data" / "ingredient_interaction_rules.json").read_text()
+    )
+    missing = []
+    for rule in live["interaction_rules"]:
+        canon = rule.get("subject_ref", {}).get("canonical_id", "?")
+        for i, cr in enumerate(rule.get("condition_rules") or []):
+            if "profile_gate" not in cr:
+                missing.append(f"{canon}/condition_rules[{i}]({cr.get('condition_id')})")
+        for i, dr in enumerate(rule.get("drug_class_rules") or []):
+            if "profile_gate" not in dr:
+                missing.append(f"{canon}/drug_class_rules[{i}]({dr.get('drug_class_id')})")
+        for i, dt in enumerate(rule.get("dose_thresholds") or []):
+            if "profile_gate" not in dt:
+                missing.append(f"{canon}/dose_thresholds[{i}]")
+        pl = rule.get("pregnancy_lactation")
+        if isinstance(pl, dict) and pl:
+            preg = (pl.get("pregnancy_category") or "").strip().lower()
+            lact = (pl.get("lactation_category") or "").strip().lower()
+            has_data = preg not in {"no_data", ""} or lact not in {"no_data", ""}
+            if has_data and "profile_gate" not in pl:
+                missing.append(f"{canon}/pregnancy_lactation")
+    assert not missing, (
+        f"{len(missing)} sub-rules missing profile_gate post-migration: "
+        f"{missing[:10]}{'...' if len(missing) > 10 else ''}"
+    )
 
 
 def test_excludes_block_starts_empty():
