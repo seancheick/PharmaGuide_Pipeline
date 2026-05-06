@@ -1614,8 +1614,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/24657312/",
             "https://pubmed.ncbi.nlm.nih.gov/17928951/"
           ],
-          "alert_headline": "Not recommended with liver disease",
-          "alert_body": "Black cohosh has been linked to rare idiosyncratic liver injury. If you have liver disease, talk to your clinician before using it, and monitor liver enzymes.",
+          "alert_headline": "Linked to rare liver injury",
+          "alert_body": "Black cohosh has been linked to rare but serious liver injury in case reports. If you have liver disease, avoid unless your liver clinician specifically recommends it.",
           "informational_note": "Black cohosh has liver safety signals relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -4143,8 +4143,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/32140423/",
             "https://pubmed.ncbi.nlm.nih.gov/36178169/"
           ],
-          "alert_headline": "Not recommended with liver disease",
-          "alert_body": "High-dose green tea extract has been linked to liver injury. If you have liver disease, talk to your clinician before using concentrated EGCG supplements.",
+          "alert_headline": "Green tea extract may injure the liver",
+          "alert_body": "Concentrated green tea extract has been linked to rare but serious liver injury. If you have liver disease, avoid concentrated extract supplements unless your clinician recommends them.",
           "informational_note": "Concentrated green tea extract has liver safety signals relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -4775,8 +4775,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/12957292/",
             "https://pubmed.ncbi.nlm.nih.gov/33676282/"
           ],
-          "alert_headline": "May worsen iron overload in liver disease",
-          "alert_body": "Iron is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of iron.",
+          "alert_headline": "Extra iron may worsen liver overload",
+          "alert_body": "Extra iron can worsen iron overload in some liver conditions. If you have liver disease, use iron supplements only with clinician guidance and lab monitoring.",
           "informational_note": "Iron depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -6609,8 +6609,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/2103414/"
           ],
-          "alert_headline": "Hepatotoxic at high doses — caution",
-          "alert_body": "Vitamin A is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Vitamin A.",
+          "alert_headline": "High-dose vitamin A can harm the liver",
+          "alert_body": "High-dose preformed vitamin A (retinol) can cause liver injury. If you have liver disease, avoid high-dose vitamin A supplements unless your clinician monitors you.",
           "informational_note": "Vitamin A depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -6754,8 +6754,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/39416578/",
             "https://pubmed.ncbi.nlm.nih.gov/27402097/"
           ],
-          "alert_headline": "High-dose niacin — hepatotoxic risk",
-          "alert_body": "Niacin is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of Niacin.",
+          "alert_headline": "High-dose niacin can injure the liver",
+          "alert_body": "Pharmacologic-dose niacin can cause liver enzyme elevation and hepatotoxicity. If you have liver disease, do not use high-dose niacin without clinician monitoring.",
           "informational_note": "Niacin depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -7926,8 +7926,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/27092496/",
             "https://pubmed.ncbi.nlm.nih.gov/19943335/"
           ],
-          "alert_headline": "Not recommended with liver disease",
-          "alert_body": "Kava has been linked to serious liver injury. If you have any chronic liver condition, do not use kava; also avoid with alcohol or other hepatotoxic agents.",
+          "alert_headline": "Kava is not recommended with liver disease",
+          "alert_body": "Kava products have been linked to rare but serious liver injury. If you have liver disease, avoid kava unless your liver clinician specifically recommends it.",
           "informational_note": "Kava has liver safety signals relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8069,7 +8069,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/19138557/"
           ],
           "alert_headline": "Rare liver injury reports",
-          "alert_body": "Valerian is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of valerian.",
+          "alert_body": "Rare case reports have linked valerian to liver injury. If you have liver disease, review use with your clinician and stop if liver symptoms occur.",
           "informational_note": "Valerian depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8178,8 +8178,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/16800417/",
             "https://pubmed.ncbi.nlm.nih.gov/16854576/"
           ],
-          "alert_headline": "Rare cholestatic injury reports",
-          "alert_body": "Saw palmetto is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of saw palmetto.",
+          "alert_headline": "Rare liver injury reports",
+          "alert_body": "Rare case reports have linked saw palmetto to liver injury. If you have liver disease, review use with your clinician and stop if liver symptoms occur.",
           "informational_note": "Saw palmetto depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8516,8 +8516,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/41255460/",
             "https://pubmed.ncbi.nlm.nih.gov/41281037/"
           ],
-          "alert_headline": "High-dose extract — liver injury reports",
-          "alert_body": "Turmeric is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of turmeric.",
+          "alert_headline": "Concentrated curcumin — liver caution",
+          "alert_body": "High-dose curcumin extract has been linked to liver injury in recent reports. If you have liver disease, review use of concentrated curcumin with your clinician.",
           "informational_note": "Turmeric depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -8757,15 +8757,15 @@
       "condition_rules": [
         {
           "condition_id": "liver_disease",
-          "severity": "monitor",
+          "severity": "informational",
           "evidence_level": "probable",
           "mechanism": "Silymarin (the active flavonolignan complex from Silybum marianum) is hepatoprotective and widely used in liver disease patients — it reduces oxidative stress, inhibits inflammatory signaling, and has antifibrotic properties. However, silymarin and its constituents (especially silybin A, isosilybin A/B, silychristin) are mechanism-based inhibitors of CYP3A4 and also inhibit P-glycoprotein. In liver disease patients who are on hepatically-cleared medications (antivirals, immunosuppressants, anticoagulants), this CYP3A4 inhibition can elevate drug plasma levels to toxic ranges. The herb itself does not cause hepatotoxicity at standard doses.",
           "action": "Milk thistle is generally beneficial in liver disease but requires monitoring for drug interactions in patients on CYP3A4-metabolized medications. Review the full medication list before initiating. Preferred formulation: standardized silymarin 70–80%, 140–420 mg/day.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23801821/"
           ],
-          "alert_headline": "Hepatoprotective — discuss with clinician",
-          "alert_body": "Milk thistle is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of milk thistle.",
+          "alert_headline": "Discuss milk thistle with liver clinician",
+          "alert_body": "Milk thistle is commonly used by people with liver conditions, but evidence varies by condition and product. It should not replace medical care or prescribed treatment.",
           "informational_note": "Milk thistle depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -13843,8 +13843,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/15801887/",
             "https://pubmed.ncbi.nlm.nih.gov/21334992/"
           ],
-          "alert_headline": "Rare hepatitis reports",
-          "alert_body": "Gotu kola is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of gotu kola.",
+          "alert_headline": "Rare liver injury reports",
+          "alert_body": "Rare case reports have linked gotu kola to liver injury. If you have liver disease, review use with your clinician and stop if liver symptoms occur.",
           "informational_note": "Gotu kola depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -14202,8 +14202,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/20667992/"
           ],
-          "alert_headline": "Rare hepatitis case report",
-          "alert_body": "Tribulus is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of tribulus.",
+          "alert_headline": "Rare liver injury reports",
+          "alert_body": "Rare case reports have linked tribulus to liver injury. If you have liver disease, review use with your clinician and stop if liver symptoms occur.",
           "informational_note": "Tribulus depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -15290,8 +15290,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/29953177/",
             "https://pubmed.ncbi.nlm.nih.gov/25336950/"
           ],
-          "alert_headline": "Rare HILI case reports",
-          "alert_body": "Andrographis is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of andrographis.",
+          "alert_headline": "Rare liver injury reports",
+          "alert_body": "Rare case reports have linked andrographis to liver injury. If you have liver disease, review use with your clinician and stop if liver symptoms occur.",
           "informational_note": "Andrographis depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -16012,8 +16012,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/36992844/",
             "https://pubmed.ncbi.nlm.nih.gov/29806946/"
           ],
-          "alert_headline": "Hepatic clearance impaired in disease",
-          "alert_body": "Copper is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of copper.",
+          "alert_headline": "Copper handling depends on the liver",
+          "alert_body": "The liver is central to copper metabolism and excretion. If you have liver disease, avoid extra copper unless your clinician recommends it based on lab testing.",
           "informational_note": "Copper depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -16121,8 +16121,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/9875025/",
             "https://pubmed.ncbi.nlm.nih.gov/9002084/"
           ],
-          "alert_headline": "Hepatic clearance impaired in disease",
-          "alert_body": "Manganese is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of manganese.",
+          "alert_headline": "Manganese clearance depends on the liver",
+          "alert_body": "Manganese clearance can be impaired in liver disease, leading to accumulation. If you have liver disease, avoid high-dose manganese unless your clinician monitors levels.",
           "informational_note": "Manganese depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -16868,8 +16868,8 @@
           "sources": [
             "https://www.nccih.nih.gov/health/butterbur"
           ],
-          "alert_headline": "Not recommended with liver disease",
-          "alert_body": "Butterbur alkaloids are direct liver toxins. If you have liver disease, talk to your clinician; even PA-free products carry some liver-injury risk.",
+          "alert_headline": "PA-containing butterbur can injure liver",
+          "alert_body": "Butterbur containing pyrrolizidine alkaloids is hepatotoxic. If you have liver disease, avoid butterbur unless it is verified PA-free and your clinician approves.",
           "informational_note": "Butterbur has liver safety signals — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -16945,15 +16945,15 @@
         },
         {
           "condition_id": "liver_disease",
-          "severity": "avoid",
-          "evidence_level": "established",
+          "severity": "caution",
+          "evidence_level": "probable",
           "mechanism": "Chronic use of anthraquinone laxatives including cascara sagrada has been associated with hepatotoxicity; the FDA withdrew OTC cascara sagrada products in 2002 partly on safety grounds. Emodins and aloe-emodins in cascara have demonstrated hepatotoxic effects in rodent models and isolated human hepatocytes.",
           "action": "Do not use cascara sagrada in liver disease. Use an osmotic laxative instead.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/32876395/"
           ],
-          "alert_headline": "Not recommended with liver disease",
-          "alert_body": "Long-term cascara use has been linked to liver injury, and FDA withdrew it from OTC monographs in 2002. If you have liver disease, talk to your clinician about alternatives.",
+          "alert_headline": "Chronic use may affect the liver",
+          "alert_body": "Chronic or high-dose stimulant laxative use has been linked to liver injury. If you have liver disease, use cascara only with clinician guidance.",
           "informational_note": "Cascara sagrada has liver safety signals relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -17122,7 +17122,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/31236960/"
           ],
           "alert_headline": "Linked to herb-induced liver injury",
-          "alert_body": "Chinese skullcap is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of chinese skullcap.",
+          "alert_body": "Scutellaria species have been linked to liver injury in case reports. If you have liver disease, review use with your clinician and stop if liver symptoms occur.",
           "informational_note": "Chinese skullcap depends on liver clearance — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
@@ -18872,39 +18872,7 @@
         "db": "ingredient_quality_map",
         "canonical_id": "milk_thistle"
       },
-      "condition_rules": [
-        {
-          "condition_id": "liver_disease",
-          "severity": "caution",
-          "evidence_level": "established",
-          "mechanism": "Silymarin (milk thistle extract) has hepatoprotective effects via antioxidant activity and stimulation of ribosomal RNA polymerase I. However, silymarin is a potent inhibitor of CYP3A4, CYP2C9, UGT1A1, and P-glycoprotein. In patients with liver disease on polypharmacy, this CYP inhibition can increase plasma concentrations of co-administered hepatically metabolised drugs, paradoxically worsening hepatotoxic drug burden.",
-          "action": "In liver disease patients on multiple medications, review all concurrent drugs for CYP3A4/2C9 interactions before starting silymarin. Clinically meaningful interactions exist with immunosuppressants (tacrolimus, cyclosporine), statins, and antivirals. Benefit-risk assessment required.",
-          "sources": [
-            "https://www.nccih.nih.gov/health/milk-thistle"
-          ],
-          "alert_headline": "Hepatoprotective — discuss with clinician",
-          "alert_body": "Silymarin is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of silymarin.",
-          "informational_note": "Silymarin depends on liver clearance — relevant to people with liver conditions.",
-          "profile_gate": {
-            "gate_type": "condition",
-            "requires": {
-              "conditions_any": [
-                "liver_disease"
-              ],
-              "drug_classes_any": [],
-              "profile_flags_any": []
-            },
-            "excludes": {
-              "conditions_any": [],
-              "drug_classes_any": [],
-              "profile_flags_any": [],
-              "product_forms_any": [],
-              "nutrient_forms_any": []
-            },
-            "dose": null
-          }
-        }
-      ],
+      "condition_rules": [],
       "drug_class_rules": [
         {
           "drug_class_id": "immunosuppressants",
@@ -20552,8 +20520,8 @@
             "https://www.fda.gov/news-events/public-health-focus/fda-regulation-cannabis-and-cannabis-derived-products-including-cannabidiol-cbd",
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8fa2369f-3f0f-44d6-8e0b-25e534b73a18"
           ],
-          "alert_headline": "Not recommended with liver disease",
-          "alert_body": "CBD is heavily metabolized in the liver and can elevate liver enzymes. If you have liver disease, talk to your clinician and monitor liver function labs.",
+          "alert_headline": "CBD may raise liver enzymes",
+          "alert_body": "CBD is processed by the liver and can raise liver enzymes, especially at higher doses or with other liver-metabolized medicines. If you have liver disease, use only with clinician guidance.",
           "informational_note": "CBD is liver-metabolized — relevant to people with liver conditions.",
           "profile_gate": {
             "gate_type": "condition",
