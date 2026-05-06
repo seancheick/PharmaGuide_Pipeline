@@ -2,13 +2,13 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "6.0.0",
+    "schema_version": "6.0.1",
     "last_updated": "2026-05-05",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
-    "flutter_schema_version": "6.0.0",
+    "flutter_schema_version": "6.0.1",
     "v60_added_fields": {
       "profile_gate": "deterministic predicate per sub-rule. See scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md. Required field; consumers MUST evaluate the gate against (user_profile, product_context) before rendering an alert."
     },
@@ -43,6 +43,12 @@
           "to": "6.0.0",
           "date": "2026-05-05",
           "summary": "MAJOR: introduced profile_gate field on every sub-rule per scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md. Migration was deterministic (no clinical judgment) and applied via scripts/tools/migrate_to_profile_gate.py. 557 profile_gate fields added across 145 rules: 210 condition_rules, 213 drug_class_rules, 73 dose_thresholds, 61 pregnancy_lactation blocks (84 rules with no_data pregnancy_lactation correctly skipped). Mappings: condition_id={pregnancy,lactation,ttc,surgery_scheduled} → profile_flag gate; other condition_id → condition gate; drug_class_id → drug_class gate; dose_thresholds with scope={condition,drug_class,profile_flag} → combination gate; pure dose thresholds → dose gate. Excludes blocks initialized empty; populated by hand in Step 5 (vitamin A nutrient-form, aloe topical, curcumin culinary, berberine medication-class escalation). Consumers (Flutter) MUST evaluate profile_gate against user profile + product context before rendering alerts; backend emits the gate but does NOT evaluate user profile."
+        },
+        {
+          "from": "6.0.0",
+          "to": "6.0.1",
+          "date": "2026-05-05",
+          "summary": "Profile-flag mapping correction per Flutter UI separation. condition_id='pregnancy' now maps to profile_flag=['pregnant'] only (was ['pregnant','trying_to_conceive']). pregnancy_lactation block union gate now ['pregnant','breastfeeding'] (was 3-flag union including 'trying_to_conceive'). TTC is a SEPARATE Flutter toggle today and must not be conflated with pregnancy/breastfeeding alerts. Re-applied via scripts/tools/migrate_to_profile_gate.py --apply --force. Structural pregnancy/lactation split (Option A) deferred — current Flutter combines pregnancy+breastfeeding in one toggle that sets both flags, so the union gate works; pipeline is already future-ready for separate Flutter toggles with no further pipeline change."
         }
       ]
     },
@@ -89,8 +95,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -125,7 +130,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -168,8 +172,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -236,7 +239,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -340,7 +342,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -414,8 +415,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -481,7 +481,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -577,8 +576,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -677,7 +675,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -1030,7 +1027,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -1213,7 +1209,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -1256,8 +1251,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -1325,7 +1319,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -1367,8 +1360,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -1462,8 +1454,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -1539,7 +1530,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -1675,7 +1665,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -1803,8 +1792,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -1872,7 +1860,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -2012,7 +1999,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -2055,8 +2041,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -2123,7 +2108,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -2999,7 +2983,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -3079,8 +3062,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -3308,7 +3290,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -3350,8 +3331,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -3449,7 +3429,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -3849,8 +3828,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -3976,8 +3954,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -4053,7 +4030,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -4362,8 +4338,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -4429,7 +4404,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -4461,8 +4435,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -4763,7 +4736,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -4967,7 +4939,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -5126,8 +5097,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -5474,7 +5444,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -5582,7 +5551,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -5708,8 +5676,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -5771,8 +5738,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -5813,7 +5779,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -6073,8 +6038,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -6105,8 +6069,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -6147,7 +6110,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -6190,8 +6152,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -6254,8 +6215,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -6332,7 +6292,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -6516,8 +6475,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -6648,7 +6606,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -6775,8 +6732,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -6812,7 +6768,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -6855,8 +6810,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -6891,7 +6845,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -6934,8 +6887,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -6967,7 +6919,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -7111,7 +7062,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -7222,7 +7172,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -7393,8 +7342,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -7562,7 +7510,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -8513,8 +8460,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -8673,8 +8619,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -9301,8 +9246,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -9699,8 +9643,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -9772,7 +9715,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -10907,7 +10849,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -11015,7 +10956,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -11214,7 +11154,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -12227,7 +12166,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -12591,7 +12529,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -12669,7 +12606,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -12743,8 +12679,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -12779,7 +12714,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -12857,7 +12791,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -12965,7 +12898,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -13666,8 +13598,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -13765,7 +13696,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -13992,7 +13922,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -14200,7 +14129,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -14717,7 +14645,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -15078,7 +15005,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -15188,7 +15114,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -15298,7 +15223,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -15341,8 +15265,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -15459,8 +15382,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -15557,7 +15479,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -15600,8 +15521,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -15668,7 +15588,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -15740,8 +15659,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -15840,8 +15758,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -15913,7 +15830,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -15956,8 +15872,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -16041,8 +15956,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -16170,7 +16084,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -16212,8 +16125,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -16359,8 +16271,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -18946,8 +18857,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -19411,7 +19321,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -19516,8 +19425,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -19673,7 +19581,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -19716,8 +19623,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -19748,7 +19654,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -19791,8 +19696,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -19823,7 +19727,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -19866,8 +19769,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -19898,8 +19800,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -19935,7 +19836,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -19977,8 +19877,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -20030,8 +19929,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -20083,8 +19981,7 @@
               "conditions_any": [],
               "drug_classes_any": [],
               "profile_flags_any": [
-                "pregnant",
-                "trying_to_conceive"
+                "pregnant"
               ]
             },
             "excludes": {
@@ -20415,7 +20312,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -20649,7 +20545,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },
@@ -20723,7 +20618,6 @@
             "drug_classes_any": [],
             "profile_flags_any": [
               "pregnant",
-              "trying_to_conceive",
               "breastfeeding"
             ]
           },

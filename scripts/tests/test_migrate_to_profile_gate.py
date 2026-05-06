@@ -54,7 +54,8 @@ def test_pregnancy_condition_rule_gets_profile_flag_gate():
     out, _ = migrate_rules(data)
     g = out["interaction_rules"][0]["condition_rules"][0]["profile_gate"]
     assert g["gate_type"] == "profile_flag"
-    assert set(g["requires"]["profile_flags_any"]) == {"pregnant", "trying_to_conceive"}
+    # condition_id="pregnancy" → ["pregnant"] only; TTC is a separate Flutter toggle
+    assert g["requires"]["profile_flags_any"] == ["pregnant"]
     assert g["requires"]["conditions_any"] == []
 
 
@@ -169,10 +170,13 @@ def test_dose_threshold_with_pregnancy_scope_uses_profile_flag_target():
     g = out["interaction_rules"][0]["dose_thresholds"][0]["profile_gate"]
     assert g["gate_type"] == "combination"
     assert g["requires"]["conditions_any"] == []
-    assert set(g["requires"]["profile_flags_any"]) == {"pregnant", "trying_to_conceive"}
+    # condition_id="pregnancy" target → ["pregnant"] only; TTC is separate
+    assert g["requires"]["profile_flags_any"] == ["pregnant"]
 
 
 def test_pregnancy_lactation_block_gets_union_gate():
+    """The pregnancy_lactation BLOCK uses [pregnant, breastfeeding] union — TTC
+    is a separate Flutter toggle and is intentionally NOT included."""
     rule = {
         "subject_ref": {"db": "ingredient_quality_map", "canonical_id": "x"},
         "condition_rules": [], "drug_class_rules": [], "dose_thresholds": [],
@@ -185,7 +189,10 @@ def test_pregnancy_lactation_block_gets_union_gate():
     out, _ = migrate_rules({"interaction_rules": [rule]})
     g = out["interaction_rules"][0]["pregnancy_lactation"]["profile_gate"]
     assert g["gate_type"] == "profile_flag"
-    assert set(g["requires"]["profile_flags_any"]) == {"pregnant", "trying_to_conceive", "breastfeeding"}
+    assert set(g["requires"]["profile_flags_any"]) == {"pregnant", "breastfeeding"}
+    assert "trying_to_conceive" not in g["requires"]["profile_flags_any"], (
+        "TTC must NOT be in pregnancy_lactation block union — it's a separate Flutter toggle"
+    )
 
 
 def test_pregnancy_lactation_no_data_block_skipped():

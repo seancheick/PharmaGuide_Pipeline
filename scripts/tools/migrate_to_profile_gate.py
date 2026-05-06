@@ -8,7 +8,7 @@ Pass --apply to write the migrated file in place.
 
 Mappings (deterministic, no clinical judgment):
 
-  condition_rules[].condition_id="pregnancy"        → profile_flag gate, flags=[pregnant, trying_to_conceive]
+  condition_rules[].condition_id="pregnancy"        → profile_flag gate, flags=[pregnant]
   condition_rules[].condition_id="lactation"        → profile_flag gate, flags=[breastfeeding]
   condition_rules[].condition_id="ttc"              → profile_flag gate, flags=[trying_to_conceive]
   condition_rules[].condition_id="surgery_scheduled"→ profile_flag gate, flags=[surgery_scheduled]
@@ -18,7 +18,13 @@ Mappings (deterministic, no clinical judgment):
   dose_thresholds[] (scope=drug_class)              → combination gate (drug_classes_any) + dose
   dose_thresholds[] (scope=profile_flag)            → combination gate (profile_flags_any) + dose
   dose_thresholds[] (no scope / pure dose)          → dose gate
-  pregnancy_lactation block                         → profile_flag gate, flags=[pregnant, trying_to_conceive, breastfeeding]
+  pregnancy_lactation block                         → profile_flag gate, flags=[pregnant, breastfeeding]
+
+Flutter profile-flag separation (per user clarification 2026-05-05): TTC is a
+SEPARATE Flutter toggle and is never included in the pregnancy/breastfeeding
+union. Pregnancy + Breastfeeding share one Flutter toggle today; Flutter sets
+both flags when enabled. A future split into separate Flutter toggles needs no
+pipeline change — schema is already correct.
 
 The script is idempotent: re-running on already-migrated rules is a no-op
 because it only sets profile_gate when absent.
@@ -38,9 +44,20 @@ from typing import Any
 REPO = Path(__file__).resolve().parents[2]
 RULES_PATH = REPO / "scripts" / "data" / "ingredient_interaction_rules.json"
 
-# Profile-flag mappings for condition_id values that map to lifecycle/perioperative flags
+# Profile-flag mappings for condition_id values that map to lifecycle/perioperative flags.
+#
+# IMPORTANT — Flutter profile-flag separation (per user clarification 2026-05-05):
+#   * Pregnancy and Breastfeeding share ONE Flutter toggle today, but Flutter
+#     internally sets BOTH "pregnant" and "breastfeeding" flags when the user
+#     enables it. The pregnancy_lactation BLOCK gate uses the union ["pregnant",
+#     "breastfeeding"] so it fires for either flag.
+#   * Trying to Conceive (TTC) is a SEPARATE Flutter toggle and should never be
+#     included in the pregnancy/breastfeeding union — TTC alerts must only fire
+#     when the user explicitly sets the trying_to_conceive flag.
+#   * A condition_id="pregnancy" sub-rule is pregnancy-specific clinical content;
+#     it maps to ["pregnant"] only. TTC users see TTC-specific rules instead.
 PROFILE_FLAG_CONDITION_MAP: dict[str, list[str]] = {
-    "pregnancy":         ["pregnant", "trying_to_conceive"],
+    "pregnancy":         ["pregnant"],
     "lactation":         ["breastfeeding"],
     "ttc":               ["trying_to_conceive"],
     "surgery_scheduled": ["surgery_scheduled"],
@@ -179,18 +196,23 @@ def _build_gate_for_dose_threshold(threshold: dict[str, Any], *, rule_id: str = 
 
 
 def _build_gate_for_preg_lac() -> dict[str, Any]:
-    """pregnancy_lactation block → profile_flag gate (union of reproductive flags).
+    """pregnancy_lactation block → profile_flag gate ["pregnant", "breastfeeding"].
 
-    Flutter chooses severity from the block's pregnancy_category vs lactation_category
-    based on which user flag matched. Step 5 of the v6.0 plan may split the block
-    into separate condition_rules entries for cleaner severity selection.
+    Flutter currently combines pregnancy + breastfeeding into one toggle that
+    sets BOTH flags. The block's pregnancy_category vs lactation_category fields
+    let Flutter pick the right severity based on which flag matched. TTC is a
+    SEPARATE Flutter toggle and is intentionally NOT included in this union —
+    TTC users see TTC-specific condition_rules entries instead.
+
+    A future Phase will split this block into two distinct condition_rules
+    entries for cleaner severity selection (Option C deferred).
     """
     return {
         "gate_type": "profile_flag",
         "requires": {
             "conditions_any":    [],
             "drug_classes_any":  [],
-            "profile_flags_any": ["pregnant", "trying_to_conceive", "breastfeeding"],
+            "profile_flags_any": ["pregnant", "breastfeeding"],
         },
         "excludes": _empty_excludes(),
         "dose":     None,
