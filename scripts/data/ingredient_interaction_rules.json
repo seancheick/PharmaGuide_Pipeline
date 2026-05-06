@@ -1004,7 +1004,7 @@
             "https://www.nccih.nih.gov/health/providers/digest/herb-drug-interactions-science"
           ],
           "alert_headline": "May modestly lower LDL-C",
-          "alert_body": "Berberine can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding berberine — it may change your lipid-therapy plan.",
+          "alert_body": "Berberine has demonstrated modest lipid-lowering effects in clinical trials. If you manage cholesterol with medication, mention berberine to your clinician to avoid unexpected overlap.",
           "informational_note": "Berberine affects lipid pathways — relevant to people managing high cholesterol.",
           "profile_gate": {
             "gate_type": "condition",
@@ -2914,7 +2914,7 @@
             "https://www.nccih.nih.gov/health/garlic"
           ],
           "alert_headline": "May modestly lower cholesterol",
-          "alert_body": "Garlic can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding garlic — it may change your lipid-therapy plan.",
+          "alert_body": "Garlic supplements may modestly reduce total cholesterol and LDL-C. If you manage cholesterol with medication, mention garlic supplements to your clinician.",
           "informational_note": "Garlic affects lipid pathways — relevant to people managing high cholesterol.",
           "profile_gate": {
             "gate_type": "condition",
@@ -6785,8 +6785,8 @@
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/17466224/"
           ],
-          "alert_headline": "High-dose niacin shifts lipids",
-          "alert_body": "Niacin can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding Niacin — it may change your lipid-therapy plan.",
+          "alert_headline": "High-dose niacin needs clinician guidance",
+          "alert_body": "Pharmacologic-dose niacin can shift HDL, LDL, and triglycerides. If you manage cholesterol with medication, do not add high-dose niacin without clinician guidance. Multivitamin doses are fine.",
           "informational_note": "Niacin affects lipid pathways — relevant to people managing high cholesterol.",
           "profile_gate": {
             "gate_type": "condition",
@@ -12856,8 +12856,8 @@
             "https://pubmed.ncbi.nlm.nih.gov/19528564/",
             "https://pubmed.ncbi.nlm.nih.gov/12622602/"
           ],
-          "alert_headline": "May offset statin-related fatigue",
-          "alert_body": "CoQ10 can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding CoQ10 — it may change your lipid-therapy plan.",
+          "alert_headline": "Often discussed with statin therapy",
+          "alert_body": "CoQ10 is commonly discussed alongside statin therapy because statins may reduce CoQ10 levels. Evidence for symptom benefit is mixed. If you take a statin, ask your clinician about CoQ10.",
           "informational_note": "CoQ10 affects lipid pathways — relevant to people managing high cholesterol.",
           "profile_gate": {
             "gate_type": "condition",
@@ -13005,8 +13005,8 @@
             "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances",
             "https://pubmed.ncbi.nlm.nih.gov/32626016/"
           ],
-          "alert_headline": "Not recommended for cholesterol management",
-          "alert_body": "Red yeast rice contains monacolin K, the same molecule as the prescription statin lovastatin. If you have high cholesterol, talk to your prescriber about approved statin options.",
+          "alert_headline": "Red yeast rice can act like a statin",
+          "alert_body": "Red yeast rice contains monacolin K, which is chemically identical to lovastatin. If you take a statin or manage cholesterol, discuss red yeast rice with your clinician before use.",
           "informational_note": "Red yeast rice contains a natural statin — relevant to people managing cholesterol.",
           "profile_gate": {
             "gate_type": "condition",
@@ -13111,7 +13111,7 @@
             "https://pubmed.ncbi.nlm.nih.gov/32441543/"
           ],
           "alert_headline": "May modestly lower LDL-C",
-          "alert_body": "Citrus bergamot can affect lipid metabolism. If you are managing high cholesterol, talk to your clinician before adding citrus bergamot — it may change your lipid-therapy plan.",
+          "alert_body": "Bergamot polyphenols may modestly reduce LDL cholesterol. If you manage cholesterol with medication, mention bergamot supplements to your clinician.",
           "informational_note": "Citrus bergamot affects lipid pathways — relevant to people managing high cholesterol.",
           "profile_gate": {
             "gate_type": "condition",
