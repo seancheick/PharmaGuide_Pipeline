@@ -845,8 +845,6 @@ def build_combined_safety_hits(
             "mechanism_of_harm": safe_str(harmful_hit.get("mechanism_of_harm") or harmful_ref.get("mechanism_of_harm")),
             "population_warnings": safe_list(harmful_hit.get("population_warnings") or harmful_ref.get("population_warnings")),
             "classification_evidence": safe_str(harmful_hit.get("classification_evidence")),
-            "match_method": safe_str(harmful_hit.get("match_method")),
-            "matched_alias": safe_str(harmful_hit.get("matched_alias")),
         })
 
     return combined
@@ -2577,8 +2575,6 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             ),
             "standard_name": std_name_resolved,
             "severity_level": safe_str((harmful_hit or {}).get("severity_level")),
-            "match_method": safe_str((harmful_hit or {}).get("match_method")),
-            "matched_alias": safe_str((harmful_hit or {}).get("matched_alias")),
             "notes": notes_text,
             "mechanism_of_harm": mechanism_text,
             "common_uses": safe_list(other_ref.get("common_uses")),
