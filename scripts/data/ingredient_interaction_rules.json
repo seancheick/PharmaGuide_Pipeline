@@ -2278,7 +2278,7 @@
           "mechanism": "Coumarin content plus antiplatelet phytochemicals. Multiple case reports of INR elevation in patients on warfarin.",
           "action": "If you take warfarin or an antiplatelet, avoid dong quai unless cleared by your prescriber.",
           "sources": [
-            "https://www.nccih.nih.gov/health/dong-quai",
+            "https://pubmed.ncbi.nlm.nih.gov/30000896/",
             "https://www.nccih.nih.gov/health/herbsataglance"
           ],
           "alert_headline": "Bleeding risk with blood thinners",
@@ -6375,7 +6375,7 @@
         "mechanism": "Limited safety data and insulin-mimetic activity present risk concerns.",
         "notes": "Avoid during pregnancy and lactation.",
         "sources": [
-          "https://ods.od.nih.gov/factsheets/Vanadium-HealthProfessional/"
+          "https://pubmed.ncbi.nlm.nih.gov/37958659/"
         ],
         "alert_headline": "Not recommended in pregnancy or breastfeeding",
         "alert_body": "Vanadyl sulfate has insulin-mimetic activity with limited human safety data. If you are pregnant or breastfeeding, do not use vanadium supplements unless directed by your clinician.",
@@ -7694,7 +7694,7 @@
           "mechanism": "Caulophyllum thalictroides contains caulosaponin and methylcytisine, which stimulate uterine contractions. Case reports document neonatal stroke, heart failure, and multi-organ injury following maternal use near term.",
           "action": "Do not use during pregnancy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/blue-cohosh"
+            "https://pubmed.ncbi.nlm.nih.gov/30000839/"
           ],
           "alert_headline": "Do not use during pregnancy",
           "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
@@ -7729,7 +7729,7 @@
         "notes": "Multiple case reports of serious neonatal adverse events. ACOG and NCCIH advise against use in pregnancy.",
         "sources": [
           "https://www.ncbi.nlm.nih.gov/books/NBK501922/",
-          "https://www.nccih.nih.gov/health/blue-cohosh"
+          "https://pubmed.ncbi.nlm.nih.gov/17592099/"
         ],
         "alert_headline": "Do not use during pregnancy",
         "alert_body": "Blue cohosh stimulates uterine contractions and has been linked to severe newborn harm. If you are pregnant, do not use any blue cohosh product.",
@@ -13066,7 +13066,7 @@
           "action": "Do not use red yeast rice supplements for cholesterol management. Individuals seeking statin therapy should discuss prescription statin options with their physician.",
           "sources": [
             "https://www.fda.gov/food/dietary-supplements/information-select-dietary-supplement-ingredients-and-other-substances",
-            "https://www.efsa.europa.eu/en/efsajournal/pub/e08085"
+            "https://pubmed.ncbi.nlm.nih.gov/32626016/"
           ],
           "alert_headline": "Not recommended for cholesterol management",
           "alert_body": "Red yeast rice contains monacolin K, the same molecule as the prescription statin lovastatin. If you have high cholesterol, talk to your prescriber about approved statin options.",
@@ -13205,7 +13205,7 @@
           "action": "If you take simvastatin or lovastatin, avoid grapefruit and bergamot products. Pravastatin or rosuvastatin are safer alternatives if grapefruit cannot be eliminated.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23184849/",
-            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Muscle-toxicity risk with statins",
@@ -13238,7 +13238,7 @@
           "action": "If you take a calcium channel blocker, avoid grapefruit and bergamot products. Talk to your prescriber.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/23184849/",
-            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "May lower blood pressure too much",
@@ -13270,7 +13270,7 @@
           "mechanism": "Same CYP3A4 mechanism. Tacrolimus and cyclosporine have narrow therapeutic indices; toxic levels cause nephrotoxicity.",
           "action": "If you take tacrolimus or cyclosporine, do not consume grapefruit or bergamot products. This is a strict contraindication.",
           "sources": [
-            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Do not combine with transplant drugs",
@@ -13302,7 +13302,7 @@
           "mechanism": "CYP3A4 inhibition combined with amiodarone's intrinsic QT-prolongation amplifies torsades de pointes risk. Documented cases.",
           "action": "If you take amiodarone, avoid grapefruit and bergamot products.",
           "sources": [
-            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Heart-rhythm risk with amiodarone",
@@ -13334,7 +13334,7 @@
           "mechanism": "CYP3A4 + P-gp inhibition increases DOAC (apixaban, rivaroxaban) exposure → bleeding risk.",
           "action": "If you take apixaban or rivaroxaban, talk to your prescriber before using grapefruit or bergamot products.",
           "sources": [
-            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "May increase bleeding risk",
@@ -13366,7 +13366,7 @@
           "mechanism": "CYP3A4 inhibition may modestly increase ethinyl estradiol exposure. Effect is documented but small.",
           "action": "If you take oral contraceptives, mention regular grapefruit or bergamot intake to your prescriber.",
           "sources": [
-            "https://www.nccih.nih.gov/health/grapefruit",
+            "https://pubmed.ncbi.nlm.nih.gov/39517207/",
             "https://www.fda.gov/consumers/consumer-updates/grapefruit-juice-and-some-drugs-dont-mix"
           ],
           "alert_headline": "Mildly raises hormone levels",
@@ -13643,7 +13643,7 @@
           "action": "Avoid in pregnancy unless a reproductive specialist has a specific indication.",
           "sources": [
             "https://medlineplus.gov/druginfo/natural/331.html",
-            "https://www.nccih.nih.gov/health/dehydroepiandrosterone"
+            "https://pubmed.ncbi.nlm.nih.gov/32852449/"
           ],
           "alert_headline": "Not recommended in pregnancy",
           "alert_body": "DHEA is a steroid precursor that can affect fetal hormone signaling. If you are pregnant, talk to a reproductive specialist before using it.",
@@ -16290,7 +16290,7 @@
           "mechanism": "5-HTP is a direct precursor to serotonin and has serotonergic pharmacology. Human pregnancy safety data are absent, so use is precautionary rather than evidence-driven; conservative practice is to avoid until safety is established.",
           "action": "Avoid 5-HTP during pregnancy unless your obstetric clinician specifically recommends it. Use is precautionary because human safety data are lacking.",
           "sources": [
-            "https://www.nccih.nih.gov/health/5-htp",
+            "https://pubmed.ncbi.nlm.nih.gov/16023217/",
             "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
           ],
           "alert_headline": "Pregnancy safety is unclear",
@@ -16324,7 +16324,7 @@
           "mechanism": "5-HTP increases presynaptic serotonin synthesis while SSRIs/SNRIs block serotonin reuptake at SERT. The combination raises synaptic serotonin to levels associated with serotonin syndrome (hyperthermia, clonus, agitation, autonomic instability). Case reports of serotonin syndrome with this combination exist.",
           "action": "Do not combine with SSRIs or SNRIs. If transitioning off an antidepressant, observe a washout period before initiating 5-HTP. Seek prescriber guidance.",
           "sources": [
-            "https://www.nccih.nih.gov/health/5-htp"
+            "https://pubmed.ncbi.nlm.nih.gov/16023217/"
           ],
           "alert_headline": "Do not combine with SSRIs or SNRIs",
           "alert_body": "5-HTP raises serotonin directly. If you take an SSRI or SNRI antidepressant, do not combine — the pairing can cause serotonin syndrome.",
@@ -16407,7 +16407,7 @@
           "mechanism": "Sennosides stimulate myenteric plexus nerve endings and increase colonic peristalsis via prostaglandin release. Chronic or high-dose use may trigger uterine smooth muscle contractions; limited human data show occasional association with preterm labor at high doses.",
           "action": "Avoid prolonged or high-dose use during pregnancy. Osmotic laxatives are preferred. Consult an obstetrician for any laxative use beyond occasional short-term relief.",
           "sources": [
-            "https://www.nccih.nih.gov/health/senna",
+            "https://pubmed.ncbi.nlm.nih.gov/36702448/",
             "https://www.ncbi.nlm.nih.gov/books/NBK548375/"
           ],
           "alert_headline": "Consult during pregnancy",
@@ -16439,7 +16439,7 @@
           "mechanism": "Chronic anthraquinone laxative use can cause electrolyte depletion (hypokalemia, hyponatremia) which is poorly tolerated in chronic kidney disease. Potassium wasting compounds the risk of dangerous hyperkalemia rebound and cardiac arrhythmia in CKD patients on renin-angiotensin-aldosterone system blockers.",
           "action": "Use senna only short-term in kidney disease. Monitor serum electrolytes with any repeated use; avoid long-term use without nephrologist oversight.",
           "sources": [
-            "https://www.nccih.nih.gov/health/senna"
+            "https://pubmed.ncbi.nlm.nih.gov/36702448/"
           ],
           "alert_headline": "Electrolyte loss with chronic use",
           "alert_body": "Senna is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of senna.",
@@ -16472,7 +16472,7 @@
           "mechanism": "Senna-induced hypokalemia potentiates digoxin toxicity by increasing cardiac glycoside binding affinity at the Na+/K+-ATPase pump. Even modest decreases in serum potassium (e.g., from 3.5 to 3.0 mEq/L) can shift digoxin into the toxic range.",
           "action": "Avoid senna with digoxin or other cardiac glycosides. If a laxative is required, use an osmotic agent and monitor serum potassium and digoxin levels.",
           "sources": [
-            "https://www.nccih.nih.gov/health/senna"
+            "https://pubmed.ncbi.nlm.nih.gov/36702448/"
           ],
           "alert_headline": "Can increase digoxin toxicity",
           "alert_body": "Senna-induced potassium loss makes digoxin more toxic. If you take digoxin or another cardiac glycoside, talk to your prescriber and discuss a gentler laxative instead.",
@@ -16655,7 +16655,7 @@
           "mechanism": "N-acetylcysteine (NAC) inhibits platelet aggregation by reducing disulfide bonds on platelet surface glycoproteins and by increasing nitric oxide bioavailability. At high doses (>1200 mg/day) this antiplatelet effect may be clinically meaningful in patients with underlying coagulopathy.",
           "action": "Use with caution in bleeding disorders. Avoid high doses (>1200 mg/day) without haematology oversight. Inform prescribers before surgical procedures.",
           "sources": [
-            "https://www.nccih.nih.gov/health/nac-n-acetyl-cysteine"
+            "https://pubmed.ncbi.nlm.nih.gov/34208683/"
           ],
           "alert_headline": "May raise bleeding risk",
           "alert_body": "NAC has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding NAC.",
@@ -16718,7 +16718,7 @@
           "mechanism": "NAC reduces disulfide bridges on coagulation factors and on platelet membrane glycoproteins, and it scavenges reactive oxygen species that normally promote pro-coagulant states. Combined with warfarin, case reports document enhanced anticoagulant effect and elevated INR.",
           "action": "Monitor INR more frequently if starting or stopping NAC during anticoagulant therapy. Alert prescriber to any INR changes.",
           "sources": [
-            "https://www.nccih.nih.gov/health/nac-n-acetyl-cysteine"
+            "https://pubmed.ncbi.nlm.nih.gov/34208683/"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "NAC has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding NAC and ask about INR or bleeding checks.",
@@ -16982,7 +16982,7 @@
           "mechanism": "Cascara sagrada contains anthraquinone glycosides (cascarosides A-D) that stimulate colonic smooth muscle via prostaglandin and nitric oxide pathways. Anthraquinones pass into breast milk and are detectable in maternal plasma; their stimulant effects on smooth muscle may extend to uterine tissue.",
           "action": "Avoid during pregnancy. Select a safer laxative such as polyethylene glycol or psyllium and consult an obstetrician.",
           "sources": [
-            "https://www.nccih.nih.gov/health/cascara-sagrada"
+            "https://pubmed.ncbi.nlm.nih.gov/32876395/"
           ],
           "alert_headline": "Stimulant laxative — avoid in pregnancy",
           "alert_body": "Cascara sagrada stimulates colonic muscle and passes into breast milk. If you are pregnant, talk to your obstetrician about a gentler laxative instead.",
@@ -17013,7 +17013,7 @@
           "mechanism": "Chronic use of anthraquinone laxatives including cascara sagrada has been associated with hepatotoxicity; the FDA withdrew OTC cascara sagrada products in 2002 partly on safety grounds. Emodins and aloe-emodins in cascara have demonstrated hepatotoxic effects in rodent models and isolated human hepatocytes.",
           "action": "Do not use cascara sagrada in liver disease. Use an osmotic laxative instead.",
           "sources": [
-            "https://www.nccih.nih.gov/health/cascara-sagrada"
+            "https://pubmed.ncbi.nlm.nih.gov/32876395/"
           ],
           "alert_headline": "Not recommended with liver disease",
           "alert_body": "Long-term cascara use has been linked to liver injury, and FDA withdrew it from OTC monographs in 2002. If you have liver disease, talk to your clinician about alternatives.",
@@ -17044,7 +17044,7 @@
           "mechanism": "Anthraquinone-induced electrolyte depletion (hypokalemia, hypomagnesemia) is amplified in CKD where electrolyte homeostasis is already impaired. Hypokalaemia exacerbates the cardiovascular risk profile in dialysis patients and in those on renin-angiotensin-aldosterone system inhibitors.",
           "action": "Avoid prolonged use in kidney disease. If a laxative is necessary, choose an osmotic agent. Monitor electrolytes with any use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/cascara-sagrada"
+            "https://pubmed.ncbi.nlm.nih.gov/32876395/"
           ],
           "alert_headline": "Electrolyte loss with chronic use",
           "alert_body": "Cascara sagrada is cleared through the kidneys and may accumulate when kidney function is reduced. If you have kidney disease, talk to your nephrologist about safe intake of cascara sagrada.",
@@ -17077,7 +17077,7 @@
           "mechanism": "Anthraquinone-induced hypokalemia increases myocardial sensitivity to digoxin and other cardiac glycosides by enhancing Na+/K+-ATPase inhibition. Potassium depletion lowers the toxic threshold for digoxin significantly.",
           "action": "Avoid cascara sagrada with cardiac glycosides. If constipation management is required, select a potassium-sparing approach and monitor serum potassium and digoxin levels.",
           "sources": [
-            "https://www.nccih.nih.gov/health/cascara-sagrada"
+            "https://pubmed.ncbi.nlm.nih.gov/32876395/"
           ],
           "alert_headline": "Can increase digoxin toxicity",
           "alert_body": "Cascara-induced potassium loss makes digoxin more toxic. If you take digoxin or another cardiac glycoside, talk to your prescriber about a gentler laxative.",
@@ -17151,7 +17151,7 @@
           "mechanism": "Chinese skullcap (Scutellaria baicalensis) contains baicalin and baicalein which inhibit CYP1A2 and CYP2C9. Animal data suggest possible teratogenic risk at high doses; human safety data in pregnancy are absent.",
           "action": "Avoid during pregnancy due to absent safety data. Inform obstetrician of any prior use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/31236960/"
           ],
           "alert_headline": "Pregnancy safety is unclear",
           "alert_body": "Chinese skullcap lacks human pregnancy safety data and animal studies suggest teratogenic signals. If you are pregnant, talk to your obstetrician before any use.",
@@ -17182,7 +17182,7 @@
           "mechanism": "Scutellaria species have been linked to herb-induced liver injury (HILI) in published case series. Proposed mechanisms include flavone-mediated mitochondrial dysfunction and idiosyncratic immune-mediated hepatocyte damage. Chinese skullcap preparations adulterated with Teucrium species carry additional germander-related hepatotoxicity risk.",
           "action": "Avoid in active liver disease. If use is considered, verify product is authenticated Scutellaria baicalensis (not Teucrium), monitor LFTs monthly, and discontinue immediately upon any elevation.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/31236960/"
           ],
           "alert_headline": "Linked to herb-induced liver injury",
           "alert_body": "Chinese skullcap is processed through the liver and may accumulate when clearance is reduced. If you have liver disease, talk to your clinician about safe intake of chinese skullcap.",
@@ -17235,7 +17235,7 @@
           "mechanism": "Thymoquinone (the primary active constituent of black seed oil/Nigella sativa) stimulates insulin secretion from pancreatic beta cells and increases peripheral glucose uptake via PPAR-gamma activation. Multiple small RCTs demonstrate fasting glucose reductions of 15-20 mg/dL, creating additive hypoglycemia risk with antidiabetic agents.",
           "action": "Monitor blood glucose closely when starting or stopping black seed oil in patients on diabetes medications. Warn of additive hypoglycemia risk.",
           "sources": [
-            "https://www.nccih.nih.gov/health/black-seed"
+            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May lower blood sugar",
           "alert_body": "Black seed oil can lower blood sugar. If you have diabetes, talk to your clinician before adding black seed oil and monitor your glucose, especially in the first weeks.",
@@ -17266,7 +17266,7 @@
           "mechanism": "Thymoquinone inhibits voltage-gated calcium channels and increases endothelial nitric oxide synthase (eNOS) activity, reducing peripheral vascular resistance. Reductions of 5-10 mmHg systolic have been reported in small trials, creating additive hypotension risk with antihypertensive therapy.",
           "action": "Monitor blood pressure when combining with antihypertensive medications. Alert prescriber to use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/black-seed"
+            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May modestly lower blood pressure",
           "alert_body": "Black seed oil can influence blood pressure. If you have high blood pressure, talk to your clinician before adding black seed oil and monitor your readings.",
@@ -17297,7 +17297,7 @@
           "mechanism": "Black seed oil (Nigella sativa) has limited human pregnancy safety data, and preclinical (animal) studies have signaled uterine-effect activity at high doses. Human pregnancy effects are not established; conservative practice is to avoid until data exist.",
           "action": "Avoid black seed oil during pregnancy unless your obstetric clinician specifically recommends it. Use is precautionary because human pregnancy data are lacking.",
           "sources": [
-            "https://www.nccih.nih.gov/health/black-seed"
+            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "Pregnancy safety is unclear",
           "alert_body": "Black seed oil has limited pregnancy safety data and animal studies have flagged uterine-effect signals. If you are pregnant, talk to your obstetrician before use.",
@@ -17330,7 +17330,7 @@
           "mechanism": "Thymoquinone inhibits thromboxane B2 synthesis and platelet aggregation, and in vitro data suggest weak inhibition of CYP2C9 which is the primary metabolic pathway for warfarin S-enantiomer. A combined antiplatelet and potential pharmacokinetic interaction may increase bleeding risk.",
           "action": "Monitor INR if combining black seed oil with warfarin or other anticoagulants. Alert prescriber to use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/black-seed"
+            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Black seed oil has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding black seed oil and ask about INR or bleeding checks.",
@@ -17361,7 +17361,7 @@
           "mechanism": "Additive glucose-lowering via PPAR-gamma activation and beta-cell stimulation. Risk of symptomatic hypoglycemia particularly with sulfonylureas and insulin.",
           "action": "Monitor blood glucose more frequently. Avoid unsupervised combinations with insulin or sulfonylureas.",
           "sources": [
-            "https://www.nccih.nih.gov/health/black-seed"
+            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Black seed oil can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding black seed oil and monitor your glucose more closely at first.",
@@ -17392,7 +17392,7 @@
           "mechanism": "Additive glucose-lowering via PPAR-gamma activation and beta-cell stimulation. Risk of symptomatic hypoglycemia particularly with sulfonylureas and insulin.",
           "action": "Monitor blood glucose more frequently. Avoid unsupervised combinations with insulin or sulfonylureas.",
           "sources": [
-            "https://www.nccih.nih.gov/health/black-seed"
+            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Black seed oil can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding black seed oil and monitor your glucose more closely at first.",
@@ -17423,7 +17423,7 @@
           "mechanism": "Additive blood pressure-lowering via calcium channel inhibition and increased nitric oxide production may cause symptomatic hypotension, particularly with calcium channel blockers and ACE inhibitors.",
           "action": "Monitor blood pressure. Alert prescriber to black seed oil use if on antihypertensive therapy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/black-seed"
+            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Black seed oil can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding black seed oil.",
@@ -17454,7 +17454,7 @@
           "mechanism": "Additive glucose-lowering via PPAR-gamma activation and beta-cell stimulation. Risk of symptomatic hypoglycemia particularly with sulfonylureas and insulin.",
           "action": "Monitor blood glucose more frequently. Avoid unsupervised combinations with insulin or sulfonylureas.",
           "sources": [
-            "https://www.nccih.nih.gov/health/black-seed"
+            "https://pubmed.ncbi.nlm.nih.gov/34073784/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Black seed oil can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding black seed oil and monitor your glucose more closely at first.",
@@ -17958,7 +17958,7 @@
           "action": "Monitor blood pressure when combining L-theanine with antihypertensive medications, particularly in patients with borderline-low blood pressure.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18296328/",
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/35378276/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "L-theanine can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding L-theanine.",
@@ -17990,7 +17990,7 @@
           "action": "Advise patients on sedative-hypnotic medications of potential additive sedation. Avoid high doses of L-theanine if operating machinery or driving.",
           "sources": [
             "https://pubmed.ncbi.nlm.nih.gov/18296328/",
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/35378276/"
           ],
           "alert_headline": "May add to sedative drowsiness",
           "alert_body": "L-theanine has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding L-theanine — the combination can increase drowsiness.",
@@ -18042,7 +18042,7 @@
           "mechanism": "Bacopa monnieri has been shown in animal studies to increase thyroid hormone levels (T4 specifically) via stimulation of thyroid iodide uptake and thyroglobulin synthesis. The clinical relevance in humans is uncertain but persons with hyperthyroidism or Graves disease may be at greater risk.",
           "action": "Use with caution in thyroid disorders, particularly hyperthyroidism. Monitor thyroid function tests (TSH, free T4) periodically during use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/bacopa"
+            "https://pubmed.ncbi.nlm.nih.gov/27912958/"
           ],
           "alert_headline": "May raise thyroid hormone levels",
           "alert_body": "Bacopa can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding bacopa and monitor your labs.",
@@ -18075,7 +18075,7 @@
           "mechanism": "Bacopa may increase endogenous thyroid hormone levels, potentially altering the equilibrium maintained by levothyroxine replacement therapy and requiring dose adjustment.",
           "action": "Monitor TSH levels when initiating or discontinuing Bacopa in patients on thyroid hormone replacement. Alert prescriber to supplement use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/bacopa"
+            "https://pubmed.ncbi.nlm.nih.gov/27912958/"
           ],
           "alert_headline": "May affect thyroid medication",
           "alert_body": "Bacopa can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing bacopa away from your dose.",
@@ -18106,7 +18106,7 @@
           "mechanism": "Bacopa has adaptogenic effects and modulates serotonergic and GABA-ergic neurotransmission. Animal studies show additive sedative effects when combined with CNS depressants.",
           "action": "Advise caution with concomitant use of sedative-hypnotic medications. Avoid if operating heavy machinery.",
           "sources": [
-            "https://www.nccih.nih.gov/health/bacopa"
+            "https://pubmed.ncbi.nlm.nih.gov/27912958/"
           ],
           "alert_headline": "May add to sedative drowsiness",
           "alert_body": "Bacopa has mild sedative effects. If you take a sedative or sleep medication, talk to your prescriber before adding bacopa — the combination can increase drowsiness.",
@@ -18575,7 +18575,7 @@
           "mechanism": "White willow bark contains salicin, which is metabolised in the gut and liver to salicylate and salicylic acid — pharmacologically similar to aspirin. Salicylates irreversibly acetylate cyclooxygenase-1 in platelets, blocking thromboxane A2 synthesis and impairing platelet aggregation for the lifespan of the platelet (8-10 days).",
           "action": "Avoid in bleeding disorders. Treat similarly to aspirin from a bleeding risk perspective.",
           "sources": [
-            "https://www.nccih.nih.gov/health/white-willow-bark"
+            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
           ],
           "alert_headline": "Salicylate — raises bleeding risk",
           "alert_body": "White willow bark acts like aspirin on platelets. If you have a bleeding disorder, talk to your clinician before use — it carries the same bleeding risk as aspirin.",
@@ -18606,7 +18606,7 @@
           "mechanism": "Salicylates from white willow bark irreversibly inhibit platelet cyclooxygenase-1 (COX-1). Because platelet COX-1 inhibition lasts the platelet lifespan (~10 days), stopping willow bark 7-10 days pre-operatively is necessary to restore normal platelet function.",
           "action": "Discontinue white willow bark at least 7-10 days before any elective surgical procedure. Inform the surgical and anaesthesia team.",
           "sources": [
-            "https://www.nccih.nih.gov/health/white-willow-bark"
+            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
           ],
           "alert_headline": "Pause before scheduled surgery",
           "alert_body": "White willow bark inhibits platelets for the life of the platelet. If you have surgery scheduled, talk to your surgeon about pausing it 7-10 days beforehand.",
@@ -18639,7 +18639,7 @@
           "mechanism": "Salicylate from white willow bark inhibits platelet aggregation (antiplatelet) AND displaces warfarin from albumin binding sites, potentially elevating free warfarin plasma concentrations and raising INR. The combination significantly increases haemorrhagic risk.",
           "action": "Avoid white willow bark with anticoagulants. If analgesic is needed, consult prescriber about alternatives.",
           "sources": [
-            "https://www.nccih.nih.gov/health/white-willow-bark"
+            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
           ],
           "alert_headline": "Can add to blood-thinner effect",
           "alert_body": "White willow bark adds to warfarin's effect and raises bleeding risk. If you take an anticoagulant, talk to your prescriber about a different pain option.",
@@ -18670,7 +18670,7 @@
           "mechanism": "Additive irreversible COX-1 inhibition. White willow bark combined with aspirin or clopidogrel produces dual antiplatelet inhibition beyond standard cardioprotective dosing.",
           "action": "Do not combine with antiplatelet therapy. Consult prescriber if analgesic is needed.",
           "sources": [
-            "https://www.nccih.nih.gov/health/white-willow-bark"
+            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
           ],
           "alert_headline": "Do not combine with antiplatelet medications",
           "alert_body": "White willow bark adds to aspirin and clopidogrel platelet effects. If you take antiplatelet therapy, do not combine — talk to your prescriber for alternatives.",
@@ -18701,7 +18701,7 @@
           "mechanism": "Concurrent salicylate from white willow bark and NSAID use creates additive COX-1/COX-2 inhibition, increasing gastrointestinal bleeding risk and nephrotoxicity. Comparable to aspirin-NSAID co-administration.",
           "action": "Do not combine white willow bark with NSAIDs. Select an alternative analgesic in consultation with prescriber.",
           "sources": [
-            "https://www.nccih.nih.gov/health/white-willow-bark"
+            "https://pubmed.ncbi.nlm.nih.gov/25997859/"
           ],
           "alert_headline": "Can add to NSAID side-effect risk",
           "alert_body": "White willow bark combined with NSAIDs increases GI bleeding and kidney strain. If you take NSAIDs regularly, talk to your prescriber about a safer pain option.",
@@ -18753,7 +18753,7 @@
           "mechanism": "Huperzine A inhibits acetylcholinesterase (AChE), increasing synaptic acetylcholine. Elevated cholinergic tone in the CNS can lower seizure threshold and has been associated with seizure-like activity in overdose scenarios. The clinical significance at standard supplement doses is unclear but warrants caution.",
           "action": "Use with caution in seizure disorders. Alert neurologist to huperzine A use. Report any changes in seizure frequency.",
           "sources": [
-            "https://www.nccih.nih.gov/health/huperzine-a"
+            "https://pubmed.ncbi.nlm.nih.gov/19370686/"
           ],
           "alert_headline": "Cholinergic effect — caution with seizures",
           "alert_body": "Huperzine A may affect seizure threshold in susceptible people. If you have a seizure disorder, talk to your neurologist before adding Huperzine A.",
@@ -18786,7 +18786,7 @@
           "mechanism": "Huperzine A inhibits acetylcholinesterase, dramatically increasing synaptic acetylcholine. Anticholinergic drugs (oxybutynin, benztropine, scopolamine, tricyclic antidepressants) act by blocking muscarinic acetylcholine receptors. Combining an AChE inhibitor with an anticholinergic creates pharmacological antagonism that can result in cholinergic toxidrome (bronchospasm, bradycardia, excessive secretions, miosis) if the cholinergic effect predominates, or unpredictable effects on both systems.",
           "action": "Do not combine huperzine A with anticholinergic medications. Alert prescriber to supplement use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/huperzine-a"
+            "https://pubmed.ncbi.nlm.nih.gov/19370686/"
           ],
           "alert_headline": "Works against anticholinergic medications",
           "alert_body": "Huperzine A boosts acetylcholine while anticholinergics block it — these effects cancel. If you take an anticholinergic medication, talk to your prescriber before use.",
@@ -18839,7 +18839,7 @@
           "mechanism": "Alpha-GPC (L-alpha glycerylphosphorylcholine) is a choline donor that directly increases brain acetylcholine synthesis and release by providing substrate for choline acetyltransferase. Anticholinergic drugs block muscarinic receptors to reduce cholinergic transmission. Alpha-GPC antagonises this pharmacological effect, potentially reducing the therapeutic efficacy of anticholinergics (e.g., overactive bladder treatment with oxybutynin) or creating unpredictable CNS effects.",
           "action": "Inform prescriber of alpha-GPC use if taking anticholinergic medications. The therapeutic effect of anticholinergics may be reduced. Monitor for loss of efficacy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/36950691/"
           ],
           "alert_headline": "May affect anticholinergic medications",
           "alert_body": "Alpha-GPC can influence brain-signaling balance. If you take an anticholinergic medication, talk to your prescriber before adding Alpha-GPC.",
@@ -18891,7 +18891,7 @@
           "mechanism": "L-tyrosine is the direct biosynthetic precursor to thyroid hormones (T3 and T4). Thyroglobulin contains tyrosine residues that are iodinated to form monoiodotyrosine and diiodotyrosine, which couple to form T3 and T4. Supplemental tyrosine loading may theoretically increase thyroid hormone synthesis, particularly concerning in hyperthyroidism or Graves disease.",
           "action": "Use with caution in hyperthyroidism. Monitor thyroid function tests (TSH, free T4) when initiating L-tyrosine supplementation. Alert endocrinologist to use.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/DietarySupplements-HealthProfessional/"
+            "https://pubmed.ncbi.nlm.nih.gov/33795250/"
           ],
           "alert_headline": "Thyroid hormone precursor — monitor",
           "alert_body": "L-tyrosine can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding L-tyrosine and monitor your labs.",
@@ -18924,7 +18924,7 @@
           "mechanism": "L-tyrosine is converted to tyramine in the gut. Tyramine is normally metabolised by MAO-A in the gut wall and liver (first-pass). MAO inhibitors block this pathway, leading to tyramine accumulation and triggering norepinephrine release from sympathetic nerve terminals — the classic 'cheese reaction' causing hypertensive crisis (severe headache, diaphoresis, hypertension to malignant levels, stroke risk).",
           "action": "Absolutely contraindicated with MAOIs. A tyramine-restricted diet AND avoidance of tyrosine supplements is mandatory during MAOI therapy.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/37937763/"
           ],
           "alert_headline": "Do not combine with MAOIs",
           "alert_body": "L-tyrosine converts to tyramine, which MAOIs prevent the body from breaking down. If you take an MAOI, do not combine — this pairing risks a hypertensive crisis.",
@@ -18955,7 +18955,7 @@
           "mechanism": "L-tyrosine provides substrate for thyroid hormone synthesis. Supplemental loading could theoretically alter thyroid hormone production, affecting the dose balance required for stable levothyroxine replacement.",
           "action": "Monitor TSH levels periodically if taking L-tyrosine with levothyroxine. Alert endocrinologist to supplement use.",
           "sources": [
-            "https://ods.od.nih.gov/factsheets/DietarySupplements-HealthProfessional/"
+            "https://pubmed.ncbi.nlm.nih.gov/33795250/"
           ],
           "alert_headline": "May affect thyroid medication",
           "alert_body": "L-tyrosine can interact with thyroid hormone absorption or metabolism. If you take thyroid medication, talk to your endocrinologist about timing L-tyrosine away from your dose.",
@@ -19124,7 +19124,7 @@
           "mechanism": "Forskolin (Coleus forskohlii) directly activates adenylate cyclase, raising intracellular cAMP. In vascular smooth muscle, increased cAMP activates protein kinase A, which phosphorylates myosin light chain kinase and causes vasodilation. This additive blood pressure reduction can cause symptomatic hypotension when combined with antihypertensive agents.",
           "action": "Monitor blood pressure closely when combining forskolin with antihypertensive medications. Alert prescriber to supplement use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/38623169/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Forskolin can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding forskolin.",
@@ -19155,7 +19155,7 @@
           "mechanism": "Forskolin has demonstrated platelet aggregation inhibitory effects via cAMP-dependent suppression of platelet activation. This antiplatelet property may add to anticoagulant bleeding risk.",
           "action": "Monitor coagulation parameters when using forskolin with anticoagulants. Inform prescriber of supplement use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/38623169/"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Forskolin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding forskolin and ask about INR or bleeding checks.",
@@ -19207,7 +19207,7 @@
           "mechanism": "Icariin (the primary active flavonoid in Epimedium/horny goat weed) inhibits phosphodiesterase-5 (PDE5) and to a lesser extent PDE4. PDE5 inhibition causes vasodilation; in patients with cardiovascular disease, particularly those on nitrates, this can precipitate severe hypotension. Icariin also has a weak estrogen receptor agonist activity.",
           "action": "Use with caution in established heart disease. Do not combine with nitrates (extreme hypotension risk). Alert cardiologist to supplement use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/30342950/"
           ],
           "alert_headline": "PDE5-like effect — caution with heart meds",
           "alert_body": "Icariin can affect heart rate or rhythm in some people. If you have heart disease, talk to your cardiologist before adding icariin.",
@@ -19240,7 +19240,7 @@
           "mechanism": "PDE5 inhibition by icariin causes smooth muscle relaxation and vasodilation, producing additive hypotension with antihypertensive agents, especially alpha-blockers and nitrates.",
           "action": "Monitor blood pressure if combining horny goat weed with antihypertensives. Do not combine with alpha-blockers or nitrates.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/30342950/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Icariin can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding icariin.",
@@ -19292,7 +19292,7 @@
           "mechanism": "Stinging nettle (Urtica dioica) leaf extract has demonstrated alpha-glucosidase inhibitory activity and increases insulin secretion in animal and small human studies. These mechanisms produce additive glucose-lowering when combined with antidiabetic medications.",
           "action": "Monitor blood glucose when using stinging nettle with diabetes medications. Risk of additive hypoglycemia, particularly with insulin and sulfonylureas.",
           "sources": [
-            "https://www.nccih.nih.gov/health/stinging-nettle"
+            "https://pubmed.ncbi.nlm.nih.gov/35800714/"
           ],
           "alert_headline": "May modestly lower blood sugar",
           "alert_body": "Stinging nettle can lower blood sugar. If you have diabetes, talk to your clinician before adding stinging nettle and monitor your glucose, especially in the first weeks.",
@@ -19325,7 +19325,7 @@
           "mechanism": "Stinging nettle has diuretic and mild vasodilatory properties in animal models. Combined with antihypertensive medications, additive blood pressure lowering and risk of volume depletion are possible.",
           "action": "Monitor blood pressure and fluid status when combining stinging nettle with antihypertensive or diuretic medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/stinging-nettle"
+            "https://pubmed.ncbi.nlm.nih.gov/35800714/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Stinging nettle can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding stinging nettle.",
@@ -19356,7 +19356,7 @@
           "mechanism": "Alpha-glucosidase inhibitory and insulin secretagogue properties of nettle extract create additive hypoglycemic risk with antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/stinging-nettle"
+            "https://pubmed.ncbi.nlm.nih.gov/35800714/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Stinging nettle can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding stinging nettle and monitor your glucose more closely at first.",
@@ -19387,7 +19387,7 @@
           "mechanism": "Alpha-glucosidase inhibitory and insulin secretagogue properties of nettle extract create additive hypoglycemic risk with antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/stinging-nettle"
+            "https://pubmed.ncbi.nlm.nih.gov/35800714/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Stinging nettle can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding stinging nettle and monitor your glucose more closely at first.",
@@ -19418,7 +19418,7 @@
           "mechanism": "Alpha-glucosidase inhibitory and insulin secretagogue properties of nettle extract create additive hypoglycemic risk with antidiabetic drugs, particularly sulfonylureas and insulin.",
           "action": "Advise patients to monitor blood glucose more frequently. Warn of hypoglycemia symptoms if using nettle alongside antidiabetic medications.",
           "sources": [
-            "https://www.nccih.nih.gov/health/stinging-nettle"
+            "https://pubmed.ncbi.nlm.nih.gov/35800714/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Stinging nettle can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding stinging nettle and monitor your glucose more closely at first.",
@@ -19471,7 +19471,7 @@
           "mechanism": "Pygeum africanum bark extract contains phytosterols (beta-sitosterol), pentacyclic triterpenes, and ferulic acid esters that inhibit prostaglandin biosynthesis by reducing arachidonic acid release from membrane phospholipids and by directly inhibiting 5-lipoxygenase and COX pathways. Combined with NSAID COX inhibition, there is theoretical additive anti-inflammatory activity and a possible additive risk of gastrointestinal mucosal injury.",
           "action": "If combining pygeum with NSAIDs, use the lowest NSAID dose for the shortest duration. Take both with food. Monitor for GI symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/pygeum"
+            "https://pubmed.ncbi.nlm.nih.gov/31627963/"
           ],
           "alert_headline": "May add to NSAID bleeding risk",
           "alert_body": "Pygeum has mild antiplatelet activity that can add to NSAID bleeding risk. If you take NSAIDs regularly, talk to your prescriber before adding pygeum.",
@@ -19523,7 +19523,7 @@
           "mechanism": "Oleuropein and hydroxytyrosol in olive leaf extract stimulate glucose uptake in muscle cells via GLUT4 translocation (independent of insulin) and inhibit intestinal alpha-glucosidase. RCTs show fasting glucose reductions of 15-25 mg/dL, creating clinically relevant additive hypoglycemia risk with antidiabetic medications.",
           "action": "Monitor blood glucose when starting or stopping olive leaf extract in diabetic patients on medication. Warn of additive hypoglycemia risk with insulin and sulfonylureas.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/38287654/"
           ],
           "alert_headline": "May lower blood sugar",
           "alert_body": "Olive leaf can lower blood sugar. If you have diabetes, talk to your clinician before adding olive leaf and monitor your glucose, especially in the first weeks.",
@@ -19556,7 +19556,7 @@
           "mechanism": "Oleuropein is a calcium channel blocker with endothelium-independent vasodilatory effects and mild ACE-inhibitory activity. A 500 mg/day olive leaf extract RCT showed blood pressure reduction comparable to 25 mg/day captopril. Additive hypotension with antihypertensive drugs is a real risk.",
           "action": "Monitor blood pressure when combining olive leaf extract with antihypertensive medications. Alert prescriber; dose adjustment of antihypertensives may be needed.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/38287654/"
           ],
           "alert_headline": "May affect blood-pressure control",
           "alert_body": "Olive leaf can influence blood pressure and may add to or counter antihypertensive therapy. If you take blood-pressure medication, talk to your prescriber before adding olive leaf.",
@@ -19587,7 +19587,7 @@
           "mechanism": "GLUT4 translocation stimulation and alpha-glucosidase inhibition produce additive blood glucose lowering with antidiabetic agents. Risk of hypoglycemia is greatest with insulin, sulfonylureas, and meglitinides.",
           "action": "Increase blood glucose monitoring frequency. Advise patients to recognise hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/38287654/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Olive leaf can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding olive leaf and monitor your glucose more closely at first.",
@@ -19618,7 +19618,7 @@
           "mechanism": "GLUT4 translocation stimulation and alpha-glucosidase inhibition produce additive blood glucose lowering with antidiabetic agents. Risk of hypoglycemia is greatest with insulin, sulfonylureas, and meglitinides.",
           "action": "Increase blood glucose monitoring frequency. Advise patients to recognise hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/38287654/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Olive leaf can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding olive leaf and monitor your glucose more closely at first.",
@@ -19649,7 +19649,7 @@
           "mechanism": "GLUT4 translocation stimulation and alpha-glucosidase inhibition produce additive blood glucose lowering with antidiabetic agents. Risk of hypoglycemia is greatest with insulin, sulfonylureas, and meglitinides.",
           "action": "Increase blood glucose monitoring frequency. Advise patients to recognise hypoglycemia symptoms.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/38287654/"
           ],
           "alert_headline": "May add to diabetes-med effects",
           "alert_body": "Olive leaf can lower blood sugar. If you take a diabetes medication, talk to your prescriber before adding olive leaf and monitor your glucose more closely at first.",
@@ -19882,7 +19882,7 @@
           "mechanism": "Cordyceps (Cordyceps sinensis/militaris) contains cordycepin (3-deoxyadenosine) and beta-glucans that stimulate NK cell activity, macrophage activation, and T-helper cell proliferation via Toll-like receptor and NFkappaB pathways. This immune potentiation may exacerbate autoimmune conditions (e.g., rheumatoid arthritis, lupus, multiple sclerosis, inflammatory bowel disease).",
           "action": "Avoid unsupervised use in autoimmune conditions. Consult a rheumatologist or immunologist before starting cordyceps.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/37513265/"
           ],
           "alert_headline": "Immune-stimulating — caution if autoimmune",
           "alert_body": "Cordyceps has mild immune-modulating activity. If you have an autoimmune condition, talk to your specialist before adding cordyceps.",
@@ -19915,7 +19915,7 @@
           "mechanism": "Cordyceps immune-stimulating effects (NK cell and T-cell activation via NFkappaB pathway) directly oppose the mechanism of immunosuppressants such as tacrolimus, cyclosporine, mycophenolate, and corticosteroids, potentially precipitating organ rejection in transplant patients.",
           "action": "Do not use cordyceps if on immunosuppressant therapy. Alert transplant team or rheumatologist to any supplement use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/37513265/"
           ],
           "alert_headline": "Do not combine with immunosuppressants",
           "alert_body": "Cordyceps stimulates NK and T-cell activity, working against immunosuppressants. If you take transplant or autoimmune medications, do not combine.",
@@ -19946,7 +19946,7 @@
           "mechanism": "Cordyceps has demonstrated in vitro platelet aggregation inhibitory activity and adenosine-mediated vasodilation. Cordycepin (adenosine analogue) may contribute to antiplatelet effects additive with anticoagulant therapy.",
           "action": "Monitor coagulation parameters when combining cordyceps with anticoagulants. Alert prescriber to supplement use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/37513265/"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Cordyceps has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding cordyceps and ask about INR or bleeding checks.",
@@ -19999,7 +19999,7 @@
           "mechanism": "Lion's mane (Hericium erinaceus) contains hericenones and erinacines that have demonstrated inhibition of ADP-induced and collagen-induced platelet aggregation in in vitro and animal studies, attributed to reduced thromboxane B2 synthesis. Combined with anticoagulant therapy, additive antiplatelet/anticoagulant effects may increase bleeding risk.",
           "action": "Monitor coagulation parameters when combining lion's mane with anticoagulants or antiplatelets. Report any unusual bruising or bleeding. Alert prescriber to supplement use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/40284172/"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Lion's mane has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding lion's mane and ask about INR or bleeding checks.",
@@ -20051,7 +20051,7 @@
           "mechanism": "Quercetin inhibits thyroid peroxidase (TPO), the enzyme responsible for iodinating tyrosine residues in thyroglobulin to form T3 and T4. At high supplemental doses (>500 mg/day), this TPO inhibition may impair thyroid hormone synthesis, contributing to goitre formation or worsening hypothyroidism, particularly in individuals with borderline iodine intake.",
           "action": "Use with caution in thyroid disorders, especially hypothyroidism. Limit dose to under 500 mg/day. Monitor TSH periodically and inform endocrinologist of use.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/29127724/"
           ],
           "alert_headline": "May inhibit thyroid hormone synthesis",
           "alert_body": "Quercetin can influence thyroid hormone levels. If you have a thyroid condition, talk to your endocrinologist before adding quercetin and monitor your labs.",
@@ -20084,7 +20084,7 @@
           "mechanism": "Quercetin inhibits CYP2C9 (the primary metabolic enzyme for S-warfarin) and inhibits P-glycoprotein. Both mechanisms reduce warfarin clearance, potentially increasing plasma warfarin concentration and INR. Quercetin also inhibits platelet aggregation independently.",
           "action": "Monitor INR frequently when starting or stopping quercetin supplementation in patients on warfarin. Alert prescriber to dose and any INR changes.",
           "sources": [
-            "https://www.nccih.nih.gov/health/herbs-at-a-glance"
+            "https://pubmed.ncbi.nlm.nih.gov/29127724/"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Quercetin has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding quercetin and ask about INR or bleeding checks.",
@@ -20173,7 +20173,7 @@
           "mechanism": "Resveratrol inhibits thromboxane A2 synthesis by suppressing COX-1/COX-2 activity in platelets and inhibits collagen-induced platelet aggregation via the GPVI signalling pathway. At doses above 150 mg/day, clinically meaningful antiplatelet effects have been documented.",
           "action": "Use with caution in bleeding disorders. Limit dose and inform haematologist or treating physician of use, particularly before invasive procedures.",
           "sources": [
-            "https://www.nccih.nih.gov/health/resveratrol"
+            "https://pubmed.ncbi.nlm.nih.gov/29737899/"
           ],
           "alert_headline": "May raise bleeding risk",
           "alert_body": "Resveratrol has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding resveratrol.",
@@ -20204,7 +20204,7 @@
           "mechanism": "Limited human pregnancy data; animal work suggests developmental effects at some exposures.",
           "action": "Avoid high-dose self-supplementation.",
           "sources": [
-            "https://www.nccih.nih.gov/health/resveratrol"
+            "https://pubmed.ncbi.nlm.nih.gov/29737899/"
           ],
           "alert_headline": "Limited pregnancy safety data",
           "alert_body": "Resveratrol has limited human pregnancy data, and higher exposures raise developmental questions in animal studies. If you are pregnant, avoid routine high-dose self-supplementation.",
@@ -20236,7 +20236,7 @@
           "mechanism": "Resveratrol inhibits CYP2C9 (primary metabolism pathway for S-warfarin) and CYP3A4. Inhibition of CYP2C9 reduces warfarin clearance, raising plasma concentrations and INR. Concomitant antiplatelet activity adds further haemostatic impairment.",
           "action": "Monitor INR closely when starting, adjusting, or stopping resveratrol in patients on warfarin. Alert prescriber; warfarin dose may need reduction.",
           "sources": [
-            "https://www.nccih.nih.gov/health/resveratrol"
+            "https://pubmed.ncbi.nlm.nih.gov/29737899/"
           ],
           "alert_headline": "May add to blood-thinner effects",
           "alert_body": "Resveratrol has mild antiplatelet or anticoagulant activity. If you take an anticoagulant, talk to your prescriber before adding resveratrol and ask about INR or bleeding checks.",
@@ -20267,7 +20267,7 @@
           "mechanism": "Additive antiplatelet effect via complementary mechanisms: resveratrol inhibits COX-1/COX-2 and GPVI signalling while aspirin/clopidogrel block COX-1 or P2Y12 pathways, producing greater aggregate inhibition of platelet function than either alone.",
           "action": "Inform prescriber of resveratrol use when on antiplatelet therapy. Avoid high doses (>250 mg/day) without physician oversight.",
           "sources": [
-            "https://www.nccih.nih.gov/health/resveratrol"
+            "https://pubmed.ncbi.nlm.nih.gov/29737899/"
           ],
           "alert_headline": "May add to antiplatelet effects",
           "alert_body": "Resveratrol has mild antiplatelet activity. If you take an antiplatelet medication like aspirin or clopidogrel, talk to your prescriber before adding resveratrol.",
@@ -20429,7 +20429,7 @@
           "action": "Monitor for signs of bleeding. Inform prescriber if taking anticoagulants or antiplatelets. Consider dose reduction if >3g EPA+DHA/day.",
           "sources": [
             "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=57ddb2b8-2fe3-4e9c-8028-1e7e2cfab7a8",
-            "https://www.nccih.nih.gov/health/omega-3-supplements"
+            "https://pubmed.ncbi.nlm.nih.gov/35311615/"
           ],
           "alert_headline": "High-dose may prolong bleeding time",
           "alert_body": "Fish oil has mild antiplatelet activity. If you have a bleeding disorder, talk to your hematologist before adding fish oil.",
@@ -20460,7 +20460,7 @@
           "mechanism": "Omega-3 fatty acids may increase perioperative bleeding risk due to antiplatelet effects. Multiple FDA drug labels recommend caution with concurrent anticoagulant/antiplatelet therapy.",
           "action": "Consider discontinuing omega-3 supplements 7-10 days before planned surgery. Inform surgeon and anesthesiologist.",
           "sources": [
-            "https://www.nccih.nih.gov/health/omega-3-supplements"
+            "https://pubmed.ncbi.nlm.nih.gov/35311615/"
           ],
           "alert_headline": "Pause before scheduled surgery",
           "alert_body": "Fish oil can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing fish oil about two weeks before the procedure.",
@@ -20526,7 +20526,7 @@
           "mechanism": "Additive antiplatelet effects. Omega-3 fatty acids inhibit platelet aggregation via thromboxane A2 suppression, which may compound the effects of antiplatelet agents like aspirin or clopidogrel.",
           "action": "Monitor for increased bruising or bleeding. Inform prescriber of omega-3 supplementation.",
           "sources": [
-            "https://www.nccih.nih.gov/health/omega-3-supplements",
+            "https://pubmed.ncbi.nlm.nih.gov/35311615/",
             "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/",
             "https://www.nccih.nih.gov/health/omega3-supplements-in-depth"
           ],
