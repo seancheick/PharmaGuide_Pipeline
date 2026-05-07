@@ -3437,6 +3437,14 @@ class EnhancedDSLDNormalizer:
                     for nested_ing in nested:
                         nested_name = nested_ing.get("name", "")
                         if self._should_skip_ingredient(nested_name):
+                            # Recurse into skip-listed children that have
+                            # their own nestedRows (same rescue pattern as
+                            # the default-path nested skip block below).
+                            if nested_ing.get("nestedRows"):
+                                sub_flattened = self._flatten_nested_ingredients(
+                                    [nested_ing], _depth=_depth + 1,
+                                )
+                                flattened.extend(sub_flattened)
                             continue
                         nested_ing["parentBlend"] = name
                         nested_ing["isNestedIngredient"] = True
@@ -3470,8 +3478,14 @@ class EnhancedDSLDNormalizer:
                     nested_name = nested_ing.get("name", "")
 
                     # SKIP ENFORCEMENT: Skip nested items from skip list
+                    # BUT: still extract grandchildren from skipped nested
+                    # items, mirroring the top-level skip path (lines 3432-3451).
+                    # Without this, EPA/DHA nested under "Total EPA and DHA"
+                    # (which is skip-listed) are silently dropped — affecting
+                    # ~40 omega-3/tocopherol products.
                     if self._should_skip_ingredient(nested_name):
                         logger.debug(f"Skipping nested ingredient: {nested_name}")
+                        grand_nested = nested_ing.get("nestedRows") or []
                         if not self._is_nutrition_fact(
                             nested_name,
                             nested_ing.get("ingredientGroup"),
@@ -3482,8 +3496,42 @@ class EnhancedDSLDNormalizer:
                                 source_section="activeIngredients",
                                 display_type="summary_wrapper",
                                 score_included=False,
-                                children=[child.get("name", "") for child in (nested_ing.get("nestedRows") or []) if child.get("name")],
+                                children=[child.get("name", "") for child in grand_nested if child.get("name")],
                             )
+                        # Rescue grandchildren from skipped nested items
+                        if grand_nested:
+                            logger.debug(
+                                "Extracting %d nestedRows from skipped nested parent: %s",
+                                len(grand_nested), nested_name,
+                            )
+                            skipped_mass, skipped_unit = self._extract_primary_mass_unit(nested_ing)
+                            for grand_ing in grand_nested:
+                                grand_name = grand_ing.get("name", "")
+                                if self._should_skip_ingredient(grand_name):
+                                    # Recursively flatten skip-listed
+                                    # grandchildren that themselves have
+                                    # children (handles arbitrary depth).
+                                    if grand_ing.get("nestedRows"):
+                                        sub = self._flatten_nested_ingredients(
+                                            [grand_ing], _depth=_depth + 1,
+                                        )
+                                        flattened.extend(sub)
+                                    continue
+                                grand_ing["parentBlend"] = nested_name
+                                grand_ing["isNestedIngredient"] = True
+                                if skipped_mass is not None:
+                                    grand_ing["parentBlendMass"] = skipped_mass
+                                    grand_ing["parentBlendUnit"] = skipped_unit
+                                elif parent_mass is not None:
+                                    grand_ing["parentBlendMass"] = parent_mass
+                                    grand_ing["parentBlendUnit"] = parent_unit
+                                if grand_ing.get("nestedRows"):
+                                    sub = self._flatten_nested_ingredients(
+                                        [grand_ing], _depth=_depth + 1,
+                                    )
+                                    flattened.extend(sub)
+                                else:
+                                    flattened.append(grand_ing)
                         continue
 
                     # Mark as part of a blend
