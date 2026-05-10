@@ -237,6 +237,121 @@ class TestClaimValidationLogic:
         result = enricher._collect_compliance_data(product, contaminant_data=contaminant_data)
         assert result["vegan"] is True
 
+    def test_collect_compliance_data_promotes_statement_dairy_free(self, enricher):
+        """Statement-only dairy-free should set dairy_free flag.
+
+        Locks the rule_id-based promotion path added 2026-05-09 (was
+        previously matched on dedupe_key — functionally identical for the
+        single rule we have today, but rule_id matching is future-proof
+        for any CLAIM_DAIRY_FREE_CERTIFIED variant that may be added).
+        """
+        product = {
+            "statements": [{"notes": "Dairy-Free"}],
+            "targetGroups": [],
+        }
+        contaminant_data = {"allergens": {"allergens": [], "has_may_contain_warning": False}}
+        result = enricher._collect_compliance_data(product, contaminant_data=contaminant_data)
+        assert result["dairy_free"] is True
+
+    def test_collect_compliance_data_promotes_statement_soy_free(self, enricher):
+        """Statement-only soy-free should set soy_free flag (mirrors dairy)."""
+        product = {
+            "statements": [{"notes": "Soy-Free"}],
+            "targetGroups": [],
+        }
+        contaminant_data = {"allergens": {"allergens": [], "has_may_contain_warning": False}}
+        result = enricher._collect_compliance_data(product, contaminant_data=contaminant_data)
+        assert result["soy_free"] is True
+
+    def test_soy_free_with_sunflower_lecithin_is_eligible(self, enricher):
+        """Sunflower lecithin near a 'Soy-Free' claim must NOT disqualify it.
+
+        Locks the lecithin-removal fix (cert_claim_rules.json 2026-05-09).
+        Pre-fix this label disqualified soy-free at the proximity-conflict
+        gate because 'lecithin' was on the conflict_allergens list,
+        producing 0% soy-free flagging on Thorne / Nordic Naturals (which
+        use sunflower lecithin universally).
+        """
+        field_groups = enricher._get_field_groups()
+        rule = enricher.databases['cert_claim_rules']['rules']['allergen_free_claims']['soy_free']
+        text = "Soy-Free formula. Other ingredients: sunflower lecithin, magnesium stearate."
+        evidence = enricher._check_claim_with_validation(text, "statements", rule, field_groups)
+        assert evidence is not None
+        assert evidence['rule_id'] == 'CLAIM_SOY_FREE'
+        assert evidence['score_eligible'] is True, (
+            'sunflower lecithin must not disqualify a soy-free claim — '
+            'lecithin is removed from soy_free.conflict_allergens'
+        )
+
+    def test_soy_free_with_soy_lecithin_in_label_text_passes_first_layer(self, enricher):
+        """First-layer proximity check no longer catches 'soy-free + soy
+        lecithin' in label text — the surviving `soy` token in
+        conflict_allergens is suppressed by the existing
+        `soy-free`/`soy free` escape clause (line 8123) which prevents
+        the claim string itself from being flagged as a conflict.
+
+        This is a documented trade-off of the lecithin-removal fix
+        (cert_claim_rules.json 2026-05-09): we accept this narrow
+        first-layer gap because the second layer (allergen detection
+        on the ingredient list, see test below) still catches real
+        contradictions, and reverting the change would re-introduce
+        the much larger sunflower-lecithin false-negative class
+        (Pure Encapsulations 2%, Thorne 0%).
+        """
+        field_groups = enricher._get_field_groups()
+        rule = enricher.databases['cert_claim_rules']['rules']['allergen_free_claims']['soy_free']
+        text = "Soy-Free formula. Other ingredients: soy lecithin."
+        evidence = enricher._check_claim_with_validation(text, "statements", rule, field_groups)
+        assert evidence is not None
+        assert evidence['rule_id'] == 'CLAIM_SOY_FREE'
+        assert evidence['score_eligible'] is True, (
+            'Documented behavior change post-2026-05-09: first layer '
+            'alone does not catch this. Second layer guarantees safety.'
+        )
+
+    def test_soy_free_with_detected_soy_allergen_disqualifies_via_second_layer(
+        self, enricher
+    ):
+        """Second-layer guarantee: if the ingredient list parses to a
+        soy allergen detection, `_collect_compliance_data` clears the
+        soy_free flag regardless of what the first-layer proximity
+        check decided. This is the safety net for the lecithin removal.
+        """
+        product = {
+            "statements": [{"notes": "Soy-Free"}],
+            "targetGroups": [],
+        }
+        # Simulate what `_collect_contaminant_data` produces when the
+        # ingredient list contains soy lecithin: detected_allergens
+        # carries an entry whose name includes 'soy'.
+        contaminant_data = {
+            "allergens": {
+                "allergens": [
+                    {"allergen_name": "Soy & Soy Lecithin", "allergen_id": "ALLERGEN_SOY"}
+                ],
+                "has_may_contain_warning": False,
+            }
+        }
+        result = enricher._collect_compliance_data(
+            product, contaminant_data=contaminant_data
+        )
+        # Stage-1 sets soy_free True from `targetGroups` text → False
+        # (no targetGroups). Stage-2 evidence promotion finds a
+        # CLAIM_SOY_FREE rule_id match in statements → True. Then the
+        # second-layer conflict pass at lines 7967-7980 sees soy in
+        # detected_allergens, marks the evidence ineligible. The final
+        # `soy_free` boolean ends up False because eligible_allergen_
+        # evidence is filtered BEFORE promotion.
+        assert result["soy_free"] is False, (
+            'Soy-free claim with soy detected in ingredients must be '
+            'rejected by the allergen-detection second layer.'
+        )
+        # The conflicts list also surfaces the disagreement explicitly.
+        assert any(
+            'soy-free' in c.lower() and 'soy' in c.lower()
+            for c in result.get("conflicts", [])
+        ), 'Stage-1 conflict-detection should record the disagreement.'
+
     def test_collect_organic_data_excludes_made_with_organic_only(self, enricher):
         """'Made with organic ingredients' should not count as certified organic."""
         enricher._compile_patterns()

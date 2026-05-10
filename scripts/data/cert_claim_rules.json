@@ -833,14 +833,13 @@
         "conflict_allergens": [
           "soy",
           "soya",
-          "soybean",
-          "lecithin"
+          "soybean"
         ],
         "evidence_strength": "medium",
         "scope_rule": "product_level_only",
         "approved_field_group": "product_level_fields",
         "points_if_eligible": 1,
-        "notes": "This product does not contain soy or soy-derived ingredients like soy lecithin. Soy is one of the Big 8 allergens. We verify this by scanning the ingredient list for soy compounds."
+        "notes": "This product does not contain soy or soy-derived ingredients like soy lecithin. Soy is one of the Big 8 allergens. We verify this by scanning the ingredient list for soy compounds. NOTE: 'lecithin' was removed from conflict_allergens 2026-05-09 — generic 'lecithin' is most often sunflower- or egg-derived (not soy) and was producing high false-negative rate (Pure Encapsulations 2%, Thorne 0%, Nordic Naturals 0%). The substring proximity check still catches 'soy lecithin' via the 'soy' entry, so true contradictions remain disqualified."
       },
       "nut_free": {
         "id": "CLAIM_NUT_FREE",

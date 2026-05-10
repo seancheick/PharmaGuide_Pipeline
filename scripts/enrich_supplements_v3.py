@@ -7885,20 +7885,31 @@ class SupplementEnricherV3:
         vegan = 'vegan' in target_lower
         vegetarian = 'vegetarian' in target_lower
 
-        # Check for conflicts with detected allergens
-        # Use pre-collected data if provided (avoids double-collection)
+        # Resolve detected allergens once. Used twice below: first to seed
+        # `conflicts` and then again as a hard gate after Stage-2 evidence
+        # promotion (so a soy-lecithin product whose claim was promoted by
+        # `CLAIM_SOY_FREE` still gets disqualified by the ingredient-level
+        # detection — closes the sequencing gap that the now-removed
+        # 'lecithin' proximity entry used to mask).
         if contaminant_data is None:
             contaminant_data = self._collect_contaminant_data(product)
         detected_allergens = contaminant_data['allergens']['allergens']
+        detected_lower_names = [
+            str(a.get('allergen_name', '')).lower() for a in detected_allergens
+        ]
 
+        def _allergen_in_detected(*tokens: str) -> bool:
+            return any(any(t in n for t in tokens) for n in detected_lower_names)
+
+        # Initial conflict pass (Stage-1-only). Stays here so the
+        # `conflicts` list is populated as soon as the targetGroups text
+        # match fires, even if Stage-2 promotion later toggles a flag.
         conflicts = []
-        if dairy_free and any('milk' in a['allergen_name'].lower() or 'dairy' in a['allergen_name'].lower()
-                             for a in detected_allergens):
+        if dairy_free and _allergen_in_detected('milk', 'dairy'):
             conflicts.append("dairy-free claim conflicts with detected dairy")
-        if soy_free and any('soy' in a['allergen_name'].lower() for a in detected_allergens):
+        if soy_free and _allergen_in_detected('soy'):
             conflicts.append("soy-free claim conflicts with detected soy")
-        if gluten_free and any('wheat' in a['allergen_name'].lower() or 'gluten' in a['allergen_name'].lower()
-                              for a in detected_allergens):
+        if gluten_free and _allergen_in_detected('wheat', 'gluten'):
             conflicts.append("gluten-free claim conflicts with detected gluten/wheat")
 
         # P0.1: Use structured allergen data for may_contain detection
@@ -7922,16 +7933,24 @@ class SupplementEnricherV3:
                     claim_keys.add(key)
         allergen_free_claims = sorted(claim_keys)
 
+        # Promote evidence-based detections to the canonical compliance flags.
+        # All three concerns now match on `rule_id` for consistency — gluten
+        # was already explicit (handles the GFCO certified variant); dairy
+        # and soy previously matched on `dedupe_key`, which was functionally
+        # equivalent today but would silently miss any future certified
+        # variant (e.g. CLAIM_DAIRY_FREE_CERTIFIED) added with a different
+        # dedupe_key. Use a rule_id set per concern so adding a variant is
+        # a one-line change.
         gluten_free = gluten_free or any(
             ev.get('rule_id') in {'CLAIM_GLUTEN_FREE', 'CLAIM_GLUTEN_FREE_GFCO'}
             for ev in eligible_allergen_evidence
         )
         dairy_free = dairy_free or any(
-            str(ev.get('dedupe_key', '')).lower() == 'allergen_free:dairy'
+            ev.get('rule_id') in {'CLAIM_DAIRY_FREE'}
             for ev in eligible_allergen_evidence
         )
         soy_free = soy_free or any(
-            str(ev.get('dedupe_key', '')).lower() == 'allergen_free:soy'
+            ev.get('rule_id') in {'CLAIM_SOY_FREE'}
             for ev in eligible_allergen_evidence
         )
 
@@ -7947,6 +7966,33 @@ class SupplementEnricherV3:
             ev.get('rule_id') == 'CLAIM_VEGETARIAN'
             for ev in eligible_dietary_evidence
         )
+
+        # POST-PROMOTION HARD GATE — detected allergens trump any claim
+        # source. Without this, a label that says "Soy-Free" but lists
+        # soy lecithin in ingredients would slip through Stage-2
+        # promotion (the rule_id match fires, evidence is eligible at
+        # the first-layer because the surviving 'soy' proximity token
+        # is suppressed by the 'soy-free'/'soy free' escape clause).
+        # Pre-2026-05-09 the now-removed 'lecithin' proximity entry
+        # masked this sequencing gap; the gate makes the safety
+        # invariant explicit instead.
+        #
+        # Each gate is also recorded into `conflicts` if not already
+        # there, so downstream scoring (`score_supplements.py:1934`)
+        # sees the disagreement.
+        def _record_conflict(msg: str) -> None:
+            if msg not in conflicts:
+                conflicts.append(msg)
+
+        if dairy_free and _allergen_in_detected('milk', 'dairy'):
+            dairy_free = False
+            _record_conflict("dairy-free claim conflicts with detected dairy")
+        if soy_free and _allergen_in_detected('soy'):
+            soy_free = False
+            _record_conflict("soy-free claim conflicts with detected soy")
+        if gluten_free and _allergen_in_detected('wheat', 'gluten'):
+            gluten_free = False
+            _record_conflict("gluten-free claim conflicts with detected gluten/wheat")
 
         # Apply conflict checking to evidence objects
         for evidence in allergen_evidence:

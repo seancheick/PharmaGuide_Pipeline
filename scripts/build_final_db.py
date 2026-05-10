@@ -3640,7 +3640,12 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
         positive_signals.append("clinically-backed")
     if safe_list(enriched.get("named_cert_programs")):
         positive_signals.append("third-party tested")
-    if safe_dict(enriched.get("dietary_sensitivity_data")).get("vegan"):
+    # Dietary signals come from compliance_data (the canonical source for
+    # vegan / gluten_free / etc. flags). dietary_sensitivity_data carries
+    # only sugar / sodium per `_collect_dietary_sensitivity_data` and never
+    # had `vegan` or `gluten_free` populated — the prior reads against
+    # `dietary_sensitivity_data` were silently always-false dead paths.
+    if safe_dict(enriched.get("compliance_data")).get("vegan"):
         positive_signals.append("vegan")
 
     share_description = f"A {grade.lower()} quality supplement"
@@ -3670,12 +3675,17 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     if certs:
         highlights.append(" • ".join(str(c) for c in certs[:3]))
 
-    # Dietary
+    # Dietary highlights — same canonical source as the description above.
+    # The earlier `ds.get("gluten_free") or compliance.gluten_free` guard
+    # was defensive only on paper; `dietary_sensitivity_data` never carries
+    # `gluten_free`, so the OR was permanently a no-op falling through to
+    # `compliance_data`. Reading compliance_data directly removes the
+    # cargo-cult double-check.
     dietary_flags = []
-    ds = safe_dict(enriched.get("dietary_sensitivity_data"))
-    if ds.get("vegan"):
+    compliance = safe_dict(enriched.get("compliance_data"))
+    if compliance.get("vegan"):
         dietary_flags.append("Vegan")
-    if ds.get("gluten_free") or safe_dict(enriched.get("compliance_data")).get("gluten_free"):
+    if compliance.get("gluten_free"):
         dietary_flags.append("Gluten-Free")
     if dietary_flags:
         highlights.append(" • ".join(dietary_flags))
