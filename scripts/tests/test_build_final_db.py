@@ -1429,6 +1429,44 @@ class TestDetailBlobNutritionAndUnmapped:
     def test_schema_version_bumped_to_150(self):
         assert EXPORT_SCHEMA_VERSION == "1.5.0"
 
+    def test_detail_blob_emits_demoted_absorption_enhancers(self):
+        """Sprint E1.23 follow-up (2026-05-09): the enricher produces
+        `ingredient_quality_data.demoted_absorption_enhancers`; the build
+        step must promote it to the detail blob so the Flutter
+        `formulation_detail_section` can render bioavailability-aid
+        chips. Pre-fix, this list was silently dropped on the floor.
+        """
+        enriched = make_enriched()
+        existing_iqd = enriched.get("ingredient_quality_data") or {}
+        enriched["ingredient_quality_data"] = {
+            **existing_iqd,
+            "demoted_absorption_enhancers": [
+                {"name": "BioPerine", "quantity": 5.0, "unit": "mg"},
+            ],
+        }
+        blob = build_detail_blob(enriched, make_scored())
+        assert "ingredient_quality_data" in blob, (
+            'Pipeline must emit ingredient_quality_data so Flutter can '
+            'read demoted_absorption_enhancers'
+        )
+        iqd = blob["ingredient_quality_data"]
+        assert iqd["demoted_absorption_enhancers"] == [
+            {"name": "BioPerine", "quantity": 5.0, "unit": "mg"},
+        ]
+
+    def test_detail_blob_omits_ingredient_quality_data_when_no_demoted(self):
+        """Empty list → key not emitted (cleaner blob, less wire bytes).
+        Flutter handles missing key the same as empty list via `?? const {}`.
+        """
+        enriched = make_enriched()
+        existing_iqd = enriched.get("ingredient_quality_data") or {}
+        enriched["ingredient_quality_data"] = {
+            **existing_iqd,
+            "demoted_absorption_enhancers": [],
+        }
+        blob = build_detail_blob(enriched, make_scored())
+        assert "ingredient_quality_data" not in blob
+
     def test_end_to_end_nutrition_and_unmapped_both_populate(self):
         """Smoke: realistic enriched with calories + unmapped actives → column and blob both correct."""
         enriched = self._enriched_with_nutrition(calories=120.0, protein=6.0)

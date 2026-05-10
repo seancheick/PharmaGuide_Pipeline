@@ -3402,6 +3402,23 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         ),
     }
 
+    # Sprint E1.23 follow-up (2026-05-09) — surface demoted absorption
+    # enhancers (e.g. BioPerine 5 mg below clinical threshold) under the
+    # `ingredient_quality_data` blob key so Flutter's
+    # `formulation_detail_section` can render them as info chips. The
+    # enricher (`enrich_supplements_v3.py:2579`) already produces this
+    # list inside `enriched.ingredient_quality_data`; previously the
+    # build step never promoted it to the detail blob, so the Flutter
+    # consumer at `formulation_detail_section.dart:60` always read null
+    # and silently rendered nothing. Keeping the emission scoped to just
+    # this single field — the full ingredient_quality_data object holds
+    # internal scoring state we don't need on-device.
+    demoted_enhancers = safe_list(iqd.get("demoted_absorption_enhancers"))
+    if demoted_enhancers:
+        blob["ingredient_quality_data"] = {
+            "demoted_absorption_enhancers": demoted_enhancers,
+        }
+
     blob["score_bonuses"] = bonuses
     blob["score_penalties"] = penalties
     blob["audit"] = {
