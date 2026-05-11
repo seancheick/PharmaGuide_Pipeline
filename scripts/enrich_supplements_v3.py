@@ -1265,6 +1265,31 @@ class SupplementEnricherV3:
         quality_entry["safety_canonical_source_db"] = "banned_recalled_ingredients"
         quality_entry["safety_canonical_preserved"] = True
 
+    @staticmethod
+    def _preserve_cleaner_botanical_canonical(ingredient: Dict, quality_entry: Dict) -> None:
+        """Identity_bioactivity_split Phase 5: preserve cleaner-set botanical
+        canonical_id on the enriched quality_entry when the IQM matcher
+        returned no match (canonical_id=None on the entry).
+
+        Without this, source-botanical ingredients (acerola, turmeric, etc.)
+        lose their cleaner-assigned canonical_id during enrichment because
+        the IQM matcher only searches ingredient_quality_map.json. The
+        canonical needs to survive so _compute_delivers_markers can look up
+        marker contributions in botanical_marker_contributions.json.
+        """
+        cleaner_src = ingredient.get("canonical_source_db")
+        if cleaner_src not in {"botanical_ingredients", "standardized_botanicals"}:
+            return
+        cleaner_cid = ingredient.get("canonical_id")
+        if not isinstance(cleaner_cid, str) or not cleaner_cid:
+            return
+        # Only fill in when the matcher didn't already pick one up.
+        if quality_entry.get("canonical_id"):
+            return
+        quality_entry["canonical_id"] = cleaner_cid
+        quality_entry["canonical_source_db"] = cleaner_src
+        quality_entry["canonical_preserved_from_cleaner"] = True
+
     def _compile_patterns(self):
         """Compile regex patterns for performance"""
         self.compiled_patterns = {
@@ -2464,6 +2489,11 @@ class SupplementEnricherV3:
                     "name": ing_name,  # Label-facing name
                     "raw_source_text": raw_source_text,  # Exact label text (provenance)
                     "standard_name": std_name,
+                    # Identity_bioactivity_split: preserve cleaner-set canonical
+                    # so _compute_delivers_markers can look up source-botanical
+                    # marker contributions even on non-scorable rows.
+                    "canonical_id": ingredient.get("canonical_id"),
+                    "canonical_source_db": ingredient.get("canonical_source_db"),
                     "matched_form": None,
                     "matched_forms": [],
                     "extracted_forms": [],
@@ -2531,6 +2561,7 @@ class SupplementEnricherV3:
                 ingredient, match_result, hierarchy_type, source_section="active"
             )
             self._preserve_cleaner_safety_canonical(ingredient, quality_entry)
+            self._preserve_cleaner_botanical_canonical(ingredient, quality_entry)
             is_quality_match = bool(
                 match_result and isinstance(match_result, dict) and match_result.get("match_status") != "FORM_UNMAPPED"
             )
@@ -2691,6 +2722,7 @@ class SupplementEnricherV3:
                     dose_present=dose_present
                 )
                 self._preserve_cleaner_safety_canonical(ingredient, quality_entry)
+                self._preserve_cleaner_botanical_canonical(ingredient, quality_entry)
                 is_quality_match = bool(
                     match_result and isinstance(match_result, dict) and match_result.get("match_status") != "FORM_UNMAPPED"
                 )
@@ -9924,9 +9956,18 @@ class SupplementEnricherV3:
     # SECTION C: EVIDENCE & RESEARCH DATA COLLECTORS
     # =========================================================================
 
-    def _collect_evidence_data(self, product: Dict) -> Dict:
+    def _collect_evidence_data(
+        self, product: Dict, ingredient_quality_data: Optional[Dict] = None
+    ) -> Dict:
         """
         Collect clinical evidence data for scoring Section C.
+
+        When ``ingredient_quality_data`` is supplied (post-Phase 4 of
+        identity_bioactivity_split), the matcher ALSO walks each ingredient's
+        ``delivers_markers[]`` and adds marker-via-ingredient clinical matches.
+        Each marker match carries ``marker_via_ingredient`` (the source
+        canonical) and ``marker_confidence_scale`` (0.0–1.0) so the scorer
+        can apply the appropriate Section C confidence weighting.
         """
         clinical_db = self.databases.get('backed_clinical_studies', {})
         studies = clinical_db.get('backed_clinical_studies', [])
@@ -10005,6 +10046,87 @@ class SupplementEnricherV3:
                             match_payload[field] = study.get(field)
 
                     matches.append(match_payload)
+
+        # =====================================================================
+        # Identity vs Bioactivity Split — secondary marker matches
+        # =====================================================================
+        # Walk delivers_markers[] on each enriched ingredient. For markers with
+        # confidence_scale > 0, add clinical matches that the marker triggers
+        # but stamp them with marker_via_ingredient + marker_confidence_scale
+        # so the scorer can apply confidence scaling and avoid double-credit
+        # with primary canonical matches.
+        existing_study_ids = {
+            (m.get("study_id") or m.get("id"))
+            for m in matches if (m.get("study_id") or m.get("id"))
+        }
+        ingredients_with_markers = []
+        if isinstance(ingredient_quality_data, dict):
+            ingredients_with_markers = ingredient_quality_data.get("ingredients", []) or []
+        for ing in ingredients_with_markers:
+            if not isinstance(ing, dict):
+                continue
+            primary_canonical = ing.get("canonical_id")
+            for marker_entry in ing.get("delivers_markers", []) or []:
+                if not isinstance(marker_entry, dict):
+                    continue
+                confidence = marker_entry.get("confidence_scale")
+                try:
+                    confidence_f = float(confidence) if confidence is not None else 0.0
+                except (TypeError, ValueError):
+                    confidence_f = 0.0
+                if confidence_f <= 0:
+                    continue
+                marker_id = marker_entry.get("marker_canonical_id")
+                if not marker_id:
+                    continue
+                marker_candidate_names = [marker_id, marker_id.replace("_", " ")]
+                for study in studies:
+                    study_id = study.get("id", "")
+                    if not study_id or study_id in existing_study_ids:
+                        continue
+                    study_name = study.get("standard_name", "") or ""
+                    study_aliases = self._collect_clinical_aliases(study)
+                    matched = self._clinical_study_match(marker_candidate_names, study)
+                    if not matched:
+                        continue
+                    # Skip brand-specific studies for marker-via path
+                    if study_id.startswith("BRAND_"):
+                        continue
+                    match_payload = {
+                        "ingredient": ing.get("name") or ing.get("raw_source_text"),
+                        "standard_name": study_name,
+                        "id": study_id,
+                        "study_id": study_id,
+                        "study_name": study_name,
+                        "match_method": matched.get("method"),
+                        "matched_term": matched.get("matched_term"),
+                        "evidence_level": study.get("evidence_level", "ingredient-human"),
+                        "study_type": study.get("study_type", "rct_single"),
+                        "score_contribution": study.get("score_contribution", "tier_3"),
+                        "health_goals_supported": study.get("health_goals_supported", []),
+                        "key_endpoints": study.get("key_endpoints", []),
+                        # Identity vs Bioactivity provenance
+                        "marker_via_ingredient": primary_canonical,
+                        "marker_confidence_scale": confidence_f,
+                        "marker_estimation_method": marker_entry.get("estimation_method"),
+                        "marker_estimated_dose_mg": marker_entry.get("estimated_dose_mg"),
+                        "marker_evidence_id": marker_entry.get("evidence_id"),
+                    }
+                    optional_fields = [
+                        "min_clinical_dose", "dose_unit", "typical_effective_dose", "dose_range",
+                        "base_points", "multiplier", "computed_score", "effect_direction",
+                        "effect_direction_rationale", "effect_direction_confidence",
+                        "total_enrollment", "published_studies", "published_studies_count",
+                        "published_rct_count", "published_meta_review_count",
+                        "registry_completed_trials_count", "primary_outcome",
+                        "endpoint_relevance_tags", "notes", "notable_studies",
+                        "references_structured",
+                    ]
+                    for field in optional_fields:
+                        if field in study and study.get(field) is not None:
+                            match_payload[field] = study.get(field)
+                    matches.append(match_payload)
+                    existing_study_ids.add(study_id)
 
         # Check for unsubstantiated claims
         all_text = self._get_all_product_text(product)
@@ -13088,7 +13210,12 @@ class SupplementEnricherV3:
             enriched["proprietary_data"] = self._collect_proprietary_data(product)
 
             # Section C: Evidence & Research
-            enriched["evidence_data"] = self._collect_evidence_data(product)
+            # Pass ingredient_quality_data so delivers_markers can drive
+            # marker-via-ingredient clinical matches (identity_bioactivity_split
+            # Phase 4 + Phase 5).
+            enriched["evidence_data"] = self._collect_evidence_data(
+                product, ingredient_quality_data=enriched.get("ingredient_quality_data")
+            )
 
             # Section D: Brand Trust
             manufacturer_data = self._collect_manufacturer_data(product)

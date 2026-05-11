@@ -2945,6 +2945,16 @@ class SupplementScorer:
                         if "SUPRA_CLINICAL_DOSE" not in flags:
                             flags.append("SUPRA_CLINICAL_DOSE")
 
+            # Identity vs Bioactivity Split — apply confidence scaling when this
+            # match is a marker-via-ingredient secondary credit. confidence_scale
+            # ranges 0.4 (provenance-only) – 1.0 (explicit standardization dose).
+            marker_confidence = entry.get("marker_confidence_scale")
+            if marker_confidence is not None:
+                try:
+                    raw *= float(marker_confidence)
+                except (TypeError, ValueError):
+                    pass
+
             canonical = canon_key(
                 entry.get("standard_name") or entry.get("study_name") or entry.get("ingredient")
             )
