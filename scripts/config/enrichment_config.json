@@ -38,6 +38,7 @@
     "banned_recalled_ingredients": "data/banned_recalled_ingredients.json",
     "banned_match_allowlist": "data/banned_match_allowlist.json",
     "botanical_ingredients": "data/botanical_ingredients.json",
+    "botanical_marker_contributions": "data/botanical_marker_contributions.json",
     "cert_claim_rules": "data/cert_claim_rules.json",
     "clinical_risk_taxonomy": "data/clinical_risk_taxonomy.json",
     "clinically_relevant_strains": "data/clinically_relevant_strains.json",

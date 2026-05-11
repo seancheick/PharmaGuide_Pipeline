@@ -148,6 +148,34 @@ IQM_CANONICAL_CROSS_PARENT_ALLOWLIST: Dict[Tuple[str, str], Tuple[str, ...]] = {
     ),
 }
 
+# Botanical cleaner IDs whose active marker compounds must remain secondary
+# metadata unless the cleaner has resolved the row directly to the marker's IQM
+# canonical. This protects non-IQM source canonicals, which are outside the IQM
+# parent hard-stop above.
+BOTANICAL_SOURCE_MARKER_CANONICAL_BLOCKLIST: Dict[str, Tuple[str, ...]] = {
+    "acerola_cherry": ("vitamin_c",),
+    "tomato": ("lycopene",),
+    "broccoli": ("sulforaphane",),
+    "cayenne_pepper": ("capsaicin",),
+    "cistanche": ("echinacea",),
+    "green_tea": ("caffeine", "egcg", "epigallocatechin", "gallocatechin"),
+    "green_tea_leaf": ("caffeine", "egcg", "epigallocatechin", "gallocatechin"),
+    "horny_goat_weed": ("flavones",),
+    "coffee_fruit": ("caffeine",),
+    "japanese_knotweed": ("resveratrol",),
+    "kanna_sceletium": ("mesembrine",),
+    "lemon": ("vitamin_b9_folate",),
+    "moringa": ("vitamin_a",),
+    "sophora_japonica": ("quercetin",),
+    "yerba_mate": ("caffeine",),
+    "yerba_mate_leaf": ("caffeine",),
+}
+
+BOTANICAL_CANONICAL_SOURCE_DBS = {
+    "botanical_ingredients",
+    "standardized_botanicals",
+}
+
 
 def _compute_strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> Optional[str]:
     """Map a per-strain CFU count to its adequacy tier using Dr Pham's
@@ -1193,6 +1221,50 @@ class SupplementEnricherV3:
             "banned_recalled_ingredients",
         }
 
+    @staticmethod
+    def _is_blocked_botanical_source_marker_match(
+        ingredient: Dict,
+        match_result: Optional[Dict],
+    ) -> bool:
+        """Return True when a botanical cleaner ID was scored as a marker.
+
+        The Phase 3 IQM hard-stop only applies when the cleaner's canonical is
+        itself an IQM parent. Botanical source canonicals such as tomato and
+        broccoli live in botanical databases, so they need a separate guard:
+        marker compounds may annotate the row later, but they must not replace
+        the declared botanical as the primary scored identity.
+        """
+        if not match_result or not isinstance(match_result, dict):
+            return False
+        source_db = ingredient.get("canonical_source_db")
+        if source_db not in BOTANICAL_CANONICAL_SOURCE_DBS:
+            return False
+        source_id = ingredient.get("canonical_id")
+        if not isinstance(source_id, str) or not source_id:
+            return False
+        resolved_id = match_result.get("canonical_id")
+        blocked_markers = BOTANICAL_SOURCE_MARKER_CANONICAL_BLOCKLIST.get(source_id)
+        return bool(blocked_markers and resolved_id in blocked_markers)
+
+    @staticmethod
+    def _preserve_cleaner_safety_canonical(ingredient: Dict, quality_entry: Dict) -> None:
+        """Attach safety canonical provenance without suppressing IQM scoring.
+
+        High-risk/watchlist ingredients can still be legitimate active
+        ingredients in the product. Section A may score the normal IQM identity,
+        while B0/export warnings use banned_recalled_ingredients. Preserve that
+        cleaner safety identity explicitly so downstream consumers do not have
+        to infer it from the normal IQM canonical.
+        """
+        if ingredient.get("canonical_source_db") != "banned_recalled_ingredients":
+            return
+        canonical_id = ingredient.get("canonical_id")
+        if not isinstance(canonical_id, str) or not canonical_id.startswith(("RISK_", "BANNED_")):
+            return
+        quality_entry["safety_canonical_id"] = canonical_id
+        quality_entry["safety_canonical_source_db"] = "banned_recalled_ingredients"
+        quality_entry["safety_canonical_preserved"] = True
+
     def _compile_patterns(self):
         """Compile regex patterns for performance"""
         self.compiled_patterns = {
@@ -2122,6 +2194,184 @@ class SupplementEnricherV3:
         return lowered
 
     # =========================================================================
+    # Identity vs Bioactivity Split — delivers_markers computation
+    # =========================================================================
+    # When a source-botanical ingredient ALSO contributes to a marker (e.g. an
+    # acerola extract contributes vitamin_c), the marker contribution is recorded
+    # in `delivers_markers[]` on the ingredient record. Section A scoring uses
+    # the primary canonical_id; Section C scoring (Phase 5) uses delivers_markers
+    # at scaled confidence. See scripts/data/botanical_marker_contributions.json.
+
+    _STANDARDIZATION_PCT_RE = re.compile(r"(\d+(?:\.\d+)?)\s*%", re.IGNORECASE)
+    _STANDARDIZATION_TERMS_RE = re.compile(
+        r"\bstandardi[sz]ed\s+to\b|\bstd\.?\s+to\b|\bcontaining\s+\d|\bmin\.?\s+\d+\s*%",
+        re.IGNORECASE,
+    )
+
+    def _scan_label_for_standardization(
+        self, label_text: str, keywords: List[str]
+    ) -> Tuple[bool, Optional[float]]:
+        """Returns (has_standardization, pct_value_or_None).
+
+        has_standardization is True when the label text mentions ANY of the
+        botanical's standardization_keywords (e.g. 'curcuminoid', '95%',
+        'standardized to'). pct_value extracts the numeric standardization
+        percentage when the keyword appears alongside a percentage.
+        """
+        if not label_text:
+            return False, None
+        text_l = label_text.lower()
+        # Any keyword present?
+        keyword_hit = any(k.lower() in text_l for k in (keywords or []))
+        if not keyword_hit and not self._STANDARDIZATION_TERMS_RE.search(label_text):
+            return False, None
+        # Try to extract percentage if present
+        m = self._STANDARDIZATION_PCT_RE.search(label_text)
+        pct = float(m.group(1)) if m else None
+        return True, pct
+
+    def _compute_delivers_markers(
+        self, ingredient_record: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """Compute the marker contributions an ingredient delivers based on
+        its primary canonical_id and scripts/data/botanical_marker_contributions.json.
+
+        Returns a list of marker contribution dicts. Empty list when:
+          - canonical_id is not a source-botanical with declared marker contributions
+          - botanical_marker_contributions database is missing
+          - canonical_id is itself a marker (no need to self-credit)
+
+        Each marker entry has fields:
+          - marker_canonical_id, marker_source_db
+          - estimated_dose_mg (None when no dose computable)
+          - estimation_method: one of
+              'default_contribution' (USDA-cited default × ingredient mass)
+              'standardization_pct'  (declared standardization % × ingredient mass)
+              'standardization_keyword' (keyword present but no pct extractable)
+              'none' (provenance only — no Section C credit)
+          - confidence_scale (0.0–1.0 multiplier for Section C credit)
+          - evidence_source, evidence_url, evidence_id (from contributions DB)
+          - basis: short string explaining the calculation
+        """
+        bmc_db = (self.databases or {}).get("botanical_marker_contributions") or {}
+        botanicals = bmc_db.get("botanicals") or {}
+        if not botanicals:
+            return []
+
+        canonical_id = ingredient_record.get("canonical_id")
+        if not canonical_id:
+            return []
+        contributions = (botanicals.get(canonical_id) or {}).get("delivers") or []
+        if not contributions:
+            return []
+
+        # Label text for standardization scan: combine raw_source_text + matched_form + original_label
+        label_text = " ".join(
+            str(ingredient_record.get(k, "") or "")
+            for k in ("raw_source_text", "matched_form", "original_label", "name")
+        )
+
+        # Ingredient mass in grams (for default-contribution dose math)
+        quantity = ingredient_record.get("quantity")
+        unit_norm = (ingredient_record.get("unit_normalized") or "").lower()
+        try:
+            qty_num = float(quantity) if quantity is not None else None
+        except (TypeError, ValueError):
+            qty_num = None
+        mass_g: Optional[float] = None
+        if qty_num is not None and qty_num > 0:
+            if unit_norm in {"mg"}:
+                mass_g = qty_num / 1000.0
+            elif unit_norm in {"g", "gram", "grams"}:
+                mass_g = qty_num
+            elif unit_norm in {"ug", "mcg", "microgram", "micrograms"}:
+                mass_g = qty_num / 1_000_000.0
+
+        results: List[Dict[str, Any]] = []
+        for contrib in contributions:
+            marker_id = contrib.get("marker_canonical_id")
+            model = contrib.get("model")
+            keywords = contrib.get("standardization_keywords") or []
+            entry: Dict[str, Any] = {
+                "marker_canonical_id": marker_id,
+                "marker_source_db": "ingredient_quality_map",
+                "evidence_source": contrib.get("evidence_source"),
+                "evidence_url": contrib.get("evidence_url"),
+                "evidence_id": contrib.get("evidence_id"),
+                "estimated_dose_mg": None,
+                "estimation_method": "none",
+                "confidence_scale": 0.0,
+                "basis": "",
+            }
+            has_std, pct = self._scan_label_for_standardization(label_text, keywords)
+            if model == "standardization_required":
+                min_pct = contrib.get("min_standardization_pct_required")
+                if not has_std:
+                    entry["basis"] = (
+                        f"No standardization keyword found in label "
+                        f"({', '.join(keywords[:2])!r}…). Marker recorded for "
+                        "provenance only; no Section C dose credit."
+                    )
+                elif pct is not None and (min_pct is None or pct >= min_pct):
+                    # Explicit standardization with pct meeting min
+                    if mass_g is not None:
+                        entry["estimated_dose_mg"] = round(mass_g * 1000.0 * (pct / 100.0), 3)
+                        entry["estimation_method"] = "standardization_pct"
+                        entry["confidence_scale"] = 1.0
+                        entry["basis"] = (
+                            f"Label declares {pct}% standardization × ingredient mass "
+                            f"{quantity} {unit_norm}"
+                        )
+                    else:
+                        entry["estimation_method"] = "standardization_keyword"
+                        entry["confidence_scale"] = 0.5
+                        entry["basis"] = (
+                            f"Label declares {pct}% standardization but ingredient "
+                            "mass not computable (no dose)."
+                        )
+                else:
+                    # Keyword present but pct missing or below min
+                    entry["estimation_method"] = "standardization_keyword"
+                    entry["confidence_scale"] = 0.5
+                    entry["basis"] = (
+                        f"Standardization keyword present (no pct extracted or "
+                        f"below {min_pct}% minimum)."
+                    )
+            elif model == "default_contribution":
+                default_mg_per_g = contrib.get("default_contribution_mg_per_g")
+                if default_mg_per_g is None:
+                    continue
+                if has_std and pct is not None:
+                    # Label explicitly declares standardization — use it preferentially
+                    if mass_g is not None:
+                        entry["estimated_dose_mg"] = round(mass_g * 1000.0 * (pct / 100.0), 3)
+                        entry["estimation_method"] = "standardization_pct"
+                        entry["confidence_scale"] = 1.0
+                        entry["basis"] = (
+                            f"Label declares {pct}% standardization × ingredient mass "
+                            f"{quantity} {unit_norm} (overrides default contribution)"
+                        )
+                elif mass_g is not None:
+                    entry["estimated_dose_mg"] = round(mass_g * float(default_mg_per_g), 3)
+                    entry["estimation_method"] = "default_contribution"
+                    entry["confidence_scale"] = 0.7
+                    entry["basis"] = (
+                        f"USDA default {default_mg_per_g} mg/g × ingredient mass "
+                        f"{quantity} {unit_norm}"
+                    )
+                else:
+                    entry["estimation_method"] = "default_contribution"
+                    entry["confidence_scale"] = 0.4
+                    entry["basis"] = (
+                        f"USDA default {default_mg_per_g} mg/g but ingredient mass "
+                        "not computable (no dose, provenance only)"
+                    )
+            else:
+                entry["basis"] = f"Unknown contribution model {model!r}"
+            results.append(entry)
+        return results
+
+    # =========================================================================
     # SECTION A: INGREDIENT QUALITY DATA COLLECTORS
     # =========================================================================
 
@@ -2275,9 +2525,12 @@ class SupplementEnricherV3:
                 ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
                 branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
             )
+            if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
+                match_result = None
             quality_entry = self._build_quality_entry(
                 ingredient, match_result, hierarchy_type, source_section="active"
             )
+            self._preserve_cleaner_safety_canonical(ingredient, quality_entry)
             is_quality_match = bool(
                 match_result and isinstance(match_result, dict) and match_result.get("match_status") != "FORM_UNMAPPED"
             )
@@ -2428,6 +2681,8 @@ class SupplementEnricherV3:
                     ing_name, std_name, quality_map, cleaned_forms=ingredient_forms,
                     branded_token=_bte, cleaner_canonical_id=_cleaner_iqm_cid,
                 )
+                if self._is_blocked_botanical_source_marker_match(ingredient, match_result):
+                    match_result = None
                 quality_entry = self._build_quality_entry(
                     ingredient, match_result, hierarchy_type,
                     source_section="inactive_promoted",
@@ -2435,6 +2690,7 @@ class SupplementEnricherV3:
                     promotion_confidence=promotion_confidence,
                     dose_present=dose_present
                 )
+                self._preserve_cleaner_safety_canonical(ingredient, quality_entry)
                 is_quality_match = bool(
                     match_result and isinstance(match_result, dict) and match_result.get("match_status") != "FORM_UNMAPPED"
                 )
@@ -2556,6 +2812,27 @@ class SupplementEnricherV3:
 
         # Total evaluated = scorable + skipped (includes promoted in scorable)
         total_ingredients_evaluated = total_scorable + total_skipped
+
+        # =================================================================
+        # IDENTITY vs BIOACTIVITY SPLIT — attach delivers_markers per ingredient
+        # =================================================================
+        # For ingredients whose primary canonical_id is a source botanical with
+        # marker contributions declared in botanical_marker_contributions.json,
+        # compute and attach the marker contribution list. Empty for marker-
+        # canonical ingredients or botanicals without contribution mappings.
+        for ing_list in (all_quality_data, ingredients_scorable, ingredients_skipped):
+            for ing in ing_list or []:
+                if not isinstance(ing, dict):
+                    continue
+                try:
+                    markers = self._compute_delivers_markers(ing)
+                except Exception as exc:
+                    self.logger.warning(
+                        "delivers_markers computation failed for canonical_id=%s: %s",
+                        ing.get("canonical_id"), exc,
+                    )
+                    markers = []
+                ing["delivers_markers"] = markers
 
         return {
             # Schema version for forward compatibility
