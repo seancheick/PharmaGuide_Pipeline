@@ -133,6 +133,21 @@ _EVIDENCE_STRENGTH_TO_SUPPORT_LEVEL = {
     "weak": "weak",
 }
 
+# Reviewed IQM parent crossings where the form text is intentionally more
+# specific than the cleaner's parent-level canonical. Any IQM-to-IQM crossing
+# not listed here is treated as a resolver bug and falls back to the cleaner
+# parent instead of silently changing the scored ingredient.
+IQM_CANONICAL_CROSS_PARENT_ALLOWLIST: Dict[Tuple[str, str], Tuple[str, ...]] = {
+    ("vitamin_k", "vitamin_k1"): (
+        "phytonadione",
+        "phylloquinone",
+        "vitamin k1",
+    ),
+    ("turmeric", "curcumin"): (
+        "curcuminoid",
+    ),
+}
+
 
 def _compute_strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> Optional[str]:
     """Map a per-strain CFU count to its adequacy tier using Dr Pham's
@@ -4478,6 +4493,8 @@ class SupplementEnricherV3:
         matched_forms = []
         unmapped_forms = []
         generic_form_tokens = []
+        cleaner_canonical_enforced_by_form = False
+        cleaner_canonical_fallback_by_form = False
 
         for form_data in extracted_forms:
             match_candidates = form_data.get('match_candidates', [])
@@ -4534,6 +4551,10 @@ class SupplementEnricherV3:
                     cleaner_canonical_id=cleaner_canonical_id,
                 )
                 if form_match:
+                    if form_match.get("cleaner_canonical_enforced"):
+                        cleaner_canonical_enforced_by_form = True
+                    if form_match.get("cleaner_canonical_fallback"):
+                        cleaner_canonical_fallback_by_form = True
                     form_id = form_match.get('form_id', '')
                     # Accept if it's a specific form (not unspecified)
                     if form_id and 'unspecified' not in form_id.lower():
@@ -4588,6 +4609,9 @@ class SupplementEnricherV3:
                     'generic_form_tokens': generic_form_tokens,
                     'unmapped_forms': [],
                     'form_extraction_used': True,
+                    'cleaner_canonical_enforced': cleaner_canonical_enforced_by_form,
+                    'cleaner_canonical_fallback': cleaner_canonical_fallback_by_form,
+                    'cleaner_canonical_id': cleaner_canonical_id,
                 }
             return None
 
@@ -4678,6 +4702,15 @@ class SupplementEnricherV3:
                 for f in matched_forms[1:]
             ] if len(matched_forms) > 1 else []
         }
+
+        for key in (
+            "cleaner_canonical_id",
+            "cleaner_canonical_enforced",
+            "cleaner_canonical_fallback",
+            "cleaner_canonical_cross_parent_allowed",
+        ):
+            if key in primary_match:
+                result[key] = primary_match[key]
 
         return result
 
@@ -5067,6 +5100,8 @@ class SupplementEnricherV3:
             and not cleaner_canonical_id.startswith("_")
         ):
             cleaner_iqm_canonical = cleaner_canonical_id
+        cleaner_form_constraint_enforced = False
+        cleaner_form_constraint_fallback = False
 
         # MULTI-FORM MATCHING: Try structured cleaned_forms first, then fall back
         # to label text extraction. This fixes the "form loss" issue where cleaning
@@ -5082,6 +5117,10 @@ class SupplementEnricherV3:
                         cleaner_canonical_id=cleaner_iqm_canonical,
                     )
                     if multi_form_result:
+                        if multi_form_result.get("cleaner_canonical_enforced"):
+                            cleaner_form_constraint_enforced = True
+                        if multi_form_result.get("cleaner_canonical_fallback"):
+                            cleaner_form_constraint_fallback = True
                         if not multi_form_result.get('all_forms_generic'):
                             # Branded tokens (KSM-66, Sensoril, etc.) are more specific than
                             # DSLD sub-form labels like "Ashwagandha Root Extract". If the
@@ -5165,6 +5204,10 @@ class SupplementEnricherV3:
                     cleaner_canonical_id=cleaner_iqm_canonical,
                 )
                 if multi_form_result:
+                    if multi_form_result.get("cleaner_canonical_enforced"):
+                        cleaner_form_constraint_enforced = True
+                    if multi_form_result.get("cleaner_canonical_fallback"):
+                        cleaner_form_constraint_fallback = True
                     if not multi_form_result.get('all_forms_generic'):
                         # Branded tokens are more specific than label-extracted form text.
                         # If branded token resolves to a higher bio_score form, prefer it.
@@ -5861,6 +5904,41 @@ class SupplementEnricherV3:
         # silybin/siliphos/silipide aliases) are dropped before sort.
         cleaner_canonical_enforced = False
         cleaner_canonical_fallback = False
+        cleaner_canonical_cross_parent_allowed = False
+
+        def _is_allowed_cleaner_canonical_cross_parent(candidate: Dict) -> bool:
+            if not cleaner_iqm_canonical:
+                return False
+            target_parent = candidate.get("parent_key")
+            allowed_aliases = IQM_CANONICAL_CROSS_PARENT_ALLOWLIST.get(
+                (cleaner_iqm_canonical, target_parent)
+            )
+            if not allowed_aliases:
+                return False
+
+            alias_blob = " ".join(
+                str(value or "")
+                for value in (
+                    candidate.get("matched_alias"),
+                    candidate.get("form_key"),
+                    candidate.get("fallback_form_name"),
+                )
+            )
+            if (cleaner_iqm_canonical, target_parent) == ("turmeric", "curcumin"):
+                # Clinical-review policy: turmeric only upgrades to curcumin
+                # when the form text explicitly declares curcuminoids or 95%
+                # standardization. Plain "curcumin" / branded-token text is
+                # not enough to overwrite the botanical parent.
+                return (
+                    "curcuminoid" in alias_blob.lower()
+                    or re.search(r"\b95\s*%", alias_blob, flags=re.IGNORECASE) is not None
+                )
+            alias_blob_norm = self._normalize_text(alias_blob)
+            return any(
+                self._normalize_text(alias) in alias_blob_norm
+                for alias in allowed_aliases
+            )
+
         if cleaner_iqm_canonical and candidates:
             constrained = [c for c in candidates if c["parent_key"] == cleaner_iqm_canonical]
             if constrained:
@@ -5868,6 +5946,23 @@ class SupplementEnricherV3:
                 if len(constrained) != len(candidates):
                     cleaner_canonical_enforced = True
                 candidates = constrained
+            else:
+                allowed_cross_parent = [
+                    c for c in candidates
+                    if _is_allowed_cleaner_canonical_cross_parent(c)
+                ]
+                if allowed_cross_parent:
+                    cleaner_canonical_enforced = True
+                    cleaner_canonical_cross_parent_allowed = True
+                    candidates = allowed_cross_parent
+                else:
+                    # The cleaner resolved an IQM parent, but every form-text
+                    # candidate pointed somewhere else. Treat that as no
+                    # candidate so the existing parent fallback preserves the
+                    # cleaner's canonical instead of silently crossing parents.
+                    cleaner_canonical_enforced = True
+                    cleaner_canonical_fallback = True
+                    candidates = []
 
         if not candidates:
             # Cleaner emitted an IQM canonical but text match produced zero
@@ -6021,8 +6116,12 @@ class SupplementEnricherV3:
         best["match_data"]["fallback_form_name"] = best["fallback_form_name"]
         if cleaner_iqm_canonical:
             best["match_data"]["cleaner_canonical_id"] = cleaner_iqm_canonical
-            best["match_data"]["cleaner_canonical_enforced"] = cleaner_canonical_enforced
-            if cleaner_canonical_fallback:
+            best["match_data"]["cleaner_canonical_enforced"] = (
+                cleaner_canonical_enforced or cleaner_form_constraint_enforced
+            )
+            if cleaner_canonical_cross_parent_allowed:
+                best["match_data"]["cleaner_canonical_cross_parent_allowed"] = True
+            if cleaner_canonical_fallback or cleaner_form_constraint_fallback:
                 best["match_data"]["cleaner_canonical_fallback"] = True
 
         if match_tier == "pattern":

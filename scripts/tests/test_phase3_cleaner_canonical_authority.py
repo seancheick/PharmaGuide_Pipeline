@@ -143,6 +143,148 @@ class TestParentFallbackWhenConstrainedPoolEmpty:
         assert result.get("cleaner_canonical_fallback") is True
         assert result.get("cleaner_canonical_enforced") is True
 
+    @pytest.mark.parametrize(
+        ("cleaner_canonical", "label_name", "forms", "wrong_canonicals"),
+        [
+            (
+                "vitamin_e",
+                "Vitamin E",
+                [{"name": "Alpha-Tocopherol"}, {"name": "Brassica napus"}],
+                {"canola_oil", "sunflower_oil"},
+            ),
+            (
+                "phosphorus",
+                "Phosphorus",
+                [{"name": "Dicalcium Phosphate"}],
+                {"calcium", "dicalcium_phosphate"},
+            ),
+            (
+                "dha",
+                "DHA",
+                [{"name": "ethyl ester"}],
+                {"fish_oil", "algae_oil"},
+            ),
+            (
+                "calcium",
+                "Calcium",
+                [{"name": "Calcium Ascorbate"}],
+                {"vitamin_c"},
+            ),
+            (
+                "curcumin",
+                "Curcumin",
+                [{"name": "Turmeric Extract"}],
+                {"turmeric"},
+            ),
+            (
+                "coffee_fruit",
+                "Coffee Fruit Extract",
+                [{"name": "Caffeine"}],
+                {"caffeine"},
+            ),
+            (
+                "nmn",
+                "Nicotinamide Mononucleotide",
+                [{"name": "Niacinamide"}],
+                {"vitamin_b3_niacin"},
+            ),
+            (
+                "nadh",
+                "NADH",
+                [{"name": "Niacinamide"}],
+                {"vitamin_b3_niacin"},
+            ),
+            (
+                "nicotinamide_riboside",
+                "Nicotinamide Riboside",
+                [{"name": "Niacinamide"}],
+                {"vitamin_b3_niacin"},
+            ),
+            (
+                "probiotics",
+                "Probiotic Blend",
+                [{"name": "Lactobacillus acidophilus"}],
+                {"lactobacillus_acidophilus"},
+            ),
+            (
+                "magnesium",
+                "Magnesium",
+                [{"name": "Magnesium Ascorbate"}],
+                {"vitamin_c"},
+            ),
+        ],
+    )
+    def test_cleaned_forms_with_only_off_parent_candidates_fall_back_to_cleaner_parent(
+        self,
+        enricher,
+        iqm,
+        cleaner_canonical,
+        label_name,
+        forms,
+        wrong_canonicals,
+    ) -> None:
+        result = enricher._match_quality_map(
+            ing_name=label_name,
+            std_name=label_name,
+            quality_map=iqm,
+            cleaned_forms=forms,
+            cleaner_canonical_id=cleaner_canonical,
+        )
+        assert result is not None
+        assert result.get("canonical_id") == cleaner_canonical
+        assert result.get("canonical_id") not in wrong_canonicals
+        assert result.get("cleaner_canonical_id") == cleaner_canonical
+        assert result.get("cleaner_canonical_enforced") is True
+
+    @pytest.mark.parametrize(
+        ("cleaner_canonical", "label_name", "forms", "expected_canonical"),
+        [
+            ("vitamin_k", "Vitamin K", [{"name": "Phytonadione"}], "vitamin_k1"),
+            (
+                "turmeric",
+                "Turmeric",
+                [{"name": "Meriva Turmeric Phytosome Curcuminoids"}],
+                "curcumin",
+            ),
+        ],
+    )
+    def test_reviewed_cross_parent_policy_exceptions_still_score_specific_active(
+        self,
+        enricher,
+        iqm,
+        cleaner_canonical,
+        label_name,
+        forms,
+        expected_canonical,
+    ) -> None:
+        result = enricher._match_quality_map(
+            ing_name=label_name,
+            std_name=label_name,
+            quality_map=iqm,
+            cleaned_forms=forms,
+            cleaner_canonical_id=cleaner_canonical,
+        )
+        assert result is not None
+        assert result.get("canonical_id") == expected_canonical
+        assert result.get("cleaner_canonical_id") == cleaner_canonical
+        assert result.get("cleaner_canonical_cross_parent_allowed") is True
+
+    def test_turmeric_plain_curcumin_text_does_not_cross_to_curcumin(
+        self, enricher, iqm
+    ) -> None:
+        result = enricher._match_quality_map(
+            ing_name="Turmeric",
+            std_name="Turmeric",
+            quality_map=iqm,
+            cleaned_forms=[{"name": "Curcumin C3 Complex"}],
+            cleaner_canonical_id="turmeric",
+        )
+        assert result is not None
+        assert result.get("canonical_id") == "turmeric"
+        assert result.get("canonical_id") != "curcumin"
+        assert result.get("cleaner_canonical_enforced") is True
+        assert result.get("cleaner_canonical_cross_parent_allowed") is not True
+
 
 # ---------------------------------------------------------------------------
 # Legacy path remains intact when cleaner_canonical_id is absent / non-IQM
