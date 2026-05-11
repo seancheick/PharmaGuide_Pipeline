@@ -5651,7 +5651,9 @@
         "grape seed skin extract",
         "French Grape (Vitis vinifera) seed extract",
         "grape 95% extract",
-        "Vitis vinifera"
+        "Vitis vinifera",
+        "grape skin extract",
+        "red wine extract"
       ],
       "category": "fruit",
       "notes": "Vitis vinifera (Vitaceae) fruit. Contains resveratrol, quercetin, and anthocyanins (in red varieties). Botanical whole-grape powder form covering generic grape labels. Not standardized.",
@@ -11404,7 +11406,8 @@
         "japanese sophora",
         "Styphnolobium japonicum",
         "Phospholipid Complex, Sophora japonica Flower Extract",
-        "Sophora japonica Flower Extract, Sunflower Phospholipids"
+        "Sophora japonica Flower Extract, Sunflower Phospholipids",
+        "sophora japonica extract"
       ],
       "category": "flower",
       "notes": "Styphnolobium japonicum (syn. Sophora japonica, Fabaceae) flower bud. Huai Hua in TCM. Natural source of rutin bioflavonoid (up to 20% dry weight). Used for venous and capillary health.",
@@ -12255,7 +12258,8 @@
         "Curcuma longa Root Extract, Phospholipid Complex",
         "turmeric powder (unstandardized)",
         "curcumin powder",
-        "unstandardized curcumin"
+        "unstandardized curcumin",
+        "turmeric curcumin"
       ],
       "category": "root",
       "notes": "Curcuma longa (Zingiberaceae) rhizome. Contains curcuminoids (curcumin, demethoxycurcumin, bisdemethoxycurcumin, 2-5%) and turmerone essential oil. Most-studied botanical anti-inflammatory.",

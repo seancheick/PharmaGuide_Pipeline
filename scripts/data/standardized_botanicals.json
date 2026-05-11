@@ -3,7 +3,7 @@
     "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
     "purpose": "Standardized branded forms reference (bonus-awarding layer per match_ledger.py \u2014 capped bonus when label shows standardization evidence). Holds plant-part botanicals AND non-botanical branded forms (amino acids, minerals, fatty acids, proteins, fibers, fermentates, hormones). Non-botanical entries cross-reference their matching IQM parent via attributes.iqm_parent_id.",
     "schema_version": "5.0.0",
-    "last_updated": "2026-04-30",
+    "last_updated": "2026-05-11",
     "total_entries": 239,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight.",
     "required_fields": [
@@ -50,7 +50,8 @@
       "USP Dietary Supplement Standards",
       "European Pharmacopoeia botanical monographs",
       "FDA GRAS and NDI notifications"
-    ]
+    ],
+    "notes": "| identity_bioactivity_split Phase 3: 5 source-botanical aliases relocated to source canonicals."
   },
   "standardized_botanicals": [
     {
@@ -2352,7 +2353,6 @@
         "curcumin 95%",
         "curcumin standardized extract",
         "diferuloylmethane",
-        "turmeric curcumin",
         "curcumin complex",
         "curcumin powder"
       ],
@@ -5755,7 +5755,6 @@
       "standard_name": "Quercetin",
       "aliases": [
         "quercetin dihydrate",
-        "sophora japonica extract",
         "quercetin-rich botanicals"
       ],
       "markers": [
@@ -5892,9 +5891,6 @@
       "standard_name": "Resveratrol",
       "aliases": [
         "trans-resveratrol",
-        "polygonum cuspidatum extract",
-        "grape skin extract",
-        "red wine extract",
         "trans resveratrol"
       ],
       "markers": [
