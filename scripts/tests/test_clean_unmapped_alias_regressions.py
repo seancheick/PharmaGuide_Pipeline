@@ -1219,7 +1219,7 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Horsetail leaf extract", "Horsetail"),
         ("Horsetail leaf & stem extract", "Horsetail"),
         ("Horsetail (Equisetum arvense) 4:1 aerial parts extract", "Horsetail"),
-        ("Horse Chestnut 20% extract", "Aescin"),
+        ("Horse Chestnut 20% extract", "Horse Chestnut Seed"),
         ("Holy Basil (Ocimum sanctum) leaf supercritical CO2 extract", "Holy Basil"),
         ("Hawthorn berry ext.", "Hawthorn"),
         ("Guggul ext.", "Guggul"),

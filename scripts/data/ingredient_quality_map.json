@@ -9006,14 +9006,10 @@
           "resvida",
           "resvinol-25",
           "resveratrol 50% extract",
-          "polygonum cuspidatum 50% extract",
-          "standardized extract of polygonum cuspidatum",
           "hu zhang",
           "hu zhang extract",
           "hu zhang root extract",
           "hu zhang hydroethanolic extract",
-          "chinese knotweed extract",
-          "Asian Knotweed Root Extract",
           "Veri-te resveratrol",
           "Reynoutria japonica root extract",
           "BioVin",
@@ -51120,9 +51116,7 @@
         "aliases": [
           "aescin",
           "escin",
-          "beta-aescin",
-          "horse chestnut 20% extract",
-          "horse chestnut extract 20%"
+          "beta-aescin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

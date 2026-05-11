@@ -2849,6 +2849,39 @@ class EnhancedDSLDNormalizer:
                             logger.debug(f"Fuzzy matched form '{form}' -> '{fuzzy_form}' (score: {form_score})")
                 
                 return mapped_name, True, mapped_forms or forms
+
+        # Identity vs bioactivity split: standardized source-botanical labels
+        # often arrive as one raw ingredient string, e.g.
+        # "Turmeric Extract standardized to 95% curcuminoids". If the full
+        # string is not an alias, preserve the source identity by matching the
+        # base ingredient before the standardization clause. Marker credit is
+        # handled downstream via delivers_markers[].
+        marker_terms = (
+            "curcuminoids?|glucoraphanin|sulforaphane|aescin|escin|"
+            "resveratrol|capsaicin|capsaicinoids?|quercetin|vitamin\\s+c|"
+            "ascorbic\\s+acid|lycopene"
+        )
+        standardization_base_candidates = []
+        for pattern in (
+            r"\s+standardi[sz]ed\s+(?:to\s+)?\d+(?:\.\d+)?\s*%.*$",
+            rf"\s+\d+(?:\.\d+)?\s*%\s+(?:{marker_terms}).*$",
+        ):
+            candidate = re.sub(pattern, "", name, flags=re.IGNORECASE).strip(" ,;:-")
+            if candidate and candidate.lower() != name_lower:
+                standardization_base_candidates.append(candidate)
+        for candidate in standardization_base_candidates:
+            processed_candidate = self.matcher.preprocess_text(candidate)
+            if processed_candidate in self.ingredient_alias_lookup:
+                mapped_name = self.ingredient_alias_lookup[processed_candidate]
+                return mapped_name, True, forms or []
+            candidate_name, candidate_mapped, candidate_forms = self._perform_ingredient_mapping(
+                candidate,
+                forms,
+                ingredient_group,
+                allow_descriptor_fallback=False,
+            )
+            if candidate_mapped:
+                return candidate_name, True, candidate_forms or forms or []
         
         # Check if ingredient exists in harmful additives database
         harmful_info = self._enhanced_harmful_check(name)
