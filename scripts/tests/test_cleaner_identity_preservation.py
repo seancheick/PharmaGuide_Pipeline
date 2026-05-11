@@ -30,6 +30,17 @@ def normalizer():
 # Each row: (label, expected_substring_in_standard_name, reason)
 # expected_substring is matched case-insensitively against the cleaner output.
 SOURCE_BOTANICAL_CASES = [
+    # Phase 8 — kelp / marigold / citrus (post-Codex review)
+    ("Kelp",                         "seaweed",  "Phase 8: kelp source → botanical, not iodine marker"),
+    ("Kelp Blend",                   "seaweed",  "Phase 8: bare kelp blend"),
+    ("Kelp extract",                 "seaweed",  "Phase 8: kelp extract → botanical"),
+    ("Organic Kelp",                 "seaweed",  "Phase 8: organic kelp → botanical"),
+    ("Marigold extract",             "marigold", "Phase 8: marigold source → marigold botanical, not lutein"),
+    ("Aztec Marigold extract",       "marigold", "Phase 8: aztec marigold variant"),
+    ("Tagetes erecta extract",       "marigold", "Phase 8: Latin name → marigold"),
+    ("Citrus extract",               "citrus",   "Phase 8: bare citrus → citrus_fruit_extract, not bioflavonoid marker"),
+    ("Citrus sinensis",              "citrus",   "Phase 8: Latin name for sweet orange"),
+    ("Citrus spp.",                  "citrus",   "Phase 8: taxonomic citrus → botanical"),
     # Pure source-botanical labels — must resolve to source botanical, NOT marker.
     ("Acerola Extract",              "acerola",  "previously routed to vitamin_c (bio=12)"),
     ("Acerola Cherry Extract",       "acerola",  "vitamin_c.acerola_cherry_extract form deleted"),
@@ -60,6 +71,14 @@ SOURCE_BOTANICAL_CASES = [
 
 # Marker products that MUST still resolve to their marker canonical.
 MARKER_PRESERVATION_CASES = [
+    # Phase 8 marker preservation — "X from Y" or "X-from-source" patterns still
+    # resolve to marker (Y is just provenance).
+    ("Iodine from Kelp",   "iodine",       "Phase 8: marker-from-source declaration"),
+    ("Seaweed Iodine",     "iodine",       "Phase 8: source-prefix but marker-declared"),
+    ("Lutein 2020 Marigold", "lutein",     "Phase 8: branded marker with source mention"),
+    ("Marigold Lutein",    "lutein",       "Phase 8: marker-after-source naming"),
+    ("Citrus Bioflavonoids", "bioflavonoid", "Phase 8: full marker name"),
+    ("Vitamin P",          "bioflavonoid", "Phase 8: historical marker name maps to citrus_bioflavonoids"),
     ("Vitamin C",          "vitamin c",    "core marker"),
     ("Liposomal Vitamin C", "vitamin c",   "premium delivery form"),
     ("Ascorbic Acid",      "vitamin c",    "USP-grade marker"),
@@ -93,6 +112,17 @@ def test_source_botanical_does_not_cross_to_marker(normalizer, label, expected_s
 
 # Forbid: these source-botanical labels MUST NOT resolve to their marker.
 MARKER_FORBIDDEN_FOR_SOURCE = [
+    # Phase 8 negative cases
+    ("Kelp",                         "iodine"),
+    ("Kelp Blend",                   "iodine"),
+    ("Kelp extract",                 "iodine"),
+    ("Organic Kelp",                 "iodine"),
+    ("Marigold extract",             "lutein"),
+    ("Aztec Marigold extract",       "lutein"),
+    ("Tagetes erecta extract",       "lutein"),
+    ("Citrus extract",               "bioflavonoid"),
+    ("Citrus sinensis",              "bioflavonoid"),
+    ("Citrus spp.",                  "bioflavonoid"),
     ("Acerola Extract",              "vitamin c"),
     ("Camu Camu Fruit Extract",      "vitamin c"),
     ("Turmeric (root) extract",      "curcumin"),

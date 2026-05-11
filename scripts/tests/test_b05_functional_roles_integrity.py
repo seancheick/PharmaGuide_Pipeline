@@ -44,6 +44,8 @@ def test_all_botanicals_have_empty_roles_in_v1(botanicals):
 
 
 def test_botanical_total_count_unchanged(botanicals):
-    # 481 after identity_bioactivity_split Phase 2: broccoli_sprout added as
-    # source-botanical canonical (sulforaphane marker contributions split).
-    assert len(botanicals) == 481
+    # 481 after identity_bioactivity_split Phase 2: broccoli_sprout added.
+    # 482 after Phase 8: marigold (Tagetes erecta) added — source botanical for
+    # lutein marker contribution. Previously implicit via IQM marigold aliases
+    # under lutein.forms[]; now an explicit botanical canonical per policy.
+    assert len(botanicals) == 482

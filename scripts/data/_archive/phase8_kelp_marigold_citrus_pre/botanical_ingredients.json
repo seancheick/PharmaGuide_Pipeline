@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-11",
-    "total_entries": 482,
+    "total_entries": 481,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -13,7 +13,7 @@
     },
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
-    "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders. | identity_bioactivity_split: aliases from IQM marker canonicals relocated to source botanicals (Phase 2). | identity_bioactivity_split Phase 8: kelp/marigold/citrus source aliases relocated.",
+    "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders. | identity_bioactivity_split: aliases from IQM marker canonicals relocated to source botanicals (Phase 2).",
     "field_contract_changes": {
       "v5.2.0": "2026-04-30 Phase 6 \u2014 V1.1 attributes scaffolding. Added attributes object with source_origin populated on all entries (plant/fungal/algal/animal derived from category)."
     }
@@ -3248,12 +3248,9 @@
       "standard_name": "Citrus Fruit Extract",
       "aliases": [
         "citrus extract",
+        "citrus bioflavonoids",
         "Citrus spp. Fruit Extract",
-        "Citrus spp Fruit Extract",
-        "citrus extract supplement",
-        "citrus sinensis",
-        "citrus sinensis extract",
-        "Citrus spp."
+        "Citrus spp Fruit Extract"
       ],
       "category": "fruit",
       "notes": "Generic citrus (Rutaceae) fruit extract covering multiple Citrus species. Contains bioflavonoids (hesperidin, naringin, rutin). Identity mapping for non-specific citrus extract labels. Not standardized.",
@@ -7236,12 +7233,7 @@
         "Kelp",
         "ecklonia radiata",
         "ecklonia kurome",
-        "alaria esculenta",
-        "icelandic kelp",
-        "kelp extract",
-        "organic kelp",
-        "Laminaria saccharina",
-        "Laminaria saccharina, Powder"
+        "alaria esculenta"
       ],
       "category": "seaweed",
       "notes": "Laminaria digitata / Ascophyllum nodosum (Laminariaceae) thallus. Brown seaweed naturally rich in iodine (1,500-8,000 \u00b5g/g). Contains fucoidan and alginate polysaccharides. Botanical seaweed powder.",
@@ -14714,27 +14706,6 @@
       "last_updated": "2026-05-11",
       "external_ids": {},
       "cui": "C4521843",
-      "functional_roles": [],
-      "attributes": {
-        "source_origin": "plant"
-      }
-    },
-    {
-      "id": "marigold",
-      "standard_name": "Marigold",
-      "latin_name": "Tagetes erecta",
-      "aliases": [
-        "marigold flower extract",
-        "marigold extract",
-        "tagetes erecta extract",
-        "aztec marigold extract",
-        "2020 marigold flower extract"
-      ],
-      "category": "flower",
-      "notes": "Tagetes erecta (Aztec marigold) flower extract. Commercial source of lutein and zeaxanthin via saponification. Per identity_bioactivity_split policy: bare marigold labels resolve to this botanical canonical; lutein marker Section C credit requires explicit standardization declaration (see scripts/data/botanical_marker_contributions.json \u2014 TODO: add entry).",
-      "last_updated": "2026-05-11",
-      "external_ids": {},
-      "cui": "C0938046",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
