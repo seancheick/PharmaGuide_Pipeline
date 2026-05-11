@@ -42,7 +42,11 @@ CURCUMIN_EVIDENCE_BANDS = [
     ('bcm-95 curcumin',                     0.01,  0.05,  'PMID:20046768 Antony 2008 — 6.93× pilot'),
     ('curcumin c3 complex with bioperine',  0.01,  0.05,  'PMID:40487425 Kroon 2025 — piperine debunked'),
     ('curcumin c3 complex',                 0.005, 0.04,  'class baseline ~1-3% absolute F'),
-    ('turmeric powder (unstandardized)',    0.001, 0.025, 'class baseline; raw root with 2-5% curcumin content'),
+    # NOTE: 'turmeric powder (unstandardized)' removed by identity_bioactivity_split
+    # Phase 2 — turmeric is no longer a curcumin IQM form (relocated to source
+    # botanical 'turmeric'). Raw turmeric on labels now resolves to botanical
+    # canonical; curcumin Section C credit requires 95%+ standardization
+    # declaration per botanical_marker_contributions.json policy.
 ]
 
 

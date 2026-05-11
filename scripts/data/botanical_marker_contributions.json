@@ -8,7 +8,9 @@
       "PubMed E-utilities (eutils.ncbi.nlm.nih.gov/entrez/eutils)"
     ],
     "policy": "Identity vs Bioactivity Split \u2014 source botanicals only credit marker Section C evidence when (a) label explicitly declares standardization meeting min_standardization_pct_required, or (b) botanical has a default_contribution_mg_per_g with USDA FDC citation.",
-    "total_entries": 9
+    "total_entries": 9,
+    "description": "Maps source-botanical canonicals to the bioactivity markers they may deliver. Used by enricher to compute delivers_markers[] per ingredient when label declares standardization or botanical has a USDA-cited default contribution. Architectural fix for the identity-vs-bioactivity split (canonical_id = label identity, delivers_markers[] = clinical contribution).",
+    "purpose": "marker_contribution_reference"
   },
   "botanicals": {
     "acerola_cherry": {

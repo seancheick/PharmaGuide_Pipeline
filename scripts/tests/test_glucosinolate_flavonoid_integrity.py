@@ -30,8 +30,11 @@ EVIDENCE_LOCKS = [
     # Sulforaphane forms: hierarchy stabilized > +myrosinase ≈ sprout > glucoraphanin alone
     ('sulforaphane',   'stabilized sulforaphane',      0.55, 0.85,
      'PMC:3076202 — pre-formed sulforaphane ~70% urinary metabolite recovery'),
-    ('sulforaphane',   'broccoli sprout extract',      0.25, 0.55,
-     'Variable endogenous myrosinase activity; ~30-50% conversion'),
+    # NOTE: 'broccoli sprout extract' removed by identity_bioactivity_split
+    # Phase 2 — broccoli sprout is now a source-botanical canonical
+    # (broccoli_sprout), not a sulforaphane IQM form. Sulforaphane Section C
+    # credit requires explicit standardization per
+    # scripts/data/botanical_marker_contributions.json.
     ('sulforaphane',   'glucoraphanin',                0.01, 0.10,
      'PMC:3076202 — mean ~5% conversion without exogenous myrosinase'),
     ('sulforaphane',   'glucoraphanin + myrosinase',   0.20, 0.45,
@@ -61,7 +64,13 @@ def test_struct_value_in_evidence_band(iqm, pid, fname, vmin, vmax, basis):
 
 def test_sulforaphane_hierarchy_preserved(iqm):
     """Sulforaphane form ranking by absorption MUST stay in evidence order:
-    stabilized > (sprout ≈ +myrosinase) > glucoraphanin alone.
+    stabilized > +myrosinase > glucoraphanin alone.
+
+    Note: identity_bioactivity_split Phase 2 removed 'broccoli sprout extract'
+    from sulforaphane IQM forms (relocated to broccoli_sprout source botanical).
+    The remaining IQM forms still preserve the active-ingredient hierarchy.
+    Broccoli sprout's Section C credit pathway lives in
+    scripts/data/botanical_marker_contributions.json under standardization gating.
     """
     f = iqm['sulforaphane']['forms']
     def v(name):
@@ -69,13 +78,8 @@ def test_sulforaphane_hierarchy_preserved(iqm):
 
     stabilized   = v('stabilized sulforaphane')
     plus_myro    = v('glucoraphanin + myrosinase')
-    sprout       = v('broccoli sprout extract')
     glucoraphanin = v('glucoraphanin')
 
-    assert stabilized > sprout, (
-        f'stabilized sulforaphane ({stabilized}) must absorb more than '
-        f'broccoli sprout extract ({sprout}); pre-formed bypasses myrosinase step'
-    )
     assert stabilized > plus_myro, (
         f'stabilized sulforaphane ({stabilized}) must absorb more than '
         f'glucoraphanin + exogenous myrosinase ({plus_myro})'
@@ -84,10 +88,6 @@ def test_sulforaphane_hierarchy_preserved(iqm):
         f'glucoraphanin + myrosinase ({plus_myro}) must absorb more than '
         f'glucoraphanin alone ({glucoraphanin}); exogenous enzyme overcomes '
         f'absent gut myrosinase activity'
-    )
-    assert sprout > glucoraphanin, (
-        f'broccoli sprout extract ({sprout}, has endogenous myrosinase) must '
-        f'absorb more than glucoraphanin alone ({glucoraphanin}, no myrosinase)'
     )
 
 

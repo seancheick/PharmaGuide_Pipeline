@@ -44,4 +44,6 @@ def test_all_botanicals_have_empty_roles_in_v1(botanicals):
 
 
 def test_botanical_total_count_unchanged(botanicals):
-    assert len(botanicals) == 480
+    # 481 after identity_bioactivity_split Phase 2: broccoli_sprout added as
+    # source-botanical canonical (sulforaphane marker contributions split).
+    assert len(botanicals) == 481

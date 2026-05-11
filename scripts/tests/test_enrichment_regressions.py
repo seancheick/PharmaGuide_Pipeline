@@ -1983,7 +1983,11 @@ def test_pure_encapsulations_branded_parent_fallbacks_map_to_specific_forms():
         ("Perluxan Hops (Humulus lupulus) extract", "hops", "hops extract (unspecified)"),
         ("Lifenol Hops (Humulus lupulus) extract", "hops", "hops extract (unspecified)"),
         ("Meriva Turmeric Phytosome Complex Curcuminoids", "curcumin", "meriva curcumin"),
-        ("Meriva Turmeric Phytosome Sunflower Phospholipid Complex", "curcumin", "meriva curcumin"),
+        # NOTE: 'Meriva Turmeric Phytosome Sunflower Phospholipid Complex' (no
+        # curcuminoid keyword) was relocated to turmeric botanical canonical in
+        # identity_bioactivity_split Phase 2 — variant without standardization
+        # marker text now routes to source botanical. Pending T5 rewrite to
+        # assert botanical resolution + delivers_markers attachment.
     ]
 
     for label, expected_canonical, expected_form in cases:

@@ -1259,7 +1259,10 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("Immune Support Response", "immune support response"),
         ("Glucanase", "Digestive Enzymes"),
         ("Chinese Cinnamon (Cinnamomum cassia) bark powder", "Cinnamon"),
-        ("Camu Camu Fruit Extract", "Vitamin C"),
+        # identity_bioactivity_split Phase 2: Camu Camu now routes to source
+        # botanical camu_camu (not vitamin_c). Vitamin C marker credit lives in
+        # delivers_markers[] gated on label standardization.
+        ("Camu Camu Fruit Extract", "Camu Camu"),
         ("Calcium Glycinate", "Calcium"),
         ("Boswellin Super", "Boswellia"),
         ("Boswella extract", "Boswellia"),
@@ -2497,9 +2500,11 @@ def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, 
 @pytest.mark.parametrize(
     "name,expected_substring",
     [
-        # Turmeric cluster — now correctly routes to IQM Curcumin/Turmeric
-        # (fixed: removed turmeric from explicit_natural_dyes to prevent dye interception)
-        ("organic turmeric", "Curcumin"),
+        # Turmeric cluster — post identity_bioactivity_split Phase 2, bare
+        # turmeric routes to source botanical Turmeric (NOT curcumin).
+        # Curcumin Section C credit requires explicit 95%+ standardization
+        # declaration per botanical_marker_contributions.json policy.
+        ("organic turmeric", "Turmeric"),
         ("organic turmeric root extract", "Turmeric"),
         ("organic fermented turmeric", "Turmeric"),
         ("turmeric curcuminoids", "Turmeric"),
@@ -2525,8 +2530,10 @@ def test_batch45_inactive_exact_aliases_map(normalizer, name, ingredient_group, 
         ("essence of pure black pepper (fruit) oil", "Piperine"),
         # Strontium
         ("strontium", "Strontium"),
-        # Cayenne
-        ("organic cayenne", "Capsaicin"),
+        # Cayenne — post identity_bioactivity_split Phase 2, bare cayenne
+        # routes to source botanical (NOT capsaicin marker). Capsaicin
+        # Section C credit requires 2%+ standardization declaration.
+        ("organic cayenne", "Cayenne"),
         # Other
         ("organic anise", "Anise"),
         ("organic schisandra (schisandra chinensis) berry extract", "Schisandrin"),

@@ -49,8 +49,10 @@ def iqm():
 # (parent, form, vmin, vmax, basis)
 VITCE_BANDS = [
     # Vit C
-    ('vitamin_c', 'camu camu extract',           0.60, 0.80, 'whole-food = SVCT1-class'),
-    ('vitamin_c', 'acerola cherry extract',      0.65, 0.80, 'Uchida 2011 NS AUC trend'),
+    # NOTE: 'camu camu extract' and 'acerola cherry extract' removed by
+    # identity_bioactivity_split Phase 2 — they're now source-botanical
+    # canonicals (camu_camu, acerola_cherry), not vitamin_c forms. Will be
+    # re-asserted as botanical bio_scores in T6 (scorer Section A extension).
     ('vitamin_c', 'potassium ascorbate',         0.70, 0.85, 'class-match ascorbate salts'),
     ('vitamin_c', 'zinc ascorbate',              0.70, 0.85, 'class-match ascorbate salts'),
     ('vitamin_c', 'slow-release vitamin C',      0.65, 0.85, 'Viscovich 2004 reduced fluctuation'),
@@ -133,6 +135,14 @@ def test_ascorbate_salts_class_consistent(iqm):
     )
 
 
+@pytest.mark.skip(
+    reason=(
+        "identity_bioactivity_split Phase 2: camu camu and acerola are no longer "
+        "vitamin_c IQM forms (relocated to source-botanical canonicals camu_camu / "
+        "acerola_cherry). New equivalent assertion lives in T6 (scorer Section A "
+        "+ delivers_markers Section C bands)."
+    )
+)
 def test_camu_acerola_not_above_ascorbic_acid(iqm):
     """Per Carr & Vissers 2013 (PMID:24067392) and Uchida 2011 (PMID:22040889),
     whole-food vit C does NOT exceed ascorbic acid in absolute F. The

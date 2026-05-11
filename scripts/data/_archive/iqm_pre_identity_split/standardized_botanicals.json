@@ -1,7 +1,7 @@
 {
   "_metadata": {
     "description": "Botanical extracts, herbs, and plant-derived ingredients with standardization markers and thresholds",
-    "purpose": "Standardized branded forms reference (bonus-awarding layer per match_ledger.py \u2014 capped bonus when label shows standardization evidence). Holds plant-part botanicals AND non-botanical branded forms (amino acids, minerals, fatty acids, proteins, fibers, fermentates, hormones). Non-botanical entries cross-reference their matching IQM parent via attributes.iqm_parent_id.",
+    "purpose": "Standardized branded forms reference (bonus-awarding layer per match_ledger.py — capped bonus when label shows standardization evidence). Holds plant-part botanicals AND non-botanical branded forms (amino acids, minerals, fatty acids, proteins, fibers, fermentates, hormones). Non-botanical entries cross-reference their matching IQM parent via attributes.iqm_parent_id.",
     "schema_version": "5.0.0",
     "last_updated": "2026-04-30",
     "total_entries": 239,
@@ -140,7 +140,7 @@
       },
       "cui": "C1086056",
       "min_threshold": 10,
-      "threshold_source": "10% beta-glucans \u2014 functional mushroom standard"
+      "threshold_source": "10% beta-glucans — functional mushroom standard"
     },
     {
       "standard_name": "Akarkara",
@@ -246,7 +246,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "alphawave_l_theanine",
-      "notes": "AlphaWave \u2014 pure L-theanine from fermentation. Standardized to \u226599% L-theanine (HPLC).",
+      "notes": "AlphaWave — pure L-theanine from fermentation. Standardized to ≥99% L-theanine (HPLC).",
       "category": "amino_acid",
       "external_ids": {},
       "data_quality": "complete",
@@ -419,7 +419,7 @@
       "external_ids": {},
       "cui": "C1215581",
       "min_threshold": 15,
-      "threshold_source": "15% anthocyanins \u2014 standard chokeberry extract"
+      "threshold_source": "15% anthocyanins — standard chokeberry extract"
     },
     {
       "standard_name": "Artichoke",
@@ -545,14 +545,14 @@
         "microalgal astaxanthin"
       ],
       "markers": [
-        "astaxanthin \u2265 3%",
+        "astaxanthin ≥ 3%",
         "total carotenoids"
       ],
       "min_threshold": 3,
       "priority": "high",
       "last_updated": "2025-11-17",
       "id": "astaxanthin_haematococcus_pluvialis",
-      "notes": "Botanical ingredient standardized for astaxanthin \u2265 3%, total carotenoids. Commonly used in dietary supplements.",
+      "notes": "Botanical ingredient standardized for astaxanthin ≥ 3%, total carotenoids. Commonly used in dietary supplements.",
       "category": "herb",
       "external_ids": {
         "unii": "31T0FF0472",
@@ -631,7 +631,7 @@
       "external_ids": {},
       "cui": "C1095897",
       "min_threshold": 0.3,
-      "threshold_source": "0.3% astragalosides \u2014 Chinese Pharmacopoeia"
+      "threshold_source": "0.3% astragalosides — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Bacopa",
@@ -944,7 +944,7 @@
       },
       "cui": "C1134651",
       "min_threshold": 20,
-      "threshold_source": "20% beta-glucans \u2014 minimum for functional claim"
+      "threshold_source": "20% beta-glucans — minimum for functional claim"
     },
     {
       "standard_name": "Bil-Max",
@@ -1089,7 +1089,7 @@
       },
       "cui": "C0771400",
       "min_threshold": 25,
-      "threshold_source": "25% anthocyanins \u2014 concentrated seed/fruit extract"
+      "threshold_source": "25% anthocyanins — concentrated seed/fruit extract"
     },
     {
       "standard_name": "Black Musli",
@@ -1142,7 +1142,7 @@
       "priority": "high",
       "last_updated": "2025-11-17",
       "id": "black_pepper_extract",
-      "notes": "Bioavailability enhancer standardized for 95% piperine (BioPerine\u00ae). Added to turmeric and other supplements to enhance absorption.",
+      "notes": "Bioavailability enhancer standardized for 95% piperine (BioPerine®). Added to turmeric and other supplements to enhance absorption.",
       "category": "seed_fruit",
       "external_ids": {
         "unii": "KM66971LVF"
@@ -1287,7 +1287,7 @@
       },
       "cui": "C1083174",
       "min_threshold": 0.03,
-      "threshold_source": "0.03% iodine content \u2014 typical standardization"
+      "threshold_source": "0.03% iodine content — typical standardization"
     },
     {
       "standard_name": "Blue-Green Algae",
@@ -1466,7 +1466,7 @@
       },
       "cui": "C0006217",
       "min_threshold": 2400,
-      "threshold_source": "2400 GDU/g \u2014 activity unit threshold",
+      "threshold_source": "2400 GDU/g — activity unit threshold",
       "attributes": {
         "iqm_parent_id": "bromelain"
       }
@@ -1503,7 +1503,7 @@
       },
       "cui": "C0873127",
       "min_threshold": 1,
-      "threshold_source": "1% arctiin \u2014 standard root extract"
+      "threshold_source": "1% arctiin — standard root extract"
     },
     {
       "standard_name": "Butcher's Broom",
@@ -1524,7 +1524,7 @@
       "external_ids": {},
       "cui": "C1021282",
       "min_threshold": 10,
-      "threshold_source": "10% ruscogenin \u2014 European Pharmacopoeia standard"
+      "threshold_source": "10% ruscogenin — European Pharmacopoeia standard"
     },
     {
       "standard_name": "Butterbur",
@@ -1565,19 +1565,7 @@
       "aliases": [
         "myrciaria dubia",
         "camu camu powder",
-        "camu camu extract",
-        "natural vitamin c",
-        "amazonian vitamin c",
-        "camu fruit c",
-        "camu camu supplement",
-        "natural vitamin c supplement",
-        "natural vit c",
-        "camu camu extract supplement",
-        "amazonian vitamin c supplement",
-        "amazonian vit c",
-        "camu fruit c supplement",
-        "camu camu fruit extract",
-        "Camu Camu Berry Extract"
+        "camu camu extract"
       ],
       "markers": [
         "vitamin C"
@@ -1674,7 +1662,7 @@
       },
       "rxcui": "285223",
       "gsrs": {
-        "substance_name": "CAT\u2019S CLAW",
+        "substance_name": "CAT’S CLAW",
         "substance_class": "structurallyDiverse",
         "cfr_sections": [],
         "dsld_count": 258,
@@ -1741,7 +1729,7 @@
       },
       "cui": "C1365522",
       "min_threshold": 1,
-      "threshold_source": "1% 3-n-butylphthalide \u2014 celery seed extract standard"
+      "threshold_source": "1% 3-n-butylphthalide — celery seed extract standard"
     },
     {
       "standard_name": "Century Plant",
@@ -1923,7 +1911,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "chromax",
-      "notes": "Chromax \u2014 chromium picolinate by Nutrition21. Dosed by elemental chromium (typically 200 mcg/dose).",
+      "notes": "Chromax — chromium picolinate by Nutrition21. Dosed by elemental chromium (typically 200 mcg/dose).",
       "category": "mineral_chelate",
       "external_ids": {
         "cas": "14639-25-9",
@@ -2006,7 +1994,7 @@
       },
       "cui": "C0301249",
       "min_threshold": 55,
-      "threshold_source": "55% cinnamaldehyde \u2014 USP/Ph.Eur standard"
+      "threshold_source": "55% cinnamaldehyde — USP/Ph.Eur standard"
     },
     {
       "standard_name": "Cissus Quadrangularis",
@@ -2039,7 +2027,7 @@
       },
       "cui": "C1078516",
       "min_threshold": 2.5,
-      "threshold_source": "2.5% ketosteroids \u2014 3-Keto-beta-sitosterol standard"
+      "threshold_source": "2.5% ketosteroids — 3-Keto-beta-sitosterol standard"
     },
     {
       "standard_name": "Cistanche",
@@ -2115,7 +2103,7 @@
       "external_ids": {},
       "cui": "C3651730",
       "min_threshold": 10,
-      "threshold_source": "10% flavanols \u2014 standardized cocoa extract"
+      "threshold_source": "10% flavanols — standardized cocoa extract"
     },
     {
       "standard_name": "Coffeeberry",
@@ -2136,7 +2124,7 @@
       "external_ids": {},
       "cui": "C1138610",
       "min_threshold": 45,
-      "threshold_source": "45% chlorogenic acids \u2014 standard coffee fruit extract"
+      "threshold_source": "45% chlorogenic acids — standard coffee fruit extract"
     },
     {
       "standard_name": "Cognigrape",
@@ -2169,7 +2157,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "cognizin_citicoline",
-      "notes": "Cognizin \u2014 fermentation-derived citicoline by Kyowa Hakko. \u226599% purity by HPLC.",
+      "notes": "Cognizin — fermentation-derived citicoline by Kyowa Hakko. ≥99% purity by HPLC.",
       "category": "nootropic",
       "external_ids": {},
       "data_quality": "complete",
@@ -2302,7 +2290,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "cranrx",
-      "notes": "CranRx \u2014 cranberry (Vaccinium macrocarpon) extract. Standardized to 36 mg PAC/dose by BL-DMAC method.",
+      "notes": "CranRx — cranberry (Vaccinium macrocarpon) extract. Standardized to 36 mg PAC/dose by BL-DMAC method.",
       "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -2534,7 +2522,7 @@
       },
       "cui": "C0440015",
       "min_threshold": 2,
-      "threshold_source": "2% sesquiterpene lactones \u2014 standard root extract"
+      "threshold_source": "2% sesquiterpene lactones — standard root extract"
     },
     {
       "standard_name": "Devil's Claw",
@@ -2635,7 +2623,7 @@
       "external_ids": {},
       "cui": "C0752270",
       "min_threshold": 4,
-      "threshold_source": "4% phenolic compounds \u2014 aligns with species-level entries"
+      "threshold_source": "4% phenolic compounds — aligns with species-level entries"
     },
     {
       "standard_name": "Echinacea Purpurea",
@@ -2772,7 +2760,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "enovita",
-      "notes": "Enovita \u2014 grape seed extract (Vitis vinifera). Standardized to \u226595% OPCs.",
+      "notes": "Enovita — grape seed extract (Vitis vinifera). Standardized to ≥95% OPCs.",
       "category": "seed_fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -2790,7 +2778,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "enxtra",
-      "notes": "EnXtra \u2014 Alpinia galanga rhizome extract by Laila Nutraceuticals. Standardized to ACA profile (exact threshold proprietary).",
+      "notes": "EnXtra — Alpinia galanga rhizome extract by Laila Nutraceuticals. Standardized to ACA profile (exact threshold proprietary).",
       "category": "root",
       "external_ids": {},
       "data_quality": "complete",
@@ -2809,7 +2797,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "epicor",
-      "notes": "EpiCor \u2014 dried yeast fermentate (S. cerevisiae). Whole-food matrix, not standardized to single marker. Identity-tested as complete fermentate.",
+      "notes": "EpiCor — dried yeast fermentate (S. cerevisiae). Whole-food matrix, not standardized to single marker. Identity-tested as complete fermentate.",
       "category": "fermentate",
       "external_ids": {},
       "data_quality": "complete",
@@ -2857,7 +2845,7 @@
       },
       "cui": "C0015148",
       "min_threshold": 70,
-      "threshold_source": "70% eucalyptol/1,8-cineole \u2014 Ph.Eur monograph"
+      "threshold_source": "70% eucalyptol/1,8-cineole — Ph.Eur monograph"
     },
     {
       "standard_name": "Evening Primrose",
@@ -2913,7 +2901,7 @@
       "external_ids": {},
       "cui": "C3728253",
       "min_threshold": 1,
-      "threshold_source": "1% saponins \u2014 stem extract standard"
+      "threshold_source": "1% saponins — stem extract standard"
     },
     {
       "standard_name": "Fennel",
@@ -3106,7 +3094,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "fruitex_b_calcium_fructoborate",
-      "notes": "FruiteX-B \u2014 calcium fructoborate. Provides 3 mg elemental boron per clinical dose.",
+      "notes": "FruiteX-B — calcium fructoborate. Provides 3 mg elemental boron per clinical dose.",
       "category": "mineral_complex",
       "external_ids": {},
       "data_quality": "complete",
@@ -3204,7 +3192,7 @@
       "external_ids": {},
       "cui": "C0017439",
       "min_threshold": 2,
-      "threshold_source": "2% gentiopicroside \u2014 European Pharmacopoeia"
+      "threshold_source": "2% gentiopicroside — European Pharmacopoeia"
     },
     {
       "standard_name": "Ginger Extract",
@@ -3274,7 +3262,7 @@
       "external_ids": {},
       "cui": "C0061267",
       "min_threshold": 5,
-      "threshold_source": "5% gingerols \u2014 standard ginger extract"
+      "threshold_source": "5% gingerols — standard ginger extract"
     },
     {
       "standard_name": "Ginkgo Biloba",
@@ -3339,7 +3327,7 @@
       "external_ids": {},
       "cui": "C0599524",
       "min_threshold": 6,
-      "threshold_source": "6% terpene lactones \u2014 EGb 761 terpene fraction"
+      "threshold_source": "6% terpene lactones — EGb 761 terpene fraction"
     },
     {
       "standard_name": "Goji Berry",
@@ -3360,7 +3348,7 @@
       "external_ids": {},
       "cui": "C4255019",
       "min_threshold": 20,
-      "threshold_source": "20% polysaccharides \u2014 Lycium barbarum standard"
+      "threshold_source": "20% polysaccharides — Lycium barbarum standard"
     },
     {
       "standard_name": "Goldenseal",
@@ -3461,7 +3449,7 @@
       },
       "cui": "C2776583",
       "min_threshold": 12.5,
-      "threshold_source": "12.5% 6-paradol \u2014 Paradoxine standard"
+      "threshold_source": "12.5% 6-paradol — Paradoxine standard"
     },
     {
       "standard_name": "Grape Seed",
@@ -3789,7 +3777,7 @@
       },
       "cui": "C0950016",
       "min_threshold": 20,
-      "threshold_source": "20% gypenosides \u2014 standard jiaogulan extract"
+      "threshold_source": "20% gypenosides — standard jiaogulan extract"
     },
     {
       "standard_name": "Hawthorn",
@@ -3837,7 +3825,7 @@
       "external_ids": {},
       "cui": "C1031603",
       "min_threshold": 1,
-      "threshold_source": "1% TSG (2,3,5,4'-tetrahydroxystilbene-2-O-\u03b2-D-glucoside) \u2014 Chinese Pharmacopoeia"
+      "threshold_source": "1% TSG (2,3,5,4'-tetrahydroxystilbene-2-O-β-D-glucoside) — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Hibiscus Extract",
@@ -3874,7 +3862,7 @@
       },
       "cui": "C1207898",
       "min_threshold": 1.5,
-      "threshold_source": "1.5% anthocyanins \u2014 common standardization"
+      "threshold_source": "1.5% anthocyanins — common standardization"
     },
     {
       "standard_name": "Holy Basil",
@@ -4124,7 +4112,7 @@
       },
       "cui": "C1004696",
       "min_threshold": 0.5,
-      "threshold_source": "0.5% mesembrine \u2014 standard Sceletium tortuosum extract"
+      "threshold_source": "0.5% mesembrine — standard Sceletium tortuosum extract"
     },
     {
       "standard_name": "Kelp",
@@ -4160,7 +4148,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "keraglo",
-      "notes": "KeraGLO \u2014 solubilized keratin from wool (Keraplast technology). Identity-tested, not standardized to % marker.",
+      "notes": "KeraGLO — solubilized keratin from wool (Keraplast technology). Identity-tested, not standardized to % marker.",
       "category": "structural_protein",
       "external_ids": {},
       "data_quality": "complete",
@@ -4203,7 +4191,7 @@
       },
       "cui": "C1572690",
       "min_threshold": 6,
-      "threshold_source": "6% caffeine \u2014 standard kola extract"
+      "threshold_source": "6% caffeine — standard kola extract"
     },
     {
       "standard_name": "KSM-66 Ashwagandha",
@@ -4243,7 +4231,7 @@
       "external_ids": {},
       "cui": "C5779733",
       "min_threshold": 40,
-      "threshold_source": "40% puerarin \u2014 standard root extract"
+      "threshold_source": "40% puerarin — standard root extract"
     },
     {
       "standard_name": "L-Theanine",
@@ -4346,7 +4334,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "levagen",
-      "notes": "Levagen+ \u2014 palmitoylethanolamide (PEA) with LipiSperse dispersion. \u226598% PEA by HPLC.",
+      "notes": "Levagen+ — palmitoylethanolamide (PEA) with LipiSperse dispersion. ≥98% PEA by HPLC.",
       "category": "fatty_acid_amide",
       "external_ids": {
         "cas": "544-31-0",
@@ -4414,7 +4402,7 @@
       },
       "cui": "C0086555",
       "min_threshold": 4,
-      "threshold_source": "4% glycyrrhizin \u2014 European Pharmacopoeia"
+      "threshold_source": "4% glycyrrhizin — European Pharmacopoeia"
     },
     {
       "standard_name": "Life's DHA",
@@ -4429,7 +4417,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "life_s_dha",
-      "notes": "Life's DHA \u2014 algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %.",
+      "notes": "Life's DHA — algal DHA from Schizochytrium sp. (DSM fermentation). Dosed by mg DHA per serving, not standardization %.",
       "category": "algal_oil",
       "external_ids": {},
       "data_quality": "complete",
@@ -4678,7 +4666,7 @@
       },
       "cui": "C1067051",
       "min_threshold": 10,
-      "threshold_source": "10% anthocyanins \u2014 Delphinol standard"
+      "threshold_source": "10% anthocyanins — Delphinol standard"
     },
     {
       "standard_name": "Marigold",
@@ -4760,7 +4748,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "microactive_melatonin",
-      "notes": "MicroActive Melatonin \u2014 microencapsulated sustained-release melatonin. Dosed by mg/serving.",
+      "notes": "MicroActive Melatonin — microencapsulated sustained-release melatonin. Dosed by mg/serving.",
       "category": "hormone_analog",
       "external_ids": {},
       "data_quality": "complete",
@@ -4828,7 +4816,7 @@
       "external_ids": {},
       "cui": "C0042785",
       "min_threshold": 0.1,
-      "threshold_source": "0.1% viscotoxins \u2014 European mistletoe standard"
+      "threshold_source": "0.1% viscotoxins — European mistletoe standard"
     },
     {
       "standard_name": "Moringa",
@@ -4849,7 +4837,7 @@
       "external_ids": {},
       "cui": "C5981468",
       "min_threshold": 1,
-      "threshold_source": "1% isothiocyanates \u2014 leaf extract standard"
+      "threshold_source": "1% isothiocyanates — leaf extract standard"
     },
     {
       "standard_name": "Morosil",
@@ -4863,7 +4851,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "morosil",
-      "notes": "Morosil \u2014 Moro blood orange extract (Citrus sinensis cv. Moro). Standardized to \u22655% anthocyanins.",
+      "notes": "Morosil — Moro blood orange extract (Citrus sinensis cv. Moro). Standardized to ≥5% anthocyanins.",
       "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -4958,7 +4946,7 @@
       },
       "cui": "C0330540",
       "min_threshold": 1,
-      "threshold_source": "1% DNJ \u2014 standard white mulberry extract"
+      "threshold_source": "1% DNJ — standard white mulberry extract"
     },
     {
       "standard_name": "Mullein",
@@ -5090,7 +5078,7 @@
       "external_ids": {},
       "cui": "C1365464",
       "min_threshold": 6,
-      "threshold_source": "6% hydroxytyrosol \u2014 clinical dosing standard"
+      "threshold_source": "6% hydroxytyrosol — clinical dosing standard"
     },
     {
       "standard_name": "Olive Leaf",
@@ -5235,12 +5223,12 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "organic_gold_standard_potentiating_nutrients",
-      "notes": "Proprietary blend \u2014 not a single-ingredient brand. Insufficient public data for standardization markers.",
+      "notes": "Proprietary blend — not a single-ingredient brand. Insufficient public data for standardization markers.",
       "category": "blend",
       "external_ids": {},
       "data_quality": "stub",
       "attributes": {
-        "no_iqm_parent_reason": "Proprietary blend \u2014 no clean parent target; defer per-entry analysis"
+        "no_iqm_parent_reason": "Proprietary blend — no clean parent target; defer per-entry analysis"
       }
     },
     {
@@ -5347,7 +5335,7 @@
       "external_ids": {},
       "cui": "C3779996",
       "min_threshold": 0.1,
-      "threshold_source": "EPs 7630 standard \u2014 coumarins marker"
+      "threshold_source": "EPs 7630 standard — coumarins marker"
     },
     {
       "standard_name": "Peppermint",
@@ -5385,7 +5373,7 @@
       },
       "cui": "C0697157",
       "min_threshold": 1,
-      "threshold_source": "1% menthol \u2014 leaf extract minimum"
+      "threshold_source": "1% menthol — leaf extract minimum"
     },
     {
       "standard_name": "Peppermint Essential Oil",
@@ -5411,7 +5399,7 @@
       },
       "cui": "C0070325",
       "min_threshold": 38,
-      "threshold_source": "38% menthol \u2014 USP monograph"
+      "threshold_source": "38% menthol — USP monograph"
     },
     {
       "standard_name": "Phosphatidylserine",
@@ -5563,7 +5551,7 @@
       "external_ids": {},
       "cui": "C0949996",
       "min_threshold": 5,
-      "threshold_source": "5% betalains \u2014 Opuntia ficus-indica standard"
+      "threshold_source": "5% betalains — Opuntia ficus-indica standard"
     },
     {
       "standard_name": "Proanthoplex",
@@ -5577,7 +5565,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "proanthoplex",
-      "notes": "Proanthoplex \u2014 grape seed OPC extract. Standardized to \u226595% OPCs.",
+      "notes": "Proanthoplex — grape seed OPC extract. Standardized to ≥95% OPCs.",
       "category": "seed_fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -5622,7 +5610,7 @@
       },
       "cui": "C0033488",
       "min_threshold": 5,
-      "threshold_source": "5% total polyphenols \u2014 commercial standard"
+      "threshold_source": "5% total polyphenols — commercial standard"
     },
     {
       "standard_name": "Psyllium",
@@ -5847,7 +5835,7 @@
       "external_ids": {},
       "cui": "C1382907",
       "min_threshold": 0.1,
-      "threshold_source": "0.1% catalpol \u2014 Chinese Pharmacopoeia reference"
+      "threshold_source": "0.1% catalpol — Chinese Pharmacopoeia reference"
     },
     {
       "standard_name": "Reishi",
@@ -6026,7 +6014,7 @@
       },
       "cui": "C1074162",
       "min_threshold": 3,
-      "threshold_source": "3% aspalathin \u2014 concentrated rooibos extract"
+      "threshold_source": "3% aspalathin — concentrated rooibos extract"
     },
     {
       "standard_name": "Rosehip",
@@ -6156,7 +6144,7 @@
       },
       "cui": "C0696940",
       "min_threshold": 5,
-      "threshold_source": "5% salvianolic acid B \u2014 Chinese Pharmacopoeia"
+      "threshold_source": "5% salvianolic acid B — Chinese Pharmacopoeia"
     },
     {
       "standard_name": "Sarsaparilla",
@@ -6270,7 +6258,7 @@
       "external_ids": {},
       "cui": "C1013835",
       "min_threshold": 3,
-      "threshold_source": "3% omega-7 palmitoleic acid \u2014 berry/seed oil standard"
+      "threshold_source": "3% omega-7 palmitoleic acid — berry/seed oil standard"
     },
     {
       "standard_name": "Setria",
@@ -6284,7 +6272,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "setria",
-      "notes": "Setria \u2014 fermentation-derived L-glutathione by Kyowa Hakko. \u226598% L-glutathione by HPLC.",
+      "notes": "Setria — fermentation-derived L-glutathione by Kyowa Hakko. ≥98% L-glutathione by HPLC.",
       "category": "tripeptide",
       "external_ids": {},
       "data_quality": "complete",
@@ -6428,7 +6416,7 @@
       "external_ids": {},
       "cui": "C0074460",
       "min_threshold": 5,
-      "threshold_source": "5% shogaols \u2014 dried/processed ginger standard"
+      "threshold_source": "5% shogaols — dried/processed ginger standard"
     },
     {
       "standard_name": "Siberian Ginseng",
@@ -6452,7 +6440,7 @@
       },
       "cui": "C1035215",
       "min_threshold": 0.8,
-      "threshold_source": "0.8% eleutherosides \u2014 European Pharmacopoeia"
+      "threshold_source": "0.8% eleutherosides — European Pharmacopoeia"
     },
     {
       "standard_name": "Slendesta",
@@ -6486,7 +6474,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "slimbione",
-      "notes": "Slimbione \u2014 bitter melon (Momordica charantia) extract. Standardized to charantin + polypeptide-p (proprietary ratio).",
+      "notes": "Slimbione — bitter melon (Momordica charantia) extract. Standardized to charantin + polypeptide-p (proprietary ratio).",
       "category": "fruit",
       "external_ids": {},
       "data_quality": "complete",
@@ -6694,7 +6682,7 @@
       },
       "cui": "C4025984",
       "min_threshold": 0.5,
-      "threshold_source": "0.5% ecdysterones \u2014 Pfaffia paniculata standard"
+      "threshold_source": "0.5% ecdysterones — Pfaffia paniculata standard"
     },
     {
       "standard_name": "SunActive Iron",
@@ -6708,7 +6696,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "sunactive_iron",
-      "notes": "SunActive Iron \u2014 micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron.",
+      "notes": "SunActive Iron — micronized ferric pyrophosphate. High bioavailability iron form. Dosed by mg elemental iron.",
       "category": "mineral",
       "external_ids": {},
       "data_quality": "complete",
@@ -6738,7 +6726,7 @@
       },
       "cui": "C0330657",
       "min_threshold": 1,
-      "threshold_source": "1% anthocyanins \u2014 Montmorency cherry standard"
+      "threshold_source": "1% anthocyanins — Montmorency cherry standard"
     },
     {
       "standard_name": "Thermosil",
@@ -6752,7 +6740,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "thermosil",
-      "notes": "Thermosil \u2014 silicon/silica complex. Limited public standardization data. Requires verification.",
+      "notes": "Thermosil — silicon/silica complex. Limited public standardization data. Requires verification.",
       "category": "mineral",
       "external_ids": {},
       "data_quality": "requires_verification",
@@ -6794,7 +6782,7 @@
       },
       "cui": "C0697238",
       "min_threshold": 20,
-      "threshold_source": "20% thymol \u2014 Ph.Eur thyme oil standard"
+      "threshold_source": "20% thymol — Ph.Eur thyme oil standard"
     },
     {
       "standard_name": "Tongkat Ali",
@@ -6852,7 +6840,7 @@
       "external_ids": {},
       "cui": "C3832720",
       "min_threshold": 10,
-      "threshold_source": "10% polysaccharides \u2014 functional mushroom standard"
+      "threshold_source": "10% polysaccharides — functional mushroom standard"
     },
     {
       "standard_name": "Tribulus",
@@ -6985,7 +6973,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "uniflex",
-      "notes": "Uniflex (UC-II) \u2014 undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization.",
+      "notes": "Uniflex (UC-II) — undenatured type II collagen from chicken sternum cartilage (InterHealth/Lonza). Clinical dose 40 mg. Identity by native structure, not % standardization.",
       "category": "structural_protein",
       "external_ids": {},
       "data_quality": "complete",
@@ -7012,7 +7000,7 @@
       "external_ids": {},
       "cui": "C0770993",
       "min_threshold": 10,
-      "threshold_source": "10% arbutin \u2014 European Pharmacopoeia"
+      "threshold_source": "10% arbutin — European Pharmacopoeia"
     },
     {
       "standard_name": "Valerian",
@@ -7066,7 +7054,7 @@
       "priority": "medium",
       "last_updated": "2026-01-05",
       "id": "wellmune",
-      "notes": "Wellmune \u2014 beta-1,3/1,6-glucan from S. cerevisiae (Kerry). Standardized to \u226575% beta-glucan by weight.",
+      "notes": "Wellmune — beta-1,3/1,6-glucan from S. cerevisiae (Kerry). Standardized to ≥75% beta-glucan by weight.",
       "category": "polysaccharide",
       "external_ids": {},
       "data_quality": "complete",
@@ -7174,7 +7162,7 @@
       },
       "cui": "C0697076",
       "min_threshold": 6,
-      "threshold_source": "6% diosgenin \u2014 commercial standardization"
+      "threshold_source": "6% diosgenin — commercial standardization"
     },
     {
       "standard_name": "Wormwood",
@@ -7211,7 +7199,7 @@
       },
       "cui": "C0331308",
       "min_threshold": 0.03,
-      "threshold_source": "0.03% artemisinin \u2014 Artemisia annua leaf standard"
+      "threshold_source": "0.03% artemisinin — Artemisia annua leaf standard"
     },
     {
       "standard_name": "Yellow Dock",

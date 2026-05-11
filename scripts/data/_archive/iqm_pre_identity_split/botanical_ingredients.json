@@ -3,19 +3,19 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-05-11",
-    "total_entries": 481,
+    "last_updated": "2026-05-01",
+    "total_entries": 480,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
       "vocab_source": "data/functional_roles_vocab.json (v1.0.0, 32 LOCKED IDs)",
-      "purpose": "Multi-valued functional role(s) for the Flutter UI tap-to-learn chip layer. Display-only \u2014 no scoring impact in V1. Most botanicals are actives (no role assigned), but some serve as colorants (turmeric), flavorings, or carriers in formulation context. Per-entry assignment in Phase 3 backfill."
+      "purpose": "Multi-valued functional role(s) for the Flutter UI tap-to-learn chip layer. Display-only — no scoring impact in V1. Most botanicals are actives (no role assigned), but some serve as colorants (turmeric), flavorings, or carriers in formulation context. Per-entry assignment in Phase 3 backfill."
     },
     "quality_tier": "basic_raw_botanicals",
     "standardization": "none",
-    "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders. | identity_bioactivity_split: aliases from IQM marker canonicals relocated to source botanicals (Phase 2).",
+    "notes": "This database is separate from standardized_botanicals.json by design. Overlaps are intentional and allow the scoring system to reward standardized forms over raw powders.",
     "field_contract_changes": {
-      "v5.2.0": "2026-04-30 Phase 6 \u2014 V1.1 attributes scaffolding. Added attributes object with source_origin populated on all entries (plant/fungal/algal/animal derived from category)."
+      "v5.2.0": "2026-04-30 Phase 6 — V1.1 attributes scaffolding. Added attributes object with source_origin populated on all entries (plant/fungal/algal/animal derived from category)."
     }
   },
   "botanical_ingredients": [
@@ -38,7 +38,7 @@
         "Euterpe oleracea"
       ],
       "category": "fruit",
-      "notes": "Euterpe oleracea (Arecaceae) fruit. High anthocyanin and polyphenol content (ORAC >15,000 \u00b5mol TE/100g). Used as antioxidant-rich superfood; freeze-dried powder retains more anthocyanins than juice. Not standardized to specific compounds.",
+      "notes": "Euterpe oleracea (Arecaceae) fruit. High anthocyanin and polyphenol content (ORAC >15,000 µmol TE/100g). Used as antioxidant-rich superfood; freeze-dried powder retains more anthocyanins than juice. Not standardized to specific compounds.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "46AM2VJ0AW"
@@ -71,31 +71,10 @@
         "barbados cherry",
         "acerola berry extract",
         "acerola extract",
-        "Acerola Cherry juice powder",
-        "acerola cherry extract",
-        "cherry vitamin c",
-        "natural c acerola",
-        "acerola fruit c",
-        "acerola cherry supplement",
-        "acerola extract supplement",
-        "cherry vitamin c supplement",
-        "cherry vit c",
-        "natural c acerola supplement",
-        "acerola fruit c supplement",
-        "Acerola juice powder",
-        "acerola berry juice powder",
-        "Malpighia glabra Fruit Extract",
-        "Malpighia glabra",
-        "malpighia glabra fruit",
-        "malpighia punicifolia",
-        "acerola",
-        "acerola cherry extract supplement",
-        "Acerola Fruit Juice",
-        "acerola juice",
-        "acerola fruit juice powder"
+        "Acerola Cherry juice powder"
       ],
       "category": "fruit",
-      "notes": "Malpighia emarginata (Malpighiaceae) fruit. Natural vitamin C source (1,000\u20134,500 mg/100g fresh weight). Often used in supplements as whole-food C source, but botanical form is not standardized to specific ascorbic acid percentage.",
+      "notes": "Malpighia emarginata (Malpighiaceae) fruit. Natural vitamin C source (1,000–4,500 mg/100g fresh weight). Often used in supplements as whole-food C source, but botanical form is not standardized to specific ascorbic acid percentage.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950505",
@@ -452,7 +431,7 @@
         "Apocynum venetum"
       ],
       "category": "leaf",
-      "notes": "Apocynum venetum (Apocynaceae) leaf. Venetron\u00ae is a commercial extract used for mild anxiety and sleep support. Traditional Chinese herb (Luo-Bu-Ma). Contains hyperoside and isoquercitrin flavonoids.",
+      "notes": "Apocynum venetum (Apocynaceae) leaf. Venetron® is a commercial extract used for mild anxiety and sleep support. Traditional Chinese herb (Luo-Bu-Ma). Contains hyperoside and isoquercitrin flavonoids.",
       "last_updated": "2026-03-13",
       "external_ids": {
         "unii": "33E68BI71Z"
@@ -600,7 +579,7 @@
         "Saraca asoca"
       ],
       "category": "bark",
-      "notes": "Saraca asoca (Fabaceae/Caesalpinioideae), commonly called Ashoka. Ayurvedic botanical used in women\u2019s health formulas. Added for exact identity coverage.",
+      "notes": "Saraca asoca (Fabaceae/Caesalpinioideae), commonly called Ashoka. Ayurvedic botanical used in women’s health formulas. Added for exact identity coverage.",
       "last_updated": "2026-03-13",
       "external_ids": {
         "unii": "OO7O919190"
@@ -971,7 +950,7 @@
         "wax myrtle"
       ],
       "category": "bark",
-      "notes": "Myrica cerifera (Myricaceae; modern: Morella cerifera) root bark. North American astringent herb used traditionally for sore throat, diarrhea, and circulatory stimulation. Contains myricitrin flavonoid and triterpenes. Not standardized. Distinct from Myrica/Morella rubra (Yangmei) \u2014 see yangmei entry.",
+      "notes": "Myrica cerifera (Myricaceae; modern: Morella cerifera) root bark. North American astringent herb used traditionally for sore throat, diarrhea, and circulatory stimulation. Contains myricitrin flavonoid and triterpenes. Not standardized. Distinct from Myrica/Morella rubra (Yangmei) — see yangmei entry.",
       "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C0697160",
@@ -1505,7 +1484,7 @@
         "blue cohosh root extract"
       ],
       "category": "root",
-      "notes": "Caulophyllum thalictroides (Berberidaceae) root. Contains caulosaponin and methylcytisine alkaloids. Traditional parturient herb \u2014 safety concern in pregnancy due to uterotonic and nicotinic effects.",
+      "notes": "Caulophyllum thalictroides (Berberidaceae) root. Contains caulosaponin and methylcytisine alkaloids. Traditional parturient herb — safety concern in pregnancy due to uterotonic and nicotinic effects.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0331048",
@@ -2036,8 +2015,8 @@
         "butcher's broom dried extract",
         "ruscus aculeatus",
         "ruscus aculeatus root extract",
-        "butcher\u2019s broom",
-        "butcher\u2019s broom root",
+        "butcher’s broom",
+        "butcher’s broom root",
         "butcher's broom",
         "Butcher's Broom 10% extract",
         "Butchers Broom"
@@ -2082,7 +2061,7 @@
         "white walnut bark"
       ],
       "category": "bark",
-      "notes": "Juglans cinerea (Juglandaceae) inner bark \u2014 TREE bark, NOT to be confused with Cucurbita moschata (butternut squash, vegetable \u2014 separate entry: butternut_squash). Traditional Eclectic medicine laxative containing juglone and juglandin. Gentle cathartic used for constipation and liver support. UNII Z11Q755I6W (whole) / 48FZ1BHO18 (branch bark/root bark). Audit 2026-05-01: stripped 'butternut squash powder', 'butternut squash', 'cucurbita moschata' aliases per strict species rule (different family Cucurbitaceae vs Juglandaceae).",
+      "notes": "Juglans cinerea (Juglandaceae) inner bark — TREE bark, NOT to be confused with Cucurbita moschata (butternut squash, vegetable — separate entry: butternut_squash). Traditional Eclectic medicine laxative containing juglone and juglandin. Gentle cathartic used for constipation and liver support. UNII Z11Q755I6W (whole) / 48FZ1BHO18 (branch bark/root bark). Audit 2026-05-01: stripped 'butternut squash powder', 'butternut squash', 'cucurbita moschata' aliases per strict species rule (different family Cucurbitaceae vs Juglandaceae).",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "Z11Q755I6W"
@@ -2108,7 +2087,7 @@
         "winter squash"
       ],
       "category": "fruit",
-      "notes": "Cucurbita moschata (Cucurbitaceae) fruit \u2014 butternut squash, a winter squash cultivar. Distinct from Juglans cinerea ('butternut tree', see butternut entry \u2014 different family entirely). Source of beta-carotene, lutein, zeaxanthin, polysaccharides, and dietary fiber. Used in food and supplement formulations as a whole-food carotenoid source. UNII 6D4613H8ZL (whole) / 4O338K8OH3 (seed).",
+      "notes": "Cucurbita moschata (Cucurbitaceae) fruit — butternut squash, a winter squash cultivar. Distinct from Juglans cinerea ('butternut tree', see butternut entry — different family entirely). Source of beta-carotene, lutein, zeaxanthin, polysaccharides, and dietary fiber. Used in food and supplement formulations as a whole-food carotenoid source. UNII 6D4613H8ZL (whole) / 4O338K8OH3 (seed).",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "6D4613H8ZL"
@@ -2502,7 +2481,7 @@
         "Uncaria tomentosa"
       ],
       "category": "bark",
-      "notes": "Uncaria tomentosa (Rubiaceae) inner bark. U\u00f1a de Gato from Peruvian Amazon. Contains pentacyclic oxindole alkaloids (POAs). Used for immune modulation and joint inflammation. Botanical bark form.",
+      "notes": "Uncaria tomentosa (Rubiaceae) inner bark. Uña de Gato from Peruvian Amazon. Contains pentacyclic oxindole alkaloids (POAs). Used for immune modulation and joint inflammation. Botanical bark form.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949579",
@@ -2607,31 +2586,7 @@
       "aliases": [
         "capsicum annuum",
         "cayenne powder",
-        "red pepper",
-        "cayenne",
-        "cayenne pepper powder",
-        "cayenne fruit extract",
-        "cayenne, powder",
-        "organic cayenne",
-        "wild crafted cayenne",
-        "capsicum extract",
-        "cayenne pepper extract",
-        "cayenne extract",
-        "capsicum annuum extract",
-        "capsicum fruit extract",
-        "cayenne pepper fruit powder",
-        "capsimax capsicum extract",
-        "capsimax cayenne extract",
-        "omnibead capsicum",
-        "Capsimax Capsicum annuum fruit extract",
-        "capsimax capsicum fruit extract",
-        "capsimax(tm) capsicum fruit extract",
-        "capsimax capsicum seed extract",
-        "capsicum seed extract",
-        "capsimax red pepper extract",
-        "capsimax cayenne pepper fruit extract",
-        "capsimax(tm) capsicum extract",
-        "capsimax capsicum (capsicum annuum) fruit extract"
+        "red pepper"
       ],
       "category": "spice",
       "notes": "Capsicum annuum (Solanaceae) fruit. Contains capsaicin (8-methyl-N-vanillyl-6-nonenamide) at 0.1-1% in cayenne varieties. Thermogenic and circulatory stimulant. Botanical powder, not standardized to capsaicin.",
@@ -2694,7 +2649,7 @@
         "Celery 10:1 extract"
       ],
       "category": "seed",
-      "notes": "Apium graveolens (Apiaceae) seed. Contains 3-n-butylphthalide (NBP) and apigenin. Traditional remedy for gout and joint pain. Also contains furanocoumarins \u2014 photosensitivity possible. Botanical seed form.",
+      "notes": "Apium graveolens (Apiaceae) seed. Contains 3-n-butylphthalide (NBP) and apigenin. Traditional remedy for gout and joint pain. Also contains furanocoumarins — photosensitivity possible. Botanical seed form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "1G1EAA320L"
@@ -3431,7 +3386,7 @@
         "coffeeberry"
       ],
       "category": "fruit",
-      "notes": "Coffea arabica (Rubiaceae) whole fruit (cherry). Contains chlorogenic acids and polyphenols distinct from coffee bean. NeuroFactor\u00ae studies show BDNF elevation from coffee fruit extract. Botanical fruit form.",
+      "notes": "Coffea arabica (Rubiaceae) whole fruit (cherry). Contains chlorogenic acids and polyphenols distinct from coffee bean. NeuroFactor® studies show BDNF elevation from coffee fruit extract. Botanical fruit form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "HOX6BEK27Q"
@@ -3697,7 +3652,7 @@
         "Primula veris"
       ],
       "category": "flower",
-      "notes": "Primula veris (Primulaceae) flower. European traditional expectorant containing saponins (primulasaponin) and flavonoids. Component of Sinupret\u00ae for sinusitis. Botanical flower preparation.",
+      "notes": "Primula veris (Primulaceae) flower. European traditional expectorant containing saponins (primulasaponin) and flavonoids. Component of Sinupret® for sinusitis. Botanical flower preparation.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "W6LFQ57E4M"
@@ -4160,10 +4115,10 @@
       "aliases": [
         "devil's claw extract",
         "devils claw extract",
-        "devil\u2019s claw extract",
+        "devil’s claw extract",
         "harpagophytum procumbens extract",
         "harpagophytum zeyheri extract",
-        "devil\u2019s claw (harpagophytum procumbens and harpagophytum zeyheri) extract",
+        "devil’s claw (harpagophytum procumbens and harpagophytum zeyheri) extract",
         "Harpagophytum procumbens"
       ],
       "category": "tuber",
@@ -5175,7 +5130,7 @@
         "Allium sativum"
       ],
       "category": "bulb",
-      "notes": "Allium sativum (Amaryllidaceae) fresh/dried bulb. Contains alliin \u2192 allicin (via alliinase on crushing). RCT evidence for blood pressure and lipids (PMID 23590705). Botanical bulb form, unstandardized.",
+      "notes": "Allium sativum (Amaryllidaceae) fresh/dried bulb. Contains alliin → allicin (via alliinase on crushing). RCT evidence for blood pressure and lipids (PMID 23590705). Botanical bulb form, unstandardized.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "V1V998DC17"
@@ -5313,7 +5268,7 @@
         "Ginkgo biloba"
       ],
       "category": "leaf",
-      "notes": "Ginkgo biloba (Ginkgoaceae) leaf. Contains flavone glycosides (quercetin, kaempferol) and terpene lactones (ginkgolides, bilobalide). Botanical leaf form, distinct from standardized EGb 761\u00ae extract.",
+      "notes": "Ginkgo biloba (Ginkgoaceae) leaf. Contains flavone glycosides (quercetin, kaempferol) and terpene lactones (ginkgolides, bilobalide). Botanical leaf form, distinct from standardized EGb 761® extract.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "19FUJ2C58T"
@@ -5486,7 +5441,7 @@
         "french lilac"
       ],
       "category": "herb",
-      "notes": "Galega officinalis (Fabaceae) aerial parts. Same as galega_officinalis \u2014 Goat's Rue. Traditional galactagogue. Contains galegine guanidine derivative. Botanical herb form. See also galega entry.",
+      "notes": "Galega officinalis (Fabaceae) aerial parts. Same as galega_officinalis — Goat's Rue. Traditional galactagogue. Contains galegine guanidine derivative. Botanical herb form. See also galega entry.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "BIA2SO6F5B"
@@ -6074,7 +6029,7 @@
         "Ilex guayusa"
       ],
       "category": "leaf",
-      "notes": "Ilex guayusa (Aquifoliaceae) leaf. Amazonian holly related to yerba mat\u00e9. Contains caffeine (1.7-3.5%), chlorogenic acids, and L-theanine. Traditional Ecuadorian stimulant tea. Botanical leaf form.",
+      "notes": "Ilex guayusa (Aquifoliaceae) leaf. Amazonian holly related to yerba maté. Contains caffeine (1.7-3.5%), chlorogenic acids, and L-theanine. Traditional Ecuadorian stimulant tea. Botanical leaf form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "92860L6OY2"
@@ -6475,10 +6430,7 @@
         "horse chestnut extract",
         "aesculus hippocastanum",
         "horse chestnut 20% extract",
-        "Horse Chestnut ext.",
-        "horse chestnut saponin",
-        "aesculus hippocastanum extract",
-        "horse chestnut seed extract"
+        "Horse Chestnut ext."
       ],
       "category": "seed",
       "notes": "Aesculus hippocastanum (Sapindaceae) seed. Contains aescin (escin) triterpene saponin mixture. European HMPC-approved for chronic venous insufficiency. RCT evidence (PMID 22592684). Botanical seed form.",
@@ -6546,7 +6498,7 @@
         "Armoracia rusticana"
       ],
       "category": "root",
-      "notes": "Armoracia rusticana (Brassicaceae) root. Contains sinigrin glucosinolate \u2192 allyl isothiocyanate (pungent). Traditional antimicrobial and sinus-clearing herb. Botanical root powder.",
+      "notes": "Armoracia rusticana (Brassicaceae) root. Contains sinigrin glucosinolate → allyl isothiocyanate (pungent). Traditional antimicrobial and sinus-clearing herb. Botanical root powder.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "8DS6G120HJ"
@@ -6921,13 +6873,7 @@
         "fermented japanese knotweed",
         "wildcrafted japanese knotweed",
         "polygonum cuspidatum",
-        "Polygonum cuspidatum",
-        "japanese knotweed extract",
-        "polygonum cuspidatum extract",
-        "polygonum cuspidatum root extract",
-        "Japanese Knotweed (root) and whole Red Grape extracts",
-        "Whole grape extract (Vitis vinifera) and Polygonum cuspidatum (root) extract",
-        "Fallopia japonica"
+        "Polygonum cuspidatum"
       ],
       "category": "root",
       "notes": "Reynoutria japonica (syn. Polygonum cuspidatum, Polygonaceae) root. Hu Zhang in TCM. Richest dietary source of trans-resveratrol (not standardized in botanical form). Also contains emodin anthraquinone.",
@@ -7229,7 +7175,7 @@
         "alaria esculenta"
       ],
       "category": "seaweed",
-      "notes": "Laminaria digitata / Ascophyllum nodosum (Laminariaceae) thallus. Brown seaweed naturally rich in iodine (1,500-8,000 \u00b5g/g). Contains fucoidan and alginate polysaccharides. Botanical seaweed powder.",
+      "notes": "Laminaria digitata / Ascophyllum nodosum (Laminariaceae) thallus. Brown seaweed naturally rich in iodine (1,500-8,000 µg/g). Contains fucoidan and alginate polysaccharides. Botanical seaweed powder.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "168S4EO8YJ"
@@ -7660,7 +7606,7 @@
         "privet fruit"
       ],
       "category": "berry",
-      "notes": "Ligustrum lucidum (Oleaceae) berry. N\u00fc Zhen Zi in TCM. Contains oleanolic acid and ursolic acid triterpenes. Yin-nourishing herb for liver-kidney deficiency patterns. Botanical berry powder.",
+      "notes": "Ligustrum lucidum (Oleaceae) berry. Nü Zhen Zi in TCM. Contains oleanolic acid and ursolic acid triterpenes. Yin-nourishing herb for liver-kidney deficiency patterns. Botanical berry powder.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0949889",
@@ -7905,7 +7851,7 @@
         "huang bai powder"
       ],
       "category": "bark",
-      "notes": "Blend of Magnolia officinalis bark (honokiol, magnolol) and Phellodendron amurense bark (berberine). Relora\u00ae is a branded version. Used for cortisol modulation and stress. Botanical bark blend.",
+      "notes": "Blend of Magnolia officinalis bark (honokiol, magnolol) and Phellodendron amurense bark (berberine). Relora® is a branded version. Used for cortisol modulation and stress. Botanical bark blend.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "functional_roles": [],
@@ -8734,7 +8680,7 @@
         "Urtica dioica"
       ],
       "category": "root",
-      "notes": "Urtica dioica (Urticaceae) root. Distinct from leaf in bioactive profile \u2014 contains lectins, sterols, and lignans. European HMPC-approved for BPH symptoms. Botanical root form.",
+      "notes": "Urtica dioica (Urticaceae) root. Distinct from leaf in bioactive profile — contains lectins, sterols, and lignans. European HMPC-approved for BPH symptoms. Botanical root form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "J8HE8A6E5T"
@@ -8953,7 +8899,7 @@
         "Avena sativa"
       ],
       "category": "grain",
-      "notes": "Avena sativa (Poaceae) aerial parts (straw). Contains avenacosides and flavonoids. Traditional nervine and nutritive herb. Neuravena\u00ae extract studied for cognitive function. Botanical herb form.",
+      "notes": "Avena sativa (Poaceae) aerial parts (straw). Contains avenacosides and flavonoids. Traditional nervine and nutritive herb. Neuravena® extract studied for cognitive function. Botanical herb form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "WQ0UW3VFG5"
@@ -9170,7 +9116,7 @@
         "essential oil of chamomile"
       ],
       "category": "essential oil",
-      "notes": "Matricaria chamomilla (Asteraceae) flower-top essential oil. Distinct from chamomile herb (chamomile entry) \u2014 the steam-distilled oil concentrates volatile compounds (chamazulene, alpha-bisabolol, farnesene). Used as flavor and aromatherapy. UNII SA8AR2W4ER (Matricaria chamomilla flowering top oil); generic 'chamomile flower oil' UNII 60F80Z61A9. CUI C0109265.",
+      "notes": "Matricaria chamomilla (Asteraceae) flower-top essential oil. Distinct from chamomile herb (chamomile entry) — the steam-distilled oil concentrates volatile compounds (chamazulene, alpha-bisabolol, farnesene). Used as flavor and aromatherapy. UNII SA8AR2W4ER (Matricaria chamomilla flowering top oil); generic 'chamomile flower oil' UNII 60F80Z61A9. CUI C0109265.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "SA8AR2W4ER"
@@ -9198,7 +9144,7 @@
         "bergamot peel oil"
       ],
       "category": "essential oil",
-      "notes": "Citrus bergamia (Rutaceae) peel/leaf essential oil. Cold-pressed peel oil contains bergaptene (a furocoumarin), linalyl acetate, and limonene. DISTINCT from citrus_bergamot IQM extract entry (the polyphenolic flavonoid-rich extract used for cardiovascular indications) \u2014 the essential oil is a different product class with different chemistry. UNII 39W1PKE3JI (bergamot oil); leaf oil UNII ZVY8741I1V. CUI C0105754. SAFETY: furocoumarins (bergaptene) are documented for topical photosensitivity. Per clinician decision 2026-05-01: this ingredient is treated as a WARNING NOTE only, NOT a B1 safety penalty \u2014 supplement-form oral use at flavor-grade doses is below documented phototoxicity threshold and the photosensitivity concern is primarily topical. Display the warning to users; do not deduct from score.",
+      "notes": "Citrus bergamia (Rutaceae) peel/leaf essential oil. Cold-pressed peel oil contains bergaptene (a furocoumarin), linalyl acetate, and limonene. DISTINCT from citrus_bergamot IQM extract entry (the polyphenolic flavonoid-rich extract used for cardiovascular indications) — the essential oil is a different product class with different chemistry. UNII 39W1PKE3JI (bergamot oil); leaf oil UNII ZVY8741I1V. CUI C0105754. SAFETY: furocoumarins (bergaptene) are documented for topical photosensitivity. Per clinician decision 2026-05-01: this ingredient is treated as a WARNING NOTE only, NOT a B1 safety penalty — supplement-form oral use at flavor-grade doses is below documented phototoxicity threshold and the photosensitivity concern is primarily topical. Display the warning to users; do not deduct from score.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "39W1PKE3JI"
@@ -9225,7 +9171,7 @@
         "essential oil of nutmeg"
       ],
       "category": "essential oil",
-      "notes": "Myristica fragrans (Myristicaceae) kernel essential oil. Steam-distilled, containing alpha-pinene, beta-pinene, sabinene, myristicin, and elemicin. Used for flavor and aromatherapy. SAFETY: myristicin and elemicin can cause neurological effects at very high oral doses (large single ingestion of whole nutmeg, generally documented \u22655 g range). Supplement-relevant flavor doses are far below this threshold; flavor-grade use is GRAS per FDA. Display safety information without scoring penalty. UNII Z1CLM48948. CUI C0301248.",
+      "notes": "Myristica fragrans (Myristicaceae) kernel essential oil. Steam-distilled, containing alpha-pinene, beta-pinene, sabinene, myristicin, and elemicin. Used for flavor and aromatherapy. SAFETY: myristicin and elemicin can cause neurological effects at very high oral doses (large single ingestion of whole nutmeg, generally documented ≥5 g range). Supplement-relevant flavor doses are far below this threshold; flavor-grade use is GRAS per FDA. Display safety information without scoring penalty. UNII Z1CLM48948. CUI C0301248.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "Z1CLM48948"
@@ -9254,7 +9200,7 @@
         "rose geranium oil"
       ],
       "category": "essential oil",
-      "notes": "Pelargonium graveolens (Geraniaceae) flower/aerial essential oil. Steam-distilled from the rose-geranium cultivar group; main volatiles citronellol, geraniol, linalool, isomenthone. Used as flavor and aromatherapy. NOTE: 'Geranium' as a label term sometimes refers to other Pelargonium species (P. capitatum, P. radens, P. roseum, P. odoratissimum, P. peltatum, P. graveolens \u00d7 radens, all with their own UNIIs in fda_unii_cache); P. graveolens is the standard commercial source. UNII 3K0J1S7QGC (P. graveolens flower oil). CUI C0304136.",
+      "notes": "Pelargonium graveolens (Geraniaceae) flower/aerial essential oil. Steam-distilled from the rose-geranium cultivar group; main volatiles citronellol, geraniol, linalool, isomenthone. Used as flavor and aromatherapy. NOTE: 'Geranium' as a label term sometimes refers to other Pelargonium species (P. capitatum, P. radens, P. roseum, P. odoratissimum, P. peltatum, P. graveolens × radens, all with their own UNIIs in fda_unii_cache); P. graveolens is the standard commercial source. UNII 3K0J1S7QGC (P. graveolens flower oil). CUI C0304136.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "3K0J1S7QGC"
@@ -9553,7 +9499,7 @@
         "pau d'arco extract",
         "pau d'arco",
         "lapacho bark",
-        "Pau d\u2019Arco",
+        "Pau d’Arco",
         "pau d'arco bark extract",
         "Handroanthus impetiginosus"
       ],
@@ -9704,16 +9650,16 @@
     {
       "id": "peppermint",
       "standard_name": "Peppermint",
-      "latin_name": "Mentha \u00d7 piperita",
+      "latin_name": "Mentha × piperita",
       "aliases": [
         "mint",
         "mentha piperita",
         "peppermint leaf",
         "peppermint supercritical extract",
-        "Mentha \u00d7 piperita"
+        "Mentha × piperita"
       ],
       "category": "leaf",
-      "notes": "Mentha \u00d7 piperita (Lamiaceae) leaf. Contains menthol (30-55%) and menthone. RCT evidence for IBS (enteric-coated oil, PMID 17420159). European HMPC-approved for GI spasms. Botanical leaf form.",
+      "notes": "Mentha × piperita (Lamiaceae) leaf. Contains menthol (30-55%) and menthone. RCT evidence for IBS (enteric-coated oil, PMID 17420159). European HMPC-approved for GI spasms. Botanical leaf form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "V95R5KMY2B"
@@ -9739,14 +9685,14 @@
     {
       "id": "peppermint_leaf",
       "standard_name": "Peppermint Leaf",
-      "latin_name": "Mentha \u00d7 piperita",
+      "latin_name": "Mentha × piperita",
       "aliases": [
         "mentha piperita leaf",
         "peppermint powder",
-        "Mentha \u00d7 piperita"
+        "Mentha × piperita"
       ],
       "category": "leaf",
-      "notes": "Mentha \u00d7 piperita (Lamiaceae) leaf. Same species as peppermint entry; covers leaf-specific labels. Rich in menthol and rosmarinic acid. Traditional carminative and digestive herb.",
+      "notes": "Mentha × piperita (Lamiaceae) leaf. Same species as peppermint entry; covers leaf-specific labels. Rich in menthol and rosmarinic acid. Traditional carminative and digestive herb.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "A389O33LX6"
@@ -9819,7 +9765,7 @@
         "phellodendron amurense bark extract"
       ],
       "category": "bark",
-      "notes": "Phellodendron amurense (Rutaceae) bark. Huang Bai in TCM. Contains berberine (2-5%) and phellodendrine. Damp-heat clearing herb for lower jiao. Component of Er Miao San and Relora\u00ae.",
+      "notes": "Phellodendron amurense (Rutaceae) bark. Huang Bai in TCM. Contains berberine (2-5%) and phellodendrine. Damp-heat clearing herb for lower jiao. Component of Er Miao San and Relora®.",
       "last_updated": "2026-03-01",
       "external_ids": {},
       "cui": "C0950042",
@@ -9908,7 +9854,7 @@
         "unii": "I4U55R240N"
       },
       "gsrs": {
-        "substance_name": "Musa \u00d7 paradisiaca whole",
+        "substance_name": "Musa × paradisiaca whole",
         "substance_class": "structurallyDiverse",
         "cfr_sections": [],
         "dsld_count": null,
@@ -9969,7 +9915,7 @@
         "Polypodium leucotomos"
       ],
       "category": "leaf",
-      "notes": "Polypodium leucotomos (Polypodiaceae) rhizome. Central American fern. Contains caffeic and ferulic acid derivatives. RCT evidence for photoprotection (PMID 25064166). Fernblock\u00ae is branded extract.",
+      "notes": "Polypodium leucotomos (Polypodiaceae) rhizome. Central American fern. Contains caffeic and ferulic acid derivatives. RCT evidence for photoprotection (PMID 25064166). Fernblock® is branded extract.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "BG58BW230G"
@@ -10817,7 +10763,7 @@
         "ruta graveolens extract"
       ],
       "category": "herb",
-      "notes": "Ruta graveolens (Rutaceae) aerial parts. Contains rutin flavonoid (named after this plant), furanocoumarins, and acridone alkaloids. Traditional emmenagogue. Phototoxic \u2014 handle with care.",
+      "notes": "Ruta graveolens (Rutaceae) aerial parts. Contains rutin flavonoid (named after this plant), furanocoumarins, and acridone alkaloids. Traditional emmenagogue. Phototoxic — handle with care.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "N94C2U587S"
@@ -10958,7 +10904,7 @@
         "jamaican sarsaparilla"
       ],
       "category": "root",
-      "notes": "Smilax ornata (Smilacaceae) root \u2014 Jamaican Sarsaparilla. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. NOTE: 'Sarsaparilla' is a commercial trade name applied to multiple Smilax species \u2014 S. ornata (this entry, CUI C4277519), S. officinalis (CUI C3388298, Honduran), S. regelii, S. aristolochiifolia (Mexican). Strict policy: only S. ornata is mapped here. Products labeled 'Smilax officinalis' or 'Honduras Sarsaparilla' will surface in unmapped triage and require separate entries if confirmed. Old CUI C0036312 was a stale identifier (not present in current UMLS); corrected to C4277519 via verify_cui.py audit 2026-05-01.",
+      "notes": "Smilax ornata (Smilacaceae) root — Jamaican Sarsaparilla. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. NOTE: 'Sarsaparilla' is a commercial trade name applied to multiple Smilax species — S. ornata (this entry, CUI C4277519), S. officinalis (CUI C3388298, Honduran), S. regelii, S. aristolochiifolia (Mexican). Strict policy: only S. ornata is mapped here. Products labeled 'Smilax officinalis' or 'Honduras Sarsaparilla' will surface in unmapped triage and require separate entries if confirmed. Old CUI C0036312 was a stale identifier (not present in current UMLS); corrected to C4277519 via verify_cui.py audit 2026-05-01.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "2H1576D5WG"
@@ -10985,7 +10931,7 @@
         "honduras sarsaparilla"
       ],
       "category": "root",
-      "notes": "Smilax officinalis Kunth (Smilacaceae) root \u2014 Honduran/Honduras Sarsaparilla. DISTINCT species from Smilax ornata (Jamaican Sarsaparilla, CUI C4277519) and Smilax regelii (CUI C3749755) \u2014 historically conflated in commerce under the generic 'Sarsaparilla' label, but UMLS treats as separate concepts. Contains sarsasapogenin, smilagenin, and related steroidal saponins. Used in traditional herbal medicine for similar indications as S. ornata (blood purification, anti-inflammatory, skin conditions). Audit 2026-05-01 split this from sarsaparilla entry per strict same-species chemistry rule.",
+      "notes": "Smilax officinalis Kunth (Smilacaceae) root — Honduran/Honduras Sarsaparilla. DISTINCT species from Smilax ornata (Jamaican Sarsaparilla, CUI C4277519) and Smilax regelii (CUI C3749755) — historically conflated in commerce under the generic 'Sarsaparilla' label, but UMLS treats as separate concepts. Contains sarsasapogenin, smilagenin, and related steroidal saponins. Used in traditional herbal medicine for similar indications as S. ornata (blood purification, anti-inflammatory, skin conditions). Audit 2026-05-01 split this from sarsaparilla entry per strict same-species chemistry rule.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "KDX23MP2GS",
@@ -11402,9 +11348,7 @@
         "japanese sophora flower bud extract",
         "japanese sophora sophora japonica flower bud extract",
         "japanese sophora",
-        "Styphnolobium japonicum",
-        "Phospholipid Complex, Sophora japonica Flower Extract",
-        "Sophora japonica Flower Extract, Sunflower Phospholipids"
+        "Styphnolobium japonicum"
       ],
       "category": "flower",
       "notes": "Styphnolobium japonicum (syn. Sophora japonica, Fabaceae) flower bud. Huai Hua in TCM. Natural source of rutin bioflavonoid (up to 20% dry weight). Used for venous and capillary health.",
@@ -11651,17 +11595,17 @@
     {
       "id": "strawberry",
       "standard_name": "Strawberry",
-      "latin_name": "Fragaria \u00d7 ananassa",
+      "latin_name": "Fragaria × ananassa",
       "aliases": [
         "organic Strawberries",
         "Strawberry fruit powder",
         "Strawberry Extract, Natural",
         "Non-GMO Strawberry extract",
         "non-gmo strawberry extract",
-        "Fragaria \u00d7 ananassa"
+        "Fragaria × ananassa"
       ],
       "category": "fruit",
-      "notes": "Fragaria \u00d7 ananassa (Rosaceae) fruit. Rich in pelargonidin-3-glucoside anthocyanin, ellagic acid, and vitamin C (59 mg/100g). Botanical fruit powder used in supplement blends.",
+      "notes": "Fragaria × ananassa (Rosaceae) fruit. Rich in pelargonidin-3-glucoside anthocyanin, ellagic acid, and vitamin C (59 mg/100g). Botanical fruit powder used in supplement blends.",
       "last_updated": "2026-03-13",
       "external_ids": {
         "unii": "4J2TY8Y81V"
@@ -11727,7 +11671,7 @@
         "yam"
       ],
       "category": "vegetable",
-      "notes": "Ipomoea batatas (Convolvulaceae) tuber. Orange varieties rich in beta-carotene (8,510 \u00b5g/100g). Purple varieties contain peonidin anthocyanins. Used in whole-food supplement blends.",
+      "notes": "Ipomoea batatas (Convolvulaceae) tuber. Orange varieties rich in beta-carotene (8,510 µg/100g). Purple varieties contain peonidin anthocyanins. Used in whole-food supplement blends.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "M9WGG9Z9GK"
@@ -12003,10 +11947,7 @@
         "lyc-o-mato tomato extract",
         "lycomato",
         "lyc-o-mato",
-        "standardized tomato fruit extract",
-        "tomato lycopene",
-        "tomato lycopene supplement",
-        "Lycopene LYC-O-MATO(R) tomato extract"
+        "standardized tomato fruit extract"
       ],
       "category": "fruit",
       "notes": "Solanum lycopersicum (Solanaceae) fruit. Primary dietary source of lycopene (3-5 mg/100g). Also contains naringenin and chlorogenic acid. Used in supplement blends for antioxidant content.",
@@ -12230,32 +12171,7 @@
       "aliases": [
         "Tumeric",
         "Curcuma Extract, Natural",
-        "Curcuma longa",
-        "turmeric curcumin complex",
-        "BCM-95 Bio-Curcumin (Curcuma longa) 25:1 extract",
-        "BCM-95 Bio-Curcumin Turmeric 25:1 extract",
-        "curcuma longa extract",
-        "curcumin curcuma longa rhizome extract",
-        "curcuma longa rhizome extract",
-        "Curcumin (Curcuma longa) rhizome extract",
-        "turmeric with bioperine",
-        "Curcumin Phytosome (Curcuma longa extract (root) / Phosphatidylcholine complex)",
-        "Curcuma longa extract, Phospholipid Complex",
-        "Curcuma longa extract, Phosphatidylcholine Complex",
-        "Meriva (Curcuma longa) Phytosome",
-        "Meriva Turmeric Phytosome",
-        "Meriva Turmeric Phytosome Complex",
-        "Meriva Turmeric Phytosome Complex Sunflower Phospholipid",
-        "Meriva Turmeric Phytosome Sunflower Phospholipid Complex",
-        "Meriva Turmeric Phytosome Phospholipid Complex",
-        "Meriva Turmeric Phytosome Complex Curcuma longa extract",
-        "Meriva Turmeric Phytosome Complex Soy Phospholipid",
-        "Meriva Turmeric Phytosome Curcuma longa extract",
-        "Meriva Turmeric Phytosome Curcuma longa Root Extract",
-        "Curcuma longa Root Extract, Phospholipid Complex",
-        "turmeric powder (unstandardized)",
-        "curcumin powder",
-        "unstandardized curcumin"
+        "Curcuma longa"
       ],
       "category": "root",
       "notes": "Curcuma longa (Zingiberaceae) rhizome. Contains curcuminoids (curcumin, demethoxycurcumin, bisdemethoxycurcumin, 2-5%) and turmerone essential oil. Most-studied botanical anti-inflammatory.",
@@ -12886,7 +12802,7 @@
         "baptisia tinctoria"
       ],
       "category": "root",
-      "notes": "Baptisia tinctoria (Fabaceae) root. Contains isoflavones and polysaccharides. Traditional Eclectic immune stimulant. Component of Esberitox\u00ae with Echinacea and Thuja. Botanical root form.",
+      "notes": "Baptisia tinctoria (Fabaceae) root. Contains isoflavones and polysaccharides. Traditional Eclectic immune stimulant. Component of Esberitox® with Echinacea and Thuja. Botanical root form.",
       "last_updated": "2026-03-01",
       "external_ids": {
         "unii": "5EF0HWI5WU"
@@ -13239,7 +13155,7 @@
         "myrica rubra fruit extract"
       ],
       "category": "fruit",
-      "notes": "Myrica rubra (Myricaceae; modern: Morella rubra) fruit. East Asian (China/Japan/Korea) edible berry \u2014 distinct from North American Myrica cerifera (Bayberry root bark). Rich in anthocyanins (cyanidin-3-O-glucoside dominant), proanthocyanidins, ellagic acid, and myricetin. Studied for antioxidant and metabolic-health applications. UMLS canonical name uses modern Morella rubra taxonomy.",
+      "notes": "Myrica rubra (Myricaceae; modern: Morella rubra) fruit. East Asian (China/Japan/Korea) edible berry — distinct from North American Myrica cerifera (Bayberry root bark). Rich in anthocyanins (cyanidin-3-O-glucoside dominant), proanthocyanidins, ellagic acid, and myricetin. Studied for antioxidant and metabolic-health applications. UMLS canonical name uses modern Morella rubra taxonomy.",
       "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C1688280",
@@ -13435,7 +13351,7 @@
         "smilax china l. root"
       ],
       "category": "root",
-      "notes": "Smilax china L. (Smilacaceae) root \u2014 traditional Ayurvedic (madhusnuhi) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). DISTINCT from Smilax glabra (Tu Fu Ling, CUI C2810601 \u2014 different species, primary TCM herb for damp-heat clearing) and from Smilax ornata/regelii (sarsaparilla). Clinical evidence sparse \u2014 primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
+      "notes": "Smilax china L. (Smilacaceae) root — traditional Ayurvedic (madhusnuhi) botanical. Contains steroidal saponins (sarsasaponin, smilasaponin), flavonoids, stilbenes, and polyphenols. Traditional uses: anti-inflammatory, diuretic, blood purification, rheumatoid arthritis support, and skin conditions (psoriasis, eczema). DISTINCT from Smilax glabra (Tu Fu Ling, CUI C2810601 — different species, primary TCM herb for damp-heat clearing) and from Smilax ornata/regelii (sarsaparilla). Clinical evidence sparse — primarily in vitro and animal studies. High doses may cause GI irritation (saponin content). No FDA safety alerts.",
       "last_updated": "2026-03-17",
       "external_ids": {
         "unii": "B5ZXF484DK"
@@ -13613,7 +13529,7 @@
         "quinoa seed"
       ],
       "category": "grain",
-      "notes": "Chenopodium quinoa \u2014 pseudocereal grain. Complete protein with all 9 essential amino acids. Rich in manganese, phosphorus, magnesium, folate. Gluten-free. Commonly featured in whole-food supplement blends.",
+      "notes": "Chenopodium quinoa — pseudocereal grain. Complete protein with all 9 essential amino acids. Rich in manganese, phosphorus, magnesium, folate. Gluten-free. Commonly featured in whole-food supplement blends.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "9KMA964L92",
@@ -13644,7 +13560,7 @@
         "red bean"
       ],
       "category": "legume",
-      "notes": "Vigna angularis \u2014 East Asian legume, rich in protein, fiber, and flavonoids.",
+      "notes": "Vigna angularis — East Asian legume, rich in protein, fiber, and flavonoids.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "IO64JGK313",
@@ -13675,7 +13591,7 @@
         "amaranth seed"
       ],
       "category": "grain",
-      "notes": "Amaranthus spp. \u2014 pseudocereal grain, gluten-free complete protein. Distinct from FD&C Red #2 artificial dye (also named \"amaranth\").",
+      "notes": "Amaranthus spp. — pseudocereal grain, gluten-free complete protein. Distinct from FD&C Red #2 artificial dye (also named \"amaranth\").",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "07L86FJ69J",
@@ -13707,7 +13623,7 @@
         "khorasan wheat"
       ],
       "category": "grain",
-      "notes": "Khorasan wheat \u2014 ancient wheat variety. Higher protein and selenium than common wheat. Contains gluten.",
+      "notes": "Khorasan wheat — ancient wheat variety. Higher protein and selenium than common wheat. Contains gluten.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C1440855"
@@ -13739,7 +13655,7 @@
         "curry leaf extract"
       ],
       "category": "herb",
-      "notes": "Murraya koenigii \u2014 Indian aromatic herb. Traditional uses for digestion; antioxidant compounds.",
+      "notes": "Murraya koenigii — Indian aromatic herb. Traditional uses for digestion; antioxidant compounds.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C1440524"
@@ -13767,7 +13683,7 @@
         "Cannabis sativa protein"
       ],
       "category": "protein",
-      "notes": "Hemp seed protein \u2014 complete plant protein, ~50% protein by weight, rich in arginine.",
+      "notes": "Hemp seed protein — complete plant protein, ~50% protein by weight, rich in arginine.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
@@ -13793,7 +13709,7 @@
         "betel"
       ],
       "category": "leaf",
-      "notes": "Piper betle leaf \u2014 traditional Ayurvedic botanical. Modern formulas use leaf extract (not betel quid with areca).",
+      "notes": "Piper betle leaf — traditional Ayurvedic botanical. Modern formulas use leaf extract (not betel quid with areca).",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "NT24A1359E",
@@ -13825,7 +13741,7 @@
         "black-eyed pea"
       ],
       "category": "legume",
-      "notes": "Vigna unguiculata (Fabaceae) seed/legume \u2014 cowpea / black-eyed pea, including the catjang cultivar group. UNII A15VFT1NFM. DISTINCT from horse gram (Macrotyloma uniflorum, formerly Dolichos biflorus, CUI C1477450) \u2014 Dolichos biflorus is the obsolete name for horse gram, NOT cowpea. The Catjang/Dolichos confusion is an old taxonomic error perpetuated in some commercial labeling. Audit 2026-05-01 corrected: stripped 'Dolichos biflorus extract', 'horse gram extract', 'kulthi extract' aliases (different species \u2014 see horse_gram entry); fixed external_ids.cui from C0058663 (which is dolichos biflorus AGGLUTININ protein, not the plant) to C0996865 (Vigna unguiculata).",
+      "notes": "Vigna unguiculata (Fabaceae) seed/legume — cowpea / black-eyed pea, including the catjang cultivar group. UNII A15VFT1NFM. DISTINCT from horse gram (Macrotyloma uniflorum, formerly Dolichos biflorus, CUI C1477450) — Dolichos biflorus is the obsolete name for horse gram, NOT cowpea. The Catjang/Dolichos confusion is an old taxonomic error perpetuated in some commercial labeling. Audit 2026-05-01 corrected: stripped 'Dolichos biflorus extract', 'horse gram extract', 'kulthi extract' aliases (different species — see horse_gram entry); fixed external_ids.cui from C0058663 (which is dolichos biflorus AGGLUTININ protein, not the plant) to C0996865 (Vigna unguiculata).",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "A15VFT1NFM",
@@ -13864,7 +13780,7 @@
         "Catjang Cowpea (Dolichos biflorus) extract"
       ],
       "category": "legume",
-      "notes": "Macrotyloma uniflorum (Fabaceae) seed/legume \u2014 horse gram / kulthi / kulattha. Modern accepted name; OLD synonym Dolichos biflorus is widely used in Ayurvedic and older commercial labeling but refers to this species, NOT cowpea (Vigna unguiculata). Traditional Ayurvedic use for kidney stones, urinary calculi, weight management, hyperlipidemia. Contains polyphenols, phytic acid, and protease inhibitors. UNII 379916QREU (whole). Note: 'Dolichos biflorus' is also used in lab biology to refer to Dolichos biflorus agglutinin (DBA, CUI C0058663) \u2014 that's a lectin protein, not a botanical extract.",
+      "notes": "Macrotyloma uniflorum (Fabaceae) seed/legume — horse gram / kulthi / kulattha. Modern accepted name; OLD synonym Dolichos biflorus is widely used in Ayurvedic and older commercial labeling but refers to this species, NOT cowpea (Vigna unguiculata). Traditional Ayurvedic use for kidney stones, urinary calculi, weight management, hyperlipidemia. Contains polyphenols, phytic acid, and protease inhibitors. UNII 379916QREU (whole). Note: 'Dolichos biflorus' is also used in lab biology to refer to Dolichos biflorus agglutinin (DBA, CUI C0058663) — that's a lectin protein, not a botanical extract.",
       "last_updated": "2026-05-01",
       "external_ids": {
         "unii": "379916QREU",
@@ -13889,7 +13805,7 @@
         "eryngii mushroom"
       ],
       "category": "fungus",
-      "notes": "Pleurotus eryngii \u2014 gourmet edible mushroom with beta-glucan content.",
+      "notes": "Pleurotus eryngii — gourmet edible mushroom with beta-glucan content.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "2WGH02ZJ1G",
@@ -13919,7 +13835,7 @@
         "wild black raspberry"
       ],
       "category": "fruit",
-      "notes": "Rubus occidentalis \u2014 distinct from red raspberry. Rich in anthocyanins and ellagitannins.",
+      "notes": "Rubus occidentalis — distinct from red raspberry. Rich in anthocyanins and ellagitannins.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "QEN9684SNX",
@@ -13951,7 +13867,7 @@
         "dried kombu"
       ],
       "category": "seaweed",
-      "notes": "Laminaria japonica / Saccharina japonica \u2014 edible brown seaweed. Richest natural iodine source.",
+      "notes": "Laminaria japonica / Saccharina japonica — edible brown seaweed. Richest natural iodine source.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "WE98HW412B",
@@ -13982,7 +13898,7 @@
         "white bean"
       ],
       "category": "legume",
-      "notes": "Navy bean (Phaseolus vulgaris) \u2014 small white bean, common in whole-food supplement matrices. Rich in protein, fiber, folate.",
+      "notes": "Navy bean (Phaseolus vulgaris) — small white bean, common in whole-food supplement matrices. Rich in protein, fiber, folate.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
@@ -14011,7 +13927,7 @@
         "essence of organic lavandin oil"
       ],
       "category": "herb",
-      "notes": "Lavandula x intermedia (Lavandin) \u2014 hybrid of true lavender and spike lavender. Essential oil used for fragrance and aromatherapy.",
+      "notes": "Lavandula x intermedia (Lavandin) — hybrid of true lavender and spike lavender. Essential oil used for fragrance and aromatherapy.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
@@ -14039,7 +13955,7 @@
         "sacha inchi seed"
       ],
       "category": "seed",
-      "notes": "Plukenetia volubilis \u2014 Amazonian vine producing edible seeds. Richest plant source of omega-3 ALA (~50% of seed oil), plus protein and tocopherols.",
+      "notes": "Plukenetia volubilis — Amazonian vine producing edible seeds. Richest plant source of omega-3 ALA (~50% of seed oil), plus protein and tocopherols.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C1640937"
@@ -14066,7 +13982,7 @@
         "lantana"
       ],
       "category": "herb",
-      "notes": "Lantana camara \u2014 traditional South Asian medicinal plant. Caution: known phototoxicity; supplement-grade use limited.",
+      "notes": "Lantana camara — traditional South Asian medicinal plant. Caution: known phototoxicity; supplement-grade use limited.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C0331282"
@@ -14093,7 +14009,7 @@
         "pala indigo plant"
       ],
       "category": "herb",
-      "notes": "Wrightia tinctoria \u2014 Ayurvedic botanical from India. Traditional uses for skin conditions.",
+      "notes": "Wrightia tinctoria — Ayurvedic botanical from India. Traditional uses for skin conditions.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "cui": "C2785511"
@@ -14121,7 +14037,7 @@
         "Brassica oleracea acephala"
       ],
       "category": "vegetable",
-      "notes": "Brassica oleracea var. acephala \u2014 cruciferous leafy green. Vitamin K, A, C source; glucosinolate content.",
+      "notes": "Brassica oleracea var. acephala — cruciferous leafy green. Vitamin K, A, C source; glucosinolate content.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
@@ -14148,7 +14064,7 @@
         "orange peel extract"
       ],
       "category": "fruit",
-      "notes": "Citrus sinensis (Sweet Orange) \u2014 flavor/aromatic botanical. Peel contains limonene; fruit vitamin C and bioflavonoids.",
+      "notes": "Citrus sinensis (Sweet Orange) — flavor/aromatic botanical. Peel contains limonene; fruit vitamin C and bioflavonoids.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "rxcui": null,
@@ -14176,7 +14092,7 @@
         "wilford's swallowwort"
       ],
       "category": "herb",
-      "notes": "Cynanchum wilfordii (Apocynaceae) root. Korean traditional herb used in women's health / menopause formulations (component of Estromon). Contains cynandione A, gagaminine, acetophenones. IMPORTANT: adulteration risk \u2014 historically confused/substituted with Polygonum multiflorum (He Shou Wu, hepatotoxic) on US market. Verify binomial on label.",
+      "notes": "Cynanchum wilfordii (Apocynaceae) root. Korean traditional herb used in women's health / menopause formulations (component of Estromon). Contains cynandione A, gagaminine, acetophenones. IMPORTANT: adulteration risk — historically confused/substituted with Polygonum multiflorum (He Shou Wu, hepatotoxic) on US market. Verify binomial on label.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "0YW1513318"
@@ -14214,7 +14130,7 @@
         "korean phlomis root"
       ],
       "category": "herb",
-      "notes": "Phlomoides umbrosa (Lamiaceae; formerly Phlomis umbrosa) root. Korean traditional herb, component of Estromon women's-health formulation. Contains iridoid glycosides (shanzhiside methyl ester, sesamoside, phlomiol). Note: Korean vernacular 'Sok-Dan' overlaps with TCM Xu Duan (Dipsacus) \u2014 verify binomial, not common name.",
+      "notes": "Phlomoides umbrosa (Lamiaceae; formerly Phlomis umbrosa) root. Korean traditional herb, component of Estromon women's-health formulation. Contains iridoid glycosides (shanzhiside methyl ester, sesamoside, phlomiol). Note: Korean vernacular 'Sok-Dan' overlaps with TCM Xu Duan (Dipsacus) — verify binomial, not common name.",
       "last_updated": "2026-04-20",
       "external_ids": {
         "unii": "8J1RE3K5G5"
@@ -14261,7 +14177,7 @@
         "pubchem_cid": null,
         "unii": null
       },
-      "notes": "Tamarindus indica fruit \u2014 legume-family tropical fruit used for dietary fiber and polyphenols. Source of tartaric acid and malic acid. Used in gummies and chewables as natural flavor + fiber source.",
+      "notes": "Tamarindus indica fruit — legume-family tropical fruit used for dietary fiber and polyphenols. Source of tartaric acid and malic acid. Used in gummies and chewables as natural flavor + fiber source.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "functional_roles": [],
@@ -14284,7 +14200,7 @@
         "organic green bean powder"
       ],
       "category": "botanical",
-      "notes": "Green Bean (Phaseolus vulgaris) \u2014 edible legume used in whole-food supplement blends for plant protein + fiber.",
+      "notes": "Green Bean (Phaseolus vulgaris) — edible legume used in whole-food supplement blends for plant protein + fiber.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
@@ -14311,7 +14227,7 @@
         "butter bean"
       ],
       "category": "botanical",
-      "notes": "Lima Bean (Phaseolus lunatus) \u2014 edible legume used in whole-food supplement blends for plant protein + fiber.",
+      "notes": "Lima Bean (Phaseolus lunatus) — edible legume used in whole-food supplement blends for plant protein + fiber.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
@@ -14337,7 +14253,7 @@
       "category": "botanical",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Ecklonia radiata; marine kelp species, tracked governed-null per protocol.",
-      "notes": "Ecklonia radiata \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
+      "notes": "Ecklonia radiata — brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
@@ -14360,7 +14276,7 @@
       "category": "botanical",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Ecklonia kurome; marine kelp species, tracked governed-null per protocol.",
-      "notes": "Ecklonia kurome \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
+      "notes": "Ecklonia kurome — brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
@@ -14385,7 +14301,7 @@
       "category": "botanical",
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Alaria esculenta; marine kelp species, tracked governed-null per protocol.",
-      "notes": "Alaria esculenta \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
+      "notes": "Alaria esculenta — brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
       "added_by": "sprint_d2.5",
       "last_updated": "2026-04-20",
       "external_ids": {},
@@ -14664,37 +14580,6 @@
       "last_updated": "2026-05-01",
       "external_ids": {},
       "cui": "C0950083",
-      "functional_roles": [],
-      "attributes": {
-        "source_origin": "plant"
-      }
-    },
-    {
-      "id": "broccoli_sprout",
-      "standard_name": "Broccoli Sprout",
-      "latin_name": "Brassica oleracea var. italica",
-      "aliases": [
-        "broccoli seed",
-        "broccoli sprouts",
-        "brassica oleracea italica sprouts",
-        "broccoli sprout extract",
-        "cruciferous extract",
-        "myrosinase complex",
-        "sprouted broccoli",
-        "broccoli sprouts powder",
-        "broccoli cruciferous extract",
-        "Broccoli seed raffinate",
-        "broccoli sprout, whole plant concentrate",
-        "broccoli sprout whole plant concentrate",
-        "broccoli sprout concentrate",
-        "broccoli seed extract",
-        "broccoli sprout/seed extract"
-      ],
-      "category": "vegetable",
-      "notes": "Young broccoli plant sprouted from seed. Commercial source of glucoraphanin (precursor to sulforaphane). Sulforaphane is liberated by myrosinase enzyme during chewing or processing; standardized extracts declare glucoraphanin or sulforaphane content. Per identity/bioactivity split policy (Phase 2 of identity_bioactivity_split audit, 2026-05): credit sulforaphane Section C evidence only when label declares standardization. Marker contributions (sulforaphane) recorded in scripts/data/botanical_marker_contributions.json.",
-      "last_updated": "2026-05-11",
-      "external_ids": {},
-      "cui": "C4521843",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
