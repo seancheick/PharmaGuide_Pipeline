@@ -1,0 +1,227 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "generated_at": "2026-05-11T07:45:38.870845+00:00",
+    "generator": "scripts/api_audit/verify_botanical_composition.py --build-baseline",
+    "source_authorities": [
+      "USDA FoodData Central API (api.nal.usda.gov/fdc/v1)",
+      "PubMed E-utilities (eutils.ncbi.nlm.nih.gov/entrez/eutils)"
+    ],
+    "policy": "Identity vs Bioactivity Split \u2014 source botanicals only credit marker Section C evidence when (a) label explicitly declares standardization meeting min_standardization_pct_required, or (b) botanical has a default_contribution_mg_per_g with USDA FDC citation.",
+    "total_entries": 9
+  },
+  "botanicals": {
+    "acerola_cherry": {
+      "delivers": [
+        {
+          "marker_canonical_id": "vitamin_c",
+          "model": "default_contribution",
+          "default_contribution_mg_per_g": 16.0,
+          "evidence_source": "USDA FoodData Central \u2014 Acerola juice, raw",
+          "evidence_url": "https://fdc.nal.usda.gov/food-details/171687/nutrients",
+          "evidence_id": "USDA_FDC:171687",
+          "evidence_nutrient_id": 1162,
+          "evidence_raw_value": 1600.0,
+          "evidence_raw_units": "mg per 100g",
+          "fetched_at": "2026-05-11T07:45:39.636627+00:00",
+          "standardization_keywords": [
+            "standardized to",
+            "% vitamin c",
+            "% ascorbic acid",
+            "mg vitamin c"
+          ],
+          "min_standardization_pct_required": null,
+          "notes": "Fresh acerola fruit averages ~1670 mg vitamin C per 100g per USDA FoodData Central; one of the highest natural sources. Default contribution gives partial credit when label declares acerola but does not standardize."
+        }
+      ],
+      "source_db": "botanical_ingredients"
+    },
+    "tomato": {
+      "delivers": [
+        {
+          "marker_canonical_id": "lycopene",
+          "model": "default_contribution",
+          "default_contribution_mg_per_g": 0.218,
+          "evidence_source": "USDA FoodData Central \u2014 Tomato products, canned, puree, with salt added",
+          "evidence_url": "https://fdc.nal.usda.gov/food-details/170546/nutrients",
+          "evidence_id": "USDA_FDC:170546",
+          "evidence_nutrient_id": 1122,
+          "evidence_raw_value": 21800.0,
+          "evidence_raw_units": "ug per 100g",
+          "fetched_at": "2026-05-11T07:45:40.617511+00:00",
+          "standardization_keywords": [
+            "standardized to",
+            "% lycopene",
+            "mg lycopene"
+          ],
+          "min_standardization_pct_required": null,
+          "notes": "Tomato concentrates/purees contain measurable lycopene per USDA FDC. Fresh tomato is lower (~2500 \u03bcg/100g); concentrates 10x+ higher. Default contribution uses puree value as conservative midpoint."
+        }
+      ],
+      "source_db": "botanical_ingredients"
+    },
+    "camu_camu": {
+      "delivers": [
+        {
+          "marker_canonical_id": "vitamin_c",
+          "model": "standardization_required",
+          "min_standardization_pct_required": 5.0,
+          "default_contribution_mg_per_g": null,
+          "evidence_source": "PubMed PMID:30599928 \u2014 Vitamin C in camu-camu [Myrciaria dubia (H.B.K.) McVaugh]: evaluation of extraction and analytical methods.",
+          "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/30599928/",
+          "evidence_id": "PMID:30599928",
+          "evidence_keyword_coverage": 1.0,
+          "fetched_at": "2026-05-11T07:45:41.436423+00:00",
+          "standardization_keywords": [
+            "standardized to",
+            "% vitamin c",
+            "% ascorbic acid",
+            "mg vitamin c"
+          ],
+          "notes": "Camu camu (Myrciaria dubia) berry vitamin C content is highly variable (2-3% w/w fresh, 20%+ in standardized extracts). Conservative policy: credit vitamin C only when label explicitly declares standardization."
+        }
+      ],
+      "source_db": "standardized_botanicals"
+    },
+    "turmeric": {
+      "delivers": [
+        {
+          "marker_canonical_id": "curcumin",
+          "model": "standardization_required",
+          "min_standardization_pct_required": 95.0,
+          "default_contribution_mg_per_g": null,
+          "evidence_source": "PubMed PMID:37708671 \u2014 Purification and characterization of pure curcumin, desmethoxycurcumin, and bisdemethoxycurcumin from North-East India Lakadong turmeric (Curcuma longa).",
+          "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/37708671/",
+          "evidence_id": "PMID:37708671",
+          "evidence_keyword_coverage": 1.0,
+          "fetched_at": "2026-05-11T07:45:42.096018+00:00",
+          "standardization_keywords": [
+            "curcuminoid",
+            "95%",
+            "standardized to",
+            "% curcumin"
+          ],
+          "notes": "Raw turmeric rhizome contains 2-9% curcuminoids; commercial standardized extracts (95% curcuminoids) are the clinical reference. Credit curcumin only when label declares 95%+ standardization (industry standard)."
+        }
+      ],
+      "source_db": "botanical_ingredients"
+    },
+    "broccoli_sprout": {
+      "delivers": [
+        {
+          "marker_canonical_id": "sulforaphane",
+          "model": "standardization_required",
+          "min_standardization_pct_required": 1.0,
+          "default_contribution_mg_per_g": null,
+          "evidence_source": "PubMed PMID:30372361 \u2014 Isothiocyanate from Broccoli, Sulforaphane, and Its Properties.",
+          "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/30372361/",
+          "evidence_id": "PMID:30372361",
+          "evidence_keyword_coverage": 1.0,
+          "fetched_at": "2026-05-11T07:45:42.789820+00:00",
+          "standardization_keywords": [
+            "sulforaphane",
+            "glucoraphanin",
+            "% sulforaphane",
+            "% glucoraphanin",
+            "myrosinase"
+          ],
+          "notes": "Sulforaphane is generated from glucoraphanin by myrosinase during chewing. Raw broccoli sprout glucoraphanin varies 0.5-13 mg/g; sulforaphane yield depends on processing. Credit only when label declares standardization."
+        }
+      ],
+      "source_db": "MISSING_NEEDS_CREATION"
+    },
+    "cayenne_pepper": {
+      "delivers": [
+        {
+          "marker_canonical_id": "capsaicin",
+          "model": "standardization_required",
+          "min_standardization_pct_required": 2.0,
+          "default_contribution_mg_per_g": null,
+          "evidence_source": "PubMed PMID:37366425 \u2014 Estimation of genetic variation in yield, its contributing characters and capsaicin content of",
+          "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/37366425/",
+          "evidence_id": "PMID:37366425",
+          "evidence_keyword_coverage": 0.5,
+          "fetched_at": "2026-05-11T07:45:43.733710+00:00",
+          "standardization_keywords": [
+            "capsaicin",
+            "capsaicinoid",
+            "% capsaicin",
+            "Scoville"
+          ],
+          "notes": "Cayenne (Capsicum annuum) capsaicinoid content varies widely (0.1-2% w/w) by cultivar and growing conditions. Standardized commercial extracts (e.g., Capsimax 2%) are the clinical reference. Credit only when standardized."
+        }
+      ],
+      "source_db": "botanical_ingredients"
+    },
+    "sophora_japonica": {
+      "delivers": [
+        {
+          "marker_canonical_id": "quercetin",
+          "model": "standardization_required",
+          "min_standardization_pct_required": 95.0,
+          "default_contribution_mg_per_g": null,
+          "evidence_source": "PubMed PMID:35307893 \u2014 United States Pharmacopeia comprehensive safety review of Styphnolobium japonicum flower and flower bud.",
+          "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/35307893/",
+          "evidence_id": "PMID:35307893",
+          "evidence_keyword_coverage": 1.0,
+          "fetched_at": "2026-05-11T07:45:44.965364+00:00",
+          "standardization_keywords": [
+            "quercetin",
+            "% quercetin",
+            "standardized to"
+          ],
+          "notes": "Sophora japonica flower buds are a commercial source of quercetin via rutin hydrolysis. Commercial quercetin from sophora is typically 95%+ pure. Credit only when label declares standardization."
+        }
+      ],
+      "source_db": "botanical_ingredients"
+    },
+    "horse_chestnut_seed": {
+      "delivers": [
+        {
+          "marker_canonical_id": "aescin",
+          "model": "standardization_required",
+          "min_standardization_pct_required": 16.0,
+          "default_contribution_mg_per_g": null,
+          "evidence_source": "PubMed PMID:9828868 \u2014 Horse-chestnut seed extract for chronic venous insufficiency. A criteria-based systematic review.",
+          "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/9828868/",
+          "evidence_id": "PMID:9828868",
+          "evidence_keyword_coverage": 0.667,
+          "fetched_at": "2026-05-11T07:45:45.768193+00:00",
+          "standardization_keywords": [
+            "aescin",
+            "escin",
+            "16%",
+            "20%",
+            "% aescin",
+            "% escin"
+          ],
+          "notes": "Horse chestnut seed extract (HCSE) used clinically is standardized to 16-20% triterpene glycosides (aescin/escin). Raw seed content varies. Credit only when label declares 16%+ standardization."
+        }
+      ],
+      "source_db": "botanical_ingredients"
+    },
+    "japanese_knotweed": {
+      "delivers": [
+        {
+          "marker_canonical_id": "resveratrol",
+          "model": "standardization_required",
+          "min_standardization_pct_required": 50.0,
+          "default_contribution_mg_per_g": null,
+          "evidence_source": "PubMed PMID:34410415 \u2014 Response Surface Methodology to Optimize Supercritical Carbon Dioxide Extraction of Polygonum cuspidatum.",
+          "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/34410415/",
+          "evidence_id": "PMID:34410415",
+          "evidence_keyword_coverage": 0.667,
+          "fetched_at": "2026-05-11T07:45:46.484650+00:00",
+          "standardization_keywords": [
+            "resveratrol",
+            "trans-resveratrol",
+            "% resveratrol",
+            "standardized to"
+          ],
+          "notes": "Polygonum cuspidatum (Japanese knotweed) is the commercial source of resveratrol. Raw root contains 0.1-1.5% resveratrol; standardized extracts are 50-98% pure. Credit only when label declares standardization."
+        }
+      ],
+      "source_db": "botanical_ingredients"
+    }
+  }
+}
