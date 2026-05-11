@@ -29,6 +29,7 @@ REQUIRED_BOTANICALS = {
     "sophora_japonica",
     "horse_chestnut_seed",
     "japanese_knotweed",
+    "marigold",  # Phase 8 — Tagetes erecta source of lutein
 }
 
 EXPECTED_MARKER_MAP = {
@@ -41,6 +42,7 @@ EXPECTED_MARKER_MAP = {
     "sophora_japonica": "quercetin",
     "horse_chestnut_seed": "aescin",
     "japanese_knotweed": "resveratrol",
+    "marigold": "lutein",
 }
 
 USDA_FDC_PATTERN = re.compile(r"^USDA_FDC:\d+$")
