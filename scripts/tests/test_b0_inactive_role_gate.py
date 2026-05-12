@@ -187,6 +187,11 @@ NEVER_ACCEPTABLE_INACTIVE_CASES = [
     ("Bitter Orange",          "RISK_BITTER_ORANGE"),
     ("Formaldehyde",           "BANNED_ADD_FORMALDEHYDE"),
     ("Delta-8 THC",            "BANNED_DELTA8_THC"),
+    # v5.4.1 (2026-05-12): Cascara Sagrada promoted from review_required
+    # to penalize_anyway after clinical review. Evidence (already in entry):
+    # FDA stripped GRASE status 2002 (67 FR 31125), EFSA HAD genotoxicity
+    # finding, NIH LiverTox acute liver failure documentation.
+    ("Cascara Sagrada",        "ADD_CASCARA_SAGRADA"),
 ]
 
 
@@ -250,31 +255,33 @@ def test_watchlist_inactive_fires_b0_watchlist_5pt(enricher, ing_name, expected_
 
 
 # ---------------------------------------------------------------------------
-# Review_required class: Cascara and Synthetic Food Acids stay silent at
-# score layer until human review. Warnings layer surfaces them.
+# v5.4.1 (2026-05-12): zero review_required entries remain after clinical
+# review. Cascara Sagrada → penalize_anyway (FDA/EFSA/LiverTox evidence
+# in entry). BANNED_ADD_SYNTHETIC_FOOD_ACIDS → excipient_acceptable
+# (aliases fumaric/adipic/citric are FDA GRAS pH-buffer excipients).
+#
+# This test pins the FOOD-ACIDS classification so a future revisit of the
+# "synthetic vs natural acids" clinical claim has a clean baseline. The
+# decision argument: the molecule is identical (citric acid from
+# Aspergillus niger fermentation vs industrial synthesis), and the
+# corpus-wide FP rate of penalizing every gummy / effervescent / chewable
+# would dwarf any real safety signal.
 # ---------------------------------------------------------------------------
 
-REVIEW_REQUIRED_INACTIVE_CASES = [
-    ("Cascara Sagrada",  "ADD_CASCARA_SAGRADA"),
-]
-
-
-@pytest.mark.parametrize("ing_name, expected_rule_id", REVIEW_REQUIRED_INACTIVE_CASES)
-def test_review_required_inactive_does_not_fire_b0(enricher, ing_name, expected_rule_id):
-    """inactive_policy='review_required' substances must NOT fire B0
-    until a human reviewer classifies them. Borderline cases — wrong
-    direction is more expensive than waiting for clinical review.
-
-    The warnings layer (build_final_db commit 3e4f9d6) IS visible to
-    the user even when the score is silent — so the regulator-tracking
-    signal isn't lost while review is pending."""
-    product = _minimal_enriched_inactive(ing_name)
+def test_synthetic_food_acids_inactive_does_not_fire_b0(enricher):
+    """Synthetic food acids (fumaric/adipic/citric/E297/E355) must NOT
+    fire B0 when listed as inactives. The watchlist data entry stays in
+    place so warnings layer can still surface it for any unusual context,
+    but ubiquitous pH-buffer excipient use does not penalize the score.
+    """
+    # Use a real alias from the entry
+    product = _minimal_enriched_inactive("fumaric acid")
     result = _run_banned_check(enricher, product)
     substances = result.get("substances") or []
     assert not substances, (
-        f"{ing_name!r} as INACTIVE (review_required) should be silent at "
-        f"score layer; got {[s.get('id') for s in substances]}. Flip to "
-        f"penalize_anyway or excipient_acceptable only after human review."
+        f"fumaric acid as INACTIVE fired B0 — expected suppression under "
+        f"inactive_policy='excipient_acceptable'. Got: "
+        f"{[s.get('id') for s in substances]}"
     )
 
 

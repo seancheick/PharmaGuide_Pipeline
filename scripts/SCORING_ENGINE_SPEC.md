@@ -3,26 +3,37 @@
 > Scoring version: **3.5.2** / Data schema: **5.4.0** / Last updated: **2026-05-12**
 > Aligned to current `score_supplements.py` and `config/scoring_config.json`.
 
-## v3.5.2 highlights (2026-05-12)
+## v3.5.2 highlights (2026-05-12, data schema 5.4.1)
 
 - **Per-entry inactive_policy field** on `banned_recalled_ingredients.json`
   high_risk + watchlist entries. Discriminates the v3.5.0 role gate by
-  three classes:
-  - `excipient_acceptable` (3 entries: TiO2, Talc, Docusate Sodium) →
-    inactive matches suppressed. Warning visible via build layer; score
-    unchanged. Prevents ~2,000+ FP HIGH_RISK on common capsules.
-  - `penalize_anyway` (35 entries: heavy metals, hormones, hepatotoxic
-    botanicals, controlled substances, watchlist contaminants) →
-    inactive matches FIRE B0. Score now reflects "this substance has no
-    legitimate inactive use; presence is a labeling defect or hidden
-    active risk."
-  - `review_required` (2 entries: Cascara Sagrada, Synthetic Food Acids)
-    → inactive matches suppressed at score layer pending human review.
+  two final classes (all 40 entries classified, 0 review_required remain):
+  - `excipient_acceptable` (4 entries: TiO2, Talc, Docusate Sodium,
+    Synthetic Food Acids) → inactive matches suppressed. Warning visible
+    via build layer; score unchanged. Prevents ~2,000+ FP HIGH_RISK on
+    common capsules + ubiquitous pH-buffer excipient FPs.
+  - `penalize_anyway` (36 entries: heavy metals, hormones, hepatotoxic
+    botanicals incl. Cascara Sagrada, controlled substances, watchlist
+    contaminants) → inactive matches FIRE B0. Score now reflects "this
+    substance has no legitimate inactive use; presence is a labeling
+    defect or hidden active risk."
 - **Mega Teen 1007 (TiO2 inactive) unchanged**: 81/100 SAFE — TiO2 stays
   excipient_acceptable.
 - **Synthetic Yohimbe-inactive product** now matches Yohimbe-active
   product: 68.6/100 CAUTION + B0_HIGH_RISK_SUBSTANCE.
-- Lock: [scripts/tests/test_b0_inactive_role_gate.py](tests/test_b0_inactive_role_gate.py).
+- Clinical review evidence:
+  - Cascara Sagrada → penalize_anyway. Evidence in entry: FDA stripped
+    GRASE status 2002 (Federal Register 67 FR 31125); EFSA 2018/2024
+    hydroxyanthracene derivative (HAD) genotoxicity/carcinogenicity
+    finding; NIH LiverTox documents acute liver failure cases. Active
+    compounds ARE the stimulant-laxative HADs — no plausible trace/
+    excipient use.
+  - Synthetic Food Acids → excipient_acceptable. Aliases (fumaric/adipic/
+    citric, E297, E355) are FDA GRAS pH-buffer excipients universally
+    used in gummies, effervescents, chewables. Synthetic-vs-natural
+    distinction is chemically unsupported (identical molecules).
+    Watchlist visibility preserved at warnings layer.
+- Lock: [scripts/tests/test_b0_inactive_role_gate.py](tests/test_b0_inactive_role_gate.py) — 29 tests.
 
 ## v3.5.0 highlights
 
@@ -141,14 +152,14 @@ Input path:
 The enricher's `_check_banned_substances` walks BOTH active and inactive
 ingredients. For each banned_recalled entry with `match_mode='active'`
 (the default), it discriminates inactive-section matches by the entry's
-`inactive_policy` field (added in data schema 5.4.0 for all 29 high_risk
-+ 11 watchlist entries):
+`inactive_policy` field (added in data schema 5.4.0; all 29 high_risk
++ 11 watchlist entries classified, 0 review_required remain after the
+v5.4.1 clinical-review pass on 2026-05-12):
 
 | inactive_policy | Entries | Behavior on inactive match |
 |---|---|---|
-| `excipient_acceptable` | 3 (TiO2, Talc, Docusate Sodium) | SUPPRESS — score unchanged; warning visible via build layer |
-| `penalize_anyway` | 35 (heavy metals, hormones, hepatotoxic botanicals, controlled substances, watchlist contaminants) | FIRE B0 (high_risk 10pt or watchlist 5pt); warning visible |
-| `review_required` | 2 (Cascara, Synthetic Food Acids) | SUPPRESS — pending human review; warning still visible |
+| `excipient_acceptable` | 4 (TiO2, Talc, Docusate Sodium, Synthetic Food Acids) | SUPPRESS — score unchanged; warning visible via build layer |
+| `penalize_anyway` | 36 (heavy metals, hormones, hepatotoxic botanicals incl. Cascara, controlled substances, watchlist contaminants) | FIRE B0 (high_risk 10pt or watchlist 5pt); warning visible |
 | _(absent)_ | banned + recalled entries | SUPPRESS — falls through to UNSAFE/BLOCKED verdict via the hard-fail path |
 
 The historical v3.5.0 blanket suppression (preventing ~2,000+ FP HIGH_RISK
@@ -156,7 +167,7 @@ fires on capsules using TiO2/Talc/Simethicone as excipients) is preserved
 for `excipient_acceptable`; the new policy distinguishes "this is a real
 excipient context" from "this is a labeling defect / hidden active."
 
-**Net effect on scoring** (locked by [test_b0_inactive_role_gate.py](tests/test_b0_inactive_role_gate.py), 22 tests):
+**Net effect on scoring** (locked by [test_b0_inactive_role_gate.py](tests/test_b0_inactive_role_gate.py), 29 tests):
 - TiO2 / Talc / Docusate AS INACTIVE → suppressed → no B0 penalty.
   Mega Teen 1007 stays at 81/100 SAFE. (Same TiO2 as ACTIVE still drops
   to 69/100 CAUTION; the active-side safety signal is unchanged.)
