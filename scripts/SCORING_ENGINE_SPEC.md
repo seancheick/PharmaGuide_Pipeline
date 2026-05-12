@@ -1,13 +1,36 @@
 # SCORING_ENGINE_SPEC.md
 
-> Scoring version: **3.5.0** / Data schema: **5.3.0** / Last updated: **2026-04-29**
+> Scoring version: **3.5.2** / Data schema: **5.4.0** / Last updated: **2026-05-12**
 > Aligned to current `score_supplements.py` and `config/scoring_config.json`.
+
+## v3.5.2 highlights (2026-05-12)
+
+- **Per-entry inactive_policy field** on `banned_recalled_ingredients.json`
+  high_risk + watchlist entries. Discriminates the v3.5.0 role gate by
+  three classes:
+  - `excipient_acceptable` (3 entries: TiO2, Talc, Docusate Sodium) →
+    inactive matches suppressed. Warning visible via build layer; score
+    unchanged. Prevents ~2,000+ FP HIGH_RISK on common capsules.
+  - `penalize_anyway` (35 entries: heavy metals, hormones, hepatotoxic
+    botanicals, controlled substances, watchlist contaminants) →
+    inactive matches FIRE B0. Score now reflects "this substance has no
+    legitimate inactive use; presence is a labeling defect or hidden
+    active risk."
+  - `review_required` (2 entries: Cascara Sagrada, Synthetic Food Acids)
+    → inactive matches suppressed at score layer pending human review.
+- **Mega Teen 1007 (TiO2 inactive) unchanged**: 81/100 SAFE — TiO2 stays
+  excipient_acceptable.
+- **Synthetic Yohimbe-inactive product** now matches Yohimbe-active
+  product: 68.6/100 CAUTION + B0_HIGH_RISK_SUBSTANCE.
+- Lock: [scripts/tests/test_b0_inactive_role_gate.py](tests/test_b0_inactive_role_gate.py).
 
 ## v3.5.0 highlights
 
 - **Banned-substance role gate** (enricher): `match_mode='active'` entries no longer
   fire on inactive-section ingredients. Eliminates ~2,000+ FP HIGH_RISK fires
-  (talc/TiO2/simethicone as excipients).
+  (talc/TiO2/simethicone as excipients). **Refined in v3.5.2** by per-entry
+  `inactive_policy` (above) — the blanket suppression only applies to
+  `inactive_policy='excipient_acceptable'` or `'review_required'` now.
 - **Section C retune**: `ingredient-human` 0.65 → 0.80, `branded-rct` 0.80 → 0.90,
   `top_n_weights` [1.0, 0.5, 0.25] → [1.0, 0.7, 0.5, 0.3]. Rewards evidence-rich
   formulations (Thorne / PE / Transparent Labs) without multivitamin inflation.
@@ -113,43 +136,42 @@ Order in `score_product()`:
 Input path:
 - `contaminant_data.banned_substances.substances[]`
 
-**Active/inactive role-gate (v3.5.0, documented gap as of 2026-05-12):**
+**Active/inactive role-gate (v3.5.2, granular per-entry policy):**
 
 The enricher's `_check_banned_substances` walks BOTH active and inactive
-ingredients but applies a per-entry `match_mode` filter:
+ingredients. For each banned_recalled entry with `match_mode='active'`
+(the default), it discriminates inactive-section matches by the entry's
+`inactive_policy` field (added in data schema 5.4.0 for all 29 high_risk
++ 11 watchlist entries):
 
-- `match_mode='active'` (default for all 29 high_risk entries): SUPPRESSES
-  matches sourced from `inactiveIngredients[]`. This is intentional — it
-  prevents ~2,000+ FP HIGH_RISK fires on capsules that legitimately use
-  TiO2 (coating), Talc (anti-caking), Simethicone (de-foamer), Docusate
-  Sodium (softgel emulsifier) as excipients.
-- `match_mode='any'` or `'inactive'`: would fire on inactives. **No entries
-  currently use these values** — the data file is uniform `active`.
-
-**Net effect on scoring** (locked by [test_b0_inactive_role_gate.py](tests/test_b0_inactive_role_gate.py)):
-- TiO2 / Talc / Docusate AS INACTIVE → no contaminant_data hit → no B0
-  penalty → Section B unchanged, score unchanged.
-- Same ingredient AS ACTIVE → B0 fires → 10pt high_risk penalty → Section
-  B drops ~10pt (e.g., Mega Teen 1007: SAFE 81/100 → CAUTION 69/100).
-
-**Known architectural gap** (documented, not yet fixed): the 29 high_risk
-entries split into two policy classes that the current uniform
-`match_mode='active'` doesn't distinguish:
-
-| Class | Examples | Correct policy |
+| inactive_policy | Entries | Behavior on inactive match |
 |---|---|---|
-| (a) Excipient-acceptable | TiO2, Talc, Docusate Sodium | Suppress when inactive (current) — score unaffected, warning visible |
-| (b) Never-acceptable | Heavy metals (As/Pb/Hg/Cd), prohormones (7-Keto-DHEA), hepatotoxic botanicals (Chaparral/Germander/Pennyroyal), Kava, Yohimbe, Bitter Orange, Δ8-THC, Formaldehyde, Cascara, T2 | **Should fire B0 even when inactive** — appearing in inactives is a labeling defect / hidden-active risk |
+| `excipient_acceptable` | 3 (TiO2, Talc, Docusate Sodium) | SUPPRESS — score unchanged; warning visible via build layer |
+| `penalize_anyway` | 35 (heavy metals, hormones, hepatotoxic botanicals, controlled substances, watchlist contaminants) | FIRE B0 (high_risk 10pt or watchlist 5pt); warning visible |
+| `review_required` | 2 (Cascara, Synthetic Food Acids) | SUPPRESS — pending human review; warning still visible |
+| _(absent)_ | banned + recalled entries | SUPPRESS — falls through to UNSAFE/BLOCKED verdict via the hard-fail path |
 
-The warnings-array layer (build_final_db commit 3e4f9d6) DOES surface
-class (b) hits as user-facing warnings even when the score is silent —
-the safety signal isn't lost, but the score / verdict don't currently
-reflect class (b) inactives. Fix path: add per-entry `inactive_policy`
-field (`excipient_acceptable` vs `penalize_anyway`) to
-`banned_recalled_ingredients.json`, branch the role-gate check on it.
-13 xfailed regression tests in [test_b0_inactive_role_gate.py]
-(tests/test_b0_inactive_role_gate.py) will flip to passing when this
-lands — surfaces the policy change automatically.
+The historical v3.5.0 blanket suppression (preventing ~2,000+ FP HIGH_RISK
+fires on capsules using TiO2/Talc/Simethicone as excipients) is preserved
+for `excipient_acceptable`; the new policy distinguishes "this is a real
+excipient context" from "this is a labeling defect / hidden active."
+
+**Net effect on scoring** (locked by [test_b0_inactive_role_gate.py](tests/test_b0_inactive_role_gate.py), 22 tests):
+- TiO2 / Talc / Docusate AS INACTIVE → suppressed → no B0 penalty.
+  Mega Teen 1007 stays at 81/100 SAFE. (Same TiO2 as ACTIVE still drops
+  to 69/100 CAUTION; the active-side safety signal is unchanged.)
+- Yohimbe / Kava / Lead / 7-Keto-DHEA / Δ8-THC / Formaldehyde / etc. AS
+  INACTIVE → fire B0 high_risk (10pt). Score-side now aligns with the
+  warnings layer.
+- Phthalates / Anatabine / Octopamine / Lobelia AS INACTIVE → fire B0
+  watchlist (5pt). Same alignment, lower magnitude.
+- Cascara Sagrada / Synthetic Food Acids AS INACTIVE → suppressed at
+  score layer pending human review; visible at warnings layer.
+
+Maintaining the policy: when adding a new high_risk or watchlist entry to
+`banned_recalled_ingredients.json`, set `inactive_policy` explicitly. The
+schema v5.4 validation test (when added) will refuse to load entries
+without it.
 
 Match-type semantics:
 - Hard-fail eligible types: `exact`, `alias`

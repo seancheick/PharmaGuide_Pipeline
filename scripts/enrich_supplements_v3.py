@@ -7483,16 +7483,50 @@ class SupplementEnricherV3:
                 if match_mode in ('disabled', 'historical'):
                     continue
 
-                # P0c: Active/inactive role gate. Substances flagged with
-                # match_mode='active' (the default) are dangerous as actives
-                # but acceptable as common excipients (talc as glidant, TiO2
-                # as coating, docusate as softgel emulsifier). Skip the
-                # banned-item check when the ingredient came from the
-                # inactives list and the entry isn't explicitly 'any'/'inactive'.
-                # Product entries are matched against product identity, not
-                # ingredient sections, so they bypass this gate.
+                # P0c: Active/inactive role gate (v3.5.2 — per-entry policy).
+                # Substances flagged with match_mode='active' (the default)
+                # split into three policy classes for inactive-section matches:
+                #
+                #   inactive_policy='excipient_acceptable' (TiO2/Talc/Docusate):
+                #     SKIP — these have legitimate FDA-approved excipient
+                #     use; firing B0 on every capsule would produce ~2,000+
+                #     FPs. Warning visibility remains via the resolver layer
+                #     in build_final_db (commit 3e4f9d6).
+                #
+                #   inactive_policy='penalize_anyway' (heavy metals, hormones,
+                #     hepatotoxic botanicals, controlled substances, watchlist
+                #     contaminants): FALL THROUGH — these have no legitimate
+                #     inactive use; appearing in the inactive panel is a
+                #     labeling defect or hidden-active risk and must penalize.
+                #
+                #   inactive_policy='review_required' (Cascara, synthetic
+                #     food acids):
+                #     SKIP for now — borderline classification; do not
+                #     penalize until a human reviewer decides. Warning still
+                #     visible via the build-layer resolver.
+                #
+                # Fallback: when inactive_policy is absent (e.g., 'banned'/
+                # 'recalled' entries that escape directly to UNSAFE/BLOCKED
+                # verdicts), preserve the original v3.5.0 suppression so
+                # the legacy behavior is unchanged for those.
+                #
+                # Product entries (entity_type='product') bypass this gate
+                # entirely — they're matched against product identity, not
+                # ingredient sections.
                 if entity_type != 'product' and match_mode == 'active' and ing_source_section == 'inactive':
-                    continue
+                    inactive_policy = banned_item.get('inactive_policy')
+                    if inactive_policy == 'penalize_anyway':
+                        # fall through and fire B0 — never-acceptable inactive
+                        pass
+                    elif inactive_policy == 'excipient_acceptable':
+                        continue
+                    elif inactive_policy == 'review_required':
+                        continue  # human review pending; preserve current score
+                    else:
+                        # No explicit policy — default to suppression so
+                        # banned/recalled (which never need this gate) and
+                        # any future entries keep the v3.5.0 behavior.
+                        continue
 
                 # Product-level recalls/bans should match product identity
                 # (full name / brand), not ingredient labels.

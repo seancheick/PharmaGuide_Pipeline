@@ -164,15 +164,17 @@ def test_excipient_acceptable_active_DOES_fire_b0(enricher, ing_name, expected_r
 
 
 # ---------------------------------------------------------------------------
-# Class (b): never-acceptable inactives — current policy INCORRECTLY suppresses.
-# These tests are marked xfail so they don't block CI but DO surface the gap
-# whenever the suite runs. When per-entry inactive_policy lands and these
-# fire as expected, flip the xfail off in the same commit.
+# Class (b): never-acceptable inactives — inactive_policy='penalize_anyway'.
+# v3.5.2 (2026-05-12): per-entry policy landed. These tests now PASS as
+# active assertions — heavy metals, prohormones, hepatotoxic botanicals,
+# controlled substances, and watchlist contaminants fire B0 even when
+# listed as inactives. Use aliases the data file recognizes (some entries
+# require qualification like "Inorganic Arsenic" vs bare "arsenic").
 # ---------------------------------------------------------------------------
 
 NEVER_ACCEPTABLE_INACTIVE_CASES = [
-    # (ingredient label, banned_recalled id)
-    ("Arsenic",                "HM_ARSENIC"),
+    # (ingredient label, banned_recalled id) — use aliases the entries match.
+    ("Inorganic Arsenic",      "HM_ARSENIC"),
     ("Lead",                   "HM_LEAD"),
     ("Mercury",                "HM_MERCURY"),
     ("Cadmium",                "HM_CADMIUM"),
@@ -188,32 +190,91 @@ NEVER_ACCEPTABLE_INACTIVE_CASES = [
 ]
 
 
-@pytest.mark.xfail(
-    reason="Architectural gap (documented): high_risk entries that should never "
-           "be acceptable as inactives are currently suppressed by the same gate "
-           "as TiO2/Talc. Awaiting per-entry inactive_policy in banned_recalled.json. "
-           "Until then, the warnings-array layer (commit 3e4f9d6) is the user-facing "
-           "signal; score is silent. Flip this xfail off when the policy lands.",
-    strict=False,
-)
 @pytest.mark.parametrize("ing_name, expected_rule_id", NEVER_ACCEPTABLE_INACTIVE_CASES)
-def test_never_acceptable_inactive_should_fire_b0_after_policy_fix(enricher, ing_name, expected_rule_id):
-    """When per-entry inactive_policy='penalize_anyway' lands, these
-    high_risk substances must fire B0 even when listed as inactives.
-    Heavy metals, prohormones, hepatotoxic botanicals, and controlled
-    substances showing up in the inactive panel is a labeling defect or
-    hidden-active risk — not an excipient context the user can excuse.
-
-    Currently xfailed (strict=False). Behavior: contaminant_data is
-    silent for these as inactive. When the policy fix flips behavior,
-    this xfail becomes an unexpected pass and CI surfaces the change —
-    remove the xfail decorator in the same commit."""
+def test_never_acceptable_inactive_fires_b0(enricher, ing_name, expected_rule_id):
+    """v3.5.2 contract: high_risk entries with inactive_policy='penalize_anyway'
+    must fire B0 even when listed as inactives. Heavy metals, prohormones,
+    hepatotoxic botanicals, controlled substances appearing in the inactive
+    panel is a labeling defect or hidden-active risk — not an excipient
+    context the user can excuse. The score now aligns with the warnings
+    layer (commit 3e4f9d6) for these substances."""
     product = _minimal_enriched_inactive(ing_name)
     result = _run_banned_check(enricher, product)
     substances = result.get("substances") or []
     assert substances, (
         f"{ing_name!r} as INACTIVE should fire B0 (never-acceptable class) "
         f"but contaminant_data is silent — policy gap."
+    )
+    # Status must be high_risk → B0 fires 10pt penalty (vs 5pt for watchlist).
+    assert any(s.get("status") == "high_risk" for s in substances), (
+        f"{ing_name!r} as INACTIVE: expected high_risk status hit, got "
+        f"{[s.get('status') for s in substances]}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Watchlist class: all 11 watchlist entries are penalize_anyway (5pt B0).
+# ---------------------------------------------------------------------------
+
+WATCHLIST_INACTIVE_CASES = [
+    # (ingredient label, banned_recalled id) — these all have
+    # inactive_policy='penalize_anyway' so they fire B0 watchlist 5pt
+    # penalty when listed as inactives. None are legitimate excipients;
+    # most are food-additive contaminants or alkaloids.
+    ("Phthalates",       "BANNED_ADD_PHTHALATES"),
+    ("Potassium Bromate","BANNED_ADD_POTASSIUM_BROMATE"),
+    ("Anatabine",        "BANNED_ADD_ANATABINE"),
+    ("Octopamine",       "BANNED_ADD_OCTOPAMINE"),
+    ("Lobelia",          "RISK_LOBELIA"),
+]
+
+
+@pytest.mark.parametrize("ing_name, expected_rule_id", WATCHLIST_INACTIVE_CASES)
+def test_watchlist_inactive_fires_b0_watchlist_5pt(enricher, ing_name, expected_rule_id):
+    """Per user directive 2026-05-12: watchlist entries with
+    inactive_policy='penalize_anyway' fire the 5pt B0 watchlist penalty
+    when listed as inactives. The watchlist semantic ('informational')
+    still applies at the warnings layer (commit 3e4f9d6) — at the score
+    layer, watchlist contaminants in any panel get the 5pt nudge so the
+    score reflects the regulatory tracking signal."""
+    product = _minimal_enriched_inactive(ing_name)
+    result = _run_banned_check(enricher, product)
+    substances = result.get("substances") or []
+    assert substances, (
+        f"{ing_name!r} as INACTIVE (watchlist) should fire B0 5pt — silent"
+    )
+    assert any(s.get("status") == "watchlist" for s in substances), (
+        f"{ing_name!r} as INACTIVE: expected watchlist status hit, got "
+        f"{[s.get('status') for s in substances]}"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Review_required class: Cascara and Synthetic Food Acids stay silent at
+# score layer until human review. Warnings layer surfaces them.
+# ---------------------------------------------------------------------------
+
+REVIEW_REQUIRED_INACTIVE_CASES = [
+    ("Cascara Sagrada",  "ADD_CASCARA_SAGRADA"),
+]
+
+
+@pytest.mark.parametrize("ing_name, expected_rule_id", REVIEW_REQUIRED_INACTIVE_CASES)
+def test_review_required_inactive_does_not_fire_b0(enricher, ing_name, expected_rule_id):
+    """inactive_policy='review_required' substances must NOT fire B0
+    until a human reviewer classifies them. Borderline cases — wrong
+    direction is more expensive than waiting for clinical review.
+
+    The warnings layer (build_final_db commit 3e4f9d6) IS visible to
+    the user even when the score is silent — so the regulator-tracking
+    signal isn't lost while review is pending."""
+    product = _minimal_enriched_inactive(ing_name)
+    result = _run_banned_check(enricher, product)
+    substances = result.get("substances") or []
+    assert not substances, (
+        f"{ing_name!r} as INACTIVE (review_required) should be silent at "
+        f"score layer; got {[s.get('id') for s in substances]}. Flip to "
+        f"penalize_anyway or excipient_acceptable only after human review."
     )
 
 

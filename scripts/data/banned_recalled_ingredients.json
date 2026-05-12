@@ -2,8 +2,8 @@
   "_metadata": {
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
-    "schema_version": "5.3.0",
-    "last_updated": "2026-04-26",
+    "schema_version": "5.4.0",
+    "last_updated": "2026-05-12",
     "total_entries": 146,
     "data_source_metadata": {
       "sources": [
@@ -366,7 +366,14 @@
     },
     "reviewed_by": "Lead Clinician (PharmaGuide)",
     "reviewed_date": "2026-04-17",
-    "review_round": "full_authoring_pass_v1"
+    "review_round": "full_authoring_pass_v1",
+    "changelog": [
+      {
+        "version": "5.4.0",
+        "date": "2026-05-12",
+        "change": "Added inactive_policy field to all 29 high_risk + 10 watchlist entries. Values: excipient_acceptable (TiO2/Talc/Docusate), penalize_anyway (heavy metals, hormones, hepatotoxic botanicals, stimulants, controlled substances, watchlist contaminants), review_required (Cascara — borderline). Drives the score-side active/inactive role gate; warnings layer unaffected."
+      }
+    ]
   },
   "ingredients": [
     {
@@ -1192,7 +1199,9 @@
       "external_ids": {},
       "ban_context": "export_restricted",
       "safety_warning": "A steroid precursor banned as a supplement ingredient in the UK, Canada, Australia, and New Zealand, though still sold in the US. Consult your doctor before use.",
-      "safety_warning_one_liner": "Steroid precursor banned abroad. Consult a doctor."
+      "safety_warning_one_liner": "Steroid precursor banned abroad. Consult a doctor.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Pro-hormone; controlled substance precursor in CA/UK/AU"
     },
     {
       "id": "BANNED_ADD_ANATABINE",
@@ -1306,7 +1315,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "A tobacco alkaloid voluntarily withdrawn from the US market after FDA questioned its supplement claims. Its presence in products now is associated with past mislabeling and should be avoided.",
-      "safety_warning_one_liner": "Tobacco alkaloid withdrawn after FDA concerns. Avoid."
+      "safety_warning_one_liner": "Tobacco alkaloid withdrawn after FDA concerns. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Alkaloid contamination — never an excipient"
     },
     {
       "id": "BANNED_ADD_CITRUS_RED_2",
@@ -1414,7 +1425,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "A synthetic dye approved only for coloring orange peels in the US — classified as a possible human carcinogen. Its presence in a supplement is associated with labeling problems and should be avoided.",
-      "safety_warning_one_liner": "Synthetic dye not approved for supplements. Avoid."
+      "safety_warning_one_liner": "Synthetic dye not approved for supplements. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Banned food color (orange peel only) — never a supplement excipient"
     },
     {
       "id": "BANNED_ADD_FORMALDEHYDE",
@@ -1530,7 +1543,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A preservative classified as a known human carcinogen (IARC Group 1). Banned as a food additive in most countries; presence in a supplement is linked to contamination. Stop.",
-      "safety_warning_one_liner": "Known carcinogen. Stop and consult a doctor."
+      "safety_warning_one_liner": "Known carcinogen. Stop and consult a doctor.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Preservative banned in food/supplements — never an excipient"
     },
     {
       "id": "BANNED_ADD_ORANGE_B",
@@ -1644,7 +1659,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "A synthetic dye FDA-approved only for hot dog and sausage casings — not for dietary supplements. Its presence in a supplement is associated with undisclosed colorant use and possible mislabeling.",
-      "safety_warning_one_liner": "Synthetic dye not approved for supplements. Possible mislabeling risk."
+      "safety_warning_one_liner": "Synthetic dye not approved for supplements. Possible mislabeling risk.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Restricted food color (sausage casing only) — never a supplement excipient"
     },
     {
       "id": "BANNED_ADD_PHTHALATES",
@@ -1776,7 +1793,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "Packaging contaminants that leach from plastic into supplements — linked to endocrine disruption and reproductive harm. Presence reflects contamination rather than an added ingredient.",
-      "safety_warning_one_liner": "Endocrine-disrupting contaminants linked to plastics. Avoid."
+      "safety_warning_one_liner": "Endocrine-disrupting contaminants linked to plastics. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Plasticizer contamination — never an excipient"
     },
     {
       "id": "BANNED_ADD_POTASSIUM_BROMATE",
@@ -1890,7 +1909,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "A flour-treatment agent classified as possibly carcinogenic (IARC Group 2B). Banned as a food additive in the EU and Canada; presence in a US supplement is associated with poor sourcing.",
-      "safety_warning_one_liner": "Possible carcinogen banned abroad. Avoid."
+      "safety_warning_one_liner": "Possible carcinogen banned abroad. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Banned flour-treatment agent — never a supplement excipient"
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_ESTROGENS",
@@ -2018,7 +2039,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "Synthetic hormones that can disrupt the endocrine system and have been linked to reproductive problems and cancer risk. They can accumulate in body fat and are not lawful supplement ingredients. Stop.",
-      "safety_warning_one_liner": "Endocrine-disrupting synthetic hormones. Stop and consult."
+      "safety_warning_one_liner": "Endocrine-disrupting synthetic hormones. Stop and consult.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Synthetic hormones — never an excipient"
     },
     {
       "id": "BANNED_ADD_SYNTHETIC_FOOD_ACIDS",
@@ -2123,7 +2146,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "Synthetic food acids on a regulatory watchlist — presence in a supplement is associated with labeling and tolerability concerns. Avoid products that list these as ingredients.",
-      "safety_warning_one_liner": "Watchlist food acids in supplements. Avoid."
+      "safety_warning_one_liner": "Watchlist food acids in supplements. Avoid.",
+      "inactive_policy": "review_required",
+      "inactive_policy_reason": "Aliases include fumaric/adipic/citric — common pH-buffer excipients; needs review before penalizing"
     },
     {
       "id": "BANNED_ARISTOLOCHIC_ACID",
@@ -3036,7 +3061,9 @@
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
       "safety_warning": "Compounded GLP-1 drugs sold outside the prescription system or mislabeled in supplement products carry risks of contamination, wrong potency, and unsafe dosing. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Compounded GLP-1 drugs in gray-market products. Stop."
+      "safety_warning_one_liner": "Compounded GLP-1 drugs in gray-market products. Stop.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Pharmaceutical-grade contamination — never an excipient"
     },
     {
       "id": "BANNED_DELTA8_THC",
@@ -3154,7 +3181,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A psychoactive cannabinoid usually synthesized from CBD. Linked to intoxication-related poison control calls and banned as a supplement in multiple US states. Avoid products marketed for wellness use.",
-      "safety_warning_one_liner": "Psychoactive cannabinoid restricted in many states. Avoid."
+      "safety_warning_one_liner": "Psychoactive cannabinoid restricted in many states. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Controlled / state-regulated cannabinoid — never an excipient"
     },
     {
       "id": "BANNED_DMAA",
@@ -4064,7 +4093,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A weight-loss botanical linked to severe liver injury, including deaths and liver transplants. France banned it in 2025; Australia and Japan issued warnings. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic weight-loss botanical. Stop and consult."
+      "safety_warning_one_liner": "Liver-toxic weight-loss botanical. Stop and consult.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Hepatotoxic weight-loss extract — never an excipient"
     },
     {
       "id": "BANNED_HIGENAMINE",
@@ -4597,7 +4628,9 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "Metallic particles from manufacturing equipment found in some supplements — linked to GI irritation and long-term accumulation concerns. Avoid products with recalls flagged for metal contamination.",
-      "safety_warning_one_liner": "Manufacturing contaminant. Avoid affected products."
+      "safety_warning_one_liner": "Manufacturing contaminant. Avoid affected products.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Manufacturing contamination — never an excipient"
     },
     {
       "id": "BANNED_PEDIATRIC_FLUORIDE",
@@ -4731,7 +4764,9 @@
       "external_ids": {},
       "ban_context": "adulterant_in_supplements",
       "safety_warning": "Fluoride drops and tablets for children are prescription drug products — found in supplement products, they raise dosing and safety concerns. Talk to your pediatrician about the right form.",
-      "safety_warning_one_liner": "Prescription drug sold as supplement. Talk to your pediatrician."
+      "safety_warning_one_liner": "Prescription drug sold as supplement. Talk to your pediatrician.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Dose-specific safety concern for children — track regardless of section"
     },
     {
       "id": "BANNED_PHENIBUT",
@@ -6332,7 +6367,9 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A botanical linked to at least 18 reported cases of severe liver injury, including transplants. Not a lawful supplement ingredient; stop and consult a doctor if you have used a product containing it.",
-      "safety_warning_one_liner": "Liver-toxic botanical. Stop and consult."
+      "safety_warning_one_liner": "Liver-toxic botanical. Stop and consult.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Hepatotoxic botanical — never an excipient"
     },
     {
       "id": "HIGH_RISK_GERMANDER",
@@ -6465,7 +6502,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A weight-loss botanical withdrawn in Europe after over 30 hepatitis cases and several deaths from liver failure. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic botanical withdrawn in Europe. Stop."
+      "safety_warning_one_liner": "Liver-toxic botanical withdrawn in Europe. Stop.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Hepatotoxic botanical — never an excipient"
     },
     {
       "id": "HIGH_RISK_PENNYROYAL",
@@ -6584,7 +6623,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "An essential oil and high-dose extract associated with severe liver injury and deaths, particularly when taken internally. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Liver-toxic essential oil. Stop and consult."
+      "safety_warning_one_liner": "Liver-toxic essential oil. Stop and consult.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Hepatotoxic essential oil — never an excipient"
     },
     {
       "id": "HM_ARSENIC",
@@ -6747,7 +6788,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A heavy-metal contaminant classified as a known human carcinogen linked to skin, lung, bladder, and kidney cancers at chronic levels. Avoid supplements sourced without tested contaminant limits.",
-      "safety_warning_one_liner": "Carcinogenic heavy-metal contaminant. Avoid untested products."
+      "safety_warning_one_liner": "Carcinogenic heavy-metal contaminant. Avoid untested products.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Heavy-metal contamination — never an excipient"
     },
     {
       "id": "HM_CADMIUM",
@@ -6881,7 +6924,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A heavy-metal contaminant that accumulates in the kidneys and is linked to long-term kidney damage and bone loss. Avoid supplements without verified contaminant testing.",
-      "safety_warning_one_liner": "Heavy-metal contaminant linked to kidney damage. Avoid."
+      "safety_warning_one_liner": "Heavy-metal contaminant linked to kidney damage. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Heavy-metal contamination — never an excipient"
     },
     {
       "id": "HM_LEAD",
@@ -7018,7 +7063,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A cumulative neurotoxin with no safe blood level, especially for children. Linked to cognitive, kidney, and cardiovascular harm. Avoid supplements without verified lead-limit testing.",
-      "safety_warning_one_liner": "Neurotoxic contaminant with no safe level. Avoid untested products."
+      "safety_warning_one_liner": "Neurotoxic contaminant with no safe level. Avoid untested products.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Heavy-metal contamination — never an excipient"
     },
     {
       "id": "HM_MERCURY",
@@ -7155,7 +7202,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A neurotoxin that crosses the placenta and blood-brain barrier. Linked to irreversible neurological harm, especially in fetuses and young children. Avoid supplements without verified mercury testing.",
-      "safety_warning_one_liner": "Neurotoxic heavy metal. Avoid untested products."
+      "safety_warning_one_liner": "Neurotoxic heavy metal. Avoid untested products.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Heavy-metal contamination — never an excipient"
     },
     {
       "id": "NOOTROPIC_9MEBC",
@@ -10935,7 +10984,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A citrus extract containing synephrine, with ephedrine-like cardiovascular effects. Linked to blood-pressure elevation and heart events, especially when combined with caffeine. Stop and consult.",
-      "safety_warning_one_liner": "Ephedrine-like stimulant, cardiovascular risk. Stop."
+      "safety_warning_one_liner": "Ephedrine-like stimulant, cardiovascular risk. Stop.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Synephrine-bearing stimulant — never an excipient"
     },
     {
       "id": "RISK_GERMANIUM",
@@ -11056,7 +11107,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "Inorganic germanium compounds marketed in the 1980s as immune tonics — associated with fatal kidney failure in case reports. Not a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Associated with fatal kidney failure. Stop."
+      "safety_warning_one_liner": "Associated with fatal kidney failure. Stop.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Inorganic germanium — heavy-metal-tier toxicity, never legitimate"
     },
     {
       "id": "RISK_GREEN_TEA_EXTRACT_HIGH",
@@ -11171,7 +11224,9 @@
       "external_ids": {},
       "ban_context": "watchlist",
       "safety_warning": "High-dose green tea extract standardized to concentrated EGCG has been linked to drug-induced liver injury, particularly above 800 mg EGCG per day. Talk to your doctor before using concentrated forms.",
-      "safety_warning_one_liner": "High-dose EGCG linked to liver injury. Talk to your doctor."
+      "safety_warning_one_liner": "High-dose EGCG linked to liver injury. Talk to your doctor.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "High-dose extract = hepatotoxicity risk; flag in any panel"
     },
     {
       "id": "RISK_KAVA",
@@ -11392,7 +11447,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "Kava root extracts have been linked to over 100 cases of severe liver injury globally, including transplants. Restricted or banned in several countries. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Botanical associated with liver injury. Stop and consult."
+      "safety_warning_one_liner": "Botanical associated with liver injury. Stop and consult.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Hepatotoxic botanical — never an excipient"
     },
     {
       "id": "RISK_KRATOM_NATURAL",
@@ -11683,7 +11740,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "Yohimbe bark contains yohimbine, a stimulant alkaloid associated with anxiety, high blood pressure, and heart-rhythm changes. Not safe as a supplement for most users. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Stimulant alkaloid with cardiovascular risk. Stop."
+      "safety_warning_one_liner": "Stimulant alkaloid with cardiovascular risk. Stop.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Cardiovascular-risk stimulant — never an excipient"
     },
     {
       "id": "SARM_ANDARINE",
@@ -14802,7 +14861,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "A botanical with a narrow window between useful and toxic dose. Banned in OTC drug products since 1993 and placed on FDA's poisonous-plant watchlist. Avoid use in supplements.",
-      "safety_warning_one_liner": "Watchlist botanical with narrow safety margin. Avoid."
+      "safety_warning_one_liner": "Watchlist botanical with narrow safety margin. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Cardiovascular-risk alkaloid — never a passive excipient"
     },
     {
       "id": "ADD_5A_HYDROXY_LAXOGENIN",
@@ -14890,7 +14951,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "A steroidal plant compound marketed for muscle building. FDA has issued warning letters and does not accept it as a lawful supplement ingredient. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not a lawful supplement ingredient. Stop."
+      "safety_warning_one_liner": "Not a lawful supplement ingredient. Stop.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Synthetic anabolic — never an excipient"
     },
     {
       "id": "ADD_CASCARA_SAGRADA",
@@ -14982,7 +15045,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "A stimulant laxative whose GRASE status FDA stripped in 2002 after safety data was not provided. Its presence in supplements is associated with regulatory gaps. Avoid long-term use.",
-      "safety_warning_one_liner": "FDA stripped safety status in 2002. Avoid."
+      "safety_warning_one_liner": "FDA stripped safety status in 2002. Avoid.",
+      "inactive_policy": "review_required",
+      "inactive_policy_reason": "Stimulant laxative; FDA-banned OTC drug use 2002 but trace presence in some products may not be excipient"
     },
     {
       "id": "ADD_COLLOIDAL_SILVER",
@@ -15108,7 +15173,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "FDA has ruled colloidal silver products are not generally recognized as safe. Linked to permanent blue-gray skin discoloration (argyria) and kidney and neurological harm. Stop and consult a doctor.",
-      "safety_warning_one_liner": "Not recognized as safe by FDA. Stop."
+      "safety_warning_one_liner": "Not recognized as safe by FDA. Stop.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "No legitimate excipient use; FDA-banned health claim"
     },
     {
       "id": "ADD_DIIODOTHYRONINE_T2",
@@ -15186,7 +15253,9 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A thyroid-hormone analog found on supplement labels. Associated with unpredictable thyroid effects and cardiovascular strain; not a lawful supplement ingredient. Stop and consult your doctor.",
-      "safety_warning_one_liner": "Thyroid hormone analog, not a supplement. Stop."
+      "safety_warning_one_liner": "Thyroid hormone analog, not a supplement. Stop.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Thyroid pro-hormone — never an excipient"
     },
     {
       "id": "ADD_DOCUSATE_SODIUM",
@@ -15270,7 +15339,9 @@
       },
       "ban_context": "adulterant_in_supplements",
       "safety_warning": "An OTC stool-softener drug appearing as an undisclosed ingredient in supplements. Its presence reflects a labeling issue — talk to your doctor before continuing the product.",
-      "safety_warning_one_liner": "OTC drug found in supplements. Talk to your doctor."
+      "safety_warning_one_liner": "OTC drug found in supplements. Talk to your doctor.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "FDA-approved softgel emulsifier; OTC stool softener at therapeutic doses, but legitimate excipient at trace levels"
     },
     {
       "id": "ADD_HORDENINE",
@@ -16447,7 +16518,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "A white-pigment additive EFSA ruled in 2021 could no longer be considered safe due to possible genotoxicity. Banned in EU food since 2022; still permitted in US supplements. Avoid when possible.",
-      "safety_warning_one_liner": "EU-banned white pigment. Avoid when possible."
+      "safety_warning_one_liner": "EU-banned white pigment. Avoid when possible.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "FDA-approved white pigment 21 CFR §73.575; EU food ban (E171) does not extend to US supplements"
     },
     {
       "id": "BANNED_ADD_TALC",
@@ -16593,7 +16666,9 @@
       },
       "ban_context": "substance",
       "safety_warning": "Talc used in consumer products can be contaminated with asbestos, a known human carcinogen. Presence in supplements is associated with contamination risk. Avoid affected products.",
-      "safety_warning_one_liner": "Possible asbestos contamination. Avoid."
+      "safety_warning_one_liner": "Possible asbestos contamination. Avoid.",
+      "inactive_policy": "excipient_acceptable",
+      "inactive_policy_reason": "FDA-approved anti-caking agent / glidant for tablets; asbestos-contamination risk monitored separately"
     },
     {
       "id": "BANNED_ADD_CAROB_COLOR",
@@ -16710,7 +16785,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "Vegetable-carbon color is permitted in the EU but not approved by FDA as a food color. Presence in a US supplement is associated with labeling inconsistency. Avoid.",
-      "safety_warning_one_liner": "Not FDA-approved color in supplements. Avoid."
+      "safety_warning_one_liner": "Not FDA-approved color in supplements. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Vegetable carbon E153 — restricted in US; track regardless of section"
     },
     {
       "id": "BANNED_ADD_OCTOPAMINE",
@@ -16839,7 +16916,9 @@
       },
       "ban_context": "watchlist",
       "safety_warning": "A sympathomimetic stimulant flagged by FDA as a new dietary ingredient without a lawful safety submission. Associated with blood-pressure elevation; avoid products containing it.",
-      "safety_warning_one_liner": "FDA-flagged stimulant. Avoid."
+      "safety_warning_one_liner": "FDA-flagged stimulant. Avoid.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Sympathomimetic stimulant — never an excipient"
     },
     {
       "id": "BANNED_DETERENOL_ISOPROPYLNORSYNEPHRINE",
@@ -17183,7 +17262,9 @@
       "external_ids": {},
       "ban_context": "substance",
       "safety_warning": "A known human carcinogen via inhalation, with clear oral carcinogenicity in rodent studies. Avoid supplements without verified chromium-speciation testing.",
-      "safety_warning_one_liner": "Carcinogenic form of chromium. Avoid untested products."
+      "safety_warning_one_liner": "Carcinogenic form of chromium. Avoid untested products.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Heavy-metal contamination; toxic oxidation state — never an excipient"
     },
     {
       "id": "RECALLED_ROSABELLA_MORINGA",
@@ -17810,7 +17891,9 @@
             "by": "system"
           }
         ]
-      }
+      },
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Hepatotoxic / reproductive-toxic botanical — never an excipient"
     },
     {
       "id": "BANNED_TANSY",
@@ -17888,7 +17971,9 @@
             "by": "system"
           }
         ]
-      }
+      },
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Neurotoxic / reproductive-toxic botanical — never an excipient"
     },
     {
       "id": "BANNED_BITTER_ORANGE",
@@ -17980,7 +18065,9 @@
             "by": "system"
           }
         ]
-      }
+      },
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Synephrine-bearing stimulant — never an excipient"
     }
   ]
 }
