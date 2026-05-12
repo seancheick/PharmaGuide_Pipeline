@@ -493,9 +493,55 @@ def contaminant_status_matches(enriched: Dict, *statuses: str) -> List[Dict]:
             if normalize_text(match.get("status")) in wanted]
 
 
+def _resolver_status_in(
+    enriched: Dict, target_statuses: tuple,
+) -> bool:
+    """Walk both active and inactive ingredients in the enriched product
+    and run them through the InactiveIngredientResolver's banned_recalled
+    alias index. Returns True if any ingredient matches a rule whose
+    status is in ``target_statuses``.
+
+    Bridges the gap where ``enriched.contaminant_data`` didn't catch the
+    hit (the enricher's name-match misses inactives + alias variants on
+    actives like 'Garcinia Cambogia fruit extract'), but the unified
+    resolver's normalized-alias index does. Same alias coverage the per-
+    ingredient blob entries use, applied at the product-level flag layer.
+    """
+    try:
+        index = _get_active_banned_recalled_index()
+    except Exception:
+        # Defensive fallback — never crash a build because the resolver
+        # index couldn't load. Original contaminant_data path still runs.
+        return False
+    target_set = {s.lower() for s in target_statuses}
+    for src_key in ("activeIngredients", "inactiveIngredients"):
+        for ing in safe_list(enriched.get(src_key)):
+            if not isinstance(ing, dict):
+                continue
+            terms = _active_banned_recall_terms(
+                safe_str(ing.get("name")),
+                safe_str(ing.get("raw_source_text")),
+                safe_str(ing.get("standardName")),
+            )
+            for t in terms:
+                entry = index.get(t)
+                if entry and (entry.get("status") or "").strip().lower() in target_set:
+                    return True
+    return False
+
+
 def has_banned_substance(enriched: Dict) -> bool:
-    """True only for exact/alias banned ingredient hits, not recalls/high-risk reviews."""
-    return bool(contaminant_status_matches(enriched, "banned"))
+    """True for exact/alias banned ingredient hits, not recalls/high-risk reviews.
+
+    Reads BOTH the enricher's contaminant_data (legacy path) AND the
+    unified resolver's banned_recalled index applied to actives + inactives.
+    The resolver-side path catches: (a) inactive ingredients flagged in
+    banned_recalled, which the enricher historically didn't scan, and
+    (b) alias variants the enricher's name-match missed on actives.
+    """
+    if contaminant_status_matches(enriched, "banned"):
+        return True
+    return _resolver_status_in(enriched, ("banned",))
 
 
 def collect_match_terms(*values: Any) -> list[str]:
@@ -1894,12 +1940,19 @@ def _warning_dedup_key(w: Dict[str, Any]) -> tuple:
         s = str(v)
         return (s,) if s else ()
 
+    # Per-ingredient identity: include matched_rule_id (when present) or
+    # ingredient_name so two resolver-synthesized warnings for DIFFERENT
+    # banned actives (e.g. 7-Keto-DHEA + Garcinia on the same product)
+    # don't collapse into one entry just because they share
+    # severity/type/source. Interaction warnings already differ by
+    # condition_id / drug_class_id so the addition is a no-op for them.
     return (
         _norm(w.get("severity")),
         _norm(w.get("canonical_id") or w.get("type")),
         _norm(w.get("condition_id") or w.get("condition_ids")),
         _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
         _norm(w.get("source_rule") or w.get("source")),
+        _norm(w.get("matched_rule_id") or w.get("ingredient_name")),
     )
 
 
@@ -2535,8 +2588,23 @@ def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
 # ─── Has Recalled Ingredient ───
 
 def has_recalled_ingredient(enriched: Dict) -> bool:
-    """Check if any ingredient has recalled status with exact/alias match."""
-    return bool(contaminant_status_matches(enriched, "recalled"))
+    """True ONLY for status='recalled' ingredient hits.
+
+    Per the export-gate contract, the three banned_recalled statuses route
+    to three distinct surfaces:
+      * status='banned'    → has_banned_substance=1
+      * status='recalled'  → has_recalled_ingredient=1
+      * status='high_risk' → neither flag; surfaced via warnings[] +
+                             blocking_reason='high_risk_ingredient'
+
+    So high_risk inactives like Titanium Dioxide and Talc remain visible
+    via the warnings synthesizer (see build_detail_blob → warnings loop)
+    rather than co-opting the recalled flag. Falls back to the resolver
+    index for recalled aliases the contaminant_data path missed.
+    """
+    if contaminant_status_matches(enriched, "recalled"):
+        return True
+    return _resolver_status_in(enriched, ("recalled",))
 
 
 # ─── Detail Blob Builder ───
@@ -3107,6 +3175,50 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # (not a safety warning, not a green-safe tag). Separation of concerns:
     # warnings[] = safety/interactions; product_status_detail = availability.
     pass  # intentionally no warning emission for discontinued/off_market
+
+    # 2026-05-12 — resolver-synthesized banned_recalled warnings.
+    # Closes the gap where per-ingredient blob entries are correctly
+    # flagged is_safety_concern=True (via the resolver) but the warnings[]
+    # array was empty for that ingredient because build_top_warnings()
+    # reads from enriched.contaminant_data which misses inactives + alias
+    # variants on actives. Titanium Dioxide × 1,178 inactive occurrences
+    # are the canary. The dedup below collapses any overlap with the
+    # contaminant_matches() output above.
+    for ing_list, role in ((ingredients, "active"), (inactive, "inactive")):
+        for ing in ing_list:
+            if not isinstance(ing, dict):
+                continue
+            if ing.get("matched_source") != "banned_recalled":
+                continue
+            if not (ing.get("is_safety_concern") or ing.get("is_banned")):
+                continue  # watchlist/informational — top warning not required
+            name = (
+                ing.get("display_label")
+                or ing.get("name")
+                or ing.get("raw_source_text")
+                or "Unknown ingredient"
+            )
+            if bool(ing.get("is_banned")):
+                w_type = "banned_substance"
+                w_severity = "critical"
+                w_title = f"Banned substance: {name}"
+            else:
+                # high_risk / recalled — both surface as high_risk_ingredient
+                w_type = "high_risk_ingredient"
+                w_severity = "high"
+                w_title = f"High-risk ingredient: {name}"
+            warnings.append({
+                "type": w_type,
+                "severity": w_severity,
+                "title": w_title,
+                "detail": safe_str(ing.get("safety_reason")) or "",
+                "ingredient_name": safe_str(ing.get("name") or name),
+                "ingredient_role": role,  # 'active' | 'inactive' — for Flutter routing
+                "matched_rule_id": safe_str(ing.get("matched_rule_id")) or None,
+                "source": "inactive_ingredient_resolver",
+                "display_mode_default": "critical",
+                "clinical_risk": safe_str(ing.get("harmful_severity")) or None,
+            })
 
     # Build the profile-gated subset — warnings whose default treatment is
     # NOT "suppress". This is what Flutter should render by default when

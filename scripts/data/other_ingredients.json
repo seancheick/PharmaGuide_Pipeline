@@ -16214,8 +16214,7 @@
       "external_ids": {},
       "cui": "C0016157",
       "functional_roles": [
-        "carrier_oil",
-        "softgel_fill"
+        "carrier_oil"
       ]
     },
     {
@@ -20610,7 +20609,6 @@
         "d-Alpha-Tocopherol",
         "DL-Alpha-Tocopherol",
         "DL-Alpha-Tocopheryl Acetate",
-        "DL-Alpha Tocopherol",
         "Tocopherols"
       ],
       "category": "preservative",
@@ -20644,7 +20642,6 @@
       "cui": "C3255108",
       "functional_roles": [
         "preservative",
-        "preservative_antioxidant",
         "antioxidant"
       ]
     },
@@ -23739,7 +23736,7 @@
         "Riboflavin (Natural Color)",
         "riboflavin natural color"
       ],
-      "category": "colorant",
+      "category": "colorant_natural",
       "is_additive": true,
       "additive_type": "colorant_natural",
       "functional_roles": [
@@ -23769,7 +23766,7 @@
         "natural rose hips",
         "rose hips extract"
       ],
-      "category": "botanical_filler",
+      "category": "filler",
       "is_additive": true,
       "additive_type": "botanical_filler",
       "functional_roles": [

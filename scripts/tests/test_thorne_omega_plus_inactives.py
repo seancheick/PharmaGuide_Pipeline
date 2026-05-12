@@ -115,19 +115,34 @@ def test_thorne_omega_plus_inactive_ingredient_canonical_targets(other_ingredien
     Label: "Other Ingredients: Gelatin (bovine), Purified Water and Glycerin
     (vegetable source) gelcap, Vitamin E (mixed tocopherols)."
     """
-    expected = [
-        ("PII_GELATIN_CAPSULE", {"coating", "gelling_agent"}),
-        ("PII_PURIFIED_WATER", {"solvent"}),
-        ("NHA_VEGETABLE_GLYCERIN", {"humectant", "solvent"}),
-        ("OI_TOCOPHEROL_PRESERVATIVE", {"preservative"}),
+    # OI_TOCOPHEROL_PRESERVATIVE gained antioxidant roles when Vitamin E
+    # inactive aliases were added by the unified resolver (commit 3a113c9).
+    # Vitamin E in inactive contexts is genuinely both: preservative (FDA
+    # GRAS, protects oils from oxidation) and antioxidant (mechanism). Both
+    # roles route to the same display label so the user-facing copy is
+    # unchanged — locking "preservative" must be present, allowing
+    # antioxidant variants to coexist.
+    required_roles = [
+        ("PII_GELATIN_CAPSULE", {"coating", "gelling_agent"}, True),     # exact
+        ("PII_PURIFIED_WATER", {"solvent"}, True),                       # exact
+        ("NHA_VEGETABLE_GLYCERIN", {"humectant", "solvent"}, True),      # exact
+        ("OI_TOCOPHEROL_PRESERVATIVE", {"preservative"}, False),         # superset OK
     ]
-    for entry_id, expected_roles in expected:
+    for entry_id, expected_roles, exact in required_roles:
         entry = other_ingredients.get(entry_id)
         assert entry is not None, f"missing canonical entry {entry_id}"
-        assert set(entry.get("functional_roles") or []) == expected_roles, (
-            f"{entry_id} functional_roles drift: "
-            f"got {entry.get('functional_roles')}, expected {expected_roles}"
-        )
+        actual = set(entry.get("functional_roles") or [])
+        if exact:
+            assert actual == expected_roles, (
+                f"{entry_id} functional_roles drift: "
+                f"got {actual}, expected {expected_roles}"
+            )
+        else:
+            missing = expected_roles - actual
+            assert not missing, (
+                f"{entry_id} must contain {expected_roles}; missing: {missing}; "
+                f"actual: {actual}"
+            )
 
 
 def test_omega3_form_disclosed_helper_detects_premium_forms():
