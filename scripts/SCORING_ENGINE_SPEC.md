@@ -113,6 +113,44 @@ Order in `score_product()`:
 Input path:
 - `contaminant_data.banned_substances.substances[]`
 
+**Active/inactive role-gate (v3.5.0, documented gap as of 2026-05-12):**
+
+The enricher's `_check_banned_substances` walks BOTH active and inactive
+ingredients but applies a per-entry `match_mode` filter:
+
+- `match_mode='active'` (default for all 29 high_risk entries): SUPPRESSES
+  matches sourced from `inactiveIngredients[]`. This is intentional — it
+  prevents ~2,000+ FP HIGH_RISK fires on capsules that legitimately use
+  TiO2 (coating), Talc (anti-caking), Simethicone (de-foamer), Docusate
+  Sodium (softgel emulsifier) as excipients.
+- `match_mode='any'` or `'inactive'`: would fire on inactives. **No entries
+  currently use these values** — the data file is uniform `active`.
+
+**Net effect on scoring** (locked by [test_b0_inactive_role_gate.py](tests/test_b0_inactive_role_gate.py)):
+- TiO2 / Talc / Docusate AS INACTIVE → no contaminant_data hit → no B0
+  penalty → Section B unchanged, score unchanged.
+- Same ingredient AS ACTIVE → B0 fires → 10pt high_risk penalty → Section
+  B drops ~10pt (e.g., Mega Teen 1007: SAFE 81/100 → CAUTION 69/100).
+
+**Known architectural gap** (documented, not yet fixed): the 29 high_risk
+entries split into two policy classes that the current uniform
+`match_mode='active'` doesn't distinguish:
+
+| Class | Examples | Correct policy |
+|---|---|---|
+| (a) Excipient-acceptable | TiO2, Talc, Docusate Sodium | Suppress when inactive (current) — score unaffected, warning visible |
+| (b) Never-acceptable | Heavy metals (As/Pb/Hg/Cd), prohormones (7-Keto-DHEA), hepatotoxic botanicals (Chaparral/Germander/Pennyroyal), Kava, Yohimbe, Bitter Orange, Δ8-THC, Formaldehyde, Cascara, T2 | **Should fire B0 even when inactive** — appearing in inactives is a labeling defect / hidden-active risk |
+
+The warnings-array layer (build_final_db commit 3e4f9d6) DOES surface
+class (b) hits as user-facing warnings even when the score is silent —
+the safety signal isn't lost, but the score / verdict don't currently
+reflect class (b) inactives. Fix path: add per-entry `inactive_policy`
+field (`excipient_acceptable` vs `penalize_anyway`) to
+`banned_recalled_ingredients.json`, branch the role-gate check on it.
+13 xfailed regression tests in [test_b0_inactive_role_gate.py]
+(tests/test_b0_inactive_role_gate.py) will flip to passing when this
+lands — surfaces the policy change automatically.
+
 Match-type semantics:
 - Hard-fail eligible types: `exact`, `alias`
 - Non-hard-fail types: `token_bounded` and any other value -> review-only flag
