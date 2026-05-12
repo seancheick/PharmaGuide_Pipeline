@@ -2496,6 +2496,17 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "dosage_unit": safe_str(ing.get("unit")),
             "normalized_value": safe_float(ne.get("normalized_amount")),
             "is_mapped": safe_bool(m.get("mapped", ing.get("mapped"))),
+            # canonical_id — foundational identifier for interactions, stack
+            # logic, evidence routing, biomarker scoring, dedup, and analytics.
+            # The enricher writes it into both activeIngredients[].canonical_id
+            # AND ingredient_quality_data.ingredients[].canonical_id (`m`).
+            # Prefer `m` (post-enrichment match) over `ing` (raw label entry).
+            "canonical_id": safe_str(m.get("canonical_id") or ing.get("canonical_id")),
+            # delivers_markers — marker-via-ingredient evidence routing payload.
+            # Computed by the enricher (botanical_marker_contributions.json) and
+            # attached to the IQM match record. Always emit as a list (possibly
+            # empty) so Flutter consumers can iterate without null-checks.
+            "delivers_markers": safe_list(m.get("delivers_markers")),
             # `is_safety_concern` is the semantic safety flag (true only
             # when severity is moderate/high/critical). Replaced the
             # confused `is_harmful` provenance flag in v1.5.x.
