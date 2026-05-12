@@ -1,0 +1,429 @@
+{
+  "schema": "raw_to_final_audit_v1",
+  "build_dir": "/tmp/pharmaguide_release_build_v3",
+  "products_root": "scripts/products",
+  "finding_catalog": {
+    "RAW_ACTIVE_MISSING_FROM_BLOB": "BLOCKER",
+    "RAW_INACTIVE_MISSING_FROM_BLOB": "BLOCKER",
+    "BLEND_CHILD_FLATTENED_NO_PARENT": "BLOCKER",
+    "INACTIVE_LIST_EMPTY_BUT_RAW_NONZERO": "BLOCKER",
+    "UNSAFE_UNIT_CONVERSION": "BLOCKER",
+    "FLUTTER_DISPLAY_FALLBACK_MISMATCH": "BLOCKER",
+    "UNEXPLAINED_DROP_REASON": "BLOCKER",
+    "UNKNOWN_DROP_REASON_CODE": "BLOCKER",
+    "CANONICAL_ID_MISSING_ON_MAPPED": "HIGH",
+    "DISPLAY_LABEL_COLLAPSES_TO_CANONICAL": "HIGH",
+    "BRANDED_TOKEN_DROPPED": "HIGH",
+    "PLANT_PART_DROPPED": "HIGH",
+    "STANDARDIZATION_NOTE_DROPPED": "HIGH",
+    "WELL_DOSED_ON_UNDISCLOSED_BLEND": "HIGH",
+    "CORE_DB_BLOB_COUNT_MISMATCH": "HIGH",
+    "DELIVERS_MARKERS_MISSING_FOR_BOTANICAL": "MEDIUM",
+    "EVIDENCE_BULLET_USES_RAW_ID": "MEDIUM",
+    "DISPLAY_DOSE_LABEL_NP_LEAK": "MEDIUM",
+    "BLEND_CHILD_WITHOUT_DOSE_DISCLOSURE": "MEDIUM",
+    "FORM_STATUS_ABSENT": "LOW",
+    "FORM_MATCH_STATUS_ABSENT": "LOW",
+    "DOSE_STATUS_ABSENT": "LOW",
+    "IS_SAFETY_CONCERN_ABSENT": "LOW",
+    "INACTIVE_V1_5_0_CONTRACT_ABSENT": "LOW"
+  },
+  "summary": {
+    "products_audited": 10,
+    "products_with_raw_source": 10,
+    "by_severity": {
+      "LOW": 7,
+      "HIGH": 1
+    },
+    "by_code": {
+      "INACTIVE_V1_5_0_CONTRACT_ABSENT": 7,
+      "PLANT_PART_DROPPED": 1
+    },
+    "products_with_blocker": [],
+    "products_with_high": [
+      "1181"
+    ]
+  },
+  "products": [
+    {
+      "dsld_id": "1004",
+      "archetype": "simple_single",
+      "product_name": "L-Arginine 1000",
+      "upc": "048107076436",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 1,
+          "inactives": 2
+        },
+        "blob": {
+          "ingredients_count": 1,
+          "inactive_ingredients_count": 2,
+          "raw_actives_count": 1,
+          "raw_inactives_count": 2,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": false
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 43.0
+        }
+      },
+      "findings": [
+        {
+          "severity": "LOW",
+          "code": "INACTIVE_V1_5_0_CONTRACT_ABSENT",
+          "note": "1/2 inactives missing 'display_role_label'"
+        }
+      ],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "1007",
+      "archetype": "multivit",
+      "product_name": "Mega Teen",
+      "upc": "",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 26,
+          "inactives": 5
+        },
+        "blob": {
+          "ingredients_count": 26,
+          "inactive_ingredients_count": 5,
+          "raw_actives_count": 26,
+          "raw_inactives_count": 6,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": false
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 64.9
+        }
+      },
+      "findings": [
+        {
+          "severity": "LOW",
+          "code": "INACTIVE_V1_5_0_CONTRACT_ABSENT",
+          "note": "2/5 inactives missing 'display_role_label'"
+        }
+      ],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "1007",
+      "archetype": "vitamin_a_iu",
+      "product_name": "Mega Teen",
+      "upc": "",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 26,
+          "inactives": 5
+        },
+        "blob": {
+          "ingredients_count": 26,
+          "inactive_ingredients_count": 5,
+          "raw_actives_count": 26,
+          "raw_inactives_count": 6,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": false
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 64.9
+        }
+      },
+      "findings": [
+        {
+          "severity": "LOW",
+          "code": "INACTIVE_V1_5_0_CONTRACT_ABSENT",
+          "note": "2/5 inactives missing 'display_role_label'"
+        }
+      ],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "1181",
+      "archetype": "botanical",
+      "product_name": "Be-Energized Calorie Burning Formula",
+      "upc": "",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 8,
+          "inactives": 4
+        },
+        "blob": {
+          "ingredients_count": 8,
+          "inactive_ingredients_count": 4,
+          "raw_actives_count": 8,
+          "raw_inactives_count": 4,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": true
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 50.8
+        }
+      },
+      "findings": [
+        {
+          "severity": "LOW",
+          "code": "INACTIVE_V1_5_0_CONTRACT_ABSENT",
+          "note": "1/4 inactives missing 'display_role_label'"
+        },
+        {
+          "severity": "HIGH",
+          "code": "PLANT_PART_DROPPED",
+          "note": "plant part 'fruit' present in source 'Capsimax(TM) Capsicum Fruit Extract' but absent from display_label",
+          "ingredient": "Capsimax"
+        }
+      ],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "43994",
+      "archetype": "blend",
+      "product_name": "Perfect Food Raw Apple",
+      "upc": "",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 65,
+          "inactives": 2
+        },
+        "blob": {
+          "ingredients_count": 65,
+          "inactive_ingredients_count": 2,
+          "raw_actives_count": 72,
+          "raw_inactives_count": 2,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE",
+            "DROPPED_STRUCTURAL_HEADER"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": true
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 48.8
+        }
+      },
+      "findings": [],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "1044",
+      "archetype": "probiotic",
+      "product_name": "Ultra Probiotic Complex 25",
+      "upc": "",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 5,
+          "inactives": 0
+        },
+        "blob": {
+          "ingredients_count": 5,
+          "inactive_ingredients_count": 0,
+          "raw_actives_count": 7,
+          "raw_inactives_count": 0,
+          "drop_reasons": [
+            "DROPPED_STRUCTURAL_HEADER"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": false
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 53.1
+        }
+      },
+      "findings": [],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "178667",
+      "archetype": "omega3",
+      "product_name": "Enteric-Coated Fish Oil 1200 mg",
+      "upc": "681131162630",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 3,
+          "inactives": 10
+        },
+        "blob": {
+          "ingredients_count": 3,
+          "inactive_ingredients_count": 10,
+          "raw_actives_count": 8,
+          "raw_inactives_count": 11,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE",
+            "DROPPED_SUMMARY_WRAPPER"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": false
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 44.3
+        }
+      },
+      "findings": [],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "193349",
+      "archetype": "magnesium_form",
+      "product_name": "Basic Nutrients IV Multi With Copper And Iron",
+      "upc": "693749001126",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 38,
+          "inactives": 4
+        },
+        "blob": {
+          "ingredients_count": 38,
+          "inactive_ingredients_count": 4,
+          "raw_actives_count": 38,
+          "raw_inactives_count": 4,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": false
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 67.0
+        }
+      },
+      "findings": [
+        {
+          "severity": "LOW",
+          "code": "INACTIVE_V1_5_0_CONTRACT_ABSENT",
+          "note": "1/4 inactives missing 'display_role_label'"
+        }
+      ],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "1031",
+      "archetype": "many_others",
+      "product_name": "Ultra Iron 65",
+      "upc": "048107082970",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 1,
+          "inactives": 12
+        },
+        "blob": {
+          "ingredients_count": 1,
+          "inactive_ingredients_count": 12,
+          "raw_actives_count": 1,
+          "raw_inactives_count": 12,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": false
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 38.6
+        }
+      },
+      "findings": [
+        {
+          "severity": "LOW",
+          "code": "INACTIVE_V1_5_0_CONTRACT_ABSENT",
+          "note": "3/12 inactives missing 'display_role_label'"
+        }
+      ],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    },
+    {
+      "dsld_id": "1003",
+      "archetype": "allergen_cert",
+      "product_name": "L-Arginine 5000 mg Natural Orange Flavor",
+      "upc": "048107076108",
+      "raw_source_found": true,
+      "stages": {
+        "raw": {
+          "actives": 1,
+          "inactives": 6
+        },
+        "blob": {
+          "ingredients_count": 1,
+          "inactive_ingredients_count": 6,
+          "raw_actives_count": 3,
+          "raw_inactives_count": 6,
+          "drop_reasons": [
+            "DROPPED_AS_INACTIVE"
+          ],
+          "unmapped_actives_total": 0,
+          "has_proprietary_blends": false
+        },
+        "core_db": {
+          "row_present": true,
+          "verdict": "SAFE",
+          "score_quality_80": 38.5
+        }
+      },
+      "findings": [
+        {
+          "severity": "LOW",
+          "code": "INACTIVE_V1_5_0_CONTRACT_ABSENT",
+          "note": "2/6 inactives missing 'display_role_label'"
+        }
+      ],
+      "notes": [
+        "core_db has no `active_ingredient_count` column \u2014 v1.5.0 doc lists fields that aren't in the schema"
+      ]
+    }
+  ]
+}

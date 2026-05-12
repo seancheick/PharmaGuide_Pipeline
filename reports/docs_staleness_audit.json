@@ -1,0 +1,131 @@
+{
+  "audit_generated": "2026-05-12",
+  "doc_truth_priority": [
+    "A. Current code behavior (Python source files)",
+    "B. Generated artifacts (detail_blobs, pharmaguide_core.db, export_manifest.json)",
+    "C. Tests and audit outputs (scripts/tests/, reports/)",
+    "D. Schema docs \u2014 only after verifying against A-C"
+  ],
+  "totals": {
+    "KEEP": 12,
+    "UPDATE": 5,
+    "ARCHIVE": 46,
+    "DELETE": 14,
+    "IGNORE_BY_AGENTS": 4
+  },
+  "classifications": {
+    "KEEP": {
+      "CLAUDE.md": "Project root rules for agents (this session)",
+      "AGENTS.md": "Sibling of CLAUDE.md for non-Claude agents (kept in sync)",
+      "README.md": "Top-level repo readme",
+      "scripts/FINAL_EXPORT_SCHEMA_V1.md": "Frozen Flutter contract (bumped to v1.6.0 this session)",
+      "scripts/SCORING_ENGINE_SPEC.md": "Scoring formula spec (touched 2026-05-05 with v1.5.0)",
+      "scripts/SCORING_README.md": "Implementation guide for scorer (touched 2026-05-05)",
+      "scripts/DATABASE_SCHEMA.md": "Master schema reference for 39 data files",
+      "scripts/GLOSSARY.md": "IQM/scoring terminology \u2014 cross-referenced from CLAUDE.md",
+      "scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md": "ADR for current interaction rules v6 (touched 2026-05-05)",
+      "scripts/INTERACTION_RULE_AUTHORING_SOP.md": "SOP for adding interaction rules (still current)",
+      "scripts/MATCHING_PRECEDENCE.md": "Matching precedence spec \u2014 still current",
+      "docs/RELEASES.md": "Release ledger \u2014 append-only history"
+    },
+    "UPDATE": {
+      "scripts/PIPELINE_ARCHITECTURE.md": "Last touched 2026-04-18, predates v1.5.0/v1.6.0",
+      "scripts/PIPELINE_OPERATIONS_README.md": "Modified in working tree (need to commit + may need v1.6.0 mention)",
+      "docs/PG_SCORE_EXPLAINED.md": "User-facing scoring explainer; verify against current scoring_config.json",
+      "docs/INTERACTION_DB_SPEC.md": "Interaction DB spec; verify against current schema",
+      "scripts/CONTRACT_V150_FOLLOWUP.md": "v1.5.0 follow-up plan \u2014 likely mostly delivered now"
+    },
+    "ARCHIVE": {
+      "docs/SPRINT_E1_ACCURACY_ADDENDUM.md": "Sprint E1 archive",
+      "docs/SPRINT_E1_BUILD_BASELINE.md": "Sprint E1 archive",
+      "docs/SPRINT_E1_CHECKPOINT_PRE_E1_3.md": "Sprint E1 archive",
+      "docs/SPRINT_E1_RELEASE_CHECKPOINT.md": "Sprint E1 archive",
+      "docs/SPRINT_E1_STRAIN_VERIFICATION.md": "Sprint E1 archive",
+      "docs/HANDOFF_2026-04-18.md": "Handoff archive",
+      "docs/HANDOFF_2026-04-20_PIPELINE_REFACTOR.md": "Handoff archive",
+      "docs/HANDOFF_NEXT.md": "Handoff archive \u2014 re-create as needed",
+      "docs/FLUTTER_HANDOFF_E1_POST_RELEASE.md": "Handoff archive",
+      "docs/flutter_handoff_enhanced_2.md": "Handoff archive",
+      "docs/COQ10_GABA_STACK_DIFF_2026-04-25.md": "One-off audit diff",
+      "docs/DR_PHAM_IQM_AUDIT_REVIEW_2026-04-25.md": "One-off audit review",
+      "docs/MIGRATION_CATEGORY_ERROR_ENUM_2026-04-25.md": "Migration record archive",
+      "docs/INTERACTION_RULE_GAP_AUDIT_2026-04-26.md": "Audit archive",
+      "docs/INTERACTION_TIER2_AND_BRIDGE_PLAN.md": "Future-sprint plan archive",
+      "docs/DR_PHAM_AUTHORING_QUEUE.md": "Sprint queue archive",
+      "docs/TEST_SUITE_CONSOLIDATION_PLAN.md": "Plan archive (verify if done)",
+      "docs/AUTOMATION_ROADMAP.md": "Roadmap snapshot",
+      "docs/PHARMAGUIDE_FLUTTER_ROADMAP.md": "Roadmap snapshot (April)",
+      "docs/PHARMAGUIDE_MASTER_ROADMAP.md": "Roadmap snapshot (April)",
+      "docs/ROADMAP_EXECUTIVE_SUMMARY.md": "Roadmap snapshot (April)",
+      "docs/FINAL_IMPLEMENTATION_GUIDE.md": "Implementation guide snapshot (April)",
+      "docs/PROFILE_SETUP_VALIDATION_GUIDE.md": "Profile spec snapshot (April)",
+      "HANDOFF_PIPELINE_SAFETY_DATA.md": "Top-level handoff archive",
+      "docs/plans/2026-04-09-category-gate-audit.md": "Plan archive",
+      "docs/plans/AGENT_PROMPT_DASHBOARD.md": "Dashboard prompt archive",
+      "docs/plans/HANDOFF_2026_04_14.md": "Handoff archive",
+      "docs/plans/HANDOFF_2026_04_14_SESSION2.md": "Handoff archive",
+      "docs/plans/LESSONS_LEARNED.md": "Retro archive (might be worth retaining as KEEP if actively read)",
+      "docs/plans/pipeline-dashboard-sprint-tracker.md": "Sprint tracker archive",
+      "scripts/EXPORT_SCHEMA_V1.3.0_CHANGELOG.md": "Changelog for old v1.3.0 \u2014 moved into FINAL_EXPORT_SCHEMA_V1.md narrative; archive",
+      "scripts/FLUTTER_V1.3.0_INTEGRATION_GUIDE.md": "Integration guide for v1.3.0 (now v1.6.0); archive",
+      "scripts/INTERACTION_ENHANCEMENT_PLAN.md": "Old plan \u2014 likely delivered",
+      "scripts/SAFETY_DATA_PATH_C_PLAN.md": "Old plan \u2014 verify if delivered",
+      "scripts/PIPELINE_MAINTENANCE_SCHEDULE.md": "DUP \u2014 also in docs/; archive scripts/ copy and keep docs/",
+      "docs/PIPELINE_MAINTENANCE_SCHEDULE.md": "DUP-target \u2014 KEEP this canonical copy",
+      "docs/PIPELINE_OPERATIONS_README.md": "DUP \u2014 scripts/PIPELINE_OPERATIONS_README.md is current; archive this",
+      "IMPLEMENTATION_STATUS_V1.3.0.md": "Status doc for v1.3.0 (now v1.6.0); archive",
+      "FINAL_SUMMARY_FOR_USER.md": "Status snapshot for v1.3.0 era",
+      "Harmful_additive_audit_prompt.md": "Audit-prompt template; move to scripts/audits/",
+      "Ingredient_Aliases_accuracy_audit.md": "Audit-prompt template; move to scripts/audits/",
+      "UNMAPPED_RESOLUTION_PROMPT.md": "Audit-prompt template; move to scripts/audits/",
+      "cluster_fixup_goals_match.md": "One-off note (April)",
+      "docs/infographic-pipeline-story.md": "Marketing/outreach artifact",
+      "docs/how-it-works-deep-dives.md": "Marketing/outreach artifact",
+      "docs/outreach-scripts.md": "Marketing/outreach artifact"
+    },
+    "DELETE": {
+      "CLEANING_SCRIPT_FINAL_FIXES.md": "Bug-fix completion log Nov 2024",
+      "CLEANING_SCRIPT_TINY_FIXES.md": "Bug-fix completion log Nov 2024",
+      "ENRICHMENT_ALL_BUGS_FIXED.md": "Bug-fix completion log Nov 2024",
+      "ENRICHMENT_FINAL_FIX_SUMMARY.md": "Bug-fix completion log Nov 2024",
+      "ENRICHMENT_LOGGING_BUG_FIX.md": "Bug-fix completion log Nov 2024",
+      "ENRICHMENT_SCHEMA_FIX_COMPLETE.md": "Bug-fix completion log Nov 2024",
+      "ENRICHMENT_SCRIPT_SCHEMA_ISSUES.md": "Bug-fix completion log Nov 2024",
+      "INGREDIENT_QUALITY_MAP_AUDIT_2024.md": "Audit log Nov 2024",
+      "resume-optimizer-prompt.md": "Unrelated to pipeline (resume tool)",
+      "scripts/IQM_AUDIT_MASTER_PROMPT.md": "Audit-prompt template; move to scripts/audits/ OR delete",
+      "scripts/PROMPT_ADD_INTERACTION_RULES.md": "Authoring prompt; move to scripts/audits/ OR delete",
+      "scripts/FLUTTER_DATA_CONTRACT_V1.md": "Superseded by scripts/FINAL_EXPORT_SCHEMA_V1.md (v1.6.0)",
+      "scripts/PharmaGuide Flutter MVP Dev.md": "Empty / no title; predates v1.5.0",
+      "scripts/SUPABASE_SYNC_README.md": "Verify if accurate; supabase sync is pure copy now"
+    },
+    "IGNORE_BY_AGENTS": {
+      "docs/superpowers/*": "AI-generated design specs from March/April \u2014 not current implementation; ignore for code truth",
+      "docs/plans/* (any remaining)": "Old plans \u2014 superseded by Sprint E1.x",
+      ".claude/skills/*": "Agent skill definitions, not pipeline docs",
+      "scripts/audits/*/research.md": "Per-batch research, transient"
+    }
+  },
+  "duplicates_to_resolve": {
+    "PIPELINE_MAINTENANCE_SCHEDULE.md": {
+      "canonical": "docs/PIPELINE_MAINTENANCE_SCHEDULE.md (more recent)",
+      "duplicate": "scripts/PIPELINE_MAINTENANCE_SCHEDULE.md (archive)"
+    },
+    "PIPELINE_OPERATIONS_README.md": {
+      "canonical": "scripts/PIPELINE_OPERATIONS_README.md (more recent + closer to code)",
+      "duplicate": "docs/PIPELINE_OPERATIONS_README.md (archive)"
+    },
+    "README.md": {
+      "note": "scripts/dashboard/README.md is for the dashboard tool; top-level README.md is the project readme; both legitimate, no resolution needed"
+    }
+  },
+  "top_level_rot": "14 of 19 top-level .md files are Nov 2024 / April 2026 bug-fix completion logs (ENRICHMENT_*, CLEANING_SCRIPT_*, IMPLEMENTATION_STATUS_V1.3.0). DELETE candidates.",
+  "next_steps": [
+    "1. Delete the 15 confirmed-DELETE files (bug-fix logs, superseded v1.3 contract docs)",
+    "2. Move ARCHIVE candidates into docs/archive/YYYY-MM/",
+    "3. Update PIPELINE_ARCHITECTURE.md, PIPELINE_OPERATIONS_README.md, CONTRACT_V150_FOLLOWUP.md, PG_SCORE_EXPLAINED.md",
+    "4. Resolve the 2 duplicate filenames (commit the working-tree change to docs/PIPELINE_OPERATIONS_README.md, then choose canonical)",
+    "5. Add ignore-by-agents note to CLAUDE.md so future agents know docs/superpowers/ + docs/plans/ are not authoritative"
+  ],
+  "agent_guidance": "When an agent needs to know 'what does the pipeline do?', read the code first (scripts/enrich_supplements_v3.py, build_final_db.py). Then inspect a recent detail_blob from /tmp/pharmaguide_release_build/detail_blobs/. Run the audit scripts (audit_contract_sync.py, audit_raw_to_final.py) for an objective state snapshot. Only consult FINAL_EXPORT_SCHEMA_V1.md / SCORING_ENGINE_SPEC.md / DATABASE_SCHEMA.md AFTER verifying their claims against A-C above. Do not use docs/superpowers/* or docs/plans/* as implementation truth \u2014 those are historical design conversations, not specifications."
+}

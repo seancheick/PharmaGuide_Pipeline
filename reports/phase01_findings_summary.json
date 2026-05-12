@@ -256,5 +256,23 @@
     "6. Investigate the BRANDED_TOKEN_DROPPED HIGH findings post-rebuild; fix display_label composer if real",
     "7. Update FINAL_EXPORT_SCHEMA_V1.md to document v1.6.0; commit deletion of stale docs/plans/*.md",
     "8. (Phase 5 conditional) Inspect sync_to_supabase.py \u2014 does it transform or just copy? If transforms, add Supabase reconciliation phase."
-  ]
+  ],
+  "docs_staleness_audit": {
+    "report": "reports/docs_staleness_audit.json",
+    "human_readable": "reports/DOCS_STALENESS_AUDIT.md",
+    "counts": {
+      "KEEP": 12,
+      "UPDATE": 5,
+      "ARCHIVE": 46,
+      "DELETE": 14,
+      "IGNORE_BY_AGENTS": 4
+    },
+    "doc_truth_priority": [
+      "A. Current code behavior (Python source)",
+      "B. Generated artifacts (detail_blobs, pharmaguide_core.db)",
+      "C. Tests + audit reports (scripts/tests/, reports/)",
+      "D. Schema docs (only after verifying against A-C)"
+    ],
+    "agent_guard_rail": "Add to CLAUDE.md: do NOT use docs/superpowers/*, docs/plans/*, or top-level historical bug-fix .md as implementation truth. Those are conversational history, not specifications."
+  }
 }

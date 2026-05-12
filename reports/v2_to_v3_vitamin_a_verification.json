@@ -1,0 +1,72 @@
+{
+  "schema": "v2_to_v3_vitamin_a_verification_v1",
+  "verified_at": "2026-05-12",
+  "fix_summary": "scripts/dosage_normalizer.py:639-665 joins ingredient[\"forms\"][*].name into the ingredient_name passed to unit_converter.convert_nutrient(). unit_converter form-detection now sees \u03b2-carotene / retinyl palmitate tokens and routes to vitamin_a_beta_carotene_supplement (factor 0.1) or vitamin_a_retinol (factor 0.3) instead of vitamin_a_unknown (factor 1.0).",
+  "verification_pipeline": [
+    "1. Re-enriched GNC (3945 products) + Garden_of_life (1131 products) \u2014 50 minutes",
+    "2. Re-scored both brands",
+    "3. Rebuilt final DB to /tmp/pharmaguide_release_build_v3 (combining re-enriched GNC+GoL with 19 other brands existing artifacts)",
+    "4. Ran audit_raw_to_final.py against v3",
+    "5. Ran test_vitamin_a_form_aware_normalization.py (9 pass)",
+    "6. Ran test_label_fidelity_contract.py against v3 build (6/7 pass)"
+  ],
+  "blob_level_evidence": {
+    "1007": {
+      "product": "GNC Mega Teen",
+      "before_v2": {
+        "dosage": "5000 IU",
+        "normalized_amount": 5000.0,
+        "normalized_unit": "IU"
+      },
+      "after_v3": {
+        "dosage": "5000 IU",
+        "normalized_amount": 500.0,
+        "normalized_unit": "mcg RAE"
+      },
+      "pregnancy_ul_check": "500 mcg RAE \u2264 3000 mcg RAE UL \u2014 safe (now evaluable)"
+    },
+    "43994": {
+      "product": "Garden of Life Perfect Food Raw Apple",
+      "before_v2": {
+        "dosage": "180 IU",
+        "normalized_amount": 180.0,
+        "normalized_unit": "IU"
+      },
+      "after_v3": {
+        "dosage": "180 IU",
+        "normalized_amount": 18.0,
+        "normalized_unit": "mcg RAE"
+      }
+    }
+  },
+  "audit_delta": {
+    "v2": {
+      "BLOCKER": 3,
+      "HIGH": 1,
+      "LOW": 7
+    },
+    "v3": {
+      "BLOCKER": 0,
+      "HIGH": 1,
+      "LOW": 7
+    },
+    "products_with_blocker_v2": [
+      "1007",
+      "43994"
+    ],
+    "products_with_blocker_v3": []
+  },
+  "tests_passing": {
+    "test_vitamin_a_form_aware_normalization.py": "9/9 pass",
+    "test_label_fidelity_contract.py": "6/7 pass (plant_part_preserved still fails on blend parents \u2014 pre-existing, not Vitamin A related)",
+    "test_active_count_reconciliation.py": "22/22 pass",
+    "dose/normalize/vitamin/convert sweep": "745 pass, 0 fail"
+  },
+  "remaining_corpus_coverage_caveat": "1122 products across 16 brands have Vitamin A in IU. This verification re-enriched only GNC (1007) + Garden_of_life (43994) \u2014 the canary set. Other 14 brands' on-disk enriched artifacts still carry the pre-fix normalized_unit=IU. The Python code is fixed; full corpus propagation requires re-enriching all 16 brands (estimated 2-3 hours sequential, 30-60 minutes parallel). Suggested follow-up: `python3 scripts/run_pipeline.py` or per-brand re-enrich for the affected 14.",
+  "still_open": {
+    "capsimax_plant_part_dropped": "HIGH on DSLD 1181 \u2014 display_label drops \"Capsicum Fruit\" species + plant part. Separate display_label composer fix.",
+    "test_plant_part_preserved_on_blends": "18 violations, all on blend parents \u2014 test refinement or display composer enhancement.",
+    "canonical_id_emit_rate": "v1.5.0 contract field still at 0% emit. Separate from Vitamin A.",
+    "delivers_markers_propagation": "computed in enrich, not propagated to blob. Separate from Vitamin A."
+  }
+}
