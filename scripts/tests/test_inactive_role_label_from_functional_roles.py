@@ -49,105 +49,13 @@ if str(ROOT / "scripts") not in sys.path:
     sys.path.insert(0, str(ROOT / "scripts"))
 
 
-def _role(ing: dict, other_ref: dict | None = None) -> str | None:
-    """Invoke build_final_db._compute_inactive_role_label directly."""
-    from scripts.build_final_db import _compute_inactive_role_label
-    return _compute_inactive_role_label(ing, other_ref or {})
-
-
-# ---------------------------------------------------------------------------
-# Direct function-level tests
-# ---------------------------------------------------------------------------
-
-def test_curated_functional_role_uses_curated_label() -> None:
-    """A functional_role value that exists in _INACTIVE_ROLE_LABELS must
-    render its curated user-friendly label, not the snake-case fallback."""
-    ing = {
-        "name": "Microcrystalline Cellulose",
-        "additive_type": None,
-        "category": None,
-        "functional_roles": ["filler"],
-    }
-    assert _role(ing) == "Filler"
-
-
-def test_curated_anti_caking_role() -> None:
-    ing = {
-        "name": "Silicon Dioxide",
-        "functional_roles": ["anti_caking_agent", "glidant"],
-    }
-    # The function picks the first functional_role and looks it up.
-    assert _role(ing) == "Anti-caking agent"
-
-
-def test_uncurated_functional_role_uses_snake_case_fallback() -> None:
-    """A functional_role token not yet in _INACTIVE_ROLE_LABELS still
-    renders something readable via the snake_case → Title-case fallback.
-    sweetener_artificial → 'Sweetener artificial'."""
-    ing = {
-        "name": "Acesulfame Potassium",
-        "functional_roles": ["sweetener_artificial"],
-    }
-    result = _role(ing)
-    assert result is not None
-    # Either curated ("Sweetener (artificial)") or fallback ("Sweetener artificial").
-    assert "sweetener" in result.lower()
-    assert "artificial" in result.lower()
-
-
-def test_uncurated_colorant_artificial() -> None:
-    ing = {"name": "Red 40", "functional_roles": ["colorant_artificial"]}
-    result = _role(ing)
-    assert result is not None
-    assert "colorant" in result.lower() or "color" in result.lower()
-
-
-def test_empty_functional_roles_still_returns_none() -> None:
-    """When everything is empty/none, return None (correct behavior —
-    Flutter renders no role label and the entry shows up as plain text
-    in 'Other ingredients')."""
-    ing = {
-        "name": "Mystery Excipient",
-        "additive_type": None,
-        "category": None,
-        "functional_roles": [],
-    }
-    assert _role(ing) is None
-
-
-def test_sentinel_none_in_functional_roles_returns_none() -> None:
-    """Cleaner sometimes emits ['(none)'] as a placeholder. Treat as empty."""
-    ing = {
-        "name": "Truly Unknown Inactive",
-        "functional_roles": ["(none)"],
-    }
-    result = _role(ing)
-    # Either None (preferred — sentinel filtered) or "(none)" (acceptable
-    # but ugly). Lock in the preferred behavior: filter sentinel values.
-    assert result != "(none)", (
-        f"sentinel '(none)' leaked into display_role_label as {result!r}"
-    )
-
-
-def test_additive_type_wins_over_functional_roles() -> None:
-    """If both additive_type AND functional_roles are populated, the
-    more-specific additive_type (curated against harmful_additives.json
-    or similar) wins. Ensures we don't regress the existing precedence."""
-    ing = {
-        "name": "Gelatin",
-        "additive_type": "capsule_shell",
-        "functional_roles": ["filler"],  # incorrect/general
-    }
-    # The curated label for capsule_shell beats filler.
-    assert _role(ing) == "Gelatin capsule" or _role(ing) == "Capsule shell"
-
-
-def test_other_ref_category_wins_over_functional_roles() -> None:
-    """The IQM other_ref lookup is more authoritative than the cleaner's
-    bag-of-roles classification."""
-    ing = {"name": "X", "functional_roles": ["filler"]}
-    other_ref = {"additive_type": "preservative"}
-    assert _role(ing, other_ref) == "Preservative"
+# NOTE (2026-05-12): the unit tests in this file (testing the legacy
+# _compute_inactive_role_label function directly) were removed when the
+# unified InactiveIngredientResolver became the single source of truth
+# for inactive role classification. The behaviors are now covered by
+# scripts/tests/test_inactive_ingredient_resolver.py (20 tests).
+# The two corpus-level coverage tests below remain — they verify the
+# blob output, not the resolver internals.
 
 
 # ---------------------------------------------------------------------------

@@ -23,89 +23,17 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from build_final_db import (
-    _compute_inactive_role_label,
-    _compute_inactive_severity_status,
-    _compute_is_safety_concern,
-    build_detail_blob,
-)
+from build_final_db import build_detail_blob
 
-
-# -- _compute_inactive_role_label -------------------------------------------
-
-@pytest.mark.parametrize("ingredient, expected", [
-    ({"additive_type": "anti_caking_agent"}, "Anti-caking agent"),
-    ({"additive_type": "capsule_coating"}, "Capsule coating"),
-    ({"category": "capsule_shell"}, "Capsule shell"),
-    ({"additive_type": "lubricant"}, "Lubricant"),
-    ({"additive_type": "filler"}, "Filler"),
-    ({"additive_type": "colorant"}, "Colorant"),
-    ({"additive_type": "preservative"}, "Preservative"),
-    ({"additive_type": "lecithin"}, "Lecithin (emulsifier)"),
-    # additive_type takes precedence over category when both present.
-    ({"additive_type": "anti_caking_agent", "category": "capsule_shell"}, "Anti-caking agent"),
-])
-def test_role_label_curated_mapping(ingredient, expected):
-    assert _compute_inactive_role_label(ingredient, {}) == expected
-
-
-def test_role_label_falls_back_to_other_ref():
-    """When the ingredient itself has no role hints, use the
-    other_ingredients reference data."""
-    assert _compute_inactive_role_label({}, {"additive_type": "lubricant"}) == "Lubricant"
-
-
-def test_role_label_uncurated_value_falls_back_to_titlecase():
-    """Vocabulary entries we haven't curated yet still produce a clean
-    label rather than leaking snake_case to Flutter."""
-    assert _compute_inactive_role_label({"additive_type": "novel_excipient_x"}, {}) == "Novel excipient x"
-
-
-def test_role_label_returns_none_when_no_role_known():
-    """Bare amino acid like 'Leucine' has no excipient role — Flutter
-    should suppress the role chip entirely rather than guess one."""
-    assert _compute_inactive_role_label({}, {}) is None
-
-
-# -- _compute_inactive_severity_status --------------------------------------
-
-@pytest.mark.parametrize("is_additive, is_harmful, severity, expected", [
-    # Hazardous excipients always show.
-    (True, True, "high", "critical"),
-    (True, True, "moderate", "critical"),
-    (True, True, "critical", "critical"),
-    # Low-severity excipients suppress (Tradeoffs only, hidden from RBU).
-    (True, True, "low", "suppress"),
-    (False, True, "low", "suppress"),
-    # Flagged but no severity — informational.
-    (True, True, "", "informational"),
-    (True, True, None, "informational"),
-    # Non-harmful inactives — n/a (just render in Other Ingredients).
-    (True, False, None, "n/a"),
-    (False, False, None, "n/a"),
-])
-def test_severity_status_routing(is_additive, is_harmful, severity, expected):
-    assert _compute_inactive_severity_status(is_additive, is_harmful, severity) == expected
-
-
-# -- _compute_is_safety_concern ---------------------------------------------
-# is_harmful records DB provenance (in harmful_additives.json); the
-# semantic safety flag must NOT light up for low-severity excipients
-# tracked for transparency. This test pins that semantic.
-
-@pytest.mark.parametrize("is_harmful, severity, expected", [
-    (True, "high", True),
-    (True, "moderate", True),
-    (True, "critical", True),
-    # Silicon dioxide / MCC / calcium laurate — listed in harmful DB
-    # but severity=low because they're tracked excipients, not risks.
-    (True, "low", False),
-    (True, "", False),
-    (True, None, False),
-    (False, None, False),
-])
-def test_is_safety_concern_only_true_for_real_hazards(is_harmful, severity, expected):
-    assert _compute_is_safety_concern(is_harmful, severity) is expected
+# NOTE (2026-05-12): the unit tests in this file previously tested the
+# legacy helpers _compute_inactive_role_label, _compute_inactive_severity_status,
+# and _compute_is_safety_concern. Those helpers were deleted when
+# `InactiveIngredientResolver` (scripts/inactive_ingredient_resolver.py)
+# became the single source of truth for inactive role/severity classification.
+# The behaviors locked in by those tests are now covered by the resolver's
+# own 20-test suite — see scripts/tests/test_inactive_ingredient_resolver.py.
+# The blob-level integration tests below (test_silicon_dioxide_suppresses_*,
+# test_hypromellose_renders_*) remain as canary verifications.
 
 
 # -- Integration: blob carries the new contract fields ----------------------
