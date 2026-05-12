@@ -51,6 +51,7 @@ from audit_evidence_utils import (
     derive_omega3_audit,
     derive_proprietary_blend_audit,
 )
+from inactive_ingredient_resolver import InactiveIngredientResolver
 from supplement_type_utils import infer_supplement_type
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -720,6 +721,19 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
 
 HARMFUL_REFERENCE_INDEX: Optional[Dict[str, Dict]] = None
 IQM_REFERENCE_INDEX: Optional[Dict[str, Dict]] = None
+_SHARED_INACTIVE_RESOLVER: Optional[InactiveIngredientResolver] = None
+
+
+def _get_shared_inactive_resolver() -> InactiveIngredientResolver:
+    """Lazily build the inactive-ingredient resolver once per process.
+    Indices for banned_recalled + harmful_additives + other_ingredients
+    are built on first call and reused across every product in the
+    build run. O(total_aliases) on init, O(1) lookups thereafter.
+    """
+    global _SHARED_INACTIVE_RESOLVER
+    if _SHARED_INACTIVE_RESOLVER is None:
+        _SHARED_INACTIVE_RESOLVER = InactiveIngredientResolver()
+    return _SHARED_INACTIVE_RESOLVER
 
 
 def extract_identifiers(entry: Dict) -> Optional[Dict]:
@@ -2682,6 +2696,15 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         })
 
     # Inactive ingredients
+    # Inactive ingredients — unified resolver path (2026-05-12).
+    # All safety + role classification flows through
+    # InactiveIngredientResolver, which consults banned_recalled FIRST,
+    # then harmful_additives, then other_ingredients (with notes-text
+    # bleed-through prevention). Closes the "TiO2/Talc ship as
+    # severity_status=n/a" gap that the previous harmful_lookup-only
+    # path produced. See scripts/inactive_ingredient_resolver.py for
+    # the full architectural rationale.
+    inactive_resolver = _get_shared_inactive_resolver()
     inactive = []
     for ing in safe_list(enriched.get("inactiveIngredients")):
         if not isinstance(ing, dict):
@@ -2689,55 +2712,23 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         raw = safe_str(ing.get("raw_source_text"))
         name = safe_str(ing.get("name"), raw)
         std_name_ing = safe_str(ing.get("standardName"))
-        harmful_hit = None
-        for term in collect_match_terms(raw, name, std_name_ing):
-            harmful_hit = harmful_lookup.get(term)
-            if harmful_hit:
-                break
-        harmful_ref = resolve_harmful_reference(harmful_hit)
-        other_ref = resolve_other_ingredient_reference(name, std_name_ing)
 
-        # Phase 4a (2026-04-30): suppress label-noise + move-to-actives entries
-        # from the Flutter inactive_ingredients[] blob. Entries flagged
-        # is_label_descriptor=true are descriptive label fragments (marketing
-        # copy, source descriptors, phytochemical markers) — not real
-        # ingredients and should never render as chips. Entries flagged
-        # is_active_only=true are bioactives that will physically relocate to
-        # the active-ingredient pipeline in V1.1 (botanical_extract,
-        # glandular_tissue, branded complexes, amino_acid_derivative,
-        # phytocannabinoids, marine extracts) — meanwhile suppress here so
-        # they don't pollute the inactive section.
-        # Source of truth: scripts/audits/functional_roles/categorize.py
-        if other_ref.get("is_label_descriptor") or other_ref.get("is_active_only"):
+        # Single resolver call: returns InactiveResolution with all
+        # safety + role fields populated.
+        res = inactive_resolver.resolve(
+            raw_name=name or raw,
+            standard_name=std_name_ing,
+        )
+
+        # Phase 4a (2026-04-30): suppress label-noise + move-to-actives
+        # entries from the Flutter inactive_ingredients[] blob. Entries
+        # flagged is_label_descriptor=true are descriptive label fragments
+        # (marketing copy, source descriptors, phytochemical markers).
+        # Entries flagged is_active_only=true are bioactives that physically
+        # relocate to the active-ingredient pipeline in V1.1. Either way,
+        # do not render as inactive chips.
+        if res.is_label_descriptor or res.is_active_only:
             continue
-
-        # Notes priority: harmful_ref (safety) > enrichment-embedded > other_ingredients ref
-        notes_text = (
-            safe_str(harmful_ref.get("notes"))
-            or safe_str(harmful_hit.get("notes") if harmful_hit else "")
-            or safe_str(other_ref.get("notes"))
-        )
-        mechanism_text = safe_str(harmful_ref.get("mechanism_of_harm"))
-
-        std_name_resolved = safe_str(
-            harmful_ref.get("standard_name")
-            or (harmful_hit or {}).get("canonical_name")
-            or (harmful_hit or {}).get("additive_name")
-            or other_ref.get("standard_name")
-        )
-        is_additive_resolved = safe_bool(ing.get("isAdditive") or other_ref.get("is_additive"))
-        is_harmful_resolved = bool(harmful_hit)
-        harmful_severity_resolved = harmful_hit.get("severity_level") if harmful_hit else None
-        # Resolve functional_roles once from the three-way chain so both
-        # the blob field AND _compute_inactive_role_label see the same
-        # value. Maltodextrin is the canary: enriched ing has None, but
-        # harmful_ref carries ['filler'] — the role-label computer
-        # missed it before we threaded the resolved list through.
-        functional_roles_resolved = safe_list(
-            ing.get("functional_roles")
-            or other_ref.get("functional_roles")
-            or (harmful_ref or {}).get("functional_roles")
-        )
 
         inactive.append({
             "raw_source_text": raw,
@@ -2745,42 +2736,28 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "standardName": std_name_ing,
             "normalized_key": safe_str(ing.get("normalized_key")),
             "forms": safe_list(ing.get("forms")),
-            "category": safe_str(ing.get("category") or other_ref.get("category")),
-            "is_additive": is_additive_resolved,
-            "functional_roles": functional_roles_resolved,
-            "standard_name": std_name_resolved,
-            "notes": notes_text,
-            "mechanism_of_harm": mechanism_text,
-            "common_uses": safe_list(other_ref.get("common_uses")),
-            "population_warnings": safe_list(
-                harmful_ref.get("population_warnings")
-                or (harmful_hit or {}).get("population_warnings")
-            ),
-            # `is_safety_concern` is the semantic safety flag (true only
-            # for moderate/high/critical hazards). The retired `is_harmful`
-            # provenance flag conflated "in harmful_additives.json" with
-            # "actually harmful" — silicon dioxide is in the DB but not a
-            # safety risk. `severity_status` carries the routing decision.
-            "harmful_severity": harmful_severity_resolved,
-            "harmful_notes": (
-                mechanism_text
-                or notes_text
-                or safe_str((harmful_hit or {}).get("classification_evidence"))
-                or safe_str((harmful_hit or {}).get("category"))
-            ) if harmful_hit else None,
-            "identifiers": extract_identifiers(harmful_ref or other_ref),
-            # Canonical inactive contract — Flutter renders these
-            # directly without local inference.
-            "display_label": std_name_resolved or name,
-            "display_role_label": _compute_inactive_role_label(
-                ing, other_ref, resolved_functional_roles=functional_roles_resolved
-            ),
-            "severity_status": _compute_inactive_severity_status(
-                is_additive_resolved, is_harmful_resolved, harmful_severity_resolved
-            ),
-            "is_safety_concern": _compute_is_safety_concern(
-                is_harmful_resolved, harmful_severity_resolved
-            ),
+            "category": res.category or safe_str(ing.get("category")),
+            "is_additive": res.is_additive or safe_bool(ing.get("isAdditive")),
+            "functional_roles": res.functional_roles,
+            "standard_name": res.standard_name or std_name_ing or name,
+            "notes": res.notes,
+            "mechanism_of_harm": res.mechanism_of_harm or "",
+            "common_uses": res.common_uses,
+            "population_warnings": res.population_warnings,
+            "harmful_severity": res.harmful_severity,
+            "harmful_notes": res.harmful_notes,
+            "identifiers": res.identifiers or {},
+            # Canonical inactive contract (v1.5.0+) — Flutter renders
+            # these directly without local inference.
+            "display_label": res.display_label,
+            "display_role_label": res.display_role_label,
+            "severity_status": res.severity_status,
+            "is_safety_concern": res.is_safety_concern,
+            # v1.6.0+ unified contract additions:
+            "is_banned": res.is_banned,
+            "safety_reason": res.safety_reason,
+            "matched_source": res.matched_source,
+            "matched_rule_id": res.matched_rule_id,
         })
 
     # Warnings

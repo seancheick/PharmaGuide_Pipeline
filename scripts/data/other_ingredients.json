@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-01",
-    "total_entries": 679,
+    "last_updated": "2026-05-12",
+    "total_entries": 681,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -16195,7 +16195,10 @@
         "ultra-pure marine lipid concentrate",
         "wild alaskan fish oil",
         "Marine Lip Concentrate",
-        "Marine Lipid Concentrate 30 A% TG"
+        "Marine Lipid Concentrate 30 A% TG",
+        "Fish Body Oil",
+        "Fish Oil Body",
+        "Anchovy Fish Body Oil"
       ],
       "category": "carrier_oil",
       "is_additive": false,
@@ -16211,7 +16214,8 @@
       "external_ids": {},
       "cui": "C0016157",
       "functional_roles": [
-        "carrier_oil"
+        "carrier_oil",
+        "softgel_fill"
       ]
     },
     {
@@ -20600,7 +20604,14 @@
         "Tocopherol rich extract",
         "vitamin E mixed tocopherol concentrate",
         "natural D-Alpha Tocopheryl",
-        "non-GMO Mixed Tocopherols"
+        "non-GMO Mixed Tocopherols",
+        "Vitamin E",
+        "Vitamin E (preservative)",
+        "d-Alpha-Tocopherol",
+        "DL-Alpha-Tocopherol",
+        "DL-Alpha-Tocopheryl Acetate",
+        "DL-Alpha Tocopherol",
+        "Tocopherols"
       ],
       "category": "preservative",
       "is_additive": true,
@@ -20632,7 +20643,9 @@
       },
       "cui": "C3255108",
       "functional_roles": [
-        "preservative"
+        "preservative",
+        "preservative_antioxidant",
+        "antioxidant"
       ]
     },
     {
@@ -23712,6 +23725,65 @@
       "clinical_notes": "Generic descriptor. Source-specific entries should be preferred when label discloses the algal species.",
       "functional_roles": [],
       "is_label_descriptor": true
+    },
+    {
+      "id": "OI_RIBOFLAVIN_COLORANT",
+      "standard_name": "Riboflavin (Color)",
+      "aliases": [
+        "Riboflavin",
+        "riboflavin",
+        "Riboflavin (color)",
+        "riboflavin color",
+        "E101",
+        "vitamin b2 color",
+        "Riboflavin (Natural Color)",
+        "riboflavin natural color"
+      ],
+      "category": "colorant",
+      "is_additive": true,
+      "additive_type": "colorant_natural",
+      "functional_roles": [
+        "colorant_natural"
+      ],
+      "common_uses": [
+        "natural yellow colorant (FDA 21 CFR §73.450)"
+      ],
+      "notes": "Riboflavin used as a natural yellow color additive (E101). Distinct from B2 as an active nutritional ingredient — the active scoring path handles that case via the IQM. This entry covers ONLY the inactive/excipient use where the cleaner has classified Riboflavin into inactiveIngredients[].",
+      "external_ids": {},
+      "allergen": null,
+      "last_updated": "2026-05-12",
+      "added_by": "inactive_ingredient_resolver_2026_05_12"
+    },
+    {
+      "id": "OI_ROSE_HIPS_INACTIVE",
+      "standard_name": "Rose Hips (Botanical Filler)",
+      "aliases": [
+        "Rose Hips powder",
+        "rose hips powder",
+        "rose hips",
+        "Rose Hips",
+        "Rose hip powder",
+        "rose hip",
+        "Rosa canina fruit",
+        "Dog Rose fruit powder",
+        "natural rose hips",
+        "rose hips extract"
+      ],
+      "category": "botanical_filler",
+      "is_additive": true,
+      "additive_type": "botanical_filler",
+      "functional_roles": [
+        "filler",
+        "colorant_natural"
+      ],
+      "common_uses": [
+        "natural source of vitamin C (when used as filler / colorant rather than standardized active ingredient)"
+      ],
+      "notes": "Rose Hips powder appearing in inactiveIngredients[] is used as a natural filler or mild colorant. When standardized for vitamin C and listed in the Supplement Facts, the active scoring path handles it via the IQM. This entry covers the excipient case only.",
+      "external_ids": {},
+      "allergen": null,
+      "last_updated": "2026-05-12",
+      "added_by": "inactive_ingredient_resolver_2026_05_12"
     }
   ]
 }

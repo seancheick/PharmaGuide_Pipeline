@@ -1,0 +1,234 @@
+{
+  "schema": "audit_inactive_safety_v1",
+  "build_dir": "/tmp/pharmaguide_release_build_inactives",
+  "summary": {
+    "total_inactive_entries": 31248,
+    "banned_in_inactives_seen": 1610,
+    "banned_signal_violations": 0,
+    "notes_only_false_positives": 0,
+    "unknown_inactive_roles_total": 1744,
+    "unknown_distinct_names": 409
+  },
+  "check_1_banned_signal_violations": [],
+  "check_2_notes_only_false_positives": [],
+  "check_3_unknown_inactive_roles": {
+    "total_unknown_inactives": 1744,
+    "distinct_names": 409,
+    "top_50": [
+      [
+        "Protein Blend",
+        83
+      ],
+      [
+        "Clean Tablet Technology Blend",
+        82
+      ],
+      [
+        "Phytonadione",
+        65
+      ],
+      [
+        "Creamer",
+        55
+      ],
+      [
+        "Brewer's Yeast",
+        33
+      ],
+      [
+        "Fat Blend",
+        32
+      ],
+      [
+        "organic Citrus extract",
+        30
+      ],
+      [
+        "Wheybolic Protein Complex",
+        27
+      ],
+      [
+        "Potassium Chloride",
+        26
+      ],
+      [
+        "Lactobacillus bulgaricus",
+        26
+      ],
+      [
+        "Soy Oil & Lecithin Blend",
+        25
+      ],
+      [
+        "Sunflower Creamer",
+        24
+      ],
+      [
+        "Sodium Aluminum Silicate",
+        22
+      ],
+      [
+        "purified Arctic Cod Liver Oil",
+        21
+      ],
+      [
+        "Polyglycerol Polyricinoleate",
+        21
+      ],
+      [
+        "Bovine Gelatin",
+        21
+      ],
+      [
+        "organic Apple",
+        20
+      ],
+      [
+        "Sodium Ascorbate",
+        17
+      ],
+      [
+        "Flax seed Oil",
+        16
+      ],
+      [
+        "Probiotic Cultures",
+        16
+      ],
+      [
+        "Borage seed Oil",
+        15
+      ],
+      [
+        "Carb Blend",
+        14
+      ],
+      [
+        "100% Whey Protein Blend",
+        14
+      ],
+      [
+        "Porcine Gelatin",
+        14
+      ],
+      [
+        "Choline Bitartrate",
+        14
+      ],
+      [
+        "Citrus Extract",
+        13
+      ],
+      [
+        "Magnesium Oxide",
+        12
+      ],
+      [
+        "Tricalcium Phosphate",
+        12
+      ],
+      [
+        "organic Acacia Fiber",
+        12
+      ],
+      [
+        "deep-sea Fish Oil",
+        12
+      ],
+      [
+        "Carbohydrate Blend",
+        11
+      ],
+      [
+        "Parsley herb powder",
+        10
+      ],
+      [
+        "Fish Gelatin",
+        10
+      ],
+      [
+        "Rosemary leaf extract",
+        10
+      ],
+      [
+        "Soy Protein isolate",
+        10
+      ],
+      [
+        "organic Lemon",
+        10
+      ],
+      [
+        "Hesperidin Complex",
+        10
+      ],
+      [
+        "Oat Fiber",
+        10
+      ],
+      [
+        "Citrus extract",
+        10
+      ],
+      [
+        "Alfalfa leaf powder",
+        9
+      ],
+      [
+        "Cookie Bits",
+        9
+      ],
+      [
+        "Certified Organic Fruit Chew Base Blend",
+        9
+      ],
+      [
+        "Chocolate Flavored Sprinkles",
+        9
+      ],
+      [
+        "Vitamin And Mineral Blend",
+        9
+      ],
+      [
+        "Green Pepper powder",
+        9
+      ],
+      [
+        "Papain",
+        8
+      ],
+      [
+        "Citrus Bioflavonoid",
+        8
+      ],
+      [
+        "Cinnamon bark extract",
+        8
+      ],
+      [
+        "Ionic Magnesium Fizz Blend",
+        8
+      ],
+      [
+        "supercritical deep-sea Fish Oil",
+        8
+      ]
+    ]
+  },
+  "check_4_source_distribution": {
+    "by_matched_source": {
+      "other_ingredients": 16210,
+      "banned_recalled": 1610,
+      "<unmatched>": 1744,
+      "harmful_additives": 11684
+    },
+    "by_severity_status": {
+      "n/a": 17954,
+      "critical": 4740,
+      "suppress": 8552,
+      "informational": 2
+    }
+  }
+}
