@@ -1,6 +1,6 @@
 # PIPELINE_ARCHITECTURE.md
 
-> Last updated: 2026-05-12 | Export schema: v1.6.0 (91 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`.
+> Last updated: 2026-05-12 | Export schema: v1.6.1 (91 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`.
 
 ## Overview
 
@@ -157,6 +157,30 @@ Core domain blocks consumed by scorer:
 - `manufacturer_data`
 - `probiotic_data`
 - `match_ledger` (for diagnostics/flags)
+
+### Inactive ingredient resolver (v1.6.1, 2026-05-12)
+
+`scripts/inactive_ingredient_resolver.py` is the single safety + role
+classification path for inactive ingredients in the blob builder. Imported
+once at module load; a shared instance is built lazily inside
+`build_final_db.py` (`_get_shared_inactive_resolver()`) and reused for
+every inactive across every product in the build run.
+
+Priority order (highest authority wins; first match returns):
+
+1. `banned_recalled_ingredients.json` — `status` ∈ {banned, high_risk, recalled, watchlist}; skips `match_mode` ∈ {disabled, historical}
+2. `harmful_additives.json` — `severity_level` ∈ {high, critical, moderate, low}
+3. `other_ingredients.json` — 679 curated excipient role classifications
+
+Match rules: `standard_name` + `aliases` ONLY, normalized exact match.
+NEVER matches on notes / mechanism_of_harm / safety_summary text — that
+bleed-through was the original Candurin Silver / Titanium Dioxide
+false-positive risk.
+
+Emits four new blob fields on every inactive entry: `is_banned`,
+`safety_reason`, `matched_source`, `matched_rule_id`. See
+`FINAL_EXPORT_SCHEMA_V1.md` §"Inactive contract additions (v1.6.1)" for
+the per-field contract. CI gate: `scripts/audit_inactive_safety.py`.
 
 ## Scoring Pipeline Logic (High-Level)
 

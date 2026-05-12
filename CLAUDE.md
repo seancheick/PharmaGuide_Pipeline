@@ -133,9 +133,48 @@ Config: `scripts/config/scoring_config.json` (100+ tunable parameters)
 | `scripts/DATABASE_SCHEMA.md`        | Master schema reference for all 39 data files |
 | `scripts/SCORING_ENGINE_SPEC.md`    | Detailed scoring formulas and section logic   |
 | `scripts/SCORING_README.md`         | Implementation guide for the scorer           |
-| `scripts/PIPELINE_ARCHITECTURE.md`  | 3-stage pipeline design and contracts         |
+| `scripts/PIPELINE_ARCHITECTURE.md`  | 4-stage pipeline design and contracts         |
 | `scripts/FINAL_EXPORT_SCHEMA_V1.md` | Flutter MVP data contract                     |
 | `scripts/api_audit/README.md`       | API audit tooling reference                   |
+
+## Documentation truth priority
+
+When you need to know how the pipeline behaves, consult sources in this
+order:
+
+1. **Python source files in `scripts/`** — the code is the truth.
+2. **Generated artifacts** in `scripts/final_db_output/` or `/tmp/pharmaguide_release_build*/` — what actually ships.
+3. **Tests + audit reports** under `scripts/tests/` and `reports/`.
+4. **Schema docs** (`FINAL_EXPORT_SCHEMA_V1.md`, `SCORING_ENGINE_SPEC.md`, etc.) — only after cross-checking against 1–3.
+
+Do NOT use `docs/archive/*`, `docs/superpowers/*`, or top-level historical
+bug-fix `.md` as implementation truth. They are conversational history,
+not specifications. If in doubt, run
+`scripts/audit_contract_sync.py` and `scripts/audit_raw_to_final.py`
+against a fresh `build_final_db.py` output to get an objective state
+snapshot.
+
+## Active audit + verification scripts
+
+These are the data-integrity gates the pipeline relies on. Run any of
+them against `scripts/final_db_output` or a fresh
+`/tmp/pharmaguide_release_build*/` to verify the contract.
+
+| Script                                          | What it gates                                                |
+| ----------------------------------------------- | ------------------------------------------------------------ |
+| `scripts/audit_contract_sync.py`                | v1.5.0/v1.6.x blob-contract field emit rates (GREEN/YELLOW/RED) |
+| `scripts/audit_raw_to_final.py`                 | Raw → blob reconciliation; 23 finding codes; canary set       |
+| `scripts/audit_inactive_safety.py`              | Banned-in-inactives have safety signal; notes-text FP catcher; unknown-role counter (CI gate) |
+| `scripts/db_integrity_sanity_check.py`          | SQLite schema + data validation                              |
+| `scripts/coverage_gate.py`                      | Quality / coverage threshold enforcement                     |
+| `scripts/coverage_gate_functional_roles.py`     | functional_roles coverage on inactives                       |
+| `scripts/enrichment_contract_validator.py`      | Enrichment output contract                                   |
+| `scripts/tests/test_inactive_ingredient_resolver.py` | Resolver unit + canary suite (20 tests)                |
+| `scripts/tests/test_canonical_id_delivers_markers_emit.py` | Active-side canonical_id + delivers_markers contract |
+| `scripts/tests/test_capsimax_display_label_fidelity.py` | Branded botanical display fidelity              |
+| `scripts/tests/test_vitamin_a_form_aware_normalization.py` | Vitamin A IU→mcg RAE form detection         |
+| `scripts/tests/test_label_fidelity_contract.py` | 8 invariants for blob ↔ label fidelity                       |
+| `scripts/tests/test_active_count_reconciliation.py` | E1.2.5 drop-reason enum                                 |
 
 ## Conventions
 

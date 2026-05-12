@@ -1,9 +1,9 @@
 # FINAL EXPORT SCHEMA V1
 
-> Version: 1.6.0 — 2026-05-12
+> Version: 1.6.1 — 2026-05-12
 > Consumes: current scorer output (v3.4.0 as of 2026-04-05), enrichment schema v5.1.0
-> Status: ACTIVE — v1.6.0 adds profile_gate passthrough on warnings; v1.5.0 canonical ingredient contract emit landed in builds from 2026-05-05.
-> Updated: **v1.6.0 adds `profile_gate` passthrough on `interaction` / `drug_interaction` warning entries so the Flutter app can route condition/drug-class hits without re-evaluating thresholds (2026-05-12). v1.5.0 introduced the canonical active + inactive ingredient contract: `display_form_label` / `form_status` / `form_match_status` / `dose_status` on actives; `display_label` / `display_role_label` / `severity_status` / `is_safety_concern` on inactives. Flutter renders these directly without local inference. Legacy fields (`form`, `is_harmful`) kept for back-compat and documented as deprecated — Flutter migrates first, then they get deleted. v1.4.0 adds `image_thumbnail_url` TEXT column (91 cols) and `normalize_upc` field; image upload pipeline via `extract_product_images.py`. v1.3.4 added CAERS B8 penalty scoring (159 adverse event signals) and offline UNII cache (172K substances). v1.3.3 expanded interaction rules to 129 (was 98) and added 4 new drug classes. v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 91 columns; `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
+> Status: ACTIVE — v1.6.1 lands the unified inactive-ingredient resolver + Vitamin A IU→mcg RAE form-aware conversion + canonical_id / delivers_markers propagation.
+> Updated: **v1.6.1 adds (2026-05-12): (a) unified inactive-ingredient resolver via `scripts/inactive_ingredient_resolver.py` — consults `banned_recalled_ingredients.json`, `harmful_additives.json`, `other_ingredients.json` in priority order with strict standard_name+aliases-only matching; (b) four new fields on every inactive blob entry: `is_banned`, `safety_reason`, `matched_source`, `matched_rule_id` — closes the TiO2/Talc silent-ship gap (1,178+311 occurrences now correctly flagged is_safety_concern=true / severity_status=critical); (c) `canonical_id` + `delivers_markers` now emitted on every active blob entry — was 0% emit pre-fix, 100% post-fix on mapped actives. Foundational for interaction rules, stack-checking, evidence routing, biomarker scoring; (d) `display_label` for branded botanicals now preserves brand + species + plant-part + form (e.g. "Capsimax(TM) Capsicum Fruit Extract" → "Capsimax Capsicum Fruit Extract", trademark stripped); (e) Vitamin A IU labels now normalize form-aware to mcg RAE (β-carotene factor 0.1, retinol 0.3) — pregnancy UL gate now evaluable. v1.6.0 added `profile_gate` passthrough on `interaction` / `drug_interaction` warning entries. v1.5.0 introduced the canonical active + inactive ingredient contract (`display_form_label` / `form_status` / `form_match_status` / `dose_status` on actives; `display_label` / `display_role_label` / `severity_status` / `is_safety_concern` on inactives). Legacy fields (`form`, `is_harmful`) kept for back-compat and documented as deprecated. v1.4.0 adds `image_thumbnail_url` TEXT column (91 cols) and `normalize_upc` field. v1.3.4 added CAERS B8 penalty scoring (159 adverse event signals) and offline UNII cache (172K substances). v1.3.3 expanded interaction rules to 129 (now 145 per `scripts/data/interaction_rules.json` schema 6.1.0). v1.3.2 adds `calories_per_serving` REAL column (90 cols) and two new detail_blob subkeys: `nutrition_detail` (all five macros) and `unmapped_actives` (transparency panel). v1.3.1 bugfixes `dosing_summary`/`servings_per_container` and adds `net_contents_quantity` + `net_contents_unit` for refill-reminder features. Schema now has 91 columns; `build_final_db.py` CORE_COLUMN_COUNT is the runtime source of truth.**
 >
 > **Build coverage gate (v1.6.0):** Products with `unmapped_actives_total > 0` get `verdict=NOT_SCORED` and are excluded from the final DB by the Batch 3 data integrity gate ("product cannot ship without a coherent score"). This realises the audit rule "no product marked as fully scored if required ingredient data was silently dropped." The `unmapped_actives` detail-blob subkey remains present (always emitted, even when empty) as the contract for any pre-gate / partial-coverage future surface; in practice every shipped blob today has `unmapped_actives.total == 0`.
 >
@@ -600,6 +600,45 @@ per concern.
 | `is_safety_concern`  | boolean   | True only when `harmful_severity` is `moderate`/`high`/`critical`. Distinguishes real risks from tracked-for-transparency excipients.            |
 
 **Why `is_harmful` is not enough:** silicon dioxide and microcrystalline cellulose appear in `harmful_additives.json` (so `is_harmful: true`) but with `severity_level: low` because they're *tracked for transparency*, not because they're risks. The contract's `is_safety_concern` flag and `severity_status` enum lift that distinction out of Flutter so consumers read one field instead of cross-computing three.
+
+#### Inactive contract additions (v1.6.1 — 2026-05-12)
+
+Four new fields on every active **and** inactive ingredient blob entry, emitted by the unified inactive-ingredient resolver (`scripts/inactive_ingredient_resolver.py`). They are the single safety + provenance contract for Flutter — replaces the old scattered logic where `severity_status` came from `harmful_additives.json` only and silently missed `banned_recalled_ingredients.json` (Titanium Dioxide, Talc).
+
+| Field             | Type    | Values / Source                                                                                                                                                       |
+| ----------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `is_banned`       | boolean | `True` ONLY when matched in `banned_recalled_ingredients.json` with `status="banned"`. Distinct from `high_risk` / `recalled` / `watchlist` — those use `severity_status` only. |
+| `safety_reason`   | string? | One-line user-facing rationale when `is_safety_concern=true`. Pulled from the source entry's `safety_warning_one_liner` / `safety_summary_one_liner` / `reason` field. `null` otherwise. |
+| `matched_source`  | enum?   | Provenance: `"banned_recalled"` \| `"harmful_additives"` \| `"other_ingredients"` \| `null` (unmatched). Tells Flutter (and the audit script) WHICH source file triggered the classification. |
+| `matched_rule_id` | string? | Provenance: the source entry's `id` (e.g. `"BANNED_ADD_TITANIUM_DIOXIDE"`, `"ADD_SUCRALOSE"`, `"OI_TOCOPHEROL_PRESERVATIVE"`). Lets an audit prove which entry fired. |
+
+**Resolver priority order** (highest authority wins):
+
+1. `banned_recalled_ingredients.json` (skips `match_mode` ∈ {`disabled`, `historical`}).
+2. `harmful_additives.json`.
+3. `other_ingredients.json` (679 excipient role classifications).
+4. Unmatched → `severity_status="n/a"`, all flags `false`, role labels `null`.
+
+**Severity mapping** the resolver applies:
+
+```
+banned_recalled.status = "banned"       → severity_status="critical", is_banned=true,  is_safety_concern=true
+banned_recalled.status = "high_risk"    → severity_status="critical", is_banned=false, is_safety_concern=true
+banned_recalled.status = "recalled"     → severity_status="critical", is_banned=false, is_safety_concern=true
+banned_recalled.status = "watchlist"    → severity_status="informational", is_safety_concern=false
+harmful_additives.severity_level ∈
+  {high, critical, moderate}            → severity_status="critical", is_safety_concern=true
+harmful_additives.severity_level = "low" → severity_status="suppress",  is_safety_concern=false  (transparency)
+other_ingredients (excipient match)     → severity_status="n/a",       is_safety_concern=false
+```
+
+**Matching guarantees**:
+- Match on `standard_name` + `aliases` ONLY. Never on notes/description/mechanism_of_harm/safety_summary text. Prevents the Candurin Silver bleed-through ("titanium dioxide" appears in Candurin's description — must not turn every Candurin entry into a TiO2 match).
+- Normalized exact match (lowercase, whitespace-normalized). No broad fuzzy.
+
+**Audit gate**: `scripts/audit_inactive_safety.py` runs four CI-grade checks (banned-signal violations, notes-only false positives, unknown-role count, source distribution). Exits non-zero on any banned-in-inactive shipping without proper safety signal.
+
+**Active ingredient canonical_id + delivers_markers (also v1.6.1)**: every active ingredient blob entry now also carries `canonical_id` (stable string id — `"vitamin_a"`, `"turmeric"`, `"camu_camu"`) used by interaction rules / stack matching / evidence routing / biomarker scoring / dedup / analytics, plus `delivers_markers` (the marker-via-ingredient evidence routing payload: turmeric → curcumin + PubMed citation). Both fields are derived from the IQM match record in the enriched product; build_final_db reads them at line 2497–2511.
 
 ### Warning entry
 
