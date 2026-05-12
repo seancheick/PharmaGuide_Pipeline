@@ -1,0 +1,711 @@
+{
+  "schema": "audit_active_banned_recalled_parity_v1",
+  "build_dir": "/tmp/pharmaguide_release_build_inactives",
+  "summary": {
+    "banned_recalled_actives_seen": 176,
+    "by_status": {
+      "high_risk": 136,
+      "banned": 40
+    },
+    "by_severity": {
+      "HIGH": 40
+    },
+    "total_findings": 40,
+    "notes_only_false_positives": 0,
+    "distinct_rules_hit": 10
+  },
+  "examples_by_severity": {
+    "HIGH": [
+      {
+        "dsld_id": "175642",
+        "product_name": "Decaf Thermo Igniter 12X",
+        "ingredient": "Garcinia Cambogia fruit extract",
+        "matched_term": "garcinia cambogia fruit extract",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+        "is_banned": false,
+        "is_safety_concern": true,
+        "harmful_severity": null,
+        "problems": [
+          "no_warning_references_ingredient"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "dsld_id": "176168",
+        "product_name": "Decaf Thermo Igniter 12X",
+        "ingredient": "Garcinia cambogia fruit extract",
+        "matched_term": "garcinia cambogia fruit extract",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+        "is_banned": false,
+        "is_safety_concern": true,
+        "harmful_severity": null,
+        "problems": [
+          "no_warning_references_ingredient"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "dsld_id": "182872",
+        "product_name": "Super Citrimax",
+        "ingredient": "Garcinia cambogia fruit extract",
+        "matched_term": "garcinia cambogia fruit extract",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+        "is_banned": false,
+        "is_safety_concern": true,
+        "harmful_severity": null,
+        "problems": [
+          "no_warning_references_ingredient"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "dsld_id": "182874",
+        "product_name": "Slimvance Core Slimming Complex",
+        "ingredient": "Garcinia cambogia fruit extract",
+        "matched_term": "garcinia cambogia fruit extract",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+        "is_banned": false,
+        "is_safety_concern": true,
+        "harmful_severity": null,
+        "problems": [
+          "no_warning_references_ingredient"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "dsld_id": "183545",
+        "product_name": "Decaf Thermo Igniter 12X",
+        "ingredient": "Garcinia Cambogia fruit extract",
+        "matched_term": "garcinia cambogia fruit extract",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+        "is_banned": false,
+        "is_safety_concern": true,
+        "harmful_severity": null,
+        "problems": [
+          "no_warning_references_ingredient"
+        ],
+        "severity": "HIGH"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "dsld_id": "175642",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "176168",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "182872",
+      "product_name": "Super Citrimax",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "182874",
+      "product_name": "Slimvance Core Slimming Complex",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "183545",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "213565",
+      "product_name": "L-Carnitine Complex",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "219891",
+      "product_name": "Slimvance Core Slimming Complex",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "220245",
+      "product_name": "Energy & Metabolism Generator",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "2238",
+      "product_name": "Apple Cider Complete",
+      "ingredient": "Garcinia cambogia Fruit Extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "2239",
+      "product_name": "Apple Cider Vinegar",
+      "ingredient": "Garcinia cambogia Fruit Extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "224772",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "228068",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "228860",
+      "product_name": "Garcinia Cambogia Soft Chew Berry Punch",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "229375",
+      "product_name": "Energy and Metabolism Igniter",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "243129",
+      "product_name": "Apple Cider Complete",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "297218",
+      "product_name": "Energy and Metabolism Igniter",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "304636",
+      "product_name": "Energy & Metabolism Generator",
+      "ingredient": "Garcinia cambogia Fruit Extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "305212",
+      "product_name": "Slimvance",
+      "ingredient": "Garcinia cambogia Fruit Extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "31046",
+      "product_name": "Cyclo-Shred",
+      "ingredient": "Garcinia cambogia Fruit Extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "31147",
+      "product_name": "Re-Comp",
+      "ingredient": "7-Keto-DHEA",
+      "matched_term": "7-keto-dhea",
+      "banned_status": "high_risk",
+      "matched_rule_id": "BANNED_7_KETO_DHEA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315303",
+      "product_name": "Maca Man",
+      "ingredient": "Yohimbine Alkaloids",
+      "matched_term": "yohimbine alkaloids",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315305",
+      "product_name": "Yohimbe 451",
+      "ingredient": "Yohimbe Alkaloids",
+      "matched_term": "yohimbe alkaloids",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315845",
+      "product_name": "Prostate & Virility",
+      "ingredient": "Yohimbine Alkaloids",
+      "matched_term": "yohimbine alkaloids",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "331492",
+      "product_name": "Energy and Metabolism Igniter",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "336011",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Garcinia cambogia Fruit Extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "36248",
+      "product_name": "Control & Reduce Unflavored",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "36250",
+      "product_name": "Control & Reduce Fruit Punch",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "36981",
+      "product_name": "Decaf Thermo Igniter 12x",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "37217",
+      "product_name": "Rare Vanilla",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "37224",
+      "product_name": "Rare Chocolate Fudge",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "47743",
+      "product_name": "Meta-Ignite Inferno",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "47848",
+      "product_name": "Tone & Define",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "57147",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "69526",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Garcinia Cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "69535",
+      "product_name": "Energy & Metabolism Generator",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "69663",
+      "product_name": "Energy & Metabolism Generator",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "74484",
+      "product_name": "L-Carnitine Complex",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "78345",
+      "product_name": "Apple Cider Vinegar",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "78351",
+      "product_name": "Apple Cider Complete",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "79141",
+      "product_name": "Energy & Metabolism Generator",
+      "ingredient": "Garcinia cambogia fruit extract",
+      "matched_term": "garcinia cambogia fruit extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": true,
+      "harmful_severity": null,
+      "problems": [
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    }
+  ],
+  "notes_only_violations": [],
+  "matched_rule_distribution_top_20": {
+    "RISK_YOHIMBE": 82,
+    "RISK_GARCINIA_CAMBOGIA": 47,
+    "BANNED_CBD_US": 30,
+    "BANNED_RED_YEAST_RICE": 9,
+    "BANNED_BITTER_ORANGE": 3,
+    "ADD_CASCARA_SAGRADA": 1,
+    "BANNED_TANSY": 1,
+    "BANNED_7_KETO_DHEA": 1,
+    "ADD_COLLOIDAL_SILVER": 1,
+    "NOOTROPIC_VINPOCETINE": 1
+  }
+}

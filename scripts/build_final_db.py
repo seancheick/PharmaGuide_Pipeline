@@ -412,6 +412,152 @@ def _compute_is_safety_concern(is_harmful: bool, harmful_severity: Optional[str]
     return bool(is_harmful) and sev in ("moderate", "high", "critical")
 
 
+# Banned/recalled status values that escalate an active ingredient to
+# is_safety_concern=True. 'watchlist' is intentionally excluded — it
+# signals "track but do not block" and surfaces as informational only.
+_ACTIVE_BANNED_RECALLED_SAFETY_STATUSES = frozenset({"banned", "high_risk", "recalled"})
+
+
+def _resolve_active_safety_contract(
+    harmful_hit: Optional[Dict],
+    harmful_ref: Dict,
+    ingredient_hits: List[Dict],
+    *,
+    name_terms: Optional[List[str]] = None,
+    banned_recalled_index: Optional[Dict[str, Dict]] = None,
+) -> Dict[str, Any]:
+    """Unified safety contract for one active ingredient. Mirrors the
+    inactive resolver's output shape (is_safety_concern / is_banned /
+    safety_reason / matched_source / matched_rule_id) so Flutter reads
+    the same fields on both active and inactive rows.
+
+    Resolution precedence (highest authority wins):
+      1. ingredient_hits with status='banned'    → is_banned=True, is_safety_concern=True, matched_source='banned_recalled'
+      2. ingredient_hits with status in {high_risk, recalled}
+         → is_safety_concern=True, matched_source='banned_recalled'
+      3. Direct banned_recalled alias lookup on the ingredient name +
+         raw_source_text + standard_name (FALLBACK — covers alias
+         variants that the enricher's contaminant_lookup missed, e.g.
+         "Garcinia Cambogia fruit extract" → alias of `garcinia cambogia`
+         which the enricher's name-match didn't catch).
+      4. harmful_hit with severity in {moderate, high, critical}
+         → is_safety_concern=True, matched_source='harmful_additives'
+      5. ingredient_hits with status='watchlist'
+         → is_safety_concern=False (informational only), matched_source='banned_recalled'
+      6. None of the above → is_safety_concern=False, all provenance fields None.
+
+    Architectural note: this exists because the previous active-path code
+    computed is_safety_concern from harmful_additives ONLY, ignoring
+    banned_recalled. Yohimbe (high_risk × 82 products), Cannabidiol
+    (banned × 30), Garcinia Cambogia (high_risk × 11), Red Yeast Rice
+    (banned × 9), Cascara Sagrada, Bitter Orange, etc. all shipped with
+    is_safety_concern=False on the per-ingredient blob entry — Flutter's
+    Review-Before-Use gate silently missed them. The contaminant hits
+    (sourced from banned_recalled at enrich time) WERE in
+    `safety_hits[]`, just not consulted by the flag derivation. The
+    direct banned_recalled_index fallback (step 3) closes the second
+    gap: alias variants the enricher's name-match missed entirely.
+    """
+    # 1. + 2. — banned_recalled hits via enricher's contaminant_lookup
+    banned_hit = None
+    elevated_hit = None
+    watchlist_hit = None
+    for hit in ingredient_hits or []:
+        if not isinstance(hit, dict):
+            continue
+        s = normalize_text(hit.get("status"))
+        if s == "banned":
+            banned_hit = hit
+            break  # banned is the strongest signal; stop
+        if s in _ACTIVE_BANNED_RECALLED_SAFETY_STATUSES and elevated_hit is None:
+            elevated_hit = hit
+        elif s == "watchlist" and watchlist_hit is None:
+            watchlist_hit = hit
+
+    # 3. — direct banned_recalled alias lookup fallback. Required because
+    # the enricher's contaminant_data is built with a stricter name match
+    # that misses alias variants (e.g. "Garcinia Cambogia fruit extract"
+    # — `garcinia cambogia` is an alias of RISK_GARCINIA_CAMBOGIA but the
+    # enricher didn't synthesize a contaminant_hit for the extract form).
+    # We replicate the inactive resolver's strict standard_name+aliases
+    # lookup so the active path has the same alias coverage.
+    if banned_hit is None and elevated_hit is None and banned_recalled_index is not None:
+        for term in (name_terms or []):
+            entry = banned_recalled_index.get(term)
+            if not entry:
+                continue
+            s = (entry.get("status") or "").strip().lower()
+            if s == "banned":
+                banned_hit = entry
+                break
+            if s in _ACTIVE_BANNED_RECALLED_SAFETY_STATUSES and elevated_hit is None:
+                elevated_hit = entry
+            elif s == "watchlist" and watchlist_hit is None:
+                watchlist_hit = entry
+
+    if banned_hit is not None:
+        return {
+            "is_safety_concern": True,
+            "is_banned": True,
+            "safety_reason": safe_str(
+                banned_hit.get("reason")
+                or banned_hit.get("safety_warning_one_liner")
+                or banned_hit.get("safety_warning")
+            ) or None,
+            "matched_source": "banned_recalled",
+            "matched_rule_id": safe_str(banned_hit.get("id") or banned_hit.get("rule_id")) or None,
+        }
+    if elevated_hit is not None:
+        return {
+            "is_safety_concern": True,
+            "is_banned": False,
+            "safety_reason": safe_str(
+                elevated_hit.get("reason")
+                or elevated_hit.get("safety_warning_one_liner")
+                or elevated_hit.get("safety_warning")
+            ) or None,
+            "matched_source": "banned_recalled",
+            "matched_rule_id": safe_str(elevated_hit.get("id") or elevated_hit.get("rule_id")) or None,
+        }
+    # 3. — harmful_additives moderate+
+    if harmful_hit is not None:
+        sev = (harmful_hit.get("severity_level") or "").strip().lower()
+        if sev in ("moderate", "high", "critical"):
+            reason = safe_str(
+                harmful_ref.get("safety_summary_one_liner")
+                or harmful_ref.get("safety_summary")
+                or harmful_hit.get("safety_summary_one_liner")
+                or harmful_hit.get("mechanism_of_harm")
+            )
+            return {
+                "is_safety_concern": True,
+                "is_banned": False,
+                "safety_reason": reason or None,
+                "matched_source": "harmful_additives",
+                "matched_rule_id": safe_str(harmful_hit.get("id") or harmful_ref.get("id")) or None,
+            }
+    # 4. — watchlist informational only
+    if watchlist_hit is not None:
+        return {
+            "is_safety_concern": False,
+            "is_banned": False,
+            "safety_reason": safe_str(
+                watchlist_hit.get("reason")
+                or watchlist_hit.get("safety_warning_one_liner")
+            ) or None,
+            "matched_source": "banned_recalled",
+            "matched_rule_id": safe_str(watchlist_hit.get("id") or watchlist_hit.get("rule_id")) or None,
+        }
+    # 5. — nothing
+    return {
+        "is_safety_concern": False,
+        "is_banned": False,
+        "safety_reason": None,
+        "matched_source": None,
+        "matched_rule_id": None,
+    }
+
+
 def normalize_text(value: Any) -> str:
     """Normalize free text for tolerant cross-structure matching."""
     return safe_str(value).lower()
@@ -734,6 +880,51 @@ def _get_shared_inactive_resolver() -> InactiveIngredientResolver:
     if _SHARED_INACTIVE_RESOLVER is None:
         _SHARED_INACTIVE_RESOLVER = InactiveIngredientResolver()
     return _SHARED_INACTIVE_RESOLVER
+
+
+_ACTIVE_BANNED_RECALLED_INDEX: Optional[Dict[str, Dict]] = None
+
+
+def _get_active_banned_recalled_index() -> Dict[str, Dict]:
+    """Lazily build a normalized alias → banned_recalled-entry index for
+    the active-ingredient path. Shares the inactive resolver's
+    filter-and-normalize rules so active and inactive paths see the
+    same set of banned/high_risk/recalled/watchlist entries.
+
+    Reuses the inactive resolver's already-loaded entries (skipping
+    match_mode in {disabled, historical}) so we don't re-parse the
+    file or implement a second normalization.
+    """
+    global _ACTIVE_BANNED_RECALLED_INDEX
+    if _ACTIVE_BANNED_RECALLED_INDEX is None:
+        resolver = _get_shared_inactive_resolver()
+        idx: Dict[str, Dict] = {}
+        # Import here to avoid a circular import at module load.
+        from inactive_ingredient_resolver import _normalize as _ir_normalize
+        for entry in resolver.iter_banned_recalled_entries_for_audit():
+            for n in [entry.get("standard_name")] + (entry.get("aliases") or []):
+                if isinstance(n, str):
+                    t = _ir_normalize(n)
+                    if t and t not in idx:
+                        idx[t] = entry
+        _ACTIVE_BANNED_RECALLED_INDEX = idx
+    return _ACTIVE_BANNED_RECALLED_INDEX
+
+
+def _active_banned_recall_terms(*values: str) -> List[str]:
+    """Normalize a small list of name candidates for direct alias lookup
+    against the active banned_recalled index. Uses the same normalizer
+    the inactive resolver uses, so a name that resolves on the inactive
+    path resolves identically here."""
+    from inactive_ingredient_resolver import _normalize as _ir_normalize
+    seen: set = set()
+    out: List[str] = []
+    for v in values:
+        n = _ir_normalize(v)
+        if n and n not in seen:
+            seen.add(n)
+            out.append(n)
+    return out
 
 
 def extract_identifiers(entry: Dict) -> Optional[Dict]:
@@ -2640,21 +2831,31 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # attached to the IQM match record. Always emit as a list (possibly
             # empty) so Flutter consumers can iterate without null-checks.
             "delivers_markers": safe_list(m.get("delivers_markers")),
-            # `is_safety_concern` is the semantic safety flag (true only
-            # when severity is moderate/high/critical). Replaced the
-            # confused `is_harmful` provenance flag in v1.5.x.
+            # `is_safety_concern` is the semantic safety flag. Computed by
+            # the unified safety contract resolver which consults BOTH
+            # banned_recalled (ingredient_hits) AND harmful_additives
+            # (harmful_hit). The previous code only checked harmful_hit
+            # — that missed Yohimbe / Cannabidiol / Garcinia Cambogia /
+            # Red Yeast Rice and other banned_recalled-only flags. See
+            # `_resolve_active_safety_contract` docstring for precedence.
             "harmful_severity": harmful_hit.get("severity_level") if harmful_hit else None,
-            "is_safety_concern": _compute_is_safety_concern(
-                bool(harmful_hit),
-                harmful_hit.get("severity_level") if harmful_hit else None,
-            ),
+            **(lambda c: {
+                "is_safety_concern": c["is_safety_concern"],
+                "is_banned":         c["is_banned"],
+                "safety_reason":     c["safety_reason"],
+                "matched_source":    c["matched_source"],
+                "matched_rule_id":   c["matched_rule_id"],
+            })(_resolve_active_safety_contract(
+                harmful_hit, harmful_ref, ingredient_hits,
+                name_terms=_active_banned_recall_terms(raw, name, standard_name),
+                banned_recalled_index=_get_active_banned_recalled_index(),
+            )),
             "harmful_notes": (
                 safe_str(harmful_ref.get("mechanism_of_harm"))
                 or safe_str(harmful_ref.get("notes"))
                 or safe_str(harmful_hit.get("classification_evidence"))
                 or safe_str(harmful_hit.get("category"))
             ) if harmful_hit else None,
-            "is_banned": any(normalize_text(hit.get("status")) == "banned" for hit in ingredient_hits),
             "is_allergen": bool(allergen_hits),
             "identifiers": extract_identifiers(
                 iqm_index.get(safe_str(m.get("parent_key") or ing.get("normalized_key")), {})

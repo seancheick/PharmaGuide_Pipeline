@@ -1,0 +1,2293 @@
+{
+  "schema": "audit_active_banned_recalled_parity_v1",
+  "build_dir": "/tmp/pharmaguide_release_build_inactives",
+  "summary": {
+    "banned_recalled_actives_seen": 140,
+    "by_status": {
+      "high_risk": 100,
+      "banned": 40
+    },
+    "by_severity": {
+      "HIGH": 100,
+      "BLOCKER": 40
+    },
+    "total_findings": 140,
+    "notes_only_false_positives": 0,
+    "distinct_rules_hit": 10
+  },
+  "examples_by_severity": {
+    "HIGH": [
+      {
+        "dsld_id": "11525",
+        "product_name": "Staminol",
+        "ingredient": "Yohimbe bark extract",
+        "matched_term": "yohimbe",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_YOHIMBE",
+        "is_banned": false,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "dsld_id": "1639",
+        "product_name": "Staminol Ultra",
+        "ingredient": "Yohimbe bark extract",
+        "matched_term": "yohimbe",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_YOHIMBE",
+        "is_banned": false,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "dsld_id": "1640",
+        "product_name": "Staminol Rapid Surge",
+        "ingredient": "Yohimbe bark extract",
+        "matched_term": "yohimbe",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_YOHIMBE",
+        "is_banned": false,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "dsld_id": "182966",
+        "product_name": "Staminol Ultra",
+        "ingredient": "Yohimbe bark extract",
+        "matched_term": "yohimbe",
+        "banned_status": "high_risk",
+        "matched_rule_id": "RISK_YOHIMBE",
+        "is_banned": false,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "HIGH"
+      },
+      {
+        "dsld_id": "18313",
+        "product_name": "Cascara Sagrada",
+        "ingredient": "Cascara Sagrada bark powder",
+        "matched_term": "cascara sagrada",
+        "banned_status": "high_risk",
+        "matched_rule_id": "ADD_CASCARA_SAGRADA",
+        "is_banned": false,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "HIGH"
+      }
+    ],
+    "BLOCKER": [
+      {
+        "dsld_id": "222758",
+        "product_name": "CBD 10 mg Softgels",
+        "ingredient": "Cannabidiol",
+        "matched_term": "cannabidiol",
+        "banned_status": "banned",
+        "matched_rule_id": "BANNED_CBD_US",
+        "is_banned": true,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "BLOCKER"
+      },
+      {
+        "dsld_id": "222763",
+        "product_name": "Inflammatory Response CBD 10 mg",
+        "ingredient": "Cannabidiol",
+        "matched_term": "cannabidiol",
+        "banned_status": "banned",
+        "matched_rule_id": "BANNED_CBD_US",
+        "is_banned": true,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "BLOCKER"
+      },
+      {
+        "dsld_id": "222770",
+        "product_name": "CBD+ Relax Softgels",
+        "ingredient": "Cannabidiol",
+        "matched_term": "cannabidiol",
+        "banned_status": "banned",
+        "matched_rule_id": "BANNED_CBD_US",
+        "is_banned": true,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "BLOCKER"
+      },
+      {
+        "dsld_id": "222788",
+        "product_name": "CBD 30 mg Liquid Drops Chocolate Mint",
+        "ingredient": "Cannabidiol",
+        "matched_term": "cannabidiol",
+        "banned_status": "banned",
+        "matched_rule_id": "BANNED_CBD_US",
+        "is_banned": true,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "BLOCKER"
+      },
+      {
+        "dsld_id": "222844",
+        "product_name": "CBD+ Inflammatory Response Liquid Drops",
+        "ingredient": "Cannabidiol",
+        "matched_term": "cannabidiol",
+        "banned_status": "banned",
+        "matched_rule_id": "BANNED_CBD_US",
+        "is_banned": true,
+        "is_safety_concern": false,
+        "harmful_severity": null,
+        "problems": [
+          "is_safety_concern_missing"
+        ],
+        "severity": "BLOCKER"
+      }
+    ]
+  },
+  "findings": [
+    {
+      "dsld_id": "11525",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "1639",
+      "product_name": "Staminol Ultra",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "1640",
+      "product_name": "Staminol Rapid Surge",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "182966",
+      "product_name": "Staminol Ultra",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "18313",
+      "product_name": "Cascara Sagrada",
+      "ingredient": "Cascara Sagrada bark powder",
+      "matched_term": "cascara sagrada",
+      "banned_status": "high_risk",
+      "matched_rule_id": "ADD_CASCARA_SAGRADA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "18473",
+      "product_name": "Amplified Muscle Igniter 4X",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "18477",
+      "product_name": "Amplified Maxertion N.O.",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "204616",
+      "product_name": "Liver Bitters Detox Spray",
+      "ingredient": "organic Bitter Orange (fruit) extract",
+      "matched_term": "bitter orange (synephrine",
+      "banned_status": "high_risk",
+      "matched_rule_id": "BANNED_BITTER_ORANGE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "206914",
+      "product_name": "Men's Multivitamin",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "206917",
+      "product_name": "Men's Multivitamin",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "207182",
+      "product_name": "Ultra Mega Green Men's",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "211350",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "213586",
+      "product_name": "Maca Man",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "213590",
+      "product_name": "Staminol Ultra",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "218984",
+      "product_name": "Prostate & Virility",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "219039",
+      "product_name": "Energy & Metabolism Vanilla",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "219902",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "220179",
+      "product_name": "Earth Genius Men's Multivitamin",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "221095",
+      "product_name": "Energy & Metabolism Chocolate",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "2219",
+      "product_name": "Ravage Grape",
+      "ingredient": "Yohimbe powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "2223",
+      "product_name": "Refine",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "222758",
+      "product_name": "CBD 10 mg Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222763",
+      "product_name": "Inflammatory Response CBD 10 mg",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222770",
+      "product_name": "CBD+ Relax Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222788",
+      "product_name": "CBD 30 mg Liquid Drops Chocolate Mint",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222844",
+      "product_name": "CBD+ Inflammatory Response Liquid Drops",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222850",
+      "product_name": "CBD+ Inflammatory Response Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222857",
+      "product_name": "CBD+ Focus Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222862",
+      "product_name": "Women CBD 10 mg",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222867",
+      "product_name": "Stress Relief CBD 10 mg",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222869",
+      "product_name": "Men CBD 10 mg",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222877",
+      "product_name": "Immune CBD 10 mg",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222880",
+      "product_name": "CBD 50 mg Liquid Drops Peppermint",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222881",
+      "product_name": "CBD 10 mg Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222895",
+      "product_name": "CBD 30 mg Liquid Drops Peppermint",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222896",
+      "product_name": "CBD 50 mg Liquid Drops Chocolate Mint",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222902",
+      "product_name": "Grass Fed Collagen CBD Unflavored",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222904",
+      "product_name": "CBD 30 mg Spray Chocolate Mint",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222909",
+      "product_name": "CBD 10 mg Liquid Drops Chocolate Mint",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222910",
+      "product_name": "CBD 10 mg Liquid Drops Peppermint",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "222911",
+      "product_name": "CBD 30 mg Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "223429",
+      "product_name": "Omega LDL",
+      "ingredient": "Red Yeast Rice powder",
+      "matched_term": "red yeast rice (monacolin k",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "228119",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "232878",
+      "product_name": "CBD+ Sleep",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "232887",
+      "product_name": "CBD+ Sleep",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "232905",
+      "product_name": "CBD+ Stress Relief",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "232909",
+      "product_name": "CBD+ Youthful Skin",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "242673",
+      "product_name": "CBD+ 10 mg Berry Spice Flavor",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "243499",
+      "product_name": "Staminol Ultra",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "24676",
+      "product_name": "Best Red Yeast Rice 600 mg",
+      "ingredient": "Organic Red Yeast Rice",
+      "matched_term": "red yeast rice (monacolin k",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "24678",
+      "product_name": "Best Red Yeast Rice 1200",
+      "ingredient": "Red Yeast Rice",
+      "matched_term": "red yeast rice",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "24681",
+      "product_name": "Best Red Yeast Rice 1200 With CoQ10",
+      "ingredient": "Red Yeast Rice",
+      "matched_term": "red yeast rice",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "25216",
+      "product_name": "Best Red Yeast Rice 600 With CoQ10",
+      "ingredient": "Organic Red Yeast Rice",
+      "matched_term": "red yeast rice (monacolin k",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "25217",
+      "product_name": "Best Red Yeast Rice 1200 With CoQ10",
+      "ingredient": "Red Yeast Rice",
+      "matched_term": "red yeast rice",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "25219",
+      "product_name": "Best Red Yeast Rice With CoQ10 And Cholesstrinol",
+      "ingredient": "Red Yeast Rice",
+      "matched_term": "red yeast rice",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "25593",
+      "product_name": "Amplified Maxertion N.0.",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "272454",
+      "product_name": "DTF Dynamic Testosterone Formula",
+      "ingredient": "Sphaeranthus indicus flower extract",
+      "matched_term": "tansy",
+      "banned_status": "high_risk",
+      "matched_rule_id": "BANNED_TANSY",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "27343",
+      "product_name": "Amplified N.O. Loaded V2 Watermelon",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "27346",
+      "product_name": "Amplified N.O. Loaded V2 Fruit Punch",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "274448",
+      "product_name": "Liver Bitters Detox Spray",
+      "ingredient": "organic Bitter Orange (fruit) extract",
+      "matched_term": "bitter orange (synephrine",
+      "banned_status": "high_risk",
+      "matched_rule_id": "BANNED_BITTER_ORANGE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "27462",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "278026",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "285635",
+      "product_name": "Liver Bitters Detox Spray",
+      "ingredient": "organic Bitter Orange (fruit) extract",
+      "matched_term": "bitter orange (synephrine",
+      "banned_status": "high_risk",
+      "matched_rule_id": "BANNED_BITTER_ORANGE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "297650",
+      "product_name": "CBD 30 mg Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "297651",
+      "product_name": "CBD+ Focus Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "297652",
+      "product_name": "CBD+ Inflammatory Response Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "297653",
+      "product_name": "CBD+ Relax Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "297654",
+      "product_name": "CBD+ Sleep Softgels",
+      "ingredient": "Cannabidiol",
+      "matched_term": "cannabidiol",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_CBD_US",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "304639",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "304644",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "31147",
+      "product_name": "Re-Comp",
+      "ingredient": "Garcinia Cambogia Rind Extract",
+      "matched_term": "garcinia cambogia rind extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "31147",
+      "product_name": "Re-Comp",
+      "ingredient": "7-Keto-DHEA",
+      "matched_term": "7-keto-dhea",
+      "banned_status": "high_risk",
+      "matched_rule_id": "BANNED_7_KETO_DHEA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing",
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315303",
+      "product_name": "Maca Man",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315303",
+      "product_name": "Maca Man",
+      "ingredient": "Yohimbine Alkaloids",
+      "matched_term": "yohimbine alkaloids",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing",
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315304",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315305",
+      "product_name": "Yohimbe 451",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315305",
+      "product_name": "Yohimbe 451",
+      "ingredient": "Yohimbe Alkaloids",
+      "matched_term": "yohimbe alkaloids",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing",
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315814",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315845",
+      "product_name": "Prostate & Virility",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "315845",
+      "product_name": "Prostate & Virility",
+      "ingredient": "Yohimbine Alkaloids",
+      "matched_term": "yohimbine alkaloids",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing",
+        "no_warning_references_ingredient"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "3176",
+      "product_name": "Liquid Multi Colloidal Minerals",
+      "ingredient": "Silver",
+      "matched_term": "silver",
+      "banned_status": "high_risk",
+      "matched_rule_id": "ADD_COLLOIDAL_SILVER",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "33199",
+      "product_name": "Ravage Fruit Punch",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "33459",
+      "product_name": "N.O. (Nitric Oxide) Formula",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "33552",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "336011",
+      "product_name": "Decaf Thermo Igniter 12X",
+      "ingredient": "Hydroxycitric Acid",
+      "matched_term": "hydroxycitric acid",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "33607",
+      "product_name": "DHEA+ Prostate & Virility Formula",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "33686",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "36192",
+      "product_name": "DHEA + Prostate & Virility Formula",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "36263",
+      "product_name": "Healthy Metabolism Soft Chew Pink Lemonade",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "42175",
+      "product_name": "Ravage Grape",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "4255",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "4282",
+      "product_name": "Thermo Burst Hardcore",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "4290",
+      "product_name": "Amplified N.O. Loaded Fruit Punch",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "44121",
+      "product_name": "Oceans 3 Better Brain",
+      "ingredient": "Vinpocetine",
+      "matched_term": "vinpocetine",
+      "banned_status": "banned",
+      "matched_rule_id": "NOOTROPIC_VINPOCETINE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "47550",
+      "product_name": "Ultra Mega Green Men's Multivitamin",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "49176",
+      "product_name": "Ultra Mega Green Men's",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "49199",
+      "product_name": "Ultra Mega Green Men's Multivitamin",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "5817",
+      "product_name": "Amplified Muscle Igniter 4X",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "5821",
+      "product_name": "Yohimbe 451",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "5861",
+      "product_name": "Amplified N.O. Loaded Blue Raspberry",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "5863",
+      "product_name": "Amplified Muscle Igniter 4X Tropical Punch",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "5873",
+      "product_name": "Amplified Maxertion N.O.",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "5878",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "60307",
+      "product_name": "Red Yeast Rice 600 mg",
+      "ingredient": "Red Yeast Rice powder",
+      "matched_term": "red yeast rice (monacolin k",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "60310",
+      "product_name": "Red Yeast Rice 600 mg",
+      "ingredient": "Red Yeast Rice powder",
+      "matched_term": "red yeast rice (monacolin k",
+      "banned_status": "banned",
+      "matched_rule_id": "BANNED_RED_YEAST_RICE",
+      "is_banned": true,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "BLOCKER"
+    },
+    {
+      "dsld_id": "63772",
+      "product_name": "N.O. Push",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "63913",
+      "product_name": "N.O. Push",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "63919",
+      "product_name": "Ravage Fruit Punch",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "63920",
+      "product_name": "Ravage Grape",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "63921",
+      "product_name": "Ravage Cherry Limeade",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "63922",
+      "product_name": "Ravage Fruit Punch",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "63973",
+      "product_name": "Ravage Lemon Lime",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "63974",
+      "product_name": "Ravage Raspberry Twist",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "63975",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "66427",
+      "product_name": "DHEA Prostate & Virility",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "66785",
+      "product_name": "Men's",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "67030",
+      "product_name": "Ultra Mega Green Men's Energy & Metabolism",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "68885",
+      "product_name": "Staminol Ultra",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "68958",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "69270",
+      "product_name": "DHEA Prostate & Virility",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "69310",
+      "product_name": "Prostate & Virility",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "69538",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "69759",
+      "product_name": "Energy & Metabolism Vanilla",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "69770",
+      "product_name": "Energy & Metabolism Chocolate",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "70017",
+      "product_name": "Energy & Metabolism Chocolate",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "70018",
+      "product_name": "Energy & Metabolism Vanilla",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "703",
+      "product_name": "Yohimbe",
+      "ingredient": "Yohimbe Bark Extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "70584",
+      "product_name": "Ultra Mega Green Men's Multivitamin",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "74603",
+      "product_name": "Amplified N.O. Loaded V2 Blue Raspberry",
+      "ingredient": "Yohimbe bark powder",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "74632",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "74634",
+      "product_name": "Yohimbe 451",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "74661",
+      "product_name": "Yohimbe Extract 450 mg",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "74777",
+      "product_name": "Energy & Metabolism Vanilla",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "75016",
+      "product_name": "Ultra Mega Green Men's Multivitamin",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "75129",
+      "product_name": "Ultra Mega Green Men's",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "75571",
+      "product_name": "Energy & Metabolism Chocolate",
+      "ingredient": "Garcinia cambogia extract",
+      "matched_term": "garcinia cambogia extract",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_GARCINIA_CAMBOGIA",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "79152",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "79722",
+      "product_name": "Staminol Ultra",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "82384",
+      "product_name": "Sexual Health",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "dsld_id": "964",
+      "product_name": "Staminol",
+      "ingredient": "Yohimbe bark extract",
+      "matched_term": "yohimbe",
+      "banned_status": "high_risk",
+      "matched_rule_id": "RISK_YOHIMBE",
+      "is_banned": false,
+      "is_safety_concern": false,
+      "harmful_severity": null,
+      "problems": [
+        "is_safety_concern_missing"
+      ],
+      "severity": "HIGH"
+    }
+  ],
+  "notes_only_violations": [],
+  "matched_rule_distribution_top_20": {
+    "RISK_YOHIMBE": 82,
+    "BANNED_CBD_US": 30,
+    "RISK_GARCINIA_CAMBOGIA": 11,
+    "BANNED_RED_YEAST_RICE": 9,
+    "BANNED_BITTER_ORANGE": 3,
+    "ADD_CASCARA_SAGRADA": 1,
+    "BANNED_TANSY": 1,
+    "BANNED_7_KETO_DHEA": 1,
+    "ADD_COLLOIDAL_SILVER": 1,
+    "NOOTROPIC_VINPOCETINE": 1
+  }
+}
