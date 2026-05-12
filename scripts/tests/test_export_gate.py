@@ -175,6 +175,7 @@ COLUMNS = [
     "primary_category", "secondary_categories",
     "contains_omega3", "contains_probiotics", "contains_collagen",
     "contains_adaptogens", "contains_nootropics", "key_ingredient_tags",
+    "ingredients_text",  # 2026-05-12: searchable ingredient FTS column
     "goal_matches", "goal_match_confidence",
     "dosing_summary", "servings_per_container",
     "net_contents_quantity", "net_contents_unit",

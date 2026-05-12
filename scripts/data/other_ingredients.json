@@ -7836,9 +7836,13 @@
       "aliases": [
         "100% bovine gelatin",
         "animal gelatin",
+        "Bovine Gelatin",
+        "bovine gelatin",
         "bovine gelatin capsule",
         "Bovine-derived Gelatin",
         "BSE-free Beef Gelatin",
+        "Fish Gelatin",
+        "fish gelatin",
         "fish gelatin capsule",
         "gel cap",
         "gelatin",
@@ -23781,6 +23785,72 @@
       "allergen": null,
       "last_updated": "2026-05-12",
       "added_by": "inactive_ingredient_resolver_2026_05_12"
+    },
+    {
+      "id": "PII_TRICALCIUM_PHOSPHATE",
+      "standard_name": "Tricalcium Phosphate",
+      "aliases": [
+        "Tricalcium Phosphate",
+        "tricalcium phosphate",
+        "tribasic calcium phosphate",
+        "calcium phosphate (tribasic)",
+        "TCP",
+        "E341(iii)",
+        "E341iii",
+        "Ca3(PO4)2",
+        "Tri-Calcium Phosphate"
+      ],
+      "category": "anti_caking_agent",
+      "is_additive": true,
+      "additive_type": "anti_caking_agent",
+      "functional_roles": [
+        "anti_caking_agent",
+        "filler"
+      ],
+      "common_uses": [
+        "anti-caking agent / flow agent for powders and tableted products (FDA GRAS 21 CFR §184.1722)",
+        "bulking agent in tablets",
+        "calcium fortification source (when used as an active ingredient — covered by IQM, not this entry)"
+      ],
+      "notes": "FDA GRAS anti-caking agent and tablet bulking agent. When listed in the Supplement Facts panel as an active calcium source, the active scoring path handles it via the IQM. This entry covers the excipient case only.",
+      "external_ids": {
+        "cas": "7758-87-4",
+        "pubchem_cid": "24456"
+      },
+      "allergen": false,
+      "last_updated": "2026-05-12",
+      "added_by": "unknown_role_quick_wins_2026_05_12"
+    },
+    {
+      "id": "PII_POLYGLYCEROL_POLYRICINOLEATE",
+      "standard_name": "Polyglycerol Polyricinoleate (E476)",
+      "aliases": [
+        "Polyglycerol Polyricinoleate",
+        "polyglycerol polyricinoleate",
+        "PGPR",
+        "E476",
+        "polyricinoleate",
+        "polyglycerol esters of polycondensed fatty acids from castor oil",
+        "Glycerin Esters of polycondensed castor oil"
+      ],
+      "category": "emulsifier",
+      "is_additive": true,
+      "additive_type": "emulsifier",
+      "functional_roles": [
+        "emulsifier",
+        "surfactant"
+      ],
+      "common_uses": [
+        "emulsifier / surfactant in softgel formulations and oil-based suspensions (FDA GRAS 21 CFR §172.854)",
+        "viscosity reducer in chocolate / oil-based confectionery (food use, included for breadth)"
+      ],
+      "notes": "PGPR is the FDA-GRAS emulsifier derived from castor oil polyglycerol esters; commonly used in softgels to suspend oil-soluble actives. Safe at supplement dose levels. ADI 25 mg/kg bw per JECFA 2017.",
+      "external_ids": {
+        "cas": "29894-35-7"
+      },
+      "allergen": false,
+      "last_updated": "2026-05-12",
+      "added_by": "unknown_role_quick_wins_2026_05_12"
     }
   ]
 }

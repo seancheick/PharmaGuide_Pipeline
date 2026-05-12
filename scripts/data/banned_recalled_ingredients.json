@@ -1209,6 +1209,158 @@
       "inactive_policy_reason": "Pro-hormone; controlled substance precursor in CA/UK/AU"
     },
     {
+      "id": "BANNED_DHEA",
+      "standard_name": "Dehydroepiandrosterone (DHEA)",
+      "aliases": [
+        "dhea",
+        "DHEA",
+        "dehydroepiandrosterone",
+        "Dehydroepiandrosterone",
+        "5-dehydroepiandrosterone",
+        "prasterone",
+        "Prasterone",
+        "micronized dhea",
+        "Micronized DHEA",
+        "dhea-s",
+        "DHEA-S",
+        "dhea sulfate",
+        "DHEA Sulfate",
+        "dehydroepiandrosterone sulfate",
+        "DHEA-Sulfate",
+        "androstenolone",
+        "5-androsten-3beta-ol-17-one"
+      ],
+      "reason": "DHEA is an endogenous adrenal steroid hormone and direct precursor to testosterone and estradiol. Classified as a controlled substance / prescription-only in Canada (Schedule IV), UK (POM), Australia (S4), and most EU countries. Banned by WADA (S1.1b Anabolic Agents). NIH ODS warns of androgenic / estrogenic side effects (acne, hair changes, mood changes, lipid alterations) and theoretical promotion of hormone-sensitive cancers (breast, prostate, ovarian). NIH LiverTox lists DHEA among supplements with mild idiosyncratic hepatotoxicity reports. Legal in the US only because DSHEA 1994 grandfathered it; no FDA review affirmed safety.",
+      "status": "high_risk",
+      "class_tags": [
+        "steroid_hormone",
+        "controlled_substance",
+        "hormonal",
+        "wada_banned"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "normalized",
+        "confidence": "high",
+        "negative_match_terms": [
+          "7-keto",
+          "7-keto dhea",
+          "7 keto dhea",
+          "7-oxo-dhea",
+          "7-oxo dhea",
+          "7-oxodehydroepiandrosterone",
+          "dha",
+          "docosahexaenoic acid",
+          "docosahexaenoic",
+          "epa/dha",
+          "epa+dha",
+          "omega-3 dha"
+        ]
+      },
+      "entity_type": "ingredient",
+      "match_mode": "active",
+      "legal_status_enum": "restricted",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "legal",
+          "source": {
+            "type": "regulatory_classification",
+            "citation": "Legal as dietary supplement under DSHEA 1994 (grandfathered). FDA has issued multiple warning letters to manufacturers for therapeutic claims, but DHEA itself is not banned.",
+            "accessed_date": "2026-05-12"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-12"
+        },
+        {
+          "region": "Canada",
+          "level": "federal",
+          "status": "prescription_only",
+          "source": {
+            "type": "national_legislation",
+            "citation": "Controlled Drugs and Substances Act — Schedule IV. Sale without prescription is illegal.",
+            "accessed_date": "2026-05-12"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "CA",
+          "last_verified_date": "2026-05-12"
+        },
+        {
+          "region": "UK",
+          "level": "federal",
+          "status": "prescription_only",
+          "source": {
+            "type": "national_legislation",
+            "citation": "Classified as POM under the Medicines Act. Sale as dietary supplement is illegal.",
+            "accessed_date": "2026-05-12"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "GB",
+          "last_verified_date": "2026-05-12"
+        },
+        {
+          "region": "Australia",
+          "level": "federal",
+          "status": "prescription_only",
+          "source": {
+            "type": "national_legislation",
+            "citation": "TGA Schedule 4 — prescription-only medicine. Sale as dietary supplement is illegal.",
+            "accessed_date": "2026-05-12"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "AU",
+          "last_verified_date": "2026-05-12"
+        },
+        {
+          "region": "WADA",
+          "level": "international",
+          "status": "banned",
+          "source": {
+            "type": "anti_doping_code",
+            "citation": "WADA Prohibited List 2026 — S1.1b Anabolic Agents (other anabolic agents). Prohibited at all times in competition and out of competition.",
+            "accessed_date": "2026-05-12"
+          },
+          "jurisdiction_type": "international_body",
+          "jurisdiction_code": "WADA",
+          "last_verified_date": "2026-05-12"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "regulatory_agency",
+          "agency": "NIH ODS",
+          "title": "Dehydroepiandrosterone (DHEA) Fact Sheet for Health Professionals",
+          "url": "https://ods.od.nih.gov/factsheets/DHEA-HealthProfessional/",
+          "accessed_date": "2026-05-12"
+        },
+        {
+          "type": "regulatory_agency",
+          "agency": "WADA",
+          "title": "WADA Prohibited List 2026 — Anabolic Agents",
+          "accessed_date": "2026-05-12"
+        },
+        {
+          "type": "clinical_database",
+          "agency": "NIH LiverTox",
+          "title": "LiverTox: DHEA",
+          "url": "https://www.ncbi.nlm.nih.gov/books/NBK548725/",
+          "accessed_date": "2026-05-12"
+        }
+      ],
+      "cui": "C0011260",
+      "external_ids": {},
+      "ban_context": "wada_prohibited_and_rx_only_outside_us",
+      "safety_warning": "An adrenal steroid hormone and precursor to testosterone and estradiol. Banned by WADA and classified as prescription-only in Canada, UK, Australia, and most EU countries. May cause acne, hair changes, mood changes, lipid alterations, and is contraindicated in hormone-sensitive cancers. Consult a doctor before use.",
+      "safety_warning_one_liner": "Steroid hormone; WADA-banned, Rx-only abroad. Consult a doctor.",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Endogenous steroid hormone — never an excipient; appearing in inactives is a labeling defect"
+    },
+    {
       "id": "BANNED_ADD_ANATABINE",
       "standard_name": "Anatabine",
       "aliases": [

@@ -1120,6 +1120,13 @@ CREATE TABLE IF NOT EXISTS products_core (
     contains_nootropics           INTEGER DEFAULT 0,
     key_ingredient_tags           TEXT,  -- JSON array: top 5 priority ingredients
 
+    -- 2026-05-12: searchable ingredient text. Aggregates active + inactive
+    -- ingredient display labels into a single space-separated string so
+    -- products_fts can match by ingredient name (e.g. "Capsimax" finds
+    -- products listing it as an active even when product_name + brand_name
+    -- don't carry the brand). Indexed via products_fts below.
+    ingredients_text              TEXT,
+
     -- ====================================================================
     -- Enhancement 4: Goal Matching Preview
     -- ====================================================================
@@ -1191,7 +1198,7 @@ CREATE INDEX IF NOT EXISTS idx_core_contains_nootropics ON products_core(contain
 
 FTS_SQL = """
 CREATE VIRTUAL TABLE IF NOT EXISTS products_fts USING fts5(
-    product_name, brand_name,
+    product_name, brand_name, ingredients_text,
     content='products_core', content_rowid='rowid',
     tokenize='porter unicode61'
 );
@@ -4640,6 +4647,27 @@ def build_core_row(
     allergen_summ = generate_allergen_summary(enriched)
     non_gmo_audit = derive_non_gmo_audit(enriched)
 
+    # 2026-05-12 — searchable ingredient text. Aggregate all ingredient
+    # display names (active + inactive) so products_fts can match by
+    # ingredient. Use a set to dedup, sort for deterministic builds.
+    ing_tokens: set[str] = set()
+    iqd = safe_dict(enriched.get("ingredient_quality_data"))
+    for ing in safe_list(iqd.get("ingredients_scorable")) or safe_list(iqd.get("ingredients")):
+        if isinstance(ing, dict):
+            for k in ("standard_name", "matched_name", "name", "raw_source_text",
+                      "canonical_id", "display_label"):
+                v = ing.get(k)
+                if isinstance(v, str) and v.strip() and v.strip().lower() not in {"unknown", "n/a", "none"}:
+                    ing_tokens.add(v.strip())
+    # Inactives — pull from canonical inactiveIngredients list (label-fidelity)
+    for ing in safe_list(enriched.get("inactiveIngredients")):
+        if isinstance(ing, dict):
+            for k in ("standardName", "name", "raw_source_text"):
+                v = ing.get(k)
+                if isinstance(v, str) and v.strip():
+                    ing_tokens.add(v.strip())
+    ingredients_text = " ".join(sorted(ing_tokens))
+
     return (
         safe_str(enriched.get("dsld_id")),
         safe_str(enriched.get("product_name")),
@@ -4729,6 +4757,7 @@ def build_core_row(
         safe_bool(categories["contains_adaptogens"]),
         safe_bool(categories["contains_nootropics"]),
         json.dumps(categories["key_ingredient_tags"], ensure_ascii=False),
+        ingredients_text,
         # Enhancement 4: Goal Matching
         json.dumps(goal_data["goal_matches"], ensure_ascii=False),
         goal_data["goal_match_confidence"],
@@ -4753,7 +4782,7 @@ def build_core_row(
     )
 
 
-CORE_COLUMN_COUNT = 91  # Must match the tuple above and SCHEMA_SQL
+CORE_COLUMN_COUNT = 92  # Must match the tuple above and SCHEMA_SQL (2026-05-12: +ingredients_text)
 
 
 # ─── Reference Data Loader ───
