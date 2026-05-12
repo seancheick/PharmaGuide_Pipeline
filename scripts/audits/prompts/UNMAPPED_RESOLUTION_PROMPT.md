@@ -1,6 +1,6 @@
 # PharmaGuide Unmapped Ingredient Resolution — v3.1 Batch Protocol
 
-Updated: 2026-04-16
+Updated: 2026-05-12 (refresh — counts current; identity-vs-bioactivity guidance added)
 
 ## Role
 
@@ -119,16 +119,25 @@ This is a medical-grade product.
 
 Before adding ANY alias or new entry, search ALL routing databases:
 
-- `ingredient_quality_map.json` (588 IQM parents — read `_metadata.total_entries` for live count)
-- `other_ingredients.json` (662 entries)
-- `harmful_additives.json` (115 entries)
-- `banned_recalled_ingredients.json` (143 entries)
-- `botanical_ingredients.json` (433 entries)
-- `standardized_botanicals.json` (239 entries)
-- `proprietary_blends.json` (19 entries)
-- `cross_db_overlap_allowlist.json` (31 entries)
+- `ingredient_quality_map.json` (~621 IQM parents — schema 5.4.0 — read `_metadata.total_entries` for live count)
+- `other_ingredients.json` (~679 entries, schema 5.4.0)
+- `harmful_additives.json` (~116 entries, schema 5.4.0)
+- `banned_recalled_ingredients.json` (~146 entries, schema 5.3.0)
+- `botanical_ingredients.json` (~482 entries, schema 5.2.0)
+- `standardized_botanicals.json` (~239 entries)
+- `botanical_marker_contributions.json` (added 2026-05-11; configures source botanical → bioactive marker contributions for scoring)
+- `proprietary_blends.json` (~19 entries)
+- `cross_db_overlap_allowlist.json` (read live)
 
 Do not rely on hard-coded entry counts in this prompt; counts evolve. Always read `_metadata.total_entries` from the live file.
+
+### 7.5. Identity vs Bioactivity boundary (added 2026-05-11)
+
+A specific class of mapping bug now has dedicated handling:
+
+- **Source botanicals (kelp, marigold, citrus extract, broccoli sprout, etc.) must route to `botanical_ingredients.json`**, NOT to an IQM marker entry (iodine, lutein, bioflavonoids, sulforaphane).
+- The cleaner's reverse-index uses an exclusion list to prevent source-botanical aliases from being added to IQM markers. If the canonical_crossing audit finds a source-only alias inside an IQM marker, the fix is to relocate it to the botanical canonical and (if a real marker contribution exists) configure it in `botanical_marker_contributions.json`.
+- This was the 8-phase Identity-vs-Bioactivity split landed in May 2026 — see `reports/identity_vs_bioactivity_impact_report.md`. 133 kelp/marigold/citrus identity leaks were fixed; auditors should treat new occurrences of this pattern as critical-severity findings.
 
 If the ingredient already exists in another file, do NOT create a duplicate. Either:
 

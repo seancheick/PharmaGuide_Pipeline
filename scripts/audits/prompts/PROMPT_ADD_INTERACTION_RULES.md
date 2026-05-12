@@ -1,5 +1,7 @@
 # Prompt: Add Interaction Rules to PharmaGuide
 
+> **Note (2026-05-12):** The authoritative procedure for adding interaction rules is now `scripts/INTERACTION_RULE_AUTHORING_SOP.md` (with the v6 schema captured in `scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md`). This prompt remains as a copy-paste convenience for AI agents but should be used together with the SOP — if they disagree, the SOP wins.
+
 > Copy this entire prompt when you want an AI agent to add new interaction rules.
 > Replace the `[TARGET]` section at the bottom with what you want to add.
 
@@ -39,11 +41,13 @@ Label text "Vitamin A Palmitate"
 
 ## Valid Values (from clinical_risk_taxonomy.json)
 
-### Conditions (condition_id)
+### Conditions (condition_id) — 14 total
 `pregnancy`, `lactation`, `ttc`, `surgery_scheduled`, `hypertension`, `heart_disease`, `diabetes`, `bleeding_disorders`, `kidney_disease`, `liver_disease`, `thyroid_disorder`, `autoimmune`, `seizure_disorder`, `high_cholesterol`
 
-### Drug Classes (drug_class_id)
-`anticoagulants`, `antiplatelets`, `nsaids`, `antihypertensives`, `hypoglycemics`, `thyroid_medications`, `sedatives`, `immunosuppressants`, `statins`
+### Drug Classes (drug_class_id) — 23 total (expanded since v6 schema)
+`anticoagulants`, `antiplatelets`, `nsaids`, `antihypertensives`, `hypoglycemics_high_risk`, `hypoglycemics_lower_risk`, `hypoglycemics_unknown`, `thyroid_medications`, `sedatives`, `immunosuppressants`, `statins`, `antidepressants_ssri_snri`, `maois`, `cardiac_glycosides`, `anticholinergics`, `anticonvulsants`, `thiazide_diuretics`, `lithium`, `calcium_channel_blockers`, `oral_contraceptives`, `antiarrhythmics`, `cyp3a4_substrates`, `cyp2d6_substrates`
+
+**Note:** The single `hypoglycemics` class was split into three risk tiers (`hypoglycemics_high_risk` for insulin/sulfonylureas, `hypoglycemics_lower_risk` for metformin, `hypoglycemics_unknown` when the user's specific drug isn't classified). Use the most specific class that applies — when a supplement interacts with all insulin secretagogues regardless of risk tier, write three rules, one per class.
 
 ### Severity Levels (from most to least severe)
 - `contraindicated` — Do Not Use. Red flag. Evidence of serious harm.
@@ -173,32 +177,66 @@ For each ingredient you add rules for:
 - [ ] `_metadata.total_entries` is updated to match actual rule count
 - [ ] `_metadata.last_updated` is set to today's date
 
-## Current Coverage Gaps
+## Current Coverage (as of 2026-05-12)
 
-Conditions with NO interaction rules yet:
-- `lactation` — 0 rules (partially covered via pregnancy_lactation blocks)
-- `ttc` — 0 rules
-- `heart_disease` — 0 rules
-- `bleeding_disorders` — 0 rules
-- `liver_disease` — 0 rules
-- `thyroid_disorder` — 0 rules
-- `autoimmune` — 0 rules
-- `seizure_disorder` — 0 rules
-- `high_cholesterol` — 0 rules
+145 total interaction rules in `ingredient_interaction_rules.json` (schema 6.1.0). Coverage by condition:
 
-Drug classes with thin coverage:
-- `nsaids` — 0 rules
-- `antiplatelets` — 1 rule
-- `thyroid_medications` — 1 rule
-- `sedatives` — 1 rule
-- `immunosuppressants` — 1 rule
-- `statins` — 1 rule
+| Condition | Rule count |
+|---|---|
+| pregnancy | 40 |
+| diabetes | 23 |
+| bleeding_disorders | 21 |
+| liver_disease | 20 |
+| hypertension | 17 |
+| heart_disease | 12 |
+| thyroid_disorder | 10 |
+| autoimmune | 10 |
+| kidney_disease | 9 |
+| surgery_scheduled | 9 |
+| ttc | 9 |
+| seizure_disorder | 8 |
+| high_cholesterol | 6 |
+| lactation | 4 |
+
+Coverage by drug class:
+
+| Drug class | Rule count |
+|---|---|
+| anticoagulants | 45 |
+| antihypertensives | 26 |
+| antiplatelets | 23 |
+| hypoglycemics_high_risk | 18 |
+| hypoglycemics_lower_risk | 18 |
+| hypoglycemics_unknown | 18 |
+| nsaids | 16 |
+| immunosuppressants | 15 |
+| sedatives | 14 |
+| maois | 11 |
+| thyroid_medications | 11 |
+| statins | 8 |
+| lithium | 8 |
+| cyp3a4_substrates | 3 |
+| cyp2d6_substrates | 3 |
+| antidepressants_ssri_snri | 2 |
+| oral_contraceptives | 2 |
+| cardiac_glycosides | 2 |
+| anticholinergics | 2 |
+| thiazide_diuretics | 1 |
+| calcium_channel_blockers | 1 |
+| antiarrhythmics | 1 |
+| anticonvulsants | 1 |
+
+**Thinnest gaps:** `lactation`, `high_cholesterol` (condition); `thiazide_diuretics`, `calcium_channel_blockers`, `antiarrhythmics`, `anticonvulsants`, `antidepressants_ssri_snri`, `oral_contraceptives`, `cardiac_glycosides`, `anticholinergics`, `cyp3a4_substrates`, `cyp2d6_substrates` (drug class). When adding new rules, prefer extending these classes if the clinical evidence is real.
+
+**Re-verify before assuming a gap:** counts above are point-in-time. Run the snippet under "After Writing Rules" or grep `ingredient_interaction_rules.json` for the target enum before starting work.
 
 ## After Writing Rules
 
 1. Run tests: `cd scripts && python3 -m pytest tests/ -q`
-2. All 2672+ tests must pass
+2. All ~7,000 tests (across 169 files) must pass
 3. Verify the JSON is valid: `python3 -c "import json; json.load(open('data/ingredient_interaction_rules.json'))"`
+4. Run the interaction-rules schema and content tests specifically: `python3 -m pytest tests/test_ingredient_interaction_rules*.py -v`
+5. Run the FINAL_EXPORT_SCHEMA round-trip test (v1.6.0) if you touched `dose_thresholds` or `pregnancy_lactation` — they flow into the Flutter export's interaction_summary block
 
 ---
 

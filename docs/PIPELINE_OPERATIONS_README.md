@@ -1,8 +1,9 @@
 # PharmaGuide — Pipeline Operations Handbook
 
 **Audience:** Anyone running, reviewing, or approving a pipeline change.
-**Purpose:** Operational playbook for the multi-person era. Answers *how do I actually do this?*
+**Purpose:** Operational playbook for the multi-person era. Answers _how do I actually do this?_
 **Companion docs:**
+
 - [`AUTOMATION_ROADMAP.md`](AUTOMATION_ROADMAP.md) — the phased vision.
 - [`PIPELINE_MAINTENANCE_SCHEDULE.md`](PIPELINE_MAINTENANCE_SCHEDULE.md) — who does what, how often.
 - [`scripts/PIPELINE_OPERATIONS_README.md`](../scripts/PIPELINE_OPERATIONS_README.md) — technical command reference.
@@ -29,12 +30,14 @@ Each stage has different owners, different tooling, different failure modes. Und
 **Who owns it:** Pipeline operator (today). Automated workflows + data curator (Phase 3+).
 
 **Tools:**
+
 - `scripts/dsld_api_sync.py` — NIH DSLD product fetching
 - `scripts/api_audit/fda_weekly_sync.py` — FDA regulatory data
 - `scripts/api_audit/*.py` — per-source enrichment (UMLS, PubMed, ChEMBL, etc.)
 - Cloud storage bucket — landing zone for raw JSON
 
 **Failure modes:**
+
 - NIH API returns errors → retry with backoff (already in `dsld_api_client.py`)
 - FDA format changes → workflow fails loudly, human investigates
 - Duplicate product IDs → deduped by canonical ID before commit
@@ -48,11 +51,13 @@ Each stage has different owners, different tooling, different failure modes. Und
 **Who owns it:** Dr. Pham (primary). CSO or second clinical reviewer (approvals).
 
 **Tools:**
+
 - Dashboard: `streamlit run scripts/dashboard/app.py` → Quality → Clinical Copy
 - (Phase 2) Web-based editor with PR opener
 - (Phase 2) Strict validator runs on every PR automatically
 
 **Failure modes:**
+
 - Author writes SCREAM copy ("AVOID!") → validator fails → PR blocked
 - Author writes encyclopedic opener ("Aspartame is a...") → validator fails
 - Author includes numeric stats in body ("30% of users") → validator fails
@@ -67,6 +72,7 @@ Each stage has different owners, different tooling, different failure modes. Und
 **Who owns it:** automated (CI). Humans only touch this when adding new validators.
 
 **Tools:**
+
 - `.github/workflows/validate-pr.yml` (Phase 2)
 - `scripts/validate_safety_copy.py --strict`
 - `pytest scripts/tests/` (3,957 tests)
@@ -75,6 +81,7 @@ Each stage has different owners, different tooling, different failure modes. Und
 - `scripts/enrichment_contract_validator.py`
 
 **Failure modes:**
+
 - Validator or test fails → PR cannot merge → author fixes + re-pushes
 - New failure mode discovered → add a new test, add a new validator rule
 
@@ -109,6 +116,7 @@ Skip the auto-rebuild for single-brand iteration with `SKIP_SNAPSHOT=1 bash batc
 For the full technical command reference, options, and runtime expectations, see [`scripts/PIPELINE_OPERATIONS_README.md § Canonical Operations`](../scripts/PIPELINE_OPERATIONS_README.md).
 
 **Tools:**
+
 - `batch_run_all_datasets.sh` — canonical Phase 1 + Phase 2 driver (N brands, sequential, smallest first)
 - `scripts/rebuild_dashboard_snapshot.sh` — Phase 2 standalone (manual reruns, idempotent)
 - `scripts/run_pipeline.py` — single-brand orchestrator (used internally by the batch driver)
@@ -116,7 +124,10 @@ For the full technical command reference, options, and runtime expectations, see
 - `scripts/release_catalog_artifact.py` — validates + stages `scripts/dist/` atomically
 - Cloud storage bucket (for raw data input + build artifact caching)
 
+- python3 scripts/extract_product_images.py --db-path scripts/dist/pharmaguide_core.db --output-dir scripts/dist/product_images
+
 **Failure modes:**
+
 - Enrichment exception on one product → product goes to `errors/` folder, build continues with 99% coverage, ops reviews
 - Brand failure during Phase 1 → `batch_run_all_datasets.sh` marks it failed, skips Phase 2 (partial snapshot would mislead), exits non-zero
 - Out-of-memory on CI → split build into batches, add retry
@@ -131,11 +142,13 @@ For the full technical command reference, options, and runtime expectations, see
 **Who owns it:** automated (CI). Pipeline operator for emergency rollbacks.
 
 **Tools:**
+
 - `scripts/sync_to_supabase.py` — catalog + reference data
 - Supabase dashboard for manual inspection
 - Flutter asset sync (manual today; automated in Phase 4)
 
 **Failure modes:**
+
 - Supabase rate-limit → retry with backoff
 - Sync interrupted mid-way → partial state; tooling has `--cleanup` flag to fix
 - Flutter asset out of sync → users on offline mode see stale reference data
@@ -150,6 +163,7 @@ For the full technical command reference, options, and runtime expectations, see
 **Who owns it:** automated (Cloudflare Worker + Supabase Edge Function). Safety-alert watcher (pipeline operator) monitors via Slack.
 
 **Tools:**
+
 - Cloudflare Worker `safety-alert-poller.ts` — polls openFDA + FDA RSS every 15 min
 - Supabase Edge Function `draft-safety-alert` — classifies tier, auto-drafts conservative copy, inserts `safety_alerts` row
 - Supabase Realtime — pushes new rows to subscribed Flutter clients
@@ -157,12 +171,14 @@ For the full technical command reference, options, and runtime expectations, see
 - Dashboard safety-alerts queue — Dr. Pham refines copy within 24–48 hrs
 
 **Failure modes:**
+
 - Poller misses a recall (API returned error) → next poll 15 min later picks it up; second-order fallback is the weekly FDA sync
 - Auto-draft classifies tier wrong → safety-alert watcher manually overrides within minutes
 - FCM push fails for subset of devices → in-app banner still fires on next open
 - False-positive alert (bad match) → safety-alert watcher marks `status='superseded'` → Realtime retracts
 
 **Guardrail:**
+
 - Every auto-drafted alert goes to Slack `#safety-alerts` for human eyeballing.
 - Supabase Edge Function rate-limits itself to 10 alerts/hour to prevent runaway firing on a bad FDA data day.
 - Tier 1 push notifications cap at 3/day per user (hard-coded client-side) to prevent push fatigue.
@@ -174,6 +190,7 @@ For the full technical command reference, options, and runtime expectations, see
 ### Pipeline operator (today: Sean)
 
 **Can do:**
+
 - Merge PRs
 - Trigger manual builds
 - Access Supabase service key
@@ -182,6 +199,7 @@ For the full technical command reference, options, and runtime expectations, see
 - Configure GitHub repo settings
 
 **Should not do (without a second approver):**
+
 - Deploy directly to Supabase production without a PR
 - Force-push to main
 - Disable CI checks
@@ -190,6 +208,7 @@ For the full technical command reference, options, and runtime expectations, see
 ### Clinical author (today: Dr. Pham)
 
 **Can do:**
+
 - Edit authored copy fields in the web UI (Phase 2)
 - Open PRs via the UI
 - View the Clinical Copy dashboard
@@ -197,6 +216,7 @@ For the full technical command reference, options, and runtime expectations, see
 - **Refine auto-drafted safety-alert copy** in the dashboard's safety-alerts queue (Phase 1.5). Edits push live to Supabase Realtime within seconds.
 
 **Cannot do:**
+
 - Edit severity / evidence_level / mechanism / PMIDs (locked at form layer)
 - Merge PRs (approval required from pipeline operator / CSO)
 - Access Supabase service key
@@ -205,6 +225,7 @@ For the full technical command reference, options, and runtime expectations, see
 ### Safety-alert watcher (Phase 1.5 — today: Sean; future: on-call rotation)
 
 **Can do:**
+
 - Monitor `#safety-alerts` Slack channel
 - Mark auto-drafted alerts as `superseded` (false-positive retraction)
 - Reclassify tier on an alert (CRITICAL ↔ HIGH ↔ CATALOG)
@@ -212,42 +233,49 @@ For the full technical command reference, options, and runtime expectations, see
 - Escalate P0 incidents to the pipeline operator / CSO
 
 **Cannot do:**
+
 - Author clinical copy (that's Dr. Pham's job; watcher only classifies/retracts)
 - Change poller schedule without a PR (config change, auditable)
 
 ### Safety reviewer / CSO (future)
 
 **Can do:**
+
 - Approve clinical-copy PRs (second approver)
 - Request changes on PRs
 - Review incident post-mortems
 - Quarterly: read through audit trail
 
 **Cannot do:**
+
 - Merge without validator passing
 - Edit pipeline infrastructure
 
 ### Data curator / ops (future, part-time role)
 
 **Can do:**
+
 - Review monthly intake PRs
 - Flag bad products for exclusion
 - Update brand allowlist (`config/brands.json`)
 - Update category config (`config/categories.json`)
 
 **Cannot do:**
+
 - Merge clinical-copy changes (not clinical judgment)
 - Modify pipeline code
 
 ### Engineer / devops (future)
 
 **Can do:**
+
 - Modify workflows, validators, pipeline code
 - Debug CI failures
 - Rotate secrets
 - Performance optimization
 
 **Cannot do:**
+
 - Approve clinical-copy PRs (not clinical judgment)
 
 ---
@@ -258,7 +286,7 @@ These are the "oh no, what do I do now" runbooks. Short and specific.
 
 ### Playbook 1 — Monthly intake PR arrived, how do I review?
 
-1. Open the PR. The title looks like *"Monthly intake 2026-05: +42 gummies, +18 capsules"*.
+1. Open the PR. The title looks like _"Monthly intake 2026-05: +42 gummies, +18 capsules"_.
 2. Check the summary comment — confirms which DSLD IDs are new.
 3. Click through 3–5 randomly sampled new product JSON files. Do they look like real products? (Brand name, ingredients, UPC all populated?)
 4. Check the CI status — validator + tests green?
@@ -294,7 +322,7 @@ These are the "oh no, what do I do now" runbooks. Short and specific.
    - **Tests failed** → code regression. Check the pytest output, revert if needed.
    - **Infra failed** (timeout, OOM, API rate-limit) → re-run the workflow. If it fails twice, investigate.
 3. If the failure blocked a deploy, the previous Supabase state is still live — users aren't affected.
-4. Post to Slack: *"Build failed, investigating, no user impact."*
+4. Post to Slack: _"Build failed, investigating, no user impact."_
 5. Fix → merge → re-build.
 
 **Total time:** 5–60 minutes depending on category.
@@ -353,7 +381,7 @@ These are the "oh no, what do I do now" runbooks. Short and specific.
 4. **If the match is a false positive:**
    - In the dashboard → `#safety-alerts-queue` → click "Mark superseded" on the offending row.
    - Supabase Realtime pushes the retraction to clients; banners disappear on next app open.
-   - Post to Slack: *"False-positive Tier 1 alert retracted at HH:MM, root cause: {reason}. No user-impact push fired — matched users now see the retraction on next open."*
+   - Post to Slack: _"False-positive Tier 1 alert retracted at HH:MM, root cause: {reason}. No user-impact push fired — matched users now see the retraction on next open."_
 5. **If tier was wrong (should have been Tier 2/3, not Tier 1):**
    - Reclassify via the dashboard → updates the row → clients handle the new tier on next Realtime update.
 6. **Post-mortem:** any Tier 1 false positive or wrong-tier gets a 3-paragraph write-up within 48 hours — push notifications are expensive user trust; misfires should be rare and documented.
@@ -363,6 +391,7 @@ These are the "oh no, what do I do now" runbooks. Short and specific.
 ### Playbook 8 — The safety-alert poller is down
 
 **Signals:**
+
 - No new `safety_alerts` rows in 2+ hours (verify via dashboard or Supabase).
 - UptimeRobot flag on the Cloudflare Worker endpoint.
 - FDA publishes a known recall, nobody gets notified.
@@ -374,7 +403,7 @@ These are the "oh no, what do I do now" runbooks. Short and specific.
 3. If executions are firing but writing nothing: check Supabase Edge Function logs for `draft-safety-alert` errors.
 4. If FDA API is down on their end: out of our hands, but log it.
 5. **Meanwhile, trip the fallback:** kick off `scripts/api_audit/fda_weekly_sync.py` manually to catch anything the poller missed. This won't get sub-hour latency but prevents the catalog from drifting.
-6. Post to Slack: *"Safety poller degraded at HH:MM, fallback manual sync running. ETA to restore: {estimate}."*
+6. Post to Slack: _"Safety poller degraded at HH:MM, fallback manual sync running. ETA to restore: {estimate}."_
 
 **Total time:** 15–45 minutes to restore; fallback buys you hours of safety margin.
 
@@ -436,18 +465,20 @@ Full details in [`scripts/PIPELINE_OPERATIONS_README.md`](../scripts/PIPELINE_OP
 Never do a manual prod sync from your laptop unless it's an emergency.
 
 Prod syncs should flow through CI:
+
 1. Merge PR to main.
 2. Build workflow runs → validator → build → sync.
 3. If sync fails, CI logs show the error.
 4. If sync succeeds, you'll see a Slack notification.
 
 If you must sync manually (e.g., CI broken):
+
 1. Pull latest main.
 2. Run full test suite locally (`pytest scripts/tests/ -q`).
 3. Run `validate_safety_copy.py --strict`.
 4. Run `python3 scripts/sync_to_supabase.py <build_dir> --dry-run`.
 5. Only if all three are green: drop `--dry-run` and sync for real.
-6. Post to Slack: *"Manual sync completed, reason: {CI was down}. Verified by {name}."*
+6. Post to Slack: _"Manual sync completed, reason: {CI was down}. Verified by {name}."_
 
 ### SOP-4 — Rotating a secret
 
@@ -455,7 +486,7 @@ If you must sync manually (e.g., CI broken):
 2. Update GitHub Secrets → `{SECRET_NAME}` → paste new value.
 3. Trigger a test workflow run — confirm it works.
 4. Revoke old secret at upstream provider.
-5. Post to Slack: *"Rotated {SECRET}, completed {YYYY-MM-DD}."*
+5. Post to Slack: _"Rotated {SECRET}, completed {YYYY-MM-DD}."_
 
 Rotate quarterly at minimum, or immediately if a secret is suspected compromised.
 
@@ -465,14 +496,14 @@ The interaction DB (`scripts/interaction_db_output/interaction_db.sqlite`, ~22 M
 
 **When to rebuild — trigger-driven, not on a clock:**
 
-| Trigger | Action |
-|---|---|
-| Edited `scripts/data/curated_interactions/*.json` (added pair, fixed CUI, changed severity) | Rebuild |
-| Edited `scripts/data/drug_classes.json` (new class, member RXCUI changes) | Rebuild |
-| New supp.ai dump available (rare — last upstream update 2021-10-20) | Re-run `ingest_suppai.py`, then rebuild |
-| Major IQM changes that map a previously-unmapped CUI | Rebuild (the verifier re-runs `map_canonical_id` against current IQM) |
-| Schema bump (`schema_version` change in spec) | Rebuild |
-| Catalog release (any `pharmaguide_core.db` ship) | Rebuild *together* so manifests agree on `pipeline_version` |
+| Trigger                                                                                     | Action                                                                |
+| ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Edited `scripts/data/curated_interactions/*.json` (added pair, fixed CUI, changed severity) | Rebuild                                                               |
+| Edited `scripts/data/drug_classes.json` (new class, member RXCUI changes)                   | Rebuild                                                               |
+| New supp.ai dump available (rare — last upstream update 2021-10-20)                         | Re-run `ingest_suppai.py`, then rebuild                               |
+| Major IQM changes that map a previously-unmapped CUI                                        | Rebuild (the verifier re-runs `map_canonical_id` against current IQM) |
+| Schema bump (`schema_version` change in spec)                                               | Rebuild                                                               |
+| Catalog release (any `pharmaguide_core.db` ship)                                            | Rebuild _together_ so manifests agree on `pipeline_version`           |
 
 **Not** a weekly cron — it's release-time work. If none of the inputs above changed, the bundled artifact stays valid.
 
@@ -490,18 +521,21 @@ bash scripts/rebuild_interaction_db.sh --offline
 ```
 
 The script runs four steps under one shell:
+
 1. **Verify** — `verify_interactions.py` runs the 10 spec checks against UMLS+RxNorm (or schema-only if `--offline`). Builds fail on any error; warnings surface in the audit report. Foods in `Med-Food`/`Food-Med` entries are recognized and routed to a `food_agents` list (no false-positive "unmapped supplement" warnings).
 2. **Build** — `build_interaction_db.py` produces SQLite with `interactions`, `research_pairs`, `drug_class_map`, `interaction_db_metadata`, and the `interactions_fts` FTS5 index. Sets `pipeline_version` from `build_final_db.py` so catalog and interaction artifacts agree.
 3. **Stage** — `release_interaction_artifact.py` promotes the verified build from `scripts/interaction_db_output/` (working dir) → `scripts/dist/` (release-staging). If anything in step 1 or 2 broke, `dist/` keeps the previous good copy.
-4. **Import** *(only with `--import`)* — Flutter's `import_catalog_artifact.sh` validates manifest + checksum + integrity, then atomically copies into `assets/db/interaction_db.sqlite`.
+4. **Import** _(only with `--import`)_ — Flutter's `import_catalog_artifact.sh` validates manifest + checksum + integrity, then atomically copies into `assets/db/interaction_db.sqlite`.
 
 **Health checks after a rebuild:**
+
 - `scripts/interaction_db_output/interaction_audit_report.json` → `errors: 0`
 - `scripts/dist/interaction_db_manifest.json` → `pipeline_version` matches the catalog manifest
 - `scripts/interaction_db_output/build_audit_report.json` → review `resolved_conflicts` for any new "more cautious wins" decisions
 - Diff `total_interactions` against the previous build — sudden drops mean entries were silently dropped
 
 **Order vs the catalog rebuild:** they're independent but should ship together. Standard release flow:
+
 ```
 1. python3 scripts/run_pipeline.py <dataset>     # Stage 1-3: clean→enrich→score
 2. python3 scripts/build_final_db.py <input>     # build pharmaguide_core.db
@@ -549,23 +583,23 @@ What you should have watching the system (most are free).
 
 ### Repo access tiers
 
-| Role | GitHub permission |
-|---|---|
-| Pipeline operator | Admin |
-| Engineer | Write |
-| Clinical author | Write (limited to branches via branch protection) |
-| Safety reviewer / CSO | Write |
-| Data curator | Triage (approve intake PRs, no code merge) |
-| Investors / advisors | Read |
+| Role                  | GitHub permission                                 |
+| --------------------- | ------------------------------------------------- |
+| Pipeline operator     | Admin                                             |
+| Engineer              | Write                                             |
+| Clinical author       | Write (limited to branches via branch protection) |
+| Safety reviewer / CSO | Write                                             |
+| Data curator          | Triage (approve intake PRs, no code merge)        |
+| Investors / advisors  | Read                                              |
 
 ### Supabase access tiers
 
-| Role | Supabase access |
-|---|---|
+| Role              | Supabase access                                                 |
+| ----------------- | --------------------------------------------------------------- |
 | Pipeline operator | Service role key (via GitHub Secrets only, not personal access) |
-| Engineer | Project admin |
-| Clinical author | No direct access (edits via UI only) |
-| Read-only analyst | Anon key (read-only) |
+| Engineer          | Project admin                                                   |
+| Clinical author   | No direct access (edits via UI only)                            |
+| Read-only analyst | Anon key (read-only)                                            |
 
 ### Data sensitivity
 
@@ -582,12 +616,12 @@ Today: ~$0/month (everything on free tiers).
 
 Projected monthly cost at common milestones:
 
-| Milestone | Expected cost |
-|---|---|
-| 15 brands, 5k products, 100 active users | $0–$5 (Supabase pro if DB >500 MB) |
-| 50 brands, 20k products, 5k active users | $25–$50 (Supabase Pro + extra storage) |
-| 100 brands, 50k products, 50k active users | $100–$300 (multiple Supabase projects, CDN, monitoring) |
-| 500 brands, 200k products, 500k active users | $2k–$5k (upgrades across the stack) |
+| Milestone                                    | Expected cost                                           |
+| -------------------------------------------- | ------------------------------------------------------- |
+| 15 brands, 5k products, 100 active users     | $0–$5 (Supabase pro if DB >500 MB)                      |
+| 50 brands, 20k products, 5k active users     | $25–$50 (Supabase Pro + extra storage)                  |
+| 100 brands, 50k products, 50k active users   | $100–$300 (multiple Supabase projects, CDN, monitoring) |
+| 500 brands, 200k products, 500k active users | $2k–$5k (upgrades across the stack)                     |
 
 At those milestones, cost review makes sense. Before then, stay on free tiers.
 
@@ -597,13 +631,13 @@ At those milestones, cost review makes sense. Before then, stay on free tiers.
 
 Four doc families to keep alive:
 
-| Doc | Update cadence | Who |
-|---|---|---|
-| `docs/AUTOMATION_ROADMAP.md` | Quarterly | Pipeline operator |
-| `docs/PIPELINE_MAINTENANCE_SCHEDULE.md` | When cadence changes | Pipeline operator |
-| `docs/PIPELINE_OPERATIONS_README.md` (this doc) | When playbooks change | Pipeline operator |
-| `docs/incidents/*.md` | Per incident | Whoever ran the incident |
-| `scripts/*.md` (technical refs) | When commands/schema change | Engineer |
+| Doc                                             | Update cadence              | Who                      |
+| ----------------------------------------------- | --------------------------- | ------------------------ |
+| `docs/AUTOMATION_ROADMAP.md`                    | Quarterly                   | Pipeline operator        |
+| `docs/PIPELINE_MAINTENANCE_SCHEDULE.md`         | When cadence changes        | Pipeline operator        |
+| `docs/PIPELINE_OPERATIONS_README.md` (this doc) | When playbooks change       | Pipeline operator        |
+| `docs/incidents/*.md`                           | Per incident                | Whoever ran the incident |
+| `scripts/*.md` (technical refs)                 | When commands/schema change | Engineer                 |
 
 **Rule:** if you find yourself answering the same question twice in Slack, that answer belongs in a doc.
 
@@ -616,7 +650,7 @@ Four doc families to keep alive:
 - **Scoring algorithm** — see [`scripts/SCORING_README.md`](../scripts/SCORING_README.md).
 - **Architecture decisions** — see `docs/TECH_STACK_2026.md` and related ADRs.
 
-This doc is about *who, when, and how* — the human layer on top of the technical stack.
+This doc is about _who, when, and how_ — the human layer on top of the technical stack.
 
 ---
 

@@ -1,11 +1,14 @@
 # PharmaGuide — Ingredient Database Alias Accuracy Audit
 
+> **Updated:** 2026-05-12. Reflects the 8-phase Identity vs Bioactivity split that landed in May 2026 (see `reports/identity_vs_bioactivity_impact_report.md`). Special attention should be paid to source-botanical aliases that drifted into IQM marker entries — that class of bug is now a top-severity finding.
+
 ## Role
 
 You are a pharmaceutical chemist and dietary supplement formulation expert
-auditing a clinical-grade ingredient database. This database scores 180K+
-supplement products. A wrong alias-to-parent mapping means a product gets
-the wrong safety or quality score — which is a patient safety issue.
+auditing a clinical-grade ingredient database. This database scores 13,000+
+supplement products against the NIH DSLD corpus. A wrong alias-to-parent
+mapping means a product gets the wrong safety or quality score — which is
+a patient safety issue.
 
 ## Task
 
@@ -26,11 +29,14 @@ I will give you a file path to a JSON database. Before auditing:
 
 This allows the prompt to work on ANY of the project's databases:
 
-- ingredient_quality_map.json (parent → forms → aliases)
-- harmful_additives.json (entries with aliases and categories)
-- banned_recalled_ingredients.json (entries with aliases and status)
-- botanical_ingredients.json (entries with aliases)
-- other_ingredients.json (entries with aliases)
+- `ingredient_quality_map.json` (parent → forms → aliases) — 621 parents, schema 5.4.0
+- `harmful_additives.json` (entries with aliases and categories) — 116 entries, schema 5.4.0
+- `banned_recalled_ingredients.json` (entries with aliases and status) — 146 entries, schema 5.3.0
+- `botanical_ingredients.json` (entries with aliases) — 482 entries, schema 5.2.0
+- `botanical_marker_contributions.json` (source botanical → bioactive marker contributions) — added 2026-05-11
+- `other_ingredients.json` (entries with aliases) — 679 entries, schema 5.4.0
+- `standardized_botanicals.json` (botanical standardization markers) — 239 entries
+- `clinically_relevant_strains.json` (probiotic strain bonuses) — 42 entries, schema 5.1.0
 - Or any similar structured reference file
 
 ### Step 1 — Audit each entry
@@ -52,6 +58,14 @@ For each parent/entry and its aliases, verify:
    - An inactive excipient alias filed under an active ingredient parent
    - A compound with a similar name but different mechanism
      (e.g. "capsaicin" under "bell pepper")
+   - **Source botanical filed under its bioactive marker** (this is now a
+     critical-severity finding). Example: "marigold extract" must not be an
+     alias under the `lutein` IQM parent — marigold is a source-of-lutein,
+     not a form of lutein. The standardized lutein marker contribution
+     should be expressed via `botanical_marker_contributions.json`, while
+     "marigold extract" itself routes to `marigold` in
+     `botanical_ingredients.json`. Same pattern for kelp→iodine,
+     citrus extract→bioflavonoids, and broccoli sprout→sulforaphane.
 
 3. **Category correctness**: Is the entry in the right category for what
    it actually is? (e.g. a vitamin classified as "herbs")

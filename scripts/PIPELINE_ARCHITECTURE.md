@@ -1,6 +1,6 @@
 # PIPELINE_ARCHITECTURE.md
 
-> Last updated: 2026-04-16 | Export schema: v1.4.0 (91 columns)
+> Last updated: 2026-05-12 | Export schema: v1.6.0 (91 columns). Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`.
 
 ## Overview
 
@@ -27,7 +27,7 @@ final_db_output/
   ├── pharmaguide_core.db        (SQLite, 91-col products_core)
   ├── detail_blobs/*.json        (per-product JSON blobs)
   ├── detail_index.json
-  ├── export_manifest.json       (schema_version="1.4.0")
+  ├── export_manifest.json       (schema_version="1.6.0")
   └── export_audit_report.json
   -> [SUPABASE SYNC] sync_to_supabase.py
 Supabase Storage: pharmaguide/v{version}/pharmaguide_core.db
@@ -36,9 +36,9 @@ Supabase Postgres: export_manifest row inserted via rotate_manifest RPC
   -> [FLUTTER APP] downloads SQLite + queries locally via Drift
 ```
 
-### Silent-failure audit principle (2026-04)
+### Silent-failure audit principle (2026-04 → 2026-05)
 
-Every field must flow across all 5 stage boundaries (Raw → Clean → Enrich → Score → Final DB → Flutter) without being silently dropped. If a stage computes a signal that a downstream stage ignores, users see a mismatch between warnings and scores. A field-level cross-reference audit in 2026-04 identified and fixed 18 such drops (including the original probiotic `clinical_strain_count` bug, the `serving_info` phantom key in `build_final_db.py`, and the amount-based sugar scoring gap). See `PIPELINE_OPERATIONS_README.md` → "What landed in v1.3.1 and v1.3.2" for the full track list and `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
+Every field must flow across all 5 stage boundaries (Raw → Clean → Enrich → Score → Final DB → Flutter) without being silently dropped. If a stage computes a signal that a downstream stage ignores, users see a mismatch between warnings and scores. A field-level cross-reference audit in 2026-04 identified and fixed 18 such drops (including the original probiotic `clinical_strain_count` bug, the `serving_info` phantom key in `build_final_db.py`, and the amount-based sugar scoring gap). The 8-phase Identity-vs-Bioactivity split (2026-05) extended this principle to alias-routing: source botanicals (kelp, marigold, citrus extract, broccoli sprout) now route to `botanical_ingredients.json` rather than IQM marker entries, with bioactive contributions surfaced through `botanical_marker_contributions.json` and emitted at blob level as `canonical_id` + `delivers_markers`. See `reports/identity_vs_bioactivity_impact_report.md` for the migration record and `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
 
 ## Stage Responsibilities
 
@@ -243,6 +243,8 @@ python scripts/sync_to_supabase.py <build_output_dir> --dry-run # Preview only
 | v1.3.3 | 2026-04-14 | 90 | Interaction safety expansion: 129 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM 588 entries (was 571) |
 | v1.3.4 | 2026-04-14 | 90 | CAERS B8 scoring (159 adverse event signals), UNII offline cache (172K substances), IQM UNII standardization (66%), drug label interaction mining |
 | v1.4.0 | 2026-04-15 | 91 | `image_thumbnail_url` column added; `normalize_upc` field added; image upload pipeline |
+| v1.5.0 | 2026-05-05 | 91 | Canonical active + inactive ingredient contract: `display_form_label`, `form_status`, `form_match_status`, `dose_status` on actives; `display_label`, `display_role_label`, `severity_status`, `is_safety_concern` on inactives. Flutter renders these without local inference; legacy `form` / `is_harmful` kept for back-compat then deprecated. |
+| v1.6.0 | 2026-05-12 | 91 | `profile_gate` passthrough on `interaction` / `drug_interaction` warning entries so Flutter routes condition/drug-class hits without re-evaluating thresholds. Coverage gate: products with `unmapped_actives_total > 0` get `verdict=NOT_SCORED` and are excluded from the final DB by the Batch 3 data integrity gate. `canonical_id` + `delivers_markers` now emitted at blob level on active ingredients (identity vs bioactivity split). |
 
 Runtime source of truth: `EXPORT_SCHEMA_VERSION` and `CORE_COLUMN_COUNT` in `build_final_db.py`. Per-column contract: `FINAL_EXPORT_SCHEMA_V1.md`.
 

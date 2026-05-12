@@ -1,8 +1,8 @@
 # PharmaGuide — Interaction DB & Nutrient Safety Engineering Plan
 
 **Document version:** 2.2.0
-**Last updated:** 2026-04-11
-**Status:** M1 shipped. M2 Phase 1 in progress (pipeline scaffolding + golden fixture).
+**Last updated:** 2026-04-11 (status note refreshed 2026-05-12)
+**Status:** M1 + M2 shipped. Curated interactions live (`scripts/data/curated_interactions/curated_interactions_v1.json` = 108 entries; `med_med_pairs_v1.json` = 28 entries). `ingredient_interaction_rules.json` at schema 6.1.0 (145 rules). Operational authority now lives in `scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md` + `scripts/INTERACTION_RULE_AUTHORING_SOP.md` — read those first for current schema and authoring rules; this document is the planning/architecture record from the build-out phase.
 **Supersedes:** v2.1.0 (supp.ai evidence corpus clarification), v2.0.0 (Flutter infra), v1.0.0 (initial)
 
 ---

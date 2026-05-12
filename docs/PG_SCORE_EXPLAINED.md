@@ -1,6 +1,8 @@
 # PharmaGuide Score Explained
 
-> Scoring version: **3.3.0** | Data schema: **5.1.0** | Last updated: 2026-03-30
+> Scoring version: **3.4.0** | Data schema: spans **5.0.0 – 5.4.0** (heterogeneous, see each data file's `_metadata.schema_version`) | Last updated: 2026-05-12
+>
+> Section caps (A=25, B=30, C=20, D=5; E folded into A as omega-3 dose bonus), verdict precedence (BLOCKED > UNSAFE > NOT_SCORED > CAUTION > POOR > SAFE), `poor_threshold_quality_score = 32`, and grade scale all verified against `scripts/config/scoring_config.json` on 2026-05-12. The narrative below remains current — only the header was bumped.
 
 ---
 

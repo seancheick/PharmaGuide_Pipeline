@@ -1,14 +1,18 @@
 # Contract v1.5.0 — Follow-up Plan
 
 > Owner: Sean
-> Status: in-flight, blocked on fresh pipeline rebuild
-> Created: 2026-05-05
-> Related: `FINAL_EXPORT_SCHEMA_V1.md` (v1.5.0), `build_final_db.py`, Flutter repo at `/Users/seancheick/PharmaGuide ai`
+> **Status: COMPLETE 2026-05-05 — kept as a historical runbook. v1.6.0 has since shipped on top of this (profile_gate passthrough, coverage gate enforcement, canonical_id + delivers_markers at blob level).**
+> Created: 2026-05-05 · Closed: 2026-05-05 · Doc refreshed: 2026-05-12
+> Related: `FINAL_EXPORT_SCHEMA_V1.md` (now v1.6.0), `build_final_db.py`, Flutter repo at `/Users/seancheick/PharmaGuide ai`
 
-This is the ordered runbook for landing the canonical ingredient
-contract end-to-end. The pipeline side shipped (Phase A/B/C below).
-The Flutter side waits on a fresh rebuild so we can verify against
-real blob data before changing widgets.
+This was the ordered runbook for landing the canonical ingredient
+contract end-to-end. All six steps (Pipeline rebuild, Real-blob
+verification, Flutter surgical migration, Widget tests, Deprecation
+cleanup, Refactor sequencing) landed on 2026-05-05 — see the
+Definition-of-done checklist at the bottom. Subsequent work
+(v1.6.0 — profile_gate passthrough, coverage gate, identity-vs-bioactivity
+split) is tracked in `reports/identity_vs_bioactivity_impact_report.md`
+and `FINAL_EXPORT_SCHEMA_V1.md`.
 
 ---
 
@@ -166,11 +170,11 @@ Sequencing matters: the contract migration MUST land before Phase 4 (ingredient 
 
 ---
 
-## Open questions
+## Open questions — RESOLVED 2026-05-05
 
-- For the `_debug` subkey on inactives — should `match_method` / `matched_alias` move there, or just delete? Flutter never reads them; only useful for pipeline debugging. If unused, delete is cleanest.
-- For `is_harmful` — keep as a renamed provenance flag (`is_in_harmful_db`) or delete? If no consumer needs the provenance signal, delete.
-- For empty-string-vs-null cleanup — sweep all data-file emit sites or just the inactive row builder? Bigger sweep is risky; scope to inactives initially.
+- For the `_debug` subkey on inactives — should `match_method` / `matched_alias` move there, or just delete? → **DELETED** (commit `8b0f9ea`). Flutter never read them.
+- For `is_harmful` — keep as a renamed provenance flag (`is_in_harmful_db`) or delete? → **DELETED** (commit `8483b0c`). No consumer needed the provenance signal.
+- For empty-string-vs-null cleanup — sweep all data-file emit sites or just the inactive row builder? → **Scoped to inactives** as planned. Wider sweep stays deferred until a concrete need surfaces.
 
 ---
 

@@ -185,6 +185,8 @@ staging/brands/<brand>/  ──clean──▶  *_cleaned/  ──enrich──▶
 | v1.3.3  | 2026-04-14 | 90      | Interaction safety expansion: 127 rules (was 98), 4 new drug classes, context-aware harmful scoring, 25 PMID fixes, IQM 588 entries (was 571)                                                                |
 | v1.3.4  | 2026-04-14 | 90      | CAERS B8 scoring (159 adverse event signals), UNII offline cache (172K substances), IQM UNII standardization (66%), drug label interaction mining (40 supplements, 90% coverage), CAERS dashboard audit view |
 | v1.4.0  | 2026-04-15 | 91      | `image_thumbnail_url` column added; IQM expanded to 589 entries; branded ingredient bio-score prioritization fix (KSM-66, Sensoril, Bergavit); 31 new IQM aliases; normalize_upc pipeline step               |
+| v1.5.0  | 2026-05-05 | 91      | Canonical active + inactive ingredient contract on the detail blob: `display_form_label`, `form_status`, `form_match_status`, `dose_status` on actives; `display_label`, `display_role_label`, `severity_status`, `is_safety_concern` on inactives. Flutter renders these directly without local inference. Legacy `form` / `is_harmful` retained for back-compat then deprecated. Drives `MATCHING_PRECEDENCE.md` + `INTERACTION_RULE_AUTHORING_SOP.md`. |
+| v1.6.0  | 2026-05-12 | 91      | `profile_gate` passthrough on `interaction` and `drug_interaction` warning entries so Flutter routes condition/drug-class hits without re-evaluating thresholds. Coverage gate: products with `unmapped_actives_total > 0` get `verdict=NOT_SCORED` and are excluded from the final DB by the Batch 3 data integrity gate. `canonical_id` + `delivers_markers` now emitted at blob level on active ingredients (identity vs bioactivity split, 8-phase migration — see `reports/identity_vs_bioactivity_impact_report.md`). |
 
 Runtime source of truth: `CORE_COLUMN_COUNT` in `build_final_db.py` plus `EXPORT_SCHEMA_VERSION`. See `FINAL_EXPORT_SCHEMA_V1.md` for the per-column contract.
 
@@ -206,13 +208,13 @@ The pipeline targets an **offline-first architecture**: the products table lives
 
 What actually moves:
 
-- `pharmaguide_core.db` → uploaded to `pharmaguide/v{db_version}/pharmaguide_core.db` in Storage. Contains the full 91-column `products_core` table (as of v1.4.0).
+- `pharmaguide_core.db` → uploaded to `pharmaguide/v{db_version}/pharmaguide_core.db` in Storage. Contains the full 91-column `products_core` table (still 91 columns through v1.6.0; the v1.5.0 / v1.6.0 additions live on the detail blob, not the SQLite schema).
 - `detail_blobs/*.json` → uploaded to `pharmaguide/shared/details/sha256/{prefix}/{hash}.json` in Storage.
-- `export_manifest.json` → insert-new-row via `rotate_manifest(p_schema_version='1.4.0', ...)` RPC.
+- `export_manifest.json` → insert-new-row via `rotate_manifest(p_schema_version='1.6.0', ...)` RPC.
 
 **Rollout checks** (run before a production sync):
 
-1. Local build produces `export_manifest.json` with `schema_version: "1.4.0"`, `pipeline_version: "3.4.0"`, `scoring_version: "3.4.0"`
+1. Local build produces `export_manifest.json` with `schema_version: "1.6.0"`, `pipeline_version: "3.4.0"`, `scoring_version: "3.4.0"`
 2. Full test suite green: `python3 -m pytest scripts/tests/ -q`
 3. Dry-run sync: `python3 scripts/sync_to_supabase.py ~/Documents/DataSetDsld/builds/release_output --dry-run`
 4. Flutter release gate passes: `flutter test test/release_gate/bundled_catalog_test.dart`
@@ -366,7 +368,7 @@ Schema bumps cascade into Flutter's reference-data asset sync — see "Flutter a
 
 ### Git LFS quota notes
 
-The SQLite file currently ships at ~5.9 MiB (4240 products, schema v1.4.0, 91 columns). Free GitHub LFS quota is 1 GB storage + 1 GB/month bandwidth, which easily accommodates thousands of releases. If the DB grows past ~50 MiB, plan for an LFS quota bump on the Flutter repo before the release that ships it.
+The SQLite file currently ships at ~5.9 MiB (4240 products, schema v1.6.0, 91 columns). Free GitHub LFS quota is 1 GB storage + 1 GB/month bandwidth, which easily accommodates thousands of releases. If the DB grows past ~50 MiB, plan for an LFS quota bump on the Flutter repo before the release that ships it.
 
 ### Rollback
 

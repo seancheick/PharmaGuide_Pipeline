@@ -11,31 +11,33 @@ You are auditing a supplement scoring pipeline that powers a consumer health app
 
 ## CODEBASE ORIENTATION
 
-- **IQM file:** `scripts/data/ingredient_quality_map.json` — the master ingredient database (610 parents, each with scored forms)
+- **IQM file:** `scripts/data/ingredient_quality_map.json` — the master ingredient database (621 parents, schema 5.4.0, each with scored forms)
 - **Scoring range:** bio_score is 0-15. If natural=True, score = bio_score + 3 (max score = 18). If natural=False, score = bio_score (max score = 15). bio_score MUST NOT exceed 15.
 - **Scoring engine:** `scripts/score_supplements.py` — reads IQM scores to produce final product grades
 - **Enrichment pipeline:** `scripts/enrich_supplements_v3.py` — resolves raw labels → IQM parents/forms
 - **Scoring spec:** `scripts/SCORING_ENGINE_SPEC.md` (v3.4.0) — authoritative scoring rules
 - **Scoring config:** `scripts/config/scoring_config.json` — caps, gates, coefficients
-- **Tests:** `python -m pytest scripts/tests/` — ALL tests must pass after every change
-- **Supporting data files (in `scripts/data/`):**
-  - `banned_recalled_ingredients.json` — hard-fail blocked substances (143 entries)
-  - `harmful_additives.json` — penalty substances (115 entries, severity: critical/high/moderate/low)
-  - `top_manufacturers_data.json` — trusted brands (77 entries, fuzzy threshold 0.90)
-  - `allergens.json` — allergen detection (17 entries)
-  - `backed_clinical_studies.json` — evidence database (197 entries, all PMID-backed)
-  - `absorption_enhancers.json` — pairing bonuses (+3 pts, 23 entries)
-  - `enhanced_delivery.json` — delivery tier scoring (78 entries)
-  - `rda_optimal_uls.json` — RDA/UL reference values (47 entries)
-  - `clinically_relevant_strains.json` — probiotic strain bonuses (42 entries)
-  - `synergy_cluster.json` — synergy detection (54 entries)
-  - `standardized_botanicals.json` — botanical standardization markers (239 entries)
-  - `other_ingredients.json` — recognized non-scorable ingredients (656 entries)
-  - `botanical_ingredients.json` — botanical mapping (428 entries)
-  - `proprietary_blends.json` — blend recognition mapping (14 entries)
-  - `manufacturer_violations.json` — brand deductions (66 entries, cap -25)
-  - `clinical_risk_taxonomy.json` — interaction enum definitions (14 conditions, 9 drug classes)
-  - `ingredient_interaction_rules.json` — condition/drug interaction rules (45 rules)
+- **Tests:** `python -m pytest scripts/tests/` (~7,000 tests across 169 files) — ALL tests must pass after every change
+- **Supporting data files (in `scripts/data/`):** counts current as of 2026-05-12; check `_metadata.total_entries` for live values
+  - `banned_recalled_ingredients.json` — hard-fail blocked substances (~146 entries, schema 5.3.0)
+  - `harmful_additives.json` — penalty substances (~116 entries, schema 5.4.0, severity: critical/high/moderate/low)
+  - `top_manufacturers_data.json` — trusted brands (~77 entries, fuzzy threshold 0.90)
+  - `allergens.json` — allergen detection (~17 entries)
+  - `backed_clinical_studies.json` — evidence database (~197 entries, all PMID-backed, schema 5.3.0)
+  - `absorption_enhancers.json` — pairing bonuses (+3 pts, ~23 entries, schema 5.1.0)
+  - `enhanced_delivery.json` — delivery tier scoring (~78 entries)
+  - `rda_optimal_uls.json` — RDA/UL reference values (~47 entries)
+  - `clinically_relevant_strains.json` — probiotic strain bonuses (~42 entries, schema 5.1.0)
+  - `synergy_cluster.json` — synergy detection (~58 entries, schema 5.2.0)
+  - `standardized_botanicals.json` — botanical standardization markers (~239 entries)
+  - `botanical_marker_contributions.json` — source-botanical → bioactive-marker contributions (added 2026-05-11; configures marker scoring credit for standardized botanical extracts; see also `identity_vs_bioactivity_impact_report.md`)
+  - `other_ingredients.json` — recognized non-scorable ingredients (~679 entries, schema 5.4.0)
+  - `botanical_ingredients.json` — botanical mapping (~482 entries, schema 5.2.0)
+  - `proprietary_blends.json` — blend recognition mapping (~19 entries)
+  - `manufacturer_violations.json` — brand deductions (~79 entries, cap -25)
+  - `clinical_risk_taxonomy.json` — interaction enum definitions (14 conditions, 23 drug classes — schema 5.2.0)
+  - `ingredient_interaction_rules.json` — condition/drug interaction rules (~145 rules, schema 6.1.0; see also `INTERACTION_RULE_SCHEMA_V6_ADR.md` + `INTERACTION_RULE_AUTHORING_SOP.md`)
+  - `user_goals_to_clusters.json` — user-goal → synergy-cluster mapping (schema 6.0.0)
 
 ## TASK 1: IQM 5-POINT AUDIT (PRIMARY — ~70% of effort)
 
@@ -95,6 +97,8 @@ Run ONCE at the start of the audit before batch work begins:
 3. **Scan for scattered entries:** Parents added over time may be scattered at the end of the file instead of grouped logically. Check if late-index parents (indices 400+) should actually be forms under an existing parent rather than standalone entries. Example: a `phosphatidylserine_sharp_ps_gold` parent at index 490 should just be a form under the existing `phosphatidylserine` parent.
 
 4. **Verify parent count:** Report the total parent count and compare to previous audit. Large jumps (+20) or drops (-10) should be explained.
+
+5. **Identity vs bioactivity boundary (added 2026-05-11):** Source botanicals (e.g., marigold, kelp, citrus extract) must route to a **botanical canonical**, not into IQM marker entries (e.g., lutein, iodine, bioflavonoids). Marker delivery is configured via `botanical_marker_contributions.json`, not by aliasing source botanicals into IQM markers. The cleaner reverse-index uses an exclusion list to enforce this. When auditing IQM marker entries, scan their aliases for source-botanical names and confirm those names ALSO exist in `botanical_ingredients.json` as canonical entries. See `reports/identity_vs_bioactivity_impact_report.md` for the 8-phase migration history.
 
 ---
 
@@ -174,14 +178,14 @@ Run ONCE at the start of the audit before batch work begins:
 ## TASK 4: SCHEMA & INFRASTRUCTURE (~5% of effort)
 
 ### 4A: Schema Version Consistency
-- All data files should have consistent schema versions (currently 5.0.0, clinical files use 5.1.0)
-- Verify schema_version fields match across all JSON files
+- Data files now span schema 5.0.0 – 5.4.0 (with 6.0.0 for `user_goals_to_clusters.json` and 6.1.0 for `ingredient_interaction_rules.json`). Verify each file's `_metadata.schema_version` is set and matches its tests' expectations — schema versions are deliberately heterogeneous across the corpus.
+- Schema-version bumps require a corresponding test update under `scripts/tests/`.
 
 ### 4B: Test Suite Health
 - Run full test suite: `python -m pytest scripts/tests/ -v`
 - Any skipped tests should be investigated — are they stale or blocked?
 - Any xfailed tests should be reviewed — can they be fixed?
-- Check test count hasn't decreased (currently 2672+)
+- Check test count hasn't decreased (currently ~7,000 across 169 files; verify with `python3 -m pytest scripts/tests/ --collect-only -q | tail -3`)
 
 ### 4C: Constants Freshness
 - Review `scripts/constants.py` EXCLUDED_NUTRITION_FACTS list
@@ -251,3 +255,5 @@ Remember: This system directly affects health decisions. Every bio_score must be
 | ------- | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 2026-02 | Claude + Sean | Vitamins A-K, Ca, P, Mg, Fe, Zn, Slippery Elm, Chromium-Glutathione, Choline-Taurine, PI-TMG, Probiotics/Prebiotics (architecture refactor), L-Glutamine through L-Ornithine | 498→508 parents, 10 species-level probiotic parents created, 37 strain forms migrated, 200+ bio_score corrections, 300+ notes rewritten with PubMed citations, 150+ suffix aliases removed, 8 phantom "from food" forms deleted, Nitrosigine form added |
 | 2026-03 | Claude + Sean | Interaction rules, clinical taxonomy, export hardening, project cleanup                                                                                                      | 549 parents, 33 data files, 45 interaction rules (pregnancy/hypertension/diabetes), condition_summary + dose_threshold_evaluation in export, 2672 tests, schema 5.0/5.1                                                                                 |
+| 2026-04 | Claude + Sean | IQM alias expansion, Dr. Pham IQM audit batches, interaction rules schema v6, botanical/citrus standardization fixes | ~600 parents, interaction_rules schema 6.0 (one entry per ingredient, dose_thresholds, pregnancy_lactation block), expanded drug_class enum (9 → 23), new condition coverage (liver_disease, thyroid_disorder, autoimmune, etc.), final export schema v1.5.0, ~5,100 tests |
+| 2026-05 | Claude + Sean | Identity vs bioactivity split (8-phase migration), canonical crossing audit, marigold→lutein contribution, blob-level canonical_id + delivers_markers, FINAL_EXPORT_SCHEMA bumped to v1.6.0 | 621 parents (schema 5.4.0), interaction_rules schema 6.1.0 (~145 rules), botanical_marker_contributions.json added, 133 kelp/marigold/citrus identity leaks fixed, ~7,000 tests across 169 files |
