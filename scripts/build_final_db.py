@@ -295,14 +295,47 @@ _INACTIVE_ROLE_LABELS = {
     "color": "Color",
     "flavoring": "Flavoring",
     "flavor": "Flavor",
+    # Cleaner functional_roles taxonomy (added 2026-05-12 after audit
+    # found 4,139 inactives with populated functional_roles but no
+    # display_role_label). These are the most common functional_roles
+    # values that don't appear in harmful_additives.json:
+    "sweetener_artificial": "Sweetener (artificial)",
+    "sweetener_natural": "Sweetener (natural)",
+    "sweetener_sugar_alcohol": "Sweetener (sugar alcohol)",
+    "colorant_artificial": "Colorant (artificial)",
+    "colorant_natural": "Colorant (natural)",
+    "flavor_artificial": "Flavor (artificial)",
+    "flavor_natural": "Flavor (natural)",
+    "surfactant": "Surfactant",
+    "ph_adjuster": "pH adjuster",
+    "acidulant": "Acidulant",
 }
 
+# Sentinel tokens the cleaner emits when classification fails. Treat as
+# "no role" rather than rendering them literally.
+_INACTIVE_ROLE_SENTINELS = frozenset({"(none)", "none", "unknown", ""})
 
-def _compute_inactive_role_label(ingredient: Dict[str, Any], other_ref: Dict[str, Any]) -> Optional[str]:
+
+def _compute_inactive_role_label(
+    ingredient: Dict[str, Any],
+    other_ref: Dict[str, Any],
+    resolved_functional_roles: Optional[List[str]] = None,
+) -> Optional[str]:
     """Return the user-visible role string for an inactive ingredient.
-    Prefers the more specific `additive_type` over the broader `category`,
-    then maps through the curated label table, with a snake_case
-    fallback for vocabulary entries not yet curated.
+
+    Resolution order (most authoritative → least):
+      1. ingredient.additiveType / additive_type — DSLD-typed
+      2. ingredient.category — DSLD broad category
+      3. other_ref.additive_type / category — IQM curated reference
+      4. resolved_functional_roles[0] — cleaner's role classifier as
+         already resolved by the blob-builder (which OR-chains
+         ing > other_ref > harmful_ref). Pass it in so the caller
+         doesn't have to re-resolve the same chain.
+
+    All candidates map through ``_INACTIVE_ROLE_LABELS`` for curated
+    user-friendly strings, with a snake_case → "Title case" prettifier
+    as the fallback. Sentinel tokens ("(none)", "none", "unknown")
+    are filtered so they never leak into Flutter.
     """
     candidates = [
         safe_str(ingredient.get("additiveType")),
@@ -311,9 +344,29 @@ def _compute_inactive_role_label(ingredient: Dict[str, Any], other_ref: Dict[str
         safe_str(other_ref.get("additive_type")),
         safe_str(other_ref.get("category")),
     ]
+    # functional_roles fallback. Accept the already-resolved list from
+    # the caller. If not provided, fall back to checking ing + other_ref
+    # directly (back-compat with older call-sites).
+    sources: List[Any] = []
+    if resolved_functional_roles is not None:
+        sources.append(resolved_functional_roles)
+    else:
+        sources.append(ingredient.get("functional_roles"))
+        sources.append(other_ref.get("functional_roles"))
+    for source in sources:
+        if isinstance(source, list):
+            chosen = next(
+                (s for s in source if isinstance(s, str) and s.strip()),
+                None,
+            )
+            if chosen:
+                candidates.append(chosen)
+                break  # first non-empty source wins; the cleaner's
+                       # primary-role signal is at index 0
+
     for raw in candidates:
         key = raw.strip().lower()
-        if not key:
+        if not key or key in _INACTIVE_ROLE_SENTINELS:
             continue
         if key in _INACTIVE_ROLE_LABELS:
             return _INACTIVE_ROLE_LABELS[key]
@@ -2675,6 +2728,16 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         is_additive_resolved = safe_bool(ing.get("isAdditive") or other_ref.get("is_additive"))
         is_harmful_resolved = bool(harmful_hit)
         harmful_severity_resolved = harmful_hit.get("severity_level") if harmful_hit else None
+        # Resolve functional_roles once from the three-way chain so both
+        # the blob field AND _compute_inactive_role_label see the same
+        # value. Maltodextrin is the canary: enriched ing has None, but
+        # harmful_ref carries ['filler'] — the role-label computer
+        # missed it before we threaded the resolved list through.
+        functional_roles_resolved = safe_list(
+            ing.get("functional_roles")
+            or other_ref.get("functional_roles")
+            or (harmful_ref or {}).get("functional_roles")
+        )
 
         inactive.append({
             "raw_source_text": raw,
@@ -2684,11 +2747,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "forms": safe_list(ing.get("forms")),
             "category": safe_str(ing.get("category") or other_ref.get("category")),
             "is_additive": is_additive_resolved,
-            "functional_roles": safe_list(
-                ing.get("functional_roles")
-                or other_ref.get("functional_roles")
-                or (harmful_ref or {}).get("functional_roles")
-            ),
+            "functional_roles": functional_roles_resolved,
             "standard_name": std_name_resolved,
             "notes": notes_text,
             "mechanism_of_harm": mechanism_text,
@@ -2713,7 +2772,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             # Canonical inactive contract — Flutter renders these
             # directly without local inference.
             "display_label": std_name_resolved or name,
-            "display_role_label": _compute_inactive_role_label(ing, other_ref),
+            "display_role_label": _compute_inactive_role_label(
+                ing, other_ref, resolved_functional_roles=functional_roles_resolved
+            ),
             "severity_status": _compute_inactive_severity_status(
                 is_additive_resolved, is_harmful_resolved, harmful_severity_resolved
             ),
