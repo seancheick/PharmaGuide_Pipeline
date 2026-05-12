@@ -1355,34 +1355,99 @@ _BRANDED_TOKENS = (
     "Phytosome", "Silybin Phytosome", "Pycnogenol", "Setria", "Albion",
     "TRAACS", "Chromax", "Curcumin C3", "Longvida", "Wellmune", "CurcuWIN",
     "LJ100", "enXtra", "AstraGin", "Venetron",
+    # Capsimax (capsicum extract), Carnipure (l-carnitine), Sunfiber (PHGG),
+    # Lutemax/Lutemax 2020 (lutein/zeaxanthin), Suntheanine (l-theanine),
+    # Cognizin (citicoline) — added 2026-05-12 after the Capsimax canary
+    # surfaced display_label fidelity loss (DSLD 1181 dropped "Capsicum
+    # Fruit" from the rendered string).
+    "Capsimax", "Carnipure", "Sunfiber", "Lutemax", "Lutemax 2020",
+    "Suntheanine", "Cognizin",
 )
+
+# Generic form words that survive the cleaner's name_extraction pass when the
+# DSLD label form is too thin (e.g. "Capsimax(TM) Capsicum Fruit Extract" →
+# forms[0].name='extract', source='name_extraction'). When all three signals
+# line up (name_extraction source AND a generic form token AND a richer
+# raw_source_text), use the cleaned raw text as the display base instead.
+_GENERIC_FORM_TOKENS = frozenset({
+    "extract", "powder", "complex", "blend", "concentrate", "fraction",
+    "phytosome", "liposome", "tincture", "oil", "resin", "isolate",
+})
+
+_TRADEMARK_PAREN_RE = re.compile(
+    r"\s*\(\s*(?:TM|R|C|SM)\s*\)", re.IGNORECASE
+)
+_TRADEMARK_SYMBOL_RE = re.compile(r"[™®©℠]")  # ™ ® © ℠
+_WHITESPACE_RE = re.compile(r"\s+")
+
+
+def _strip_trademark_markers(text: str) -> str:
+    """Remove (TM), (R), (C), ™, ®, © from a label string and normalize
+    whitespace. Trademark markers don't render well in Flutter and don't
+    add semantic value — the brand identity comes from the token itself.
+    """
+    if not text:
+        return ""
+    text = _TRADEMARK_PAREN_RE.sub("", text)
+    text = _TRADEMARK_SYMBOL_RE.sub("", text)
+    return _WHITESPACE_RE.sub(" ", text).strip()
 
 
 def _compute_display_label(ingredient: Dict[str, Any]) -> str:
     """Produce the user-facing ingredient label string for Flutter.
 
     Format: ``Brand Base Form``. Preserves branded tokens (KSM-66,
-    BioPerine, Ferrochel) and the DSLD-authored descriptive form phrase
-    (typically ``Base PlantPart Form``, e.g. "Ashwagandha Root Extract").
+    BioPerine, Ferrochel, Capsimax) and the DSLD-authored descriptive
+    form phrase (typically ``Base PlantPart Form``, e.g. "Ashwagandha
+    Root Extract" or "Capsicum Fruit Extract").
 
     Sprint E1.2.2 invariants this satisfies:
       #1 display_name_never_canonical — base phrase prefers the DSLD
          descriptive form over the scoring-group canonical, so we never
          collapse e.g. "KSM-66 Ashwagandha Root Extract" → "Ashwagandha".
       #4 branded_identity_preserved — if the source label carries a
-         branded token (KSM-66, BioPerine, etc.) the output carries it.
+         branded token (KSM-66, BioPerine, Capsimax, etc.) the output
+         carries it.
       #5 plant_part_preserved — plant-part words land in ``forms[0].name``
-         on DSLD data and therefore survive into the base phrase.
+         on DSLD data and therefore survive into the base phrase. When
+         the cleaner reverse-engineered a thin form (source=
+         "name_extraction", e.g. just "extract"), we fall back to the
+         cleaned raw_source_text so species + plant part are not lost.
     """
     name = safe_str(ingredient.get("name"))
+    raw = safe_str(ingredient.get("raw_source_text"))
     forms = ingredient.get("forms") or []
     first_form_name = ""
+    first_form_source = ""
     if forms and isinstance(forms[0], dict):
         first_form_name = safe_str(forms[0].get("name"))
+        first_form_source = safe_str(forms[0].get("source"))
 
     name_lower = name.lower()
     form_lower = first_form_name.lower()
     is_branded_name = any(t.lower() in name_lower for t in _BRANDED_TOKENS)
+
+    # Thin-form fallback (capsules the Capsimax class of failures):
+    # When the cleaner could not extract a real label form and synthesized
+    # a generic one from the name AND the raw_source_text contains richer
+    # descriptive content (species, plant part, branded modifiers), prefer
+    # the cleaned raw text. Use it directly when it already contains the
+    # name as a substring (i.e. the brand+species+part+form sequence).
+    if (
+        first_form_source == "name_extraction"
+        and form_lower in _GENERIC_FORM_TOKENS
+        and raw
+    ):
+        cleaned_raw = _strip_trademark_markers(raw)
+        # Acceptance criteria: cleaned_raw is richer than name+form alone
+        # AND contains the name token (so we're not swapping in unrelated
+        # text). Word-count >= 3 ensures we don't drop into edge cases
+        # where raw is also one word.
+        if (
+            len(cleaned_raw.split()) >= 3
+            and (not name or name_lower in cleaned_raw.lower())
+        ):
+            return cleaned_raw
 
     # Word-boundary substring match so "Calcium" does NOT claim to be
     # contained in "Tricalcium Phosphate" (the user would see "Tricalcium
@@ -1421,7 +1486,8 @@ def _compute_display_label(ingredient: Dict[str, Any]) -> str:
             break
 
     result = f"{branded} {base_phrase}".strip() if branded else base_phrase
-    return result.strip() or name
+    # Strip any trademark markers that slipped through forms/name strings.
+    return _strip_trademark_markers(result) or name
 
 
 # Sprint E1.2.5 — active-count reconciliation.
