@@ -1,0 +1,260 @@
+{
+  "schema": "phase01_findings_summary_v1",
+  "generated_at": "2026-05-12T14:37:35.184171+00:00Z",
+  "build_freshness": {
+    "build_freshness_warning": "The audited build at scripts/final_db_output/ was generated 2026-04-26 at schema_version=1.4.0. Pipeline code is at v1.6.0 (May 9). The v1.5.0 emit logic in build_final_db.py lines 2469-2552 (form_status, form_match_status, dose_status, is_safety_concern, display_role_label, severity_status) IS present but was not exercised when these blobs were built. Re-running build_final_db.py should make most LOW-severity findings disappear. UNSAFE_UNIT_CONVERSION, BLEND_CHILD_FLATTENED_NO_PARENT, raw-vs-blob count deltas, and BRANDED_TOKEN_DROPPED are NOT explained by stale build and require code-level fixes.",
+    "audited_build": {
+      "exported_at": "2026-04-26",
+      "schema_version": "1.4.0",
+      "pipeline_version": "3.4.0",
+      "scoring_version": "3.4.0"
+    },
+    "current_code": {
+      "EXPORT_SCHEMA_VERSION": "1.6.0",
+      "PIPELINE_VERSION": "3.4.0",
+      "build_final_db_last_modified": "2026-05-09"
+    }
+  },
+  "phase_0_contract_sync": {
+    "blobs_scanned": 8169,
+    "active_v1_5_0_fields_red": [
+      "display_form_label",
+      "form_status",
+      "form_match_status",
+      "dose_status",
+      "is_safety_concern",
+      "canonical_id"
+    ],
+    "inactive_v1_5_0_fields_red": [
+      "display_label",
+      "display_role_label",
+      "severity_status",
+      "is_safety_concern"
+    ],
+    "interpretation": "All listed RED fields are 0% emitted on disk. v1.5.0 emit logic is in code (build_final_db.py:2469-2552). Re-build to confirm. Doc and code are in sync; only the on-disk output is behind."
+  },
+  "phase_1_raw_to_final": {
+    "canaries_audited": [
+      "1007",
+      "43994",
+      "1007",
+      "1044",
+      "1181",
+      "183043"
+    ],
+    "canary_set": [
+      [
+        "simple_single",
+        "1004",
+        "L-Arginine 1000"
+      ],
+      [
+        "multivit",
+        "1007",
+        "Mega Teen"
+      ],
+      [
+        "vitamin_a_iu",
+        "1007",
+        "Mega Teen"
+      ],
+      [
+        "botanical",
+        "1181",
+        "Be-Energized Calorie Burning Formula"
+      ],
+      [
+        "blend",
+        "43994",
+        "Perfect Food Raw Apple"
+      ],
+      [
+        "probiotic",
+        "1044",
+        "Ultra Probiotic Complex 25"
+      ],
+      [
+        "omega3",
+        "178667",
+        "Enteric-Coated Fish Oil 1200 mg"
+      ],
+      [
+        "magnesium_form",
+        "183043",
+        "Children's Basic Nutrients"
+      ],
+      [
+        "many_others",
+        "1031",
+        "Ultra Iron 65"
+      ],
+      [
+        "allergen_cert",
+        "1003",
+        "L-Arginine 5000 mg Natural Orange Flavor"
+      ],
+      [
+        "unmapped",
+        "214221",
+        "Aloe Vera Juice Natural Wild Berry Flavor"
+      ]
+    ],
+    "findings_by_severity": {
+      "LOW": 752,
+      "HIGH": 13,
+      "BLOCKER": 4
+    },
+    "real_bugs_independent_of_stale_build": [
+      {
+        "code": "UNSAFE_UNIT_CONVERSION",
+        "severity": "BLOCKER",
+        "where": "Vitamin A IU \u2192 mcg RAE form-aware normalization missing",
+        "products": [
+          "1007",
+          "43994"
+        ],
+        "count": 3,
+        "actionable": "Check that scoring computes form-aware mcg RAE for Vitamin A and exposes normalized_value/normalized_unit on the blob."
+      },
+      {
+        "code": "BLEND_CHILD_FLATTENED_NO_PARENT",
+        "severity": "BLOCKER",
+        "where": "43994 'RAW Organic Fruit & Veggie Juice Antioxidant Blend' \u2014 disclosure_level='none' but child_ingredients=49",
+        "products": [
+          "43994"
+        ],
+        "count": 1,
+        "actionable": "Either the disclosure_level enum is wrong for this blend or the children list is being populated for opaque blends. Investigate proprietary_blend_detector.py."
+      },
+      {
+        "code": "BRANDED_TOKEN_DROPPED",
+        "severity": "HIGH",
+        "where": "branded tokens (Ferrochel, BioPerine, Albion, TRAACS, Phytosome) present in raw notes/forms but absent from display_label",
+        "products": [
+          "1007",
+          "1181",
+          "1044",
+          "183043"
+        ],
+        "count": 12,
+        "actionable": "Re-run build_final_db.py \u2014 _compute_display_label may now preserve branded tokens. If still failing post-rebuild, fix in display_label computer.",
+        "false_positive_risk": "Some matches (e.g. 'Phytosome' on Bifidobacterium) come from notes-text bleed-through where the IQM notes mention a brand applicable to a different nutrient. The audit's check is conservative; manual review needed for the Phytosome/Ferrochel-on-non-iron cases."
+      },
+      {
+        "code": "PLANT_PART_DROPPED",
+        "severity": "HIGH",
+        "where": "1181 Capsimax Capsicum Fruit Extract \u2014 'fruit' in raw, absent from display_label",
+        "products": [
+          "1181"
+        ],
+        "count": 1,
+        "actionable": "Re-run build_final_db.py; if still failing, fix display_label composer to preserve plant-part tokens."
+      }
+    ],
+    "raw_vs_blob_count_deltas": [
+      {
+        "dsld_id": "43994",
+        "raw_actives_counted": 65,
+        "blob_ings": 64,
+        "delta": 1,
+        "explained_by_drop_reasons": true,
+        "drop_reasons": [
+          "DROPPED_AS_INACTIVE",
+          "DROPPED_STRUCTURAL_HEADER"
+        ],
+        "note": "1 active reclassified or absorbed into a structural header; reconciler accepts this"
+      },
+      {
+        "dsld_id": "178667",
+        "raw_actives_counted": 3,
+        "blob_ings": 2,
+        "delta": 1,
+        "explained_by_drop_reasons": true,
+        "drop_reasons": [
+          "DROPPED_AS_INACTIVE",
+          "DROPPED_SUMMARY_WRAPPER"
+        ],
+        "note": "1 raw active is a 'Less than 2% of...' summary or routed to inactive"
+      },
+      {
+        "dsld_id": "214221",
+        "raw_actives_counted": 6,
+        "blob_ings": 5,
+        "delta": 1,
+        "explained_by_drop_reasons": true,
+        "drop_reasons": [
+          "DROPPED_AS_INACTIVE",
+          "DROPPED_UNMAPPED_ACTIVE"
+        ],
+        "unmapped_actives_total": 2,
+        "note": "1 raw active is in unmapped_actives.names (transparency panel)"
+      }
+    ],
+    "counter_definition_note": "The blob's raw_actives_count is computed by the cleaner from display_ingredients[] and includes expanded nested-blend children. The audit's raw_actives walker counts activeIngredients[] entries (plus nestedRows). They differ by definition \u2014 the blob.raw_actives_count is the canonical reconciliation baseline. Audit log keeps both for transparency."
+  },
+  "auto_skipping_tests_that_can_now_activate": [
+    {
+      "test": "scripts/tests/test_active_count_reconciliation.py::test_canary_carries_raw_actives_count_and_reasons",
+      "status": "ALREADY ACTIVE on existing CANARY_IDS (35491, 306237, 246324, 1002, 19067, 1036, 176872)",
+      "action": "Expand CANARY_IDS to include the 11 new archetypes (or merge with new test_raw_to_final_canaries.py)"
+    },
+    {
+      "test": "scripts/tests/test_label_fidelity_contract.py::test_inactive_ingredients_complete",
+      "status": "BLOCKING_GATE: raw_inactives_count present on all canaries (100%) \u2014 auto-skip should release",
+      "action": "Run pytest to confirm. If still skipping, the _find_blob_dir() function looks at /tmp/pharmaguide_release_build/ \u2014 point it at scripts/final_db_output/ OR run a fresh build to /tmp."
+    },
+    {
+      "test": "scripts/tests/test_label_fidelity_contract.py::test_display_name_never_canonical, test_branded_identity_preserved, test_plant_part_preserved, test_standardization_note_preserved",
+      "status": "BLOCKED_BY_STALE_BUILD: invariants gate on `display_label` / `display_badge` / `standardization_note` being emitted. v1.5.0 logic exists in code but on-disk blobs predate it.",
+      "action": "Re-run `python3 scripts/build_final_db.py` to a fresh build dir, then run these tests against /tmp/pharmaguide_release_build/."
+    }
+  ],
+  "documentation_staleness": {
+    "FINAL_EXPORT_SCHEMA_V1.md": {
+      "doc_version": "1.5.0",
+      "last_commit": "2026-05-05",
+      "vs_code_EXPORT_SCHEMA_VERSION": "1.6.0",
+      "drift": "doc one minor behind code (v1.6 added profile_gate passthrough). Update doc to mention v1.6.0 changes.",
+      "recommendation": "UPDATE \u2014 bump to v1.6.0 with profile_gate fields documented"
+    },
+    "DATABASE_SCHEMA.md": {
+      "last_commit": "2026-04-30",
+      "drift": "predates v1.5.0/v1.6.0 schema bump",
+      "recommendation": "UPDATE \u2014 confirm products_core columns match build_final_db CORE_COLUMN_COUNT"
+    },
+    "PIPELINE_ARCHITECTURE.md": {
+      "last_commit": "2026-04-18",
+      "drift": "predates v1.5.0/v1.6.0 \u2014 also has unstaged modifications per git status (M PIPELINE_OPERATIONS_README.md)",
+      "recommendation": "UPDATE \u2014 note the v1.5.0 canonical contract path"
+    },
+    "SCORING_ENGINE_SPEC.md": {
+      "last_commit": "2026-05-05",
+      "drift": "in sync with v1.5.0",
+      "recommendation": "KEEP"
+    },
+    "deleted_plan_docs_in_git_status": [
+      "docs/plans/2026-03-06-clinical-source-batch-remediation.md",
+      "docs/plans/2026-03-06-followup-safety-policy-design.md",
+      "docs/plans/2026-03-06-followup-safety-policy-plan.md",
+      "docs/plans/2026-03-06-pipeline-audit-remediation.md",
+      "docs/plans/2026-03-08-clean-unmapped-structural-header-fixes.md",
+      "docs/plans/2026-03-08-ingredientgroup-fallback-plan.md",
+      "docs/plans/2026-03-08-iqm-collision-cleanup.md",
+      "docs/plans/2026-03-08-unmapped-resolution-prompt-design.md",
+      "docs/plans/2026-03-09-display-ledger-design.md",
+      "docs/plans/2026-03-09-display-ledger-plan.md",
+      "docs/plans/2026-03-16-clean-unmapped-verification-sop.md"
+    ],
+    "deleted_plan_docs_recommendation": "Already deleted in working copy \u2014 `git commit` to remove from index. These were superseded by Sprint E1.x."
+  },
+  "next_steps_ordered": [
+    "1. Re-run build_final_db.py on a clean output dir (e.g., /tmp/pharmaguide_release_build) to refresh the corpus to v1.6.0",
+    "2. Re-run scripts/audit_contract_sync.py --build-dir /tmp/pharmaguide_release_build \u2014 should show GREEN for v1.5.0 fields if emit logic works as intended",
+    "3. Re-run scripts/audit_raw_to_final.py --build-dir /tmp/pharmaguide_release_build --canary \u2014 should drop ~712 LOW findings",
+    "4. Re-run pytest scripts/tests/test_label_fidelity_contract.py \u2014 should activate previously-skipping invariants",
+    "5. Fix the BLOCKERs that DON'T depend on rebuild: Vitamin A unit conversion + 43994 opaque-blend children",
+    "6. Investigate the BRANDED_TOKEN_DROPPED HIGH findings post-rebuild; fix display_label composer if real",
+    "7. Update FINAL_EXPORT_SCHEMA_V1.md to document v1.6.0; commit deletion of stale docs/plans/*.md",
+    "8. (Phase 5 conditional) Inspect sync_to_supabase.py \u2014 does it transform or just copy? If transforms, add Supabase reconciliation phase."
+  ]
+}

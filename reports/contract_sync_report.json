@@ -1,0 +1,573 @@
+{
+  "schema": "contract_sync_report_v1",
+  "build_dir": "scripts/final_db_output",
+  "blob_count": 8169,
+  "active_ingredient_contract": {
+    "_total_ingredients": 83171,
+    "_total_blobs": 8169,
+    "fields": {
+      "raw_source_text": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "name": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "standard_name": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "normalized_key": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "quantity": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "unit": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "dosage": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "dosage_unit": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "bio_score": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.8367,
+        "absent_in": 0.1633,
+        "status": "GREEN"
+      },
+      "score": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": true,
+        "present_in": 0.8649,
+        "absent_in": 0.1351,
+        "status": "GREEN"
+      },
+      "form": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": true,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "is_harmful": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": true,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "display_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "display_form_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED"
+      },
+      "form_status": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED",
+        "values_seen": {},
+        "values_expected": [
+          "known",
+          "unknown"
+        ]
+      },
+      "form_match_status": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED",
+        "values_seen": {},
+        "values_expected": [
+          "mapped",
+          "unmapped",
+          "n/a"
+        ]
+      },
+      "display_dose_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "dose_status": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED",
+        "values_seen": {},
+        "values_expected": [
+          "disclosed",
+          "not_disclosed_blend",
+          "missing"
+        ]
+      },
+      "is_safety_concern": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED"
+      },
+      "canonical_id": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED",
+        "note": "needed for interaction-rule and stack matching"
+      },
+      "delivers_markers": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED_OPTIONAL",
+        "note": "computed in enricher; doc\u00a7Detail Blob Contract promises propagation"
+      },
+      "standardization_note": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.0145,
+        "absent_in": 0.9855,
+        "status": "GREEN"
+      },
+      "display_badge": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "identifiers": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.4026,
+        "absent_in": 0.5974,
+        "status": "GREEN"
+      }
+    }
+  },
+  "inactive_ingredient_contract": {
+    "_total_ingredients": 48850,
+    "_total_blobs": 8169,
+    "fields": {
+      "raw_source_text": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "name": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "standard_name": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "normalized_key": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "severity_level": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "is_additive": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "additive_type": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "functional_roles": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED_OPTIONAL"
+      },
+      "identifiers": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.8873,
+        "absent_in": 0.1127,
+        "status": "GREEN"
+      },
+      "display_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED"
+      },
+      "display_role_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED"
+      },
+      "severity_status": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED",
+        "values_seen": {},
+        "values_expected": [
+          "critical",
+          "suppress",
+          "informational",
+          "n/a"
+        ]
+      },
+      "is_safety_concern": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED"
+      }
+    }
+  },
+  "blob_top_level": {
+    "dsld_id": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "blob_version": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "ingredients": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "inactive_ingredients": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "warnings": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "section_breakdown": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "compliance_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "certification_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "proprietary_blend_detail": {
+      "required": false,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "only when product has blends"
+    },
+    "dietary_sensitivity_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "formulation_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "serving_info": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "manufacturer_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "probiotic_detail": {
+      "required": false,
+      "present_in": 0.0977,
+      "absent_in": 0.9023,
+      "status": "GREEN",
+      "note": "probiotic products only"
+    },
+    "synergy_detail": {
+      "required": false,
+      "present_in": 0.7254,
+      "absent_in": 0.2746,
+      "status": "GREEN"
+    },
+    "interaction_summary": {
+      "required": true,
+      "present_in": 0.8284,
+      "absent_in": 0.1716,
+      "status": "YELLOW"
+    },
+    "evidence_data": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "rda_ul_data": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "nutrition_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "v1.3.2: always present"
+    },
+    "unmapped_actives": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "v1.3.2: always present"
+    },
+    "raw_actives_count": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "E1.2.5 reconciliation snapshot"
+    },
+    "raw_inactives_count": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "E1.0.1 invariant #7 gate"
+    },
+    "ingredients_dropped_reasons": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "E1.2.5 reconciliation enum"
+    }
+  },
+  "summary": {
+    "active_RED_required": [
+      "display_form_label",
+      "form_status",
+      "form_match_status",
+      "dose_status",
+      "is_safety_concern",
+      "canonical_id"
+    ],
+    "active_RED_optional_zero_emit": [
+      "delivers_markers"
+    ],
+    "inactive_RED_required": [
+      "display_label",
+      "display_role_label",
+      "severity_status",
+      "is_safety_concern"
+    ],
+    "inactive_RED_optional_zero_emit": [
+      "functional_roles"
+    ],
+    "top_level_RED": [],
+    "v1_5_0_fields_absent": [
+      "active.display_form_label",
+      "active.form_status",
+      "active.form_match_status",
+      "active.dose_status",
+      "active.is_safety_concern",
+      "active.canonical_id",
+      "active.delivers_markers",
+      "inactive.display_label",
+      "inactive.display_role_label",
+      "inactive.severity_status",
+      "inactive.is_safety_concern"
+    ]
+  },
+  "build_freshness": {
+    "build_freshness_warning": "The audited build at scripts/final_db_output/ was generated 2026-04-26 at schema_version=1.4.0. Pipeline code is at v1.6.0 (May 9). The v1.5.0 emit logic in build_final_db.py lines 2469-2552 (form_status, form_match_status, dose_status, is_safety_concern, display_role_label, severity_status) IS present but was not exercised when these blobs were built. Re-running build_final_db.py should make most LOW-severity findings disappear. UNSAFE_UNIT_CONVERSION, BLEND_CHILD_FLATTENED_NO_PARENT, raw-vs-blob count deltas, and BRANDED_TOKEN_DROPPED are NOT explained by stale build and require code-level fixes.",
+    "audited_build": {
+      "exported_at": "2026-04-26",
+      "schema_version": "1.4.0",
+      "pipeline_version": "3.4.0",
+      "scoring_version": "3.4.0"
+    },
+    "current_code": {
+      "EXPORT_SCHEMA_VERSION": "1.6.0",
+      "PIPELINE_VERSION": "3.4.0",
+      "build_final_db_last_modified": "2026-05-09"
+    }
+  }
+}

@@ -1,0 +1,558 @@
+{
+  "schema": "contract_sync_report_v1",
+  "build_dir": "/tmp/pharmaguide_release_build",
+  "blob_count": 8331,
+  "active_ingredient_contract": {
+    "_total_ingredients": 88054,
+    "_total_blobs": 8331,
+    "fields": {
+      "raw_source_text": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "name": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "standard_name": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "normalized_key": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "quantity": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "unit": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "dosage": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "dosage_unit": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "bio_score": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.8162,
+        "absent_in": 0.1838,
+        "status": "GREEN"
+      },
+      "score": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": true,
+        "present_in": 0.8506,
+        "absent_in": 0.1494,
+        "status": "GREEN"
+      },
+      "form": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": true,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED_OPTIONAL"
+      },
+      "is_harmful": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": true,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED_OPTIONAL"
+      },
+      "display_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "display_form_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.7307,
+        "absent_in": 0.2693,
+        "status": "YELLOW"
+      },
+      "form_status": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN",
+        "values_seen": {
+          "known": 64343,
+          "unknown": 23711
+        },
+        "values_expected": [
+          "known",
+          "unknown"
+        ]
+      },
+      "form_match_status": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN",
+        "values_seen": {
+          "mapped": 48043,
+          "n/a": 23711,
+          "unmapped": 16300
+        },
+        "values_expected": [
+          "mapped",
+          "unmapped",
+          "n/a"
+        ]
+      },
+      "display_dose_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "dose_status": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN",
+        "values_seen": {
+          "disclosed": 57904,
+          "not_disclosed_blend": 29941,
+          "missing": 209
+        },
+        "values_expected": [
+          "disclosed",
+          "not_disclosed_blend",
+          "missing"
+        ]
+      },
+      "is_safety_concern": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "canonical_id": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED",
+        "note": "needed for interaction-rule and stack matching"
+      },
+      "delivers_markers": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED_OPTIONAL",
+        "note": "computed in enricher; doc\u00a7Detail Blob Contract promises propagation"
+      },
+      "standardization_note": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.0142,
+        "absent_in": 0.9858,
+        "status": "GREEN"
+      },
+      "display_badge": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "identifiers": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.4077,
+        "absent_in": 0.5923,
+        "status": "GREEN"
+      }
+    }
+  },
+  "inactive_ingredient_contract": {
+    "_total_ingredients": 49304,
+    "_total_blobs": 8331,
+    "fields": {
+      "raw_source_text": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "name": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "standard_name": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "normalized_key": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "severity_level": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED_OPTIONAL"
+      },
+      "is_additive": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "additive_type": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.0,
+        "absent_in": 1.0,
+        "status": "RED_OPTIONAL"
+      },
+      "functional_roles": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "identifiers": {
+        "promised": true,
+        "required": false,
+        "v1_5_0": false,
+        "deprecated": false,
+        "present_in": 0.8921,
+        "absent_in": 0.1079,
+        "status": "GREEN"
+      },
+      "display_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      },
+      "display_role_label": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 0.7871,
+        "absent_in": 0.2129,
+        "status": "YELLOW"
+      },
+      "severity_status": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN",
+        "values_seen": {
+          "n/a": 32725,
+          "suppress": 13263,
+          "critical": 3316
+        },
+        "values_expected": [
+          "critical",
+          "suppress",
+          "informational",
+          "n/a"
+        ]
+      },
+      "is_safety_concern": {
+        "promised": true,
+        "required": true,
+        "v1_5_0": true,
+        "deprecated": false,
+        "present_in": 1.0,
+        "absent_in": 0.0,
+        "status": "GREEN"
+      }
+    }
+  },
+  "blob_top_level": {
+    "dsld_id": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "blob_version": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "ingredients": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "inactive_ingredients": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "warnings": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "section_breakdown": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "compliance_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "certification_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "proprietary_blend_detail": {
+      "required": false,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "only when product has blends"
+    },
+    "dietary_sensitivity_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "formulation_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "serving_info": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "manufacturer_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "probiotic_detail": {
+      "required": false,
+      "present_in": 0.0971,
+      "absent_in": 0.9029,
+      "status": "GREEN",
+      "note": "probiotic products only"
+    },
+    "synergy_detail": {
+      "required": false,
+      "present_in": 0.7435,
+      "absent_in": 0.2565,
+      "status": "GREEN"
+    },
+    "interaction_summary": {
+      "required": true,
+      "present_in": 0.8461,
+      "absent_in": 0.1539,
+      "status": "YELLOW"
+    },
+    "evidence_data": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "rda_ul_data": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN"
+    },
+    "nutrition_detail": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "v1.3.2: always present"
+    },
+    "unmapped_actives": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "v1.3.2: always present"
+    },
+    "raw_actives_count": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "E1.2.5 reconciliation snapshot"
+    },
+    "raw_inactives_count": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "E1.0.1 invariant #7 gate"
+    },
+    "ingredients_dropped_reasons": {
+      "required": true,
+      "present_in": 1.0,
+      "absent_in": 0.0,
+      "status": "GREEN",
+      "note": "E1.2.5 reconciliation enum"
+    }
+  },
+  "summary": {
+    "active_RED_required": [
+      "canonical_id"
+    ],
+    "active_RED_optional_zero_emit": [
+      "form",
+      "is_harmful",
+      "delivers_markers"
+    ],
+    "inactive_RED_required": [],
+    "inactive_RED_optional_zero_emit": [
+      "severity_level",
+      "additive_type"
+    ],
+    "top_level_RED": [],
+    "v1_5_0_fields_absent": [
+      "active.canonical_id",
+      "active.delivers_markers"
+    ]
+  }
+}
