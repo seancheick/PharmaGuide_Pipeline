@@ -636,12 +636,27 @@ class DosageNormalizer:
                 source_field=source_field
             )
 
-        # Convert units
+        # Convert units. For form-dependent vitamins (A, E, folate) the
+        # converter's form detection scans ``ingredient_name`` for tokens
+        # like "beta-carotene" / "retinyl palmitate" / "d-alpha tocopherol"
+        # / "methylfolate" — but the bare ``name`` (e.g. "Vitamin A") never
+        # contains the form. The form is in ``ingredient['forms'][*].name``
+        # (DSLD schema). Join name + form names so the converter can route
+        # to the correct rule. Without this, Vitamin A in IU silently uses
+        # factor 1.0 ("form unknown") instead of 0.1 (β-carotene supplement)
+        # or 0.3 (retinol) — a BLOCKER for the pregnancy/UL gate.
+        form_names = [
+            f.get('name', '') for f in (ingredient.get('forms') or [])
+            if isinstance(f, dict) and f.get('name')
+        ]
+        ingredient_name_for_form_detection = (
+            ' '.join([name] + form_names) if form_names else name
+        )
         conversion_result = self.unit_converter.convert_nutrient(
             nutrient=name,
             amount=float(amount),
             from_unit=unit,
-            ingredient_name=name
+            ingredient_name=ingredient_name_for_form_detection,
         )
 
         # Calculate per-day amounts
