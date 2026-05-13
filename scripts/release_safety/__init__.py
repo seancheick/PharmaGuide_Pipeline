@@ -67,6 +67,19 @@ from .gates import (
     DEFAULT_BLAST_RADIUS_THRESHOLD,
     evaluate_cleanup_gates,
 )
+from .quarantine import (
+    QUARANTINE_PREFIX,
+    ACTIVE_PREFIX,
+    DEFAULT_BUCKET,
+    ParsedActivePath,
+    ParsedQuarantinePath,
+    parse_active_path,
+    parse_quarantine_path,
+    quarantine_target_path,
+    quarantine_blob,
+    recover_blob,
+    list_quarantine_dates,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -114,4 +127,16 @@ __all__ = [
     "GateResult",
     "DEFAULT_BLAST_RADIUS_THRESHOLD",
     "evaluate_cleanup_gates",
+    # P2.1a — quarantine primitive (move-to-quarantine + recover)
+    "QUARANTINE_PREFIX",
+    "ACTIVE_PREFIX",
+    "DEFAULT_BUCKET",
+    "ParsedActivePath",
+    "ParsedQuarantinePath",
+    "parse_active_path",
+    "parse_quarantine_path",
+    "quarantine_target_path",
+    "quarantine_blob",
+    "recover_blob",
+    "list_quarantine_dates",
 ]
