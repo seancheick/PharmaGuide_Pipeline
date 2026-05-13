@@ -39,6 +39,142 @@ DETAIL_BLOB_STORAGE_PREFIX = "shared/details/sha256"
 
 
 # ---------------------------------------------------------------------------
+# P3.6b — catalog_releases registry activation (auto-create + state walk)
+# ---------------------------------------------------------------------------
+#
+# A successful release walks the registry through:
+#     missing -> PENDING -> VALIDATING -> (manifest flip) -> ACTIVE
+#
+# This module owns two helpers that the sync() function calls at the right
+# moments:
+#
+#   _ensure_registry_validating(client, db_version, detail_index_url)
+#       Stage 1. Called AFTER all uploads succeed, BEFORE manifest flip.
+#       Brings the registry row to VALIDATING-or-later. The row's blobs
+#       are protected by P3.5 once the state is VALIDATING.
+#
+#   _ensure_registry_active(client, db_version)
+#       Stage 2. Called AFTER manifest flip, BEFORE reporting sync success.
+#       Brings the row from VALIDATING to ACTIVE.
+#
+# Re-entry behavior (per ADR-0001 P3.6b sign-off):
+#
+#   row state on entry to Stage 1   -> action
+#   -----------------------------------------------------------
+#   missing                         -> insert PENDING, advance VALIDATING
+#   PENDING                         -> advance VALIDATING
+#   VALIDATING                      -> no-op (already there)
+#   ACTIVE                          -> no-op (already past)
+#   RETIRED                         -> RAISE (never resurrect)
+#
+#   row state on entry to Stage 2   -> action
+#   -----------------------------------------------------------
+#   VALIDATING                      -> advance ACTIVE
+#   ACTIVE                          -> no-op (idempotent success)
+#   any other                       -> RAISE (between-stage inconsistency)
+#
+# Partial-failure policy:
+#   - Stage 1 failure: sync aborts BEFORE manifest flip. Registry may be
+#     left in PENDING or VALIDATING; rerun is safe (preflight resumes).
+#   - Stage 2 failure: manifest has already flipped (consumers see new
+#     version). Registry is in VALIDATING (protected). Rerun completes
+#     the transition. Sync reports failure so the operator knows.
+
+
+def _ensure_registry_validating(client, *, db_version, detail_index_url):
+    """Stage 1: bring the registry row for db_version to VALIDATING-or-later.
+
+    Idempotent and re-entry-safe per the table above.
+
+    Returns the CatalogRelease in its final state after this stage.
+    Raises RuntimeError on RETIRED (a retired version must never be
+    silently resurrected — operator must create a new db_version).
+    """
+    from release_safety import (
+        ReleaseChannel,
+        ReleaseState,
+        get_release,
+        insert_pending_release,
+        transition_to_validating,
+    )
+
+    existing = get_release(client, db_version)
+
+    if existing is None:
+        print(f"  [registry] {db_version}: no row found, inserting PENDING…")
+        insert_pending_release(
+            client,
+            db_version=db_version,
+            release_channel=ReleaseChannel.OTA_STABLE,
+            detail_index_url=detail_index_url,
+            notes="auto-created by sync_to_supabase",
+        )
+        print(f"  [registry] {db_version}: PENDING -> VALIDATING")
+        return transition_to_validating(client, db_version)
+
+    if existing.state == ReleaseState.PENDING:
+        print(f"  [registry] {db_version}: row exists as PENDING; advancing -> VALIDATING")
+        return transition_to_validating(client, db_version)
+
+    if existing.state == ReleaseState.VALIDATING:
+        print(f"  [registry] {db_version}: row already VALIDATING (idempotent re-entry)")
+        return existing
+
+    if existing.state == ReleaseState.ACTIVE:
+        print(f"  [registry] {db_version}: row already ACTIVE (idempotent re-entry)")
+        return existing
+
+    if existing.state == ReleaseState.RETIRED:
+        raise RuntimeError(
+            f"[registry] refusing to activate RETIRED release {db_version!r}. "
+            f"A retired release must never be silently resurrected. If this "
+            f"is a legitimate re-release, create a new db_version instead."
+        )
+
+    # Defensive — registry.ReleaseState only has 4 members.
+    raise RuntimeError(
+        f"[registry] {db_version}: unexpected state {existing.state.value!r}"
+    )
+
+
+def _ensure_registry_active(client, *, db_version):
+    """Stage 2: bring the registry row from VALIDATING to ACTIVE.
+
+    Called AFTER manifest flip succeeds.
+
+    Returns the CatalogRelease in ACTIVE state.
+    Raises RuntimeError if the row is in any state other than VALIDATING
+    or ACTIVE when this stage runs (shouldn't be reached after Stage 1).
+    """
+    from release_safety import (
+        ReleaseState,
+        activate_release,
+        get_release,
+    )
+
+    existing = get_release(client, db_version)
+    if existing is None:
+        raise RuntimeError(
+            f"[registry] {db_version}: row disappeared between Stage 1 and "
+            f"Stage 2 (concurrent deletion?). Aborting."
+        )
+
+    if existing.state == ReleaseState.ACTIVE:
+        print(f"  [registry] {db_version}: row already ACTIVE (idempotent re-entry)")
+        return existing
+
+    if existing.state == ReleaseState.VALIDATING:
+        print(f"  [registry] {db_version}: VALIDATING -> ACTIVE")
+        return activate_release(client, db_version)
+
+    raise RuntimeError(
+        f"[registry] {db_version}: unexpected state {existing.state.value!r} "
+        f"between Stage 1 (VALIDATING) and Stage 2 (ACTIVE). Manual "
+        f"intervention required."
+    )
+
+
+# ---------------------------------------------------------------------------
 # Pure functions (testable without Supabase)
 # ---------------------------------------------------------------------------
 
@@ -758,10 +894,32 @@ def sync(
             "time_seconds": round(db_time + detail_index_time + discover_time + blob_time, 1),
         }
 
-    # Insert manifest (only if all blobs uploaded successfully)
+    # P3.6b Stage 1: bring catalog_releases registry row to VALIDATING
+    # BEFORE the manifest flip. Once VALIDATING, P3.5 protected-set
+    # computation will fold this version's blobs into the protected union,
+    # so any orphan cleanup that runs (after the lock is released) cannot
+    # touch them. Stage 1 failure aborts the sync — manifest stays at the
+    # previous version, no consumer-visible change.
+    print(f"\n[registry] Stage 1: ensuring {version} is VALIDATING...")
+    _ensure_registry_validating(
+        client,
+        db_version=version,
+        detail_index_url=remote_detail_index_path,
+    )
+
+    # Insert manifest (only if all blobs uploaded successfully AND registry
+    # is at least VALIDATING — see P3.6b above).
     print(f"\nUpdating manifest (version {version})...")
     insert_manifest(client, local)
     print("  Done")
+
+    # P3.6b Stage 2: bring catalog_releases to ACTIVE AFTER manifest flip.
+    # Manifest is already updated (consumers see new version). Stage 2
+    # failure leaves the row in VALIDATING — still fully protected,
+    # operator re-run will resume from VALIDATING and complete ACTIVE.
+    print(f"\n[registry] Stage 2: activating {version}...")
+    _ensure_registry_active(client, db_version=version)
+    print(f"  [registry] {version} is ACTIVE; release fully visible to cleanup gates")
 
     # Summary
     total_time = db_time + detail_index_time + discover_time + blob_time
