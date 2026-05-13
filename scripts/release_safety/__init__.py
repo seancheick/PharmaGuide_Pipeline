@@ -46,6 +46,13 @@ from .bundle_alignment import (
     read_flutter_bundle_manifest,
     check_bundle_alignment,
 )
+from .protected_blobs import (
+    ProtectedBlobSet,
+    ProtectedBlobSetError,
+    MalformedBundleCatalogError,
+    BundleCatalogQueryError,
+    compute_protected_blob_set,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -75,4 +82,10 @@ __all__ = [
     "BundleMisalignmentError",
     "read_flutter_bundle_manifest",
     "check_bundle_alignment",
+    # P1.4 — protected blob set (bundled ∪ dist; interim until P3 registry)
+    "ProtectedBlobSet",
+    "ProtectedBlobSetError",
+    "MalformedBundleCatalogError",
+    "BundleCatalogQueryError",
+    "compute_protected_blob_set",
 ]
