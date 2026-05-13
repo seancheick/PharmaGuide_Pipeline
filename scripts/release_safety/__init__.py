@@ -92,6 +92,17 @@ from .storage_audit import (
     StorageAuditReport,
     run_storage_audit,
 )
+from .delete_stale_version_dirs import (
+    DEFAULT_MANIFEST_TABLE,
+    CandidateVersion,
+    DeletePlan,
+    DeleteResult,
+    ExpectedCountMismatch,
+    ManifestRaceConditionError,
+    compute_delete_plan,
+    execute_delete_plan,
+    format_plan_text,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -161,4 +172,14 @@ __all__ = [
     "PrefixStats",
     "StorageAuditReport",
     "run_storage_audit",
+    # Bucket-2 cleanup: stale version-directory deletion
+    "DEFAULT_MANIFEST_TABLE",
+    "CandidateVersion",
+    "DeletePlan",
+    "DeleteResult",
+    "ExpectedCountMismatch",
+    "ManifestRaceConditionError",
+    "compute_delete_plan",
+    "execute_delete_plan",
+    "format_plan_text",
 ]
