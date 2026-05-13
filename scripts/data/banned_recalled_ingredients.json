@@ -3,8 +3,8 @@
     "description": "Banned and recalled ingredients database for regulatory compliance and safety (v3.0)",
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
-    "last_updated": "2026-05-12",
-    "total_entries": 146,
+    "last_updated": "2026-05-13",
+    "total_entries": 147,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -1325,7 +1325,7 @@
             "citation": "WADA Prohibited List 2026 — S1.1b Anabolic Agents (other anabolic agents). Prohibited at all times in competition and out of competition.",
             "accessed_date": "2026-05-12"
           },
-          "jurisdiction_type": "international_body",
+          "jurisdiction_type": "agency_scope",
           "jurisdiction_code": "WADA",
           "last_verified_date": "2026-05-12"
         }
@@ -1354,11 +1354,24 @@
       ],
       "cui": "C0011260",
       "external_ids": {},
-      "ban_context": "wada_prohibited_and_rx_only_outside_us",
-      "safety_warning": "An adrenal steroid hormone and precursor to testosterone and estradiol. Banned by WADA and classified as prescription-only in Canada, UK, Australia, and most EU countries. May cause acne, hair changes, mood changes, lipid alterations, and is contraindicated in hormone-sensitive cancers. Consult a doctor before use.",
-      "safety_warning_one_liner": "Steroid hormone; WADA-banned, Rx-only abroad. Consult a doctor.",
+      "ban_context": "export_restricted",
+      "safety_warning": "Steroid hormone precursor to testosterone and estradiol. Prescription-only in Canada, UK, Australia. May affect lipids and hormone-sensitive conditions. Consult your doctor before use.",
+      "safety_warning_one_liner": "Steroid hormone — Rx-only abroad. Consult your doctor.",
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Endogenous steroid hormone — never an excipient; appearing in inactives is a labeling defect"
+      "inactive_policy_reason": "Endogenous steroid hormone — never an excipient; appearing in inactives is a labeling defect",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-12",
+        "next_review_due": "2026-11-12",
+        "reviewed_by": "manual_entry",
+        "change_log": [
+          {
+            "date": "2026-05-12",
+            "change": "Added BANNED_DHEA parent entry — resolves asymmetry where 7-Keto-DHEA metabolite was flagged but parent DHEA was not. WADA Prohibited List 2026 (S1.1 anabolic agents), Canada Schedule IV, UK POM, Australia TGA Schedule 4. US legal under DSHEA (DEA-exempt). negative_match_terms exclude 7-Keto/7-oxo metabolite and DHA/Docosahexaenoic Acid/EPA/Fish Oil to prevent false matches.",
+            "by": "manual"
+          }
+        ]
+      }
     },
     {
       "id": "BANNED_ADD_ANATABINE",
