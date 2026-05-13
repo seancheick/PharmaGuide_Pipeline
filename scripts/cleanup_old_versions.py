@@ -257,6 +257,151 @@ def cleanup_orphan_blobs(client, current_version, dry_run):
 
 
 # ---------------------------------------------------------------------------
+# Gated orphan-blob cleanup (ADR-0001 P1.6 — production wire-in)
+# ---------------------------------------------------------------------------
+
+
+def cleanup_orphan_blobs_with_gates(
+    client,
+    current_version,
+    *,
+    flutter_repo_path,
+    dist_dir,
+    branch="main",
+    bundle_mismatch_reason=None,
+    expected_count=None,
+    audit_log=None,
+    lock_path=None,
+):
+    """Run release-safety gates BEFORE deleting any orphaned detail blob.
+
+    This is the production wire-in for ADR-0001's release-safety stack.
+    Unlike the legacy ``cleanup_orphan_blobs`` (single-version protection,
+    the path that caused the 2026-05-12 incident), this function:
+
+      1. Lists all blobs in storage.
+      2. Reads dist/detail_index.json to compute initial deletion candidates
+         (storage hashes NOT in dist's index).
+      3. Calls ``evaluate_cleanup_gates(...)`` in EXECUTE mode with those
+         candidates + storage_total. The gate enforces:
+           - lock acquisition (HR-12)
+           - dist index validation (HR-11)
+           - bundled∪dist protected-set computation (HR-1, HR-2)
+           - bundle alignment with Flutter main HEAD (HR-13)
+           - blast-radius (HR-4)
+           - non-empty protected set (HR-2)
+      4. If gates fail, prints failure_summary, returns (0, 0). NO deletions.
+      5. If gates pass, deletes only the candidates that survive the
+         protected-set filter (i.e., ``result.deletion_candidates``).
+
+    Args:
+        client: Supabase client.
+        current_version: most-recent db_version (for legacy log compatibility).
+        flutter_repo_path: REQUIRED. Path to the Flutter repo root.
+        dist_dir: REQUIRED. Path to the freshly-built dist/ directory.
+        branch: Flutter branch to read bundled manifest from. Default ``"main"``.
+        bundle_mismatch_reason: optional override for the bundle-alignment gate.
+        expected_count: optional override for the blast-radius gate.
+        audit_log: optional explicit AuditLog. None creates a fresh one.
+        lock_path: optional explicit lock file path.
+
+    Returns:
+        (deleted_count, failed_count). Both 0 if gates rejected the run.
+
+    Never raises in normal use — gate failures and storage errors are
+    caught and reported. Unexpected exceptions from the gate machinery
+    propagate; callers should wrap in try/except + return (0, 0) per
+    ADR-0001 P1.6 fail-closed requirement.
+    """
+    # Imported here so the module remains importable even when
+    # release_safety package isn't on sys.path (legacy direct invocation).
+    from release_safety import (
+        evaluate_cleanup_gates,
+        GateMode,
+        GateOverrides,
+        validate_detail_index,
+    )
+    from pathlib import Path as _Path
+
+    print("\n=== Gated orphan-blob cleanup (ADR-0001 P1.6) ===")
+    print(f"  flutter_repo:     {flutter_repo_path}")
+    print(f"  dist_dir:         {dist_dir}")
+    print(f"  branch:           {branch}")
+
+    # Step 1: list all blobs in storage (we need both the candidate set
+    # and the total for blast-radius). Cheaper to do this once here than
+    # twice (here + inside the gate).
+    print("\nListing all blobs in Supabase storage...")
+    shards = list_all_blob_shard_dirs(client)
+    storage_paths = []
+    for shard in shards:
+        storage_paths.extend(list_blobs_in_shard(client, shard))
+    storage_hashes = set()
+    for path in storage_paths:
+        leaf = path.rsplit("/", 1)[-1]
+        if leaf.endswith(".json"):
+            storage_hashes.add(leaf[:-5])
+    storage_total = len(storage_hashes)
+    print(f"  {storage_total} unique blobs in storage")
+
+    # Step 2: compute initial deletion candidates (storage − dist.index).
+    # The gate will further filter against the bundled∪dist protected set.
+    try:
+        dist_index = validate_detail_index(_Path(dist_dir) / "detail_index.json")
+    except Exception as exc:
+        print(f"\n[release-safety] Could not validate dist detail_index: {exc}")
+        print("  Refusing destructive cleanup. No blobs deleted.")
+        return 0, 0
+    candidate_hashes = storage_hashes - dist_index.blob_hashes
+    print(f"  {len(candidate_hashes)} candidates pre-gate (storage \\ dist.index)")
+
+    # Step 3: run the gate in EXECUTE mode.
+    overrides = GateOverrides(
+        bundle_mismatch_reason=bundle_mismatch_reason,
+        expected_count=expected_count,
+    )
+    result = evaluate_cleanup_gates(
+        flutter_repo_path=flutter_repo_path,
+        dist_dir=dist_dir,
+        candidate_blobs=candidate_hashes,
+        storage_total=storage_total,
+        mode=GateMode.EXECUTE,
+        branch=branch,
+        overrides=overrides,
+        audit_log=audit_log,
+        lock_path=lock_path,
+    )
+
+    if not result.passed:
+        print("\n" + result.failure_summary())
+        print("\n[release-safety] Orphan cleanup REJECTED — no blobs deleted.")
+        return 0, 0
+
+    # Step 4: delete only candidates surviving the protected-set filter.
+    actual_deletions = result.deletion_candidates
+    print(
+        f"\n[release-safety] Gates passed. "
+        f"Deleting {len(actual_deletions)} blob(s) "
+        f"(of {len(candidate_hashes)} pre-gate candidates; "
+        f"{len(candidate_hashes) - len(actual_deletions)} protected by bundled∪dist)."
+    )
+
+    deleted = 0
+    failed = 0
+    for blob_hash in sorted(actual_deletions):
+        shard = blob_hash[:2]
+        path = f"shared/details/sha256/{shard}/{blob_hash}.json"
+        ok, err = delete_storage_path(client, path)
+        if ok:
+            deleted += 1
+        else:
+            print(f"  [ERROR] Failed to delete orphan {path}: {err}")
+            failed += 1
+
+    return deleted, failed
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -293,6 +438,49 @@ def parse_args(argv=None):
         default=False,
         dest="cleanup_orphan_blobs",
         help="Detect and delete orphaned detail blobs not referenced by the current detail_index (default: false).",
+    )
+    # ADR-0001 P1.6 — release-safety gate inputs.
+    # These are REQUIRED when --cleanup-orphan-blobs --execute is given.
+    # They are unused in dry-run mode (read-only ops do not need gates).
+    parser.add_argument(
+        "--flutter-repo",
+        type=str,
+        default=None,
+        dest="flutter_repo",
+        help="Path to the Flutter repo root (required for --cleanup-orphan-blobs --execute).",
+    )
+    parser.add_argument(
+        "--dist-dir",
+        type=str,
+        default=None,
+        dest="dist_dir",
+        help="Path to dist/ directory (required for --cleanup-orphan-blobs --execute).",
+    )
+    parser.add_argument(
+        "--branch",
+        type=str,
+        default="main",
+        help="Flutter branch whose committed manifest is the trust anchor (default: main).",
+    )
+    parser.add_argument(
+        "--override-bundle-mismatch",
+        type=str,
+        default=None,
+        dest="override_bundle_mismatch",
+        help=(
+            "Override the bundle-alignment gate with a written reason. "
+            "Captured verbatim in the audit log."
+        ),
+    )
+    parser.add_argument(
+        "--expected-count",
+        type=int,
+        default=None,
+        dest="expected_count",
+        help=(
+            "Override the blast-radius gate by stating the exact expected "
+            "deletion count. Must equal the actual count or the gate fails."
+        ),
     )
     return parser.parse_args(argv)
 
@@ -385,9 +573,57 @@ def main(argv=None):
     if args.cleanup_orphan_blobs:
         current_row = next((r for r in rows if r.get("is_current")), rows[0] if rows else None)
         if current_row:
-            total_orphans_deleted, total_orphans_failed = cleanup_orphan_blobs(
-                client, current_row["db_version"], dry_run,
-            )
+            if dry_run:
+                # Dry-run path is read-only; no destructive gates required
+                # per ADR-0001 HR-12 (read-only ops bypass the lock + gates).
+                # Single-version protection is fine here because nothing is
+                # actually deleted — the output just shows what WOULD be.
+                total_orphans_deleted, total_orphans_failed = cleanup_orphan_blobs(
+                    client, current_row["db_version"], dry_run,
+                )
+            else:
+                # EXECUTE path — gated per ADR-0001 P1.6.
+                # Required inputs MUST be present; fail closed if missing.
+                if not args.flutter_repo or not args.dist_dir:
+                    print(
+                        "\n[ERROR] --cleanup-orphan-blobs --execute requires "
+                        "--flutter-repo AND --dist-dir."
+                    )
+                    print(
+                        "        These are needed to compute the bundled∪dist "
+                        "protected blob set per ADR-0001 HR-2."
+                    )
+                    print(
+                        "        Refusing destructive cleanup. Run with "
+                        "--flutter-repo PATH --dist-dir PATH or omit --execute."
+                    )
+                    sys.exit(2)
+
+                # Wrap in try/except so any unexpected gate-machinery error
+                # fails closed (no deletions) rather than crashing the
+                # cleanup mid-run. Per ADR-0001 P1.6 sign-off.
+                try:
+                    total_orphans_deleted, total_orphans_failed = (
+                        cleanup_orphan_blobs_with_gates(
+                            client,
+                            current_row["db_version"],
+                            flutter_repo_path=args.flutter_repo,
+                            dist_dir=args.dist_dir,
+                            branch=args.branch,
+                            bundle_mismatch_reason=args.override_bundle_mismatch,
+                            expected_count=args.expected_count,
+                        )
+                    )
+                except Exception as exc:
+                    print(
+                        f"\n[release-safety] Unexpected error during gated "
+                        f"orphan cleanup: {type(exc).__name__}: {exc}"
+                    )
+                    print(
+                        "  Refusing destructive cleanup. No blobs deleted. "
+                        "Investigate the error before re-running."
+                    )
+                    total_orphans_deleted, total_orphans_failed = 0, 0
         else:
             print("\n  [WARN] No current version found — skipping orphan blob cleanup.")
 
