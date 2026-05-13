@@ -2,13 +2,13 @@
   "_metadata": {
     "description": "Deterministic ingredient-level interaction rules keyed by canonical database identity",
     "purpose": "interaction_alert_rules",
-    "schema_version": "6.1.0",
-    "last_updated": "2026-05-06",
+    "schema_version": "6.1.1",
+    "last_updated": "2026-05-13",
     "total_entries": 145,
     "structure_note": "One entry per ingredient (or per form-scoped variant). All conditions, drug classes, and dose thresholds for that ingredient are in one object. As of v6.0.0, every sub-rule (condition_rules[], drug_class_rules[], dose_thresholds[], pregnancy_lactation block) carries an explicit profile_gate predicate that consumers MUST evaluate against the user profile before firing the alert.",
     "total_rules": 145,
     "flutter_top_level_key": "interaction_rules",
-    "flutter_schema_version": "6.1.0",
+    "flutter_schema_version": "6.1.1",
     "v60_added_fields": {
       "profile_gate": "deterministic predicate per sub-rule. See scripts/INTERACTION_RULE_SCHEMA_V6_ADR.md. Required field; consumers MUST evaluate the gate against (user_profile, product_context) before rendering an alert."
     },
@@ -67,6 +67,12 @@
           "to": "6.1.0",
           "date": "2026-05-06",
           "summary": "Hypoglycemics drug-class split: replaced single \"hypoglycemics\" with \"hypoglycemics_high_risk\" (insulin/sulfonylureas/meglitinides) and \"hypoglycemics_lower_risk\" (metformin/GLP-1 RAs/SGLT2i/DPP-4i). Split 18 drug_class_rules + 3 dose_thresholds. Lower-risk subclass gets reduced severity on most rules."
+        },
+        {
+          "from": "6.1.0",
+          "to": "6.1.1",
+          "date": "2026-05-13",
+          "summary": "Backfill condition_rules lost during the v5→v6 migration for two non-IQM rules. RULE_BANNED_YOHIMBE_CONTRA gains two condition_rules: hypertension (contraindicated/established, condition-gate) and pregnancy (contraindicated/probable, profile_flag-gate ['pregnant']). RULE_OTHER_GINGER_EXTRACT_BLEEDING gains surgery_scheduled (caution/probable, profile_flag-gate ['surgery_scheduled']). Both restorations are byte-for-byte equal to the v5.2.0 clinician-validated copy in ingredient_interaction_rules_Reviewed.json plus v6.0.0 profile_gate fields applied per the migration spec. Rule count unchanged (145)."
         }
       ]
     },
@@ -383,7 +389,66 @@
         "db": "banned_recalled_ingredients",
         "canonical_id": "RISK_YOHIMBE"
       },
-      "condition_rules": [],
+      "condition_rules": [
+        {
+          "condition_id": "hypertension",
+          "severity": "contraindicated",
+          "evidence_level": "established",
+          "mechanism": "Adrenergic stimulation can raise blood pressure and heart rate.",
+          "action": "Do not use in hypertension or cardiovascular risk settings.",
+          "sources": [
+            "https://www.fda.gov/consumers/health-fraud-scams/health-fraud-product-database"
+          ],
+          "alert_headline": "Not recommended with high blood pressure",
+          "alert_body": "Yohimbe raises blood pressure and heart rate. If you have high blood pressure or cardiovascular risk, talk to your clinician and do not use yohimbe products.",
+          "informational_note": "Yohimbe is a stimulant relevant to people with high blood pressure or heart concerns.",
+          "profile_gate": {
+            "gate_type": "condition",
+            "requires": {
+              "conditions_any": ["hypertension"],
+              "drug_classes_any": [],
+              "profile_flags_any": []
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        },
+        {
+          "condition_id": "pregnancy",
+          "severity": "contraindicated",
+          "evidence_level": "probable",
+          "mechanism": "Stimulant profile and hemodynamic effects present maternal-fetal risk concerns.",
+          "action": "Do not use during pregnancy.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/safety"
+          ],
+          "alert_headline": "Do not use during pregnancy",
+          "alert_body": "Yohimbe's stimulant and hemodynamic effects raise maternal-fetal risk. If you are pregnant, do not use yohimbe-containing products.",
+          "informational_note": "Yohimbe has stimulant effects relevant to anyone pregnant or planning pregnancy.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": ["pregnant"]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        }
+      ],
       "drug_class_rules": [
         {
           "drug_class_id": "antihypertensives",
@@ -7538,7 +7603,37 @@
         "db": "other_ingredients",
         "canonical_id": "NHA_GINGER_EXTRACT"
       },
-      "condition_rules": [],
+      "condition_rules": [
+        {
+          "condition_id": "surgery_scheduled",
+          "severity": "caution",
+          "evidence_level": "probable",
+          "mechanism": "Concentrated ginger extracts may affect platelet function.",
+          "action": "Review pre-op supplement use.",
+          "sources": [
+            "https://www.nccih.nih.gov/health/ginger"
+          ],
+          "alert_headline": "Pause before scheduled surgery",
+          "alert_body": "Ginger extract can affect bleeding around procedures. If you have surgery scheduled, talk to your surgeon about pausing ginger extract about two weeks before the procedure.",
+          "informational_note": "Ginger extract can affect perioperative bleeding — relevant to anyone preparing for surgery.",
+          "profile_gate": {
+            "gate_type": "profile_flag",
+            "requires": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": ["surgery_scheduled"]
+            },
+            "excludes": {
+              "conditions_any": [],
+              "drug_classes_any": [],
+              "profile_flags_any": [],
+              "product_forms_any": [],
+              "nutrient_forms_any": []
+            },
+            "dose": null
+          }
+        }
+      ],
       "drug_class_rules": [
         {
           "drug_class_id": "anticoagulants",
