@@ -122,6 +122,16 @@ from .registry import (
     rollback_to_pending,
     transition_to_validating,
 )
+from .backfill_catalog_releases import (
+    BackfillCandidate,
+    BackfillError,
+    BackfillPlan,
+    BackfillResult,
+    InvalidBackfillEnvironmentError,
+    compute_backfill_plan,
+    execute_backfill_plan,
+    format_plan_text as format_backfill_plan_text,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -219,4 +229,13 @@ __all__ = [
     "retire_release",
     "rollback_to_pending",
     "transition_to_validating",
+    # P3.3 — one-time historical backfill (insert-only; --dry-run default)
+    "BackfillCandidate",
+    "BackfillError",
+    "BackfillPlan",
+    "BackfillResult",
+    "InvalidBackfillEnvironmentError",
+    "compute_backfill_plan",
+    "execute_backfill_plan",
+    "format_backfill_plan_text",
 ]
