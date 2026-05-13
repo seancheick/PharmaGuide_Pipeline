@@ -132,6 +132,14 @@ from .backfill_catalog_releases import (
     execute_backfill_plan,
     format_plan_text as format_backfill_plan_text,
 )
+from .retire_release import (
+    RetireBlocked,
+    RetirePlan,
+    RetireResult,
+    compute_retire_plan,
+    execute_retire_plan,
+    format_plan_text as format_retire_plan_text,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -238,4 +246,11 @@ __all__ = [
     "compute_backfill_plan",
     "execute_backfill_plan",
     "format_backfill_plan_text",
+    # P3.4 — retire ACTIVE row (audit-logged, dangerous-override gated)
+    "RetireBlocked",
+    "RetirePlan",
+    "RetireResult",
+    "compute_retire_plan",
+    "execute_retire_plan",
+    "format_retire_plan_text",
 ]
