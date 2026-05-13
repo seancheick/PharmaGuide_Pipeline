@@ -147,6 +147,14 @@ class MockBucket:
                     results.append({"name": first})
         return results
 
+    def download(self, path: str) -> bytes:
+        """Match supabase-py's storage download contract. Used by P3.5
+        registry side to fetch v{ver}/detail_index.json for protected
+        set computation."""
+        if path not in self.objects:
+            raise RuntimeError(f"not found: {path}")
+        return self.objects[path]
+
 
 class MockStorageNamespace:
     def __init__(self):
@@ -156,9 +164,52 @@ class MockStorageNamespace:
         return self.buckets.setdefault(bucket, MockBucket())
 
 
+class _MockTableResponse:
+    def __init__(self, data):
+        self.data = data
+
+
+class MockTable:
+    """Minimal Supabase table double for the registry select() pattern
+    used by P3.5 protected_blobs._fetch_registry_blob_hashes."""
+    def __init__(self, name: str, store: list):
+        self._name = name
+        self._store = store
+        self._select_cols = None
+        self._filters: list = []
+
+    def select(self, cols: str = "*") -> "MockTable":
+        new = MockTable(self._name, self._store)
+        new._select_cols = None if cols == "*" else [c.strip() for c in cols.split(",")]
+        return new
+
+    def eq(self, col, val) -> "MockTable":
+        self._filters.append((col, val))
+        return self
+
+    def execute(self) -> _MockTableResponse:
+        matched = [r for r in self._store
+                   if all(r.get(c) == v for c, v in self._filters)]
+        if self._select_cols is None:
+            return _MockTableResponse([dict(r) for r in matched])
+        return _MockTableResponse([
+            {c: r.get(c) for c in self._select_cols} for r in matched
+        ])
+
+
 class MockSupabaseClient:
     def __init__(self):
         self.storage = MockStorageNamespace()
+        self._tables: dict = {}
+
+    def table(self, name: str) -> MockTable:
+        store = self._tables.setdefault(name, [])
+        return MockTable(name, store)
+
+    def seed_catalog_releases(self, rows: list) -> "MockSupabaseClient":
+        store = self._tables.setdefault("catalog_releases", [])
+        store.extend(dict(r) for r in rows)
+        return self
 
 
 def _make_mock_client_with_active_storage(storage_hashes):
@@ -739,3 +790,167 @@ def test_p2_2_partial_quarantine_failure_continues_and_reports(tmp_path):
     assert completion["quarantined_count"] == 2
     assert completion["failed_count"] == 1
     assert _active_path(failing_orphan) in completion["failed_paths"]
+
+
+# ===========================================================================
+# P3.6a — integration test: registry-backed protection covers cleanup gates
+# ===========================================================================
+#
+# Proves the load-bearing flip: the supabase_client now passed through
+# cleanup_old_versions.py -> evaluate_cleanup_gates -> compute_protected_blob_set
+# actually folds catalog_releases rows into the protected set BEFORE the
+# gate runs. A blob referenced ONLY by a rollback registry row (not in
+# bundled, not in dist) must survive cleanup.
+#
+# This is the end-to-end version of test_p3_5_rollback_row_protected_even_*,
+# exercised through the real cleanup_orphan_blobs_with_gates entry point.
+
+
+def test_p3_6a_registry_rollback_row_protects_blobs_in_full_cleanup_path(tmp_path):
+    """The integration test the sign-off called out.
+
+    Setup:
+      - Flutter bundled catalog references hashes {A1, A2, A3}.
+      - dist's detail_index references the same {A1, A2, A3} (post-bundle steady state).
+      - Storage holds {A1, A2, A3, R1, R2, R3, X1, X2, X3} — 9 blobs total.
+        * A* are in bundled∪dist.
+        * R* are referenced ONLY by a rollback registry row.
+        * X* are genuine orphans (nothing references them).
+      - catalog_releases registry holds:
+        * one ACTIVE row matching bundled (channel=bundled, references A*)
+        * one ACTIVE row for the rollback (channel=ota_stable, references R*)
+
+    Expected:
+      - A* preserved (bundled, dist, and registry all protect them).
+      - R* preserved (ONLY registry protects them — proves the wire-in).
+      - X* quarantined (nothing protects them, gates pass blast-radius).
+    """
+    from cleanup_old_versions import cleanup_orphan_blobs_with_gates
+    from release_safety import make_audit_log
+
+    # --- Bundled + dist: 94 shared hashes (padding to keep blast radius low) ---
+    # We need storage to be ≥100 so 3 orphans = 3% < 5% blast-radius threshold.
+    # The 94 "shared" hashes are in BOTH bundled and dist — typical steady state.
+    bundled = [_h(i) for i in range(0, 94)]                # A* (94 hashes)
+    flutter_repo = tmp_path / "flutter"
+    flutter_repo.mkdir()
+    _git_init(flutter_repo)
+    _commit_bundle(flutter_repo, bundled, db_version="2026.05.13.bundled")
+
+    dist_dir = tmp_path / "dist"
+    _make_dist(dist_dir, bundled, db_version="2026.05.13.bundled")
+
+    # --- Storage: bundled∪dist (A*) + rollback-only (R*) + orphans (X*) ---
+    rollback_only = [_h(i) for i in range(100, 103)]    # R1, R2, R3
+    orphans       = [_h(i) for i in range(200, 203)]    # X1, X2, X3
+    all_storage_hashes = bundled + rollback_only + orphans
+    client, bucket = _make_mock_client_with_active_storage(all_storage_hashes)
+
+    # --- Registry: bundled ACTIVE row + rollback ACTIVE row ---
+    bundled_index_payload: dict = {"_meta": {"db_version": "2026.05.13.bundled"}}
+    for i, h in enumerate(bundled):
+        bundled_index_payload[str(10000 + i)] = {
+            "blob_sha256": h,
+            "storage_path": f"shared/details/sha256/{h[:2]}/{h}.json",
+            "blob_version": 1,
+        }
+    rollback_index_payload: dict = {"_meta": {"db_version": "2026.05.11.rollback"}}
+    for i, h in enumerate(rollback_only):
+        rollback_index_payload[str(20000 + i)] = {
+            "blob_sha256": h,
+            "storage_path": f"shared/details/sha256/{h[:2]}/{h}.json",
+            "blob_version": 1,
+        }
+
+    bucket.objects["v2026.05.13.bundled/detail_index.json"] = \
+        json.dumps(bundled_index_payload).encode("utf-8")
+    bucket.objects["v2026.05.11.rollback/detail_index.json"] = \
+        json.dumps(rollback_index_payload).encode("utf-8")
+
+    client.seed_catalog_releases([
+        {
+            "db_version": "2026.05.13.bundled",
+            "state": "ACTIVE",
+            "release_channel": "bundled",
+            "released_at": "2026-05-13T00:00:00Z",
+            "activated_at": "2026-05-13T00:00:00Z",
+            "retired_at": None, "retired_reason": None,
+            "bundled_in_app_versions": [],
+            "flutter_repo_commit": "abc123",
+            "detail_index_url": "v2026.05.13.bundled/detail_index.json",
+            "notes": None,
+        },
+        {
+            "db_version": "2026.05.11.rollback",
+            "state": "ACTIVE",
+            "release_channel": "ota_stable",
+            "released_at": "2026-05-11T00:00:00Z",
+            "activated_at": "2026-05-11T00:00:00Z",
+            "retired_at": None, "retired_reason": None,
+            "bundled_in_app_versions": [],
+            "flutter_repo_commit": None,
+            "detail_index_url": "v2026.05.11.rollback/detail_index.json",
+            "notes": None,
+        },
+    ])
+
+    audit = make_audit_log(audit_dir=tmp_path / "audit",
+                           release_id="p3_6a_registry_integration")
+
+    quarantined, failed = cleanup_orphan_blobs_with_gates(
+        client=client,
+        current_version="2026.05.13.bundled",
+        flutter_repo_path=flutter_repo,
+        dist_dir=dist_dir,
+        branch="main",
+        audit_log=audit,
+        lock_path=tmp_path / ".release.lock",
+        run_date="2026-05-13",
+    )
+
+    # --- Outcomes ---
+    assert failed == 0, "no per-blob quarantine failures expected"
+    assert quarantined == len(orphans), (
+        f"expected exactly {len(orphans)} orphans quarantined, got {quarantined}"
+    )
+
+    # A* (bundled∪dist∪registry) - all preserved in active storage
+    for h in bundled:
+        assert _active_path(h) in bucket.objects, (
+            f"bundled hash {h[:16]}... was incorrectly removed from active storage"
+        )
+
+    # R* (registry-only protection - THE LOAD-BEARING CASE) - all preserved
+    for h in rollback_only:
+        assert _active_path(h) in bucket.objects, (
+            f"P3.6a REGRESSION: rollback hash {h[:16]}... was deleted from "
+            f"active storage. The registry-backed protection wire-in is broken; "
+            f"compute_protected_blob_set was called without supabase_client."
+        )
+        # Sanity: NOT in quarantine either
+        assert _quarantine_path("2026-05-13", h) not in bucket.objects
+
+    # X* (genuine orphans) - all moved to quarantine
+    for h in orphans:
+        assert _active_path(h) not in bucket.objects
+        assert _quarantine_path("2026-05-13", h) in bucket.objects
+
+    # Audit event surfaces registry metrics (per ADR-0001 P3.5 sign-off)
+    from release_safety import read_audit_log
+    events = read_audit_log(audit.path)
+    protected_set_event = next(
+        (e for e in events if e["event_type"] == "protected_set_computed"),
+        None,
+    )
+    assert protected_set_event is not None
+    assert protected_set_event["registry_version_count"] == 2
+    assert set(protected_set_event["registry_versions"]) == {
+        "2026.05.13.bundled", "2026.05.11.rollback",
+    }
+    # Registry contributed len(bundled)+len(rollback_only) entries
+    expected_registry_entries = len(bundled) + len(rollback_only)
+    assert protected_set_event["registry_total_entry_count"] == expected_registry_entries
+    # Unique hashes contributed by registry. Bundled side fully overlaps with
+    # dist; rollback hashes are new. The exact precision is exercised in unit
+    # tests — here we just check the registry covers at least the rollback set.
+    assert protected_set_event["registry_protected_blob_count"] >= len(rollback_only)

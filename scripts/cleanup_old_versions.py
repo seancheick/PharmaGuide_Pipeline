@@ -288,7 +288,8 @@ def cleanup_orphan_blobs_with_gates(
          candidates + storage_total. The gate enforces:
            - lock acquisition (HR-12)
            - dist index validation (HR-11)
-           - bundled∪dist protected-set computation (HR-1, HR-2)
+           - bundled∪dist∪registry protected-set computation (HR-1, HR-2)
+             (P3.5: registry-backed ACTIVE+VALIDATING rows fold in too)
            - bundle alignment with Flutter main HEAD (HR-13)
            - blast-radius (HR-4)
            - non-empty protected set (HR-2)
@@ -392,6 +393,11 @@ def cleanup_orphan_blobs_with_gates(
         overrides=overrides,
         audit_log=audit_log,
         lock_path=lock_path,
+        # P3.6a — registry-backed protected-set is now load-bearing in
+        # production cleanup runs. Strictly additive: any ACTIVE/VALIDATING
+        # catalog_releases row contributes its blob hashes to the protected
+        # set before this gate decides which candidates survive.
+        supabase_client=client,
     )
 
     if not result.passed:
