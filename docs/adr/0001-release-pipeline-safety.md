@@ -481,3 +481,74 @@ P3 ─── catalog_releases registry + protected-set + state machine
 ```
 
 No phase ships without acceptance criteria passing. No destructive cleanup runs in production until P1+P2 are landed and the regression test (replay of 2026-05-12) passes.
+
+---
+
+## Phase status — implementation log (as of 2026-05-13)
+
+P1, P2, P4, and P3 are all complete. The pipeline now enforces every
+invariant (I1–I10) and every hard requirement (HR-1 through HR-13) listed
+above. Acceptance criteria for each phase passed before commit; the
+2026-05-12 incident class is now closed by construction.
+
+### P1 — Bundle alignment + dry-run + structured logs ✅ COMPLETE
+
+| Sub-phase | Module | Commit |
+|---|---|---|
+| P1.0 | `--allow-destructive-orphan-cleanup` opt-in default OFF in `sync_to_supabase.py` | (sprint commits) |
+| P1.1 | `release_safety/lock.py` — pipeline release lock, signal trap, PID liveness | `78f5732` |
+| P1.2 | `release_safety/index_validator.py` — `detail_index.json` validator | `8246bd4` |
+| P1.3 | `release_safety/bundle_alignment.py` — Flutter `main` HEAD bundle gate | `2ddb348` |
+| P1.4 | `release_safety/protected_blobs.py` — bundled∪dist interim union | `cb229a4` |
+| P1.5a | `release_safety/audit_log.py` — append-only JSONL, fsynced | `9051441` |
+| P1.5b | `release_safety/gates.py` — 3-gate orchestrator with aggregating failures | `8966dc4` |
+| P1.6 commit 1 | `cleanup_orphan_blobs_with_gates()` in `cleanup_old_versions.py` | (sprint) |
+
+### P2 — Quarantine + 30d TTL + sweeper ✅ COMPLETE
+
+| Sub-phase | Module | Commit |
+|---|---|---|
+| P2.1a | `release_safety/quarantine.py` — COPY+verify+DELETE move-to-quarantine | `f5c1778` |
+| P2.1b | `release_safety/quarantine_sweeper.py` — TTL-based hard-delete | `d86ba40` |
+| P2.2 | Wire quarantine into `cleanup_orphan_blobs_with_gates` (replaces hard-delete) | (sprint) |
+
+### P4 — Flutter `verify-bundle` + CI gate ✅ COMPLETE
+
+| Sub-phase | Module | Commit |
+|---|---|---|
+| P4.1 | `scripts/verify_bundle.dart` in PharmaGuide repo | `f9dcc6f` (Flutter) |
+| P4.2 | `.github/workflows/verify-bundle.yml` CI gate | `61d2851` (Flutter) |
+
+### P3 — Catalog release registry ✅ COMPLETE
+
+| Sub-phase | Module / change | Commit |
+|---|---|---|
+| P3.1 | `catalog_releases` schema in `supabase_schema.sql` + 8 contract tests | `c5da5f2` |
+| P3.1 | Live migration `p3_1_catalog_releases_registry` applied to Supabase | (MCP `apply_migration`) |
+| P3.2 | `release_safety/registry.py` — Python API + strict state machine + 42 tests | `edcd137` |
+| P3.3 | `release_safety/backfill_catalog_releases.py` + 19 tests | `d25b08e` |
+| P3.3 | Live `--execute` of backfill — 2 ACTIVE rows inserted | (operator action) |
+| P3.4 | `release_safety/retire_release.py` CLI + audit + 21 tests | `2206b47` |
+| P3.5 | `protected_blobs.compute_protected_blob_set` extended to bundled∪dist∪registry + 11 tests | `abd0705` |
+| P3.6a | `cleanup_old_versions.py` passes `supabase_client` through; integration test | `7f47403` |
+| P3.6b | `sync_to_supabase.py` auto-walks PENDING→VALIDATING→ACTIVE around manifest flip + 15 tests | `3fc4f13` |
+
+### Storage cleanup operations log
+
+| Date | Action | Commit |
+|---|---|---|
+| 2026-05-13 | Bucket 2 cleanup — 515.36 MiB of stale version-dirs reclaimed | `d14673c` |
+| 2026-05-13 | Storage audit module (read-only inventory) | `ee3e6fe` |
+
+### Test coverage
+
+- 325 tests pass across release-safety + schema-contract + sync + cleanup suites.
+- All sign-off acceptance criteria for P1, P2, P3, P4 pass.
+- 2026-05-12 incident regression test: a replay of bundled=`v2026.05.11.164208` + dist=`v2026.05.12.203133` triggers Gate 1 failure with zero deletions.
+
+### Still pending (post-P3)
+
+- **P1.6 commit 2 (next):** flip orphan-cleanup default to ON. Gates + quarantine + registry-backed protection are all in place, so the freeze can lift.
+- **Operator tasks:** Supabase Pro upgrade before 2026-05-25 storage cutoff; verify-bundle CI secrets; iPhone product-detail smoke test post-cleanup.
+- **Deferred:** drop `dist_dir` parameter from `compute_protected_blob_set` after one clean release cycle observed end-to-end with P3.6b.
+- **P5/P6:** still deferred until post-TestFlight per the original ADR.
