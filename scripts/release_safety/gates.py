@@ -195,6 +195,8 @@ def evaluate_cleanup_gates(
     overrides: GateOverrides = GateOverrides(),
     audit_log: Optional[AuditLog] = None,
     lock_path: Optional[Path] = None,
+    # P3.5 — registry-backed protection. None preserves P1.4 bundled∪dist behavior.
+    supabase_client=None,
 ) -> GateResult:
     """Evaluate the cleanup gate sequence and return a single go/no-go.
 
@@ -288,6 +290,7 @@ def evaluate_cleanup_gates(
             branch=branch,
             blast_radius_threshold=blast_radius_threshold,
             overrides=overrides,
+            supabase_client=supabase_client,
         )
     finally:
         if lock_ctx is not None:
@@ -313,6 +316,7 @@ def _run_gates_after_lock(
     branch: str,
     blast_radius_threshold: float,
     overrides: GateOverrides,
+    supabase_client=None,
 ) -> GateResult:
     """Run preconditions + aggregating gates with the lock already held
     (or not, for dry-run mode)."""
@@ -343,6 +347,7 @@ def _run_gates_after_lock(
     try:
         protected_set = compute_protected_blob_set(
             flutter_repo_path, dist_dir, branch=branch,
+            supabase_client=supabase_client,
         )
         log.event(
             "protected_set_computed",
@@ -354,6 +359,11 @@ def _run_gates_after_lock(
             intersection_count=protected_set.intersection_count,
             degenerate=protected_set.degenerate,
             degenerate_reason=protected_set.degenerate_reason,
+            # P3.5 — registry-backed protection metrics
+            registry_version_count=len(protected_set.registry_versions),
+            registry_protected_blob_count=len(protected_set.registry_hashes),
+            registry_total_entry_count=protected_set.registry_count,
+            registry_versions=list(protected_set.registry_versions),
         )
     except (
         MalformedBundleCatalogError,

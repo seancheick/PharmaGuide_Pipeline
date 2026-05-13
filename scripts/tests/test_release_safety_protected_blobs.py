@@ -516,3 +516,574 @@ def test_p1_4_2026_05_12_regression_bundled_only_hashes_protected(tmp_path):
     assert result.intersection_count == 5
     assert result.bundled_version == "2026.05.11.bundled"
     assert result.dist_version == "2026.05.12.dist"
+
+
+# ===========================================================================
+# P3.5 — registry-backed protected set
+# ===========================================================================
+#
+# Coverage targets (per ADR-0001 P3.5 sign-off):
+#   - rollback row stays protected when not in bundled OR dist
+#   - VALIDATING row is protected (pre-live activation window)
+#   - RETIRED row is NOT protected (excluded from union)
+#   - PENDING row is NOT protected (excluded from union)
+#   - missing detail_index in storage -> hard fail (block cleanup)
+#   - malformed detail_index in storage -> hard fail (block cleanup)
+#   - row with NULL detail_index_url in ACTIVE/VALIDATING -> hard fail
+#   - empty registry (no ACTIVE/VALIDATING rows) -> NOT an error; registry side no-op
+#   - audit metrics: registry_versions and registry_count populated correctly
+#   - sequential multi-row fetch produces correct union
+#
+# These tests use a FakeSupabaseClient double — bundled + dist still use the
+# real git/disk fixtures because that trust model is the whole point of P1.4.
+
+
+# ---------------------------------------------------------------------------
+# P3.5 — Supabase client test double (storage + table)
+# ---------------------------------------------------------------------------
+
+
+class _P35Response:
+    def __init__(self, data):
+        self.data = data
+
+
+class _P35Bucket:
+    """Mock bucket with .list() and .download() supporting registry path layout."""
+    def __init__(self):
+        self.objects: dict[str, bytes] = {}
+        # Inject failure modes per-path for negative-path tests.
+        self.list_raises_for: dict[str, Exception] = {}
+        self.download_raises_for: dict[str, Exception] = {}
+
+    def put(self, path: str, content: bytes) -> None:
+        self.objects[path] = content
+
+    def list(self, path: str = "", options=None):
+        if path in self.list_raises_for:
+            raise self.list_raises_for[path]
+        opts = options or {}
+        limit = opts.get("limit")
+        offset = opts.get("offset", 0)
+        prefix = (path.rstrip("/") + "/") if path else ""
+        results = []
+        seen_dirs: set[str] = set()
+        for full, data in self.objects.items():
+            if not full.startswith(prefix):
+                continue
+            rest = full[len(prefix):]
+            if "/" not in rest:
+                results.append({"name": rest, "metadata": {"size": len(data)}})
+            else:
+                first = rest.split("/", 1)[0]
+                if first not in seen_dirs:
+                    seen_dirs.add(first)
+                    results.append({"name": first})
+        if limit is None:
+            return results[offset:]
+        return results[offset:offset + limit]
+
+    def download(self, path: str) -> bytes:
+        if path in self.download_raises_for:
+            raise self.download_raises_for[path]
+        if path not in self.objects:
+            raise RuntimeError(f"not found: {path}")
+        return self.objects[path]
+
+
+class _P35Storage:
+    def __init__(self):
+        self.buckets: dict[str, _P35Bucket] = {}
+
+    def from_(self, bucket: str) -> _P35Bucket:
+        return self.buckets.setdefault(bucket, _P35Bucket())
+
+
+class _P35Table:
+    def __init__(self, name: str, store: list[dict]) -> None:
+        self._name = name
+        self._store = store
+        self._mode = None
+        self._select_cols = None
+        self._filters: list[tuple] = []
+
+    def select(self, cols="*"):
+        new = _P35Table(self._name, self._store)
+        new._mode = "select"
+        new._select_cols = None if cols == "*" else [c.strip() for c in cols.split(",")]
+        return new
+
+    def eq(self, col, val):
+        self._filters.append((col, val))
+        return self
+
+    def execute(self):
+        matched = [r for r in self._store
+                   if all(r.get(c) == v for c, v in self._filters)]
+        if self._select_cols is None:
+            return _P35Response([dict(r) for r in matched])
+        return _P35Response([
+            {c: r.get(c) for c in self._select_cols} for r in matched
+        ])
+
+
+class FakeSupabaseClientForP35:
+    def __init__(self):
+        self.storage = _P35Storage()
+        self._tables: dict[str, list[dict]] = {}
+
+    def table(self, name: str) -> _P35Table:
+        store = self._tables.setdefault(name, [])
+        return _P35Table(name, store)
+
+    def seed_registry(self, rows: list[dict]):
+        store = self._tables.setdefault("catalog_releases", [])
+        store.extend(dict(r) for r in rows)
+        return self
+
+
+def _registry_row(
+    *, db_version: str, state: str, channel: str = "ota_stable",
+    detail_index_url: str = None,
+    flutter_repo_commit: str = None,
+):
+    detail_index_url = (
+        detail_index_url if detail_index_url is not None
+        else f"v{db_version}/detail_index.json"
+    )
+    return {
+        "db_version": db_version,
+        "state": state,
+        "release_channel": channel,
+        "released_at": "2026-05-12T00:00:00Z",
+        "activated_at": "2026-05-12T00:00:00Z" if state in ("ACTIVE", "RETIRED") else None,
+        "retired_at": "2026-05-13T00:00:00Z" if state == "RETIRED" else None,
+        "retired_reason": "test" if state == "RETIRED" else None,
+        "bundled_in_app_versions": [],
+        "flutter_repo_commit": flutter_repo_commit,
+        "detail_index_url": detail_index_url,
+        "notes": None,
+    }
+
+
+def _detail_index_bytes(hashes: list[str], db_version: str) -> bytes:
+    """Serialize a detail_index.json matching the format validate_detail_index expects."""
+    payload: dict = {
+        "_meta": {"db_version": db_version},
+    }
+    for i, h in enumerate(hashes):
+        payload[str(1000 + i)] = {
+            "blob_sha256": h,
+            "storage_path": f"shared/details/sha256/{h[:2]}/{h}.json",
+            "blob_version": 1,
+        }
+    return json.dumps(payload).encode("utf-8")
+
+
+# ---------------------------------------------------------------------------
+# Helper: assemble a bundled + dist fixture for P3.5 tests
+# ---------------------------------------------------------------------------
+
+
+def _p35_bundled_and_dist(tmp_path, *, bundled_hashes, dist_hashes,
+                          bundled_version="2026.05.13.bundled",
+                          dist_version="2026.05.13.dist"):
+    flutter_repo = tmp_path / "flutter"
+    flutter_repo.mkdir()
+    _git_init(flutter_repo)
+    _commit_bundle(flutter_repo, bundled_hashes, db_version=bundled_version)
+    dist_dir = tmp_path / "dist"
+    _make_dist(dist_dir, dist_hashes, db_version=dist_version)
+    return flutter_repo, dist_dir
+
+
+# ===========================================================================
+# P3.5 — happy path: rollback row protected even when absent from bundled+dist
+# ===========================================================================
+
+
+def test_p3_5_rollback_row_protected_even_when_not_in_bundled_or_dist(tmp_path):
+    """The headline P3.5 scenario: an OTA rollback version that no longer
+    appears in bundled or dist is STILL protected through the registry.
+
+    This is the future-proofing case — after the next OTA, the rollback's
+    blobs would otherwise be orphans, but the registry row holds them safe."""
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    rollback_only_hashes = [_h(i) for i in range(100, 105)]
+    bundled_hashes = [_h(i) for i in range(0, 3)]
+    dist_hashes = [_h(i) for i in range(0, 3)]   # same as bundled — overlap
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path, bundled_hashes=bundled_hashes, dist_hashes=dist_hashes,
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        # Current OTA (matches bundled+dist) - protection redundant with those sources
+        _registry_row(db_version="2026.05.13.bundled", state="ACTIVE",
+                      channel="bundled", flutter_repo_commit="abc"),
+        # Rollback OTA - ONLY the registry holds these hashes
+        _registry_row(db_version="2026.05.11.rollback", state="ACTIVE"),
+    ])
+    # Seed the rollback's detail_index in storage
+    client.storage.from_("pharmaguide").put(
+        "v2026.05.11.rollback/detail_index.json",
+        _detail_index_bytes(rollback_only_hashes, "2026.05.11.rollback"),
+    )
+    # Also seed the current OTA's index (referenced by ACTIVE row, must exist)
+    client.storage.from_("pharmaguide").put(
+        "v2026.05.13.bundled/detail_index.json",
+        _detail_index_bytes(bundled_hashes, "2026.05.13.bundled"),
+    )
+
+    result = compute_protected_blob_set(
+        flutter_repo, dist_dir, supabase_client=client,
+    )
+
+    # Rollback hashes ARE in protected set
+    for h in rollback_only_hashes:
+        assert h in result.protected, (
+            f"P3.5 regression: rollback hash {h[:16]}... should be protected "
+            f"via registry even though it's absent from bundled+dist"
+        )
+
+    # Registry metrics surfaced
+    assert len(result.registry_versions) == 2
+    assert set(result.registry_versions) == {
+        "2026.05.13.bundled", "2026.05.11.rollback",
+    }
+    assert result.registry_count == 8  # 3 + 5
+
+
+# ===========================================================================
+# P3.5 — VALIDATING row is protected (pre-live activation window)
+# ===========================================================================
+
+
+def test_p3_5_validating_row_is_protected(tmp_path):
+    """A row in state VALIDATING is in the activation pipeline — its blobs
+    have been uploaded but the row isn't ACTIVE yet. P3.5 protects them so
+    a concurrent cleanup can't delete blobs the operator is about to promote."""
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    validating_only = [_h(i) for i in range(200, 204)]
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)], dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        _registry_row(db_version="2026.05.14.validating", state="VALIDATING"),
+    ])
+    client.storage.from_("pharmaguide").put(
+        "v2026.05.14.validating/detail_index.json",
+        _detail_index_bytes(validating_only, "2026.05.14.validating"),
+    )
+
+    result = compute_protected_blob_set(
+        flutter_repo, dist_dir, supabase_client=client,
+    )
+
+    for h in validating_only:
+        assert h in result.protected
+    assert "2026.05.14.validating" in result.registry_versions
+
+
+# ===========================================================================
+# P3.5 — RETIRED row is NOT protected
+# ===========================================================================
+
+
+def test_p3_5_retired_row_is_not_protected(tmp_path):
+    """RETIRED rows are explicitly excluded — their blobs are eligible for
+    orphan cleanup. This is the inverse of the rollback-protection case."""
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    retired_hashes = [_h(i) for i in range(300, 303)]
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)], dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        _registry_row(db_version="2026.04.01.retired", state="RETIRED"),
+    ])
+    # Even seed the index — it shouldn't be looked up
+    client.storage.from_("pharmaguide").put(
+        "v2026.04.01.retired/detail_index.json",
+        _detail_index_bytes(retired_hashes, "2026.04.01.retired"),
+    )
+
+    result = compute_protected_blob_set(
+        flutter_repo, dist_dir, supabase_client=client,
+    )
+
+    for h in retired_hashes:
+        assert h not in result.protected
+    assert result.registry_versions == ()
+    assert result.registry_count == 0
+
+
+# ===========================================================================
+# P3.5 — PENDING row is NOT protected
+# ===========================================================================
+
+
+def test_p3_5_pending_row_is_not_protected(tmp_path):
+    """PENDING rows haven't yet uploaded their blobs (they're pre-VALIDATING).
+    The schema lets them exist but they MUST NOT enter the protected set."""
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)], dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        _registry_row(db_version="2026.05.20.pending", state="PENDING"),
+    ])
+    # NOTE: no storage seeded — PENDING shouldn't trigger any fetch
+
+    result = compute_protected_blob_set(
+        flutter_repo, dist_dir, supabase_client=client,
+    )
+
+    assert result.registry_versions == ()
+    assert result.registry_hashes == frozenset()
+
+
+# ===========================================================================
+# P3.5 — missing detail_index in storage -> hard fail (RegistryDetailIndexMissingError)
+# ===========================================================================
+
+
+def test_p3_5_missing_detail_index_in_storage_hard_fails(tmp_path):
+    """An ACTIVE row promising a storage path that doesn't exist is the
+    exact failure class P3.5 was built to catch. Operator must retire the
+    row or upload the missing index before cleanup can proceed."""
+    from release_safety.protected_blobs import (
+        RegistryDetailIndexMissingError,
+        compute_protected_blob_set,
+    )
+
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)], dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        _registry_row(db_version="2026.05.13.orphan_promise", state="ACTIVE",
+                      detail_index_url="v2026.05.13.orphan_promise/detail_index.json"),
+    ])
+    # Deliberately do NOT seed the index — it should be missing
+
+    with pytest.raises(RegistryDetailIndexMissingError, match="orphan_promise"):
+        compute_protected_blob_set(
+            flutter_repo, dist_dir, supabase_client=client,
+        )
+
+
+# ===========================================================================
+# P3.5 — malformed detail_index -> hard fail (IndexValidationError subclass)
+# ===========================================================================
+
+
+def test_p3_5_malformed_detail_index_hard_fails(tmp_path):
+    from release_safety.index_validator import IndexValidationError
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)], dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        _registry_row(db_version="2026.05.13.malformed", state="ACTIVE"),
+    ])
+    # Seed garbage in place of the index
+    client.storage.from_("pharmaguide").put(
+        "v2026.05.13.malformed/detail_index.json",
+        b"{ this is not valid json",
+    )
+
+    with pytest.raises(IndexValidationError):
+        compute_protected_blob_set(
+            flutter_repo, dist_dir, supabase_client=client,
+        )
+
+
+# ===========================================================================
+# P3.5 — NULL detail_index_url on protected row -> hard fail
+# ===========================================================================
+
+
+def test_p3_5_null_detail_index_url_on_active_row_hard_fails(tmp_path):
+    """The schema permits detail_index_url=NULL but P3.5 requires non-null
+    for ACTIVE/VALIDATING rows. A NULL there means backfill or activation
+    didn't supply the path — fail closed."""
+    from release_safety.protected_blobs import (
+        MalformedRegistryRowError,
+        compute_protected_blob_set,
+    )
+
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)], dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        # Manually set detail_index_url=None to bypass _registry_row default
+        {
+            "db_version": "2026.05.13.no_url",
+            "state": "ACTIVE",
+            "release_channel": "ota_stable",
+            "released_at": "2026-05-12T00:00:00Z",
+            "activated_at": "2026-05-12T00:00:00Z",
+            "retired_at": None, "retired_reason": None,
+            "bundled_in_app_versions": [],
+            "flutter_repo_commit": None,
+            "detail_index_url": None,
+            "notes": None,
+        },
+    ])
+
+    with pytest.raises(MalformedRegistryRowError, match="no_url"):
+        compute_protected_blob_set(
+            flutter_repo, dist_dir, supabase_client=client,
+        )
+
+
+# ===========================================================================
+# P3.5 — storage fetch error -> RegistryFetchError (no silent retry)
+# ===========================================================================
+
+
+def test_p3_5_storage_fetch_error_raises_registry_fetch_error(tmp_path):
+    """Transient/network errors during list or download should surface as
+    RegistryFetchError so the gates orchestrator can decide whether to retry."""
+    from release_safety.protected_blobs import (
+        RegistryFetchError,
+        compute_protected_blob_set,
+    )
+
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)], dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    client.seed_registry([
+        _registry_row(db_version="2026.05.13.netfail", state="ACTIVE"),
+    ])
+    bucket = client.storage.from_("pharmaguide")
+    bucket.list_raises_for["v2026.05.13.netfail"] = ConnectionError("timeout")
+
+    with pytest.raises(RegistryFetchError, match="netfail"):
+        compute_protected_blob_set(
+            flutter_repo, dist_dir, supabase_client=client,
+        )
+
+
+# ===========================================================================
+# P3.5 — empty registry is NOT an error
+# ===========================================================================
+
+
+def test_p3_5_empty_registry_is_no_op(tmp_path):
+    """When the registry has zero ACTIVE/VALIDATING rows, the registry side
+    contributes nothing but does not raise. Falls back to bundled∪dist."""
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    bundled_hashes = [_h(i) for i in range(3)]
+    dist_hashes = [_h(i) for i in range(3, 6)]
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path, bundled_hashes=bundled_hashes, dist_hashes=dist_hashes,
+    )
+
+    client = FakeSupabaseClientForP35()
+    # Seed only a RETIRED row — no ACTIVE or VALIDATING
+    client.seed_registry([
+        _registry_row(db_version="2026.04.01.retired", state="RETIRED"),
+    ])
+
+    result = compute_protected_blob_set(
+        flutter_repo, dist_dir, supabase_client=client,
+    )
+
+    assert result.registry_versions == ()
+    assert result.registry_count == 0
+    assert result.protected == frozenset(bundled_hashes + dist_hashes)
+
+
+# ===========================================================================
+# P3.5 — backward compat: supabase_client=None preserves P1.4 behavior
+# ===========================================================================
+
+
+def test_p3_5_client_none_preserves_p1_4_behavior(tmp_path):
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    bundled_hashes = [_h(i) for i in range(3)]
+    dist_hashes = [_h(i) for i in range(2, 5)]
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path, bundled_hashes=bundled_hashes, dist_hashes=dist_hashes,
+    )
+
+    result = compute_protected_blob_set(
+        flutter_repo, dist_dir,
+        # NO supabase_client passed — should behave exactly as P1.4
+    )
+
+    assert result.registry_versions == ()
+    assert result.registry_count == 0
+    assert result.registry_hashes == frozenset()
+    # P1.4 union math unchanged
+    assert result.protected == frozenset(bundled_hashes + dist_hashes)
+
+
+# ===========================================================================
+# P3.5 — multi-row fetch produces correct union (sequential)
+# ===========================================================================
+
+
+def test_p3_5_multi_row_union(tmp_path):
+    from release_safety.protected_blobs import compute_protected_blob_set
+
+    flutter_repo, dist_dir = _p35_bundled_and_dist(
+        tmp_path,
+        bundled_hashes=[_h(0)], dist_hashes=[_h(0)],
+    )
+
+    client = FakeSupabaseClientForP35()
+    # Three protected rows: two ACTIVE, one VALIDATING.
+    # Each has its own distinct hash set.
+    versions_and_hashes = [
+        ("v.a", "ACTIVE",     [_h(i) for i in range(400, 403)]),
+        ("v.b", "ACTIVE",     [_h(i) for i in range(500, 502)]),
+        ("v.c", "VALIDATING", [_h(i) for i in range(600, 604)]),
+    ]
+    rows = [_registry_row(db_version=v, state=s) for v, s, _ in versions_and_hashes]
+    client.seed_registry(rows)
+    for v, _, hashes in versions_and_hashes:
+        client.storage.from_("pharmaguide").put(
+            f"v{v}/detail_index.json", _detail_index_bytes(hashes, v),
+        )
+
+    result = compute_protected_blob_set(
+        flutter_repo, dist_dir, supabase_client=client,
+    )
+
+    # All three versions contributed
+    assert set(result.registry_versions) == {"v.a", "v.b", "v.c"}
+    assert result.registry_count == 3 + 2 + 4
+
+    # Union covers every hash from every row
+    all_expected = {h for _, _, hashes in versions_and_hashes for h in hashes}
+    for h in all_expected:
+        assert h in result.protected

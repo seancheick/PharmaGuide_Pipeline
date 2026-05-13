@@ -1,16 +1,32 @@
-"""Protected blob set computation — bundled∪dist union for orphan-cleanup gating.
+"""Protected blob set computation — bundled∪dist∪registry union for orphan-cleanup gating.
 
-Implements ADR-0001 P1.4. This is the **interim** implementation that
-P3 (catalog_releases registry) will replace with the full registry-driven
-union across all live catalog versions.
+Implements ADR-0001 P1.4 + P3.5.
 
-Why interim
-===========
+P1.4 shipped the interim bundled∪dist heuristic. P3.5 adds the third source:
+catalog_releases registry rows in state ∈ {ACTIVE, VALIDATING}. The union
+is purely additive — protected set only grows. ``dist_dir`` remains an
+honored input until P3.6 has been observed through at least one clean
+release cycle, at which point a follow-up commit can drop it.
+
+Why three sources
+=================
 The 2026-05-12 incident proved that orphan cleanup must protect blobs
 referenced by *any* catalog a consumer could currently be reading — not
-just dist's catalog. Until P3 ships, "any" is approximated by the union
-of (bundled-on-Flutter-main) + (dist-just-built). Two-version protection
-closes the immediate failure mode while the registry is built.
+just dist's catalog. The three sources together cover:
+
+  - **bundled** (Flutter main HEAD): the catalog installed on shipped app
+    builds. Always required (degenerate-tolerant for absence).
+  - **dist** (just-built pipeline output): the catalog about to be uploaded.
+    Always required. Transitional until P3.6.
+  - **registry** (Supabase catalog_releases ∩ {ACTIVE, VALIDATING}): every
+    catalog currently routed to consumers, plus any that are mid-activation.
+    Added in P3.5. Becomes load-bearing once backfill (P3.3) is run.
+
+VALIDATING is included because the row's blobs MUST stay protected during
+the activation window — between PENDING→VALIDATING and VALIDATING→ACTIVE,
+the blobs are written to Supabase but the row is not yet ACTIVE. An orphan
+sweep that runs in that window could delete blobs the operator is about to
+promote to ACTIVE, recreating the 2026-05-12 race in a new form.
 
 Trust model — Option C (per P1.4 sign-off, ADR HR-13)
 ======================================================
@@ -55,7 +71,30 @@ Public API
         bundled_catalog_path="assets/db/pharmaguide_core.db",
         dist_manifest_filename="export_manifest.json",
         dist_index_filename="detail_index.json",
+        supabase_client=None,                  # P3.5: enables registry side
+        registry_bucket="pharmaguide",         # P3.5
+        registry_table="catalog_releases",     # P3.5
     ) -> ProtectedBlobSet
+
+When ``supabase_client`` is ``None`` the registry side is a no-op and the
+function returns the P1.4 bundled∪dist set. When a client is provided,
+the function additionally fetches every ACTIVE+VALIDATING row, downloads
+its ``detail_index_url`` from Supabase storage, validates it, and unions
+its hashes into ``protected``.
+
+Registry-side failure modes (P3.5)
+==================================
+  - Missing index in storage      -> RegistryDetailIndexMissingError (hard fail)
+    The registry row promises a path the bucket does not contain. Operator
+    must retire the row OR upload the missing index before cleanup can run.
+  - Malformed registry index      -> IndexValidationError subclass (hard fail)
+    Same policy as dist. The index is present but unparseable.
+  - Storage fetch/network error   -> RegistryFetchError (raised, fail closed)
+    No silent retry at this layer; the gates orchestrator decides whether
+    to re-run.
+
+  RETIRED and PENDING rows are explicitly excluded from the union — their
+  blobs are not consumer-routed (RETIRED) or not yet uploaded (PENDING).
 """
 
 from __future__ import annotations
@@ -63,7 +102,8 @@ from __future__ import annotations
 import hashlib
 import json
 import sqlite3
-from dataclasses import dataclass
+import tempfile
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional, Tuple, Union
 
@@ -81,6 +121,7 @@ from .index_validator import validate_detail_index
 DEFAULT_BUNDLED_CATALOG_PATH = "assets/db/pharmaguide_core.db"
 DEFAULT_DIST_INDEX_FILENAME = "detail_index.json"
 DEFAULT_DIST_MANIFEST_FILENAME = "export_manifest.json"
+DEFAULT_REGISTRY_BUCKET = "pharmaguide"
 
 
 # ---------------------------------------------------------------------------
@@ -114,6 +155,35 @@ class BundleCatalogQueryError(ProtectedBlobSetError):
     """Working-tree catalog DB checksum matches but the SQLite query
     failed (missing table, missing column, db corruption between mtime
     and read, etc.). Hard failure."""
+
+
+class RegistryDetailIndexMissingError(ProtectedBlobSetError):
+    """An ACTIVE/VALIDATING catalog_releases row points at a
+    detail_index_url that does not exist in Supabase storage.
+
+    This is a HARD failure: the registry promises blob protection at
+    a path that doesn't exist, which means the row is inconsistent.
+    Operator must either upload the missing index OR retire the row.
+
+    Per ADR-0001 P3.5 sign-off: do NOT silently skip — a missing
+    promised path is exactly the failure class the registry was built
+    to catch.
+    """
+
+
+class RegistryFetchError(ProtectedBlobSetError):
+    """Network/storage error while fetching a registry detail_index from
+    Supabase storage (timeout, 500, transient connectivity, etc.).
+
+    Caller (gates.py orchestrator) decides whether to retry the whole
+    gate evaluation. No silent retry at this layer."""
+
+
+class MalformedRegistryRowError(ProtectedBlobSetError):
+    """An ACTIVE/VALIDATING catalog_releases row has detail_index_url=NULL
+    (cannot compute its hashes). Hard failure — the schema permits NULL
+    but P3.5 requires non-null for protected states. Mismatch = operator
+    error during backfill or activation."""
 
 
 # ---------------------------------------------------------------------------
@@ -156,6 +226,12 @@ class ProtectedBlobSet:
     bundled_commit_sha: Optional[str]
     degenerate: bool
     degenerate_reason: Optional[str] = None
+    # --- P3.5: registry-backed protection (additive third source) -------
+    # Defaults preserve P1.4-only construction in existing tests and any
+    # caller that does not yet pass a Supabase client.
+    registry_hashes: frozenset = field(default_factory=frozenset)
+    registry_count: int = 0                          # total entries (with dup)
+    registry_versions: tuple[str, ...] = ()          # db_versions contributing
 
 
 # ---------------------------------------------------------------------------
@@ -218,8 +294,12 @@ def compute_protected_blob_set(
     bundled_catalog_path: str = DEFAULT_BUNDLED_CATALOG_PATH,
     dist_manifest_filename: str = DEFAULT_DIST_MANIFEST_FILENAME,
     dist_index_filename: str = DEFAULT_DIST_INDEX_FILENAME,
+    # P3.5: registry side — additive, opt-in via supabase_client
+    supabase_client=None,
+    registry_bucket: str = DEFAULT_REGISTRY_BUCKET,
+    registry_table: Optional[str] = None,
 ) -> ProtectedBlobSet:
-    """Compute the bundled∪dist protected blob set.
+    """Compute the bundled∪dist∪registry protected blob set.
 
     Args:
         flutter_repo_path: filesystem path to the Flutter repo root.
@@ -229,14 +309,24 @@ def compute_protected_blob_set(
         bundled_catalog_path: path within Flutter repo (relative). Read from
             working tree, verified against committed manifest's ``checksum_sha256``.
         dist_manifest_filename / dist_index_filename: filenames within ``dist_dir``.
+        supabase_client: P3.5 — when provided, the function ALSO fetches every
+            catalog_releases row in state ∈ {ACTIVE, VALIDATING}, downloads its
+            detail_index_url, validates it, and unions its hashes into the
+            protected set. When None, behaves exactly as P1.4 (bundled∪dist only).
+        registry_bucket: Supabase storage bucket holding detail_index files.
+            Default ``pharmaguide``.
+        registry_table: catalog_releases table name. Defaults to the value
+            registry.DEFAULT_TABLE — kept as a parameter for testability.
 
     Returns:
-        ``ProtectedBlobSet`` with full bundled∪dist union when bundled
-        side is loadable; or with ``degenerate=True`` (and a populated
-        ``degenerate_reason``) when the bundled side is absent.
+        ``ProtectedBlobSet`` with full bundled∪dist∪registry union when bundled
+        and registry sides are loadable; ``degenerate=True`` (and a populated
+        ``degenerate_reason``) when the bundled side is absent. The registry
+        side is NEVER degenerate — empty registry means zero additional
+        protection but does not raise.
 
     Raises:
-        IndexValidationError: dist's detail_index is missing or malformed.
+        IndexValidationError: dist's OR a registry row's detail_index is missing or malformed.
         ProtectedBlobSetError: dist db_version unknown.
         MalformedBundleManifestError: bundled manifest exists but is broken
             (data corruption, not absence — hard fail).
@@ -245,6 +335,12 @@ def compute_protected_blob_set(
             stale checkout — hard fail).
         BundleCatalogQueryError: SQLite open or query failed despite checksum
             matching — hard fail.
+        RegistryDetailIndexMissingError: an ACTIVE/VALIDATING row promises
+            a detail_index_url that does not exist in storage — hard fail.
+        RegistryFetchError: network/storage error fetching a registry index
+            — hard fail (no silent retry at this layer).
+        MalformedRegistryRowError: an ACTIVE/VALIDATING row has
+            detail_index_url=NULL — hard fail (operator error).
     """
     flutter_repo_path = Path(flutter_repo_path)
     dist_dir = Path(dist_dir)
@@ -356,8 +452,21 @@ def compute_protected_blob_set(
                 # Checksum verified — safe to query SQLite content.
                 bundled_hashes, bundled_count = _query_blob_hashes_from_catalog(wt_catalog)
 
-    # --- Step 3: compute union ------------------------------------------
-    protected = bundled_hashes | dist_hashes
+    # --- Step 3: registry-side fetch (P3.5; opt-in via supabase_client) --
+    registry_hashes: frozenset = frozenset()
+    registry_count = 0
+    registry_versions: tuple[str, ...] = ()
+    if supabase_client is not None:
+        registry_hashes, registry_count, registry_versions = (
+            _fetch_registry_blob_hashes(
+                supabase_client,
+                bucket=registry_bucket,
+                table=registry_table,
+            )
+        )
+
+    # --- Step 4: compute union (bundled ∪ dist ∪ registry) ---------------
+    protected = bundled_hashes | dist_hashes | registry_hashes
 
     return ProtectedBlobSet(
         protected=protected,
@@ -372,4 +481,141 @@ def compute_protected_blob_set(
         bundled_commit_sha=bundled_commit_sha,
         degenerate=degenerate,
         degenerate_reason=degenerate_reason,
+        registry_hashes=registry_hashes,
+        registry_count=registry_count,
+        registry_versions=registry_versions,
     )
+
+
+# ---------------------------------------------------------------------------
+# P3.5 — registry-backed blob hash fetch
+# ---------------------------------------------------------------------------
+
+
+def _fetch_registry_blob_hashes(
+    client,
+    *,
+    bucket: str,
+    table: Optional[str] = None,
+) -> Tuple[frozenset, int, Tuple[str, ...]]:
+    """Fetch every ACTIVE+VALIDATING registry row, download its detail_index,
+    validate it, and union the hashes.
+
+    Per ADR-0001 P3.5 sign-off:
+      - ACTIVE ∪ VALIDATING are protected. PENDING and RETIRED are excluded.
+      - Missing detail_index_url on a protected row -> hard fail.
+      - Index path missing in storage -> hard fail.
+      - Malformed index -> hard fail (propagates IndexValidationError).
+      - Network/fetch error -> hard fail (raises RegistryFetchError).
+      - Sequential fetches; concurrency is a future optimization.
+
+    Returns:
+        (frozenset of unique hashes, total entry count with duplicates,
+         tuple of db_versions that contributed in order encountered).
+    """
+    # Local import: registry depends on nothing from this module so this
+    # is one-way; the import is at call time to keep module import cheap.
+    from .registry import (
+        DEFAULT_TABLE as REGISTRY_DEFAULT_TABLE,
+        ReleaseState,
+        list_releases_by_state,
+    )
+
+    table_name = table or REGISTRY_DEFAULT_TABLE
+    actives = list_releases_by_state(client, ReleaseState.ACTIVE, table=table_name)
+    validatings = list_releases_by_state(client, ReleaseState.VALIDATING, table=table_name)
+    protected_rows = list(actives) + list(validatings)
+
+    all_hashes: set[str] = set()
+    total_count = 0
+    versions: list[str] = []
+
+    for release in protected_rows:
+        if not release.detail_index_url:
+            raise MalformedRegistryRowError(
+                f"catalog_releases row db_version={release.db_version!r} is in "
+                f"state {release.state.value} but detail_index_url is NULL. "
+                f"P3.5 requires non-null detail_index_url for ACTIVE/VALIDATING "
+                f"rows. Either set the URL or retire the row before cleanup."
+            )
+
+        index_bytes = _fetch_index_from_storage(
+            client,
+            bucket=bucket,
+            storage_path=release.detail_index_url,
+            db_version=release.db_version,
+        )
+
+        # validate_detail_index works from a filesystem path; write to a
+        # tempfile and unlink after parsing. The validator is responsible
+        # for rejecting malformed JSON / structure / hashes (hard fail).
+        with tempfile.NamedTemporaryFile(
+            mode="wb", suffix=".json", delete=False,
+        ) as tmp:
+            tmp.write(index_bytes)
+            tmp_path = Path(tmp.name)
+        try:
+            validated = validate_detail_index(tmp_path)
+        finally:
+            tmp_path.unlink(missing_ok=True)
+
+        all_hashes.update(validated.blob_hashes)
+        total_count += validated.count
+        versions.append(release.db_version)
+
+    return frozenset(all_hashes), total_count, tuple(versions)
+
+
+def _fetch_index_from_storage(
+    client,
+    *,
+    bucket: str,
+    storage_path: str,
+    db_version: str,
+) -> bytes:
+    """Download a registry detail_index from Supabase storage.
+
+    Existence is verified via list() first so the error path for a
+    missing object is clean (no reliance on supabase-py's specific
+    download-failure exception types, which vary across client versions).
+
+    Raises:
+        RegistryDetailIndexMissingError: object does not exist in storage.
+        RegistryFetchError: list or download failed for any other reason.
+    """
+    if "/" in storage_path:
+        parent, basename = storage_path.rsplit("/", 1)
+    else:
+        parent, basename = "", storage_path
+
+    try:
+        items = client.storage.from_(bucket).list(
+            path=parent,
+            options={"limit": 1000, "offset": 0},
+        )
+    except Exception as exc:  # noqa: BLE001
+        raise RegistryFetchError(
+            f"Failed to list bucket={bucket!r} path={parent!r} while looking "
+            f"up registry detail_index for db_version={db_version!r}: "
+            f"{type(exc).__name__}: {exc}"
+        ) from exc
+
+    items = items or []
+    found = any(
+        isinstance(i, dict) and i.get("name") == basename for i in items
+    )
+    if not found:
+        raise RegistryDetailIndexMissingError(
+            f"catalog_releases row db_version={db_version!r} promises "
+            f"detail_index at {bucket}/{storage_path} but the object does NOT "
+            f"exist in storage. Either upload the missing index or retire the "
+            f"row before cleanup can run."
+        )
+
+    try:
+        return client.storage.from_(bucket).download(storage_path)
+    except Exception as exc:  # noqa: BLE001
+        raise RegistryFetchError(
+            f"Failed to download {bucket}/{storage_path} for db_version="
+            f"{db_version!r}: {type(exc).__name__}: {exc}"
+        ) from exc
