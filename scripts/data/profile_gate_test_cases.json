@@ -3,6 +3,7 @@
     "description": "Shared evaluator fixture for v6.0 profile_gate. Python (scripts/profile_gate_evaluator.py) and Dart (Flutter alert-rendering layer) MUST both produce the same fires/severity output for every case below. Drift between the two implementations is the failure this fixture catches.",
     "purpose": "profile_gate_evaluator_cross_runtime_fixture",
     "schema_version": "1.0.0",
+    "total_entries": 18,
     "evaluator_contract_version": "6.0",
     "last_updated": "2026-05-13",
     "case_count": 18,

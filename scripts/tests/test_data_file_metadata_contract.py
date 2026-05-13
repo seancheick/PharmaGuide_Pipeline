@@ -80,6 +80,18 @@ INTENTIONAL_EXCEPTIONS: dict[str, str] = {
         "total_entries tracks alias_collisions_resolved (the headline number "
         "of this migration); other arrays/dicts are scaffolding. Pinned by "
         "test_migration_report_contract.py.",
+    "fda_unii_cache.json":
+        "Runtime cache file (name_to_unii + unii_to_name lookups, 170K+ "
+        "entries each) populated by scripts/api_audit/fda_weekly_sync.py. "
+        "Size fluctuates with each FDA UNII sync — a static total_entries "
+        "would be meaningless and forced bumps per sync. Intentionally "
+        "carries no total_entries; the cache file's freshness is tracked "
+        "by _metadata.last_updated instead.",
+    "percentile_categories.json":
+        "Mixed-shape config (categories dict of 9 + classification_rules "
+        "dict of 4 — both top-level). The 9 categories are the meaningful "
+        "entry count; classification_rules are static config the scorer "
+        "reads alongside. Pinned by test_percentile_categories_contract.py.",
 }
 
 
@@ -157,15 +169,17 @@ def test_metadata_total_entries_matches_entry_count(path: Path) -> None:
     if not isinstance(blob, dict) or "_metadata" not in blob:
         pytest.skip(f"{path.name}: no _metadata block")
 
+    # INTENTIONAL_EXCEPTIONS is the FIRST check after _metadata exists so that
+    # files with a decided semantic skip with their rationale + bespoke-test
+    # pointer, regardless of whether they have total_entries or a recognized
+    # shape. This is what makes "no silent skips" enforceable — every file in
+    # the exceptions dict carries an explicit reason.
+    if path.name in INTENTIONAL_EXCEPTIONS:
+        pytest.skip(f"{path.name}: {INTENTIONAL_EXCEPTIONS[path.name]}")
+
     meta_total = blob["_metadata"].get("total_entries")
     if meta_total is None:
         pytest.skip(f"{path.name}: _metadata has no total_entries field")
-
-    # INTENTIONAL_EXCEPTIONS check comes BEFORE the shape check so files with
-    # a decided semantic skip with the rationale (and pointer to bespoke test),
-    # not with the generic shape-mismatch message.
-    if path.name in INTENTIONAL_EXCEPTIONS:
-        pytest.skip(f"{path.name}: {INTENTIONAL_EXCEPTIONS[path.name]}")
 
     classification = _classify_shape(blob)
     if classification is None:

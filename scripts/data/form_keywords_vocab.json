@@ -2,6 +2,7 @@
   "_metadata": {
     "description": "Controlled vocabulary for ingredient FORM KEYWORDS extracted from raw label text. Single source of truth for the cleaner (extracts forms from ingredient names), the scorer (gates premium-form bonuses), and the enricher (matches probiotic delivery / postbiotic patterns). Replaces 3-5 hardcoded duplicate keyword lists previously scattered across enhanced_normalizer.py, score_supplements.py, enrich_supplements_v3.py, constants.py, and ingredient_quality_map.json aliases.",
     "schema_version": "1.0.0",
+    "total_entries": 17,
     "last_updated": "2026-05-05",
     "total_categories": 17,
     "status": "ACTIVE — v1.5.0 form vocabulary refactor",

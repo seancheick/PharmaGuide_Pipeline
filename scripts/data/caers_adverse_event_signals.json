@@ -1,6 +1,7 @@
 {
   "_metadata": {
     "schema_version": "1.0.0",
+    "total_entries": 159,
     "source": "FDA CAERS bulk download (food/event)",
     "source_url": "https://api.fda.gov/download.json",
     "last_updated": "2026-04-14T19:38:51Z",
