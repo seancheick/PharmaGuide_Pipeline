@@ -34,6 +34,18 @@ from .index_validator import (
     ChecksumMismatchError,
     validate_detail_index,
 )
+from .bundle_alignment import (
+    BundleManifestSnapshot,
+    AlignmentResult,
+    BundleAlignmentError,
+    FlutterRepoNotFoundError,
+    BranchNotFoundError,
+    BundleManifestNotFoundError,
+    MalformedBundleManifestError,
+    BundleMisalignmentError,
+    read_flutter_bundle_manifest,
+    check_bundle_alignment,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -52,4 +64,15 @@ __all__ = [
     "MalformedHashError",
     "ChecksumMismatchError",
     "validate_detail_index",
+    # P1.3 — bundle alignment (Flutter main HEAD)
+    "BundleManifestSnapshot",
+    "AlignmentResult",
+    "BundleAlignmentError",
+    "FlutterRepoNotFoundError",
+    "BranchNotFoundError",
+    "BundleManifestNotFoundError",
+    "MalformedBundleManifestError",
+    "BundleMisalignmentError",
+    "read_flutter_bundle_manifest",
+    "check_bundle_alignment",
 ]
