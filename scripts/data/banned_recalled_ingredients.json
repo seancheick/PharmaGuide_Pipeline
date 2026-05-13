@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
     "last_updated": "2026-05-13",
-    "total_entries": 155,
+    "total_entries": 156,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -370,6 +370,16 @@
             "  RECALLED_IMU_TEK_COLOSTRUM_5_CAPSULES (H-0660-2026, 120 capsules)",
             "  RECALLED_IMU_TEK_COLOSTRUM_5_POWDER   (H-0661-2026, 1,000 mg/scoop)",
             "Total entries: 153 -> 155"
+          ]
+        },
+        {
+          "version": "5.4.1",
+          "date": "2026-05-13",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Added 1 new product-scoped entry from FDA recall H-0637-2026 (TG Foods Inc., Class II undeclared egg allergen in collagen peptide supplement):",
+            "  RECALLED_DIVIDED_SUNSET_COLLAGEN_PEPTIDES (H-0637-2026)",
+            "Total entries: 155 -> 156"
           ]
         }
       ],
@@ -19012,6 +19022,96 @@
         "effective_from": "2026-02-24",
         "effective_to": null,
         "note": "FDA Class II recall (H-0661-2026) — 30% IgG bovine colostrum supplement, 2 capsules/scoops 2x/day oral dosing."
+      }
+    },
+    {
+      "id": "RECALLED_DIVIDED_SUNSET_COLLAGEN_PEPTIDES",
+      "standard_name": "Divided Sunset Multi Collagen Peptides",
+      "aliases": [
+        "divided sunset multi collagen peptides",
+        "divided sunset multi-collagen peptides",
+        "divided sunset collagen",
+        "tg foods divided sunset"
+      ],
+      "cui": null,
+      "reason": "TG Foods Inc. initiated an FDA Class II recall of Divided Sunset Multi Collagen Peptides (FDA recall H-0637-2026, 2026-02-27) after the ingredient statement was found to list 'eggshell membrane collagen' but failed to declare EGG as a major food allergen. Under the Food Allergen Labeling and Consumer Protection Act (FALCPA, 21 USC 343 et seq.), egg-containing products must carry explicit 'Contains: Egg' labeling. Consumers with egg allergy can experience anaphylaxis or other severe allergic reactions when the allergen is undisclosed. Class II reflects a temporary or medically reversible adverse consequence with remote probability of serious outcome for the general population — but acute risk for egg-allergic users.",
+      "status": "recalled",
+      "ban_context": "contamination_recall",
+      "class_tags": [
+        "undeclared_allergen",
+        "collagen_supplement"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped recall — any presence of this SKU warrants the B0 gate. Undeclared allergen risk applies regardless of column.",
+      "safety_warning": "FDA Class II recall: Divided Sunset Multi Collagen Peptides contains undeclared egg — risk of allergic reaction or anaphylaxis for egg-allergic users. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Class II FDA recall — undeclared egg allergen. Stop.",
+      "legal_status_enum": "contaminant_risk",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-02-27",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0637-2026 — Divided Sunset Multi Collagen Peptides — 2026-02-27",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0637-2026: Divided Sunset Multi Collagen Peptides — undeclared egg allergen",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0637-2026",
+          "evidence_grade": "R",
+          "date": "2026-02-27",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA Class II recall — ingredient statement listed 'eggshell membrane collagen' but failed to declare EGG as a major food allergen per FALCPA labeling requirements."
+        }
+      ],
+      "source_category": "labeling_violation",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0637-2026 — Class II recall of TG Foods Inc's Divided Sunset Multi Collagen Peptides for undeclared egg allergen.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-02-27",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "TG Foods Inc.",
+        "formulations": [
+          "Divided Sunset Multi Collagen Peptides"
+        ],
+        "lots": null,
+        "effective_from": "2026-02-27",
+        "effective_to": null,
+        "note": "FDA Class II recall (H-0637-2026) — 8 Ounce stand-up pouch, UPC 8 50005 60689 5. Ingredient statement listed eggshell membrane collagen without the required 'Contains: Egg' FALCPA disclosure."
       }
     }
   ]
