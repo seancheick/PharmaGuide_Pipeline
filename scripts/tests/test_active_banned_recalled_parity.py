@@ -45,6 +45,11 @@ if str(ROOT / "scripts") not in sys.path:
 
 
 _BUILD_CANDIDATES = (
+    # 2026-05-13: scripts/dist/ is the canonical current build (produced by
+    # rebuild_dashboard_snapshot.sh + release_full.sh). Prefer it so the
+    # audit reflects what's actually shipping. The /tmp/* paths below are
+    # historical sandbox dirs that may carry stale data from prior runs.
+    ROOT / "scripts" / "dist",
     Path("/tmp/pharmaguide_release_build_inactives"),
     Path("/tmp/pharmaguide_release_build_canonical_id"),
     Path("/tmp/pharmaguide_release_build_v3"),

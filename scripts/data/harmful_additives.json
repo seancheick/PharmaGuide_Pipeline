@@ -11918,7 +11918,7 @@
         "hexametaphosphate"
       ],
       "category": "emulsifier",
-      "mechanism_of_harm": "Polyphosphate salt contributing significant inorganic phosphorus absorbed at 90-100% efficiency (vs 40-60% for natural food phosphorus). EFSA 2019 re-evaluation established group ADI of 40 mg phosphorus/kg bw/day, which is already exceeded in infants, toddlers, and children at mean intake levels. Elevated serum phosphorus is associated with increased cardiovascular disease, vascular calcification, and accelerated kidney disease progression even within the 'normal' lab range. Approximately 10% of the general population has some degree of CKD with reduced renal function.",
+      "mechanism_of_harm": "Polyphosphate salt contributing highly bioavailable inorganic phosphorus, absorbed at 90-100% efficiency (vs 40-60% for natural food phosphorus). EFSA 2019 re-evaluation established a group ADI of 40 mg phosphorus/kg bw/day, which is already exceeded in infants, toddlers, and children at mean intake levels. Elevated serum phosphorus is associated with vascular calcification and accelerated renal decline even within the 'normal' lab range. Population-specific guidance is carried in population_warnings.",
       "regulatory_status": {
         "US": "FDA GRAS as sequestrant when used per good manufacturing practice (21 CFR 182).",
         "EU": "E452i approved. EFSA 2019 re-evaluation set group ADI of 40 mg P/kg bw/day for all phosphate additives (E 338-452). ADI already exceeded in children.",

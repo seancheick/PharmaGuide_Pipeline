@@ -3001,11 +3001,19 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     for h in safe_list(enriched.get("harmful_additives")):
         if not isinstance(h, dict):
             continue
-        # Prefer notes/mechanism emitted by enrichment; fallback to runtime resolution
+        # Sprint E1.1.2 (2026-05-13): prefer the live data file (h_ref)
+        # over the enricher's snapshot (h) for static reference fields.
+        # The enricher copies mechanism_of_harm / notes / population_warnings
+        # from harmful_additives.json verbatim at enrich-time, so an update
+        # to the data file would otherwise sit dormant until a full
+        # re-enrichment cycle. For medical-grade safety copy this is
+        # unacceptable — corrections must flow into the next build.
+        # The enricher's snapshot is kept as a fallback for cases where
+        # the runtime reference lookup fails (e.g. additive_id renamed).
         h_ref = resolve_harmful_reference(h)
-        h_notes = safe_str(h.get("notes") or h_ref.get("notes"))
-        h_mechanism = safe_str(h.get("mechanism_of_harm") or h_ref.get("mechanism_of_harm"))
-        h_pop_warnings = h.get("population_warnings") or h_ref.get("population_warnings") or []
+        h_notes = safe_str(h_ref.get("notes") or h.get("notes"))
+        h_mechanism = safe_str(h_ref.get("mechanism_of_harm") or h.get("mechanism_of_harm"))
+        h_pop_warnings = h_ref.get("population_warnings") or h.get("population_warnings") or []
         h_severity = safe_str(h.get("severity_level"), "moderate").lower()
         # Tier display by severity. High/moderate additives (e.g.
         # titanium dioxide EU-ban, formaldehyde-releasing preservatives)
