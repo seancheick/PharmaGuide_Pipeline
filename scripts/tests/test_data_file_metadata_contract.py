@@ -23,8 +23,23 @@ import pytest
 DATA = Path(__file__).parent.parent / "data"
 
 # Files whose top-level array length intentionally does not equal
-# _metadata.total_entries (e.g. count tracks something else). Add with reason.
-INTENTIONAL_EXCEPTIONS: dict[str, str] = {}
+# _metadata.total_entries (e.g. count tracks something else). Add with reason
+# + reference to the bespoke per-file test that pins the file-specific semantic.
+INTENTIONAL_EXCEPTIONS: dict[str, str] = {
+    "ingredient_weights.json":
+        "total_entries tracks dosage_weights tier count (4 — therapeutic / "
+        "optimal / maintenance / trace), not the sum across multi-section "
+        "payload. Pinned by test_ingredient_weights_contract.py.",
+    "unit_conversions.json":
+        "total_entries tracks vitamin_conversions only; mass_conversions, "
+        "probiotic_conversions, and form_detection_patterns are static "
+        "rule config, not vitamin entries. Pinned by "
+        "test_unit_conversions_contract.py.",
+    "cert_claim_rules.json":
+        "total_entries = Σ(non-_-prefixed rule keys across rules.*), "
+        "excluding each category's _metadata config sub-key. Pinned by "
+        "test_cert_claim_rules_contract.py.",
+}
 
 
 def _candidate_files() -> list[Path]:
@@ -56,15 +71,18 @@ def test_metadata_total_entries_matches_array_length(path: Path) -> None:
     if meta_total is None:
         pytest.skip(f"{path.name}: _metadata has no total_entries field")
 
+    # INTENTIONAL_EXCEPTIONS check comes BEFORE the shape check so files with
+    # a decided semantic skip with the rationale (and pointer to bespoke test),
+    # not with the generic shape-mismatch message.
+    if path.name in INTENTIONAL_EXCEPTIONS:
+        pytest.skip(f"{path.name}: {INTENTIONAL_EXCEPTIONS[path.name]}")
+
     top_level_arrays = [(k, v) for k, v in blob.items() if isinstance(v, list)]
     if len(top_level_arrays) != 1:
         pytest.skip(
             f"{path.name}: has {len(top_level_arrays)} top-level arrays "
             f"(needs file-specific test, not this universal contract)"
         )
-
-    if path.name in INTENTIONAL_EXCEPTIONS:
-        pytest.skip(f"{path.name}: {INTENTIONAL_EXCEPTIONS[path.name]}")
 
     array_key, array_val = top_level_arrays[0]
     actual = len(array_val)
