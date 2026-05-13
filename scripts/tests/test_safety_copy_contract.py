@@ -46,17 +46,23 @@ import pytest
 
 SPRINT_E1_1_2_LANDED = True   # Warning copy rewrite (critical → profile-agnostic)
 SPRINT_E1_1_3_LANDED = True   # Build-time raw-enum-leak validator
-# Banned-substance dedup landed in 3e4f9d6 (matched_rule_id + ingredient_name
-# added to the per-ingredient dedup key). Interaction-warning dedup is still
-# pending: the build emits interaction warnings without populating
-# `condition_ids` / `drug_class_ids` on the warning dict, so the contract
-# test's _warning_key() collapses legitimately-distinct rows into duplicate
-# keys (RC 2026-05-13 saw 148 products affected, e.g. product 1000 with 10
-# monitor/interaction entries for Vitamin D + various conditions). Flutter
-# is unaffected today because it dedups on `title` (which is unique per
-# rule). Re-enable this gate once the warning emitter populates the
-# structured condition/drug-class fields.
-SPRINT_E1_2_3_LANDED = False  # Build-time warning dedup — interaction path pending
+# Bucket-4 resolution (Sprint E1.2.3 follow-up, 2026-05-13):
+# The contract test's _warning_key() was a STRICT subset of the build's
+# _warning_dedup_key() — it omitted the per-ingredient component
+# (matched_rule_id / ingredient_name). That asymmetry caused the test to
+# flag legitimately-distinct per-ingredient warnings as "duplicates"
+# (e.g. EPA / DHA / Fish Body Oil / Borage Oil each carrying their own
+# pregnancy / no_data warning). The build correctly keeps them; the
+# test was wrong to collapse them. After aligning _warning_key with
+# the build, this gate enables.
+#
+# The orthogonal UX concern — that a fish-oil product showing 4
+# per-ingredient "insufficient pregnancy data" banners is visually
+# noisy — is intentionally NOT resolved here. A consolidation primitive
+# (warnings carry ``affected_ingredients[]``; Flutter renders one
+# banner per source_rule with the ingredient list) is a separate
+# sprint with its own schema and rendering changes.
+SPRINT_E1_2_3_LANDED = True   # Build-time warning dedup — test key aligned with build
 
 # ---------------------------------------------------------------------------
 # Deny-lists / regex — medical/UX justification in each invariant docstring.
@@ -329,23 +335,35 @@ def test_banned_substance_has_preflight_copy(sample_blobs) -> None:
 # ---------------------------------------------------------------------------
 
 def _warning_key(w: dict) -> tuple:
-    """Dedup key per sprint §E1.2.3: (severity, canonical_id, condition_id,
-    drug_class_id, source_rule). ``condition_id`` and ``drug_class_id`` may
-    be singular today and plural post-E1.4.1; normalize to a tuple."""
+    """Dedup key — mirrors build_final_db._warning_dedup_key() exactly.
+
+    Sprint E1.2.3 follow-up (2026-05-13): the per-ingredient component
+    (matched_rule_id / ingredient_name) is REQUIRED to keep this test in
+    sync with the build's correct per-ingredient dedup. Without it,
+    legitimately-distinct warnings (e.g. EPA-pregnancy + DHA-pregnancy +
+    Fish-Body-Oil-pregnancy + Borage-Oil-pregnancy on a single fish-oil
+    product) collapse into one key and the test fires a false positive.
+
+    The build is the source of truth: same key shape, same normalization,
+    same fallback chain. Drift here breaks E1.0.2 #5 by misidentifying
+    the build's correct per-ingredient output as a contract violation.
+    """
 
     def _norm(v) -> tuple:
         if v is None:
             return ()
         if isinstance(v, (list, tuple)):
-            return tuple(sorted(str(x) for x in v))
-        return (str(v),)
+            return tuple(sorted(str(x) for x in v if x not in (None, "")))
+        s = str(v)
+        return (s,) if s else ()
 
     return (
-        w.get("severity"),
-        w.get("canonical_id") or w.get("type"),
+        _norm(w.get("severity")),
+        _norm(w.get("canonical_id") or w.get("type")),
         _norm(w.get("condition_id") or w.get("condition_ids")),
         _norm(w.get("drug_class_id") or w.get("drug_class_ids")),
-        w.get("source_rule"),
+        _norm(w.get("source_rule") or w.get("source")),
+        _norm(w.get("matched_rule_id") or w.get("ingredient_name")),
     )
 
 
