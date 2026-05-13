@@ -540,3 +540,166 @@ def test_dry_run_filters_generic_rss_drug_alert_without_strong_supplement_signal
     assert report["skip_reasons"]["weak_rss_signal"] == 2
     assert report["skip_reasons"]["batch_duplicate_source"] == 1
     assert report["new_entries"][0]["product"] == "Kian Pee Wan capsules"
+
+
+# ---------------------------------------------------------------------------
+# Filter tightening regression tests (2026-05-13)
+#
+# These pin the false-positive cases that the 90-day dry-run surfaced before
+# the hard_reject / pharmaceutical_only_form layers landed. Each test feeds
+# is_eligible_manufacturer_record() a real FDA recall record and asserts that
+# the record is rejected for the right reason. Without these tests, anyone
+# loosening the filter would silently re-admit pharmaceutical / cosmetic /
+# food false positives into the manufacturer trust DB.
+# ---------------------------------------------------------------------------
+
+
+def _eligibility(product: str, reason: str = "", product_type: str = "Drug",
+                 source_type: str = "fda_enforcement") -> tuple[bool, str]:
+    return sync.is_eligible_manufacturer_record({
+        "product_type": product_type,
+        "product_description": product,
+        "reason_for_recall": reason,
+        "_source_type": source_type,
+    })
+
+
+def test_filter_rejects_rx_only_prazosin_capsules():
+    """V014 — Prazosin Hydrochloride Capsules USP Rx Only. "drug substance"
+    in reason mis-fires supplement_adulterant; hard_reject must catch it
+    via "rx only" before override is consulted."""
+    eligible, reason = _eligibility(
+        "Prazosin Hydrochloride Capsules, USP, 1mg, 100-count bottle, Rx Only",
+        "cGMP deviation: detection of Nitrosamine Drug Substance-Related Impurities",
+    )
+    assert not eligible
+    assert reason.startswith("hard_reject")
+
+
+def test_filter_rejects_fentanyl_injectable_solution():
+    """V016 — fentaNYL Citrate Injectable Solution. Injection + narcotic =
+    unambiguous Rx; never a dietary supplement adulterant."""
+    eligible, reason = _eligibility(
+        "fentaNYL Citrate Injectable Solution in 0.9% Sodium Chloride, 1000 mcg/50mL",
+        "CGMP deviations",
+    )
+    assert not eligible
+    assert reason.startswith("hard_reject")
+
+
+def test_filter_rejects_oxycodone_tablets_cii():
+    """V015 — Oxycodone Hydrochloride Tablets CII. Schedule II controlled
+    substance; never legitimately a supplement."""
+    eligible, reason = _eligibility(
+        "Oxycodone Hydrochloride Tablets, USP (CII), 5 mg, 100-Count blister",
+        "CGMP deviations",
+    )
+    assert not eligible
+    assert reason.startswith("hard_reject")
+
+
+def test_filter_rejects_thea_pharma_sterile_lubricant_eye_drops():
+    """V014/V015 from earlier dry-run — Similasan iVIZIA Sterile Lubricant
+    Eye Drops. Ophthalmic-only product; never a supplement."""
+    eligible, reason = _eligibility(
+        "Similasan, iVIZIA, Sterile Lubricant Eye Drops (Povidone 0.5%), 0.33 Fl oz",
+        "CGMP deviations",
+    )
+    assert not eligible
+    assert reason.startswith("hard_reject")
+
+
+def test_filter_rejects_dadi_dried_chilli_vegetable():
+    """V083 from earlier dry-run — DADI NONGFU DRIED SALT CHILLI VEGETABLE.
+    Conventional food; never a dietary supplement (caught earlier by
+    classify_record returning False; this test pins the regression)."""
+    eligible, reason = _eligibility(
+        "DADI NONGFU DRIED SALT CHILLI VEGETABLE(S); Ingredients: Radish, chili, roasted sesame",
+        "Products contain banned sweetener: cyclamates.",
+        product_type="Food",
+    )
+    assert not eligible
+    # Either not_supplement (classify_record rejects) or pure_food (filter rejects).
+    assert reason in ("not_supplement",) or reason.startswith("pure_food") or reason.startswith("hard_reject")
+
+
+def test_filter_rejects_acme_antimicrobial_alcohol_hand_wipe():
+    """V030 from earlier dry-run — Antimicrobial Alcohol Hand Wipe. OTC
+    topical antiseptic; not a dietary supplement."""
+    eligible, reason = _eligibility(
+        "Antimicrobial Alcohol Hand Wipe, Isopropyl Alcohol 70%",
+        "CGMP Deviations",
+    )
+    assert not eligible
+    assert reason.startswith("hard_reject")
+
+
+def test_filter_rejects_avantor_magnesium_chloride_bulk_api():
+    """V034 from earlier dry-run — Magnesium Chloride, Bulk active
+    pharmaceutical ingredient (API). Bulk pharma API; the supplement_adulterant
+    signal misfires on "active pharmaceutical ingredient" in product
+    description, but hard_reject catches "bulk active pharmaceutical" first."""
+    eligible, reason = _eligibility(
+        "Magnesium Chloride, 6-Hydrate, Crystal, 500G per bottle, Bulk active pharmaceutical ingredient",
+        "Subpotent drug",
+    )
+    assert not eligible
+    assert reason.startswith("hard_reject")
+
+
+def test_filter_rejects_hydropeptide_benzoyl_peroxide_serum():
+    """V036 from earlier dry-run — HydroPeptide BENZOYL PEROXIDE Serum.
+    OTC topical acne cosmetic; "peptide" in brand name accidentally matches
+    supplement_terms, but hard_reject catches "benzoyl peroxide" first."""
+    eligible, reason = _eligibility(
+        "HydroPeptide CLEAR ALLIANCE SERUM, 2.5% BENZOYL PEROXIDE, 1 FL OZ/30ml",
+        "Chemical contamination: Presence of benzene",
+    )
+    assert not eligible
+    assert reason.startswith("hard_reject")
+
+
+def test_filter_rejects_asteria_testosterone_sterile_pellet():
+    """V012-and-friends from earlier dry-run — Asteria Health Testosterone
+    Sterile Pellet. Compounded HRT pharmaceutical; not a supplement (even
+    though testosterone overlaps with anabolic-steroid supplement adulterants,
+    sterile pellets are exclusively pharmaceutical compounding)."""
+    eligible, reason = _eligibility(
+        "Testosterone, 100 mg, 1 Sterile Pellet, Asteria Health 432 Industrial Ln",
+        "Compounded drug subpotency",
+    )
+    assert not eligible
+    assert reason.startswith("hard_reject")
+
+
+def test_filter_keeps_pure_vitamins_sildenafil_spiked_male_enhancement():
+    """V005 from dry-run — Blue Bull Extreme Male Enhancement spiked with
+    sildenafil. THE canonical supplement-relevance case; must NOT be rejected."""
+    eligible, reason = _eligibility(
+        "Blue Bull Extreme Male Enhancement Supplement, total of 15 pouches per box",
+        "FDA analysis revealed the presence of undeclared sildenafil",
+    )
+    assert eligible, f"rejected with reason={reason!r}"
+
+
+def test_filter_keeps_aonic_complete_liquid_supplement_drink():
+    """V001 from dry-run — Aonic Complete Hers liquid dietary supplement
+    drink shot with microbial contamination. Must NOT be rejected — it is
+    a labeled dietary supplement with a real contamination recall."""
+    eligible, reason = _eligibility(
+        "Aonic Complete Hers. Dosage: Single serving liquid dietary supplement drink shot, 34 ml",
+        "Possible coliforms, E.coli, and/or Pseudomonas aeruginosa contamination.",
+        product_type="Food",  # FDA food/enforcement endpoint
+    )
+    assert eligible, f"rejected with reason={reason!r}"
+
+
+def test_filter_keeps_moringa_dietary_supplement_capsules():
+    """V011 from dry-run — Rosabella MORINGA DIETARY SUPPLEMENT CAPSULES.
+    Explicit "DIETARY SUPPLEMENT" labeling; must be kept."""
+    eligible, reason = _eligibility(
+        "Rosabella brand MORINGA; DIETARY SUPPLEMENT CAPSULES; 60 capsules per bottle",
+        "Microbial contamination",
+        product_type="Food",
+    )
+    assert eligible, f"rejected with reason={reason!r}"

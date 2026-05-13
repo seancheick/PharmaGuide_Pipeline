@@ -103,6 +103,110 @@ GENERIC_DRUG_ONLY_TERMS = [
     " pharmaceutical ",
 ]
 
+# Dosage forms that are PHARMACEUTICAL-ONLY (never legitimately sold as dietary
+# supplements). A drug recall with one of these forms AND no supplement-context
+# signal is NOT supplement-relevant and should be filtered out of the manufacturer
+# trust database. Matched as case-insensitive substrings on the lowered text.
+PHARMACEUTICAL_ONLY_FORMS = [
+    "transdermal system",
+    "transdermal patch",
+    "transdermal",
+    "ophthalmic",
+    "eye drops",
+    "eye drop",
+    "eye lubricant",
+    "ear drops",
+    "ear drop",
+    "nasal spray",
+    "nasal solution",
+    "inhaler",
+    "inhalation",
+    "nebulizer",
+    "injection",
+    "injectable",
+    "intravenous",
+    "iv solution",
+    "infusion",
+    "suppository",
+    "vaginal",
+    "rectal",
+    "topical cream",
+    "topical ointment",
+    "dental cream",
+    "mouth rinse",
+    "enema",
+    "irrigation solution",
+    "saline",
+    "contrast agent",
+    "dialysis",
+    "surgical",
+    "sterile lubricant",
+    "antiseptic towelette",
+    "antiseptic wipe",
+    "antibacterial towelette",
+    "hand sanitiz",   # matches sanitizer / sanitizing / sanitized — never a supplement
+    "tattoo numbing",
+    "numbing spray",
+    "benzalkonium",   # appears only in antiseptic wipes / sprays
+    "narcotic",       # fentanyl etc. — controlled Rx; never a supplement
+    "rx compounding", # compounded Rx only
+    "rx only",        # explicit Rx-only labeling
+    "ointment",
+    "salve",
+    "patch ",
+    "patches ",
+    "implant ",       # excludes "implants" (pl.) too
+    "compounded",
+    "syringe",
+    "tablets, usp",   # USP labeling = explicit Rx manufacturing
+    "capsules, usp",
+    "active pharmaceutical ingredient",
+    "bulk active pharmaceutical",
+    "active pharmaceutical",
+    "catheter",
+    "stent",
+]
+
+# Product descriptions that are clearly conventional food, not dietary supplements.
+# When matched without a supplement-form term, reject the record.
+PURE_FOOD_INDICATORS = [
+    "vegetable",
+    "vegetables",
+    "vegetable(s)",
+    "salad",
+    "sauce",
+    "salsa",
+    "dressing",
+    "cheese",
+    "yogurt",
+    "yoghurt",
+    "milk",
+    "butter",
+    "pasta",
+    "noodle",
+    "noodles",
+    "bread",
+    "pizza",
+    "sandwich",
+    "soup",
+    "candy ",   # trailing space to avoid "candidate"
+    "gum ",
+    "ice cream",
+    "cereal",
+    "pickled",
+    "smoked",
+    "cured",
+    "frozen meal",
+    "dried fruit",
+    "dried meat",
+    "jerky",
+    "spice mix",
+    "seasoning",
+    "dried salt",
+    "dried chilli",
+    "dried chili",
+]
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Sync manufacturer_violations.json from FDA openFDA data")
@@ -145,11 +249,284 @@ def _has_strong_supplement_signal(record: dict) -> bool:
     return False
 
 
+def _matches_pharmaceutical_only_form(text: str) -> str | None:
+    """Return the first pharmaceutical-only form term matched in ``text`` if any.
+
+    Caller normalises whitespace and pads with leading+trailing space so token
+    boundaries on every term work correctly. Returns the matched term (for
+    diagnostics) or None.
+    """
+    for term in PHARMACEUTICAL_ONLY_FORMS:
+        if term in text:
+            return term.strip()
+    return None
+
+
+def _matches_pure_food(text: str) -> str | None:
+    """Return the first pure-food indicator matched (caller passes normalised text)."""
+    for term in PURE_FOOD_INDICATORS:
+        if term in text:
+            return term.strip()
+    return None
+
+
+# Supplement-context terms that are UNAMBIGUOUS — finding any of these in the
+# record means the product is sold/marketed as a dietary supplement (not as a
+# pharmaceutical that happens to use a capsule form). Generic words like
+# "capsules" or "tablets" or "drops" are explicitly excluded because Rx drugs
+# use those dosage forms too — the filter must not treat "Prazosin Capsules"
+# as a supplement just because the word "capsules" appears.
+UNAMBIGUOUS_SUPPLEMENT_TERMS = [
+    "dietary supplement",
+    "nutraceutical",
+    "multivitamin",
+    "fat burner",
+    "weight loss",
+    "pre-workout",
+    "pre workout",
+    "post-workout",
+    "post workout",
+    "testosterone booster",
+    "male enhancement",
+    "female enhancement",
+    "sexual enhancement",
+    "energy shot",
+    "energy supplement",
+    "sports nutrition",
+    "muscle builder",
+    "bodybuilding",
+    "protein powder",
+    "amino acid",
+    "creatine",
+    "bcaa",
+    "kava",
+    "kratom",
+    "cbd",
+    "hemp extract",
+    "ashwagandha",
+    "turmeric",
+    "elderberry",
+    "ginseng",
+    "moringa",
+    "tejocote",
+    "fish oil",
+    "krill oil",
+    "omega-3",
+    "collagen peptides",
+    "colostrum",
+    "probiotic",
+    "prebiotic",
+    "melatonin",
+    "elderberry",
+    "garcinia",
+    "ephedra",
+    "ma huang",
+    "sarm",
+    "sarms",
+    "prohormone",
+    "anabolic",
+    "growth hormone",
+    "peptide",
+    "tribulus",
+    "horny goat weed",
+    "fenugreek",
+    "yohimbe",
+]
+
+
+def _has_supplement_context_signal(text: str, signals: list[str]) -> bool:
+    """True if the record carries a POSITIVE supplement-context signal that
+    overrides pharmaceutical-form rejection.
+
+    The override applies only when:
+      (1) The text contains an UNAMBIGUOUS supplement term ("dietary supplement",
+          "male enhancement", "kava", "fish oil", "sarms", etc.), OR
+      (2) The classifier already tagged it with a strong supplement-adulterant
+          signal category (sarms_prohibited, anabolic_steroid_prohormone,
+          supplement_adulterant, stimulant_designer, synthetic_cannabinoid, etc.).
+
+    Generic words like "capsules" / "tablets" / "drops" do NOT count as supplement
+    context because Rx drugs use those dosage forms too — e.g. "Prazosin
+    Hydrochloride Capsules, USP, Rx Only" must NOT be kept as a supplement-relevant
+    manufacturer violation.
+    """
+    if any(term in text for term in UNAMBIGUOUS_SUPPLEMENT_TERMS):
+        return True
+    # Categories that are UNAMBIGUOUSLY supplement-context on their own —
+    # any product flagged with these is almost certainly relevant to supplements.
+    UNAMBIGUOUS_SIGNAL_CATEGORIES = {
+        "supplement_adulterant",
+        "sarms_prohibited",
+        "anabolic_steroid_prohormone",
+        "stimulant_designer",
+        "synthetic_cannabinoid",
+        "nootropic_banned",
+        "novel_peptide_research_chemical",
+        "hepatotoxic_botanical",
+    }
+    signal_set = set(signals or [])
+    if UNAMBIGUOUS_SIGNAL_CATEGORIES & signal_set:
+        return True
+    # `pharmaceutical_contaminant` keyword list contains BOTH real
+    # supplement-spiking adulterants (sildenafil, tadalafil, sibutramine)
+    # AND plain Rx drugs that aren't supplement-adulterants (fentanyl,
+    # oxycodone, tramadol, furosemide). To distinguish, require
+    # `supplement_adulterant` co-occurrence — that signal fires on contextual
+    # cues like "undeclared", "undisclosed", "active pharmaceutical ingredient",
+    # which only appear when the drug was found IN a supplement (not in its
+    # own Rx packaging).
+    if "pharmaceutical_contaminant" in signal_set and "supplement_adulterant" in signal_set:
+        return True
+    # `schedule_I_psychoactive` alone is too broad — fentanyl/heroin etc. don't
+    # show up in legal supplements. Require co-occurrence with supplement_adulterant
+    # for the same reason as pharmaceutical_contaminant.
+    if "schedule_I_psychoactive" in signal_set and "supplement_adulterant" in signal_set:
+        return True
+    return False
+
+
+# Tier-1 HARD reject: phrases that DEFINITIVELY mean "not a dietary supplement".
+# No supplement-context override can rescue these — if the text contains any of
+# these terms, the record is excluded regardless of signal categories.
+#
+# Distinguished from PHARMACEUTICAL_ONLY_FORMS (Tier-2) because some of those
+# terms (e.g. "pellet") can co-occur with legitimate supplement-adulterant
+# context (testosterone pellet manufacturers often also produce supplements).
+HARD_REJECT_TERMS = [
+    "rx only",
+    "rx-only",
+    "for rx compounding",
+    "rx compounding",
+    "for prescription use",
+    "schedule ii",
+    "schedule iii",
+    "schedule iv",
+    "schedule v",
+    "narcotic",
+    "controlled substance",
+    "bulk active pharmaceutical ingredient",
+    "bulk active pharmaceutical",
+    "bulk api",
+    "active pharmaceutical ingredient",
+    "transdermal",
+    "injection",
+    "injectable",
+    "infusion",
+    "intravenous",
+    "ophthalmic",
+    "eye drops",
+    "eye drop",
+    "eye lubricant",
+    "ear drops",
+    "ear drop",
+    "nasal spray",
+    "nasal solution",
+    "topical cream",
+    "topical ointment",
+    "topical solution",
+    "rectal",
+    "suppository",
+    "vaginal",
+    "inhaler",
+    "inhalation",
+    "nebulizer",
+    "drug substance",      # phrase appears in pharma impurity recalls (V014 Prazosin)
+    "extended-release",
+    "extended release",
+    "immediate-release",
+    "modified-release",
+    "delayed-release",
+    "sustained-release",
+    "tablets, usp",
+    "capsules, usp",
+    "oral suspension",
+    "oral solution",
+    "for oral suspension",
+    "subj to caution",
+    "sterile pellet",      # compounded HRT pellets (F.H. Investments / Asteria)
+    "antiseptic wipe",
+    "antiseptic towelette",
+    "antibacterial towelette",
+    "hand wipe",
+    "alcohol wipe",
+    "isopropyl alcohol",
+    "hand sanitiz",        # catches sanitizer / sanitizing / sanitized
+    "antimicrobial wipe",
+    "antimicrobial alcohol",
+    "benzalkonium",
+    "benzoyl peroxide",    # OTC topical acne — never a supplement
+    "tattoo numbing",
+    "numbing spray",
+    "ointment",
+    "salve",
+    "saline",
+    "dialysis",
+    "contrast agent",
+    "irrigation solution",
+    "syringe",
+    "catheter",
+    "stent",
+    "sterile lubricant",
+    "surgical",
+    "compounded",
+    "patch ",
+    "patches ",
+]
+
+
+def _matches_hard_reject(text: str) -> str | None:
+    """Return the first hard-reject term matched (caller passes normalised text)."""
+    for term in HARD_REJECT_TERMS:
+        if term in text:
+            return term.strip()
+    return None
+
+
 def is_eligible_manufacturer_record(record: dict) -> tuple[bool, str]:
-    """Apply an additional conservative filter before manufacturer ingestion."""
+    """Apply an additional conservative filter before manufacturer ingestion.
+
+    Layered checks (each can reject):
+      1. classify_record (existing relevance gate)
+      2. HARD_REJECT_TERMS — unambiguous Rx / OTC / cosmetic / compounded markers
+         that no supplement-context signal can override.
+      3. PHARMACEUTICAL_ONLY_FORMS (Tier-2) — softer pharma-form markers that
+         CAN be overridden by an unambiguous supplement-context signal
+         (e.g. testosterone-pellet manufacturer is still supplement-relevant
+         because testosterone shows up in illegal anabolic supplements).
+      4. PURE_FOOD_INDICATORS — reject conventional food products lacking
+         any supplement form term.
+      5. RSS strong-signal requirement (unchanged from prior behaviour).
+    """
     relevant, primary_category, signals = classify_record(record)
     if not relevant:
         return False, "not_supplement"
+
+    # Build normalised text once for the form/food checks
+    pf_text = " ".join(
+        [
+            record.get("product_description") or "",
+            record.get("reason_for_recall") or "",
+            record.get("title") or "",
+            record.get("description") or "",
+        ]
+    ).lower()
+    pf_text = " " + re.sub(r'\s+', ' ', pf_text) + " "
+
+    # (2) Hard reject — no override possible.
+    hard_term = _matches_hard_reject(pf_text)
+    if hard_term:
+        return False, f"hard_reject:{hard_term}"
+
+    # (3) Soft reject — pharma-form markers that CAN be overridden by
+    # unambiguous supplement-context signals.
+    pharma_form = _matches_pharmaceutical_only_form(pf_text)
+    if pharma_form and not _has_supplement_context_signal(pf_text, signals):
+        return False, f"pharmaceutical_only_form:{pharma_form}"
+
+    # (4) Reject pure conventional food products lacking any supplement form term.
+    food_indicator = _matches_pure_food(pf_text)
+    if food_indicator and not any(term in pf_text for term in SUPPLEMENT_FORM_TERMS):
+        return False, f"pure_food:{food_indicator}"
 
     if record.get("_source_type") != "fda_rss":
         return True, ""
@@ -641,7 +1018,21 @@ def main() -> int:
         eligible, skip_reason = is_eligible_manufacturer_record(record)
         if not eligible:
             skipped += 1
-            skip_reasons[skip_reason] += 1
+            # Group hard_reject:*, pharmaceutical_only_form:*, pure_food:*
+            # under their umbrella keys so report counters stay sane while
+            # preserving detail in the per-record skip_reason.
+            if skip_reason.startswith("hard_reject"):
+                skip_reasons.setdefault("hard_reject", 0)
+                skip_reasons["hard_reject"] += 1
+            elif skip_reason.startswith("pharmaceutical_only_form"):
+                skip_reasons.setdefault("pharmaceutical_only_form", 0)
+                skip_reasons["pharmaceutical_only_form"] += 1
+            elif skip_reason.startswith("pure_food"):
+                skip_reasons.setdefault("pure_food", 0)
+                skip_reasons["pure_food"] += 1
+            else:
+                skip_reasons.setdefault(skip_reason, 0)
+                skip_reasons[skip_reason] += 1
             continue
 
         recall_number = (record.get("recall_number") or "").strip().upper()
