@@ -59,6 +59,27 @@ INTENTIONAL_EXCEPTIONS: dict[str, str] = {
         "score_thresholds). total_entries=5 tracks count of top-level "
         "non-_metadata sub-sections — meaningful but not entry-shaped. "
         "Pinned by test_manufacture_deduction_expl_contract.py.",
+    "banned_match_allowlist.json":
+        "total_entries tracks allowlist only; denylist is auxiliary and "
+        "tracked separately. Pinned by "
+        "test_banned_match_allowlist_contract.py.",
+    "clinical_risk_taxonomy.json":
+        "UNIQUE convention — total_entries = SUM of all 7 taxonomy arrays "
+        "(conditions + drug_classes + severity_levels + evidence_levels + "
+        "profile_flags + product_forms + sources). Pinned by "
+        "test_clinical_risk_taxonomy_contract.py.",
+    "color_indicators.json":
+        "total_entries tracks natural_indicators only; artificial_indicators "
+        "+ explicit_natural_dyes + explicit_artificial_dyes are auxiliary. "
+        "Pinned by test_color_indicators_contract.py.",
+    "functional_ingredient_groupings.json":
+        "total_entries tracks functional_groupings only; vague_terms_to_flag "
+        "+ transparency_bonuses are auxiliary. Pinned by "
+        "test_functional_ingredient_groupings_contract.py.",
+    "migration_report.json":
+        "total_entries tracks alias_collisions_resolved (the headline number "
+        "of this migration); other arrays/dicts are scaffolding. Pinned by "
+        "test_migration_report_contract.py.",
 }
 
 
