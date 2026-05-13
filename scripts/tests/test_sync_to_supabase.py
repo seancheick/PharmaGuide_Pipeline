@@ -403,3 +403,94 @@ def test_discover_existing_remote_blob_paths_lists_by_directory():
     assert existing == {"shared/details/sha256/aa/" + ("a" * 64) + ".json"}
     assert ("shared/details/sha256/aa", 1000, 0) in calls
     assert ("shared/details/sha256/bb", 1000, 0) in calls
+
+
+# ---------------------------------------------------------------------------
+# ADR-0001 / P1.0 — destructive orphan-cleanup freeze
+#
+# Regression guards proving that `sync_to_supabase.py` no longer invokes
+# `--cleanup-orphan-blobs` against `cleanup_old_versions.py` unless the
+# operator explicitly opts in via `--allow-destructive-orphan-cleanup`.
+#
+# This is the mechanically-enforced version of ADR-0001 HR-8 (operational
+# freeze on destructive cleanup until P1+P2 release-safety gates land).
+#
+# These tests are pure-function tests on `_build_cleanup_args` plus
+# `parse_args` defaults — no Supabase client, no network, no mocks needed.
+# ---------------------------------------------------------------------------
+
+def test_p1_0_build_cleanup_args_omits_orphan_cleanup_by_default():
+    """ADR-0001 P1.0: orphan-blob cleanup is FROZEN by default.
+
+    The argv passed to cleanup_old_versions.main MUST NOT include
+    `--cleanup-orphan-blobs` unless the operator passes the explicit
+    `--allow-destructive-orphan-cleanup` opt-in flag.
+
+    This is the regression guard for the 2026-05-12 incident: the existing
+    cleanup logic deletes blobs still referenced by the bundled Flutter
+    catalog whenever bundle-on-main lags dist. Until P1+P2 safety gates
+    land, the destructive step stays mechanically suppressed.
+    """
+    from sync_to_supabase import _build_cleanup_args
+
+    argv = _build_cleanup_args(
+        cleanup_keep=2,
+        allow_destructive_orphan_cleanup=False,
+    )
+
+    # The destructive step is omitted by default.
+    assert "--cleanup-orphan-blobs" not in argv, (
+        "P1.0 freeze breach: --cleanup-orphan-blobs leaked into cleanup argv "
+        "even though allow_destructive_orphan_cleanup=False. This re-opens "
+        "the 2026-05-12 failure mode (see ADR-0001)."
+    )
+
+    # Non-destructive cleanup steps still run during the freeze.
+    assert "--keep" in argv
+    assert "2" in argv
+    assert "--execute" in argv
+    assert "--cleanup-db" in argv
+
+
+def test_p1_0_build_cleanup_args_includes_orphan_cleanup_when_explicitly_opted_in():
+    """The explicit `--allow-destructive-orphan-cleanup` flag re-enables it.
+
+    NOTE: this opt-in path will only be SAFE to use once P1+P2 land and the
+    safety gates wrap the destructive step. Until then, operators must
+    leave it OFF (the default). This test guards the wiring, not the policy.
+    """
+    from sync_to_supabase import _build_cleanup_args
+
+    argv = _build_cleanup_args(
+        cleanup_keep=3,
+        allow_destructive_orphan_cleanup=True,
+    )
+
+    assert "--cleanup-orphan-blobs" in argv
+    assert "--keep" in argv
+    assert "3" in argv
+    assert "--execute" in argv
+    assert "--cleanup-db" in argv
+
+
+def test_p1_0_parse_args_allow_destructive_orphan_cleanup_defaults_off():
+    """parse_args MUST default `allow_destructive_orphan_cleanup` to False.
+
+    Default-off is the entire point of P1.0 — operators should not need to
+    remember a flag to be safe. They should need to remember a flag to be
+    DANGEROUS.
+    """
+    from sync_to_supabase import parse_args
+
+    args = parse_args(["/tmp/build"])
+
+    assert args.allow_destructive_orphan_cleanup is False
+
+
+def test_p1_0_parse_args_allow_destructive_orphan_cleanup_can_be_set():
+    """parse_args accepts the explicit opt-in flag and surfaces it as True."""
+    from sync_to_supabase import parse_args
+
+    args = parse_args(["/tmp/build", "--allow-destructive-orphan-cleanup"])
+
+    assert args.allow_destructive_orphan_cleanup is True

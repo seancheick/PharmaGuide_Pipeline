@@ -813,7 +813,38 @@ def parse_args(argv=None):
                         help="After successful sync, clean up old versions (keep last 2)")
     parser.add_argument("--cleanup-keep", type=int, default=2,
                         help="Number of versions to keep during cleanup (default: 2)")
+    parser.add_argument(
+        "--allow-destructive-orphan-cleanup",
+        action="store_true",
+        default=False,
+        dest="allow_destructive_orphan_cleanup",
+        help=(
+            "OPT-IN: re-enable `--cleanup-orphan-blobs` in the post-sync cleanup. "
+            "FROZEN by default per ADR-0001 / HR-8 until P1+P2 release-safety gates "
+            "land. The 2026-05-12 incident showed this step deletes blobs still "
+            "referenced by the bundled Flutter catalog when bundle-on-main lags dist."
+        ),
+    )
     return parser.parse_args(argv)
+
+
+def _build_cleanup_args(cleanup_keep, allow_destructive_orphan_cleanup):
+    """Build the argv list passed to ``cleanup_old_versions.main``.
+
+    ADR-0001 / P1.0: ``--cleanup-orphan-blobs`` is gated behind an explicit
+    opt-in (``allow_destructive_orphan_cleanup=True``). Default is to omit it
+    so the destructive shared-blob deletion stays FROZEN until P1+P2 land.
+
+    Pure function — no I/O, no mocks needed for unit testing.
+    """
+    cleanup_argv = [
+        "--keep", str(cleanup_keep),
+        "--execute",
+        "--cleanup-db",
+    ]
+    if allow_destructive_orphan_cleanup:
+        cleanup_argv.append("--cleanup-orphan-blobs")
+    return cleanup_argv
 
 
 def main(argv=None):
@@ -836,6 +867,25 @@ def main(argv=None):
             sys.exit(2)
         elif result["status"] in ("synced", "up_to_date", "dry_run"):
             if args.cleanup and result["status"] == "synced":
+                if not args.allow_destructive_orphan_cleanup:
+                    # ADR-0001 / HR-8: orphan-blob cleanup is FROZEN by default
+                    # until P1+P2 release-safety gates land. The 2026-05-12
+                    # incident proved the existing logic deletes blobs still
+                    # referenced by a stale-bundled Flutter catalog.
+                    print(
+                        "\n[release-safety] Orphan-blob cleanup is FROZEN "
+                        "per ADR-0001 / HR-8.\n"
+                        "  → `--cleanup-orphan-blobs` will NOT be passed to "
+                        "cleanup_old_versions.\n"
+                        "  → Per-version directory cleanup + manifest-row "
+                        "cleanup still run; only the destructive\n"
+                        "    shared-blob deletion is suppressed.\n"
+                        "  → Storage will accumulate orphans during the "
+                        "freeze; this is expected.\n"
+                        "  → To re-enable (only after P1+P2 safety gates "
+                        "land), pass:\n"
+                        "       --allow-destructive-orphan-cleanup\n"
+                    )
                 print(f"\nRunning post-sync cleanup (keeping last {args.cleanup_keep} versions)...")
                 import importlib, sys as _sys
                 from pathlib import Path as _Path
@@ -844,15 +894,13 @@ def main(argv=None):
                 if _script_dir not in _sys.path:
                     _sys.path.insert(0, _script_dir)
                 cleanup_mod = importlib.import_module("cleanup_old_versions")
-                # Full cleanup: storage versions + orphan blobs + manifest DB rows.
-                # Without --cleanup-db, export_manifest rows accumulate forever even
-                # though the storage objects are deleted, leaving stale references.
-                cleanup_mod.main([
-                    "--keep", str(args.cleanup_keep),
-                    "--execute",
-                    "--cleanup-orphan-blobs",
-                    "--cleanup-db",
-                ])
+                # Full cleanup: storage versions + manifest DB rows.
+                # Orphan-blob cleanup gated by --allow-destructive-orphan-cleanup
+                # (default OFF) per ADR-0001 P1.0; see _build_cleanup_args above.
+                cleanup_mod.main(_build_cleanup_args(
+                    args.cleanup_keep,
+                    args.allow_destructive_orphan_cleanup,
+                ))
             sys.exit(0)
     except FileNotFoundError as e:
         print(f"Error: {e}")
