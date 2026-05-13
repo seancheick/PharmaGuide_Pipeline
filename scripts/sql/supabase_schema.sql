@@ -271,3 +271,100 @@ GRANT EXECUTE ON FUNCTION increment_usage(uuid, text) TO authenticated;
 --   pharmaguide/v{version}/pharmaguide_core.db
 --   pharmaguide/v{version}/detail_index.json
 --   pharmaguide/shared/details/sha256/{blob_sha256[0:2]}/{blob_sha256}.json
+--   pharmaguide/shared/release_indexes/{db_version}/detail_index.json   -- P3 archived index
+--   pharmaguide/shared/quarantine/{date}/{shard}/{hash}.json            -- P2 soft-deleted blobs
+
+-- =============================================================================
+-- 8. Catalog Release Registry (ADR-0001 P3.1)
+-- =============================================================================
+-- Multi-version live registry. Replaces the P1.4 interim bundled∪dist
+-- heuristic in the orphan-blob protected-set computation.
+--
+-- Design highlights:
+--   - State machine: PENDING -> VALIDATING -> ACTIVE -> RETIRED
+--     (any failure during VALIDATING falls back to PENDING; never partially-active)
+--   - Multiple ACTIVE rows are normal: bundled-on-installed-app + dist for
+--     next release + ota_stable for current rollout can co-exist.
+--   - DB-layer CHECK constraints enforce state-machine invariants
+--     (so app-layer bugs cannot leave the registry in an inconsistent state).
+--   - Partial index on ACTIVE keeps the protected-set query (the hot path)
+--     fast as RETIRED rows accumulate.
+--   - Public read (so consumer-side tooling can introspect); service-role write.
+--
+-- Channels (initial set, per ADR sign-off):
+--   - bundled     : shipped in app binary; installed on user devices
+--   - ota_stable  : delivered via OTA to all installed apps
+--   - dev         : pipeline test build / pre-release
+--   ota_beta is intentionally NOT included; add via ALTER TYPE when a real
+--   beta cohort exists.
+
+-- ENUMs are wrapped in DO blocks so re-running supabase_schema.sql is idempotent
+-- (unlike CREATE TABLE IF NOT EXISTS, plain CREATE TYPE has no IF NOT EXISTS).
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'catalog_release_state') THEN
+    CREATE TYPE catalog_release_state AS ENUM (
+      'PENDING',     -- row exists; not yet visible to consumers; blobs NOT protected
+      'VALIDATING',  -- activation in progress; blobs ARE protected (transient)
+      'ACTIVE',      -- live; visible via channel routing; blobs protected
+      'RETIRED'      -- explicitly retired; blobs no longer protected
+    );
+  END IF;
+END$$;
+
+DO $$
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'catalog_release_channel') THEN
+    CREATE TYPE catalog_release_channel AS ENUM (
+      'bundled',
+      'ota_stable',
+      'dev'
+    );
+  END IF;
+END$$;
+
+CREATE TABLE IF NOT EXISTS catalog_releases (
+  db_version              text PRIMARY KEY,                              -- e.g. "2026.05.12.203133"
+  state                   catalog_release_state NOT NULL DEFAULT 'PENDING',
+  release_channel         catalog_release_channel NOT NULL,
+  released_at             timestamptz NOT NULL DEFAULT now(),
+  activated_at            timestamptz,                                   -- set when state -> ACTIVE
+  retired_at              timestamptz,                                   -- set when state -> RETIRED
+  retired_reason          text,                                          -- mandatory when retired_at IS NOT NULL
+  bundled_in_app_versions text[] NOT NULL DEFAULT ARRAY[]::text[],       -- e.g. '{1.0.0, 1.0.1}'
+  flutter_repo_commit     text,                                          -- SHA of Flutter bundle commit on main (channel=bundled only)
+  detail_index_url        text,                                          -- shared/release_indexes/{db_version}/detail_index.json
+  notes                   text,
+
+  -- ACTIVE / RETIRED rows MUST have activated_at set (proves they passed activation).
+  -- PENDING / VALIDATING rows are pre-activation; activated_at is NULL.
+  CONSTRAINT activated_at_set_iff_active_or_retired
+    CHECK (state IN ('PENDING', 'VALIDATING') OR activated_at IS NOT NULL),
+
+  -- RETIRED rows MUST have retired_at + retired_reason; non-RETIRED rows MUST have neither.
+  -- Forces the operator to record WHY a release was retired (audit-grade evidence).
+  CONSTRAINT retired_fields_consistent
+    CHECK ((state = 'RETIRED' AND retired_at IS NOT NULL AND retired_reason IS NOT NULL)
+        OR (state != 'RETIRED' AND retired_at IS NULL AND retired_reason IS NULL)),
+
+  -- Bundled rows MUST record the Flutter commit that bundled them (provenance).
+  -- ota_stable / dev channels can omit (no Flutter bundle commit per row).
+  CONSTRAINT bundled_requires_flutter_commit
+    CHECK (release_channel != 'bundled' OR flutter_repo_commit IS NOT NULL)
+);
+
+-- Hot-path partial index: the protected-set query reads
+--   SELECT db_version, detail_index_url FROM catalog_releases WHERE state = 'ACTIVE'
+-- on every cleanup run. Partial index keeps it cheap as RETIRED rows accumulate.
+CREATE INDEX IF NOT EXISTS idx_catalog_releases_active
+  ON catalog_releases (release_channel)
+  WHERE state = 'ACTIVE';
+
+-- General state index for audit queries (e.g. "show me all RETIRED releases").
+CREATE INDEX IF NOT EXISTS idx_catalog_releases_state
+  ON catalog_releases (state);
+
+-- RLS: public read so consumer-side tooling can introspect; service-role only writes.
+ALTER TABLE catalog_releases ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Public read catalog_releases" ON catalog_releases
+  FOR SELECT TO anon, authenticated USING (true);
