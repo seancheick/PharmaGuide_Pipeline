@@ -369,6 +369,12 @@ def _resolve_active_safety_contract(
             ) or None,
             "matched_source": "banned_recalled",
             "matched_rule_id": safe_str(banned_hit.get("id") or banned_hit.get("rule_id")) or None,
+            # Sprint E1.1.4 / 2026-05-13 — thread Dr Pham authored copy so
+            # the active-side warning emitter can populate the preflight
+            # banned_substance_detail blob field without re-fetching the
+            # source data.
+            "safety_warning_one_liner": safe_str(banned_hit.get("safety_warning_one_liner")) or None,
+            "safety_warning": safe_str(banned_hit.get("safety_warning")) or None,
         }
     if elevated_hit is not None:
         return {
@@ -2783,6 +2789,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "safety_reason":     c["safety_reason"],
                 "matched_source":    c["matched_source"],
                 "matched_rule_id":   c["matched_rule_id"],
+                # Sprint E1.1.4 / 2026-05-13 — pass authored Dr Pham
+                # copy through to the warning emitter. None when the
+                # safety contract didn't fire on a banned-recalled hit.
+                "safety_warning_one_liner": c.get("safety_warning_one_liner"),
+                "safety_warning":          c.get("safety_warning"),
             })(_resolve_active_safety_contract(
                 harmful_hit, harmful_ref, ingredient_hits,
                 name_terms=_active_banned_recall_terms(raw, name, standard_name),
@@ -2897,6 +2908,12 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "safety_reason": res.safety_reason,
             "matched_source": res.matched_source,
             "matched_rule_id": res.matched_rule_id,
+            # Sprint E1.1.4 / 2026-05-13 — Dr Pham authored copy threaded
+            # from banned_recalled_ingredients.json through the resolver
+            # to the warning emitter. None on harmful-additive /
+            # other-ingredient / unmatched branches.
+            "safety_warning_one_liner": res.safety_warning_one_liner,
+            "safety_warning":          res.safety_warning,
         })
 
     # Warnings
@@ -3214,7 +3231,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 w_type = "high_risk_ingredient"
                 w_severity = "high"
                 w_title = f"High-risk ingredient: {name}"
-            warnings.append({
+            warning_entry = {
                 "type": w_type,
                 "severity": w_severity,
                 "title": w_title,
@@ -3225,7 +3242,26 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "source": "inactive_ingredient_resolver",
                 "display_mode_default": "critical",
                 "clinical_risk": safe_str(ing.get("harmful_severity")) or None,
-            })
+            }
+            # Sprint E1.1.4 / 2026-05-13 — thread Dr Pham authored preflight
+            # copy into warnings emitted for banned-recalled hits. Without
+            # this, build_banned_substance_detail() (which scans
+            # warnings[].type=='banned_substance' for safety_warning_one_liner
+            # + safety_warning) gets an empty result and the preflight
+            # validator in _validate_banned_preflight_propagation fires.
+            # The fields are populated upstream by:
+            #   - InactiveResolution._from_banned (inactive path), and
+            #   - _resolve_active_safety_contract banned branch (active path).
+            # Empty string never returned — None falls through cleanly so
+            # build_banned_substance_detail's `isinstance(one, str) and one.strip()`
+            # guard skips entries that lack authored copy (e.g. high_risk).
+            one_liner = ing.get("safety_warning_one_liner")
+            safety_warning = ing.get("safety_warning")
+            if one_liner:
+                warning_entry["safety_warning_one_liner"] = one_liner
+            if safety_warning:
+                warning_entry["safety_warning"] = safety_warning
+            warnings.append(warning_entry)
 
     # Build the profile-gated subset — warnings whose default treatment is
     # NOT "suppress". This is what Flutter should render by default when

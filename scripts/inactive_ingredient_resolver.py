@@ -151,6 +151,16 @@ class InactiveResolution:
     # Optional structured evidence (PubMed, EFSA refs) — copied through
     # from the matched entry when available.
     references: list[dict] = field(default_factory=list)
+    # Sprint E1.1.4 / 2026-05-13 — authored Dr Pham preflight copy threaded
+    # through to support build_banned_substance_detail() in the blob layer.
+    # Only populated for the banned-recalled branch (and only when the source
+    # entry actually carries the authored fields); None for harmful_additives,
+    # other_ingredients, and unmatched. The fields mirror the source-data
+    # schema in banned_recalled_ingredients.json so the bridge is exact and
+    # the validator (_validate_banned_preflight_propagation) sees them
+    # under the names it expects.
+    safety_warning_one_liner: Optional[str] = None
+    safety_warning: Optional[str] = None
 
 
 # ---------------------------------------------------------------------------
@@ -337,6 +347,14 @@ class InactiveIngredientResolver:
             is_label_descriptor=False,
             is_active_only=False,
             notes=str(entry.get("ban_context") or "")[:500],
+            # Sprint E1.1.4 / 2026-05-13 — thread Dr Pham authored copy
+            # straight through. Only meaningful for status='banned' (where
+            # build_banned_substance_detail() requires both fields non-empty).
+            # We populate for ALL banned_recalled branches so consumers
+            # downstream can render the preflight copy on high_risk /
+            # recalled too if they want — they're authored regardless.
+            safety_warning_one_liner=(entry.get("safety_warning_one_liner") or None),
+            safety_warning=(entry.get("safety_warning") or None),
             identifiers={
                 k: entry.get(k)
                 for k in ("cui", "rxcui", "gsrs", "external_ids")

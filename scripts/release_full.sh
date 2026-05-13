@@ -399,7 +399,18 @@ if (( SKIP_SUPABASE == 0 )); then
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
     info "Step 5/7: Syncing dist/ to Supabase (with --cleanup, content-checksum-aware)..."
-    python3 scripts/sync_to_supabase.py "$DIST_DIR" --cleanup --cleanup-keep "$KEEP_VERSIONS"
+    # P1.6 commit 2 (2026-05-13): orphan-blob cleanup is ON by default in
+    # sync_to_supabase, gated by the P1+P2+P3 release-safety stack. The
+    # gate requires both --flutter-repo and --dist-dir to compute the
+    # bundled∪dist∪registry protected set; forward them here. --dist-dir
+    # defaults to the build_dir positional, so we only need to pass
+    # --flutter-repo. To skip the orphan sweep (incident response, etc.)
+    # rerun this script with --skip-supabase and call sync_to_supabase
+    # manually with --no-allow-destructive-orphan-cleanup.
+    python3 scripts/sync_to_supabase.py "$DIST_DIR" \
+        --cleanup \
+        --cleanup-keep "$KEEP_VERSIONS" \
+        --flutter-repo "$FLUTTER_REPO"
   fi
   ok "Supabase step done (uploaded if changed; up-to-date otherwise)"
 else
