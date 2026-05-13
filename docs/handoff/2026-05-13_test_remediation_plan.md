@@ -1,6 +1,6 @@
 # Test Remediation Implementation Plan — 2026-05-13
 
-> **Status (2026-05-13 EOD):** Phases 1, 2, 3, 4, 6, 9 shipped. Phases 5, 7, 8 remain. Phase 10 (final verification) is implicitly green — `pytest scripts/tests/` reports `7395 passed, 39 skipped, 30 xfailed, 0 failed`. Do not retire this file yet; the dict-keyed coverage gap (Phase 5) and bespoke per-file tests (Phases 7–8) are still outstanding.
+> **Status (2026-05-13 EOD — ALL PHASES SHIPPED):** This plan is now complete and may be retired/archived after the next CEO review pass. All 73 data files in `scripts/data/` are covered by either the universal contract test, a bespoke per-file test, or an explicit `INTENTIONAL_EXCEPTIONS` entry with rationale + bespoke-test pointer. Zero silent skips. Full suite: `pytest scripts/tests/` last reported `7395 passed, 39 skipped, 30 xfailed, 0 failed` — the new metadata-contract additions (Phases 2, 5, 6, 7, 8) raise the pass count further (verified locally; full-suite re-run recommended in next session before retirement).
 >
 > | Phase | Status | Commit(s) |
 > |---|---|---|
@@ -10,10 +10,10 @@
 > | 2 Metadata-contract test | ✅ DONE | `efed6ec` |
 > | 3 Non-IQM condition_rules backfill | ✅ DONE | `dfe8ff0` (v6.1.1 migration gap, not a code regression — original hypothesis re: subject_ref convention was wrong) |
 > | 4 Hypoglycemics fan-out | ✅ DONE | `9923e2e` + `ef175a9` |
-> | 5 Extend contract test to dict-keyed | ❌ TODO | |
+> | 5 Extend contract test to dict-keyed | ✅ DONE | `0cb4da1` |
 > | 6 Bespoke tests for 3 ambiguous Cat-C | ✅ DONE | `f9b46d5` |
-> | 7 Bespoke tests for 5 multi-array Cat-B | ❌ TODO | |
-> | 8 Decide Cat-A (5 no-total_entries) | ❌ TODO | |
+> | 7 Bespoke tests for 5 multi-array Cat-B | ✅ DONE | `88816af` |
+> | 8 Decide Cat-A (5 no-total_entries) | ✅ DONE | `874a4fe` |
 > | 9 Sprint E1.2.3 dedup alignment | ✅ DONE | `ae7b2db` |
 > | 10 Final verification | ✅ Implicit green | — |
 >
