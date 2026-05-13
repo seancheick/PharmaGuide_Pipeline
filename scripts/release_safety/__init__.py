@@ -80,6 +80,12 @@ from .quarantine import (
     recover_blob,
     list_quarantine_dates,
 )
+from .quarantine_sweeper import (
+    DEFAULT_QUARANTINE_TTL_DAYS,
+    SweepResult,
+    is_eligible_for_hard_delete,
+    sweep_quarantine,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -139,4 +145,9 @@ __all__ = [
     "quarantine_blob",
     "recover_blob",
     "list_quarantine_dates",
+    # P2.1b — quarantine sweeper (TTL-based hard-delete)
+    "DEFAULT_QUARANTINE_TTL_DAYS",
+    "SweepResult",
+    "is_eligible_for_hard_delete",
+    "sweep_quarantine",
 ]
