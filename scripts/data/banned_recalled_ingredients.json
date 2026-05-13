@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
     "last_updated": "2026-05-13",
-    "total_entries": 152,
+    "total_entries": 153,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -348,6 +348,17 @@
             "  RECALLED_AONIC_COMPLETE_HERS (H-0520-2026, possible coliforms / E. coli / P. aeruginosa)",
             "  RECALLED_AONIC_COMPLETE_HIS  (H-0521-2026, possible coliforms / E. coli / P. aeruginosa)",
             "Total entries: 150 -> 152"
+          ]
+        },
+        {
+          "version": "5.4.1",
+          "date": "2026-05-13",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Added 1 new product-scoped entry from FDA recall H-0647-2026 (Siluetaya, LLC, Class I, yellow oleander substitution in tejocote root supplement):",
+            "  RECALLED_SILUETAYA_TEJOCOTE (H-0647-2026)",
+            "Related: parent substance ban BANNED_YELLOW_OLEANDER_RECENT remains active for any product containing Thevetia peruviana.",
+            "Total entries: 152 -> 153"
           ]
         }
       ],
@@ -18707,6 +18718,111 @@
         "effective_from": "2026-01-15",
         "effective_to": null,
         "note": "FDA Class II recall (H-0521-2026) — 34 mL liquid dietary supplement drink shot, single-serving plastic bottles."
+      }
+    },
+    {
+      "id": "RECALLED_SILUETAYA_TEJOCOTE",
+      "standard_name": "SiluetaYa Mexican Tejocote Roots Supplement",
+      "aliases": [
+        "siluetaya mexican tejocote roots supplement",
+        "siluetaya tejocote roots",
+        "siluetaya mexican tejocote",
+        "mexican tejocote roots supplement pieces"
+      ],
+      "cui": null,
+      "reason": "Siluetaya, LLC initiated an FDA Class I recall of SiluetaYa Mexican Tejocote Roots Supplement (FDA recall H-0647-2026, 2025-10-29) after analysis confirmed the product contains yellow oleander (Thevetia peruviana) — a highly cardiotoxic plant containing cardiac glycosides (thevetin A and B, neriifolin). Yellow oleander has been linked to severe arrhythmia, cardiac arrest, hospitalization, and death when ingested. This is the long-documented Tejocote substitution pattern: weight-loss products labeled as Crataegus mexicana (true tejocote) are adulterated with Thevetia peruviana root, which is macroscopically similar but pharmacologically lethal. FDA classified as Class I — reasonable probability of serious adverse health consequences or death.",
+      "status": "recalled",
+      "ban_context": "contamination_recall",
+      "class_tags": [
+        "botanical_substitution",
+        "cardiotoxic",
+        "weight_loss_supplement"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped Class I recall — any presence of this recalled SKU warrants the B0 gate regardless of column. Yellow oleander is cardiotoxic at any disclosed or undisclosed exposure.",
+      "safety_warning": "FDA Class I recall: SiluetaYa Mexican Tejocote Roots contains yellow oleander — a cardiotoxic plant linked to severe cardiac arrhythmia and death. Stop immediately and consult a doctor.",
+      "safety_warning_one_liner": "Class I FDA recall — yellow oleander substitution. Stop immediately.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2025-10-29",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0647-2026 — SiluetaYa Mexican Tejocote Roots — 2025-10-29",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0647-2026: SiluetaYa Mexican Tejocote Roots — yellow oleander substitution",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0647-2026",
+          "evidence_grade": "R",
+          "date": "2025-10-29",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA enforcement action classified Class I (reasonable probability of serious adverse health consequences or death). Product marketed as tejocote root was found to contain yellow oleander."
+        },
+        {
+          "type": "fda_advisory",
+          "title": "FDA Issues Advisory on Tejocote Root Supplements Adulterated with Yellow Oleander",
+          "url": "https://www.fda.gov/food/alerts-advisories-safety-information/fda-issues-advisory-tejocote-root-supplements",
+          "evidence_grade": "R",
+          "date": "2024-04-25",
+          "supports_claims": [
+            "regulatory_action",
+            "substitution_pattern"
+          ],
+          "evidence_summary": "FDA advisory documents the broader pattern of tejocote supplements being adulterated with yellow oleander, with linked cardiac glycoside toxicity reports."
+        }
+      ],
+      "source_category": "botanical_substitution",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0647-2026 — Class I recall of SiluetaYa Mexican Tejocote Roots Supplement for yellow oleander (Thevetia peruviana) contamination.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2025-10-29",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "Siluetaya, LLC",
+        "formulations": [
+          "SiluetaYa Mexican Tejocote Roots Supplement Pieces"
+        ],
+        "lots": [
+          "US1220"
+        ],
+        "effective_from": "2025-10-29",
+        "effective_to": null,
+        "note": "FDA Class I recall (H-0647-2026) — 7g/bottle dietary supplement pieces, UPC 7500464462411, Lot US1220. Yellow oleander substitution for the labeled Crataegus mexicana (tejocote) — a recurring adulteration pattern across multiple brands. The substance-level ban BANNED_YELLOW_OLEANDER_RECENT remains active for any product."
       }
     }
   ]
