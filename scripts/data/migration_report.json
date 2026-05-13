@@ -3,6 +3,7 @@
     "description": "Migration report from schema upgrades",
     "purpose": "migration_audit",
     "schema_version": "5.0.0",
+    "contract_test": "scripts/tests/test_migration_report_contract.py",
     "last_updated": "2026-02-16",
     "migration_info": {
       "from_version": "2.0.0",

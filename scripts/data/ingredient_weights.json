@@ -3,6 +3,7 @@
     "description": "Ingredient weight categories for dosing classification",
     "purpose": "dosing_categories",
     "schema_version": "5.0.0",
+    "contract_test": "scripts/tests/test_ingredient_weights_contract.py",
     "last_updated": "2026-02-16",
     "total_entries": 4,
     "version": "1.0.0"

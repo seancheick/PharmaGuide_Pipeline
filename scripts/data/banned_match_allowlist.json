@@ -3,6 +3,7 @@
     "description": "Allowlist/denylist for banned ingredient matching overrides",
     "purpose": "match_override",
     "schema_version": "5.0.0",
+    "contract_test": "scripts/tests/test_banned_match_allowlist_contract.py",
     "last_updated": "2026-02-17",
     "version": "1.0.0",
     "total_entries": 5

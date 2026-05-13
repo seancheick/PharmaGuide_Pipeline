@@ -3,6 +3,7 @@
     "description": "Context-aware indicators for distinguishing natural vs artificial colors in supplement ingredient mapping",
     "purpose": "scoring_classification",
     "schema_version": "5.0.0",
+    "contract_test": "scripts/tests/test_color_indicators_contract.py",
     "last_updated": "2026-02-18",
     "total_natural": 140,
     "total_artificial": 120,

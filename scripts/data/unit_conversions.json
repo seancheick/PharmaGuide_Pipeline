@@ -3,6 +3,7 @@
     "description": "Unit conversion factors for supplement dosing normalization",
     "purpose": "dosing_normalization",
     "schema_version": "5.0.0",
+    "contract_test": "scripts/tests/test_unit_conversions_contract.py",
     "last_updated": "2026-02-16",
     "version": "1.0.0",
     "statistics": {

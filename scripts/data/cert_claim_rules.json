@@ -3,6 +3,7 @@
     "description": "Versioned rules for certification/claim detection with evidence-based scoring eligibility",
     "purpose": "claims_scoring",
     "schema_version": "5.0.0",
+    "contract_test": "scripts/tests/test_cert_claim_rules_contract.py",
     "last_updated": "2026-04-01",
     "scoring_rule": "Only award points when evidence_strength >= 'medium' AND score_eligible=true AND feature gate enabled",
     "design_principles": [

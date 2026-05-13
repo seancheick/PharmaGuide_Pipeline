@@ -1,23 +1,28 @@
-"""Metadata contract for `manufacture_deduction_expl.json`.
+"""Metadata + runtime-config contract for `manufacture_deduction_expl.json`.
 
-This file is structural scoring config — not an entry catalog. Its top
-level is a mix of:
+DESPITE THE NAME, this file is NOT explanation-only. It is the
+canonical runtime config for manufacturer trust-score deductions,
+consumed by:
 
-* one scalar (``total_deduction_cap``: int) — the overall deduction floor
-* four nested dicts (``violation_categories``, ``modifiers``,
-  ``calculation_rules``, ``score_thresholds``) — each carrying their own
-  sub-rules
+* ``scripts/api_audit/fda_manufacturer_violations_sync.py``:
+  - ``lookup_base_deduction(code)`` reads
+    ``violation_categories.*.subcategories.*.{code,base_deduction}``
+  - ``recency_multiplier(days_since)`` reads ``modifiers.RECENCY.ranges``
+  - ``build_repeat_violation_lookup(...)`` reads
+    ``modifiers.REPEAT_VIOLATIONS.trigger``
+  - ``compute_modifier_extras(...)`` reads
+    ``modifiers.UNRESOLVED_VIOLATIONS.additional_deduction`` etc.
 
-The universal ``test_data_file_metadata_contract`` skips this file because
-the shape isn't entry-shaped. The convention encoded by the author is:
+* ``scripts/db_integrity_sanity_check.check_manufacture_deduction_expl``
+  validates the top-level structure (cap + 4 severity tiers).
 
-    ``_metadata.total_entries`` == count of top-level non-``_metadata``
-    sub-sections (5 today: 1 scalar + 4 dicts).
+* ``scripts/preflight.py`` lists it as a required data file.
 
-Adding a new top-level scoring config section bumps total_entries by 1.
-Adding rules INSIDE an existing sub-dict does NOT change total_entries —
-that's intra-section growth and would be tracked by a per-section schema
-bump if at all.
+The ``description`` / ``examples`` fields ARE human-readable documentation
+(not consumed by code). The rest is live config — drift between the JSON
+and the runtime is a real defect.
+
+This test pins the runtime invariants the consumers above depend on.
 """
 
 import json
@@ -27,13 +32,30 @@ import pytest
 
 PATH = Path(__file__).parent.parent / "data" / "manufacture_deduction_expl.json"
 
+REQUIRED_SEVERITY_TIERS = ("CRITICAL", "HIGH", "MODERATE", "LOW")
+REQUIRED_MODIFIERS = (
+    "RECENCY",
+    "REPEAT_VIOLATIONS",
+    "UNRESOLVED_VIOLATIONS",
+    "MULTIPLE_PRODUCT_LINES",
+)
+
 
 @pytest.fixture(scope="module")
 def blob():
     return json.loads(PATH.read_text(encoding="utf-8"))
 
 
+# ---------------------------------------------------------------------------
+# Metadata invariants
+# ---------------------------------------------------------------------------
+
+
 def test_total_entries_tracks_top_level_section_count(blob):
+    """``_metadata.total_entries`` tracks the count of top-level
+    non-``_metadata`` sub-sections — meta=5 today (total_deduction_cap,
+    violation_categories, modifiers, calculation_rules, score_thresholds).
+    Adding or removing a top-level section is a schema change."""
     non_meta = [k for k in blob.keys() if k != "_metadata"]
     expected = len(non_meta)
     actual = blob["_metadata"]["total_entries"]
@@ -56,3 +78,96 @@ def test_required_top_level_sections_are_present(blob):
     }
     missing = required - set(blob.keys())
     assert not missing, f"required top-level sections missing: {missing}"
+
+
+# ---------------------------------------------------------------------------
+# Runtime-config invariants (live values consumed by the deduction sync)
+# ---------------------------------------------------------------------------
+
+
+def test_total_deduction_cap_is_negative_number(blob):
+    """The cap is the lower bound on total deduction; must be a negative
+    number so it bounds the sum of negative deductions."""
+    cap = blob["total_deduction_cap"]
+    assert isinstance(cap, (int, float)), f"total_deduction_cap must be numeric, got {type(cap).__name__}"
+    assert cap < 0, f"total_deduction_cap must be negative (it's a floor on deductions), got {cap}"
+
+
+def test_all_four_severity_tiers_present(blob):
+    """The deduction model has 4 severity tiers — adding a 5th or removing
+    one is a schema change that requires every consumer to update."""
+    vc = blob["violation_categories"]
+    missing = [t for t in REQUIRED_SEVERITY_TIERS if t not in vc]
+    assert not missing, f"missing severity tiers: {missing}"
+
+
+def test_every_subcategory_has_code_and_base_deduction(blob):
+    """``lookup_base_deduction(code)`` in fda_manufacturer_violations_sync.py
+    walks ``violation_categories.*.subcategories.*`` looking for matching
+    ``code`` then returns ``base_deduction``. Either field missing means a
+    silent fallback to the Python-side VIOLATION_CODE_MAP default of -10."""
+    problems = []
+    for sev, body in blob["violation_categories"].items():
+        if not isinstance(body, dict):
+            problems.append(f"{sev}: not a dict")
+            continue
+        subs = body.get("subcategories", {})
+        for sub_id, sub in subs.items():
+            if not isinstance(sub, dict):
+                problems.append(f"{sev}.{sub_id}: not a dict")
+                continue
+            if "code" not in sub or not isinstance(sub["code"], str):
+                problems.append(f"{sev}.{sub_id}: missing or non-string 'code'")
+            base = sub.get("base_deduction")
+            if not isinstance(base, (int, float)):
+                problems.append(
+                    f"{sev}.{sub_id}: missing or non-numeric 'base_deduction' "
+                    f"(got {type(base).__name__})"
+                )
+            elif base > 0:
+                problems.append(
+                    f"{sev}.{sub_id}: base_deduction must be ≤ 0 "
+                    f"(it's a deduction), got {base}"
+                )
+    assert not problems, "subcategory schema violations:\n  " + "\n  ".join(problems[:10])
+
+
+def test_violation_codes_are_unique(blob):
+    """``code`` is the lookup key — duplicates would cause
+    lookup_base_deduction to return whichever subcategory the dict iteration
+    happens to hit first. Duplicates are a bug."""
+    seen: dict[str, str] = {}
+    dupes: list[tuple[str, str, str]] = []
+    for sev, body in blob["violation_categories"].items():
+        subs = body.get("subcategories", {}) if isinstance(body, dict) else {}
+        for sub_id, sub in subs.items():
+            code = sub.get("code") if isinstance(sub, dict) else None
+            if not code:
+                continue
+            if code in seen:
+                dupes.append((code, seen[code], f"{sev}.{sub_id}"))
+            else:
+                seen[code] = f"{sev}.{sub_id}"
+    assert not dupes, f"duplicate violation codes: {dupes}"
+
+
+def test_all_four_required_modifiers_present_with_expected_shape(blob):
+    """Each modifier carries a different sub-shape but the consumer code in
+    fda_manufacturer_violations_sync.py reads specific sub-keys from each."""
+    mods = blob["modifiers"]
+    missing = [m for m in REQUIRED_MODIFIERS if m not in mods]
+    assert not missing, f"missing required modifiers: {missing}"
+
+    # RECENCY needs `ranges` (recency_multiplier reads it)
+    assert isinstance(mods["RECENCY"].get("ranges"), dict), (
+        "modifiers.RECENCY.ranges must be a dict — recency_multiplier reads it"
+    )
+    # REPEAT_VIOLATIONS needs `trigger` (build_repeat_violation_lookup reads it)
+    assert isinstance(mods["REPEAT_VIOLATIONS"].get("trigger"), str), (
+        "modifiers.REPEAT_VIOLATIONS.trigger must be a string — "
+        "build_repeat_violation_lookup parses it for lookback windows"
+    )
+    # UNRESOLVED_VIOLATIONS needs `additional_deduction` (compute_modifier_extras reads it)
+    assert isinstance(mods["UNRESOLVED_VIOLATIONS"].get("additional_deduction"), (int, float)), (
+        "modifiers.UNRESOLVED_VIOLATIONS.additional_deduction must be numeric"
+    )
