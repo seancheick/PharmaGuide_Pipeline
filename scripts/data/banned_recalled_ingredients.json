@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
     "last_updated": "2026-05-13",
-    "total_entries": 147,
+    "total_entries": 150,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -325,6 +325,18 @@
             "Weekly FDA sync (7-day scan 2026-04-07 to 2026-04-14): 0 new entries added",
             "Filtered 3 false positives: 2 processing defects (Imu-Tek Colostrum), 1 allergen labeling (Divided Sunset Collagen)",
             "Re-verified 3 stale historical recalls (Hydroxycut, Jack3d, OxyElite Pro) — all match_mode=historical confirmed correct"
+          ]
+        },
+        {
+          "version": "5.4.1",
+          "date": "2026-05-13",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Added 3 new product-scoped entries from FDA recalls 2026-03-13 (Pure Vitamins and Natural Supplements, LLC, all Class I, sildenafil/tadalafil-spiked male enhancement):",
+            "  RECALLED_BLUE_BULL_EXTREME (H-0654-2026, undeclared sildenafil)",
+            "  RECALLED_RED_BULL_EXTREME (H-0655-2026, undeclared sildenafil)",
+            "  RECALLED_BONER_BEARS_HONEY (H-0653-2026, undeclared sildenafil + tadalafil)",
+            "Total entries: 147 -> 150"
           ]
         }
       ],
@@ -18240,6 +18252,273 @@
       },
       "inactive_policy": "penalize_anyway",
       "inactive_policy_reason": "Synephrine-bearing stimulant — never an excipient"
+    },
+    {
+      "id": "RECALLED_BLUE_BULL_EXTREME",
+      "standard_name": "Blue Bull Extreme Male Enhancement Supplement",
+      "aliases": [
+        "blue bull extreme male enhancement supplement",
+        "blue bull extreme",
+        "blue bull extreme male enhancement"
+      ],
+      "cui": null,
+      "reason": "Pure Vitamins and Natural Supplements, LLC initiated an FDA Class I recall of Blue Bull Extreme Male Enhancement Supplement (FDA recall H-0654-2026, 2026-03-13) after FDA laboratory analysis identified undeclared sildenafil in the product. Sildenafil is a prescription drug for erectile dysfunction that can cause severe blood-pressure drops when combined with nitrates or other vasodilators — a life-threatening interaction the consumer cannot anticipate when the active ingredient is hidden. Users with cardiovascular disease, diabetes, or on nitrates face the highest risk. Any presence of this specific product warrants the B0 gate.",
+      "status": "recalled",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "sexual_enhancement",
+        "pharmaceutical_adulterant"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped recall — any presence of this specific recalled product warrants the B0 gate regardless of which ingredient column lists it.",
+      "safety_warning": "FDA Class I recall: undeclared sildenafil found in Blue Bull Extreme Male Enhancement pouches. Dangerous blood-pressure interaction with nitrates. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Class I FDA recall — sildenafil-spiked male enhancement. Stop.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-03-13",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0654-2026 — Blue Bull Extreme Male Enhancement Supplement — 2026-03-13",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0654-2026: Blue Bull Extreme Male Enhancement Supplement — sildenafil/tadalafil adulteration",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0654-2026",
+          "evidence_grade": "R",
+          "date": "2026-03-13",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis identified undeclared sildenafil in Blue Bull Extreme Male Enhancement Supplement marketed by Pure Vitamins and Natural Supplements, LLC. Classified Class I — reasonable probability of serious adverse health consequences."
+        }
+      ],
+      "source_category": "pharmaceutical_adulterants",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0654-2026 — Class I recall of Pure Vitamins LLC's Blue Bull Extreme Male Enhancement for undeclared sildenafil.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-03-13",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "Pure Vitamins and Natural Supplements, LLC",
+        "formulations": [
+          "Blue Bull Extreme Male Enhancement"
+        ],
+        "lots": null,
+        "effective_from": "2026-03-13",
+        "effective_to": null,
+        "note": "FDA Class I recall (H-0654-2026) — Net Wt 15 g pouches, consume-entire-pouch dosing instructions on package."
+      }
+    },
+    {
+      "id": "RECALLED_RED_BULL_EXTREME",
+      "standard_name": "Red Bull Extreme Male Enhancement Supplement",
+      "aliases": [
+        "red bull extreme male enhancement supplement",
+        "red bull extreme",
+        "red bull extreme male enhancement"
+      ],
+      "cui": null,
+      "reason": "Pure Vitamins and Natural Supplements, LLC initiated an FDA Class I recall of Red Bull Extreme Male Enhancement Supplement (FDA recall H-0655-2026, 2026-03-13) after FDA laboratory analysis identified undeclared sildenafil in the product. Sildenafil is a prescription drug for erectile dysfunction that can cause severe blood-pressure drops when combined with nitrates or other vasodilators — a life-threatening interaction the consumer cannot anticipate when the active ingredient is hidden. Users with cardiovascular disease, diabetes, or on nitrates face the highest risk. Any presence of this specific product warrants the B0 gate.",
+      "status": "recalled",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "sexual_enhancement",
+        "pharmaceutical_adulterant"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped recall — any presence of this specific recalled product warrants the B0 gate regardless of which ingredient column lists it.",
+      "safety_warning": "FDA Class I recall: undeclared sildenafil found in Red Bull Extreme Male Enhancement pouches. Dangerous blood-pressure interaction with nitrates. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Class I FDA recall — sildenafil-spiked male enhancement. Stop.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-03-13",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0655-2026 — Red Bull Extreme Male Enhancement Supplement — 2026-03-13",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0655-2026: Red Bull Extreme Male Enhancement Supplement — sildenafil/tadalafil adulteration",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0655-2026",
+          "evidence_grade": "R",
+          "date": "2026-03-13",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis identified undeclared sildenafil in Red Bull Extreme Male Enhancement Supplement marketed by Pure Vitamins and Natural Supplements, LLC. Classified Class I — reasonable probability of serious adverse health consequences."
+        }
+      ],
+      "source_category": "pharmaceutical_adulterants",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0655-2026 — Class I recall of Pure Vitamins LLC's Red Bull Extreme Male Enhancement for undeclared sildenafil.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-03-13",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "Pure Vitamins and Natural Supplements, LLC",
+        "formulations": [
+          "Red Bull Extreme Male Enhancement"
+        ],
+        "lots": null,
+        "effective_from": "2026-03-13",
+        "effective_to": null,
+        "note": "FDA Class I recall (H-0655-2026) — Net Wt 15 g pouches, consume-entire-pouch dosing instructions on package."
+      }
+    },
+    {
+      "id": "RECALLED_BONER_BEARS_HONEY",
+      "standard_name": "Boner Bears Honey Male Enhancement",
+      "aliases": [
+        "boner bears honey male enhancement",
+        "boner bears honey male enhancement",
+        "boner bears honey male enhancement (wildflower honey)"
+      ],
+      "cui": null,
+      "reason": "Pure Vitamins and Natural Supplements, LLC initiated an FDA Class I recall of Boner Bears Honey Male Enhancement (FDA recall H-0653-2026, 2026-03-13) after FDA laboratory analysis identified undeclared sildenafil and tadalafil in the product. Sildenafil and tadalafil is a prescription drug for erectile dysfunction that can cause severe blood-pressure drops when combined with nitrates or other vasodilators — a life-threatening interaction the consumer cannot anticipate when the active ingredient is hidden. Users with cardiovascular disease, diabetes, or on nitrates face the highest risk. Any presence of this specific product warrants the B0 gate.",
+      "status": "recalled",
+      "ban_context": "adulterant_in_supplements",
+      "class_tags": [
+        "sexual_enhancement",
+        "pharmaceutical_adulterant"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped recall — any presence of this specific recalled product warrants the B0 gate regardless of which ingredient column lists it.",
+      "safety_warning": "FDA Class I recall: undeclared sildenafil and tadalafil found in Boner Bears Honey pouches. Two ED drugs at unmeasured doses — severe blood-pressure risk with nitrates. Stop and consult a doctor.",
+      "safety_warning_one_liner": "Class I FDA recall — sildenafil + tadalafil spiked. Stop.",
+      "legal_status_enum": "adulterant",
+      "clinical_risk_enum": "critical",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-03-13",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0653-2026 — Boner Bears Honey Male Enhancement — 2026-03-13",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0653-2026: Boner Bears Honey Male Enhancement — sildenafil/tadalafil adulteration",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0653-2026",
+          "evidence_grade": "R",
+          "date": "2026-03-13",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA laboratory analysis identified undeclared sildenafil and tadalafil in Boner Bears Honey Male Enhancement marketed by Pure Vitamins and Natural Supplements, LLC. Classified Class I — reasonable probability of serious adverse health consequences."
+        }
+      ],
+      "source_category": "pharmaceutical_adulterants",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0653-2026 — Class I recall of Pure Vitamins LLC's Boner Bears Honey Male Enhancement (Wildflower Honey) for undeclared sildenafil and tadalafil.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-03-13",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "Pure Vitamins and Natural Supplements, LLC",
+        "formulations": [
+          "Boner Bears Honey Male Enhancement (Wildflower Honey)"
+        ],
+        "lots": null,
+        "effective_from": "2026-03-13",
+        "effective_to": null,
+        "note": "FDA Class I recall (H-0653-2026) — Net Wt 15 g pouches, consume-entire-pouch dosing instructions on package."
+      }
     }
   ]
 }
