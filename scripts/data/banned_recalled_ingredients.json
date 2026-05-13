@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
     "last_updated": "2026-05-13",
-    "total_entries": 153,
+    "total_entries": 155,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -359,6 +359,17 @@
             "  RECALLED_SILUETAYA_TEJOCOTE (H-0647-2026)",
             "Related: parent substance ban BANNED_YELLOW_OLEANDER_RECENT remains active for any product containing Thevetia peruviana.",
             "Total entries: 152 -> 153"
+          ]
+        },
+        {
+          "version": "5.4.1",
+          "date": "2026-05-13",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Added 2 new product-scoped entries from FDA recalls 2026-02-24 (Imu-Tek Animal Health, Inc., Class II under-processing recalls of colostrum supplements):",
+            "  RECALLED_IMU_TEK_COLOSTRUM_5_CAPSULES (H-0660-2026, 120 capsules)",
+            "  RECALLED_IMU_TEK_COLOSTRUM_5_POWDER   (H-0661-2026, 1,000 mg/scoop)",
+            "Total entries: 153 -> 155"
           ]
         }
       ],
@@ -18823,6 +18834,184 @@
         "effective_from": "2025-10-29",
         "effective_to": null,
         "note": "FDA Class I recall (H-0647-2026) — 7g/bottle dietary supplement pieces, UPC 7500464462411, Lot US1220. Yellow oleander substitution for the labeled Crataegus mexicana (tejocote) — a recurring adulteration pattern across multiple brands. The substance-level ban BANNED_YELLOW_OLEANDER_RECENT remains active for any product."
+      }
+    },
+    {
+      "id": "RECALLED_IMU_TEK_COLOSTRUM_5_CAPSULES",
+      "standard_name": "Imu-Tek Colostrum-5 Capsules",
+      "aliases": [
+        "imu-tek colostrum-5 capsules",
+        "imu-tek colostrum 5 capsules",
+        "imu-tek colostrum-5"
+      ],
+      "cui": null,
+      "reason": "Imu-Tek Animal Health, Incorporated initiated an FDA Class II recall of Imu-Tek Colostrum-5 Capsules (FDA recall H-0660-2026, 2026-02-24) after FDA found the product to be potentially under-processed. Under-processing in colostrum products means the thermal treatment step intended to inactivate pathogens (notably vegetative bacteria and viral contaminants) may not have achieved the validated lethality. Class II reflects a temporary or medically reversible adverse health consequence per FDA recall classification. Immunocompromised consumers face the greatest risk.",
+      "status": "recalled",
+      "ban_context": "contamination_recall",
+      "class_tags": [
+        "manufacturing_violation",
+        "colostrum_supplement"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped recall — any presence of this specific SKU warrants the B0 gate regardless of column.",
+      "safety_warning": "FDA Class II recall: Imu-Tek Colostrum-5 Capsules may be under-processed — pathogen-inactivation step may have failed. Stop and consult a doctor if symptoms develop.",
+      "safety_warning_one_liner": "Class II FDA recall — possible under-processing. Stop.",
+      "legal_status_enum": "contaminant_risk",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-02-24",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0660-2026 — Imu-Tek Colostrum-5 Capsules — 2026-02-24",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0660-2026: Imu-Tek Colostrum-5 Capsules — under-processed",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0660-2026",
+          "evidence_grade": "R",
+          "date": "2026-02-24",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA classified Imu-Tek's Imu-Tek Colostrum-5 Capsules as potentially under-processed (Class II)."
+        }
+      ],
+      "source_category": "manufacturing_violation",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0660-2026 — Class II under-processing recall of Imu-Tek's Imu-Tek Colostrum-5 Capsules.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-02-24",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "Imu-Tek Animal Health, Incorporated",
+        "formulations": [
+          "Imu-Tek Colostrum-5 Capsules"
+        ],
+        "lots": null,
+        "effective_from": "2026-02-24",
+        "effective_to": null,
+        "note": "FDA Class II recall (H-0660-2026) — 30% IgG bovine colostrum supplement, 2 capsules/scoops 2x/day oral dosing."
+      }
+    },
+    {
+      "id": "RECALLED_IMU_TEK_COLOSTRUM_5_POWDER",
+      "standard_name": "Imu-Tek Colostrum-5 Powder",
+      "aliases": [
+        "imu-tek colostrum-5 powder",
+        "imu-tek colostrum 5 powder",
+        "imu-tek colostrum-5"
+      ],
+      "cui": null,
+      "reason": "Imu-Tek Animal Health, Incorporated initiated an FDA Class II recall of Imu-Tek Colostrum-5 Powder (FDA recall H-0661-2026, 2026-02-24) after FDA found the product to be potentially under-processed. Under-processing in colostrum products means the thermal treatment step intended to inactivate pathogens (notably vegetative bacteria and viral contaminants) may not have achieved the validated lethality. Class II reflects a temporary or medically reversible adverse health consequence per FDA recall classification. Immunocompromised consumers face the greatest risk.",
+      "status": "recalled",
+      "ban_context": "contamination_recall",
+      "class_tags": [
+        "manufacturing_violation",
+        "colostrum_supplement"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped recall — any presence of this specific SKU warrants the B0 gate regardless of column.",
+      "safety_warning": "FDA Class II recall: Imu-Tek Colostrum-5 Powder may be under-processed — pathogen-inactivation step may have failed. Stop and consult a doctor if symptoms develop.",
+      "safety_warning_one_liner": "Class II FDA recall — possible under-processing. Stop.",
+      "legal_status_enum": "contaminant_risk",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-02-24",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0661-2026 — Imu-Tek Colostrum-5 Powder — 2026-02-24",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0661-2026: Imu-Tek Colostrum-5 Powder — under-processed",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0661-2026",
+          "evidence_grade": "R",
+          "date": "2026-02-24",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA classified Imu-Tek's Imu-Tek Colostrum-5 Powder as potentially under-processed (Class II)."
+        }
+      ],
+      "source_category": "manufacturing_violation",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0661-2026 — Class II under-processing recall of Imu-Tek's Imu-Tek Colostrum-5 Powder.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-02-24",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "Imu-Tek Animal Health, Incorporated",
+        "formulations": [
+          "Imu-Tek Colostrum-5 Powder"
+        ],
+        "lots": null,
+        "effective_from": "2026-02-24",
+        "effective_to": null,
+        "note": "FDA Class II recall (H-0661-2026) — 30% IgG bovine colostrum supplement, 2 capsules/scoops 2x/day oral dosing."
       }
     }
   ]
