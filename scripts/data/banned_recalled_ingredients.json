@@ -381,6 +381,20 @@
             "  RECALLED_DIVIDED_SUNSET_COLLAGEN_PEPTIDES (H-0637-2026)",
             "Total entries: 155 -> 156"
           ]
+        },
+        {
+          "version": "5.4.1",
+          "date": "2026-05-13",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Schema-parity patch on 9 newly-added RECALLED_ entries (2026-05-13 sweep):",
+            "  + external_ids (UNII codes for spike substances / pathogens, fda_recall_id)",
+            "  + cui_status + cui_note (documented intentional-null CUI per project policy)",
+            "  + match_rules.negative_match_terms (researched competitor brand lists to prevent false matches against innocent products)",
+            "Dates refreshed on 3 stale historical recalls:",
+            "  RECALLED_HYDROXYCUT, RECALLED_JACK3D, RECALLED_OXYELITE_PRO last_reviewed_at → 2026-05-13",
+            "Patched 9 new entries; no entry counts changed."
+          ]
         }
       ],
       "known_limitations": [
@@ -10012,7 +10026,7 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-04-14",
+        "last_reviewed_at": "2026-05-13",
         "next_review_due": "2026-10-14",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
@@ -10035,6 +10049,11 @@
             "date": "2026-04-14",
             "change": "Weekly re-verification: match_mode=historical still correct. No new FDA enforcement activity.",
             "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-05-13",
+            "change": "Review date refreshed (last_reviewed_at 2026-04-14 → 2026-05-13). match_mode remains historical; recall record retained for audit history.",
+            "by": "fda_weekly_sync_agent"
           }
         ]
       },
@@ -10140,7 +10159,7 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-04-14",
+        "last_reviewed_at": "2026-05-13",
         "next_review_due": "2026-10-14",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
@@ -10163,6 +10182,11 @@
             "date": "2026-04-14",
             "change": "Weekly re-verification: match_mode=historical still correct. No new FDA enforcement activity.",
             "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-05-13",
+            "change": "Review date refreshed (last_reviewed_at 2026-04-14 → 2026-05-13). match_mode remains historical; recall record retained for audit history.",
+            "by": "fda_weekly_sync_agent"
           }
         ]
       },
@@ -10567,7 +10591,7 @@
       "entity_type": "product",
       "review": {
         "status": "validated",
-        "last_reviewed_at": "2026-04-14",
+        "last_reviewed_at": "2026-05-13",
         "next_review_due": "2026-10-14",
         "reviewed_by": "fda_weekly_sync_agent",
         "change_log": [
@@ -10590,6 +10614,11 @@
             "date": "2026-04-14",
             "change": "Weekly re-verification: match_mode=historical still correct. No new FDA enforcement activity.",
             "by": "fda_weekly_sync"
+          },
+          {
+            "date": "2026-05-13",
+            "change": "Review date refreshed (last_reviewed_at 2026-04-14 → 2026-05-13). match_mode remains historical; recall record retained for audit history.",
+            "by": "fda_weekly_sync_agent"
           }
         ]
       },
@@ -18120,7 +18149,8 @@
         ]
       },
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Hepatotoxic / reproductive-toxic botanical — never an excipient"
+      "inactive_policy_reason": "Hepatotoxic / reproductive-toxic botanical — never an excipient",
+      "cui": "C0939239"
     },
     {
       "id": "BANNED_TANSY",
@@ -18200,7 +18230,8 @@
         ]
       },
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Neurotoxic / reproductive-toxic botanical — never an excipient"
+      "inactive_policy_reason": "Neurotoxic / reproductive-toxic botanical — never an excipient",
+      "cui": "C1256219"
     },
     {
       "id": "BANNED_BITTER_ORANGE",
@@ -18294,7 +18325,8 @@
         ]
       },
       "inactive_policy": "penalize_anyway",
-      "inactive_policy_reason": "Synephrine-bearing stimulant — never an excipient"
+      "inactive_policy_reason": "Synephrine-bearing stimulant — never an excipient",
+      "cui": "C3267737"
     },
     {
       "id": "RECALLED_BLUE_BULL_EXTREME",
@@ -18318,7 +18350,14 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "red bull energy drink",
+          "red bull simply cola",
+          "blue ox",
+          "bull strength",
+          "blue tablet",
+          "blue pill"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -18383,7 +18422,14 @@
         "effective_from": "2026-03-13",
         "effective_to": null,
         "note": "FDA Class I recall (H-0654-2026) — Net Wt 15 g pouches, consume-entire-pouch dosing instructions on package."
-      }
+      },
+      "external_ids": {
+        "unii_substance": "3M7OB98Y7H",
+        "unii_substance_name": "sildenafil",
+        "fda_recall_id": "H-0654-2026"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped recall of a Pure Vitamins and Natural Supplements, LLC SKU — no single UMLS concept maps to a brand product entry. The spiked substance sildenafil has its own ADULTERANT_SILDENAFIL parent entry with verified CUI."
     },
     {
       "id": "RECALLED_RED_BULL_EXTREME",
@@ -18407,7 +18453,14 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "red bull energy drink",
+          "red bull simply cola",
+          "red bull racing",
+          "red ox",
+          "red pill",
+          "red tablet"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -18472,7 +18525,14 @@
         "effective_from": "2026-03-13",
         "effective_to": null,
         "note": "FDA Class I recall (H-0655-2026) — Net Wt 15 g pouches, consume-entire-pouch dosing instructions on package."
-      }
+      },
+      "external_ids": {
+        "unii_substance": "3M7OB98Y7H",
+        "unii_substance_name": "sildenafil",
+        "fda_recall_id": "H-0655-2026"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped recall of a Pure Vitamins and Natural Supplements, LLC SKU — no single UMLS concept maps to a brand product entry. The spiked substance sildenafil has its own ADULTERANT_SILDENAFIL parent entry with verified CUI."
     },
     {
       "id": "RECALLED_BONER_BEARS_HONEY",
@@ -18496,7 +18556,16 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "sue bee honey",
+          "y.s. eco bee farms",
+          "burt's bees",
+          "manuka honey",
+          "raw honey",
+          "wildflower honey",
+          "gummy bears",
+          "haribo gold-bears"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -18561,7 +18630,18 @@
         "effective_from": "2026-03-13",
         "effective_to": null,
         "note": "FDA Class I recall (H-0653-2026) — Net Wt 15 g pouches, consume-entire-pouch dosing instructions on package."
-      }
+      },
+      "external_ids": {
+        "unii_substance_primary": "3M7OB98Y7H",
+        "unii_substance_secondary": "742SXX0ICT",
+        "unii_substance_names": [
+          "sildenafil",
+          "tadalafil"
+        ],
+        "fda_recall_id": "H-0653-2026"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped recall of a Pure Vitamins LLC honey SKU — no single UMLS concept maps to a brand product entry. The two spike substances sildenafil and tadalafil each have their own ADULTERANT_ parent entries with verified CUIs."
     },
     {
       "id": "RECALLED_AONIC_COMPLETE_HERS",
@@ -18585,7 +18665,15 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "centrum complete",
+          "olly complete",
+          "garden of life complete",
+          "nature made complete",
+          "ritual complete",
+          "athletic greens complete",
+          "complete protein"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -18650,7 +18738,14 @@
         "effective_from": "2026-01-15",
         "effective_to": null,
         "note": "FDA Class II recall (H-0520-2026) — 34 mL liquid dietary supplement drink shot, single-serving plastic bottles."
-      }
+      },
+      "external_ids": {
+        "fda_recall_id": "H-0520-2026",
+        "unii_pathogen_e_coli": "514B9K0L10",
+        "unii_pathogen_p_aeruginosa": "Y793W5V55N"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped microbial-contamination recall — no single UMLS concept maps to a brand SKU. The identified pathogens E. coli and P. aeruginosa carry their own UNIIs (cross-linked above) but are not catalogued here as substance-level bans."
     },
     {
       "id": "RECALLED_AONIC_COMPLETE_HIS",
@@ -18674,7 +18769,16 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "centrum complete",
+          "olly complete",
+          "garden of life complete",
+          "nature made complete",
+          "ritual complete",
+          "athletic greens complete",
+          "complete protein",
+          "men's complete multivitamin"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -18739,7 +18843,14 @@
         "effective_from": "2026-01-15",
         "effective_to": null,
         "note": "FDA Class II recall (H-0521-2026) — 34 mL liquid dietary supplement drink shot, single-serving plastic bottles."
-      }
+      },
+      "external_ids": {
+        "fda_recall_id": "H-0521-2026",
+        "unii_pathogen_e_coli": "514B9K0L10",
+        "unii_pathogen_p_aeruginosa": "Y793W5V55N"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped microbial-contamination recall — no single UMLS concept maps to a brand SKU. The identified pathogens E. coli and P. aeruginosa carry their own UNIIs (cross-linked above)."
     },
     {
       "id": "RECALLED_SILUETAYA_TEJOCOTE",
@@ -18765,7 +18876,15 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "alipotec tejocote",
+          "eva nutrition tejocote",
+          "niwhe tejocote pure",
+          "healthy choice naturals tejocote",
+          "supreme nutrition tejocote",
+          "crataegus mexicana extract",
+          "hawthorn berry"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -18844,7 +18963,15 @@
         "effective_from": "2025-10-29",
         "effective_to": null,
         "note": "FDA Class I recall (H-0647-2026) — 7g/bottle dietary supplement pieces, UPC 7500464462411, Lot US1220. Yellow oleander substitution for the labeled Crataegus mexicana (tejocote) — a recurring adulteration pattern across multiple brands. The substance-level ban BANNED_YELLOW_OLEANDER_RECENT remains active for any product."
-      }
+      },
+      "external_ids": {
+        "fda_recall_id": "H-0647-2026",
+        "unii_glycoside_thevetin_a": "788WS2ZR7A",
+        "unii_glycoside_neriifolin": "5RD2ADS9WV",
+        "parent_substance_cui": "C0331122"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped recall — no single UMLS concept maps to a brand tejocote SKU. The substituted contaminant yellow oleander (Thevetia peruviana) has its own BANNED_YELLOW_OLEANDER_RECENT parent entry with verified CUI C0331122. The toxic glycosides (thevetin A, neriifolin) carry their own UNIIs cross-linked above."
     },
     {
       "id": "RECALLED_IMU_TEK_COLOSTRUM_5_CAPSULES",
@@ -18868,7 +18995,15 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "sovereign laboratories colostrum",
+          "symbiotics colostrum",
+          "surthrival colostrum",
+          "armra colostrum",
+          "cure colostrum",
+          "wonderfeel colostrum",
+          "nuvitru colostrum"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -18933,7 +19068,12 @@
         "effective_from": "2026-02-24",
         "effective_to": null,
         "note": "FDA Class II recall (H-0660-2026) — 30% IgG bovine colostrum supplement, 2 capsules/scoops 2x/day oral dosing."
-      }
+      },
+      "external_ids": {
+        "fda_recall_id": "H-0660-2026"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped under-processing recall — no single UMLS concept maps to a brand colostrum SKU. The substance bovine colostrum is a generic supplement ingredient and is not catalogued in banned_recalled as a substance-level entry."
     },
     {
       "id": "RECALLED_IMU_TEK_COLOSTRUM_5_POWDER",
@@ -18957,7 +19097,15 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "sovereign laboratories colostrum",
+          "symbiotics colostrum",
+          "surthrival colostrum",
+          "armra colostrum",
+          "cure colostrum",
+          "wonderfeel colostrum",
+          "nuvitru colostrum"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -19022,7 +19170,12 @@
         "effective_from": "2026-02-24",
         "effective_to": null,
         "note": "FDA Class II recall (H-0661-2026) — 30% IgG bovine colostrum supplement, 2 capsules/scoops 2x/day oral dosing."
-      }
+      },
+      "external_ids": {
+        "fda_recall_id": "H-0661-2026"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped under-processing recall — no single UMLS concept maps to a brand colostrum SKU. The substance bovine colostrum is a generic supplement ingredient and is not catalogued in banned_recalled as a substance-level entry."
     },
     {
       "id": "RECALLED_DIVIDED_SUNSET_COLLAGEN_PEPTIDES",
@@ -19047,7 +19200,16 @@
         "priority": 1,
         "match_type": "exact",
         "confidence": "high",
-        "negative_match_terms": []
+        "negative_match_terms": [
+          "vital proteins collagen peptides",
+          "sports research collagen peptides",
+          "ancient nutrition multi collagen",
+          "garden of life collagen",
+          "great lakes collagen",
+          "neocell super collagen",
+          "drink wholesome collagen",
+          "further food collagen"
+        ]
       },
       "match_mode": "active",
       "inactive_policy": "penalize_anyway",
@@ -19112,7 +19274,12 @@
         "effective_from": "2026-02-27",
         "effective_to": null,
         "note": "FDA Class II recall (H-0637-2026) — 8 Ounce stand-up pouch, UPC 8 50005 60689 5. Ingredient statement listed eggshell membrane collagen without the required 'Contains: Egg' FALCPA disclosure."
-      }
+      },
+      "external_ids": {
+        "fda_recall_id": "H-0637-2026"
+      },
+      "cui_status": "no_single_umls_concept",
+      "cui_note": "Product-scoped undeclared-allergen recall — no single UMLS concept maps to a brand collagen SKU. The undeclared allergen (egg) is governed by FALCPA labeling rules rather than a substance-level ban; egg-allergic users should consult the allergens.json catalog for general egg-allergen detection."
     }
   ]
 }
