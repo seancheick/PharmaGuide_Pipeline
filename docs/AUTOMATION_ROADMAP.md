@@ -401,7 +401,7 @@ What *can* be Pro-gated: HIGH-tier advisories, deeper "why this was flagged" exp
 
 ### What it is
 
-Today Dr. Pham edits `_Reviewed.json` files locally and sends them to you. In Phase 2 we give her a **web-based editor** (extension of the Streamlit dashboard you already built) where she can:
+Today Dr. Pham edits `ingredient_interaction_rules.json` (and the other live data files) locally and sends them to you. The legacy `_Reviewed.json` snapshot pattern was retired on 2026-05-13 — the live file is now the single source of truth (see commit `7a1754a`). In Phase 2 we give her a **web-based editor** (extension of the Streamlit dashboard you already built) where she can:
 
 1. See every entry that needs authoring (coverage page you already have)
 2. Click an entry, see the authored fields as an editable form
