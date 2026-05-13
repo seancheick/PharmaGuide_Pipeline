@@ -44,18 +44,19 @@ def test_total_entry_count_matches_metadata(by_id, metadata):
 
 
 def test_aggregate_disposition_counts(by_id):
-    """Mapper outcome: 470 populated, 203 deferred ([])."""
+    """Mapper outcome: 470 populated, 213 deferred ([])."""
     populated = sum(1 for e in by_id.values() if e.get("functional_roles"))
     deferred = sum(
         1 for e in by_id.values()
         if "functional_roles" in e and not e["functional_roles"]
     )
-    # 466 = 462 direct-map assigns + 4 per-id overrides (5 colorants + 2
-    # sweeteners + Agar = 8 overrides total; minus 1 Glycolipids → []
-    # minus 3 descriptor + 1 metabolic_intermediate now in RETIRE = 4 net
-    # to populated). New active-only/descriptor entries are expected to stay
-    # deferred until they move into the active-ingredient pipeline.
-    assert populated == 466, f"expected 466 populated entries; got {populated}"
+    # 470 = 466 batch-5 baseline (commit 7d1c0d7)
+    #     + 2 from 3a113c9 (OI_RIBOFLAVIN_COLORANT, OI_ROSE_HIPS_INACTIVE — TiO2/Talc resolver work)
+    #     + 2 from 74aa9a0 (PII_POLYGLYCEROL_POLYRICINOLEATE, PII_TRICALCIUM_PHOSPHATE — Lane #3 excipients)
+    # 6 additional entries added in 74aa9a0 (NHA_*) are correctly deferred under the Phase 4
+    # rule pinned in test_retired_descriptor_categories_have_empty_roles (category=
+    # active_pending_relocation or label_descriptor).
+    assert populated == 470, f"expected 470 populated entries; got {populated}"
     assert deferred == len(by_id) - populated, (
         f"expected deferred count to track total-populated; got {deferred}"
     )

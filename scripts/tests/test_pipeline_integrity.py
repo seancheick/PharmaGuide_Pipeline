@@ -29,7 +29,7 @@ from constants import DATA_DIR, SCRIPTS_DIR
 # Shared helpers
 # ---------------------------------------------------------------------------
 
-REQUIRED_SCHEMA_VERSIONS = {"1.0.0", "5.0.0", "5.1.0", "5.2.0", "5.2.1", "5.3.0", "5.4.0", "6.0.0"}
+REQUIRED_SCHEMA_VERSIONS = {"1.0.0", "1.1.0", "5.0.0", "5.1.0", "5.2.0", "5.2.1", "5.3.0", "5.4.0", "5.4.1", "6.0.0", "6.1.0"}
 
 # Files that belong to a different subsystem and carry their own schema
 # versioning namespace independent of the main enrichment pipeline (5.x).

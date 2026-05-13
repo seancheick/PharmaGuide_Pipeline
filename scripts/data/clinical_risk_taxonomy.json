@@ -4,7 +4,7 @@
     "purpose": "interaction_alert_taxonomy",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-05",
-    "total_entries": 52,
+    "total_entries": 71,
     "flutter_top_level_key": "clinical_risk_taxonomy",
     "drug_classes_count": 15,
     "migration": {
