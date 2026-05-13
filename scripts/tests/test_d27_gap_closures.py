@@ -138,8 +138,11 @@ class TestD34FormAliases:
     @pytest.mark.parametrize("raw,expected_canonical", [
         ("Phytosome Curcuminoids",       "curcumin"),
         ("Curcumin Phytosome:",          "curcumin"),
-        # Marigold is a pre-existing lutein alias — sanity check
-        ("Marigold flower extract",      "lutein"),
+        # Phase 8 follow-up (commit fef27e4, 2026-05-11): marigold became
+        # its own canonical with a delivers_markers contribution to lutein.
+        # Pre-Phase-8, marigold was a direct lutein IQM alias; now it
+        # resolves to the `marigold` source-botanical canonical.
+        ("Marigold flower extract",      "marigold"),
     ])
     def test_form_alias_resolves(self, normalizer, raw, expected_canonical) -> None:
         r = normalizer._resolve_canonical_identity(raw, raw_name=raw)

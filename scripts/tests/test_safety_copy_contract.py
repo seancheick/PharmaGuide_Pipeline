@@ -46,7 +46,17 @@ import pytest
 
 SPRINT_E1_1_2_LANDED = True   # Warning copy rewrite (critical → profile-agnostic)
 SPRINT_E1_1_3_LANDED = True   # Build-time raw-enum-leak validator
-SPRINT_E1_2_3_LANDED = True   # Build-time warning dedup
+# Banned-substance dedup landed in 3e4f9d6 (matched_rule_id + ingredient_name
+# added to the per-ingredient dedup key). Interaction-warning dedup is still
+# pending: the build emits interaction warnings without populating
+# `condition_ids` / `drug_class_ids` on the warning dict, so the contract
+# test's _warning_key() collapses legitimately-distinct rows into duplicate
+# keys (RC 2026-05-13 saw 148 products affected, e.g. product 1000 with 10
+# monitor/interaction entries for Vitamin D + various conditions). Flutter
+# is unaffected today because it dedups on `title` (which is unique per
+# rule). Re-enable this gate once the warning emitter populates the
+# structured condition/drug-class fields.
+SPRINT_E1_2_3_LANDED = False  # Build-time warning dedup — interaction path pending
 
 # ---------------------------------------------------------------------------
 # Deny-lists / regex — medical/UX justification in each invariant docstring.

@@ -959,7 +959,11 @@ def test_nordic_softgels_inactive_unmapped_labels_map(
         ("S-Acetyl-L-Glutathione", "Glutathione"),
         ("Carnipure L-Carnitine", "L-Carnitine"),
         ("Black Cohosh (Cimicifuga racemosa) root and rhizome extract", "Black Cohosh"),
-        ("Icelandic Kelp", "Iodine"),
+        # Phase 2 identity_bioactivity_split (commit f3b713d+): kelp aliases
+        # relocated out of the iodine marker IQM and onto the source-botanical
+        # canonical `kelp_powder`. Iodine contribution still routes through the
+        # delivers_markers band, but the identity resolves to kelp.
+        ("Icelandic Kelp", "Kelp"),
         ("L-Lysine Monohydrochloride", "L-Lysine"),
         ("Boron Amino Acid Chelate", "Boron"),
         ("Glucosamine Sulphate 2KCl", "Glucosamine"),

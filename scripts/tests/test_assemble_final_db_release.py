@@ -40,6 +40,7 @@ def _write_pair_output(root: Path, name: str, dsld_id: str, product_name: str):
                 '{}', '[]', 0, 0, 0,  # fingerprint, key_nutrients, stimulants, sedatives, blood_thinners
                 None, None, '[]', None,  # share_title, share_description, share_highlights, share_og_image_url
                 None, '[]', 0, 0, 0, 0, 0, '[]',  # primary_category, secondary_categories, contains_* flags, key_ingredient_tags
+                None,  # ingredients_text (v1.6.x, column 76 — FTS-indexed aggregate)
                 '[]', None,  # goal_matches, goal_match_confidence
                 None, None, None, None,  # dosing_summary, servings_per_container, net_contents_quantity, net_contents_unit
                 None,  # allergen_summary

@@ -111,6 +111,8 @@ PRODUCTS_CORE_COLUMNS = [
     "contains_adaptogens",
     "contains_nootropics",
     "key_ingredient_tags",
+    # v1.6.x addition (1 new column, 2026-05-12 — aggregated ingredient names for FTS)
+    "ingredients_text",
     "goal_matches",
     "goal_match_confidence",
     "dosing_summary",
@@ -1281,8 +1283,8 @@ def test_build_core_row_net_contents_preserves_non_integer_quantities():
     assert row["net_contents_unit"] == "oz."
 
 
-def test_final_db_has_91_columns():
-    # Tuple emitted by build_core_row must match the 91-column schema (v1.4.0).
+def test_final_db_has_92_columns():
+    # Tuple emitted by build_core_row must match the 92-column schema (v1.6.x).
     enriched = make_enriched()
     enriched["servingsPerContainer"] = 60
     enriched["servingSizes"] = [
@@ -1298,8 +1300,8 @@ def test_final_db_has_91_columns():
         {"order": 1, "quantity": 60, "unit": "Capsule(s)", "display": "60 Capsule(s)"}
     ]
     row = build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z")
-    assert len(row) == 91
-    assert len(PRODUCTS_CORE_COLUMNS) == 91
+    assert len(row) == 92
+    assert len(PRODUCTS_CORE_COLUMNS) == 92
 
 
 def test_dosing_summary_not_empty_for_real_product():
@@ -1421,13 +1423,13 @@ class TestDetailBlobNutritionAndUnmapped:
         idx = PRODUCTS_CORE_COLUMNS.index("calories_per_serving")
         assert row[idx] is None
 
-    def test_core_row_column_count_is_91(self):
+    def test_core_row_column_count_is_92(self):
         row = build_core_row(make_enriched(), make_scored(), "2026-04-10T12:00:00Z")
-        assert len(row) == 91
-        assert CORE_COLUMN_COUNT == 91
+        assert len(row) == 92
+        assert CORE_COLUMN_COUNT == 92
 
-    def test_schema_version_bumped_to_150(self):
-        assert EXPORT_SCHEMA_VERSION == "1.5.0"
+    def test_schema_version_bumped_to_160(self):
+        assert EXPORT_SCHEMA_VERSION == "1.6.0"
 
     def test_detail_blob_emits_demoted_absorption_enhancers(self):
         """Sprint E1.23 follow-up (2026-05-09): the enricher produces
