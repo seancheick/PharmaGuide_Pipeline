@@ -53,6 +53,12 @@ from .protected_blobs import (
     BundleCatalogQueryError,
     compute_protected_blob_set,
 )
+from .audit_log import (
+    AuditLog,
+    DEFAULT_AUDIT_DIR,
+    make_audit_log,
+    read_audit_log,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -88,4 +94,9 @@ __all__ = [
     "MalformedBundleCatalogError",
     "BundleCatalogQueryError",
     "compute_protected_blob_set",
+    # P1.5a — structured audit log (JSONL, append-only, fsynced)
+    "AuditLog",
+    "DEFAULT_AUDIT_DIR",
+    "make_audit_log",
+    "read_audit_log",
 ]
