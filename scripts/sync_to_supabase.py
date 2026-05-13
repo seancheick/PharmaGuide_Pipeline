@@ -973,14 +973,19 @@ def parse_args(argv=None):
                         help="Number of versions to keep during cleanup (default: 2)")
     parser.add_argument(
         "--allow-destructive-orphan-cleanup",
-        action="store_true",
-        default=False,
+        action=argparse.BooleanOptionalAction,
+        default=True,
         dest="allow_destructive_orphan_cleanup",
         help=(
-            "OPT-IN: re-enable `--cleanup-orphan-blobs` in the post-sync cleanup. "
-            "FROZEN by default per ADR-0001 / HR-8 until P1+P2 release-safety gates "
-            "land. The 2026-05-12 incident showed this step deletes blobs still "
-            "referenced by the bundled Flutter catalog when bundle-on-main lags dist."
+            "Include orphan-blob cleanup in the post-sync cleanup. "
+            "DEFAULT IS ON per ADR-0001 P1.6 commit 2 (2026-05-13) — the "
+            "P1+P2+P3 release-safety stack is now in place and the destructive "
+            "step is wrapped in: pipeline lock (HR-12), detail_index validation "
+            "(HR-11), bundle alignment (HR-13), blast-radius gate, registry-backed "
+            "protected set (P3.5: bundled∪dist∪ACTIVE/VALIDATING registry rows), "
+            "and quarantine-with-30d-recovery (P2.1) instead of hard delete. "
+            "Pass --no-allow-destructive-orphan-cleanup to skip the orphan sweep "
+            "(e.g. incident response, deliberate deferral)."
         ),
     )
     # ADR-0001 P1.6 — passthrough flags for the gated orphan cleanup.
@@ -1098,24 +1103,36 @@ def main(argv=None):
             sys.exit(2)
         elif result["status"] in ("synced", "up_to_date", "dry_run"):
             if args.cleanup and result["status"] == "synced":
-                if not args.allow_destructive_orphan_cleanup:
-                    # ADR-0001 / HR-8: orphan-blob cleanup is FROZEN by default
-                    # until P1+P2 release-safety gates land. The 2026-05-12
-                    # incident proved the existing logic deletes blobs still
-                    # referenced by a stale-bundled Flutter catalog.
+                if args.allow_destructive_orphan_cleanup:
+                    # ADR-0001 P1.6 commit 2 (2026-05-13): orphan-blob cleanup
+                    # is INCLUDED by default now that P1+P2+P3 are landed and
+                    # the destructive step is wrapped in: lock + index
+                    # validation + bundle alignment + blast radius + quarantine
+                    # + registry-backed protected set.
                     print(
-                        "\n[release-safety] Orphan-blob cleanup is FROZEN "
-                        "per ADR-0001 / HR-8.\n"
-                        "  → `--cleanup-orphan-blobs` will NOT be passed to "
-                        "cleanup_old_versions.\n"
+                        "\n[release-safety] Orphan-blob cleanup INCLUDED by "
+                        "default (ADR-0001 P1.6 commit 2).\n"
+                        "  → Gated by: pipeline lock (HR-12), detail_index "
+                        "validation (HR-11),\n"
+                        "    bundle alignment vs Flutter main HEAD (HR-13), "
+                        "blast-radius (HR-4),\n"
+                        "    registry-backed protected set (P3.5).\n"
+                        "  → Deletions are MOVES to quarantine (P2.1); "
+                        "recoverable for 30 days.\n"
+                        "  → To skip the orphan sweep (e.g. incident response), "
+                        "pass:\n"
+                        "       --no-allow-destructive-orphan-cleanup\n"
+                    )
+                else:
+                    # Operator opted out explicitly. Note: this is now a real
+                    # decision (used to be the default).
+                    print(
+                        "\n[release-safety] Orphan-blob cleanup SKIPPED "
+                        "(--no-allow-destructive-orphan-cleanup).\n"
                         "  → Per-version directory cleanup + manifest-row "
-                        "cleanup still run; only the destructive\n"
-                        "    shared-blob deletion is suppressed.\n"
-                        "  → Storage will accumulate orphans during the "
-                        "freeze; this is expected.\n"
-                        "  → To re-enable (only after P1+P2 safety gates "
-                        "land), pass:\n"
-                        "       --allow-destructive-orphan-cleanup\n"
+                        "cleanup still run.\n"
+                        "  → Orphan blobs in shared/details/ accumulate "
+                        "until the next sweep.\n"
                     )
                 print(f"\nRunning post-sync cleanup (keeping last {args.cleanup_keep} versions)...")
                 import importlib, sys as _sys
