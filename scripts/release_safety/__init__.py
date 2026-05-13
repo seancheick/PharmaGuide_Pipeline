@@ -24,12 +24,32 @@ from .lock import (
     CorruptLockError,
     acquire_release_lock,
 )
+from .index_validator import (
+    ValidatedIndex,
+    IndexValidationError,
+    MalformedJSONError,
+    MalformedStructureError,
+    MissingFieldError,
+    MalformedHashError,
+    ChecksumMismatchError,
+    validate_detail_index,
+)
 
 __all__ = [
+    # P1.1 — release lock
     "ReleaseLock",
     "ReleaseLockError",
     "LockContentionError",
     "StaleLockError",
     "CorruptLockError",
     "acquire_release_lock",
+    # P1.2 — detail_index validator
+    "ValidatedIndex",
+    "IndexValidationError",
+    "MalformedJSONError",
+    "MalformedStructureError",
+    "MissingFieldError",
+    "MalformedHashError",
+    "ChecksumMismatchError",
+    "validate_detail_index",
 ]
