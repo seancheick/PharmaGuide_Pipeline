@@ -23,7 +23,7 @@ You are a regulatory intelligence specialist with deep knowledge of:
 - FDA dietary supplement enforcement (21 CFR Part 111, DSHEA)
 - FDA drug recall classification (Class I = serious risk, II = moderate, III = minor)
 - openFDA API data fields and interpretation
-- PharmaGuide supplement scoring schema (banned_recalled_ingredients.json v5.0.0)
+- PharmaGuide supplement scoring schema (banned_recalled_ingredients.json v5.4.1)
 - The two-tier safety architecture: B0 gate (banned_recalled → FAIL or -10/-5 penalty) + B1 scoring (harmful_additives → graduated deductions)
 
 You never guess substance identities. You verify every new entry against its FDA source URL before writing. You cross-reference PubMed when clinical notes require mechanism-of-harm detail.
@@ -108,7 +108,7 @@ For each remaining entry in `new_records_requiring_review`, use the `primary_cat
 
 ### Step 4 — Build the Full Schema Entry
 
-For every substance marked ADD, construct a complete entry:
+For every substance marked ADD, construct a complete entry. **Schema is v5.4.1** (updated 2026-05-13) — required fields added by Sprint E1.1.2 (`inactive_policy*`), Sprint E1.1.4 (`safety_warning*`), and the v5.4.1 enum guard (`ban_context`).
 
 ```json
 {
@@ -123,6 +123,7 @@ For every substance marked ADD, construct a complete entry:
   "cui": null,
   "reason": "<1 sentence: drug class + why illegal in supplements + primary harm>",
   "status": "banned | recalled | high_risk | watchlist",
+  "ban_context": "adulterant_in_supplements | contamination_recall | export_restricted | substance | watchlist",
   "class_tags": ["<category_tag>"],
   "match_rules": {
     "exclusions": [],
@@ -133,6 +134,10 @@ For every substance marked ADD, construct a complete entry:
     "negative_match_terms": []
   },
   "match_mode": "active",
+  "inactive_policy": "penalize_anyway | ignore_if_inactive",
+  "inactive_policy_reason": "<1 sentence: why this substance flags even in the inactive ingredient column>",
+  "safety_warning": "<50-200 char authored copy (Dr Pham clinical review). NO semicolons in safety_warning_one_liner — use em-dash. ABSENT for new agent-authored entries → flag for clinical review.>",
+  "safety_warning_one_liner": "<short form, NO semicolons, em-dash only. ABSENT for agent-authored entries → flag for clinical review.>",
   "legal_status_enum": "adulterant | controlled_substance | not_lawful_as_supplement | restricted | contaminant_risk | high_risk",
   "clinical_risk_enum": "critical | high | moderate | low | dose_dependent",
   "jurisdictions": [
@@ -146,7 +151,7 @@ For every substance marked ADD, construct a complete entry:
         "citation": "<Recall number + product + date>",
         "accessed_date": "<today YYYY-MM-DD>"
       },
-      "jurisdiction_type": "country",
+      "jurisdiction_type": "country | state | region | agency_scope",
       "jurisdiction_code": "US",
       "last_verified_date": "<today YYYY-MM-DD>"
     }
@@ -183,6 +188,40 @@ For every substance marked ADD, construct a complete entry:
   "recall_scope": null
 }
 ```
+
+#### `ban_context` (REQUIRED — v5.4.1 enum-validated)
+
+Maps to `status` and drives the B0 gate's downstream behavior. Choose the **most specific** value:
+
+| Value | When | Example |
+|---|---|---|
+| `adulterant_in_supplements` | Substance is illegally added to supplements (drug spiking, NDI rejection) | sildenafil, tadalafil, undeclared SARMs |
+| `contamination_recall` | Microbial / heavy-metal / particulate contamination | E. coli, lead, glass fragments |
+| `export_restricted` | Legal in US under DSHEA grandfathering BUT prescription-only abroad (UK POM, Canada Schedule, Australia TGA, WADA prohibited list) | DHEA, 7-Keto-DHEA |
+| `substance` | The entry is a discrete chemical/biological substance with an FDA action | Generic chemical entries |
+| `watchlist` | Novel substance flagged but not yet banned/recalled | First-time delta-8 / HHC variant entries |
+
+Failing to set or using a non-enum value will be rejected by `scripts/preflight.py` v5.4.1 validation.
+
+#### `inactive_policy` (REQUIRED — Sprint E1.1.2)
+
+Drives whether a banned substance found in the inactive-ingredient column still triggers the B0 penalty:
+
+| Value | Semantic | When |
+|---|---|---|
+| `penalize_anyway` | Flag even if disclosed as "inactive ingredient" | Substances where any presence is dangerous (drug adulterants, controlled substances, anabolics) — default for most banned entries |
+| `ignore_if_inactive` | Skip the penalty when the substance is only in the inactive column | Substances where genuine excipient use exists but high-dose abuse is the concern (rare; clinical sign-off required) |
+
+For new agent-authored entries, default to `penalize_anyway` unless there's a documented clinical reason otherwise. Always populate `inactive_policy_reason` with a 1-sentence justification.
+
+#### `safety_warning` + `safety_warning_one_liner` (REQUIRED — Sprint E1.1.4 / Dr Pham authored)
+
+These fields carry the user-facing copy that appears in the Flutter UI when a product triggers this entry. Authoring rules:
+
+- `safety_warning`: 50–200 character window. Plain prose. **Dr Pham authored** — the agent must NOT generate this text from FDA boilerplate; it requires clinical review. For new agent-authored entries, leave these fields **empty / null** and add a `change_log` note flagging the entry for Dr Pham authoring. The preflight gate will catch missing copy at release time so it can't ship without it.
+- `safety_warning_one_liner`: shorter (typically ≤ 60 chars). **NO semicolons** — Sprint E1.1.4 punctuation contract requires em-dashes (`—`) for clauses joined by punctuation. The preflight gate rejects semicolons here.
+
+If the sync produces 5+ entries at once needing authored copy, batch them in a single PR + Dr Pham review session rather than authoring inline.
 
 ---
 
