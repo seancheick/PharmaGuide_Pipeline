@@ -6,25 +6,39 @@ where `other_ingredients.json` shipped with 683 entries but `_metadata.total_ent
 remained at 681. That drift survived for ~24 hours and broke two tests in b04
 once anyone ran them.
 
-This test fails fast at commit time for any single-array data file whose
-`_metadata.total_entries` disagrees with the actual array length.
+This test fails fast at commit time for any data file whose
+`_metadata.total_entries` disagrees with the actual entry count, across
+three recognized shapes:
 
-Scope: only files with the simple shape `{"_metadata": {...}, "<key>": [...]}`.
-Multi-array files (e.g. clinical_risk_taxonomy.json), dict-keyed files
-(e.g. ingredient_quality_map.json), and files without `total_entries`
-(e.g. fda_unii_cache.json) are skipped — those have their own per-file tests.
+* **single_array**: one top-level array besides `_metadata`. Entries are the
+  array items. Example: `other_ingredients.json`.
+* **single_payload_dict**: exactly one top-level dict besides `_metadata`.
+  Entries are the keys of that wrapping dict (values may be dicts or lists —
+  both shapes are valid). Examples: `botanical_marker_contributions.json`
+  (entries are dicts), `cluster_ingredient_aliases.json` (entries are alias
+  lists).
+* **top_level_dict_of_dicts**: no nested wrapper — the top level itself is
+  the entry map, and every non-`_metadata` value is a dict (one entry record
+  per top-level key). Examples: `ingredient_quality_map.json` (621 entries),
+  `enhanced_delivery.json` (78), `unit_mappings.json` (14).
+
+Files with a different shape (multi-array, mixed scalar+dict, etc.) are
+skipped — but only with an explicit `INTENTIONAL_EXCEPTIONS` entry that
+names the bespoke per-file test pinning that file's semantic. Silent skips
+are not permitted.
 """
 
 import json
 from pathlib import Path
+from typing import Any, Optional
 
 import pytest
 
 DATA = Path(__file__).parent.parent / "data"
 
-# Files whose top-level array length intentionally does not equal
-# _metadata.total_entries (e.g. count tracks something else). Add with reason
-# + reference to the bespoke per-file test that pins the file-specific semantic.
+# Files whose shape doesn't match the universal classifier OR whose
+# total_entries means something file-specific. Each entry MUST cite the
+# bespoke per-file test that pins the semantic (no silent skips).
 INTENTIONAL_EXCEPTIONS: dict[str, str] = {
     "ingredient_weights.json":
         "total_entries tracks dosage_weights tier count (4 — therapeutic / "
@@ -39,7 +53,60 @@ INTENTIONAL_EXCEPTIONS: dict[str, str] = {
         "total_entries = Σ(non-_-prefixed rule keys across rules.*), "
         "excluding each category's _metadata config sub-key. Pinned by "
         "test_cert_claim_rules_contract.py.",
+    "manufacture_deduction_expl.json":
+        "Structural config file (1 scalar total_deduction_cap + 4 nested "
+        "dicts for violation_categories / modifiers / calculation_rules / "
+        "score_thresholds). total_entries=5 tracks count of top-level "
+        "non-_metadata sub-sections — meaningful but not entry-shaped. "
+        "Pinned by test_manufacture_deduction_expl_contract.py.",
 }
+
+
+def _classify_shape(blob: dict) -> Optional[tuple[str, int]]:
+    """Return ``(shape_name, entry_count)`` if the file matches one of three
+    universal shapes; ``None`` if it needs a bespoke per-file test.
+
+    Shapes recognized:
+
+    1. ``single_array``: exactly one top-level array besides ``_metadata``,
+       no top-level dicts. Entry count = ``len(array)``.
+
+    2. ``single_payload_dict``: exactly one top-level dict besides
+       ``_metadata``, no top-level arrays. Entry count = number of keys in
+       that wrapping dict. Inner values may be dicts (entry records) or
+       lists (alias arrays) — count is what matters.
+
+    3. ``top_level_dict_of_dicts``: 2+ top-level dicts besides ``_metadata``,
+       no top-level arrays, no top-level scalars. Every non-``_metadata``
+       value must be a dict (an entry record). Entry count = number of
+       non-``_metadata`` keys.
+
+    A file with mixed scalars+dicts at top level (e.g. config files like
+    ``manufacture_deduction_expl.json``) falls through to ``None``.
+    """
+    non_meta = {k: v for k, v in blob.items() if k != "_metadata"}
+    arrays = [(k, v) for k, v in non_meta.items() if isinstance(v, list)]
+    dicts = [(k, v) for k, v in non_meta.items() if isinstance(v, dict)]
+
+    # Shape 1: exactly one top-level array. Auxiliary top-level dicts
+    # (e.g. side-lookups, classification settings) are permitted — the
+    # array is the primary entry catalog and meta tracks its length.
+    # Examples: clinically_relevant_strains.json (strains array + prebiotics
+    # lookup), id_redirects.json (redirects array + lookup index),
+    # ingredient_classification.json (skip_exact array + settings + classifications).
+    if len(arrays) == 1:
+        return ("single_array", len(arrays[0][1]))
+
+    # Shape 2: single top-level dict (wrapper), no arrays, no other keys.
+    if len(dicts) == 1 and not arrays and len(non_meta) == 1:
+        return ("single_payload_dict", len(dicts[0][1]))
+
+    # Shape 3: top-level IS the entry map — every non-meta value is a dict.
+    # Excludes files with any scalar at top level (e.g. config files).
+    if not arrays and dicts and len(non_meta) == len(dicts):
+        return ("top_level_dict_of_dicts", len(non_meta))
+
+    return None
 
 
 def _candidate_files() -> list[Path]:
@@ -51,16 +118,18 @@ def _candidate_files() -> list[Path]:
     _candidate_files(),
     ids=lambda p: p.name,
 )
-def test_metadata_total_entries_matches_array_length(path: Path) -> None:
-    """Every single-array data file must have _metadata.total_entries == len(array).
+def test_metadata_total_entries_matches_entry_count(path: Path) -> None:
+    """Every classifiable data file must have _metadata.total_entries match
+    its entry count, where "entry count" is shape-defined (see _classify_shape).
 
     Drift means either:
       * an author added/removed entries without bumping _metadata, or
-      * an author bumped _metadata without matching the array — either way,
+      * an author bumped _metadata without matching reality — either way,
         downstream consumers reading total_entries get a lie.
 
-    If a file legitimately tracks something else under total_entries, add it
-    to INTENTIONAL_EXCEPTIONS with a comment explaining the semantic.
+    If a file legitimately tracks something else under total_entries (e.g.
+    a section of a multi-section payload), add it to INTENTIONAL_EXCEPTIONS
+    with a rationale AND write a bespoke per-file test pinning the semantic.
     """
     blob = json.loads(path.read_text(encoding="utf-8"))
 
@@ -77,18 +146,19 @@ def test_metadata_total_entries_matches_array_length(path: Path) -> None:
     if path.name in INTENTIONAL_EXCEPTIONS:
         pytest.skip(f"{path.name}: {INTENTIONAL_EXCEPTIONS[path.name]}")
 
-    top_level_arrays = [(k, v) for k, v in blob.items() if isinstance(v, list)]
-    if len(top_level_arrays) != 1:
+    classification = _classify_shape(blob)
+    if classification is None:
         pytest.skip(
-            f"{path.name}: has {len(top_level_arrays)} top-level arrays "
-            f"(needs file-specific test, not this universal contract)"
+            f"{path.name}: shape not recognized by universal classifier "
+            f"(needs a bespoke per-file test; add to INTENTIONAL_EXCEPTIONS "
+            f"with a pointer to that test)."
         )
 
-    array_key, array_val = top_level_arrays[0]
-    actual = len(array_val)
+    shape_name, actual = classification
     assert actual == meta_total, (
-        f"{path.name}: _metadata.total_entries={meta_total} but array "
-        f"{array_key!r} has {actual} entries. "
+        f"{path.name}: _metadata.total_entries={meta_total} but "
+        f"{shape_name} payload has {actual} entries. "
         f"Bump _metadata.total_entries to {actual} "
-        f"(or add to INTENTIONAL_EXCEPTIONS with rationale)."
+        f"(or, if the semantic intentionally differs, add to "
+        f"INTENTIONAL_EXCEPTIONS with rationale + bespoke test)."
     )
