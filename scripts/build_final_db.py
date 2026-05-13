@@ -1503,6 +1503,19 @@ def build_banned_substance_detail(
     """Aggregate the first banned-substance warning's Dr Pham authored copy
     into a top-level detail-blob key. Returns ``None`` when the product
     does not carry a banned-substance hit (most of the catalog).
+
+    Sprint C (2026-05-13) — also forwards the additional context fields
+    the warning dict already carries (``ban_context``, ``detail``,
+    ``regulatory_date_label``, ``date``, ``source_urls``) so Flutter's
+    blocked-product view can render the regulatory date line, mechanism
+    paragraph, and real citation URLs instead of falling back to the
+    generic FDA CDER index. The three legacy fields
+    (``safety_warning_one_liner`` / ``safety_warning`` / ``substance_name``)
+    remain MANDATORY and are validated by
+    ``_validate_banned_preflight_propagation``. The new fields are
+    OPTIONAL — only forwarded when the warning dict has them populated,
+    and Flutter must tolerate any subset being absent. This keeps the
+    blob lean and avoids empty-string footguns on the consumer side.
     """
     if not has_banned_substance(enriched):
         return None
@@ -1511,17 +1524,37 @@ def build_banned_substance_detail(
             continue
         one = w.get("safety_warning_one_liner")
         body = w.get("safety_warning")
-        if (
+        if not (
             isinstance(one, str) and one.strip()
             and isinstance(body, str) and body.strip()
         ):
-            title = safe_str(w.get("title"))
-            substance = title.split(":", 1)[-1].strip() if ":" in title else title or None
-            return {
-                "safety_warning_one_liner": one.strip(),
-                "safety_warning": body.strip(),
-                "substance_name": substance,
-            }
+            continue
+        title = safe_str(w.get("title"))
+        substance = title.split(":", 1)[-1].strip() if ":" in title else title or None
+        bsd: Dict[str, Any] = {
+            "safety_warning_one_liner": one.strip(),
+            "safety_warning": body.strip(),
+            "substance_name": substance,
+        }
+        ban_context = w.get("ban_context")
+        if isinstance(ban_context, str) and ban_context.strip():
+            bsd["ban_context"] = ban_context.strip()
+        detail_text = w.get("detail")
+        if isinstance(detail_text, str) and detail_text.strip():
+            bsd["detail"] = detail_text.strip()
+        reg_label = w.get("regulatory_date_label")
+        if isinstance(reg_label, str) and reg_label.strip():
+            bsd["regulatory_date_label"] = reg_label.strip()
+        reg_date = w.get("date")
+        if isinstance(reg_date, str) and reg_date.strip():
+            bsd["date"] = reg_date.strip()
+        source_urls = w.get("source_urls")
+        if isinstance(source_urls, list):
+            cleaned = [u.strip() for u in source_urls
+                       if isinstance(u, str) and u.strip()]
+            if cleaned:
+                bsd["source_urls"] = cleaned
+        return bsd
     return None
 
 
@@ -1698,10 +1731,15 @@ _ALLOWED_DROP_REASONS = frozenset({
 # display_type → reason code mapping. The cleaner tags every dropped
 # item via _queue_display_ingredient(display_type=...), so we derive
 # reasons from the already-trusted tag rather than re-classifying.
+# Sprint E1.2.5 follow-up (2026-05-13): "nutrition_fact" was added to
+# the cleaner's display trail so the E1.6 defense gate below can
+# distinguish a real classifier bug from a legitimate-nutrition-facts
+# product whose actives panel is entirely macronutrient rows.
 _DISPLAY_TYPE_TO_REASON = {
     "structural_container": _DROP_REASON_STRUCTURAL_HEADER,
     "summary_wrapper": _DROP_REASON_SUMMARY_WRAPPER,
     "inactive_ingredient": _DROP_REASON_CLASSIFIED_INACTIVE,
+    "nutrition_fact": _DROP_REASON_NUTRITION_FACT,
 }
 
 
