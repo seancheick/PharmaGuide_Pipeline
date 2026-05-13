@@ -103,6 +103,25 @@ from .delete_stale_version_dirs import (
     execute_delete_plan,
     format_plan_text,
 )
+from .registry import (
+    DEFAULT_TABLE as REGISTRY_DEFAULT_TABLE,
+    CatalogRelease,
+    DuplicateReleaseError,
+    IllegalStateTransitionError,
+    InvalidReleaseFieldError,
+    RegistryError,
+    ReleaseChannel,
+    ReleaseNotFoundError,
+    ReleaseState,
+    activate_release,
+    get_release,
+    insert_pending_release,
+    list_active_releases,
+    list_releases_by_state,
+    retire_release,
+    rollback_to_pending,
+    transition_to_validating,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -182,4 +201,22 @@ __all__ = [
     "compute_delete_plan",
     "execute_delete_plan",
     "format_plan_text",
+    # P3.2 — catalog_releases registry (Python API + state machine)
+    "REGISTRY_DEFAULT_TABLE",
+    "CatalogRelease",
+    "DuplicateReleaseError",
+    "IllegalStateTransitionError",
+    "InvalidReleaseFieldError",
+    "RegistryError",
+    "ReleaseChannel",
+    "ReleaseNotFoundError",
+    "ReleaseState",
+    "activate_release",
+    "get_release",
+    "insert_pending_release",
+    "list_active_releases",
+    "list_releases_by_state",
+    "retire_release",
+    "rollback_to_pending",
+    "transition_to_validating",
 ]
