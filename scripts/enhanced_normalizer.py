@@ -3619,18 +3619,6 @@ class EnhancedDSLDNormalizer:
             if other_ingredients_raw is None:
                 other_ingredients_raw = []
 
-            # Sprint E1.2.4 — count RAW inactives with real names (exclude
-            # DSLD's "None" placeholder + empty/None-valued name entries).
-            # This is the pre-filter truth used by the contract-test gate
-            # to detect any future drop regression.
-            raw_inactives_count = sum(
-                1 for oi in other_ingredients_raw
-                if isinstance(oi, dict)
-                and isinstance(oi.get("name"), str)
-                and oi["name"].strip()
-                and oi["name"].strip().lower() != "none"
-            )
-
             # Sprint E1.2.5 — count RAW actives by walking ingredientRows
             # recursively (including nested blend members). Excludes DSLD
             # "None" placeholder + empty names. Used by E1.2.5 invariant
@@ -3649,6 +3637,53 @@ class EnhancedDSLDNormalizer:
             nutritional_info = self._extract_nutritional_info(flattened_ingredients + other_ingredients_raw)
 
             active_ingredients = self._process_ingredients_enhanced(flattened_ingredients, is_active=True)
+
+            # Sprint E1.2.4 (revised 2026-05-13) — count of REAL raw inactives
+            # the cleaner is expected to surface in the blob. Computed AFTER
+            # active_ingredients so we can subtract rows that are legitimate
+            # dedup targets (same raw name appears as an active). Exclusions:
+            #   • DSLD's "None" placeholder + empty-name entries
+            #   • DSLD-tagged headers (ingredientGroup == "Header")
+            #   • Structural label headers ("Less than 2% of:", "Contains <2%:")
+            #   • Skip-list entries ("Contains <2%:", "May contain:", etc.)
+            #   • Rows whose preprocessed raw name matches an active row's
+            #     preprocessed name or standardName (legitimate dedup; the
+            #     ingredient still ships via the active record).
+            # The audit invariant (build_final_db._validate_inactive_preservation)
+            # asserts: raw_inactives_count > 0 ⇒ blob.inactive_ingredients[] non-empty.
+            # By excluding the cases above, the audit fires only on a TRUE
+            # filter regression — not on legitimate dedup or header rows.
+            _active_tokens_for_count = set()
+            for _a in active_ingredients:
+                _an = _a.get("name") or ""
+                _as = _a.get("standardName") or ""
+                if _an:
+                    _active_tokens_for_count.add(self.matcher.preprocess_text(_an))
+                if _as:
+                    _active_tokens_for_count.add(self.matcher.preprocess_text(_as))
+
+            def _is_real_raw_inactive(oi):
+                if not isinstance(oi, dict):
+                    return False
+                nm = oi.get("name")
+                if not isinstance(nm, str):
+                    return False
+                nm_s = nm.strip()
+                if not nm_s or nm_s.lower() == "none":
+                    return False
+                if (oi.get("ingredientGroup") or "").strip().lower() == "header":
+                    return False
+                if self._is_label_header(nm_s):
+                    return False
+                if self._should_skip_ingredient(nm_s):
+                    return False
+                if self.matcher.preprocess_text(nm_s) in _active_tokens_for_count:
+                    return False
+                return True
+
+            raw_inactives_count = sum(
+                1 for oi in other_ingredients_raw if _is_real_raw_inactive(oi)
+            )
 
             # Process other ingredients - handle both key formats
             inactive_ingredients = self._process_other_ingredients_enhanced(other_ing_data)
@@ -4455,6 +4490,21 @@ class EnhancedDSLDNormalizer:
             quantity_g=_quantity_g,
         ):
             logger.debug(f"Skipping nutrition fact: {name} (group: {ingredient_group}, unit: {unit_raw})")
+            # Sprint E1.2.5 follow-up (2026-05-13): emit a display
+            # trail entry tagged 'nutrition_fact' so the build's
+            # ingredients_dropped_reasons surfaces DROPPED_NUTRITION_FACT
+            # for these rows. Without this, the E1.6 defense gate
+            # ("all raw actives reclassified as inactive") mis-fires on
+            # legitimate-nutrition-facts products whose otheringredients
+            # later land as inactives — the gate could not distinguish
+            # "cleaner classifier bug" from "DSLD-placed-no-real-actives".
+            self._queue_display_ingredient(
+                raw_source_text=raw_name,
+                source_section="activeIngredients" if is_active else "inactiveIngredients",
+                display_type="nutrition_fact",
+                score_included=False,
+                children=[],
+            )
             return None
         
         # Enhanced mapping with fuzzy matching
@@ -5428,64 +5478,71 @@ class EnhancedDSLDNormalizer:
         self, active_ingredients: List[Dict], inactive_ingredients: List[Dict]
     ) -> List[Dict]:
         """
-        A4: Deduplicate inactive ingredients that also appear in active ingredients.
+        A4: Deduplicate inactive ingredients that re-disclose a real active.
 
-        If an ingredient appears in both active (Supplement Facts) and inactive
-        (Other Ingredients), keep only the active record since it has dose/unit info.
+        Invariant (Sprint E1.2.4 follow-up, 2026-05-13):
+        Two label rows are the SAME ingredient iff their RAW label names
+        preprocess-equal. A shared ``standardName`` alone is NOT a sufficient
+        identity signal — broad mapping (e.g. "Hydrolyzed lactalbumin protein"
+        → standardName="Protein") creates false collisions that erase
+        safety-relevant specificity (allergens, banned substances,
+        harmful additives).
+
+        Dedup predicate:
+            preprocess(inactive.name) ∈ { preprocess(active.name),
+                                          preprocess(active.standardName) }
+
+        The inactive's own standardName is no longer used to drive dedup —
+        only its raw label name. This preserves cases like "Ascorbic Acid"
+        appearing under Other Ingredients while "Vitamin C" sits in
+        Supplement Facts: they will both ship, since the raw label
+        disclosures differ. The cost is at most one redundant inactive row;
+        the gain is no silent loss of label specificity.
 
         Args:
             active_ingredients: Processed active ingredients list
             inactive_ingredients: Processed inactive ingredients list
 
         Returns:
-            Filtered inactive ingredients list with duplicates removed
+            Filtered inactive ingredients list with same-name duplicates removed
         """
         if not active_ingredients or not inactive_ingredients:
             return inactive_ingredients
 
-        # Build a set of normalized active ingredient names for fast lookup
-        active_names = set()
+        # Build a set of normalized active label tokens (both raw name and
+        # mapped standardName). The inactive's RAW name is compared against
+        # this set — not the inactive's standardName.
+        active_tokens = set()
         for ing in active_ingredients:
-            # Use standardName if available, else fall back to name
             std_name = ing.get("standardName", "")
             name = ing.get("name", "")
-
             if std_name:
-                active_names.add(self.matcher.preprocess_text(std_name))
+                active_tokens.add(self.matcher.preprocess_text(std_name))
             if name:
-                active_names.add(self.matcher.preprocess_text(name))
+                active_tokens.add(self.matcher.preprocess_text(name))
 
-        # Filter out inactive ingredients that match active ingredients
         deduplicated = []
         duplicates_removed = 0
 
         for ing in inactive_ingredients:
-            std_name = ing.get("standardName", "")
             name = ing.get("name", "")
-
-            # Check if this inactive ingredient matches any active ingredient
-            is_duplicate = False
-
-            if std_name and self.matcher.preprocess_text(std_name) in active_names:
-                is_duplicate = True
-            elif name and self.matcher.preprocess_text(name) in active_names:
-                is_duplicate = True
+            is_duplicate = bool(name) and (
+                self.matcher.preprocess_text(name) in active_tokens
+            )
 
             if is_duplicate:
                 duplicates_removed += 1
                 logger.debug(
-                    "Deduped inactive ingredient '%s' (also in active ingredients)",
-                    name or std_name
+                    "Deduped inactive '%s' — raw name matches an active row",
+                    name,
                 )
-                # Optionally: flag the active ingredient that it was also listed
-                # in other ingredients (for transparency reporting)
             else:
                 deduplicated.append(ing)
 
         if duplicates_removed > 0:
             logger.info(
-                "Removed %d duplicate ingredients from inactive list (already in active)",
-                duplicates_removed
+                "Removed %d duplicate inactive ingredient(s) (raw-name match to active)",
+                duplicates_removed,
             )
 
         return deduplicated
@@ -6772,10 +6829,16 @@ class EnhancedDSLDNormalizer:
             "hemp seed oil", "chia seed oil", "sea buckthorn oil",
             # Sterols / stanols
             "phytosterols (unspecified)", "phytosterols",
+            # DSLD ingredientGroup variant for mixed phytosterol esters
+            # (e.g. Thorne Sterolipin) — added Sprint E1.2.5 follow-up.
+            "phytosterol (mixed)", "phytosterol esters",
             "beta-sitosterol", "stigmasterol", "campesterol",
             "plant sterols", "plant stanols",
-            # MCT / fractionated coconut
+            # MCT / fractionated coconut. DSLD's ingredientGroup for MCT
+            # products varies — capture the common variants observed in
+            # the Nutricost / SR Sports Research / GNC catalogs.
             "mct", "mct oil", "medium chain triglycerides",
+            "medium chain triglycerides (mct)", "medium chain triglyceride oil",
             # Lecithin family
             "lecithin", "soy lecithin", "sunflower lecithin",
             # Fat-soluble actives DSLD occasionally tags category=fat
@@ -6874,19 +6937,54 @@ class EnhancedDSLDNormalizer:
                 # single-active powder products (Creatine 4g, L-Glutamine 5g,
                 # MSM 3g, Inositol 2g, Beta-Sitosterol 1g, Whey Protein 25g)
                 # were silently dropped. (Batch 5 cleaner fix.)
+                #
+                # E1.6 follow-up (Sprint E1.2.5, 2026-05-13): the legacy
+                # blanket exclusion below was over-aggressive — it killed
+                # any gram-unit row whose DSLD category was 'other' (Red
+                # Yeast Rice 1.8g) or 'fat' (Medium Chain Triglyceride Oil
+                # 10g) even when the row was a real, label-disclosed
+                # supplement. DSLD's category tag alone is not a reliable
+                # nutrition-fact signal at this layer. The replacement:
+                # only exclude here when the NAME is in the curated
+                # nutrition-facts list, OR the ingredientGroup is a
+                # known panel-disclosure group. Real-fat-class
+                # ingredientGroups (MCT, phospholipid, krill oil,
+                # phytosterol) explicitly survive. Anything else falls
+                # through to the downstream mapper, which is the right
+                # disambiguator for unfamiliar gram-unit rows.
                 elif not _bypass_name_match:
-                    logger.debug(
-                        f"Excluding via gram unit (no supplement category): "
-                        f"{name} (unit: {unit}, cat: {dsld_category!r})"
-                    )
-                    return True
+                    _processed_name_check = self.matcher.preprocess_text(name)
+                    _group_lower = (ingredient_group or "").lower().strip()
+                    if _processed_name_check in self._preprocessed_excluded_nutrition:
+                        logger.debug(
+                            "Excluding via gram unit + known nutrition-fact name: "
+                            "%s (unit: %s, cat: %r)",
+                            name, unit, dsld_category,
+                        )
+                        return True
+                    if _group_lower in _FAT_CATEGORY_REAL_ACTIVES:
+                        logger.debug(
+                            "E1.6: gram-unit row %r kept — ingredientGroup %r is a "
+                            "known fat-class active",
+                            name, ingredient_group,
+                        )
+                        # Fall through; downstream mapper handles it.
+                    # Otherwise: trust DSLD's row even with non-supplement
+                    # category. Do NOT exclude here.
             # D1.3 + E1.6: Sugar/Fat/Carb rows are Nutrition Facts panel
-            # disclosures by default — UNLESS the ingredientGroup matches a
-            # known supplement-active (allowlist below). This preserves the
-            # original D1.3 behavior for genuine panel/formulation rows
-            # (Palm Oil, Cane Sugar, Maltodextrin, Dextrose) while
-            # exempting real actives (Phosphatidyl Serine, Krill Oil,
-            # Phytosterols, Evening Primrose Oil, Flaxseed Oil, MCT, …).
+            # disclosures by default — UNLESS one of:
+            #   - the ingredientGroup matches a known fat-class active
+            #     (Phosphatidyl Serine, Krill Oil, Phytosterols, MCT, …)
+            #   - the row's NAME is not in the curated nutrition-facts list
+            #     (preserves real sugar-class supplements such as D-Mannose,
+            #     D-Ribose, Galactooligosaccharides, and complex-carb
+            #     supplements that DSLD tags ``category='sugar'`` or
+            #     ``category='complex carbohydrate'`` — Sprint E1.2.5
+            #     follow-up, 2026-05-13)
+            # This preserves the original D1.3 behavior for genuine panel
+            # rows (Total Carbohydrates, Total Sugars, Total Fat, Cholesterol,
+            # bare "Sugar"/"Sodium") while exempting real label-disclosed
+            # actives across all sugar/fat/carb categories.
             if _cat_lower in _NUTRITION_FACTS_CATEGORIES and _cat_lower not in {
                 "protein",  # handled below
                 "fiber", "total fiber", "dietary fiber", "soluble fiber", "insoluble fiber",
@@ -6894,6 +6992,29 @@ class EnhancedDSLDNormalizer:
                 # We do NOT auto-filter fiber rows — let them route normally.
             }:
                 ingredient_group_lower = (ingredient_group or "").lower().strip()
+                # Curated set of DSLD ingredientGroup strings that ALMOST
+                # always indicate panel-disclosure / formulation-carrier
+                # rows rather than real supplement actives. When the
+                # category is sugar/fat/complex-carb AND the group is in
+                # this set, the row is a panel disclosure even if its
+                # raw name (Dextrose, Cane Sugar, Palm Oil, Maltodextrin)
+                # isn't in EXCLUDED_NUTRITION_FACTS by name. Sprint
+                # E1.2.5 follow-up: kept tight on purpose — adding a
+                # carrier name to this set must not also blacklist its
+                # real-supplement use (e.g. don't add "sucrose" here
+                # because a sucrose-only sweetener product would lose
+                # its only ingredient).
+                _PANEL_CARRIER_GROUPS = {
+                    # Basic sugars used as panel disclosures / carriers
+                    "glucose", "sucrose", "fructose", "maltose", "lactose",
+                    "high fructose corn syrup", "corn syrup",
+                    "cane sugar", "beet sugar", "brown sugar",
+                    "maltodextrin",
+                    # Bulk vegetable / refined oils — almost always carriers
+                    "palm oil", "palm kernel oil",
+                    "soybean oil", "canola oil", "rapeseed oil",
+                    "cottonseed oil", "vegetable oil",
+                }
                 if ingredient_group_lower in _FAT_CATEGORY_REAL_ACTIVES:
                     logger.debug(
                         "E1.6: ingredientGroup %r is a known fat-class active — "
@@ -6901,13 +7022,32 @@ class EnhancedDSLDNormalizer:
                         ingredient_group, name, _cat_lower,
                     )
                     # Fall through to subsequent checks; do NOT exclude here.
-                else:
+                elif ingredient_group_lower in _PANEL_CARRIER_GROUPS:
                     logger.debug(
-                        "D1.3: routing sugar/fat/carb disclosure to nutritionalInfo: %s "
-                        "(cat=%s, unit=%s, group=%s)",
-                        name, _cat_lower, unit, ingredient_group,
+                        "D1.3: ingredientGroup %r is a panel-carrier — "
+                        "filtering %s (cat=%s)",
+                        ingredient_group, name, _cat_lower,
                     )
                     return True
+                else:
+                    _processed_name_d13 = self.matcher.preprocess_text(name)
+                    if _processed_name_d13 in self._preprocessed_excluded_nutrition:
+                        logger.debug(
+                            "D1.3: routing nutrition-facts panel name to nutritionalInfo: %s "
+                            "(cat=%s, unit=%s, group=%s)",
+                            name, _cat_lower, unit, ingredient_group,
+                        )
+                        return True
+                    # Name is NOT a known nutrition-facts term and group
+                    # is not a panel-carrier. Trust DSLD's row as a real
+                    # active (D-Mannose under cat=sugar, GOS under
+                    # cat=complex carbohydrate). Downstream mapping
+                    # resolves the canonical identity.
+                    logger.debug(
+                        "D1.3 follow-up: keeping %r — name/group not in "
+                        "nutrition-facts allowlist despite category=%s",
+                        name, _cat_lower,
+                    )
 
             # Protein-supplement preservation is fully handled in the
             # gram-unit block above (Batch 14a). category=protein is now in
