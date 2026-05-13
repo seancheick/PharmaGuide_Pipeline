@@ -192,11 +192,17 @@ def _walk_severities(obj, found):
 @pytest.fixture(scope="module")
 def severity_values_in_source_data():
     found = set()
+    # ingredient_interaction_rules_Reviewed.json is a stale v5.2.0
+    # snapshot retired 2026-05-13. Existence-guarded so this test
+    # tolerates either presence (during transition) or absence
+    # (post-retirement) without dropping coverage on the live file.
     for relpath in (
         "ingredient_interaction_rules.json",
         "ingredient_interaction_rules_Reviewed.json",
     ):
         path = os.path.join(os.path.dirname(__file__), "..", "data", relpath)
+        if not os.path.exists(path):
+            continue
         with open(path, encoding="utf-8") as f:
             _walk_severities(json.load(f), found)
     return found

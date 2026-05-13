@@ -86,7 +86,13 @@ def _walk_field(obj, key, found):
 
 def test_every_interaction_rule_evidence_level_in_strength_vocab(strengths):
     found = set()
+    # ingredient_interaction_rules_Reviewed.json is a stale v5.2.0
+    # snapshot retired 2026-05-13. Existence-guarded so this test
+    # tolerates either presence (during transition) or absence
+    # (post-retirement) without dropping coverage on the live file.
     for path in INTERACTION_RULE_PATHS:
+        if not os.path.exists(path):
+            continue
         with open(path, encoding="utf-8") as f:
             _walk_field(json.load(f), "evidence_level", found)
     vocab_ids = {entry["id"] for entry in strengths}
