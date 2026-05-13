@@ -4,7 +4,7 @@
     "purpose": "safety_disqualification_and_regulatory_compliance",
     "schema_version": "5.4.1",
     "last_updated": "2026-05-13",
-    "total_entries": 150,
+    "total_entries": 152,
     "data_source_metadata": {
       "sources": [
         "FDA",
@@ -337,6 +337,17 @@
             "  RECALLED_RED_BULL_EXTREME (H-0655-2026, undeclared sildenafil)",
             "  RECALLED_BONER_BEARS_HONEY (H-0653-2026, undeclared sildenafil + tadalafil)",
             "Total entries: 147 -> 150"
+          ]
+        },
+        {
+          "version": "5.4.1",
+          "date": "2026-05-13",
+          "auditor": "fda_weekly_sync_agent",
+          "changes": [
+            "Added 2 new product-scoped entries from FDA recalls 2026-01-15 (TKS Co-pack Manufacturing, LLC, Class II microbial contamination of liquid dietary supplement drink shots):",
+            "  RECALLED_AONIC_COMPLETE_HERS (H-0520-2026, possible coliforms / E. coli / P. aeruginosa)",
+            "  RECALLED_AONIC_COMPLETE_HIS  (H-0521-2026, possible coliforms / E. coli / P. aeruginosa)",
+            "Total entries: 150 -> 152"
           ]
         }
       ],
@@ -18518,6 +18529,184 @@
         "effective_from": "2026-03-13",
         "effective_to": null,
         "note": "FDA Class I recall (H-0653-2026) — Net Wt 15 g pouches, consume-entire-pouch dosing instructions on package."
+      }
+    },
+    {
+      "id": "RECALLED_AONIC_COMPLETE_HERS",
+      "standard_name": "Aonic Complete Hers",
+      "aliases": [
+        "aonic complete hers",
+        "aonic complete hers",
+        "aonic hers"
+      ],
+      "cui": null,
+      "reason": "TKS Co-pack Manufacturing, LLC initiated an FDA Class II recall of Aonic Complete Hers (FDA recall H-0520-2026, 2026-01-15) after sampling identified possible contamination with coliforms, Escherichia coli, and Pseudomonas aeruginosa. The single-serving 34 mL liquid drink shots are sold in plastic bottles. E. coli and Pseudomonas exposure can cause gastrointestinal illness — particularly serious for immunocompromised consumers, infants, and the elderly. Class II reflects a temporary or medically reversible adverse health consequence per FDA recall classification.",
+      "status": "recalled",
+      "ban_context": "contamination_recall",
+      "class_tags": [
+        "microbial_contamination",
+        "liquid_supplement"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped contamination recall — any presence of this specific recalled SKU warrants the B0 gate regardless of column.",
+      "safety_warning": "FDA Class II recall: Aonic Complete Hers liquid drinks may be contaminated with coliforms, E. coli, or Pseudomonas aeruginosa. Risk of GI illness. Stop and consult a doctor if symptoms develop.",
+      "safety_warning_one_liner": "Class II FDA recall — microbial contamination risk. Stop.",
+      "legal_status_enum": "contaminant_risk",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-01-15",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0520-2026 — Aonic Complete Hers — 2026-01-15",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0520-2026: Aonic Complete Hers — microbial contamination",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0520-2026",
+          "evidence_grade": "R",
+          "date": "2026-01-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA sampling identified possible coliforms, E. coli, and/or Pseudomonas aeruginosa contamination in TKS Co-pack Manufacturing's Aonic Complete Hers. Class II per FDA recall classification."
+        }
+      ],
+      "source_category": "microbial_contamination",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0520-2026 — Class II microbial contamination recall of TKS Co-pack's Aonic Complete Hers.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-01-15",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "TKS Co-pack Manufacturing, LLC",
+        "formulations": [
+          "Aonic Complete Hers"
+        ],
+        "lots": null,
+        "effective_from": "2026-01-15",
+        "effective_to": null,
+        "note": "FDA Class II recall (H-0520-2026) — 34 mL liquid dietary supplement drink shot, single-serving plastic bottles."
+      }
+    },
+    {
+      "id": "RECALLED_AONIC_COMPLETE_HIS",
+      "standard_name": "Aonic Complete His",
+      "aliases": [
+        "aonic complete his",
+        "aonic complete his",
+        "aonic his"
+      ],
+      "cui": null,
+      "reason": "TKS Co-pack Manufacturing, LLC initiated an FDA Class II recall of Aonic Complete His (FDA recall H-0521-2026, 2026-01-15) after sampling identified possible contamination with coliforms, Escherichia coli, and Pseudomonas aeruginosa. The single-serving 34 mL liquid drink shots are sold in plastic bottles. E. coli and Pseudomonas exposure can cause gastrointestinal illness — particularly serious for immunocompromised consumers, infants, and the elderly. Class II reflects a temporary or medically reversible adverse health consequence per FDA recall classification.",
+      "status": "recalled",
+      "ban_context": "contamination_recall",
+      "class_tags": [
+        "microbial_contamination",
+        "liquid_supplement"
+      ],
+      "match_rules": {
+        "exclusions": [],
+        "case_sensitive": false,
+        "priority": 1,
+        "match_type": "exact",
+        "confidence": "high",
+        "negative_match_terms": []
+      },
+      "match_mode": "active",
+      "inactive_policy": "penalize_anyway",
+      "inactive_policy_reason": "Product-scoped contamination recall — any presence of this specific recalled SKU warrants the B0 gate regardless of column.",
+      "safety_warning": "FDA Class II recall: Aonic Complete His liquid drinks may be contaminated with coliforms, E. coli, or Pseudomonas aeruginosa. Risk of GI illness. Stop and consult a doctor if symptoms develop.",
+      "safety_warning_one_liner": "Class II FDA recall — microbial contamination risk. Stop.",
+      "legal_status_enum": "contaminant_risk",
+      "clinical_risk_enum": "high",
+      "jurisdictions": [
+        {
+          "region": "US",
+          "level": "federal",
+          "status": "recalled",
+          "effective_date": "2026-01-15",
+          "source": {
+            "type": "fda_enforcement",
+            "citation": "FDA Recall H-0521-2026 — Aonic Complete His — 2026-01-15",
+            "accessed_date": "2026-05-13"
+          },
+          "jurisdiction_type": "country",
+          "jurisdiction_code": "US",
+          "last_verified_date": "2026-05-13"
+        }
+      ],
+      "references_structured": [
+        {
+          "type": "fda_enforcement",
+          "title": "FDA Recall H-0521-2026: Aonic Complete His — microbial contamination",
+          "url": "https://www.accessdata.fda.gov/scripts/ires/?action=Redirect&recall_number=H-0521-2026",
+          "evidence_grade": "R",
+          "date": "2026-01-15",
+          "supports_claims": [
+            "regulatory_action"
+          ],
+          "evidence_summary": "FDA sampling identified possible coliforms, E. coli, and/or Pseudomonas aeruginosa contamination in TKS Co-pack Manufacturing's Aonic Complete His. Class II per FDA recall classification."
+        }
+      ],
+      "source_category": "microbial_contamination",
+      "entity_type": "product",
+      "review": {
+        "status": "validated",
+        "last_reviewed_at": "2026-05-13",
+        "next_review_due": "2026-11-13",
+        "reviewed_by": "fda_weekly_sync_agent",
+        "change_log": [
+          {
+            "date": "2026-05-13",
+            "change": "Added from FDA recall H-0521-2026 — Class II microbial contamination recall of TKS Co-pack's Aonic Complete His.",
+            "by": "fda_weekly_sync_agent"
+          }
+        ]
+      },
+      "supersedes_ids": null,
+      "regulatory_date": "2026-01-15",
+      "regulatory_date_label": "FDA recall initiation date",
+      "recall_scope": {
+        "brand": "TKS Co-pack Manufacturing, LLC",
+        "formulations": [
+          "Aonic Complete His"
+        ],
+        "lots": null,
+        "effective_from": "2026-01-15",
+        "effective_to": null,
+        "note": "FDA Class II recall (H-0521-2026) — 34 mL liquid dietary supplement drink shot, single-serving plastic bottles."
       }
     }
   ]
