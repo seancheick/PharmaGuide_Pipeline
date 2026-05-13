@@ -86,6 +86,12 @@ from .quarantine_sweeper import (
     is_eligible_for_hard_delete,
     sweep_quarantine,
 )
+from .storage_audit import (
+    DEFAULT_ORPHAN_SAMPLE_SIZE,
+    PrefixStats,
+    StorageAuditReport,
+    run_storage_audit,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -150,4 +156,9 @@ __all__ = [
     "SweepResult",
     "is_eligible_for_hard_delete",
     "sweep_quarantine",
+    # Storage audit (read-only inventory; P3 prerequisite)
+    "DEFAULT_ORPHAN_SAMPLE_SIZE",
+    "PrefixStats",
+    "StorageAuditReport",
+    "run_storage_audit",
 ]
