@@ -257,7 +257,7 @@ def cleanup_orphan_blobs(client, current_version, dry_run):
 
 
 # ---------------------------------------------------------------------------
-# Gated orphan-blob cleanup (ADR-0001 P1.6 — production wire-in)
+# Gated orphan-blob cleanup (ADR-0001 P1.6 + P2.2 — gated + quarantined)
 # ---------------------------------------------------------------------------
 
 
@@ -272,15 +272,17 @@ def cleanup_orphan_blobs_with_gates(
     expected_count=None,
     audit_log=None,
     lock_path=None,
+    run_date=None,
 ):
-    """Run release-safety gates BEFORE deleting any orphaned detail blob.
+    """Run release-safety gates THEN move orphaned detail blobs to quarantine.
 
-    This is the production wire-in for ADR-0001's release-safety stack.
-    Unlike the legacy ``cleanup_orphan_blobs`` (single-version protection,
+    This is the production wire-in for ADR-0001's release-safety stack
+    (P1.6) plus the P2.2 quarantine layer. Unlike the legacy
+    ``cleanup_orphan_blobs`` (single-version protection + hard-delete,
     the path that caused the 2026-05-12 incident), this function:
 
       1. Lists all blobs in storage.
-      2. Reads dist/detail_index.json to compute initial deletion candidates
+      2. Reads dist/detail_index.json to compute initial orphan candidates
          (storage hashes NOT in dist's index).
       3. Calls ``evaluate_cleanup_gates(...)`` in EXECUTE mode with those
          candidates + storage_total. The gate enforces:
@@ -290,9 +292,16 @@ def cleanup_orphan_blobs_with_gates(
            - bundle alignment with Flutter main HEAD (HR-13)
            - blast-radius (HR-4)
            - non-empty protected set (HR-2)
-      4. If gates fail, prints failure_summary, returns (0, 0). NO deletions.
-      5. If gates pass, deletes only the candidates that survive the
-         protected-set filter (i.e., ``result.deletion_candidates``).
+      4. If gates fail, prints failure_summary, returns (0, 0). NO action.
+      5. If gates pass, MOVES (not deletes) only the candidates that
+         survive the protected-set filter into shared/quarantine/{run_date}/.
+         Quarantined blobs are recoverable for 30 days via
+         ``release_safety.recover_blob(...)``; the sweeper hard-deletes
+         them after the TTL.
+
+    Per P2.2 sign-off: per-blob quarantine failures DO NOT abort the
+    cleanup. The function continues across remaining eligible blobs and
+    reports the failure count in the return tuple.
 
     Args:
         client: Supabase client.
@@ -304,14 +313,18 @@ def cleanup_orphan_blobs_with_gates(
         expected_count: optional override for the blast-radius gate.
         audit_log: optional explicit AuditLog. None creates a fresh one.
         lock_path: optional explicit lock file path.
+        run_date: optional ISO YYYY-MM-DD for the quarantine date directory.
+            Defaults to today UTC. All blobs quarantined by THIS call land
+            under the same date, so the sweeper can drain them as a unit
+            after TTL. Tests pass an explicit value for determinism.
 
     Returns:
-        (deleted_count, failed_count). Both 0 if gates rejected the run.
+        ``(quarantined_count, failed_count)``. Both 0 if gates rejected.
 
-    Never raises in normal use — gate failures and storage errors are
-    caught and reported. Unexpected exceptions from the gate machinery
-    propagate; callers should wrap in try/except + return (0, 0) per
-    ADR-0001 P1.6 fail-closed requirement.
+    Never raises in normal use — gate failures and per-blob quarantine
+    errors are caught and reported. Unexpected exceptions from the gate
+    machinery propagate; callers should wrap in try/except + return
+    (0, 0) per ADR-0001 P1.6 fail-closed requirement.
     """
     # Imported here so the module remains importable even when
     # release_safety package isn't on sys.path (legacy direct invocation).
@@ -320,13 +333,22 @@ def cleanup_orphan_blobs_with_gates(
         GateMode,
         GateOverrides,
         validate_detail_index,
+        quarantine_blob,
+        DEFAULT_QUARANTINE_TTL_DAYS,
     )
+    from datetime import datetime as _datetime, timezone as _timezone
     from pathlib import Path as _Path
 
-    print("\n=== Gated orphan-blob cleanup (ADR-0001 P1.6) ===")
+    # One run_date per cleanup run — every quarantined blob lands under
+    # the same date directory so the sweeper can drain them as a unit.
+    if run_date is None:
+        run_date = _datetime.now(_timezone.utc).strftime("%Y-%m-%d")
+
+    print("\n=== Gated orphan-blob cleanup (ADR-0001 P1.6 + P2.2) ===")
     print(f"  flutter_repo:     {flutter_repo_path}")
     print(f"  dist_dir:         {dist_dir}")
     print(f"  branch:           {branch}")
+    print(f"  run_date:         {run_date}")
 
     # Step 1: list all blobs in storage (we need both the candidate set
     # and the total for blast-radius). Cheaper to do this once here than
@@ -344,13 +366,13 @@ def cleanup_orphan_blobs_with_gates(
     storage_total = len(storage_hashes)
     print(f"  {storage_total} unique blobs in storage")
 
-    # Step 2: compute initial deletion candidates (storage − dist.index).
+    # Step 2: compute initial orphan candidates (storage − dist.index).
     # The gate will further filter against the bundled∪dist protected set.
     try:
         dist_index = validate_detail_index(_Path(dist_dir) / "detail_index.json")
     except Exception as exc:
         print(f"\n[release-safety] Could not validate dist detail_index: {exc}")
-        print("  Refusing destructive cleanup. No blobs deleted.")
+        print("  Refusing destructive cleanup. No blobs quarantined.")
         return 0, 0
     candidate_hashes = storage_hashes - dist_index.blob_hashes
     print(f"  {len(candidate_hashes)} candidates pre-gate (storage \\ dist.index)")
@@ -374,31 +396,56 @@ def cleanup_orphan_blobs_with_gates(
 
     if not result.passed:
         print("\n" + result.failure_summary())
-        print("\n[release-safety] Orphan cleanup REJECTED — no blobs deleted.")
+        print("\n[release-safety] Orphan cleanup REJECTED — no blobs quarantined.")
         return 0, 0
 
-    # Step 4: delete only candidates surviving the protected-set filter.
-    actual_deletions = result.deletion_candidates
+    # Step 4: quarantine only candidates surviving the protected-set filter.
+    # P2.2 — the destructive step is now a MOVE-to-quarantine, not a
+    # hard delete. Recoverable for DEFAULT_QUARANTINE_TTL_DAYS (30) days
+    # via release_safety.recover_blob(client, blob_hash).
+    actual_orphans = result.deletion_candidates
     print(
         f"\n[release-safety] Gates passed. "
-        f"Deleting {len(actual_deletions)} blob(s) "
+        f"Quarantining {len(actual_orphans)} blob(s) "
+        f"to shared/quarantine/{run_date}/ "
         f"(of {len(candidate_hashes)} pre-gate candidates; "
-        f"{len(candidate_hashes) - len(actual_deletions)} protected by bundled∪dist)."
+        f"{len(candidate_hashes) - len(actual_orphans)} protected by bundled∪dist). "
+        f"Recoverable for {DEFAULT_QUARANTINE_TTL_DAYS} days."
     )
 
-    deleted = 0
+    quarantined = 0
     failed = 0
-    for blob_hash in sorted(actual_deletions):
+    failed_paths: list = []
+    for blob_hash in sorted(actual_orphans):
         shard = blob_hash[:2]
         path = f"shared/details/sha256/{shard}/{blob_hash}.json"
-        ok, err = delete_storage_path(client, path)
+        ok, err = quarantine_blob(client, path, run_date=run_date)
         if ok:
-            deleted += 1
+            quarantined += 1
         else:
-            print(f"  [ERROR] Failed to delete orphan {path}: {err}")
+            # P2.2 sign-off: per-blob failures DO NOT abort the cleanup.
+            # Count + report; continue across remaining candidates.
+            print(f"  [ERROR] Failed to quarantine orphan {path}: {err}")
             failed += 1
+            failed_paths.append(path)
 
-    return deleted, failed
+    print(
+        f"\n[release-safety] Quarantine complete: "
+        f"{quarantined} moved, {failed} failed. "
+        f"Recover via: from release_safety import recover_blob; "
+        f"recover_blob(client, '<hash>')"
+    )
+
+    if audit_log is not None:
+        audit_log.event(
+            "quarantine_completed",
+            quarantined_count=quarantined,
+            failed_count=failed,
+            run_date=run_date,
+            failed_paths=failed_paths,
+        )
+
+    return quarantined, failed
 
 
 # ---------------------------------------------------------------------------
@@ -568,7 +615,7 @@ def main(argv=None):
         print()
 
     # Orphan blob cleanup
-    total_orphans_deleted = 0
+    total_orphans_quarantined = 0
     total_orphans_failed = 0
     if args.cleanup_orphan_blobs:
         current_row = next((r for r in rows if r.get("is_current")), rows[0] if rows else None)
@@ -578,7 +625,7 @@ def main(argv=None):
                 # per ADR-0001 HR-12 (read-only ops bypass the lock + gates).
                 # Single-version protection is fine here because nothing is
                 # actually deleted — the output just shows what WOULD be.
-                total_orphans_deleted, total_orphans_failed = cleanup_orphan_blobs(
+                total_orphans_quarantined, total_orphans_failed = cleanup_orphan_blobs(
                     client, current_row["db_version"], dry_run,
                 )
             else:
@@ -603,7 +650,7 @@ def main(argv=None):
                 # fails closed (no deletions) rather than crashing the
                 # cleanup mid-run. Per ADR-0001 P1.6 sign-off.
                 try:
-                    total_orphans_deleted, total_orphans_failed = (
+                    total_orphans_quarantined, total_orphans_failed = (
                         cleanup_orphan_blobs_with_gates(
                             client,
                             current_row["db_version"],
@@ -623,7 +670,7 @@ def main(argv=None):
                         "  Refusing destructive cleanup. No blobs deleted. "
                         "Investigate the error before re-running."
                     )
-                    total_orphans_deleted, total_orphans_failed = 0, 0
+                    total_orphans_quarantined, total_orphans_failed = 0, 0
         else:
             print("\n  [WARN] No current version found — skipping orphan blob cleanup.")
 
@@ -640,9 +687,18 @@ def main(argv=None):
         if total_db_failed:
             print(f"  Manifest row failures:          {total_db_failed}")
     if args.cleanup_orphan_blobs:
-        print(f"  Orphan blobs {action.lower()}:    {total_orphans_deleted}")
+        if dry_run:
+            # Dry-run uses the legacy cleanup_orphan_blobs (single-version
+            # protection) for backwards compat; nothing is touched, the
+            # count reflects what WOULD have been deleted.
+            print(f"  Orphan blobs would delete:      {total_orphans_quarantined}")
+        else:
+            # Execute path (P2.2): orphans were MOVED to quarantine, not
+            # deleted. Recoverable for 30 days via release_safety.recover_blob.
+            print(f"  Orphan blobs quarantined:       {total_orphans_quarantined}")
         if total_orphans_failed:
-            print(f"  Orphan blob failures:           {total_orphans_failed}")
+            verb = "delete" if dry_run else "quarantine"
+            print(f"  Orphan blob {verb} failures:  {total_orphans_failed}")
     print()
     if dry_run:
         print("Dry-run complete. Re-run with --execute to apply deletions.")
@@ -667,12 +723,12 @@ def main(argv=None):
         #                                Blocking the release on housekeeping
         #                                failures is the wrong call.
         if total_orphans_failed > 0:
-            orphan_total = total_orphans_deleted + total_orphans_failed
+            orphan_total = total_orphans_quarantined + total_orphans_failed
             print(
                 f"  Note: {total_orphans_failed}/{orphan_total} orphan-blob "
-                f"deletions failed — typically transient HTTP/2 stream-limit "
+                f"quarantine moves failed — typically transient HTTP/2 stream-limit "
                 f"or response-parse issues. Treating as non-blocking; the "
-                f"stragglers retry on the next cleanup run."
+                f"stragglers retry on the next cleanup run (idempotent)."
             )
 
         blocking_failures = total_failed + total_db_failed
