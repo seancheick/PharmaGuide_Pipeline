@@ -59,6 +59,14 @@ from .audit_log import (
     make_audit_log,
     read_audit_log,
 )
+from .gates import (
+    GateMode,
+    GateOverrides,
+    GateFailure,
+    GateResult,
+    DEFAULT_BLAST_RADIUS_THRESHOLD,
+    evaluate_cleanup_gates,
+)
 
 __all__ = [
     # P1.1 — release lock
@@ -99,4 +107,11 @@ __all__ = [
     "DEFAULT_AUDIT_DIR",
     "make_audit_log",
     "read_audit_log",
+    # P1.5b — gates orchestrator
+    "GateMode",
+    "GateOverrides",
+    "GateFailure",
+    "GateResult",
+    "DEFAULT_BLAST_RADIUS_THRESHOLD",
+    "evaluate_cleanup_gates",
 ]
