@@ -14262,11 +14262,11 @@
       "cui_verified_source": "UMLS (pre-verified in existing pipeline; Tamarindus indica concept C0965568)",
       "external_ids": {
         "pubchem_cid": null,
-        "unii": "2U9H66X7VX"
+        "unii": null
       },
       "notes": "Tamarindus indica fruit \u2014 legume-family tropical fruit used for dietary fiber and polyphenols. Source of tartaric acid and malic acid. Used in gummies and chewables as natural flavor + fiber source.",
       "added_by": "sprint_d2.5",
-      "last_updated": "2026-05-14",
+      "last_updated": "2026-04-20",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
