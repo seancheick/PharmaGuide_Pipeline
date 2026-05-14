@@ -10893,17 +10893,15 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Malate — generic malic acid/salt descriptor on supplement labels. L-malic acid is a Krebs cycle intermediate. Used as acidulant, flavor enhancer, and mineral chelation acid. Identity mapping for unspecified malate forms.",
+      "notes": "Malate — generic malic acid/salt descriptor on supplement labels. L-malic acid is a Krebs cycle intermediate. Used as acidulant, flavor enhancer, and mineral chelation acid. Identity mapping for unspecified malate forms. UNII 817L1N4CKP (MALIC ACID), CAS 6915-15-7, and PubChem CID 525 (all L-malic-acid specific) were removed 2026-05-14 — 'Malate' as a generic descriptor is ambiguous between malate ions, calcium/magnesium/potassium/sodium malate salts, and malic acid forms. FDA cache has no generic-malate UNII. Specific malate compounds (NHA_MALIC_ACID for the acid form, and per-salt entries) keep their own UNIIs.",
       "common_uses": [
         "identity mapping"
       ],
-      "last_updated": "2026-03-01",
-      "external_ids": {
-        "cas": "6915-15-7",
-        "pubchem_cid": 525,
-        "unii": "817L1N4CKP"
-      },
+      "last_updated": "2026-05-14",
+      "external_ids": {},
       "cui": "C0220873",
+      "cui_status": "governed_null",
+      "cui_note": "UNII intentionally omitted — generic 'Malate' descriptor covers malate ions, calcium/magnesium/sodium/potassium malate salts, and acid forms. FDA cache has no generic-malate UNII. CAS/PubChem CID also removed because they were acid-specific (L-malic acid) and would mis-anchor every label-disclosed 'Malate' to the acid form. UMLS CUI C0220873 (Malates) retained because it's the generic concept identifier, not an acid-specific one.",
       "functional_roles": [],
       "is_label_descriptor": true
     },
