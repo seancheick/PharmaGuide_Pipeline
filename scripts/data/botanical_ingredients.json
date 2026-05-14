@@ -3,7 +3,7 @@
     "description": "Non-standardized whole herb powders and simple botanical extracts without guaranteed marker compounds. Used for basic ingredient mapping. For premium standardized extracts with marker compounds, see standardized_botanicals.json.",
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
-    "last_updated": "2026-05-11",
+    "last_updated": "2026-05-14",
     "total_entries": 482,
     "functional_roles_field": {
       "added_in": "5.1.0",
@@ -240,11 +240,17 @@
         "Aloe vera powder",
         "Kumari",
         "aloe vera organic powder",
-        "Aloe barbadensis"
+        "Aloe barbadensis",
+        "whole leaf Aloe vera",
+        "organic whole leaf Aloe vera",
+        "88% organic whole leaf Aloe vera",
+        "100% organic whole leaf Aloe vera",
+        "99% organic whole leaf Aloe vera",
+        "Aloe vera whole leaf"
       ],
       "category": "herb",
-      "notes": "Aloe barbadensis (Asphodelaceae) leaf gel and latex. Contains acemannan polysaccharides (gel) and anthraquinone glycosides (latex). The whole-leaf and gel preparations differ markedly in composition and safety profile.",
-      "last_updated": "2026-03-01",
+      "notes": "Aloe barbadensis (Asphodelaceae) leaf gel and latex. Contains acemannan polysaccharides (gel) and anthraquinone glycosides (latex). The whole-leaf and gel preparations differ markedly in composition and safety profile. Common DSLD label disclosures include percentage-prefixed concentration claims (e.g. '88% organic whole leaf Aloe vera') — aliased rather than relying on cleaner-side prefix stripping to keep identity matching deterministic.",
+      "last_updated": "2026-05-14",
       "external_ids": {
         "unii": "ZY81Z83H0X"
       },

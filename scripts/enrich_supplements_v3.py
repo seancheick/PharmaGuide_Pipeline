@@ -3824,6 +3824,32 @@ class SupplementEnricherV3:
             # Strip benign qualifiers for identity-only recognition.
             variants.add(re.sub(r'^(?:organic|natural|raw|pure)\s+', '', base).strip())
             variants.add(re.sub(r'^(?:organic|natural|raw|pure)\s+', '', self._normalize_text(pre)).strip())
+            # Iterative compound-prefix strip — handles DSLD label prefix combos
+            # like "88% organic whole leaf Aloe vera" or "100% raw whole bark
+            # Cinnamon" that chain percentage + sourcing-qualifier + preparation
+            # in one string. Applies the strip rules in a loop so order doesn't
+            # matter and partial matches don't block subsequent strips. Scope:
+            # tier-3 recognition only (this _variants() runs inside
+            # _is_recognized_non_scorable). The existing one-pass strips above
+            # remain so this is purely additive — adds one more candidate per
+            # base/pre form, never removes existing ones. Safe from false-
+            # positive identity loss because the un-stripped variants are
+            # still tried first against the lookup index. Added 2026-05-14.
+            def _iter_strip_compound_prefix(text: str) -> str:
+                prev = None
+                while prev != text:
+                    prev = text
+                    text = re.sub(r'^\s*\d+(?:\.\d+)?%\s+', '', text)
+                    text = re.sub(
+                        r'^(?:certified\s+organic|fair[-\s]?trade|organic|natural|raw|pure)\s+',
+                        '',
+                        text,
+                        flags=re.IGNORECASE,
+                    )
+                    text = re.sub(r'^(?:whole|raw)\s+', '', text, flags=re.IGNORECASE)
+                return re.sub(r'\s+', ' ', text).strip()
+            variants.add(_iter_strip_compound_prefix(base))
+            variants.add(_iter_strip_compound_prefix(self._normalize_text(pre)))
             # Strip common processing qualifiers that should not block identity matching.
             for v in list(variants):
                 stripped = re.sub(

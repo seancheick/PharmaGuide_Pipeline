@@ -3,8 +3,8 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-13",
-    "total_entries": 683,
+    "last_updated": "2026-05-14",
+    "total_entries": 684,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -21226,17 +21226,28 @@
       "id": "NHA_UNIVESTIN",
       "standard_name": "Univestin",
       "aliases": [
-        "univestin"
+        "univestin",
+        "Univestin",
+        "UnivestinR",
+        "Univestin(R)",
+        "Acacia catechu wood & bark extract and Chinese Skullcap root extract",
+        "acacia catechu wood and bark extract and chinese skullcap root extract",
+        "Acacia catechu and Scutellaria baicalensis",
+        "Acacia catechu extract and Scutellaria baicalensis extract",
+        "Acacia catechu (heartwood) and Scutellaria baicalensis (root)",
+        "Scutellaria baicalensis and Acacia catechu",
+        "baicalin and catechins blend"
       ],
       "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Univestin — branded botanical complex (Scutellaria baicalensis + Acacia catechu) by Unigen Inc. Standardized to baicalin and catechins. Studied for joint comfort (doi:10.1186/1472-6882-12-8). Identity mapping for label tokens.",
+      "notes": "Univestin — branded botanical complex (Scutellaria baicalensis + Acacia catechu) by Unigen Inc. Standardized to baicalin and catechins. Studied for joint comfort (doi:10.1186/1472-6882-12-8). Aliases include both the brand token AND the standard label phrasing used on consumer products (e.g. GNC Women's Joint Health, Move Free Advanced) where the components are spelled out instead of the brand name. Identity mapping for both label tokens and component-name disclosures.",
       "common_uses": [
-        "identity mapping"
+        "identity mapping",
+        "joint comfort"
       ],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-14",
       "external_ids": {},
       "functional_roles": [],
       "is_label_descriptor": true
@@ -23851,6 +23862,38 @@
       "allergen": false,
       "last_updated": "2026-05-12",
       "added_by": "unknown_role_quick_wins_2026_05_12"
+    },
+    {
+      "id": "NHA_HIGH_AMYLOPECTIN_STARCH",
+      "standard_name": "High Amylopectin Starch",
+      "aliases": [
+        "high amylopectin starch",
+        "High Amylopectin Starch",
+        "high-amylopectin starch",
+        "high amylopectin waxy maize starch",
+        "amylopectin starch",
+        "waxy maize starch",
+        "waxy corn starch",
+        "waxy starch"
+      ],
+      "category": "active_pending_relocation",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "High Amylopectin Starch — sports-nutrition carbohydrate fuel derived from waxy maize (corn) starch, which is naturally >95% amylopectin. DSLD ships products like GNC Wheybolic with the FDA UNII TQI9LJM246 (AMYLOPECTIN, CORN) on this active-panel row at 250–500 mg per serving, with source-form 'Waxy Maize'. Same product family as Highly Branched Cyclic Dextrin (NHA_HBCD_CLUSTER_DEXTRIN); HBCD is the enzyme-treated derivative of this precursor. Marketed for fast gastric emptying / rapid post-workout glycogen replenishment vs. maltodextrin or sucrose. Recognized as an active fuel ingredient but not scored for therapeutic quality (no premium-vs-lower form distinction). UNII verified 2026-05-14 against fda_unii_cache.json: TQI9LJM246 → 'AMYLOPECTIN, CORN'. Generic unspecified-source UNII 4XO4QFV777 (AMYLOPECTIN, UNSPECIFIED SOURCE) and per-source UNIIs (wheat BZ5AL1C3TJ, rice FCF4HG24O1, potato CDT7MX9YQ5, tapioca KL9H9HAD19, pea RQ1DI8911W, oat 1LE22FEY4Z) exist for other source forms.",
+      "common_uses": [
+        "carbohydrate fuel",
+        "sports nutrition energy source",
+        "post-workout glycogen replenishment"
+      ],
+      "last_updated": "2026-05-14",
+      "external_ids": {
+        "unii": "TQI9LJM246",
+        "fda_unii_name": "AMYLOPECTIN, CORN"
+      },
+      "functional_roles": [],
+      "is_active_only": true,
+      "added_by": "gnc_amylopectin_coverage_gate_2026_05_14"
     }
   ]
 }
