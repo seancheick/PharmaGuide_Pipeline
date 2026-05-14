@@ -96,8 +96,10 @@
       ],
       "category": "fruit",
       "notes": "Malpighia emarginata (Malpighiaceae) fruit. Natural vitamin C source (1,000\u20134,500 mg/100g fresh weight). Often used in supplements as whole-food C source, but botanical form is not standardized to specific ascorbic acid percentage.",
-      "last_updated": "2026-03-01",
-      "external_ids": {},
+      "last_updated": "2026-05-14",
+      "external_ids": {
+        "unii": "XDD2WEC9L5"
+      },
       "cui": "C0950505",
       "functional_roles": [],
       "attributes": {
