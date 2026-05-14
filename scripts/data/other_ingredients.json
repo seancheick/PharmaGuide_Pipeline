@@ -23747,9 +23747,11 @@
         "natural yellow colorant (FDA 21 CFR §73.450)"
       ],
       "notes": "Riboflavin used as a natural yellow color additive (E101). Distinct from B2 as an active nutritional ingredient — the active scoring path handles that case via the IQM. This entry covers ONLY the inactive/excipient use where the cleaner has classified Riboflavin into inactiveIngredients[].",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "TLM2976OFR"
+      },
       "allergen": null,
-      "last_updated": "2026-05-12",
+      "last_updated": "2026-05-14",
       "added_by": "inactive_ingredient_resolver_2026_05_12"
     },
     {
