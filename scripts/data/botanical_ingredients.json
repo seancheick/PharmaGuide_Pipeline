@@ -14125,8 +14125,10 @@
       ],
       "category": "vegetable",
       "notes": "Brassica oleracea var. acephala \u2014 cruciferous leafy green. Vitamin K, A, C source; glucosinolate content.",
-      "last_updated": "2026-04-20",
-      "external_ids": {},
+      "last_updated": "2026-05-14",
+      "external_ids": {
+        "unii": "PVL385313S"
+      },
       "rxcui": null,
       "gsrs": {
         "substance_name": "Brassica oleracea acephala",
