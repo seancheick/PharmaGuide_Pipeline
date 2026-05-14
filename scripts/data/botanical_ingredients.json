@@ -14367,8 +14367,10 @@
       "cui_note": "No confirmed single UMLS concept for Ecklonia kurome; marine kelp species, tracked governed-null per protocol.",
       "notes": "Ecklonia kurome \u2014 brown algae / kelp species. Used in whole-food greens blends + marine extracts. Sources of iodine, fucoxanthin, phlorotannins.",
       "added_by": "sprint_d2.5",
-      "last_updated": "2026-04-20",
-      "external_ids": {},
+      "last_updated": "2026-05-14",
+      "external_ids": {
+        "unii": "802YF989GT"
+      },
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
