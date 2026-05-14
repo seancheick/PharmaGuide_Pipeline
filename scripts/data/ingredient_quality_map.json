@@ -62751,9 +62751,7 @@
       "research_status": "validated"
     },
     "category_enum": "probiotics",
-    "external_ids": {
-      "unii": "F1A0PSN10V"
-    },
+    "external_ids": {},
     "rxcui_note": "Lactococcus lactis NCBI taxid 1358; no specific RxNorm concept",
     "aliases": []
   },
