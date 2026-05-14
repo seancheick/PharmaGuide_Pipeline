@@ -23812,10 +23812,11 @@
       "notes": "FDA GRAS anti-caking agent and tablet bulking agent. When listed in the Supplement Facts panel as an active calcium source, the active scoring path handles it via the IQM. This entry covers the excipient case only.",
       "external_ids": {
         "cas": "7758-87-4",
-        "pubchem_cid": "24456"
+        "pubchem_cid": "24456",
+        "unii": "K4C08XP666"
       },
       "allergen": false,
-      "last_updated": "2026-05-12",
+      "last_updated": "2026-05-14",
       "added_by": "unknown_role_quick_wins_2026_05_12"
     },
     {
