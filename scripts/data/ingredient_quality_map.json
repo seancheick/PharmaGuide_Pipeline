@@ -13559,12 +13559,12 @@
       "completeness": 1.0,
       "missing_fields": [],
       "review_status": "validated",
-      "last_reviewed_at": "2026-02-27",
+      "last_reviewed_at": "2026-05-14",
       "research_status": "validated"
     },
-    "external_ids": {
-      "unii": "89NA02M4RX"
-    },
+    "external_ids": {},
+    "cui_status": "governed_null",
+    "cui_note": "UNII 89NA02M4RX (PECTIN) removed 2026-05-14 — 'Prebiotics' is an ingredient CLASS covering inulin, FOS, GOS, pectin, beta-glucan, and other fermentable fibers. Pectin is one specific prebiotic; tagging the parent class with pectin's UNII would cause every prebiotic-disclosed product to UNII-match as pectin specifically. Individual prebiotic forms keep their own UNIIs in the forms[] sub-tree.",
     "aliases": []
   },
   "choline": {
@@ -37450,7 +37450,7 @@
       "vitamins": 17
     },
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-11",
+    "last_updated": "2026-05-14",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
