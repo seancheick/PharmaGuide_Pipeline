@@ -22,47 +22,52 @@ provenance before continuing.
 
 ## Test-suite issues tracked
 
-**Active at end of Sprint 1.1:** 1 collection error (entry #4). Origin:
-pre-dates Sprint 1 (Python 3.9 syntax mismatch on the test harness).
+**Active at end of Sprint 1.1:** 0 — all entries resolved.
 
-**Resolved during Sprint 1.1:** 5 failing tests — entries #1, #2, #3
+**Resolved during Sprint 1.1:** 6 entries total — entries #1, #2, #3
 (strict-validator phrasing on the 2026-05-13 banned_recalled +
 manufacturer_violations sweeps, resolved 2026-05-14 by Dr Pham
-reauthoring pass) plus entries #5, #6 (IQM Sprint 2-prep rollback).
+reauthoring pass), entries #5, #6 (IQM Sprint 2-prep rollback), and
+entry #4 (Python 3.9 `int | None` syntax in
+`test_form_sensitive_nutrient_gate.py`, resolved 2026-05-14 by rewriting
+the annotation to `Optional[int]`).
 
-**Latest broader-suite count after the 2026-05-14 reauthoring:** all
+**Latest broader-suite count after the 2026-05-14 work:** all
 strict-validator tests green (`test_safety_copy_production` 4/4 +
-`test_validate_safety_copy` 55/55) and `test_safety_copy_contract`
-suite green. The only remaining test-suite-collection issue is the
-Python 3.9 syntax problem in `test_form_sensitive_nutrient_gate.py`.
+`test_validate_safety_copy` 55/55), `test_safety_copy_contract` suite
+green, and `test_form_sensitive_nutrient_gate.py` now collects and
+passes all 23 tests on Python 3.9.
 
-## Active issues (1 — collection error only)
+## Active issues (0)
 
-### 4. `test_form_sensitive_nutrient_gate.py` (entire file — collection error, not a test failure)
+_None at this time._
+
+---
+
+## Recently resolved (kept for audit trail)
+
+### 4. `test_form_sensitive_nutrient_gate.py` (entire file — collection error) — RESOLVED 2026-05-14
 
 **Origin:** Pre-existing — fails on Python 3.9 (the harness's pyenv).
-File uses Python 3.10+ syntax `int | None` in a function annotation.
+File used Python 3.10+ syntax `int | None` at line 122 in the
+`_iter_blob_paths` function annotation.
 
 **Failure detail:**
 ```
 TypeError: unsupported operand type(s) for |: 'type' and 'NoneType'
 ```
-Affects test collection — the whole file is skipped. Doesn't affect
-other tests but means the file's gate is not enforced.
+Affected test collection — the whole file was skipped. The file's
+form-sensitive nutrient gate was not enforced as a result.
 
-**Why not blocking Sprint 1.1:** unrelated to UNII work; pre-existing
-runtime/syntax mismatch.
+**Resolved by:** Rewrote the annotation `limit: int | None = None` to
+`limit: Optional[int] = None` (the file already imported `Optional`
+from `typing` at line 25, so no new import was required). Confirmed
+under Python 3.9: file now collects 23 tests and all 23 pass.
 
-**Acceptance criterion to resolve:** Either (a) rewrite the offending
-type annotation to use `Optional[int]` from typing (Python 3.9 compat),
-or (b) bump CI / harness to Python 3.10+. Option (a) is the lower-risk
-fix.
-
-**ETA:** Next harness/CI maintenance touch.
+**Validation:** `python3 -m pytest scripts/tests/test_form_sensitive_nutrient_gate.py -v`
+→ `23 passed in 11.10s`.
 
 ---
-
-## Recently resolved (kept for audit trail)
 
 ### 1. `test_safety_copy_production.py::test_banned_recalled_production_strict` — RESOLVED 2026-05-14
 

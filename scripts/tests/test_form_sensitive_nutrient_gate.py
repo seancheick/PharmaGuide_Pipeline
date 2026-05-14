@@ -119,7 +119,7 @@ def _resolve_detail_blobs_dir() -> Optional[Path]:
 DETAIL_BLOBS_DIR = _resolve_detail_blobs_dir()
 
 
-def _iter_blob_paths(limit: int | None = None):
+def _iter_blob_paths(limit: Optional[int] = None):
     if DETAIL_BLOBS_DIR is None:
         return
     for i, path in enumerate(sorted(DETAIL_BLOBS_DIR.iterdir())):
