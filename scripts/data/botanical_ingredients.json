@@ -14316,10 +14316,8 @@
       "category": "botanical",
       "notes": "Lima Bean (Phaseolus lunatus) \u2014 edible legume used in whole-food supplement blends for plant protein + fiber.",
       "added_by": "sprint_d2.5",
-      "last_updated": "2026-05-14",
-      "external_ids": {
-        "unii": "112YH1ZMX2"
-      },
+      "last_updated": "2026-04-20",
+      "external_ids": {},
       "cui_status": "no_confirmed_umls_match",
       "cui_note": "No confirmed single UMLS concept for Phaseolus lunatus at supplement-ingredient level; track governed-null per protocol.",
       "functional_roles": [],
