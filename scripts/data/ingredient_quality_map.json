@@ -16362,7 +16362,9 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "external_ids": {},
+    "external_ids": {
+      "unii": "4SR0Q8YD1X"
+    },
     "aliases": []
   },
   "l_tryptophan": {
