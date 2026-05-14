@@ -21455,16 +21455,16 @@
       "is_additive": true,
       "additive_type": "cellulose_filler",
       "allergen": false,
-      "notes": "Plant-derived cellulose used as a bulking agent, anti-caking agent, and texture enhancer. Provides dietary fiber and is physiologically inert. Commonly used in tablet and capsule manufacturing.",
+      "notes": "Plant-derived cellulose used as a bulking agent, anti-caking agent, and texture enhancer. Provides dietary fiber and is physiologically inert. Commonly used in tablet and capsule manufacturing. UNII OP1R32D61U (MICROCRYSTALLINE CELLULOSE) was removed 2026-05-14 — 'Vegetable Cellulose' is a generic descriptor covering MCC, powdered cellulose, hydroxypropyl methylcellulose, ethylcellulose, etc. FDA cache has NO generic 'cellulose' UNII, only specific forms. Specific cellulose forms (MCC, powdered, modified) keep their own UNIIs in dedicated entries.",
       "common_uses": [
         "filler",
         "bulking agent"
       ],
-      "last_updated": "2025-11-17",
-      "external_ids": {
-        "unii": "OP1R32D61U"
-      },
+      "last_updated": "2026-05-14",
+      "external_ids": {},
       "cui": "C5964383",
+      "cui_status": "governed_null",
+      "cui_note": "UNII intentionally omitted — generic 'Vegetable Cellulose' is a class of plant-derived cellulose products (MCC, powdered cellulose, HPMC, ethylcellulose, etc.). FDA cache contains no generic-cellulose UNII; only form-specific UNIIs exist. Tagging the generic with MCC's UNII would mis-anchor every label-disclosed vegetable cellulose to MCC specifically.",
       "functional_roles": [
         "filler"
       ]
