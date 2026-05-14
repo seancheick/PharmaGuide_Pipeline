@@ -58621,8 +58621,7 @@
       "last_reviewed_at": "2026-03-16",
       "research_status": "validated"
     },
-    "cui_status": "governed_null",
-    "cui_note": "UNII 8617Z5FMF6 (WHEY) removed 2026-05-14 — Milk Basic Protein (MBP) is a distinct fraction of basic isoelectric milk proteins (lactoferrin, lactoperoxidase, etc.), NOT whey protein. Stale GSRS metadata that claimed MBP was 'substance_name: WHEY' was incorrect and removed in the same commit. FDA cache contains no discrete UNII for 'Milk Basic Protein'. Per user direction: govern-null rather than blindly assign a nearby protein UNII. If a specific MBP fraction (e.g., lactoferrin alone) needs scoring later, model it as its own entry with the correct per-fraction UNII (lactoferrin = KG21X1090A bovine, 8SIZ47YNP2 human, etc.).",
+    "cui_status": "no_confirmed_umls_match",
     "external_ids": {},
     "aliases": []
   },
