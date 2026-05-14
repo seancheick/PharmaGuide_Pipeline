@@ -15,11 +15,12 @@ generated `2026-05-14T09:29:08Z`, catalog `product_count=8414`,
 | Bucket                                  | 2026-05-13 baseline | 2026-05-14 current | Status                  |
 | --------------------------------------- | ------------------- | ------------------ | ----------------------- |
 | **1. NOT_SCORED products**              | 128                 | **42**             | Still active (67% drop) |
-| **2. Filter regression (inactives)**    | 19                  | **2**              | Still active (89% drop) |
+| **2. Filter regression (inactives)**    | 19                  | **0** (next build) | ✅ **CLOSED 2026-05-14** |
 | **3. Cleaner classifier (actives→inactive)** | 17             | **0**              | ✅ **CLOSED**           |
 | **4. Duplicate-warnings test**          | failing             | **passing**        | ✅ **CLOSED**           |
 
-`excluded_by_gate` total: 164 → 44 (73% reduction).
+`excluded_by_gate` total: 164 → 42 (74% reduction; Bucket 2's
+remaining 2 entries will clear on the next pipeline rebuild).
 
 ### What's still open
 
@@ -29,13 +30,26 @@ Identical signature suggests a single root cause likely covers most/all
 of them; first action remains "sample one representative dsld_id and
 trace through the scoring pipeline to find where it bails."
 
-**Bucket 2 — 2 inactives-dropped:** affected dsld_ids are `327403` and
-`329092`, both single-inactive drops. Same
-`enhanced_normalizer._process_other_ingredients_enhanced` filter-too-
-aggressive root cause as the original 19 — investigation playbook in
-Bucket 2 below is still valid.
-
 ### What's closed
+
+**Bucket 2 — filter regression (inactives) [CLOSED 2026-05-14]:** Root
+cause traced to the validator/blob-emitter contract mismatch introduced
+by Phase 4a (2026-04-30). Phase 4a added intentional drops of
+`is_label_descriptor=True` / `is_active_only=True` resolver outputs
+from the blob's `inactive_ingredients[]` array, but the
+`_validate_inactive_preservation` invariant kept using the cleaner's
+pre-resolver `raw_inactives_count`. Result: products where the ONLY raw
+inactive was a legitimate source descriptor (e.g., Garden of Life MCT
+Oil 327403/329092 → "Coconut" → `PII_COCONUT_SOURCE_DESCRIPTOR`,
+`is_label_descriptor=True`) raised "filter regression" and got excluded.
+
+Fix: added `intentional_drops` parameter to
+`_validate_inactive_preservation`; build's emission loop counts entries
+dropped by the Phase 4a filter and passes the count. Effective raw
+inactive count = raw_inactives_count - intentional_drops. The 2
+remaining cases (327403, 329092) will rejoin the build on the next
+pipeline rebuild. 5 new regression tests pin the new contract
+(test_inactive_ingredient_preservation.py).
 
 **Bucket 3 — cleaner classifier:** `excluded_by_gate` shows 0
 `DROPPED_AS_INACTIVE` errors and 0 `all raw actives reclassified` errors
@@ -49,12 +63,8 @@ either way the contract is consistent now).
 
 ### Recommended next move
 
-When picking this back up: focus on Bucket 1 (42 entries with identical
-signature — highest-yield investigation) followed by Bucket 2's 2
-residuals. Buckets 3 and 4 can be closed in the doc with a brief
-"closed in commit X" notation when the next pipeline release ships.
-The original investigation principles below (no fast patches, trace
-ALL representatives, etc.) all still apply.
+Bucket 1 is the only active investigation now. The 42 NOT_SCORED entries
+share an identical signature — highest-yield single-trace target.
 
 ---
 

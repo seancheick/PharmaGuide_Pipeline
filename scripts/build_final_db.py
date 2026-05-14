@@ -1885,11 +1885,22 @@ _NONE_PLACEHOLDER_NAMES = {"none", "n/a", "na", ""}
 
 
 def _validate_inactive_preservation(
-    blob: Dict[str, Any], raw_inactives_count: int, dsld_id: str
+    blob: Dict[str, Any],
+    raw_inactives_count: int,
+    dsld_id: str,
+    intentional_drops: int = 0,
 ) -> None:
     """Raise ``ValueError`` if raw DSLD had ≥1 real inactive but the
     blob emits an empty inactive_ingredients list. Also enforces: the
-    literal "None" placeholder must never leak into a blob entry."""
+    literal "None" placeholder must never leak into a blob entry.
+
+    ``intentional_drops`` accounts for the Phase 4a filter that
+    intentionally drops `is_label_descriptor=True` / `is_active_only=True`
+    entries during blob construction (e.g., "Coconut" source-descriptor
+    on an MCT-oil product). These drops are policy, not a filter
+    regression — they subtract from the effective raw count before the
+    preservation invariant is checked. Source: bucket 2 closure 2026-05-14.
+    """
     blob_inactives = blob.get("inactive_ingredients") or []
 
     # Hard stop: literal "None" placeholder leak.
@@ -1905,10 +1916,13 @@ def _validate_inactive_preservation(
             )
 
     # Preservation invariant (contract test E1.0.1 #7).
-    if raw_inactives_count > 0 and len(blob_inactives) == 0:
+    effective_raw_inactives = raw_inactives_count - intentional_drops
+    if effective_raw_inactives > 0 and len(blob_inactives) == 0:
         raise ValueError(
             f"[{dsld_id}] raw DSLD disclosed {raw_inactives_count} real "
-            f"inactive(s) but blob emits 0. Filter regression — inspect "
+            f"inactive(s) ({intentional_drops} intentionally dropped as "
+            f"label_descriptor/active_only; {effective_raw_inactives} "
+            f"net) but blob emits 0. Filter regression — inspect "
             f"enhanced_normalizer._process_other_ingredients_enhanced "
             f"(Sprint E1.2.4)."
         )
@@ -2894,6 +2908,14 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # the full architectural rationale.
     inactive_resolver = _get_shared_inactive_resolver()
     inactive = []
+    # Sprint E1.2.4 reconciliation (2026-05-14):
+    # Count entries that were intentionally dropped here via the Phase 4a
+    # label-descriptor / active-only filter. The downstream validator
+    # `_validate_inactive_preservation` subtracts this from
+    # raw_inactives_count so that "1 raw inactive → 0 blob inactives"
+    # doesn't fire as a regression when the only raw inactive was a
+    # source descriptor (e.g., "Coconut" for an MCT oil product).
+    intentional_inactive_drops = 0
     for ing in safe_list(enriched.get("inactiveIngredients")):
         if not isinstance(ing, dict):
             continue
@@ -2916,6 +2938,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         # relocate to the active-ingredient pipeline in V1.1. Either way,
         # do not render as inactive chips.
         if res.is_label_descriptor or res.is_active_only:
+            intentional_inactive_drops += 1
             continue
 
         inactive.append({
@@ -3831,7 +3854,16 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     # Sprint E1.2.4 — raw-inactive preservation invariant.
     raw_inactives_count = int(enriched.get("raw_inactives_count") or 0)
     blob["raw_inactives_count"] = raw_inactives_count
-    _validate_inactive_preservation(blob, raw_inactives_count, dsld_id_for_validation)
+    # 2026-05-14 — pass intentional Phase 4a drops so the invariant
+    # doesn't fire on products where the only raw inactive was a
+    # legitimate source-descriptor (e.g., "Coconut" on an MCT oil
+    # product). See bucket 2 closure for full rationale.
+    _validate_inactive_preservation(
+        blob,
+        raw_inactives_count,
+        dsld_id_for_validation,
+        intentional_drops=intentional_inactive_drops,
+    )
 
     # Sprint E1.2.5 — active-count reconciliation + reason codes.
     raw_actives_count = int(enriched.get("raw_actives_count") or 0)

@@ -192,3 +192,77 @@ def test_normalizer_counts_real_inactives_excluding_none() -> None:
     }
     cleaned = normalizer.normalize_product(raw_mixed)
     assert cleaned.get("raw_inactives_count") == 2
+
+
+# ---------------------------------------------------------------------------
+# 2026-05-14 — Phase 4a intentional_drops reconciliation
+# ---------------------------------------------------------------------------
+# Background: build_final_db's inactive-emission loop drops entries where
+# the resolver returns is_label_descriptor=True or is_active_only=True
+# (Phase 4a, 2026-04-30). For products where the ONLY raw inactive is
+# such an entry (e.g., Garden of Life MCT Oil → "Coconut" source
+# descriptor), the validator used to fire spuriously: raw_inactives_count=1
+# but blob_inactives=0. Bucket 2 closure (handoff doc) added the
+# `intentional_drops` parameter so the validator subtracts these
+# legitimate drops before checking the preservation invariant.
+
+def test_validator_silent_when_only_intentional_drops_explain_empty_blob() -> None:
+    """The Garden of Life MCT Oil case (dsld 327403/329092):
+    1 raw inactive ("Coconut") got dropped because the resolver flagged
+    it as is_label_descriptor=True (Coconut is a source descriptor for
+    the MCT, which IS the product's active). Validator must accept this."""
+    blob = {"inactive_ingredients": []}
+    # No raise expected — the one raw inactive was an intentional drop.
+    _validate_inactive_preservation(
+        blob, raw_inactives_count=1, dsld_id="DSLD-MCT-OIL",
+        intentional_drops=1,
+    )
+
+
+def test_validator_still_raises_when_some_drops_are_intentional_but_others_lost() -> None:
+    """If 3 raw inactives, only 1 is an intentional drop, and the blob is
+    empty, that's still a regression (2 entries got lost somewhere)."""
+    blob = {"inactive_ingredients": []}
+    with pytest.raises(ValueError, match="Filter regression"):
+        _validate_inactive_preservation(
+            blob, raw_inactives_count=3, dsld_id="DSLD-PARTIAL-LOSS",
+            intentional_drops=1,
+        )
+
+
+def test_validator_error_message_reports_intentional_drops() -> None:
+    """The error message includes the intentional_drops count so future
+    debuggers can see at a glance how many were legitimately filtered
+    versus how many disappeared unexplained."""
+    blob = {"inactive_ingredients": []}
+    with pytest.raises(ValueError) as ei:
+        _validate_inactive_preservation(
+            blob, raw_inactives_count=2, dsld_id="DSLD-DEBUG",
+            intentional_drops=0,
+        )
+    # Original "filter regression" message preserved
+    assert "Filter regression" in str(ei.value)
+    # New: count details visible
+    assert "2 real" in str(ei.value)
+    assert "0 intentionally dropped" in str(ei.value)
+    assert "2 net" in str(ei.value)
+
+
+def test_validator_default_intentional_drops_is_zero_for_back_compat() -> None:
+    """Old call sites that don't pass intentional_drops must behave
+    exactly as before — defaulting to 0 means the invariant is unchanged."""
+    blob = {"inactive_ingredients": []}
+    with pytest.raises(ValueError, match="Filter regression"):
+        # Note: no intentional_drops kwarg — relies on default
+        _validate_inactive_preservation(blob, 1, "DSLD-LEGACY-CALL")
+
+
+def test_validator_silent_when_intentional_drops_exceed_raw_count() -> None:
+    """Edge case: if for some reason intentional_drops > raw_count
+    (shouldn't happen with correct accounting, but defensive),
+    the validator must not raise — empty blob is still acceptable."""
+    blob = {"inactive_ingredients": []}
+    _validate_inactive_preservation(
+        blob, raw_inactives_count=1, dsld_id="DSLD-OVER-COUNT",
+        intentional_drops=2,
+    )
