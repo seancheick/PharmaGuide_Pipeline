@@ -19259,8 +19259,6 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "cui_status": "governed_null",
-    "cui_note": "UNII 2G86QN327L removed 2026-05-14 — that UNII is FDA's identifier for GELATIN (denatured collagen), not native collagen. FDA cache has no generic 'collagen' UNII; only source-specific UNIIs exist (BOVINE TYPE I COLLAGEN FHJ3ATL51C, MARINE COLLAGEN, SOLUBLE 8JC99XGU4W, HUMAN TYPE I COLLAGEN PT3TGI7OIP, etc.). Per user direction, govern-null the parent rather than blindly assign a nearby protein UNII. Specific collagen forms in the forms[] sub-tree carry their own UNIIs.",
     "aliases": [
       "C0017237"
     ]
