@@ -1,0 +1,890 @@
+{
+  "audit_date": "2026-05-14",
+  "audit_title": "V054/V055 CRI_UNDRUG \u2192 CRI_ANABOLIC Reclassification",
+  "rationale": "Phase 1 (commit 4321137) introduced CRI_ANABOLIC (-18) as a more specific code for Class I recalls involving anabolic steroids and SARMs. The original 37 CRI_UNDRUG entries were left untouched to keep that commit additive. This audit scanned all 37 occurrences and found exactly 2 that warrant reclassification:\n  V054 (Warrior Labz SARMS) \u2014 explicit SARMs distribution + ED-drug spike; manufacturer name itself contains 'SARMS'\n  V055 (Modern Therapy) \u2014 criminal prosecution for conspiracy to distribute controlled anabolic steroids as supplements",
+  "scan_method": "Regex over reason/internal_note/contamination_type fields with explicit pattern lists for GLP-1, anabolic, and botanical-substitution markers.",
+  "reclassifications": [
+    {
+      "id": "V054",
+      "manufacturer": "Warrior Labz SARMS",
+      "old": {
+        "code": "CRI_UNDRUG",
+        "base": -15,
+        "total": -21.0
+      },
+      "new": {
+        "code": "CRI_ANABOLIC",
+        "base": -18,
+        "total": -24.0
+      },
+      "delta_total_deduction": -3.0,
+      "delta_final_score": -3.0
+    },
+    {
+      "id": "V055",
+      "manufacturer": "Modern Therapy",
+      "old": {
+        "code": "CRI_UNDRUG",
+        "base": -15,
+        "total": -3.75
+      },
+      "new": {
+        "code": "CRI_ANABOLIC",
+        "base": -18,
+        "total": -4.5
+      },
+      "delta_total_deduction": -0.75,
+      "delta_final_score": -0.75
+    }
+  ],
+  "band_distribution": {
+    "before": {
+      "Acceptable": 37,
+      "Concerning": 2,
+      "Trusted": 42
+    },
+    "after": {
+      "Acceptable": 37,
+      "Concerning": 2,
+      "Trusted": 42
+    },
+    "unchanged": true
+  },
+  "band_movers": [],
+  "score_movers_same_band": [
+    {
+      "manufacturer_id": "mfg_moderntherapy",
+      "manufacturer_name": "Modern Therapy",
+      "violation_count": 1,
+      "score_before": 96.25,
+      "band_before": "Trusted",
+      "score_after": 95.5,
+      "band_after": "Trusted",
+      "delta": -0.75
+    },
+    {
+      "manufacturer_id": "mfg_warriorlabz",
+      "manufacturer_name": "Warrior Labz SARMS",
+      "violation_count": 1,
+      "score_before": 79.0,
+      "band_before": "Acceptable",
+      "score_after": 76.0,
+      "band_after": "Acceptable",
+      "delta": -3.0
+    }
+  ],
+  "verdict": "PASS \u2014 0 band-crossings. 2 same-band score deltas, exactly matching the reclassified entries (-3.0 for V054, -0.75 for V055). No collateral impact on other 79 manufacturers.",
+  "manufacturer_count": 81,
+  "full_table": [
+    {
+      "manufacturer_id": "agebox",
+      "manufacturer_name": "Agebox",
+      "violation_count": 2,
+      "score_before": 75.0,
+      "band_before": "Acceptable",
+      "score_after": 75.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "ambrosiabrandsllc",
+      "manufacturer_name": "Ambrosia Brands LLC",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "amnealpharmaceuticalsllc",
+      "manufacturer_name": "Amneal Pharmaceuticals, LLC",
+      "violation_count": 1,
+      "score_before": 87.0,
+      "band_before": "Acceptable",
+      "score_after": 87.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "anthonytrinh123herbalsllc",
+      "manufacturer_name": "ANTHONY TRINH, 123Herbals LLC",
+      "violation_count": 1,
+      "score_before": 77.0,
+      "band_before": "Acceptable",
+      "score_after": 77.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "aphresellerbuyherbalcom",
+      "manufacturer_name": "Aphreseller (Buy-herbal.com)",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "appcopharmallc",
+      "manufacturer_name": "Appco Pharma LLC",
+      "violation_count": 3,
+      "score_before": 75.0,
+      "band_before": "Acceptable",
+      "score_after": 75.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "cardinalhealth200llc",
+      "manufacturer_name": "Cardinal Health 200, LLC",
+      "violation_count": 1,
+      "score_before": 85.0,
+      "band_before": "Acceptable",
+      "score_after": 85.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "imutekanimalhealthincorporated",
+      "manufacturer_name": "Imu-Tek Animal Health, Incorporated",
+      "violation_count": 2,
+      "score_before": 75.0,
+      "band_before": "Acceptable",
+      "score_after": 75.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_123herbals",
+      "manufacturer_name": "123Herbals LLC",
+      "violation_count": 2,
+      "score_before": 65.5,
+      "band_before": "Concerning",
+      "score_after": 65.5,
+      "band_after": "Concerning",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_abcsales",
+      "manufacturer_name": "ABC Sales 1 Inc.",
+      "violation_count": 1,
+      "score_before": 96.25,
+      "band_before": "Trusted",
+      "score_after": 96.25,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_akkarco",
+      "manufacturer_name": "Akkarco LLC",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_antilage",
+      "manufacturer_name": "Anti L'Age",
+      "violation_count": 1,
+      "score_before": 93.0,
+      "band_before": "Trusted",
+      "score_after": 93.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_backstage",
+      "manufacturer_name": "Backstage Center",
+      "violation_count": 1,
+      "score_before": 90.0,
+      "band_before": "Trusted",
+      "score_after": 90.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_botanicalbe",
+      "manufacturer_name": "Botanical-Be",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_boulla",
+      "manufacturer_name": "Boulla LLC",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_buyherbal",
+      "manufacturer_name": "buy-herbal.com",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_cana",
+      "manufacturer_name": "C&A Naturistics",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_celebratetoday",
+      "manufacturer_name": "Celebrate Today",
+      "violation_count": 1,
+      "score_before": 96.25,
+      "band_before": "Trusted",
+      "score_after": 96.25,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_dorado",
+      "manufacturer_name": "Dorado Nutrition",
+      "violation_count": 1,
+      "score_before": 94.0,
+      "band_before": "Trusted",
+      "score_after": 94.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_esupplementsales",
+      "manufacturer_name": "Esupplementsales, LLC",
+      "violation_count": 1,
+      "score_before": 96.25,
+      "band_before": "Trusted",
+      "score_after": 96.25,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_formtech",
+      "manufacturer_name": "Formulation Technology, Inc.",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_gearisle",
+      "manufacturer_name": "Gadget Island, Inc. DBA Gear Isle",
+      "violation_count": 1,
+      "score_before": 95.5,
+      "band_before": "Trusted",
+      "score_after": 95.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_genepro",
+      "manufacturer_name": "Genepro",
+      "violation_count": 1,
+      "score_before": 85.0,
+      "band_before": "Acceptable",
+      "score_after": 85.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_globalmix",
+      "manufacturer_name": "Global Mix, Inc.",
+      "violation_count": 1,
+      "score_before": 88.5,
+      "band_before": "Acceptable",
+      "score_after": 88.5,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_gnmart",
+      "manufacturer_name": "GNMART Inc",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_goldstar",
+      "manufacturer_name": "Gold Star Distribution Inc.",
+      "violation_count": 1,
+      "score_before": 79.0,
+      "band_before": "Acceptable",
+      "score_after": 79.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_goli",
+      "manufacturer_name": "Goli Nutrition Inc.",
+      "violation_count": 1,
+      "score_before": 98.5,
+      "band_before": "Trusted",
+      "score_after": 98.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_greenlumber",
+      "manufacturer_name": "Green Lumber Holding LLC",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_guru",
+      "manufacturer_name": "Guru Inc.",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_handelnine",
+      "manufacturer_name": "Handelnine Global Limited (Navafresh)",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_healthfixer",
+      "manufacturer_name": "Health Fixer",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_herbalvit",
+      "manufacturer_name": "Herbal Vitality, Inc.",
+      "violation_count": 1,
+      "score_before": 95.5,
+      "band_before": "Trusted",
+      "score_after": 95.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_herbsforever",
+      "manufacturer_name": "HerbsForever LLC",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_hydroxie",
+      "manufacturer_name": "Hydroxie LLC",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_jarrow",
+      "manufacturer_name": "Jarrow Formulas, Inc.",
+      "violation_count": 1,
+      "score_before": 97.5,
+      "band_before": "Trusted",
+      "score_after": 97.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_kiriko",
+      "manufacturer_name": "Kiriko, LLC",
+      "violation_count": 1,
+      "score_before": 100.0,
+      "band_before": "Trusted",
+      "score_after": 100.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_liveitupsuperfoods",
+      "manufacturer_name": "Superfoods, Inc. (Live it Up)",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_luckyfoods",
+      "manufacturer_name": "Lucky Foods",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_medinatura",
+      "manufacturer_name": "MediNatura New Mexico Inc.",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_moderntherapy",
+      "manufacturer_name": "Modern Therapy",
+      "violation_count": 1,
+      "score_before": 96.25,
+      "band_before": "Trusted",
+      "score_after": 95.5,
+      "band_after": "Trusted",
+      "delta": -0.75
+    },
+    {
+      "manufacturer_id": "mfg_modernwarrior",
+      "manufacturer_name": "Modern Warrior",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_mom",
+      "manufacturer_name": "M.O.M. Enterprises, LLC",
+      "violation_count": 1,
+      "score_before": 92.5,
+      "band_before": "Trusted",
+      "score_after": 92.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_motivate",
+      "manufacturer_name": "Motivate Me Ashley, LLC",
+      "violation_count": 1,
+      "score_before": 88.5,
+      "band_before": "Acceptable",
+      "score_after": 88.5,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_mxbbb",
+      "manufacturer_name": "MXBBB",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_naturaldior",
+      "manufacturer_name": "Natural Dior LLC",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_naturesway",
+      "manufacturer_name": "Nature's Way Products, LLC",
+      "violation_count": 1,
+      "score_before": 93.5,
+      "band_before": "Trusted",
+      "score_after": 93.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_neptune",
+      "manufacturer_name": "Neptune Resources, LLC",
+      "violation_count": 1,
+      "score_before": 87.0,
+      "band_before": "Acceptable",
+      "score_after": 87.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_niacinproducts",
+      "manufacturer_name": "Niacin Products",
+      "violation_count": 1,
+      "score_before": 87.0,
+      "band_before": "Acceptable",
+      "score_after": 87.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_now",
+      "manufacturer_name": "NOW Health Group, Inc.",
+      "violation_count": 1,
+      "score_before": 100.0,
+      "band_before": "Trusted",
+      "score_after": 100.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_onesourcenutrition",
+      "manufacturer_name": "One Source Nutrition",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_pennherb",
+      "manufacturer_name": "Penn Herb Company Ltd",
+      "violation_count": 1,
+      "score_before": 95.0,
+      "band_before": "Trusted",
+      "score_after": 95.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_prophet",
+      "manufacturer_name": "Prophet Premium Blends",
+      "violation_count": 1,
+      "score_before": 88.5,
+      "band_before": "Acceptable",
+      "score_after": 88.5,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_purity",
+      "manufacturer_name": "Purity Products",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_quality",
+      "manufacturer_name": "Quality Supplement Manufacturing, Inc.",
+      "violation_count": 1,
+      "score_before": 97.0,
+      "band_before": "Trusted",
+      "score_after": 97.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_restorative",
+      "manufacturer_name": "Restorative Botanicals, LLC",
+      "violation_count": 1,
+      "score_before": 92.5,
+      "band_before": "Trusted",
+      "score_after": 92.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_shoppers",
+      "manufacturer_name": "Shoppers-Plaza",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_siluetaya",
+      "manufacturer_name": "SiluetaYa",
+      "violation_count": 1,
+      "score_before": 77.0,
+      "band_before": "Acceptable",
+      "score_after": 77.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_stopclopez",
+      "manufacturer_name": "Stop Clopez Corp",
+      "violation_count": 1,
+      "score_before": 90.0,
+      "band_before": "Trusted",
+      "score_after": 90.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_stuffbynainax",
+      "manufacturer_name": "StuffbyNainax LLC",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_superchill",
+      "manufacturer_name": "Super Chill Products",
+      "violation_count": 1,
+      "score_before": 88.5,
+      "band_before": "Acceptable",
+      "score_after": 88.5,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_supercore",
+      "manufacturer_name": "Supercore Products Group",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_todaytheworld",
+      "manufacturer_name": "Today The World",
+      "violation_count": 1,
+      "score_before": 90.0,
+      "band_before": "Trusted",
+      "score_after": 90.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_tophealth",
+      "manufacturer_name": "Top Health Manufacturing, LLC",
+      "violation_count": 1,
+      "score_before": 92.5,
+      "band_before": "Trusted",
+      "score_after": 92.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_txsyn",
+      "manufacturer_name": "Txsyn Int. LLC",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_usaless",
+      "manufacturer_name": "USA LESS Co.",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_usplabs",
+      "manufacturer_name": "USPLabs LLC / S.K. Laboratories Inc.",
+      "violation_count": 1,
+      "score_before": 90.0,
+      "band_before": "Trusted",
+      "score_after": 90.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_vitacost",
+      "manufacturer_name": "Vitacost.com, Inc.",
+      "violation_count": 1,
+      "score_before": 93.5,
+      "band_before": "Trusted",
+      "score_after": 93.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_vitality",
+      "manufacturer_name": "VitalityVita",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_voltcandy",
+      "manufacturer_name": "Tager Online, Inc. DBA Volt Candy",
+      "violation_count": 1,
+      "score_before": 96.25,
+      "band_before": "Trusted",
+      "score_after": 96.25,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_warriorlabz",
+      "manufacturer_name": "Warrior Labz SARMS",
+      "violation_count": 1,
+      "score_before": 79.0,
+      "band_before": "Acceptable",
+      "score_after": 76.0,
+      "band_after": "Acceptable",
+      "delta": -3.0
+    },
+    {
+      "manufacturer_id": "mfg_western",
+      "manufacturer_name": "Western Innovations, Inc.",
+      "violation_count": 1,
+      "score_before": 92.5,
+      "band_before": "Trusted",
+      "score_after": 92.5,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_worldgreen",
+      "manufacturer_name": "World Green Nutrition, Inc.",
+      "violation_count": 1,
+      "score_before": 90.0,
+      "band_before": "Trusted",
+      "score_after": 90.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mfg_zaarahherbals",
+      "manufacturer_name": "New York Wholesale Group (Zaarah Herbals)",
+      "violation_count": 1,
+      "score_before": 91.0,
+      "band_before": "Trusted",
+      "score_after": 91.0,
+      "band_after": "Trusted",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "mohamedhagar",
+      "manufacturer_name": "Mohamed Hagar",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "purevitaminsandnaturalsupplementsllc",
+      "manufacturer_name": "Pure Vitamins and Natural Supplements, LLC",
+      "violation_count": 3,
+      "score_before": 50.0,
+      "band_before": "Concerning",
+      "score_after": 50.0,
+      "band_after": "Concerning",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "siluetayallc",
+      "manufacturer_name": "Siluetaya, LLC",
+      "violation_count": 1,
+      "score_before": 77.0,
+      "band_before": "Acceptable",
+      "score_after": 77.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "stridespharmainc",
+      "manufacturer_name": "STRIDES PHARMA INC",
+      "violation_count": 1,
+      "score_before": 87.0,
+      "band_before": "Acceptable",
+      "score_after": 87.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "stuffbynainax",
+      "manufacturer_name": "StuffbyNainax",
+      "violation_count": 1,
+      "score_before": 82.0,
+      "band_before": "Acceptable",
+      "score_after": 82.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "tgfoodsinc",
+      "manufacturer_name": "TG FOODS INC",
+      "violation_count": 1,
+      "score_before": 87.0,
+      "band_before": "Acceptable",
+      "score_after": 87.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "tkscopackmanufacturingllc",
+      "manufacturer_name": "TKS Co-pack Manufacturing, LLC",
+      "violation_count": 2,
+      "score_before": 75.0,
+      "band_before": "Acceptable",
+      "score_after": 75.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    },
+    {
+      "manufacturer_id": "winderlaboratoriesllc",
+      "manufacturer_name": "Winder Laboratories, LLC",
+      "violation_count": 1,
+      "score_before": 87.0,
+      "band_before": "Acceptable",
+      "score_after": 87.0,
+      "band_after": "Acceptable",
+      "delta": 0.0
+    }
+  ]
+}
