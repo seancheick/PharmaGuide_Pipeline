@@ -23780,9 +23780,11 @@
         "natural source of vitamin C (when used as filler / colorant rather than standardized active ingredient)"
       ],
       "notes": "Rose Hips powder appearing in inactiveIngredients[] is used as a natural filler or mild colorant. When standardized for vitamin C and listed in the Supplement Facts, the active scoring path handles it via the IQM. This entry covers the excipient case only.",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "3TNW8D08V3"
+      },
       "allergen": null,
-      "last_updated": "2026-05-12",
+      "last_updated": "2026-05-14",
       "added_by": "inactive_ingredient_resolver_2026_05_12"
     },
     {
