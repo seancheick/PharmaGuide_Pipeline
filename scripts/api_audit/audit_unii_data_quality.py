@@ -142,6 +142,22 @@ def load_fda_unii_cache(repo_root: Path) -> Tuple[Dict[str, str], Dict[str, str]
     return blob.get("name_to_unii", {}), blob.get("unii_to_name", {})
 
 
+def load_exoneration_allowlist(repo_root: Path) -> Dict[str, Dict[str, Any]]:
+    """Load scripts/data/unii_exoneration_allowlist.json into {UNII → entry}.
+    Returns empty dict if the file doesn't exist (allowlist is optional —
+    the test suite enforces its existence and contract independently)."""
+    path = repo_root / "scripts/data/unii_exoneration_allowlist.json"
+    if not path.exists():
+        return {}
+    with open(path, encoding="utf-8") as f:
+        blob = json.load(f)
+    return {
+        entry["unii"].strip().upper(): entry
+        for entry in blob.get("exonerations", [])
+        if isinstance(entry, dict) and entry.get("unii")
+    }
+
+
 def build_unii_to_fda_names(name_to_unii: Dict[str, str]) -> Dict[str, set]:
     """Inverse the name_to_unii map: UNII → set of all FDA names that resolve
     to it. Used to check if an entry's names match the FDA's known synonyms
@@ -219,6 +235,7 @@ def find_duplicate_unii_cross_file(
 def find_same_unii_different_names(
     entries: List[Tuple[str, str, Dict]],
     unii_to_fda_names: Optional[Dict[str, set]] = None,
+    exoneration_allowlist: Optional[Dict[str, Dict[str, Any]]] = None,
 ) -> Dict[str, Dict[str, Any]]:
     """Returns {unii: {locations, severity, exoneration}} for UNIIs that
     map to entries with materially different `standard_name`s.
@@ -229,15 +246,17 @@ def find_same_unii_different_names(
         b) FDA cache confirms at least 2 of the entry names are in the UNII's
            known FDA synonym set
         c) Entries share a UMLS CUI (same compound by clinical authority)
+        d) Explicit exoneration allowlist entry (scripts/data/unii_exoneration_allowlist.json)
 
     Output shape per UNII:
       {
         "locations": [(file, entry_id, standard_name, cui), ...],
-        "severity": "critical" | "review",
-        "exoneration": list of strings explaining why severity is 'review',
+        "severity": "critical" | "review" | "allowlist_exonerated",
+        "exoneration": list of strings explaining why severity is not 'critical',
       }
     """
     unii_to_fda_names = unii_to_fda_names or {}
+    exoneration_allowlist = exoneration_allowlist or {}
     by_unii: Dict[str, List[Tuple[str, str, str, Optional[str], Dict]]] = defaultdict(list)
     for file_label, eid, edict in entries:
         unii = _extract_entry_unii(edict)
@@ -289,7 +308,19 @@ def find_same_unii_different_names(
         if shared_cui:
             exoneration.append(f"All entries share UMLS CUI {list(cuis)[0]}")
 
-        severity = "review" if exoneration else "critical"
+        # Signal D: explicit allowlist (HIGHEST priority — overrides all others)
+        allowlist_entry = exoneration_allowlist.get(unii)
+        if allowlist_entry:
+            exoneration.append(
+                f"Allowlisted (unii_exoneration_allowlist.json): "
+                f"{allowlist_entry.get('rationale','(no rationale)')[:200]}"
+            )
+            severity = "allowlist_exonerated"
+        elif exoneration:
+            severity = "review"
+        else:
+            severity = "critical"
+
         flagged[unii] = {
             "locations": [(loc[0], loc[1], loc[2], loc[3]) for loc in locations],
             "severity": severity,
@@ -381,9 +412,10 @@ def render_report(
     """Render the markdown report."""
     now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     lines: List[str] = []
-    # Split same_unii_diff_names into critical and review buckets
+    # Split same_unii_diff_names into critical, review-exonerated, and allowlist-exonerated buckets
     critical_same_unii = {k: v for k, v in same_unii_diff_names.items() if v["severity"] == "critical"}
     review_same_unii = {k: v for k, v in same_unii_diff_names.items() if v["severity"] == "review"}
+    allowlist_same_unii = {k: v for k, v in same_unii_diff_names.items() if v["severity"] == "allowlist_exonerated"}
 
     lines.append("# UNII Data-Quality Audit Report")
     lines.append("")
@@ -399,6 +431,7 @@ def render_report(
     lines.append(f"| DUPLICATE_UNII_CROSS_FILE | {len(duplicate_cross_file)} | warn |")
     lines.append(f"| SAME_UNII_DIFFERENT_NAMES (critical) | {len(critical_same_unii)} | **critical** |")
     lines.append(f"| SAME_UNII_DIFFERENT_NAMES (exonerated by FDA/CUI) | {len(review_same_unii)} | review |")
+    lines.append(f"| SAME_UNII_DIFFERENT_NAMES (allowlist-exonerated) | {len(allowlist_same_unii)} | info |")
     lines.append(f"| SAME_NAME_DIFFERENT_UNIIS | {len(same_name_diff_uniis)} | review |")
     lines.append(f"| FDA_CACHE_NAME_MISMATCH | {len(fda_mismatches)} | review |")
     lines.append("")
@@ -470,6 +503,15 @@ def render_report(
         "priority order (banned > IQM > botanical > other) resolves correctly.",
         review_same_unii,
     )
+    _render_same_unii_diff_names_bucket(
+        "SAME_UNII_DIFFERENT_NAMES (allowlist-exonerated)",
+        "Same UNII across entries with different names, BUT the UNII is in the "
+        "explicit exoneration allowlist (`scripts/data/unii_exoneration_allowlist.json`). "
+        "Each allowlist entry carries rationale + FDA canonical name + regression "
+        "test coverage. These satisfy the pre-Sprint-1 blocker rule and do NOT "
+        "block Sprint 1 from shipping.",
+        allowlist_same_unii,
+    )
 
     _section_for_dict(
         "SAME_NAME_DIFFERENT_UNIIS",
@@ -532,9 +574,12 @@ def main() -> int:
     entries_with_unii = sum(1 for _, _, e in entries if _extract_entry_unii(e))
     name_to_unii, unii_to_name = load_fda_unii_cache(repo_root)
     unii_to_fda_names = build_unii_to_fda_names(name_to_unii)
+    exoneration_allowlist = load_exoneration_allowlist(repo_root)
 
     duplicate_cross_file = find_duplicate_unii_cross_file(entries)
-    same_unii_diff_names = find_same_unii_different_names(entries, unii_to_fda_names)
+    same_unii_diff_names = find_same_unii_different_names(
+        entries, unii_to_fda_names, exoneration_allowlist
+    )
     same_name_diff_uniis = find_same_name_different_uniis(entries)
     fda_mismatches = find_fda_cache_name_mismatches(entries, unii_to_name)
 
@@ -559,9 +604,13 @@ def main() -> int:
     review_count = sum(
         1 for info in same_unii_diff_names.values() if info["severity"] == "review"
     )
+    allowlist_count = sum(
+        1 for info in same_unii_diff_names.values() if info["severity"] == "allowlist_exonerated"
+    )
 
     print(
         f"Findings: {critical_count} critical, {review_count} review-exonerated, "
+        f"{allowlist_count} allowlist-exonerated, "
         f"{len(duplicate_cross_file)} cross-file duplicates, "
         f"{len(same_name_diff_uniis)} same-name-different-uniis, "
         f"{len(fda_mismatches)} fda cache mismatches.",
@@ -571,7 +620,7 @@ def main() -> int:
     if critical_count:
         print(
             f"CRITICAL: {critical_count} SAME_UNII_DIFFERENT_NAMES findings "
-            "with no FDA/CUI exoneration — fix BEFORE enabling UNII-first matching.",
+            "with no FDA/CUI/allowlist exoneration — fix BEFORE enabling UNII-first matching.",
             file=sys.stderr,
         )
         return 2
