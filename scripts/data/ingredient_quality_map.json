@@ -62842,7 +62842,9 @@
       "research_status": "validated"
     },
     "category_enum": "probiotics",
-    "external_ids": {},
+    "external_ids": {
+      "unii": "2DNC474OP6"
+    },
     "rxcui_note": "Lactobacillus jensenii NCBI taxid 109790; no specific RxNorm concept",
     "aliases": []
   },
