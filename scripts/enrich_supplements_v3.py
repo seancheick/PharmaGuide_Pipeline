@@ -119,7 +119,21 @@ from match_ledger import (
     METHOD_PATTERN,
     METHOD_CONTAINS,
     METHOD_FUZZY,
+    # Sprint 1.1 — cleaner-side match methods (UNII + alternateNames).
+    # When the cleaner sets `cleaner_match_method` on a cleaned-ingredient
+    # dict, the enricher's match_ledger uses one of these values instead
+    # of the default tier-mapped METHOD_EXACT etc.
+    METHOD_UNII_EXACT,
+    METHOD_UNII_FORM_EXACT,
+    METHOD_ALTERNATE_NAME,
 )
+
+# Sprint 1.1 — map cleaner-side match-method strings to match_ledger constants.
+_CLEANER_MATCH_METHOD_MAP = {
+    "unii_exact_match": METHOD_UNII_EXACT,
+    "unii_form_exact_match": METHOD_UNII_FORM_EXACT,
+    "alternate_name_match": METHOD_ALTERNATE_NAME,
+}
 
 
 # Sprint E1.3.2 — probiotic CFU adequacy helpers.
@@ -2582,6 +2596,11 @@ class SupplementEnricherV3:
                     # marker contributions even on non-scorable rows.
                     "canonical_id": ingredient.get("canonical_id"),
                     "canonical_source_db": ingredient.get("canonical_source_db"),
+                    # Sprint 1.1: preserve cleaner-side match method (UNII /
+                    # alternateNames) so the downstream ledger emission can
+                    # attribute correctly even on the skipped/recognized-
+                    # non-scorable path.
+                    "cleaner_match_method": ingredient.get("cleaner_match_method"),
                     "matched_form": None,
                     "matched_forms": [],
                     "extracted_forms": [],
@@ -4491,6 +4510,15 @@ class SupplementEnricherV3:
             entry["promotion_reason"] = promotion_reason
             entry["promotion_confidence"] = promotion_confidence
             entry["dose_present"] = dose_present
+
+        # Sprint 1.1: propagate cleaner-side match method (UNII / alternateNames)
+        # so the downstream match_ledger emission can attribute it correctly.
+        # When set on the input ingredient (by the cleaner), forward to the
+        # quality_entry that flows into ingredient_quality_data.ingredients[],
+        # which is what record_match / record_recognized_non_scorable read.
+        cm = ingredient.get("cleaner_match_method")
+        if cm:
+            entry["cleaner_match_method"] = cm
 
         return entry
 
@@ -13705,14 +13733,25 @@ class SupplementEnricherV3:
             normalized_key = ing.get("normalized_key") or norm_module.make_normalized_key(raw_text)
 
             if canonical_id:
-                # Map match_tier to method
-                method = METHOD_EXACT
-                if match_tier == "normalized":
-                    method = METHOD_NORMALIZED
-                elif match_tier == "pattern":
-                    method = METHOD_PATTERN
-                elif match_tier == "contains":
-                    method = METHOD_CONTAINS
+                # Sprint 1.1: cleaner-side UNII / alternateNames match overrides
+                # the default tier mapping. When the cleaner resolved this
+                # ingredient via Tier-0 UNII match or via alternateNames
+                # fallback, it stashed the method on `cleaner_match_method`.
+                # That attribution must reach the final match_ledger so audit
+                # tooling can prove WHY the match happened (UNII vs name).
+                cleaner_method_str = ing.get("cleaner_match_method")
+                cleaner_method = _CLEANER_MATCH_METHOD_MAP.get(cleaner_method_str)
+                if cleaner_method is not None:
+                    method = cleaner_method
+                else:
+                    # Map match_tier to method (original cleaner-name-based path)
+                    method = METHOD_EXACT
+                    if match_tier == "normalized":
+                        method = METHOD_NORMALIZED
+                    elif match_tier == "pattern":
+                        method = METHOD_PATTERN
+                    elif match_tier == "contains":
+                        method = METHOD_CONTAINS
 
                 ledger.record_match(
                     domain=DOMAIN_INGREDIENTS,
@@ -13737,6 +13776,10 @@ class SupplementEnricherV3:
                         normalized_key=normalized_key,
                     )
                 elif ing.get("recognized_non_scorable"):
+                    # Sprint 1.1: surface cleaner-side UNII/alternateNames
+                    # attribution even on the recognized-non-scorable path.
+                    _cm = ing.get("cleaner_match_method")
+                    cleaner_method = _CLEANER_MATCH_METHOD_MAP.get(_cm) if _cm else None
                     ledger.record_recognized_non_scorable(
                         domain=DOMAIN_INGREDIENTS,
                         raw_source_text=raw_text,
@@ -13746,6 +13789,7 @@ class SupplementEnricherV3:
                         canonical_id=ing.get("matched_entry_id"),
                         matched_to_name=ing.get("matched_entry_name") or std_name or raw_text,
                         normalized_key=normalized_key,
+                        cleaner_match_method=cleaner_method,
                     )
                 else:
                     # Unmapped scorable ingredient
@@ -13780,6 +13824,10 @@ class SupplementEnricherV3:
                         normalized_key=normalized_key,
                     )
                 else:
+                    # Sprint 1.1: surface cleaner-side UNII/alternateNames
+                    # attribution on the skipped/recognized path too.
+                    _cm = ing.get("cleaner_match_method")
+                    cleaner_method = _CLEANER_MATCH_METHOD_MAP.get(_cm) if _cm else None
                     ledger.record_recognized_non_scorable(
                         domain=DOMAIN_INGREDIENTS,
                         raw_source_text=raw_text,
@@ -13789,6 +13837,7 @@ class SupplementEnricherV3:
                         canonical_id=ing.get("recognized_entry_id") or ing.get("matched_entry_id"),
                         matched_to_name=recognized_entry_name,
                         normalized_key=normalized_key,
+                        cleaner_match_method=cleaner_method,
                     )
             else:
                 ledger.record_skipped(

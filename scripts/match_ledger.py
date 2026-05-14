@@ -50,6 +50,12 @@ METHOD_CONTAINS = "contains"
 METHOD_TOKEN_BOUNDED = "token_bounded"
 METHOD_FUZZY = "fuzzy"
 METHOD_MANUAL = "manual"
+# Sprint 1.1 (2026-05-14): UNII-anchored Tier-0 matching + alternateNames fallback.
+# These methods are set by the cleaner (enhanced_normalizer.py) and propagated
+# downstream via the cleaned-output `cleaner_match_method` field.
+METHOD_UNII_EXACT = "unii_exact_match"           # row's top-level uniiCode resolved
+METHOD_UNII_FORM_EXACT = "unii_form_exact_match"  # forms[*].uniiCode resolved
+METHOD_ALTERNATE_NAME = "alternate_name_match"    # primary name missed; alternateNames hit
 
 # =============================================================================
 # SCORING STATUS CONSTANTS
@@ -402,6 +408,7 @@ class MatchLedgerBuilder:
         canonical_id: Optional[str] = None,
         matched_to_name: Optional[str] = None,
         normalized_key: Optional[str] = None,
+        cleaner_match_method: Optional[str] = None,
     ) -> None:
         """
         Record a recognized but non-scorable item.
@@ -421,6 +428,12 @@ class MatchLedgerBuilder:
             recognition_source: Which database recognized it (e.g., "other_ingredients", "excipient_list")
             recognition_reason: Why it's non-scorable (e.g., "carrier_oil", "food_powder")
             normalized_key: Pre-computed normalized key
+            cleaner_match_method: Sprint 1.1 — when the cleaner resolved this
+                ingredient via UNII Tier-0 or alternateNames fallback, pass one
+                of METHOD_UNII_EXACT / METHOD_UNII_FORM_EXACT / METHOD_ALTERNATE_NAME.
+                When set, the ledger's `match_method` field carries this value
+                (HOW resolved) instead of the recognition_source (WHICH DB).
+                When None, falls back to legacy behavior (match_method = recognition_source).
         """
         if not normalized_key:
             normalized_key = norm_module.make_normalized_key(raw_source_text)
@@ -431,7 +444,11 @@ class MatchLedgerBuilder:
             raw_source_path=raw_source_path,
             normalized_key=normalized_key,
             canonical_id=canonical_id,
-            match_method=recognition_source,  # Reuse field to track source
+            # Sprint 1.1: prefer cleaner-side method (UNII/alternateNames) over
+            # legacy reuse of match_method-as-recognition-source. The
+            # recognition_source remains accessible via decision_reason context
+            # and the recognition_source field on the LedgerEntry below.
+            match_method=cleaner_match_method or recognition_source,
             confidence=1.0,  # High confidence we recognized it
             matched_to_name=matched_to_name,
             decision=DECISION_RECOGNIZED_NON_SCORABLE,

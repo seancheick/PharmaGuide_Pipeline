@@ -5069,6 +5069,12 @@ class EnhancedDSLDNormalizer:
             # CANONICAL IDENTITY (Phase 1b)
             "canonical_id": canonical_id,
             "canonical_source_db": canonical_source_db,
+            # Sprint 1.1: surface the cleaner-side match method (UNII or
+            # alternateNames) so the enricher's match_ledger can attribute
+            # the resolve correctly. None when neither Tier-0 nor
+            # alternateNames fired (most rows — name-based match path was
+            # used and the enricher will record its own method).
+            "cleaner_match_method": ing.get("_sprint1_match_method"),
             # LABEL NUTRIENT CONTEXT (Phase 1c)
             "label_nutrient_context": label_nutrient_context,
             # raw_source_path: Source section (active/inactive), enrichment adds full path
