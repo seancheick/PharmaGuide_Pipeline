@@ -1,6 +1,29 @@
 # Test Remediation Implementation Plan — 2026-05-13
 
-> **Status (2026-05-13 EOD — ALL PHASES SHIPPED):** This plan is now complete and may be retired/archived after the next CEO review pass. All 73 data files in `scripts/data/` are covered by either the universal contract test, a bespoke per-file test, or an explicit `INTENTIONAL_EXCEPTIONS` entry with rationale + bespoke-test pointer. Zero silent skips. Full suite: `pytest scripts/tests/` last reported `7395 passed, 39 skipped, 30 xfailed, 0 failed` — the new metadata-contract additions (Phases 2, 5, 6, 7, 8) raise the pass count further (verified locally; full-suite re-run recommended in next session before retirement).
+> # 🗄️ RETIRED — 2026-05-14
+>
+> All 10 phases shipped and verified. Final full-suite confirmation on
+> 2026-05-14:
+>
+> ```
+> python3 -m pytest scripts/tests/ -q --tb=no
+> → 7591 passed, 30 skipped, 30 xfailed in 864.10s (0:14:24)
+> ```
+>
+> **Outcomes:**
+> - All 73 data files in `scripts/data/` covered by either the universal
+>   metadata-contract test, a bespoke per-file test, or an explicit
+>   `INTENTIONAL_EXCEPTIONS` entry with rationale + bespoke-test pointer.
+> - Zero silent skips. The 30 skipped + 30 xfailed all carry explicit
+>   reasons (live tests gated by `PHARMAGUIDE_LIVE_TESTS`, snapshot
+>   regen waiting on Sprint Phase 7, etc.).
+> - Original baseline before plan started: `7312 passed, 2 failed,
+>   19 skipped, 30 xfailed`. Today's baseline: `7591 passed, 0 failed`.
+>   That's **+279 passing tests, -2 failures** from the work captured
+>   in this plan plus the follow-on Sprint 1.1 / 1.2 sweeps (UNII
+>   match-method ledger, manufacturer-violations refresh, safety-copy
+>   reauthoring, graduated cap v2.2, CRI reclassification, Python 3.9
+>   compat fix on test_form_sensitive_nutrient_gate.py).
 >
 > | Phase | Status | Commit(s) |
 > |---|---|---|
@@ -15,7 +38,25 @@
 > | 7 Bespoke tests for 5 multi-array Cat-B | ✅ DONE | `88816af` |
 > | 8 Decide Cat-A (5 no-total_entries) | ✅ DONE | `874a4fe` |
 > | 9 Sprint E1.2.3 dedup alignment | ✅ DONE | `ae7b2db` |
-> | 10 Final verification | ✅ Implicit green | — |
+> | 10 Final verification | ✅ DONE 2026-05-14 (this commit) |
+>
+> **What to do with this file:** Keep it in `docs/handoff/` as the
+> historical record of the test-debt remediation. Future similar work
+> can use this file's structure (per-phase atomic commits,
+> `INTENTIONAL_EXCEPTIONS` pattern, no silent skips) as a template —
+> see Phases 5–8 in particular for how to handle ambiguous Cat-C /
+> multi-array Cat-B / no-total_entries Cat-A data-file shapes.
+>
+> **Related closed-out / shrunken handoffs:** see
+> `docs/handoff/2026-05-13_data_quality_backlog.md` — Buckets 3 + 4
+> closed 2026-05-14, Buckets 1 + 2 substantially reduced (164 → 44
+> total `excluded_by_gate` entries).
+>
+> ---
+>
+> _Original status banner preserved below for audit trail._
+>
+> **Status (2026-05-13 EOD — ALL PHASES SHIPPED):** This plan is now complete and may be retired/archived after the next CEO review pass. All 73 data files in `scripts/data/` are covered by either the universal contract test, a bespoke per-file test, or an explicit `INTENTIONAL_EXCEPTIONS` entry with rationale + bespoke-test pointer. Zero silent skips. Full suite: `pytest scripts/tests/` last reported `7395 passed, 39 skipped, 30 xfailed, 0 failed` — the new metadata-contract additions (Phases 2, 5, 6, 7, 8) raise the pass count further (verified locally; full-suite re-run recommended in next session before retirement).
 >
 > **For agentic workers:** REQUIRED SUB-SKILL: Use `superpowers:subagent-driven-development` (recommended) or `superpowers:executing-plans` to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
