@@ -13563,8 +13563,6 @@
       "research_status": "validated"
     },
     "external_ids": {},
-    "cui_status": "governed_null",
-    "cui_note": "UNII 89NA02M4RX (PECTIN) removed 2026-05-14 — 'Prebiotics' is an ingredient CLASS covering inulin, FOS, GOS, pectin, beta-glucan, and other fermentable fibers. Pectin is one specific prebiotic; tagging the parent class with pectin's UNII would cause every prebiotic-disclosed product to UNII-match as pectin specifically. Individual prebiotic forms keep their own UNIIs in the forms[] sub-tree.",
     "aliases": []
   },
   "choline": {
