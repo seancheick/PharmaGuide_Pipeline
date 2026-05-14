@@ -3388,25 +3388,12 @@
         "source disclosure",
         "identity routing"
       ],
-      "last_updated": "2026-03-09",
-      "external_ids": {
-        "unii": "331KBJ17RK"
-      },
+      "last_updated": "2026-05-14",
+      "external_ids": {},
       "rxcui": "1309202",
-      "gsrs": {
-        "substance_name": "CANOLA OIL",
-        "substance_class": "mixture",
-        "cfr_sections": [
-          "21 CFR 184.1555"
-        ],
-        "dsld_count": 12,
-        "dsld_info_raw": "Dietary Supplement Label Database|Fatty Acid|Canola Oil | 1233 (Number of products:12)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
       "cui": "C5703431",
+      "cui_status": "governed_null",
+      "cui_note": "UNII 331KBJ17RK (CANOLA OIL) removed 2026-05-14 — this is a pure source-descriptor entry for generic 'Canola' label disclosures, NOT for canola oil specifically. FDA cache contains no generic 'canola' UNII (only canola oil 331KBJ17RK and Brassica napus whole NFP6814VZ4). Tagging the descriptor with canola oil's UNII would force every generic 'Canola' label disclosure to UNII-match as the oil. RxCUI 1309202 (Canola oil) preserved for downstream reference but UNII intentionally absent. Specific canola products (PII_CANOLA_OIL, NHA_CANOLA_LECITHIN, etc.) keep their own UNIIs.",
       "functional_roles": [],
       "is_label_descriptor": true
     },
