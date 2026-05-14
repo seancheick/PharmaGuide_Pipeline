@@ -40,6 +40,7 @@ import math as _math
 import os
 import re
 import sqlite3
+import sys
 import tempfile
 from datetime import datetime, timezone
 from pathlib import Path
@@ -5507,11 +5508,34 @@ def main():
                         help="Directories containing enriched JSON files")
     parser.add_argument("--scored-dir", nargs="+", required=True,
                         help="Directories containing scored JSON files")
-    parser.add_argument("--output-dir", default="final_db_output",
-                        help="Output directory for DB + blobs + manifest")
+    parser.add_argument("--output-dir", default=None,
+                        help=("Output directory for DB + blobs + manifest. "
+                              "If omitted, defaults to legacy 'final_db_output/' "
+                              "with a warning — production builds should pass "
+                              "an explicit --output-dir (rebuild_dashboard_snapshot.sh "
+                              "writes to /tmp)."))
     parser.add_argument("--strict", action="store_true",
                         help="Fail build if any enriched/scored mismatch (production mode)")
     args = parser.parse_args()
+
+    # 2026-05-14 — emit a loud warning when the legacy default is used.
+    # The production flow (rebuild_dashboard_snapshot.sh) always passes
+    # --output-dir explicitly. A bare invocation without --output-dir is
+    # almost always a dev running build_final_db.py directly, and the
+    # legacy scripts/final_db_output/ path has been a recurring source of
+    # stale-data footguns. Warning visibility prevents the foot-shoot.
+    if args.output_dir is None:
+        args.output_dir = "final_db_output"
+        # ANSI yellow for terminal visibility; same style as batch_run_all_datasets.sh.
+        print(
+            "\033[1;33m"
+            "[build_final_db] WARNING: No --output-dir passed; using legacy "
+            "default 'final_db_output/'. Production builds use "
+            "rebuild_dashboard_snapshot.sh (which stages to /tmp and then to "
+            "scripts/dist). Pass --output-dir explicitly to silence this warning."
+            "\033[0m",
+            file=sys.stderr,
+        )
 
     script_dir = str(Path(__file__).parent)
     result = build_final_db(

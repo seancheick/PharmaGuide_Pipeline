@@ -11,6 +11,7 @@ import hashlib
 import json
 import sqlite3
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 import pytest
@@ -120,7 +121,10 @@ def _write_manifest_json(
             override_product_count if override_product_count is not None else row_count
         ),
         "min_app_version": DEFAULT_MIN_APP_VERSION,
-        "generated_at": "2026-04-10T22:25:55+00:00",
+        # 2026-05-14 — generate fresh per-call so tests using main() pass
+        # the freshness guard. Tests that need a stale timestamp overwrite
+        # this field after the fixture writes it (see freshness-guard tests).
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "checksum": checksum,
     }
     if drop_key:
@@ -486,3 +490,153 @@ def test_main_print_json_emits_parseable_output(
     assert payload["db_version"] == DEFAULT_DB_VERSION
     assert payload["schema_version"] == DEFAULT_SCHEMA_VERSION
     assert payload["product_count"] == 1000
+
+
+# ---------------------------------------------------------------------------
+# Freshness guard — added 2026-05-14 to prevent re-staging stale builds
+# (e.g., from a leftover scripts/final_db_output/ that wasn't refreshed).
+# ---------------------------------------------------------------------------
+
+
+def _iso_utc(offset_hours: float) -> str:
+    """Helper: return a now+offset ISO-8601 UTC string."""
+    return (datetime.now(timezone.utc) + timedelta(hours=offset_hours)).isoformat()
+
+
+def test_freshness_passes_when_manifest_is_recent() -> None:
+    """Fresh manifest (1h old) — guard stays silent at default 24h max."""
+    manifest = {"generated_at": _iso_utc(-1)}
+    rca.check_release_freshness(
+        manifest=manifest, max_age_hours=24.0, allow_stale=False
+    )  # no raise
+
+
+def test_freshness_raises_when_manifest_is_stale() -> None:
+    """Stale manifest (48h old) — guard raises at default 24h max."""
+    manifest = {"generated_at": _iso_utc(-48)}
+    with pytest.raises(rca.ReleaseValidationError) as exc:
+        rca.check_release_freshness(
+            manifest=manifest, max_age_hours=24.0, allow_stale=False
+        )
+    msg = str(exc.value)
+    assert "stale" in msg.lower()
+    assert "48" in msg  # age reported
+    assert "--allow-stale" in msg  # escape hatch documented
+    assert "batch_run_all_datasets.sh" in msg  # remediation hint
+
+
+def test_freshness_allow_stale_bypasses_with_warning(
+    capsys: pytest.CaptureFixture,
+) -> None:
+    """--allow-stale lets the build through but emits a warning to stderr."""
+    manifest = {"generated_at": _iso_utc(-48)}
+    rca.check_release_freshness(
+        manifest=manifest, max_age_hours=24.0, allow_stale=True
+    )  # no raise
+    captured = capsys.readouterr()
+    assert "WARNING" in captured.err
+    assert "--allow-stale" in captured.err
+
+
+def test_freshness_accepts_z_suffix_timestamps() -> None:
+    """build_final_db.py writes "...Z"; Python <3.11 doesn't parse that
+    natively. Verify the normalization works."""
+    # 1h ago, formatted with 'Z'
+    recent = (datetime.now(timezone.utc) - timedelta(hours=1)).replace(microsecond=0)
+    manifest = {"generated_at": recent.strftime("%Y-%m-%dT%H:%M:%SZ")}
+    rca.check_release_freshness(
+        manifest=manifest, max_age_hours=24.0, allow_stale=False
+    )  # no raise
+
+
+def test_freshness_naive_timestamp_assumed_utc() -> None:
+    """Defensive: timestamps without tz are treated as UTC rather than
+    crashing. A 1h-ago naive timestamp is still within a 24h window."""
+    naive_recent = (datetime.now(timezone.utc) - timedelta(hours=1)).replace(
+        tzinfo=None
+    )
+    manifest = {"generated_at": naive_recent.isoformat()}
+    rca.check_release_freshness(
+        manifest=manifest, max_age_hours=24.0, allow_stale=False
+    )  # no raise
+
+
+def test_freshness_raises_on_unparseable_timestamp() -> None:
+    """Garbage generated_at fails loudly rather than silently allowing
+    a potentially-stale build through."""
+    manifest = {"generated_at": "not-a-timestamp"}
+    with pytest.raises(rca.ReleaseValidationError) as exc:
+        rca.check_release_freshness(
+            manifest=manifest, max_age_hours=24.0, allow_stale=False
+        )
+    assert "ISO-8601" in str(exc.value)
+
+
+def test_freshness_missing_generated_at_is_silent_defensive() -> None:
+    """If generated_at is missing, the guard returns silently —
+    validate_release_candidate already enforces presence; this is a
+    defensive no-op for unit-test isolation."""
+    rca.check_release_freshness(
+        manifest={}, max_age_hours=24.0, allow_stale=False
+    )  # no raise
+
+
+def test_main_exits_1_when_input_dir_is_stale(
+    tmp_path: Path, capsys: pytest.CaptureFixture
+) -> None:
+    """End-to-end: main() returns 1 with a clear FRESHNESS GATE message
+    when the input dir's manifest is older than --max-age-hours."""
+    input_dir = tmp_path / "stale_build"
+    input_dir.mkdir()
+    db_path = input_dir / "pharmaguide_core.db"
+    _make_fake_db(db_path, row_count=1000)
+    # Overwrite manifest with a 48h-old generated_at
+    manifest_dict = _write_manifest_json(
+        input_dir / "export_manifest.json", db_path, row_count=1000
+    )
+    manifest_dict["generated_at"] = _iso_utc(-48)
+    (input_dir / "export_manifest.json").write_text(json.dumps(manifest_dict, indent=2))
+
+    exit_code = rca.main(
+        [
+            "--input-dir",
+            str(input_dir),
+            "--output-dir",
+            str(tmp_path / "dist"),
+            "--min-products",
+            "500",
+        ]
+    )
+    assert exit_code == 1
+    err = capsys.readouterr().err
+    assert "FRESHNESS GATE FAILED" in err
+
+
+def test_main_succeeds_when_stale_input_with_allow_stale(
+    tmp_path: Path, capsys: pytest.CaptureFixture
+) -> None:
+    """--allow-stale lets a deliberately-stale restage proceed."""
+    input_dir = tmp_path / "stale_build"
+    input_dir.mkdir()
+    db_path = input_dir / "pharmaguide_core.db"
+    _make_fake_db(db_path, row_count=1000)
+    manifest_dict = _write_manifest_json(
+        input_dir / "export_manifest.json", db_path, row_count=1000
+    )
+    manifest_dict["generated_at"] = _iso_utc(-48)
+    (input_dir / "export_manifest.json").write_text(json.dumps(manifest_dict, indent=2))
+
+    exit_code = rca.main(
+        [
+            "--input-dir",
+            str(input_dir),
+            "--output-dir",
+            str(tmp_path / "dist"),
+            "--min-products",
+            "500",
+            "--allow-stale",
+        ]
+    )
+    assert exit_code == 0
+    err = capsys.readouterr().err
+    assert "WARNING" in err and "--allow-stale" in err

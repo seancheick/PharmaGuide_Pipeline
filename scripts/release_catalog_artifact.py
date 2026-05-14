@@ -479,6 +479,54 @@ def stage_release(
 # ---------------------------------------------------------------------------
 
 
+def check_release_freshness(
+    *,
+    manifest: Dict[str, Any],
+    max_age_hours: float,
+    allow_stale: bool,
+) -> None:
+    """Refuse stale builds. Production flow stages from /tmp builds that
+    are seconds old; this gate fires when someone re-runs staging against
+    a leftover scripts/final_db_output/ without re-running the pipeline
+    first. Pass ``--allow-stale`` to override (logged as a warning).
+    """
+    generated_at_raw = manifest.get("generated_at")
+    if not generated_at_raw:
+        # validate_release_candidate already requires this key — defensive only.
+        return
+    try:
+        # ISO-8601; some emitters write trailing 'Z' which only Python 3.11+
+        # parses natively. Normalize for broad compat.
+        generated_at = datetime.fromisoformat(str(generated_at_raw).replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise ReleaseValidationError(
+            f"export_manifest.json generated_at is not parseable ISO-8601: "
+            f"{generated_at_raw!r} ({exc})"
+        ) from exc
+
+    if generated_at.tzinfo is None:
+        # Assume UTC for naive timestamps (build_final_db writes tz-aware ones,
+        # but be defensive against legacy artifacts).
+        generated_at = generated_at.replace(tzinfo=timezone.utc)
+
+    age = datetime.now(timezone.utc) - generated_at
+    age_hours = age.total_seconds() / 3600
+
+    if age_hours <= max_age_hours:
+        return  # fresh — no action
+
+    msg = (
+        f"Release candidate is stale: manifest generated_at={generated_at_raw} "
+        f"is {age_hours:.1f}h old (max-age-hours={max_age_hours}). "
+        f"Re-run the pipeline (bash batch_run_all_datasets.sh) before staging, "
+        f"or pass --allow-stale to override."
+    )
+    if allow_stale:
+        print(f"[release] WARNING (--allow-stale): {msg}", file=sys.stderr)
+        return
+    raise ReleaseValidationError(msg)
+
+
 def _parse_args(argv: Optional[list] = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(
         description="Stage a pipeline release artifact for the Flutter bridge.",
@@ -498,6 +546,24 @@ def _parse_args(argv: Optional[list] = None) -> argparse.Namespace:
         type=int,
         default=500,
         help="Minimum product count required in products_core (default: 500).",
+    )
+    p.add_argument(
+        "--max-age-hours",
+        type=float,
+        default=24.0,
+        help=(
+            "Maximum allowed age (in hours) of --input-dir's export_manifest.json "
+            "generated_at. Prevents accidentally re-staging stale builds. "
+            "Default: 24."
+        ),
+    )
+    p.add_argument(
+        "--allow-stale",
+        action="store_true",
+        help=(
+            "Bypass the freshness guard. Logs a warning. Use only for "
+            "intentional restages of older builds."
+        ),
     )
     p.add_argument(
         "--print-json",
@@ -523,6 +589,16 @@ def main(argv: Optional[list] = None) -> int:
     except Exception as exc:  # noqa: BLE001 — surface unexpected errors loud
         print(f"[release] UNEXPECTED ERROR during validation: {exc}", file=sys.stderr)
         return 2
+
+    try:
+        check_release_freshness(
+            manifest=validation["manifest"],
+            max_age_hours=args.max_age_hours,
+            allow_stale=args.allow_stale,
+        )
+    except ReleaseValidationError as exc:
+        print(f"[release] FRESHNESS GATE FAILED: {exc}", file=sys.stderr)
+        return 1
 
     try:
         result = stage_release(validation=validation, output_dir=output_dir)
