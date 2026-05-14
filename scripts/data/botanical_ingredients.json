@@ -1892,30 +1892,19 @@
       "latin_name": "Rhamnus cathartica",
       "aliases": [
         "buckthorn",
+        "common buckthorn",
         "wild crafted buckthorn",
-        "frangula alnus bark",
-        "rhamnus frangula bark",
+        "rhamnus cathartica bark",
         "buckthorn bark extract",
         "Rhamnus cathartica"
       ],
       "category": "bark",
-      "notes": "Rhamnus cathartica (Rhamnaceae) bark. Stimulant laxative containing anthraquinone glycosides (emodin, chrysophanol). Traditional use for constipation. Not for long-term use. Botanical bark powder.",
-      "last_updated": "2026-03-01",
+      "notes": "Rhamnus cathartica (Rhamnaceae) bark — also called common buckthorn or European buckthorn. Stimulant laxative containing anthraquinone glycosides (emodin, chrysophanol). Traditional use for constipation. Not for long-term use. Botanical bark powder. UNII corrected 2026-05-14 from S2D77IH61R (FRANGULA ALNUS BARK — a DIFFERENT species, Rhamnus frangula / Frangula alnus) to KD27950XHY (RHAMNUS CATHARTICA BARK — the correct species for this entry). Frangula-species aliases ('frangula alnus bark', 'rhamnus frangula bark') also removed because they belong on the separate `frangula_bark` entry, not on buckthorn. Verified via fda_unii_cache.json: name_to_unii['rhamnus cathartica bark'] = 'KD27950XHY'. Stale GSRS metadata referencing FRANGULA ALNUS BARK also removed.",
+      "last_updated": "2026-05-14",
       "external_ids": {
-        "unii": "S2D77IH61R"
+        "unii": "KD27950XHY"
       },
       "rxcui": "1310063",
-      "gsrs": {
-        "substance_name": "FRANGULA ALNUS BARK",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
       "cui": "C0949619",
       "functional_roles": [],
       "attributes": {
