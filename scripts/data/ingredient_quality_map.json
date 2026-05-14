@@ -21717,8 +21717,7 @@
     ],
     "external_ids": {
       "unii": "BQY1UBX046"
-    },
-    "unii_correction_note": "UNII corrected 2026-05-14 from CT03BSA18U (SAMBUCUS NIGRA FLOWERING TOP, i.e. elder flower) to BQY1UBX046 (EUROPEAN ELDERBERRY, i.e. the fruit). The IQM:elderberry entry refers to elderberry fruit (Sambucus nigra fruit) used in immune-support formulations, NOT the flowering top. Verified against fda_unii_cache.json: name_to_unii['european elderberry'] = 'BQY1UBX046'. Stale GSRS metadata block referencing SAMBUCUS NIGRA FLOWERING TOP also removed."
+    }
   },
   "digestive_enzymes": {
     "standard_name": "Digestive Enzymes",
