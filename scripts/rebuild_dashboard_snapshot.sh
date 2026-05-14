@@ -64,13 +64,25 @@ rm -rf scripts/dist/detail_blobs
 cp -r "$STAGING/detail_blobs" scripts/dist/detail_blobs
 [[ -f "$STAGING/export_audit_report.json" ]] && cp "$STAGING/export_audit_report.json" scripts/dist/ || true
 
+# 5. Mirror the working build into scripts/final_db_output/ so dev tools
+#    that default to that path (build_final_db.py legacy default,
+#    release_catalog_artifact.py --input-dir default, audit_raw_to_final.py
+#    --build-dir default) always see today's data — never a stale leftover.
+#    This is the "no mixed builds" guarantee: both scripts/dist/ and
+#    scripts/final_db_output/ are refreshed atomically on every pipeline run.
+#    Added 2026-05-14 — see freshness guard in release_catalog_artifact.py.
+rm -rf scripts/final_db_output
+mkdir -p scripts/final_db_output
+cp -r "$STAGING/." scripts/final_db_output/
+
 PRODUCT_COUNT=$("$PYTHON" -c "import sqlite3; print(sqlite3.connect('scripts/dist/pharmaguide_core.db').execute('SELECT COUNT(*) FROM products_core').fetchone()[0])")
 BLOB_COUNT=$(ls scripts/dist/detail_blobs | wc -l | tr -d ' ')
 
 echo ""
 echo "✓ Dashboard snapshot ready:"
-echo "  scripts/dist/pharmaguide_core.db    $PRODUCT_COUNT products"
-echo "  scripts/dist/detail_blobs/          $BLOB_COUNT blobs"
+echo "  scripts/dist/pharmaguide_core.db              $PRODUCT_COUNT products"
+echo "  scripts/dist/detail_blobs/                    $BLOB_COUNT blobs"
+echo "  scripts/final_db_output/ (working-build mirror, also $PRODUCT_COUNT products)"
 echo ""
 echo "Launch the dashboard:"
 echo "  streamlit run scripts/dashboard/app.py"
