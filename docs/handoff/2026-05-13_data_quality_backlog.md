@@ -6,6 +6,58 @@ This document hands off **four real but non-blocking data-quality issues** that 
 
 ---
 
+## 2026-05-14 status update — backlog has shrunk substantially
+
+Re-checked against the current build (`scripts/dist/export_manifest.json`,
+generated `2026-05-14T09:29:08Z`, catalog `product_count=8414`,
+`errors=0`, `warnings=0`):
+
+| Bucket                                  | 2026-05-13 baseline | 2026-05-14 current | Status                  |
+| --------------------------------------- | ------------------- | ------------------ | ----------------------- |
+| **1. NOT_SCORED products**              | 128                 | **42**             | Still active (67% drop) |
+| **2. Filter regression (inactives)**    | 19                  | **2**              | Still active (89% drop) |
+| **3. Cleaner classifier (actives→inactive)** | 17             | **0**              | ✅ **CLOSED**           |
+| **4. Duplicate-warnings test**          | failing             | **passing**        | ✅ **CLOSED**           |
+
+`excluded_by_gate` total: 164 → 44 (73% reduction).
+
+### What's still open
+
+**Bucket 1 — 42 NOT_SCORED:** all 42 share the identical error signature
+(`Batch 3 data integrity gate — mapping/dosage gate failed upstream`).
+Identical signature suggests a single root cause likely covers most/all
+of them; first action remains "sample one representative dsld_id and
+trace through the scoring pipeline to find where it bails."
+
+**Bucket 2 — 2 inactives-dropped:** affected dsld_ids are `327403` and
+`329092`, both single-inactive drops. Same
+`enhanced_normalizer._process_other_ingredients_enhanced` filter-too-
+aggressive root cause as the original 19 — investigation playbook in
+Bucket 2 below is still valid.
+
+### What's closed
+
+**Bucket 3 — cleaner classifier:** `excluded_by_gate` shows 0
+`DROPPED_AS_INACTIVE` errors and 0 `all raw actives reclassified` errors
+against the current 8,414-product build. Fish-oil and single-active
+products are now scoring correctly.
+
+**Bucket 4 — duplicate-warnings test:** `test_no_duplicate_warnings`
+now passes locally. The test/build dedup key asymmetry was resolved
+(either the test was updated or the build's dedup logic tightened —
+either way the contract is consistent now).
+
+### Recommended next move
+
+When picking this back up: focus on Bucket 1 (42 entries with identical
+signature — highest-yield investigation) followed by Bucket 2's 2
+residuals. Buckets 3 and 4 can be closed in the doc with a brief
+"closed in commit X" notation when the next pipeline release ships.
+The original investigation principles below (no fast patches, trace
+ALL representatives, etc.) all still apply.
+
+---
+
 ## Engineering principles for this handoff
 
 Before opening any bucket below, please internalize these. They are the same principles that produced the release-safety stack and the banned-substance preflight fix:
