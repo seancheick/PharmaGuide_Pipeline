@@ -10,15 +10,23 @@ deferred and the policy that governs future backfills.
 > **UNII backfill requires real-world DSLD consensus, not just FDA-name
 > exactness.**
 >
-> An FDA-cache name match alone is insufficient evidence to anchor an
-> entry's `external_ids.unii`. The bar is:
+> **Auto-eligible** (HIGH tier — no further sign-off needed): BOTH of
 >
-> 1. FDA cache match (exact on standard_name OR an alias), **AND**
+> 1. FDA cache match (exact on standard_name OR an alias), AND
 > 2. **≥5 DSLD products** consensus tagging that ingredient name with the
->    same UNII across at least 2 brands (the more the better)
+>    same UNII across at least 2 brands.
 >
-> When only one of those signals is present, the entry is **deferred
-> for one-by-one review**, not auto-applied.
+> **Human-approved exception** (MEDIUM tier — apply only after explicit
+> reviewer sign-off): strong DSLD consensus on its own (≥5 products
+> across ≥2 brands) when identity ambiguity is low (single-compound
+> entry, no alt-UNIIs surfaced, not a class concept). This is the path
+> the Tier B entries (5_htp, d_aspartic_acid, PII_PURIFIED_FISH_OIL)
+> shipped through in Sprint 2 — DSLD-only signals, no FDA exact, but
+> low identity ambiguity (single compound or excipient role).
+>
+> **Deferred for one-by-one review** (no auto-apply, no batch
+> exception): everything else — FDA-only signals (zero DSLD usage),
+> single-brand DSLD signals, low-confidence signals.
 >
 > **Alt-UNII cases** (more than one candidate UNII surfaces during the
 > proposal) ALWAYS require manual identity review before apply,
@@ -32,7 +40,9 @@ deferred and the policy that governs future backfills.
 
 This policy is encoded in the script's confidence tiers:
 - **HIGH**: FDA match + ≥5 DSLD consensus → auto-eligible
-- **MEDIUM**: only one signal → deferred for one-by-one review
+- **MEDIUM**: only one signal → deferred for one-by-one review (may
+  ship as a reviewer-approved exception when DSLD signal is strong and
+  identity ambiguity is low — see Tier B examples shipped in Sprint 2)
 - **LOW**: weak signals (≥1 brand, no FDA exact) → deferred
 
 The pre-apply regression guard (also added during Sprint 2) refuses any
@@ -56,7 +66,9 @@ audit:
 
 Plus 1 governance annotation:
 - `iqm:vitamin_k` — `cui_note` added documenting intentional class-level
-  no-UNII (mirrors prebiotics + collagen pattern)
+  no-UNII (mirrors the class-concept governance pattern: a class-level
+  parent entry retains its valid CUI but omits `external_ids.unii`
+  because no single UNII covers the class)
 
 ## Deferred — Tier C (12 entries, FDA-exact + zero DSLD usage)
 
@@ -119,13 +131,13 @@ consensus is the safer corroboration:
 | `other:PII_DIASTASE` | `A370TYK9KO` | 15 products / 1 brand (GNC) | Single-brand risk |
 | `other:PII_XYLANASE` | `S2MZZ5DR1O` | 11 products / 1 brand (GNC) | Single-brand risk |
 
-## Deferred — Tier D low-confidence (4 entries)
+## Deferred — Tier D low-confidence (3 entries)
 
-| Entry | Proposed UNII | Signal |
-|---|---|---|
-| `standardized_botanicals:olive_leaf` | `MJ95C3OH47` | 5 products / 3 brands, no FDA |
-| `standardized_botanicals:rosehip` | `3TNW8D08V3` | 6 products / 1 brand, no FDA |
-| `iqm:saccharomyces_boulardii` | `978D8U419H` | 5 products / 2 brands, no FDA |
+| Entry | Proposed UNII | Signal | Cross-cutting note |
+|---|---|---|---|
+| `standardized_botanicals:olive_leaf` | `MJ95C3OH47` | 5 products / 3 brands, no FDA | Sibling `olive_leaf_extract` is also in "Blocked by regression guard" below |
+| `standardized_botanicals:rosehip` | `3TNW8D08V3` | 6 products / 1 brand, no FDA | **Deferred AND currently blocked**: if applied now, the regression guard would refuse because `OI_ROSE_HIPS_INACTIVE` (committed in Sprint 2) already carries `3TNW8D08V3` and the audit treats `Rosehip` (standardized) vs `Rose Hips (Botanical Filler)` as different names. Resolution requires either an exoneration allowlist entry (clinician-confirmed same-compound modeling) or a de-collision fix before apply. |
+| `iqm:saccharomyces_boulardii` | `978D8U419H` | 5 products / 2 brands, no FDA | — |
 
 (plus 33 low-confidence proposals from the dry-run report not yet
 itemized here.)
@@ -156,14 +168,15 @@ The user proposed two paths; both are viable and not mutually exclusive:
    improvements (Tier-0 UNII matching, alternateNames fallback,
    ledger attribution, 7 new backfilled UNIIs). After verification,
    sync to Supabase so the Flutter app reflects the corrected scoring.
-   This is the user-visible win.
 
 2. **Manual review sprint for deferred Tier C + yellow-flag entries.**
-   Walk the 12 Tier C + 2 yellow-flag + 4 single-brand + 4 Tier D
+   Walk the 12 Tier C + 2 yellow-flag + 4 single-brand + 3 Tier D
    entries one at a time with API verification (FDA, PubChem, etc.).
    Apply the ones that pass clinician/scientist sign-off. This converts
    the deferred backlog into more concrete UNIIs over time.
 
-(2) is cheaper and more incremental; (1) ships the Sprint 1.x + 2
-matcher improvements to users. Recommended order: (1) first to deliver
-user-visible value, then (2) to grind down the deferred queue.
+**Recommended release path: (1) first, then (2).** Sprint 1.x + 2 are
+already on `main` but their effects don't reach users until the catalog
+is rebuilt and synced. Rebuild + sync delivers the matcher improvements;
+the deferred backlog can then be ground down incrementally afterwards
+without blocking the release.
