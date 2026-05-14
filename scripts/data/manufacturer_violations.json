@@ -3,7 +3,7 @@
     "description": "Manufacturer FDA violations and recall history",
     "purpose": "manufacturer_penalties",
     "schema_version": "5.0.0",
-    "last_updated": "2026-05-13",
+    "last_updated": "2026-05-14",
     "total_entries": 89,
     "scoring_rule": "Deductions applied based on violation severity, recency, and resolution status. See manufacture_deduction_expl.json for full scoring framework.",
     "severity_level_definitions": {
@@ -3655,7 +3655,7 @@
       "lead_level_ppm": null,
       "related_violation_ids": null,
       "undeclared_drugs": null,
-      "brand_trust_summary": "Class I recall: male enhancement pouches spiked with undeclared sildenafil. Stop use — dangerous interaction with nitrates."
+      "brand_trust_summary": "Class I recall — male enhancement pouches spiked with undeclared sildenafil. Stop use — dangerous nitrate interaction."
     },
     {
       "id": "V083",
@@ -3703,7 +3703,7 @@
       "lead_level_ppm": null,
       "related_violation_ids": null,
       "undeclared_drugs": null,
-      "brand_trust_summary": "Class I recall: male enhancement pouches spiked with undeclared sildenafil. Stop use — dangerous interaction with nitrates."
+      "brand_trust_summary": "Class I recall — male enhancement pouches spiked with undeclared sildenafil. Stop use — dangerous nitrate interaction."
     },
     {
       "id": "V084",
@@ -3751,7 +3751,7 @@
       "lead_level_ppm": null,
       "related_violation_ids": null,
       "undeclared_drugs": null,
-      "brand_trust_summary": "Class I recall: honey pouches spiked with undeclared sildenafil and tadalafil. Stop use — two ED drugs at unmeasured doses."
+      "brand_trust_summary": "Class I recall — honey pouches spiked with undeclared sildenafil and tadalafil. Stop use — severe blood-pressure risk."
     },
     {
       "id": "V085",
@@ -3847,7 +3847,7 @@
       "lead_level_ppm": null,
       "related_violation_ids": null,
       "undeclared_drugs": null,
-      "brand_trust_summary": "Class I recall: enhancement capsules with undeclared pharmaceuticals. Stop use — potentially life-threatening interactions."
+      "brand_trust_summary": "Class I recall — enhancement capsules with undeclared pharmaceuticals. Stop use — life-threatening interaction risk."
     },
     {
       "id": "V087",
