@@ -33908,7 +33908,9 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "external_ids": {},
+    "external_ids": {
+      "unii": "9181P3OI6N"
+    },
     "rxcui_note": "No RxNorm concept found via GSRS lookup",
     "aliases": []
   },
