@@ -4487,23 +4487,12 @@
         "proprietary elderberry extract"
       ],
       "category": "fruit",
-      "notes": "Sambucus nigra (Adoxaceae) fruit. Rich in anthocyanins (cyanidin-3-sambubioside, cyanidin-3-glucoside). RCT evidence for influenza duration reduction (PMID 15080016). Most studied berry for immune support.",
-      "last_updated": "2026-03-01",
+      "notes": "Sambucus nigra (Adoxaceae) fruit. Rich in anthocyanins (cyanidin-3-sambubioside, cyanidin-3-glucoside). RCT evidence for influenza duration reduction (PMID 15080016). Most studied berry for immune support. UNII corrected 2026-05-14 from CT03BSA18U (SAMBUCUS NIGRA FLOWERING TOP, i.e. elder flower) to BQY1UBX046 (EUROPEAN ELDERBERRY, i.e. the fruit) — this entry is explicitly about the BERRY, not the flowering top. Verified via fda_unii_cache.json: name_to_unii['european elderberry'] = 'BQY1UBX046'. Stale GSRS metadata referencing SAMBUCUS NIGRA FLOWERING TOP also removed.",
+      "last_updated": "2026-05-14",
       "external_ids": {
-        "unii": "CT03BSA18U"
+        "unii": "BQY1UBX046"
       },
       "rxcui": "1307698",
-      "gsrs": {
-        "substance_name": "SAMBUCUS NIGRA FLOWERING TOP",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
       "cui": "C0036195",
       "functional_roles": [],
       "attributes": {
