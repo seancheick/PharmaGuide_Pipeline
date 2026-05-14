@@ -256,13 +256,80 @@ def test_version_at_or_above_2_1(blob):
     )
 
 
-def test_total_deduction_cap_unchanged_pending_phase_2(blob):
-    """Phase 1 explicitly does NOT change total_deduction_cap. The
-    graduated-cap proposal is Phase 2, pending impact analysis. If this
-    test fails because cap changed, ensure the change is intentional
-    (Phase 2 sign-off) and update this test accordingly."""
+def test_total_deduction_cap_default_unchanged(blob):
+    """The default total_deduction_cap stays at -25 (the floor for
+    manufacturers with 0 or 1 Class-I in 3yr). v2.2 adds a graduated
+    cap on top — see test_v2_2_graduated_cap_structure below."""
     assert blob["total_deduction_cap"] == -25, (
-        f"total_deduction_cap changed to {blob['total_deduction_cap']}. "
-        f"Phase 1 of the 2026-05-13 proposal explicitly leaves the cap "
-        f"at -25 pending the Phase 2 before/after impact report."
+        f"total_deduction_cap (default) changed to {blob['total_deduction_cap']}. "
+        f"The default cap is preserved at -25 by the v2.2 design — only "
+        f"repeat Class-I actors hit the graduated tiers (-35 / -50)."
+    )
+
+
+# ---------------------------------------------------------------------------
+# v2.2 additions (Phase 2 of 2026-05-13 deduction-expl proposal, 2026-05-14)
+# Pin the graduated total_deduction_cap structure introduced for repeat
+# Class-I drug-spike actors.
+# ---------------------------------------------------------------------------
+
+
+def test_v2_2_graduated_cap_structure(blob):
+    """v2.2 added `total_deduction_cap_graduated` carrying default + two
+    threshold tiers. The Python-side mirror in
+    scripts/score_supplements.py::SupplementScorer (constants
+    _MFG_CAP_DEFAULT / _TWO_CLASS_I / _THREE_OR_MORE_CLASS_I) MUST match.
+
+    Drift between this JSON and the Python code is caught by
+    test_graduated_cap_score_movements.py::test_python_cap_constants_match_json_source_of_truth."""
+    graduated = blob.get("total_deduction_cap_graduated")
+    assert isinstance(graduated, dict), (
+        "v2.2 added total_deduction_cap_graduated. Missing block means "
+        "the file regressed or was downgraded. See "
+        "docs/handoff/2026-05-14_phase2_graduated_cap_impact.md."
+    )
+    assert graduated.get("default") == -25, (
+        f"graduated.default expected -25 (matches top-level total_deduction_cap), "
+        f"got {graduated.get('default')}"
+    )
+    assert graduated.get("two_class_i_in_3_years") == -35, (
+        f"graduated.two_class_i_in_3_years expected -35, "
+        f"got {graduated.get('two_class_i_in_3_years')}"
+    )
+    assert graduated.get("three_or_more_class_i_in_3_years") == -50, (
+        f"graduated.three_or_more_class_i_in_3_years expected -50, "
+        f"got {graduated.get('three_or_more_class_i_in_3_years')}"
+    )
+
+
+def test_v2_2_version_at_or_above_2_2(blob):
+    """v2.2 is the minimum version that includes the graduated cap.
+    Older versions silently default to a static -25 cap, which produces
+    different scores for repeat Class-I actors. Version must reflect that."""
+    ver = blob["_metadata"].get("version", "0.0")
+    parts = tuple(int(p) for p in ver.split("."))
+    assert parts >= (2, 2), (
+        f"_metadata.version is {ver!r}; expected ≥ 2.2 since v2.2 added "
+        f"the total_deduction_cap_graduated block."
+    )
+
+
+def test_v2_2_calculation_rules_step_7_describes_graduated_cap(blob):
+    """`step_7` in calculation_rules is the canonical natural-language
+    description of the cap step. Since v2.2 made the cap graduated, the
+    description must mention the graduated structure — not the old static
+    -25 wording (which incorrectly called 75 a "Trusted score floor"
+    when it's actually Acceptable per score_thresholds)."""
+    step_7 = blob.get("calculation_rules", {}).get("step_7", "")
+    assert "graduated" in step_7.lower(), (
+        f"step_7 must reference the graduated cap structure (v2.2). "
+        f"Got: {step_7!r}"
+    )
+    # Wording correction: 75 is the Acceptable band, not Trusted.
+    # Existing step_7 text should NOT have the old misleading phrase
+    # "never goes below 75 score" without qualifier, since under graduated
+    # caps repeat actors DO go below 75.
+    assert "Acceptable score floor" in step_7 or "Acceptable" in step_7, (
+        f"step_7 must clarify that 75 is the Acceptable score floor "
+        f"(not Trusted). Got: {step_7!r}"
     )

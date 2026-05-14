@@ -3728,10 +3728,63 @@ class SupplementScorer:
 
         return False
 
+    # Graduated aggregate cap per manufacture_deduction_expl.json v2.2 (Phase 2,
+    # 2026-05-14). The default -25 cap is too lenient for repeat Class-I
+    # drug-spike actors. See docs/handoff/2026-05-14_phase2_graduated_cap_impact.md.
+    #
+    # These constants are the canonical Python-side source. They MUST match
+    # scripts/data/manufacture_deduction_expl.json::total_deduction_cap_graduated;
+    # drift is caught by test_manufacture_deduction_expl_contract.py +
+    # test_graduated_cap_score_movements.py.
+    _MFG_CAP_DEFAULT = -25.0
+    _MFG_CAP_TWO_CLASS_I = -35.0
+    _MFG_CAP_THREE_OR_MORE_CLASS_I = -50.0
+    _CLASS_I_LOOKBACK_DAYS = 3 * 365  # 3-year window
+
+    @staticmethod
+    def _count_class_i_in_3_years(items: List[Dict[str, Any]], today=None) -> int:
+        """Count Class-I (severity='critical') violations within the last 3 years.
+
+        Used to resolve the per-manufacturer aggregate cap. The graduated cap
+        intensifies as a manufacturer accrues repeat Class-I recalls — the
+        lookback is fixed at 3 years per the framework's recency-modifier
+        ranges (see manufacture_deduction_expl.json::modifiers.RECENCY)."""
+        from datetime import date as _date
+        if today is None:
+            today = _date.today()
+        count = 0
+        for item in items or []:
+            if not isinstance(item, dict):
+                continue
+            if (item.get("severity_level") or "").lower() != "critical":
+                continue
+            d = item.get("date") or ""
+            try:
+                dt = _date.fromisoformat(str(d))
+            except (TypeError, ValueError):
+                continue
+            if (today - dt).days <= SupplementScorer._CLASS_I_LOOKBACK_DAYS:
+                count += 1
+        return count
+
+    @classmethod
+    def _resolve_manufacturer_cap(cls, class_i_count_3y: int) -> float:
+        """Map Class-I-in-3yr count to the appropriate aggregate cap floor.
+
+        Source of truth: manufacture_deduction_expl.json::total_deduction_cap_graduated.
+        Mirrored here for backwards-compat with older enrichment outputs that
+        don't carry deduction_expl context."""
+        if class_i_count_3y >= 3:
+            return cls._MFG_CAP_THREE_OR_MORE_CLASS_I
+        if class_i_count_3y >= 2:
+            return cls._MFG_CAP_TWO_CLASS_I
+        return cls._MFG_CAP_DEFAULT
+
     def _compute_manufacturer_violation_penalty(self, product: Dict[str, Any]) -> float:
         violations = product.get("manufacturer_data", {}).get("violations", {})
 
         deduction: Optional[float] = None
+        items: List[Dict[str, Any]] = []
         if isinstance(violations, dict):
             deduction = as_float(violations.get("total_deduction_applied"), None)
             items = safe_list(violations.get("violations"))
@@ -3751,6 +3804,7 @@ class SupplementScorer:
                         ) or 0.0
                     deduction = total
         elif isinstance(violations, list):
+            items = list(violations)
             total = 0.0
             for item in violations:
                 total += as_float(
@@ -3762,8 +3816,12 @@ class SupplementScorer:
         if deduction is None:
             return 0.0
 
-        # Stored as negative, add directly after section sum.
-        return max(float(deduction), -25.0)
+        # Apply the graduated aggregate cap (v2.2). Manufacturers with 0-1
+        # Class-I in 3yr stay at the default -25 floor; 2 in 3yr → -35;
+        # 3+ in 3yr → -50. Stored as negative, added directly after section sum.
+        class_i_3y = self._count_class_i_in_3_years(items)
+        cap = self._resolve_manufacturer_cap(class_i_3y)
+        return max(float(deduction), cap)
 
     # ---------------------------------------------------------------------
     # Output helpers

@@ -267,6 +267,23 @@ These routings are pinned by [scripts/tests/test_manufacture_deduction_expl_cont
 
 **NOTE on existing entries:** v2.1 is additive and backwards-compatible. Existing entries' codes are NOT being reclassified (e.g., the 37 entries currently coded `CRI_UNDRUG` for sildenafil/tadalafil spikes stay that way). Use the new codes only for *new* sync runs going forward, unless retroactive reclassification is explicitly scoped as separate work.
 
+#### Graduated total_deduction_cap (v2.2, 2026-05-14)
+
+The aggregate cap on a manufacturer's total deduction was previously a uniform `-25` (Acceptable score floor at 75). v2.2 makes the cap graduated based on Class-I-in-3-year count, so repeat drug-spike actors actually fall through bands:
+
+| Class-I in last 3 years | Aggregate cap | Score floor | Band reached |
+|---:|---:|---:|---|
+| 0 | -25 | 75 | Acceptable (unchanged) |
+| 1 | -25 | 75 | Acceptable (unchanged) |
+| 2 | **-35** | **65** | **Concerning** (forward-looking; 0 manufacturers today) |
+| 3+ | **-50** | **50** | **Concerning, boundary to High Risk** (Pure Vitamins LLC is the only current case) |
+
+The cap is applied in [scripts/score_supplements.py](../../scripts/score_supplements.py) at `_compute_manufacturer_violation_penalty()` (canonical aggregate site). The Python-side constants `_MFG_CAP_DEFAULT / _MFG_CAP_TWO_CLASS_I / _MFG_CAP_THREE_OR_MORE_CLASS_I` mirror the JSON's `total_deduction_cap_graduated` block and are drift-tested by `test_graduated_cap_score_movements.py::test_python_cap_constants_match_json_source_of_truth`.
+
+**Class-I count uses the 3-year lookback** matching the framework's recency-modifier window. Class-I violations older than 3 years are still recency-decayed via the existing modifier but do NOT contribute to the graduated-cap trigger.
+
+**Score impact verified:** the only manufacturer affected today is Pure Vitamins LLC (3 concurrent sildenafil/tadalafil recalls 2026-03-13) — moves from score 75 Acceptable to 50 Concerning. All 81 other manufacturers with 0 or 1 Class-I in 3yr stay unchanged. Impact report: [docs/handoff/2026-05-14_phase2_graduated_cap_impact.md](../../docs/handoff/2026-05-14_phase2_graduated_cap_impact.md).
+
 #### `cui` field
 - Set to `null` for new entries. After adding, run `python scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply` to populate CUIs automatically via the UMLS API.
 

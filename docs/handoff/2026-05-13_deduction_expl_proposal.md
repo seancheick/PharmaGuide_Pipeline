@@ -126,7 +126,7 @@ The `-25` total_deduction_cap may be **too lenient** for repeat drug-spikers —
   "default": -25,
   "two_class_i_in_3_years": -35,
   "three_or_more_class_i_in_3_years": -50,
-  "rationale": "Pure Vitamins LLC just had 3 concurrent Class I drug-spike recalls (V082-V084). Under the -25 cap, they retain a 'trusted' score floor of 75. A repeat-Class-I-drug-spike manufacturer should be capable of dropping into 'concerning' (50-69) or 'high_risk' (<49) territory."
+  "rationale": "Pure Vitamins LLC just had 3 concurrent Class I drug-spike recalls (V082-V084). Under the -25 cap, they retain the 'Acceptable' score floor of 75 (NOT 'Trusted' — Trusted requires ≥85). A repeat-Class-I-drug-spike manufacturer should be capable of dropping into 'Concerning' (50-69) or 'High Risk' (<49) territory."
 }
 ```
 

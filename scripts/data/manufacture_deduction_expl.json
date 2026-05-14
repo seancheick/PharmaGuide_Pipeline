@@ -5,16 +5,25 @@
     "schema_version": "5.0.0",
     "contract_test": "scripts/tests/test_manufacture_deduction_expl_contract.py",
     "last_updated": "2026-05-14",
-    "version": "2.1",
+    "version": "2.2",
     "version_history": {
       "2.0": "Initial v5.0.0 framework (2026-02-16).",
-      "2.1": "Phase 1 of 2026-05-13 deduction-expl proposal: added 3 CRITICAL codes (CRI_GLP1, CRI_ANABOLIC, CRI_BOT_SUB) for emerging 2025-26 adulteration patterns + PEDIATRIC_SUPPLEMENT modifier. Additive + backwards-compatible — existing entries' codes are NOT reclassified. total_deduction_cap unchanged at -25; graduated-cap proposal pending Phase 2 impact analysis."
+      "2.1": "Phase 1 of 2026-05-13 deduction-expl proposal: added 3 CRITICAL codes (CRI_GLP1, CRI_ANABOLIC, CRI_BOT_SUB) for emerging 2025-26 adulteration patterns + PEDIATRIC_SUPPLEMENT modifier. Additive + backwards-compatible — existing entries' codes are NOT reclassified. total_deduction_cap unchanged at -25; graduated-cap proposal pending Phase 2 impact analysis.",
+      "2.2": "Phase 2 of 2026-05-13 deduction-expl proposal: graduated total_deduction_cap (-25 default / -35 for 2 Class-I in 3yr / -50 for 3+ Class-I in 3yr). The default -25 still applies to manufacturers with 0 or 1 Class-I; only repeat Class-I actors are affected. Impact report: docs/handoff/2026-05-14_phase2_graduated_cap_impact.md."
     },
     "max_score": 100,
     "minimum_viable_score": 0,
-    "total_entries": 5
+    "total_entries": 6
   },
   "total_deduction_cap": -25,
+  "total_deduction_cap_graduated": {
+    "description": "Graduated aggregate cap added in v2.2 (Phase 2 of 2026-05-13 proposal). When a manufacturer accrues multiple Class-I recalls within a 3-year window, the aggregate cap floor lowers — repeat drug-spike actors should be capable of dropping into Concerning or High-Risk bands rather than holding at the default Acceptable floor (75). The default cap below applies to manufacturers with 0 or 1 Class-I in 3yr.",
+    "default": -25,
+    "two_class_i_in_3_years": -35,
+    "three_or_more_class_i_in_3_years": -50,
+    "applies_at": "scripts/score_supplements.py:_compute_manufacturer_violation_penalty (canonical aggregate cap site)",
+    "rationale": "Pure Vitamins LLC's 3 concurrent Class-I sildenafil/tadalafil recalls produced -69 raw deductions. Under the original -25 cap they retained the Acceptable score floor of 75; under -50 they drop to score 50, the boundary between Concerning and High Risk. Symmetric step structure (-25 / -35 / -50) reads as 'each tier is meaningfully more severe.' Preserves the principle that brand-side positives in other scoring sections can still contribute, while creating a real cliff for repeat drug-spike actors. Impact analysis: docs/handoff/2026-05-14_phase2_graduated_cap_impact.md."
+  },
   "violation_categories": {
     "CRITICAL": {
       "score_impact": -15,
@@ -254,7 +263,7 @@
     "step_4": "Apply recency multiplier (0.0 - 1.0) based on violation date",
     "step_5": "Apply additional modifiers: repeat violations (-5), unresolved (-3), multiple product lines (-3)",
     "step_6": "Sum all deductions",
-    "step_7": "Cap total deduction at -25 points (manufacturer never goes below 75 score from violations alone)",
+    "step_7": "Cap total aggregate deduction at the appropriate graduated cap from total_deduction_cap_graduated: default -25 (Acceptable score floor at 75) for manufacturers with 0-1 Class-I in 3yr; -35 for 2 Class-I in 3yr; -50 for 3+ Class-I in 3yr. Class-I count is computed at scoring time from the matched violations list.",
     "step_8": "Calculate final trust score: 100 - (capped_total_deduction)",
     "step_9": "Round to nearest integer"
   },
