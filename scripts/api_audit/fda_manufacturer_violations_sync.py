@@ -59,6 +59,11 @@ VIOLATION_CODE_MAP = {
     "CRI_ALLER": -12,
     "CRI_CONTA": -15,
     "CRI_ADVERS": -20,
+    # v2.1 additions (Phase 1 of 2026-05-13 proposal, landed 2026-05-14).
+    # JSON is the source of truth; these are fallbacks for offline runs.
+    "CRI_GLP1": -18,
+    "CRI_ANABOLIC": -18,
+    "CRI_BOT_SUB": -20,
     "HIGH_CII": -10,
     "HIGH_CGMP_CRIT": -12,
     "MOD_CIII_SING": -3,

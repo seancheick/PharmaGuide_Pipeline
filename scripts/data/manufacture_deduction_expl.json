@@ -4,8 +4,12 @@
     "purpose": "manufacturer_deduction_explanation",
     "schema_version": "5.0.0",
     "contract_test": "scripts/tests/test_manufacture_deduction_expl_contract.py",
-    "last_updated": "2026-02-16",
-    "version": "2.0",
+    "last_updated": "2026-05-14",
+    "version": "2.1",
+    "version_history": {
+      "2.0": "Initial v5.0.0 framework (2026-02-16).",
+      "2.1": "Phase 1 of 2026-05-13 deduction-expl proposal: added 3 CRITICAL codes (CRI_GLP1, CRI_ANABOLIC, CRI_BOT_SUB) for emerging 2025-26 adulteration patterns + PEDIATRIC_SUPPLEMENT modifier. Additive + backwards-compatible — existing entries' codes are NOT reclassified. total_deduction_cap unchanged at -25; graduated-cap proposal pending Phase 2 impact analysis."
+    },
     "max_score": 100,
     "minimum_viable_score": 0,
     "total_entries": 5
@@ -73,6 +77,36 @@
           "base_deduction": -20,
           "description": "Serious adverse events reported (hospitalization, death)",
           "code": "CRI_ADVERS"
+        },
+        "CLASS_I_GLP1_COMPOUNDED": {
+          "base_deduction": -18,
+          "description": "Class I recall — undeclared GLP-1 receptor agonist in a supplement (semaglutide/Ozempic, tirzepatide/Mounjaro, liraglutide/Saxenda). 2025-26 emerging adulteration pattern — peptides being compounded and illegally sold as weight-loss supplements.",
+          "examples": [
+            "undeclared semaglutide in weight-loss supplement",
+            "tirzepatide spike in compounded peptide product",
+            "underground GLP-1 peptide supplement"
+          ],
+          "code": "CRI_GLP1"
+        },
+        "CLASS_I_ANABOLIC_SPIKE": {
+          "base_deduction": -18,
+          "description": "Class I recall — undeclared anabolic steroid or steroid-precursor in a supplement (testosterone, oxandrolone, methandrostenolone, stanozolol, nandrolone). Distinguished from generic CRI_UNDRUG because anabolic-spike manufacturers are typically operating in the SARMs/peptide gray market and warrant a different risk profile.",
+          "examples": [
+            "undeclared testosterone in natural muscle builder",
+            "stanozolol spike in pre-workout",
+            "designer prohormone in testosterone booster"
+          ],
+          "code": "CRI_ANABOLIC"
+        },
+        "CLASS_I_BOTANICAL_SUBSTITUTION": {
+          "base_deduction": -20,
+          "description": "Class I recall — toxic botanical substitution (yellow oleander as tejocote, comfrey/aristolochia patterns, ephedra mislabeled as ma huang). Distinguished from generic CRI_TOXIC because substitution implies upstream sourcing/identity-testing failure rather than incidental contamination.",
+          "examples": [
+            "yellow oleander substituted for tejocote",
+            "aristolochia in herbal preparation",
+            "ephedra mislabeled as ma huang"
+          ],
+          "code": "CRI_BOT_SUB"
         }
       }
     },
@@ -205,6 +239,12 @@
       "product_line_threshold": 3,
       "additional_deduction": -3,
       "label": "Systemic manufacturing issue"
+    },
+    "PEDIATRIC_SUPPLEMENT": {
+      "description": "Penalty modifier when the recalled product is intended for children, infants, or prenatal use. Children have lower body mass and higher sensitivity to dose-dependent risks; the trust violation is qualitatively different.",
+      "additional_deduction": -3,
+      "trigger": "Product description contains 'kids', 'children', 'infant', 'pediatric', 'prenatal', or equivalent pediatric-target keyword",
+      "label": "Pediatric supplement — children at elevated risk"
     }
   },
   "calculation_rules": {

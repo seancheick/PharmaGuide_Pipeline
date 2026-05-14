@@ -171,3 +171,98 @@ def test_all_four_required_modifiers_present_with_expected_shape(blob):
     assert isinstance(mods["UNRESOLVED_VIOLATIONS"].get("additional_deduction"), (int, float)), (
         "modifiers.UNRESOLVED_VIOLATIONS.additional_deduction must be numeric"
     )
+
+
+# ---------------------------------------------------------------------------
+# v2.1 additions (Phase 1 of 2026-05-13 deduction-expl proposal, 2026-05-14)
+# Pin the new CRITICAL codes + PEDIATRIC_SUPPLEMENT modifier so a future
+# refactor can't drop them silently.
+# ---------------------------------------------------------------------------
+
+
+# Code → (severity tier, expected base_deduction). The base_deduction values
+# are scoring decisions; pinning them here makes accidental tuning visible.
+V2_1_NEW_CODES = {
+    "CRI_GLP1":     ("CRITICAL", -18),
+    "CRI_ANABOLIC": ("CRITICAL", -18),
+    "CRI_BOT_SUB":  ("CRITICAL", -20),
+}
+
+
+def _find_code(blob, target_code):
+    """Return the subcategory dict for ``target_code``, or None."""
+    for sev, body in blob["violation_categories"].items():
+        for sub_id, sub in (body.get("subcategories") or {}).items():
+            if isinstance(sub, dict) and sub.get("code") == target_code:
+                return sev, sub_id, sub
+    return None
+
+
+@pytest.mark.parametrize("code,expected", list(V2_1_NEW_CODES.items()))
+def test_v2_1_new_critical_codes_present(blob, code, expected):
+    """v2.1 added 3 new CRITICAL subcategories. Each must be present under
+    the expected severity tier with the expected base_deduction. If you
+    change either, that's a deliberate scoring change — bump version and
+    document in the proposal handoff doc."""
+    expected_tier, expected_base = expected
+    found = _find_code(blob, code)
+    assert found is not None, (
+        f"v2.1 violation code {code!r} missing from violation_categories. "
+        f"See docs/handoff/2026-05-13_deduction_expl_proposal.md Phase 1."
+    )
+    tier, sub_id, sub = found
+    assert tier == expected_tier, (
+        f"{code!r} found under tier {tier!r}, expected {expected_tier!r}"
+    )
+    assert sub.get("base_deduction") == expected_base, (
+        f"{code!r}: base_deduction={sub.get('base_deduction')}, "
+        f"expected {expected_base}"
+    )
+
+
+def test_pediatric_supplement_modifier_present(blob):
+    """v2.1 added the PEDIATRIC_SUPPLEMENT modifier (-3) for products
+    targeting children, infants, or prenatal use. Required shape:
+    `additional_deduction` numeric, `trigger` string."""
+    mods = blob["modifiers"]
+    assert "PEDIATRIC_SUPPLEMENT" in mods, (
+        "v2.1 added PEDIATRIC_SUPPLEMENT modifier — must be present. "
+        "See docs/handoff/2026-05-13_deduction_expl_proposal.md Phase 1."
+    )
+    m = mods["PEDIATRIC_SUPPLEMENT"]
+    assert isinstance(m.get("additional_deduction"), (int, float)), (
+        "PEDIATRIC_SUPPLEMENT.additional_deduction must be numeric"
+    )
+    assert m["additional_deduction"] == -3, (
+        f"PEDIATRIC_SUPPLEMENT.additional_deduction expected -3, "
+        f"got {m['additional_deduction']}. Change is a deliberate "
+        f"scoring decision — bump version + document."
+    )
+    assert isinstance(m.get("trigger"), str) and m["trigger"], (
+        "PEDIATRIC_SUPPLEMENT.trigger must be a non-empty string"
+    )
+
+
+def test_version_at_or_above_2_1(blob):
+    """v2.1 is the minimum version that includes the proposal-Phase-1 codes.
+    Older versions are missing CRI_GLP1/CRI_ANABOLIC/CRI_BOT_SUB and the
+    pediatric modifier."""
+    ver = blob["_metadata"].get("version", "0.0")
+    parts = tuple(int(p) for p in ver.split("."))
+    assert parts >= (2, 1), (
+        f"_metadata.version is {ver!r}; expected ≥ 2.1 since v2.1 added "
+        f"the CRI_GLP1 / CRI_ANABOLIC / CRI_BOT_SUB codes and "
+        f"PEDIATRIC_SUPPLEMENT modifier."
+    )
+
+
+def test_total_deduction_cap_unchanged_pending_phase_2(blob):
+    """Phase 1 explicitly does NOT change total_deduction_cap. The
+    graduated-cap proposal is Phase 2, pending impact analysis. If this
+    test fails because cap changed, ensure the change is intentional
+    (Phase 2 sign-off) and update this test accordingly."""
+    assert blob["total_deduction_cap"] == -25, (
+        f"total_deduction_cap changed to {blob['total_deduction_cap']}. "
+        f"Phase 1 of the 2026-05-13 proposal explicitly leaves the cap "
+        f"at -25 pending the Phase 2 before/after impact report."
+    )

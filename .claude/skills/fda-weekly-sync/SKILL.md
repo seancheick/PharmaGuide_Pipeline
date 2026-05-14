@@ -245,6 +245,27 @@ If the sync produces 5+ entries at once needing authored copy, batch them in a s
   - `sarms_prohibited` → `sarms`
   - `synthetic_cannabinoid` → `synthetic_cannabinoids`
   - `heavy_metal_contamination` → `heavy_metals`
+  - `botanical_substitution` → `botanical_substitution` (NEW v2.1)
+
+#### Manufacturer violation code routing (v2.1, 2026-05-14)
+
+When the manufacturer-violations sync writes a new entry, it picks a `violation_code` from [scripts/data/manufacture_deduction_expl.json](../../scripts/data/manufacture_deduction_expl.json). v2.1 added 3 specific CRITICAL codes for emerging 2025-26 adulteration patterns. Route as follows when classifying a recall:
+
+| If the spike substance is… | violation_code | base_deduction |
+|---|---|---:|
+| GLP-1 receptor agonist (semaglutide / Ozempic, tirzepatide / Mounjaro, liraglutide / Saxenda) | `CRI_GLP1` | -18 |
+| Anabolic steroid or steroid precursor (testosterone, oxandrolone, methandrostenolone, stanozolol, nandrolone, designer prohormones) | `CRI_ANABOLIC` | -18 |
+| Toxic botanical substitution (yellow oleander as tejocote, aristolochia as other herb, ephedra mislabeled) | `CRI_BOT_SUB` | -20 |
+| Other prescription drug spike (sildenafil, tadalafil, sibutramine, metformin, etc.) | `CRI_UNDRUG` | -15 (default) |
+| Toxic substance contamination without substitution pattern | `CRI_TOXIC` | -20 |
+| Undeclared allergen (egg, wheat, peanut, etc.) | `CRI_ALLER` | -12 |
+| Microbial contamination (Salmonella, E. coli, Listeria) | `CRI_CONTA` | -15 |
+
+If the product targets children / infants / prenatal users, additionally apply the `PEDIATRIC_SUPPLEMENT` modifier (-3) on top of the base deduction.
+
+These routings are pinned by [scripts/tests/test_manufacture_deduction_expl_contract.py](../../scripts/tests/test_manufacture_deduction_expl_contract.py). If you want to change a code's `base_deduction`, you need to update both the JSON and the test in the same commit.
+
+**NOTE on existing entries:** v2.1 is additive and backwards-compatible. Existing entries' codes are NOT being reclassified (e.g., the 37 entries currently coded `CRI_UNDRUG` for sildenafil/tadalafil spikes stay that way). Use the new codes only for *new* sync runs going forward, unless retroactive reclassification is explicitly scoped as separate work.
 
 #### `cui` field
 - Set to `null` for new entries. After adding, run `python scripts/api_audit/verify_cui.py --file scripts/data/banned_recalled_ingredients.json --list-key ingredients --cui-field cui --apply` to populate CUIs automatically via the UMLS API.
