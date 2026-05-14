@@ -61904,9 +61904,7 @@
       "last_reviewed_at": "2026-04-20",
       "research_status": "validated"
     },
-    "external_ids": {
-      "unii": "2FC65L33PK"
-    },
+    "external_ids": {},
     "rxcui_note": "No RxCUI assigned \u2014 probiotic strain.",
     "gsrs": {
       "substance_name": "Leuconostoc Mesenteroides",
