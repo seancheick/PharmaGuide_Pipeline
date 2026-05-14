@@ -3446,16 +3446,17 @@
       "is_additive": true,
       "additive_type": "capsule_shell",
       "allergen": false,
-      "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation.",
+      "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation. UNII 3NXW29V3WO (hypromelloses/HPMC) was removed 2026-05-14 — generic capsules can be gelatin, HPMC, pullulan, etc., so a single specific UNII would mis-anchor every generic-capsule disclosure to HPMC. Specific capsule materials are modeled in separate entries (PII_HPMC, PII_GELATIN_CAPSULE, etc.).",
       "common_uses": [
         "delivery format"
       ],
-      "last_updated": "2026-02-18",
+      "last_updated": "2026-05-14",
       "external_ids": {
-        "pubchem_cid": 57503849,
-        "unii": "3NXW29V3WO"
+        "pubchem_cid": 57503849
       },
       "cui": "C1704652",
+      "cui_status": "governed_null",
+      "cui_note": "UNII intentionally omitted — generic capsule is a delivery-format class (gelatin / HPMC / pullulan / etc.), no single FDA-cataloged substance covers the class. Specific capsule materials carry their own UNIIs in dedicated entries.",
       "functional_roles": [
         "coating",
         "gelling_agent"
