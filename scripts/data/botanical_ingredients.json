@@ -14618,10 +14618,8 @@
       ],
       "category": "vegetable",
       "notes": "Allium ampeloprasum / A. porrum (Amaryllidaceae). Common culinary allium with allicin-related sulfur compounds. Modest individual clinical evidence; functional grouping with garlic / onion / chive for cardiovascular and immune support.",
-      "last_updated": "2026-05-14",
-      "external_ids": {
-        "unii": "RCU76P419D"
-      },
+      "last_updated": "2026-05-01",
+      "external_ids": {},
       "cui": "C1262901",
       "functional_roles": [],
       "attributes": {
