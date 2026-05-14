@@ -7775,6 +7775,26 @@
           "unii": "VF8L36HTE0"
         }
       },
+      "peg-creatine system": {
+        "bio_score": 10,
+        "natural": false,
+        "score": 10,
+        "absorption": "polymer-conjugate; lower-dose ergogenic equivalence vs monohydrate (Herda 2009); no superiority demonstrated",
+        "notes": "Polyethylene-glycosylated creatine (PEG-creatine, marketed as PEG-Creatine System): creatine covalently bound to a polyethylene-glycol polymer carrier. Mechanism is hydrolytic release of free creatine from the PEG carrier \u2014 distinct from the ionic dissociation that creatine salts (HCl, citrate, nitrate, Mg-chelate) use via the SLC6A8/CRT transporter pathway. Evidence base is three small short-duration RCTs from U.S. strength-conditioning labs: Herda 2009 (PMID:19387397, 30-day, n=58, 4-arm) found PEG-creatine at 1.25-2.50 g/d matched creatine monohydrate at 5 g/d on 1RM bench and leg press \u2014 though only the monohydrate arm gained body mass and Wingate mean power. Camic 2010 (PMID:21068676, 28-day, n=22) found 5 g/d PEG-creatine improved 1RM bench vs placebo. Camic 2014 (PMID:23897021, 28-day, n=77) found 1.25-2.50 g/d PEG-creatine improved vertical jump, 20-yard shuttle, 3-cone drill, bench endurance, and body mass on at least one PEG arm vs placebo. NO PEG-creatine study has demonstrated superiority over creatine monohydrate on any endpoint; no muscle-creatine PK measurements; no replication outside single-lab US strength-conditioning research. Conservative bio_score 10 reflects class-equivalence to creatine salt forms (HCl, citrate, nitrate at bio_score 10-11) rather than the gold-standard monohydrate tier (bio_score 14). Distinct commercial and chemical identity warrants a dedicated IQM form per project taxonomy principle (no aliasing across distinct compound classes). Added 2026-05-14 in Bucket-1 NOT_SCORED closure for 14 GNC Amplified Creatine 189 / Creatine HCl 189 / Creatine Strength Support products whose only active row in DSLD is `PEG-Creatine System`. PMID verification: 19387397, 21068676, 23897021 all WebFetch-verified via PubMed eutils 2026-05-14.",
+        "aliases": [
+          "peg-creatine system",
+          "peg-creatine",
+          "polyethylene glycosylated creatine",
+          "polyethylene-glycosylated creatine"
+        ],
+        "dosage_importance": 0.5,
+        "absorption_structured": {
+          "value": 0.90,
+          "range_low": 0.80,
+          "range_high": 0.95,
+          "quality": "good"
+        }
+      },
       "creatine monohydrate ((unspecified))": {
         "bio_score": 6,
         "natural": false,

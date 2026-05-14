@@ -60,7 +60,7 @@ Probably not worth doing for 18 products.
 
 ---
 
-## Cluster B-creatine — PEG-Creatine System (14 entries) — POTENTIALLY FIXABLE
+## Cluster B-creatine — PEG-Creatine System (14 entries) — IQM SHIPPED 2026-05-14, CLEANER STILL BLOCKS
 
 All GNC Creatine products: Amplified Creatine 189 (×12), Creatine
 Strength Support, Creatine 189 Strength & Performance Support, Creatine
@@ -70,32 +70,80 @@ HCl 189.
 ```
 name: "PEG-Creatine System"
 ingredientGroup: "Creatine"
+category: "non-nutrient/non-botanical"
 ```
-DSLD's `ingredientGroup` ≈ "Creatine" — the canonical class IS detected
-at DSLD's level. But the pipeline isn't matching `PEG-Creatine System`
-to the Creatine IQM canonical, so `mapped_coverage=0` and the product
-gets gated.
 
 **Affected dsld_ids:** 4844, 4845, 5776, 5884, 18479, 25595, 30568,
 31141, 42327, 67310, 69333, 74811, 74814, 210596.
 
-**Where to look:**
-1. `scripts/enrich_supplements_v3.py` Pass 1 active classification —
-   how does it match `PEG-Creatine System` → IQM `creatine`?
-2. `scripts/data/ingredient_quality_map.json` — does the `creatine`
-   entry have `PEG-Creatine System` as an alias or pattern? It likely
-   doesn't, since "PEG-" is a delivery-system prefix.
-3. The `_should_promote_to_scorable` Rule A (known therapeutic) — does
-   the active classifier even reach IQM with the prefixed name?
+### 2026-05-14 IQM-side fix (LANDED)
 
-**Likely fix paths:**
-- Add `PEG-Creatine System` alias to IQM `creatine`, OR
-- Prefix-stripping logic so `PEG-<X>` and `<X>` both route to the IQM
-  entry for `<X>`. Generalize beyond just PEG (could handle other
-  delivery-system prefixes).
+Added a dedicated `peg-creatine system` form to the `creatine_monohydrate`
+parent in `ingredient_quality_map.json`:
+- bio_score: 10 (class-equivalent to creatine HCl/citrate, NOT 6 like
+  the (unspecified) fallback, NOT 14 like monohydrate gold standard)
+- absorption_structured.value: 0.90 (conservative band [0.80, 0.95])
+- Evidence-anchored to 3 WebFetch-verified PMIDs:
+  - Herda 2009 PMID:19387397 (n=58, 30-day RCT, equivalent to monohydrate
+    on 1RM at lower dose)
+  - Camic 2010 PMID:21068676 (n=22, 28-day RCT vs placebo)
+  - Camic 2014 PMID:23897021 (n=77, 28-day RCT vs placebo)
+- Aliases: `peg-creatine system`, `peg-creatine`,
+  `polyethylene glycosylated creatine`, `polyethylene-glycosylated creatine`
+- 9 regression tests in `test_creatine_integrity.py` pin the form + its
+  bio_score band + alias coverage + PMID evidence + taxonomy isolation
+- Matcher simulation PASSES: raw `'PEG-Creatine System'` from DSLD now
+  routes cleanly to the dedicated form with bio_score 10
 
-**Estimated effort:** 30 min if just an alias addition; 1–2 hours if
-prefix-stripping needs a design.
+Earlier draft attempted to alias PEG-Creatine to the (unspecified) form
+at bio_score 6 — rejected by reviewer as too punitive (would put PEG
+below creatine ethyl ester, a known failed pro-drug). Alternative draft
+proposed aliasing to creatine_hydrochloride to lift the score — rejected
+as semantically sloppy (PEG-Creatine is NOT creatine HCl). Final approach
+follows project taxonomy principle: distinct compound → distinct form node.
+
+Earlier draft also cited an incorrect Herda PMID (19164825 — actually a
+2008 prostate-cancer study). PubMed eutils content-verification caught
+the ghost reference; replaced with the correct PMID 19387397 pre-merge.
+
+### Cleaner-side blocker (STILL ACTIVE — separate work needed)
+
+End-to-end verification on dsld 4844 (Amplified Creatine 189) reveals
+the cleaner DROPS the `PEG-Creatine System` raw active row before it
+reaches the enricher:
+```
+raw_actives_count: 1          # cleaner sees the row in ingredientRows
+activeIngredients: []         # but it disappears after classification
+inactiveIngredients: [7]      # NOT routed to inactive either — just dropped
+```
+
+The drop is upstream of any IQM matching. The IQM fix is therefore
+necessary but not sufficient — the 14 GNC creatine products will
+continue to score as NOT_SCORED on the next pipeline rebuild until the
+cleaner-side drop is also resolved.
+
+**Where to look (cleaner-side):**
+1. `scripts/enhanced_normalizer.py:_process_single_ingredient_enhanced`
+   (line ~4630) — the per-row classifier that returns `None` to drop
+   silently. Add a trace branch that logs the drop reason.
+2. Walk the `_process_ingredients_enhanced` filter chain (line ~4518):
+   `_is_active_source_form_wrapper`, `_is_structural_active_blend_leaf`,
+   `_is_structural_active_form_display_only`,
+   `_is_structural_active_display_only_leaf`, `_is_structural_form_container`,
+   `_is_label_header`. The `forms[]=[]` plus the "System" suffix on the
+   name might be triggering one of the structural-container checks even
+   though the row has no children.
+3. `_is_nutrition_fact` returns False for this row (verified separately),
+   so it is NOT the drop site.
+
+**Estimated effort:** 1-2 hours of cleaner-side tracing once someone
+sits down with the live raw record.
+
+This is the same shape as the original Bucket 3 issue (actives demoted
+to inactive) and the Bucket 2 issue (Phase 4a label-descriptor drops).
+Likely a missing entry in one of the cleaner's structural-container
+allowlists, or an overly-aggressive `forms[]==[]` filter that fires on
+single-row containers like this one.
 
 ---
 
