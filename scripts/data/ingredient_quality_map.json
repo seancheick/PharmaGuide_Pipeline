@@ -62799,9 +62799,7 @@
       "research_status": "validated"
     },
     "category_enum": "probiotics",
-    "external_ids": {
-      "unii": "QX2H2M2084"
-    },
+    "external_ids": {},
     "rxcui_note": "Lactobacillus crispatus NCBI taxid 47770; no specific RxNorm concept",
     "aliases": []
   },
