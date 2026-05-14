@@ -7,7 +7,7 @@ from pathlib import Path
 
 DATA_DIR = Path(__file__).resolve().parents[1] / "data"
 IQM_PATH = DATA_DIR / "ingredient_quality_map.json"
-APPROVED_NULL_STATUSES = {"no_confirmed_umls_match", "no_single_umls_concept"}
+APPROVED_NULL_STATUSES = {"no_confirmed_umls_match", "no_single_umls_concept", "governed_null"}
 
 
 def load_iqm():

@@ -308,12 +308,32 @@ def test_verified_other_ingredients_missing_cui_null_outs():
 
 
 def test_verified_other_ingredients_gsrs_unii_fills():
-    """5 UNII fills confirmed by CAS cross-validation against live GSRS."""
+    """4 UNII fills confirmed by CAS cross-validation against live GSRS.
+
+    NHA_MALATE_GENERIC was previously pinned to UNII 817L1N4CKP (MALIC ACID)
+    + CAS 6915-15-7, but Sprint 2-prep triage (2026-05-14, commit 3106050)
+    governed-null'd both because 'Malate' as a generic descriptor is
+    ambiguous between malate ions, calcium/magnesium/sodium/potassium
+    malate salts, AND the acid form. FDA cache has no generic-malate UNII.
+    Per docs/UNII_TRIAGE_2026_05_14.md and the pre-Sprint-1 blocker rule,
+    tagging the generic descriptor with the acid-form's identifiers would
+    mis-anchor every label-disclosed 'Malate' to malic acid once UNII-first
+    matching ships. Specific malate compounds (NHA_MALIC_ACID for the acid,
+    per-salt entries) keep their correct UNIIs.
+    """
     rows = _rows_by_id()
 
     malate_ext = (rows["NHA_MALATE_GENERIC"].get("external_ids") or {})
-    assert malate_ext.get("unii") == "817L1N4CKP"       # malic acid, CAS 6915-15-7
-    assert malate_ext.get("cas") == "6915-15-7"          # unchanged
+    assert malate_ext.get("unii") is None, (
+        "NHA_MALATE_GENERIC must NOT carry a UNII (governed_null per "
+        "Sprint 2-prep triage). Generic 'Malate' is ambiguous between "
+        "ion/salt/acid forms; specific malate compounds carry their own UNIIs."
+    )
+    assert malate_ext.get("cas") is None, (
+        "NHA_MALATE_GENERIC must NOT carry CAS 6915-15-7 (L-malic acid). "
+        "Generic descriptor — no single CAS applies."
+    )
+    assert rows["NHA_MALATE_GENERIC"].get("cui_status") == "governed_null"
 
     oaa_ext = (rows["PII_OXALOACETATE"].get("external_ids") or {})
     assert oaa_ext.get("unii") == "2F399MM81J"           # oxaloacetic acid, CAS 328-42-7

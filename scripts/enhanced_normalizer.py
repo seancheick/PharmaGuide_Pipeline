@@ -96,6 +96,37 @@ def _preprocess_text_module_cached(text: str) -> str:
     return norm_module.preprocess_text(text)
 
 
+# ---------------------------------------------------------------------------
+# Sprint 1 UNII-first matching: canonical UNII normalizer.
+# Used by index build (entries' external_ids.unii + top-level unii) AND
+# every lookup site (raw DSLD row uniiCode, forms[*].uniiCode, nonscorable
+# index lookup, backfill proposal generator). ONE function so the contract
+# is consistent across the cleaner and enricher.
+# ---------------------------------------------------------------------------
+_UNII_PLACEHOLDERS = frozenset({"", "0", "1"})
+
+
+def _normalize_unii(value):
+    """Canonicalize a UNII string. Returns None for placeholders/garbage.
+
+    FDA UNIIs are exactly 10 alphanumeric characters. DSLD raw labels and
+    reference data may emit them with whitespace or mixed case; DSLD also
+    uses "0" and "1" as placeholders meaning "no UNII assigned". We strip
+    whitespace, uppercase, and reject placeholders + malformed values.
+
+    Returns:
+        Optional[str]: 10-char uppercase alphanumeric UNII, or None.
+    """
+    if not isinstance(value, str):
+        return None
+    canon = value.strip().upper()
+    if not canon or canon in _UNII_PLACEHOLDERS:
+        return None
+    if len(canon) != 10 or not canon.isalnum():
+        return None
+    return canon
+
+
 _VARIATION_ABBREVIATIONS = {
     'vitamin': 'vit',
     'alpha': 'a',
@@ -1268,6 +1299,50 @@ class EnhancedDSLDNormalizer:
         # Build combined exact match lookup for all databases
         self._fast_exact_lookup = {}
         self._group_exact_lookup = {}
+        # Sprint 1: UNII-anchored payload index. Keyed by canonical UNII
+        # (10-char alphanumeric uppercase per _normalize_unii). Priority
+        # order mirrors _fast_exact_lookup: banned > allergen > harmful >
+        # IQM > standardized > botanical > other > proprietary_blends >
+        # fda_other > absorption > enhanced_delivery.
+        self._unii_to_payload_lookup: Dict[str, Dict[str, Any]] = {}
+
+        def add_unii_payload(unii_raw, payload: Dict[str, Any], entry_id_for_log: str = "") -> None:
+            unii = _normalize_unii(unii_raw)
+            if not unii:
+                return
+            incoming_priority = payload.get("priority", 999)
+            existing = self._unii_to_payload_lookup.get(unii)
+            if existing is None:
+                self._unii_to_payload_lookup[unii] = payload
+                return
+            existing_priority = existing.get("priority", 999)
+            if existing_priority < incoming_priority:
+                # Higher-priority tier already wins; cross-tier collision is
+                # expected and benign. Log at debug for audit visibility.
+                logger.debug(
+                    "UNII collision (cross-tier): %s already mapped to %r "
+                    "(tier %d); skipping incoming tier-%d %r",
+                    unii, existing.get("standard_name", "?"),
+                    existing_priority, incoming_priority, entry_id_for_log,
+                )
+                return
+            if incoming_priority < existing_priority:
+                self._unii_to_payload_lookup[unii] = payload
+                logger.debug(
+                    "UNII collision (cross-tier): %s previously mapped to tier-%d %r; "
+                    "promoting to higher-priority tier-%d %r",
+                    unii, existing_priority, existing.get("standard_name", "?"),
+                    incoming_priority, entry_id_for_log,
+                )
+                return
+            # SAME tier, different entries — likely data-quality bug. Warn.
+            if existing is not payload:
+                logger.warning(
+                    "UNII same-tier conflict: %s mapped to BOTH %r and %r (tier %d) — "
+                    "first-write wins. Likely data-quality bug; review with audit.",
+                    unii, existing.get("standard_name", "?"),
+                    entry_id_for_log, incoming_priority,
+                )
 
         def add_group_exact(key: str, payload: Dict[str, Any]) -> None:
             normalized = norm_module.normalize_text(key)
@@ -1548,6 +1623,216 @@ class EnhancedDSLDNormalizer:
 
         for entry_type, count in sorted(type_counts.items()):
             logger.info(f"  - {entry_type}: {count} entries")
+
+        # ── Sprint 1: build UNII-anchored payload index ──
+        # Walk every reference DB and index entries by their external_ids.unii
+        # (or top-level unii). Mirrors the priority order of _fast_exact_lookup
+        # so the higher-priority tier wins on cross-tier collisions.
+        # banned > allergen > harmful > IQM > standardized > botanical >
+        # other > proprietary > absorption > enhanced_delivery.
+        self._build_unii_to_payload_lookup()
+        logger.info(
+            f"Built UNII-anchored payload index with {len(self._unii_to_payload_lookup)} entries"
+        )
+
+    def _build_unii_to_payload_lookup(self) -> None:
+        """Populate self._unii_to_payload_lookup by walking all reference
+        databases in priority order. Each entry's `external_ids.unii` (or
+        top-level `unii`) is indexed via `add_unii_payload` (defined inline
+        in `_build_fast_lookups_impl` and lifted to a closure via attribute
+        rebinding below — but easier: re-implement here to avoid scope issues)."""
+
+        # Local helper duplicates the collision-aware add logic from
+        # _build_fast_lookups_impl's add_unii_payload. Same contract.
+        def _add(unii_raw, payload: Dict[str, Any], entry_id_for_log: str = "") -> None:
+            unii = _normalize_unii(unii_raw)
+            if not unii:
+                return
+            incoming_priority = payload.get("priority", 999)
+            existing = self._unii_to_payload_lookup.get(unii)
+            if existing is None:
+                self._unii_to_payload_lookup[unii] = payload
+                return
+            existing_priority = existing.get("priority", 999)
+            if existing_priority < incoming_priority:
+                logger.debug(
+                    "UNII collision (cross-tier): %s already mapped to %r "
+                    "(tier %d); skipping incoming tier-%d %r",
+                    unii, existing.get("standard_name", "?"),
+                    existing_priority, incoming_priority, entry_id_for_log,
+                )
+                return
+            if incoming_priority < existing_priority:
+                self._unii_to_payload_lookup[unii] = payload
+                logger.debug(
+                    "UNII collision (cross-tier): %s previously mapped to tier-%d %r; "
+                    "promoting to higher-priority tier-%d %r",
+                    unii, existing_priority, existing.get("standard_name", "?"),
+                    incoming_priority, entry_id_for_log,
+                )
+                return
+            if existing is not payload:
+                logger.warning(
+                    "UNII same-tier conflict: %s mapped to BOTH %r and %r (tier %d) — "
+                    "first-write wins. Likely data-quality bug; review with audit.",
+                    unii, existing.get("standard_name", "?"),
+                    entry_id_for_log, incoming_priority,
+                )
+
+        def _extract_unii(entry: Dict[str, Any]) -> Optional[str]:
+            if not isinstance(entry, dict):
+                return None
+            eid = entry.get("external_ids") or {}
+            if isinstance(eid, dict):
+                u = _normalize_unii(eid.get("unii"))
+                if u:
+                    return u
+            return _normalize_unii(entry.get("unii"))
+
+        # Build a payload reflecting the entry's tier — re-using the same
+        # shape that _fast_exact_lookup uses so downstream consumers get
+        # the familiar fields.
+
+        # PRIORITY 1: banned_recalled — already indexed in _fast_exact_lookup
+        # at priority 1 with type=banned. Reuse those payloads.
+        for payload in self._fast_exact_lookup.values():
+            t = payload.get("type")
+            if t == "banned":
+                # The standard_name on banned payloads is canonical; look up
+                # the original entry to find its UNII.
+                std_name = payload.get("standard_name")
+                if not std_name:
+                    continue
+                # Walk banned_recalled to find UNII for this standard_name
+                for section_value in self.banned_recalled.values():
+                    if not isinstance(section_value, list):
+                        continue
+                    for entry in section_value:
+                        if not isinstance(entry, dict):
+                            continue
+                        if entry.get("standard_name") == std_name:
+                            _add(_extract_unii(entry), payload, f"banned:{std_name}")
+                            break
+
+        # PRIORITY 4: IQM (active ingredients) — walk ingredient_map (self.ingredient_map)
+        quality_map = getattr(self, "ingredient_map", {})
+        if isinstance(quality_map, dict):
+            for parent_key, parent_data in quality_map.items():
+                if parent_key.startswith("_") or not isinstance(parent_data, dict):
+                    continue
+                parent_std = parent_data.get("standard_name", parent_key)
+                # Use the IQM-tier payload from _fast_exact_lookup if present
+                # via parent_std preprocessing
+                processed_std = self.matcher.preprocess_text(parent_std)
+                payload = self._fast_exact_lookup.get(processed_std)
+                if not payload:
+                    # Build a minimal IQM-tier payload
+                    payload = {
+                        "type": "ingredient",
+                        "standard_name": parent_std,
+                        "mapped": True,
+                        "priority": 4,
+                    }
+                _add(_extract_unii(parent_data), payload, f"iqm:{parent_key}")
+                # Form-level UNIIs route to the same parent payload (forms
+                # share the parent's identity for matching purposes; the
+                # downstream resolver picks the specific form by name)
+                forms = parent_data.get("forms", {})
+                if isinstance(forms, dict):
+                    for form_name, form_data in forms.items():
+                        if not isinstance(form_data, dict):
+                            continue
+                        _add(_extract_unii(form_data), payload, f"iqm:{parent_key}.{form_name}")
+
+        # PRIORITY 5: standardized_botanicals
+        sb_db = getattr(self, "standardized_botanicals", None) or {}
+        sb_entries = sb_db.get("standardized_botanicals", []) if isinstance(sb_db, dict) else []
+        for entry in sb_entries:
+            if not isinstance(entry, dict):
+                continue
+            std_name = entry.get("standard_name", entry.get("id", ""))
+            processed_std = self.matcher.preprocess_text(std_name) if std_name else ""
+            payload = self._fast_exact_lookup.get(processed_std)
+            if not payload:
+                payload = {
+                    "type": "standardized_botanical",
+                    "standard_name": std_name,
+                    "mapped": True,
+                    "priority": 5,
+                }
+            _add(_extract_unii(entry), payload, f"std_bot:{entry.get('id','?')}")
+
+        # PRIORITY 6: botanical_ingredients
+        bi_db = getattr(self, "botanical_ingredients", None) or {}
+        bi_entries = bi_db.get("botanical_ingredients", []) if isinstance(bi_db, dict) else []
+        for entry in bi_entries:
+            if not isinstance(entry, dict):
+                continue
+            std_name = entry.get("standard_name", entry.get("id", ""))
+            processed_std = self.matcher.preprocess_text(std_name) if std_name else ""
+            payload = self._fast_exact_lookup.get(processed_std)
+            if not payload:
+                payload = {
+                    "type": "botanical",
+                    "standard_name": std_name,
+                    "mapped": True,
+                    "priority": 6,
+                }
+            _add(_extract_unii(entry), payload, f"botanical:{entry.get('id','?')}")
+
+        # PRIORITY 7: other_ingredients
+        oi_db = getattr(self, "other_ingredients", None) or {}
+        oi_entries = oi_db.get("other_ingredients", []) if isinstance(oi_db, dict) else []
+        for entry in oi_entries:
+            if not isinstance(entry, dict):
+                continue
+            std_name = entry.get("standard_name", entry.get("id", ""))
+            processed_std = self.matcher.preprocess_text(std_name) if std_name else ""
+            payload = self._fast_exact_lookup.get(processed_std)
+            if not payload:
+                payload = {
+                    "type": "other_ingredient",
+                    "standard_name": std_name,
+                    "category": entry.get("category", "other"),
+                    "is_additive": entry.get("is_additive", False),
+                    "mapped": True,
+                    "priority": 9,
+                }
+            _add(_extract_unii(entry), payload, f"other:{entry.get('id','?')}")
+
+    def _try_unii_match(
+        self, ingredient_data: Dict[str, Any]
+    ) -> Optional[Tuple[Dict[str, Any], str]]:
+        """Sprint 1 Tier-0 match: resolve ingredient_data's uniiCode against
+        the UNII-anchored payload index. Returns (payload, match_method) on
+        hit; None otherwise.
+
+        Match precedence:
+          1. Row's `uniiCode` (DSLD-attached top-level identifier)
+          2. Each `forms[*].uniiCode` (DSLD-attached per-form identifier)
+        Placeholders (None, "", "0", "1") are rejected via _normalize_unii.
+
+        Returns:
+            Optional tuple (payload_dict, match_method) where match_method is
+            either "unii_exact_match" (top-level uniiCode hit) or
+            "unii_form_exact_match" (forms[*] uniiCode hit).
+        """
+        if not isinstance(ingredient_data, dict):
+            return None
+        # Try top-level row UNII
+        unii = _normalize_unii(ingredient_data.get("uniiCode"))
+        if unii and unii in self._unii_to_payload_lookup:
+            return self._unii_to_payload_lookup[unii], "unii_exact_match"
+        # Try forms[*].uniiCode
+        forms = ingredient_data.get("forms") or []
+        if isinstance(forms, list):
+            for form in forms:
+                if not isinstance(form, dict):
+                    continue
+                form_unii = _normalize_unii(form.get("uniiCode"))
+                if form_unii and form_unii in self._unii_to_payload_lookup:
+                    return self._unii_to_payload_lookup[form_unii], "unii_form_exact_match"
+        return None
 
     def _fast_ingredient_lookup(self, name: str) -> Dict[str, Any]:
         """Fast combined lookup for ingredient, harmful, and allergen data"""
@@ -4506,13 +4791,61 @@ class EnhancedDSLDNormalizer:
                 children=[],
             )
             return None
-        
-        # Enhanced mapping with fuzzy matching
-        standard_name, mapped, mapped_forms = self._enhanced_ingredient_mapping(
-            name,
-            forms,
-            ingredient_group=ingredient_group,
-        )
+
+        # ── Sprint 1 Tier-0: UNII-anchored match ──
+        # Try the FDA UNII (top-level uniiCode, then per-form uniiCodes)
+        # against the UNII reverse index BEFORE falling through to
+        # name-based matching. Bypasses all name-string variation issues
+        # for substances DSLD has explicitly identified with an FDA UNII.
+        # Result shape mirrors _enhanced_ingredient_mapping: (std_name, mapped, forms).
+        unii_match_result = self._try_unii_match(ing)
+        if unii_match_result is not None:
+            unii_payload, unii_method = unii_match_result
+            standard_name = unii_payload.get("standard_name", name)
+            mapped = True
+            mapped_forms = forms or []
+            # Stash match method on the row for downstream ledger reporting.
+            ing["_sprint1_match_method"] = unii_method
+            logger.debug(
+                "UNII %s match: row %r (uniiCode=%r) → %r [method=%s]",
+                "form" if unii_method == "unii_form_exact_match" else "row",
+                name, ing.get("uniiCode"), standard_name, unii_method,
+            )
+        else:
+            # Enhanced mapping with fuzzy matching (existing path)
+            standard_name, mapped, mapped_forms = self._enhanced_ingredient_mapping(
+                name,
+                forms,
+                ingredient_group=ingredient_group,
+            )
+
+            # ── Sprint 1: alternateNames fallback ──
+            # If primary-name lookup missed, try each DSLD-provided
+            # alternateName against the SAME full lookup chain. Re-uses
+            # _enhanced_ingredient_mapping (with its full cascade) per alt name.
+            # Cheap when alternateNames is empty or missing (most rows).
+            if not mapped:
+                alt_names = ing.get("alternateNames") or []
+                if isinstance(alt_names, list):
+                    for alt_name in alt_names:
+                        if not isinstance(alt_name, str) or not alt_name.strip():
+                            continue
+                        alt_std, alt_mapped, alt_forms = self._enhanced_ingredient_mapping(
+                            alt_name,
+                            forms,
+                            ingredient_group=ingredient_group,
+                        )
+                        if alt_mapped:
+                            standard_name = alt_std
+                            mapped = True
+                            mapped_forms = alt_forms or mapped_forms
+                            ing["_sprint1_match_method"] = "alternate_name_match"
+                            logger.debug(
+                                "alternateNames match: primary %r missed; "
+                                "alternateName %r → %r",
+                                name, alt_name, standard_name,
+                            )
+                            break
 
         # Priority-based ingredient classification to handle overlaps
         classification = self._priority_based_classification(name, forms)

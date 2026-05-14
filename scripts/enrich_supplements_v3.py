@@ -177,6 +177,31 @@ BOTANICAL_CANONICAL_SOURCE_DBS = {
 }
 
 
+# ---------------------------------------------------------------------------
+# Sprint 1 UNII-first matching: canonical UNII normalizer (must stay in sync
+# with `enhanced_normalizer._normalize_unii` — duplicated rather than imported
+# to keep the cleaner and enricher independently testable). Contract:
+#
+#   FDA UNIIs are exactly 10 alphanumeric uppercase characters. Strip
+#   whitespace, uppercase, and reject DSLD placeholder values ("0", "1", "").
+#
+# Returns: Optional[str] — 10-char canonical UNII, or None for placeholder/garbage.
+# ---------------------------------------------------------------------------
+_UNII_PLACEHOLDERS = frozenset({"", "0", "1"})
+
+
+def _normalize_unii(value):
+    """Canonicalize a UNII string. Returns None for placeholders/garbage."""
+    if not isinstance(value, str):
+        return None
+    canon = value.strip().upper()
+    if not canon or canon in _UNII_PLACEHOLDERS:
+        return None
+    if len(canon) != 10 or not canon.isalnum():
+        return None
+    return canon
+
+
 def _compute_strain_cfu_tier(cfu_per_day, tiers_cfu_per_day) -> Optional[str]:
     """Map a per-strain CFU count to its adequacy tier using Dr Pham's
     authored ``tiers_cfu_per_day`` band dict.
@@ -562,6 +587,10 @@ class SupplementEnricherV3:
         self._iqm_norm_index: Dict[str, List] = {}   # normalized → [(parent_key, form_key|None, alias_text, priority, match_mode)]
         # Non-scorable DB index for O(1) recognition lookups
         self._nonscorable_index: Dict[str, Dict] = {}  # normalized_variant → result_dict
+        # Sprint 1: UNII-anchored non-scorable recognition index. Mirrors
+        # _nonscorable_index but keyed by canonical UNII for Tier-0 recognition
+        # of inactive/recognized-non-scorable items via DSLD's uniiCode.
+        self._nonscorable_unii_index: Dict[str, Dict] = {}
         self._build_performance_indexes()
 
         # Track unmapped ingredients across batch
@@ -1197,11 +1226,70 @@ class SupplementEnricherV3:
 
         self._nonscorable_index = nonscorable_idx
 
+        # ── Sprint 1: UNII-anchored non-scorable index ──
+        # Walk the same 4 reference DBs + banned_recalled and index by
+        # entry's external_ids.unii. Higher recognition_priority wins on
+        # cross-DB collision (banned > harmful > other/botanical/std_bot).
+        nonscorable_unii_idx: Dict[str, Dict] = {}
+        for db_key, list_key, rec_type, reason_fn in db_configs:
+            db = self.databases.get(db_key, {})
+            entries = db.get(list_key, []) if isinstance(db, dict) else []
+            for entry in entries:
+                if not isinstance(entry, dict):
+                    continue
+                eid = entry.get("external_ids") or {}
+                entry_unii = _normalize_unii(
+                    (eid.get("unii") if isinstance(eid, dict) else None)
+                    or entry.get("unii")
+                )
+                if not entry_unii:
+                    continue
+                result = {
+                    "recognition_source": db_key,
+                    "recognition_reason": reason_fn(entry),
+                    "matched_entry_id": entry.get("id"),
+                    "matched_entry_name": entry.get("standard_name"),
+                    "recognition_type": rec_type,
+                }
+                existing = nonscorable_unii_idx.get(entry_unii)
+                if existing is None or _recognition_priority(result) > _recognition_priority(existing):
+                    nonscorable_unii_idx[entry_unii] = result
+
+        # Also index banned_recalled by UNII (mirrors the name-indexed pass below)
+        banned_db = self.databases.get("banned_recalled_ingredients", {})
+        banned_list = banned_db.get("ingredients", []) if isinstance(banned_db, dict) else []
+        for entry in banned_list:
+            if not isinstance(entry, dict):
+                continue
+            entity_type = entry.get("entity_type", "ingredient")
+            if entity_type not in {"ingredient", "contaminant", "class", None, ""}:
+                continue
+            eid = entry.get("external_ids") or {}
+            entry_unii = _normalize_unii(
+                (eid.get("unii") if isinstance(eid, dict) else None)
+                or entry.get("unii")
+            )
+            if not entry_unii:
+                continue
+            result = {
+                "recognition_source": "banned_recalled_ingredients",
+                "recognition_reason": "banned",
+                "matched_entry_id": entry.get("id"),
+                "matched_entry_name": entry.get("standard_name"),
+                "recognition_type": "non_scorable",
+            }
+            existing = nonscorable_unii_idx.get(entry_unii)
+            if existing is None or _recognition_priority(result) > _recognition_priority(existing):
+                nonscorable_unii_idx[entry_unii] = result
+
+        self._nonscorable_unii_index = nonscorable_unii_idx
+
         elapsed = time.monotonic() - t0
         self.logger.info(
             f"Performance indexes built in {elapsed:.2f}s: "
             f"IQM exact={len(exact_idx)} norm={len(norm_idx)} entries, "
-            f"non-scorable={len(nonscorable_idx)} entries"
+            f"non-scorable={len(nonscorable_idx)} entries, "
+            f"non-scorable-UNII={len(nonscorable_unii_idx)} entries"
         )
 
     @staticmethod
@@ -3748,11 +3836,14 @@ class SupplementEnricherV3:
 
         return False
 
-    def _is_recognized_non_scorable(self, ing_name: str, std_name: str) -> Optional[Dict]:
+    def _is_recognized_non_scorable(
+        self, ing_name: str, std_name: str, raw_row: Optional[Dict] = None
+    ) -> Optional[Dict]:
         """
         Check if ingredient is recognized in non-scorable databases.
 
         TIERED MATCHING (per dev feedback):
+        - Tier 0 (Sprint 1, NEW): raw_row.uniiCode → O(1) UNII index lookup
         - Tier 1: quality_map → scorable bioactive
         - Tier 2: botanicals → recognized (scorable if modeled)
         - Tier 3: other_ingredients → recognized_non_scorable (THIS METHOD)
@@ -3762,9 +3853,30 @@ class SupplementEnricherV3:
         This prevents oils, food powders, and carriers from counting as
         "unmapped ingredients" and inflating the unmapped count.
 
+        Args:
+            ing_name: ingredient name from cleaner output
+            std_name: candidate standard_name (from cleaner mapping attempt)
+            raw_row: optional full DSLD row dict with `uniiCode` and `forms[*]`
+                     for Tier-0 UNII-anchored recognition (Sprint 1)
+
         Returns:
             Dict with recognition_source and reason if recognized, None otherwise.
         """
+        # ── Sprint 1 Tier-0: UNII-anchored fast path ──
+        if raw_row is not None and self._nonscorable_unii_index:
+            raw_unii = _normalize_unii(raw_row.get("uniiCode"))
+            if raw_unii and raw_unii in self._nonscorable_unii_index:
+                return dict(self._nonscorable_unii_index[raw_unii])
+            # Walk forms[*].uniiCode if top-level missed
+            forms = raw_row.get("forms") or []
+            if isinstance(forms, list):
+                for form in forms:
+                    if not isinstance(form, dict):
+                        continue
+                    form_unii = _normalize_unii(form.get("uniiCode"))
+                    if form_unii and form_unii in self._nonscorable_unii_index:
+                        return dict(self._nonscorable_unii_index[form_unii])
+
         # ── FAST PATH: O(1) index lookup before expensive variant generation ──
         if self._nonscorable_index:
             # Check ing_name directly (most common hit)
