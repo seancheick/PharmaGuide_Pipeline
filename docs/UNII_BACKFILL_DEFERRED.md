@@ -49,26 +49,105 @@ The pre-apply regression guard (also added during Sprint 2) refuses any
 apply that would introduce a new `SAME_UNII_DIFFERENT_NAMES` critical
 finding, regardless of confidence tier.
 
-## What shipped (7 backfills)
+## What shipped (7 backfills, all artifact-verified in git HEAD)
 
-Each entry below was applied + committed atomically + verified by the
-audit:
+Each entry below has been applied to its authoritative data file and is
+present at `external_ids.unii` in git HEAD. Verified by the
+artifact-parity invariant test
+(`scripts/tests/test_unii_closure_doc_artifact_parity.py`) — see
+"Governance invariant" section at the bottom of this doc.
 
-| Entry | UNII | Signal strength |
-|---|---|---|
-| `other:PII_TRICALCIUM_PHOSPHATE` | `K4C08XP666` | FDA exact on standard_name + 176 products / 8 brands |
-| `other:OI_RIBOFLAVIN_COLORANT` | `TLM2976OFR` | FDA alias + 1297 products / 15 brands |
-| `other:OI_ROSE_HIPS_INACTIVE` | `3TNW8D08V3` | FDA alias + 11 products / 2 brands |
-| `botanical:acerola_cherry` | `XDD2WEC9L5` | FDA alias + 22 products / 4 brands |
-| `iqm:5_htp` | `9181P3OI6N` | 58 products / 6 brands (no FDA exact) |
-| `iqm:d_aspartic_acid` | `4SR0Q8YD1X` | 18 products / 4 brands |
-| `other:PII_PURIFIED_FISH_OIL` | `XGF7L72M0F` | 20 products / 4 brands |
+| Entry | UNII | Signal strength | Notes |
+|---|---|---|---|
+| `other:PII_TRICALCIUM_PHOSPHATE` | `K4C08XP666` | FDA exact on standard_name + 176 products / 8 brands | Original Sprint 2 apply (149a883) |
+| `other:OI_RIBOFLAVIN_COLORANT` | `TLM2976OFR` | FDA alias + 1297 products / 15 brands | Original Sprint 2 apply (3057c59) |
+| `other:OI_ROSE_HIPS_INACTIVE` | `3TNW8D08V3` | FDA alias + 11 products / 2 brands | Original Sprint 2 apply (6a9f00c) |
+| `botanical:acerola_cherry` | `XDD2WEC9L5` | FDA alias + 22 products / 4 brands | Original Sprint 2 apply (65b1407) |
+| `iqm:5_htp` | `9181P3OI6N` | 58 products / 6 brands (no FDA exact) | Original Sprint 2 apply |
+| `iqm:d_aspartic_acid` | `4SR0Q8YD1X` | 18 products / 4 brands | Original Sprint 2 apply |
+| `other:PII_PURIFIED_FISH_OIL` | `XGF7L72M0F` | 20 products / 4 brands | **Recovered 2026-05-15** after silent-failure detection — see "Silent-failure forensics" below. Originally claimed shipped via 6e1dfcc on 2026-05-14, but that commit only modified `manufacturer_violations.json`. Real apply landed in commit `f7d1a2d`. |
 
 Plus 1 governance annotation:
 - `iqm:vitamin_k` — `cui_note` added documenting intentional class-level
   no-UNII (mirrors the class-concept governance pattern: a class-level
   parent entry retains its valid CUI but omits `external_ids.unii`
-  because no single UNII covers the class)
+  because no single UNII covers the class). Not in the artifact-parity
+  table because there is no UNII to verify.
+
+### Catalog deployment status
+
+The artifact-parity table above is data-file level. As of catalog
+build `2026.05.14.191432` (live on Supabase), only 6 of the 7 backfills
+above are in the live catalog — `PII_PURIFIED_FISH_OIL` was recovered
+to the data file AFTER that build was generated. The next pipeline
+rebuild + Supabase resync will deliver the 7th to users.
+
+### Silent-failure forensics — `PII_PURIFIED_FISH_OIL` recovery
+
+Commit `6e1dfcc` (2026-05-14) carried the message
+"`fix(data): backfill UNII for PII_PURIFIED_FISH_OIL`" but the only
+file it touched was `scripts/data/manufacturer_violations.json` — the
+authoritative target file (`scripts/data/other_ingredients.json`) was
+NEVER modified. The closure doc claimed shipped; the data file did
+not have the UNII. The catalog rebuild silently propagated the
+unfilled entry.
+
+Two bugs in `scripts/api_audit/backfill_unii_from_cache.py`'s
+`apply_one_entry()` combined to produce the silent failure:
+
+1. **basename vs full-path key mismatch.** `REFERENCE_FILES` was a
+   list of `(full_repo_path, list_key)` tuples. Proposals carried only
+   the basename. The lookup `dict(REFERENCE_FILES).get(proposal.file)`
+   always returned `None` for basename inputs, so `list_key` was
+   `None`. Control then fell through to the IQM-style top-level
+   dict-of-dicts branch, which silently failed on list-based files.
+
+2. **encoding-convention drift on write.** Output was always
+   `ensure_ascii=False`, which re-encoded `—` (em-dash) and other
+   non-ASCII chars in IQM + botanicals + standardized_botanicals
+   files (which use ASCII-escaped JSON), producing diff noise across
+   unrelated entries.
+
+Why only `PII_PURIFIED_FISH_OIL` failed and not the other three
+list-file backfills (PII_TRICALCIUM_PHOSPHATE, OI_RIBOFLAVIN_COLORANT,
+OI_ROSE_HIPS_INACTIVE, acerola_cherry): the script's behavior when
+`list_key=None` was inconsistent — the four earlier applies happened
+to find their entries via a fall-through path that worked for them
+but failed for `PII_PURIFIED_FISH_OIL`. The deterministic fix
+(commit `6122655`) replaces the silent fall-through with an explicit
+`RuntimeError` for unknown reference files.
+
+Recovery commits (atomic batch, 2026-05-15):
+- `6122655` — `fix(api_audit): basename-keyed file map + per-file encoding`
+- `f7d1a2d` — `fix(data): recover PII_PURIFIED_FISH_OIL UNII backfill`
+- `2662a04` — `feat(test): governance invariant — closure-doc shipped backfills must match data file UNIIs`
+
+### Governance invariant
+
+After this batch, every "What shipped" row above MUST satisfy:
+
+> The corresponding entry in the data file carries the claimed UNII at
+> `external_ids.unii`.
+
+Enforced by `scripts/tests/test_unii_closure_doc_artifact_parity.py`.
+The check runs as a parametrized test, one assertion per shipped row.
+A canary test catches doc-structure drift separately so a failed parse
+cannot silently collect zero cases.
+
+The invariant is artifact-level: the data file IS the artifact, and
+CI runs against git, so a passing test guarantees git HEAD has the
+UNII. Implication runs one way: shipped claim ⇒ file has UNII. A UNII
+present in the file but not claimed shipped is fine (legacy backfills
+predating this doc).
+
+Catalog-level deployment (Supabase) is downstream of file-level state
+and gated separately by the rebuild + sync workflow.
+
+**The larger lesson:** governance annotations must be artifact-verified,
+not process-verified. "Backfill applied via: `<command>`" in a commit
+message proves the COMMAND ran; it does not prove the right FILE was
+modified. Process-verified governance produced commit `6e1dfcc`.
+Artifact-verified governance prevents the next one.
 
 ## Deferred — Tier C (12 entries, FDA-exact + zero DSLD usage)
 
