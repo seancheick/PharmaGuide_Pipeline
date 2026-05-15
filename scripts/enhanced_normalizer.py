@@ -4783,13 +4783,50 @@ class EnhancedDSLDNormalizer:
             # legitimate-nutrition-facts products whose otheringredients
             # later land as inactives — the gate could not distinguish
             # "cleaner classifier bug" from "DSLD-placed-no-real-actives".
+            _form_names_for_display = [
+                f.get("name", "") for f in (ing.get("forms") or [])
+                if isinstance(f, dict) and f.get("name")
+            ]
             self._queue_display_ingredient(
                 raw_source_text=raw_name,
                 source_section="activeIngredients" if is_active else "inactiveIngredients",
                 display_type="nutrition_fact",
                 score_included=False,
-                children=[],
+                children=_form_names_for_display,
             )
+
+            # Bucket-1 closure 2026-05-14: extract real-bioactive form
+            # children before dropping the parent. DSLD products like Fish
+            # Oil softgels (dsld_ids 1056, 11587, 33527, 75188, 75291,
+            # 212518, 243713) place the active in `Total Omega-3 Fatty
+            # Acids` (a nutrition-fact rollup) with `forms[DHA, EPA]` as
+            # the real chemical identities. Without this extraction the
+            # cleaner silently dropped the entire active chain, leaving
+            # raw_actives_count > 0 but activeIngredients == [] →
+            # downstream NOT_SCORED. Re-running the per-row classifier on
+            # each extracted form ensures noise children (e.g., "Other
+            # Omega-3 Fatty Acids") are themselves filtered by the same
+            # gates, so we don't smuggle rollups back in.
+            if is_active and ing.get("forms"):
+                extracted = []
+                for form_ing in self._expand_header_forms_for_processing(
+                    ing, source_path="activeIngredients"
+                ):
+                    processed_form = self._process_single_ingredient_enhanced(
+                        form_ing, is_active=True
+                    )
+                    if processed_form is not None:
+                        if isinstance(processed_form, list):
+                            extracted.extend(processed_form)
+                        else:
+                            extracted.append(processed_form)
+                if extracted:
+                    logger.debug(
+                        "Rescued %d form child(ren) from nutrition-fact parent %r",
+                        len(extracted), name,
+                    )
+                    return extracted
+
             return None
 
         # ── Sprint 1 Tier-0: UNII-anchored match ──

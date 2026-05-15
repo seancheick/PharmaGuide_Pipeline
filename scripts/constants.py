@@ -969,7 +969,15 @@ BLEND_HEADER_EXACT_NAMES = {
     "total bcaa",
     "pump maximizer with ot2(tm)",
     "pump maximizer with ot2",
-    "peg-creatine system",
+    # Removed 2026-05-14: "peg-creatine system" was here, but in 14 GNC products
+    # (Amplified Creatine 189 series) it appears as a leaf row with no
+    # nestedRows[] / no forms[] — i.e., it IS the product's identity, not a
+    # structural header. Skipping it dropped the only active and produced
+    # NOT_SCORED verdicts. PEG-Creatine now has its own dedicated IQM form
+    # (see ingredient_quality_map.json::creatine_monohydrate.forms).
+    # Rule of thumb: do not add leaf-only marketing names to this set —
+    # they are real actives, not headers. Only add entries that appear
+    # in DSLD as parent rows with real nestedRows[] / forms[] children.
     "arginine, peg-micronized system",
     "fruit & vegetable juice blend",
     "fruit and vegetable juice blend",
