@@ -598,3 +598,207 @@ def test_p1_6_commit_2_gates_and_quarantine_still_active_when_opted_in():
     assert "--override-bundle-mismatch" in argv
     assert "--expected-count" in argv
     assert "12" in argv
+
+
+# ---------------------------------------------------------------------------
+# Discovery retry on transient API failures (regression: 2026-05-15)
+#
+# Supabase Storage occasionally returns a non-JSON body (empty response,
+# HTML 5xx page, rate-limit page) to the list() endpoint. The SDK does
+# response.json() internally and raises JSONDecodeError. Before this
+# fix, a single such response from any of the parallelized list() calls
+# killed the entire sync and surfaced as a misleading "Configuration
+# error". Discovery now retries transient failures with exponential
+# backoff, exactly like upload_with_retries already does for uploads.
+# ---------------------------------------------------------------------------
+
+
+def test_list_with_retries_recovers_after_transient_jsondecodeerror():
+    """A single JSON parse failure must not kill discovery — it must retry."""
+    from sync_to_supabase import _list_with_retries
+
+    attempts = {"count": 0}
+
+    def list_fn(_client, _bucket, _directory, limit, offset):
+        attempts["count"] += 1
+        if attempts["count"] == 1:
+            # First call simulates Supabase returning an empty body that
+            # the SDK tries to json.loads() and fails on.
+            raise json.JSONDecodeError("Expecting value", doc="", pos=0)
+        return [{"name": "blob1.json"}]
+
+    sleeps: list = []
+    page = _list_with_retries(
+        list_fn,
+        client=None,
+        bucket="b",
+        directory="shared/details/sha256/ab",
+        limit=1000,
+        offset=0,
+        retries=3,
+        base_delay=0.5,
+        sleep_fn=sleeps.append,
+    )
+    assert page == [{"name": "blob1.json"}]
+    assert attempts["count"] == 2
+    assert sleeps == [0.5]  # one backoff between attempt 1 and 2
+
+
+def test_list_with_retries_recovers_after_transient_oserror():
+    """OSError (parent of ConnectionError/TimeoutError) is also transient."""
+    from sync_to_supabase import _list_with_retries
+
+    attempts = {"count": 0}
+
+    def list_fn(_client, _bucket, _directory, limit, offset):
+        attempts["count"] += 1
+        if attempts["count"] < 3:
+            raise ConnectionError("dropped")
+        return []
+
+    page = _list_with_retries(
+        list_fn,
+        client=None,
+        bucket="b",
+        directory="d",
+        limit=1000,
+        offset=0,
+        retries=3,
+        base_delay=0.1,
+        sleep_fn=lambda _: None,
+    )
+    assert page == []
+    assert attempts["count"] == 3
+
+
+def test_list_with_retries_raises_after_exhausting_retries():
+    """Persistent transient errors must surface as the real exception, not
+    a misleading 'Configuration error' or silent empty result."""
+    from sync_to_supabase import _list_with_retries
+
+    attempts = {"count": 0}
+
+    def always_jsondecodeerror(_client, _bucket, _directory, limit, offset):
+        attempts["count"] += 1
+        raise json.JSONDecodeError("still broken", doc="", pos=0)
+
+    with pytest.raises(json.JSONDecodeError, match="still broken"):
+        _list_with_retries(
+            always_jsondecodeerror,
+            client=None,
+            bucket="b",
+            directory="d",
+            limit=1000,
+            offset=0,
+            retries=2,
+            base_delay=0.1,
+            sleep_fn=lambda _: None,
+        )
+    # Initial attempt + 2 retries == 3 calls
+    assert attempts["count"] == 3
+
+
+def test_list_with_retries_does_not_retry_non_transient_errors():
+    """Real bugs (KeyError, TypeError, AttributeError) must crash loudly
+    on first occurrence — retrying would hide them from the developer."""
+    from sync_to_supabase import _list_with_retries
+
+    attempts = {"count": 0}
+
+    def list_fn(_client, _bucket, _directory, limit, offset):
+        attempts["count"] += 1
+        raise KeyError("missing-field")
+
+    with pytest.raises(KeyError, match="missing-field"):
+        _list_with_retries(
+            list_fn,
+            client=None,
+            bucket="b",
+            directory="d",
+            limit=1000,
+            offset=0,
+            retries=5,
+            base_delay=0.1,
+            sleep_fn=lambda _: None,
+        )
+    # No retry on non-transient error — single call only
+    assert attempts["count"] == 1
+
+
+def test_discover_existing_remote_paths_for_directory_recovers_from_transient_jsondecodeerror():
+    """Integration test: the discovery loop survives a single Supabase
+    list() returning non-JSON. This is the exact scenario that killed
+    the 2026-05-15 release before the retry layer was added."""
+    from sync_to_supabase import _discover_existing_remote_paths_for_directory
+
+    call_log = []
+
+    def flaky_list_fn(_client, _bucket, directory, limit, offset):
+        call_log.append((directory, offset))
+        # First call to this directory simulates a Supabase API hiccup
+        if len(call_log) == 1:
+            raise json.JSONDecodeError("Expecting value", doc="", pos=0)
+        # On retry, return the actual page
+        if offset == 0:
+            return [{"name": "abc.json"}, {"name": "def.json"}]
+        return []  # no more pages
+
+    expected = {
+        "shared/details/sha256/ab/abc.json",
+        "shared/details/sha256/ab/def.json",
+    }
+    existing = _discover_existing_remote_paths_for_directory(
+        client=None,
+        bucket="b",
+        directory="shared/details/sha256/ab",
+        expected_paths=expected,
+        list_fn=flaky_list_fn,
+        page_size=1000,
+        retries=3,
+        base_delay=0.01,
+    )
+    assert existing == expected
+    # 1 failed attempt + 1 successful = 2 calls (no extra pages since
+    # len(page) < page_size triggered the break)
+    assert len(call_log) == 2
+
+
+# ---------------------------------------------------------------------------
+# Single-owner invariant for dist/ staging (regression: 2026-05-15)
+#
+# release_catalog_artifact.py is the sole owner of populating
+# scripts/dist/ with detail_index.json + detail_blobs/. Earlier,
+# rebuild_dashboard_snapshot.sh had a manual `cp` workaround that
+# duplicated this responsibility. The workaround was removed; this
+# test pins the invariant so it cannot drift back.
+# ---------------------------------------------------------------------------
+
+
+def test_rebuild_dashboard_snapshot_has_no_manual_detail_artifact_copies():
+    """rebuild_dashboard_snapshot.sh must NOT manually copy detail_index.json
+    or detail_blobs/ — release_catalog_artifact.py owns that.
+
+    If a future commit reintroduces the workaround, this test fails and
+    forces the author to acknowledge the duplicate ownership.
+    """
+    import re
+    from pathlib import Path
+
+    script = (Path(__file__).resolve().parent.parent /
+              "rebuild_dashboard_snapshot.sh").read_text()
+
+    # Lines we explicitly forbid. Match patterns that copy these specific
+    # artifacts from staging/anywhere into scripts/dist/.
+    forbidden = [
+        r"^\s*cp\s+.*detail_index\.json\s+scripts/dist",
+        r"^\s*cp\s+-r?\s+.*detail_blobs.*scripts/dist",
+        r"^\s*rm\s+-rf\s+scripts/dist/detail_blobs",
+    ]
+    for pattern in forbidden:
+        match = re.search(pattern, script, flags=re.MULTILINE)
+        assert match is None, (
+            f"rebuild_dashboard_snapshot.sh contains forbidden manual copy "
+            f"of detail artifacts (matched pattern {pattern!r}). "
+            f"release_catalog_artifact.py is the single owner — remove the "
+            f"workaround."
+        )

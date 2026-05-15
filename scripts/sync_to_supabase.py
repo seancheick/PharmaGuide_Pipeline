@@ -275,11 +275,69 @@ def filter_pending_blob_uploads(uploads, existing_remote_paths):
     return pending, skipped
 
 
-def _discover_existing_remote_paths_for_directory(client, bucket, directory, expected_paths, list_fn, page_size):
+# Transient errors worth retrying when listing remote storage. Narrow on
+# purpose — a real bug (KeyError, TypeError, AttributeError) must still
+# crash loudly; we are only papering over network/API hiccups.
+#   - JSONDecodeError: Supabase Storage occasionally returns a non-JSON
+#     body (empty response, HTML 5xx page, rate-limit page). The SDK
+#     calls response.json() and raises JSONDecodeError. This is the
+#     specific failure mode that killed the 2026-05-15 release.
+#   - OSError: parent of ConnectionError, TimeoutError, socket errors.
+_TRANSIENT_DISCOVERY_ERRORS = (json.JSONDecodeError, OSError)
+
+
+def _list_with_retries(
+    list_fn,
+    client,
+    bucket,
+    directory,
+    limit,
+    offset,
+    *,
+    retries,
+    base_delay,
+    sleep_fn=time.sleep,
+):
+    """Call list_fn with bounded retry on transient API failures.
+
+    Returns the page on success. Re-raises the last transient error after
+    exhausting retries, or any non-transient error immediately.
+    """
+    last_error = None
+    for attempt in range(retries + 1):
+        try:
+            return list_fn(client, bucket, directory, limit=limit, offset=offset)
+        except _TRANSIENT_DISCOVERY_ERRORS as exc:
+            last_error = exc
+            if attempt >= retries:
+                raise
+            sleep_fn(base_delay * (2 ** attempt))
+    raise last_error  # pragma: no cover - defensive; loop always returns or raises
+
+
+def _discover_existing_remote_paths_for_directory(
+    client,
+    bucket,
+    directory,
+    expected_paths,
+    list_fn,
+    page_size,
+    retries=DEFAULT_UPLOAD_RETRIES,
+    base_delay=DEFAULT_RETRY_BASE_DELAY,
+):
     existing = set()
     offset = 0
     while True:
-        page = list_fn(client, bucket, directory, limit=page_size, offset=offset)
+        page = _list_with_retries(
+            list_fn,
+            client,
+            bucket,
+            directory,
+            limit=page_size,
+            offset=offset,
+            retries=retries,
+            base_delay=base_delay,
+        )
         if not page:
             break
         for item in page:
@@ -1161,11 +1219,25 @@ def main(argv=None):
     except FileNotFoundError as e:
         print(f"Error: {e}")
         sys.exit(1)
+    except json.JSONDecodeError as e:
+        # JSONDecodeError is a ValueError subclass, so the order matters:
+        # this branch must come BEFORE the generic ValueError handler.
+        # Bubbles up when Supabase Storage returns a non-JSON response
+        # (empty body, HTML error page, rate-limit page) and the SDK's
+        # internal response.json() call fails. Discovery has bounded
+        # retry-on-transient (see _list_with_retries) — reaching here
+        # means the API was persistently broken across N+1 attempts,
+        # not a single hiccup. Action: rerun the sync; if it persists,
+        # check Supabase status / project quotas.
+        print(f"API response error (non-JSON body from Supabase): {e}", file=sys.stderr)
+        sys.exit(1)
     except ValueError as e:
-        print(f"Configuration error: {e}")
+        # Genuine config errors (missing SUPABASE_URL / SERVICE_ROLE_KEY
+        # raised by get_supabase_client, malformed manifest fields, etc.)
+        print(f"Configuration error: {e}", file=sys.stderr)
         sys.exit(1)
     except Exception as e:
-        print(f"Sync failed: {e}")
+        print(f"Sync failed: {e}", file=sys.stderr)
         sys.exit(2)
 
 

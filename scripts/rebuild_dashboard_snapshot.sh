@@ -52,19 +52,22 @@ fi
   --output-dir "$STAGING" \
   2>&1 | tail -5
 
-# 3. Stage catalog release bundle into scripts/dist/ (for Flutter + dashboard).
+# 3. Stage the complete release bundle into scripts/dist/.
+#
+# release_catalog_artifact.py is the SINGLE owner of populating dist/:
+# pharmaguide_core.db, export_manifest.json, RELEASE_NOTES.md,
+# detail_index.json, detail_blobs/, and (if present) export_audit_report.json.
+# Previously this script had a manual `cp` workaround at this position to
+# patch around release_catalog_artifact.py wiping the detail artifacts.
+# That workaround moved INTO release_catalog_artifact.py (commit a81c6e3),
+# so the manual copies here are now redundant and would silently drift if
+# the staging script's behavior changes. Removed 2026-05-15.
 "$PYTHON" scripts/release_catalog_artifact.py \
   --input-dir "$STAGING" \
   --output-dir scripts/dist \
   2>&1 | tail -5
 
-# 4. Copy the detail artifacts the dashboard needs but the Flutter bundle doesn't.
-cp "$STAGING/detail_index.json" scripts/dist/
-rm -rf scripts/dist/detail_blobs
-cp -r "$STAGING/detail_blobs" scripts/dist/detail_blobs
-[[ -f "$STAGING/export_audit_report.json" ]] && cp "$STAGING/export_audit_report.json" scripts/dist/ || true
-
-# 5. Mirror the working build into scripts/final_db_output/ so dev tools
+# 4. Mirror the working build into scripts/final_db_output/ so dev tools
 #    that default to that path (build_final_db.py legacy default,
 #    release_catalog_artifact.py --input-dir default, audit_raw_to_final.py
 #    --build-dir default) always see today's data — never a stale leftover.
