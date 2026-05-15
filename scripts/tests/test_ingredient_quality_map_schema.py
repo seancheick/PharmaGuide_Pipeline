@@ -804,3 +804,90 @@ class TestSummaryStatistics:
         print(f"Ingredients with relationships: {with_relationships}")
 
         assert True  # Always pass
+
+
+# =============================================================================
+# METADATA STATISTICS RECONCILIATION (2026-05-15)
+#
+# _metadata.statistics must match the actual counts computed from the IQM
+# data. Pre-2026-05-15 drift: declared was 131 entries behind actual on
+# total_form_aliases alone (11987 vs 12118), plus parents and forms drifts.
+# That drift survived undetected because no test pinned the invariant.
+#
+# This class makes the invariant permanent: any IQM edit that doesn't bump
+# the statistics block to match fails this test, forcing the author to
+# either re-run the recompute or acknowledge the drift explicitly.
+# =============================================================================
+
+
+class TestStatisticsReconciliation:
+    """_metadata.statistics fields must equal the actual counts."""
+
+    @staticmethod
+    def _compute(entries):
+        total_parents = 0
+        total_forms = 0
+        total_form_aliases = 0
+        parents_with_parent_aliases = 0
+        parents_with_contains_aliases = 0
+        parents_with_pattern_aliases = 0
+        for entry in entries.values():
+            if not isinstance(entry, dict):
+                continue
+            total_parents += 1
+            if entry.get('aliases'):
+                parents_with_parent_aliases += 1
+            if entry.get('contains_aliases'):
+                parents_with_contains_aliases += 1
+            if entry.get('pattern_aliases'):
+                parents_with_pattern_aliases += 1
+            forms = entry.get('forms', {})
+            if isinstance(forms, dict):
+                for fdata in forms.values():
+                    total_forms += 1
+                    if isinstance(fdata, dict):
+                        total_form_aliases += len(fdata.get('aliases', []))
+        return {
+            'total_parents': total_parents,
+            'total_forms': total_forms,
+            'total_form_aliases': total_form_aliases,
+            'parents_with_parent_aliases': parents_with_parent_aliases,
+            'parents_with_contains_aliases': parents_with_contains_aliases,
+            'parents_with_pattern_aliases': parents_with_pattern_aliases,
+        }
+
+    @pytest.mark.parametrize(
+        "field",
+        [
+            "total_parents",
+            "total_forms",
+            "total_form_aliases",
+            "parents_with_parent_aliases",
+            "parents_with_contains_aliases",
+            "parents_with_pattern_aliases",
+        ],
+    )
+    def test_declared_statistic_matches_actual(self, entries, metadata, field):
+        """Each _metadata.statistics field must match its computed value."""
+        actual = self._compute(entries)[field]
+        declared = metadata.get('statistics', {}).get(field)
+        assert declared == actual, (
+            f"_metadata.statistics.{field}={declared} but actual counted="
+            f"{actual} (drift {actual - declared:+d}). Reconcile via:\n"
+            f"  - update _metadata.statistics.{field} to {actual}\n"
+            f"  - bump _metadata.last_updated to today\n"
+            f"This invariant exists because pre-2026-05-15, drift on "
+            f"total_form_aliases reached 131 entries before anyone noticed."
+        )
+
+    def test_total_entries_matches_total_parents(self, entries, metadata):
+        """_metadata.total_entries is the parent count (top-level non-_meta keys).
+
+        Same field, two locations — keep them in sync.
+        """
+        declared = metadata.get('total_entries')
+        actual = len(entries)
+        assert declared == actual, (
+            f"_metadata.total_entries={declared} but actual parent count="
+            f"{actual}. These must agree."
+        )
