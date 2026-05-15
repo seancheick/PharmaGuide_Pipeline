@@ -16200,8 +16200,10 @@
         "omega-3 carrier",
         "softgel fill"
       ],
-      "last_updated": "2026-02-18",
-      "external_ids": {},
+      "last_updated": "2026-05-14",
+      "external_ids": {
+        "unii": "XGF7L72M0F"
+      },
       "cui": "C0016157",
       "functional_roles": [
         "carrier_oil"
