@@ -4156,7 +4156,7 @@
     "standard_name": "Vitamin K",
     "category": "vitamins",
     "cui": "C0042878",
-    "cui_note": "Vitamin K is a CLASS (K1/phylloquinone, K2 menaquinones MK-4 through MK-13, K3/menadione). external_ids.unii intentionally omitted at the class level — the Sprint 2 backfill dry-run surfaced A034SE7857 (PHYLLOQUINONE / K1) as a candidate from 678 DSLD products, but tagging the class parent with K1's UNII would mis-anchor every label-disclosed 'Vitamin K' to phylloquinone specifically. Form-level UNIIs should live in forms[] when each form is verified separately. Same governance pattern as prebiotics (class) and collagen (class).",
+    "cui_note": "Vitamin K is a CLASS (K1/phylloquinone, K2 menaquinones MK-4 through MK-13, K3/menadione). external_ids.unii intentionally omitted at the class level \u2014 the Sprint 2 backfill dry-run surfaced A034SE7857 (PHYLLOQUINONE / K1) as a candidate from 678 DSLD products, but tagging the class parent with K1's UNII would mis-anchor every label-disclosed 'Vitamin K' to phylloquinone specifically. Form-level UNIIs should live in forms[] when each form is verified separately. Same governance pattern as prebiotics (class) and collagen (class).",
     "forms": {
       "menaquinone-7 (MK-7)": {
         "bio_score": 12,
@@ -7789,8 +7789,8 @@
         ],
         "dosage_importance": 0.5,
         "absorption_structured": {
-          "value": 0.90,
-          "range_low": 0.80,
+          "value": 0.9,
+          "range_low": 0.8,
           "range_high": 0.95,
           "quality": "good"
         }
@@ -19170,7 +19170,9 @@
           "collagen, hydrolysate",
           "hydrolysed collagen",
           "hydrolysed fish collagen",
-          "biocell collagen proprietary sternal cartilage extract"
+          "biocell collagen proprietary sternal cartilage extract",
+          "hydrolyzed collagen types 1 and 3",
+          "collagen types 1 and 3"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -30628,7 +30630,8 @@
           "isolated soy protein",
           "soy protein isolate protein",
           "soy peptide",
-          "soy peptides"
+          "soy peptides",
+          "egg white albumin"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -37440,7 +37443,7 @@
     "statistics": {
       "total_parents": 610,
       "total_forms": 1379,
-      "total_form_aliases": 11983,
+      "total_form_aliases": 11987,
       "parents_with_parent_aliases": 186,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -37460,7 +37463,7 @@
       "vitamins": 17
     },
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-14",
+    "last_updated": "2026-05-15",
     "pipeline_integration": "Used by enrichment script to assign quality scores to matched ingredient forms. Match ingredient name against forms aliases (case-insensitive). Use highest-scoring matched form.",
     "matching_notes": [
       "Match ingredient name + forms text against aliases array (case-insensitive)",
@@ -42765,7 +42768,8 @@
           "anchovy oil",
           "menhaden oil",
           "herring oil",
-          "mackerel oil"
+          "mackerel oil",
+          "fish oil triglycerides"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {

@@ -7504,6 +7504,17 @@ class EnhancedDSLDNormalizer:
             r"^may\s+contain\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
             r"^contains?\s+one\s+or\s+more\s+of(\s+the\s+following)?:?$",
             r".*\b(shell|capsule)\s+ingredients:?$",
+            # 2026-05-15: suffix-less percentage fragments. DSLD occasionally parses
+            # label text like "Natural flavor, citric acid, less than 0.1%
+            # sodium benzoate" into separate rows including a bare "less than 0.1%"
+            # entry with no forms[] attached. Existing patterns above all require
+            # "of" or "of:" suffix; this entry slips through and gets promoted to
+            # active by enricher Pass 2, triggering UNMAPPED_ACTIVE_INGREDIENT and
+            # NOT_SCORED. Treating bare-percentage strings as label headers means
+            # _expand_header_forms_for_processing drops them (no forms → empty
+            # expansion → silently filtered). Closes 1 product in Bucket 1 NOT_SCORED.
+            r"^less\s+than\s+\d+(\.\d+)?\s*%\s*$",
+            r"^<\s*\d+(\.\d+)?\s*%\s*$",
         ]
 
         for pattern in header_patterns:

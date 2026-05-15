@@ -3279,13 +3279,18 @@ class SupplementEnricherV3:
             return SKIP_REASON_NUTRITION_FACT
 
         # Header/label phrase variants that are never ingredients.
-        if re.match(r"^(contains|may also contain)\s*(less than|<)\s*\d+\s*%(\s*of)?", text):
+        # 2026-05-15: \d+ → \d+(?:\.\d+)? so the patterns match decimal
+        # percentages like "less than 0.1%" — GNC Aloe Vera Juice (214221)
+        # carried "less than 0.1%" as a bare inactive that previously slipped
+        # past these guards (integer-only \d+) and got promoted, triggering
+        # UNMAPPED_ACTIVE_INGREDIENT → NOT_SCORED.
+        if re.match(r"^(contains|may also contain)\s*(less than|<)\s*\d+(?:\.\d+)?\s*%(\s*of)?", text):
             return SKIP_REASON_LABEL_PHRASE
-        if re.match(r"^contains?\s+\d+\s*percent\s+or\s+less(\s+of)?", text):
+        if re.match(r"^contains?\s+\d+(?:\.\d+)?\s*percent\s+or\s+less(\s+of)?", text):
             return SKIP_REASON_LABEL_PHRASE
-        if re.match(r"^less than\s*\d+\s*%(\s*of)?", text):
+        if re.match(r"^less than\s*\d+(?:\.\d+)?\s*%(\s*of)?", text):
             return SKIP_REASON_LABEL_PHRASE
-        if re.match(r"^<\s*\d+\s*%\s*of", text):
+        if re.match(r"^<\s*\d+(?:\.\d+)?\s*%(\s*of)?", text):
             return SKIP_REASON_LABEL_PHRASE
         # Spec-string fragments emitted by parser; these are not standalone ingredients.
         if re.match(r"^\s*min\.\s*\d+", text):

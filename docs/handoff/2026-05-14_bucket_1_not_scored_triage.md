@@ -271,3 +271,44 @@ session (estimated 2–4 hours of pipeline work + tests).
 
 If you decide to pursue this, start with Cluster B-creatine (highest
 count × lowest effort) and Cluster C3 (real bug, single product).
+
+---
+
+## 2026-05-15 closure update — Bucket 1 effectively closed
+
+**Status:** Bucket 1 trajectory: 128 (May 13) → 42 (May 14) → **11 → 5
+(May 15)**. The remaining 5 are all `NO_ACTIVES_DETECTED` (Cluster A,
+genuine DSLD authoring gaps — un-fixable in any timeline).
+
+**What landed today:**
+
+| Cluster | Products | Fix |
+| --- | ---: | --- |
+| B-creatine (PEG-Creatine System) | 14 | Closed by commit `27a388e feat(iqm): dedicated peg-creatine form` (pre-2026-05-15) |
+| C (silent active drops) | 8+ | Closed by commit `1447062 fix(cleaner): broader silent-active-drop recovery` (pre-2026-05-15) |
+| C2 (Collagen+Peptan family) | 3 | IQM alias added to `collagen.forms['hydrolyzed collagen peptides'].aliases`: `'hydrolyzed collagen types 1 and 3'`, `'collagen types 1 and 3'` |
+| Egg Albumin Protein (82901) | 1 | IQM alias added to `protein.forms['protein (unspecified)'].aliases`: `'egg white albumin'` (bio_score=5, generic protein catchall) |
+| Fish Oil Triglycerides (269603) | 1 | IQM alias added to `fish_oil.forms['natural triglyceride'].aliases`: `'fish oil triglycerides'` |
+| C4 (Aloe Vera "less than 0.1%" 214221) | 1 | Two-layer fix: cleaner `_is_label_header` widened (defense in depth) + enricher `_excluded_text_reason` decimal regex (`\d+ → \d+(?:\.\d+)?`) — the latter is load-bearing |
+
+**Targeted verification:** all 6 dsld_ids run through enricher + scorer
+produce `verdict=SAFE` with `mapped_coverage=1.0`. No more
+UNMAPPED_ACTIVE_INGREDIENT.
+
+**Regression tests:** `scripts/tests/test_bucket_1_closure_2026_05_15.py`
+— 36 tests covering IQM alias presence, bio_score sentinels,
+`_is_label_header` coverage (positive + negative), and
+`_excluded_text_reason` decimal coverage.
+
+**Remaining 5 NO_ACTIVES_DETECTED (Cluster A — accept as DSLD debt):**
+- 18259 (CVS), 855 (GNC), 78355 (GNC), 212518 (GNC), 328814 (GNC)
+
+These 5 have zero active ingredient rows in raw DSLD data. They cannot
+score under any policy that requires active-ingredient coverage. They
+correctly land in `excluded_by_gate` and never ship to the catalog.
+
+**Bucket 1 is now closed as an active-work category.** Catalog releases
+v2026.05.15.073733+ are unaffected (those 5 were already
+`excluded_by_gate` before this work — they didn't ship and still
+don't). The next fresh batch will move 6 additional products into
+the SAFE catalog (the 5 Cluster A NO_ACTIVES products stay quarantined).
