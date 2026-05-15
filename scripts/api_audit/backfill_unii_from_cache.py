@@ -543,15 +543,36 @@ def apply_one_entry(
 
     today_str = today_str or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     file_path = repo_root / "scripts/data" / proposal.file
+    # Read the raw file text once so we can detect its existing convention
+    # for non-ASCII characters. The 4 reference files differ:
+    #   - other_ingredients.json: raw UTF-8 (no \u escapes)
+    #   - ingredient_quality_map.json + standardized_botanicals.json: ASCII-
+    #     escaped (\uXXXX)
+    #   - botanical_ingredients.json: mixed (older entries escaped, newer raw)
+    # We default to ASCII-escaping when ≥10 \u escapes appear in the file
+    # OR when zero non-ASCII chars appear (pure ASCII files). Otherwise we
+    # preserve raw UTF-8. This keeps the apply diff minimal in every case.
     with open(file_path, encoding="utf-8") as f:
-        blob = json.load(f)
+        raw_text = f.read()
+    blob = json.loads(raw_text)
+    escape_count = raw_text.count("\\u")
+    has_raw_utf8 = any(ord(c) > 127 for c in raw_text[:50000])
+    # ascii-escape the output if the file is conventionally escape-style
+    file_uses_ascii_escapes = escape_count >= 10 or not has_raw_utf8
 
-    # Find the list_key for this file
-    list_key_map = dict(REFERENCE_FILES)
-    list_key = list_key_map.get(proposal.file)
+    # Find the list_key for this file. REFERENCE_FILES is keyed by full
+    # repo-relative path ("scripts/data/<file>.json") but proposals carry
+    # only the basename (Path(rel_path).name). Resolve by basename match.
+    list_key_map = {Path(rel_path).name: lk for rel_path, lk in REFERENCE_FILES}
+    if proposal.file not in list_key_map:
+        raise RuntimeError(
+            f"Apply failed: unknown reference file {proposal.file!r}. "
+            f"Known files: {sorted(list_key_map.keys())}"
+        )
+    list_key = list_key_map[proposal.file]
 
+    # IQM-style top-level dict-of-dicts (list_key=None) vs list-of-dicts
     if list_key is None:
-        # IQM-style: top-level dict-of-dicts
         entry = blob.get(proposal.entry_id)
         if not isinstance(entry, dict):
             raise RuntimeError(
@@ -578,9 +599,10 @@ def apply_one_entry(
     if isinstance(md, dict):
         md["last_updated"] = today_str
 
-    # Write back with stable formatting
+    # Write back with stable formatting, preserving the file's existing
+    # non-ASCII convention (ASCII-escaped vs raw UTF-8).
     with open(file_path, "w", encoding="utf-8") as f:
-        json.dump(blob, f, indent=2, ensure_ascii=False)
+        json.dump(blob, f, indent=2, ensure_ascii=file_uses_ascii_escapes)
         f.write("\n")
 
     return file_path
