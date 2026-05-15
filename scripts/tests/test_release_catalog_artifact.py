@@ -135,12 +135,23 @@ def _write_manifest_json(
 
 @pytest.fixture
 def good_release_dir(tmp_path: Path) -> Path:
-    """A fully valid pipeline output dir with 1000 products."""
+    """A fully valid pipeline output dir with 1000 products.
+
+    Includes the per-product detail artifacts that build_final_db.py
+    always writes alongside the catalog DB: detail_index.json and
+    detail_blobs/. stage_release() requires both — without them the
+    Supabase sync step fails downstream.
+    """
     input_dir = tmp_path / "final_db_output"
     input_dir.mkdir()
     db_path = input_dir / "pharmaguide_core.db"
     _make_fake_db(db_path, row_count=1000)
     _write_manifest_json(input_dir / "export_manifest.json", db_path, row_count=1000)
+    # Minimal stand-in for the real artifacts (real ones are produced
+    # by build_final_db.py at line ~5180). stage_release() asserts
+    # existence, not content shape.
+    (input_dir / "detail_index.json").write_text('{"products": {}}\n')
+    (input_dir / "detail_blobs").mkdir()
     return input_dir
 
 
@@ -425,6 +436,92 @@ def test_stage_release_replaces_existing_output_dir(
 
 
 # ---------------------------------------------------------------------------
+# Detail-artifact carry-forward (regression: 2026-05-15)
+#
+# build_final_db.py writes detail_index.json + detail_blobs/ alongside the
+# catalog DB. Earlier versions of stage_release() only copied the DB and
+# manifest, silently dropping the detail artifacts. The Supabase sync step
+# then failed with "detail_index.json not found in scripts/dist". The
+# fix makes stage_release() carry both artifacts forward; these tests
+# pin the behavior so it can never silently regress.
+# ---------------------------------------------------------------------------
+
+
+def test_stage_release_copies_detail_index_and_blobs_to_dist(
+    good_release_dir: Path, tmp_path: Path
+) -> None:
+    """detail_index.json and detail_blobs/ must land in the staged dist."""
+    # Add a representative blob to the source so we can verify content too.
+    blobs_src = good_release_dir / "detail_blobs"
+    (blobs_src / "ab").mkdir()
+    sample_blob = blobs_src / "ab" / "abc123.json"
+    sample_blob.write_text('{"dsld_id": "999"}\n')
+
+    output_dir = tmp_path / "dist"
+    validation = rca.validate_release_candidate(
+        input_dir=good_release_dir, min_products=500
+    )
+    rca.stage_release(validation=validation, output_dir=output_dir)
+
+    assert (output_dir / "detail_index.json").is_file(), (
+        "stage_release must copy detail_index.json from source to dist/ — "
+        "Supabase sync depends on it"
+    )
+    assert (output_dir / "detail_blobs").is_dir(), (
+        "stage_release must copy detail_blobs/ directory from source to dist/"
+    )
+    # Content-level check: the actual blob file made it across, not just
+    # an empty directory.
+    staged_blob = output_dir / "detail_blobs" / "ab" / "abc123.json"
+    assert staged_blob.is_file()
+    assert json.loads(staged_blob.read_text())["dsld_id"] == "999"
+
+
+def test_stage_release_fails_loudly_when_detail_index_missing(
+    good_release_dir: Path, tmp_path: Path
+) -> None:
+    """Missing detail_index.json must raise, not silently ship partial release.
+
+    Silent partial-release was the original bug: dist/ would contain a
+    valid DB but no detail_index.json, and the Supabase sync step would
+    fail late with a cryptic 'not found' error. The fix makes
+    stage_release fail-fast with a clear message naming the missing file.
+    """
+    (good_release_dir / "detail_index.json").unlink()
+
+    output_dir = tmp_path / "dist"
+    validation = rca.validate_release_candidate(
+        input_dir=good_release_dir, min_products=500
+    )
+
+    with pytest.raises(
+        rca.ReleaseValidationError,
+        match=r"missing detail_index\.json",
+    ):
+        rca.stage_release(validation=validation, output_dir=output_dir)
+
+
+def test_stage_release_fails_loudly_when_detail_blobs_missing(
+    good_release_dir: Path, tmp_path: Path
+) -> None:
+    """Missing detail_blobs/ directory must raise, not silently ship."""
+    import shutil as _shutil  # local import — fixture cleanup helper
+
+    _shutil.rmtree(good_release_dir / "detail_blobs")
+
+    output_dir = tmp_path / "dist"
+    validation = rca.validate_release_candidate(
+        input_dir=good_release_dir, min_products=500
+    )
+
+    with pytest.raises(
+        rca.ReleaseValidationError,
+        match=r"missing detail_blobs/",
+    ):
+        rca.stage_release(validation=validation, output_dir=output_dir)
+
+
+# ---------------------------------------------------------------------------
 # CLI tests
 # ---------------------------------------------------------------------------
 
@@ -625,6 +722,9 @@ def test_main_succeeds_when_stale_input_with_allow_stale(
     )
     manifest_dict["generated_at"] = _iso_utc(-48)
     (input_dir / "export_manifest.json").write_text(json.dumps(manifest_dict, indent=2))
+    # Detail artifacts that stage_release() requires alongside the DB.
+    (input_dir / "detail_index.json").write_text('{"products": {}}\n')
+    (input_dir / "detail_blobs").mkdir()
 
     exit_code = rca.main(
         [
