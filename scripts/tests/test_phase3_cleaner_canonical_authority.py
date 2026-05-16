@@ -286,6 +286,106 @@ class TestParentFallbackWhenConstrainedPoolEmpty:
         assert result.get("cleaner_canonical_cross_parent_allowed") is not True
 
 
+class TestNonIqmCanonicalAuthority:
+    """Cleaner authority also applies to non-IQM source/risk canonicals."""
+
+    @pytest.mark.parametrize(
+        ("source_id", "label_name", "forms", "blocked_canonical"),
+        [
+            ("tomato", "Tomato Extract", [{"name": "Lycopene"}], "lycopene"),
+            ("broccoli", "Broccoli Sprout Extract", [{"name": "Sulforaphane"}], "sulforaphane"),
+            ("green_tea", "Green Tea Extract", [{"name": "Caffeine"}], "caffeine"),
+            ("coffee_fruit", "Coffee Fruit Extract", [{"name": "Caffeine"}], "caffeine"),
+            ("acerola_cherry", "Acerola Cherry Extract", [{"name": "Vitamin C"}], "vitamin_c"),
+            ("moringa", "Moringa Leaf", [{"name": "Mixed Carotenoids"}], "vitamin_a"),
+            ("yerba_mate", "Yerba Mate Extract", [{"name": "Caffeine"}], "caffeine"),
+            ("japanese_knotweed", "Japanese Knotweed Extract", [{"name": "Trans-Resveratrol"}], "resveratrol"),
+            ("sophora_japonica", "Sophora japonica Flower Extract", [{"name": "Quercetin"}], "quercetin"),
+            ("lemon", "Lemon", [{"name": "Vitamin B9 (Folate)"}], "vitamin_b9_folate"),
+            ("cayenne_pepper", "Cayenne Pepper", [{"name": "Capsaicin"}], "capsaicin"),
+            ("horny_goat_weed", "Horny Goat Weed", [{"name": "Flavones"}], "flavones"),
+            ("kanna_sceletium", "Kanna Sceletium", [{"name": "Mesembrine"}], "mesembrine"),
+        ],
+    )
+    def test_botanical_source_rows_do_not_score_as_marker_canonicals(
+        self,
+        enricher,
+        source_id,
+        label_name,
+        forms,
+        blocked_canonical,
+    ) -> None:
+        result = enricher._collect_ingredient_quality_data({
+            "activeIngredients": [{
+                "name": label_name,
+                "standardName": label_name,
+                "quantity": 100,
+                "unit": "mg",
+                "forms": forms,
+                "canonical_source_db": "botanical_ingredients",
+                "canonical_id": source_id,
+            }],
+            "inactiveIngredients": [],
+        })
+        row = (result["ingredients"] or result["ingredients_skipped"])[0]
+        assert row.get("canonical_id") != blocked_canonical
+        assert row.get("scoreable_identity") is False
+
+    def test_green_tea_source_can_still_score_as_green_tea_extract(
+        self, enricher
+    ) -> None:
+        result = enricher._collect_ingredient_quality_data({
+            "activeIngredients": [{
+                "name": "Green Tea Extract",
+                "standardName": "Green Tea",
+                "quantity": 100,
+                "unit": "mg",
+                "forms": [],
+                "canonical_source_db": "botanical_ingredients",
+                "canonical_id": "green_tea",
+            }],
+            "inactiveIngredients": [],
+        })
+        row = result["ingredients"][0]
+        assert row.get("canonical_id") == "green_tea_extract"
+        assert row.get("role_classification") == "active_scorable"
+        assert row.get("scoreable_identity") is True
+
+    @pytest.mark.parametrize(
+        ("risk_id", "label_name", "normal_canonical"),
+        [
+            ("RISK_YOHIMBE", "Yohimbe Bark Extract", "yohimbe"),
+            ("RISK_GARCINIA_CAMBOGIA", "Garcinia Cambogia", "garcinia_cambogia"),
+            ("BANNED_7_KETO_DHEA", "7-Keto DHEA", "7_keto_dhea"),
+        ],
+    )
+    def test_risk_cleaner_rows_preserve_safety_canonical_while_quality_scoring(
+        self,
+        enricher,
+        risk_id,
+        label_name,
+        normal_canonical,
+    ) -> None:
+        result = enricher._collect_ingredient_quality_data({
+            "activeIngredients": [{
+                "name": label_name,
+                "standardName": label_name,
+                "quantity": 100,
+                "unit": "mg",
+                "canonical_source_db": "banned_recalled_ingredients",
+                "canonical_id": risk_id,
+            }],
+            "inactiveIngredients": [],
+        })
+        row = result["ingredients"][0]
+        assert row.get("canonical_id") == normal_canonical
+        assert row.get("safety_canonical_id") == risk_id
+        assert row.get("safety_canonical_source_db") == "banned_recalled_ingredients"
+        assert row.get("safety_canonical_preserved") is True
+        assert row.get("role_classification") == "active_scorable"
+        assert row.get("scoreable_identity") is True
+
+
 # ---------------------------------------------------------------------------
 # Legacy path remains intact when cleaner_canonical_id is absent / non-IQM
 # ---------------------------------------------------------------------------

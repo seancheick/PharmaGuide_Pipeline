@@ -4,6 +4,6 @@
 
 **1 rules.** Category: —
 
-| canonical_id | db | severity | evidence | alert_headline | mechanism |
-|---|---|---|---|---|---|
-| `probiotics` | ingredient_quality_map | caution | probable | Caution if severely immunocompromised | In severely immunocompromised patients (solid organ transplant recipients, hematologic malignancy, high-dose corticosteroid therapy), orally administered probiotic organisms — par… |
+| canonical_id | db                     | severity | evidence | alert_headline                        | mechanism                                                                                                                                                                            |
+| ------------ | ---------------------- | -------- | -------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `probiotics` | ingredient_quality_map | caution  | probable | Caution if severely immunocompromised | In severely immunocompromised patients (solid organ transplant recipients, hematologic malignancy, high-dose corticosteroid therapy), orally administered probiotic organisms — par… |
