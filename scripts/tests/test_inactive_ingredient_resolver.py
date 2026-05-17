@@ -126,6 +126,45 @@ def test_mica_pearlescent_pigment_does_not_falsely_match_titanium_dioxide(resolv
     assert r.is_banned is False, "Candurin Silver is not banned itself"
 
 
+def test_banned_recalled_resolution_exposes_policy_and_status(resolver) -> None:
+    banned = resolver.resolve(raw_name="Brominated Vegetable Oil")
+    assert banned.matched_source == "banned_recalled"
+    assert banned.regulatory_status == "banned"
+    assert banned.is_banned is True
+
+    warning_only = resolver.resolve(raw_name="Titanium Dioxide")
+    assert warning_only.matched_rule_id == "BANNED_ADD_TITANIUM_DIOXIDE"
+    assert warning_only.regulatory_status == "high_risk"
+    assert warning_only.inactive_policy == "excipient_acceptable"
+    assert warning_only.is_banned is False
+
+    penalized = resolver.resolve(raw_name="DHEA")
+    assert penalized.matched_rule_id == "BANNED_DHEA"
+    assert penalized.regulatory_status == "high_risk"
+    assert penalized.inactive_policy == "penalize_anyway"
+
+
+def test_banned_recalled_resolution_exposes_display_role_label(resolver) -> None:
+    """Critical inactive rows still need a pipeline-prepared label for the
+    ingredient row UI. The safety posture comes from severity/is_banned; the
+    role label must not disappear just because the match came from the
+    banned/high-risk source branch."""
+    r = resolver.resolve(raw_name="Titanium Dioxide")
+    assert r.matched_source == "banned_recalled"
+    assert r.severity_status == "critical"
+    assert r.display_role_label == "High risk ingredients"
+
+
+def test_harmful_additive_resolution_falls_back_to_category_role_label(resolver) -> None:
+    """Some harmful-additive entries predate functional_roles[] backfill but
+    still carry a category that is safe to render. Use that category instead
+    of shipping a blank display_role_label."""
+    r = resolver.resolve(raw_name="Caramel Color")
+    assert r.matched_source == "harmful_additives"
+    assert r.severity_status == "critical"
+    assert r.display_role_label == "Colorant (artificial)"
+
+
 # ---------------------------------------------------------------------------
 # Excipient role classification (the Vitamin E / Riboflavin / Fish Oil class)
 # ---------------------------------------------------------------------------

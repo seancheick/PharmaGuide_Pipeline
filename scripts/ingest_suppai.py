@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -136,6 +137,68 @@ def build_known_drug_rxcuis(drug_classes: dict[str, Any]) -> set[str]:
         for rxcui in cls.get("member_rxcuis", []):
             if isinstance(rxcui, str) and rxcui:
                 out.add(rxcui)
+    return out
+
+
+def normalize_drug_lookup_name(name: Any) -> str:
+    """Normalize a drug name for exact local RxCUI bridge matching."""
+    if not isinstance(name, str):
+        return ""
+    normalized = re.sub(r"[^a-z0-9]+", " ", name.lower()).strip()
+    return re.sub(r"\s+", " ", normalized)
+
+
+def build_drug_name_to_rxcui_index(drug_classes: dict[str, Any]) -> dict[str, str]:
+    """Return unambiguous ``normalized drug name → RxCUI`` from drug classes.
+
+    ``drug_classes.json`` is the curated local RxNorm surface that the app can
+    already query. We intentionally use exact normalized names only; fuzzy
+    matching against clinical identifiers would create unsafe false bridges.
+    """
+    candidates: dict[str, set[str]] = {}
+    for cls in drug_classes.get("classes", {}).values():
+        names = cls.get("member_names", [])
+        rxcuis = cls.get("member_rxcuis", [])
+        for name, rxcui in zip(names, rxcuis, strict=False):
+            key = normalize_drug_lookup_name(name)
+            rx = str(rxcui or "").strip()
+            if key and rx:
+                candidates.setdefault(key, set()).add(rx)
+    return {
+        name: next(iter(rxcuis))
+        for name, rxcuis in candidates.items()
+        if len(rxcuis) == 1
+    }
+
+
+def build_cui_to_rxcui_index(
+    cui_metadata: dict[str, Any],
+    drug_classes: dict[str, Any],
+) -> dict[str, str]:
+    """Bridge supp.ai drug CUIs to RxCUIs using deterministic local aliases.
+
+    A bridge is accepted only when one or more Supp.ai aliases match the same
+    single RxCUI in ``drug_classes.json``. Ambiguous aliases are skipped rather
+    than guessed.
+    """
+    name_to_rxcui = build_drug_name_to_rxcui_index(drug_classes)
+    out: dict[str, str] = {}
+    for cui, meta in cui_metadata.items():
+        if not isinstance(cui, str) or not isinstance(meta, dict):
+            continue
+        if meta.get("ent_type") != "drug":
+            continue
+        aliases: list[Any] = [meta.get("preferred_name")]
+        aliases.extend(meta.get("synonyms") or [])
+        aliases.extend(meta.get("tradenames") or [])
+
+        matches: set[str] = set()
+        for alias in aliases:
+            key = normalize_drug_lookup_name(alias)
+            if key in name_to_rxcui:
+                matches.add(name_to_rxcui[key])
+        if len(matches) == 1:
+            out[cui] = next(iter(matches))
     return out
 
 
@@ -297,6 +360,7 @@ def build_research_pair_row(
     paper_meta: dict[str, Any],
     cui_to_canonical: dict[str, str],
     cui_metadata: dict[str, Any],
+    cui_to_rxcui: dict[str, str] | None = None,
     max_sentences: int = DEFAULT_MAX_SENTENCES_PER_PAIR,
 ) -> dict[str, Any] | None:
     """Construct one output row from a pair's raw sentence list.
@@ -330,6 +394,7 @@ def build_research_pair_row(
 
     meta_a = cui_metadata.get(cui_a) or {}
     meta_b = cui_metadata.get(cui_b) or {}
+    rx_index = cui_to_rxcui or {}
 
     # Build the compressed top_sentences shape
     top_sentences_out: list[dict[str, Any]] = []
@@ -359,6 +424,8 @@ def build_research_pair_row(
         "cui_b": cui_b,
         "canonical_id_a": cui_to_canonical.get(cui_a),
         "canonical_id_b": cui_to_canonical.get(cui_b),
+        "rxcui_a": rx_index.get(cui_a),
+        "rxcui_b": rx_index.get(cui_b),
         "ent_type_a": meta_a.get("ent_type"),
         "ent_type_b": meta_b.get("ent_type"),
         "display_name_a": meta_a.get("preferred_name"),
@@ -501,6 +568,7 @@ def run_ingest_from_dicts(
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     """Run the full ingest pipeline from in-memory dicts."""
     cui_to_canonical = build_cui_to_canonical_index(iqm)
+    cui_to_rxcui = build_cui_to_rxcui_index(cui_metadata, drug_classes)
     supplement_cuis = set(cui_to_canonical.keys())
     known_drug_cuis = _default_known_drug_cuis(cui_metadata)
     anchor = PairAnchor(
@@ -523,6 +591,7 @@ def run_ingest_from_dicts(
             paper_meta=paper_metadata,
             cui_to_canonical=cui_to_canonical,
             cui_metadata=cui_metadata,
+            cui_to_rxcui=cui_to_rxcui,
             max_sentences=max_sentences,
         )
         if row is None:
@@ -538,6 +607,7 @@ def run_ingest_from_dicts(
 
     # Deterministic row ordering.
     rows.sort(key=lambda r: (r["cui_a"], r["cui_b"]))
+    rows_with_rxcui = sum(1 for r in rows if r.get("rxcui_a") or r.get("rxcui_b"))
 
     report = {
         "total_pairs_in_dump": len(sentence_dict),
@@ -548,6 +618,8 @@ def run_ingest_from_dicts(
         "dropped_no_human_study": dropped_no_human,
         "supplement_anchors": len(supplement_cuis),
         "drug_anchors": len(known_drug_cuis),
+        "drug_rxcui_bridge_count": len(cui_to_rxcui),
+        "research_pairs_with_rxcui": rows_with_rxcui,
         "known_drug_rxcuis": len(build_known_drug_rxcuis(drug_classes)),
         "min_paper_count": min_paper_count,
         "require_human_study": require_human_study,
@@ -685,7 +757,8 @@ def main(argv: list[str] | None = None) -> int:
             "require_human_study": args.require_human_study,
             "filter_rule": (
                 "≥1 side ∈ IQM canonical supplements; paper_count ≥ min_paper_count; "
-                "optional human-study requirement"
+                "optional human-study requirement; drug-side RxCUIs are bridged "
+                "from local drug_classes exact-name matches"
             ),
         },
         "research_pairs": rows,
@@ -701,6 +774,8 @@ def main(argv: list[str] | None = None) -> int:
         f"dropped_no_human_study={report['dropped_no_human_study']} "
         f"supplement_anchors={report['supplement_anchors']} "
         f"drug_anchors={report['drug_anchors']} "
+        f"drug_rxcui_bridge_count={report['drug_rxcui_bridge_count']} "
+        f"research_pairs_with_rxcui={report['research_pairs_with_rxcui']} "
         f"min_paper_count={report['min_paper_count']} "
         f"require_human_study={report['require_human_study']}",
         file=sys.stderr,

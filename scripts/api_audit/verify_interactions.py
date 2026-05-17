@@ -384,7 +384,10 @@ def validate_schema(entry: dict[str, Any]) -> list[str]:
     for side in ("agent1_id", "agent2_id"):
         aid = entry.get(side)
         if isinstance(aid, str) and aid and classify_agent(aid) == "unknown":
-            errors.append(f"invalid {side}: {aid!r} (expected rxcui, Cxxxxxxx, or class:name)")
+            errors.append(
+                f"invalid {side}: {aid!r} "
+                "(expected rxcui, Cxxxxxxx, class:name, or ref:name)"
+            )
 
     # Optional: source_urls must be list of strings if present
     urls = entry.get("source_urls")
@@ -442,7 +445,7 @@ def normalize_direction(entry: dict[str, Any]) -> dict[str, Any]:
     # If agent2 is a drug (or class) and agent1 is a supplement, swap so
     # drug-side is always first.
     should_swap = False
-    if a1_kind == "supplement" and a2_kind in ("drug", "class"):
+    if a1_kind in ("supplement", "reference") and a2_kind in ("drug", "class"):
         should_swap = True
     elif a1_kind == "class" and a2_kind == "drug":
         # Normalize: specific drug first, class second (harder to match class first)
@@ -460,12 +463,14 @@ def normalize_direction(entry: dict[str, Any]) -> dict[str, Any]:
     # Compute canonical type based on *normalized* sides
     a1_kind = classify_agent(str(out.get("agent1_id", "")))
     a2_kind = classify_agent(str(out.get("agent2_id", "")))
-    out["agent1_type"] = {"drug": "drug", "class": "drug_class", "supplement": "supplement"}.get(
-        a1_kind, "unknown"
-    )
-    out["agent2_type"] = {"drug": "drug", "class": "drug_class", "supplement": "supplement"}.get(
-        a2_kind, "unknown"
-    )
+    agent_type_map = {
+        "drug": "drug",
+        "class": "drug_class",
+        "supplement": "supplement",
+        "reference": "reference",
+    }
+    out["agent1_type"] = agent_type_map.get(a1_kind, "unknown")
+    out["agent2_type"] = agent_type_map.get(a2_kind, "unknown")
     return out
 
 
@@ -900,6 +905,12 @@ def verify_entry(
                             "name": normalized.get(f"{side}_name"),
                         }
                     )
+        elif kind == "reference":
+            authored_canonical = normalized.get(f"{side}_canonical_id")
+            if isinstance(authored_canonical, str) and authored_canonical.strip():
+                normalized[f"{side}_canonical_id"] = authored_canonical.strip()
+            else:
+                normalized[f"{side}_canonical_id"] = agent_id.removeprefix("ref:")
         else:
             normalized[f"{side}_canonical_id"] = None
 

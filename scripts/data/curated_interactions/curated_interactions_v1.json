@@ -2791,6 +2791,72 @@
       "agent2_canonical_id": "cbd"
     },
     {
+      "id": "DSI_ANTICOAG_VINPOCETINE",
+      "type": "Med-Sup",
+      "agent1_name": "Anticoagulants (class)",
+      "agent1_id": "class:anticoagulants",
+      "agent2_name": "Vinpocetine",
+      "agent2_id": "C0059752",
+      "severity": "Moderate",
+      "interaction_effect_type": "Enhancer",
+      "mechanism": "Vinpocetine has published pharmacokinetic interaction potential through CYP and P-glycoprotein pathways, and product literature reports changes in coagulation measures when vinpocetine is added to warfarin. Because vinpocetine is also a non-lawful supplement ingredient in the U.S. catalog, anticoagulant users should treat the combination as clinically important.",
+      "management": "Avoid starting vinpocetine while taking warfarin or another anticoagulant unless a prescriber is explicitly managing the risk. If exposure occurred, tell the anticoagulation clinician and ask whether INR or bleeding monitoring is needed.",
+      "source_urls": [
+        "https://www.fda.gov/food/information-select-dietary-supplement-ingredients-and-other-substances/vinpocetine-dietary-supplements",
+        "https://pubmed.ncbi.nlm.nih.gov/28930203/"
+      ],
+      "source_pmids": [
+        "28930203"
+      ],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-17T20:20:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": true
+        },
+        "method": "manual_primary_source_review_2026_05_17"
+      },
+      "evidence_basis": "label_regulatory",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "nootropic_vinpocetine"
+    },
+    {
+      "id": "DSI_ANTICOAG_HORSE_CHESTNUT",
+      "type": "Med-Sup",
+      "agent1_name": "Anticoagulants (class)",
+      "agent1_id": "class:anticoagulants",
+      "agent2_name": "Horse Chestnut Seed",
+      "agent2_id": "ref:horse_chestnut_seed",
+      "severity": "Moderate",
+      "interaction_effect_type": "Additive",
+      "mechanism": "Health Canada lists horse chestnut among natural health products with evidence that they may change warfarin levels or directly affect blood clotting. Horse chestnut seed extracts contain aescin/escin and are used for venous insufficiency, so anticoagulant users need bleeding-risk monitoring rather than a silent clean check.",
+      "management": "Use caution with horse chestnut seed extract while taking warfarin or another anticoagulant. Tell the anticoagulation clinician before adding or stopping it, keep intake consistent if already using it, and watch for unusual bruising or bleeding.",
+      "source_urls": [
+        "https://www.canada.ca/en/health-canada/services/drugs-medical-devices/warfarin.html",
+        "https://www.nccih.nih.gov/health/horse-chestnut"
+      ],
+      "source_pmids": [],
+      "verification": {
+        "status": "verified",
+        "verified_at": "2026-05-17T20:20:00Z",
+        "verified_with": {
+          "rxnorm": true,
+          "umls": true,
+          "pubmed": false
+        },
+        "method": "manual_primary_source_review_2026_05_17"
+      },
+      "evidence_basis": "authoritative_review",
+      "clinical_confidence": "medium",
+      "applies_to": "whole_class",
+      "agent1_canonical_id": null,
+      "agent2_canonical_id": "horse_chestnut_seed"
+    },
+    {
       "id": "DSI_DM_ASHWAGANDHA",
       "type": "Med-Sup",
       "agent1_name": "Diabetes medications (class)",

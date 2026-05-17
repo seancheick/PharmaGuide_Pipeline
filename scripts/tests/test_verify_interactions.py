@@ -183,6 +183,10 @@ def test_classify_agent_class():
     assert vi.classify_agent("class:statins") == "class"
 
 
+def test_classify_agent_reference():
+    assert vi.classify_agent("ref:horse_chestnut_seed") == "reference"
+
+
 def test_classify_agent_unknown():
     assert vi.classify_agent("random-thing") == "unknown"
     assert vi.classify_agent("") == "unknown"
@@ -429,6 +433,28 @@ def test_verify_entry_warns_unmapped_supplement(ctx_offline):
     assert result["agent2_canonical_id"] is None
     assert report.warnings >= 1
     assert any(u["cui"] == "C9999999" for u in report.unmapped_supplements)
+
+
+def test_verify_entry_preserves_reference_canonical_id(ctx_offline):
+    entry = {
+        "id": "HORSE_CHESTNUT_REF",
+        "type": "Med-Sup",
+        "agent1_name": "Anticoagulants (class)",
+        "agent1_id": "class:statins",
+        "agent2_name": "Horse Chestnut Seed",
+        "agent2_id": "ref:horse_chestnut_seed",
+        "agent2_canonical_id": "horse_chestnut_seed",
+        "severity": "Moderate",
+        "mechanism": "m",
+        "management": "m",
+    }
+    report = vi.VerificationReport(total_entries=1)
+    result = vi.verify_entry(entry, ctx_offline, report)
+
+    assert result is not None
+    assert result["agent2_type"] == "reference"
+    assert result["agent2_canonical_id"] == "horse_chestnut_seed"
+    assert report.warnings == 0
 
 
 def test_verify_entry_blocks_unknown_class(ctx_offline):

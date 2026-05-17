@@ -308,6 +308,18 @@ def test_build_known_drug_rxcuis(fake_drug_classes):
     assert rxcuis == {"11289"}
 
 
+def test_build_drug_name_to_rxcui_index(fake_drug_classes):
+    idx = ing.build_drug_name_to_rxcui_index(fake_drug_classes)
+    assert idx["warfarin"] == "11289"
+
+
+def test_build_cui_to_rxcui_index_matches_unambiguous_drug_alias(
+    fake_cui_metadata, fake_drug_classes
+):
+    idx = ing.build_cui_to_rxcui_index(fake_cui_metadata, fake_drug_classes)
+    assert idx == {"C0043031": "11289"}
+
+
 def test_build_known_supplement_cuis_from_iqm(fake_iqm):
     cuis = ing.build_known_supplement_cuis(fake_iqm)
     assert cuis == {"C0042878", "C0016157"}
@@ -486,6 +498,8 @@ def test_build_research_pair_row_full_shape(
         "cui_b",
         "canonical_id_a",
         "canonical_id_b",
+        "rxcui_a",
+        "rxcui_b",
         "ent_type_a",
         "ent_type_b",
         "display_name_a",
@@ -534,6 +548,28 @@ def test_build_research_pair_row_resolves_canonical_id(
     )
     assert row["canonical_id_a"] == "vitamin_k"
     assert row["canonical_id_b"] is None  # warfarin is a drug, no IQM mapping
+
+
+def test_build_research_pair_row_resolves_drug_rxcui(
+    fake_sentence_dict,
+    fake_paper_metadata,
+    fake_iqm,
+    fake_drug_classes,
+    fake_cui_metadata,
+):
+    cui_to_canonical = ing.build_cui_to_canonical_index(fake_iqm)
+    cui_to_rxcui = ing.build_cui_to_rxcui_index(fake_cui_metadata, fake_drug_classes)
+    row = ing.build_research_pair_row(
+        pair_id="C0042878-C0043031",
+        sentences=fake_sentence_dict["C0042878-C0043031"],
+        paper_meta=fake_paper_metadata,
+        cui_to_canonical=cui_to_canonical,
+        cui_metadata=fake_cui_metadata,
+        cui_to_rxcui=cui_to_rxcui,
+        max_sentences=3,
+    )
+    assert row["rxcui_a"] is None
+    assert row["rxcui_b"] == "11289"
 
 
 def test_build_research_pair_row_counts_unique_papers(
@@ -714,6 +750,10 @@ def test_run_ingest_end_to_end(
     # Each row has ≤3 sentences
     for r in rows:
         assert len(r["top_sentences"]) <= 3
+    assert any(r.get("rxcui_a") == "11289" or r.get("rxcui_b") == "11289" for r in rows)
+    report = json.loads(report_path.read_text())
+    assert report["drug_rxcui_bridge_count"] == 1
+    assert report["research_pairs_with_rxcui"] == 2
 
 
 def test_run_ingest_writes_metadata_block(

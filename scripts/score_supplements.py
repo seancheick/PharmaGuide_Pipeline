@@ -35,6 +35,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from constants import LOG_DATE_FORMAT, LOG_FORMAT
 from audit_evidence_utils import derive_non_gmo_audit
+from inactive_ingredient_resolver import InactiveIngredientResolver
 from supplement_type_utils import infer_supplement_type
 
 try:
@@ -332,6 +333,12 @@ class SupplementScorer:
         self.paths = self.config.get("paths", {})
         self._parent_total_warned = False
         self._caers_signals = self._load_caers_signals()
+        self._inactive_resolver: Optional[InactiveIngredientResolver] = None
+
+    def _get_inactive_resolver(self) -> InactiveIngredientResolver:
+        if self._inactive_resolver is None:
+            self._inactive_resolver = InactiveIngredientResolver()
+        return self._inactive_resolver
 
     def _load_caers_signals(self) -> Dict[str, Any]:
         """Load CAERS adverse event signals from data file (once at init)."""
@@ -644,6 +651,55 @@ class SupplementScorer:
             return "token_bounded"
         return text
 
+    def _iter_resolver_safety_hits(self, product: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Return banned-recalled hits from the shared resolver.
+
+        The enricher's contaminant_data is still the primary active-path
+        signal. This resolver pass closes the product-level gap for inactives
+        and direct alias matches that only build_final_db previously saw.
+        """
+        try:
+            resolver = self._get_inactive_resolver()
+        except Exception as exc:
+            self.logger.warning("Inactive resolver unavailable during scoring: %s", exc)
+            return []
+
+        hits: List[Dict[str, Any]] = []
+        for source_key, role in (
+            ("activeIngredients", "active"),
+            ("inactiveIngredients", "inactive"),
+        ):
+            for ingredient in safe_list(product.get(source_key)):
+                if not isinstance(ingredient, dict):
+                    continue
+                raw_name = (
+                    ingredient.get("name")
+                    or ingredient.get("raw_source_text")
+                    or ingredient.get("standardName")
+                )
+                if not raw_name:
+                    continue
+                res = resolver.resolve(
+                    raw_name=str(raw_name),
+                    standard_name=ingredient.get("standardName"),
+                )
+                if res.matched_source != "banned_recalled":
+                    continue
+                if not (res.is_safety_concern or res.is_banned):
+                    continue
+                hits.append({
+                    "name": res.display_label or str(raw_name),
+                    "status": res.regulatory_status,
+                    "inactive_policy": res.inactive_policy,
+                    "role": role,
+                    "matched_rule_id": res.matched_rule_id,
+                })
+        return hits
+
+    @staticmethod
+    def _safety_hit_key(name: Any, status: Any) -> tuple[str, str]:
+        return (canon_key(name), norm_text(status))
+
     def _evaluate_safety_gate(self, product: Dict[str, Any]) -> Dict[str, Any]:
         contaminant_data = product.get("contaminant_data") or {}
         substances = safe_list(
@@ -659,6 +715,7 @@ class SupplementScorer:
         reason = None
         matched_substance_name = None
         review_needed = False
+        seen_hits: set[tuple[str, str, str]] = set()
 
         for substance in substances:
             match_type = self._normalize_match_type(
@@ -672,6 +729,10 @@ class SupplementScorer:
                 or substance.get("name")
                 or "unknown"
             )
+            seen_hits.add(self._safety_hit_key(
+                name,
+                status,
+            ))
 
             # Interim behavior: non exact/alias hits are review-only.
             if match_type not in {"exact", "alias"}:
@@ -725,6 +786,48 @@ class SupplementScorer:
                     flags.append("B0_MODERATE_SUBSTANCE")
                 elif severity == "low":
                     flags.append("B0_LOW_SUBSTANCE")
+
+        for hit in self._iter_resolver_safety_hits(product):
+            status = norm_text(hit.get("status"))
+            name = hit.get("name") or "unknown"
+            key = self._safety_hit_key(name, status)
+            if key in seen_hits:
+                continue
+            seen_hits.add(key)
+
+            role = norm_text(hit.get("role"))
+            inactive_policy = norm_text(hit.get("inactive_policy"))
+
+            if status == "banned":
+                blocked = True
+                reason = f"Banned substance ({name})"
+                matched_substance_name = name
+            elif status == "recalled":
+                unsafe = True
+                reason = f"Recalled ingredient ({name})"
+                matched_substance_name = name
+            elif status == "high_risk":
+                if role == "inactive" and inactive_policy == "excipient_acceptable":
+                    flags.append("B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY")
+                    continue
+                b0_cfg = self.config.get(
+                    "section_B_safety_purity", {}
+                ).get("B0_immediate_fail", {})
+                moderate_penalty += as_float(
+                    b0_cfg.get("high_risk_penalty"), 10.0
+                ) or 10.0
+                flags.append("B0_HIGH_RISK_SUBSTANCE")
+            elif status == "watchlist":
+                if role == "inactive" and inactive_policy == "excipient_acceptable":
+                    flags.append("B0_WATCHLIST_EXCIPIENT_WARNING_ONLY")
+                    continue
+                b0_cfg = self.config.get(
+                    "section_B_safety_purity", {}
+                ).get("B0_immediate_fail", {})
+                moderate_penalty += as_float(
+                    b0_cfg.get("watchlist_penalty"), 5.0
+                ) or 5.0
+                flags.append("B0_WATCHLIST_SUBSTANCE")
 
         # If a hard fail was triggered, moderate/low advisory flags are not relevant.
         if blocked or unsafe:
@@ -3922,6 +4025,25 @@ class SupplementScorer:
             return "POOR"
         return "SAFE"
 
+    @staticmethod
+    def _derive_blocking_reason_from_scoring_gate(
+        verdict: str,
+        b0: Dict[str, Any],
+        flags: List[str],
+    ) -> Optional[str]:
+        if b0.get("blocked"):
+            return "banned_ingredient"
+        if b0.get("unsafe"):
+            reason = norm_text(b0.get("reason"))
+            if "banned" in reason:
+                return "banned_ingredient"
+            if "recall" in reason:
+                return "recalled_ingredient"
+            return "safety_block"
+        if verdict == "CAUTION" and "B0_HIGH_RISK_SUBSTANCE" in flags:
+            return "high_risk_ingredient"
+        return None
+
     def _build_core_output(
         self,
         product: Dict[str, Any],
@@ -3935,6 +4057,7 @@ class SupplementScorer:
         unmapped_actives_excluding_banned_exact_alias: int,
         mapped_coverage: float,
         reason: Optional[str] = None,
+        blocking_reason: Optional[str] = None,
     ) -> Dict[str, Any]:
         product_id = product.get("dsld_id", "unknown")
         product_name = product.get("product_name", "Unknown Product")
@@ -3991,6 +4114,7 @@ class SupplementScorer:
             "grade": self._grade_word(score_100_equivalent or 0.0, verdict),
             "verdict": verdict,
             "safety_verdict": safety_verdict,
+            "blocking_reason": blocking_reason,
             "badges": self._build_badges(product, verdict),
             "category_percentile": None,
             "category_percentile_text": None,
@@ -4027,6 +4151,7 @@ class SupplementScorer:
                 ),
                 "mapped_coverage": round(mapped_coverage, 4),
                 "reason": reason,
+                "blocking_reason": blocking_reason,
             },
             "section_scores": {
                 "A_ingredient_quality": {
@@ -4144,6 +4269,7 @@ class SupplementScorer:
                     ),
                     mapped_coverage=mapping_gate.get("mapped_coverage", 0.0),
                     reason=b0.get("reason"),
+                    blocking_reason="banned_ingredient",
                 )
 
             if b0.get("unsafe"):
@@ -4174,6 +4300,7 @@ class SupplementScorer:
                     ),
                     mapped_coverage=mapping_gate.get("mapped_coverage", 0.0),
                     reason=b0.get("reason"),
+                    blocking_reason=self._derive_blocking_reason_from_scoring_gate("UNSAFE", b0, flags),
                 )
 
             # Step 2/3: type + mapping gate
@@ -4244,6 +4371,7 @@ class SupplementScorer:
             quality_score = clamp(0.0, 80.0, quality_raw)
 
             verdict = self._derive_verdict(b0, mapping_gate, flags, quality_score, product)
+            blocking_reason = self._derive_blocking_reason_from_scoring_gate(verdict, b0, flags)
 
             breakdown = {
                 "A": section_a,
@@ -4269,6 +4397,7 @@ class SupplementScorer:
                     "unmapped_actives_excluding_banned_exact_alias", 0
                 ),
                 mapped_coverage=mapping_gate.get("mapped_coverage", 1.0),
+                blocking_reason=blocking_reason,
             )
 
         except Exception as exc:

@@ -151,6 +151,8 @@ class InactiveResolution:
     # Optional structured evidence (PubMed, EFSA refs) — copied through
     # from the matched entry when available.
     references: list[dict] = field(default_factory=list)
+    regulatory_status: Optional[str] = None
+    inactive_policy: Optional[str] = None
     # Sprint E1.1.4 / 2026-05-13 — authored Dr Pham preflight copy threaded
     # through to support build_banned_substance_detail() in the blob layer.
     # Only populated for the banned-recalled branch (and only when the source
@@ -324,14 +326,22 @@ class InactiveIngredientResolver:
             or entry.get("reason")
             or f"Listed as {status} in banned_recalled_ingredients.json"
         )
+        functional_roles = list(entry.get("functional_roles") or [])
+        display_role_label = (
+            _pretty_role(functional_roles[0]) if functional_roles else None
+        )
+        if not display_role_label:
+            display_role_label = _pretty_role(entry.get("source_category"))
+        if not display_role_label and status:
+            display_role_label = _pretty_role(status)
         return InactiveResolution(
             raw_name=raw_name,
             display_label=entry.get("standard_name") or raw_name,
             standard_name=entry.get("standard_name"),
             matched_source=SOURCE_BANNED_RECALLED,
             matched_rule_id=entry.get("id"),
-            display_role_label=None,  # banned items don't need a role label
-            functional_roles=list(entry.get("functional_roles") or []),
+            display_role_label=display_role_label,
+            functional_roles=functional_roles,
             additive_type=None,
             category=entry.get("source_category"),
             severity_status=severity_status,
@@ -361,6 +371,8 @@ class InactiveIngredientResolver:
                 if entry.get(k) is not None
             },
             references=list(entry.get("references_structured") or []),
+            regulatory_status=status or None,
+            inactive_policy=entry.get("inactive_policy") or None,
         )
 
     @staticmethod
@@ -379,6 +391,8 @@ class InactiveIngredientResolver:
         # Derive a friendly display_role_label from the first functional role
         # (the build's existing _INACTIVE_ROLE_LABELS table now maps these).
         display_role_label = _pretty_role(functional_roles[0]) if functional_roles else None
+        if not display_role_label:
+            display_role_label = _pretty_role(entry.get("category"))
         return InactiveResolution(
             raw_name=raw_name,
             display_label=entry.get("standard_name") or raw_name,

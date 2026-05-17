@@ -21,7 +21,9 @@ from build_final_db import (
     build_core_row,
     build_detail_blob,
     build_top_warnings,
+    classify_product_categories,
     fetch_staged_product,
+    generate_ingredient_fingerprint,
     generate_dosing_summary,
     iter_json_products,
     mark_staged_product_matched,
@@ -697,6 +699,131 @@ def test_recalled_exact_match_sets_recalled_flag_but_not_banned_flag():
     assert row["blocking_reason"] == "recalled_ingredient"
 
 
+def test_banned_inactive_forces_blocked_core_verdict_when_scorer_says_safe():
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Brominated Vegetable Oil",
+            "raw_source_text": "Brominated Vegetable Oil",
+            "standardName": "Brominated Vegetable Oil",
+        }
+    ]
+    scored = make_scored(verdict="SAFE")
+
+    blob = build_detail_blob(enriched, scored)
+    row = row_as_dict(
+        build_core_row(
+            enriched,
+            scored,
+            "2026-03-17T19:00:00Z",
+            detail_blob=blob,
+        )
+    )
+
+    assert row["has_banned_substance"] == 1
+    assert row["verdict"] == "BLOCKED"
+    assert row["safety_verdict"] == "BLOCKED"
+    assert row["blocking_reason"] == "banned_ingredient"
+    assert row["score_quality_80"] is None
+    assert row["score_display_80"] == "N/A"
+    assert row["score_safety_purity"] == 0.0
+    assert any(
+        w.get("type") == "banned_substance" and w.get("severity") == "critical"
+        for w in blob["warnings_profile_gated"]
+    )
+
+
+def test_critical_banned_blob_warning_cannot_coexist_with_safe_core_verdict():
+    enriched = make_enriched()
+    scored = make_scored(verdict="SAFE")
+    blob = {
+        "warnings_profile_gated": [
+            {"type": "banned_substance", "severity": "critical"}
+        ]
+    }
+
+    row = row_as_dict(
+        build_core_row(
+            enriched,
+            scored,
+            "2026-03-17T19:00:00Z",
+            detail_blob=blob,
+        )
+    )
+
+    assert row["verdict"] == "BLOCKED"
+    assert row["safety_verdict"] == "BLOCKED"
+    assert row["blocking_reason"] == "banned_ingredient"
+
+
+def test_excipient_acceptable_inactive_uses_calibrated_warning_posture():
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "Titanium Dioxide",
+            "raw_source_text": "Titanium Dioxide",
+            "standardName": "Titanium Dioxide",
+        }
+    ]
+    scored = make_scored(verdict="SAFE")
+
+    blob = build_detail_blob(enriched, scored)
+    row = row_as_dict(
+        build_core_row(
+            enriched,
+            scored,
+            "2026-03-17T19:00:00Z",
+            detail_blob=blob,
+        )
+    )
+    warning = next(
+        w for w in blob["warnings_profile_gated"]
+        if w.get("matched_rule_id") == "BANNED_ADD_TITANIUM_DIOXIDE"
+    )
+
+    assert row["verdict"] == "SAFE"
+    assert row["safety_verdict"] == "SAFE"
+    assert row["blocking_reason"] is None
+    assert warning["type"] == "watchlist_substance"
+    assert warning["severity"] == "moderate"
+    assert warning["display_mode_default"] == "informational"
+    assert warning["inactive_policy"] == "excipient_acceptable"
+
+
+def test_core_row_honors_scorer_emitted_high_risk_blocking_reason():
+    enriched = make_enriched()
+    enriched["inactiveIngredients"] = [
+        {
+            "name": "DHEA",
+            "raw_source_text": "DHEA",
+            "standardName": "DHEA",
+        }
+    ]
+    scored = make_scored(verdict="CAUTION")
+    scored["blocking_reason"] = "high_risk_ingredient"
+
+    blob = build_detail_blob(enriched, scored)
+    row = row_as_dict(
+        build_core_row(
+            enriched,
+            scored,
+            "2026-03-17T19:00:00Z",
+            detail_blob=blob,
+        )
+    )
+
+    assert row["verdict"] == "CAUTION"
+    assert row["safety_verdict"] == "CAUTION"
+    assert row["blocking_reason"] == "high_risk_ingredient"
+    assert any(
+        w.get("type") == "high_risk_ingredient"
+        and w.get("severity") == "high"
+        and w.get("display_mode_default") == "critical"
+        and w.get("inactive_policy") == "penalize_anyway"
+        for w in blob["warnings_profile_gated"]
+    )
+
+
 def test_detail_blob_includes_optional_rda_and_evidence_sections_when_present():
     blob = build_detail_blob(make_enriched(), make_scored())
 
@@ -738,6 +865,40 @@ def test_detail_blob_preserves_real_upstream_field_names_for_active_ingredients(
     assert expected_keys.issubset(set(ingredient.keys()))
     assert ingredient["score"] == 14.0
     assert ingredient["standardName"] == "Retinyl Palmitate"
+
+
+def test_detail_blob_does_not_mark_active_mapped_without_canonical_id():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "from Green Tea Leaf Extract",
+            "standardName": "from Green Tea Leaf Extract",
+            "raw_source_text": "from Green Tea Leaf Extract",
+            "quantity": 56,
+            "unit": "mg",
+            "mapped": False,
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "name": "from Green Tea Leaf Extract",
+            "raw_source_text": "from Green Tea Leaf Extract",
+            "standard_name": "from Green Tea Leaf Extract",
+            "mapped": True,
+            "canonical_id": None,
+            "recognized_non_scorable": True,
+            "role_classification": "recognized_non_scorable",
+            "recognition_reason": "source_descriptor_child_row",
+            "score": 9,
+            "category": "herbs",
+        }
+    ]
+
+    ingredient = build_detail_blob(enriched, make_scored())["ingredients"][0]
+
+    assert ingredient["canonical_id"] == ""
+    assert ingredient["mapped"] is False
+    assert ingredient["is_mapped"] is False
 
 
 def test_detail_blob_marks_ingredient_flags_from_enriched_safety_data():
@@ -870,6 +1031,202 @@ def test_detail_blob_allergens_empty_when_no_hits():
     enriched["allergen_hits"] = []
     blob = build_detail_blob(enriched, make_scored())
     assert blob["allergens"] == []
+
+
+def test_key_ingredient_tags_emit_all_mapped_canonical_ids_for_interactions():
+    enriched = make_enriched()
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "name": "Potassium",
+            "standard_name": "Potassium",
+            "canonical_id": "potassium",
+            "parent_key": "potassium",
+            "category": "mineral",
+            "mapped": True,
+            "dosage": 99,
+            "dosage_unit": "mg",
+        },
+        {
+            "name": "Potassium Gluconate",
+            "standard_name": "Potassium",
+            "canonical_id": "potassium",
+            "parent_key": "potassium_gluconate",
+            "category": "mineral",
+            "mapped": True,
+            "dosage": 595,
+            "dosage_unit": "mg",
+        },
+        {
+            "name": "Magnesium",
+            "standard_name": "Magnesium",
+            "canonical_id": "magnesium",
+            "parent_key": "magnesium",
+            "category": "mineral",
+            "mapped": True,
+            "dosage": 100,
+            "dosage_unit": "mg",
+        },
+    ]
+
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert categories["key_ingredient_tags"] == ["potassium", "magnesium"]
+
+
+def test_key_ingredient_tags_include_active_canonicals_when_iqm_is_empty():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Red Yeast Rice powder",
+            "standardName": "Red Yeast Rice",
+            "normalized_key": "red_yeast_rice_powder",
+            "canonical_id": "BANNED_RED_YEAST_RICE",
+            "raw_source_text": "Red Yeast Rice powder",
+            "quantity": 600,
+            "unit": "mg",
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert categories["key_ingredient_tags"] == ["banned_red_yeast_rice"]
+
+
+def test_key_ingredient_tags_merge_iqm_and_active_canonicals_without_dropping_safety_ids():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Red Yeast Rice",
+            "standardName": "Red Yeast Rice",
+            "normalized_key": "red_yeast_rice",
+            "canonical_id": "BANNED_RED_YEAST_RICE",
+            "raw_source_text": "Red Yeast Rice",
+            "quantity": 1200,
+            "unit": "mg",
+        },
+        {
+            "name": "CoQ10",
+            "standardName": "CoQ10",
+            "normalized_key": "coq10",
+            "canonical_id": "coq10",
+            "raw_source_text": "CoQ10",
+            "quantity": 100,
+            "unit": "mg",
+        },
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "name": "CoQ10",
+            "standard_name": "CoQ10",
+            "canonical_id": "coq10",
+            "parent_key": "coq10",
+            "category": "antioxidants",
+            "mapped": True,
+            "dosage": 100,
+            "dosage_unit": "mg",
+        }
+    ]
+
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert categories["key_ingredient_tags"] == ["coq10", "banned_red_yeast_rice"]
+
+
+def test_ingredients_text_includes_active_canonicals_when_iqm_is_empty():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Cannabidiol",
+            "standardName": "CBD (Cannabidiol)",
+            "normalized_key": "cannabidiol",
+            "canonical_id": "BANNED_CBD_US",
+            "raw_source_text": "Cannabidiol",
+            "quantity": 5,
+            "unit": "mg",
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+
+    row = row_as_dict(build_core_row(enriched, make_scored(), "2026-04-10T12:00:00Z"))
+
+    assert "Cannabidiol" in row["ingredients_text"]
+    assert "CBD (Cannabidiol)" in row["ingredients_text"]
+    assert "BANNED_CBD_US" in row["ingredients_text"]
+
+
+def test_validate_export_contract_quarantines_active_rows_without_identity():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Tea Trio(R) Blend",
+            "standardName": "Tea Trio Blend",
+            "normalized_key": "tea_trio_blend",
+            "raw_source_text": "Tea Trio(R) Blend",
+            "quantity": 1,
+            "unit": "serving",
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+
+    issues = validate_export_contract(enriched, make_scored())
+
+    assert any("missing required active identity" in issue for issue in issues)
+
+
+def test_validate_export_contract_allows_mapped_blend_identity():
+    enriched = make_enriched()
+    enriched["activeIngredients"] = [
+        {
+            "name": "Mapped Superfood Blend",
+            "standardName": "Mapped Superfood Blend",
+            "normalized_key": "mapped_superfood_blend",
+            "canonical_id": "blend_superfood",
+            "raw_source_text": "Mapped Superfood Blend",
+            "quantity": 1,
+            "unit": "serving",
+        }
+    ]
+    enriched["ingredient_quality_data"]["ingredients"] = []
+
+    issues = validate_export_contract(enriched, make_scored())
+    categories = classify_product_categories(enriched, make_scored())
+
+    assert not any("missing required active identity" in issue for issue in issues)
+    assert categories["key_ingredient_tags"] == ["blend_superfood"]
+
+
+def test_ingredient_fingerprint_uses_canonical_ids_and_singular_categories():
+    enriched = make_enriched()
+    enriched["ingredient_quality_data"]["ingredients"] = [
+        {
+            "name": "Potassium",
+            "standard_name": "Potassium",
+            "canonical_id": "potassium",
+            "category": "mineral",
+            "mapped": True,
+            "quantity": 99,
+            "unit": "mg",
+        },
+        {
+            "name": "Ashwagandha Root",
+            "standard_name": "Ashwagandha",
+            "canonical_id": "ashwagandha",
+            "category": "botanical",
+            "mapped": True,
+            "quantity": 300,
+            "unit": "mg",
+        },
+    ]
+
+    fingerprint = generate_ingredient_fingerprint(enriched)
+
+    assert "potassium" in fingerprint["nutrients"]
+    assert "Potassium" not in fingerprint["nutrients"]
+    assert fingerprint["nutrients"]["potassium"] == {"amount": 99.0, "unit": "mg"}
+    assert fingerprint["herbs"] == ["ashwagandha"]
+    assert "mineral" in fingerprint["categories"]
+    assert "botanical" in fingerprint["categories"]
 
 
 def test_detail_blob_allergens_skips_entries_missing_allergen_id():

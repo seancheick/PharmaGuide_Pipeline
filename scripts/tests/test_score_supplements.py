@@ -3566,6 +3566,63 @@ class TestBannedRecalledVerdictLock:
         assert result["verdict"] == "BLOCKED"
         assert result["score_80"] is None
 
+    @pytest.mark.parametrize("inactive_name,standard_name", [
+        ("Sodium Tetraborate", "Sodium Tetraborate"),
+        ("Brominated Vegetable Oil", "Brominated Vegetable Oil"),
+        ("FD&C Red #3", "FD&C Red #3"),
+        ("Dimethylpolysiloxane", "Simethicone"),
+    ])
+    def test_banned_inactive_resolver_hit_blocks_at_scoring_source(
+        self,
+        scorer,
+        inactive_name,
+        standard_name,
+    ):
+        product = make_base_product()
+        product["inactiveIngredients"] = [
+            {"name": inactive_name, "standardName": standard_name}
+        ]
+
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "BLOCKED"
+        assert result["safety_verdict"] == "BLOCKED"
+        assert result["score_80"] is None
+        assert result["score_100_equivalent"] is None
+        assert result["blocking_reason"] == "banned_ingredient"
+        assert result["breakdown"]["B"]["score"] == 0.0
+        assert result["breakdown"]["B"]["B0"] == "BLOCKED"
+
+    @pytest.mark.parametrize("inactive_name", ["Titanium Dioxide", "Talc"])
+    def test_excipient_acceptable_inactive_is_warning_only_not_b0_penalty(
+        self,
+        scorer,
+        inactive_name,
+    ):
+        product = make_base_product()
+        product["inactiveIngredients"] = [{"name": inactive_name, "standardName": inactive_name}]
+
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "SAFE"
+        assert result["safety_verdict"] == "SAFE"
+        assert result["blocking_reason"] is None
+        assert result["breakdown"]["B"]["B0_moderate_penalty"] == 0.0
+        assert "B0_HIGH_RISK_EXCIPIENT_WARNING_ONLY" in result["flags"]
+        assert "B0_HIGH_RISK_SUBSTANCE" not in result["flags"]
+
+    def test_penalize_anyway_inactive_high_risk_drops_safety_posture(self, scorer):
+        product = make_base_product()
+        product["inactiveIngredients"] = [{"name": "DHEA", "standardName": "DHEA"}]
+
+        result = scorer.score_product(product)
+
+        assert result["verdict"] == "CAUTION"
+        assert result["safety_verdict"] == "CAUTION"
+        assert result["blocking_reason"] == "high_risk_ingredient"
+        assert result["breakdown"]["B"]["B0_moderate_penalty"] > 0.0
+        assert "B0_HIGH_RISK_SUBSTANCE" in result["flags"]
+
 
 class TestProbioticCoreQualityRegression:
     """Phase 0 failing tests pinning real probiotic scoring bugs seen on Thorne 15581.

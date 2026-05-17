@@ -702,6 +702,16 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
         for field in missing:
             issues.append(f"missing ingredient_quality_data.ingredients[{idx}].{field}")
 
+    active_ingredients = [
+        ing for ing in safe_list(enriched.get("activeIngredients"))
+        if isinstance(ing, dict)
+    ]
+    has_active_identity = any(
+        safe_str(ing.get("canonical_id") or ing.get("parent_key"))
+        for ing in ingredients
+        if isinstance(ing, dict)
+    ) or any(safe_str(ing.get("canonical_id")) for ing in active_ingredients)
+
     if "section_scores" not in scored:
         issues.append("missing scored.section_scores")
     if "scoring_metadata" not in scored:
@@ -716,6 +726,12 @@ def validate_export_contract(enriched: Dict, scored: Dict) -> List[str]:
             "review_queue: NOT_SCORED verdict — mapping/dosage gate "
             "failed upstream; product cannot ship without a coherent "
             "score (Batch 3 data integrity gate)."
+        )
+    elif active_ingredients and not has_active_identity:
+        issues.append(
+            "review_queue: missing required active identity — product has "
+            "activeIngredients but no canonical_id in active or IQM rows; "
+            "opaque/rollup-only labels cannot ship as scored catalog rows."
         )
     elif not score_optional:
         s100 = scored.get("score_100_equivalent")
@@ -2633,8 +2649,27 @@ def build_top_warnings(enriched: Dict) -> List[str]:
 
 # ─── Blocking Reason ───
 
+def blob_has_critical_banned_warning(detail_blob: Optional[Dict]) -> bool:
+    """True when a detail blob carries a critical banned-substance warning."""
+    if not isinstance(detail_blob, dict):
+        return False
+    for list_key in ("warnings", "warnings_profile_gated"):
+        for warning in safe_list(detail_blob.get(list_key)):
+            if not isinstance(warning, dict):
+                continue
+            if (
+                safe_str(warning.get("type")) == "banned_substance"
+                and safe_str(warning.get("severity")).lower() == "critical"
+            ):
+                return True
+    return False
+
+
 def derive_blocking_reason(enriched: Dict, scored: Dict) -> Optional[str]:
     """Derive blocking_reason from B0 gate results."""
+    if has_banned_substance(enriched):
+        return "banned_ingredient"
+
     verdict = safe_str(scored.get("verdict"))
     if verdict not in ("BLOCKED", "UNSAFE", "CAUTION"):
         return None
@@ -2787,6 +2822,10 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
         # Canonical form + dose contract for Flutter. Single source of
         # truth: pipeline emits explicit states, Flutter renders them.
         form_contract = _compute_form_contract(ing, m)
+        canonical_id = safe_str(m.get("canonical_id") or ing.get("canonical_id"))
+        is_mapped = safe_bool(m.get("mapped", ing.get("mapped")))
+        if not canonical_id:
+            is_mapped = False
         ingredients.append({
             "raw_source_text": raw,
             "name": name,
@@ -2807,7 +2846,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "natural": bool(m.get("natural")),
             "score": safe_float(m.get("score")),
             "notes": safe_str(m.get("notes")),
-            "mapped": safe_bool(m.get("mapped", ing.get("mapped"))),
+            "mapped": is_mapped,
             "safety_hits": combined_safety_hits,
             "normalized_amount": safe_float(ne.get("normalized_amount")),
             "normalized_unit": safe_str(ne.get("normalized_unit")),
@@ -2816,13 +2855,13 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "dosage": safe_float(qty),
             "dosage_unit": safe_str(ing.get("unit")),
             "normalized_value": safe_float(ne.get("normalized_amount")),
-            "is_mapped": safe_bool(m.get("mapped", ing.get("mapped"))),
+            "is_mapped": is_mapped,
             # canonical_id — foundational identifier for interactions, stack
             # logic, evidence routing, biomarker scoring, dedup, and analytics.
             # The enricher writes it into both activeIngredients[].canonical_id
             # AND ingredient_quality_data.ingredients[].canonical_id (`m`).
             # Prefer `m` (post-enrichment match) over `ing` (raw label entry).
-            "canonical_id": safe_str(m.get("canonical_id") or ing.get("canonical_id")),
+            "canonical_id": canonical_id,
             # delivers_markers — marker-via-ingredient evidence routing payload.
             # Computed by the enricher (botanical_marker_contributions.json) and
             # attached to the IQM match record. Always emit as a list (possibly
@@ -2970,6 +3009,8 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "safety_reason": res.safety_reason,
             "matched_source": res.matched_source,
             "matched_rule_id": res.matched_rule_id,
+            "regulatory_status": res.regulatory_status,
+            "inactive_policy": res.inactive_policy,
             # Sprint E1.1.4 / 2026-05-13 — Dr Pham authored copy threaded
             # from banned_recalled_ingredients.json through the resolver
             # to the warning emitter. None on harmful-additive /
@@ -3296,11 +3337,20 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 w_type = "banned_substance"
                 w_severity = "critical"
                 w_title = f"Banned substance: {name}"
+                dm_default = "critical"
             else:
-                # high_risk / recalled — both surface as high_risk_ingredient
-                w_type = "high_risk_ingredient"
-                w_severity = "high"
-                w_title = f"High-risk ingredient: {name}"
+                inactive_policy = normalize_text(ing.get("inactive_policy"))
+                if role == "inactive" and inactive_policy == "excipient_acceptable":
+                    w_type = "watchlist_substance"
+                    w_severity = "moderate"
+                    w_title = f"Excipient watchlist: {name}"
+                    dm_default = "informational"
+                else:
+                    # high_risk / recalled — both surface as high_risk_ingredient
+                    w_type = "high_risk_ingredient"
+                    w_severity = "high"
+                    w_title = f"High-risk ingredient: {name}"
+                    dm_default = "critical"
             warning_entry = {
                 "type": w_type,
                 "severity": w_severity,
@@ -3310,8 +3360,9 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
                 "ingredient_role": role,  # 'active' | 'inactive' — for Flutter routing
                 "matched_rule_id": safe_str(ing.get("matched_rule_id")) or None,
                 "source": "inactive_ingredient_resolver",
-                "display_mode_default": "critical",
+                "display_mode_default": dm_default,
                 "clinical_risk": safe_str(ing.get("harmful_severity")) or None,
+                "inactive_policy": safe_str(ing.get("inactive_policy")) or None,
             }
             # Sprint E1.1.4 / 2026-05-13 — thread Dr Pham authored preflight
             # copy into warnings emitted for banned-recalled hits. Without
@@ -3948,32 +3999,39 @@ def generate_ingredient_fingerprint(enriched: Dict) -> Dict:
 
     all_ingredient_names = set()
 
+    nutrient_categories = {"vitamin", "vitamins", "mineral", "minerals", "amino_acid", "amino_acids", "fatty_acid", "fatty_acids"}
+    herb_categories = {"botanical", "botanicals", "herb", "herbs", "plant_extract", "plant_extracts"}
+
     for ing in ingredients:
         if not isinstance(ing, dict):
             continue
 
         standard_name = safe_str(ing.get("standard_name")).lower()
         category = safe_str(ing.get("category")).lower()
+        canonical_id = safe_str(ing.get("canonical_id") or ing.get("parent_key")).lower()
 
-        if not standard_name:
+        ingredient_id = canonical_id or standard_name.replace(" ", "_")
+        if not ingredient_id:
             continue
 
-        all_ingredient_names.add(standard_name.replace(" ", "_"))
+        all_ingredient_names.add(ingredient_id)
+        if standard_name:
+            all_ingredient_names.add(standard_name.replace(" ", "_"))
 
         # Extract nutrients with doses
-        if category in ["vitamins", "minerals", "amino_acids", "fatty_acids"]:
-            normalized_amount = ing.get("normalized_amount") or ing.get("dosage")
-            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit"))
+        if category in nutrient_categories:
+            normalized_amount = ing.get("normalized_amount") or ing.get("dosage") or ing.get("quantity")
+            normalized_unit = safe_str(ing.get("normalized_unit") or ing.get("dosage_unit") or ing.get("unit"))
 
             if normalized_amount is not None:
-                fingerprint["nutrients"][standard_name.replace(" ", "_")] = {
+                fingerprint["nutrients"][ingredient_id] = {
                     "amount": float(normalized_amount),
                     "unit": normalized_unit,
                 }
 
         # Track herbs
-        if category in ["botanicals", "herbs", "plant_extracts"]:
-            fingerprint["herbs"].append(standard_name)
+        if category in herb_categories:
+            fingerprint["herbs"].append(ingredient_id)
 
         # Track categories
         if category:
@@ -4142,16 +4200,44 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
 
     omega3_audit = derive_omega3_audit(enriched, scored)
 
-    # Extract ingredient names
+    # Extract ingredient names and canonical ids. `key_ingredient_tags` is a
+    # safety carrier used by Flutter interaction lookup, so it must include all
+    # mapped active canonical IDs, not just a short display-priority subset.
     ingredient_names = set()
+    key_tags = []
+    seen_key_tags = set()
+
+    def normalize_interaction_tag(value: Any) -> str:
+        return safe_str(value).lower().replace(" ", "_")
+
+    def add_interaction_tag(value: Any) -> None:
+        canonical_id = normalize_interaction_tag(value)
+        if not canonical_id:
+            return
+        ingredient_names.add(canonical_id)
+        if canonical_id not in seen_key_tags:
+            seen_key_tags.add(canonical_id)
+            key_tags.append(canonical_id)
+
     for ing in ingredients:
         if isinstance(ing, dict):
             name = safe_str(ing.get("standard_name") or ing.get("name")).lower().replace(" ", "_")
             if name:
                 ingredient_names.add(name)
-            canonical_id = safe_str(ing.get("canonical_id") or ing.get("parent_key")).lower().replace(" ", "_")
-            if canonical_id:
-                ingredient_names.add(canonical_id)
+            add_interaction_tag(ing.get("canonical_id") or ing.get("parent_key"))
+
+    # Some safety/resolver canonicals live only on activeIngredients when the
+    # active is recognized but not IQM-scorable (for example CBD, red yeast
+    # rice, vinpocetine, and botanical source identities). These canonicals are
+    # still required by Flutter interaction lookup and stack storage, so export
+    # them into the core carrier as well.
+    for ing in safe_list(enriched.get("activeIngredients")):
+        if not isinstance(ing, dict):
+            continue
+        name = safe_str(ing.get("standardName") or ing.get("name")).lower().replace(" ", "_")
+        if name:
+            ingredient_names.add(name)
+        add_interaction_tag(ing.get("canonical_id"))
 
     # Primary category detection
     primary_category = None
@@ -4199,18 +4285,6 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
     contains_collagen = any(name in ingredient_names for name in ["collagen", "collagen_peptides"])
     contains_adaptogens = bool(ingredient_names & adaptogens)
     contains_nootropics = bool(ingredient_names & nootropics)
-
-    # Key ingredient tags (top 5 most important)
-    key_tags = []
-    priority_ingredients = [
-        "ashwagandha", "magnesium", "vitamin_d", "omega-3", "curcumin",
-        "probiotics", "collagen", "vitamin_c", "zinc", "ginkgo"
-    ]
-    for priority in priority_ingredients:
-        if priority in ingredient_names:
-            key_tags.append(priority)
-        if len(key_tags) >= 5:
-            break
 
     return {
         "primary_category": primary_category,
@@ -4714,18 +4788,46 @@ def build_core_row(
     scored: Dict,
     exported_at: str,
     detail_blob_sha256: Optional[str] = None,
+    detail_blob: Optional[Dict] = None,
 ) -> tuple:
     """Build a products_core row tuple from enriched + scored product data."""
     comp = safe_dict(enriched.get("compliance_data"))
     ds = safe_dict(enriched.get("dietary_sensitivity_data"))
-    ss = safe_dict(scored.get("section_scores"))
     cp = safe_dict(scored.get("category_percentile"))
     st_str = resolve_export_supplement_type(enriched, scored)
     sm = safe_dict(scored.get("scoring_metadata"))
 
     disc_date = safe_str(enriched.get("discontinuedDate"))[:10] or None
-    score_80 = safe_float(scored.get("score_80"))
-    score_100 = safe_float(scored.get("score_100_equivalent"))
+    has_export_banned_signal = (
+        has_banned_substance(enriched)
+        or blob_has_critical_banned_warning(detail_blob)
+    )
+    effective_scored = dict(scored)
+    if has_export_banned_signal:
+        section_scores = dict(safe_dict(scored.get("section_scores")))
+        for section_key in (
+            "A_ingredient_quality",
+            "B_safety_purity",
+            "C_evidence_research",
+            "D_brand_trust",
+        ):
+            section = dict(safe_dict(section_scores.get(section_key)))
+            section["score"] = 0.0
+            section_scores[section_key] = section
+        effective_scored.update({
+            "score_80": None,
+            "display": "N/A",
+            "display_100": "N/A",
+            "score_100_equivalent": None,
+            "grade": "Blocked",
+            "verdict": "BLOCKED",
+            "safety_verdict": "BLOCKED",
+            "section_scores": section_scores,
+        })
+
+    score_80 = safe_float(effective_scored.get("score_80"))
+    score_100 = safe_float(effective_scored.get("score_100_equivalent"))
+    ss = safe_dict(effective_scored.get("section_scores"))
 
     top_warnings = build_top_warnings(enriched)
 
@@ -4746,16 +4848,20 @@ def build_core_row(
                 f"({serious} serious of {total} reports)"
             )
 
-    blocking = derive_blocking_reason(enriched, scored)
+    blocking = (
+        "banned_ingredient"
+        if has_export_banned_signal
+        else safe_str(scored.get("blocking_reason")) or derive_blocking_reason(enriched, scored)
+    )
     interaction_hint = build_interaction_summary_hint(enriched)
-    decision_highlights = build_decision_highlights(enriched, scored, blocking)
+    decision_highlights = build_decision_highlights(enriched, effective_scored, blocking)
     _validate_decision_highlights(decision_highlights, safe_str(enriched.get("dsld_id")))
 
     # ─── v1.1.0 Enhancements ───
     fingerprint = generate_ingredient_fingerprint(enriched)
     key_nutrients = generate_key_nutrients_summary(enriched)
-    share_meta = generate_share_metadata(enriched, scored)
-    categories = classify_product_categories(enriched, scored)
+    share_meta = generate_share_metadata(enriched, effective_scored)
+    categories = classify_product_categories(enriched, effective_scored)
     goal_data = compute_goal_matches(enriched)
     dosing = generate_dosing_summary(enriched)
     net_contents = generate_net_contents_summary(enriched)
@@ -4771,6 +4877,15 @@ def build_core_row(
         if isinstance(ing, dict):
             for k in ("standard_name", "matched_name", "name", "raw_source_text",
                       "canonical_id", "display_label"):
+                v = ing.get(k)
+                if isinstance(v, str) and v.strip() and v.strip().lower() not in {"unknown", "n/a", "none"}:
+                    ing_tokens.add(v.strip())
+    # Active ingredients can be recognized by the resolver yet absent from IQM
+    # scoring rows (banned/not-lawful actives, non-scorable botanical source
+    # identities, etc.). FTS must still expose those names and canonicals.
+    for ing in safe_list(enriched.get("activeIngredients")):
+        if isinstance(ing, dict):
+            for k in ("standardName", "name", "raw_source_text", "canonical_id", "normalized_key"):
                 v = ing.get(k)
                 if isinstance(v, str) and v.strip() and v.strip().lower() not in {"unknown", "n/a", "none"}:
                     ing_tokens.add(v.strip())
@@ -4801,13 +4916,13 @@ def build_core_row(
         st_str,
         # Scores
         score_80,
-        safe_str(scored.get("display")),
-        safe_str(scored.get("display_100")),
+        safe_str(effective_scored.get("display")),
+        safe_str(effective_scored.get("display_100")),
         score_100,
-        safe_str(scored.get("grade")),
-        safe_str(scored.get("verdict")),
-        safe_str(scored.get("safety_verdict")),
-        safe_float(scored.get("mapped_coverage")),
+        safe_str(effective_scored.get("grade")),
+        safe_str(effective_scored.get("verdict")),
+        safe_str(effective_scored.get("safety_verdict")),
+        safe_float(effective_scored.get("mapped_coverage")),
         # Section scores
         safe_float(safe_dict(ss.get("A_ingredient_quality")).get("score")),
         safe_float(safe_dict(ss.get("A_ingredient_quality")).get("max")),
@@ -5186,7 +5301,13 @@ def build_final_db(
                 blob = build_detail_blob(enriched, scored)
                 blob_json = json.dumps(blob, ensure_ascii=False, separators=(",", ":"))
                 blob_sha256 = hashlib.sha256(blob_json.encode("utf-8")).hexdigest()
-                row = build_core_row(enriched, scored, exported_at, detail_blob_sha256=blob_sha256)
+                row = build_core_row(
+                    enriched,
+                    scored,
+                    exported_at,
+                    detail_blob_sha256=blob_sha256,
+                    detail_blob=blob,
+                )
                 if len(row) != CORE_COLUMN_COUNT:
                     logger.error(
                         "Product %s: row has %d columns, expected %d",
