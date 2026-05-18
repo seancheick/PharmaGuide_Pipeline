@@ -173,6 +173,47 @@ def count_drug_classes(db_path: Path) -> int:
     return int(row[0]) if row else 0
 
 
+def research_pair_counts(db_path: Path) -> dict[str, int]:
+    con = _open_ro(db_path)
+    try:
+        row = con.execute(
+            """
+            SELECT
+              COUNT(*) AS total,
+              SUM(
+                CASE
+                  WHEN COALESCE(rxcui_a, '') != ''
+                    OR COALESCE(rxcui_b, '') != ''
+                  THEN 1 ELSE 0
+                END
+              ) AS bridged,
+              SUM(
+                CASE
+                  WHEN (
+                    COALESCE(rxcui_a, '') != ''
+                    OR COALESCE(rxcui_b, '') != ''
+                  )
+                  AND (
+                    COALESCE(canonical_id_a, '') != ''
+                    OR COALESCE(canonical_id_b, '') != ''
+                  )
+                  THEN 1 ELSE 0
+                END
+              ) AS bridged_with_canonical
+            FROM research_pairs
+            """
+        ).fetchone()
+    finally:
+        con.close()
+    if row is None:
+        return {"total": 0, "bridged": 0, "bridged_with_canonical": 0}
+    return {
+        "total": int(row[0] or 0),
+        "bridged": int(row[1] or 0),
+        "bridged_with_canonical": int(row[2] or 0),
+    }
+
+
 def run_integrity_check(db_path: Path) -> str:
     try:
         con = _open_ro(db_path)
@@ -296,6 +337,22 @@ def validate_release_candidate(
             f"{manifest['total_interactions']}, actual_rows={interactions_count}.",
         )
 
+    research_counts = research_pair_counts(db_path)
+    source_suppai_count = int(embedded["source_suppai_count"])
+    _require(
+        research_counts["total"] == source_suppai_count,
+        "research_pairs row count disagrees with embedded source_suppai_count: "
+        f"research_pairs={research_counts['total']}, "
+        f"source_suppai_count={source_suppai_count}.",
+    )
+    if source_suppai_count > 0:
+        _require(
+            research_counts["bridged_with_canonical"] > 0,
+            "research_pairs are bundled but no row has both a supplement "
+            "canonical_id and a bridged drug RxCUI. Tier 2 would be "
+            "unreachable from medication-aware Flutter paths.",
+        )
+
     actual_checksum = compute_sha256(db_path)
     manifest_checksum = strip_sha256_prefix(manifest["checksum"])
     _require(
@@ -312,6 +369,7 @@ def validate_release_candidate(
         "checksum_sha256": actual_checksum,
         "interactions_count": interactions_count,
         "drug_class_count": class_count,
+        "research_pair_counts": research_counts,
         "integrity": integrity,
     }
 

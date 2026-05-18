@@ -409,6 +409,23 @@ def audit_interaction_artifact(audit: Audit, *, name: str, root: Path) -> dict[s
             """,
         )
     )
+    research_rxcui_with_canonical = int(
+        sqlite_scalar(
+            db_path,
+            """
+            SELECT COUNT(*)
+            FROM research_pairs
+            WHERE (
+                COALESCE(rxcui_a, '') != ''
+                OR COALESCE(rxcui_b, '') != ''
+            )
+            AND (
+                COALESCE(canonical_id_a, '') != ''
+                OR COALESCE(canonical_id_b, '') != ''
+            )
+            """,
+        )
+    )
     if research_pairs and research_rxcui == 0:
         audit.add(
             "MEDIUM",
@@ -416,6 +433,15 @@ def audit_interaction_artifact(audit: Audit, *, name: str, root: Path) -> dict[s
             artifact_key,
             "research_pairs are bundled but have no RxCUI bridge; Tier 2 is not reachable by medication RxCUI",
             research_pairs=research_pairs,
+        )
+    if research_pairs and research_rxcui_with_canonical == 0:
+        audit.add(
+            "HIGH",
+            "TIER2_RESEARCH_NOT_QUERYABLE_BY_FLUTTER",
+            artifact_key,
+            "research_pairs are bundled but no row has both a supplement canonical_id and bridged drug RxCUI",
+            research_pairs=research_pairs,
+            research_pairs_with_any_rxcui=research_rxcui,
         )
 
     summary = {
@@ -429,6 +455,7 @@ def audit_interaction_artifact(audit: Audit, *, name: str, root: Path) -> dict[s
         "live_interactions": live_interactions,
         "research_pairs": research_pairs,
         "research_pairs_with_any_rxcui": research_rxcui,
+        "research_pairs_with_rxcui_and_canonical": research_rxcui_with_canonical,
     }
     audit.artifacts[artifact_key] = summary
     return summary

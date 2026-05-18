@@ -308,6 +308,51 @@ def test_checksum_mismatch_is_rejected(tmp_path):
     assert rc == 1
 
 
+def test_research_pairs_require_queryable_rxcui_bridge(tmp_path):
+    paths = _seed_build(tmp_path)
+    con = sqlite3.connect(paths["db"])
+    try:
+        con.execute(
+            """
+            INSERT INTO research_pairs (
+              pair_id, cui_a, cui_b, entity_a_name, entity_b_name,
+              entity_a_type, entity_b_type, canonical_id_a, canonical_id_b,
+              rxcui_a, rxcui_b, paper_count, human_study_count,
+              clinical_study_count, top_sentences_json, top_pmids_json,
+              latest_paper_year, source, last_updated
+            ) VALUES (
+              'C0042878-C0043031', 'C0042878', 'C0043031',
+              'Vitamin K', 'Warfarin', 'supplement', 'drug',
+              'vitamin_k', NULL, NULL, NULL, 3, 2, 1,
+              '[]', '["12345"]', 2024, 'suppai',
+              '2026-04-11T00:00:00Z'
+            )
+            """
+        )
+        con.execute(
+            """
+            UPDATE interaction_db_metadata
+            SET value = '1'
+            WHERE key = 'source_suppai_count'
+            """
+        )
+        con.commit()
+    finally:
+        con.close()
+
+    rc = ria.main(
+        [
+            "--input-dir",
+            str(paths["work"]),
+            "--output-dir",
+            str(tmp_path / "dist"),
+            "--min-interactions",
+            "1",
+        ]
+    )
+    assert rc == 1
+
+
 def test_print_json_mode_prints_result(tmp_path, capsys):
     paths = _seed_build(tmp_path)
     dist = tmp_path / "dist"
