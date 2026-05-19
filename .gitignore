@@ -75,3 +75,16 @@ scripts/reports/*
 scripts/data/*.json.bak
 .claude/scheduled_tasks.lock
 .claude/
+# Top-level generated reports (distinct from scripts/reports/ already ignored)
+reports/
+
+# Cert / audit generated reports — tool sources are tracked, outputs are regenerable
+scripts/api_audit/reports/
+
+# RC rollback snapshots — keep locally, never version
+scripts/final_db_output.preRC_*/
+scripts/dist.preRC_*/
+
+# Local dev tooling caches (Continue.dev, Playwright MCP)
+.continue/
+.playwright-mcp/
