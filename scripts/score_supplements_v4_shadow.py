@@ -11,12 +11,13 @@ plus stable shared helpers (cert_resolver, enhanced_normalizer lookups).
 NOT shared: the scoring policy itself — `scoring_v4/` owns rubrics,
 gates, modules, and confidence rules independently.
 
-At P1.0 (this commit) — scaffold only:
+Current P1.2 state:
   - Router runs and decides the module (generic / probiotic / multi_or_prenatal).
+  - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
+  - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
   - shadow_score_v4_100 = None
-  - shadow_score_v4_verdict = None
-  - shadow_score_v4_confidence = "skeleton"
-  - shadow_score_v4_breakdown = {}
+  - shadow_score_v4_confidence = "skeleton" for complete rows until scoring
+    math lands; blocked_by_* for gate failures.
   - shadow_score_v4_anchored = False
 
 Subsequent phases (per §19 P1.x slices):
@@ -39,6 +40,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
+from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
 from scoring_v4.router import class_for_product
 
@@ -83,6 +85,20 @@ def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
     }
 
 
+def _completeness_gate_breakdown(completeness_result) -> Dict[str, Any]:
+    """Render the completeness-gate result into the shadow breakdown."""
+    return {
+        "module": completeness_result.module,
+        "is_live_eligible": completeness_result.is_live_eligible,
+        "verdict": completeness_result.verdict,
+        "reason": completeness_result.reason,
+        "missing_fields": list(completeness_result.missing_fields),
+        "mapped_coverage": completeness_result.mapped_coverage,
+        "dose_coverage": completeness_result.dose_coverage,
+        "checked_fields": list(completeness_result.checked_fields),
+    }
+
+
 def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     """Score an enriched product against the v4 shadow scorer.
 
@@ -94,7 +110,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
       2. Layer 1 Safety Gate. BLOCKED/UNSAFE short-circuit scoring
          (score=None, confidence='blocked_by_safety_gate'). CAUTION
          sets verdict but scoring continues.
-      3. Layer 2 Completeness Gate. [P1.2 — not online yet]
+      3. Layer 2 Completeness Gate.
       4. Layer 3 Scoring (per-module). [P1.3 — not online yet]
       5. Layer 4 Confidence. [P1.4 — not online yet]
 
@@ -141,5 +157,17 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         # the score-band rules (CAUTION > POOR > SAFE) at output time.
         shadow["shadow_score_v4_verdict"] = "CAUTION"
 
-    # Layer 2 / 3 / 4 not online yet — return skeleton.
+    # Layer 2 — Completeness Gate.
+    completeness = evaluate_completeness_gate(enriched_product, module)
+    shadow["shadow_score_v4_breakdown"]["completeness_gate"] = (
+        _completeness_gate_breakdown(completeness)
+    )
+    if not completeness.is_live_eligible:
+        # Archive / QA verdict only. Live catalog excludes these rows
+        # entirely; safety signals remain available in safety_gate.
+        shadow["shadow_score_v4_verdict"] = "NOT_SCORED"
+        shadow["shadow_score_v4_confidence"] = "blocked_by_completeness_gate"
+        return shadow
+
+    # Layer 3 / 4 not online yet — return skeleton.
     return shadow

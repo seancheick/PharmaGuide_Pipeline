@@ -151,6 +151,25 @@ REQUIRED_SHADOW_KEYS = {
 }
 
 
+COMPLETE_GENERIC_PRODUCT = {
+    "status": "active",
+    "form_factor": "capsule",
+    "supplement_type": {"type": "single_nutrient"},
+    "ingredient_quality_data": {
+        "total_active": 1,
+        "ingredients_scorable": [
+            {
+                "name": "Magnesium",
+                "canonical_id": "magnesium",
+                "mapped": True,
+                "dose": 200,
+                "unit": "mg",
+            }
+        ],
+    },
+}
+
+
 def test_shadow_entry_point_returns_required_keys() -> None:
     """v3 score_supplements.py is untouched. v4 entry point lives in its
     own file and returns a deterministic dict of shadow columns. Schema
@@ -180,21 +199,23 @@ def test_shadow_entry_point_module_matches_router() -> None:
 
 
 def test_shadow_entry_point_p10_skeleton_confidence() -> None:
-    """At P1.0, scoring math isn't online yet. The entry point must
+    """At P1.2, scoring math still isn't online yet. For a complete,
+    scoreable product, the entry point must
     declare its skeleton state in `shadow_score_v4_confidence` so any
     downstream code (audit/report/Flutter) can tell the shadow column
     isn't fully populated yet. Later phases overwrite to typed sub-
     categories: 'high' / 'moderate' / 'low' / 'insufficient_data'."""
     from score_supplements_v4_shadow import score_product_v4_shadow
-    out = score_product_v4_shadow({"supplement_type": {"type": "single_nutrient"}})
+    out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
     assert out["shadow_score_v4_confidence"] == "skeleton"
 
 
 def test_shadow_entry_point_p10_score_is_none() -> None:
-    """At P1.0, no scoring math runs. shadow_score_v4_100 must be None
-    (not 0 — that would be confusable with a real low score)."""
+    """At P1.2, no scoring math runs for complete products.
+    shadow_score_v4_100 must be None (not 0 — that would be confusable
+    with a real low score)."""
     from score_supplements_v4_shadow import score_product_v4_shadow
-    out = score_product_v4_shadow({"supplement_type": {"type": "single_nutrient"}})
+    out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
     assert out["shadow_score_v4_100"] is None
     assert out["shadow_score_v4_verdict"] is None
     assert out["shadow_score_v4_anchored"] is False
@@ -209,12 +230,13 @@ def test_shadow_entry_point_breakdown_shape() -> None:
 
 
 def test_shadow_entry_point_handles_minimal_input() -> None:
-    """Robustness: the shadow scorer must not crash on the smallest valid
-    enriched input (empty product). Returns generic-module skeleton."""
+    """Robustness: the shadow scorer must not crash on empty product.
+    At P1.2, empty input is incomplete and therefore NOT_SCORED."""
     from score_supplements_v4_shadow import score_product_v4_shadow
     out = score_product_v4_shadow({})
     assert out["shadow_score_v4_module"] == "generic"
-    assert out["shadow_score_v4_confidence"] == "skeleton"
+    assert out["shadow_score_v4_verdict"] == "NOT_SCORED"
+    assert out["shadow_score_v4_confidence"] == "blocked_by_completeness_gate"
 
 
 # --- Architecture lock ----------------------------------------------------

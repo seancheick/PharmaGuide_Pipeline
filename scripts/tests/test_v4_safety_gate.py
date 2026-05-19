@@ -12,8 +12,8 @@ Inputs read from the enriched product (same contract v3 reads):
     fallback flags)
   - has_disease_claims (top-level enricher flag)
 
-BLOCKED + UNSAFE short-circuit scoring (anchored=True, score=None in
-shadow output). CAUTION does NOT short-circuit — scoring still runs;
+BLOCKED + UNSAFE short-circuit scoring (score=None, anchored remains
+False until canary-membership lookup lands). CAUTION does NOT short-circuit — scoring still runs;
 CAUTION overrides POOR/SAFE in the final verdict resolution layer.
 """
 
@@ -28,6 +28,25 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
+
+
+COMPLETE_GENERIC_PRODUCT = {
+    "status": "active",
+    "form_factor": "capsule",
+    "supplement_type": {"type": "single_nutrient"},
+    "ingredient_quality_data": {
+        "total_active": 1,
+        "ingredients_scorable": [
+            {
+                "name": "Magnesium",
+                "canonical_id": "magnesium",
+                "mapped": True,
+                "dose": 200,
+                "unit": "mg",
+            }
+        ],
+    },
+}
 
 
 # --- Direct gate contract -------------------------------------------------
@@ -382,13 +401,12 @@ def test_anchored_stays_false_until_canary_membership_lands() -> None:
 
 
 def test_shadow_caution_continues_to_next_layer() -> None:
-    """CAUTION sets the verdict but does NOT short-circuit. At P1.1,
-    'next layer' is still scaffold (P1.2/1.3 not online), so
-    confidence stays 'skeleton' and score stays None. The verdict is
-    carried so downstream tooling can see it."""
+    """CAUTION sets the verdict but does NOT short-circuit. With a
+    complete product at P1.2, confidence stays 'skeleton' because score
+    math is not online yet, and the CAUTION verdict is carried forward."""
     from score_supplements_v4_shadow import score_product_v4_shadow
     product = {
-        "supplement_type": {"type": "single_nutrient"},
+        **COMPLETE_GENERIC_PRODUCT,
         "contaminant_data": {
             "banned_substances": {
                 "substances": [
@@ -401,14 +419,14 @@ def test_shadow_caution_continues_to_next_layer() -> None:
     assert out["shadow_score_v4_verdict"] == "CAUTION"
     assert out["shadow_score_v4_anchored"] is False
     assert out["shadow_score_v4_confidence"] == "skeleton"
-    assert out["shadow_score_v4_100"] is None  # P1.1 — scoring not online yet
+    assert out["shadow_score_v4_100"] is None  # P1.2 — scoring not online yet
 
 
 def test_shadow_clean_product_no_verdict_change() -> None:
-    """A clean product with no safety triggers leaves verdict=None at
-    P1.1 — the verdict gets set in P1.3 once scoring math is online."""
+    """A clean, complete product with no safety triggers leaves verdict=None
+    at P1.2 — the verdict gets set in P1.3 once scoring math is online."""
     from score_supplements_v4_shadow import score_product_v4_shadow
-    out = score_product_v4_shadow({"supplement_type": {"type": "single_nutrient"}})
+    out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
     assert out["shadow_score_v4_verdict"] is None
     assert out["shadow_score_v4_anchored"] is False
     assert out["shadow_score_v4_confidence"] == "skeleton"

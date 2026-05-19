@@ -60,7 +60,8 @@ class SafetyResult:
             module.
         short_circuits_scoring: True when verdict is BLOCKED or UNSAFE.
             Caller must skip the scoring math entirely and emit the
-            shadow score with score=None, anchored=True.
+            shadow score with score=None. The shadow `anchored` flag is
+            reserved for canary-set membership, not safety finality.
         blocking_reason: A stable code for explainability and Flutter
             UI ('banned_ingredient' / 'recalled_ingredient' / etc.) when
             the verdict short-circuits; None otherwise.

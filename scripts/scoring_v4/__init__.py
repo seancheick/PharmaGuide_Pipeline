@@ -21,4 +21,4 @@ Phased migration (§19):
   P5   — Flutter cutover.
 """
 
-__all__ = ["router"]
+__all__ = ["router", "gate_safety", "gate_completeness"]
