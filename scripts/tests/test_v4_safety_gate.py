@@ -418,7 +418,8 @@ def test_shadow_caution_continues_to_next_layer() -> None:
     out = score_product_v4_shadow(product)
     assert out["shadow_score_v4_verdict"] == "CAUTION"
     assert out["shadow_score_v4_anchored"] is False
-    assert out["shadow_score_v4_confidence"] == "skeleton"
+    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
+    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
     assert out["shadow_score_v4_100"] is not None
 
 
@@ -429,7 +430,8 @@ def test_shadow_clean_product_gets_score_band_verdict() -> None:
     out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
     assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR"}
     assert out["shadow_score_v4_anchored"] is False
-    assert out["shadow_score_v4_confidence"] == "skeleton"
+    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
+    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
 
 
 # --- Architecture lock (extends the P1.0 invariant) -----------------------

@@ -11,7 +11,7 @@ plus stable shared helpers (cert_resolver, enhanced_normalizer lookups).
 NOT shared: the scoring policy itself — `scoring_v4/` owns rubrics,
 gates, modules, and confidence rules independently.
 
-Current P1.3.6 state:
+Current P1.4 state:
   - Router runs and decides the module (generic / probiotic / multi_or_prenatal).
   - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
   - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
@@ -19,8 +19,10 @@ Current P1.3.6 state:
     trust / violations and a final 0-100 score.
   - shadow_score_v4_100 mirrors the generic module result for complete
     generic products.
-  - shadow_score_v4_confidence = "skeleton" for complete rows until scoring
-    math lands; blocked_by_* for gate failures.
+  - shadow_score_v4_confidence = top-level typed confidence band for
+    complete generic rows; blocked_by_* for gate failures.
+  - shadow_score_v4_breakdown.confidence contains typed sub-category
+    levels / drivers for evidence, label_completeness, verification, identity.
   - shadow_score_v4_anchored = False (canary-set membership lands later).
 
 Subsequent phases (per §19 P1.x slices):
@@ -36,8 +38,7 @@ Subsequent phases (per §19 P1.x slices):
   P1.3.5 — Transparency 10 (B3 claims; B2/B5/B6 penalties).
   P1.3.6 — Manufacturer Trust +5 + Manufacturer Violations -25
            + penalty roll-up + final 100-pt assembly + verdict reconciliation.
-  P1.4   — Confidence typed sub-categories: high / moderate / low /
-           insufficient_data.
+  P1.4   — Confidence typed sub-categories: high / moderate / low.       [done]
   P1.5   — Canary rank-order check on rows 1-9 and 19-24 of the v4 spec
            canary set; omega-vs-generic decision gate.
 
@@ -50,6 +51,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
+from scoring_v4.confidence import evaluate_confidence
 from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
 from scoring_v4.modules.generic import score_generic
@@ -142,7 +144,8 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
       4. Layer 3 Scoring (per-module). Generic module emits populated
          dimensions and a final module score at P1.3.6.
          Probiotic (P2) and multi_or_prenatal (P3) modules not online yet.
-      5. Layer 4 Confidence. [P1.4 — not online yet]
+      5. Layer 4 Confidence. Complete generic rows get typed confidence
+         metadata plus a top-level band. Gate failures retain blocked_by_*.
 
     Note on `shadow_score_v4_anchored`: per §14, this flag means the
     product is in the §12 canary set — NOT that the safety gate is
@@ -211,6 +214,13 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
             module_result.score_100,
             shadow.get("shadow_score_v4_verdict"),
         )
+        confidence = evaluate_confidence(
+            enriched_product,
+            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
+            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+        )
+        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
+        shadow["shadow_score_v4_confidence"] = confidence["band"]
 
-    # Layer 4 (typed confidence sub-categories) not online yet — P1.4.
     return shadow

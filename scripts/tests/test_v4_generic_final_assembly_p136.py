@@ -251,7 +251,8 @@ def test_shadow_top_level_score_and_verdict_are_populated_for_complete_generic()
     assert out["shadow_score_v4_100"] == out["shadow_score_v4_breakdown"]["module"]["score_100"]
     assert out["shadow_score_v4_100"] is not None
     assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR"}
-    assert out["shadow_score_v4_confidence"] == "skeleton"
+    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
+    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
 
 
 def test_shadow_caution_verdict_overrides_safe_score_band() -> None:

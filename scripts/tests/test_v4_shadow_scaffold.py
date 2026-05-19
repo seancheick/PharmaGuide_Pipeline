@@ -16,9 +16,9 @@ Locks the contract for the first slice of v4 shadow scoring:
        - shadow_score_v4_breakdown
        - shadow_score_v4_anchored
 
-At P1.0, the entry point returns the class via the router and a
-"skeleton" confidence; scoring math comes online in P1.1+ as the
-gates and generic module land.
+At P1.4, the entry point returns the class via the router, a score for
+complete generic rows, and a typed confidence band. Gate failures keep
+their blocked_by_* confidence strings.
 """
 
 from __future__ import annotations
@@ -198,16 +198,13 @@ def test_shadow_entry_point_module_matches_router() -> None:
         assert actual == expected, f"module drift on {p}: router={expected!r}, shadow={actual!r}"
 
 
-def test_shadow_entry_point_p10_skeleton_confidence() -> None:
-    """At P1.2, scoring math still isn't online yet. For a complete,
-    scoreable product, the entry point must
-    declare its skeleton state in `shadow_score_v4_confidence` so any
-    downstream code (audit/report/Flutter) can tell the shadow column
-    isn't fully populated yet. Later phases overwrite to typed sub-
-    categories: 'high' / 'moderate' / 'low' / 'insufficient_data'."""
+def test_shadow_entry_point_p14_typed_confidence_band() -> None:
+    """At P1.4, complete generic rows emit a top-level confidence band
+    plus a typed confidence block in the breakdown."""
     from score_supplements_v4_shadow import score_product_v4_shadow
     out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
-    assert out["shadow_score_v4_confidence"] == "skeleton"
+    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
+    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
 
 
 def test_shadow_entry_point_p136_score_is_populated() -> None:

@@ -311,13 +311,14 @@ def test_shadow_does_not_wire_generic_module_for_probiotic_route() -> None:
     assert module_block is None or module_block.get("module") != "generic"
 
 
-def test_shadow_module_score_online_but_confidence_stays_skeleton_until_p14() -> None:
-    """P1.3.6 assembles score_100. P1.4 still owns typed confidence."""
+def test_shadow_module_score_and_typed_confidence_are_online_at_p14() -> None:
+    """P1.4 adds typed confidence after P1.3.6 score assembly."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
     assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_confidence"] == "skeleton"
+    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
+    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
 
 
 # --- Architecture lock ----------------------------------------------------

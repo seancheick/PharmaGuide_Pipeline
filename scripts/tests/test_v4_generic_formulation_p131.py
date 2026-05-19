@@ -1132,7 +1132,8 @@ def test_shadow_top_level_score_populated_at_p136() -> None:
         _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
     )
     assert out["shadow_score_v4_100"] is not None
-    assert out["shadow_score_v4_confidence"] == "skeleton"
+    assert out["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
+    assert out["shadow_score_v4_breakdown"]["confidence"]["band"] == out["shadow_score_v4_confidence"]
 
 
 def test_shadow_transparency_populated_at_p135() -> None:
