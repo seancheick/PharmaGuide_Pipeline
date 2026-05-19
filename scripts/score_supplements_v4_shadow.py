@@ -11,25 +11,34 @@ plus stable shared helpers (cert_resolver, enhanced_normalizer lookups).
 NOT shared: the scoring policy itself — `scoring_v4/` owns rubrics,
 gates, modules, and confidence rules independently.
 
-Current P1.2 state:
+Current P1.3.0 state:
   - Router runs and decides the module (generic / probiotic / multi_or_prenatal).
   - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
   - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
-  - shadow_score_v4_100 = None
+  - Generic module emits its 5-dimension breakdown scaffold (caps locked,
+    scores all None until P1.3.1+ fill them).
+  - shadow_score_v4_100 = None (mirrors the module result until P1.3.6 assembly).
   - shadow_score_v4_confidence = "skeleton" for complete rows until scoring
     math lands; blocked_by_* for gate failures.
-  - shadow_score_v4_anchored = False
+  - shadow_score_v4_anchored = False (canary-set membership lands later).
 
 Subsequent phases (per §19 P1.x slices):
-  P1.1 — safety gate (Layer 1) short-circuits BLOCKED/UNSAFE/CAUTION.
+  P1.1 — safety gate (Layer 1) short-circuits BLOCKED/UNSAFE/CAUTION.   [done]
   P1.2 — completeness gate (Layer 2) flags NOT_SCORED on class-specific
-         field absence.
-  P1.3 — generic module + rubric (5 v4 dimensions: Formulation 25 /
-         Dose 25 / Evidence 20 / Trust 15 / Transparency 15).
-  P1.4 — confidence typed sub-categories (Layer 4): high / moderate /
-         low / insufficient_data.
-  P1.5 — wire the whole pipeline; canary rank-order check on rows 1-9
-         and 19-24 of the v4 spec canary set.
+         field absence.                                                  [done]
+  P1.3.0 — generic-module scaffold + breakdown contract.                 [done]
+  P1.3.1 — Formulation 30 (bio_score + premium + delivery + absorption
+           + excellence + single-ingredient + enzyme; B0/B1 penalties).
+  P1.3.2 — Dose 25 (supplemental window + multi-form; B7 penalty).
+  P1.3.3 — Evidence 20 (multiplicative pipeline).
+  P1.3.4 — Testing & Trust 15 (B4a SKU + B4b GMP + B4c traceability).
+  P1.3.5 — Transparency 10 (B3 claims; B2/B5/B6 penalties).
+  P1.3.6 — Manufacturer Trust +5 + Manufacturer Violations -25
+           + penalty roll-up + final 100-pt assembly + verdict reconciliation.
+  P1.4   — Confidence typed sub-categories: high / moderate / low /
+           insufficient_data.
+  P1.5   — Canary rank-order check on rows 1-9 and 19-24 of the v4 spec
+           canary set; omega-vs-generic decision gate.
 
 This module never mutates the input product dict. It returns a fresh
 shadow-column dict that the caller (build_final_db.py or the scoring
@@ -42,6 +51,7 @@ from typing import Any, Dict
 
 from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
+from scoring_v4.modules.generic import score_generic
 from scoring_v4.router import class_for_product
 
 
@@ -110,8 +120,12 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
       2. Layer 1 Safety Gate. BLOCKED/UNSAFE short-circuit scoring
          (score=None, confidence='blocked_by_safety_gate'). CAUTION
          sets verdict but scoring continues.
-      3. Layer 2 Completeness Gate.
-      4. Layer 3 Scoring (per-module). [P1.3 — not online yet]
+      3. Layer 2 Completeness Gate. Incomplete products short-circuit
+         to NOT_SCORED with confidence='blocked_by_completeness_gate'.
+      4. Layer 3 Scoring (per-module). Generic module emits its
+         5-dimension breakdown scaffold at P1.3.0; dimension scores
+         remain None until P1.3.1+ slices land per-dimension math.
+         Probiotic (P2) and multi_or_prenatal (P3) modules not online yet.
       5. Layer 4 Confidence. [P1.4 — not online yet]
 
     Note on `shadow_score_v4_anchored`: per §14, this flag means the
@@ -169,5 +183,17 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_confidence"] = "blocked_by_completeness_gate"
         return shadow
 
-    # Layer 3 / 4 not online yet — return skeleton.
+    # Layer 3 — Per-class module. Only the generic module is online at
+    # P1.3.0 (scaffold only — dimension scores are all None until P1.3.1+
+    # land the per-dimension math). Probiotic (P2) and multi_or_prenatal
+    # (P3) emit their own module blocks under the same `module` key.
+    if module == "generic":
+        module_result = score_generic(enriched_product)
+        shadow["shadow_score_v4_breakdown"]["module"] = module_result.to_breakdown()
+        # `score_100` stays on the module result until P1.3.6 assembly.
+        # When it populates, the shadow's top-level `shadow_score_v4_100`
+        # mirrors it; until then both stay None and confidence stays
+        # 'skeleton'.
+
+    # Layer 4 (typed confidence sub-categories) not online yet — P1.4.
     return shadow
