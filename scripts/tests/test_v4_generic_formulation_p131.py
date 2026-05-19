@@ -1136,11 +1136,11 @@ def test_shadow_top_level_score_still_none_at_p131() -> None:
     assert out["shadow_score_v4_confidence"] == "skeleton"
 
 
-def test_shadow_transparency_still_skeleton_at_p134() -> None:
+def test_shadow_transparency_populated_at_p135() -> None:
     """Originally asserted dose/evidence/trust/transparency all stay
     skeleton after formulation lands. After P1.3.2a, dose is online via
     the RDA/UL proxy. After P1.3.3, evidence is also online. After
-    P1.3.4, Trust is online; only transparency remains skeleton."""
+    P1.3.4, Trust is online; after P1.3.5 transparency is online."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(
@@ -1149,9 +1149,9 @@ def test_shadow_transparency_still_skeleton_at_p134() -> None:
     module_block = out["shadow_score_v4_breakdown"]["module"]
     for name in ("transparency",):
         dim = module_block["dimensions"][name]
-        assert dim["score"] is None, f"{name}.score should still be None until its slice lands"
-        assert dim["components"] == {}
-        assert dim["penalties"] == {}
+        assert dim["score"] == 6.0
+        assert dim["components"]["clear_disclosure_base"] == 6.0
+        assert dim["metadata"]["phase"] == "P1.3.5_transparency"
 
     evidence = module_block["dimensions"]["evidence"]
     assert evidence["score"] == 0.0

@@ -30,14 +30,14 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; P1.3.6)
 
-P1.3.3 state: Formulation (P1.3.1b), Dose (P1.3.2a proxy), and
-Evidence (P1.3.3 multiplicative pipeline) are online. Dose uses an
+P1.3.5 state: Formulation (P1.3.1b), Dose (P1.3.2a proxy), Evidence
+(P1.3.3 multiplicative pipeline), Testing & Trust (P1.3.4), and
+Transparency (P1.3.5) are online. Dose uses an
 RDA/UL proxy because the supplemental-window math per §6 line 369 needs
 a `typical_dietary_intake` reference table that does not yet exist; the
 dose dimension's `metadata` carries explicit proxy markers so downstream
 tooling never mistakes the proxy band for final NIH/NHANES window math.
-Testing & Trust (P1.3.4) is online. Transparency and manufacturer
-adjustments remain skeleton until their P1.3.x slices land. Audit and
+Manufacturer adjustments remain skeleton until P1.3.6 lands. Audit and
 score-delta tooling reads against this contract.
 
 The module never raises on malformed input — empty / non-dict products
@@ -56,9 +56,10 @@ from scoring_v4.modules.generic_dose import score_dose
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_formulation import score_formulation
 from scoring_v4.modules.generic_trust import score_trust
+from scoring_v4.modules.generic_transparency import score_transparency
 
 
-PHASE_MARKER = "P1.3.4_testing_trust"
+PHASE_MARKER = "P1.3.5_transparency"
 
 
 # Dimension caps per §4 line 176. Order is rendering order in audit / UI.
@@ -179,8 +180,8 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
-    P1.3.4 state: Formulation, Dose, Evidence, and Trust are populated.
-    Transparency still skeleton (None score).
+    P1.3.5 state: Formulation, Dose, Evidence, Trust, and Transparency
+    are populated.
     score_100 stays None until P1.3.6 final assembly.
 
     Never raises on malformed input. The completeness gate (Layer 2)
@@ -233,6 +234,14 @@ def score_generic(product: Any) -> GenericModuleResult:
     trust_dim.components = trust_payload["components"]
     trust_dim.penalties = trust_payload["penalties"]
     trust_dim.metadata = trust_payload.get("metadata", {})
+
+    # Layer 3 — Transparency dimension (P1.3.5 complete for generic).
+    transparency_payload = score_transparency(product)
+    transparency_dim = result.dimensions["transparency"]
+    transparency_dim.score = transparency_payload["score"]
+    transparency_dim.components = transparency_payload["components"]
+    transparency_dim.penalties = transparency_payload["penalties"]
+    transparency_dim.metadata = transparency_payload.get("metadata", {})
 
     # Module-level phase reflects the most-recent slice landed. Audit
     # tooling reads this to know whether to trust the per-dimension

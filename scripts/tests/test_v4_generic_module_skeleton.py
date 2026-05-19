@@ -92,8 +92,8 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     """Subsequent slices fill these in-place. The shape is the contract:
     every dimension always has score / max / components / penalties keys.
 
-    Updated for P1.3.4: formulation, dose, evidence, and trust are
-    populated. Transparency is still skeleton."""
+    Updated for P1.3.5: formulation, dose, evidence, trust, and
+    transparency are populated."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
@@ -105,13 +105,6 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
         assert "max" in dim
         assert "components" in dim
         assert "penalties" in dim
-
-    # The not-yet-online dimensions stay skeleton.
-    for name in ("transparency",):
-        dim = breakdown["dimensions"][name]
-        assert dim["score"] is None, f"{name}.score must be None until its slice lands"
-        assert dim["components"] == {}, f"{name}.components must start empty"
-        assert dim["penalties"] == {}, f"{name}.penalties must start empty"
 
     # Formulation is complete at P1.3.1b.
     formulation = breakdown["dimensions"]["formulation"]
@@ -138,6 +131,11 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     assert trust["score"] == 0.0
     assert "B4a_verified_certifications" in trust["components"]
     assert trust["metadata"]["phase"] == "P1.3.4_testing_trust"
+
+    transparency = breakdown["dimensions"]["transparency"]
+    assert transparency["score"] == 6.0
+    assert "clear_disclosure_base" in transparency["components"]
+    assert transparency["metadata"]["phase"] == "P1.3.5_transparency"
 
 
 def test_manufacturer_trust_separate_dimension_with_cap_5() -> None:
