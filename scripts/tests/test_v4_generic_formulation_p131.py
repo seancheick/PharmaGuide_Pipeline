@@ -459,6 +459,40 @@ def test_live_cell_units_are_dose_eligible_for_formulation_quality() -> None:
     assert payload["components"]["A1_bio_score"] == 12.0
 
 
+def test_greek_mu_microgram_unit_is_dose_eligible_alias() -> None:
+    """Accept both common microgram glyphs: `µg` (micro sign, v3) and
+    `μg` (Greek mu, label/OCR variant). This is a spelling alias, not a
+    new dose-unit policy."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(ingredients=[_ingredient(bio_score=12, quantity=100, unit="μg")])
+    payload = score_formulation(product)
+
+    assert payload["components"]["A1_bio_score"] == 12.0
+
+
+def test_ml_unit_is_not_dose_eligible_for_formulation_quality() -> None:
+    """v3 does not accept volume-only liquid amounts for A1 form quality.
+    Keep v4 shadow parity until a documented dose-policy change lands."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(ingredients=[_ingredient(bio_score=12, quantity=5, unit="ml")])
+    payload = score_formulation(product)
+
+    assert payload["components"]["A1_bio_score"] == 0.0
+
+
+def test_percent_unit_is_not_dose_eligible_for_formulation_quality() -> None:
+    """A standardized-extract percent alone is not a dose amount. A5b can
+    credit standardization separately; A1 still needs a v3-recognized dose."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(ingredients=[_ingredient(bio_score=12, quantity=95, unit="%")])
+    payload = score_formulation(product)
+
+    assert payload["components"]["A1_bio_score"] == 0.0
+
+
 # --- B1 dietary sugar penalty ---------------------------------------------
 
 

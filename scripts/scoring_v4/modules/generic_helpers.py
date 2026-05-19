@@ -33,8 +33,6 @@ _DOSE_UNIT_WHITELIST = frozenset(
         "active cell", "active cells", "active cell(s)",
         "activecell", "activecells", "activecell(s)",
         "mcgdfe", "mgdfe",
-        "ml", "milliliter", "milliliters",
-        "%",  # standardized extract ratio
     }
 )
 
@@ -86,7 +84,7 @@ def get_active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 def has_usable_individual_dose(ingredient: Dict[str, Any]) -> bool:
     """True when the ingredient has a positive quantity in a recognized
-    dose unit (mg/mcg/g/IU/CFU/ml/%) — or the enricher explicitly set
+    dose unit (mg/mcg/g/IU/CFU) — or the enricher explicitly set
     `has_dose=True` to bypass unit checks (legacy probiotic CFU shapes).
     """
     if not isinstance(ingredient, dict):
