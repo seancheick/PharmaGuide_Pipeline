@@ -17,20 +17,9 @@ DAYS=7
 DO_COMMIT=true
 DO_CLAUDE=true
 
-# Auto-detect python
-if command -v python3 &>/dev/null; then
-  PYTHON="python3"
-elif command -v python &>/dev/null; then
-  PYTHON="python"
-else
-  echo "[ERROR] Python not found" >&2
-  exit 1
-fi
-
-# Use venv if it exists
-if [ -f "${PROJECT_DIR}/.venv/bin/python" ]; then
-  PYTHON="${PROJECT_DIR}/.venv/bin/python"
-fi
+REPO_ROOT="$PROJECT_DIR"
+source "${PROJECT_DIR}/scripts/python_env.sh"
+PYTHON="$PG_PYTHON"
 
 # Parse args
 while [[ $# -gt 0 ]]; do

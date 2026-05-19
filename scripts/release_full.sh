@@ -69,6 +69,7 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
+source "$REPO_ROOT/scripts/python_env.sh"
 
 # ---------------------------------------------------------------------------
 # Defaults
@@ -194,7 +195,7 @@ json_field() {
   local path="$1"
   local key="$2"
   [[ ! -f "$path" ]] && return 0
-  python3 -c "
+  "$PG_PYTHON" -c "
 import json, sys
 try:
     with open('$path') as f: d = json.load(f)
@@ -245,7 +246,7 @@ if step1_needs_run; then
   # build_all_final_dbs.py defaults its scan dir to scripts/ but per-brand
   # pipeline outputs live in scripts/products/output_*/. Always pass an
   # explicit --scan-dir so the auto-discovery actually finds them.
-  python3 scripts/build_all_final_dbs.py --scan-dir scripts/products --output-dir scripts/final_db_output
+  "$PG_PYTHON" scripts/build_all_final_dbs.py --scan-dir scripts/products --output-dir scripts/final_db_output
   ok "Final DB assembled (scripts/final_db_output/)"
 else
   skip "Step 1/7: Catalog up to date with per-brand outputs — skipping assembly"
@@ -280,7 +281,7 @@ step2_needs_run() {
 
 if step2_needs_run; then
   info "Step 2/7: final_db_output newer than dist/ — staging catalog..."
-  python3 scripts/release_catalog_artifact.py
+  "$PG_PYTHON" scripts/release_catalog_artifact.py
   ok "Catalog staged"
 else
   skip "Step 2/7: dist/ catalog already current — skipping stage"
@@ -304,7 +305,7 @@ step3_needs_run() {
 
   local status
   status="$(
-    python3 - "$DIST_CATALOG" "$DIST_PRODUCT_IMAGES_DIR" <<'PY'
+    "$PG_PYTHON" - "$DIST_CATALOG" "$DIST_PRODUCT_IMAGES_DIR" <<'PY'
 import os
 import sqlite3
 import sys
@@ -344,7 +345,7 @@ PY
 if (( SKIP_PRODUCT_IMAGES == 0 )); then
   if step3_needs_run; then
     info "Step 3/7: Catalog/images out of sync — extracting DSLD product images..."
-    python3 scripts/extract_product_images.py --db-path "$DIST_CATALOG"
+    "$PG_PYTHON" scripts/extract_product_images.py --db-path "$DIST_CATALOG"
     ok "DSLD product images extracted + DB backfilled"
   else
     skip "Step 3/7: DSLD product images already current — skipping extraction"
@@ -395,7 +396,7 @@ fi
 if (( SKIP_SUPABASE == 0 )); then
   if (( SUPABASE_DRY_RUN == 1 )); then
     info "Step 5/7: Syncing dist/ to Supabase (DRY-RUN)..."
-    python3 scripts/sync_to_supabase.py "$DIST_DIR" --dry-run
+    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" --dry-run
     warn "Supabase sync was DRY-RUN — nothing actually uploaded"
   else
     info "Step 5/7: Syncing dist/ to Supabase (with --cleanup, content-checksum-aware)..."
@@ -407,7 +408,7 @@ if (( SKIP_SUPABASE == 0 )); then
     # --flutter-repo. To skip the orphan sweep (incident response, etc.)
     # rerun this script with --skip-supabase and call sync_to_supabase
     # manually with --no-allow-destructive-orphan-cleanup.
-    python3 scripts/sync_to_supabase.py "$DIST_DIR" \
+    "$PG_PYTHON" scripts/sync_to_supabase.py "$DIST_DIR" \
         --cleanup \
         --cleanup-keep "$KEEP_VERSIONS" \
         --flutter-repo "$FLUTTER_REPO"
@@ -492,8 +493,8 @@ info ""
 # a literal "<version>" placeholder. Falls back to "unknown" if the manifest
 # is unreadable (skipped Flutter step, missing jq, etc.) — the user will see
 # the placeholder and know something needs investigating before committing.
-CATALOG_VERSION="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('db_version','unknown'))" "$ASSETS_DIR/export_manifest.json" 2>/dev/null || echo unknown)"
-INTERACTION_VERSION="$(python3 -c "import json,sys; print(json.load(open(sys.argv[1])).get('interaction_db_version','unknown'))" "$ASSETS_DIR/interaction_db_manifest.json" 2>/dev/null || echo unknown)"
+CATALOG_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sys.argv[1])).get('db_version','unknown'))" "$ASSETS_DIR/export_manifest.json" 2>/dev/null || echo unknown)"
+INTERACTION_VERSION="$("$PG_PYTHON" -c "import json,sys; print(json.load(open(sys.argv[1])).get('interaction_db_version','unknown'))" "$ASSETS_DIR/interaction_db_manifest.json" 2>/dev/null || echo unknown)"
 
 info "Next steps (manual git-side):"
 info "  cd \"$FLUTTER_REPO\""

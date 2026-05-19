@@ -31,6 +31,7 @@ set -Eeuo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
+source "$REPO_ROOT/scripts/python_env.sh"
 
 # ---------------------------------------------------------------------------
 # Defaults
@@ -81,7 +82,7 @@ mkdir -p "$OUTPUT_DIR" "$DIST_DIR"
 
 if [[ ! -f "$OUTPUT_DIR/research_pairs.json" ]]; then
   info "research_pairs.json not found — running ingest_suppai.py first..."
-  python3 scripts/ingest_suppai.py \
+  "$PG_PYTHON" scripts/ingest_suppai.py \
     --output "$OUTPUT_DIR/research_pairs.json" \
     --report "$OUTPUT_DIR/ingest_suppai_report.json"
   ok "supp.ai ingest complete"
@@ -92,7 +93,7 @@ fi
 # ---------------------------------------------------------------------------
 
 info "Step 1/4: Verifying curated interactions..."
-python3 scripts/api_audit/verify_interactions.py \
+"$PG_PYTHON" scripts/api_audit/verify_interactions.py \
   --drafts scripts/data/curated_interactions \
   --report "$OUTPUT_DIR/interaction_audit_report.json" \
   --normalized-out "$OUTPUT_DIR/interactions_verified.json" \
@@ -106,7 +107,7 @@ ok "Verification passed"
 # ---------------------------------------------------------------------------
 
 info "Step 2/4: Building interaction_db.sqlite..."
-python3 scripts/build_interaction_db.py \
+"$PG_PYTHON" scripts/build_interaction_db.py \
   --normalized-drafts "$OUTPUT_DIR/interactions_verified.json" \
   --research-pairs "$OUTPUT_DIR/research_pairs.json" \
   --drug-classes scripts/data/drug_classes.json \
@@ -123,7 +124,7 @@ ok "SQLite built"
 # ---------------------------------------------------------------------------
 
 info "Step 3/4: Staging release to dist/..."
-python3 scripts/release_interaction_artifact.py
+"$PG_PYTHON" scripts/release_interaction_artifact.py
 
 ok "Interaction DB staged to $DIST_DIR/"
 
@@ -138,7 +139,7 @@ if (( DO_IMPORT == 1 )); then
   if [[ ! -f "$DIST_DIR/pharmaguide_core.db" ]]; then
     info "Catalog DB not in dist/ — attempting to stage from final_db_output/..."
     if [[ -f "scripts/final_db_output/pharmaguide_core.db" ]]; then
-      python3 scripts/release_catalog_artifact.py
+      "$PG_PYTHON" scripts/release_catalog_artifact.py
       ok "Catalog staged"
     else
       err "No catalog DB available. Run the catalog pipeline first, or"

@@ -24,6 +24,7 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
+source "$REPO_ROOT/scripts/python_env.sh"
 
 STAGING="/tmp/pg_dashboard_snapshot_$$"
 trap 'rm -rf "$STAGING"' EXIT
@@ -41,12 +42,7 @@ fi
 echo "◦ Building from ${#ENR[@]} enriched dirs + ${#SCR[@]} scored dirs..."
 
 # 2. Build into /tmp.
-PYTHON="${PYTHON:-/Users/seancheick/.pyenv/versions/3.13.3/bin/python3}"
-if [[ ! -x "$PYTHON" ]]; then
-  PYTHON="python3"
-fi
-
-"$PYTHON" scripts/build_final_db.py \
+"$PG_PYTHON" scripts/build_final_db.py \
   --enriched-dir "${ENR[@]}" \
   --scored-dir "${SCR[@]}" \
   --output-dir "$STAGING" \
@@ -62,7 +58,7 @@ fi
 # That workaround moved INTO release_catalog_artifact.py (commit a81c6e3),
 # so the manual copies here are now redundant and would silently drift if
 # the staging script's behavior changes. Removed 2026-05-15.
-"$PYTHON" scripts/release_catalog_artifact.py \
+"$PG_PYTHON" scripts/release_catalog_artifact.py \
   --input-dir "$STAGING" \
   --output-dir scripts/dist \
   2>&1 | tail -5
@@ -78,7 +74,7 @@ rm -rf scripts/final_db_output
 mkdir -p scripts/final_db_output
 cp -r "$STAGING/." scripts/final_db_output/
 
-PRODUCT_COUNT=$("$PYTHON" -c "import sqlite3; print(sqlite3.connect('scripts/dist/pharmaguide_core.db').execute('SELECT COUNT(*) FROM products_core').fetchone()[0])")
+PRODUCT_COUNT=$("$PG_PYTHON" -c "import sqlite3; print(sqlite3.connect('scripts/dist/pharmaguide_core.db').execute('SELECT COUNT(*) FROM products_core').fetchone()[0])")
 BLOB_COUNT=$(ls scripts/dist/detail_blobs | wc -l | tr -d ' ')
 
 echo ""
