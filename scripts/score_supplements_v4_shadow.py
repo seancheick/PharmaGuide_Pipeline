@@ -11,13 +11,14 @@ plus stable shared helpers (cert_resolver, enhanced_normalizer lookups).
 NOT shared: the scoring policy itself — `scoring_v4/` owns rubrics,
 gates, modules, and confidence rules independently.
 
-Current P1.3.0 state:
+Current P1.3.6 state:
   - Router runs and decides the module (generic / probiotic / multi_or_prenatal).
   - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
   - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
-  - Generic module emits its 5-dimension breakdown scaffold (caps locked,
-    scores all None until P1.3.1+ fill them).
-  - shadow_score_v4_100 = None (mirrors the module result until P1.3.6 assembly).
+  - Generic module emits populated generic dimensions plus manufacturer
+    trust / violations and a final 0-100 score.
+  - shadow_score_v4_100 mirrors the generic module result for complete
+    generic products.
   - shadow_score_v4_confidence = "skeleton" for complete rows until scoring
     math lands; blocked_by_* for gate failures.
   - shadow_score_v4_anchored = False (canary-set membership lands later).
@@ -109,6 +110,22 @@ def _completeness_gate_breakdown(completeness_result) -> Dict[str, Any]:
     }
 
 
+def _verdict_from_score(score_100: Any, carried_verdict: Any = None) -> str:
+    """Resolve the non-blocking verdict after score assembly.
+
+    BLOCKED/UNSAFE/NOT_SCORED return earlier. CAUTION from Layer 1 wins
+    over POOR/SAFE; otherwise the v4 100-point equivalent of v3's 32/80
+    threshold is 40.
+    """
+    if carried_verdict == "CAUTION":
+        return "CAUTION"
+    try:
+        score = float(score_100)
+    except (TypeError, ValueError):
+        return carried_verdict or "NOT_SCORED"
+    return "POOR" if score < 40.0 else "SAFE"
+
+
 def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     """Score an enriched product against the v4 shadow scorer.
 
@@ -122,9 +139,8 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
          sets verdict but scoring continues.
       3. Layer 2 Completeness Gate. Incomplete products short-circuit
          to NOT_SCORED with confidence='blocked_by_completeness_gate'.
-      4. Layer 3 Scoring (per-module). Generic module emits its
-         5-dimension breakdown scaffold at P1.3.0; dimension scores
-         remain None until P1.3.1+ slices land per-dimension math.
+      4. Layer 3 Scoring (per-module). Generic module emits populated
+         dimensions and a final module score at P1.3.6.
          Probiotic (P2) and multi_or_prenatal (P3) modules not online yet.
       5. Layer 4 Confidence. [P1.4 — not online yet]
 
@@ -190,10 +206,11 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     if module == "generic":
         module_result = score_generic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = module_result.to_breakdown()
-        # `score_100` stays on the module result until P1.3.6 assembly.
-        # When it populates, the shadow's top-level `shadow_score_v4_100`
-        # mirrors it; until then both stay None and confidence stays
-        # 'skeleton'.
+        shadow["shadow_score_v4_100"] = module_result.score_100
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            module_result.score_100,
+            shadow.get("shadow_score_v4_verdict"),
+        )
 
     # Layer 4 (typed confidence sub-categories) not online yet — P1.4.
     return shadow

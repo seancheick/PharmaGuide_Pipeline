@@ -402,8 +402,8 @@ def test_anchored_stays_false_until_canary_membership_lands() -> None:
 
 def test_shadow_caution_continues_to_next_layer() -> None:
     """CAUTION sets the verdict but does NOT short-circuit. With a
-    complete product at P1.2, confidence stays 'skeleton' because score
-    math is not online yet, and the CAUTION verdict is carried forward."""
+    complete product at P1.3.6, score math runs and the CAUTION verdict
+    is carried forward over the score band."""
     from score_supplements_v4_shadow import score_product_v4_shadow
     product = {
         **COMPLETE_GENERIC_PRODUCT,
@@ -419,15 +419,15 @@ def test_shadow_caution_continues_to_next_layer() -> None:
     assert out["shadow_score_v4_verdict"] == "CAUTION"
     assert out["shadow_score_v4_anchored"] is False
     assert out["shadow_score_v4_confidence"] == "skeleton"
-    assert out["shadow_score_v4_100"] is None  # P1.2 — scoring not online yet
+    assert out["shadow_score_v4_100"] is not None
 
 
-def test_shadow_clean_product_no_verdict_change() -> None:
-    """A clean, complete product with no safety triggers leaves verdict=None
-    at P1.2 — the verdict gets set in P1.3 once scoring math is online."""
+def test_shadow_clean_product_gets_score_band_verdict() -> None:
+    """A clean, complete product with no safety trigger gets SAFE/POOR
+    from the P1.3.6 score-band reconciliation."""
     from score_supplements_v4_shadow import score_product_v4_shadow
     out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
-    assert out["shadow_score_v4_verdict"] is None
+    assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR"}
     assert out["shadow_score_v4_anchored"] is False
     assert out["shadow_score_v4_confidence"] == "skeleton"
 

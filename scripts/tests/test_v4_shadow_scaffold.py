@@ -210,14 +210,12 @@ def test_shadow_entry_point_p10_skeleton_confidence() -> None:
     assert out["shadow_score_v4_confidence"] == "skeleton"
 
 
-def test_shadow_entry_point_p10_score_is_none() -> None:
-    """At P1.2, no scoring math runs for complete products.
-    shadow_score_v4_100 must be None (not 0 — that would be confusable
-    with a real low score)."""
+def test_shadow_entry_point_p136_score_is_populated() -> None:
+    """At P1.3.6, complete generic products emit a real shadow score."""
     from score_supplements_v4_shadow import score_product_v4_shadow
     out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
-    assert out["shadow_score_v4_100"] is None
-    assert out["shadow_score_v4_verdict"] is None
+    assert out["shadow_score_v4_100"] is not None
+    assert out["shadow_score_v4_verdict"] in {"SAFE", "POOR"}
     assert out["shadow_score_v4_anchored"] is False
 
 

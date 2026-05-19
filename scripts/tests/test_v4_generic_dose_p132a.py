@@ -481,12 +481,12 @@ def test_shadow_wires_dose_dimension() -> None:
     assert dose_dim["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
 
 
-def test_shadow_top_level_score_still_none_at_p132a() -> None:
-    """score_100 only populates at P1.3.6 final assembly."""
+def test_shadow_top_level_score_populated_at_p136() -> None:
+    """P1.3.6 final assembly populates top-level shadow_score_v4_100."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(_product())
-    assert out["shadow_score_v4_100"] is None
+    assert out["shadow_score_v4_100"] is not None
     assert out["shadow_score_v4_confidence"] == "skeleton"
 
 

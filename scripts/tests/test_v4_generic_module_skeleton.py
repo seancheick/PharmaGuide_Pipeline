@@ -144,9 +144,10 @@ def test_manufacturer_trust_separate_dimension_with_cap_5() -> None:
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
 
     mt = breakdown["manufacturer_trust"]
-    assert mt["score"] is None
+    assert mt["score"] == 0.0
     assert mt["max"] == 5
-    assert mt["components"] == {}
+    assert mt["components"]["D2_disclosure_quality"] == 0.0
+    assert mt["metadata"]["D1_source"] == "none"
 
 
 def test_manufacturer_violations_separate_dimension_with_floor_minus_25() -> None:
@@ -157,17 +158,19 @@ def test_manufacturer_violations_separate_dimension_with_floor_minus_25() -> Non
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
 
     mv = breakdown["manufacturer_violations"]
-    assert mv["score"] is None
-    assert mv["floor"] == -25
-    assert mv["components"] == {}
+    assert mv["score"] == 0.0
+    assert mv["floor"] == -25.0
+    assert mv["components"]["manufacturer_violation_deduction"] == 0.0
 
 
-def test_score_100_is_none_at_skeleton() -> None:
-    """No math runs yet. score_100 is None until P1.3.6 assembly."""
+def test_score_100_is_populated_at_p136() -> None:
+    """P1.3.6 final assembly populates the module-level 0-100 score."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
-    assert breakdown["score_100"] is None
+    assert breakdown["score_100"] is not None
+    assert 0.0 <= breakdown["score_100"] <= 100.0
+    assert breakdown["metadata"]["phase"] == "P1.3.6_final_assembly"
 
 
 def test_phase_marker_in_breakdown() -> None:
@@ -185,8 +188,9 @@ def test_phase_marker_in_breakdown() -> None:
 
 
 def test_score_generic_resilient_to_missing_product() -> None:
-    """Never raise. Generic module must safely emit a skeleton even on
-    malformed / empty enriched blobs."""
+    """Never raise. Direct generic-module calls still emit a bounded
+    score even on malformed blobs; the real pipeline's completeness gate
+    blocks those rows before module scoring."""
     from scoring_v4.modules.generic import score_generic
 
     for bad in (None, {}, {"supplement_type": None}, 42, "oops"):
@@ -194,7 +198,7 @@ def test_score_generic_resilient_to_missing_product() -> None:
         breakdown = result.to_breakdown()
         assert breakdown["module"] == "generic"
         assert set(breakdown["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-        assert breakdown["score_100"] is None
+        assert 0.0 <= breakdown["score_100"] <= 100.0
 
 
 def test_score_generic_does_not_mutate_input() -> None:
@@ -212,18 +216,18 @@ def test_score_generic_does_not_mutate_input() -> None:
 def test_shadow_wires_generic_module_breakdown_when_both_gates_pass() -> None:
     """After Layer 1 + Layer 2 pass, the shadow scorer must call the
     generic module and stash its breakdown under
-    `shadow_score_v4_breakdown["module"]`. Score still None at P1.3.0."""
+    `shadow_score_v4_breakdown["module"]`. Score is online at P1.3.6."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
 
     assert out["shadow_score_v4_module"] == "generic"
-    assert out["shadow_score_v4_100"] is None
+    assert out["shadow_score_v4_100"] is not None
     assert "module" in out["shadow_score_v4_breakdown"]
     module_block = out["shadow_score_v4_breakdown"]["module"]
     assert module_block["module"] == "generic"
     assert set(module_block["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-    assert module_block["score_100"] is None
+    assert module_block["score_100"] == out["shadow_score_v4_100"]
 
 
 def test_shadow_does_not_wire_module_when_safety_short_circuits() -> None:
@@ -307,14 +311,12 @@ def test_shadow_does_not_wire_generic_module_for_probiotic_route() -> None:
     assert module_block is None or module_block.get("module") != "generic"
 
 
-def test_shadow_module_score_is_none_so_confidence_stays_skeleton() -> None:
-    """Until P1.3.6 assembles a real score_100, top-level shadow_score_v4_100
-    stays None and confidence stays 'skeleton'. P1.4 will populate the
-    typed confidence sub-categories."""
+def test_shadow_module_score_online_but_confidence_stays_skeleton_until_p14() -> None:
+    """P1.3.6 assembles score_100. P1.4 still owns typed confidence."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(COMPLETE_GENERIC_PRODUCT)
-    assert out["shadow_score_v4_100"] is None
+    assert out["shadow_score_v4_100"] is not None
     assert out["shadow_score_v4_confidence"] == "skeleton"
 
 

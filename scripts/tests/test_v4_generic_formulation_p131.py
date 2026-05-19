@@ -1124,15 +1124,14 @@ def test_shadow_populates_formulation_when_generic() -> None:
     assert module_block["phase"].startswith("P1.3.")
 
 
-def test_shadow_top_level_score_still_none_at_p131() -> None:
-    """score_100 only populates at P1.3.6 final assembly. Top-level
-    shadow_score_v4_100 stays None throughout P1.3.x."""
+def test_shadow_top_level_score_populated_at_p136() -> None:
+    """P1.3.6 final assembly populates top-level shadow_score_v4_100."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(
         _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
     )
-    assert out["shadow_score_v4_100"] is None
+    assert out["shadow_score_v4_100"] is not None
     assert out["shadow_score_v4_confidence"] == "skeleton"
 
 

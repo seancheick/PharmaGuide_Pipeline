@@ -30,15 +30,15 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; P1.3.6)
 
-P1.3.5 state: Formulation (P1.3.1b), Dose (P1.3.2a proxy), Evidence
+P1.3.6 state: Formulation (P1.3.1b), Dose (P1.3.2a proxy), Evidence
 (P1.3.3 multiplicative pipeline), Testing & Trust (P1.3.4), and
-Transparency (P1.3.5) are online. Dose uses an
+Transparency (P1.3.5) are online, with Manufacturer Trust / Violations
+and final score assembly now wired. Dose uses an
 RDA/UL proxy because the supplemental-window math per §6 line 369 needs
 a `typical_dietary_intake` reference table that does not yet exist; the
 dose dimension's `metadata` carries explicit proxy markers so downstream
 tooling never mistakes the proxy band for final NIH/NHANES window math.
-Manufacturer adjustments remain skeleton until P1.3.6 lands. Audit and
-score-delta tooling reads against this contract.
+Audit and score-delta tooling reads against this contract.
 
 The module never raises on malformed input — empty / non-dict products
 get the same zero-math skeleton. Real input validation lives in the
@@ -55,11 +55,15 @@ from typing import Any, Dict, Optional
 from scoring_v4.modules.generic_dose import score_dose
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_formulation import score_formulation
+from scoring_v4.modules.generic_manufacturer import (
+    score_manufacturer_trust,
+    score_manufacturer_violations,
+)
 from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.generic_transparency import score_transparency
 
 
-PHASE_MARKER = "P1.3.5_transparency"
+PHASE_MARKER = "P1.3.6_final_assembly"
 
 
 # Dimension caps per §4 line 176. Order is rendering order in audit / UI.
@@ -109,12 +113,14 @@ class ManufacturerTrustResult:
     score: Optional[float] = None
     max: float = MANUFACTURER_TRUST_CAP
     components: Dict[str, float] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "score": self.score,
             "max": self.max,
             "components": dict(self.components),
+            "metadata": dict(self.metadata),
         }
 
 
@@ -127,12 +133,14 @@ class ManufacturerViolationsResult:
     score: Optional[float] = None
     floor: float = MANUFACTURER_VIOLATIONS_FLOOR
     components: Dict[str, float] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             "score": self.score,
             "floor": self.floor,
             "components": dict(self.components),
+            "metadata": dict(self.metadata),
         }
 
 
@@ -156,6 +164,7 @@ class GenericModuleResult:
     manufacturer_violations: ManufacturerViolationsResult = field(default_factory=ManufacturerViolationsResult)
     score_100: Optional[float] = None
     phase: str = PHASE_MARKER
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_breakdown(self) -> Dict[str, Any]:
         """Render as the dict shape used in `shadow_score_v4_breakdown["module"]`.
@@ -168,6 +177,7 @@ class GenericModuleResult:
             "manufacturer_violations": self.manufacturer_violations.to_dict(),
             "score_100": self.score_100,
             "phase": self.phase,
+            "metadata": dict(self.metadata),
         }
 
 
@@ -180,9 +190,8 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
-    P1.3.5 state: Formulation, Dose, Evidence, Trust, and Transparency
-    are populated.
-    score_100 stays None until P1.3.6 final assembly.
+    P1.3.6 state: Formulation, Dose, Evidence, Trust, Transparency,
+    Manufacturer Trust, Manufacturer Violations, and score_100 are populated.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.
@@ -243,6 +252,23 @@ def score_generic(product: Any) -> GenericModuleResult:
     transparency_dim.penalties = transparency_payload["penalties"]
     transparency_dim.metadata = transparency_payload.get("metadata", {})
 
+    # Separate manufacturer dimensions (P1.3.6). Manufacturer Trust is a
+    # small positive adjustment; Manufacturer Violations is a separate
+    # negative adjustment and never burns the +15 Testing & Trust cap.
+    manufacturer_trust_payload = score_manufacturer_trust(product)
+    result.manufacturer_trust.score = manufacturer_trust_payload["score"]
+    result.manufacturer_trust.max = manufacturer_trust_payload["max"]
+    result.manufacturer_trust.components = manufacturer_trust_payload["components"]
+    result.manufacturer_trust.metadata = manufacturer_trust_payload.get("metadata", {})
+
+    manufacturer_violations_payload = score_manufacturer_violations(product)
+    result.manufacturer_violations.score = manufacturer_violations_payload["score"]
+    result.manufacturer_violations.floor = manufacturer_violations_payload["floor"]
+    result.manufacturer_violations.components = manufacturer_violations_payload["components"]
+    result.manufacturer_violations.metadata = manufacturer_violations_payload.get("metadata", {})
+
+    _assemble_score(result)
+
     # Module-level phase reflects the most-recent slice landed. Audit
     # tooling reads this to know whether to trust the per-dimension
     # scores. The overall module score remains unavailable until P1.3.6
@@ -250,3 +276,47 @@ def score_generic(product: Any) -> GenericModuleResult:
     result.phase = PHASE_MARKER
 
     return result
+
+
+def _assemble_score(result: GenericModuleResult) -> None:
+    """Assemble v4's final 0-100 score from populated dimensions.
+
+    If a dimension is explicitly not evaluable (`score is None`), exclude
+    its max from the denominator instead of treating it as zero. This is
+    important for botanicals / specialty actives where the Dose proxy has
+    no RDA/UL benchmark; missing reference data should lower confidence
+    later, not punish quality.
+    """
+    evaluable_scores = []
+    evaluable_max = 0.0
+    excluded = []
+    for name, dim in result.dimensions.items():
+        if dim.score is None:
+            excluded.append(name)
+            continue
+        evaluable_scores.append(float(dim.score))
+        evaluable_max += float(dim.max)
+
+    raw_dimension_sum = sum(evaluable_scores)
+    if evaluable_max <= 0:
+        class_subtotal = 0.0
+    elif evaluable_max == 100.0:
+        class_subtotal = raw_dimension_sum
+    else:
+        class_subtotal = (raw_dimension_sum / evaluable_max) * 100.0
+
+    manufacturer_trust = float(result.manufacturer_trust.score or 0.0)
+    manufacturer_violations = float(result.manufacturer_violations.score or 0.0)
+    adjusted = class_subtotal + manufacturer_trust + manufacturer_violations
+    result.score_100 = round(max(0.0, min(100.0, adjusted)), 1)
+    result.metadata = {
+        "phase": PHASE_MARKER,
+        "raw_dimension_sum": round(raw_dimension_sum, 4),
+        "evaluable_class_max": round(evaluable_max, 4),
+        "excluded_dimensions": excluded,
+        "class_subtotal": round(class_subtotal, 4),
+        "manufacturer_trust_adjustment": round(manufacturer_trust, 4),
+        "manufacturer_violation_adjustment": round(manufacturer_violations, 4),
+        "adjusted_score_before_clamp": round(adjusted, 4),
+        "score_clamped": adjusted < 0.0 or adjusted > 100.0,
+    }
