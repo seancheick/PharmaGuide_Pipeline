@@ -159,7 +159,12 @@ def build_drug_name_to_rxcui_index(drug_classes: dict[str, Any]) -> dict[str, st
     for cls in drug_classes.get("classes", {}).values():
         names = cls.get("member_names", [])
         rxcuis = cls.get("member_rxcuis", [])
-        for name, rxcui in zip(names, rxcuis, strict=False):
+        # Plain zip() stops at the shortest iterable — equivalent to
+        # `zip(..., strict=False)` but compatible with Python 3.9 (where
+        # `strict=` kwarg raises TypeError). Length mismatch between names
+        # and rxcuis is intentionally silent here; the caller relies on
+        # the resulting dict only containing unambiguous 1-to-1 mappings.
+        for name, rxcui in zip(names, rxcuis):
             key = normalize_drug_lookup_name(name)
             rx = str(rxcui or "").strip()
             if key and rx:

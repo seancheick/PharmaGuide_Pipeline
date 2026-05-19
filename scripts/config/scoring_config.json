@@ -324,10 +324,33 @@
       "vegan_vegetarian": 1
     },
     "B4_quality_certifications": {
-      "cap_total": 21,
+      "cap_total": 17,
+      "_cap_total_note": "P0.1b: B4a is now scope-aware and can contribute at most 12 points. B4b GMP can add 4 and B4c batch traceability can add 1. Scorer clamps the whole B section via the bonus_pool_cap.",
+      "B4a_verified_programs": {
+        "_description": "Registry/override-verified certs in product.verified_cert_programs score B4a. P0.1d also permits a low provisional label_asserted_product tier for whitelisted product-label claims while scrapers are missing. claimed_only, brand_only, and needs_review are display/audit only and score zero.",
+        "scope_points": {
+          "sku": [8, 4, 2],
+          "product_line": [6, 3, 1],
+          "label_asserted_product": [2, 1, 0],
+          "brand_only": [0, 0, 0],
+          "needs_review": [0, 0, 0],
+          "claimed_only": [0, 0, 0]
+        },
+        "label_asserted_product": {
+          "_description": "P0.1d provisional bridge: product-label evidence only, never manufacturer evidence. Strong but unscraped programs earn tiny diminishing credit until scrapers land.",
+          "evidence_source_required": "product_label",
+          "eligible_programs": ["USP Verified", "Informed Choice", "Informed Sport", "BSCG"],
+          "omega_only_eligible_programs": ["IFOS"],
+          "non_b4a_programs": ["Friend of the Sea", "MSC Certified", "GOED Certified", "Labdoor Tested", "Health Canada NPN", "Third-Party Tested"],
+          "cap_note": "The [2,1,0] rung caps provisional label credit at 3 before the global B4a cap of 12."
+        },
+        "cap": 12,
+        "requires_no_scoring_blocked_reason": true
+      },
       "B4a_named_programs": {
-        "points_per_program": 5,
-        "cap": 15
+        "_deprecated": "P0.1b: retained only so historical config readers do not crash. The scorer must not use claimed/named programs for B4a.",
+        "points_per_program": 0,
+        "cap": 0
       },
       "B4b_gmp": {
         "certified": 4,
@@ -350,7 +373,14 @@
         "partial": 3,
         "none": 5
       },
-      "count_share_min_denominator_constant": 8
+      "count_share_min_denominator_constant": 8,
+      "class_multipliers": {
+        "probiotic": 0.4,
+        "multi_or_prenatal": 1.3,
+        "sports_active": 1.5,
+        "generic": 1.0
+      },
+      "_class_routing_note": "P0.2 class-aware opacity. The scorer's _b5_class_for_product router maps supp_type + product-name signals to one of these classes. probiotic gets a softer multiplier because strain-named + aggregate-CFU is an industry norm. multi_or_prenatal gets a stricter multiplier because each vitamin has a known RDA. sports_active gets the heaviest multiplier because opaque blends in stimulant / amino-acid stacks hide the very thing that needs to be transparent (per-component dose). Multipliers scale the ramp only — the dimension cap (10) is unchanged."
     },
     "B6_marketing_penalty": {
       "penalty": 5

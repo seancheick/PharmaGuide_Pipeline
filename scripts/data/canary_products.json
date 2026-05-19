@@ -1,0 +1,593 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "description": "Curated 35-product v4 canary set spanning 14 primary classes (single_nutrient, multivitamin, prenatal_multi, probiotic, fish_oil, herbal_branded_extract / unstandardized / marker_pct, sports_opaque / transparent, specialty, greens_superfood, blocked_verdict, manufacturer_signal_only) and all 4 B5 router class routes (probiotic / multi_or_prenatal / sports_active / generic). Each entry encodes expected_b5_class, expected_dose_route_v4, edge_cases, and v3 shipped score/verdict for regression baselining.",
+    "purpose": "v4 dose + B5 class-aware + cert coverage canary set. Used by test_v4_canary_coverage.py to guarantee every product class + edge case the v4 design depends on is exercised on real shipped data. Add a new entry before adding a new class to the scorer; remove an entry only with a decision log note. Source of truth for canary-based regression review and the score-delta report.",
+    "last_updated": "2026-05-19",
+    "primary_classes": [
+      "single_nutrient",
+      "multivitamin",
+      "prenatal_multi",
+      "probiotic",
+      "fish_oil",
+      "herbal_branded_extract",
+      "herbal_unstandardized",
+      "herbal_marker_pct",
+      "sports_opaque",
+      "sports_transparent",
+      "specialty",
+      "greens_superfood",
+      "blocked_verdict",
+      "manufacturer_signal_only"
+    ],
+    "b5_class_routes": [
+      "probiotic",
+      "multi_or_prenatal",
+      "sports_active",
+      "generic"
+    ],
+    "notes": "expected_b5_class is the v4-correct routing decision. Where the current scorer disagrees, the discrepancy is captured in edge_cases as 'router_disagreement_*' so test_v4_canary_coverage flags (not fails) until the router fix lands."
+  },
+  "canaries": [
+    {
+      "dsld_id": "253169",
+      "brand_name": "Doctor's Best",
+      "product_name": "High Absorption CoQ10 100 mg",
+      "primary_class": "single_nutrient",
+      "subclass": "coq10",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "usp_label_not_in_registry_drops_to_zero_post_scraper",
+        "single_mg_active"
+      ],
+      "v3_shipped_score": 65.2,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "P0.1d provisional +2 (USP label) → 0 once Codex's USP scraper landed (USP is in covered_programs; this SKU not in USP public list)."
+    },
+    {
+      "dsld_id": "298074",
+      "brand_name": "Thorne",
+      "product_name": "Magnesium Bisglycinate",
+      "primary_class": "single_nutrient",
+      "subclass": "magnesium_bisglycinate",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "nsf_sport_sku_verified",
+        "two_nsf_certs_diminishing_returns"
+      ],
+      "v3_shipped_score": 72.6,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "P0.1b anchor — NSF Sport + NSF/ANSI 173 both SKU-verified → B4a 8+4=12 (was buggy 15 in v3). USP also claimed via manufacturer signal but stays claimed_only (mfg-only never bridges)."
+    },
+    {
+      "dsld_id": "184058",
+      "brand_name": "Spring Valley",
+      "product_name": "Vitamin D3 5000 IU",
+      "primary_class": "single_nutrient",
+      "subclass": "vitamin_d3_high_dose",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "near_ul_dose",
+        "store_brand_no_certs"
+      ],
+      "v3_shipped_score": 60.9,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "5000 IU = 125% RDA, 50% UL. Tests B7 over-UL gate at moderate-risk threshold (should not penalize until 150%)."
+    },
+    {
+      "dsld_id": "15761",
+      "brand_name": "Thorne Research",
+      "product_name": "Vitamin K2",
+      "primary_class": "single_nutrient",
+      "subclass": "vitamin_k2",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "branded_form_mk4_vs_mk7",
+        "low_score_unexpected"
+      ],
+      "v3_shipped_score": 51.5,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "MK-4 (Thorne's) and MK-7 have different bioavailability profiles. Tests form-aware A1 mapping. Low v3 score worth investigating (Thorne brand-trust should help)."
+    },
+    {
+      "dsld_id": "1437",
+      "brand_name": "GNC",
+      "product_name": "NAC 600",
+      "primary_class": "single_nutrient",
+      "subclass": "nac",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "fda_status_disputed_2020_2022"
+      ],
+      "v3_shipped_score": 47.1,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "NAC had FDA enforcement uncertainty; current rules permit. Tests B0/B1 regulatory neutrality."
+    },
+    {
+      "dsld_id": "294020",
+      "brand_name": "Pure Encapsulations",
+      "product_name": "Melatonin 0.5 mg",
+      "primary_class": "single_nutrient",
+      "subclass": "melatonin_micro_dose",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "micro_dose_trial_relevant",
+        "below_typical_otc_dose"
+      ],
+      "v3_shipped_score": 55.9,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Most melatonin is 3-10mg; clinical evidence supports 0.3-0.5mg. Tests v4 dose-curve that rewards trial-aligned micro-dosing rather than penalizing low-mg."
+    },
+    {
+      "dsld_id": "241894",
+      "brand_name": "Double Wood Supplements",
+      "product_name": "NMN Nicotinamide Mononucleotide 250 mg",
+      "primary_class": "single_nutrient",
+      "subclass": "nmn",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "new_molecule_weak_evidence",
+        "no_rda_set"
+      ],
+      "v3_shipped_score": 62.9,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "NMN has no RDA/UL. Tests v4 Evidence dimension behavior on emerging compounds (rule: no clinical-trial PMID = capped Evidence credit)."
+    },
+    {
+      "dsld_id": "173888",
+      "brand_name": "Garden Of Life MyKind Organics",
+      "product_name": "Men's Multi Organic Berry",
+      "primary_class": "multivitamin",
+      "subclass": "mens_daily",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "multi_panel",
+      "edge_cases": [
+        "router_disagreement_supp_type_says_specialty",
+        "caution_verdict"
+      ],
+      "v3_shipped_score": 68.7,
+      "v3_shipped_verdict": "CAUTION",
+      "notes": "Enricher's _classify_supplement_type returns 'specialty' even though primary_category is 'multivitamin'. Current B5 router uses supp_type → routes to 'generic' (WRONG). Follow-up: extend router to fall back to primary_category when supp_type=specialty."
+    },
+    {
+      "dsld_id": "173918",
+      "brand_name": "Garden Of Life MyKind Organics",
+      "product_name": "Women's Multi Organic Berry",
+      "primary_class": "multivitamin",
+      "subclass": "womens_daily",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "multi_panel",
+      "edge_cases": [
+        "router_disagreement_supp_type_says_specialty",
+        "caution_verdict"
+      ],
+      "v3_shipped_score": 67.5,
+      "v3_shipped_verdict": "CAUTION",
+      "notes": "Same classifier gap as 173888."
+    },
+    {
+      "dsld_id": "178559",
+      "brand_name": "Spring Valley",
+      "product_name": "Children's Multivitamin Gummies",
+      "primary_class": "multivitamin",
+      "subclass": "kids_gummy",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "multi_panel",
+      "edge_cases": [
+        "sugar_penalty_gummy",
+        "kids_appropriate_dosing"
+      ],
+      "v3_shipped_score": 55.1,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Gummies → sugar content drives B1_dietary_sugar penalty; kids-specific RDAs differ from adults. Tests v4 age-stratified dose curves."
+    },
+    {
+      "dsld_id": "15906",
+      "brand_name": "Thorne Research",
+      "product_name": "Basic Prenatal",
+      "primary_class": "prenatal_multi",
+      "subclass": "standard_prenatal",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "multi_panel_prenatal",
+      "edge_cases": [
+        "nsf_sport_brand_only_per_p01b",
+        "thorne_brand_injection_doesnt_score_b4a"
+      ],
+      "v3_shipped_score": 70.1,
+      "v3_shipped_verdict": "CAUTION",
+      "notes": "Codex's P0.1b anchor — Thorne claims NSF Sport but this product not in NSF registry → brand_only → B4a=0. Verifies manufacturer-injection guard."
+    },
+    {
+      "dsld_id": "274081",
+      "brand_name": "Garden of Life Dr. Formulated Probiotics",
+      "product_name": "Once Daily Prenatal",
+      "primary_class": "prenatal_multi",
+      "subclass": "prenatal_probiotic",
+      "expected_b5_class": "probiotic",
+      "expected_dose_route_v4": "probiotic_cfu_adequacy",
+      "edge_cases": [
+        "dual_class_probiotic_in_prenatal",
+        "nsf_needs_review_borderline"
+      ],
+      "v3_shipped_score": 45.6,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Functionally a probiotic (supp_type=probiotic) marketed for prenatal use. Tests v4 dual-class routing — Dose should use probiotic per-strain CFU, not prenatal panel."
+    },
+    {
+      "dsld_id": "74124",
+      "brand_name": "Nordic Naturals",
+      "product_name": "Prenatal DHA Unflavored Formula",
+      "primary_class": "prenatal_multi",
+      "subclass": "prenatal_omega",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "omega_dose",
+      "edge_cases": [
+        "fos_goed_ifos_manufacturer_only",
+        "single_active_omega_in_prenatal_class",
+        "prenatal_keyword_routes_b5"
+      ],
+      "v3_shipped_score": 69.7,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Friend of the Sea / GOED / IFOS all claimed via Nordic brand injection — none of them reach B4a (manufacturer-only). Router routes to multi_or_prenatal via 'Prenatal' keyword (consumer-targeting); no blends so B5 itself is 0 either way. Future P0.3 marine-source dimension may credit FoS/GOED/IFOS there."
+    },
+    {
+      "dsld_id": "1643",
+      "brand_name": "GNC Probiotics",
+      "product_name": "Ultra Probiotic Complex 50 Billion CFUs",
+      "primary_class": "probiotic",
+      "subclass": "high_cfu_blend",
+      "expected_b5_class": "probiotic",
+      "expected_dose_route_v4": "probiotic_cfu_adequacy",
+      "edge_cases": [
+        "high_total_cfu_strain_disclosure_unknown"
+      ],
+      "v3_shipped_score": 62.0,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "50B CFU is a strong number, but whether strain identities + per-strain CFU are disclosed drives v4 Dose dim from 0/25 to ~15/25. Worth blob inspection."
+    },
+    {
+      "dsld_id": "178346",
+      "brand_name": "Spring Valley",
+      "product_name": "Advanced Strength Probiotic 50 Billion",
+      "primary_class": "probiotic",
+      "subclass": "store_brand_probiotic",
+      "expected_b5_class": "probiotic",
+      "expected_dose_route_v4": "probiotic_cfu_adequacy",
+      "edge_cases": [
+        "poor_verdict_today",
+        "store_brand_no_certs"
+      ],
+      "v3_shipped_score": 39.3,
+      "v3_shipped_verdict": "POOR",
+      "notes": "POOR verdict at 39.3 is the floor of the probiotic range. Useful for v4 calibration — does the new Dose dim recover this when strain disclosure is OK?"
+    },
+    {
+      "dsld_id": "327776",
+      "brand_name": "Sports Research",
+      "product_name": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "primary_class": "fish_oil",
+      "subclass": "balanced_epa_dha",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "omega_dose",
+      "edge_cases": [
+        "ifos_label_asserted_p01d_anchor",
+        "balanced_epa_dha_at_trial_dose"
+      ],
+      "v3_shipped_score": 63.7,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "P0.1d omega-only IFOS label test. Combined EPA+DHA 1055mg crosses general-health threshold (~250mg) and approaches cardio (1g)."
+    },
+    {
+      "dsld_id": "288740",
+      "brand_name": "Nordic Naturals",
+      "product_name": "Ultimate Omega + CoQ10 Lemon",
+      "primary_class": "fish_oil",
+      "subclass": "high_dose_omega_plus_companion",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "omega_dose",
+      "edge_cases": [
+        "high_dose_omega",
+        "secondary_active_coq10"
+      ],
+      "v3_shipped_score": 68.6,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Nordic Ultimate Omega is ~1280mg EPA+DHA per serving. Tests v4 dose curve at the cardio threshold."
+    },
+    {
+      "dsld_id": "305203",
+      "brand_name": "Transparent Labs",
+      "product_name": "KSM-66",
+      "primary_class": "herbal_branded_extract",
+      "subclass": "ashwagandha_ksm66",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "herbal_marker_dose",
+      "edge_cases": [
+        "branded_extract_ksm66",
+        "clinical_trial_dose_match"
+      ],
+      "v3_shipped_score": 61.5,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "KSM-66 has clinical trials at 300-600mg. Tests v4 form-aware herbal dose."
+    },
+    {
+      "dsld_id": "82300",
+      "brand_name": "Doctor's Best",
+      "product_name": "Ashwagandha With Sensoril 125 mg",
+      "primary_class": "herbal_branded_extract",
+      "subclass": "ashwagandha_sensoril",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "herbal_marker_dose",
+      "edge_cases": [
+        "branded_extract_sensoril",
+        "low_score_vs_ksm66"
+      ],
+      "v3_shipped_score": 49.7,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Sensoril clinical trials at 125-250mg (LOWER mg per trial than KSM-66 → 125mg is appropriate). Tests v4 branded-extract-specific dose math; current 49.7 may under-credit Sensoril vs KSM-66 due to mg-based comparison."
+    },
+    {
+      "dsld_id": "16095",
+      "brand_name": "Thorne Research",
+      "product_name": "Meriva-SR Curcumin Phytosome",
+      "primary_class": "herbal_branded_extract",
+      "subclass": "curcumin_meriva_phytosome",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "herbal_marker_dose",
+      "edge_cases": [
+        "bioavailability_form_phytosome",
+        "non_piperine_absorption_enhancer"
+      ],
+      "v3_shipped_score": 67.3,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Meriva = phytosome form, ~29x more bioavailable than unformulated curcumin. Tests v4 form-aware bioavailability multiplier."
+    },
+    {
+      "dsld_id": "255449",
+      "brand_name": "Goli Nutrition",
+      "product_name": "Ashwagandha Gummies Mixed Berry",
+      "primary_class": "herbal_unstandardized",
+      "subclass": "ashwagandha_unstandardized_gummy",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "herbal_marker_dose",
+      "edge_cases": [
+        "bscg_label_asserted_p01d_anchor",
+        "unstandardized_root_powder",
+        "gummy_form_sugar"
+      ],
+      "v3_shipped_score": 62.5,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "P0.1d BSCG label_asserted anchor. Unstandardized ashwagandha root → Dose should drop sharply (no marker content). Sugar in gummies should incur B1 penalty."
+    },
+    {
+      "dsld_id": "183275",
+      "brand_name": "Pure Encapsulations",
+      "product_name": "Silymarin",
+      "primary_class": "herbal_marker_pct",
+      "subclass": "milk_thistle_silymarin",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "herbal_marker_dose",
+      "edge_cases": [
+        "marker_percent_standardization",
+        "silymarin_80pct_typical"
+      ],
+      "v3_shipped_score": 63.2,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Standardized to silymarin content (typically 80%). Tests v4 marker-pct multiplier on extract."
+    },
+    {
+      "dsld_id": "306381",
+      "brand_name": "Nutricost Performance",
+      "product_name": "PRE Pre-Workout Complex Blue Raspberry",
+      "primary_class": "sports_opaque",
+      "subclass": "preworkout_proprietary_blend",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "blend_per_component_or_not_scored",
+      "edge_cases": [
+        "router_disagreement_supp_type_says_multivitamin",
+        "opaque_preworkout_hides_stim_dose"
+      ],
+      "v3_shipped_score": 74.2,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Enricher classifies as multivitamin (because vitamins are mixed into the matrix), but the product is functionally a pre-workout stack. Current B5 router uses supp_type → wrong (multi_or_prenatal 1.3x) instead of sports_active 1.5x. Follow-up: router fix to check sports keywords even when supp_type=multivitamin."
+    },
+    {
+      "dsld_id": "2722",
+      "brand_name": "GNC Pro Performance",
+      "product_name": "RapidDrive Pre-Workout Amino Complex Fruit Punch",
+      "primary_class": "sports_opaque",
+      "subclass": "preworkout_amino_complex",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "blend_per_component_or_not_scored",
+      "edge_cases": [
+        "opaque_preworkout_amino"
+      ],
+      "v3_shipped_score": 69.0,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "supp_type=specialty + name has 'Pre-Workout' → router correctly routes to sports_active 1.5x."
+    },
+    {
+      "dsld_id": "268690",
+      "brand_name": "SR Sports Research",
+      "product_name": "Whey Protein Isolate Dutch Chocolate",
+      "primary_class": "sports_transparent",
+      "subclass": "whey_protein_isolate",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "protein_per_serving",
+      "edge_cases": [
+        "informed_sport_label_p01d_anchor",
+        "informed_choice_label_stacks_to_b4a_3",
+        "router_disagreement_supp_type_says_multivitamin"
+      ],
+      "v3_shipped_score": 70.3,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "P0.1d label_asserted stacking anchor (Informed Sport + Informed Choice → B4a 2+1=3). Enricher classifies as multivitamin because of added vitamin profile; product is functionally protein."
+    },
+    {
+      "dsld_id": "325587",
+      "brand_name": "Transparent Labs",
+      "product_name": "Creatine HMB Strawberry Lemonade",
+      "primary_class": "sports_transparent",
+      "subclass": "creatine_hmb_stack",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "single_active_creatine",
+      "edge_cases": [
+        "informed_choice_label_p01d_anchor",
+        "high_v3_score_85"
+      ],
+      "v3_shipped_score": 85.2,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "TL = brand pattern of full transparency. v3 score 85.2 is the high end of our band — useful for v4 ceiling calibration."
+    },
+    {
+      "dsld_id": "269425",
+      "brand_name": "Nutricost",
+      "product_name": "Creatine Monohydrate 3 g",
+      "primary_class": "sports_transparent",
+      "subclass": "creatine_mono_basic",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "single_active_creatine",
+      "edge_cases": [
+        "basic_transparent_no_certs"
+      ],
+      "v3_shipped_score": 68.9,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Creatine monohydrate at 3g is sub-optimal (clinical dose 5g). Tests v4 dose curve on under-dosed actives."
+    },
+    {
+      "dsld_id": "211334",
+      "brand_name": "GNC Beyond Raw",
+      "product_name": "Precision BCAA Gummy Worm",
+      "primary_class": "sports_transparent",
+      "subclass": "bcaa_gummy",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "bcaa_ratio_dose",
+      "edge_cases": [
+        "gummy_form_for_sports_active",
+        "router_disagreement_supp_type_says_multivitamin"
+      ],
+      "v3_shipped_score": 64.4,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "BCAA delivered as gummies is unusual. supp_type=multivitamin (because of vitamin co-pack); name has 'BCAA' → router correctly catches sports_active via keyword."
+    },
+    {
+      "dsld_id": "184411",
+      "brand_name": "Pure Encapsulations",
+      "product_name": "Digestive Enzymes Ultra",
+      "primary_class": "specialty",
+      "subclass": "digestive_enzymes",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "enzyme_activity_units",
+      "edge_cases": [
+        "poor_verdict_today",
+        "enzyme_activity_units_not_mg",
+        "primary_category_mistagged_multivitamin"
+      ],
+      "v3_shipped_score": 37.6,
+      "v3_shipped_verdict": "POOR",
+      "notes": "Enzymes are dosed in activity units (DU, FCC, USP) not mg — v3 mg-based dose math under-scores them. POOR at 37.6 reveals the gap. Top v4 candidate for class-specific dose rubric. Note: enricher mis-tags primary_category=multivitamin on this enzyme product, so router routes to multi_or_prenatal. The B5 multiplier isn't critical here (likely no blend penalty); flagged for enricher primary_category audit."
+    },
+    {
+      "dsld_id": "278343",
+      "brand_name": "Pure Encapsulations",
+      "product_name": "Quercetin",
+      "primary_class": "specialty",
+      "subclass": "quercetin_flavonoid",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "single_nutrient",
+      "edge_cases": [
+        "flavonoid_marker",
+        "no_rda"
+      ],
+      "v3_shipped_score": 57.9,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Quercetin trial doses 500-1000mg. Tests v4 single-active dose curve for compounds without RDA."
+    },
+    {
+      "dsld_id": "204739",
+      "brand_name": "Garden of Life",
+      "product_name": "Raw Organic Perfect Food Green Superfood Chocolate",
+      "primary_class": "greens_superfood",
+      "subclass": "greens_blend",
+      "expected_b5_class": "multi_or_prenatal",
+      "expected_dose_route_v4": "blend_per_component_or_not_scored",
+      "edge_cases": [
+        "large_ingredient_stack",
+        "router_disagreement_uses_multivitamin"
+      ],
+      "v3_shipped_score": 69.6,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "supp_type=multivitamin (many ingredients, diverse categories) → routes to multi_or_prenatal 1.3x. Greens products often hide per-ingredient dose; debatable whether multi_or_prenatal or generic is the right class — flag for v4 review."
+    },
+    {
+      "dsld_id": "16012",
+      "brand_name": "Thorne Research",
+      "product_name": "Vinpocetine",
+      "primary_class": "blocked_verdict",
+      "subclass": "blocked_vinpocetine",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "blocked_short_circuit",
+      "edge_cases": [
+        "banned_ingredient_vinpocetine",
+        "blocked_verdict_short_circuits_dose"
+      ],
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": "BLOCKED",
+      "notes": "Vinpocetine has been targeted by FDA enforcement as not a legal supplement. BLOCKED verdict short-circuits scoring → v4 must respect this gate."
+    },
+    {
+      "dsld_id": "16072",
+      "brand_name": "Thorne Research",
+      "product_name": "Memoractiv",
+      "primary_class": "blocked_verdict",
+      "subclass": "blocked_blend_contains_vinpocetine",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "blocked_short_circuit",
+      "edge_cases": [
+        "banned_ingredient_inside_multi_blend",
+        "blocked_verdict_short_circuits_dose"
+      ],
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": "BLOCKED",
+      "notes": "Multi-active blend whose B0/B1 gate fires on vinpocetine. Tests banned-ingredient detection inside complex formulas."
+    },
+    {
+      "dsld_id": "211448",
+      "brand_name": "Equate",
+      "product_name": "Triple Strength Glucosamine Chondroitin MSM",
+      "primary_class": "blocked_verdict",
+      "subclass": "blocked_unexpected",
+      "expected_b5_class": "generic",
+      "expected_dose_route_v4": "blocked_short_circuit",
+      "edge_cases": [
+        "blocked_unexpected_for_joint_product",
+        "banned_ingredient_audit_target"
+      ],
+      "v3_shipped_score": null,
+      "v3_shipped_verdict": "BLOCKED",
+      "notes": "Joint-support product flagged BLOCKED for a banned ingredient — surprising; the banned hit is likely in an inactive or excipient. Worth auditing why. supp_type=multivitamin (joint stack with vitamins) → router routes to multi_or_prenatal. BLOCKED verdict short-circuits scoring anyway so B5 routing is moot."
+    },
+    {
+      "dsld_id": "274376",
+      "brand_name": "Legion",
+      "product_name": "Whey+ Dutch Chocolate",
+      "primary_class": "manufacturer_signal_only",
+      "subclass": "labdoor_only_no_b4a",
+      "expected_b5_class": "sports_active",
+      "expected_dose_route_v4": "protein_per_serving",
+      "edge_cases": [
+        "labdoor_routes_to_non_b4a_review",
+        "supp_type_targeted_protein"
+      ],
+      "v3_shipped_score": 68.1,
+      "v3_shipped_verdict": "SAFE",
+      "notes": "Legion claims Labdoor (manual-review-only per P0.1c routing). Tests that non-B4a cert programs don't accidentally credit B4a. Pure Encapsulations + ConsumerLab follow the same rule."
+    }
+  ]
+}

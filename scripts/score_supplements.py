@@ -2070,52 +2070,141 @@ class SupplementScorer:
 
         return allergen_valid, gluten_valid, vegan_valid, flags
 
+    # v4 P0.1b (2026-05-18): scope-aware diminishing returns for B4a.
+    # See docs/plans/SCORING_V4_PROPOSAL.md §10 and §16. Only sku/product_line
+    # resolutions score. brand_only routes to manufacturer trust (D), not B4a.
+    # claimed_only and needs_review score zero until reviewers triage.
+    #
+    # P0.1d (2026-05-18): provisional `label_asserted_product` tier closes the
+    # undercredit gap for whitelisted programs (USP / Informed Choice /
+    # Informed Sport / BSCG) with strong product-LABEL evidence, while their
+    # live scrapers are not yet built. Capped low (3) so a false-positive on
+    # the label can never bypass real SKU-level verification.
+    _B4A_SCOPE_POINTS = {
+        "sku":                    [8, 4, 2],
+        "product_line":           [6, 3, 1],
+        "label_asserted_product": [2, 1, 0],  # P0.1d provisional (label-only)
+        "brand_only":             [0, 0, 0],  # display/trust metadata only (lives on D)
+        "needs_review":           [0, 0, 0],  # held until reviewer triages
+        "claimed_only":           [0, 0, 0],  # regex/manufacturer claim, no registry proof
+    }
+    # B4a hard cap (v4): tighter than the v3 cap (15) because the dimension
+    # cap (testing/trust = 15) must accommodate B4b GMP + B4c batch as well.
+    _B4A_CAP = 12
+
+    # P0.1d label_asserted whitelist (strong testing/purity certs only).
+    # Programs outside this set never get the provisional 2/1/0 — even with
+    # label evidence. Sustainability / source-quality / regulatory certs
+    # (Friend of the Sea, MSC, GOED, Health Canada NPN, Labdoor) route to
+    # other v4 dimensions, not B4a.
+    _B4A_LABEL_ASSERTED_WHITELIST = frozenset({
+        "usp verified",
+        "informed choice",
+        "informed sport",
+        "bscg",
+    })
+    # IFOS scores label_asserted ONLY when the product is omega-like.
+    # Marine/omega-specific cert gate is enforced just below the whitelist
+    # check in _compute_certifications_bonus.
+    _B4A_LABEL_ASSERTED_OMEGA_ONLY_WHITELIST = frozenset({
+        "ifos",
+    })
+    _B4A_SCOPE_STRENGTH = {
+        "sku": 3,
+        "product_line": 2,
+        "label_asserted_product": 1,
+    }
+
     def _compute_certifications_bonus(self, product: Dict[str, Any], supp_type: str) -> Dict[str, float]:
         cert = product.get("certification_data", {})
         b4_cfg = self.config.get("section_B_safety_purity", {}).get("B4_quality_certifications", {})
-        b4a_cfg = b4_cfg.get("B4a_named_programs", {}) if isinstance(b4_cfg, dict) else {}
-        b4a_points_per = as_float(
-            b4a_cfg.get("points_per_program"),
-            5.0,
-        ) or 5.0
-        b4a_cap = as_float(
-            b4a_cfg.get("cap"),
-            15.0,
-        ) or 15.0
 
-        named_programs = safe_list(product.get("named_cert_programs"))
-        if not named_programs:
-            programs = cert.get("third_party_programs", {}).get("programs", [])
-            if isinstance(programs, list):
-                named_programs = [p.get("name") if isinstance(p, dict) else p for p in programs]
-
-        canonical_programs = []
-        for p in named_programs:
-            if not p:
-                continue
-            text = norm_text(p)
-            if text:
-                canonical_programs.append(text)
+        # v4 B4a: read verified_cert_programs (resolver-produced) — never the
+        # raw claimed/manufacturer-injected list. This is the integrity fix.
+        verified = product.get("verified_cert_programs")
+        if verified is None:
+            # Fall back to the nested location written by _collect_certification_data
+            verified = (cert or {}).get("verified_cert_programs")
+        if not isinstance(verified, list):
+            verified = []
 
         # Marine/omega-specific certs: only count when product contains omega-3 /
-        # marine ingredients. The list of marine-scope certs is sourced from
-        # cert_claim_rules.json (entries with product_scope=="marine") so adding
-        # a new marine cert to the data file propagates automatically.
+        # marine ingredients. (Same gate as v3, applied to verified entries.)
         marine_cert_tokens = self._get_marine_cert_tokens()
-        if canonical_programs:
-            omega_like = supp_type == "specialty" or any(
-                any(term in norm_text(i.get("name") or i.get("standard_name"))
-                    for term in ("omega", "fish oil", "krill", "cod liver", "marine", "dha", "epa"))
-                for i in self._get_active_ingredients(product)
-            )
-            filtered = []
-            for p in canonical_programs:
-                if any(mc in p for mc in marine_cert_tokens) and not omega_like:
-                    continue
-                filtered.append(p)
-            canonical_programs = sorted(set(filtered))
+        omega_like = supp_type == "specialty" or any(
+            any(term in norm_text(i.get("name") or i.get("standard_name"))
+                for term in ("omega", "fish oil", "krill", "cod liver", "marine", "dha", "epa"))
+            for i in self._get_active_ingredients(product)
+        )
 
-        b4a = clamp(0.0, b4a_cap, float(len(canonical_programs) * b4a_points_per))
+        # Group SCORING-ELIGIBLE entries by scope. An entry scores only if:
+        #   (1) scope in {sku, product_line, label_asserted_product}
+        #   (2) recency status is not scoring_blocked
+        #   (3) no scoring_blocked_reason set (covers unknown-recency too)
+        # The resolver writes scoring_blocked_reason whenever the snapshot is
+        # too stale to credit; we honor that here without re-deriving recency.
+        #
+        # P0.1d adds `label_asserted_product` for whitelisted programs only,
+        # with extra evidence-source + omega gates so manufacturer-injected
+        # claims and off-topic certs can't bypass the gate.
+        # Program-level dedupe is required because the enricher can see the
+        # same product-label cert through multiple paths (label cert list,
+        # raw label text, rules-db). Count each normalized program once and
+        # keep the strongest scoreable scope for that program.
+        best_scope_by_program: Dict[str, str] = {}
+        for entry in verified:
+            if not isinstance(entry, dict):
+                continue
+            scope = entry.get("scope") or ""
+            if scope not in ("sku", "product_line", "label_asserted_product"):
+                continue
+            if entry.get("scoring_blocked_reason"):
+                continue
+            program = norm_text(entry.get("program") or "")
+            if not program:
+                continue
+
+            # P0.1d gates: label_asserted_product only credits when
+            #   (a) evidence is product-label (never manufacturer-injection)
+            #   (b) program is in the testing/purity whitelist OR the
+            #       omega-only whitelist + product is omega-like.
+            if scope == "label_asserted_product":
+                if entry.get("evidence_source") != "product_label":
+                    continue
+                in_main_wl = program in self._B4A_LABEL_ASSERTED_WHITELIST
+                in_omega_wl = (
+                    program in self._B4A_LABEL_ASSERTED_OMEGA_ONLY_WHITELIST
+                    and omega_like
+                )
+                if not (in_main_wl or in_omega_wl):
+                    continue
+
+            # Marine cert gate (also applies to sku/product_line)
+            if any(mc in program for mc in marine_cert_tokens) and not omega_like:
+                continue
+
+            existing = best_scope_by_program.get(program)
+            if existing is None or self._B4A_SCOPE_STRENGTH[scope] > self._B4A_SCOPE_STRENGTH[existing]:
+                best_scope_by_program[program] = scope
+
+        from collections import defaultdict
+        scope_counts: Dict[str, int] = defaultdict(int)
+        for scope in best_scope_by_program.values():
+            scope_counts[scope] += 1
+
+        # Apply diminishing returns: SKU first, then product_line, then the
+        # provisional label_asserted tier. Each scope has its own rung list;
+        # the overall B4a cap (12) wins at the end.
+        b4a_raw = 0.0
+        for scope in ("sku", "product_line", "label_asserted_product"):
+            n = scope_counts[scope]
+            if n <= 0:
+                continue
+            rungs = self._B4A_SCOPE_POINTS[scope]
+            for i in range(min(n, len(rungs))):
+                b4a_raw += float(rungs[i])
+
+        b4a = clamp(0.0, float(self._B4A_CAP), b4a_raw)
 
         b4b_cfg = b4_cfg.get("B4b_gmp", {}) if isinstance(b4_cfg, dict) else {}
         b4b_certified = as_float(b4b_cfg.get("certified"), 4.0) or 4.0
@@ -2151,7 +2240,9 @@ class SupplementScorer:
             "B4a": b4a,
             "B4b": b4b,
             "B4c": b4c,
-            "named_program_count": float(len(canonical_programs)),
+            "named_program_count": float(len(best_scope_by_program)),
+            "_verified_programs_scored": sorted(best_scope_by_program.keys()),
+            "_verified_scope_counts": {k: v for k, v in scope_counts.items() if v > 0},
         }
 
     def _sum_total_active_mg(self, product: Dict[str, Any]) -> float:
@@ -2260,6 +2351,114 @@ class SupplementScorer:
     _B5_BASE = {"full": 0.0, "partial": 1.0, "none": 2.0}
     _B5_PROP_COEF = {"full": 0.0, "partial": 3.0, "none": 5.0}
     _B5_CAP = 10.0
+
+    # P0.2 (2026-05-18): class-aware opacity multipliers. See
+    # docs/plans/SCORING_V4_PROPOSAL.md §5. Defaults are overridden by
+    # config.section_B_safety_purity.B5_proprietary_blends.class_multipliers.
+    _B5_CLASS_MULTIPLIERS_DEFAULT = {
+        "probiotic": 0.4,           # strain-named + aggregate CFU is industry norm
+        "multi_or_prenatal": 1.3,   # each vitamin has a known RDA
+        "sports_active": 1.5,       # opaque blends hide stimulant / amino doses
+        "generic": 1.0,             # v3 behavior preserved
+    }
+    # Product-name keyword matchers for class routing.  Used only when the
+    # supp_type classifier did not already assign a strong class.
+    _B5_PRENATAL_KEYWORDS = re.compile(
+        r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b",
+        re.IGNORECASE,
+    )
+    _B5_SPORTS_KEYWORDS = re.compile(
+        r"\b(pre[-\s]?workout|post[-\s]?workout|intra[-\s]?workout|"
+        r"bcaa|eaa|creatine|beta[-\s]?alanine|nitric[-\s]?oxide|"
+        r"energy\s+matrix|pump|stim\s+stack|thermogenic|fat\s+burner|"
+        r"whey|casein|"
+        r"protein\s+(?:isolate|blend|complex|matrix|powder|concentrate|hydrolysate))\b",
+        re.IGNORECASE,
+    )
+    _B5_GENERIC_OVERRIDE_KEYWORDS = re.compile(
+        r"\b(dha|epa|omega[-\s]?3|fish\s+oil|krill|cod\s+liver|"
+        r"enzyme|enzymes|glucosamine|chondroitin|msm|collagen)\b",
+        re.IGNORECASE,
+    )
+    _B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES = {
+        "omega-3",
+        "omega 3",
+        "protein",
+        "collagen",
+        "enzyme",
+        "enzymes",
+    }
+
+    def _b5_class_for_product(self, product: Dict[str, Any]) -> str:
+        """Route a product to one of the B5 opacity classes:
+        probiotic / multi_or_prenatal / sports_active / generic.
+
+        Priority (refined post-P0.2 canary inspection on real catalog):
+          1. supp_type=probiotic — strongest signal (enricher inspected ingredients).
+          2. Product-name sports keyword — catches pre-workout / BCAA / creatine
+             stacks even when the enricher labeled them `multivitamin` because
+             of bundled vitamins (e.g., Nutricost PRE Pre-Workout, SR Whey,
+             GNC BCAA Gummy). Sports opacity hides per-component dose — the
+             worst case — so it outranks multivit routing.
+          3. Generic override for omega/enzyme/joint/collagen/protein products
+             that carry a broad category signal but are not RDA-panel multis.
+          4. supp_type=multivitamin — fall through here only when no sports
+             keyword matched.
+          5. Product-name prenatal keyword — catches `Prenatal DHA` etc. that
+             classify as `specialty` due to small active count.
+          6. primary_category=multivitamin fallback — supp_type=specialty /
+             targeted / unknown with primary_category=multivitamin (e.g., GoL
+             MyKind Men's/Women's Multi) routes to multi_or_prenatal.
+          7. Fallback: generic (v3 behavior).
+        """
+        st_payload = product.get("supplement_type", {})
+        supp_type = (
+            st_payload.get("type") if isinstance(st_payload, dict) else st_payload
+        ) or product.get("supp_type") or ""
+        supp_type = str(supp_type).strip().lower()
+
+        # Priority 1: probiotic supp_type wins everything.
+        if supp_type == "probiotic":
+            return "probiotic"
+
+        name_text = " ".join(
+            str(product.get(k) or "")
+            for k in ("product_name", "fullName", "brand_name", "bundleName")
+        )
+
+        # Priority 2: sports keywords beat multivitamin supp_type.
+        if self._B5_SPORTS_KEYWORDS.search(name_text):
+            return "sports_active"
+
+        primary_category = str(product.get("primary_category") or "").strip().lower()
+
+        # Priority 3: shipped catalog correction for products that carry a
+        # prenatal/multivitamin signal but are actually single-purpose omega,
+        # enzyme, joint-support, or collagen/protein products. Their opacity
+        # semantics are not the multi/prenatal RDA panel case.
+        if (
+            primary_category in self._B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES
+            or (
+                self._B5_GENERIC_OVERRIDE_KEYWORDS.search(name_text)
+                and not self._B5_PRENATAL_KEYWORDS.search(name_text)
+            )
+        ):
+            return "generic"
+
+        # Priority 4: multivitamin supp_type.
+        if supp_type == "multivitamin":
+            return "multi_or_prenatal"
+
+        # Priority 5: prenatal keyword on a non-multivit product.
+        if self._B5_PRENATAL_KEYWORDS.search(name_text):
+            return "multi_or_prenatal"
+
+        # Priority 6: primary_category=multivitamin fallback for specialty /
+        # targeted / unknown supp_type. Captures GoL Men's/Women's Multi.
+        if primary_category == "multivitamin":
+            return "multi_or_prenatal"
+
+        return "generic"
 
     def _blend_quantity_to_mg(self, amount: Any, unit: Any) -> Tuple[Optional[float], bool]:
         qty = as_float(amount, None)
@@ -2459,6 +2658,18 @@ class SupplementScorer:
         b5_cap = as_float(b5_cfg.get("cap"), self._B5_CAP)
         count_denom_min = int(as_float(b5_cfg.get("count_share_min_denominator_constant"), 8))
 
+        # P0.2: class-aware opacity multiplier.  Reads config overrides on
+        # top of the in-code defaults so a future tweak (e.g., raising sports
+        # to 1.7) doesn't require a code change.
+        cfg_multipliers = b5_cfg.get("class_multipliers") or {}
+        class_multipliers = dict(self._B5_CLASS_MULTIPLIERS_DEFAULT)
+        for k, v in cfg_multipliers.items():
+            mv = as_float(v, class_multipliers.get(k, 1.0))
+            if mv is not None:
+                class_multipliers[k] = float(mv)
+        blend_class = self._b5_class_for_product(product)
+        class_mult = float(class_multipliers.get(blend_class, 1.0))
+
         penalty_sum = 0.0
         for blend in deduped:
             level = norm_text(blend.get("disclosure_level"))
@@ -2517,14 +2728,20 @@ class SupplementScorer:
                 denom = max(total_active_count, count_denom_min)
                 impact = clamp(0.0, 1.0, hidden_count / max(denom, 1))
 
-            blend_penalty = 0.0
+            blend_penalty_raw = 0.0
             if level != "full":
-                blend_penalty = base + (prop_coef * impact)
-                penalty_sum += blend_penalty
+                blend_penalty_raw = base + (prop_coef * impact)
+            # P0.2: scale by class multiplier before accumulating.  `full`
+            # blends stay 0 (anything × 0 = 0), so the multiplier is a no-op
+            # on transparent blends regardless of class.
+            blend_penalty = blend_penalty_raw * class_mult
+            penalty_sum += blend_penalty
 
             evidence = {
                 "blend_name": blend.get("name") or "",
                 "disclosure_tier": level or "none",
+                "blend_class": blend_class,
+                "class_multiplier_applied": round(class_mult, 4),
                 "blend_total_mg": None if blend_total_mg is None else round(blend_total_mg, 4),
                 "disclosed_child_mg_sum": round(disclosed_child_mg_sum, 4),
                 "hidden_mass_mg": None if hidden_mass_mg is None else round(hidden_mass_mg, 4),

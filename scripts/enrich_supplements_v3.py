@@ -9056,16 +9056,21 @@ class SupplementEnricherV3:
         """
         Collect certification data for scoring Section B3.
 
-        ENHANCED (v1.0.0): Now uses cert_claim_rules.json for evidence-based detection.
-        - Returns evidence objects with full audit trail
-        - Validates claims with negative patterns
-        - Enforces scope rules (product-level only)
-        - Scoring decides points based on evidence_strength and score_eligible
+        v4 three-tier cert split (P0.1b, 2026-05-18):
+          - `third_party_programs.programs` — regex + rules-db hits from the
+            label and product text. DISPLAY ONLY. Was the source of the v3
+            overcredit bug because the scorer trusted it for points.
+          - `manufacturer_cert_signals` — brand/manufacturer-level evidence
+            from `top_manufacturers_data.json`. **Rerouted out of
+            third_party_programs** so brand-level claims no longer leak into
+            per-SKU scoring. DISPLAY ONLY.
+          - `verified_cert_programs` — resolver output: for each claimed/
+            manufacturer-signal program, ask the public cert registry
+            whether THIS SKU is listed. Only entries with scope ∈
+            {sku, product_line} and recency_status != scoring_blocked
+            actually score B4a points. SCORES POINTS.
 
-        Also derives safety verification flags from certifications:
-        - purity_verified: Product tested by program that tests for contaminants
-        - heavy_metal_tested: Product tested by program that tests for heavy metals
-        - label_accuracy_verified: Product tested by program that verifies label claims
+        Also derives safety verification flags from certifications.
         """
         all_text = self._get_all_product_text(product)
 
@@ -9075,33 +9080,43 @@ class SupplementEnricherV3:
         traceability = self._collect_traceability_data(all_text)
 
         # ENHANCED (v1.0.0): Collect using rules database with evidence objects
-        # These provide full audit trail for hardened scoring
         third_party_evidence = self._collect_claims_from_rules_db(product, 'third_party_programs')
         gmp_evidence = self._collect_claims_from_rules_db(product, 'gmp_certifications')
         batch_evidence = self._collect_claims_from_rules_db(product, 'batch_traceability')
 
-        # Merge evidence-based third-party detections into legacy structure.
-        # Scoring currently reads projected named_cert_programs from
-        # certification_data.third_party_programs.programs, so keep that source
-        # complete even when only rules-db evidence finds a match.
+        # Merge evidence-based third-party detections into the regex-derived
+        # third_party_programs. This is the CLAIMED set — labels + rules-db
+        # only. Manufacturer-level evidence does NOT go here in v4.
         third_party = self._merge_evidence_third_party_programs(third_party, third_party_evidence)
 
-        # Manufacturer-level certification injection: when the product matches a
-        # known top-manufacturer, cross-reference that manufacturer's evidence
-        # strings for certification keywords.  This catches certifications that
-        # are not printed on the physical label but are publicly verifiable
-        # at the company level (e.g., "NSF Certified for Sport" for Thorne).
-        third_party = self._inject_manufacturer_certs(third_party, product, gmp)
+        # Manufacturer-level cert evidence — was previously merged into
+        # third_party_programs (the v3 overcredit bug). v4 reroutes this to
+        # its own field, display-only, never scored. The function below now
+        # returns a separate dict instead of mutating third_party.
+        manufacturer_cert_signals = self._collect_manufacturer_cert_signals(product, gmp)
 
-        # Derive safety flags from certifications
-        # These programs test for heavy metals, contaminants, and/or label accuracy
+        # Cert resolver: ask the public registry whether THIS SKU is verified
+        # for any of the claimed-or-manufacturer-signaled programs. Output is
+        # the only thing the v4 B4a scorer reads.
+        verified_cert_programs = self._resolve_verified_cert_programs(
+            product=product,
+            third_party_programs=third_party,
+            manufacturer_signals=manufacturer_cert_signals,
+        )
+
+        # Derive safety flags from certifications (uses claimed set — display
+        # signals like "tested for heavy metals" still come from the regex/
+        # rules-db detection, not from registry verification).
         safety_flags = self._derive_safety_flags(third_party, product)
 
         return {
-            # Legacy format for backward compatibility
+            # Legacy format for backward compatibility (DISPLAY ONLY post-v4)
             "third_party_programs": third_party,
             "gmp": gmp,
             "batch_traceability": traceability,
+            # v4 three-tier cert split (P0.1b)
+            "manufacturer_cert_signals": manufacturer_cert_signals,
+            "verified_cert_programs": verified_cert_programs,
             # Safety verification flags for app display
             "purity_verified": safety_flags["purity_verified"],
             "heavy_metal_tested": safety_flags["heavy_metal_tested"],
@@ -9169,15 +9184,32 @@ class SupplementEnricherV3:
         (re.compile(r'\bGMP\b', re.I), None),  # GMP handled separately
     ]
 
-    def _inject_manufacturer_certs(
-        self, third_party: Dict, product: Dict, gmp: Dict
-    ) -> Dict:
-        """Inject certifications from top_manufacturers_data evidence strings.
+    _LABEL_ASSERTED_B4A_PROGRAMS = {
+        "usp verified",
+        "informed choice",
+        "informed sport",
+        "bscg",
+    }
+    _LABEL_ASSERTED_OMEGA_ONLY_PROGRAMS = {
+        "ifos",
+    }
 
-        When a product matches a known top-manufacturer, that manufacturer's
-        ``evidence`` list is scanned for certification keywords.  Detected
-        certifications are added to the third_party programs list (deduped).
-        GMP evidence is injected into the gmp dict in-place.
+    def _collect_manufacturer_cert_signals(
+        self, product: Dict, gmp: Dict
+    ) -> List[Dict]:
+        """v4 (P0.1b 2026-05-18): Returns brand/manufacturer-level cert evidence
+        as a SEPARATE list, no longer mutates ``third_party.programs``.
+
+        This was previously named ``_inject_manufacturer_certs`` and was the
+        source of the cert overcredit bug — it injected company-level certs
+        like "Thorne has NSF Sport on file" into every Thorne SKU's
+        third_party_programs, which then scored as if each SKU were
+        individually certified. The fix is to keep the signal (it's still
+        useful trust metadata) but route it to its own field so the scorer
+        cannot grant B4a points from it.
+
+        GMP evidence is still side-effected into the ``gmp`` dict — that's a
+        separate B4b concern, not the B4a bug we're fixing.
         """
         brand = product.get("brandName", "")
         contacts = product.get("contacts", [])
@@ -9193,55 +9225,156 @@ class SupplementEnricherV3:
 
         top_match = self._check_top_manufacturer(brand, manufacturer)
         if not top_match.get("found"):
-            return third_party
+            return []
 
         # Find the matching manufacturer entry to get evidence strings.
         top_db = self.databases.get("top_manufacturers_data", {})
         top_list = top_db.get("top_manufacturers", [])
-        evidence_strings = []
+        evidence_strings: List[str] = []
         matched_id = top_match.get("manufacturer_id", "")
         for entry in top_list:
             if entry.get("id") == matched_id:
-                evidence_strings = entry.get("evidence", [])
+                evidence_strings = entry.get("evidence", []) or []
                 break
 
         if not evidence_strings:
-            return third_party
+            return []
 
-        programs = list((third_party or {}).get("programs", []) or [])
-        existing = {
-            self._normalize_text((p or {}).get("name"))
-            for p in programs
-            if isinstance(p, dict)
-        }
-
+        signals: List[Dict] = []
+        seen: set = set()
         for ev_str in evidence_strings:
             for pattern, cert_name in self._MANUFACTURER_CERT_PATTERNS:
                 if not pattern.search(ev_str):
                     continue
                 if cert_name is None:
-                    # GMP — inject into gmp dict
+                    # GMP — still side-effected into the gmp dict (B4b, not B4a)
                     if not gmp.get("nsf_gmp") and not gmp.get("claimed"):
                         gmp["claimed"] = True
                         gmp["source"] = "manufacturer_evidence"
                     continue
                 key = self._normalize_text(cert_name)
-                if key in existing:
+                if key in seen:
                     continue
-                programs.append({
-                    "name": cert_name,
-                    "verified": True,
-                    "source": "manufacturer_evidence",
+                seen.add(key)
+                signals.append({
+                    "program": cert_name,
+                    "evidence": ev_str,
+                    "source": "top_manufacturers_data.json",
+                    "manufacturer_id": matched_id,
+                    "_note": "brand-level cert signal — display/trust metadata only, does NOT score B4a; resolver decides per-SKU verification",
                 })
-                existing.add(key)
                 break  # one cert per evidence string
+        return signals
 
-        merged = dict(third_party or {})
-        merged["programs"] = programs
-        merged["count"] = len(programs)
-        if programs:
-            merged["has_generic_claim_only"] = False
-        return merged
+    def _inject_manufacturer_certs(
+        self, third_party: Dict, product: Dict, gmp: Dict
+    ) -> Dict:
+        """DEPRECATED (P0.1b): kept for any external callers; do not call from
+        within enrichment. v4 uses _collect_manufacturer_cert_signals which
+        returns a separate list instead of mutating third_party. This shim
+        delegates to the new function and adds nothing to third_party so
+        existing tests against `programs` content don't accidentally pass."""
+        # Side-effect GMP only; do not touch third_party.programs.
+        _ = self._collect_manufacturer_cert_signals(product, gmp)
+        return third_party
+
+    def _resolve_verified_cert_programs(
+        self,
+        product: Dict,
+        third_party_programs: Dict,
+        manufacturer_signals: List[Dict],
+    ) -> List[Dict]:
+        """Ask the cert registry which claimed cert programs are SKU-verified
+        for THIS product. Returns a list of resolved entries (one per program
+        the resolver decided on). Only entries with scope in {sku, product_line}
+        AND no scoring_blocked_reason will earn B4a points in the scorer.
+        """
+        # Lazy-load the resolver registry once per enricher instance.
+        if not hasattr(self, "_cert_registry_cache"):
+            try:
+                from cert_resolver import CertRegistry  # local import to avoid hard dep at module load
+                self._cert_registry_cache = CertRegistry.load()
+            except Exception as exc:  # registry missing or malformed → empty
+                self.logger.warning("cert_resolver unavailable: %s (verified_cert_programs will be empty)", exc)
+                self._cert_registry_cache = None
+
+        registry = self._cert_registry_cache
+        if registry is None:
+            return []
+
+        from cert_resolver import resolve  # local import (kept colocated with usage)
+
+        brand = product.get("brandName", "") or ""
+        product_name = (
+            product.get("productName")
+            or product.get("fullName")
+            or ""
+        )
+
+        # Union of claimed (label/rules-db) + manufacturer signals. Track
+        # product-label provenance separately for P0.1d provisional scoring:
+        # unsupported scrapers may emit a low `label_asserted_product` scope,
+        # but manufacturer evidence must never earn that provisional credit.
+        claimed_programs: List[str] = []
+        seen: set = set()
+        label_claims_by_name: Dict[str, Dict] = {}
+        manufacturer_claim_names: set = set()
+        for prog in (third_party_programs or {}).get("programs", []) or []:
+            name = prog.get("name") if isinstance(prog, dict) else prog
+            if name and name not in seen:
+                seen.add(name)
+                claimed_programs.append(name)
+            if name:
+                label_claims_by_name[self._normalize_text(name)] = prog if isinstance(prog, dict) else {"name": name}
+        for sig in manufacturer_signals or []:
+            name = sig.get("program")
+            if name and name not in seen:
+                seen.add(name)
+                claimed_programs.append(name)
+            if name:
+                manufacturer_claim_names.add(self._normalize_text(name))
+
+        if not claimed_programs:
+            return []
+
+        resolutions = resolve(brand, product_name, claimed_programs, registry)
+        covered_programs = {
+            self._normalize_text(program)
+            for program in getattr(registry, "records_by_program", {}).keys()
+            if program
+        }
+
+        out: List[Dict] = []
+        for resolution in resolutions:
+            row = resolution.to_dict()
+            program = row.get("program") or ""
+            program_key = self._normalize_text(program)
+
+            # P0.1d provisional bridge: if a program has no live registry
+            # loaded yet and the product label explicitly claims it, emit a
+            # low-credit label_asserted_product scope for the scorer. Do not
+            # apply this to covered registries (NSF Sport/NSF 173) because a
+            # no-hit there is meaningful. Do not apply to manufacturer-only
+            # evidence, needs_review, or brand_only.
+            if (
+                row.get("scope") == "claimed_only"
+                and program_key in label_claims_by_name
+                and program_key not in covered_programs
+                and (
+                    program_key in self._LABEL_ASSERTED_B4A_PROGRAMS
+                    or program_key in self._LABEL_ASSERTED_OMEGA_ONLY_PROGRAMS
+                )
+            ):
+                source_claim = label_claims_by_name.get(program_key) or {}
+                row["scope"] = "label_asserted_product"
+                row["evidence_source"] = "product_label"
+                row["provisional"] = True
+                row["provisional_reason"] = "product-level label claim; live scraper not loaded for this program"
+                if isinstance(source_claim, dict):
+                    row["claim_source"] = source_claim.get("source") or "label"
+            out.append(row)
+
+        return out
 
     def _collect_third_party_certs(self, text: str) -> List[Dict]:
         """Collect third-party testing certifications"""
@@ -10110,7 +10243,16 @@ class SupplementEnricherV3:
                 name = program
             if name:
                 named_programs.append(name)
+        # Legacy display field: kept for UI + back-compat. Source is now CLAIMED
+        # only (label regex + rules-db). Manufacturer-level signals no longer
+        # land here — they live in certification_data.manufacturer_cert_signals.
         enriched["named_cert_programs"] = named_programs
+
+        # v4 P0.1b: project verified_cert_programs to top-level so the scorer
+        # reads it directly. Only these score B4a points (sku/product_line +
+        # not stale). Other fields are display-only.
+        enriched["verified_cert_programs"] = certification_data.get("verified_cert_programs", []) or []
+        enriched["manufacturer_cert_signals"] = certification_data.get("manufacturer_cert_signals", []) or []
 
         gmp_data = certification_data.get("gmp", {}) or {}
         if bool(gmp_data.get("nsf_gmp") or gmp_data.get("claimed")):

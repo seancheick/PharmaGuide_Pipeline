@@ -4338,9 +4338,16 @@ class TestConfigLockdown:
     # ------------------------------------------------------------------
     def _make_non_omega_with_ifos_product(self):
         """Product with IFOS certification but no omega-3/marine ingredients.
-        IFOS is marine-specific — it should NOT score for a non-omega product."""
+        IFOS is marine-specific — it should NOT score for a non-omega product.
+
+        v4 P0.1b: certs only score when in `verified_cert_programs` with
+        scope=sku/product_line. Provide that here so the test reflects the
+        new contract; the marine-cert gate then strips IFOS for non-omega."""
         p = make_base_product()
-        p["named_cert_programs"] = ["IFOS"]
+        p["named_cert_programs"] = ["IFOS"]  # legacy display
+        p["verified_cert_programs"] = [
+            {"program": "IFOS", "scope": "sku", "recency_status": "fresh", "match_confidence": 1.0}
+        ]
         # Ensure no omega/marine ingredients
         p["ingredient_quality_data"]["ingredients"] = [
             {
@@ -4357,9 +4364,16 @@ class TestConfigLockdown:
         return p
 
     def _make_omega_with_ifos_product(self):
-        """Fish oil product with IFOS certification — IFOS should score."""
+        """Fish oil product with IFOS certification — IFOS should score.
+
+        v4 P0.1b: provide verified_cert_programs so the new scorer recognizes
+        the cert. (Resolver would normally populate this from enrichment; the
+        test stubs it directly.)"""
         p = make_base_product()
-        p["named_cert_programs"] = ["IFOS"]
+        p["named_cert_programs"] = ["IFOS"]  # legacy display
+        p["verified_cert_programs"] = [
+            {"program": "IFOS", "scope": "sku", "recency_status": "fresh", "match_confidence": 1.0}
+        ]
         p["ingredient_quality_data"]["ingredients"] = [
             {
                 "name": "Fish Oil", "standard_name": "Fish Oil",
