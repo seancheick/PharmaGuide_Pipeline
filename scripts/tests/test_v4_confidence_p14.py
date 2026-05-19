@@ -113,6 +113,39 @@ def test_confidence_worst_case_rule_lowers_band_for_no_clinical_evidence() -> No
     assert out["shadow_score_v4_confidence"] == "low"
 
 
+def test_ingredient_human_underscore_study_types_are_moderate_not_absent() -> None:
+    """Regression for P1.4 confidence normalization.
+
+    v3-enriched evidence uses underscore study_type values such as
+    systematic_review_meta and rct_multiple. The confidence layer must not
+    normalize those into dash forms and then treat human evidence as absent.
+    """
+    from score_supplements_v4_shadow import score_product_v4_shadow
+
+    for study_type in ("systematic_review_meta", "rct_multiple", "rct_single"):
+        product = _product(
+            evidence_data={
+                "clinical_matches": [
+                    {
+                        "id": f"study-{study_type}",
+                        "ingredient": "Magnesium",
+                        "canonical_id": "magnesium",
+                        "study_type": study_type,
+                        "evidence_level": "ingredient-human",
+                        "effect_direction": "positive_strong",
+                        "total_enrollment": 250,
+                    }
+                ]
+            }
+        )
+        out = score_product_v4_shadow(product)
+        confidence = out["shadow_score_v4_breakdown"]["confidence"]
+
+        assert confidence["evidence"]["level"] == "moderate"
+        assert "product_specific_nct_absent" in confidence["evidence"]["drivers"]
+        assert "human_clinical_evidence_absent" not in confidence["evidence"]["drivers"]
+
+
 def test_no_rda_dose_reference_lowers_confidence_without_zeroing_score() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 

@@ -947,8 +947,8 @@ cutover.
 ```sql
 shadow_score_v4_100         REAL       -- the v4 0-100 number
 shadow_score_v4_module      TEXT       -- 'generic' | 'probiotic' | 'multi_or_prenatal' (and 'omega' if P1.5 promotes it)
-shadow_score_v4_verdict     TEXT       -- 'SAFE' | 'CAUTION' | 'UNSAFE' | 'BLOCKED' (from Layer 1 safety gate)
-shadow_score_v4_confidence  TEXT       -- 'high' | 'moderate' | 'low' (top-level confidence band from Layer 4)
+shadow_score_v4_verdict     TEXT       -- 'SAFE' | 'POOR' | 'CAUTION' | 'NOT_SCORED' | 'UNSAFE' | 'BLOCKED'
+shadow_score_v4_confidence  TEXT       -- scoreable rows: 'high' | 'moderate' | 'low'; gate failures: 'blocked_by_safety_gate' | 'blocked_by_completeness_gate'; non-generic module stubs may emit 'skeleton' until their module lands
 shadow_score_v4_breakdown   TEXT       -- JSON, full per-dimension audit trail (Formulation, Dose, Evidence, Trust, Transparency, manufacturer violations applied, penalties)
 shadow_score_v4_anchored    INTEGER    -- 1 if product is in the §12 canary set
 ```

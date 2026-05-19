@@ -20,18 +20,19 @@ SCORE_UNCERTAINTY_PTS = {"high": 1, "moderate": 3, "low": 7}
 
 PRODUCT_OR_BRANDED_EVIDENCE = {
     "product-human",
-    "product_human",
     "product-rct",
-    "product_rct",
     "product",
     "branded-rct",
-    "branded_rct",
 }
+# Values in these sets must use dash form because `_norm()` below converts
+# underscores to dashes. v3-enriched evidence commonly emits underscore
+# study_type values (`rct_multiple`, `systematic_review_meta`); confidence
+# should recognize those as human evidence after normalization.
 HUMAN_STUDY_TYPES = {
-    "systematic_review_meta",
-    "rct_multiple",
-    "rct_single",
-    "clinical_strain",
+    "systematic-review-meta",
+    "rct-multiple",
+    "rct-single",
+    "clinical-strain",
 }
 
 
