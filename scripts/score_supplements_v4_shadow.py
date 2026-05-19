@@ -39,6 +39,7 @@ from __future__ import annotations
 
 from typing import Any, Dict
 
+from scoring_v4.gate_safety import evaluate_safety_gate
 from scoring_v4.router import class_for_product
 
 
@@ -56,8 +57,8 @@ SHADOW_KEYS = (
 
 
 def _empty_shadow(module: str) -> Dict[str, Any]:
-    """The P1.0 skeleton shadow output — module routed, but no scoring
-    math yet. Subsequent slices fill these in.
+    """Skeleton shadow output — module routed, but no scoring math yet.
+    Subsequent slices fill the score/breakdown in.
     """
     return {
         "shadow_score_v4_100": None,
@@ -69,11 +70,41 @@ def _empty_shadow(module: str) -> Dict[str, Any]:
     }
 
 
+def _safety_gate_breakdown(safety_result) -> Dict[str, Any]:
+    """Render the safety-gate result into the shadow breakdown dict.
+    Carries explainability fields for the Flutter UI + audit reports."""
+    return {
+        "verdict": safety_result.verdict,
+        "blocking_reason": safety_result.blocking_reason,
+        "matched_substance": safety_result.matched_substance,
+        "safety_signals": list(safety_result.safety_signals),
+        "needs_review": safety_result.needs_review,
+        "short_circuits_scoring": safety_result.short_circuits_scoring,
+    }
+
+
 def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     """Score an enriched product against the v4 shadow scorer.
 
     Returns a dict of the six shadow columns. Never raises on malformed
     input — robustly falls back to the generic module + skeleton shape.
+
+    Pipeline (per §4 of SCORING_V4_PROPOSAL.md):
+      1. Router decides module (generic / probiotic / multi_or_prenatal).
+      2. Layer 1 Safety Gate. BLOCKED/UNSAFE short-circuit scoring
+         (score=None, confidence='blocked_by_safety_gate'). CAUTION
+         sets verdict but scoring continues.
+      3. Layer 2 Completeness Gate. [P1.2 — not online yet]
+      4. Layer 3 Scoring (per-module). [P1.3 — not online yet]
+      5. Layer 4 Confidence. [P1.4 — not online yet]
+
+    Note on `shadow_score_v4_anchored`: per §14, this flag means the
+    product is in the §12 canary set — NOT that the safety gate is
+    final. Safety-gate finality is captured by
+    `breakdown.safety_gate.short_circuits_scoring` + the
+    `blocked_by_safety_gate` confidence value. The canary-membership
+    decision belongs to a later slice; until then `anchored=False`
+    for every product.
 
     Args:
         enriched_product: A product dict as produced by
@@ -87,5 +118,28 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     """
     if not isinstance(enriched_product, dict):
         enriched_product = {}
+
     module = class_for_product(enriched_product)
-    return _empty_shadow(module)
+    shadow = _empty_shadow(module)
+
+    # Layer 1 — Safety Gate.
+    safety = evaluate_safety_gate(enriched_product)
+    shadow["shadow_score_v4_breakdown"]["safety_gate"] = _safety_gate_breakdown(safety)
+
+    if safety.short_circuits_scoring:
+        # BLOCKED / UNSAFE — final decision, no scoring math runs.
+        # `anchored` stays False — per §14 it's reserved for canary-set
+        # membership; safety-gate finality lives in the breakdown
+        # (`safety_gate.short_circuits_scoring`) + the confidence value.
+        shadow["shadow_score_v4_verdict"] = safety.verdict
+        shadow["shadow_score_v4_confidence"] = "blocked_by_safety_gate"
+        return shadow
+
+    if safety.verdict == "CAUTION":
+        # CAUTION carries forward but does not short-circuit. Scoring
+        # math still runs in P1.3+; the verdict will be reconciled with
+        # the score-band rules (CAUTION > POOR > SAFE) at output time.
+        shadow["shadow_score_v4_verdict"] = "CAUTION"
+
+    # Layer 2 / 3 / 4 not online yet — return skeleton.
+    return shadow
