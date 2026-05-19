@@ -1119,7 +1119,9 @@ def test_shadow_populates_formulation_when_generic() -> None:
     assert formulation["metadata"]["phase"] == "P1.3.1b_formulation_complete"
     assert formulation["metadata"]["deferred_components"] == []
     assert formulation["metadata"]["deferred_penalties"] == []
-    assert module_block["phase"] == "P1.3.1b_formulation_complete"
+    # Module-level phase rolls forward as later slices land. P1.3.2a is the
+    # current top of the stack; future P1.3.x slices will roll it again.
+    assert module_block["phase"].startswith("P1.3.")
 
 
 def test_shadow_top_level_score_still_none_at_p131() -> None:
@@ -1135,17 +1137,18 @@ def test_shadow_top_level_score_still_none_at_p131() -> None:
 
 
 def test_shadow_other_dimensions_still_skeleton_at_p131() -> None:
-    """Only formulation is online. dose/evidence/trust/transparency stay
-    score=None with empty components/penalties until P1.3.2-P1.3.5."""
+    """Originally asserted dose/evidence/trust/transparency all stay
+    skeleton after formulation lands. After P1.3.2a, dose is online via
+    the RDA/UL proxy; evidence/trust/transparency remain skeleton."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(
         _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
     )
     module_block = out["shadow_score_v4_breakdown"]["module"]
-    for name in ("dose", "evidence", "trust", "transparency"):
+    for name in ("evidence", "trust", "transparency"):
         dim = module_block["dimensions"][name]
-        assert dim["score"] is None, f"{name}.score should still be None at P1.3.1"
+        assert dim["score"] is None, f"{name}.score should still be None until its slice lands"
         assert dim["components"] == {}
         assert dim["penalties"] == {}
 

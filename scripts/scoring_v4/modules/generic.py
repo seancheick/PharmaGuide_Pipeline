@@ -30,10 +30,14 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; P1.3.6)
 
-P1.3.1b state: Formulation is complete; Dose / Evidence / Trust /
-Transparency and manufacturer adjustments remain skeleton. Subsequent
-P1.3.x slices fill them in-place; the shape never changes. Audit and
-score-delta tooling reads against this contract.
+P1.3.2a state: Formulation (P1.3.1b complete) and Dose (P1.3.2a proxy)
+are online. Dose uses an RDA/UL proxy because the supplemental-window
+math per §6 line 369 needs a `typical_dietary_intake` reference table
+that does not yet exist; the dose dimension's `metadata` carries
+explicit proxy markers so downstream tooling never mistakes the proxy
+band for final NIH/NHANES window math. Evidence / Trust / Transparency
+and manufacturer adjustments remain skeleton until their P1.3.x slices
+land. Audit and score-delta tooling reads against this contract.
 
 The module never raises on malformed input — empty / non-dict products
 get the same zero-math skeleton. Real input validation lives in the
@@ -47,10 +51,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
+from scoring_v4.modules.generic_dose import score_dose
 from scoring_v4.modules.generic_formulation import score_formulation
 
 
-PHASE_MARKER = "P1.3.1b_formulation_complete"
+PHASE_MARKER = "P1.3.2a_dose_proxy"
 
 
 # Dimension caps per §4 line 176. Order is rendering order in audit / UI.
@@ -191,8 +196,7 @@ def score_generic(product: Any) -> GenericModuleResult:
 
     result = GenericModuleResult(dimensions=_empty_dimensions())
 
-    # Layer 3 — Formulation dimension (P1.3.1b complete). Subsequent slices
-    # populate the other 4 dimensions and manufacturer + violations.
+    # Layer 3 — Formulation dimension (P1.3.1b complete).
     formulation_payload = score_formulation(product)
     formulation_dim = result.dimensions["formulation"]
     formulation_dim.score = formulation_payload["score"]
@@ -200,10 +204,21 @@ def score_generic(product: Any) -> GenericModuleResult:
     formulation_dim.penalties = formulation_payload["penalties"]
     formulation_dim.metadata = formulation_payload.get("metadata", {})
 
+    # Layer 3 — Dose dimension (P1.3.2a proxy). The dose breakdown carries
+    # explicit proxy-method metadata; the metadata is the contract that tells
+    # audit / score-delta / Flutter tooling not to mistake the proxy band
+    # for final NIH/NHANES supplemental-window math.
+    dose_payload = score_dose(product)
+    dose_dim = result.dimensions["dose"]
+    dose_dim.score = dose_payload["score"]
+    dose_dim.components = dose_payload["components"]
+    dose_dim.penalties = dose_payload["penalties"]
+    dose_dim.metadata = dose_payload.get("metadata", {})
+
     # Module-level phase reflects the most-recent slice landed. Audit
     # tooling reads this to know whether to trust the per-dimension
-    # scores. Formulation is complete; the overall module score remains
-    # unavailable until P1.3.6 final assembly.
+    # scores. The overall module score remains unavailable until P1.3.6
+    # final assembly.
     result.phase = PHASE_MARKER
 
     return result

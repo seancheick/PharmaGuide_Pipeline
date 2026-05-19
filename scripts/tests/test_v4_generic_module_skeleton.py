@@ -106,18 +106,27 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
         assert "components" in dim
         assert "penalties" in dim
 
-    # The 4 not-yet-online dimensions stay skeleton.
-    for name in ("dose", "evidence", "trust", "transparency"):
+    # The not-yet-online dimensions stay skeleton (evidence/trust/transparency
+    # at P1.3.2a; dose is partially online via the RDA/UL proxy).
+    for name in ("evidence", "trust", "transparency"):
         dim = breakdown["dimensions"][name]
         assert dim["score"] is None, f"{name}.score must be None until its slice lands"
         assert dim["components"] == {}, f"{name}.components must start empty"
         assert dim["penalties"] == {}, f"{name}.penalties must start empty"
 
-    # Formulation is partially populated at P1.3.1a.
+    # Formulation is complete at P1.3.1b.
     formulation = breakdown["dimensions"]["formulation"]
     assert formulation["score"] is not None
     assert formulation["components"]  # non-empty
     assert "A1_bio_score" in formulation["components"]
+
+    # Dose is the RDA/UL proxy at P1.3.2a. The metadata is the contract
+    # that signals the proxy state to downstream tooling.
+    dose = breakdown["dimensions"]["dose"]
+    assert dose["score"] is None
+    assert "supplemental_window_proxy" in dose["components"]
+    assert dose["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
+    assert dose["metadata"]["window_proxy_status"] == "not_evaluable_by_rda_proxy"
 
 
 def test_manufacturer_trust_separate_dimension_with_cap_5() -> None:
