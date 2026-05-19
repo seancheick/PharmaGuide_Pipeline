@@ -30,14 +30,15 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; P1.3.6)
 
-P1.3.2a state: Formulation (P1.3.1b complete) and Dose (P1.3.2a proxy)
-are online. Dose uses an RDA/UL proxy because the supplemental-window
-math per §6 line 369 needs a `typical_dietary_intake` reference table
-that does not yet exist; the dose dimension's `metadata` carries
-explicit proxy markers so downstream tooling never mistakes the proxy
-band for final NIH/NHANES window math. Evidence / Trust / Transparency
-and manufacturer adjustments remain skeleton until their P1.3.x slices
-land. Audit and score-delta tooling reads against this contract.
+P1.3.3 state: Formulation (P1.3.1b), Dose (P1.3.2a proxy), and
+Evidence (P1.3.3 multiplicative pipeline) are online. Dose uses an
+RDA/UL proxy because the supplemental-window math per §6 line 369 needs
+a `typical_dietary_intake` reference table that does not yet exist; the
+dose dimension's `metadata` carries explicit proxy markers so downstream
+tooling never mistakes the proxy band for final NIH/NHANES window math.
+Trust / Transparency and manufacturer adjustments remain skeleton until
+their P1.3.x slices land. Audit and score-delta tooling reads against
+this contract.
 
 The module never raises on malformed input — empty / non-dict products
 get the same zero-math skeleton. Real input validation lives in the
@@ -52,10 +53,11 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 from scoring_v4.modules.generic_dose import score_dose
+from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_formulation import score_formulation
 
 
-PHASE_MARKER = "P1.3.2a_dose_proxy"
+PHASE_MARKER = "P1.3.3_evidence_pipeline"
 
 
 # Dimension caps per §4 line 176. Order is rendering order in audit / UI.
@@ -176,8 +178,8 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
-    P1.3.1b state: Formulation dimension fully scored. Dose /
-    Evidence / Trust / Transparency still skeleton (None scores).
+    P1.3.3 state: Formulation, Dose, and Evidence are populated.
+    Trust / Transparency still skeleton (None scores).
     score_100 stays None until P1.3.6 final assembly.
 
     Never raises on malformed input. The completeness gate (Layer 2)
@@ -188,8 +190,8 @@ def score_generic(product: Any) -> GenericModuleResult:
 
     Returns:
         GenericModuleResult with the locked breakdown shape. The
-        formulation dimension's `score` is final for that dimension; other
-        dimensions remain None.
+        populated dimensions have phase metadata; skeleton dimensions
+        remain None until their slice lands.
     """
     if not isinstance(product, dict):
         product = {}
@@ -214,6 +216,14 @@ def score_generic(product: Any) -> GenericModuleResult:
     dose_dim.components = dose_payload["components"]
     dose_dim.penalties = dose_payload["penalties"]
     dose_dim.metadata = dose_payload.get("metadata", {})
+
+    # Layer 3 — Evidence dimension (P1.3.3 complete for generic).
+    evidence_payload = score_evidence(product)
+    evidence_dim = result.dimensions["evidence"]
+    evidence_dim.score = evidence_payload["score"]
+    evidence_dim.components = evidence_payload["components"]
+    evidence_dim.penalties = evidence_payload["penalties"]
+    evidence_dim.metadata = evidence_payload.get("metadata", {})
 
     # Module-level phase reflects the most-recent slice landed. Audit
     # tooling reads this to know whether to trust the per-dimension

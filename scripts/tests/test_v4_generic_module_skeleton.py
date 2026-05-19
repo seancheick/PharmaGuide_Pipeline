@@ -92,8 +92,8 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     """Subsequent slices fill these in-place. The shape is the contract:
     every dimension always has score / max / components / penalties keys.
 
-    Updated for P1.3.1a: formulation is now populated (8 of 14 sub-rubrics
-    online). Dose / Evidence / Trust / Transparency are still skeleton."""
+    Updated for P1.3.3: formulation, dose, and evidence are populated.
+    Trust / Transparency are still skeleton."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
@@ -106,9 +106,8 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
         assert "components" in dim
         assert "penalties" in dim
 
-    # The not-yet-online dimensions stay skeleton (evidence/trust/transparency
-    # at P1.3.2a; dose is partially online via the RDA/UL proxy).
-    for name in ("evidence", "trust", "transparency"):
+    # The not-yet-online dimensions stay skeleton.
+    for name in ("trust", "transparency"):
         dim = breakdown["dimensions"][name]
         assert dim["score"] is None, f"{name}.score must be None until its slice lands"
         assert dim["components"] == {}, f"{name}.components must start empty"
@@ -127,6 +126,13 @@ def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
     assert "supplemental_window_proxy" in dose["components"]
     assert dose["metadata"]["method"] == "rda_ul_proxy_until_dietary_intake_table"
     assert dose["metadata"]["window_proxy_status"] == "not_evaluable_by_rda_proxy"
+
+    # Evidence is online at P1.3.3. This fixture has no evidence matches, so
+    # the score is a real 0, not skeleton/unknown.
+    evidence = breakdown["dimensions"]["evidence"]
+    assert evidence["score"] == 0.0
+    assert "clinical_evidence_pipeline" in evidence["components"]
+    assert evidence["metadata"]["phase"] == "P1.3.3_evidence_pipeline"
 
 
 def test_manufacturer_trust_separate_dimension_with_cap_5() -> None:
