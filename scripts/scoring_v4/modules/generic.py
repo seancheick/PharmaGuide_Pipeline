@@ -30,11 +30,10 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; P1.3.6)
 
-P1.3.0 — this commit — establishes the scaffold and breakdown contract.
-Every dimension's `score` is None and its `components` / `penalties`
-sub-dicts are empty. Subsequent P1.3.x slices fill them in-place; the
-shape never changes. Audit and score-delta tooling reads against this
-contract.
+P1.3.1b state: Formulation is complete; Dose / Evidence / Trust /
+Transparency and manufacturer adjustments remain skeleton. Subsequent
+P1.3.x slices fill them in-place; the shape never changes. Audit and
+score-delta tooling reads against this contract.
 
 The module never raises on malformed input — empty / non-dict products
 get the same zero-math skeleton. Real input validation lives in the
@@ -51,7 +50,7 @@ from typing import Any, Dict, Optional
 from scoring_v4.modules.generic_formulation import score_formulation
 
 
-PHASE_MARKER = "P1.3.0_skeleton"
+PHASE_MARKER = "P1.3.1b_formulation_complete"
 
 
 # Dimension caps per §4 line 176. Order is rendering order in audit / UI.
@@ -172,8 +171,7 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
-    P1.3.1a state: Formulation dimension partially scored — 8 simple
-    sub-rubrics implemented, 6 complex ones deferred to P1.3.1b. Dose /
+    P1.3.1b state: Formulation dimension fully scored. Dose /
     Evidence / Trust / Transparency still skeleton (None scores).
     score_100 stays None until P1.3.6 final assembly.
 
@@ -185,7 +183,7 @@ def score_generic(product: Any) -> GenericModuleResult:
 
     Returns:
         GenericModuleResult with the locked breakdown shape. The
-        formulation dimension's `score` is a partial number; other
+        formulation dimension's `score` is final for that dimension; other
         dimensions remain None.
     """
     if not isinstance(product, dict):
@@ -193,7 +191,7 @@ def score_generic(product: Any) -> GenericModuleResult:
 
     result = GenericModuleResult(dimensions=_empty_dimensions())
 
-    # Layer 3 — Formulation dimension (P1.3.1a partial). Subsequent slices
+    # Layer 3 — Formulation dimension (P1.3.1b complete). Subsequent slices
     # populate the other 4 dimensions and manufacturer + violations.
     formulation_payload = score_formulation(product)
     formulation_dim = result.dimensions["formulation"]
@@ -204,8 +202,8 @@ def score_generic(product: Any) -> GenericModuleResult:
 
     # Module-level phase reflects the most-recent slice landed. Audit
     # tooling reads this to know whether to trust the per-dimension
-    # scores. The partial score on formulation is informative but not
-    # final until P1.3.1b lands the complex sub-rubrics.
-    result.phase = "P1.3.1a_formulation_partial"
+    # scores. Formulation is complete; the overall module score remains
+    # unavailable until P1.3.6 final assembly.
+    result.phase = PHASE_MARKER
 
     return result

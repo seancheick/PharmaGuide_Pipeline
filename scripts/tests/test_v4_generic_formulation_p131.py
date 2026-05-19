@@ -1,22 +1,24 @@
-"""v4 Generic Formulation dimension — P1.3.1a tests.
+"""v4 Generic Formulation dimension — P1.3.1 tests.
 
 Covers the 8 simple sub-rubrics implemented in this slice:
   A1 bio_score, A2 premium forms, A3 delivery, A4 absorption,
   A5a organic, A5e natural source, A6 single-ingredient,
   B1 dietary sugar penalty.
 
-The 6 complex sub-rubrics (A5b std botanical, A5c synergy 4-tier,
-A5d non-GMO, enzyme recognition, B0 moderate/watchlist, B1 harmful
-additives) are stubbed at 0.0 and exercised in P1.3.1b tests.
+P1.3.1b extends the same dimension with A5b standardized botanical,
+A5c synergy 4-tier, A5d non-GMO, enzyme recognition, B0 moderate /
+watchlist, and B1 harmful-additive penalties.
 
 Tests target the module API (`score_formulation`) directly AND verify
-the shadow scorer wires the partial dimension score through.
+the shadow scorer wires the dimension score through.
 """
 
 from __future__ import annotations
 
 import sys
 from pathlib import Path
+
+import pytest
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_ROOT = REPO_ROOT / "scripts"
@@ -483,55 +485,459 @@ def test_b1_dietary_sugar_clean_returns_zero() -> None:
     assert payload["penalties"]["B1_dietary_sugar"] == 0.0
 
 
-# --- Stubs / deferred -----------------------------------------------------
+# --- P1.3.1b formulation-excellence components ---------------------------
 
 
-def test_p131b_components_stubbed_to_zero() -> None:
-    """The 4 complex components deferred to P1.3.1b are recorded as 0.0
-    so the breakdown shape stays stable and audit tooling can distinguish
-    'deferred' from 'absent in blob'."""
-    from scoring_v4.modules.generic_formulation import (
-        DEFERRED_TO_P131B_COMPONENTS,
-        score_formulation,
+def test_a5b_standardized_botanical_full_credit_for_percentage_evidence() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            formulation_data={
+                "standardized_botanicals": [
+                    {"name": "Ashwagandha", "meets_threshold": True, "evidence_source": "percentage_local"}
+                ]
+            }
+        )
     )
 
-    payload = score_formulation(_product())
-    for name in DEFERRED_TO_P131B_COMPONENTS:
-        assert payload["components"][name] == 0.0
+    assert payload["components"]["A5b_standardized_botanical"] == 1.0
 
 
-def test_p131b_penalties_stubbed_to_zero() -> None:
-    from scoring_v4.modules.generic_formulation import (
-        DEFERRED_TO_P131B_PENALTIES,
-        score_formulation,
+def test_a5b_standardized_botanical_marker_word_only_half_credit() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            formulation_data={
+                "standardized_botanicals": [
+                    {"name": "Milk Thistle", "meets_threshold": True, "evidence_source": "marker_word_only"}
+                ]
+            }
+        )
     )
 
-    payload = score_formulation(_product())
-    for name in DEFERRED_TO_P131B_PENALTIES:
-        assert payload["penalties"][name] == 0.0
+    assert payload["components"]["A5b_standardized_botanical"] == 0.5
 
 
-def test_phase_marker_partial() -> None:
+def test_a5b_standardized_botanical_top_level_fallback() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(_product(has_standardized_botanical=True))
+
+    assert payload["components"]["A5b_standardized_botanical"] == 1.0
+
+
+def test_a5b_standardized_botanical_requires_threshold() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            formulation_data={
+                "standardized_botanicals": [
+                    {"name": "Ashwagandha", "meets_threshold": False, "evidence_source": "percentage_local"}
+                ]
+            }
+        )
+    )
+
+    assert payload["components"]["A5b_standardized_botanical"] == 0.0
+
+
+def test_a5c_synergy_cluster_tier_1_full_credit() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            formulation_data={
+                "synergy_clusters": [
+                    {
+                        "evidence_tier": 1,
+                        "match_count": 2,
+                        "matched_ingredients": [
+                            {"name": "Curcumin", "min_effective_dose": 500, "meets_minimum": True},
+                            {"name": "Piperine", "min_effective_dose": 5, "meets_minimum": True},
+                        ],
+                    }
+                ]
+            }
+        )
+    )
+
+    assert payload["components"]["A5c_synergy_cluster"] == 1.0
+
+
+@pytest.mark.parametrize(
+    ("tier", "expected"),
+    [(2, 0.75), (3, 0.5), (4, 0.25), (99, 0.25)],
+)
+def test_a5c_synergy_cluster_tier_points(tier: int, expected: float) -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            formulation_data={
+                "synergy_clusters": [
+                    {
+                        "evidence_tier": tier,
+                        "match_count": 2,
+                        "matched_ingredients": [
+                            {"name": "A", "min_effective_dose": 100, "meets_minimum": True},
+                            {"name": "B", "min_effective_dose": 100, "meets_minimum": False},
+                        ],
+                    }
+                ]
+            }
+        )
+    )
+
+    assert payload["components"]["A5c_synergy_cluster"] == expected
+
+
+def test_a5c_synergy_cluster_requires_two_matches_and_dose_checkable_items() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    single_match = score_formulation(
+        _product(
+            formulation_data={
+                "synergy_clusters": [
+                    {
+                        "evidence_tier": 1,
+                        "match_count": 1,
+                        "matched_ingredients": [
+                            {"name": "A", "min_effective_dose": 100, "meets_minimum": True},
+                        ],
+                    }
+                ]
+            }
+        )
+    )
+    no_dose_checks = score_formulation(
+        _product(
+            formulation_data={
+                "synergy_clusters": [
+                    {
+                        "evidence_tier": 1,
+                        "match_count": 2,
+                        "matched_ingredients": [{"name": "A"}, {"name": "B"}],
+                    }
+                ]
+            }
+        )
+    )
+
+    assert single_match["components"]["A5c_synergy_cluster"] == 0.0
+    assert no_dose_checks["components"]["A5c_synergy_cluster"] == 0.0
+
+
+def test_a5c_synergy_cluster_requires_half_of_checkable_items_dosed() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            formulation_data={
+                "synergy_clusters": [
+                    {
+                        "evidence_tier": 1,
+                        "match_count": 3,
+                        "matched_ingredients": [
+                            {"name": "A", "min_effective_dose": 100, "meets_minimum": True},
+                            {"name": "B", "min_effective_dose": 100, "meets_minimum": False},
+                            {"name": "C", "min_effective_dose": 100, "meets_minimum": False},
+                        ],
+                    }
+                ]
+            }
+        )
+    )
+
+    assert payload["components"]["A5c_synergy_cluster"] == 0.0
+
+
+def test_a5c_synergy_cluster_explicit_legacy_flag() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    true_payload = score_formulation(_product(synergy_cluster_qualified=True))
+    false_payload = score_formulation(_product(synergy_cluster_qualified=False))
+
+    assert true_payload["components"]["A5c_synergy_cluster"] == 0.75
+    assert false_payload["components"]["A5c_synergy_cluster"] == 0.0
+
+
+def test_a5d_non_gmo_project_verified_gets_half_point() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            labelText={
+                "parsed": {
+                    "certifications": ["Non-GMO-Project"],
+                    "cleanLabelClaims": ["Non-GMO Project Verified"],
+                }
+            }
+        )
+    )
+
+    assert payload["components"]["A5d_non_gmo"] == 0.5
+
+
+def test_a5d_generic_non_gmo_claim_no_credit() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(labelText={"parsed": {"certifications": ["Non-GMO-General"], "cleanLabelClaims": ["Non-GMO"]}})
+    )
+
+    assert payload["components"]["A5d_non_gmo"] == 0.0
+
+
+def test_a5_rollup_clamps_at_4_when_subcredits_exceed_cap() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    product = _product(
+        formulation_data={
+            "organic": {"usda_verified": True},
+            "standardized_botanicals": [
+                {"name": "Ashwagandha", "meets_threshold": True, "evidence_source": "percentage_local"}
+            ],
+            "synergy_clusters": [
+                {
+                    "evidence_tier": 1,
+                    "match_count": 2,
+                    "matched_ingredients": [
+                        {"name": "A", "min_effective_dose": 100, "meets_minimum": True},
+                        {"name": "B", "min_effective_dose": 100, "meets_minimum": True},
+                    ],
+                }
+            ],
+        },
+        labelText={"parsed": {"certifications": ["Non-GMO Project Verified"]}},
+        ingredients=[_ingredient(natural=True)],
+    )
+    payload = score_formulation(product)
+
+    assert payload["components"]["_A5_rollup_clamped_from"] == 4.5
+
+
+# --- P1.3.1b enzyme recognition ------------------------------------------
+
+
+def test_enzyme_recognition_named_single_ingredient_gets_half_point() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            supp_type="single_nutrient",
+            ingredients=[
+                _ingredient(name="Protease", canonical_id="protease", bio_score=10, quantity=None, unit=None)
+            ],
+        )
+    )
+
+    assert payload["components"]["enzyme_recognition"] == 0.5
+
+
+def test_enzyme_recognition_dedupes_and_caps_at_two_points() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    rows = [
+        _ingredient(name="Protease", canonical_id="protease", bio_score=10),
+        _ingredient(name="Protease 4.5", canonical_id="protease_2", bio_score=10),
+        _ingredient(name="Amylase", canonical_id="amylase", bio_score=10),
+        _ingredient(name="Lipase", canonical_id="lipase", bio_score=10),
+        _ingredient(name="Bromelain", canonical_id="bromelain", bio_score=10),
+        _ingredient(name="Papain", canonical_id="papain", bio_score=10),
+    ]
+    payload = score_formulation(_product(supp_type="single_nutrient", ingredients=rows))
+
+    assert payload["components"]["enzyme_recognition"] == 2.0
+
+
+def test_enzyme_recognition_requires_named_enzyme() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            supp_type="single_nutrient",
+            ingredients=[_ingredient(name="Digestive Enzyme Blend", canonical_id="enzyme_blend", bio_score=10)],
+        )
+    )
+
+    assert payload["components"]["enzyme_recognition"] == 0.0
+
+
+def test_enzyme_recognition_requires_single_ingredient_type() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            supp_type="multi",
+            ingredients=[_ingredient(name="Protease", canonical_id="protease", bio_score=10)],
+        )
+    )
+
+    assert payload["components"]["enzyme_recognition"] == 0.0
+
+
+# --- P1.3.1b safety/additive penalties -----------------------------------
+
+
+def test_b0_high_risk_exact_match_penalty_caps_at_ten() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            contaminant_data={
+                "banned_substances": {
+                    "substances": [
+                        {"name": "A", "status": "high_risk", "match_type": "exact"},
+                        {"name": "B", "status": "watchlist", "match_type": "alias"},
+                    ]
+                }
+            }
+        )
+    )
+
+    assert payload["penalties"]["B0_moderate_watchlist"] == -10.0
+
+
+def test_b0_watchlist_exact_penalty_five() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            contaminant_data={
+                "banned_substances": {
+                    "substances": [{"name": "Watch", "status": "watchlist", "match_type": "exact"}]
+                }
+            }
+        )
+    )
+
+    assert payload["penalties"]["B0_moderate_watchlist"] == -5.0
+
+
+def test_b0_legacy_moderate_severity_with_exactish_match_penalty_ten() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            contaminant_data={
+                "banned_substances": {
+                    "substances": [
+                        {
+                            "name": "Legacy moderate",
+                            "severity_level": "moderate",
+                            "match_method": "exact_name",
+                        }
+                    ]
+                }
+            }
+        )
+    )
+
+    assert payload["penalties"]["B0_moderate_watchlist"] == -10.0
+
+
+def test_b0_non_exact_match_does_not_auto_penalize() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            contaminant_data={
+                "banned_substances": {
+                    "substances": [{"name": "Maybe", "status": "high_risk", "match_type": "fuzzy"}]
+                }
+            }
+        )
+    )
+
+    assert payload["penalties"]["B0_moderate_watchlist"] == 0.0
+
+
+def test_b1_harmful_additives_severity_points_and_sugar_stays_separate() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            contaminant_data={
+                "harmful_additives": {
+                    "additives": [
+                        {"name": "A", "severity_level": "critical", "source_section": "inactive"},
+                        {"name": "B", "severity_level": "high", "source_section": "inactive"},
+                        {"name": "C", "severity_level": "moderate", "source_section": "inactive"},
+                        {"name": "D", "severity_level": "low", "source_section": "inactive"},
+                    ]
+                }
+            },
+            dietary_sensitivity_data={"sugar": {"level": "high"}},
+        )
+    )
+
+    assert payload["penalties"]["B1_harmful_additives"] == -6.5
+    assert payload["penalties"]["B1_dietary_sugar"] == -1.5
+
+
+def test_b1_harmful_additives_suppresses_low_and_moderate_actives_only() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            contaminant_data={
+                "harmful_additives": {
+                    "additives": [
+                        {"name": "Active low", "severity_level": "low", "source_section": "active"},
+                        {"name": "Active moderate", "severity_level": "moderate", "source_section": "active"},
+                        {"name": "Active high", "severity_level": "high", "source_section": "active"},
+                        {"name": "Active critical", "severity_level": "critical", "source_section": "active"},
+                    ]
+                }
+            }
+        )
+    )
+
+    assert payload["penalties"]["B1_harmful_additives"] == -5.0
+
+
+def test_b1_harmful_additives_dedupes_by_id_and_caps_at_15() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    rows = [
+        {"additive_id": "dup", "severity_level": "low", "source_section": "inactive"},
+        {"additive_id": "dup", "severity_level": "critical", "source_section": "inactive"},
+    ]
+    rows.extend(
+        {"additive_id": f"x{i}", "severity_level": "critical", "source_section": "inactive"}
+        for i in range(10)
+    )
+    payload = score_formulation(_product(contaminant_data={"harmful_additives": {"additives": rows}}))
+
+    assert payload["penalties"]["B1_harmful_additives"] == -15.0
+
+
+def test_b1_harmful_additives_anonymous_rows_do_not_dedupe_by_name() -> None:
+    """v3 only dedupes rows with stable additive_id/id. Anonymous rows
+    are treated as distinct, even when their display names match."""
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    rows = [
+        {"name": "Same display name", "severity_level": "low", "source_section": "inactive"},
+        {"name": "Same display name", "severity_level": "low", "source_section": "inactive"},
+    ]
+    payload = score_formulation(_product(contaminant_data={"harmful_additives": {"additives": rows}}))
+
+    assert payload["penalties"]["B1_harmful_additives"] == -1.0
+
+
+def test_p131b_metadata_marks_formulation_complete() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 
     payload = score_formulation(_product())
-    assert payload["phase"] == "P1.3.1a_partial"
 
-
-def test_deferred_metadata_lists_p131b_components_and_penalties() -> None:
-    """Audit tooling should not infer deferred state from zero-valued
-    stubs. The payload emits explicit metadata."""
-    from scoring_v4.modules.generic_formulation import (
-        DEFERRED_TO_P131B_COMPONENTS,
-        DEFERRED_TO_P131B_PENALTIES,
-        score_formulation,
-    )
-
-    payload = score_formulation(_product())
-
-    assert payload["metadata"]["phase"] == "P1.3.1a_partial"
-    assert payload["metadata"]["deferred_components"] == list(DEFERRED_TO_P131B_COMPONENTS)
-    assert payload["metadata"]["deferred_penalties"] == list(DEFERRED_TO_P131B_PENALTIES)
+    assert payload["phase"] == "P1.3.1b_formulation_complete"
+    assert payload["metadata"]["phase"] == "P1.3.1b_formulation_complete"
+    assert payload["metadata"]["deferred_components"] == []
+    assert payload["metadata"]["deferred_penalties"] == []
 
 
 # --- Dimension score assembly ---------------------------------------------
@@ -554,11 +960,8 @@ def test_dimension_score_assembles_8_components_minus_penalty() -> None:
 
 
 def test_dimension_score_clamps_to_max_30() -> None:
-    """At P1.3.1a, maximum positive sum is 15+4+3+3+2+1 = 28 (the A5
-    rollup is capped at 4 but only A5a+A5e are online = max 2). The
-    30-clamp can't actually be exercised from positives alone until
-    P1.3.1b lands A5b/A5c/A5d/enzyme. This test asserts the clamp is
-    in effect (score ≤ 30) and locks the P1.3.1a observed ceiling at 28."""
+    """P1.3.1b brings enough positive components online that the 30-point
+    dimension cap can be exercised directly."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(
@@ -566,6 +969,7 @@ def test_dimension_score_clamps_to_max_30() -> None:
         delivery_tier=1,
         absorption_enhancer_paired=True,
         formulation_data={"organic": {"usda_verified": True}},
+        labelText={"parsed": {"certifications": ["Non-GMO Project Verified"]}},
         ingredients=[
             _ingredient(canonical_id="a", bio_score=15, natural=True),
             _ingredient(canonical_id="b", bio_score=15, natural=True),
@@ -578,10 +982,23 @@ def test_dimension_score_clamps_to_max_30() -> None:
             _ingredient(canonical_id="i", bio_score=15, natural=True),
         ],
     )
+    product["formulation_data"]["standardized_botanicals"] = [
+        {"name": "Ashwagandha", "meets_threshold": True, "evidence_source": "percentage_local"}
+    ]
+    product["formulation_data"]["synergy_clusters"] = [
+        {
+            "evidence_tier": 1,
+            "match_count": 2,
+            "matched_ingredients": [
+                {"name": "A", "min_effective_dose": 100, "meets_minimum": True},
+                {"name": "B", "min_effective_dose": 100, "meets_minimum": True},
+            ],
+        }
+    ]
     payload = score_formulation(product)
 
     assert payload["score"] <= 30.0, "dimension cap must hold"
-    assert payload["score"] == 28.0, "P1.3.1a observed max from 8 components"
+    assert payload["score"] == 30.0
 
 
 def test_dimension_score_floors_at_zero() -> None:
@@ -612,8 +1029,8 @@ def test_dimension_score_handles_empty_product() -> None:
 # --- Worked example: Thorne Magnesium Bisglycinate (canary row 1) --------
 
 
-def test_thorne_mg_bisglycinate_partial_formulation_band() -> None:
-    """Worked example from §6 line 424. v4 P1.3.1a expected (8 components):
+def test_thorne_mg_bisglycinate_formulation_band() -> None:
+    """Worked example from §6 line 424. Expected:
       A1 bio_score ~14 (bisglycinate, single ingredient)
       A2 premium_forms 0 (one premium form, skip-first)
       A3 delivery 2 (capsule, tier 2)
@@ -622,8 +1039,7 @@ def test_thorne_mg_bisglycinate_partial_formulation_band() -> None:
       A5e natural 0 (synthetic chelate)
       A6 single-ingredient 1 (single + bio≥14)
       - sugar 0
-      = ~17 partial. Final number lands after P1.3.1b adds standardized/
-      synergy/non-GMO/enzyme/B0/B1_additives."""
+      = ~17 unless label/excellence/additive signals are present."""
     from scoring_v4.modules.generic_formulation import score_formulation
 
     product = _product(
@@ -642,15 +1058,13 @@ def test_thorne_mg_bisglycinate_partial_formulation_band() -> None:
     )
     payload = score_formulation(product)
 
-    # Expected partial band: 16-19 (matches §6 ~18.5 v3 baseline minus
-    # the not-yet-implemented A5b/A5c/A5d/enzyme credits).
     assert 16.0 <= payload["score"] <= 19.0
 
 
 # --- Shadow integration ---------------------------------------------------
 
 
-def test_shadow_populates_formulation_partial_when_generic() -> None:
+def test_shadow_populates_formulation_when_generic() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     product = _product(
@@ -668,13 +1082,13 @@ def test_shadow_populates_formulation_partial_when_generic() -> None:
     assert formulation["max"] == 30.0
     assert "A1_bio_score" in formulation["components"]
     assert "B1_dietary_sugar" in formulation["penalties"]
-    assert formulation["metadata"]["phase"] == "P1.3.1a_partial"
-    assert "A5b_standardized_botanical" in formulation["metadata"]["deferred_components"]
-    # Module phase reflects P1.3.1a.
-    assert module_block["phase"] == "P1.3.1a_formulation_partial"
+    assert formulation["metadata"]["phase"] == "P1.3.1b_formulation_complete"
+    assert formulation["metadata"]["deferred_components"] == []
+    assert formulation["metadata"]["deferred_penalties"] == []
+    assert module_block["phase"] == "P1.3.1b_formulation_complete"
 
 
-def test_shadow_top_level_score_still_none_at_p131a() -> None:
+def test_shadow_top_level_score_still_none_at_p131() -> None:
     """score_100 only populates at P1.3.6 final assembly. Top-level
     shadow_score_v4_100 stays None throughout P1.3.x."""
     from score_supplements_v4_shadow import score_product_v4_shadow
@@ -686,7 +1100,7 @@ def test_shadow_top_level_score_still_none_at_p131a() -> None:
     assert out["shadow_score_v4_confidence"] == "skeleton"
 
 
-def test_shadow_other_dimensions_still_skeleton_at_p131a() -> None:
+def test_shadow_other_dimensions_still_skeleton_at_p131() -> None:
     """Only formulation is online. dose/evidence/trust/transparency stay
     score=None with empty components/penalties until P1.3.2-P1.3.5."""
     from score_supplements_v4_shadow import score_product_v4_shadow
@@ -697,7 +1111,7 @@ def test_shadow_other_dimensions_still_skeleton_at_p131a() -> None:
     module_block = out["shadow_score_v4_breakdown"]["module"]
     for name in ("dose", "evidence", "trust", "transparency"):
         dim = module_block["dimensions"][name]
-        assert dim["score"] is None, f"{name}.score should still be None at P1.3.1a"
+        assert dim["score"] is None, f"{name}.score should still be None at P1.3.1"
         assert dim["components"] == {}
         assert dim["penalties"] == {}
 

@@ -159,7 +159,7 @@ def test_phase_marker_in_breakdown() -> None:
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
-    # P1.3.1a → "P1.3.1a_formulation_partial". Future slices roll this
+    # P1.3.1b → "P1.3.1b_formulation_complete". Future slices roll this
     # forward (P1.3.2 → "P1.3.2_dose_partial", etc.).
     assert breakdown["phase"].startswith("P1.3."), (
         f"phase marker '{breakdown['phase']}' should reflect the current P1.3.x slice"

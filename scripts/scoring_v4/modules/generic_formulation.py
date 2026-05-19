@@ -18,24 +18,23 @@ Per `docs/plans/SCORING_V4_PROPOSAL.md` §6 generic rubric — Formulation 30:
 
 Final: clamp(0, 30, sum(components) − sum(|penalties|)).
 
-P1.3.1a — THIS slice — implements the 8 "simple" sub-rubrics that are
-mostly direct field reads:
+P1.3.1a implemented the 8 "simple" sub-rubrics that are mostly direct
+field reads:
 
     A1 bio_score, A2 premium forms, A3 delivery, A4 absorption,
     A5a organic, A5e natural source, A6 single-ingredient,
     B1 dietary sugar.
 
-P1.3.1b — NEXT slice — implements the 6 "complex" sub-rubrics that
-need additional reverse-engineering:
+P1.3.1b implements the 6 "complex" sub-rubrics that need additional
+reverse-engineering:
 
     A5b standardized botanical, A5c synergy 4-tier, A5d non-GMO,
     enzyme recognition, B0 moderate/watchlist, B1 harmful additives.
 
-Until P1.3.1b lands, the 6 stubs return 0.0 and explicit metadata lists
-which component/penalty lines are deferred. The dimension score is the
-sum of the 8 partial components minus the dietary-sugar penalty, clamped
-to [0, 30]. Audit / score-delta tooling sees the phase marker and knows
-the score is not final.
+The dimension score is the positive component sum minus penalty
+magnitudes, clamped to [0, 30]. Audit / score-delta tooling sees the
+phase marker and knows formulation math is complete while downstream
+dimensions are still skeleton.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). The numeric rules below mirror v3's
@@ -44,8 +43,11 @@ A1-A6/B1 logic by re-implementation, not by import.
 
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional
+import math
+import re
+from typing import Any, Dict
 
+from audit_evidence_utils import derive_non_gmo_audit
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     canonical_key,
@@ -84,27 +86,64 @@ SINGLE_INGREDIENT_BIO_THRESHOLD = 14.0   # v4 single-ingredient bonus needs bio_
 
 # A5 rollup sub-credits (sum can exceed CAP_EXCELLENCE; we clamp at the end).
 A5A_ORGANIC = 1.0
+A5B_STANDARDIZED_FULL = 1.0
+A5B_STANDARDIZED_MARKER_ONLY = 0.5
+A5C_SYNERGY_TIER_POINTS = {1: 1.0, 2: 0.75, 3: 0.5, 4: 0.25}
+A5D_NON_GMO_PROJECT = 0.5
 A5E_NATURAL = 1.0
+
+ENZYME_POINTS_PER_NAMED = 0.5
+_KNOWN_ENZYMES = frozenset(
+    {
+        "amylase",
+        "protease",
+        "lipase",
+        "cellulase",
+        "lactase",
+        "bromelain",
+        "papain",
+        "pepsin",
+        "rennin",
+        "trypsin",
+        "chymotrypsin",
+        "serrapeptase",
+        "alpha-galactosidase",
+        "alpha galactosidase",
+        "hemicellulase",
+        "invertase",
+        "maltase",
+        "sucrase",
+        "xylanase",
+        "beta-glucanase",
+        "phytase",
+        "pectinase",
+        "catalase",
+        "superoxide dismutase",
+        "sod",
+        "nattokinase",
+    }
+)
+
+B0_HIGH_RISK_PENALTY = 10.0
+B0_WATCHLIST_PENALTY = 5.0
+B0_MODERATE_PENALTY = 10.0
+B0_CAP = 10.0
+
+B1_HARMFUL_ADDITIVE_CAP = 15.0
+B1_HARMFUL_ADDITIVE_POINTS = {
+    "critical": 3.0,
+    "high": 2.0,
+    "moderate": 1.0,
+    "low": 0.5,
+    "none": 0.0,
+}
 
 # B1 dietary-sugar penalty bands (mirrors scoring_config.B1_dietary_sugar_penalty).
 DIETARY_SUGAR_MODERATE_PENALTY = 0.5
 DIETARY_SUGAR_HIGH_PENALTY = 1.5
 DIETARY_SUGAR_CAP = 1.5
 
-PHASE_MARKER_PARTIAL = "P1.3.1a_partial"
-
-# Stub components — populated by P1.3.1b. Listed here so audit tooling can
-# distinguish "deliberately deferred to P1.3.1b" from "field absent in blob".
-DEFERRED_TO_P131B_COMPONENTS = (
-    "A5b_standardized_botanical",
-    "A5c_synergy_cluster",
-    "A5d_non_gmo",
-    "enzyme_recognition",
-)
-DEFERRED_TO_P131B_PENALTIES = (
-    "B0_moderate_watchlist",
-    "B1_harmful_additives",
-)
+PHASE_MARKER_COMPLETE = "P1.3.1b_formulation_complete"
 
 
 # --- A1 bio_score ---------------------------------------------------------
@@ -190,6 +229,71 @@ def _score_a5a_organic(product: Dict[str, Any]) -> float:
     return A5A_ORGANIC if bool(organic) else 0.0
 
 
+def _score_a5b_standardized_botanical(product: Dict[str, Any]) -> float:
+    """Standardized botanical credit. Full credit for threshold-backed
+    standardized extracts; marker-word-only evidence earns conservative
+    half credit. Mirrors v3's `A5b_standardized_botanical` branch."""
+    formulation = _safe_dict((product or {}).get("formulation_data"))
+    best = 0.0
+    for item in _safe_list(formulation.get("standardized_botanicals")):
+        if not isinstance(item, dict):
+            continue
+        if not item.get("meets_threshold"):
+            continue
+        evidence_source = _norm_text(item.get("evidence_source"))
+        if evidence_source == "marker_word_only":
+            best = max(best, A5B_STANDARDIZED_MARKER_ONLY)
+            continue
+        return A5B_STANDARDIZED_FULL
+    if best:
+        return best
+    return A5B_STANDARDIZED_FULL if bool((product or {}).get("has_standardized_botanical")) else 0.0
+
+
+def _score_a5c_synergy_cluster(product: Dict[str, Any]) -> float:
+    """4-tier synergy-cluster bonus. Dose-checkable clusters require at
+    least half the checkable ingredients to meet minimum effective dose;
+    the best qualifying tier wins."""
+    explicit = (product or {}).get("synergy_cluster_qualified")
+    if explicit is True:
+        return A5C_SYNERGY_TIER_POINTS[2]  # v3 legacy default for precomputed True
+    if explicit is False:
+        return 0.0
+
+    best = 0.0
+    formulation = _safe_dict((product or {}).get("formulation_data"))
+    for cluster in _safe_list(formulation.get("synergy_clusters")):
+        if not isinstance(cluster, dict):
+            continue
+        matched = [i for i in _safe_list(cluster.get("matched_ingredients")) if isinstance(i, dict)]
+        match_count = int(_as_float(cluster.get("match_count"), len(matched)) or 0)
+        if match_count < 2:
+            continue
+        checkable = [
+            item
+            for item in matched
+            if (_as_float(item.get("min_effective_dose"), 0.0) or 0.0) > 0
+        ]
+        if not checkable:
+            continue
+        dosed = [item for item in checkable if bool(item.get("meets_minimum"))]
+        if len(dosed) < math.ceil(len(checkable) / 2):
+            continue
+        tier = int(_as_float(cluster.get("evidence_tier"), 4) or 4)
+        best = max(best, A5C_SYNERGY_TIER_POINTS.get(tier, A5C_SYNERGY_TIER_POINTS[4]))
+    return best
+
+
+def _score_a5d_non_gmo(product: Dict[str, Any]) -> float:
+    """Non-GMO Project Verified earns +0.5. Generic non-GMO marketing
+    claims intentionally do not score."""
+    try:
+        audit = derive_non_gmo_audit(product or {})
+    except Exception:
+        return 0.0
+    return A5D_NON_GMO_PROJECT if bool(audit.get("project_verified")) else 0.0
+
+
 # --- A5e natural source (part of excellence rollup) -----------------------
 
 
@@ -223,6 +327,19 @@ def _score_single_ingredient_efficiency(product: Dict[str, Any]) -> float:
     return CAP_SINGLE_INGREDIENT
 
 
+def _score_enzyme_recognition(product: Dict[str, Any]) -> float:
+    """Named-enzyme recognition for single-ingredient generic products.
+    Dedupes enzyme families and caps at 2 points in v4."""
+    if supp_type_of(product) not in SINGLE_INGREDIENT_SUPP_TYPES:
+        return 0.0
+    seen: set[str] = set()
+    for ing in get_active_ingredients(product):
+        enzyme = _known_enzyme_name(ing)
+        if enzyme:
+            seen.add(enzyme)
+    return _clamp(0.0, CAP_ENZYME, len(seen) * ENZYME_POINTS_PER_NAMED)
+
+
 # --- B1 dietary sugar (penalty) -------------------------------------------
 
 
@@ -240,6 +357,59 @@ def _penalty_dietary_sugar(product: Dict[str, Any]) -> float:
     return 0.0
 
 
+def _penalty_b0_moderate_watchlist(product: Dict[str, Any]) -> float:
+    """Moderate/high-risk/watchlist safety signals that are not
+    short-circuit verdicts. Only exact/alias matches score here; fuzzy
+    review items stay non-scoring until reviewed."""
+    substances = _safe_list(
+        _safe_dict(_safe_dict((product or {}).get("contaminant_data")).get("banned_substances")).get("substances")
+    )
+    total = 0.0
+    for substance in substances:
+        if not isinstance(substance, dict):
+            continue
+        match_type = _normalize_match_type(
+            substance.get("match_type") or substance.get("match_method") or substance.get("match_basis")
+        )
+        if match_type not in {"exact", "alias"}:
+            continue
+        status = _norm_text(substance.get("status"))
+        severity = _norm_text(substance.get("severity_level") or substance.get("severity"))
+        if status == "high_risk":
+            total += B0_HIGH_RISK_PENALTY
+        elif status == "watchlist":
+            total += B0_WATCHLIST_PENALTY
+        elif severity == "moderate":
+            total += B0_MODERATE_PENALTY
+    return _clamp(0.0, B0_CAP, total)
+
+
+def _penalty_b1_harmful_additives(product: Dict[str, Any]) -> float:
+    """Named harmful-additive penalty. Low/moderate active-source rows are
+    suppressed to avoid penalizing active nutrients that share names with
+    excipient entries; high/critical still score."""
+    contaminant = _safe_dict((product or {}).get("contaminant_data"))
+    harmful = _safe_dict(contaminant.get("harmful_additives"))
+    additives = _safe_list(harmful.get("additives"))
+    if not additives:
+        additives = _safe_list((product or {}).get("harmful_additives"))
+
+    best_by_key: dict[str, float] = {}
+    for idx, additive in enumerate(additives):
+        if not isinstance(additive, dict):
+            continue
+        severity = _norm_text(additive.get("severity_level") or additive.get("severity"))
+        points = B1_HARMFUL_ADDITIVE_POINTS.get(severity, 0.0)
+        if points <= 0:
+            continue
+        source_section = _norm_text(additive.get("source_section") or additive.get("source"))
+        if source_section == "active" and severity in {"low", "moderate"}:
+            continue
+        key = str(additive.get("additive_id") or additive.get("id") or f"_anon_{idx}").strip().lower()
+        best_by_key[key] = max(best_by_key.get(key, 0.0), points)
+    return _clamp(0.0, B1_HARMFUL_ADDITIVE_CAP, sum(best_by_key.values()))
+
+
 # --- Public entry point ---------------------------------------------------
 
 
@@ -250,11 +420,8 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
     `score_generic()`. The caller (generic module orchestrator) merges
     this into `result.dimensions["formulation"]`.
 
-    P1.3.1a state: 8 simple components populated, 6 complex components
-    stubbed at 0 with explicit `metadata.deferred_components` /
-    `metadata.deferred_penalties` in the breakdown payload so audit /
-    score-delta tooling can distinguish "scored as zero" from "deferred
-    until next slice."
+    P1.3.1b state: all Formulation components and penalties are online.
+    Downstream dimensions remain skeleton until their P1.3.x slices land.
 
     Args:
         product: Enriched product dict. Treated as empty if not a dict.
@@ -266,7 +433,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
                 "max": 30.0,
                 "components": { ... },
                 "penalties": { ... },
-                "phase": "P1.3.1a_partial",
+                "phase": "P1.3.1b_formulation_complete",
                 "metadata": { ... },
             }
     """
@@ -279,28 +446,31 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         "A3_delivery_system":         round(_score_delivery_system(product), 4),
         "A4_absorption_enhancer":     round(_score_absorption_enhancer(product), 4),
         "A5a_organic":                round(_score_a5a_organic(product), 4),
+        "A5b_standardized_botanical": round(_score_a5b_standardized_botanical(product), 4),
+        "A5c_synergy_cluster":        round(_score_a5c_synergy_cluster(product), 4),
+        "A5d_non_gmo":                round(_score_a5d_non_gmo(product), 4),
         "A5e_natural_source":         round(_score_a5e_natural_source(product), 4),
         "A6_single_ingredient":       round(_score_single_ingredient_efficiency(product), 4),
+        "enzyme_recognition":         round(_score_enzyme_recognition(product), 4),
     }
-    # Stubs — P1.3.1b. Recorded as 0.0 with a sibling deferred-marker so
-    # audit tooling does not confuse "scored zero" with "not yet implemented".
-    for stub in DEFERRED_TO_P131B_COMPONENTS:
-        components[stub] = 0.0
 
     penalties: Dict[str, float] = {
         # Stored as negatives for ergonomic JSON inspection — the score
         # math subtracts |abs| values explicitly via _sum_penalty_magnitudes
         # so any sign convention error here can't silently inflate scores.
         "B1_dietary_sugar":           round(-_penalty_dietary_sugar(product), 4),
+        "B0_moderate_watchlist":       round(-_penalty_b0_moderate_watchlist(product), 4),
+        "B1_harmful_additives":        round(-_penalty_b1_harmful_additives(product), 4),
     }
-    for stub in DEFERRED_TO_P131B_PENALTIES:
-        penalties[stub] = 0.0
 
-    # A5 rollup hard-clamp at CAP_EXCELLENCE (4). Sub-credits A5a/A5e
-    # currently sum to ≤ 2; future P1.3.1b additions (std/synergy/non-GMO)
-    # bring the rollup max to ~4.5 and the clamp matters then. Applying
-    # the clamp now means P1.3.1b can't accidentally exceed it.
-    a5_sum = components["A5a_organic"] + components["A5e_natural_source"]
+    # A5 rollup hard-clamp at CAP_EXCELLENCE (4).
+    a5_sum = (
+        components["A5a_organic"]
+        + components["A5b_standardized_botanical"]
+        + components["A5c_synergy_cluster"]
+        + components["A5d_non_gmo"]
+        + components["A5e_natural_source"]
+    )
     a5_clamped = _clamp(0.0, CAP_EXCELLENCE, a5_sum)
     a5_excess = a5_sum - a5_clamped  # always ≥ 0; subtract to enforce the clamp
 
@@ -312,7 +482,7 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         + components["A4_absorption_enhancer"]
         + a5_clamped
         + components["A6_single_ingredient"]
-        # P1.3.1b stubs are 0 — already excluded from sum
+        + components["enzyme_recognition"]
     )
     penalty_total = _sum_penalty_magnitudes(penalties)
 
@@ -327,11 +497,11 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
         "max": DIMENSION_CAP,
         "components": components,
         "penalties": penalties,
-        "phase": PHASE_MARKER_PARTIAL,
+        "phase": PHASE_MARKER_COMPLETE,
         "metadata": {
-            "phase": PHASE_MARKER_PARTIAL,
-            "deferred_components": list(DEFERRED_TO_P131B_COMPONENTS),
-            "deferred_penalties": list(DEFERRED_TO_P131B_PENALTIES),
+            "phase": PHASE_MARKER_COMPLETE,
+            "deferred_components": [],
+            "deferred_penalties": [],
         },
     }
 
@@ -341,6 +511,35 @@ def score_formulation(product: Dict[str, Any]) -> Dict[str, Any]:
 
 def _clamp(lo: float, hi: float, value: float) -> float:
     return max(lo, min(hi, value))
+
+
+def _known_enzyme_name(ingredient: Dict[str, Any]) -> str | None:
+    """Return the canonical enzyme family if the ingredient name contains
+    a known enzyme as a word-bounded term."""
+    text = " ".join(
+        _norm_text(ingredient.get(field))
+        for field in ("name", "standard_name")
+        if _norm_text(ingredient.get(field))
+    )
+    if not text:
+        return None
+    for enzyme in sorted(_KNOWN_ENZYMES, key=len, reverse=True):
+        if re.search(rf"\b{re.escape(enzyme)}\b", text):
+            return enzyme
+    return None
+
+
+def _normalize_match_type(value: Any) -> str:
+    text = _norm_text(value)
+    if text in {"exact", "alias", "token_bounded"}:
+        return text
+    if text.startswith("exact"):
+        return "exact"
+    if "alias" in text:
+        return "alias"
+    if "token" in text:
+        return "token_bounded"
+    return text
 
 
 def _sum_penalty_magnitudes(penalties: Dict[str, float]) -> float:
