@@ -62,13 +62,26 @@ def build_enriched_index(root: Path) -> Dict[str, Dict[str, Any]]:
     return index
 
 
+def build_scored_index(root: Path) -> Dict[str, Dict[str, Any]]:
+    index: Dict[str, Dict[str, Any]] = {}
+    for path in root.glob("output_*_scored/scored/scored_cleaned_batch_*.json"):
+        for product in _iter_products(path):
+            dsld_id = _dsld_id(product)
+            if dsld_id:
+                index.setdefault(dsld_id, product)
+    return index
+
+
 def score_canaries(
     canaries: Iterable[Dict[str, Any]],
     enriched_index: Dict[str, Dict[str, Any]],
+    scored_index: Dict[str, Dict[str, Any]] | None = None,
 ) -> List[Dict[str, Any]]:
+    scored_index = scored_index or {}
     rows: List[Dict[str, Any]] = []
     for canary in canaries:
         dsld_id = str(canary.get("dsld_id") or "")
+        v3_sections = extract_v3_sections(scored_index.get(dsld_id, {}))
         base = {
             "canary_index": canary.get("canary_index"),
             "dsld_id": dsld_id,
@@ -77,6 +90,7 @@ def score_canaries(
             "primary_class": canary.get("primary_class"),
             "v3_shipped_score": canary.get("v3_shipped_score"),
             "v3_shipped_verdict": canary.get("v3_shipped_verdict"),
+            "v3_sections": v3_sections,
             "edge_cases": list(canary.get("edge_cases", [])) if isinstance(canary.get("edge_cases"), list) else [],
         }
         product = enriched_index.get(dsld_id)
@@ -146,7 +160,59 @@ def assign_rank_deltas(rows: List[Dict[str, Any]], group_key: str) -> List[Dict[
             before = _num(row.get("v3_shipped_score"))
             after = _num(row.get("v4_score"))
             row["score_delta_vs_v3"] = round(after - before, 4) if before is not None and after is not None else None
+            row["compression_flags"] = diagnose_compression(row)
     return output
+
+
+def extract_v3_sections(scored_product: Dict[str, Any]) -> Dict[str, float | None]:
+    breakdown = _safe_dict(scored_product.get("breakdown"))
+    section_b = _safe_dict(breakdown.get("B"))
+    return {
+        "A": _num(_safe_dict(breakdown.get("A")).get("score")),
+        "B": _num(section_b.get("score")),
+        "C": _num(_safe_dict(breakdown.get("C")).get("score")),
+        "D": _num(_safe_dict(breakdown.get("D")).get("score")),
+        "E": _num(_safe_dict(breakdown.get("E")).get("score")),
+        "violation_penalty": _num(breakdown.get("violation_penalty")),
+        "B_bonuses": _num(section_b.get("bonuses")),
+        "B_penalties": _num(section_b.get("penalties")),
+    }
+
+
+def diagnose_compression(row: Dict[str, Any]) -> List[str]:
+    """Explain likely causes when v4 canary scores drop materially.
+
+    This is diagnostic only. It should make P1.5 tuning conversations
+    concrete before any rubric change is made.
+    """
+    flags: List[str] = []
+    score_delta = _num(row.get("score_delta_vs_v3"))
+    if score_delta is None or score_delta > -15.0:
+        return flags
+
+    v3_sections = _safe_dict(row.get("v3_sections"))
+    v4_dimensions = _safe_dict(row.get("v4_dimensions"))
+    v3_b = _num(v3_sections.get("B"))
+    v4_trust = _num(v4_dimensions.get("trust")) or 0.0
+    v4_transparency = _num(v4_dimensions.get("transparency")) or 0.0
+    if v3_b is not None and v3_b >= 20.0 and (v4_trust + v4_transparency) <= 10.0:
+        flags.append("v3_safety_purity_base_not_represented")
+
+    confidence = _safe_dict(row.get("v4_confidence_detail"))
+    label = _safe_dict(confidence.get("label_completeness"))
+    label_drivers = set(str(driver) for driver in _safe_list(label.get("drivers")))
+    if row.get("v4_dimensions", {}).get("dose") is None and "dose_window_not_evaluable_by_rda_proxy" in label_drivers:
+        flags.append("dose_not_evaluable_with_large_score_drop")
+
+    evidence_score = _num(v4_dimensions.get("evidence"))
+    if evidence_score is not None and evidence_score < 6.0:
+        flags.append("low_evidence_dimension")
+
+    trust_score = _num(v4_dimensions.get("trust"))
+    if trust_score is not None and trust_score <= 0.0:
+        flags.append("zero_testing_trust_dimension")
+
+    return flags
 
 
 def summarize_records(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -184,6 +250,7 @@ def summarize_records(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         "scored": len(scored),
         "missing_enriched": len(missing),
         "max_abs_rank_delta": max(rank_deltas) if rank_deltas else None,
+        "compression_flag_counts": _flag_counts(scored),
         "verdict_counts": _counts(row.get("v4_verdict") for row in scored),
         "confidence_counts": _counts(row.get("v4_confidence") for row in scored),
         "module_counts": _counts(row.get("v4_module") for row in scored),
@@ -222,13 +289,14 @@ def _markdown(summary: Dict[str, Any], rows: List[Dict[str, Any]]) -> str:
         f"- Missing enriched: {summary['missing_enriched']}",
         f"- Max abs rank delta: {summary['max_abs_rank_delta']}",
         f"- Omega decision: **{summary['omega']['decision']}**",
+        f"- Compression flags: {summary.get('compression_flag_counts', {})}",
         "",
-        "| # | DSLD | Class | Product | v3 | v4 | Verdict | Conf | Rank Δ | Score Δ |",
-        "|---:|---|---|---|---:|---:|---|---|---:|---:|",
+        "| # | DSLD | Class | Product | v3 | v4 | Verdict | Conf | Rank Δ | Score Δ | Flags |",
+        "|---:|---|---|---|---:|---:|---|---|---:|---:|---|",
     ]
     for row in rows:
         lines.append(
-            "| {idx} | {dsld} | {klass} | {product} | {v3} | {v4} | {verdict} | {conf} | {rank} | {delta} |".format(
+            "| {idx} | {dsld} | {klass} | {product} | {v3} | {v4} | {verdict} | {conf} | {rank} | {delta} | {flags} |".format(
                 idx=row.get("canary_index") or "",
                 dsld=row.get("dsld_id") or "",
                 klass=row.get("primary_class") or "",
@@ -239,6 +307,7 @@ def _markdown(summary: Dict[str, Any], rows: List[Dict[str, Any]]) -> str:
                 conf=row.get("v4_confidence") or "",
                 rank=_fmt(row.get("rank_delta")),
                 delta=_fmt(row.get("score_delta_vs_v3")),
+                flags=", ".join(row.get("compression_flags", [])),
             )
         )
     lines.append("")
@@ -274,6 +343,10 @@ def _safe_dict(value: Any) -> Dict[str, Any]:
     return value if isinstance(value, dict) else {}
 
 
+def _safe_list(value: Any) -> list:
+    return value if isinstance(value, list) else []
+
+
 def _num(value: Any) -> float | None:
     try:
         if value is None:
@@ -298,6 +371,15 @@ def _counts(values: Iterable[Any]) -> Dict[str, int]:
     return dict(sorted(counts.items()))
 
 
+def _flag_counts(rows: Iterable[Dict[str, Any]]) -> Dict[str, int]:
+    counts: Dict[str, int] = {}
+    for row in rows:
+        for flag in _safe_list(row.get("compression_flags")):
+            key = str(flag)
+            counts[key] = counts.get(key, 0) + 1
+    return dict(sorted(counts.items()))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--canary", type=Path, default=DEFAULT_CANARY_PATH)
@@ -307,7 +389,8 @@ def main(argv: list[str] | None = None) -> int:
 
     canaries = load_canaries(args.canary)
     enriched_index = build_enriched_index(args.enriched_root)
-    rows = score_canaries(canaries, enriched_index)
+    scored_index = build_scored_index(args.enriched_root)
+    rows = score_canaries(canaries, enriched_index, scored_index)
     summary = summarize_records(rows)
     out_dir = args.out_dir
     if out_dir is None:

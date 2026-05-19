@@ -234,3 +234,112 @@ def test_score_canaries_extracts_top_level_shadow_fields() -> None:
     assert rows[0]["v4_module"] == "generic"
     assert rows[0]["v4_score"] is not None
     assert rows[0]["v4_confidence"] in {"high", "moderate", "low"}
+
+
+def test_extract_v3_sections_from_scored_breakdown() -> None:
+    from api_audit.v4_shadow_canary_report import extract_v3_sections
+
+    sections = extract_v3_sections(
+        {
+            "breakdown": {
+                "A": {"score": 17.2},
+                "B": {"score": 24.5, "bonuses": 0.0, "penalties": 0.5},
+                "C": {"score": 4.5},
+                "D": {"score": 3.0},
+                "violation_penalty": 0.0,
+            }
+        }
+    )
+
+    assert sections == {
+        "A": 17.2,
+        "B": 24.5,
+        "C": 4.5,
+        "D": 3.0,
+        "E": None,
+        "violation_penalty": 0.0,
+        "B_bonuses": 0.0,
+        "B_penalties": 0.5,
+    }
+
+
+def test_diagnose_compression_flags_missing_v3_safety_base() -> None:
+    from api_audit.v4_shadow_canary_report import diagnose_compression
+
+    row = {
+        "score_delta_vs_v3": -26.5,
+        "v3_sections": {"B": 24.5, "B_bonuses": 0.0, "B_penalties": 0.5},
+        "v4_dimensions": {
+            "trust": 0.0,
+            "transparency": 6.0,
+        },
+    }
+
+    flags = diagnose_compression(row)
+
+    assert "v3_safety_purity_base_not_represented" in flags
+
+
+def test_diagnose_compression_flags_not_evaluable_dose_plus_large_drop() -> None:
+    from api_audit.v4_shadow_canary_report import diagnose_compression
+
+    row = {
+        "score_delta_vs_v3": -26.5,
+        "v4_dimensions": {"dose": None},
+        "v4_confidence_detail": {
+            "label_completeness": {
+                "drivers": ["dose_window_not_evaluable_by_rda_proxy"]
+            }
+        },
+    }
+
+    flags = diagnose_compression(row)
+
+    assert "dose_not_evaluable_with_large_score_drop" in flags
+
+
+def test_score_canaries_attaches_v3_sections_and_compression_flags() -> None:
+    from api_audit.v4_shadow_canary_report import score_canaries
+
+    product = {
+        "status": "active",
+        "form_factor": "capsule",
+        "supplement_type": {"type": "single_nutrient"},
+        "ingredient_quality_data": {
+            "total_active": 1,
+            "ingredients_scorable": [
+                {
+                    "name": "Ashwagandha",
+                    "standard_name": "Ashwagandha",
+                    "canonical_id": "ashwagandha",
+                    "mapped": True,
+                    "quantity": 600,
+                    "unit": "mg",
+                    "bio_score": 14,
+                }
+            ],
+        },
+        "rda_ul_data": {
+            "adequacy_results": [{"nutrient": "Ashwagandha", "pct_rda": None, "pct_ul": None}],
+            "safety_flags": [],
+        },
+        "verified_cert_programs": [],
+    }
+    scored = {
+        "breakdown": {
+            "A": {"score": 17.2},
+            "B": {"score": 24.5, "bonuses": 0.0, "penalties": 0.5},
+            "C": {"score": 4.5},
+            "D": {"score": 3.0},
+        }
+    }
+
+    rows = score_canaries(
+        [{"dsld_id": "123", "primary_class": "herbal_branded_extract", "v3_shipped_score": 61.5}],
+        enriched_index={"123": product},
+        scored_index={"123": scored},
+    )
+
+    assert rows[0]["v3_sections"]["B"] == 24.5
+    assert "compression_flags" in rows[0]
+    assert "v3_safety_purity_base_not_represented" in rows[0]["compression_flags"]
