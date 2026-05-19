@@ -36,9 +36,9 @@ RDA/UL proxy because the supplemental-window math per §6 line 369 needs
 a `typical_dietary_intake` reference table that does not yet exist; the
 dose dimension's `metadata` carries explicit proxy markers so downstream
 tooling never mistakes the proxy band for final NIH/NHANES window math.
-Trust / Transparency and manufacturer adjustments remain skeleton until
-their P1.3.x slices land. Audit and score-delta tooling reads against
-this contract.
+Testing & Trust (P1.3.4) is online. Transparency and manufacturer
+adjustments remain skeleton until their P1.3.x slices land. Audit and
+score-delta tooling reads against this contract.
 
 The module never raises on malformed input — empty / non-dict products
 get the same zero-math skeleton. Real input validation lives in the
@@ -55,9 +55,10 @@ from typing import Any, Dict, Optional
 from scoring_v4.modules.generic_dose import score_dose
 from scoring_v4.modules.generic_evidence import score_evidence
 from scoring_v4.modules.generic_formulation import score_formulation
+from scoring_v4.modules.generic_trust import score_trust
 
 
-PHASE_MARKER = "P1.3.3_evidence_pipeline"
+PHASE_MARKER = "P1.3.4_testing_trust"
 
 
 # Dimension caps per §4 line 176. Order is rendering order in audit / UI.
@@ -178,8 +179,8 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
-    P1.3.3 state: Formulation, Dose, and Evidence are populated.
-    Trust / Transparency still skeleton (None scores).
+    P1.3.4 state: Formulation, Dose, Evidence, and Trust are populated.
+    Transparency still skeleton (None score).
     score_100 stays None until P1.3.6 final assembly.
 
     Never raises on malformed input. The completeness gate (Layer 2)
@@ -224,6 +225,14 @@ def score_generic(product: Any) -> GenericModuleResult:
     evidence_dim.components = evidence_payload["components"]
     evidence_dim.penalties = evidence_payload["penalties"]
     evidence_dim.metadata = evidence_payload.get("metadata", {})
+
+    # Layer 3 — Testing & Trust dimension (P1.3.4 complete for generic).
+    trust_payload = score_trust(product)
+    trust_dim = result.dimensions["trust"]
+    trust_dim.score = trust_payload["score"]
+    trust_dim.components = trust_payload["components"]
+    trust_dim.penalties = trust_payload["penalties"]
+    trust_dim.metadata = trust_payload.get("metadata", {})
 
     # Module-level phase reflects the most-recent slice landed. Audit
     # tooling reads this to know whether to trust the per-dimension

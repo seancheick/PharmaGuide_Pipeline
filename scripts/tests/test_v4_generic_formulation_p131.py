@@ -1136,18 +1136,18 @@ def test_shadow_top_level_score_still_none_at_p131() -> None:
     assert out["shadow_score_v4_confidence"] == "skeleton"
 
 
-def test_shadow_trust_and_transparency_still_skeleton_at_p133() -> None:
+def test_shadow_transparency_still_skeleton_at_p134() -> None:
     """Originally asserted dose/evidence/trust/transparency all stay
     skeleton after formulation lands. After P1.3.2a, dose is online via
-    the RDA/UL proxy. After P1.3.3, evidence is also online; only
-    trust/transparency remain skeleton."""
+    the RDA/UL proxy. After P1.3.3, evidence is also online. After
+    P1.3.4, Trust is online; only transparency remains skeleton."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 
     out = score_product_v4_shadow(
         _product(supp_type="single_nutrient", ingredients=[_ingredient(bio_score=14)])
     )
     module_block = out["shadow_score_v4_breakdown"]["module"]
-    for name in ("trust", "transparency"):
+    for name in ("transparency",):
         dim = module_block["dimensions"][name]
         assert dim["score"] is None, f"{name}.score should still be None until its slice lands"
         assert dim["components"] == {}
@@ -1156,6 +1156,10 @@ def test_shadow_trust_and_transparency_still_skeleton_at_p133() -> None:
     evidence = module_block["dimensions"]["evidence"]
     assert evidence["score"] == 0.0
     assert "clinical_evidence_pipeline" in evidence["components"]
+
+    trust = module_block["dimensions"]["trust"]
+    assert trust["score"] == 0.0
+    assert "B4a_verified_certifications" in trust["components"]
 
 
 # --- Architecture lock ----------------------------------------------------
