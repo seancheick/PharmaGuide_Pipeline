@@ -1119,9 +1119,9 @@ def test_shadow_populates_formulation_when_generic() -> None:
     assert formulation["metadata"]["phase"] == "P1.3.1b_formulation_complete"
     assert formulation["metadata"]["deferred_components"] == []
     assert formulation["metadata"]["deferred_penalties"] == []
-    # Module-level phase rolls forward as later slices land. P1.3.2a is the
-    # current top of the stack; future P1.3.x slices will roll it again.
-    assert module_block["phase"].startswith("P1.3.")
+    # Module-level phase now reflects the P1.5 final-assembly calibration;
+    # formulation's own metadata still records the P1.3.1b sub-slice.
+    assert module_block["phase"] == "P1.5_affine_calibration"
 
 
 def test_shadow_top_level_score_populated_at_p136() -> None:

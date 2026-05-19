@@ -30,10 +30,12 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; P1.3.6)
 
-P1.3.6 state: Formulation (P1.3.1b), Dose (P1.3.2a proxy), Evidence
+P1.5 state: Formulation (P1.3.1b), Dose (P1.3.2a proxy), Evidence
 (P1.3.3 multiplicative pipeline), Testing & Trust (P1.3.4), and
 Transparency (P1.3.5) are online, with Manufacturer Trust / Violations
-and final score assembly now wired. Dose uses an
+and final score assembly now wired. Final display score uses the P1.5
+affine calibration `25 + 0.75 * raw_score_100` to correct canary score
+compression without changing dimension math. Dose uses an
 RDA/UL proxy because the supplemental-window math per §6 line 369 needs
 a `typical_dietary_intake` reference table that does not yet exist; the
 dose dimension's `metadata` carries explicit proxy markers so downstream
@@ -63,7 +65,10 @@ from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.generic_transparency import score_transparency
 
 
-PHASE_MARKER = "P1.3.6_final_assembly"
+PHASE_MARKER = "P1.5_affine_calibration"
+CALIBRATION_INTERCEPT = 25.0
+CALIBRATION_SLOPE = 0.75
+CALIBRATION_METHOD = "affine_p15"
 
 
 # Dimension caps per §4 line 176. Order is rendering order in audit / UI.
@@ -162,6 +167,7 @@ class GenericModuleResult:
     dimensions: Dict[str, DimensionResult] = field(default_factory=dict)
     manufacturer_trust: ManufacturerTrustResult = field(default_factory=ManufacturerTrustResult)
     manufacturer_violations: ManufacturerViolationsResult = field(default_factory=ManufacturerViolationsResult)
+    raw_score_100: Optional[float] = None
     score_100: Optional[float] = None
     phase: str = PHASE_MARKER
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -175,6 +181,7 @@ class GenericModuleResult:
             "dimensions": {name: dim.to_dict() for name, dim in self.dimensions.items()},
             "manufacturer_trust": self.manufacturer_trust.to_dict(),
             "manufacturer_violations": self.manufacturer_violations.to_dict(),
+            "raw_score_100": self.raw_score_100,
             "score_100": self.score_100,
             "phase": self.phase,
             "metadata": dict(self.metadata),
@@ -190,8 +197,9 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
-    P1.3.6 state: Formulation, Dose, Evidence, Trust, Transparency,
-    Manufacturer Trust, Manufacturer Violations, and score_100 are populated.
+    P1.5 state: Formulation, Dose, Evidence, Trust, Transparency,
+    Manufacturer Trust, Manufacturer Violations, raw_score_100, and
+    calibrated score_100 are populated.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.
@@ -308,7 +316,11 @@ def _assemble_score(result: GenericModuleResult) -> None:
     manufacturer_trust = float(result.manufacturer_trust.score or 0.0)
     manufacturer_violations = float(result.manufacturer_violations.score or 0.0)
     adjusted = class_subtotal + manufacturer_trust + manufacturer_violations
-    result.score_100 = round(max(0.0, min(100.0, adjusted)), 1)
+    raw_score_100 = max(0.0, min(100.0, adjusted))
+    calibrated = CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100
+    calibrated_score_100 = max(0.0, min(100.0, calibrated))
+    result.raw_score_100 = round(raw_score_100, 1)
+    result.score_100 = round(calibrated_score_100, 1)
     result.metadata = {
         "phase": PHASE_MARKER,
         "raw_dimension_sum": round(raw_dimension_sum, 4),
@@ -318,5 +330,16 @@ def _assemble_score(result: GenericModuleResult) -> None:
         "manufacturer_trust_adjustment": round(manufacturer_trust, 4),
         "manufacturer_violation_adjustment": round(manufacturer_violations, 4),
         "adjusted_score_before_clamp": round(adjusted, 4),
+        "raw_score_100_pre_calibration": result.raw_score_100,
         "score_clamped": adjusted < 0.0 or adjusted > 100.0,
+        "calibration": {
+            "method": CALIBRATION_METHOD,
+            "intercept": CALIBRATION_INTERCEPT,
+            "slope": CALIBRATION_SLOPE,
+            "reason": "p1_5_canary_score_compression",
+            "raw_score_100": result.raw_score_100,
+            "calibrated_score_100": result.score_100,
+        },
+        "calibrated_score_before_clamp": round(calibrated, 4),
+        "calibrated_score_clamped": calibrated < 0.0 or calibrated > 100.0,
     }

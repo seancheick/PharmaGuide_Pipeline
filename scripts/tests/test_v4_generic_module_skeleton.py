@@ -163,28 +163,26 @@ def test_manufacturer_violations_separate_dimension_with_floor_minus_25() -> Non
     assert mv["components"]["manufacturer_violation_deduction"] == 0.0
 
 
-def test_score_100_is_populated_at_p136() -> None:
-    """P1.3.6 final assembly populates the module-level 0-100 score."""
+def test_score_100_is_populated_with_p15_affine_calibration() -> None:
+    """P1.5 keeps the raw module score and emits the calibrated score."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
     assert breakdown["score_100"] is not None
+    assert breakdown["raw_score_100"] is not None
     assert 0.0 <= breakdown["score_100"] <= 100.0
-    assert breakdown["metadata"]["phase"] == "P1.3.6_final_assembly"
+    assert 0.0 <= breakdown["raw_score_100"] <= 100.0
+    assert breakdown["metadata"]["phase"] == "P1.5_affine_calibration"
+    assert breakdown["metadata"]["calibration"]["method"] == "affine_p15"
 
 
 def test_phase_marker_in_breakdown() -> None:
     """Phase marker tells audit/delta tooling whether to expect dimension
-    scores. Rolls forward as each slice lands. Removed at P1.5 once full
-    math is online."""
+    scores. It now records the P1.5 final-assembly calibration slice."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
-    # P1.3.1b → "P1.3.1b_formulation_complete". Future slices roll this
-    # forward (P1.3.2 → "P1.3.2_dose_partial", etc.).
-    assert breakdown["phase"].startswith("P1.3."), (
-        f"phase marker '{breakdown['phase']}' should reflect the current P1.3.x slice"
-    )
+    assert breakdown["phase"] == "P1.5_affine_calibration"
 
 
 def test_score_generic_resilient_to_missing_product() -> None:

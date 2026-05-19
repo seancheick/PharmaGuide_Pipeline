@@ -193,11 +193,16 @@ def test_final_score_assembles_dimensions_plus_manufacturer_adjustments() -> Non
     breakdown = score_generic(_high_quality_product()).to_breakdown()
 
     class_subtotal = breakdown["metadata"]["class_subtotal"]
+    raw_score = min(100.0, class_subtotal + 5.0)
     assert class_subtotal > 0
     assert breakdown["manufacturer_trust"]["score"] == 5.0
     assert breakdown["manufacturer_violations"]["score"] == 0.0
-    assert breakdown["score_100"] == pytest.approx(min(100.0, class_subtotal + 5.0), rel=1e-6)
-    assert breakdown["phase"] == "P1.3.6_final_assembly"
+    assert breakdown["raw_score_100"] == pytest.approx(raw_score, rel=1e-6)
+    assert breakdown["score_100"] == pytest.approx(25.0 + 0.75 * raw_score, rel=1e-6)
+    assert breakdown["metadata"]["calibration"]["method"] == "affine_p15"
+    assert breakdown["metadata"]["calibration"]["intercept"] == 25.0
+    assert breakdown["metadata"]["calibration"]["slope"] == 0.75
+    assert breakdown["phase"] == "P1.5_affine_calibration"
 
 
 def test_not_evaluable_dose_dimension_is_excluded_from_denominator_not_zeroed() -> None:
@@ -223,8 +228,11 @@ def test_not_evaluable_dose_dimension_is_excluded_from_denominator_not_zeroed() 
     assert breakdown["dimensions"]["dose"]["score"] is None
     assert breakdown["metadata"]["excluded_dimensions"] == ["dose"]
     assert breakdown["metadata"]["evaluable_class_max"] == 75.0
-    assert breakdown["score_100"] > breakdown["metadata"]["class_subtotal"], (
+    assert breakdown["raw_score_100"] > breakdown["metadata"]["class_subtotal"], (
         "class subtotal should be rescaled to 100 when dose is not evaluable"
+    )
+    assert breakdown["score_100"] > breakdown["raw_score_100"], (
+        "P1.5 affine calibration should lift compressed scoreable generic rows"
     )
 
 
@@ -240,7 +248,21 @@ def test_final_score_clamps_after_positive_and_negative_manufacturer_adjustments
     }
     low = score_generic(bad).to_breakdown()
     assert 0.0 <= low["score_100"] <= 100.0
+    assert 0.0 <= low["raw_score_100"] <= 100.0
     assert low["manufacturer_violations"]["score"] == -25.0
+
+
+def test_p15_affine_calibration_preserves_raw_score_for_audit() -> None:
+    from scoring_v4.modules.generic import score_generic
+
+    breakdown = score_generic(_base_product()).to_breakdown()
+    raw = breakdown["raw_score_100"]
+    calibrated = breakdown["score_100"]
+
+    assert raw is not None
+    assert calibrated == pytest.approx(round(25.0 + 0.75 * raw, 1), rel=1e-6)
+    assert breakdown["metadata"]["raw_score_100_pre_calibration"] == raw
+    assert breakdown["metadata"]["calibration"]["reason"] == "p1_5_canary_score_compression"
 
 
 def test_shadow_top_level_score_and_verdict_are_populated_for_complete_generic() -> None:

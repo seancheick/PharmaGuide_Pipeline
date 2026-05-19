@@ -112,6 +112,7 @@ def score_canaries(
         shadow = score_product_v4_shadow(product)
         breakdown = shadow.get("shadow_score_v4_breakdown", {})
         module = _safe_dict(breakdown.get("module"))
+        module_metadata = _safe_dict(module.get("metadata"))
         dimensions = _safe_dict(module.get("dimensions"))
         confidence = breakdown.get("confidence") if isinstance(breakdown, dict) else None
         rows.append(
@@ -119,6 +120,8 @@ def score_canaries(
                 **base,
                 "status": "scored" if shadow.get("shadow_score_v4_100") is not None else "shadow_unscored",
                 "v4_score": shadow.get("shadow_score_v4_100"),
+                "v4_raw_score": module.get("raw_score_100"),
+                "v4_calibration": module_metadata.get("calibration"),
                 "v4_verdict": shadow.get("shadow_score_v4_verdict"),
                 "v4_confidence": shadow.get("shadow_score_v4_confidence"),
                 "v4_module": shadow.get("shadow_score_v4_module"),
@@ -159,7 +162,13 @@ def assign_rank_deltas(rows: List[Dict[str, Any]], group_key: str) -> List[Dict[
             row["rank_delta"] = (arank - erank) if erank is not None and arank is not None else None
             before = _num(row.get("v3_shipped_score"))
             after = _num(row.get("v4_score"))
+            raw_after = _num(row.get("v4_raw_score"))
             row["score_delta_vs_v3"] = round(after - before, 4) if before is not None and after is not None else None
+            row["raw_score_delta_vs_v3"] = (
+                round(raw_after - before, 4)
+                if before is not None and raw_after is not None
+                else None
+            )
             row["compression_flags"] = diagnose_compression(row)
     return output
 
@@ -186,7 +195,9 @@ def diagnose_compression(row: Dict[str, Any]) -> List[str]:
     concrete before any rubric change is made.
     """
     flags: List[str] = []
-    score_delta = _num(row.get("score_delta_vs_v3"))
+    score_delta = _num(row.get("raw_score_delta_vs_v3"))
+    if score_delta is None:
+        score_delta = _num(row.get("score_delta_vs_v3"))
     if score_delta is None or score_delta > -15.0:
         return flags
 
@@ -254,6 +265,10 @@ def summarize_records(rows: List[Dict[str, Any]]) -> Dict[str, Any]:
         "verdict_counts": _counts(row.get("v4_verdict") for row in scored),
         "confidence_counts": _counts(row.get("v4_confidence") for row in scored),
         "module_counts": _counts(row.get("v4_module") for row in scored),
+        "calibration_counts": _counts(
+            _safe_dict(row.get("v4_calibration")).get("method")
+            for row in scored
+        ),
         "omega": {
             "count": len(omega_rows),
             "max_abs_rank_delta": max(omega_rank_deltas) if omega_rank_deltas else None,
@@ -290,23 +305,26 @@ def _markdown(summary: Dict[str, Any], rows: List[Dict[str, Any]]) -> str:
         f"- Max abs rank delta: {summary['max_abs_rank_delta']}",
         f"- Omega decision: **{summary['omega']['decision']}**",
         f"- Compression flags: {summary.get('compression_flag_counts', {})}",
+        f"- Calibration: {summary.get('calibration_counts', {})}",
         "",
-        "| # | DSLD | Class | Product | v3 | v4 | Verdict | Conf | Rank Δ | Score Δ | Flags |",
-        "|---:|---|---|---|---:|---:|---|---|---:|---:|---|",
+        "| # | DSLD | Class | Product | v3 | Raw v4 | Cal v4 | Verdict | Conf | Rank Δ | Cal Δ | Raw Δ | Flags |",
+        "|---:|---|---|---|---:|---:|---:|---|---|---:|---:|---:|---|",
     ]
     for row in rows:
         lines.append(
-            "| {idx} | {dsld} | {klass} | {product} | {v3} | {v4} | {verdict} | {conf} | {rank} | {delta} | {flags} |".format(
+            "| {idx} | {dsld} | {klass} | {product} | {v3} | {raw_v4} | {v4} | {verdict} | {conf} | {rank} | {delta} | {raw_delta} | {flags} |".format(
                 idx=row.get("canary_index") or "",
                 dsld=row.get("dsld_id") or "",
                 klass=row.get("primary_class") or "",
                 product=str(row.get("product_name") or "").replace("|", "\\|"),
                 v3=_fmt(row.get("v3_shipped_score")),
+                raw_v4=_fmt(row.get("v4_raw_score")),
                 v4=_fmt(row.get("v4_score")),
                 verdict=row.get("v4_verdict") or "",
                 conf=row.get("v4_confidence") or "",
                 rank=_fmt(row.get("rank_delta")),
                 delta=_fmt(row.get("score_delta_vs_v3")),
+                raw_delta=_fmt(row.get("raw_score_delta_vs_v3")),
                 flags=", ".join(row.get("compression_flags", [])),
             )
         )
