@@ -10862,6 +10862,51 @@ class SupplementEnricherV3:
         "protected strain", "protected probiotic",
     ]
 
+    # P0.5 — fallback prebiotic vocabulary used when scoring_config.json is
+    # unavailable. Must stay byte-equal to the scorer's fallback in
+    # score_supplements.py _compute_probiotic_category_bonus so the two paths
+    # agree even without config. The authoritative list lives in
+    # scoring_config.section_A_ingredient_quality.probiotic_bonus.prebiotic_terms;
+    # _get_prebiotic_terms() prefers config and falls back here.
+    _PREBIOTIC_TERMS_FALLBACK = [
+        "inulin", "fos", "gos", "chicory", "acacia",
+        "beta-glucan", "beta glucan", "pea fiber", "lactulose",
+        "fructooligosaccharide", "galactooligosaccharide",
+        "xos", "xylooligosaccharide", "raftiline", "raftilose",
+    ]
+
+    def _get_prebiotic_terms(self) -> list:
+        """Single source of truth for prebiotic substring vocabulary.
+
+        Reads scripts/config/scoring_config.json section
+        `section_A_ingredient_quality.probiotic_bonus.prebiotic_terms` so
+        the enricher's display-side detection stays aligned with the
+        scorer's credit-side detection. Cached on the enricher instance
+        to avoid re-reading on every product.
+        """
+        cached = getattr(self, "_prebiotic_terms_cache", None)
+        if cached is not None:
+            return cached
+        terms: list = []
+        try:
+            from pathlib import Path as _Path
+            import json as _json
+            cfg_path = _Path(__file__).resolve().parent / "config" / "scoring_config.json"
+            cfg = _json.loads(cfg_path.read_text(encoding="utf-8"))
+            pro_cfg = (
+                cfg.get("section_A_ingredient_quality", {})
+                   .get("probiotic_bonus", {})
+            )
+            cfg_terms = pro_cfg.get("prebiotic_terms")
+            if isinstance(cfg_terms, list) and cfg_terms:
+                terms = [str(t).strip().lower() for t in cfg_terms if t]
+        except (OSError, ValueError, KeyError):
+            terms = []
+        if not terms:
+            terms = list(self._PREBIOTIC_TERMS_FALLBACK)
+        self._prebiotic_terms_cache = terms
+        return terms
+
     def _collect_probiotic_data(self, product: Dict) -> Dict:
         """
         Collect probiotic-specific data for scoring.
@@ -11074,6 +11119,29 @@ class SupplementEnricherV3:
                     break
             if prebiotic_found:
                 break
+
+        # P0.5 fallback: substring-match against the same prebiotic_terms list
+        # the scorer uses (`section_A_ingredient_quality.probiotic_bonus.
+        # prebiotic_terms` in scoring_config.json). Catches names the strict
+        # exact-match path misses, e.g. 'organic Acacia Fiber' (DSLD 274081
+        # GoL prenatal), 'FOS (Fructooligosaccharides)' with parentheticals,
+        # 'Pea Fiber', 'Raftiline'. Without this, scorer credits prebiotic
+        # but probiotic_detail.prebiotic_present stayed false — Codex's
+        # split-brain contract finding on the 2026-05-19 RC.
+        if not prebiotic_found:
+            prebiotic_terms = self._get_prebiotic_terms()
+            for ing_name, std_name in prebiotic_candidates:
+                ing_norm = (ing_name or '').lower()
+                std_norm = (std_name or '').lower()
+                for term in prebiotic_terms:
+                    if term and (term in ing_norm or term in std_norm):
+                        prebiotic_found = True
+                        # Prefer the (non-empty) ingredient label over the
+                        # bare term so the display field reads naturally.
+                        prebiotic_name = std_name or ing_name or term
+                        break
+                if prebiotic_found:
+                    break
 
         # Check for survivability coating
         has_survivability_coating = False
