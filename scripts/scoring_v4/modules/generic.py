@@ -48,6 +48,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
+from scoring_v4.modules.generic_formulation import score_formulation
+
 
 PHASE_MARKER = "P1.3.0_skeleton"
 
@@ -70,13 +72,16 @@ class DimensionResult:
     """One of the 5 class dimensions (Formulation, Dose, Evidence, Trust,
     Transparency). `score` is None until the dimension's scoring slice
     lands; `components` records positive sub-line credit (e.g. bio_score 15);
-    `penalties` records deductions (e.g. B1_harmful_additives -2.5).
+    `penalties` records deductions (e.g. B1_harmful_additives -2.5);
+    `metadata` carries phase/deferred-line data that audit tooling needs
+    without mixing non-numeric values into components or penalties.
     """
 
     score: Optional[float] = None
     max: float = 0.0
     components: Dict[str, float] = field(default_factory=dict)
     penalties: Dict[str, float] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -84,6 +89,7 @@ class DimensionResult:
             "max": self.max,
             "components": dict(self.components),
             "penalties": dict(self.penalties),
+            "metadata": dict(self.metadata),
         }
 
 
@@ -166,23 +172,40 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_generic(product: Any) -> GenericModuleResult:
     """Score a generic-class product against the v4 rubric.
 
-    At P1.3.0 — scaffold only. Returns a fully-instantiated result with
-    the 5 dimension caps locked and all scores None. Subsequent P1.3.x
-    slices populate `components`, `penalties`, and `score` per dimension.
+    P1.3.1a state: Formulation dimension partially scored — 8 simple
+    sub-rubrics implemented, 6 complex ones deferred to P1.3.1b. Dose /
+    Evidence / Trust / Transparency still skeleton (None scores).
+    score_100 stays None until P1.3.6 final assembly.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.
 
     Args:
         product: Enriched product dict (same contract as v3 consumes).
-            Currently unused — present for forward compatibility so
-            subsequent slices don't change the signature.
 
     Returns:
-        GenericModuleResult with the locked breakdown shape.
+        GenericModuleResult with the locked breakdown shape. The
+        formulation dimension's `score` is a partial number; other
+        dimensions remain None.
     """
-    # Touch `product` only to confirm safe access; do not mutate.
     if not isinstance(product, dict):
-        product = {}  # noqa: F841 — referenced once shape lands in P1.3.1+
+        product = {}
 
-    return GenericModuleResult(dimensions=_empty_dimensions())
+    result = GenericModuleResult(dimensions=_empty_dimensions())
+
+    # Layer 3 — Formulation dimension (P1.3.1a partial). Subsequent slices
+    # populate the other 4 dimensions and manufacturer + violations.
+    formulation_payload = score_formulation(product)
+    formulation_dim = result.dimensions["formulation"]
+    formulation_dim.score = formulation_payload["score"]
+    formulation_dim.components = formulation_payload["components"]
+    formulation_dim.penalties = formulation_payload["penalties"]
+    formulation_dim.metadata = formulation_payload.get("metadata", {})
+
+    # Module-level phase reflects the most-recent slice landed. Audit
+    # tooling reads this to know whether to trust the per-dimension
+    # scores. The partial score on formulation is informative but not
+    # final until P1.3.1b lands the complex sub-rubrics.
+    result.phase = "P1.3.1a_formulation_partial"
+
+    return result

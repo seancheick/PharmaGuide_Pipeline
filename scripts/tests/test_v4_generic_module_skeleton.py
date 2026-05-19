@@ -89,16 +89,35 @@ def test_dimension_caps_match_proposal_section_4() -> None:
 
 
 def test_dimension_skeleton_has_components_and_penalties_subdicts() -> None:
-    """Subsequent slices fill these in-place. Their shape is the contract."""
+    """Subsequent slices fill these in-place. The shape is the contract:
+    every dimension always has score / max / components / penalties keys.
+
+    Updated for P1.3.1a: formulation is now populated (8 of 14 sub-rubrics
+    online). Dose / Evidence / Trust / Transparency are still skeleton."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
 
+    # All dimensions have the contract keys regardless of phase.
     for name in EXPECTED_DIMENSION_CAPS:
         dim = breakdown["dimensions"][name]
-        assert dim["score"] is None, f"{name}.score must be None at P1.3.0"
+        assert "score" in dim
+        assert "max" in dim
+        assert "components" in dim
+        assert "penalties" in dim
+
+    # The 4 not-yet-online dimensions stay skeleton.
+    for name in ("dose", "evidence", "trust", "transparency"):
+        dim = breakdown["dimensions"][name]
+        assert dim["score"] is None, f"{name}.score must be None until its slice lands"
         assert dim["components"] == {}, f"{name}.components must start empty"
         assert dim["penalties"] == {}, f"{name}.penalties must start empty"
+
+    # Formulation is partially populated at P1.3.1a.
+    formulation = breakdown["dimensions"]["formulation"]
+    assert formulation["score"] is not None
+    assert formulation["components"]  # non-empty
+    assert "A1_bio_score" in formulation["components"]
 
 
 def test_manufacturer_trust_separate_dimension_with_cap_5() -> None:
@@ -135,11 +154,16 @@ def test_score_100_is_none_at_skeleton() -> None:
 
 def test_phase_marker_in_breakdown() -> None:
     """Phase marker tells audit/delta tooling whether to expect dimension
-    scores. Removed (or rolled forward to P1.5) once full math is online."""
+    scores. Rolls forward as each slice lands. Removed at P1.5 once full
+    math is online."""
     from scoring_v4.modules.generic import score_generic
 
     breakdown = score_generic(COMPLETE_GENERIC_PRODUCT).to_breakdown()
-    assert breakdown["phase"] == "P1.3.0_skeleton"
+    # P1.3.1a → "P1.3.1a_formulation_partial". Future slices roll this
+    # forward (P1.3.2 → "P1.3.2_dose_partial", etc.).
+    assert breakdown["phase"].startswith("P1.3."), (
+        f"phase marker '{breakdown['phase']}' should reflect the current P1.3.x slice"
+    )
 
 
 def test_score_generic_resilient_to_missing_product() -> None:
