@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 183,
+    "total_overrides": 300,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -3026,6 +3026,2112 @@
       "matched_product": "Omega-3 from Fish & Algae Oil 1200 mg (600 mg Omega-3) Softgels",
       "triage_reasons": [
         "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "175942",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "175944",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Natural Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "176044",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Strawberries and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "199511",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "199513",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Classic Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "199514",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cookies and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "199515",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Amplified",
+      "product": "Wheybolic 40 Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "209005",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "219703",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Classic Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "219788",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Strawberries and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "219791",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cookies and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "219898",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Creamy Peanut Butter",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "219925",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Banana Milkshake",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "219937",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Salted Caramel",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "219941",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cafe Latte",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "219962",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Natural Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "220019",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Natural Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "220023",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "220074",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Classic Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "228524",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Coconut Caramel",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "229495",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Thin Mints",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "229506",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cafe Latte",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "229510",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Amplified",
+      "product": "Wheybolic 40 Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "229695",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243050",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic 40 Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243085",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243092",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cafe Latte",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243101",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Banana Milkshake",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243105",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Creamy Peanut Butter",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243107",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cookies and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243112",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Strawberries and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243117",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243119",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Natural Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243124",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Girl Scouts S'mores",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243127",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Girl Scout Coconut Caramel",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "259821",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Girl Scout Thin Mints",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "259900",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Classic Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "259903",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Salted Caramel",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "259963",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Natural Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "259966",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Fruity Crisps",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "259970",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Girl Scouts Lemon",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "259992",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Classic Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "264834",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Classic Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "312709",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317419",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Girl Scouts Adventurefuls Caramel Brownie",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317420",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cookies and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317421",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Banana Milkshake",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317631",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317633",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Classic Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317634",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cookies and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317635",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Cookies and Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317636",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Creamy Peanut Butter",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317637",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Girl Scout Toast-Yay! Cinnamon French Toast",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317639",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Peppermint Mocha",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317640",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Pumpkin Cheesecake",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317641",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Salted Caramel",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317642",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic S'mores",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317643",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Chocolate Mint",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "334137",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Wheybolic Coconut Caramel",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "334444",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "42349",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Cookies & Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "42357",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Banana Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "42360",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Strength Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "45062",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Strength Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "45067",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Strength Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "45069",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Strength Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "45072",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Casein Chocolate Mousse",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "47225",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Casein Vanilla Frosting",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "47234",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "48181",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Power Strawberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "49632",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Power Strawberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "49634",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Natural Strawberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "49902",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "66983",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Casein",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "67394",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "69396",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "69411",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Power Strawberries & Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "69425",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "70297",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Casein Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74856",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Power French Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74872",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Power Chocolate Fudge",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "75022",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Amplified Wheybolic Extreme 60 Original Vanilla",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Wheybolic line/flavor variants matching the Informed Choice AMP Wheybolic listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "75206",
+      "record_id": "INFORMED_CHO_65E7FB3D998C",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Wheybolic",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP",
+      "product": "Pure Isolate Cookies & Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "208915",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Frosting",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221372",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Frosting",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221377",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Vanilla Custard",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221379",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Vanilla Custard",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221423",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Cookies & Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221432",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Strawberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221436",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Strawberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221458",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Lava Cake",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221460",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate S'mores",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "221471",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Cinnamon Churro",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "229563",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Peanut Butter Cup",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "229623",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Frosting",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "260134",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Vanilla Custard",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "264832",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Strawberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "264833",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Vanilla Custard",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "312706",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Frosting",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "314431",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Lava Cake",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "314432",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Peanut Butter Cup",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "314433",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Cookies & Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "314434",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Cookies & Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "314435",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Strawberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "314436",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Frosting",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317617",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Lava Cake",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317618",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Chocolate Peanut Butter Cup",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317619",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Cookies & Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317620",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Cookies & Cream",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317621",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Strawberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317622",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Vanilla Custard",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317623",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC AMP Advanced Muscle Performance",
+      "product": "Pure Isolate Vanilla Custard",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "317652",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Pure Isolate Chocolate Frosting",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "69457",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Pure Isolate Vanilla Custard",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "69462",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Pure Isolate Chocolate Frosting",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "69622",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "GNC Pro Performance AMP",
+      "product": "Pure Isolate Vanilla Custard",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed registry row and cluster members; products are GNC AMP Pure Isolate line/flavor variants matching the Informed Choice AMP Pure Isolate listing.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74695",
+      "record_id": "INFORMED_CHO_ED1FA32066E7",
+      "matched_brand": "GNC",
+      "matched_product": "AMP Pure Isolate",
+      "triage_reasons": [
+        "no_strong_signal"
       ]
     }
   ]

@@ -1,0 +1,237 @@
+"""P1.7.3 — manually reviewed cert cluster overrides.
+
+This is the score-moving half of P1.7, so the contract is deliberately
+stricter than P1.7.2 auto-rejects:
+
+  * no classifier-driven verification;
+  * reviewer must name one cluster by program + record_id;
+  * reviewer must provide an explicit action and note;
+  * mixed clusters can be limited to reviewed DSLD IDs.
+"""
+
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+SCRIPTS_ROOT = REPO_ROOT / "scripts"
+if str(SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS_ROOT))
+
+
+def _cluster_report(tmp_path: Path) -> Path:
+    report = {
+        "summary": {},
+        "clusters": [
+            {
+                "program": "Informed Choice",
+                "record_id": "INFORMED_CHO_65E7FB3D998C",
+                "matched_brand": "GNC",
+                "matched_product": "AMP Wheybolic",
+                "suggested_action": "review",
+                "member_count": 2,
+                "members": [
+                    {
+                        "dsld_id": "175942",
+                        "brand_name": "GNC Pro Performance AMP",
+                        "product_name": "Amplified Wheybolic Extreme 60 Original Chocolate",
+                        "matched_brand": "GNC",
+                        "matched_product": "AMP Wheybolic",
+                        "triage_hint": {"likely_action": "review", "reasons": ["no_strong_signal"]},
+                    },
+                    {
+                        "dsld_id": "175943",
+                        "brand_name": "GNC Pro Performance AMP",
+                        "product_name": "Amplified Wheybolic Extreme 60 Vanilla",
+                        "matched_brand": "GNC",
+                        "matched_product": "AMP Wheybolic",
+                        "triage_hint": {"likely_action": "review", "reasons": ["no_strong_signal"]},
+                    },
+                ],
+            },
+            {
+                "program": "USP Verified",
+                "record_id": "USP_MIXED",
+                "matched_brand": "Nature Made",
+                "matched_product": "Nature Made Vitamin D3 2000 IU Softgels",
+                "suggested_action": "review",
+                "member_count": 2,
+                "members": [
+                    {
+                        "dsld_id": "2000",
+                        "brand_name": "Nature Made",
+                        "product_name": "Vitamin D3 2000 IU",
+                        "matched_brand": "Nature Made",
+                        "matched_product": "Nature Made Vitamin D3 2000 IU Softgels",
+                        "triage_hint": {"likely_action": "review", "reasons": ["no_strong_signal"]},
+                    },
+                    {
+                        "dsld_id": "5000",
+                        "brand_name": "Nature Made",
+                        "product_name": "Vitamin D3 5000 IU",
+                        "matched_brand": "Nature Made",
+                        "matched_product": "Nature Made Vitamin D3 2000 IU Softgels",
+                        "triage_hint": {"likely_action": "reject", "reasons": ["dose_mismatch"]},
+                    },
+                ],
+            },
+        ],
+    }
+    path = tmp_path / "clusters.json"
+    path.write_text(json.dumps(report, indent=2))
+    return path
+
+
+def test_find_cluster_by_program_and_record_id(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import find_cluster
+
+    report = json.loads(_cluster_report(tmp_path).read_text())
+    cluster = find_cluster(
+        report.get("clusters", []),
+        program="Informed Choice",
+        record_id="INFORMED_CHO_65E7FB3D998C",
+    )
+
+    assert cluster["matched_product"] == "AMP Wheybolic"
+    assert len(cluster["members"]) == 2
+
+
+def test_find_cluster_errors_on_missing_cluster(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import find_cluster
+
+    report = json.loads(_cluster_report(tmp_path).read_text())
+    try:
+        find_cluster(report.get("clusters", []), program="IFOS", record_id="NOPE")
+    except ValueError as exc:
+        assert "cluster not found" in str(exc)
+    else:
+        raise AssertionError("missing cluster should raise")
+
+
+def test_generate_verified_product_line_overrides_requires_review_note(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import generate_reviewed_overrides, find_cluster
+
+    report = json.loads(_cluster_report(tmp_path).read_text())
+    cluster = find_cluster(report["clusters"], program="Informed Choice", record_id="INFORMED_CHO_65E7FB3D998C")
+
+    try:
+        generate_reviewed_overrides(
+            cluster,
+            action="verify_product_line",
+            review_note="",
+            reviewer="Sean",
+            review_source="p173_test",
+        )
+    except ValueError as exc:
+        assert "review note" in str(exc)
+    else:
+        raise AssertionError("empty review note should raise")
+
+
+def test_generate_verified_product_line_overrides_for_entire_cluster(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import generate_reviewed_overrides, find_cluster
+
+    report = json.loads(_cluster_report(tmp_path).read_text())
+    cluster = find_cluster(report["clusters"], program="Informed Choice", record_id="INFORMED_CHO_65E7FB3D998C")
+    overrides = generate_reviewed_overrides(
+        cluster,
+        action="verify_product_line",
+        review_note="Reviewer confirmed these are AMP Wheybolic flavor variants on the certified line.",
+        reviewer="Sean",
+        review_source="p173_test",
+    )
+
+    assert len(overrides) == 2
+    for entry in overrides:
+        assert entry["status"] == "verified"
+        assert entry["scope"] == "product_line"
+        assert entry["program"] == "Informed Choice"
+        assert entry["record_id"] == "INFORMED_CHO_65E7FB3D998C"
+        assert entry["matched_product"] == "AMP Wheybolic"
+        assert entry["reviewer"] == "Sean"
+        assert "Reviewer confirmed" in entry["reason"]
+        assert "reviewed_at" in entry
+
+
+def test_generate_reviewed_overrides_can_limit_to_member_dsld_ids(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import generate_reviewed_overrides, find_cluster
+
+    report = json.loads(_cluster_report(tmp_path).read_text())
+    cluster = find_cluster(report["clusters"], program="USP Verified", record_id="USP_MIXED")
+    overrides = generate_reviewed_overrides(
+        cluster,
+        action="verify_product_line",
+        review_note="Only the 2000 IU product matches this USP row; 5000 IU remains unreviewed.",
+        reviewer="Sean",
+        review_source="p173_test",
+        member_dsld_ids={"2000"},
+    )
+
+    assert [entry["dsld_id"] for entry in overrides] == ["2000"]
+    assert overrides[0]["product"] == "Vitamin D3 2000 IU"
+
+
+def test_generate_reject_overrides_for_reviewed_members(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import generate_reviewed_overrides, find_cluster
+
+    report = json.loads(_cluster_report(tmp_path).read_text())
+    cluster = find_cluster(report["clusters"], program="USP Verified", record_id="USP_MIXED")
+    overrides = generate_reviewed_overrides(
+        cluster,
+        action="reject",
+        review_note="Dose does not match the 2000 IU registry row.",
+        reviewer="Sean",
+        review_source="p173_test",
+        member_dsld_ids={"5000"},
+    )
+
+    assert [entry["dsld_id"] for entry in overrides] == ["5000"]
+    assert overrides[0]["status"] == "rejected"
+    assert overrides[0]["scope"] == "claimed_only"
+
+
+def test_cli_dry_run_does_not_modify_overrides(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import main
+
+    cluster_report = _cluster_report(tmp_path)
+    overrides_path = tmp_path / "overrides.json"
+    overrides_path.write_text(json.dumps({"_metadata": {"total_overrides": 0}, "overrides": []}, indent=2))
+
+    exit_code = main([
+        "--cluster-report", str(cluster_report),
+        "--overrides-path", str(overrides_path),
+        "--program", "Informed Choice",
+        "--record-id", "INFORMED_CHO_65E7FB3D998C",
+        "--action", "verify_product_line",
+        "--reviewer", "Sean",
+        "--review-note", "Reviewed the cluster table and confirmed line variants.",
+        "--dry-run",
+    ])
+
+    assert exit_code == 0
+    assert json.loads(overrides_path.read_text())["overrides"] == []
+
+
+def test_cli_apply_writes_reviewed_overrides(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import main
+
+    cluster_report = _cluster_report(tmp_path)
+    overrides_path = tmp_path / "overrides.json"
+    overrides_path.write_text(json.dumps({"_metadata": {"total_overrides": 0}, "overrides": []}, indent=2))
+
+    exit_code = main([
+        "--cluster-report", str(cluster_report),
+        "--overrides-path", str(overrides_path),
+        "--program", "Informed Choice",
+        "--record-id", "INFORMED_CHO_65E7FB3D998C",
+        "--action", "verify_product_line",
+        "--reviewer", "Sean",
+        "--review-note", "Reviewed the cluster table and confirmed line variants.",
+    ])
+
+    payload = json.loads(overrides_path.read_text())
+    assert exit_code == 0
+    assert payload["_metadata"]["total_overrides"] == 2
+    assert {entry["scope"] for entry in payload["overrides"]} == {"product_line"}
