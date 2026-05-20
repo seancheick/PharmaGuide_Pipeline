@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 376,
+    "total_overrides": 392,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -6502,6 +6502,294 @@
       "record_id": "USP_VERIFIED_376A14997644",
       "matched_brand": "Nature Made",
       "matched_product": "Nature Made Prenatal Multivitamin Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Postnatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the USP registry row; all members are Nature Made Postnatal Multi + DHA product-line instances matching Postnatal Multivitamin + 200 mg DHA Softgels.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179871",
+      "record_id": "USP_VERIFIED_D5CC1FD1B3FB",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Postnatal Multivitamin + 200 Mg DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Postnatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the USP registry row; all members are Nature Made Postnatal Multi + DHA product-line instances matching Postnatal Multivitamin + 200 mg DHA Softgels.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180109",
+      "record_id": "USP_VERIFIED_D5CC1FD1B3FB",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Postnatal Multivitamin + 200 Mg DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Postnatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the USP registry row; all members are Nature Made Postnatal Multi + DHA product-line instances matching Postnatal Multivitamin + 200 mg DHA Softgels.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "280354",
+      "record_id": "USP_VERIFIED_D5CC1FD1B3FB",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Postnatal Multivitamin + 200 Mg DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Postnatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the USP registry row; all members are Nature Made Postnatal Multi + DHA product-line instances matching Postnatal Multivitamin + 200 mg DHA Softgels.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "71328",
+      "record_id": "USP_VERIFIED_D5CC1FD1B3FB",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Postnatal Multivitamin + 200 Mg DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium Magnesium Zinc with Vitamin D3",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected member against the USP registry row; Calcium Magnesium Zinc with Vitamin D3 matches Nature Made Calcium, Magnesium and Zinc with D3 Tablets.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "302762",
+      "record_id": "USP_VERIFIED_600893E6C538",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium, Magnesium and Zinc with D3 Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Magnesium Complex with D3 & Zinc",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed selected member against the USP registry row; Magnesium Complex with D3 & Zinc is not the Calcium, Magnesium and Zinc with D3 Tablets product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313833",
+      "record_id": "USP_VERIFIED_600893E6C538",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium, Magnesium and Zinc with D3 Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Active Immunity + Elderberry Blood Orange",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; OLLY Active/Immunity + Elderberry products are not the NSF Certified Immunity Sleep + Elderberry product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "230116",
+      "record_id": "NSF_CERTIFIE_6B5DF300DE2E",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "IMMUNITY SLEEP + ELDERBERRY",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Immunity + Elderberry Berry Yuzu Lemonade",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; OLLY Active/Immunity + Elderberry products are not the NSF Certified Immunity Sleep + Elderberry product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "256876",
+      "record_id": "NSF_CERTIFIE_6B5DF300DE2E",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "IMMUNITY SLEEP + ELDERBERRY",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Immunity + Elderberry Blood Orange",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; OLLY Active/Immunity + Elderberry products are not the NSF Certified Immunity Sleep + Elderberry product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "256877",
+      "record_id": "NSF_CERTIFIE_6B5DF300DE2E",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "IMMUNITY SLEEP + ELDERBERRY",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Ultra Strength Beauty",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; OLLY Ultra Strength Beauty/Eyes/Joints products are not the NSF Certified Ultra Strength Prenatal Softgel product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "291377",
+      "record_id": "NSF_CERTIFIE_96F744D5F156",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "ULTRA STRENGTH PRENATAL SOFTGEL",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Ultra Strength Eyes",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; OLLY Ultra Strength Beauty/Eyes/Joints products are not the NSF Certified Ultra Strength Prenatal Softgel product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "291389",
+      "record_id": "NSF_CERTIFIE_96F744D5F156",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "ULTRA STRENGTH PRENATAL SOFTGEL",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Ultra Strength Joints",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; OLLY Ultra Strength Beauty/Eyes/Joints products are not the NSF Certified Ultra Strength Prenatal Softgel product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "291390",
+      "record_id": "NSF_CERTIFIE_96F744D5F156",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "ULTRA STRENGTH PRENATAL SOFTGEL",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "B-Complex #5",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; Thorne B-Complex #5/#12 products are not the NSF Sport B-Complex #6 product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "15690",
+      "record_id": "NSF_SPORT_75E78E397C7D",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® B-Complex #6",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "B-Complex #12",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; Thorne B-Complex #5/#12 products are not the NSF Sport B-Complex #6 product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "15695",
+      "record_id": "NSF_SPORT_75E78E397C7D",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® B-Complex #6",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "B-Complex #12",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; Thorne B-Complex #5/#12 products are not the NSF Sport B-Complex #6 product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35423",
+      "record_id": "NSF_SPORT_75E78E397C7D",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® B-Complex #6",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "B-Complex #12",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; Thorne B-Complex #5/#12 products are not the NSF Sport B-Complex #6 product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "63550",
+      "record_id": "NSF_SPORT_75E78E397C7D",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® B-Complex #6",
       "triage_reasons": [
         "no_strong_signal"
       ]
