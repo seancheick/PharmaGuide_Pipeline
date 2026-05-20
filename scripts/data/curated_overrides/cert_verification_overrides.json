@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 346,
+    "total_overrides": 360,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -5958,6 +5958,258 @@
       "record_id": "INFORMED_CHO_176FAD4DBA07",
       "matched_brand": "GNC",
       "matched_product": "Pro Performance Essential Amino Complete",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "28400",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "28411",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35365",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "46305",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "46517",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "50704",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "50708",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64092",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64096",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Lemon Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Lemon Flavor product-line instances matching Thorne Amino Complex Lemon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74518",
+      "record_id": "NSF_SPORT_29DD555D6227",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Lemon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Berry Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Berry Flavor product-line instances matching Thorne Amino Complex Berry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35368",
+      "record_id": "NSF_SPORT_5C70F80AC107",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Berry",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Berry Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Berry Flavor product-line instances matching Thorne Amino Complex Berry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64101",
+      "record_id": "NSF_SPORT_5C70F80AC107",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Berry",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Berry Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Berry Flavor product-line instances matching Thorne Amino Complex Berry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64105",
+      "record_id": "NSF_SPORT_5C70F80AC107",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Berry",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Amino Complex Berry Flavor",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the NSF Sport registry row; all members are Thorne Amino Complex Berry Flavor product-line instances matching Thorne Amino Complex Berry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74581",
+      "record_id": "NSF_SPORT_5C70F80AC107",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Amino Complex Berry",
       "triage_reasons": [
         "no_strong_signal"
       ]
