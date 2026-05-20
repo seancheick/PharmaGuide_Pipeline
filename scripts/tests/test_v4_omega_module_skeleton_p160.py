@@ -136,15 +136,15 @@ def test_omega_dimensions_share_stable_contract() -> None:
         assert "penalties" in dim
         assert "metadata" in dim
 
-    # P1.6.3: formulation + dose + evidence populate; trust + transparency
-    # stay None until their slices.
-    assert breakdown["dimensions"]["formulation"]["score"] is not None
-    assert breakdown["dimensions"]["dose"]["score"] is not None
-    assert breakdown["dimensions"]["evidence"]["score"] is not None
-    for name in ("trust", "transparency"):
-        assert breakdown["dimensions"][name]["score"] is None, (
-            f"omega.{name}.score should still be None pre-slice"
+    # P1.6.4: formulation + dose + evidence + trust populate; transparency
+    # stays None until P1.6.5.
+    for populated in ("formulation", "dose", "evidence", "trust"):
+        assert breakdown["dimensions"][populated]["score"] is not None, (
+            f"omega.{populated}.score should be populated through P1.6.4"
         )
+    assert breakdown["dimensions"]["transparency"]["score"] is None, (
+        "omega.transparency.score should still be None pre-P1.6.5"
+    )
 
 
 def test_omega_manufacturer_trust_dimension_has_cap_5() -> None:

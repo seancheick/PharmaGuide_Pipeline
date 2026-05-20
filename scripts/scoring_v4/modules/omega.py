@@ -71,7 +71,7 @@ from scoring_v4.modules.omega_transparency import score_transparency
 from scoring_v4.modules.omega_trust import score_trust
 
 
-PHASE_MARKER = "P1.6.3_omega_evidence"
+PHASE_MARKER = "P1.6.4_omega_trust"
 
 
 # Dimension caps per §4 + omega_rubric.json. Order is rendering order in

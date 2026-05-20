@@ -1,34 +1,234 @@
-"""P1.6.4 — Omega module Trust dimension.
+"""v4 Omega Trust dimension — P1.6.4.
 
-This is the P1.6.0 SKELETON stub. The real scoring math lands in P1.6.4.
+Scores omega-3 Testing & Trust against the 15-point rubric in
+omega_rubric.json:
 
-Per scripts/data/omega_rubric.json and Sean's 2026-05-20 policy:
-    trust 15 = b4a (IFOS sku/product_line = 10; needs_review/brand_only/
-                    claimed_only/rejected = 0)
-             + b4b GMP (nsf_gmp 4 / fda_registered 2 / self_attested 0, cap 4)
-             + b4c traceability (1 point if has_coa OR has_batch_lookup)
-             hard-clamped to 15
+    b4a_certifications  /10   IFOS / NSF / USP / Informed at sku or
+                              curated product_line scope ONLY. needs_review,
+                              brand_only, claimed_only, rejected ALL stay 0.
+                              No diminishing returns — each verified cert
+                              awards the policy value (10) and the total
+                              caps at 10. Multiple SKU certs don't stack
+                              beyond the cap.
+    b4b_gmp             /4    nsf_gmp (NSF/ANSI 173 audit) = 4.
+                              fda_registered = 2. self-attested only = 0
+                              (per P1.8 enricher hardening — Codex caught
+                              the laboratory-vs-facility false-positive).
+    b4c_traceability    /1    1 point when has_coa OR has_batch_lookup
+                              (the P1.8 nested QR-code rollup is honored).
 
-CRITICAL: needs_review and brand_only scopes stay 0. Per Sean's directive,
-uncertainty is NOT credit. P1.7 curated overrides convert specific rows
-into product_line or rejected; this dimension reads the resolved scope.
+  Hard-clamped at dimension_cap = 15.
 
-Per §13 architecture lock, this module does not import score_supplements (v3).
+POLICY LOCK (per Sean 2026-05-20):
+  "Choose Hold off for brand_only and needs_review scoring credit.
+   In the omega module, sku and curated product_line IFOS can score.
+   needs_review and brand_only stay 0 until P1.7 triage converts
+   specific rows into product_line or rejected. Do not reintroduce
+   uncertainty as score credit."
+
+The brand-level IFOS / manufacturer-cert signals go to Manufacturer
+Trust D1 (P1.6.6), NOT this dimension. That separation is exactly the
+P0.1b discipline P0.1c hardened.
+
+Per §13 architecture lock — no v3 imports.
 """
 
 from __future__ import annotations
 
-from typing import Any, Dict
+import json
+from pathlib import Path
+from typing import Any, Dict, List, Tuple
+
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+RUBRIC_PATH = REPO_ROOT / "scripts" / "data" / "omega_rubric.json"
+
+
+PHASE_MARKER = "P1.6.4_omega_trust"
+CAP_TRUST = 15.0
+
+
+def _load_rubric() -> Dict[str, Any]:
+    return json.loads(RUBRIC_PATH.read_text())
+
+
+def _safe_dict(value: Any) -> Dict[str, Any]:
+    return value if isinstance(value, dict) else {}
+
+
+def _safe_list(value: Any) -> List[Any]:
+    return value if isinstance(value, list) else []
+
+
+def _norm(value: Any) -> str:
+    return str(value or "").strip().lower()
+
+
+def _get_verified_cert_programs(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Find verified_cert_programs at either top-level or under
+    certification_data. The enricher normalizes both shapes."""
+    direct = product.get("verified_cert_programs")
+    if isinstance(direct, list):
+        return [e for e in direct if isinstance(e, dict)]
+    cert_data = _safe_dict(product.get("certification_data"))
+    nested = cert_data.get("verified_cert_programs")
+    if isinstance(nested, list):
+        return [e for e in nested if isinstance(e, dict)]
+    return []
+
+
+def _score_b4a(
+    product: Dict[str, Any],
+    scope_policy: Dict[str, Any],
+    cap: float,
+) -> Tuple[float, Dict[str, Any]]:
+    """Score B4a verified certifications under the omega module's
+    verified-scopes-only policy.
+
+    Per-entry: scope ∈ {sku, product_line} earns the policy value.
+    Anything else (needs_review, brand_only, claimed_only, rejected,
+    or missing) earns 0. Total caps at b4a_cap (10).
+
+    Returns (score, audit_metadata).
+    """
+    scored_entries: List[Dict[str, Any]] = []
+    skipped_entries: List[Dict[str, Any]] = []
+    raw = 0.0
+
+    for entry in _get_verified_cert_programs(product):
+        # Reject entries with a scoring-blocked reason (e.g. stale snapshot
+        # from the resolver). Per generic_trust pattern.
+        if entry.get("scoring_blocked_reason"):
+            skipped_entries.append({
+                "program": entry.get("program"),
+                "scope": entry.get("scope"),
+                "reason": entry.get("scoring_blocked_reason"),
+            })
+            continue
+        scope = _norm(entry.get("scope"))
+        if not scope:
+            continue
+        pts = float(scope_policy.get(scope, 0) or 0)
+        if pts <= 0:
+            skipped_entries.append({
+                "program": entry.get("program"),
+                "scope": scope,
+                "reason": "scope_not_in_verified_set",
+            })
+            continue
+        raw += pts
+        scored_entries.append({
+            "program": entry.get("program"),
+            "scope": scope,
+            "pts": pts,
+        })
+
+    score = max(0.0, min(cap, raw))
+    metadata = {
+        "B4a_raw": round(raw, 4),
+        "B4a_cap_applied": raw > cap,
+        "B4a_scored_entries": scored_entries,
+        "B4a_skipped_entries": skipped_entries,
+    }
+    return score, metadata
+
+
+def _score_b4b(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
+    """Score B4b GMP under the omega-specific stricter policy:
+      - nsf_gmp=True → 4 (NSF/ANSI 173 audit, real third-party verification)
+      - fda_registered=True → 2 (registered facility, weaker signal)
+      - self-attested only (gmp.claimed=True, no NSF/FDA backing) → 0
+
+    This is STRICTER than generic_trust which credits gmp_level=certified.
+    The omega module won't credit self-attested GMP because the enricher's
+    gmp_level=certified projection includes self-attested cases (per the
+    P1.8 hardening note documenting the laboratory-vs-facility gap).
+    """
+    nsf_gmp_pts = float(cfg.get("nsf_gmp", 4) or 4)
+    fda_pts = float(cfg.get("fda_registered", 2) or 2)
+    cap = float(cfg.get("cap", 4) or 4)
+
+    cert_data = _safe_dict(product.get("certification_data"))
+    gmp = _safe_dict(cert_data.get("gmp"))
+
+    if bool(gmp.get("nsf_gmp")):
+        return min(nsf_gmp_pts, cap), {"source": "nsf_gmp", "raw": nsf_gmp_pts}
+    if bool(gmp.get("fda_registered")):
+        return min(fda_pts, cap), {"source": "fda_registered", "raw": fda_pts}
+    return 0.0, {
+        "source": None,
+        "raw": 0.0,
+        "self_attested_only_no_credit": bool(gmp.get("claimed")),
+    }
+
+
+def _score_b4c(product: Dict[str, Any], cfg: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
+    """Score B4c batch traceability. 1 point if has_coa OR has_batch_lookup.
+
+    Honors the P1.8 nested QR-code rollup — `batch_traceability.has_qr_code`
+    counts as batch_lookup since it links to lot-specific data.
+    """
+    score_if_present = float(cfg.get("score_if_present", 1) or 1)
+    cap = float(cfg.get("cap", 1) or 1)
+
+    cert_data = _safe_dict(product.get("certification_data"))
+    bt = _safe_dict(cert_data.get("batch_traceability"))
+
+    has_coa = bool(product.get("has_coa") or bt.get("has_coa"))
+    has_batch = bool(
+        product.get("has_batch_lookup")
+        or bt.get("has_batch_lookup")
+        or bt.get("has_qr_code")
+    )
+
+    if has_coa or has_batch:
+        return min(score_if_present, cap), {
+            "has_coa": has_coa,
+            "has_batch_lookup": has_batch,
+            "source": "has_coa" if has_coa else "has_batch_lookup",
+        }
+    return 0.0, {"has_coa": False, "has_batch_lookup": False}
 
 
 def score_trust(product: Any) -> Dict[str, Any]:
-    """P1.6.0 skeleton — returns score=None until P1.6.4 lands."""
+    """Score omega-class Trust dimension."""
+    if not isinstance(product, dict):
+        product = {}
+
+    rubric = _load_rubric()
+    trust_cfg = rubric["trust"]
+    scope_policy = _safe_dict(trust_cfg.get("b4a_scope_policy"))
+    b4a_cap = float(trust_cfg.get("b4a_cap", 10) or 10)
+    dim_cap = float(trust_cfg.get("dimension_cap", 15) or 15)
+
+    b4a_score, b4a_meta = _score_b4a(product, scope_policy, b4a_cap)
+    b4b_score, b4b_meta = _score_b4b(product, _safe_dict(trust_cfg.get("b4b_gmp")))
+    b4c_score, b4c_meta = _score_b4c(product, _safe_dict(trust_cfg.get("b4c_traceability")))
+
+    components: Dict[str, float] = {}
+    if b4a_score > 0:
+        components["b4a_verified_certifications"] = round(b4a_score, 2)
+    if b4b_score > 0:
+        components["b4b_gmp"] = round(b4b_score, 2)
+    if b4c_score > 0:
+        components["b4c_batch_traceability"] = round(b4c_score, 2)
+
+    raw_score = b4a_score + b4b_score + b4c_score
+    score = max(0.0, min(dim_cap, raw_score))
+
+    metadata = {
+        "phase": PHASE_MARKER,
+        "raw_score": round(raw_score, 4),
+        "cap_applied": raw_score > dim_cap,
+        "b4a": b4a_meta,
+        "b4b": b4b_meta,
+        "b4c": b4c_meta,
+    }
+
     return {
-        "score": None,
-        "components": {},
+        "score": round(score, 2),
+        "max": dim_cap,
+        "components": components,
         "penalties": {},
-        "metadata": {
-            "phase": "P1.6.0_skeleton",
-            "deferred_to": "P1.6.4_omega_trust",
-        },
+        "metadata": metadata,
     }
