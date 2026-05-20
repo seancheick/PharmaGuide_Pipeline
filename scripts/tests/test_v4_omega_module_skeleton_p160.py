@@ -136,11 +136,12 @@ def test_omega_dimensions_share_stable_contract() -> None:
         assert "penalties" in dim
         assert "metadata" in dim
 
-    # P1.6.2: formulation + dose populate; evidence/trust/transparency
+    # P1.6.3: formulation + dose + evidence populate; trust + transparency
     # stay None until their slices.
     assert breakdown["dimensions"]["formulation"]["score"] is not None
     assert breakdown["dimensions"]["dose"]["score"] is not None
-    for name in ("evidence", "trust", "transparency"):
+    assert breakdown["dimensions"]["evidence"]["score"] is not None
+    for name in ("trust", "transparency"):
         assert breakdown["dimensions"][name]["score"] is None, (
             f"omega.{name}.score should still be None pre-slice"
         )
