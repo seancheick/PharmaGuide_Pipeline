@@ -165,7 +165,7 @@ def test_empty_or_malformed_product_scores_zero() -> None:
         assert payload["components"]["class_adjusted_clinical_evidence"] == 0.0
 
 
-def test_score_multi_prenatal_wires_evidence_dimension_and_keeps_score_100_none() -> None:
+def test_score_multi_prenatal_wires_evidence_dimension() -> None:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
     breakdown = score_multi_prenatal(_product(matches=[_match("Vitamin D")])).to_breakdown()
@@ -173,7 +173,7 @@ def test_score_multi_prenatal_wires_evidence_dimension_and_keeps_score_100_none(
     evidence = breakdown["dimensions"]["evidence"]
     assert evidence["score"] is not None
     assert evidence["metadata"]["phase"] == "P3.3_multi_prenatal_evidence"
-    assert breakdown["score_100"] is None
+    assert breakdown["score_100"] is not None
     assert breakdown["phase"].startswith("P3.")
 
 

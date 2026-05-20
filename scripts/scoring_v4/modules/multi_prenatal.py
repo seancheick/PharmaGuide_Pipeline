@@ -17,10 +17,11 @@ single-ingredient products:
                                allergens, marketing penalties
     Total class score  100
 
-P3.5 state: all five class dimensions are populated; final score assembly,
-manufacturer adjustments, verdict, and confidence land in P3.6. Later P3
-slices populate the existing dictionaries in place so downstream audit /
-Flutter consumers do not chase shape changes.
+P3.6 state: the multi/prenatal module is complete. All five dimensions,
+manufacturer adjustments, final assembly, and affine calibration are
+populated. The shape is intentionally identical to the generic and
+probiotic module breakdowns so downstream tooling can read all scored
+classes uniformly.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). It reuses the shared v4 breakdown dataclasses
@@ -34,9 +35,16 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 from scoring_v4.modules.generic import (
+    CALIBRATION_INTERCEPT,
+    CALIBRATION_METHOD,
+    CALIBRATION_SLOPE,
     DimensionResult,
     ManufacturerTrustResult,
     ManufacturerViolationsResult,
+)
+from scoring_v4.modules.generic_manufacturer import (
+    score_manufacturer_trust,
+    score_manufacturer_violations,
 )
 from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.multi_prenatal_dose import score_dose
@@ -45,7 +53,7 @@ from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 from scoring_v4.modules.multi_prenatal_transparency import score_transparency
 
 
-PHASE_MARKER = "P3.5_multi_prenatal_transparency"
+PHASE_MARKER = "P3.6_multi_prenatal_final_assembly"
 
 
 # Dimension caps per §4, multi/prenatal column. Order is rendering order in
@@ -65,8 +73,8 @@ class MultiPrenatalModuleResult:
 
     Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
     can read `shadow_score_v4_breakdown["module"]` uniformly regardless of
-    class. P3.5 populates all five dimensions and leaves downstream math
-    unset.
+    class. P3.6 populates all five dimensions, manufacturer adjustments,
+    and final score math.
     """
 
     module: str = "multi_or_prenatal"
@@ -109,10 +117,8 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     result = MultiPrenatalModuleResult(
         dimensions=_empty_dimensions(),
         metadata={
-            "module_state": "dimensions_complete",
-            "deferred_slices": [
-                "P3.6_final_assembly",
-            ],
+            "module_state": "complete",
+            "deferred_slices": [],
         },
     )
 
@@ -150,4 +156,79 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     transparency_dim.components = transparency_payload["components"]
     transparency_dim.penalties = transparency_payload["penalties"]
     transparency_dim.metadata = transparency_payload.get("metadata", {})
+
+    manufacturer_trust_payload = score_manufacturer_trust(product)
+    result.manufacturer_trust.score = manufacturer_trust_payload["score"]
+    result.manufacturer_trust.max = manufacturer_trust_payload["max"]
+    result.manufacturer_trust.components = manufacturer_trust_payload["components"]
+    result.manufacturer_trust.metadata = manufacturer_trust_payload.get("metadata", {})
+
+    manufacturer_violations_payload = score_manufacturer_violations(product)
+    result.manufacturer_violations.score = manufacturer_violations_payload["score"]
+    result.manufacturer_violations.floor = manufacturer_violations_payload["floor"]
+    result.manufacturer_violations.components = manufacturer_violations_payload["components"]
+    result.manufacturer_violations.metadata = manufacturer_violations_payload.get("metadata", {})
+
+    _assemble_score(result)
+    result.phase = PHASE_MARKER
     return result
+
+
+def _assemble_score(result: MultiPrenatalModuleResult) -> None:
+    """Assemble multi/prenatal raw_score_100 + calibrated score_100.
+
+    Mirrors generic/probiotic final assembly: rescale around None
+    dimensions, apply separate manufacturer adjustments, then apply the
+    P1.5 affine calibration `clamp(0, 100, 25 + 0.75 * raw_score_100)`.
+    """
+    evaluable_scores = []
+    evaluable_max = 0.0
+    excluded = []
+    for name, dim in result.dimensions.items():
+        if dim.score is None:
+            excluded.append(name)
+            continue
+        evaluable_scores.append(float(dim.score))
+        evaluable_max += float(dim.max)
+
+    raw_dimension_sum = sum(evaluable_scores)
+    if evaluable_max <= 0:
+        class_subtotal = 0.0
+    elif evaluable_max == 100.0:
+        class_subtotal = raw_dimension_sum
+    else:
+        class_subtotal = (raw_dimension_sum / evaluable_max) * 100.0
+
+    manufacturer_trust = float(result.manufacturer_trust.score or 0.0)
+    manufacturer_violations = float(result.manufacturer_violations.score or 0.0)
+    adjusted = class_subtotal + manufacturer_trust + manufacturer_violations
+    raw_score_100 = max(0.0, min(100.0, adjusted))
+    calibrated = CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100
+    calibrated_score_100 = max(0.0, min(100.0, calibrated))
+
+    result.raw_score_100 = round(raw_score_100, 1)
+    result.score_100 = round(calibrated_score_100, 1)
+    result.metadata = {
+        "phase": PHASE_MARKER,
+        "module_state": "complete",
+        "deferred_slices": [],
+        "raw_dimension_sum": round(raw_dimension_sum, 4),
+        "evaluable_class_max": round(evaluable_max, 4),
+        "excluded_dimensions": excluded,
+        "class_subtotal": round(class_subtotal, 4),
+        "manufacturer_trust_adjustment": round(manufacturer_trust, 4),
+        "manufacturer_violation_adjustment": round(manufacturer_violations, 4),
+        "adjusted_score_before_clamp": round(adjusted, 4),
+        "raw_score_100_pre_calibration": result.raw_score_100,
+        "score_clamped": adjusted < 0.0 or adjusted > 100.0,
+        "calibration": {
+            "method": CALIBRATION_METHOD,
+            "intercept": CALIBRATION_INTERCEPT,
+            "slope": CALIBRATION_SLOPE,
+            "reason": "p1_5_canary_score_compression",
+            "raw_score_100": result.raw_score_100,
+            "calibrated_score_100": result.score_100,
+        },
+        "calibrated_score_before_clamp": round(calibrated, 4),
+        "calibrated_score_clamped": calibrated < 0.0 or calibrated > 100.0,
+    }

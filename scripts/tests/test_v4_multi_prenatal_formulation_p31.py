@@ -175,7 +175,7 @@ def test_empty_or_malformed_product_scores_zero_not_none() -> None:
         assert payload["components"]["panel_form_quality"] == 0.0
 
 
-def test_score_multi_prenatal_wires_formulation_dimension_and_keeps_score_100_none() -> None:
+def test_score_multi_prenatal_wires_formulation_dimension() -> None:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
     breakdown = score_multi_prenatal(_product(ingredients=_premium_prenatal_ingredients())).to_breakdown()
@@ -183,7 +183,7 @@ def test_score_multi_prenatal_wires_formulation_dimension_and_keeps_score_100_no
 
     assert formulation["score"] is not None
     assert formulation["metadata"]["phase"] == "P3.1_multi_prenatal_formulation"
-    assert breakdown["score_100"] is None
+    assert breakdown["score_100"] is not None
     assert breakdown["phase"].startswith("P3.")
 
 

@@ -237,7 +237,7 @@ def test_no_rda_reference_returns_zero_score_not_none_for_multi_direct_call() ->
     assert payload["metadata"]["coverage_status"] == "no_rda_reference_data"
 
 
-def test_score_multi_prenatal_wires_dose_dimension_and_keeps_score_100_none() -> None:
+def test_score_multi_prenatal_wires_dose_dimension() -> None:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
     breakdown = score_multi_prenatal(_product(
@@ -248,7 +248,7 @@ def test_score_multi_prenatal_wires_dose_dimension_and_keeps_score_100_none() ->
     dose = breakdown["dimensions"]["dose"]
     assert dose["score"] is not None
     assert dose["metadata"]["phase"] == "P3.2_multi_prenatal_dose"
-    assert breakdown["score_100"] is None
+    assert breakdown["score_100"] is not None
     assert breakdown["phase"].startswith("P3.")
 
 

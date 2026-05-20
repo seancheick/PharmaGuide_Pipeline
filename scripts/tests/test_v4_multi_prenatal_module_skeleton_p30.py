@@ -166,23 +166,23 @@ def test_multi_prenatal_manufacturer_adjustments_have_shared_contract() -> None:
 
     breakdown = score_multi_prenatal(COMPLETE_MULTI_PRODUCT).to_breakdown()
 
-    assert breakdown["manufacturer_trust"]["score"] is None
+    assert breakdown["manufacturer_trust"]["score"] is not None
     assert breakdown["manufacturer_trust"]["max"] == 5
-    assert breakdown["manufacturer_trust"]["components"] == {}
-    assert breakdown["manufacturer_violations"]["score"] is None
+    assert "D1_manufacturer_reputation" in breakdown["manufacturer_trust"]["components"]
+    assert breakdown["manufacturer_violations"]["score"] is not None
     assert breakdown["manufacturer_violations"]["floor"] == -25
-    assert breakdown["manufacturer_violations"]["components"] == {}
+    assert "manufacturer_violation_deduction" in breakdown["manufacturer_violations"]["components"]
 
 
-def test_multi_prenatal_score_fields_stay_none_until_final_assembly() -> None:
+def test_multi_prenatal_score_fields_populated_after_final_assembly() -> None:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
     breakdown = score_multi_prenatal(COMPLETE_MULTI_PRODUCT).to_breakdown()
 
-    assert breakdown["raw_score_100"] is None
-    assert breakdown["score_100"] is None
+    assert breakdown["raw_score_100"] is not None
+    assert breakdown["score_100"] is not None
     assert breakdown["phase"].startswith("P3.")
-    assert breakdown["metadata"]["module_state"] == "dimensions_complete"
+    assert breakdown["metadata"]["phase"] == "P3.6_multi_prenatal_final_assembly"
 
 
 def test_score_multi_prenatal_resilient_to_malformed_input() -> None:
@@ -192,7 +192,7 @@ def test_score_multi_prenatal_resilient_to_malformed_input() -> None:
         breakdown = score_multi_prenatal(bad).to_breakdown()  # type: ignore[arg-type]
         assert breakdown["module"] == "multi_or_prenatal"
         assert set(breakdown["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-        assert breakdown["score_100"] is None
+        assert breakdown["score_100"] is not None
 
 
 def test_score_multi_prenatal_does_not_mutate_input() -> None:
@@ -216,9 +216,9 @@ def test_shadow_scorer_wires_complete_multivitamin_to_p3_module() -> None:
     shadow = score_product_v4_shadow(COMPLETE_MULTI_PRODUCT)
 
     assert shadow["shadow_score_v4_module"] == "multi_or_prenatal"
-    assert shadow["shadow_score_v4_100"] is None
-    assert shadow["shadow_score_v4_verdict"] == "NOT_SCORED"
-    assert shadow["shadow_score_v4_confidence"] == "skeleton"
+    assert shadow["shadow_score_v4_100"] is not None
+    assert shadow["shadow_score_v4_verdict"] in {"SAFE", "POOR", "CAUTION"}
+    assert shadow["shadow_score_v4_confidence"] in {"high", "moderate", "low"}
     assert shadow["shadow_score_v4_breakdown"]["module"]["module"] == "multi_or_prenatal"
     assert shadow["shadow_score_v4_breakdown"]["module"]["phase"].startswith("P3.")
 

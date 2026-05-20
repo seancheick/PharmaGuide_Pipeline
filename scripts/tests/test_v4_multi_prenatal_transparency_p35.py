@@ -241,7 +241,7 @@ def test_transparency_resilient_to_malformed_input() -> None:
         assert "panel_identity_disclosure" in payload["components"]
 
 
-def test_score_multi_prenatal_wires_transparency_dimension_and_keeps_score_100_none() -> None:
+def test_score_multi_prenatal_wires_transparency_dimension() -> None:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
     breakdown = score_multi_prenatal(_product()).to_breakdown()
@@ -249,9 +249,9 @@ def test_score_multi_prenatal_wires_transparency_dimension_and_keeps_score_100_n
 
     assert trans["score"] == 11.0
     assert trans["metadata"]["phase"] == "P3.5_multi_prenatal_transparency"
-    assert breakdown["score_100"] is None
-    assert breakdown["phase"] == "P3.5_multi_prenatal_transparency"
-    assert breakdown["metadata"]["module_state"] == "dimensions_complete"
+    assert breakdown["score_100"] is not None
+    assert breakdown["phase"].startswith("P3.")
+    assert breakdown["metadata"]["module_state"] in {"dimensions_complete", "complete"}
 
 
 def test_multi_prenatal_transparency_does_not_import_v3_scorer() -> None:

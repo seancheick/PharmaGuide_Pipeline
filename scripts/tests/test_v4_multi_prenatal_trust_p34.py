@@ -202,7 +202,7 @@ def test_multi_prenatal_trust_clamps_dimension_at_15() -> None:
     assert trust["metadata"]["cap_applied"] is True
 
 
-def test_score_multi_prenatal_wires_trust_dimension_and_keeps_score_100_none() -> None:
+def test_score_multi_prenatal_wires_trust_dimension() -> None:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
     breakdown = score_multi_prenatal(
@@ -212,11 +212,12 @@ def test_score_multi_prenatal_wires_trust_dimension_and_keeps_score_100_none() -
     trust = breakdown["dimensions"]["trust"]
     assert trust["score"] == 6.0
     assert trust["metadata"]["phase"] == "P1.3.4_testing_trust"
-    assert breakdown["score_100"] is None
+    assert breakdown["score_100"] is not None
     assert breakdown["phase"].startswith("P3.")
     assert breakdown["metadata"]["module_state"] in {
         "trust_partial",
         "dimensions_complete",
+        "complete",
     }
 
 

@@ -245,11 +245,10 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
         shadow["shadow_score_v4_confidence"] = confidence["band"]
     elif module == "multi_or_prenatal":
-        # P3.0: scaffold wired. The module block exposes the final
-        # multi/prenatal dimension caps and stable breakdown shape, but no
-        # scoring math is populated until P3.1+ and final score assembly
-        # lands in P3.6. Keep confidence as "skeleton" so consumers don't
-        # mistake an unscored class for a low-confidence scored row.
+        # P3.6: full multi/prenatal pipeline online — all 5 dimensions
+        # populate, manufacturer trust/violations apply, and final
+        # affine-calibrated score_100 + verdict + typed confidence match
+        # the generic/probiotic contract.
         multi_result = score_multi_prenatal(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = multi_result.to_breakdown()
         shadow["shadow_score_v4_100"] = multi_result.score_100
@@ -257,7 +256,14 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
             multi_result.score_100,
             shadow.get("shadow_score_v4_verdict"),
         )
-        shadow["shadow_score_v4_confidence"] = "skeleton"
+        confidence = evaluate_confidence(
+            enriched_product,
+            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
+            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+        )
+        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
+        shadow["shadow_score_v4_confidence"] = confidence["band"]
     elif module == "omega":
         # P1.6.0: skeleton wired — all 5 dimensions return None (no scoring
         # math yet). Breakdown shape is intact; score_100 stays None until
