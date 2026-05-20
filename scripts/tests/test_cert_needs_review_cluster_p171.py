@@ -183,6 +183,38 @@ def test_cluster_groups_by_record_id_even_with_minor_name_drift():
     assert len(clusters[0]["members"]) == 2
 
 
+# --- camelCase / snake_case shape compatibility ------------------------
+
+
+def test_cluster_reads_camelcase_brand_and_product_fields():
+    """Enriched product blobs use `brandName` and `fullName` at the top
+    level. Scored blobs use `brand_name` / `product_name`. The cluster
+    builder must read both so distinct_brands and per-member display
+    fields are populated regardless of which artifact stage we read."""
+    from api_audit.cert_needs_review_cluster import build_clusters, summarize
+
+    products = [
+        {
+            "dsld_id": "CC1",
+            "brandName": "GNC",
+            "fullName": "AMP Wheybolic Vanilla",
+            "verified_cert_programs": [{
+                "program": "Informed Choice", "scope": "needs_review",
+                "record_id": "IC_001",
+                "matched_brand": "GNC", "matched_product": "AMP Wheybolic",
+            }],
+        },
+    ]
+    clusters = build_clusters(products)
+    assert len(clusters) == 1
+    member = clusters[0]["members"][0]
+    assert member["brand_name"] == "GNC"
+    assert member["product_name"] == "AMP Wheybolic Vanilla"
+
+    summary = summarize(clusters)
+    assert summary["distinct_brands"] == 1
+
+
 # --- Triage hint ---------------------------------------------------------
 
 

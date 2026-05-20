@@ -130,10 +130,25 @@ def build_clusters(products: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
                 group["matched_brand"] = str(entry.get("matched_brand"))
             if not group["matched_product"] and entry.get("matched_product"):
                 group["matched_product"] = str(entry.get("matched_product"))
+            # Enriched blobs use camelCase (brandName, fullName) at the
+            # top level; v3-scored blobs use snake_case (brand_name,
+            # product_name). Accept both shapes so the cluster report
+            # works regardless of which artifact stage we read.
+            brand_name = (
+                product.get("brand_name")
+                or product.get("brandName")
+                or ""
+            )
+            product_name = (
+                product.get("product_name")
+                or product.get("fullName")
+                or product.get("name")
+                or ""
+            )
             member = {
                 "dsld_id": str(product.get("dsld_id") or product.get("id") or ""),
-                "brand_name": str(product.get("brand_name") or ""),
-                "product_name": str(product.get("product_name") or product.get("name") or ""),
+                "brand_name": str(brand_name),
+                "product_name": str(product_name),
                 "matched_brand": str(entry.get("matched_brand") or ""),
                 "matched_product": str(entry.get("matched_product") or ""),
                 "evidence_source": entry.get("evidence_source"),
