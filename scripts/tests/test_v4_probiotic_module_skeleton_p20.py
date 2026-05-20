@@ -135,9 +135,11 @@ def test_probiotic_manufacturer_trust_dimension_has_cap_5() -> None:
 
     breakdown = score_probiotic(COMPLETE_PROBIOTIC_PRODUCT).to_breakdown()
     mt = breakdown["manufacturer_trust"]
-    assert mt["score"] is None
+    # P2.6: manufacturer_trust is populated. The dimension cap and shape
+    # are what the scaffold contract guarantees.
+    assert mt["score"] is not None
     assert mt["max"] == 5
-    assert mt["components"] == {}
+    assert isinstance(mt["components"], dict)
 
 
 def test_probiotic_manufacturer_violations_floor_minus_25() -> None:
@@ -145,18 +147,21 @@ def test_probiotic_manufacturer_violations_floor_minus_25() -> None:
 
     breakdown = score_probiotic(COMPLETE_PROBIOTIC_PRODUCT).to_breakdown()
     mv = breakdown["manufacturer_violations"]
-    assert mv["score"] is None
+    # P2.6: manufacturer_violations is populated (likely 0 for clean
+    # products). The floor cap stays at -25.
+    assert mv["score"] is not None
     assert mv["floor"] == -25
 
 
-def test_probiotic_score_100_is_none_at_p20() -> None:
-    """No score math runs at P2.0 — both raw_score_100 and score_100 None
-    until P2.6 final assembly."""
+def test_probiotic_score_100_populated_after_p26() -> None:
+    """At-or-after P2.6: raw_score_100 + score_100 are real numbers in
+    [0, 100]. The P1.5 affine calibration is applied."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(COMPLETE_PROBIOTIC_PRODUCT).to_breakdown()
-    assert breakdown["score_100"] is None
-    assert breakdown.get("raw_score_100") is None
+    assert breakdown["score_100"] is not None
+    assert breakdown.get("raw_score_100") is not None
+    assert 0 <= breakdown["score_100"] <= 100
 
 
 def test_probiotic_phase_marker_rolls_forward_across_slices() -> None:
@@ -173,7 +178,9 @@ def test_probiotic_phase_marker_rolls_forward_across_slices() -> None:
 
 
 def test_score_probiotic_resilient_to_malformed_input() -> None:
-    """Never raise. Must safely emit a skeleton even on malformed/empty input."""
+    """Never raise on malformed input — the dimensions skeleton stays
+    intact and score_100 lands as a number (P2.6 final assembly runs;
+    for empty input it yields a low calibrated score, not None)."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     for bad in (None, {}, {"supplement_type": None}, 42, "oops"):
@@ -181,7 +188,9 @@ def test_score_probiotic_resilient_to_malformed_input() -> None:
         breakdown = result.to_breakdown()
         assert breakdown["module"] == "probiotic"
         assert set(breakdown["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-        assert breakdown["score_100"] is None
+        # score_100 is computed via affine calibration; even empty input
+        # yields a real number (low end of the calibrated range).
+        assert breakdown["score_100"] is None or 0 <= breakdown["score_100"] <= 100
 
 
 def test_score_probiotic_does_not_mutate_input() -> None:
@@ -209,9 +218,9 @@ def test_shadow_wires_probiotic_module_when_route_is_probiotic() -> None:
     module_block = out["shadow_score_v4_breakdown"]["module"]
     assert module_block["module"] == "probiotic"
     assert set(module_block["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-    # P2.0: scaffold only — score_100 None, confidence either skeleton or
-    # whatever the existing pipeline routed in.
-    assert module_block["score_100"] is None
+    # P2.6: score_100 is a real number after final assembly.
+    assert module_block["score_100"] is not None
+    assert 0 <= module_block["score_100"] <= 100
 
 
 def test_shadow_does_not_wire_probiotic_module_when_safety_short_circuits() -> None:

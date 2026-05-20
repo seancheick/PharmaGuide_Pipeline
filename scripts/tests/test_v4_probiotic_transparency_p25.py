@@ -318,11 +318,15 @@ def test_transparency_resilient_to_malformed_input() -> None:
 # --- Module wiring -------------------------------------------------------
 
 
-def test_probiotic_module_phase_rolls_to_p25() -> None:
+def test_probiotic_module_phase_rolls_forward_after_p25() -> None:
+    """Module-level phase rolls forward as each P2.x slice lands. After
+    P2.5 the marker is at least P2.5; P2.6 final assembly rolls it again."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_probiotic()).to_breakdown()
-    assert breakdown["phase"] == "P2.5_probiotic_transparency"
+    assert breakdown["phase"].startswith("P2."), (
+        f"unexpected phase: {breakdown['phase']}"
+    )
 
 
 def test_probiotic_module_transparency_dimension_populated() -> None:
@@ -337,7 +341,10 @@ def test_probiotic_module_transparency_dimension_populated() -> None:
 
 
 def test_probiotic_canary_full_dimensions_populated_at_p25() -> None:
-    """All 5 probiotic dimensions populated. score_100 still None until P2.6."""
+    """All 5 probiotic dimensions populated by P2.5. score_100 lands
+    via P2.6 final assembly (this test originally asserted None; rolled
+    forward to assert the dimensions populate independently of final
+    assembly)."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_probiotic(strain_count=5)).to_breakdown()
@@ -345,8 +352,6 @@ def test_probiotic_canary_full_dimensions_populated_at_p25() -> None:
         assert breakdown["dimensions"][name]["score"] is not None, (
             f"{name} should be populated at P2.5"
         )
-    # P2.6 final assembly hasn't landed yet
-    assert breakdown["score_100"] is None
 
 
 # --- Architecture lock ---------------------------------------------------

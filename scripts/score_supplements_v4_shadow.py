@@ -225,13 +225,24 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
         shadow["shadow_score_v4_confidence"] = confidence["band"]
     elif module == "probiotic":
-        # P2.0: emit the probiotic breakdown contract. Per-dimension math
-        # lands in P2.1+. score_100 stays None until P2.6 final assembly;
-        # shadow_score_v4_confidence stays "skeleton" until the typed
-        # confidence layer is extended for probiotic in a later slice.
+        # P2.6: full probiotic pipeline online — all 5 dimensions populate,
+        # manufacturer trust/violations apply, final affine-calibrated
+        # score_100 + verdict + typed confidence band match the generic
+        # P1.4/P1.5 contract.
         probiotic_result = score_probiotic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = probiotic_result.to_breakdown()
-        # shadow_score_v4_100 mirrors the module result; at P2.0 that's None.
         shadow["shadow_score_v4_100"] = probiotic_result.score_100
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            probiotic_result.score_100,
+            shadow.get("shadow_score_v4_verdict"),
+        )
+        confidence = evaluate_confidence(
+            enriched_product,
+            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
+            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+        )
+        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
+        shadow["shadow_score_v4_confidence"] = confidence["band"]
 
     return shadow

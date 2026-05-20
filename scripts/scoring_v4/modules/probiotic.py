@@ -48,9 +48,16 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Optional
 
 from scoring_v4.modules.generic import (
+    CALIBRATION_INTERCEPT,
+    CALIBRATION_METHOD,
+    CALIBRATION_SLOPE,
     DimensionResult,
     ManufacturerTrustResult,
     ManufacturerViolationsResult,
+)
+from scoring_v4.modules.generic_manufacturer import (
+    score_manufacturer_trust,
+    score_manufacturer_violations,
 )
 from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.probiotic_dose import score_dose
@@ -59,7 +66,7 @@ from scoring_v4.modules.probiotic_formulation import score_formulation
 from scoring_v4.modules.probiotic_transparency import score_transparency
 
 
-PHASE_MARKER = "P2.5_probiotic_transparency"
+PHASE_MARKER = "P2.6_probiotic_final_assembly"
 
 
 # Dimension caps per §4 line 176, probiotic column.
@@ -196,5 +203,88 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     transparency_dim.penalties = transparency_payload["penalties"]
     transparency_dim.metadata = transparency_payload.get("metadata", {})
 
+    # P2.6 — Manufacturer Trust (+0..+5) and Manufacturer Violations
+    # (0..-25, escalating to -35/-50 with multiple recent Class-I
+    # violations). Reuses the generic helpers verbatim — Manufacturer
+    # dimensions are module-agnostic per §6 line 390.
+    mt_payload = score_manufacturer_trust(product)
+    result.manufacturer_trust.score = mt_payload["score"]
+    result.manufacturer_trust.max = mt_payload["max"]
+    result.manufacturer_trust.components = mt_payload["components"]
+    result.manufacturer_trust.metadata = mt_payload.get("metadata", {})
+
+    mv_payload = score_manufacturer_violations(product)
+    result.manufacturer_violations.score = mv_payload["score"]
+    result.manufacturer_violations.floor = mv_payload["floor"]
+    result.manufacturer_violations.components = mv_payload["components"]
+    result.manufacturer_violations.metadata = mv_payload.get("metadata", {})
+
+    # P2.6 — Final assembly + P1.5 affine calibration. The arithmetic
+    # is identical to generic._assemble_score; the calibration constants
+    # are imported from generic so both classes stay locked to the same
+    # display-score transform. (Long-term: factor into a shared helper
+    # at P1.5 cleanup; for now duplication keeps the slice tight.)
+    _assemble_score(result)
+
     result.phase = PHASE_MARKER
     return result
+
+
+def _assemble_score(result: ProbioticModuleResult) -> None:
+    """Assemble probiotic raw_score_100 + calibrated score_100.
+
+    Mirror of generic._assemble_score: rescale around None dimensions,
+    add manufacturer adjustments, apply the P1.5 affine calibration
+    `clamp(0, 100, 25 + 0.75 * raw_score_100)`. Records the same audit
+    metadata fields (evaluable_max, excluded_dimensions, class_subtotal,
+    manufacturer adjustments, calibration block) so audit / score-delta
+    tooling sees a uniform shape across modules.
+    """
+    evaluable_scores = []
+    evaluable_max = 0.0
+    excluded = []
+    for name, dim in result.dimensions.items():
+        if dim.score is None:
+            excluded.append(name)
+            continue
+        evaluable_scores.append(float(dim.score))
+        evaluable_max += float(dim.max)
+
+    raw_dimension_sum = sum(evaluable_scores)
+    if evaluable_max <= 0:
+        class_subtotal = 0.0
+    elif evaluable_max == 100.0:
+        class_subtotal = raw_dimension_sum
+    else:
+        class_subtotal = (raw_dimension_sum / evaluable_max) * 100.0
+
+    manufacturer_trust = float(result.manufacturer_trust.score or 0.0)
+    manufacturer_violations = float(result.manufacturer_violations.score or 0.0)
+    adjusted = class_subtotal + manufacturer_trust + manufacturer_violations
+    raw_score_100 = max(0.0, min(100.0, adjusted))
+    calibrated = CALIBRATION_INTERCEPT + CALIBRATION_SLOPE * raw_score_100
+    calibrated_score_100 = max(0.0, min(100.0, calibrated))
+    result.raw_score_100 = round(raw_score_100, 1)
+    result.score_100 = round(calibrated_score_100, 1)
+    result.metadata = {
+        "phase": PHASE_MARKER,
+        "raw_dimension_sum": round(raw_dimension_sum, 4),
+        "evaluable_class_max": round(evaluable_max, 4),
+        "excluded_dimensions": excluded,
+        "class_subtotal": round(class_subtotal, 4),
+        "manufacturer_trust_adjustment": round(manufacturer_trust, 4),
+        "manufacturer_violation_adjustment": round(manufacturer_violations, 4),
+        "adjusted_score_before_clamp": round(adjusted, 4),
+        "raw_score_100_pre_calibration": result.raw_score_100,
+        "score_clamped": adjusted < 0.0 or adjusted > 100.0,
+        "calibration": {
+            "method": CALIBRATION_METHOD,
+            "intercept": CALIBRATION_INTERCEPT,
+            "slope": CALIBRATION_SLOPE,
+            "reason": "p1_5_canary_score_compression",
+            "raw_score_100": result.raw_score_100,
+            "calibrated_score_100": result.score_100,
+        },
+        "calibrated_score_before_clamp": round(calibrated, 4),
+        "calibrated_score_clamped": calibrated < 0.0 or calibrated > 100.0,
+    }

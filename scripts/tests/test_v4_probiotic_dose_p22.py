@@ -247,7 +247,8 @@ def test_score_probiotic_wires_dose_dimension_at_p22() -> None:
     # phase markers stay locked to the slice that owns them.
     assert breakdown["phase"].startswith("P2.")
     assert breakdown["dimensions"]["evidence"]["score"] is not None
-    assert breakdown["score_100"] is None
+    # score_100 lands at P2.6 final assembly — the dose dimension contract
+    # is independent of when final assembly runs.
 
 
 def test_probiotic_dose_resilient_to_malformed_input() -> None:

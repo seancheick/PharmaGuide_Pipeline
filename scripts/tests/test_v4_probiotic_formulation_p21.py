@@ -208,7 +208,8 @@ def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() ->
     assert breakdown["dimensions"]["dose"]["score"] is not None
     # Module-level phase rolls forward as each P2.x slice lands.
     assert breakdown["phase"].startswith("P2.")
-    assert breakdown["score_100"] is None
+    # score_100 lands at P2.6 final assembly — the formulation dimension
+    # contract is independent of when final assembly runs.
 
 
 def test_probiotic_formulation_resilient_to_malformed_input() -> None:

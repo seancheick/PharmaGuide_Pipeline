@@ -142,6 +142,20 @@ def _label_completeness_confidence(module: Dict[str, Any]) -> Tuple[str, List[st
         level = _min_level(level, "moderate")
         drivers.append("dose_window_not_evaluable_by_rda_proxy")
 
+    # Probiotic-specific (P2.6): aggregate CFU disclosed but not per-strain.
+    # `window_proxy_reason` comes from probiotic_dose.score_dose metadata.
+    # Values: "aggregate_cfu_not_per_strain" (has aggregate but no per-strain
+    # CFU — the common case for shipped probiotics), "no_strain_data" (no
+    # strain info at all), "per_strain_cfu_missing" (strains named but no
+    # CFU values). All three are label-completeness gaps surfacing the
+    # spec's "Strain-level CFU not disclosed" caveat per §5 line 255.
+    dose_reason = dose_meta.get("window_proxy_reason")
+    if dose_reason in {"aggregate_cfu_not_per_strain",
+                       "no_strain_data",
+                       "per_strain_cfu_missing"}:
+        level = _min_level(level, "moderate")
+        drivers.append("per_strain_cfu_not_disclosed")
+
     b5 = abs(_as_float(penalties.get("B5_proprietary_blend_opacity"), 0.0) or 0.0)
     if b5 >= 5.0:
         level = "low"
