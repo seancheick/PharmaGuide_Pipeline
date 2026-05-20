@@ -21,13 +21,12 @@ from typing import Any, Dict, Iterable, List
 from scoring_v4.modules.generic_helpers import (
     bio_score_of,
     canonical_key,
-    get_active_ingredients,
     has_usable_individual_dose,
     is_scorable,
-    scorable_ingredients,
     _as_float,
     _norm_text,
     _safe_dict,
+    _safe_list,
 )
 
 
@@ -119,13 +118,37 @@ def _form_factor_text(product: Dict[str, Any]) -> str:
     return _norm_text(" ".join(parts))
 
 
+def _active_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    """Return active rows from enriched blobs or final detail blobs.
+
+    The shadow scorer calls modules with enriched products, where rows live
+    under `ingredient_quality_data.ingredients_scorable`. Canary tooling and
+    final-db audits often pass detail blobs, where the same active rows are
+    exposed as top-level `ingredients`. Support both without changing the
+    shared generic helper contract.
+    """
+    iqd = _safe_dict(product.get("ingredient_quality_data"))
+    rows = _safe_list(iqd.get("ingredients_scorable")) or _safe_list(iqd.get("ingredients"))
+    if not rows:
+        rows = (
+            _safe_list(product.get("ingredients"))
+            or _safe_list(product.get("activeIngredients"))
+            or _safe_list(product.get("active_ingredients"))
+        )
+    return [row for row in rows if isinstance(row, dict)]
+
+
+def _scorable_ingredients(product: Dict[str, Any]) -> List[Dict[str, Any]]:
+    return [ing for ing in _active_ingredients(product) if is_scorable(ing)]
+
+
 def _score_panel_form_quality(product: Dict[str, Any]) -> tuple[float, float | None, float | None]:
     """Panel-wide A1 analogue. Mirrors v3's multivitamin smoothing:
 
         smoothed_avg = 0.7 * avg_bio_score + 0.3 * 9
         score = smoothed_avg / 15 * 12
     """
-    rows = scorable_ingredients(product, allow_sole_mapped_blend=False)
+    rows = _scorable_ingredients(product)
     if not rows:
         return 0.0, None, None
 
@@ -150,7 +173,7 @@ def _score_panel_form_quality(product: Dict[str, Any]) -> tuple[float, float | N
 
 def _score_premium_form_diversity(product: Dict[str, Any]) -> tuple[float, int]:
     premium_keys = set()
-    for ing in get_active_ingredients(product):
+    for ing in _active_ingredients(product):
         if not is_scorable(ing):
             continue
         score = bio_score_of(ing)
@@ -208,7 +231,7 @@ def _score_key_form_for_ingredient(ingredient: Dict[str, Any]) -> float:
 
 def _score_key_form_support(product: Dict[str, Any]) -> tuple[float, Dict[str, float]]:
     credits: Dict[str, float] = {}
-    for ing in get_active_ingredients(product):
+    for ing in _active_ingredients(product):
         if not isinstance(ing, dict) or not has_usable_individual_dose(ing):
             continue
         canonical = canonical_key(ing)
@@ -230,7 +253,7 @@ def _dose_coverage(rows: Iterable[Dict[str, Any]]) -> float:
 
 
 def _score_panel_disclosure_structure(product: Dict[str, Any]) -> tuple[float, float]:
-    rows = get_active_ingredients(product)
+    rows = _active_ingredients(product)
     coverage = _dose_coverage(rows)
     if coverage >= 0.9:
         return 2.0, coverage
@@ -284,7 +307,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
 
     components["dosage_form_suitability"] = (
         _score_dosage_form_suitability(product)
-        if get_active_ingredients(product)
+        if _active_ingredients(product)
         else 0.0
     )
 

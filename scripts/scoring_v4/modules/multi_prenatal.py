@@ -17,10 +17,10 @@ single-ingredient products:
                                allergens, marketing penalties
     Total class score  100
 
-P3.1 state: Formulation is populated; Dose, Evidence, Trust, and
+P3.2 state: Formulation and Dose are populated; Evidence, Trust, and
 Transparency remain scaffolded. Later P3 slices populate the existing
-dictionaries in place so downstream audit / Flutter consumers do not
-chase shape changes.
+dictionaries in place so downstream audit / Flutter consumers do not chase
+shape changes.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). It reuses the shared v4 breakdown dataclasses
@@ -38,10 +38,11 @@ from scoring_v4.modules.generic import (
     ManufacturerTrustResult,
     ManufacturerViolationsResult,
 )
+from scoring_v4.modules.multi_prenatal_dose import score_dose
 from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
 
-PHASE_MARKER = "P3.1_multi_prenatal_formulation"
+PHASE_MARKER = "P3.2_multi_prenatal_dose"
 
 
 # Dimension caps per §4, multi/prenatal column. Order is rendering order in
@@ -61,7 +62,7 @@ class MultiPrenatalModuleResult:
 
     Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
     can read `shadow_score_v4_breakdown["module"]` uniformly regardless of
-    class. P3.1 populates Formulation and leaves downstream math unset.
+    class. P3.2 populates Formulation + Dose and leaves downstream math unset.
     """
 
     module: str = "multi_or_prenatal"
@@ -104,9 +105,8 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     result = MultiPrenatalModuleResult(
         dimensions=_empty_dimensions(),
         metadata={
-            "module_state": "formulation_partial",
+            "module_state": "dose_partial",
             "deferred_slices": [
-                "P3.2_dose",
                 "P3.3_evidence",
                 "P3.4_trust",
                 "P3.5_transparency",
@@ -121,4 +121,11 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     formulation_dim.components = formulation_payload["components"]
     formulation_dim.penalties = formulation_payload["penalties"]
     formulation_dim.metadata = formulation_payload.get("metadata", {})
+
+    dose_payload = score_dose(product)
+    dose_dim = result.dimensions["dose"]
+    dose_dim.score = dose_payload["score"]
+    dose_dim.components = dose_payload["components"]
+    dose_dim.penalties = dose_payload["penalties"]
+    dose_dim.metadata = dose_payload.get("metadata", {})
     return result

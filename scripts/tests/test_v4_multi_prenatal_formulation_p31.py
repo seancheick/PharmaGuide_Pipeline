@@ -184,7 +184,7 @@ def test_score_multi_prenatal_wires_formulation_dimension_and_keeps_score_100_no
     assert formulation["score"] is not None
     assert formulation["metadata"]["phase"] == "P3.1_multi_prenatal_formulation"
     assert breakdown["score_100"] is None
-    assert breakdown["phase"] == "P3.1_multi_prenatal_formulation"
+    assert breakdown["phase"].startswith("P3.")
 
 
 def test_formulation_dimension_does_not_mutate_input() -> None:
@@ -196,9 +196,20 @@ def test_formulation_dimension_does_not_mutate_input() -> None:
     assert json.dumps(product, sort_keys=True) == before
 
 
+def test_formulation_accepts_final_detail_blob_top_level_ingredients_alias() -> None:
+    from scoring_v4.modules.multi_prenatal_formulation import score_formulation
+
+    product = _product(ingredients=_premium_prenatal_ingredients())
+    product["ingredients"] = product.pop("ingredient_quality_data")["ingredients_scorable"]
+
+    payload = score_formulation(product)
+
+    assert payload["score"] > 0
+    assert payload["metadata"]["premium_form_count"] > 0
+
+
 def test_multi_prenatal_formulation_does_not_import_v3_scorer() -> None:
     source = (SCRIPTS_ROOT / "scoring_v4" / "modules" / "multi_prenatal_formulation.py").read_text()
 
     assert "import score_supplements" not in source
     assert "from score_supplements" not in source
-
