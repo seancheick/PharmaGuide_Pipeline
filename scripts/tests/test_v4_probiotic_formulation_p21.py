@@ -196,7 +196,7 @@ def test_strain_count_falls_back_to_unique_blend_strains() -> None:
     assert payload["components"]["named_species_diversity"] == 2.0
 
 
-def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p22() -> None:
+def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() -> None:
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_product()).to_breakdown()
@@ -206,7 +206,7 @@ def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p22() ->
     assert formulation["max"] == 25.0
     assert formulation["metadata"]["phase"] == "P2.1_probiotic_formulation"
     assert breakdown["dimensions"]["dose"]["score"] is not None
-    assert breakdown["phase"] == "P2.2_probiotic_dose"
+    assert breakdown["phase"] == "P2.3_probiotic_evidence"
     assert breakdown["score_100"] is None
 
 

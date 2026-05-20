@@ -25,7 +25,7 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; reuses generic)
 
-P2.2 state: Formulation and Dose are populated; Evidence, Trust, and
+P2.3 state: Formulation, Dose, and Evidence are populated; Trust and
 Transparency remain skeletons. Subsequent P2.x slices fill them in-place;
 the shape never changes.
 
@@ -53,10 +53,11 @@ from scoring_v4.modules.generic import (
     ManufacturerViolationsResult,
 )
 from scoring_v4.modules.probiotic_dose import score_dose
+from scoring_v4.modules.probiotic_evidence import score_evidence
 from scoring_v4.modules.probiotic_formulation import score_formulation
 
 
-PHASE_MARKER = "P2.2_probiotic_dose"
+PHASE_MARKER = "P2.3_probiotic_evidence"
 
 
 # Dimension caps per §4 line 176, probiotic column.
@@ -126,9 +127,9 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_probiotic(product: Any) -> ProbioticModuleResult:
     """Score a probiotic-class product against the v4 probiotic rubric.
 
-    P2.2 state: returns a fully-instantiated result with Formulation and
-    Dose populated and remaining dimensions skeletoned. Subsequent P2.x
-    slices populate `components`, `penalties`, and `score` per dimension.
+    P2.3 state: returns a fully-instantiated result with Formulation, Dose,
+    and Evidence populated and remaining dimensions skeletoned. Subsequent
+    P2.x slices populate `components`, `penalties`, and `score` per dimension.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.
@@ -158,4 +159,11 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     dose_dim.components = dose_payload["components"]
     dose_dim.penalties = dose_payload["penalties"]
     dose_dim.metadata = dose_payload.get("metadata", {})
+
+    evidence_payload = score_evidence(product)
+    evidence_dim = result.dimensions["evidence"]
+    evidence_dim.score = evidence_payload["score"]
+    evidence_dim.components = evidence_payload["components"]
+    evidence_dim.penalties = evidence_payload["penalties"]
+    evidence_dim.metadata = evidence_payload.get("metadata", {})
     return result

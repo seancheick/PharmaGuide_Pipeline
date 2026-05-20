@@ -243,8 +243,8 @@ def test_score_probiotic_wires_dose_dimension_at_p22() -> None:
     assert dose["score"] == 25.0
     assert dose["max"] == 25.0
     assert dose["metadata"]["phase"] == "P2.2_probiotic_dose"
-    assert breakdown["phase"] == "P2.2_probiotic_dose"
-    assert breakdown["dimensions"]["evidence"]["score"] is None
+    assert breakdown["phase"] == "P2.3_probiotic_evidence"
+    assert breakdown["dimensions"]["evidence"]["score"] is not None
     assert breakdown["score_100"] is None
 
 
