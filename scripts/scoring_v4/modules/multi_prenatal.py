@@ -17,7 +17,7 @@ single-ingredient products:
                                allergens, marketing penalties
     Total class score  100
 
-P3.2 state: Formulation and Dose are populated; Evidence, Trust, and
+P3.3 state: Formulation, Dose, and Evidence are populated; Trust and
 Transparency remain scaffolded. Later P3 slices populate the existing
 dictionaries in place so downstream audit / Flutter consumers do not chase
 shape changes.
@@ -39,10 +39,11 @@ from scoring_v4.modules.generic import (
     ManufacturerViolationsResult,
 )
 from scoring_v4.modules.multi_prenatal_dose import score_dose
+from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
 
-PHASE_MARKER = "P3.2_multi_prenatal_dose"
+PHASE_MARKER = "P3.3_multi_prenatal_evidence"
 
 
 # Dimension caps per §4, multi/prenatal column. Order is rendering order in
@@ -62,7 +63,8 @@ class MultiPrenatalModuleResult:
 
     Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
     can read `shadow_score_v4_breakdown["module"]` uniformly regardless of
-    class. P3.2 populates Formulation + Dose and leaves downstream math unset.
+    class. P3.3 populates Formulation + Dose + Evidence and leaves downstream
+    math unset.
     """
 
     module: str = "multi_or_prenatal"
@@ -105,9 +107,8 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     result = MultiPrenatalModuleResult(
         dimensions=_empty_dimensions(),
         metadata={
-            "module_state": "dose_partial",
+            "module_state": "evidence_partial",
             "deferred_slices": [
-                "P3.3_evidence",
                 "P3.4_trust",
                 "P3.5_transparency",
                 "P3.6_final_assembly",
@@ -128,4 +129,11 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     dose_dim.components = dose_payload["components"]
     dose_dim.penalties = dose_payload["penalties"]
     dose_dim.metadata = dose_payload.get("metadata", {})
+
+    evidence_payload = score_evidence(product)
+    evidence_dim = result.dimensions["evidence"]
+    evidence_dim.score = evidence_payload["score"]
+    evidence_dim.components = evidence_payload["components"]
+    evidence_dim.penalties = evidence_payload["penalties"]
+    evidence_dim.metadata = evidence_payload.get("metadata", {})
     return result

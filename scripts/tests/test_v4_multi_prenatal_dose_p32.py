@@ -249,7 +249,7 @@ def test_score_multi_prenatal_wires_dose_dimension_and_keeps_score_100_none() ->
     assert dose["score"] is not None
     assert dose["metadata"]["phase"] == "P3.2_multi_prenatal_dose"
     assert breakdown["score_100"] is None
-    assert breakdown["phase"] == "P3.2_multi_prenatal_dose"
+    assert breakdown["phase"].startswith("P3.")
 
 
 def test_multi_prenatal_dose_does_not_import_v3_scorer() -> None:

@@ -155,11 +155,12 @@ def test_multi_prenatal_dimensions_share_stable_contract() -> None:
         dim = breakdown["dimensions"][name]
         assert set(dim.keys()) == {"score", "max", "components", "penalties", "metadata"}
 
-    # P3.2: formulation and dose are populated; the other three dimensions
-    # remain scaffolded until their slices land.
+    # P3.3: formulation, dose, and evidence are populated; trust and
+    # transparency remain scaffolded until their slices land.
     assert breakdown["dimensions"]["formulation"]["score"] is not None
     assert breakdown["dimensions"]["dose"]["score"] is not None
-    for name in ("evidence", "trust", "transparency"):
+    assert breakdown["dimensions"]["evidence"]["score"] is not None
+    for name in ("trust", "transparency"):
         dim = breakdown["dimensions"][name]
         assert dim["score"] is None
         assert dim["components"] == {}
@@ -188,7 +189,7 @@ def test_multi_prenatal_score_fields_stay_none_until_final_assembly() -> None:
     assert breakdown["raw_score_100"] is None
     assert breakdown["score_100"] is None
     assert breakdown["phase"].startswith("P3.")
-    assert breakdown["metadata"]["module_state"] == "dose_partial"
+    assert breakdown["metadata"]["module_state"] == "evidence_partial"
 
 
 def test_score_multi_prenatal_resilient_to_malformed_input() -> None:
