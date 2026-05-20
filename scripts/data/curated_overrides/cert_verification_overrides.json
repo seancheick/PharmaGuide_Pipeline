@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 701,
+    "total_overrides": 712,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -17,15 +17,19 @@
       "brand": "Garden of Life Dr. Formulated Probiotics",
       "product": "Once Daily Prenatal",
       "program": "NSF Certified",
-      "status": "pending_review",
-      "reason": "Registry row is Prenatal and Postnatal Daily Care; likely same line but name drift is clinically/market-significant enough to leave pending.",
-      "reviewed_at": "2026-05-19",
-      "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed remaining Once Daily Prenatal members: 20B CFU/16-strain prenatal probiotic line corresponds to registry row Dr. Formulated Probiotics Prenatal and Postnatal Daily Care; same capsule class and positioning.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "274081",
       "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
-      "scope": "product_line",
       "matched_brand": "Garden of Life, LLC",
-      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care"
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
     },
     {
       "brand": "Nordic Naturals",
@@ -12466,6 +12470,208 @@
       "record_id": "NSF_CERTIFIE_DF37D7F6EA10",
       "matched_brand": "OLLY, Public Benefit Corporation",
       "matched_product": "TEEN GIRL MULTI",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Multi-Vitamin Elite A.M.",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed remaining member: Multi-Vitamin Elite A.M. is the AM component of Thorne Multi-Vitamin Elite; registry also has exact NSF Certified AM row, so product-line match is accepted.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74938",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Dr. Formulated",
+      "product": "Organic Fiber Delicious Citrus Flavor",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed Organic Fiber members against alternate NSF Certified rows; citrus flavor maps to Dr. Formulated Organic Fiber Citrus.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "233013",
+      "record_id": "NSF_CERTIFIE_B1D1FAEB7082",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Organic Fiber Citrus",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=NSF_CERTIFIE_B1D1FAEB7082"
+      ]
+    },
+    {
+      "brand": "Garden of Life Dr. Formulated",
+      "product": "Organic Fiber Delicious Citrus Flavor",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed Organic Fiber members against alternate NSF Certified rows; citrus flavor maps to Dr. Formulated Organic Fiber Citrus.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "66827",
+      "record_id": "NSF_CERTIFIE_B1D1FAEB7082",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Organic Fiber Citrus",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=NSF_CERTIFIE_B1D1FAEB7082"
+      ]
+    },
+    {
+      "brand": "Garden of Life Dr. Formulated",
+      "product": "Organic Fiber Unflavored",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed Organic Fiber members against alternate NSF Certified rows; unflavored products map to Dr. Formulated Organic Fiber.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "233016",
+      "record_id": "NSF_CERTIFIE_770C1E9F53AF",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Organic Fiber",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=NSF_CERTIFIE_770C1E9F53AF"
+      ]
+    },
+    {
+      "brand": "Garden of Life Dr. Formulated",
+      "product": "Organic Fiber Unflavored",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed Organic Fiber members against alternate NSF Certified rows; unflavored products map to Dr. Formulated Organic Fiber.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "274135",
+      "record_id": "NSF_CERTIFIE_770C1E9F53AF",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Organic Fiber",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=NSF_CERTIFIE_770C1E9F53AF"
+      ]
+    },
+    {
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "product": "Once Daily Prenatal",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed remaining Once Daily Prenatal members: 20B CFU/16-strain prenatal probiotic line corresponds to registry row Dr. Formulated Probiotics Prenatal and Postnatal Daily Care; same capsule class and positioning.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "243976",
+      "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Dr. Formulated Probiotics",
+      "product": "Once Daily Prenatal",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed remaining Once Daily Prenatal members: 20B CFU/16-strain prenatal probiotic line corresponds to registry row Dr. Formulated Probiotics Prenatal and Postnatal Daily Care; same capsule class and positioning.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "83153",
+      "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Meriva-SR Curcumin Phytosome",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed Thorne Meriva members: Meriva-500/Meriva-SR are former or line names for Thorne Curcumin Phytosome NSF Certified for Sport; registry row is the current Curcumin Phytosome product-line name.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "16095",
+      "record_id": "NSF_SPORT_33DFB8FEB29C",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne Curcumin Phytosome",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Meriva-500 Curcumin Phytosome",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed Thorne Meriva members: Meriva-500/Meriva-SR are former or line names for Thorne Curcumin Phytosome NSF Certified for Sport; registry row is the current Curcumin Phytosome product-line name.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "16105",
+      "record_id": "NSF_SPORT_33DFB8FEB29C",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne Curcumin Phytosome",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Meriva-500 Curcumin Phytosome",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed Thorne Meriva members: Meriva-500/Meriva-SR are former or line names for Thorne Curcumin Phytosome NSF Certified for Sport; registry row is the current Curcumin Phytosome product-line name.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "16112",
+      "record_id": "NSF_SPORT_33DFB8FEB29C",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne Curcumin Phytosome",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Meriva-500 Curcumin Phytosome",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed Thorne Meriva members: Meriva-500/Meriva-SR are former or line names for Thorne Curcumin Phytosome NSF Certified for Sport; registry row is the current Curcumin Phytosome product-line name.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35602",
+      "record_id": "NSF_SPORT_33DFB8FEB29C",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne Curcumin Phytosome",
       "triage_reasons": [
         "no_strong_signal"
       ]
