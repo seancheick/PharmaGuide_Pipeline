@@ -52,12 +52,13 @@ from scoring_v4.modules.generic import (
     ManufacturerTrustResult,
     ManufacturerViolationsResult,
 )
+from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.probiotic_dose import score_dose
 from scoring_v4.modules.probiotic_evidence import score_evidence
 from scoring_v4.modules.probiotic_formulation import score_formulation
 
 
-PHASE_MARKER = "P2.3_probiotic_evidence"
+PHASE_MARKER = "P2.4_probiotic_trust"
 
 
 # Dimension caps per §4 line 176, probiotic column.
@@ -127,9 +128,10 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_probiotic(product: Any) -> ProbioticModuleResult:
     """Score a probiotic-class product against the v4 probiotic rubric.
 
-    P2.3 state: returns a fully-instantiated result with Formulation, Dose,
-    and Evidence populated and remaining dimensions skeletoned. Subsequent
-    P2.x slices populate `components`, `penalties`, and `score` per dimension.
+    P2.4 state: returns a fully-instantiated result with Formulation, Dose,
+    Evidence, and Trust populated; Transparency remains skeleton.
+    Subsequent P2.x slices populate `components`, `penalties`, and `score`
+    per dimension.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.
@@ -166,4 +168,20 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     evidence_dim.components = evidence_payload["components"]
     evidence_dim.penalties = evidence_payload["penalties"]
     evidence_dim.metadata = evidence_payload.get("metadata", {})
+
+    # P2.4 — Trust dimension reuses the generic B4a/B4b/B4c logic.
+    # Probiotic Trust 15 has the same caps and sub-rubrics as generic Trust
+    # 15 per §6 line 292-295. No probiotic-specific cert programs exist in
+    # the catalog today (NSF/USP/Informed are class-agnostic; IFOS is gated
+    # marine-only via _is_omega_like and correctly filtered for probiotics).
+    # The cross-module `brand_only` / `needs_review` scope policy question
+    # is tracked separately as P1.7.
+    trust_payload = score_trust(product)
+    trust_dim = result.dimensions["trust"]
+    trust_dim.score = trust_payload["score"]
+    trust_dim.components = trust_payload["components"]
+    trust_dim.penalties = trust_payload["penalties"]
+    trust_dim.metadata = trust_payload.get("metadata", {})
+
+    result.phase = PHASE_MARKER
     return result

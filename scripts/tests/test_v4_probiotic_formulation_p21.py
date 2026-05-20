@@ -206,7 +206,8 @@ def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p23() ->
     assert formulation["max"] == 25.0
     assert formulation["metadata"]["phase"] == "P2.1_probiotic_formulation"
     assert breakdown["dimensions"]["dose"]["score"] is not None
-    assert breakdown["phase"] == "P2.3_probiotic_evidence"
+    # Module-level phase rolls forward as each P2.x slice lands.
+    assert breakdown["phase"].startswith("P2.")
     assert breakdown["score_100"] is None
 
 

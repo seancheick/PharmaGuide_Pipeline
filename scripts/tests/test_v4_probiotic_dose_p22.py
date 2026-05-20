@@ -243,7 +243,9 @@ def test_score_probiotic_wires_dose_dimension_at_p22() -> None:
     assert dose["score"] == 25.0
     assert dose["max"] == 25.0
     assert dose["metadata"]["phase"] == "P2.2_probiotic_dose"
-    assert breakdown["phase"] == "P2.3_probiotic_evidence"
+    # Module-level phase rolls forward as each P2.x slice lands; per-dimension
+    # phase markers stay locked to the slice that owns them.
+    assert breakdown["phase"].startswith("P2.")
     assert breakdown["dimensions"]["evidence"]["score"] is not None
     assert breakdown["score_100"] is None
 

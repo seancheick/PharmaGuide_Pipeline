@@ -206,8 +206,10 @@ def test_score_probiotic_wires_evidence_dimension_at_p23() -> None:
     evidence = breakdown["dimensions"]["evidence"]
     assert evidence["score"] == 10.6
     assert evidence["metadata"]["phase"] == "P2.3_probiotic_evidence"
-    assert breakdown["phase"] == "P2.3_probiotic_evidence"
-    assert breakdown["dimensions"]["trust"]["score"] is None
+    # Module-level phase rolls forward as each P2.x slice lands.
+    assert breakdown["phase"].startswith("P2.")
+    # Trust populated at P2.4; transparency remains skeleton until P2.5.
+    assert breakdown["dimensions"]["transparency"]["score"] is None
 
 
 def test_probiotic_evidence_accepts_final_blob_probiotic_detail_alias() -> None:
