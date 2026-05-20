@@ -146,7 +146,7 @@ def test_multi_prenatal_dimension_caps_match_spec() -> None:
         assert breakdown["dimensions"][name]["max"] == expected_cap
 
 
-def test_multi_prenatal_dimensions_share_stable_contract_and_are_skeleton() -> None:
+def test_multi_prenatal_dimensions_share_stable_contract() -> None:
     from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 
     breakdown = score_multi_prenatal(COMPLETE_MULTI_PRODUCT).to_breakdown()
@@ -154,6 +154,12 @@ def test_multi_prenatal_dimensions_share_stable_contract_and_are_skeleton() -> N
     for name in EXPECTED_DIMENSION_CAPS:
         dim = breakdown["dimensions"][name]
         assert set(dim.keys()) == {"score", "max", "components", "penalties", "metadata"}
+
+    # P3.1: formulation is populated; the other four dimensions remain
+    # scaffolded until their slices land.
+    assert breakdown["dimensions"]["formulation"]["score"] is not None
+    for name in ("dose", "evidence", "trust", "transparency"):
+        dim = breakdown["dimensions"][name]
         assert dim["score"] is None
         assert dim["components"] == {}
         assert dim["penalties"] == {}
@@ -180,8 +186,8 @@ def test_multi_prenatal_score_fields_stay_none_until_final_assembly() -> None:
 
     assert breakdown["raw_score_100"] is None
     assert breakdown["score_100"] is None
-    assert breakdown["phase"] == "P3.0_multi_prenatal_skeleton"
-    assert breakdown["metadata"]["module_state"] == "skeleton"
+    assert breakdown["phase"].startswith("P3.")
+    assert breakdown["metadata"]["module_state"] == "formulation_partial"
 
 
 def test_score_multi_prenatal_resilient_to_malformed_input() -> None:
@@ -219,7 +225,7 @@ def test_shadow_scorer_wires_complete_multivitamin_to_p3_module() -> None:
     assert shadow["shadow_score_v4_verdict"] == "NOT_SCORED"
     assert shadow["shadow_score_v4_confidence"] == "skeleton"
     assert shadow["shadow_score_v4_breakdown"]["module"]["module"] == "multi_or_prenatal"
-    assert shadow["shadow_score_v4_breakdown"]["module"]["phase"] == "P3.0_multi_prenatal_skeleton"
+    assert shadow["shadow_score_v4_breakdown"]["module"]["phase"].startswith("P3.")
 
 
 def test_shadow_scorer_wires_prenatal_dha_to_p3_not_omega() -> None:
@@ -267,4 +273,3 @@ def test_shadow_scorer_safety_short_circuits_before_p3_module() -> None:
     assert shadow["shadow_score_v4_verdict"] == "BLOCKED"
     assert shadow["shadow_score_v4_confidence"] == "blocked_by_safety_gate"
     assert "module" not in shadow["shadow_score_v4_breakdown"]
-

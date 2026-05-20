@@ -1,4 +1,4 @@
-"""v4 Multi / prenatal module — P3 scaffold.
+"""v4 Multi / prenatal module — P3.
 
 Per `docs/plans/SCORING_V4_PROPOSAL.md` §4, broad multivitamin and
 prenatal products use a different weight profile from generic
@@ -17,10 +17,10 @@ single-ingredient products:
                                allergens, marketing penalties
     Total class score  100
 
-P3.0 state: scaffold only. All five dimensions are present with locked
-caps and `score=None`. Later P3 slices populate the existing dictionaries
-in place so downstream audit / Flutter consumers do not chase shape
-changes.
+P3.1 state: Formulation is populated; Dose, Evidence, Trust, and
+Transparency remain scaffolded. Later P3 slices populate the existing
+dictionaries in place so downstream audit / Flutter consumers do not
+chase shape changes.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). It reuses the shared v4 breakdown dataclasses
@@ -38,9 +38,10 @@ from scoring_v4.modules.generic import (
     ManufacturerTrustResult,
     ManufacturerViolationsResult,
 )
+from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
 
-PHASE_MARKER = "P3.0_multi_prenatal_skeleton"
+PHASE_MARKER = "P3.1_multi_prenatal_formulation"
 
 
 # Dimension caps per §4, multi/prenatal column. Order is rendering order in
@@ -60,7 +61,7 @@ class MultiPrenatalModuleResult:
 
     Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
     can read `shadow_score_v4_breakdown["module"]` uniformly regardless of
-    class. P3.0 intentionally leaves all math unset.
+    class. P3.1 populates Formulation and leaves downstream math unset.
     """
 
     module: str = "multi_or_prenatal"
@@ -91,7 +92,7 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 
 
 def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
-    """Return the P3.0 multi/prenatal scaffold.
+    """Score a multi/prenatal-class product against the current P3 state.
 
     Never raises on malformed input. Layer 2 completeness owns production
     eligibility; this defensive behavior supports tests and direct callers
@@ -100,12 +101,11 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     if not isinstance(product, dict):
         product = {}
 
-    return MultiPrenatalModuleResult(
+    result = MultiPrenatalModuleResult(
         dimensions=_empty_dimensions(),
         metadata={
-            "module_state": "skeleton",
+            "module_state": "formulation_partial",
             "deferred_slices": [
-                "P3.1_formulation",
                 "P3.2_dose",
                 "P3.3_evidence",
                 "P3.4_trust",
@@ -115,3 +115,10 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
         },
     )
 
+    formulation_payload = score_formulation(product)
+    formulation_dim = result.dimensions["formulation"]
+    formulation_dim.score = formulation_payload["score"]
+    formulation_dim.components = formulation_payload["components"]
+    formulation_dim.penalties = formulation_payload["penalties"]
+    formulation_dim.metadata = formulation_payload.get("metadata", {})
+    return result
