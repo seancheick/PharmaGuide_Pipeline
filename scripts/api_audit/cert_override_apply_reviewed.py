@@ -34,7 +34,6 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from api_audit.cert_override_apply_rejects import merge_into_overrides_file
 from cert_resolver import normalize_brand, normalize_product
 
 
@@ -186,6 +185,71 @@ def generate_reviewed_overrides(
     return entries
 
 
+def merge_reviewed_into_overrides_file(
+    overrides_path: Path,
+    entries: List[Dict[str, Any]],
+) -> tuple[int, int]:
+    """Upsert manually reviewed decisions into the curated overrides file.
+
+    Reviewed decisions are allowed to promote a previous pending_review row for
+    the same (program, record_id, dsld_id). Auto-reject imports intentionally
+    skip duplicates, but human-reviewed decisions are authoritative.
+    """
+    if not overrides_path.exists():
+        payload: Dict[str, Any] = {
+            "_metadata": {
+                "schema_version": "6.0.0",
+                "description": "Manual overrides for cert verification scope.",
+                "purpose": "cert_verification_manual_override",
+                "last_updated": "",
+                "total_overrides": 0,
+            },
+            "overrides": [],
+        }
+    else:
+        payload = json.loads(overrides_path.read_text())
+
+    existing = payload.setdefault("overrides", [])
+    index: dict[tuple[str, str, str], int] = {}
+    for idx, override in enumerate(existing):
+        if not isinstance(override, dict):
+            continue
+        key = (
+            override.get("program", ""),
+            override.get("record_id", ""),
+            str(override.get("dsld_id", "")),
+        )
+        index[key] = idx
+
+    added = 0
+    replaced = 0
+    for entry in entries:
+        key = (
+            entry.get("program", ""),
+            entry.get("record_id", ""),
+            str(entry.get("dsld_id", "")),
+        )
+        existing_idx = index.get(key)
+        if existing_idx is None:
+            existing.append(entry)
+            index[key] = len(existing) - 1
+            added += 1
+            continue
+        if existing[existing_idx] != entry:
+            existing[existing_idx] = entry
+            replaced += 1
+
+    if added or replaced:
+        payload.setdefault("_metadata", {})
+        payload["_metadata"]["total_overrides"] = len(existing)
+        payload["_metadata"]["last_updated"] = date.today().isoformat()
+
+    overrides_path.write_text(
+        json.dumps(payload, indent=2, sort_keys=False, ensure_ascii=False) + "\n"
+    )
+    return added, replaced
+
+
 def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("--cluster-report", type=Path, default=DEFAULT_CLUSTER_REPORT)
@@ -245,9 +309,11 @@ def main(argv: List[str] | None = None) -> int:
         print("  (dry-run — overrides file NOT modified)")
         return 0
 
-    added = merge_into_overrides_file(args.overrides_path, entries)
+    added, replaced = merge_reviewed_into_overrides_file(args.overrides_path, entries)
     print(f"  Wrote {added} new override entries to {args.overrides_path}")
-    print(f"  (skipped {len(entries) - added} duplicates already in file)")
+    if replaced:
+        print(f"  Replaced {replaced} existing reviewed/pending entries")
+    print(f"  (skipped {len(entries) - added - replaced} duplicates already in file)")
     return 0
 
 

@@ -265,3 +265,41 @@ def test_cli_apply_writes_reviewed_overrides(tmp_path: Path):
     assert exit_code == 0
     assert payload["_metadata"]["total_overrides"] == 2
     assert {entry["scope"] for entry in payload["overrides"]} == {"product_line"}
+
+
+def test_cli_apply_promotes_existing_pending_review_override(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import main
+
+    cluster_report = _cluster_report(tmp_path)
+    overrides_path = tmp_path / "overrides.json"
+    overrides_path.write_text(json.dumps({
+        "_metadata": {"total_overrides": 1, "last_updated": "2026-01-01"},
+        "overrides": [{
+            "brand": "GNC Pro Performance AMP",
+            "product": "Amplified Wheybolic Extreme 60 Original Chocolate",
+            "program": "Informed Choice",
+            "status": "pending_review",
+            "scope": "product_line",
+            "dsld_id": "175942",
+            "record_id": "INFORMED_CHO_65E7FB3D998C",
+            "reason": "old pending row",
+        }],
+    }, indent=2))
+
+    exit_code = main([
+        "--cluster-report", str(cluster_report),
+        "--overrides-path", str(overrides_path),
+        "--program", "Informed Choice",
+        "--record-id", "INFORMED_CHO_65E7FB3D998C",
+        "--action", "verify_product_line",
+        "--reviewer", "Sean",
+        "--review-note", "Reviewed the cluster table and confirmed line variants.",
+        "--member-dsld-id", "175942",
+    ])
+
+    payload = json.loads(overrides_path.read_text())
+    assert exit_code == 0
+    assert payload["_metadata"]["total_overrides"] == 1
+    assert len(payload["overrides"]) == 1
+    assert payload["overrides"][0]["status"] == "verified"
+    assert payload["overrides"][0]["reason"].startswith("P1.7.3 manual verify_product_line")

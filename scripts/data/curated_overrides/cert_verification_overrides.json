@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 360,
+    "total_overrides": 364,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -381,15 +381,19 @@
       "brand": "Garden of Life Sport",
       "product": "Organic Plant-Based Energy + Focus Blackberry Flavor",
       "program": "Informed Choice",
-      "status": "pending_review",
-      "reason": "Registry base row lacks flavor; label says Blackberry but nearby registry rows mention Blackberry Cherry. Needs source image/detail check before override.",
-      "reviewed_at": "2026-05-19",
-      "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the Informed Choice registry row; all members are Garden of Life Sport Organic Plant-Based Energy + Focus Blackberry product-line/flavor instances.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "236845",
       "record_id": "INFORMED_CHO_7AC0558A6966",
-      "scope": "product_line",
       "matched_brand": "Garden of Life",
-      "matched_product": "Sport Organic Plant-Based Energy + Focus"
+      "matched_product": "Sport Organic Plant-Based Energy + Focus",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
     },
     {
       "brand": "Thorne",
@@ -6210,6 +6214,78 @@
       "record_id": "NSF_SPORT_5C70F80AC107",
       "matched_brand": "Thorne",
       "matched_product": "Thorne® Amino Complex Berry",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Sport",
+      "product": "Organic Plant-Based Energy + Focus Blackberry Flavor",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the Informed Choice registry row; all members are Garden of Life Sport Organic Plant-Based Energy + Focus Blackberry product-line/flavor instances.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "235619",
+      "record_id": "INFORMED_CHO_7AC0558A6966",
+      "matched_brand": "Garden of Life",
+      "matched_product": "Sport Organic Plant-Based Energy + Focus",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Sport",
+      "product": "Organic Plant-Based Energy + Focus Blackberry",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster members against the Informed Choice registry row; all members are Garden of Life Sport Organic Plant-Based Energy + Focus Blackberry product-line/flavor instances.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "83263",
+      "record_id": "INFORMED_CHO_7AC0558A6966",
+      "matched_brand": "Garden of Life",
+      "matched_product": "Sport Organic Plant-Based Energy + Focus",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Sport",
+      "product": "Organic Plant-Based Recovery Blackberry Lemonade",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster member against the Informed Choice registry row; product is Garden of Life Sport Organic Plant-Based Recovery Blackberry Lemonade flavor variant matching the certified line.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "83255",
+      "record_id": "INFORMED_CHO_62D72AF025EE",
+      "matched_brand": "Garden of Life",
+      "matched_product": "Sport Organic Plant-Based Recovery",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Sport",
+      "product": "Organic Plant-Based Recovery Blackberry Lemonade",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed cluster member against the NSF Sport registry row; product is Garden of Life Sport Organic Plant-Based Recovery Blackberry Lemonade flavor variant matching the certified post-workout recovery line.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "83255",
+      "record_id": "NSF_SPORT_B77A8C13B4A3",
+      "matched_brand": "Garden of Life",
+      "matched_product": "Sport Organic Post-Workout Recovery Blackberry Lemonade",
       "triage_reasons": [
         "no_strong_signal"
       ]
