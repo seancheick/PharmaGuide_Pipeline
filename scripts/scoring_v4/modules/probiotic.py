@@ -25,10 +25,9 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; reuses generic)
 
-P2.0 — this commit — establishes the scaffold and breakdown contract.
-Every dimension's `score` is None and its `components` / `penalties`
-sub-dicts are empty. Subsequent P2.x slices fill them in-place; the
-shape never changes.
+P2.1 state: Formulation is populated; Dose, Evidence, Trust, and
+Transparency remain skeletons. Subsequent P2.x slices fill them in-place;
+the shape never changes.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). Shared infrastructure (DimensionResult,
@@ -53,9 +52,10 @@ from scoring_v4.modules.generic import (
     ManufacturerTrustResult,
     ManufacturerViolationsResult,
 )
+from scoring_v4.modules.probiotic_formulation import score_formulation
 
 
-PHASE_MARKER = "P2.0_probiotic_scaffold"
+PHASE_MARKER = "P2.1_probiotic_formulation"
 
 
 # Dimension caps per §4 line 176, probiotic column.
@@ -125,9 +125,9 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_probiotic(product: Any) -> ProbioticModuleResult:
     """Score a probiotic-class product against the v4 probiotic rubric.
 
-    At P2.0 — scaffold only. Returns a fully-instantiated result with
-    the 5 dimension caps locked and all scores None. Subsequent P2.x
-    slices populate `components`, `penalties`, and `score` per dimension.
+    P2.1 state: returns a fully-instantiated result with Formulation
+    populated and remaining dimensions skeletoned. Subsequent P2.x slices
+    populate `components`, `penalties`, and `score` per dimension.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.
@@ -141,6 +141,13 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
         ProbioticModuleResult with the locked breakdown shape.
     """
     if not isinstance(product, dict):
-        product = {}  # noqa: F841 — referenced once probiotic-specific scoring lands
+        product = {}
 
-    return ProbioticModuleResult(dimensions=_empty_dimensions())
+    result = ProbioticModuleResult(dimensions=_empty_dimensions())
+    formulation_payload = score_formulation(product)
+    formulation_dim = result.dimensions["formulation"]
+    formulation_dim.score = formulation_payload["score"]
+    formulation_dim.components = formulation_payload["components"]
+    formulation_dim.penalties = formulation_payload["penalties"]
+    formulation_dim.metadata = formulation_payload.get("metadata", {})
+    return result
