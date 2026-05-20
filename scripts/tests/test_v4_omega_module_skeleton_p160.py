@@ -177,7 +177,9 @@ def test_omega_phase_marker_rolls_forward_across_slices() -> None:
 
 def test_score_omega_resilient_to_malformed_input() -> None:
     """Never raise on malformed input — the dimensions skeleton stays
-    intact and the breakdown shape is unchanged."""
+    intact and the breakdown shape is unchanged. P1.6.6 lands score_100
+    as a real number after final assembly (low end of calibrated range
+    for empty input)."""
     from scoring_v4.modules.omega import score_omega
 
     for bad in (None, {}, {"supplement_type": None}, 42, "oops"):
@@ -185,8 +187,9 @@ def test_score_omega_resilient_to_malformed_input() -> None:
         breakdown = result.to_breakdown()
         assert breakdown["module"] == "omega"
         assert set(breakdown["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-        # P1.6.0 skeleton: score_100 stays None until final assembly.
-        assert breakdown["score_100"] is None
+        # P1.6.6: score_100 is computed via affine calibration; even empty
+        # input yields a real number in [0, 100].
+        assert breakdown["score_100"] is None or 0 <= breakdown["score_100"] <= 100
 
 
 def test_score_omega_does_not_mutate_input() -> None:
@@ -747,8 +750,9 @@ def test_shadow_wires_omega_module_when_route_is_omega() -> None:
     module_block = out["shadow_score_v4_breakdown"]["module"]
     assert module_block["module"] == "omega"
     assert set(module_block["dimensions"].keys()) == set(EXPECTED_DIMENSION_CAPS.keys())
-    # P1.6.0: score_100 is None until final assembly lands at P1.6.6.
-    assert module_block["score_100"] is None
+    # P1.6.6: score_100 is a real calibrated number after final assembly.
+    assert module_block["score_100"] is not None
+    assert 0 <= module_block["score_100"] <= 100
 
 
 def test_shadow_does_not_wire_omega_module_when_completeness_fails() -> None:
