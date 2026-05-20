@@ -111,7 +111,7 @@ def test_probiotic_dimension_caps_match_proposal_section_4() -> None:
 
 
 def test_probiotic_dimensions_share_stable_contract() -> None:
-    """P2.1 populates formulation; later dimensions remain skeleton.
+    """P2.2 populates formulation and dose; later dimensions remain skeleton.
     The dict shape itself is stable across slices."""
     from scoring_v4.modules.probiotic import score_probiotic
 
@@ -124,9 +124,9 @@ def test_probiotic_dimensions_share_stable_contract() -> None:
         assert "components" in dim
         assert "penalties" in dim
         assert "metadata" in dim
-        if name == "formulation":
+        if name in {"formulation", "dose"}:
             assert dim["score"] is not None
-            assert dim["components"], "formulation.components should be populated at P2.1"
+            assert dim["components"], f"{name}.components should be populated by P2.2"
         else:
             assert dim["score"] is None, f"{name}.score must remain None until its P2.x slice"
             assert dim["components"] == {}, f"{name}.components must start empty"
@@ -162,11 +162,11 @@ def test_probiotic_score_100_is_none_at_p20() -> None:
     assert breakdown.get("raw_score_100") is None
 
 
-def test_probiotic_phase_marker_p21_formulation() -> None:
+def test_probiotic_phase_marker_p22_dose() -> None:
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(COMPLETE_PROBIOTIC_PRODUCT).to_breakdown()
-    assert breakdown["phase"] == "P2.1_probiotic_formulation"
+    assert breakdown["phase"] == "P2.2_probiotic_dose"
 
 
 def test_score_probiotic_resilient_to_malformed_input() -> None:

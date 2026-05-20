@@ -53,7 +53,7 @@ def score_formulation(product: Any) -> Dict[str, Any]:
       - prebiotic complement: 5
     """
     product = product if isinstance(product, dict) else {}
-    pdata = _safe_dict(product.get("probiotic_data"))
+    pdata = _probiotic_payload(product)
 
     total_billion = _total_billion_count(pdata)
     strain_count = _total_strain_count(pdata)
@@ -169,3 +169,12 @@ def _score_delivery_survivability(product: Dict[str, Any], pdata: Dict[str, Any]
         tier = _safe_dict(product.get("delivery_data")).get("highest_tier")
     tier_int = _as_int(tier, 0)
     return {1: 4.0, 2: 3.0, 3: 2.0}.get(tier_int, 0.0)
+
+
+def _probiotic_payload(product: Dict[str, Any]) -> Dict[str, Any]:
+    """Read enriched-input `probiotic_data` and final-blob `probiotic_detail`.
+
+    The shadow pipeline scores enriched rows, but canary/debug tools often
+    call the module directly against shipped detail blobs.
+    """
+    return _safe_dict(product.get("probiotic_data") or product.get("probiotic_detail"))

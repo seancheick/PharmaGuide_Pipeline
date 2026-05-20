@@ -171,6 +171,18 @@ def test_prebiotic_complement_uses_p05_enriched_flag() -> None:
     assert without_prebiotic["components"]["prebiotic_complement"] == 0.0
 
 
+def test_probiotic_formulation_accepts_final_blob_probiotic_detail_alias() -> None:
+    from scoring_v4.modules.probiotic_formulation import score_formulation
+
+    product = _product()
+    product["probiotic_detail"] = product.pop("probiotic_data")
+
+    payload = score_formulation(product)
+
+    assert payload["score"] == 25.0
+    assert payload["metadata"]["total_billion_count"] == 50.0
+
+
 def test_strain_count_falls_back_to_unique_blend_strains() -> None:
     from scoring_v4.modules.probiotic_formulation import score_formulation
 
@@ -184,7 +196,7 @@ def test_strain_count_falls_back_to_unique_blend_strains() -> None:
     assert payload["components"]["named_species_diversity"] == 2.0
 
 
-def test_score_probiotic_wires_formulation_dimension_only_at_p21() -> None:
+def test_score_probiotic_wires_formulation_and_preserves_p21_payload_at_p22() -> None:
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_product()).to_breakdown()
@@ -193,8 +205,8 @@ def test_score_probiotic_wires_formulation_dimension_only_at_p21() -> None:
     assert formulation["score"] == 25.0
     assert formulation["max"] == 25.0
     assert formulation["metadata"]["phase"] == "P2.1_probiotic_formulation"
-    assert breakdown["dimensions"]["dose"]["score"] is None
-    assert breakdown["phase"] == "P2.1_probiotic_formulation"
+    assert breakdown["dimensions"]["dose"]["score"] is not None
+    assert breakdown["phase"] == "P2.2_probiotic_dose"
     assert breakdown["score_100"] is None
 
 
