@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 398,
+    "total_overrides": 409,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -6900,6 +6900,204 @@
       "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
       "triage_reasons": [
         "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179782",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179786",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179802",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180222",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180316",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "209359",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA 200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "241703",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA 200mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "266767",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi +DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "26688",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271089",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal Multi + DHA 200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed selected members against the USP registry row; selected products are Nature Made Prenatal Multi + DHA / 200 mg softgel line instances matching Prenatal Folic Acid + DHA Softgels. Ambiguous Folic Acid With DHA member left unresolved.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271547",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
       ]
     }
   ]
