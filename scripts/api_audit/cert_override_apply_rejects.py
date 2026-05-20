@@ -154,7 +154,9 @@ def merge_into_overrides_file(
         payload["_metadata"]["total_overrides"] = len(existing)
         payload["_metadata"]["last_updated"] = date.today().isoformat()
 
-    overrides_path.write_text(json.dumps(payload, indent=2, sort_keys=False) + "\n")
+    overrides_path.write_text(
+        json.dumps(payload, indent=2, sort_keys=False, ensure_ascii=False) + "\n"
+    )
     return added
 
 
