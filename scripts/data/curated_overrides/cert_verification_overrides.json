@@ -3,9 +3,9 @@
     "schema_version": "6.0.0",
     "description": "Manual overrides for cert verification scope. Used when (a) the fuzzy resolver returns needs_review and a human confirms/downgrades, or (b) a known-good cert isn't in the public registry snapshots yet. Pattern matches scripts/data/curated_overrides/upc_overrides.json.",
     "purpose": "cert_verification_manual_override",
-    "last_updated": "2026-05-19",
-    "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 32,
+    "last_updated": "2026-05-20",
+    "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md \u00a710.",
+    "total_overrides": 183,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -65,7 +65,7 @@
       "product": "Sacro-B",
       "program": "NSF Certified",
       "status": "verified",
-      "reason": "Exact name after trademark normalization; registry row is Thorne® Sacro-B™.",
+      "reason": "Exact name after trademark normalization; registry row is Thorne\u00ae Sacro-B\u2122.",
       "reviewed_at": "2026-05-19",
       "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
       "dsld_id": "337873",
@@ -73,15 +73,15 @@
       "scope": "product_line",
       "verified_at": "2026-05-18",
       "source_url": "https://info.nsf.org/Certified/Dietary/Listings.asp",
-      "matched_brand": "Thorne®",
-      "matched_product": "Thorne® Sacro-B™"
+      "matched_brand": "Thorne\u00ae",
+      "matched_product": "Thorne\u00ae Sacro-B\u2122"
     },
     {
       "brand": "Thorne",
       "product": "Pre-Workout Elite Citrus Berry Flavored",
       "program": "NSF Sport",
       "status": "verified",
-      "reason": "Registry lists base product Thorne® Pre-Workout Elite; flavor variant should be product-line, not separate hidden SKU.",
+      "reason": "Registry lists base product Thorne\u00ae Pre-Workout Elite; flavor variant should be product-line, not separate hidden SKU.",
       "reviewed_at": "2026-05-19",
       "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
       "dsld_id": "323126",
@@ -90,14 +90,14 @@
       "verified_at": "2026-05-18",
       "source_url": "https://nsfsport-prod.nsf.org/certified-products/listing-detail.php?id=1509896",
       "matched_brand": "Thorne",
-      "matched_product": "Thorne® Pre-Workout Elite"
+      "matched_product": "Thorne\u00ae Pre-Workout Elite"
     },
     {
       "brand": "Thorne",
       "product": "Pre-Workout Elite Citrus Berry Flavored",
       "program": "NSF Certified",
       "status": "verified",
-      "reason": "Registry lists base product Thorne® Pre-Workout Elite; flavor variant should be product-line, not separate hidden SKU.",
+      "reason": "Registry lists base product Thorne\u00ae Pre-Workout Elite; flavor variant should be product-line, not separate hidden SKU.",
       "reviewed_at": "2026-05-19",
       "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
       "dsld_id": "323126",
@@ -105,8 +105,8 @@
       "scope": "product_line",
       "verified_at": "2026-05-18",
       "source_url": "https://info.nsf.org/Certified/Dietary/Listings.asp",
-      "matched_brand": "Thorne®",
-      "matched_product": "Thorne® Pre-Workout Elite"
+      "matched_brand": "Thorne\u00ae",
+      "matched_product": "Thorne\u00ae Pre-Workout Elite"
     },
     {
       "brand": "Thorne",
@@ -254,7 +254,7 @@
       "product": "Melaton-3",
       "program": "NSF Sport",
       "status": "verified",
-      "reason": "Exact name after trademark normalization; registry row is Thorne® Melaton-3™.",
+      "reason": "Exact name after trademark normalization; registry row is Thorne\u00ae Melaton-3\u2122.",
       "reviewed_at": "2026-05-19",
       "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
       "dsld_id": "298036",
@@ -263,14 +263,14 @@
       "verified_at": "2026-05-18",
       "source_url": "https://nsfsport-prod.nsf.org/certified-products/listing-detail.php?id=1207474",
       "matched_brand": "Thorne",
-      "matched_product": "Thorne® Melaton-3™"
+      "matched_product": "Thorne\u00ae Melaton-3\u2122"
     },
     {
       "brand": "Thorne",
       "product": "Melaton-3",
       "program": "NSF Certified",
       "status": "verified",
-      "reason": "Exact name after trademark normalization; registry row is Thorne® Melaton-3™.",
+      "reason": "Exact name after trademark normalization; registry row is Thorne\u00ae Melaton-3\u2122.",
       "reviewed_at": "2026-05-19",
       "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
       "dsld_id": "298036",
@@ -278,8 +278,8 @@
       "scope": "product_line",
       "verified_at": "2026-05-18",
       "source_url": "https://info.nsf.org/Certified/Dietary/Listings.asp",
-      "matched_brand": "Thorne®",
-      "matched_product": "Thorne® Melaton-3™"
+      "matched_brand": "Thorne\u00ae",
+      "matched_product": "Thorne\u00ae Melaton-3\u2122"
     },
     {
       "brand": "Garden of Life Sport",
@@ -396,7 +396,7 @@
       "product": "Multi-Vitamin Elite A.M.",
       "program": "NSF Sport",
       "status": "verified",
-      "reason": "Registry lists base product Thorne® Multi-Vitamin Elite; A.M. is product-line variant.",
+      "reason": "Registry lists base product Thorne\u00ae Multi-Vitamin Elite; A.M. is product-line variant.",
       "reviewed_at": "2026-05-19",
       "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
       "dsld_id": "321975",
@@ -405,7 +405,7 @@
       "verified_at": "2026-05-18",
       "source_url": "https://nsfsport-prod.nsf.org/certified-products/listing-detail.php?id=1309658",
       "matched_brand": "Thorne",
-      "matched_product": "Thorne® Multi-Vitamin Elite"
+      "matched_product": "Thorne\u00ae Multi-Vitamin Elite"
     },
     {
       "brand": "Nordic Naturals",
@@ -423,7 +423,7 @@
       "product": "Multi-Vitamin Elite P.M.",
       "program": "NSF Sport",
       "status": "verified",
-      "reason": "Registry lists base product Thorne® Multi-Vitamin Elite; P.M. is product-line variant.",
+      "reason": "Registry lists base product Thorne\u00ae Multi-Vitamin Elite; P.M. is product-line variant.",
       "reviewed_at": "2026-05-19",
       "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
       "dsld_id": "337864",
@@ -432,7 +432,7 @@
       "verified_at": "2026-05-18",
       "source_url": "https://nsfsport-prod.nsf.org/certified-products/listing-detail.php?id=1309658",
       "matched_brand": "Thorne",
-      "matched_product": "Thorne® Multi-Vitamin Elite"
+      "matched_product": "Thorne\u00ae Multi-Vitamin Elite"
     },
     {
       "brand": "Garden of Life",
@@ -460,6 +460,2573 @@
       "review_source": "cert_audit_v4_p01a_20260519T005713Z needs_review triage",
       "dsld_id": "298102",
       "record_id": "NSF_SPORT_A2D656488B68"
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "18384",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "187518",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "187519",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "187527",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "188727",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "188747",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "214305",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "214314",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "214315",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "2189",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "223207",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "223211",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "223604",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "251566",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "26339",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Omega-3 Purified Fish Oil",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "26340",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288748",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288749",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288750",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288751",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288752",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288753",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288754",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288764",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288769",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "313197",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega 1280 mg Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "321716",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "42775",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "42777",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "42781",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "43027",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "43061",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "43069",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "59296",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "59298",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "59301",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "60840",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "60842",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "60884",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "74168",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nordic Naturals",
+      "product": "Ultimate Omega Lemon",
+      "program": "IFOS",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 brand_mismatch. Product matched the registry row `Ultimate rTG Omega 3 Fish Oil Softgel` owned by `Naturalis Inc` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "74256",
+      "record_id": "IFOS_249DEFA474D8",
+      "matched_brand": "Naturalis Inc",
+      "matched_product": "Ultimate rTG Omega 3 Fish Oil Softgel",
+      "triage_reasons": [
+        "brand_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 200 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179344",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179361",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179363",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 1000 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179384",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179393",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179416",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179570",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 1000 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179865",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 180 mg (400 IU)",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "239954",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "E 400 IU (180 mg)",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "266975",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "E 400 IU (180 mg)",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "280358",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "E 400 IU (267 mg)",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "280360",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "302776",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8730",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 200 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8750",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 200 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8755",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8759",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 200 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8811",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 200 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8812",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8813",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8814",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8815",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 1,000 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8816",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8817",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 200 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8818",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8819",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8820",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8856",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8857",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8918",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 800 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8958",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "9130",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "9197",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin E 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "9215",
+      "record_id": "USP_VERIFIED_69417290FC17",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 1000 IU (450 Mg) Dl-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 30 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179510",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179676",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 400 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179677",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179709",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 400 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179710",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179969",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180125",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180234",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 400 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180235",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180262",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180379",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "255113",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "271517",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 400 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "285747",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "316108",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "CoQ10 Supplement 200 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made CoQ10 100 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "8953",
+      "record_id": "USP_VERIFIED_BB36993988FF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made CoQ10 100 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 2500 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179754",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 3000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179757",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179764",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179766",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179767",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179951",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179964",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180189",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180193",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180261",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "266766",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "271534",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B12 1000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 500 Mcg Tablets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "288161",
+      "record_id": "USP_VERIFIED_4A7426EDA280",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 500 Mcg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "12140",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "19078",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "19080",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "19082",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "19095",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "19098",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 500 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "26648",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1000 mg 300 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "26691",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1000 mg 300 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "26693",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "27674",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "27703",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg 360 mg Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "30116",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Utlra Omega-3 Fish Oil 1400 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "71338",
+      "record_id": "USP_VERIFIED_7E44F7398828",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 3 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179777",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 3 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179778",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 5 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179779",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 5 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179965",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 5 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180126",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 3 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180147",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 3 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180228",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 3 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "270948",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 3 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "271540",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 5 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "271543",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin 5 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Melatonin 10 mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "27704",
+      "record_id": "USP_VERIFIED_F01221E29C5B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Melatonin 10 mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength Biotin 5,000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179750",
+      "record_id": "USP_VERIFIED_82D48685B0FA",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength D3 10,000 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179943",
+      "record_id": "USP_VERIFIED_82D48685B0FA",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength Biotin 5,000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179953",
+      "record_id": "USP_VERIFIED_82D48685B0FA",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength Biotin 5,000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179971",
+      "record_id": "USP_VERIFIED_82D48685B0FA",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength Biotin 5,000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "180191",
+      "record_id": "USP_VERIFIED_82D48685B0FA",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength Biotin 5,000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "287807",
+      "record_id": "USP_VERIFIED_82D48685B0FA",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength Biotin 5,000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "287808",
+      "record_id": "USP_VERIFIED_82D48685B0FA",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength Biotin 5,000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Maximum Strength Biotin 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "302758",
+      "record_id": "USP_VERIFIED_82D48685B0FA",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Maximum Strength Biotin 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Flaxseed Oil 1000 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Flaxseed Oil 1400 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179482",
+      "record_id": "USP_VERIFIED_39479E6FD003",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Flaxseed Oil 1400 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Flaxseed Oil 1000 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Flaxseed Oil 1400 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179529",
+      "record_id": "USP_VERIFIED_39479E6FD003",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Flaxseed Oil 1400 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Flaxseed Oil 1000 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Flaxseed Oil 1400 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "271410",
+      "record_id": "USP_VERIFIED_39479E6FD003",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Flaxseed Oil 1400 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 400 IU (267 Mg) D-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "9115",
+      "record_id": "USP_VERIFIED_4A876C982596",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 400 IU (267 Mg) D-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D 400 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin E 400 IU (267 Mg) D-Alpha Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "9193",
+      "record_id": "USP_VERIFIED_4A876C982596",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin E 400 IU (267 Mg) D-Alpha Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1000 mg With Rose Hips",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin C 500 mg with Rose Hips Caplets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179507",
+      "record_id": "USP_VERIFIED_E23C156DFA48",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 500 mg with Rose Hips Caplets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "C 1000 mg With Rose Hips",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin C 500 mg with Rose Hips Caplets` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "271405",
+      "record_id": "USP_VERIFIED_E23C156DFA48",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 500 mg with Rose Hips Caplets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "OM Original Medicine by Garden of Life",
+      "product": "100 Billion Probiotic",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Dr. Formulated 10 Billion Probiotic Gummy` owned by `Garden of Life, LLC` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "267340",
+      "record_id": "NSF_CERTIFIE_00C44867C33A",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated 10 Billion Probiotic Gummy",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Extra Strength B12 2500 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 Extra Strength 3000 mcg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "276574",
+      "record_id": "USP_VERIFIED_03EF0B9930EB",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 Extra Strength 3000 mcg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Extra Strength Chewable C 1000 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin C Extra Strength 500 Mg Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "287762",
+      "record_id": "USP_VERIFIED_0E3A88CDDFD1",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C Extra Strength 500 Mg Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Extra Strength Lutein 20 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Biotin Extra Strength 2500 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "27707",
+      "record_id": "USP_VERIFIED_2EFB0059516A",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Biotin Extra Strength 2500 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength B12 5,000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin B12 Maximum Strength 5000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "179932",
+      "record_id": "USP_VERIFIED_610F69F499FE",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin B12 Maximum Strength 5000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Extra Strength D3 125 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Vitamin D3 Extra Strength 5000 IU (125 mcg) Gummies` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "266768",
+      "record_id": "USP_VERIFIED_69FCC1E10C7F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 Extra Strength 5000 IU (125 mcg) Gummies",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Biotin 5000 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Nature Made Biotin 1000 Mcg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "26624",
+      "record_id": "USP_VERIFIED_D81507A9E4E2",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Biotin 1000 Mcg Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Omega-3 From Fish Oil 1400 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.2 auto-reject \u2014 dose_mismatch. Product matched the registry row `Omega-3 from Fish & Algae Oil 1200 mg (600 mg Omega-3) Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "dsld_id": "271567",
+      "record_id": "USP_VERIFIED_DD6609F75473",
+      "matched_brand": "Nature Made",
+      "matched_product": "Omega-3 from Fish & Algae Oil 1200 mg (600 mg Omega-3) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
     }
   ]
 }
