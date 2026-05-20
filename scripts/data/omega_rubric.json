@@ -1,0 +1,131 @@
+{
+  "_metadata": {
+    "schema_version": "1.0.0",
+    "description": "P1.6 omega/fish-oil module rubric. Defines dimension caps, per-dimension sub-component weights, IFOS scope policy, EPA/DHA dose bands, and form/source/sustainability/oxidation scoring rules. Consumed by scripts/scoring_v4/modules/omega.py and its per-dimension helpers.",
+    "purpose": "scoring_v4_omega_module_rubric",
+    "last_updated": "2026-05-20",
+    "owners": ["Claude", "Codex", "Sean"],
+    "notes": "Config-driven per Codex's P1.5 omega-debt plan + Sean's 2026-05-20 instruction. Every weight here must be referenced by code AND locked by tests (no untested policy blob). Backed by scoring_config.section_A_ingredient_quality.omega3_dose_bonus for the dose-band heritage."
+  },
+  "phase": "P1.6.0_skeleton",
+  "dimension_caps": {
+    "formulation": 25,
+    "dose": 25,
+    "evidence": 20,
+    "trust": 15,
+    "transparency": 15
+  },
+  "formulation": {
+    "_doc": "Form tier + Source disclosed + Premium-form A2 carryforward + Marine sustainability cert (FoS/MSC). Oxidation testing lives in Transparency, not here (per Sean 2026-05-20).",
+    "form_tier": {
+      "_doc": "Molecular form of EPA/DHA in the product. TG = natural triglyceride (gold standard). PL = phospholipid form (krill — high bioavailability via phosphatidylcholine carrier). rTG = re-esterified triglyceride (Nordic-style concentrate). EE = ethyl ester (cheaper, lower bioavailability for some markers). undefined = label does not disclose form.",
+      "tg": 8,
+      "pl": 7,
+      "rtg": 6,
+      "ee": 4,
+      "undefined": 2
+    },
+    "source_disclosed": {
+      "_doc": "Product label or ingredient panel discloses the marine source (fish / cod liver / krill / algae). Boolean trigger — +4 when any of these source keywords appears in product_name or ingredient_quality_data[].name.",
+      "score": 4
+    },
+    "premium_form_a2_carry": {
+      "_doc": "EPA/DHA labeled AND molecular form labeled together — carries v3's A2 premium-delivery credit forward into the omega module. Only awarded when form_tier != 'undefined'.",
+      "score": 5
+    },
+    "sustainability_cert": {
+      "_doc": "Marine sustainability cert (Friend of the Sea / MSC) — verified via rules_db third_party_programs.verified=true. Per Codex §9: 'lower weight than purity/testing certs' — sits in Formulation as a product attribute, not Trust as a third-party-test signal.",
+      "score": 4,
+      "eligible_programs": ["Friend of the Sea", "MSC"],
+      "eligibility": "rules_db_verified",
+      "_eligibility_doc": "Required: program present in certification_data.evidence_based.third_party_programs with score_eligible=true. Bare label-text without rules_db backing does NOT score (per 'no manufacturer overcredit' policy)."
+    }
+  },
+  "dose": {
+    "_doc": "EPA+DHA per-day dose adequacy bands (lifted and rescaled from scoring_config.section_A_ingredient_quality.omega3_dose_bonus.bands) + EPA:DHA ratio sanity bonus. Rescaled cap is /20 (band) + /5 (ratio) = 25.",
+    "epa_dha_bands": [
+      {"min_mg_day": 4000, "score": 20, "label": "prescription_dose", "flag": "PRESCRIPTION_DOSE_OMEGA3", "_source": "AHA/ACC prescription dose for hypertriglyceridemia"},
+      {"min_mg_day": 2000, "score": 17.5, "label": "high_clinical", "_source": "EFSA approved health claim for blood triglycerides: >= 2 g/day"},
+      {"min_mg_day": 1000, "score": 16.0, "label": "aha_cvd", "_source": "AHA recommendation for CVD patients: ~1 g/day EPA+DHA"},
+      {"min_mg_day": 500, "score": 10.0, "label": "general_health", "_source": "FDA qualified health claim minimum for combined EPA+DHA"},
+      {"min_mg_day": 250, "score": 5.0, "label": "efsa_ai_zone", "_source": "EFSA (2012) AI for EPA+DHA: 250 mg/day general population"},
+      {"min_mg_day": 0, "score": 0.0, "label": "below_efsa_ai"}
+    ],
+    "epa_dha_band_cap": 20,
+    "ratio_sanity": {
+      "_doc": "EPA:DHA ratio falling in a healthy range (between 1:3 and 3:1) earns +5. Outside that range — extreme imbalance for a marketed EPA+DHA product — earns 0. Pure DHA (algal) or pure EPA products are exempt: if either EPA or DHA is zero, ratio sanity is skipped (returns 0, not penalized).",
+      "score": 5,
+      "min_ratio": 0.333,
+      "max_ratio": 3.0,
+      "_ratio_doc": "ratio = EPA_mg / DHA_mg. 0.333 = 1:3 (DHA-dominant). 3.0 = 3:1 (EPA-dominant). Most clinical evidence supports ratios in this range; outside this either over-concentrates one fatty acid (suggesting non-standard formulation) or implies an inactive companion that wasn't disclosed.",
+      "exempt_when_one_zero": true
+    }
+  },
+  "evidence": {
+    "_doc": "Delegates to the generic evidence pipeline with omega-specific canonicals (EPA, DHA) prioritized in top-N selection. EPA/DHA evidence is well-established AHA/EFSA-backed; cap stays /20 with cap_per_ingredient = 7 inherited from scoring_config.",
+    "cap": 20,
+    "omega_canonicals": ["epa", "dha", "epa_dha"],
+    "indication_relevance": {
+      "_doc": "Bonus for products dosed at AHA CVD threshold (1g/day+ EPA+DHA) marketed for cardiovascular support — strongest clinical alignment. Score 5 if EPA+DHA >= 1000 mg/day, otherwise 0.",
+      "min_epa_dha_mg_day_for_bonus": 1000,
+      "score": 5
+    }
+  },
+  "trust": {
+    "_doc": "Per Sean 2026-05-20: only sku and curated product_line scopes score IFOS. needs_review and brand_only stay 0 to preserve P0.1b/P1.7 cleanup discipline. Uncertainty resolves via P1.7 curated overrides, NOT partial credit.",
+    "b4a_scope_policy": {
+      "sku": 10,
+      "product_line": 10,
+      "needs_review": 0,
+      "brand_only": 0,
+      "claimed_only": 0,
+      "rejected": 0
+    },
+    "_b4a_policy_rationale": "IFOS is omega-specific, but it is still product/lot/registry evidence, not generic brand reputation. If a registry match is real, curate it into product_line via the P1.7.3 review CLI. If it is not product-specific, it can appear in display or manufacturer trust, not product Trust.",
+    "b4a_cap": 10,
+    "b4b_gmp": {
+      "_doc": "B4b GMP credit. nsf_gmp (NSF/ANSI 173 facility audit) = 4. fda_registered = 2. self-attested gmp.claimed without nsf/fda backing = 0 (per P1.8 enricher hardening).",
+      "nsf_gmp": 4,
+      "fda_registered": 2,
+      "self_attested_only": 0,
+      "cap": 4
+    },
+    "b4c_traceability": {
+      "_doc": "B4c lot-level traceability: 1 point total when EITHER has_coa OR has_batch_lookup (including nested QR-code rollup per P1.8b).",
+      "score_if_present": 1,
+      "cap": 1
+    },
+    "dimension_cap": 15
+  },
+  "transparency": {
+    "_doc": "EPA/DHA breakdown disclosed (at least one component) + Form disclosed + Source disclosed + Oxidation testing disclosed + B3 claim_compliance bonus. Penalties B2 allergen / B5 opacity (class-aware) / B6 marketing reuse the same helpers as generic/probiotic.",
+    "epa_or_dha_disclosed": 5,
+    "_epa_or_dha_disclosed_doc": "Awarded when at least one of EPA or DHA is labeled with a positive mg quantity. Pure-EPA and pure-DHA (e.g. algal DHA) products qualify — disclosure of the active component(s) the product carries is what matters.",
+    "form_disclosed": 3,
+    "source_disclosed": 3,
+    "oxidation_disclosed": {
+      "_doc": "Oxidation/TOTOX/peroxide/anisidine testing disclosed on the label or in certification_data. Future-ready: most products today emit 0 because DSLD labels rarely surface lot oxidation values. When P2 lot-test scrapers land, this signal will populate.",
+      "score": 2
+    },
+    "b3_claim_compliance": {
+      "_doc": "Reuses generic Transparency B3 sub-rubric (allergen_free / gluten_free / vegan / vegetarian display claims), cap 4.",
+      "cap": 4
+    },
+    "penalties_inherited": ["b2_allergen", "b5_opacity_class_aware", "b6_marketing"]
+  },
+  "router": {
+    "_doc": "Routing signals (any one triggers omega module dispatch). Inspected by scripts/scoring_v4/router.py with priority between multi_or_prenatal and generic. The ingredient-panel signal is the strongest because it operates on the enricher's canonicalized identity rather than label text.",
+    "primary_category_match": ["omega-3", "omega_3", "fish_oil", "omega3"],
+    "name_keywords": ["fish oil", "omega-3", "omega 3", "omega3", "krill", "krill oil", "algae oil", "algal oil", "cod liver", "epa+dha", "epa dha", "epa/dha"],
+    "name_standalone_word_boundary": ["EPA", "DHA"],
+    "_standalone_word_boundary_doc": "Word-boundary regex match for standalone EPA or DHA in product/brand/bundle name text. \\b is critical to exclude false-positives like DHEA (D-H-E-A is one word; \\bDHA\\b does NOT match inside DHEA). Substring matching is forbidden for these short tokens.",
+    "ingredient_panel_canonicals": ["epa", "dha", "epa_dha"],
+    "_ingredient_panel_doc": "Strongest router signal: an enriched product whose ingredient_quality_data has an ingredient with canonical_id in {epa, dha, epa_dha} and a positive quantity routes to omega regardless of name keywords. Operates on the enricher's identity output, not loose text.",
+    "_category_breakdown_removed_doc": "A category_breakdown fatty_acid plurality check was REMOVED 2026-05-20 after a real-catalog audit caught ~250 false positives. The plurality signal flagged CLA / Borage Oil GLA / Flax Seed Oil ALA-only / MCT / Liposomal Glutathione (lecithin) as omega because all are fatty_acid in the enricher's category breakdown, but NONE bear EPA/DHA. Per the dev's 2026-05-20 RDA-table feedback: ALA is alpha-linolenic acid, a different molecule from EPA/DHA. ALA-only products belong in the generic module (where ALA gets the IOM AI when rda_optimal_uls is fixed). The plurality check was redundant — every legitimate omega product is already caught by ingredient_panel_canonicals."
+  },
+  "completeness_gate": {
+    "_doc": "Layer 2 completeness gate adds an omega-specific check: at least one EPA or DHA ingredient with quantity > 0 must be disclosed. Fish-oil-parent-only products (1000 mg fish oil, no EPA/DHA breakdown) fail and route to NOT_SCORED. Pure-EPA and pure-DHA products (algal DHA, prescription-grade pure EPA) DO qualify — the gate is 'at least one', not 'both'. Aligns with §9 'fish oil 1000 mg with no EPA/DHA breakdown should score significantly lower' rule, but enforced at the live-eligibility gate rather than as a score cap.",
+    "epa_or_dha_disclosed_required": true,
+    "_eligibility_policy": "At least one of canonical_id ∈ {epa, dha, epa_dha} with positive quantity. Requiring both globally would wrongly disqualify legitimate pure-component products."
+  }
+}

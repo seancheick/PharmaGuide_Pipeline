@@ -108,17 +108,16 @@ def test_router_unknown_supp_type_defaults_to_generic() -> None:
     assert class_for_product({"supplement_type": {"type": "weird_new_type"}}) == "generic"
 
 
-def test_router_omega_stays_generic_until_p1_5_decision() -> None:
-    """P1.5 decision gate: does generic-module handle omega-3 acceptably,
-    or does omega need its own module before P2? Until that decision,
-    omega routes to generic and we accept whatever rank-order falls out."""
+def test_router_omega_routes_to_omega_after_p1_6_decision() -> None:
+    """P1.6 decision landed: EPA/DHA-bearing omega products route to the
+    dedicated omega module instead of generic."""
     from scoring_v4.router import class_for_product
     product = {
         "supplement_type": {"type": "targeted"},
         "primary_category": "omega-3",
         "product_name": "Fish Oil 1000mg",
     }
-    assert class_for_product(product) == "generic"
+    assert class_for_product(product) == "omega"
 
 
 def test_router_valid_classes_only() -> None:

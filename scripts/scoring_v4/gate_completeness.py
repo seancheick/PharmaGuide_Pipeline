@@ -93,7 +93,15 @@ def _dose_value(ingredient: Dict[str, Any]) -> Optional[float]:
 
 
 def _dose_unit(ingredient: Dict[str, Any]) -> str:
-    for key in ("unit", "dose_unit", "amount_unit", "dosage_unit", "quantity_unit"):
+    for key in (
+        "unit",
+        "unit_normalized",
+        "normalized_unit",
+        "dose_unit",
+        "amount_unit",
+        "dosage_unit",
+        "quantity_unit",
+    ):
         unit = _norm(ingredient.get(key))
         if unit and unit not in {"np", "n/a", "na", "none"}:
             return unit
@@ -234,7 +242,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
             checked_fields=["product_payload"],
         )
 
-    module = module if module in {"generic", "probiotic", "multi_or_prenatal"} else "generic"
+    module = module if module in {"generic", "probiotic", "multi_or_prenatal", "omega"} else "generic"
     ingredients = _active_ingredients(product)
     missing, coverage = _base_checks(product, ingredients)
     checked_fields = [
@@ -267,8 +275,44 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
             missing.append("dose_with_unit")
         return _finalize(module, missing, coverage, dose_cov, checked_fields)
 
-    # Generic module: single nutrients, botanicals, omega, sports stacks.
+    if module == "omega":
+        # Per omega_rubric.completeness_gate: at least one EPA or DHA
+        # ingredient with quantity > 0 must be disclosed. Pure-EPA and
+        # pure-DHA products (e.g. algal DHA, prescription-grade pure EPA)
+        # DO qualify — the gate is 'at least one', not 'both'.
+        # Fish-oil parent mass without any EPA/DHA breakdown
+        # (e.g. "Fish Oil 1000 mg") fails the gate → NOT_SCORED.
+        # Aligns with §9: 'fish oil 1000 mg with no EPA/DHA breakdown
+        # should score significantly lower' — enforced here as live-eligibility
+        # rather than as a score cap.
+        checked_fields.append("epa_or_dha_disclosed")
+        if not _has_epa_or_dha_disclosed(ingredients):
+            missing.append("epa_or_dha_disclosed")
+        return _finalize(module, missing, coverage, dose_cov, checked_fields)
+
+    # Generic module: single nutrients, botanicals, sports stacks.
+    # Omega previously fell through here pre-P1.6; now has its own branch above.
     checked_fields.append("dose_with_unit")
     if not any(_has_dose_with_unit(i) for i in ingredients):
         missing.append("dose_with_unit")
     return _finalize(module, missing, coverage, dose_cov, checked_fields)
+
+
+_OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha", "omega3"}
+
+
+def _has_epa_or_dha_disclosed(ingredients: List[Dict[str, Any]]) -> bool:
+    """Return True when at least one EPA or DHA ingredient has a positive
+    quantity. Used by the omega completeness gate.
+
+    Field shape from enrich_supplements_v3:
+      ingredient_quality_data.ingredients_scorable[].canonical_id ∈ {epa, dha}
+      ingredient_quality_data.ingredients_scorable[].quantity > 0
+    """
+    for ing in ingredients:
+        canonical = _norm(ing.get("canonical_id"))
+        if canonical not in _OMEGA_INGREDIENT_CANONICALS:
+            continue
+        if _has_dose_with_unit(ing):
+            return True
+    return False

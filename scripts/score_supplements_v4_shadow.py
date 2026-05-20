@@ -55,6 +55,7 @@ from scoring_v4.confidence import evaluate_confidence
 from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
 from scoring_v4.modules.generic import score_generic
+from scoring_v4.modules.omega import score_omega
 from scoring_v4.modules.probiotic import score_probiotic
 from scoring_v4.router import class_for_product
 
@@ -232,6 +233,26 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_100"] = probiotic_result.score_100
         shadow["shadow_score_v4_verdict"] = _verdict_from_score(
             probiotic_result.score_100,
+            shadow.get("shadow_score_v4_verdict"),
+        )
+        confidence = evaluate_confidence(
+            enriched_product,
+            module_breakdown=shadow["shadow_score_v4_breakdown"]["module"],
+            safety_gate=shadow["shadow_score_v4_breakdown"].get("safety_gate", {}),
+            completeness_gate=shadow["shadow_score_v4_breakdown"].get("completeness_gate", {}),
+        )
+        shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
+        shadow["shadow_score_v4_confidence"] = confidence["band"]
+    elif module == "omega":
+        # P1.6.0: skeleton wired — all 5 dimensions return None (no scoring
+        # math yet). Breakdown shape is intact; score_100 stays None until
+        # P1.6.6 final assembly. Verdict resolves to NOT_SCORED (or carried
+        # CAUTION) since no real score lands yet.
+        omega_result = score_omega(enriched_product)
+        shadow["shadow_score_v4_breakdown"]["module"] = omega_result.to_breakdown()
+        shadow["shadow_score_v4_100"] = omega_result.score_100
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            omega_result.score_100,
             shadow.get("shadow_score_v4_verdict"),
         )
         confidence = evaluate_confidence(
