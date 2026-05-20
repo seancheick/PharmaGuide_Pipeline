@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 392,
+    "total_overrides": 398,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -6792,6 +6792,114 @@
       "matched_product": "Thorne® B-Complex #6",
       "triage_reasons": [
         "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D3 2000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed product form and dose against USP registry row; selected members are Nature Made Vitamin D3 2000 IU / 50 mcg softgels, matching the USP Verified softgel product line. Tablets/gummies/different doses left unverified.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "12154",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 2000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed product form and dose against USP registry row; selected members are Nature Made Vitamin D3 2000 IU / 50 mcg softgels, matching the USP Verified softgel product line. Tablets/gummies/different doses left unverified.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179660",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D3 2000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed product form and dose against USP registry row; selected members are Nature Made Vitamin D3 2000 IU / 50 mcg softgels, matching the USP Verified softgel product line. Tablets/gummies/different doses left unverified.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179703",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D3 2000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed product form and dose against USP registry row; selected members are Nature Made Vitamin D3 2000 IU / 50 mcg softgels, matching the USP Verified softgel product line. Tablets/gummies/different doses left unverified.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179704",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 2000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed product form and dose against USP registry row; selected members are Nature Made Vitamin D3 2000 IU / 50 mcg softgels, matching the USP Verified softgel product line. Tablets/gummies/different doses left unverified.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180208",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 2000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed product form and dose against USP registry row; selected members are Nature Made Vitamin D3 2000 IU / 50 mcg softgels, matching the USP Verified softgel product line. Tablets/gummies/different doses left unverified.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180423",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
       ]
     }
   ]
