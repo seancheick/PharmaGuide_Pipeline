@@ -98,6 +98,9 @@ def generate_reviewed_overrides(
     reviewer: str,
     review_source: str,
     member_dsld_ids: Set[str] | None = None,
+    override_record_id: str | None = None,
+    override_matched_brand: str | None = None,
+    override_matched_product: str | None = None,
 ) -> List[Dict[str, Any]]:
     """Convert one manually reviewed cluster decision into override entries."""
     _validate_review(action, review_note, reviewer)
@@ -109,12 +112,16 @@ def generate_reviewed_overrides(
     status = "verified" if action == "verify_product_line" else "rejected"
     scope = "product_line" if action == "verify_product_line" else "claimed_only"
     program = str(cluster.get("program") or "")
-    record_id = str(cluster.get("record_id") or "")
-    matched_brand = str(cluster.get("matched_brand") or "")
-    matched_product = str(cluster.get("matched_product") or "")
+    cluster_record_id = str(cluster.get("record_id") or "")
+    record_id = str(override_record_id or cluster_record_id)
+    matched_brand = str(override_matched_brand or cluster.get("matched_brand") or "")
+    matched_product = str(override_matched_product or cluster.get("matched_product") or "")
 
     entries: List[Dict[str, Any]] = []
     for member in members:
+        triage_reasons = list((member.get("triage_hint") or {}).get("reasons", []))
+        if override_record_id:
+            triage_reasons.append(f"alternate_record_id={record_id}")
         entry = {
             "brand": member.get("brand_name", ""),
             "product": member.get("product_name", ""),
@@ -129,8 +136,12 @@ def generate_reviewed_overrides(
             "record_id": record_id,
             "matched_brand": member.get("matched_brand") or matched_brand,
             "matched_product": member.get("matched_product") or matched_product,
-            "triage_reasons": (member.get("triage_hint") or {}).get("reasons", []),
+            "triage_reasons": triage_reasons,
         }
+        if override_matched_brand:
+            entry["matched_brand"] = matched_brand
+        if override_matched_product:
+            entry["matched_product"] = matched_product
         entries.append(entry)
     return entries
 
@@ -138,7 +149,9 @@ def generate_reviewed_overrides(
 def merge_reviewed_into_overrides_file(
     overrides_path: Path,
     entries: List[Dict[str, Any]],
-) -> tuple[int, int]:
+    *,
+    replace_program_dsld_conflicts: bool = False,
+) -> tuple[int, int, int]:
     """Upsert manually reviewed decisions into the curated overrides file.
 
     Reviewed decisions are allowed to promote a previous pending_review row for
@@ -160,6 +173,34 @@ def merge_reviewed_into_overrides_file(
         payload = json.loads(overrides_path.read_text())
 
     existing = payload.setdefault("overrides", [])
+    removed_conflicts = 0
+    if replace_program_dsld_conflicts and entries:
+        incoming_pairs = {
+            (entry.get("program", ""), str(entry.get("dsld_id", "")), entry.get("record_id", ""))
+            for entry in entries
+            if entry.get("program") and str(entry.get("dsld_id", ""))
+        }
+        incoming_program_dslds = {
+            (program, dsld_id)
+            for program, dsld_id, _record_id in incoming_pairs
+        }
+        filtered_existing = []
+        for override in existing:
+            if not isinstance(override, dict):
+                filtered_existing.append(override)
+                continue
+            pair = (override.get("program", ""), str(override.get("dsld_id", "")))
+            same_record = (
+                override.get("program", ""),
+                str(override.get("dsld_id", "")),
+                override.get("record_id", ""),
+            ) in incoming_pairs
+            if pair in incoming_program_dslds and not same_record:
+                removed_conflicts += 1
+                continue
+            filtered_existing.append(override)
+        existing[:] = filtered_existing
+
     index: dict[tuple[str, str, str], int] = {}
     for idx, override in enumerate(existing):
         if not isinstance(override, dict):
@@ -189,7 +230,7 @@ def merge_reviewed_into_overrides_file(
             existing[existing_idx] = entry
             replaced += 1
 
-    if added or replaced:
+    if added or replaced or removed_conflicts:
         payload.setdefault("_metadata", {})
         payload["_metadata"]["total_overrides"] = len(existing)
         payload["_metadata"]["last_updated"] = date.today().isoformat()
@@ -197,7 +238,7 @@ def merge_reviewed_into_overrides_file(
     overrides_path.write_text(
         json.dumps(payload, indent=2, sort_keys=False, ensure_ascii=False) + "\n"
     )
-    return added, replaced
+    return added, replaced, removed_conflicts
 
 
 def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
@@ -219,6 +260,29 @@ def _parse_args(argv: List[str] | None = None) -> argparse.Namespace:
         default=[],
         help="Limit the action to one reviewed DSLD ID. May be repeated.",
     )
+    parser.add_argument(
+        "--override-record-id",
+        help=(
+            "Use an alternate registry record_id for selected members. "
+            "Requires --replace-program-dsld-conflicts."
+        ),
+    )
+    parser.add_argument(
+        "--override-matched-brand",
+        help="Override matched_brand in emitted entries when using an alternate registry row.",
+    )
+    parser.add_argument(
+        "--override-matched-product",
+        help="Override matched_product in emitted entries when using an alternate registry row.",
+    )
+    parser.add_argument(
+        "--replace-program-dsld-conflicts",
+        action="store_true",
+        help=(
+            "Remove existing overrides for the same program + dsld_id but a "
+            "different record_id before writing the reviewed decision."
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true")
     return parser.parse_args(argv)
 
@@ -230,6 +294,13 @@ def main(argv: List[str] | None = None) -> int:
         return 2
 
     report = json.loads(args.cluster_report.read_text())
+    if args.override_record_id and not args.replace_program_dsld_conflicts:
+        print(
+            "--override-record-id requires --replace-program-dsld-conflicts "
+            "so older wrong-row decisions cannot shadow the alternate row",
+            file=sys.stderr,
+        )
+        return 2
     try:
         cluster = find_cluster(
             report.get("clusters") or [],
@@ -243,6 +314,9 @@ def main(argv: List[str] | None = None) -> int:
             reviewer=args.reviewer,
             review_source=args.review_source,
             member_dsld_ids=set(args.member_dsld_id) if args.member_dsld_id else None,
+            override_record_id=args.override_record_id,
+            override_matched_brand=args.override_matched_brand,
+            override_matched_product=args.override_matched_product,
         )
     except ValueError as exc:
         print(str(exc), file=sys.stderr)
@@ -259,10 +333,16 @@ def main(argv: List[str] | None = None) -> int:
         print("  (dry-run — overrides file NOT modified)")
         return 0
 
-    added, replaced = merge_reviewed_into_overrides_file(args.overrides_path, entries)
+    added, replaced, removed_conflicts = merge_reviewed_into_overrides_file(
+        args.overrides_path,
+        entries,
+        replace_program_dsld_conflicts=args.replace_program_dsld_conflicts,
+    )
     print(f"  Wrote {added} new override entries to {args.overrides_path}")
     if replaced:
         print(f"  Replaced {replaced} existing reviewed/pending entries")
+    if removed_conflicts:
+        print(f"  Removed {removed_conflicts} conflicting same-program/dsld entries")
     print(f"  (skipped {len(entries) - added - replaced} duplicates already in file)")
     return 0
 

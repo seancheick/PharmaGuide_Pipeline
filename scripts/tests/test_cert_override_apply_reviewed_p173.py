@@ -173,6 +173,30 @@ def test_generate_reviewed_overrides_can_limit_to_member_dsld_ids(tmp_path: Path
     assert overrides[0]["product"] == "Vitamin D3 2000 IU"
 
 
+def test_generate_reviewed_overrides_can_target_alternate_registry_record(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import generate_reviewed_overrides, find_cluster
+
+    report = json.loads(_cluster_report(tmp_path).read_text())
+    cluster = find_cluster(report["clusters"], program="USP Verified", record_id="USP_MIXED")
+    overrides = generate_reviewed_overrides(
+        cluster,
+        action="verify_product_line",
+        review_note="Reviewer matched this member to the alternate 1000 IU registry row.",
+        reviewer="Sean",
+        review_source="p173_test",
+        member_dsld_ids={"2000"},
+        override_record_id="USP_ALTERNATE_1000",
+        override_matched_brand="Nature Made",
+        override_matched_product="Nature Made Vitamin D3 1000 IU Softgels",
+    )
+
+    assert [entry["dsld_id"] for entry in overrides] == ["2000"]
+    assert overrides[0]["record_id"] == "USP_ALTERNATE_1000"
+    assert overrides[0]["matched_brand"] == "Nature Made"
+    assert overrides[0]["matched_product"] == "Nature Made Vitamin D3 1000 IU Softgels"
+    assert "alternate_record_id=USP_ALTERNATE_1000" in overrides[0]["triage_reasons"]
+
+
 def test_member_limited_override_keeps_dsld_id_for_shared_brand_product_key(tmp_path: Path):
     from api_audit.cert_override_apply_reviewed import generate_reviewed_overrides, find_cluster
 
@@ -300,3 +324,97 @@ def test_cli_apply_promotes_existing_pending_review_override(tmp_path: Path):
     assert len(payload["overrides"]) == 1
     assert payload["overrides"][0]["status"] == "verified"
     assert payload["overrides"][0]["reason"].startswith("P1.7.3 manual verify_product_line")
+
+
+def test_merge_can_replace_conflicting_same_program_dsld_record(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import merge_reviewed_into_overrides_file
+
+    overrides_path = tmp_path / "overrides.json"
+    overrides_path.write_text(json.dumps({
+        "_metadata": {"total_overrides": 2, "last_updated": "2026-01-01"},
+        "overrides": [
+            {
+                "brand": "Nature Made",
+                "product": "Vitamin C 1000 mg",
+                "program": "USP Verified",
+                "status": "rejected",
+                "scope": "claimed_only",
+                "dsld_id": "179445",
+                "record_id": "USP_WRONG_500",
+                "reason": "old wrong-row reject",
+            },
+            {
+                "brand": "Nature Made",
+                "product": "Vitamin C 1000 mg",
+                "program": "Informed Choice",
+                "status": "rejected",
+                "scope": "claimed_only",
+                "dsld_id": "179445",
+                "record_id": "INFORMED_UNRELATED",
+                "reason": "different program should stay",
+            },
+        ],
+    }, indent=2))
+
+    added, replaced, removed_conflicts = merge_reviewed_into_overrides_file(
+        overrides_path,
+        [{
+            "brand": "Nature Made",
+            "product": "Vitamin C 1000 mg",
+            "program": "USP Verified",
+            "status": "verified",
+            "scope": "product_line",
+            "dsld_id": "179445",
+            "record_id": "USP_CORRECT_1000",
+            "reason": "manual alternate-row verification",
+        }],
+        replace_program_dsld_conflicts=True,
+    )
+
+    payload = json.loads(overrides_path.read_text())
+    assert (added, replaced, removed_conflicts) == (1, 0, 1)
+    assert payload["_metadata"]["total_overrides"] == 2
+    assert {entry["record_id"] for entry in payload["overrides"]} == {
+        "USP_CORRECT_1000",
+        "INFORMED_UNRELATED",
+    }
+
+
+def test_cli_alternate_record_requires_conflict_replacement_opt_in(tmp_path: Path):
+    from api_audit.cert_override_apply_reviewed import main
+
+    cluster_report = _cluster_report(tmp_path)
+    overrides_path = tmp_path / "overrides.json"
+    overrides_path.write_text(json.dumps({
+        "_metadata": {"total_overrides": 1, "last_updated": "2026-01-01"},
+        "overrides": [{
+            "brand": "Nature Made",
+            "product": "Vitamin D3 2000 IU",
+            "program": "USP Verified",
+            "status": "rejected",
+            "scope": "claimed_only",
+            "dsld_id": "2000",
+            "record_id": "USP_MIXED",
+            "reason": "old wrong-row reject",
+        }],
+    }, indent=2))
+
+    exit_code = main([
+        "--cluster-report", str(cluster_report),
+        "--overrides-path", str(overrides_path),
+        "--program", "USP Verified",
+        "--record-id", "USP_MIXED",
+        "--action", "verify_product_line",
+        "--reviewer", "Sean",
+        "--review-note", "Reviewed member against alternate USP row.",
+        "--member-dsld-id", "2000",
+        "--override-record-id", "USP_ALTERNATE_1000",
+        "--override-matched-product", "Nature Made Vitamin D3 1000 IU Softgels",
+        "--replace-program-dsld-conflicts",
+    ])
+
+    payload = json.loads(overrides_path.read_text())
+    assert exit_code == 0
+    assert payload["_metadata"]["total_overrides"] == 1
+    assert payload["overrides"][0]["record_id"] == "USP_ALTERNATE_1000"
+    assert payload["overrides"][0]["status"] == "verified"

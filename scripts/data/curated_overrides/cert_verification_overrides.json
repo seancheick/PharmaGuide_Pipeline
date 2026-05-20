@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 409,
+    "total_overrides": 502,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -2237,11 +2237,12 @@
       "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "12140",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -2254,11 +2255,12 @@
       "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "19078",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -2271,11 +2273,12 @@
       "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "19080",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -2288,11 +2291,12 @@
       "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "19082",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -2305,11 +2309,12 @@
       "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "19095",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -2322,11 +2327,12 @@
       "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "19098",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -2354,47 +2360,14 @@
     },
     {
       "brand": "Nature Made",
-      "product": "Fish Oil 1000 mg 300 mg Omega-3",
-      "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
-      "dsld_id": "26691",
-      "record_id": "USP_VERIFIED_7E44F7398828",
-      "matched_brand": "Nature Made",
-      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
-      "triage_reasons": [
-        "dose_mismatch"
-      ]
-    },
-    {
-      "brand": "Nature Made",
-      "product": "Fish Oil 1000 mg 300 mg Omega-3",
-      "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
-      "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
-      "dsld_id": "26693",
-      "record_id": "USP_VERIFIED_7E44F7398828",
-      "matched_brand": "Nature Made",
-      "matched_product": "Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels",
-      "triage_reasons": [
-        "dose_mismatch"
-      ]
-    },
-    {
-      "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "27674",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -2407,11 +2380,12 @@
       "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "27703",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -2424,11 +2398,12 @@
       "brand": "Nature Made",
       "product": "Fish Oil 1200 mg 360 mg Omega-3",
       "program": "USP Verified",
-      "status": "rejected",
-      "scope": "claimed_only",
-      "reason": "P1.7.2 auto-reject — dose_mismatch. Product matched the registry row `Nature Made Fish Oil Derived Omega-3 1200 Mg Softgels` owned by `Nature Made` but failed conservative same-product checks.",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1200mg / 360mg Omega-3 softgel variants match the USP Fish Oil Derived Omega-3 1200mg Softgels row.",
       "reviewed_at": "2026-05-20",
-      "review_source": "P1.7.2_auto_reject_2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
       "dsld_id": "30116",
       "record_id": "USP_VERIFIED_7E44F7398828",
       "matched_brand": "Nature Made",
@@ -7098,6 +7073,1763 @@
       "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
       "triage_reasons": [
         "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179445",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179479",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179543",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179683",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179863",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180198",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "278458",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "302773",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "C 1000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313814",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1,000 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8718",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1,000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8843",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1,000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8907",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1,000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8965",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1,000 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8966",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 1,000 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made Vitamin C 1000mg tablet/caplet variants matching the alternate USP 1000mg Tablets row, not the 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9194",
+      "record_id": "USP_VERIFIED_B0F749B148DF",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 1000 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_B0F749B148DF"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179480",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179532",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179995",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180196",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180441",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "C Chewable 500 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271372",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "71355",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8752",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8970",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8971",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9180",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9203",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Vitamin C 500 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members are Nature Made chewable Vitamin C 500mg variants matching the alternate USP Chewable Vitamin C 500mg Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9246",
+      "record_id": "USP_VERIFIED_8B389D20130F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Chewable Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_8B389D20130F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "C Gummies 250 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members do not match the USP 500mg Tablets row by dose and/or dosage form, and no exact alternate row was accepted in this review batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "278459",
+      "record_id": "USP_VERIFIED_CE5CCC171574",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin C 250 mg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Vitamin C 500mg cluster reviewed member-by-member; these members do not match the USP 500mg Tablets row by dose and/or dosage form, and no exact alternate row was accepted in this review batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8960",
+      "record_id": "USP_VERIFIED_CE5CCC171574",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin C 500 Mg Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179425",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179441",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179447",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179721",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179956",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179958",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179973",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180092",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180309",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180406",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180407",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180432",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180435",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180436",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180438",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271348",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1200 mg Supplement",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these Nature Made Fish Oil 1200mg members match the alternate USP Fish Oil 1200mg Softgels row, not the 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9176",
+      "record_id": "USP_VERIFIED_DFB71DD3B387",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1200 Mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_DFB71DD3B387"
+      ]
+    },
+    {
+      "brand": "Nature Made Kids First",
+      "product": "Fish Oil Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these members are Fish Oil Gummies and do not match the USP Fish Oil 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179618",
+      "record_id": "USP_VERIFIED_14A671BAE9D9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1000 mg Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made KIDS FIRST",
+      "product": "Fish Oil Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these members are Fish Oil Gummies and do not match the USP Fish Oil 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179634",
+      "record_id": "USP_VERIFIED_14A671BAE9D9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1000 mg Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made Kids First",
+      "product": "Fish Oil Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these members are Fish Oil Gummies and do not match the USP Fish Oil 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "211261",
+      "record_id": "USP_VERIFIED_14A671BAE9D9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1000 mg Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these members are Fish Oil Gummies and do not match the USP Fish Oil 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271572",
+      "record_id": "USP_VERIFIED_14A671BAE9D9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1000 mg Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Fish Oil 1000mg cluster reviewed member-by-member; these members are Fish Oil Gummies and do not match the USP Fish Oil 1000mg Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "285748",
+      "record_id": "USP_VERIFIED_14A671BAE9D9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1000 mg Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "16024",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Bone Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182060",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Nutrients III",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182145",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182215",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Nutrients III",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182813",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Nutrients III",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182817",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Nutrients IV",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182924",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Nutrients IV",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182931",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "183053",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "183220",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Nutrients III",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "193346",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "193354",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "50737",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "63760",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "65719",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Basic Bone Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74344",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "81665",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "82031",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Basic Detox Nutrients",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Basic Nutrients 2/Day cluster reviewed member-by-member; Basic Detox Nutrients, Basic Bone Nutrients, Basic Nutrients III, and Basic Nutrients IV are distinct products and do not match the NSF Sport Basic Nutrients 2/Day registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "82033",
+      "record_id": "NSF_SPORT_513D9CA24D93",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Basic Nutrients 2/Day",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Apple",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "174615",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Chocolate Cacao",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "174622",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Original",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "174624",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Apple",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "204732",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Green Superfood Chocolate",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "204739",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Yerba Mate - Pomegranate",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "204748",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Original",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "204765",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Green Superfood Chocolate",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "233668",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Apple",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "241347",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Apple",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "241349",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Chocolate",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "241350",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Chocolate",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "241351",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Original",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "241353",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Original",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "241354",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Original",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "241355",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Chocolate",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "275119",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Green Superfood Juiced Greens Powder Apple",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "278416",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Green Superfood Juiced Greens Powder Original",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "282638",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Green Superfood Juiced Greens Powder Original",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "326696",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Apple",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "66839",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Chocolate Cacao",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "66865",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Raw Organic Perfect Food Original",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed RAW Organic Perfect Food Energizer cluster reviewed member-by-member; Apple, Chocolate/Cacao, Original, Yerba Mate-Pomegranate, and Juiced Greens variants are distinct products and do not match the NSF Certified Energizer registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "66869",
+      "record_id": "NSF_CERTIFIE_28C35A089265",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "RAW Organic Perfect Food Energizer",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1000 mg 300 mg Omega-3",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1000mg / 300mg Omega-3 softgel variants match the alternate USP Fish Oil 1000mg Softgels row, not the 1200mg derived-omega row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "26691",
+      "record_id": "USP_VERIFIED_14A671BAE9D9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1000 mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_14A671BAE9D9"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Fish Oil 1000 mg 300 mg Omega-3",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Correcting P1.7.2 over-reject after member-level review; these Nature Made Fish Oil 1000mg / 300mg Omega-3 softgel variants match the alternate USP Fish Oil 1000mg Softgels row, not the 1200mg derived-omega row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "26693",
+      "record_id": "USP_VERIFIED_14A671BAE9D9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil 1000 mg Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_14A671BAE9D9"
       ]
     }
   ]
