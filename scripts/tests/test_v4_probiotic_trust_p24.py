@@ -195,11 +195,14 @@ def test_probiotic_trust_marine_cert_filter_holds() -> None:
 # --- Module wiring + roll-forward -----------------------------------------
 
 
-def test_probiotic_module_phase_marker_rolls_to_p24() -> None:
+def test_probiotic_module_phase_marker_rolls_forward_through_p24() -> None:
+    """At-or-after P2.4: phase is at least P2.4. P2.5+ rolls forward."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_probiotic_product()).to_breakdown()
-    assert breakdown["phase"] == "P2.4_probiotic_trust"
+    assert breakdown["phase"].startswith("P2."), (
+        f"unexpected phase: {breakdown['phase']}"
+    )
 
 
 def test_probiotic_trust_metadata_carries_audit_fields() -> None:
@@ -239,9 +242,13 @@ def test_probiotic_trust_independent_of_formulation_dose_evidence() -> None:
     assert breakdown["dimensions"]["trust"]["score"] == 0.0
 
 
-def test_probiotic_trust_remaining_dimensions_still_skeleton() -> None:
-    """At P2.4, Transparency must still be None (P2.5 not landed yet)."""
+def test_probiotic_trust_score_is_independent_of_other_dimensions() -> None:
+    """Trust is computed independently — populating it doesn't depend on
+    or pollute the other dimensions. (Originally locked Transparency to
+    None; that assertion rolled forward at P2.5.)"""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(_probiotic_product()).to_breakdown()
-    assert breakdown["dimensions"]["transparency"]["score"] is None
+    # Trust is fully populated at this slice or later.
+    assert breakdown["dimensions"]["trust"]["score"] is not None
+    assert "B4a_verified_certifications" in breakdown["dimensions"]["trust"]["components"]

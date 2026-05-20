@@ -56,9 +56,10 @@ from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.probiotic_dose import score_dose
 from scoring_v4.modules.probiotic_evidence import score_evidence
 from scoring_v4.modules.probiotic_formulation import score_formulation
+from scoring_v4.modules.probiotic_transparency import score_transparency
 
 
-PHASE_MARKER = "P2.4_probiotic_trust"
+PHASE_MARKER = "P2.5_probiotic_transparency"
 
 
 # Dimension caps per §4 line 176, probiotic column.
@@ -182,6 +183,18 @@ def score_probiotic(product: Any) -> ProbioticModuleResult:
     trust_dim.components = trust_payload["components"]
     trust_dim.penalties = trust_payload["penalties"]
     trust_dim.metadata = trust_payload.get("metadata", {})
+
+    # P2.5 — Transparency dimension. Probiotic-specific positive components
+    # (strain identities 8, per-strain CFU 7) with B3 reuse from generic
+    # plus B2/B5/B6 penalty reuse. B5 class-aware multiplier (probiotic 0.4x)
+    # is applied inside the shared `_score_b5_proprietary_blend_penalty`
+    # via _b5_class_for_product detecting probiotic supp_type.
+    transparency_payload = score_transparency(product)
+    transparency_dim = result.dimensions["transparency"]
+    transparency_dim.score = transparency_payload["score"]
+    transparency_dim.components = transparency_payload["components"]
+    transparency_dim.penalties = transparency_payload["penalties"]
+    transparency_dim.metadata = transparency_payload.get("metadata", {})
 
     result.phase = PHASE_MARKER
     return result

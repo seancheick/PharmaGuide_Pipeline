@@ -111,8 +111,9 @@ def test_probiotic_dimension_caps_match_proposal_section_4() -> None:
 
 
 def test_probiotic_dimensions_share_stable_contract() -> None:
-    """P2.3 populates formulation, dose, and evidence; later dimensions remain skeleton.
-    The dict shape itself is stable across slices."""
+    """All 5 probiotic dimensions are now online (P2.5 complete).
+    The dict shape itself is stable across slices: every dimension always
+    has score/max/components/penalties/metadata keys."""
     from scoring_v4.modules.probiotic import score_probiotic
 
     breakdown = score_probiotic(COMPLETE_PROBIOTIC_PRODUCT).to_breakdown()
@@ -124,13 +125,9 @@ def test_probiotic_dimensions_share_stable_contract() -> None:
         assert "components" in dim
         assert "penalties" in dim
         assert "metadata" in dim
-        if name in {"formulation", "dose", "evidence", "trust"}:
-            assert dim["score"] is not None
-            assert dim["components"], f"{name}.components should be populated by P2.4"
-        else:
-            assert dim["score"] is None, f"{name}.score must remain None until its P2.x slice"
-            assert dim["components"] == {}, f"{name}.components must start empty"
-        assert dim["penalties"] == {}, f"{name}.penalties must start empty"
+        # P2.0-P2.5: all 5 dimensions populated
+        assert dim["score"] is not None, f"{name}.score should be populated through P2.5"
+        assert dim["components"], f"{name}.components should be populated through P2.5"
 
 
 def test_probiotic_manufacturer_trust_dimension_has_cap_5() -> None:
