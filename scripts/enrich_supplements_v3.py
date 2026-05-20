@@ -9083,6 +9083,7 @@ class SupplementEnricherV3:
         third_party_evidence = self._collect_claims_from_rules_db(product, 'third_party_programs')
         gmp_evidence = self._collect_claims_from_rules_db(product, 'gmp_certifications')
         batch_evidence = self._collect_claims_from_rules_db(product, 'batch_traceability')
+        traceability = self._merge_evidence_batch_traceability(traceability, batch_evidence)
 
         # Merge evidence-based third-party detections into the regex-derived
         # third_party_programs. This is the CLAIMED set — labels + rules-db
@@ -9416,6 +9417,7 @@ class SupplementEnricherV3:
 
         return {
             "claimed": gmp_found or nsf_gmp or fda_registered,
+            "gmp_certified_or_compliant": gmp_found,
             "nsf_gmp": nsf_gmp,
             "fda_registered": fda_registered,
             "text_matched": "NSF GMP" if nsf_gmp else "FDA Registered" if fda_registered else "GMP" if gmp_found else ""
@@ -9425,7 +9427,10 @@ class SupplementEnricherV3:
         """Collect batch traceability data"""
         has_coa = bool(self.compiled_patterns['coa'].search(text))
         has_qr = bool(self.compiled_patterns['qr_code'].search(text))
-        has_batch_lookup = bool(self.compiled_patterns['batch_lookup'].search(text))
+        # A QR code is the lookup mechanism for many labels. Keep the explicit
+        # QR flag for display, but also roll it into the canonical lookup flag
+        # so nested and top-level scoring contracts agree.
+        has_batch_lookup = bool(self.compiled_patterns['batch_lookup'].search(text) or has_qr)
 
         return {
             "has_coa": has_coa,
@@ -9433,6 +9438,44 @@ class SupplementEnricherV3:
             "has_batch_lookup": has_batch_lookup,
             "qualifies": has_coa or has_qr or has_batch_lookup
         }
+
+    def _merge_evidence_batch_traceability(self, traceability: Dict, evidence_list: List[Dict]) -> Dict:
+        """Promote eligible rules-db traceability evidence into scoring fields.
+
+        The rules database carries stronger context checks than the legacy
+        regexes. Only actionable, score-eligible evidence with positive points
+        is promoted. Weak claims such as "batch tested" remain display-only.
+        """
+        merged = dict(traceability or {})
+        merged.setdefault("has_coa", False)
+        merged.setdefault("has_qr_code", False)
+        merged.setdefault("has_batch_lookup", False)
+
+        for evidence in evidence_list or []:
+            if not isinstance(evidence, dict):
+                continue
+            if not evidence.get("score_eligible"):
+                continue
+            if (evidence.get("points_if_eligible") or 0) <= 0:
+                continue
+            if evidence.get("evidence_strength") not in {"strong", "medium"}:
+                continue
+
+            rule_id = evidence.get("rule_id")
+            dedupe_key = evidence.get("dedupe_key")
+            if rule_id == "TRACE_COA" or dedupe_key == "traceability:coa":
+                merged["has_coa"] = True
+            elif rule_id == "TRACE_QR" or dedupe_key == "traceability:qr":
+                merged["has_qr_code"] = True
+                merged["has_batch_lookup"] = True
+            elif rule_id == "TRACE_TRANSPARENCY" or dedupe_key == "traceability:transparency":
+                merged["has_batch_lookup"] = True
+
+        merged["has_batch_lookup"] = bool(merged.get("has_batch_lookup") or merged.get("has_qr_code"))
+        merged["qualifies"] = bool(
+            merged.get("has_coa") or merged.get("has_qr_code") or merged.get("has_batch_lookup")
+        )
+        return merged
 
     # Programs that test for heavy metals (lead, arsenic, mercury, cadmium)
     HEAVY_METAL_TESTING_PROGRAMS = [
@@ -10255,7 +10298,14 @@ class SupplementEnricherV3:
         enriched["manufacturer_cert_signals"] = certification_data.get("manufacturer_cert_signals", []) or []
 
         gmp_data = certification_data.get("gmp", {}) or {}
-        if bool(gmp_data.get("nsf_gmp") or gmp_data.get("claimed")):
+        if bool(
+            gmp_data.get("nsf_gmp")
+            or gmp_data.get("gmp_certified_or_compliant")
+            or (
+                gmp_data.get("claimed")
+                and not gmp_data.get("fda_registered")
+            )
+        ):
             gmp_level = "certified"
         elif bool(gmp_data.get("fda_registered")):
             gmp_level = "fda_registered"

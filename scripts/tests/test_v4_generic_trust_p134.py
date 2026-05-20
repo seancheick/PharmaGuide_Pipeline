@@ -230,6 +230,23 @@ def test_top_level_gmp_level_scores() -> None:
     assert fda_registered["components"]["B4b_gmp"] == 2.0
 
 
+def test_nested_fda_registered_gmp_scores_two_not_certified_four() -> None:
+    from scoring_v4.modules.generic_trust import score_trust
+
+    payload = score_trust(
+        _product(
+            gmp={
+                "claimed": True,
+                "nsf_gmp": False,
+                "fda_registered": True,
+                "gmp_certified_or_compliant": False,
+            }
+        )
+    )
+
+    assert payload["components"]["B4b_gmp"] == 2.0
+
+
 def test_batch_traceability_scores_coa_and_batch_lookup() -> None:
     from scoring_v4.modules.generic_trust import score_trust
 

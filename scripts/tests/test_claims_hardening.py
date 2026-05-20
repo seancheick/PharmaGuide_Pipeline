@@ -195,6 +195,130 @@ class TestClaimValidationLogic:
         assert gmp["claimed"] is True
         assert gmp["fda_registered"] is True
 
+    def test_fda_registered_facility_projects_to_two_point_gmp_level(self, enricher):
+        """FDA-registered facility is weaker than GMP-certified and must not become certified."""
+        enricher._compile_patterns()
+        gmp = enricher._collect_gmp_data("Manufactured in an FDA-registered facility.")
+        enriched = {
+            "delivery_data": {},
+            "absorption_data": {},
+            "formulation_data": {},
+            "contaminant_data": {},
+            "compliance_data": {},
+            "certification_data": {
+                "third_party_programs": {"programs": []},
+                "verified_cert_programs": [],
+                "manufacturer_cert_signals": [],
+                "gmp": gmp,
+                "batch_traceability": {},
+            },
+            "proprietary_data": {},
+            "evidence_data": {},
+            "manufacturer_data": {},
+            "ingredient_quality_data": {},
+        }
+
+        enricher._project_scoring_fields(enriched)
+
+        assert gmp["fda_registered"] is True
+        assert gmp["gmp_certified_or_compliant"] is False
+        assert enriched["gmp_level"] == "fda_registered"
+
+    def test_fda_registered_laboratory_does_not_project_gmp_level(self, enricher):
+        """Third-party FDA-registered lab claims are not manufacturer facility GMP."""
+        enricher._compile_patterns()
+        gmp = enricher._collect_gmp_data("Tested by an independent FDA-registered laboratory.")
+        enriched = {
+            "delivery_data": {},
+            "absorption_data": {},
+            "formulation_data": {},
+            "contaminant_data": {},
+            "compliance_data": {},
+            "certification_data": {
+                "third_party_programs": {"programs": []},
+                "verified_cert_programs": [],
+                "manufacturer_cert_signals": [],
+                "gmp": gmp,
+                "batch_traceability": {},
+            },
+            "proprietary_data": {},
+            "evidence_data": {},
+            "manufacturer_data": {},
+            "ingredient_quality_data": {},
+        }
+
+        enricher._project_scoring_fields(enriched)
+
+        assert gmp["fda_registered"] is False
+        assert enriched["gmp_level"] is None
+
+    def test_qr_code_rolls_into_nested_batch_lookup_contract(self, enricher):
+        """QR traceability should be visible in both nested and top-level contracts."""
+        enricher._compile_patterns()
+
+        trace = enricher._collect_traceability_data("Scan the QR code to verify your batch.")
+
+        assert trace["has_qr_code"] is True
+        assert trace["has_batch_lookup"] is True
+        assert trace["qualifies"] is True
+
+    def test_rules_db_transparency_program_scores_as_batch_lookup(self, enricher):
+        """Eligible rules-db traceability evidence should not stay display-only."""
+        enricher._compile_patterns()
+        product = {
+            "brandName": "Traceable Brand",
+            "fullName": "Traceable Magnesium",
+            "statements": [
+                {
+                    "notes": (
+                        "Our transparency program lets you track your product "
+                        "from sourcing through manufacturing."
+                    )
+                }
+            ],
+            "claims": [],
+            "activeIngredients": [],
+            "inactiveIngredients": [],
+        }
+
+        with patch.object(enricher, "_resolve_verified_cert_programs", return_value=[]):
+            cert_data = enricher._collect_certification_data(product)
+
+        trace = cert_data["batch_traceability"]
+        assert trace["has_coa"] is False
+        assert trace["has_qr_code"] is False
+        assert trace["has_batch_lookup"] is True
+        assert trace["qualifies"] is True
+        assert any(
+            ev["rule_id"] == "TRACE_TRANSPARENCY" and ev["score_eligible"] is True
+            for ev in cert_data["evidence_based"]["batch_traceability"]
+        )
+
+    def test_rules_db_batch_tested_weak_signal_does_not_score_as_lookup(self, enricher):
+        """Batch-tested claims without lookup/COA remain display-only weak evidence."""
+        enricher._compile_patterns()
+        product = {
+            "brandName": "Batch Tested Brand",
+            "fullName": "Batch Tested Magnesium",
+            "statements": [{"notes": "Every batch is tested for quality."}],
+            "claims": [],
+            "activeIngredients": [],
+            "inactiveIngredients": [],
+        }
+
+        with patch.object(enricher, "_resolve_verified_cert_programs", return_value=[]):
+            cert_data = enricher._collect_certification_data(product)
+
+        trace = cert_data["batch_traceability"]
+        assert trace["has_coa"] is False
+        assert trace["has_qr_code"] is False
+        assert trace["has_batch_lookup"] is False
+        assert trace["qualifies"] is False
+        assert any(
+            ev["rule_id"] == "TRACE_BATCH_TESTED" and ev["score_eligible"] is False
+            for ev in cert_data["evidence_based"]["batch_traceability"]
+        )
+
     @pytest.mark.parametrize(
         "text",
         [

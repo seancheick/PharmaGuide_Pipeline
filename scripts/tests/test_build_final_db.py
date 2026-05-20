@@ -338,6 +338,33 @@ def test_non_gmo_project_verified_flows_to_core_row_and_blob_audit():
     assert any(bonus["id"] == "A5d" for bonus in blob["score_bonuses"])
 
 
+def test_non_gmo_project_rules_db_evidence_flows_to_core_row_and_blob_audit():
+    enriched = make_enriched()
+    enriched["compliance_data"] = {
+        "evidence_based": {
+            "allergen_free_claims": [
+                {
+                    "rule_id": "CLAIM_NON_GMO_PROJECT",
+                    "dedupe_key": "dietary:non_gmo_project",
+                    "display_name": "Non-GMO Project Verified",
+                    "score_eligible": True,
+                    "matched_text": "Non-GMO Project Verified",
+                }
+            ]
+        }
+    }
+    scored = make_scored()
+    scored["breakdown"]["A"]["A5d"] = 0.5
+
+    row = row_as_dict(build_core_row(enriched, scored, "2026-04-10T12:00:00Z"))
+    blob = build_detail_blob(enriched, scored)
+
+    assert row["is_non_gmo"] == 1
+    assert blob["non_gmo_audit"]["project_verified"] is True
+    assert blob["non_gmo_audit"]["score_eligible"] is True
+    assert blob["formulation_detail"]["claim_non_gmo_verified"] is True
+
+
 def test_generic_non_gmo_claim_does_not_silently_become_verified():
     enriched = make_enriched()
     enriched["labelText"] = {

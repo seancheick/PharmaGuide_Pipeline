@@ -715,6 +715,30 @@ def test_a5d_non_gmo_project_verified_gets_half_point() -> None:
     assert payload["components"]["A5d_non_gmo"] == 0.5
 
 
+def test_a5d_non_gmo_project_rules_db_evidence_gets_half_point() -> None:
+    from scoring_v4.modules.generic_formulation import score_formulation
+
+    payload = score_formulation(
+        _product(
+            compliance_data={
+                "evidence_based": {
+                    "allergen_free_claims": [
+                        {
+                            "rule_id": "CLAIM_NON_GMO_PROJECT",
+                            "dedupe_key": "dietary:non_gmo_project",
+                            "display_name": "Non-GMO Project Verified",
+                            "score_eligible": True,
+                            "matched_text": "Non-GMO Project Verified",
+                        }
+                    ]
+                }
+            }
+        )
+    )
+
+    assert payload["components"]["A5d_non_gmo"] == 0.5
+
+
 def test_a5d_generic_non_gmo_claim_no_credit() -> None:
     from scoring_v4.modules.generic_formulation import score_formulation
 

@@ -104,6 +104,20 @@ def derive_non_gmo_audit(product: dict[str, Any]) -> dict[str, Any]:
         if text:
             candidate_signals.append({"source": "third_party_programs", "text": text})
 
+    compliance_evidence = _safe_dict(
+        _safe_dict(product.get("compliance_data")).get("evidence_based")
+    )
+    for evidence in _safe_list(compliance_evidence.get("allergen_free_claims")):
+        if not isinstance(evidence, dict) or not evidence.get("score_eligible"):
+            continue
+        rule_id = _safe_str(evidence.get("rule_id"))
+        dedupe_key = _safe_str(evidence.get("dedupe_key"))
+        text = _safe_str(evidence.get("display_name") or evidence.get("matched_text"))
+        if rule_id == "CLAIM_NON_GMO_PROJECT" or dedupe_key == "dietary:non_gmo_project":
+            candidate_signals.append({"source": "rules_db_non_gmo_project", "text": text or "Non-GMO Project Verified"})
+        elif rule_id == "CLAIM_NON_GMO" or dedupe_key == "dietary:non_gmo":
+            candidate_signals.append({"source": "rules_db_non_gmo", "text": text or "Non-GMO"})
+
     verified_signals: list[dict[str, str]] = []
     generic_signals: list[dict[str, str]] = []
     for signal in candidate_signals:
@@ -231,4 +245,3 @@ def derive_proprietary_blend_audit(
         "penalty_score": round(penalty, 2),
         "evidence": evidence,
     }
-

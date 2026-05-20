@@ -158,7 +158,11 @@ def _score_b4b(product: Dict[str, Any]) -> float:
     cert = _safe_dict(product.get("certification_data"))
     gmp = _safe_dict(cert.get("gmp"))
     gmp_level = _norm_text(product.get("gmp_level"))
-    if gmp_level == "certified" or bool(gmp.get("nsf_gmp") or gmp.get("claimed")):
+    if gmp_level == "certified" or bool(
+        gmp.get("nsf_gmp")
+        or gmp.get("gmp_certified_or_compliant")
+        or (gmp.get("claimed") and not gmp.get("fda_registered"))
+    ):
         return B4B_GMP_CERTIFIED
     if gmp_level == "fda_registered" or bool(gmp.get("fda_registered")):
         return B4B_FDA_REGISTERED
