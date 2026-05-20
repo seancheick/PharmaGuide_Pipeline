@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 502,
+    "total_overrides": 701,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -8830,6 +8830,3644 @@
       "triage_reasons": [
         "dose_mismatch",
         "alternate_record_id=USP_VERIFIED_14A671BAE9D9"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179699",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179701",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179702",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180207",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180338",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180424",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180434",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "26696",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 25 mcg 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271512",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU (25 mcg)",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "279461",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU (25 mcg)",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "287806",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU (25 mcg)",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313818",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU (25 mcg)",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313819",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU (25 mcg)",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU softgel variants matching the alternate USP Vitamin D3 1000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313822",
+      "record_id": "USP_VERIFIED_EB766B5E9B7E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_EB766B5E9B7E"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179566",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179711",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179824",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180091",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180200",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180201",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180421",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 25 mcg (1000 IU)",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "239934",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU (25 mcg)",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "278460",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 1000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 1000 IU tablet variants matching the alternate USP Vitamin D3 1000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "71258",
+      "record_id": "USP_VERIFIED_951616898611",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 1000 IU (25 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_951616898611"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D3 5000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 5000 IU softgel variants matching the alternate USP Extra Strength 5000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179679",
+      "record_id": "USP_VERIFIED_6C9A89E4EB8B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 Extra Strength 5000 IU (125 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_6C9A89E4EB8B"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D3 5000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 5000 IU softgel variants matching the alternate USP Extra Strength 5000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "24784",
+      "record_id": "USP_VERIFIED_6C9A89E4EB8B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 Extra Strength 5000 IU (125 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_6C9A89E4EB8B"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 125 mcg 5000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 5000 IU softgel variants matching the alternate USP Extra Strength 5000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271464",
+      "record_id": "USP_VERIFIED_6C9A89E4EB8B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 Extra Strength 5000 IU (125 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_6C9A89E4EB8B"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 5000 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 5000 IU softgel variants matching the alternate USP Extra Strength 5000 IU Softgels row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "71376",
+      "record_id": "USP_VERIFIED_6C9A89E4EB8B",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 Extra Strength 5000 IU (125 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_6C9A89E4EB8B"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 50 mcg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; this member is a Nature Made D3 2000 IU tablet variant matching the alternate USP Vitamin D3 2000 IU Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "270957",
+      "record_id": "USP_VERIFIED_BB006E117D58",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_BB006E117D58"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin D3 Gummies 50 mcg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 2000 IU gummy variants matching the alternate USP Vitamin D3 2000 IU Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271651",
+      "record_id": "USP_VERIFIED_6DDEA48239E3",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Gummies",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_6DDEA48239E3"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 Gummies 2000 IU (50 mcg)",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are Nature Made D3 2000 IU gummy variants matching the alternate USP Vitamin D3 2000 IU Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "274365",
+      "record_id": "USP_VERIFIED_6DDEA48239E3",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_6DDEA48239E3"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin A 8,000 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179544",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made KIDS FIRST",
+      "product": "Vitamin D3 Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179621",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made KIDS FIRST",
+      "product": "Vitamin D3 Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179637",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 10 mcg (400 IU)",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179695",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "26672",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-12 500 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "302756",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-12 Vitamin 500 mcg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "302770",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "D3 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "302774",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-12 500 mcg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8800",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-1 100 mg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8850",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-6 50 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8851",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-6 100 mg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8853",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-12 250 mcg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8854",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-12 500 mcg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8855",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin A 8,000 IU Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8859",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-12 500 mg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9186",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Vitamin B-6 100 mg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed D3 2000 IU softgel cluster reviewed member-by-member; these members are different nutrients, different D3 doses, or gummy/tablet forms without an accepted exact alternate row in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9190",
+      "record_id": "USP_VERIFIED_23414A808E4E",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Vitamin D3 2000 IU (50 Mcg) Softgels",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg with Vitamin D3 400 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; these members are Nature Made Calcium 600mg with Vitamin D3 tablet variants matching the USP Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179387",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg With Vitamin D3 400 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; these members are Nature Made Calcium 600mg with Vitamin D3 tablet variants matching the USP Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179397",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 500 mg With Vitamin D3 400 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; these members are Nature Made Calcium 500mg with Vitamin D tablet variants matching the alternate USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179572",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_966C7542561C"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 500 mg With Vitamin D3 400 IU",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; these members are Nature Made Calcium 500mg with Vitamin D tablet variants matching the alternate USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179645",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_966C7542561C"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 500 mg Supplement with Vitamin D",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; these members are Nature Made Calcium 500mg with Vitamin D tablet variants matching the alternate USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8836",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_966C7542561C"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 500 mg Supplement With Vitamin D",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; these members are Nature Made Calcium 500mg with Vitamin D tablet variants matching the alternate USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8837",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_966C7542561C"
+      ]
+    },
+    {
+      "brand": "Nature Made KIDS FIRST",
+      "product": "Calcium + Vitamin D3 Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; gummies, softgels, calcium citrate, chewables, or different calcium doses do not match the USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179602",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made KIDS FIRST",
+      "product": "Calcium + Vitamin D3 Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; gummies, softgels, calcium citrate, chewables, or different calcium doses do not match the USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179633",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg With Vitamin D3 400 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; gummies, softgels, calcium citrate, chewables, or different calcium doses do not match the USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179640",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made Kids First",
+      "product": "Calcium + Vitamin D3 Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; gummies, softgels, calcium citrate, chewables, or different calcium doses do not match the USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "270960",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium Citrate Supplement With Vitamin D",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; gummies, softgels, calcium citrate, chewables, or different calcium doses do not match the USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8797",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Calcium 600 mg Supplement With Vitamin D 200 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; gummies, softgels, calcium citrate, chewables, or different calcium doses do not match the USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8912",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium Citrate Supplement With Vitamin D",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; gummies, softgels, calcium citrate, chewables, or different calcium doses do not match the USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8959",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Chewable Calcium 600 mg Supplement with Vitamin D 200 IU",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 600mg with D3 cluster reviewed member-by-member; gummies, softgels, calcium citrate, chewables, or different calcium doses do not match the USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9244",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg ",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; these members are Nature Made Calcium 600mg with Vitamin D3 tablet variants matching the alternate USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "279767",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_E459ED2E6CC5"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; these members are Nature Made Calcium 600mg with Vitamin D3 tablet variants matching the alternate USP Calcium 600mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "71234",
+      "record_id": "USP_VERIFIED_E459ED2E6CC5",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 600 mg with Vitamin D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch",
+        "alternate_record_id=USP_VERIFIED_E459ED2E6CC5"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 750 mg+D+K",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179489",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 750 mg+D+K",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179520",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium Gummies 500 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271078",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271432",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 750 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "279713",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "279716",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "302759",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 750 mg+D+K",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "302761",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 750 mg+D+K",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "82550",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium 600 mg Supplement",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Calcium 500mg with D3 cluster reviewed member-by-member; D+K variants, gummies, softgels, 600mg-only, 750mg, or no-D3 rows do not match the USP Calcium 500mg with D3 Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8951",
+      "record_id": "USP_VERIFIED_966C7542561C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Calcium 500 mg wih D3 Tablets",
+      "triage_reasons": [
+        "dose_mismatch"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-3",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Thorne Melaton-3 cluster reviewed member-by-member; these members are Melaton-3 products matching the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "16107",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-3",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Thorne Melaton-3 cluster reviewed member-by-member; these members are Melaton-3 products matching the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35603",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-3",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Thorne Melaton-3 cluster reviewed member-by-member; these members are Melaton-3 products matching the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64029",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-3",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Thorne Melaton-3 cluster reviewed member-by-member; these members are Melaton-3 products matching the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64056",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-3",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Thorne Melaton-3 cluster reviewed member-by-member; these members are Melaton-3 products matching the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64083",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-3",
+      "program": "NSF Sport",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Thorne Melaton-3 cluster reviewed member-by-member; these members are Melaton-3 products matching the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "75027",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-5",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Melaton-3 cluster reviewed member-by-member; Melaton-1 and Melaton-5 are distinct strengths/products and do not match the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "16100",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-1",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Melaton-3 cluster reviewed member-by-member; Melaton-1 and Melaton-5 are distinct strengths/products and do not match the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "16102",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Melaton-5",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Melaton-3 cluster reviewed member-by-member; Melaton-1 and Melaton-5 are distinct strengths/products and do not match the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182425",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Melaton-5",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Melaton-3 cluster reviewed member-by-member; Melaton-1 and Melaton-5 are distinct strengths/products and do not match the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "298037",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-5",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Melaton-3 cluster reviewed member-by-member; Melaton-1 and Melaton-5 are distinct strengths/products and do not match the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35599",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Melaton-5",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Melaton-3 cluster reviewed member-by-member; Melaton-1 and Melaton-5 are distinct strengths/products and do not match the NSF Sport Melaton-3 registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64026",
+      "record_id": "NSF_SPORT_450730BE6F18",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Melaton-3™",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Vitamin A",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "15640",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Vitamin D",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "15756",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Vitamin K2",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "15761",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Vitamin K2",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "181806",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Vitamin K2",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "298053",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Vitamin D",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35439",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Vitamin K2",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35441",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Vitamin K2",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35443",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Vitamin D",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74288",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Vitamin K2",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Multi-Vitamin Elite cluster reviewed member-by-member; standalone Vitamin A, Vitamin D, and Vitamin K2 products are distinct products and do not match the NSF Sport Multi-Vitamin Elite row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "81655",
+      "record_id": "NSF_SPORT_A2D656488B68",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Multi-Vitamin Elite",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Super EPA Pro",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Super EPA cluster reviewed member-by-member; Super EPA Pro is a distinct product and does not match the NSF Sport Super EPA (EPA & DHA) registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "16191",
+      "record_id": "NSF_SPORT_572E451D6E36",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Super EPA (EPA & DHA)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Super EPA Pro",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Super EPA cluster reviewed member-by-member; Super EPA Pro is a distinct product and does not match the NSF Sport Super EPA (EPA & DHA) registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182602",
+      "record_id": "NSF_SPORT_572E451D6E36",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Super EPA (EPA & DHA)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Super EPA Pro",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Super EPA cluster reviewed member-by-member; Super EPA Pro is a distinct product and does not match the NSF Sport Super EPA (EPA & DHA) registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "232858",
+      "record_id": "NSF_SPORT_572E451D6E36",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Super EPA (EPA & DHA)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Super EPA Pro",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Super EPA cluster reviewed member-by-member; Super EPA Pro is a distinct product and does not match the NSF Sport Super EPA (EPA & DHA) registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "291798",
+      "record_id": "NSF_SPORT_572E451D6E36",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Super EPA (EPA & DHA)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Super EPA Pro",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Super EPA cluster reviewed member-by-member; Super EPA Pro is a distinct product and does not match the NSF Sport Super EPA (EPA & DHA) registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313924",
+      "record_id": "NSF_SPORT_572E451D6E36",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Super EPA (EPA & DHA)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Super EPA Pro",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Super EPA cluster reviewed member-by-member; Super EPA Pro is a distinct product and does not match the NSF Sport Super EPA (EPA & DHA) registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35325",
+      "record_id": "NSF_SPORT_572E451D6E36",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Super EPA (EPA & DHA)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Super EPA Pro",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Super EPA cluster reviewed member-by-member; Super EPA Pro is a distinct product and does not match the NSF Sport Super EPA (EPA & DHA) registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64090",
+      "record_id": "NSF_SPORT_572E451D6E36",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Super EPA (EPA & DHA)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Iron Bisglycinate",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Magnesium Bisglycinate cluster reviewed member-by-member; Iron Bisglycinate and Zinc Bisglycinate are distinct mineral products and do not match Magnesium Bisglycinate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "28305",
+      "record_id": "NSF_SPORT_B4E01786C163",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Magnesium Bisglycinate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Iron Bisglycinate",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Magnesium Bisglycinate cluster reviewed member-by-member; Iron Bisglycinate and Zinc Bisglycinate are distinct mineral products and do not match Magnesium Bisglycinate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35447",
+      "record_id": "NSF_SPORT_B4E01786C163",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Magnesium Bisglycinate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne FX",
+      "product": "Iron Bisglycinate",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Magnesium Bisglycinate cluster reviewed member-by-member; Iron Bisglycinate and Zinc Bisglycinate are distinct mineral products and do not match Magnesium Bisglycinate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35553",
+      "record_id": "NSF_SPORT_B4E01786C163",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Magnesium Bisglycinate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Iron Bisglycinate",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Magnesium Bisglycinate cluster reviewed member-by-member; Iron Bisglycinate and Zinc Bisglycinate are distinct mineral products and do not match Magnesium Bisglycinate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "50539",
+      "record_id": "NSF_SPORT_B4E01786C163",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Magnesium Bisglycinate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Iron Bisglycinate",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Magnesium Bisglycinate cluster reviewed member-by-member; Iron Bisglycinate and Zinc Bisglycinate are distinct mineral products and do not match Magnesium Bisglycinate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "63802",
+      "record_id": "NSF_SPORT_B4E01786C163",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Magnesium Bisglycinate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Zinc Bisglycinate",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Magnesium Bisglycinate cluster reviewed member-by-member; Iron Bisglycinate and Zinc Bisglycinate are distinct mineral products and do not match Magnesium Bisglycinate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "63932",
+      "record_id": "NSF_SPORT_B4E01786C163",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Magnesium Bisglycinate",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne FX",
+      "product": "Rebound Curcumin Phytosome",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Thorne Curcumin Phytosome cluster reviewed member-by-member; Rebound Curcumin Phytosome is a distinct product line and does not match the NSF Sport Thorne Curcumin Phytosome registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "35757",
+      "record_id": "NSF_SPORT_33DFB8FEB29C",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne Curcumin Phytosome",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B-Complex with Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Glucosamine cluster reviewed member-by-member; these B-Complex with Vitamin C caplet/supplement rows match the alternate USP Nature Made B-Complex With C Caplets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179442",
+      "record_id": "USP_VERIFIED_4B72A362DF38",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made B-Complex With C Caplets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_4B72A362DF38"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B-Complex With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Glucosamine cluster reviewed member-by-member; these B-Complex with Vitamin C caplet/supplement rows match the alternate USP Nature Made B-Complex With C Caplets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "19075",
+      "record_id": "USP_VERIFIED_4B72A362DF38",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made B-Complex With C Caplets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_4B72A362DF38"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Glucosamine cluster reviewed member-by-member; these B-Complex with Vitamin C caplet/supplement rows match the alternate USP Nature Made B-Complex With C Caplets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8749",
+      "record_id": "USP_VERIFIED_4B72A362DF38",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made B-Complex With C Caplets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_4B72A362DF38"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Glucosamine cluster reviewed member-by-member; these B-Complex with Vitamin C caplet/supplement rows match the alternate USP Nature Made B-Complex With C Caplets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8901",
+      "record_id": "USP_VERIFIED_4B72A362DF38",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made B-Complex With C Caplets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_4B72A362DF38"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Glucosamine cluster reviewed member-by-member; these B-Complex with Vitamin C caplet/supplement rows match the alternate USP Nature Made B-Complex With C Caplets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8903",
+      "record_id": "USP_VERIFIED_4B72A362DF38",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made B-Complex With C Caplets",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_4B72A362DF38"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Triple Flex with Vitamin D3",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Glucosamine cluster reviewed member-by-member; this Triple Flex with Vitamin D3 member contains glucosamine, chondroitin, MSM, and D3 matching the USP triple-strength + D3 row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "211265",
+      "record_id": "USP_VERIFIED_4DAAA88986D6",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Glucosamine Chondroitin Complex with MSM Triple Strength + Vitamin D3",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Triple Flex Triple Strength",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Glucosamine cluster reviewed member-by-member; D3-free Triple Flex, glucosamine-only, and unrelated B-complex rows do not match the USP glucosamine/chondroitin/MSM + D3 registry row unless separately routed to an alternate row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "268025",
+      "record_id": "USP_VERIFIED_4DAAA88986D6",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Glucosamine Chondroitin Complex with MSM Triple Strength + Vitamin D3",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Triple Flex Triple Strength",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Glucosamine cluster reviewed member-by-member; D3-free Triple Flex, glucosamine-only, and unrelated B-complex rows do not match the USP glucosamine/chondroitin/MSM + D3 registry row unless separately routed to an alternate row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271076",
+      "record_id": "USP_VERIFIED_4DAAA88986D6",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Glucosamine Chondroitin Complex with MSM Triple Strength + Vitamin D3",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Maximum Strength Glucosamine With Vitamin D",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Glucosamine cluster reviewed member-by-member; D3-free Triple Flex, glucosamine-only, and unrelated B-complex rows do not match the USP glucosamine/chondroitin/MSM + D3 registry row unless separately routed to an alternate row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "27207",
+      "record_id": "USP_VERIFIED_4DAAA88986D6",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Glucosamine Chondroitin Complex with MSM Triple Strength + Vitamin D3",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Super B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Super B-Complex cluster reviewed member-by-member; these are Nature Made Super B-Complex with Vitamin C supplement/tablet variants matching the USP Super B-Complex With C Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8721",
+      "record_id": "USP_VERIFIED_8F0BF337589C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Super B-Complex With C Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Super B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Super B-Complex cluster reviewed member-by-member; these are Nature Made Super B-Complex with Vitamin C supplement/tablet variants matching the USP Super B-Complex With C Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8795",
+      "record_id": "USP_VERIFIED_8F0BF337589C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Super B-Complex With C Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Super B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Super B-Complex cluster reviewed member-by-member; these are Nature Made Super B-Complex with Vitamin C supplement/tablet variants matching the USP Super B-Complex With C Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8799",
+      "record_id": "USP_VERIFIED_8F0BF337589C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Super B-Complex With C Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Super B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Super B-Complex cluster reviewed member-by-member; these are Nature Made Super B-Complex with Vitamin C supplement/tablet variants matching the USP Super B-Complex With C Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8900",
+      "record_id": "USP_VERIFIED_8F0BF337589C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Super B-Complex With C Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Super B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Super B-Complex cluster reviewed member-by-member; these are Nature Made Super B-Complex with Vitamin C supplement/tablet variants matching the USP Super B-Complex With C Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8904",
+      "record_id": "USP_VERIFIED_8F0BF337589C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Super B-Complex With C Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Super B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Super B-Complex cluster reviewed member-by-member; these are Nature Made Super B-Complex with Vitamin C supplement/tablet variants matching the USP Super B-Complex With C Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "8906",
+      "record_id": "USP_VERIFIED_8F0BF337589C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Super B-Complex With C Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Super B-Complex Supplement With Vitamin C",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Super B-Complex cluster reviewed member-by-member; these are Nature Made Super B-Complex with Vitamin C supplement/tablet variants matching the USP Super B-Complex With C Tablets row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9200",
+      "record_id": "USP_VERIFIED_8F0BF337589C",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Super B-Complex With C Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi + Omega-3 Adult Gummies",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi + Omega-3 For Her cluster reviewed member-by-member; these adult Multi + Omega-3 gummies match the alternate USP Multivitamin + Omega-3 Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180297",
+      "record_id": "USP_VERIFIED_B18DE768E32F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_B18DE768E32F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi + Omega-3 Adult Gummies",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi + Omega-3 For Her cluster reviewed member-by-member; these adult Multi + Omega-3 gummies match the alternate USP Multivitamin + Omega-3 Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "180301",
+      "record_id": "USP_VERIFIED_B18DE768E32F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_B18DE768E32F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi + Omega-3 Adult Gummies",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi + Omega-3 For Her cluster reviewed member-by-member; these adult Multi + Omega-3 gummies match the alternate USP Multivitamin + Omega-3 Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "211279",
+      "record_id": "USP_VERIFIED_B18DE768E32F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_B18DE768E32F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi + Omega-3 Adult Gummies",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi + Omega-3 For Her cluster reviewed member-by-member; these adult Multi + Omega-3 gummies match the alternate USP Multivitamin + Omega-3 Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313838",
+      "record_id": "USP_VERIFIED_B18DE768E32F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_B18DE768E32F"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi for Her plus Omega-3s",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi + Omega-3 For Her cluster reviewed member-by-member; this member is a For Her Omega-3 gummy variant matching the USP For Her Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "211272",
+      "record_id": "USP_VERIFIED_B619AA108351",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multi + Omega-3 For Her Gummies",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi + Omega-3 For Him Gummies",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi + Omega-3 For Her cluster reviewed member-by-member; these For Him Omega-3 gummy members match the alternate USP Multivitamin + Omega-3 For Him Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "279880",
+      "record_id": "USP_VERIFIED_7A686B1F2DEB",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 For Him Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_7A686B1F2DEB"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi + Omega-3 For Him Gummies",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi + Omega-3 For Her cluster reviewed member-by-member; these For Him Omega-3 gummy members match the alternate USP Multivitamin + Omega-3 For Him Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313840",
+      "record_id": "USP_VERIFIED_7A686B1F2DEB",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 For Him Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_7A686B1F2DEB"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi + Omega-3 for Him Gummies",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi + Omega-3 For Her cluster reviewed member-by-member; these For Him Omega-3 gummy members match the alternate USP Multivitamin + Omega-3 For Him Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313841",
+      "record_id": "USP_VERIFIED_7A686B1F2DEB",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 For Him Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_7A686B1F2DEB"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi For Her 50+ No Iron",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Multi for Her 50+ cluster reviewed member-by-member; No Iron variants are compositionally distinct and no exact USP No Iron row exists in the local registry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179563",
+      "record_id": "USP_VERIFIED_11E04D07B1DD",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multi for Her 50+ Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi For Her 50+ No Iron",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Multi for Her 50+ cluster reviewed member-by-member; No Iron variants are compositionally distinct and no exact USP No Iron row exists in the local registry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "26690",
+      "record_id": "USP_VERIFIED_11E04D07B1DD",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multi for Her 50+ Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi For Her 50+ No Iron",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Multi for Her 50+ cluster reviewed member-by-member; No Iron variants are compositionally distinct and no exact USP No Iron row exists in the local registry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "27208",
+      "record_id": "USP_VERIFIED_11E04D07B1DD",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multi for Her 50+ Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi For Her 50+ No Iron",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Multi for Her 50+ cluster reviewed member-by-member; No Iron variants are compositionally distinct and no exact USP No Iron row exists in the local registry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "280348",
+      "record_id": "USP_VERIFIED_11E04D07B1DD",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multi for Her 50+ Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi for Him Adult Gummies",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Mixed Multi for Him Tablets cluster reviewed member-by-member; this Multi for Him Adult Gummies member matches the alternate USP Multi For Him Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "239942",
+      "record_id": "USP_VERIFIED_FEA924D3992A",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multi For Him Gummies",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=USP_VERIFIED_FEA924D3992A"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Multi for Him Tablets cluster reviewed member-by-member; generic Multi Gummies rows do not match the USP Multi for Him Tablets row and no exact accepted alternate was used in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "270971",
+      "record_id": "USP_VERIFIED_FCC5CB5774F9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multi for Him Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Multi Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Multi for Him Tablets cluster reviewed member-by-member; generic Multi Gummies rows do not match the USP Multi for Him Tablets row and no exact accepted alternate was used in this batch.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271563",
+      "record_id": "USP_VERIFIED_FCC5CB5774F9",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multi for Him Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made Kids First",
+      "product": "Multivitamin with Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Multivitamin + Omega-3 Gummies cluster reviewed member-by-member; Kids First multivitamin omega-3 products are distinct from the adult USP Multivitamin + Omega-3 Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179598",
+      "record_id": "USP_VERIFIED_B18DE768E32F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 Gummies",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made Kids First",
+      "product": "Multivitamin with Omega-3",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed Multivitamin + Omega-3 Gummies cluster reviewed member-by-member; Kids First multivitamin omega-3 products are distinct from the adult USP Multivitamin + Omega-3 Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179629",
+      "record_id": "USP_VERIFIED_B18DE768E32F",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Multivitamin + Omega-3 Gummies",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Sports Research",
+      "product": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "program": "IFOS",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Sports Research omega cluster reviewed member-by-member; these 1250mg softgel members align better with the IFOS Omega-3 Fish Oil Triple Strength 1250mg registry row than the lemon-flavor row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "326270",
+      "record_id": "IFOS_AFC39AA2C521",
+      "matched_brand": "Sports Research",
+      "matched_product": "Omega-3 Fish Oil Triple Strength 1250mg",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=IFOS_AFC39AA2C521"
+      ]
+    },
+    {
+      "brand": "Sports Research",
+      "product": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "program": "IFOS",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Sports Research omega cluster reviewed member-by-member; these 1250mg softgel members align better with the IFOS Omega-3 Fish Oil Triple Strength 1250mg registry row than the lemon-flavor row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "326271",
+      "record_id": "IFOS_AFC39AA2C521",
+      "matched_brand": "Sports Research",
+      "matched_product": "Omega-3 Fish Oil Triple Strength 1250mg",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=IFOS_AFC39AA2C521"
+      ]
+    },
+    {
+      "brand": "Sports Research",
+      "product": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "program": "IFOS",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Sports Research omega cluster reviewed member-by-member; these 1250mg softgel members align better with the IFOS Omega-3 Fish Oil Triple Strength 1250mg registry row than the lemon-flavor row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "326273",
+      "record_id": "IFOS_AFC39AA2C521",
+      "matched_brand": "Sports Research",
+      "matched_product": "Omega-3 Fish Oil Triple Strength 1250mg",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=IFOS_AFC39AA2C521"
+      ]
+    },
+    {
+      "brand": "Sports Research",
+      "product": "Omega-3 1055 mg Fish Oil 1250 mg",
+      "program": "IFOS",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Sports Research omega cluster reviewed member-by-member; these 1250mg softgel members align better with the IFOS Omega-3 Fish Oil Triple Strength 1250mg registry row than the lemon-flavor row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "327776",
+      "record_id": "IFOS_AFC39AA2C521",
+      "matched_brand": "Sports Research",
+      "matched_product": "Omega-3 Fish Oil Triple Strength 1250mg",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=IFOS_AFC39AA2C521"
+      ]
+    },
+    {
+      "brand": "SR Sports Research",
+      "product": "Omega-3 Fish Oil 1250 mg",
+      "program": "IFOS",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Sports Research omega cluster reviewed member-by-member; these 1250mg softgel members with the lower DHA/MSC pattern align better with the IFOS Triple Strength 1250mg MSC-C-55162 registry row than the lemon-flavor row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "268581",
+      "record_id": "IFOS_DA870E131E72",
+      "matched_brand": "Sports Research",
+      "matched_product": "Omega-3 Fish Oil Triple Strength 1250mg MSC-C-55162",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=IFOS_DA870E131E72"
+      ]
+    },
+    {
+      "brand": "Sports Research",
+      "product": "Omega-3 1040 mg Fish Oil 1250 mg",
+      "program": "IFOS",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Sports Research omega cluster reviewed member-by-member; these 1250mg softgel members with the lower DHA/MSC pattern align better with the IFOS Triple Strength 1250mg MSC-C-55162 registry row than the lemon-flavor row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "326272",
+      "record_id": "IFOS_DA870E131E72",
+      "matched_brand": "Sports Research",
+      "matched_product": "Omega-3 Fish Oil Triple Strength 1250mg MSC-C-55162",
+      "triage_reasons": [
+        "no_strong_signal",
+        "alternate_record_id=IFOS_DA870E131E72"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen Creamer Chocolate",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "222870",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen Creamer Creamy Vanilla Flavor",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "222876",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen Greens Beauty Apple Flavor",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "222887",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen CBD Unflavored",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "222902",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen Super Beauty Blueberry Acai Flavor",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "222908",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen Creamer Creamy Vanilla Flavor",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "274293",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen Super Beauty Blueberry Acai Flavor",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "274320",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen Protein Fair Trade Chocolate",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "327398",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Grass Fed Collagen Protein Vanilla Flavor",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Grass Fed Collagen Peptides cluster reviewed member-by-member; creamers, beauty/greens/CBD variants, and flavored collagen protein products are distinct from the NSF Certified Grass Fed Collagen Peptides row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "327399",
+      "record_id": "NSF_CERTIFIE_AB15A681B5D6",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Grass Fed Collagen Peptides",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Prenatal Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal/Postnatal probiotic cluster reviewed member-by-member; MyKind Organics Prenatal Once Daily is a distinct prenatal multi and does not match the Dr. Formulated Probiotics Prenatal/Postnatal registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "233649",
+      "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Prenatal Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal/Postnatal probiotic cluster reviewed member-by-member; MyKind Organics Prenatal Once Daily is a distinct prenatal multi and does not match the Dr. Formulated Probiotics Prenatal/Postnatal registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "236782",
+      "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Prenatal Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal/Postnatal probiotic cluster reviewed member-by-member; MyKind Organics Prenatal Once Daily is a distinct prenatal multi and does not match the Dr. Formulated Probiotics Prenatal/Postnatal registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "236783",
+      "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Prenatal Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal/Postnatal probiotic cluster reviewed member-by-member; MyKind Organics Prenatal Once Daily is a distinct prenatal multi and does not match the Dr. Formulated Probiotics Prenatal/Postnatal registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "236784",
+      "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Prenatal Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal/Postnatal probiotic cluster reviewed member-by-member; MyKind Organics Prenatal Once Daily is a distinct prenatal multi and does not match the Dr. Formulated Probiotics Prenatal/Postnatal registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "274532",
+      "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Prenatal Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal/Postnatal probiotic cluster reviewed member-by-member; MyKind Organics Prenatal Once Daily is a distinct prenatal multi and does not match the Dr. Formulated Probiotics Prenatal/Postnatal registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "277038",
+      "record_id": "NSF_CERTIFIE_EF3AA3E0B7CB",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr. Formulated Probiotics Prenatal and Postnatal Daily Care",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Men's Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Women’s Once Daily 40B probiotic cluster reviewed member-by-member; MyKind Organics Men’s Once Daily products are distinct and do not match the women’s probiotic registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "233635",
+      "record_id": "NSF_CERTIFIE_A1F98F88EAD3",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr Formulated Probiotics Women’s Once Daily 40B",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Men's Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Women’s Once Daily 40B probiotic cluster reviewed member-by-member; MyKind Organics Men’s Once Daily products are distinct and do not match the women’s probiotic registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "235651",
+      "record_id": "NSF_CERTIFIE_A1F98F88EAD3",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr Formulated Probiotics Women’s Once Daily 40B",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Men's Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Women’s Once Daily 40B probiotic cluster reviewed member-by-member; MyKind Organics Men’s Once Daily products are distinct and do not match the women’s probiotic registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "235652",
+      "record_id": "NSF_CERTIFIE_A1F98F88EAD3",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr Formulated Probiotics Women’s Once Daily 40B",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Men's Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Women’s Once Daily 40B probiotic cluster reviewed member-by-member; MyKind Organics Men’s Once Daily products are distinct and do not match the women’s probiotic registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "235653",
+      "record_id": "NSF_CERTIFIE_A1F98F88EAD3",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr Formulated Probiotics Women’s Once Daily 40B",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Men's Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Women’s Once Daily 40B probiotic cluster reviewed member-by-member; MyKind Organics Men’s Once Daily products are distinct and do not match the women’s probiotic registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "274473",
+      "record_id": "NSF_CERTIFIE_A1F98F88EAD3",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr Formulated Probiotics Women’s Once Daily 40B",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Men's Once Daily",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Women’s Once Daily 40B probiotic cluster reviewed member-by-member; MyKind Organics Men’s Once Daily products are distinct and do not match the women’s probiotic registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "277036",
+      "record_id": "NSF_CERTIFIE_A1F98F88EAD3",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Dr Formulated Probiotics Women’s Once Daily 40B",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Vitamin Code",
+      "product": "Raw Prenatal",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal DHA cluster reviewed member-by-member; Vitamin Code Raw Prenatal products are distinct prenatal multivitamins and do not match the Dr. Formulated Prenatal DHA registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "236745",
+      "record_id": "NSF_CERTIFIE_1765AC19B121",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Garden of Life® Dr. Formulated Prenatal DHA",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Vitamin Code",
+      "product": "Raw Prenatal",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal DHA cluster reviewed member-by-member; Vitamin Code Raw Prenatal products are distinct prenatal multivitamins and do not match the Dr. Formulated Prenatal DHA registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "236877",
+      "record_id": "NSF_CERTIFIE_1765AC19B121",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Garden of Life® Dr. Formulated Prenatal DHA",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Vitamin Code",
+      "product": "Raw Prenatal",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal DHA cluster reviewed member-by-member; Vitamin Code Raw Prenatal products are distinct prenatal multivitamins and do not match the Dr. Formulated Prenatal DHA registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "236882",
+      "record_id": "NSF_CERTIFIE_1765AC19B121",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Garden of Life® Dr. Formulated Prenatal DHA",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Vitamin Code",
+      "product": "Raw Prenatal",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal DHA cluster reviewed member-by-member; Vitamin Code Raw Prenatal products are distinct prenatal multivitamins and do not match the Dr. Formulated Prenatal DHA registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "275080",
+      "record_id": "NSF_CERTIFIE_1765AC19B121",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Garden of Life® Dr. Formulated Prenatal DHA",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Vitamin Code",
+      "product": "Raw Prenatal",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Prenatal DHA cluster reviewed member-by-member; Vitamin Code Raw Prenatal products are distinct prenatal multivitamins and do not match the Dr. Formulated Prenatal DHA registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "277796",
+      "record_id": "NSF_CERTIFIE_1765AC19B121",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Garden of Life® Dr. Formulated Prenatal DHA",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "VegaLite Chocolate Flavored",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — RecoveryPro cluster reviewed member-by-member; VegaLite Chocolate is a distinct protein product and does not match RecoveryPro Chocolate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64425",
+      "record_id": "NSF_SPORT_00EFC840A4B2",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® RecoveryPro® Chocolate Flavored",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "VegaLite Chocolate Flavored",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — RecoveryPro cluster reviewed member-by-member; VegaLite Chocolate is a distinct protein product and does not match RecoveryPro Chocolate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74908",
+      "record_id": "NSF_SPORT_00EFC840A4B2",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® RecoveryPro® Chocolate Flavored",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "VegaLite Chocolate Flavored",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — RecoveryPro cluster reviewed member-by-member; VegaLite Chocolate is a distinct protein product and does not match RecoveryPro Chocolate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "75089",
+      "record_id": "NSF_SPORT_00EFC840A4B2",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® RecoveryPro® Chocolate Flavored",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "VegaLite Chocolate Flavored",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — RecoveryPro cluster reviewed member-by-member; VegaLite Chocolate is a distinct protein product and does not match RecoveryPro Chocolate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "81998",
+      "record_id": "NSF_SPORT_00EFC840A4B2",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® RecoveryPro® Chocolate Flavored",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "3-K Complete",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Perimenopause Complete cluster reviewed member-by-member; 3-K Complete is a distinct Thorne product and does not match the Perimenopause Complete registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "181909",
+      "record_id": "NSF_SPORT_0337D819F1AD",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Perimenopause Complete",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "3-K Complete",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Perimenopause Complete cluster reviewed member-by-member; 3-K Complete is a distinct Thorne product and does not match the Perimenopause Complete registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "270708",
+      "record_id": "NSF_SPORT_0337D819F1AD",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Perimenopause Complete",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "3-K Complete",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Perimenopause Complete cluster reviewed member-by-member; 3-K Complete is a distinct Thorne product and does not match the Perimenopause Complete registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "74289",
+      "record_id": "NSF_SPORT_0337D819F1AD",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Perimenopause Complete",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Turmeric Gummy",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed collagen/turmeric cluster reviewed member-by-member; turmeric gummies, standalone turmeric, unflavored collagen, and generic multi products do not match Multi Sourced Collagen Turmeric Apple Cinnamon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "204676",
+      "record_id": "NSF_CERTIFIE_C7D5051DCFB7",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Multi Sourced Collagen Turmeric Apple Cinnamon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life MyKind Organics",
+      "product": "Turmeric Gummy",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed collagen/turmeric cluster reviewed member-by-member; turmeric gummies, standalone turmeric, unflavored collagen, and generic multi products do not match Multi Sourced Collagen Turmeric Apple Cinnamon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "274561",
+      "record_id": "NSF_CERTIFIE_C7D5051DCFB7",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Multi Sourced Collagen Turmeric Apple Cinnamon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Collagen Multi-Sourced 20 g Unflavored",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed collagen/turmeric cluster reviewed member-by-member; turmeric gummies, standalone turmeric, unflavored collagen, and generic multi products do not match Multi Sourced Collagen Turmeric Apple Cinnamon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "326694",
+      "record_id": "NSF_CERTIFIE_C7D5051DCFB7",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Multi Sourced Collagen Turmeric Apple Cinnamon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Organics",
+      "product": "Turmeric",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed collagen/turmeric cluster reviewed member-by-member; turmeric gummies, standalone turmeric, unflavored collagen, and generic multi products do not match Multi Sourced Collagen Turmeric Apple Cinnamon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "327412",
+      "record_id": "NSF_CERTIFIE_C7D5051DCFB7",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Multi Sourced Collagen Turmeric Apple Cinnamon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Dr. Formulated",
+      "product": "Multi +",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Mixed collagen/turmeric cluster reviewed member-by-member; turmeric gummies, standalone turmeric, unflavored collagen, and generic multi products do not match Multi Sourced Collagen Turmeric Apple Cinnamon.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "337949",
+      "record_id": "NSF_CERTIFIE_C7D5051DCFB7",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "Multi Sourced Collagen Turmeric Apple Cinnamon",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Kids Happy Tummy Probiotic Just Peachy",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Kids Multi + Probiotic cluster reviewed member-by-member; probiotic-only products and non-Kids Multi + Probiotic rows do not match the NSF Certified KIDS MULTI + PROBIOTIC registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "201081",
+      "record_id": "NSF_CERTIFIE_C50F66B33F57",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "KIDS MULTI + PROBIOTIC",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Kids Quick Melt Probiotic Sticks Wacky Watermelon",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Kids Multi + Probiotic cluster reviewed member-by-member; probiotic-only products and non-Kids Multi + Probiotic rows do not match the NSF Certified KIDS MULTI + PROBIOTIC registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "201158",
+      "record_id": "NSF_CERTIFIE_C50F66B33F57",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "KIDS MULTI + PROBIOTIC",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Multi + Probiotic Tropical Twist",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Kids Multi + Probiotic cluster reviewed member-by-member; probiotic-only products and non-Kids Multi + Probiotic rows do not match the NSF Certified KIDS MULTI + PROBIOTIC registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "230118",
+      "record_id": "NSF_CERTIFIE_C50F66B33F57",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "KIDS MULTI + PROBIOTIC",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Kids Quick Melt Probiotic Sticks Giddy Grape",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Kids Multi + Probiotic cluster reviewed member-by-member; probiotic-only products and non-Kids Multi + Probiotic rows do not match the NSF Certified KIDS MULTI + PROBIOTIC registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "273199",
+      "record_id": "NSF_CERTIFIE_C50F66B33F57",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "KIDS MULTI + PROBIOTIC",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Multi + Probiotic Tropical Twist",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Kids Multi + Probiotic cluster reviewed member-by-member; probiotic-only products and non-Kids Multi + Probiotic rows do not match the NSF Certified KIDS MULTI + PROBIOTIC registry row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "335681",
+      "record_id": "NSF_CERTIFIE_C50F66B33F57",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "KIDS MULTI + PROBIOTIC",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Folic Acid With DHA",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Single-member review; Folic Acid With DHA is not accepted as the same product as the USP Prenatal Folic Acid + DHA Softgels row without explicit prenatal/product-line evidence.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "27128",
+      "record_id": "USP_VERIFIED_D4313C48D887",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Melatonin Maximum Strength 5 mg",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Single-member review; Melatonin Maximum Strength 5 mg is distinct from the USP Zero Sugar Melatonin Extra Strength 5 mg Gummies row.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "209485",
+      "record_id": "USP_VERIFIED_E464A574CE13",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Zero Sugar Melatonin Extra Strength 5 Mg Gummies",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "VegaLite Chocolate Flavored Vegan Protein",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Single-member review; VegaLite Chocolate Flavored Vegan Protein is a distinct product and does not match Thorne Plant Protein Chocolate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "182718",
+      "record_id": "NSF_SPORT_CFE8D05C2264",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Plant Protein (Chocolate Flavored)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Grass Fed Whey Protein Vanilla Flavored",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Single-member review; Grass Fed Whey Protein Vanilla is distinct from Thorne Whey Protein Isolate Vanilla.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64077",
+      "record_id": "NSF_SPORT_5980D2F54EEA",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Whey Protein Isolate Vanilla Flavored",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne Research",
+      "product": "Grass Fed Whey Protein Chocolate Flavored",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Single-member review; Grass Fed Whey Protein Chocolate is distinct from Thorne Whey Protein Isolate Chocolate.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "64078",
+      "record_id": "NSF_SPORT_80588E8CE08C",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Whey Protein Isolate Chocolate Flavored",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life Sport",
+      "product": "Organic Plant-Based Energy + Focus Blackberry",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Single-member review; Organic Plant-Based Energy + Focus Blackberry is distinct from Sport Organic Pre-Workout Energy + Focus Blackberry.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "83263",
+      "record_id": "NSF_SPORT_919FB51A3E50",
+      "matched_brand": "Garden of Life",
+      "matched_product": "Sport Organic Pre-Workout Energy + Focus Blackberry",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Girl Multi Berry Melon Besties",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Single-member review; Girl Multi Berry Melon Besties is distinct from TEEN GIRL MULTI.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "201070",
+      "record_id": "NSF_CERTIFIE_DF37D7F6EA10",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "TEEN GIRL MULTI",
+      "triage_reasons": [
+        "no_strong_signal"
       ]
     }
   ]
