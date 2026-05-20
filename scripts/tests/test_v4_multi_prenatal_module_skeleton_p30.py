@@ -155,17 +155,17 @@ def test_multi_prenatal_dimensions_share_stable_contract() -> None:
         dim = breakdown["dimensions"][name]
         assert set(dim.keys()) == {"score", "max", "components", "penalties", "metadata"}
 
-    # P3.3: formulation, dose, and evidence are populated; trust and
-    # transparency remain scaffolded until their slices land.
+    # P3.4: formulation, dose, evidence, and trust are populated;
+    # transparency remains scaffolded until P3.5.
     assert breakdown["dimensions"]["formulation"]["score"] is not None
     assert breakdown["dimensions"]["dose"]["score"] is not None
     assert breakdown["dimensions"]["evidence"]["score"] is not None
-    for name in ("trust", "transparency"):
-        dim = breakdown["dimensions"][name]
-        assert dim["score"] is None
-        assert dim["components"] == {}
-        assert dim["penalties"] == {}
-        assert dim["metadata"] == {}
+    assert breakdown["dimensions"]["trust"]["score"] is not None
+    dim = breakdown["dimensions"]["transparency"]
+    assert dim["score"] is None
+    assert dim["components"] == {}
+    assert dim["penalties"] == {}
+    assert dim["metadata"] == {}
 
 
 def test_multi_prenatal_manufacturer_adjustments_have_shared_contract() -> None:
@@ -189,7 +189,7 @@ def test_multi_prenatal_score_fields_stay_none_until_final_assembly() -> None:
     assert breakdown["raw_score_100"] is None
     assert breakdown["score_100"] is None
     assert breakdown["phase"].startswith("P3.")
-    assert breakdown["metadata"]["module_state"] == "evidence_partial"
+    assert breakdown["metadata"]["module_state"] == "trust_partial"
 
 
 def test_score_multi_prenatal_resilient_to_malformed_input() -> None:

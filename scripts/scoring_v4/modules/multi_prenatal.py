@@ -17,8 +17,8 @@ single-ingredient products:
                                allergens, marketing penalties
     Total class score  100
 
-P3.3 state: Formulation, Dose, and Evidence are populated; Trust and
-Transparency remain scaffolded. Later P3 slices populate the existing
+P3.4 state: Formulation, Dose, Evidence, and Trust are populated;
+Transparency remains scaffolded. Later P3 slices populate the existing
 dictionaries in place so downstream audit / Flutter consumers do not chase
 shape changes.
 
@@ -38,12 +38,13 @@ from scoring_v4.modules.generic import (
     ManufacturerTrustResult,
     ManufacturerViolationsResult,
 )
+from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.multi_prenatal_dose import score_dose
 from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 from scoring_v4.modules.multi_prenatal_formulation import score_formulation
 
 
-PHASE_MARKER = "P3.3_multi_prenatal_evidence"
+PHASE_MARKER = "P3.4_multi_prenatal_trust"
 
 
 # Dimension caps per §4, multi/prenatal column. Order is rendering order in
@@ -63,8 +64,8 @@ class MultiPrenatalModuleResult:
 
     Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
     can read `shadow_score_v4_breakdown["module"]` uniformly regardless of
-    class. P3.3 populates Formulation + Dose + Evidence and leaves downstream
-    math unset.
+    class. P3.4 populates Formulation + Dose + Evidence + Trust and leaves
+    downstream math unset.
     """
 
     module: str = "multi_or_prenatal"
@@ -107,9 +108,8 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     result = MultiPrenatalModuleResult(
         dimensions=_empty_dimensions(),
         metadata={
-            "module_state": "evidence_partial",
+            "module_state": "trust_partial",
             "deferred_slices": [
-                "P3.4_trust",
                 "P3.5_transparency",
                 "P3.6_final_assembly",
             ],
@@ -136,4 +136,11 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     evidence_dim.components = evidence_payload["components"]
     evidence_dim.penalties = evidence_payload["penalties"]
     evidence_dim.metadata = evidence_payload.get("metadata", {})
+
+    trust_payload = score_trust(product)
+    trust_dim = result.dimensions["trust"]
+    trust_dim.score = trust_payload["score"]
+    trust_dim.components = trust_payload["components"]
+    trust_dim.penalties = trust_payload["penalties"]
+    trust_dim.metadata = trust_payload.get("metadata", {})
     return result
