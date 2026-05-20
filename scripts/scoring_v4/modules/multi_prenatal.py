@@ -17,10 +17,10 @@ single-ingredient products:
                                allergens, marketing penalties
     Total class score  100
 
-P3.4 state: Formulation, Dose, Evidence, and Trust are populated;
-Transparency remains scaffolded. Later P3 slices populate the existing
-dictionaries in place so downstream audit / Flutter consumers do not chase
-shape changes.
+P3.5 state: all five class dimensions are populated; final score assembly,
+manufacturer adjustments, verdict, and confidence land in P3.6. Later P3
+slices populate the existing dictionaries in place so downstream audit /
+Flutter consumers do not chase shape changes.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). It reuses the shared v4 breakdown dataclasses
@@ -42,9 +42,10 @@ from scoring_v4.modules.generic_trust import score_trust
 from scoring_v4.modules.multi_prenatal_dose import score_dose
 from scoring_v4.modules.multi_prenatal_evidence import score_evidence
 from scoring_v4.modules.multi_prenatal_formulation import score_formulation
+from scoring_v4.modules.multi_prenatal_transparency import score_transparency
 
 
-PHASE_MARKER = "P3.4_multi_prenatal_trust"
+PHASE_MARKER = "P3.5_multi_prenatal_transparency"
 
 
 # Dimension caps per §4, multi/prenatal column. Order is rendering order in
@@ -64,8 +65,8 @@ class MultiPrenatalModuleResult:
 
     Mirrors GenericModuleResult / ProbioticModuleResult shape so consumers
     can read `shadow_score_v4_breakdown["module"]` uniformly regardless of
-    class. P3.4 populates Formulation + Dose + Evidence + Trust and leaves
-    downstream math unset.
+    class. P3.5 populates all five dimensions and leaves downstream math
+    unset.
     """
 
     module: str = "multi_or_prenatal"
@@ -108,9 +109,8 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     result = MultiPrenatalModuleResult(
         dimensions=_empty_dimensions(),
         metadata={
-            "module_state": "trust_partial",
+            "module_state": "dimensions_complete",
             "deferred_slices": [
-                "P3.5_transparency",
                 "P3.6_final_assembly",
             ],
         },
@@ -143,4 +143,11 @@ def score_multi_prenatal(product: Any) -> MultiPrenatalModuleResult:
     trust_dim.components = trust_payload["components"]
     trust_dim.penalties = trust_payload["penalties"]
     trust_dim.metadata = trust_payload.get("metadata", {})
+
+    transparency_payload = score_transparency(product)
+    transparency_dim = result.dimensions["transparency"]
+    transparency_dim.score = transparency_payload["score"]
+    transparency_dim.components = transparency_payload["components"]
+    transparency_dim.penalties = transparency_payload["penalties"]
+    transparency_dim.metadata = transparency_payload.get("metadata", {})
     return result

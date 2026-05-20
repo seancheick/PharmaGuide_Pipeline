@@ -20,6 +20,7 @@ _DOSE_UNIT_WHITELIST = frozenset(
     {
         "mg", "milligram", "milligrams", "milligram(s)",
         "mcg", "ug", "µg", "μg", "microgram", "micrograms", "microgram(s)",
+        "mcg rae", "mcgrae", "mg rae", "mgrae",
         "g", "gram", "grams", "gram(s)",
         "iu",
         "cfu", "cfu(s)", "cfus",
