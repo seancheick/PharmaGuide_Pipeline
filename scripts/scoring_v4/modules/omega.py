@@ -71,7 +71,7 @@ from scoring_v4.modules.omega_transparency import score_transparency
 from scoring_v4.modules.omega_trust import score_trust
 
 
-PHASE_MARKER = "P1.6.1_omega_formulation"
+PHASE_MARKER = "P1.6.2_omega_dose"
 
 
 # Dimension caps per §4 + omega_rubric.json. Order is rendering order in
