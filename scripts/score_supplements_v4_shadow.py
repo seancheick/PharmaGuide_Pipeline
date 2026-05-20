@@ -55,6 +55,7 @@ from scoring_v4.confidence import evaluate_confidence
 from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
 from scoring_v4.modules.generic import score_generic
+from scoring_v4.modules.multi_prenatal import score_multi_prenatal
 from scoring_v4.modules.omega import score_omega
 from scoring_v4.modules.probiotic import score_probiotic
 from scoring_v4.router import class_for_product
@@ -145,7 +146,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
          to NOT_SCORED with confidence='blocked_by_completeness_gate'.
       4. Layer 3 Scoring (per-module). Generic and probiotic modules emit
          populated dimensions and final module scores. multi_or_prenatal
-         remains offline until P3.
+         emits its P3.0 scaffold until its dimension slices land.
       5. Layer 4 Confidence. Complete generic/probiotic rows get typed confidence
          metadata plus a top-level band. Gate failures retain blocked_by_*.
 
@@ -243,6 +244,20 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         )
         shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
         shadow["shadow_score_v4_confidence"] = confidence["band"]
+    elif module == "multi_or_prenatal":
+        # P3.0: scaffold wired. The module block exposes the final
+        # multi/prenatal dimension caps and stable breakdown shape, but no
+        # scoring math is populated until P3.1+ and final score assembly
+        # lands in P3.6. Keep confidence as "skeleton" so consumers don't
+        # mistake an unscored class for a low-confidence scored row.
+        multi_result = score_multi_prenatal(enriched_product)
+        shadow["shadow_score_v4_breakdown"]["module"] = multi_result.to_breakdown()
+        shadow["shadow_score_v4_100"] = multi_result.score_100
+        shadow["shadow_score_v4_verdict"] = _verdict_from_score(
+            multi_result.score_100,
+            shadow.get("shadow_score_v4_verdict"),
+        )
+        shadow["shadow_score_v4_confidence"] = "skeleton"
     elif module == "omega":
         # P1.6.0: skeleton wired — all 5 dimensions return None (no scoring
         # math yet). Breakdown shape is intact; score_100 stays None until

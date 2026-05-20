@@ -20,4 +20,4 @@ canonical contract.
 
 from __future__ import annotations
 
-__all__ = ["generic", "probiotic", "omega"]
+__all__ = ["generic", "probiotic", "omega", "multi_prenatal"]
