@@ -55,6 +55,7 @@ from scoring_v4.confidence import evaluate_confidence
 from scoring_v4.gate_completeness import evaluate_completeness_gate
 from scoring_v4.gate_safety import evaluate_safety_gate
 from scoring_v4.modules.generic import score_generic
+from scoring_v4.modules.probiotic import score_probiotic
 from scoring_v4.router import class_for_product
 
 
@@ -202,10 +203,11 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_confidence"] = "blocked_by_completeness_gate"
         return shadow
 
-    # Layer 3 — Per-class module. Only the generic module is online at
-    # P1.3.0 (scaffold only — dimension scores are all None until P1.3.1+
-    # land the per-dimension math). Probiotic (P2) and multi_or_prenatal
-    # (P3) emit their own module blocks under the same `module` key.
+    # Layer 3 — Per-class module dispatch. Generic (P1.3.x) and Probiotic
+    # (P2.x) are wired; multi_or_prenatal (P3) emits its own module block
+    # under the same `module` key when P3 lands. At P2.0 the probiotic
+    # module is scaffold-only — dimension scores are None until P2.1+
+    # land per-dimension math.
     if module == "generic":
         module_result = score_generic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = module_result.to_breakdown()
@@ -222,5 +224,14 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         )
         shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
         shadow["shadow_score_v4_confidence"] = confidence["band"]
+    elif module == "probiotic":
+        # P2.0: emit the probiotic breakdown contract. Per-dimension math
+        # lands in P2.1+. score_100 stays None until P2.6 final assembly;
+        # shadow_score_v4_confidence stays "skeleton" until the typed
+        # confidence layer is extended for probiotic in a later slice.
+        probiotic_result = score_probiotic(enriched_product)
+        shadow["shadow_score_v4_breakdown"]["module"] = probiotic_result.to_breakdown()
+        # shadow_score_v4_100 mirrors the module result; at P2.0 that's None.
+        shadow["shadow_score_v4_100"] = probiotic_result.score_100
 
     return shadow

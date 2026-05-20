@@ -13,9 +13,9 @@ v3 scorer (§13 architecture lock).
 
 Each module emits a normalized breakdown shape compatible with
 `shadow_score_v4_breakdown["module"]`. See `generic.GenericModuleResult`
-for the canonical contract.
+and `probiotic.ProbioticModuleResult` for the canonical contract.
 """
 
 from __future__ import annotations
 
-__all__ = ["generic"]
+__all__ = ["generic", "probiotic"]
