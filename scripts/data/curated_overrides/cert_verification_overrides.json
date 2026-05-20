@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 368,
+    "total_overrides": 376,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -6358,6 +6358,150 @@
       "record_id": "NSF_CERTIFIE_B7E4D7E9E9C0",
       "matched_brand": "Garden of Life, LLC",
       "matched_product": "wild caught & grass fed Collagen Hyaluronic Acid",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "OLLY",
+      "product": "Elderberry Extra Strength Bunch O' Berries",
+      "program": "NSF Certified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed single-member cluster; OLLY Elderberry Extra Strength is not the NSF Certified Extra Strength Sleep product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "291220",
+      "record_id": "NSF_CERTIFIE_5B5BE3451A5E",
+      "matched_brand": "OLLY, Public Benefit Corporation",
+      "matched_product": "EXTRA STRENGTH SLEEP",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "B-100 Complex",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed single-member cluster; Nature Made B-100 Complex is not the USP Verified Nature Made B-Complex Gummies product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "271399",
+      "record_id": "USP_VERIFIED_CF4D4BBDD113",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made B-Complex Gummies",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Prenatal All-in-One Softgel Folic Acid + DHA + Choline",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed single-member cluster; Prenatal All-in-One Softgel Folic Acid + DHA + Choline is not the USP Verified Prenatal Folic Acid + DHA + Choline Gummies product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "287810",
+      "record_id": "USP_VERIFIED_EF45E82AB3B7",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Folic Acid + DHA + Choline Gummies",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Calcium Citrate + Magnesium",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed single-member cluster; Calcium Citrate + Magnesium is not the USP Verified Magnesium Citrate 250 mg Softgels product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "71384",
+      "record_id": "USP_VERIFIED_F564297787D7",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Magnesium Citrate 250 Mg Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Advanced DHA 650 mg",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; Thorne Advanced DHA 650 mg is not the NSF Sport Advanced Pre-Workout Rainbow Sherbet product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "284300",
+      "record_id": "NSF_SPORT_E3DB3B2EDA60",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Advanced Pre-Workout (Rainbow Sherbet Flavor)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Thorne",
+      "product": "Advanced DHA 650 mg",
+      "program": "NSF Sport",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; Thorne Advanced DHA 650 mg is not the NSF Sport Advanced Pre-Workout Rainbow Sherbet product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "298106",
+      "record_id": "NSF_SPORT_E3DB3B2EDA60",
+      "matched_brand": "Thorne",
+      "matched_product": "Thorne® Advanced Pre-Workout (Rainbow Sherbet Flavor)",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made Kids First",
+      "product": "Multivitamin Gummies",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; Kids First Multivitamin Gummies and Adult Multivitamin are not the USP Verified Nature Made Prenatal Multivitamin Tablets product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "179610",
+      "record_id": "USP_VERIFIED_376A14997644",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Multivitamin Tablets",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Adult Multivitamin",
+      "program": "USP Verified",
+      "status": "rejected",
+      "scope": "claimed_only",
+      "reason": "P1.7.3 manual reject — Reviewed cluster; Kids First Multivitamin Gummies and Adult Multivitamin are not the USP Verified Nature Made Prenatal Multivitamin Tablets product.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "9232",
+      "record_id": "USP_VERIFIED_376A14997644",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Prenatal Multivitamin Tablets",
       "triage_reasons": [
         "no_strong_signal"
       ]
