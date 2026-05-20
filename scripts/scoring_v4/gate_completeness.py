@@ -298,7 +298,7 @@ def evaluate_completeness_gate(product: Dict[str, Any], module: str) -> Complete
     return _finalize(module, missing, coverage, dose_cov, checked_fields)
 
 
-_OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha", "omega3"}
+_OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
 
 
 def _has_epa_or_dha_disclosed(ingredients: List[Dict[str, Any]]) -> bool:

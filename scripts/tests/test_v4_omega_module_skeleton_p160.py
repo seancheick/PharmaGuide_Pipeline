@@ -631,6 +631,40 @@ def test_completeness_gate_omega_rejects_fish_oil_parent_only() -> None:
     assert "epa_or_dha_disclosed" in result.missing_fields
 
 
+def test_completeness_gate_omega_rejects_omega3_parent_mass_only() -> None:
+    """Broad omega-3 parent mass is not EPA/DHA disclosure.
+
+    This locks the RDA-table integrity decision: omega_3_fatty_acids /
+    omega3 is not a synonym for combined EPA+DHA. A product can route to
+    omega by name/category, but Layer 2 requires EPA, DHA, or explicit
+    EPA+DHA combined disclosure with dose and unit.
+    """
+    from scoring_v4.gate_completeness import evaluate_completeness_gate
+
+    product = {
+        "status": "active",
+        "form_factor": "capsule",
+        "product_name": "Omega-3 Fatty Acids 1000 mg",
+        "primary_category": "omega3",
+        "supplement_type": {"type": "specialty"},
+        "ingredient_quality_data": {
+            "total_active": 1,
+            "ingredients_scorable": [
+                {
+                    "name": "Omega-3 Fatty Acids",
+                    "canonical_id": "omega3",
+                    "mapped": True,
+                    "quantity": 1000,
+                    "unit": "mg",
+                }
+            ],
+        },
+    }
+    result = evaluate_completeness_gate(product, "omega")
+    assert result.is_live_eligible is False
+    assert "epa_or_dha_disclosed" in result.missing_fields
+
+
 def test_completeness_gate_omega_rejects_epa_without_quantity() -> None:
     """EPA disclosed but no mg quantity → fails the gate. Aligns with
     'do not invent fields' — labeled-without-amount is not adequate
