@@ -20,6 +20,18 @@ def _enricher_with_registry(registry: CertRegistry) -> SupplementEnricherV3:
     return enricher
 
 
+def _registry_with_override(override: dict) -> CertRegistry:
+    registry = CertRegistry()
+    from cert_resolver import normalize_brand, normalize_product
+
+    key = (
+        normalize_brand(override.get("brand", "")),
+        normalize_product(override.get("product", "")),
+    )
+    registry.overrides_by_brand_product.setdefault(key, []).append(override)
+    return registry
+
+
 def _product() -> dict:
     return {
         "brandName": "Example Brand",
@@ -178,3 +190,51 @@ def test_enricher_keeps_marine_sustainability_claims_out_of_b4a_scope() -> None:
     )
 
     assert resolved == [{"program": "Friend of the Sea", "scope": "claimed_only"}]
+
+
+def test_enricher_passes_dsld_id_to_cert_resolver_for_member_specific_overrides() -> None:
+    registry = _registry_with_override({
+        "brand": "Nature Made",
+        "product": "Vitamin D3 2000 IU",
+        "program": "USP Verified",
+        "status": "verified",
+        "scope": "product_line",
+        "record_id": "USP_D3_SOFTGEL",
+        "dsld_id": "12154",
+    })
+    registry.records_by_program["USP Verified"] = [{
+        "program": "USP Verified",
+        "brand": "Nature Made",
+        "product": "Some Other Live Registry Row",
+    }]
+    enricher = _enricher_with_registry(registry)
+
+    resolved = enricher._resolve_verified_cert_programs(
+        product={
+            "id": "12154",
+            "brandName": "Nature Made",
+            "productName": "Vitamin D3 2000 IU",
+        },
+        third_party_programs={
+            "programs": [{"name": "USP Verified", "source": "rules_db"}],
+        },
+        manufacturer_signals=[],
+    )
+
+    assert resolved[0]["scope"] == "product_line"
+    assert resolved[0]["record_id"] == "USP_D3_SOFTGEL"
+
+    wrong_product = enricher._resolve_verified_cert_programs(
+        product={
+            "id": "274365",
+            "brandName": "Nature Made",
+            "productName": "Vitamin D3 2000 IU",
+        },
+        third_party_programs={
+            "programs": [{"name": "USP Verified", "source": "rules_db"}],
+        },
+        manufacturer_signals=[],
+    )
+
+    assert wrong_product[0]["program"] == "USP Verified"
+    assert wrong_product[0]["scope"] == "brand_only"

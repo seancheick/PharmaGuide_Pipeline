@@ -173,7 +173,7 @@ def test_generate_reviewed_overrides_can_limit_to_member_dsld_ids(tmp_path: Path
     assert overrides[0]["product"] == "Vitamin D3 2000 IU"
 
 
-def test_member_limited_override_rejects_shared_brand_product_key(tmp_path: Path):
+def test_member_limited_override_keeps_dsld_id_for_shared_brand_product_key(tmp_path: Path):
     from api_audit.cert_override_apply_reviewed import generate_reviewed_overrides, find_cluster
 
     report = json.loads(_cluster_report(tmp_path).read_text())
@@ -187,20 +187,17 @@ def test_member_limited_override_rejects_shared_brand_product_key(tmp_path: Path
         "triage_hint": {"likely_action": "review", "reasons": ["form_mismatch"]},
     })
 
-    try:
-        generate_reviewed_overrides(
-            cluster,
-            action="verify_product_line",
-            review_note="Only one member has the softgel physical form.",
-            reviewer="Sean",
-            review_source="p173_test",
-            member_dsld_ids={"2000"},
-        )
-    except ValueError as exc:
-        assert "brand/product scoped" in str(exc)
-        assert "2001:Vitamin D3 2000 IU" in str(exc)
-    else:
-        raise AssertionError("shared brand/product key should require all same-key members")
+    overrides = generate_reviewed_overrides(
+        cluster,
+        action="verify_product_line",
+        review_note="Only one member has the softgel physical form.",
+        reviewer="Sean",
+        review_source="p173_test",
+        member_dsld_ids={"2000"},
+    )
+
+    assert [entry["dsld_id"] for entry in overrides] == ["2000"]
+    assert overrides[0]["product"] == "Vitamin D3 2000 IU"
 
 
 def test_generate_reject_overrides_for_reviewed_members(tmp_path: Path):

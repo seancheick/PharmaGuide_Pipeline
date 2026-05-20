@@ -411,6 +411,42 @@ class TestOverrides:
         assert out[0].scope == "claimed_only"
         assert "rejected" in (out[0].notes or "")
 
+    def test_dsld_specific_override_applies_only_to_matching_dsld_id(self) -> None:
+        registry = _make_registry(
+            overrides=[
+                {
+                    "brand": "Nature Made",
+                    "product": "Vitamin D3 2000 IU",
+                    "program": "USP Verified",
+                    "status": "verified",
+                    "scope": "product_line",
+                    "record_id": "USP_D3_SOFTGEL",
+                    "dsld_id": "12154",
+                }
+            ],
+        )
+
+        matching = resolve(
+            "Nature Made",
+            "Vitamin D3 2000 IU",
+            ["USP Verified"],
+            registry,
+            dsld_id="12154",
+        )
+        wrong_id = resolve(
+            "Nature Made",
+            "Vitamin D3 2000 IU",
+            ["USP Verified"],
+            registry,
+            dsld_id="274365",
+        )
+        no_id = resolve("Nature Made", "Vitamin D3 2000 IU", ["USP Verified"], registry)
+
+        assert matching[0].scope == "product_line"
+        assert matching[0].record_id == "USP_D3_SOFTGEL"
+        assert wrong_id[0].scope == "claimed_only"
+        assert no_id[0].scope == "claimed_only"
+
 
 class TestMultipleClaimedPrograms:
     def test_each_program_resolved_independently(self) -> None:

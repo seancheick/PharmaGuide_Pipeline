@@ -427,10 +427,15 @@ def _keyword_overlap(a: str, b: str) -> float:
 
 
 def _check_override(
-    brand_norm: str, product_norm: str, program: str, registry: CertRegistry
+    brand_norm: str,
+    product_norm: str,
+    program: str,
+    registry: CertRegistry,
+    dsld_id: str | None = None,
 ) -> CertResolution | None:
     """Manual override always wins. Returns CertResolution or None."""
     program_canon = normalize_program(program)
+    request_dsld_id = str(dsld_id or "").strip()
     # Direct (brand, product) hit
     for key, overrides in registry.overrides_by_brand_product.items():
         ovr_brand, ovr_product = key
@@ -442,6 +447,9 @@ def _check_override(
         for override in overrides:
             ovr_program = normalize_program(override.get("program", ""))
             if ovr_program and ovr_program != program_canon:
+                continue
+            override_dsld_id = str(override.get("dsld_id") or "").strip()
+            if override_dsld_id and override_dsld_id != request_dsld_id:
                 continue
             status = override.get("status", "verified")
             scope = override.get("scope", "sku")
@@ -478,6 +486,7 @@ def resolve(
     product: str,
     claimed_programs: Iterable[str],
     registry: CertRegistry,
+    dsld_id: str | None = None,
 ) -> list[CertResolution]:
     """Resolve every claimed program to its registry scope.
 
@@ -494,7 +503,13 @@ def resolve(
             continue
 
         # Stage 1: curated override wins
-        override_resolution = _check_override(brand_norm, product_norm, program_canon, registry)
+        override_resolution = _check_override(
+            brand_norm,
+            product_norm,
+            program_canon,
+            registry,
+            dsld_id=dsld_id,
+        )
         if override_resolution is not None:
             out.append(override_resolution)
             continue

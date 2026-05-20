@@ -9338,7 +9338,19 @@ class SupplementEnricherV3:
         if not claimed_programs:
             return []
 
-        resolutions = resolve(brand, product_name, claimed_programs, registry)
+        product_dsld_id = (
+            product.get("dsld_id")
+            or product.get("id")
+            or product.get("dsldId")
+            or product.get("productId")
+        )
+        resolutions = resolve(
+            brand,
+            product_name,
+            claimed_programs,
+            registry,
+            dsld_id=str(product_dsld_id) if product_dsld_id is not None else None,
+        )
         covered_programs = {
             self._normalize_text(program)
             for program in getattr(registry, "records_by_program", {}).keys()

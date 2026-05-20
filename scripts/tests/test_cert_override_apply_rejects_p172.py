@@ -231,6 +231,7 @@ def test_resolver_applies_reject_override(tmp_path: Path):
         normalize_product("Vitamin E 200 IU"),
         "USP Verified",
         registry,
+        dsld_id="99001",
     )
     assert resolution is not None
     assert resolution.scope == "claimed_only"

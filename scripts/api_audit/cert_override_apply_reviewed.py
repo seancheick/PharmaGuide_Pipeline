@@ -34,9 +34,6 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 if str(SCRIPTS_ROOT) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_ROOT))
 
-from cert_resolver import normalize_brand, normalize_product
-
-
 DEFAULT_CLUSTER_REPORT = (
     SCRIPTS_ROOT / "api_audit" / "reports" / "cert_needs_review_clusters.json"
 )
@@ -84,52 +81,6 @@ def _selected_members(
     return selected
 
 
-def _override_key(member: Dict[str, Any]) -> tuple[str, str]:
-    """Return the same brand/product key used by cert_resolver overrides."""
-    return (
-        normalize_brand(member.get("brand_name", "")),
-        normalize_product(member.get("product_name", "")),
-    )
-
-
-def _validate_subset_does_not_bleed(
-    cluster: Dict[str, Any],
-    selected: List[Dict[str, Any]],
-    member_dsld_ids: Set[str] | None,
-) -> None:
-    """Prevent member-limited decisions that affect unselected products.
-
-    Cert overrides are applied by normalized brand + product, not DSLD ID.
-    If a selected member shares that resolver key with an unselected member,
-    the override would silently apply to both products at scoring time.
-    """
-    if not member_dsld_ids:
-        return
-
-    selected_ids = {str(member.get("dsld_id") or "") for member in selected}
-    selected_keys = {_override_key(member) for member in selected}
-    conflicts: list[str] = []
-    for member in cluster.get("members") or []:
-        if not isinstance(member, dict):
-            continue
-        dsld_id = str(member.get("dsld_id") or "")
-        if dsld_id in selected_ids:
-            continue
-        if _override_key(member) in selected_keys:
-            conflicts.append(f"{dsld_id}:{member.get('product_name', '')}")
-
-    if conflicts:
-        preview = ", ".join(conflicts[:8])
-        if len(conflicts) > 8:
-            preview += f", ... +{len(conflicts) - 8} more"
-        raise ValueError(
-            "member-limited override is unsafe: selected brand/product key also "
-            f"matches unselected cluster members ({preview}). Cert overrides are "
-            "brand/product scoped, not DSLD scoped; review all same-key members "
-            "together or leave this cluster unresolved."
-        )
-
-
 def _validate_review(action: str, review_note: str, reviewer: str) -> None:
     if action not in VALID_ACTIONS:
         raise ValueError(f"unsupported action: {action!r}")
@@ -153,7 +104,6 @@ def generate_reviewed_overrides(
     members = _selected_members(cluster, member_dsld_ids)
     if not members:
         raise ValueError("selected cluster has no members")
-    _validate_subset_does_not_bleed(cluster, members, member_dsld_ids)
 
     today = date.today().isoformat()
     status = "verified" if action == "verify_product_line" else "rejected"
