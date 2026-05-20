@@ -5,7 +5,7 @@
     "purpose": "cert_verification_manual_override",
     "last_updated": "2026-05-20",
     "usage": "Consumed by scripts/cert_resolver.py BEFORE running the rapidfuzz match. Entries here win over registry lookups. See docs/plans/SCORING_V4_PROPOSAL.md §10.",
-    "total_overrides": 364,
+    "total_overrides": 368,
     "status_meanings": {
       "verified": "Manually confirmed by reviewer. Scorer trusts the scope.",
       "pending_review": "Auto-flagged by resolver as borderline (needs_review queue). Scorer treats as claimed_only (zero points) until reviewer marks verified.",
@@ -6286,6 +6286,78 @@
       "record_id": "NSF_SPORT_B77A8C13B4A3",
       "matched_brand": "Garden of Life",
       "matched_product": "Sport Organic Post-Workout Recovery Blackberry Lemonade",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "Omega-3 from Fish Oil Pearls 550 mg",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed single-member cluster against the USP registry row; product is Nature Made Omega-3 from Fish Oil Pearls 550 mg, matching the Nature Made Fish Oil Pearls 550 mg Omega-3 softgel line.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "302764",
+      "record_id": "USP_VERIFIED_D63B37C35CA0",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made Fish Oil Pearls 550 mg Omega-3 Softgels",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Nature Made",
+      "product": "High Absorption Magnesium Glycinate 100 mg Gummies Mixed Berry",
+      "program": "USP Verified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed single-member cluster against the USP registry row; product is Nature Made High Absorption Magnesium Glycinate 100 mg Gummies Mixed Berry, matching the USP Verified High Absorption Magnesium Glycinate Gummies line.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "313829",
+      "record_id": "USP_VERIFIED_9EEA504811A7",
+      "matched_brand": "Nature Made",
+      "matched_product": "Nature Made High Absorption Magnesium Glycinate Gummies",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Organic Fit Chocolate Flavor",
+      "program": "Informed Choice",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed single-member cluster against the Informed Choice registry row; product is Garden of Life Organic Fit Chocolate Flavor, a flavor variant of the certified RAW Organic Fit line.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "233274",
+      "record_id": "INFORMED_CHO_082BBA3F6896",
+      "matched_brand": "Garden of Life",
+      "matched_product": "RAW Organic Fit",
+      "triage_reasons": [
+        "no_strong_signal"
+      ]
+    },
+    {
+      "brand": "Garden of Life",
+      "product": "Collagen Hyaluronic Acid 20 g Unflavored",
+      "program": "NSF Certified",
+      "status": "verified",
+      "scope": "product_line",
+      "reason": "P1.7.3 manual verify_product_line — Reviewed single-member cluster against the NSF Certified registry row; product is Garden of Life Collagen Hyaluronic Acid 20 g Unflavored, matching the wild caught and grass fed Collagen Hyaluronic Acid powder line.",
+      "reviewed_at": "2026-05-20",
+      "review_source": "P1.7.3_manual_review_2026-05-20",
+      "reviewer": "Codex",
+      "dsld_id": "326693",
+      "record_id": "NSF_CERTIFIE_B7E4D7E9E9C0",
+      "matched_brand": "Garden of Life, LLC",
+      "matched_product": "wild caught & grass fed Collagen Hyaluronic Acid",
       "triage_reasons": [
         "no_strong_signal"
       ]
