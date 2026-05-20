@@ -25,9 +25,10 @@ Plus two SEPARATE adjustments (§6 line 390):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; reuses generic)
 
-P2.3 state: Formulation, Dose, and Evidence are populated; Trust and
-Transparency remain skeletons. Subsequent P2.x slices fill them in-place;
-the shape never changes.
+P2.6 state: the probiotic module is complete. All five dimensions,
+manufacturer adjustments, final assembly, and affine calibration are
+populated. The shape is intentionally identical to the generic module
+breakdown so downstream tooling can read both classes uniformly.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). Shared infrastructure (DimensionResult,
@@ -136,10 +137,8 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_probiotic(product: Any) -> ProbioticModuleResult:
     """Score a probiotic-class product against the v4 probiotic rubric.
 
-    P2.4 state: returns a fully-instantiated result with Formulation, Dose,
-    Evidence, and Trust populated; Transparency remains skeleton.
-    Subsequent P2.x slices populate `components`, `penalties`, and `score`
-    per dimension.
+    P2.6 state: returns a fully-instantiated result with all dimensions,
+    manufacturer adjustments, raw score, and calibrated score populated.
 
     Never raises on malformed input. The completeness gate (Layer 2)
     handles real input validation upstream in the shadow pipeline.

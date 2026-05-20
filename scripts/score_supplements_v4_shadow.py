@@ -11,16 +11,16 @@ plus stable shared helpers (cert_resolver, enhanced_normalizer lookups).
 NOT shared: the scoring policy itself — `scoring_v4/` owns rubrics,
 gates, modules, and confidence rules independently.
 
-Current P1.4 state:
+Current P2.6 state:
   - Router runs and decides the module (generic / probiotic / multi_or_prenatal).
   - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
   - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
-  - Generic module emits populated generic dimensions plus manufacturer
-    trust / violations and a final 0-100 score.
-  - shadow_score_v4_100 mirrors the generic module result for complete
-    generic products.
+  - Generic and probiotic modules emit populated dimensions plus manufacturer
+    trust / violations and final affine-calibrated 0-100 scores.
+  - shadow_score_v4_100 mirrors the module result for complete generic and
+    probiotic products.
   - shadow_score_v4_confidence = top-level typed confidence band for
-    complete generic rows; blocked_by_* for gate failures.
+    complete generic/probiotic rows; blocked_by_* for gate failures.
   - shadow_score_v4_breakdown.confidence contains typed sub-category
     levels / drivers for evidence, label_completeness, verification, identity.
   - shadow_score_v4_anchored = False (canary-set membership lands later).
@@ -142,10 +142,10 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
          sets verdict but scoring continues.
       3. Layer 2 Completeness Gate. Incomplete products short-circuit
          to NOT_SCORED with confidence='blocked_by_completeness_gate'.
-      4. Layer 3 Scoring (per-module). Generic module emits populated
-         dimensions and a final module score at P1.3.6.
-         Probiotic (P2) and multi_or_prenatal (P3) modules not online yet.
-      5. Layer 4 Confidence. Complete generic rows get typed confidence
+      4. Layer 3 Scoring (per-module). Generic and probiotic modules emit
+         populated dimensions and final module scores. multi_or_prenatal
+         remains offline until P3.
+      5. Layer 4 Confidence. Complete generic/probiotic rows get typed confidence
          metadata plus a top-level band. Gate failures retain blocked_by_*.
 
     Note on `shadow_score_v4_anchored`: per §14, this flag means the
@@ -205,9 +205,7 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
 
     # Layer 3 — Per-class module dispatch. Generic (P1.3.x) and Probiotic
     # (P2.x) are wired; multi_or_prenatal (P3) emits its own module block
-    # under the same `module` key when P3 lands. At P2.0 the probiotic
-    # module is scaffold-only — dimension scores are None until P2.1+
-    # land per-dimension math.
+    # under the same `module` key when P3 lands.
     if module == "generic":
         module_result = score_generic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = module_result.to_breakdown()
