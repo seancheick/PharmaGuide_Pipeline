@@ -97,20 +97,42 @@ class TestVocabSync:
 
     def test_flutter_dart_vocab_present_when_repo_available(self):
         """If the Flutter app repo is checked out at the expected sibling
-        location, its form_factor_vocab.dart must declare the same id set."""
+        location, the Dart vocab loader file must exist with the expected
+        public API surface. The Dart loader reads `assets/data/form_factor_vocab.json`
+        at runtime so individual IDs are not hardcoded in the .dart file —
+        instead we verify (1) the JSON asset is present, (2) the Dart
+        loader function exists, (3) the registry wires it in."""
         flutter_root = Path("/Users/seancheick/PharmaGuide ai")
         if not flutter_root.exists():
             pytest.skip("Flutter repo not checked out at expected location")
+
+        asset_path = flutter_root / "assets" / "data" / "form_factor_vocab.json"
+        if not asset_path.is_file():
+            pytest.skip("Flutter form_factor_vocab.json asset not yet copied")
+        # Asset must be identical to the pipeline source.
+        with open(VOCAB_PATH) as fh:
+            pipeline = json.load(fh)
+        with open(asset_path) as fh:
+            flutter = json.load(fh)
+        assert pipeline == flutter, (
+            "Flutter assets/data/form_factor_vocab.json drifted from pipeline "
+            "scripts/data/form_factor_vocab.json. Re-copy the pipeline file."
+        )
+
         dart_path = flutter_root / "lib" / "core" / "data" / "form_factor_vocab.dart"
         if not dart_path.is_file():
             pytest.skip("Flutter form_factor_vocab.dart not yet generated")
         dart_src = dart_path.read_text()
-        with open(VOCAB_PATH) as fh:
-            data = json.load(fh)
-        for entry in data["form_factors"]:
-            assert f"'{entry['id']}'" in dart_src or f'"{entry["id"]}"' in dart_src, (
-                f"Form-factor id {entry['id']!r} missing from Flutter Dart vocab."
-            )
+        assert "class FormFactorEntry" in dart_src, "Dart entry class missing"
+        assert "loadFormFactorVocab" in dart_src, "Dart loader fn missing"
+        assert "form_factor_vocab.json" in dart_src, "Dart loader doesn't load the asset"
+
+        registry_path = flutter_root / "lib" / "core" / "data" / "vocab_registry.dart"
+        if registry_path.is_file():
+            registry_src = registry_path.read_text()
+            assert "FormFactorEntry" in registry_src, "VocabRegistry missing FormFactorEntry"
+            assert "loadFormFactorVocab" in registry_src, "VocabRegistry missing loader call"
+            assert "formFactor(" in registry_src, "VocabRegistry missing formFactor() getter"
 
 
 # ============================================================================
