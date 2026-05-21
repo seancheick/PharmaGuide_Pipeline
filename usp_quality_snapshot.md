@@ -1,0 +1,21 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - img "USP Verified Products" [ref=e18]
+        - navigation "Main navigation" [ref=e19]
+        - link "Home" [ref=e35] [cursor=pointer]:
+          - /url: /
+    - navigation
+    - main [ref=e37]:
+      - generic [ref=e39]:
+        - generic [ref=e40]
+        - generic [ref=e45]
+        - generic [ref=e117]
+    - contentinfo [ref=e215]:
+      - generic:
+        - paragraph [ref=e218]
+        - navigation "Footer menu" [ref=e220]
+        - paragraph [ref=e231]: ©2026 USP. All rights reserved.

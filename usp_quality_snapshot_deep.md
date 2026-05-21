@@ -1,0 +1,189 @@
+- generic [active] [ref=e1]:
+  - link "Skip to main content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e4]:
+    - banner [ref=e5]:
+      - generic [ref=e6]:
+        - img "USP Verified Products" [ref=e18]
+        - navigation "Main navigation" [ref=e19]:
+          - heading "Main navigation" [level=2] [ref=e20]
+          - list [ref=e21]:
+            - listitem [ref=e22]:
+              - link "USP Verified Products" [ref=e23] [cursor=pointer]:
+                - /url: /usp_verified_products
+            - listitem [ref=e24]:
+              - link "How to choose a quality supplement" [ref=e25] [cursor=pointer]:
+                - /url: /how-choose-quality-supplement
+            - listitem [ref=e26]:
+              - link "Why USP Verified Matters" [ref=e27] [cursor=pointer]:
+                - /url: /why-usp-verified-matters
+            - listitem [ref=e28]:
+              - link "FAQs" [ref=e29] [cursor=pointer]:
+                - /url: /faqs
+            - listitem [ref=e30]:
+              - link "About" [ref=e31] [cursor=pointer]:
+                - /url: /about-us
+            - listitem [ref=e32]:
+              - link "For Healthcare Practitioners" [ref=e33] [cursor=pointer]:
+                - /url: /healthcare-practitioners
+        - link "Home" [ref=e35] [cursor=pointer]:
+          - /url: /
+          - img "Home" [ref=e36]
+    - navigation
+    - main [ref=e37]:
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - heading "USP Verified Products" [level=1] [ref=e41]
+          - generic [ref=e42]:
+            - paragraph [ref=e43]: More than 160 different dietary supplement formulas have received the USP Verified Mark. USP Verified Products are sold at major retailers, grocery stores, pharmacies, and wholesale retailers across the U.S., as well as online through product websites.
+            - paragraph [ref=e44]: To find a supplement you can trust, select one or more of the following categories from the list below.
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - generic [ref=e49]:
+              - textbox "Search Product" [ref=e51]
+              - generic [ref=e52]:
+                - text: 🔍
+                - button "Apply" [ref=e53] [cursor=pointer]
+            - heading "Supplement Type" [level=2] [ref=e54]
+            - list [ref=e56]:
+              - listitem [ref=e57]:
+                - checkbox "Vitamin" [ref=e58]
+                - generic [ref=e59]: Vitamin
+              - listitem [ref=e60]:
+                - checkbox "Other Dietary Supplements" [ref=e61]
+                - generic [ref=e62]: Other Dietary Supplements
+              - listitem [ref=e63]:
+                - checkbox "Multivitamin" [ref=e64]
+                - generic [ref=e65]: Multivitamin
+              - listitem [ref=e66]:
+                - checkbox "Mineral" [ref=e67]
+                - generic [ref=e68]: Mineral
+              - listitem [ref=e69]:
+                - checkbox "Fish Oil" [ref=e70]
+                - generic [ref=e71]: Fish Oil
+              - listitem [ref=e72]:
+                - checkbox "Probiotic" [ref=e73]
+                - generic [ref=e74]: Probiotic
+          - generic [ref=e75]:
+            - heading "Brand" [level=2] [ref=e76]
+            - generic [ref=e77]:
+              - list [ref=e78]:
+                - listitem [ref=e79]:
+                  - checkbox "Nature Made" [ref=e80]
+                  - generic [ref=e81]: Nature Made
+                - listitem [ref=e82]:
+                  - checkbox "Kirkland Signature" [ref=e83]
+                  - generic [ref=e84]: Kirkland Signature
+                - listitem [ref=e85]:
+                  - checkbox "Member's Mark" [ref=e86]
+                  - generic [ref=e87]: Member's Mark
+                - listitem [ref=e88]:
+                  - checkbox "trunature" [ref=e89]
+                  - generic [ref=e90]: trunature
+                - listitem [ref=e91]:
+                  - checkbox "Natrol" [ref=e92]
+                  - generic [ref=e93]: Natrol
+              - link "View more" [ref=e94] [cursor=pointer]:
+                - /url: "#"
+          - generic [ref=e95]:
+            - heading "Delivery Form" [level=2] [ref=e96]
+            - list [ref=e98]:
+              - listitem [ref=e99]:
+                - checkbox "Softgels" [ref=e100]
+                - generic [ref=e101]: Softgels
+              - listitem [ref=e102]:
+                - checkbox "Tablets" [ref=e103]
+                - generic [ref=e104]: Tablets
+              - listitem [ref=e105]:
+                - checkbox "Gummies" [ref=e106]
+                - generic [ref=e107]: Gummies
+              - listitem [ref=e108]:
+                - checkbox "Capsules" [ref=e109]
+                - generic [ref=e110]: Capsules
+              - listitem [ref=e111]:
+                - checkbox "Caplets" [ref=e112]
+                - generic [ref=e113]: Caplets
+              - listitem [ref=e114]:
+                - checkbox "Liquid" [ref=e115]
+                - generic [ref=e116]: Liquid
+        - generic [ref=e117]:
+          - generic [ref=e119]:
+            - generic [ref=e120]:
+              - generic [ref=e121]:
+                - img "Nature Made logo" [ref=e124]
+                - link "Omega-3 from Fish & Algae Oil 1200 mg (600 mg Omega-3) Softgels" [ref=e127] [cursor=pointer]:
+                  - /url: https://www.naturemade.com/products/omega-3-from-fish-oil-and-algae-oil-softgels?variant=43009043366027
+              - generic [ref=e128]:
+                - img "Nature Made logo" [ref=e131]
+                - link "Nature Made Advanced Multivitamin 50+ for Her Gummies" [ref=e134] [cursor=pointer]:
+                  - /url: https://www.naturemade.com/products/advanced-multivitamin-gummies-for-her-50?variant=43009144750219
+              - generic [ref=e135]:
+                - img "Nature Made logo" [ref=e138]
+                - link "Nature Made Turmeric Curcumin High Absorption 250 mg Capsules" [ref=e141] [cursor=pointer]:
+                  - /url: https://www.naturemade.com/products/turmeric-high-absorption-capsules?variant=43040150192267
+            - generic [ref=e142]:
+              - generic [ref=e143]:
+                - img "Nature Made logo" [ref=e146]
+                - link "Nature Made Advanced Multivitamin 50+ for Him Gummies" [ref=e149] [cursor=pointer]:
+                  - /url: https://www.naturemade.com/products/advanced-multivitamin-gummies-for-him-50?variant=43009206354059
+              - generic [ref=e150]:
+                - img "Culturelle logo" [ref=e153]
+                - link "Culturelle Digestive Daily Probiotic Vegetarian Capsules" [ref=e156] [cursor=pointer]:
+                  - /url: https://www.costco.com/culturelle-digestive-health-probiotic%2C-80-vegetarian-capsules.product.100007464.html
+              - generic [ref=e157]:
+                - img "Nature Made logo" [ref=e160]
+                - link "Nature Made Glucosamine Chondroitin Complex with MSM Triple Strength + Vitamin D3" [ref=e163] [cursor=pointer]:
+                  - /url: https://www.naturemade.com/products/glucosamine-chondroitin-complex-with-msm-and-vitamin-d3
+            - generic [ref=e164]:
+              - generic [ref=e165]:
+                - img "Member's Mark logo" [ref=e168]
+                - link "Member's Mark CoQ10 200mg Softgels" [ref=e171] [cursor=pointer]:
+                  - /url: https://www.samsclub.com/p/members-mark-coq10-200-mg-softgels-dietary-supplement-180ct/P03015669?xid=plp_product_2
+              - generic [ref=e172]:
+                - img "Estroven logo" [ref=e175]
+                - link "Estroven Complete Multi-Symptom Menopause Relief Caplets" [ref=e178] [cursor=pointer]:
+                  - /url: https://www.costco.com/estroven-complete-multi-symptom-menopause-relief%2C-84-caplets.product.100693875.html
+              - generic [ref=e179]:
+                - img "Member's Mark logo" [ref=e182]
+                - link "Member's Mark Lutein 25mg with Zeaxanthin 5mg Softgels" [ref=e185] [cursor=pointer]:
+                  - /url: https://www.samsclub.com/p/members-mark-lutein-25mg-zeaxanthin-5mg-eye-health/prod25230380
+            - generic [ref=e186]:
+              - generic [ref=e187]:
+                - img "trunature logo" [ref=e190]
+                - link "trunature Women’s Daily Probiotic Capsules" [ref=e193] [cursor=pointer]:
+                  - /url: https://www.costco.com/trunature-women's-daily-probiotic%2C-90-vegetarian-capsules.product.100654716.html
+              - generic [ref=e194]:
+                - img "Nature Made logo" [ref=e197]
+                - link "Nature Made Advanced Multivitamin Gummies For Her" [ref=e200] [cursor=pointer]:
+                  - /url: https://www.naturemade.com/products/advanced-multivitamin-gummies-for-her?variant=41844880539787
+              - generic [ref=e201]:
+                - img "Nature Made logo" [ref=e204]
+                - link "Nature Made Advanced Multivitamin Gummies For Him" [ref=e207] [cursor=pointer]:
+                  - /url: https://www.naturemade.com/products/advanced-multivitamin-gummies-for-him?variant=41844958036107
+          - navigation "Pagination" [ref=e208]:
+            - heading "Pagination" [level=4] [ref=e209]
+            - list [ref=e210]:
+              - listitem [ref=e211]: Page 1
+              - listitem [ref=e212]:
+                - link "Next page" [ref=e213] [cursor=pointer]:
+                  - /url: /usp_verified_products?page=1
+                  - generic [ref=e214]: Next page
+                  - text: ››
+    - contentinfo [ref=e215]:
+      - generic:
+        - paragraph [ref=e218]:
+          - link "United States Pharmacopeia" [ref=e219] [cursor=pointer]:
+            - /url: https://www.usp.org
+        - navigation "Footer menu" [ref=e220]:
+          - heading "Footer menu" [level=2] [ref=e221]
+          - list [ref=e222]:
+            - listitem [ref=e223]:
+              - link "Contact" [ref=e224] [cursor=pointer]:
+                - /url: /about-us
+            - listitem [ref=e225]:
+              - link "Privacy Policy" [ref=e226] [cursor=pointer]:
+                - /url: https://www.usp.org/privacy-policy
+            - listitem [ref=e227]:
+              - link "Terms of Use" [ref=e228] [cursor=pointer]:
+                - /url: https://www.usp.org/legal-policies/usp-website-terms-use
+        - paragraph [ref=e231]: ©2026 USP. All rights reserved.
