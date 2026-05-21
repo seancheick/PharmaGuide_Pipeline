@@ -731,17 +731,28 @@ class TestV30Scoring:
         product["probiotic_data"] = {
             "is_probiotic_product": True,
             "has_cfu": True,
+            "total_cfu": 5000000000.0,
             "total_billion_count": 5.0,
             "total_strain_count": 3,
             "clinical_strain_count": 2,
             "guarantee_type": None,
+        }
+        # Taxonomy v2 — single source of truth for classification
+        product["supplement_taxonomy"] = {
+            "primary_type": "probiotic",
+            "secondary_type": None,
+            "percentile_category": "probiotic",
+            "classification_confidence": 0.9,
+            "classification_reasons": ["probiotic: 3/3 strains"],
+            "quantified_active_count": 3,
+            "non_quantified_base_count": 0,
+            "category_breakdown": {"probiotic": 3},
         }
 
         assert scorer._classify_supplement_type(product) == "probiotic"
 
         scored = scorer.score_product(product)
         assert scored["supp_type"] == "probiotic"
-        assert "SUPPLEMENT_TYPE_REINFERRED" in scored["flags"]
 
     def test_d1_does_not_award_fuzzy_manufacturer_match(self, scorer):
         product = make_base_product()
