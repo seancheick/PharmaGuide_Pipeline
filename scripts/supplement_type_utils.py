@@ -57,6 +57,12 @@ NON_SCORABLE_CATEGORIES = {
     "non_therapeutic",
 }
 
+# Legacy hardcoded alias map. SP-4 (2026-05-21): kept for backward compat /
+# audit visibility, but `canonical_category()` no longer reads it. The
+# canonical source of truth is `scripts/data/ingredient_category_vocab.json`,
+# accessed via `ingredient_category_normalizer.canonicalize_ingredient_category`.
+# Parity between this map and the vocab is locked by
+# `test_ingredient_category_vocab.py::TestParityWithLegacy`.
 CATEGORY_ALIASES = {
     "vitamin": "vitamin",
     "vitamins": "vitamin",
@@ -103,10 +109,17 @@ def _safe_list(value: Any) -> list[Any]:
 
 
 def canonical_category(value: Any) -> str:
-    normalized = _normalize_text(value).replace("-", "_").replace(" ", "_")
-    if not normalized:
-        return ""
-    return CATEGORY_ALIASES.get(normalized, normalized)
+    """Return the canonical ingredient-category id for a raw value.
+
+    SP-4 (2026-05-21): now a thin wrapper around the SP-4 normalizer
+    which reads `scripts/data/ingredient_category_vocab.json`. The legacy
+    CATEGORY_ALIASES map above is retained for audit / migration parity
+    but no longer drives canonicalization. Callers do not need to change
+    — output is identical for every alias the legacy map handled (locked
+    by test_ingredient_category_vocab.TestParityWithLegacy).
+    """
+    from ingredient_category_normalizer import canonicalize_ingredient_category
+    return canonicalize_ingredient_category(value)
 
 
 def _ingredient_name(row: dict[str, Any]) -> str:
