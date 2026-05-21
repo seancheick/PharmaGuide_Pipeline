@@ -93,6 +93,7 @@ from constants import (
 )
 from supplement_type_utils import infer_supplement_type
 from supplement_taxonomy import classify_supplement
+from form_factor_normalizer import canonicalize_form_factor
 
 # Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
 # postbiotic / prebiotic / vitamin-mineral form patterns. Replaces 3-5
@@ -12005,6 +12006,17 @@ class SupplementEnricherV3:
                     basis_reason = "adult_default_from_userGroups"
                     break
 
+        # SP-3 (2026-05-21): canonical form_factor for downstream consumers.
+        # Reads the DSLD langual code as the most authoritative signal, then
+        # the description text. This is the single normalization stage —
+        # v4 / score / final_db / Flutter should consume `form_factor_canonical`,
+        # not re-derive from raw `physicalState`. The legacy `form_factor`
+        # field is kept additive so pre-2026-05-21 consumers still work.
+        form_factor_canonical = canonicalize_form_factor(
+            langual_desc,
+            langual_code=physical_state.get('langualCode') if isinstance(physical_state, dict) else None,
+        )
+
         return {
             "serving_basis": {
                 "basis_count": basis_count,
@@ -12020,7 +12032,8 @@ class SupplementEnricherV3:
                 "selected_from": selected_from,
                 "canonical_serving_size_quantity": canonical_serving_size_qty
             },
-            "form_factor": form_factor
+            "form_factor": form_factor,
+            "form_factor_canonical": form_factor_canonical,
         }
 
     def _normalize_form_factor(self, langual_desc: str) -> Optional[str]:
@@ -13710,9 +13723,14 @@ class SupplementEnricherV3:
             enriched["manufacturer_normalized"] = self._normalize_company_name(manufacturer_raw)
 
             # P0.4: Serving basis and form factor for deterministic prescore
+            # SP-3 (2026-05-21): also emit canonical form_factor for downstream
+            # consumers. Legacy `form_factor` is kept additive.
             serving_data = self._collect_serving_basis_data(product)
             enriched["serving_basis"] = serving_data["serving_basis"]
             enriched["form_factor"] = serving_data["form_factor"]
+            enriched["form_factor_canonical"] = serving_data.get(
+                "form_factor_canonical", "unknown"
+            )
 
             # Percentile category (config-driven, deterministic inference for cohort ranking)
             enriched.update(self._infer_percentile_category(product, enriched))
