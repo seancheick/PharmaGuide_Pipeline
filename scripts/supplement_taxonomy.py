@@ -91,6 +91,7 @@ _MINERAL_CANONICAL_IDS = frozenset({
     "zinc", "magnesium", "calcium", "iron", "selenium", "chromium",
     "copper", "manganese", "potassium", "iodine", "molybdenum",
     "boron", "phosphorus", "silica", "vanadium", "lithium",
+    "sodium", "chloride",
 })
 
 _B_VITAMIN_IDS = frozenset({
@@ -128,17 +129,22 @@ _COLLAGEN_IDS = frozenset({
 })
 
 # Name-based signals for functional categories
-_SLEEP_NAME_TOKENS = {"sleep", "melatonin", "night", "nighttime", "night time", "pm", "rest", "calm sleep"}
+_SLEEP_NAME_TOKENS = {"sleep", "melatonin", "nighttime", "night time", "calm sleep"}
+# Short tokens that need word-boundary matching (avoid "forest"→"rest", "rpm"→"pm")
+_SLEEP_BOUNDARY_PATTERNS = [re.compile(r'\bnight\b'), re.compile(r'\bpm\b'), re.compile(r'\brest\b')]
 _IMMUNE_NAME_TOKENS = {"immune", "immunity", "defense", "elderberry", "echinacea"}
 _JOINT_NAME_TOKENS = {"joint", "glucosamine", "chondroitin", "msm", "flexibility", "cartilage"}
-_BEAUTY_NAME_TOKENS = {"hair", "skin", "nail", "nails", "beauty", "glow", "radiance", "keratin"}
-_FIBER_NAME_TOKENS = {"fiber", "fibre", "digestive", "prebiotic", "psyllium", "inulin"}
+_BEAUTY_NAME_TOKENS = {"skin", "nail", "nails", "beauty", "glow", "radiance", "keratin"}
+# "hair" needs word-boundary matching to avoid "chairman" false positive
+# \bhair matches "hair", "hairfluence", "hairy" but NOT "chairman", "mohair"
+_BEAUTY_BOUNDARY_PATTERNS = [re.compile(r'\bhair')]
+_FIBER_NAME_TOKENS = {"fiber", "fibre", "digestive fiber", "prebiotic", "psyllium", "inulin"}
 _PRE_WORKOUT_NAME_TOKENS = {"pre-workout", "pre workout", "preworkout"}
 _PROTEIN_NAME_TOKENS = {
     "protein powder", "whey", "casein", "pea protein", "protein isolate",
     "protein blend",
 }
-_GREENS_NAME_TOKENS = {"greens", "super greens", "green superfood", "superfood", "reds powder"}
+_GREENS_NAME_TOKENS = {"greens", "super greens", "green superfood", "greens powder", "reds powder"}
 _ELECTROLYTE_NAME_TOKENS = {"electrolyte", "hydration powder", "hydration mix"}
 _AMINO_NAME_TOKENS = {"bcaa", "eaa", "amino acid", "amino acids", "essential amino"}
 
@@ -238,9 +244,25 @@ _ALL_FUNCTIONAL_TOKENS = (
 )
 
 
+def _has_sleep_signal(product_name: str) -> bool:
+    """Check sleep tokens + word-boundary patterns (night, pm, rest)."""
+    if any(t in product_name for t in _SLEEP_NAME_TOKENS):
+        return True
+    return any(p.search(product_name) for p in _SLEEP_BOUNDARY_PATTERNS)
+
+
+def _has_beauty_signal(product_name: str) -> bool:
+    """Check beauty tokens + word-boundary patterns (hair)."""
+    if any(t in product_name for t in _BEAUTY_NAME_TOKENS):
+        return True
+    return any(p.search(product_name) for p in _BEAUTY_BOUNDARY_PATTERNS)
+
+
 def _has_functional_name_signal(product_name: str) -> bool:
     """Quick check: does the product name contain any functional category token?"""
-    return any(t in product_name for t in _ALL_FUNCTIONAL_TOKENS)
+    if any(t in product_name for t in _ALL_FUNCTIONAL_TOKENS):
+        return True
+    return _has_sleep_signal(product_name) or _has_beauty_signal(product_name)
 
 
 def _detect_functional_name(product_name: str) -> tuple[str, float, str]:
@@ -255,9 +277,9 @@ def _detect_functional_name(product_name: str) -> tuple[str, float, str]:
         return "electrolyte", 0.9, f"electrolyte/hydration name signal in '{product_name}'"
     if any(t in product_name for t in _AMINO_NAME_TOKENS):
         return "amino_acid", 0.85, f"amino acid name signal in '{product_name}'"
-    if any(t in product_name for t in _BEAUTY_NAME_TOKENS):
+    if _has_beauty_signal(product_name):
         return "beauty_hair_skin_nails", 0.85, f"beauty name signal in '{product_name}'"
-    if any(t in product_name for t in _SLEEP_NAME_TOKENS):
+    if _has_sleep_signal(product_name):
         return "sleep_support", 0.85, f"sleep name signal in '{product_name}'"
     if any(t in product_name for t in _IMMUNE_NAME_TOKENS):
         return "immune_support", 0.85, f"immune name signal in '{product_name}'"
@@ -677,7 +699,7 @@ def _detect_functional_category(
     """Detect functional categories from product name and composition."""
 
     # Check name-based functional signals
-    if any(t in product_name for t in _SLEEP_NAME_TOKENS):
+    if _has_sleep_signal(product_name):
         return "sleep_support", 0.8, f"sleep name signal in '{product_name}'"
 
     if any(t in product_name for t in _IMMUNE_NAME_TOKENS):
@@ -686,7 +708,7 @@ def _detect_functional_category(
     if any(t in product_name for t in _JOINT_NAME_TOKENS):
         return "joint_support", 0.8, f"joint name signal in '{product_name}'"
 
-    if any(t in product_name for t in _BEAUTY_NAME_TOKENS):
+    if _has_beauty_signal(product_name):
         return "beauty_hair_skin_nails", 0.8, f"beauty name signal in '{product_name}'"
 
     if any(t in product_name for t in _FIBER_NAME_TOKENS):

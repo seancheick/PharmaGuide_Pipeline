@@ -440,3 +440,91 @@ class TestVocabSync:
         declared = data["_metadata"]["total_entries"]
         actual = len(data["product_types"])
         assert declared == actual, f"Metadata says {declared}, actual {actual}"
+
+
+# ============================================================================
+# Substring Collision Guards
+# ============================================================================
+
+class TestSubstringCollisionGuards:
+    """Prevent short name tokens from matching inside unrelated words.
+
+    Each test encodes a real false-positive that was found and fixed.
+    If a new token is added that reintroduces a substring collision,
+    these tests will catch it before it ships.
+    """
+
+    @staticmethod
+    def _classify(name, category="herbs"):
+        p = {
+            "product_name": name,
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "A", "category": category, "quantity": 100, "unit": "mg"},
+                {"name": "B", "category": category, "quantity": 100, "unit": "mg"},
+            ]},
+        }
+        return classify_supplement(p)["primary_type"]
+
+    # --- Sleep tokens: "rest", "pm", "night" must not match substrings ---
+
+    def test_forest_not_sleep(self):
+        """'rest' in 'forest' must not trigger sleep_support."""
+        assert self._classify("Forest Mushroom Complex") != "sleep_support"
+
+    def test_rpm_not_sleep(self):
+        """'pm' in 'rpm' must not trigger sleep_support."""
+        assert self._classify("RPM Energy Booster") != "sleep_support"
+
+    def test_overnight_not_sleep(self):
+        """'night' in 'overnight' must not trigger sleep_support."""
+        assert self._classify("Overnight Collagen Repair") != "sleep_support"
+
+    def test_restore_not_sleep(self):
+        """'rest' in 'restore' must not trigger sleep_support."""
+        assert self._classify("Restore Balance Formula") != "sleep_support"
+
+    def test_good_night_is_sleep(self):
+        """'night' as a standalone word should still match."""
+        assert self._classify("Good Night Melatonin") == "sleep_support"
+
+    def test_pm_standalone_is_sleep(self):
+        """'pm' as a standalone word should still match."""
+        assert self._classify("PM Calm Support") == "sleep_support"
+
+    # --- Beauty tokens: "hair" must not match substrings ---
+
+    def test_chairman_not_beauty(self):
+        """'hair' in 'chairman' must not trigger beauty."""
+        assert self._classify("Chairman Select Vitamin D") != "beauty_hair_skin_nails"
+
+    def test_mohair_not_beauty(self):
+        """'hair' in 'mohair' must not trigger beauty."""
+        assert self._classify("Mohair Fiber Blend") != "beauty_hair_skin_nails"
+
+    def test_hair_skin_nails_is_beauty(self):
+        """Actual hair product must still match."""
+        assert self._classify("Hair Skin & Nails with Biotin") == "beauty_hair_skin_nails"
+
+    def test_hairfluence_is_beauty(self):
+        """'hair' at start of word should match (Hairfluence is a real brand)."""
+        assert self._classify("Hairfluence Growth Formula") == "beauty_hair_skin_nails"
+
+    # --- Greens: "superfood" alone must not catch mushroom blends ---
+
+    def test_superfood_mushroom_not_greens(self):
+        """Mushroom adaptogens labeled 'superfood' are not greens powders."""
+        assert self._classify("Superfood Mushroom Complex") != "greens_powder"
+
+    def test_super_greens_is_greens(self):
+        """Actual greens product must still match."""
+        assert self._classify("Super Greens Powder") == "greens_powder"
+
+    # --- Fiber: "digestive" alone must not catch enzyme products ---
+
+    def test_digestive_enzymes_not_fiber(self):
+        """Digestive enzymes are not fiber supplements."""
+        assert self._classify("Digestive Enzymes Complex", category="enzymes") != "fiber_digestive"
+
+    def test_digestive_fiber_is_fiber(self):
+        """Actual fiber product must still match."""
+        assert self._classify("Digestive Fiber Supplement") == "fiber_digestive"
