@@ -1,11 +1,9 @@
-"""v4 Omega module — P1.6.0 scaffold tests.
+"""v4 Omega module — contract and routing tests.
 
-Locks the breakdown contract for the omega module before any
-omega-specific scoring math lands. Subsequent slices (P1.6.1
-Formulation, P1.6.2 Dose, P1.6.3 Evidence, P1.6.4 Trust, P1.6.5
-Transparency, P1.6.6 Manufacturer + final assembly) fill the
-`components` / `penalties` sub-dicts and the dimension `score` fields
-in-place.
+Originally created at P1.6.0 to lock the breakdown contract before scoring
+math landed. Now also protects the complete P1.6.6 omega module contract:
+all dimensions populate, manufacturer adjustments apply, and final score
+assembly is online.
 
 Per `docs/plans/SCORING_V4_PROPOSAL.md` §4 + §9 (Omega / fish-oil policy)
 + scripts/data/omega_rubric.json:
@@ -119,11 +117,8 @@ def test_omega_dimensions_share_stable_contract() -> None:
     has score/max/components/penalties/metadata keys. Slices populate
     their dimension's score in-place as they ship.
 
-    Roll-forward expectations:
-      P1.6.0 — all scores None (skeleton)
-      P1.6.1 — formulation populated
-      P1.6.2 — formulation + dose populated
-      ...etc. Test always uses 'populated dimensions go first' rule."""
+    P1.6.6 expectation: all five omega dimensions are populated while the
+    shared dict shape remains stable."""
     from scoring_v4.modules.omega import score_omega
 
     breakdown = score_omega(COMPLETE_OMEGA_PRODUCT).to_breakdown()
@@ -136,7 +131,7 @@ def test_omega_dimensions_share_stable_contract() -> None:
         assert "penalties" in dim
         assert "metadata" in dim
 
-    # P1.6.5: all 5 dimensions populate.
+    # P1.6.6: all 5 dimensions populate.
     for populated in ("formulation", "dose", "evidence", "trust", "transparency"):
         assert breakdown["dimensions"][populated]["score"] is not None, (
             f"omega.{populated}.score should be populated through P1.6.5"
@@ -148,8 +143,7 @@ def test_omega_manufacturer_trust_dimension_has_cap_5() -> None:
 
     breakdown = score_omega(COMPLETE_OMEGA_PRODUCT).to_breakdown()
     mt = breakdown["manufacturer_trust"]
-    # P1.6.0 skeleton: manufacturer_trust not populated yet (lands in P1.6.6).
-    # The cap and shape are what the scaffold contract guarantees.
+    # Manufacturer Trust is module-agnostic and still capped at +5.
     assert mt["max"] == 5
     assert isinstance(mt["components"], dict)
 
@@ -159,14 +153,14 @@ def test_omega_manufacturer_violations_floor_minus_25() -> None:
 
     breakdown = score_omega(COMPLETE_OMEGA_PRODUCT).to_breakdown()
     mv = breakdown["manufacturer_violations"]
-    # P1.6.0: shape is stable; the floor cap stays at -25.
+    # Shape is stable; the standard manufacturer-violation floor stays at -25.
     assert mv["floor"] == -25
 
 
 def test_omega_phase_marker_rolls_forward_across_slices() -> None:
     """Module-level phase marker rolls forward as each P1.6.x slice lands.
-    Asserting starts-with 'P1.6.' keeps the test resilient — at P1.6.0
-    the marker is exactly 'P1.6.0_omega_skeleton', later slices update."""
+    Asserting starts-with 'P1.6.' keeps the test resilient across maintenance
+    slices without hiding a wrong module family."""
     from scoring_v4.modules.omega import score_omega
 
     breakdown = score_omega(COMPLETE_OMEGA_PRODUCT).to_breakdown()
@@ -780,7 +774,7 @@ def test_shadow_does_not_wire_omega_module_when_completeness_fails() -> None:
 
 
 def test_shadow_does_not_route_generic_product_to_omega_module() -> None:
-    """A magnesium single-nutrient still routes to generic — P1.6.0 must
+    """A magnesium single-nutrient still routes to generic — omega routing must
     not leak omega routing onto non-omega rows."""
     from score_supplements_v4_shadow import score_product_v4_shadow
 

@@ -112,6 +112,8 @@ _AMINO_ACID_IDS = frozenset({
     "bcaa", "beta_alanine", "creatine", "taurine", "glycine",
     "n_acetyl_cysteine", "nac", "glutathione", "acetyl_l_carnitine",
     "gaba", "5_htp", "sam_e",
+    "l_leucine", "l_isoleucine", "l_valine", "l_methionine",
+    "l_threonine", "l_phenylalanine",
 })
 
 _COLLAGEN_IDS = frozenset({
@@ -121,11 +123,26 @@ _COLLAGEN_IDS = frozenset({
 })
 
 # Name-based signals for functional categories
-_SLEEP_NAME_TOKENS = {"sleep", "melatonin", "nighttime", "night time", "pm", "rest", "calm sleep"}
+_SLEEP_NAME_TOKENS = {"sleep", "melatonin", "night", "nighttime", "night time", "pm", "rest", "calm sleep"}
 _IMMUNE_NAME_TOKENS = {"immune", "immunity", "defense", "elderberry", "echinacea"}
 _JOINT_NAME_TOKENS = {"joint", "glucosamine", "chondroitin", "msm", "flexibility", "cartilage"}
 _BEAUTY_NAME_TOKENS = {"hair", "skin", "nail", "nails", "beauty", "glow", "radiance", "keratin"}
 _FIBER_NAME_TOKENS = {"fiber", "fibre", "digestive", "prebiotic", "psyllium", "inulin"}
+_PRE_WORKOUT_NAME_TOKENS = {"pre-workout", "pre workout", "preworkout"}
+_PROTEIN_NAME_TOKENS = {
+    "protein powder", "whey", "casein", "pea protein", "protein isolate",
+    "protein blend",
+}
+_GREENS_NAME_TOKENS = {"greens", "super greens", "green superfood", "superfood", "reds powder"}
+_ELECTROLYTE_NAME_TOKENS = {"electrolyte", "hydration powder", "hydration mix"}
+_AMINO_NAME_TOKENS = {"bcaa", "eaa", "amino acid", "amino acids", "essential amino"}
+
+_SLEEP_SINGLE_IDS = frozenset({"melatonin", "5_htp", "gaba"})
+_JOINT_SINGLE_IDS = frozenset({"msm", "glucosamine", "chondroitin", "hyaluronic_acid"})
+_PRE_WORKOUT_IDS = frozenset({"caffeine", "beta_alanine", "creatine", "l_citrulline", "citrulline"})
+_PROTEIN_IDS = frozenset({"whey_protein", "casein", "pea_protein", "protein"})
+_GREENS_IDS = frozenset({"spirulina", "chlorella", "wheatgrass", "barley_grass"})
+_ELECTROLYTE_IDS = frozenset({"sodium", "potassium", "magnesium", "calcium", "chloride"})
 
 # Secondary type detection: compound → secondary_type
 _SECONDARY_TYPE_MAP = {
@@ -211,6 +228,8 @@ def _is_non_quantified(row: dict[str, Any]) -> bool:
 _ALL_FUNCTIONAL_TOKENS = (
     _SLEEP_NAME_TOKENS | _IMMUNE_NAME_TOKENS | _JOINT_NAME_TOKENS
     | _BEAUTY_NAME_TOKENS | _FIBER_NAME_TOKENS
+    | _PRE_WORKOUT_NAME_TOKENS | _PROTEIN_NAME_TOKENS
+    | _GREENS_NAME_TOKENS | _ELECTROLYTE_NAME_TOKENS | _AMINO_NAME_TOKENS
 )
 
 
@@ -221,6 +240,16 @@ def _has_functional_name_signal(product_name: str) -> bool:
 
 def _detect_functional_name(product_name: str) -> tuple[str, float, str]:
     """Detect functional category from product name. Returns (type, confidence, reason)."""
+    if any(t in product_name for t in _PRE_WORKOUT_NAME_TOKENS):
+        return "pre_workout", 0.9, f"pre-workout name signal in '{product_name}'"
+    if any(t in product_name for t in _PROTEIN_NAME_TOKENS):
+        return "protein_powder", 0.9, f"protein name signal in '{product_name}'"
+    if any(t in product_name for t in _GREENS_NAME_TOKENS):
+        return "greens_powder", 0.85, f"greens/superfood name signal in '{product_name}'"
+    if any(t in product_name for t in _ELECTROLYTE_NAME_TOKENS):
+        return "electrolyte", 0.9, f"electrolyte/hydration name signal in '{product_name}'"
+    if any(t in product_name for t in _AMINO_NAME_TOKENS):
+        return "amino_acid", 0.85, f"amino acid name signal in '{product_name}'"
     if any(t in product_name for t in _BEAUTY_NAME_TOKENS):
         return "beauty_hair_skin_nails", 0.85, f"beauty name signal in '{product_name}'"
     if any(t in product_name for t in _SLEEP_NAME_TOKENS):
@@ -283,10 +312,15 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     category_counts: dict[str, int] = {}
     canonical_ids: list[str] = []
     probiotic_count = 0
+    non_quantified_probiotic_count = 0
 
     for row in rows:
         category = canonical_category(row.get("category"))
         role = _normalize_text(row.get("role_classification"))
+        name = _ingredient_name(row)
+        is_probiotic_strain = category in {"probiotic", "bacteria"} or (
+            name and any(term in name for term in PROBIOTIC_TERMS)
+        )
 
         # Skip truly non-scorable
         if category in NON_SCORABLE_CATEGORIES:
@@ -296,7 +330,6 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         if bool(row.get("is_blend_header")) or bool(row.get("blend_total_weight_only")):
             continue
 
-        name = _ingredient_name(row)
         if not name and not category:
             continue
 
@@ -307,9 +340,6 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         # Paradise-style products that embed 5 NP probiotic strains in a
         # whole-food base would misclassify Zinc/Quercetin as "probiotic".
         if _is_non_quantified(row):
-            is_probiotic_strain = category in {"probiotic", "bacteria"} or (
-                name and any(term in name for term in PROBIOTIC_TERMS)
-            )
             # Only exempt NP probiotic strains when the product is a confirmed
             # probiotic WITH actual CFU data. Paradise-style products flag
             # is_probiotic_product=True because they embed NP probiotic strains
@@ -321,6 +351,8 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             if is_probiotic_strain and is_probiotic_product and has_real_cfu:
                 pass  # let it through — real probiotic product with CFU data
             else:
+                if is_probiotic_strain:
+                    non_quantified_probiotic_count += 1
                 non_quantified_rows.append(row)
                 continue
 
@@ -371,6 +403,16 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     secondary_type = None
     confidence = 0.0
 
+    multi_panel_signal = (
+        active_count >= 6
+        and len(vitamin_ids) + len(mineral_ids) >= 4
+        and (
+            len(vitamin_ids) + len(mineral_ids) >= 6
+            or (len(vitamin_ids) >= 3 and len(mineral_ids) >= 2)
+            or any(t in product_name for t in ("multi", "daily vitamin", "one daily", "complete", "prenatal"))
+        )
+    )
+
     # --- Probiotic ---
     probiotic_name_signal = any(term in product_name for term in PROBIOTIC_TERMS)
     probiotic_data = product.get("probiotic_data", {})
@@ -380,7 +422,17 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         bool(probiotic_data.get("is_probiotic_product"))
         and bool(probiotic_data.get("total_cfu"))
     )
-    if (probiotic_flag or probiotic_count > 0 or probiotic_name_signal) and active_count > 0:
+    if (
+        active_count == 0
+        and probiotic_name_signal
+        and non_quantified_probiotic_count > 0
+    ):
+        primary_type = "probiotic"
+        confidence = 0.65
+        reasons.append(
+            f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"
+        )
+    elif (probiotic_flag or probiotic_count > 0 or probiotic_name_signal) and active_count > 0:
         probiotic_majority = probiotic_count >= max(1, ceil(active_count * 0.5))
         if active_count == 1 or probiotic_majority or (
             (probiotic_name_signal or probiotic_flag)
@@ -389,6 +441,42 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             primary_type = "probiotic"
             confidence = 0.9 if probiotic_majority else 0.7
             reasons.append(f"probiotic: {probiotic_count}/{active_count} strains")
+
+    # --- B-Complex ---
+    # Checked before the broad multivitamin panel: B-complexes can have 6+
+    # vitamins but are still a narrower peer class than full multis.
+    elif (
+        (b_vitamin_ids and len(b_vitamin_ids) >= 3)
+        or "b-complex" in product_name
+        or "b complex" in product_name
+    ):
+        non_b_vitamins = vitamin_ids - _B_VITAMIN_IDS
+        non_b_minerals = mineral_ids
+        if len(non_b_vitamins) <= 1 and len(non_b_minerals) <= 2:
+            primary_type = "b_complex"
+            confidence = 0.9 if "complex" in product_name else 0.75
+            reasons.append(
+                f"b-complex: {len(b_vitamin_ids)} B-vitamins, {len(non_b_vitamins)} non-B vitamins"
+            )
+        else:
+            primary_type = "multivitamin"
+            confidence = 0.7
+            reasons.append(
+                f"multivitamin (b-complex + extras): {len(vitamin_ids)} vitamins + {len(mineral_ids)} minerals"
+            )
+
+    # --- Multivitamin / prenatal panel ---
+    # Checked before omega so prenatal multis with DHA don't become omega_3.
+    elif multi_panel_signal:
+        name_signal = any(
+            t in product_name
+            for t in ("multi", "daily vitamin", "one daily", "complete", "prenatal")
+        )
+        primary_type = "multivitamin"
+        confidence = 0.95 if name_signal else 0.75
+        reasons.append(
+            f"multivitamin: {len(vitamin_ids)} vitamins, {len(mineral_ids)} minerals, {active_count} actives"
+        )
 
     # --- Omega-3 / Fish Oil ---
     # Word-boundary check for short tokens (dha, epa) to avoid "ashwagan-dha" false positives
@@ -411,7 +499,19 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif active_count == 1:
         cid = canonical_ids[0] if canonical_ids else ""
         cat = list(category_counts.keys())[0] if category_counts else ""
-        if cid in _VITAMIN_CANONICAL_IDS or cat == "vitamin":
+        if cid in _SLEEP_SINGLE_IDS:
+            primary_type = "sleep_support"
+            confidence = 0.9
+            reasons.append(f"single sleep-support ingredient: {cid}")
+        elif cid in _JOINT_SINGLE_IDS:
+            primary_type = "joint_support"
+            confidence = 0.9
+            reasons.append(f"single joint-support ingredient: {cid}")
+        elif cid in _PROTEIN_IDS or cat == "protein":
+            primary_type = "protein_powder"
+            confidence = 0.9
+            reasons.append(f"single protein ingredient: {cid or cat}")
+        elif cid in _VITAMIN_CANONICAL_IDS or cat == "vitamin":
             primary_type = "single_vitamin"
             confidence = 0.95
             reasons.append(f"single vitamin: {cid or cat}")
@@ -436,55 +536,57 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             confidence = 0.5
             reasons.append(f"single ingredient, uncategorized: {cid or cat}")
 
-    # --- B-Complex ---
-    elif (b_vitamin_ids and len(b_vitamin_ids) >= 3) or "b-complex" in product_name or "b complex" in product_name:
-        # Must be primarily B-vitamins, not a full multivitamin
-        non_b_vitamins = vitamin_ids - _B_VITAMIN_IDS
-        non_b_minerals = mineral_ids
-        if len(non_b_vitamins) <= 1 and len(non_b_minerals) <= 2:
-            primary_type = "b_complex"
-            confidence = 0.9 if "complex" in product_name else 0.75
-            reasons.append(f"b-complex: {len(b_vitamin_ids)} B-vitamins, {len(non_b_vitamins)} non-B vitamins")
-        else:
-            primary_type = "multivitamin"
-            confidence = 0.7
-            reasons.append(f"multivitamin (b-complex + extras): {len(vitamin_ids)} vitamins + {len(mineral_ids)} minerals")
-
-    # --- Multivitamin ---
-    elif active_count >= 6 and len(vitamin_ids) + len(mineral_ids) >= 4 and (
-        len(set(category_counts.keys()) - {"uncategorized"}) >= 3
-        or (len(vitamin_ids) >= 3 and len(mineral_ids) >= 3)
-        or any(t in product_name for t in ("multi", "daily vitamin", "one daily", "complete"))
-    ):
-        name_signal = any(t in product_name for t in ("multi", "daily vitamin", "one daily", "complete"))
-        primary_type = "multivitamin"
-        confidence = 0.95 if name_signal else 0.75
-        reasons.append(f"multivitamin: {len(vitamin_ids)} vitamins, {len(mineral_ids)} minerals, {active_count} actives")
-
     # --- Vitamin + Mineral Combo (2-5 actives, mixed vitamins/minerals) ---
     elif 2 <= active_count <= 5 and (vitamin_ids or mineral_ids):
-        vm_count = len(vitamin_ids) + len(mineral_ids)
-        if vm_count >= active_count * 0.7:
-            if mineral_ids and not vitamin_ids:
-                primary_type = "single_mineral"
-                confidence = 0.8
-                reasons.append(f"mineral combo: {list(mineral_ids)}")
-            elif vitamin_ids and not mineral_ids:
-                primary_type = "single_vitamin"
-                confidence = 0.8
-                reasons.append(f"vitamin combo: {list(vitamin_ids)}")
-            else:
-                primary_type = "vitamin_mineral_combo"
-                confidence = 0.8
-                reasons.append(f"vitamin+mineral combo: {list(vitamin_ids | mineral_ids)}")
-        elif herb_count > vm_count:
-            primary_type = "herbal_botanical"
-            confidence = 0.7
-            reasons.append(f"herbal dominant: {herb_count} herbs vs {vm_count} vitamins/minerals")
+        if any(t in product_name for t in _ELECTROLYTE_NAME_TOKENS):
+            primary_type = "electrolyte"
+            confidence = 0.9
+            reasons.append(f"electrolyte/hydration name signal in '{product_name}'")
+        elif len(cid_set & _ELECTROLYTE_IDS) >= 3 and "hydration" in product_name:
+            primary_type = "electrolyte"
+            confidence = 0.85
+            reasons.append(f"electrolyte mineral panel: {list(cid_set & _ELECTROLYTE_IDS)}")
         else:
-            primary_type = "general_supplement"
-            confidence = 0.5
-            reasons.append(f"mixed targeted: {dict(category_counts)}")
+            vm_count = len(vitamin_ids) + len(mineral_ids)
+            if vm_count >= active_count * 0.7:
+                if mineral_ids and not vitamin_ids:
+                    primary_type = "single_mineral"
+                    confidence = 0.8
+                    reasons.append(f"mineral combo: {list(mineral_ids)}")
+                elif vitamin_ids and not mineral_ids:
+                    primary_type = "single_vitamin"
+                    confidence = 0.8
+                    reasons.append(f"vitamin combo: {list(vitamin_ids)}")
+                else:
+                    primary_type = "vitamin_mineral_combo"
+                    confidence = 0.8
+                    reasons.append(f"vitamin+mineral combo: {list(vitamin_ids | mineral_ids)}")
+            elif herb_count > vm_count:
+                primary_type = "herbal_botanical"
+                confidence = 0.7
+                reasons.append(f"herbal dominant: {herb_count} herbs vs {vm_count} vitamins/minerals")
+            else:
+                primary_type = "general_supplement"
+                confidence = 0.5
+                reasons.append(f"mixed targeted: {dict(category_counts)}")
+
+    # --- Pre-workout ---
+    elif any(t in product_name for t in _PRE_WORKOUT_NAME_TOKENS) or len(cid_set & _PRE_WORKOUT_IDS) >= 3:
+        primary_type = "pre_workout"
+        confidence = 0.9 if any(t in product_name for t in _PRE_WORKOUT_NAME_TOKENS) else 0.75
+        reasons.append(f"pre-workout signal: ids={list(cid_set & _PRE_WORKOUT_IDS)}")
+
+    # --- Protein powder ---
+    elif any(t in product_name for t in _PROTEIN_NAME_TOKENS) or category_counts.get("protein", 0) > 0 or (cid_set & _PROTEIN_IDS):
+        primary_type = "protein_powder"
+        confidence = 0.9
+        reasons.append(f"protein powder signal: ids={list(cid_set & _PROTEIN_IDS)}")
+
+    # --- Greens powder ---
+    elif any(t in product_name for t in _GREENS_NAME_TOKENS) or len(cid_set & _GREENS_IDS) >= 2:
+        primary_type = "greens_powder"
+        confidence = 0.85
+        reasons.append(f"greens/superfood signal: ids={list(cid_set & _GREENS_IDS)}")
 
     # --- Herbal blend (>60% herbs) ---
     elif active_count >= 2 and herb_count > active_count * 0.6:

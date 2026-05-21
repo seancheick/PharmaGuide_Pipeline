@@ -1,32 +1,40 @@
 """v4 class router — decides which module scores a product.
 
-Priority order (intentionally identical to score_supplements._b5_class_for_product
-where the two overlap, but a separate decision surface — v4 routes among
-the SCORING modules `probiotic / multi_or_prenatal / omega / generic`,
-while B5 routes among the OPACITY classes `probiotic / multi_or_prenatal /
-sports_active / generic`; sports_active doesn't get its own v4 module
-because sports stacks fall through generic with class-specific opacity
-already handled at B5):
+Priority order (post-taxonomy refactor, 2026-05-20):
 
-  1. supp_type == "probiotic"      → probiotic       (strongest signal)
-  2. supp_type == "multivitamin"   → multi_or_prenatal
-  3. product name contains prenatal/pregnancy/etc. → multi_or_prenatal
-     (Prenatal DHA / Prenatal Probiotic style products)
-  4. primary_category == "multivitamin"           → multi_or_prenatal
-     (specialty/targeted enricher classification + multivit category)
-  5. omega class detected (P1.6) → omega
-     - primary_category in {omega-3, omega_3, fish_oil, omega3}
-     - OR product name has omega keyword (fish oil, omega-3, krill,
-       algae, cod liver, EPA+DHA)
-     - OR product/brand/bundle name has standalone EPA/DHA word-boundary
-       match
-  6. fall through                                  → generic
+  1. probiotic              → probiotic
+     - taxonomy primary_type == "probiotic"
+     - OR legacy supp_type == "probiotic" (backward compat)
+  2. prenatal name keyword  → multi_or_prenatal
+     - overrides multi / omega routing for products like Prenatal DHA,
+       Prenatal Gummies. Does NOT override probiotic — prenatal-probiotic
+       blends still go to probiotic.
+  3. multivitamin / b-complex → multi_or_prenatal
+     - taxonomy primary_type in {multivitamin, b_complex}
+  4. omega_3                → omega
+     - taxonomy primary_type == "omega_3"
+     - OR EPA/DHA canonical in ingredient panel (positive quantity)
+     - OR omega name keyword (fish oil, omega-3, krill, cod liver, etc.)
+     - OR standalone EPA/DHA word-boundary match (excludes DHEA)
+  5. legacy multivitamin fallback → multi_or_prenatal
+     - only when taxonomy is absent (old enriched batches pre-2026-05-20):
+       legacy supp_type == "multivitamin" or primary_category == "multivitamin"
+  6. fall through           → generic
+
+The taxonomy primary_type field comes from scripts/supplement_taxonomy.py
+(introduced 2026-05-20) and uses canonical-ID-based panel composition
+analysis. It replaces the legacy supp_type heuristic which over-classified
+single-issue targeted products (Collagen Love, Mighty Night sleep aid,
+Vitafusion Omega-3 EPA/DHA, etc.) as multivitamin. The router prefers
+taxonomy when present and falls back to legacy signals only for old
+enriched batches that haven't been re-run through the new pipeline.
+
+§13 architecture lock — this router does not import from score_supplements.py.
 
 Omega routing was previously deferred to `generic` per the §9 P1.5
-decision gate. The gate fired against canary rows 5–9: generic
-under-credited EPA/DHA dose, IFOS scope, and TG/rTG/EE form by 4–11
-cal points (logged in P1.5 omega-debt note). P1.6 graduates omega
-to its own module.
+decision gate. P1.6 graduated omega to its own module. P3 added
+multi_or_prenatal. This file is the only place where module dispatch
+is decided.
 """
 
 from __future__ import annotations
@@ -156,56 +164,138 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     return False
 
 
+# Taxonomy primary_type → v4 module mapping. The taxonomy emits 20 types
+# (see scripts/data/product_type_vocab.json); v4 has 4 scoring modules.
+# Most product classes route to `generic` because their scoring rubric is
+# adequately handled by the generic dimensions; only probiotic / multi /
+# omega have dedicated modules with class-specific dose / form / evidence
+# rubrics.
+_TAXONOMY_TO_MODULE = {
+    "probiotic": "probiotic",
+    "multivitamin": "multi_or_prenatal",
+    "b_complex": "multi_or_prenatal",  # B-complex is a multi-vitamin variant
+    "omega_3": "omega",
+    # Everything else routes to generic — listed explicitly so future
+    # taxonomy types are caught by the unknown-key fallthrough below:
+    "single_vitamin": "generic",
+    "single_mineral": "generic",
+    "vitamin_mineral_combo": "generic",
+    "herbal_botanical": "generic",
+    "protein_powder": "generic",
+    "collagen": "generic",
+    "greens_powder": "generic",
+    "electrolyte": "generic",
+    "pre_workout": "generic",
+    "amino_acid": "generic",
+    "fiber_digestive": "generic",
+    "sleep_support": "generic",
+    "immune_support": "generic",
+    "joint_support": "generic",
+    "beauty_hair_skin_nails": "generic",
+    "general_supplement": "generic",
+}
+
+
+def _read_primary_type(product: Dict[str, Any]) -> str:
+    """Return the taxonomy `primary_type` if present, else empty string.
+
+    Pipeline writes the field at two paths (set by enrich_supplements_v3
+    and preserved by score_supplements):
+      product["primary_type"]
+      product["supplement_taxonomy"]["primary_type"]
+    Both are read for resilience.
+    """
+    direct = (product or {}).get("primary_type")
+    if isinstance(direct, str) and direct.strip():
+        return direct.strip().lower()
+    taxonomy = (product or {}).get("supplement_taxonomy") or {}
+    if isinstance(taxonomy, dict):
+        nested = taxonomy.get("primary_type")
+        if isinstance(nested, str) and nested.strip():
+            return nested.strip().lower()
+    return ""
+
+
+def _read_legacy_supp_type(product: Dict[str, Any]) -> str:
+    """Return the legacy supplement_type.type heuristic (pre-taxonomy enrichers)."""
+    st_payload = (product or {}).get("supplement_type")
+    if isinstance(st_payload, dict):
+        value = st_payload.get("type") or ""
+    elif isinstance(st_payload, str):
+        value = st_payload  # legacy shape (rare)
+    else:
+        value = ""
+    return str(value).strip().lower()
+
+
 def class_for_product(product: Dict[str, Any]) -> str:
     """Return one of VALID_CLASSES given an enriched product blob.
 
-    Conservative defaults: missing supp_type / unknown supp_type → generic.
-    Never returns None or a value outside VALID_CLASSES.
+    Reads `primary_type` from the new supplement taxonomy as the canonical
+    signal. Falls back to legacy `supplement_type.type` / `primary_category`
+    only when taxonomy is absent (old enriched batches pre-2026-05-20).
+
+    Never raises on malformed input. Never returns None or a value outside
+    VALID_CLASSES. Missing or unknown signals fall through to `generic`.
     """
-    st_payload = (product or {}).get("supplement_type")
-    if isinstance(st_payload, dict):
-        supp_type = st_payload.get("type") or ""
-    elif isinstance(st_payload, str):
-        supp_type = st_payload  # legacy shape (rare)
-    else:
-        supp_type = ""
-    supp_type = str(supp_type).strip().lower()
-
-    # Priority 1: probiotic supp_type wins absolutely (enricher inspected
-    # the strain panel — trust it over name keywords).
-    if supp_type == "probiotic":
-        return "probiotic"
-
-    # Priority 2: multivitamin supp_type.
-    if supp_type == "multivitamin":
-        return "multi_or_prenatal"
-
-    # Priority 3: prenatal name keyword on a non-multivit product.
-    # Covers single-active prenatal DHA, prenatal probiotic, etc.
-    # NOTE: Prenatal DHA gets multi_or_prenatal NOT omega — the prenatal
-    # use case has stricter dose/safety expectations that the multi
-    # module is designed to handle.
+    primary_type = _read_primary_type(product)
+    legacy_supp_type = _read_legacy_supp_type(product)
     name_text = " ".join(
         str((product or {}).get(k) or "")
         for k in ("product_name", "fullName", "brand_name", "bundleName")
     )
+
+    # Priority 1: probiotic. Wins absolutely — strain panel inspection is
+    # the strongest signal. Either taxonomy or legacy supp_type routes here.
+    if primary_type == "probiotic" or legacy_supp_type == "probiotic":
+        return "probiotic"
+
+    # Priority 2: prenatal name keyword. Overrides multi / omega routing
+    # for products like Prenatal DHA, Prenatal Gummies, Pregnancy Vitamins.
+    # NOTE: prenatal-DHA gets multi_or_prenatal NOT omega — the prenatal
+    # use case has stricter dose/safety expectations (folate, iron, iodine
+    # critical-nutrient floors) that the multi module is designed to handle.
+    # Prenatal-probiotic was already handled by Priority 1 above.
     if _PRENATAL_KEYWORDS.search(name_text):
         return "multi_or_prenatal"
 
-    # Priority 4: primary_category=multivitamin fallback.
-    # Catches GoL MyKind Men's/Women's Multi where supp_type=specialty
-    # but the category classifier got it right.
-    primary_category = str((product or {}).get("primary_category") or "").strip().lower()
-    if primary_category == "multivitamin":
-        return "multi_or_prenatal"
+    # Priority 3: taxonomy primary_type — canonical signal when present.
+    # Maps the 20 taxonomy types to the 4 v4 modules. Unknown taxonomy
+    # values (new types added later that aren't in _TAXONOMY_TO_MODULE)
+    # fall through to the omega / generic logic below rather than crashing.
+    if primary_type:
+        module = _TAXONOMY_TO_MODULE.get(primary_type)
+        if module == "multi_or_prenatal":
+            return "multi_or_prenatal"
+        if module == "omega":
+            return "omega"
+        # module == "generic" or None (unknown taxonomy type):
+        # don't return generic yet — let the omega panel-canonical check
+        # run, since a non-omega-classified product may still have EPA/DHA
+        # in the panel (taxonomy can mis-classify; the panel canonical
+        # is a stronger physical-fact signal).
+        # Fall through.
 
-    # Priority 5: omega-class detection (P1.6). Routes fish-oil / krill /
-    # algae / cod liver / EPA-DHA products to the dedicated omega module.
-    # See _is_omega_class for the trigger conditions (ingredient panel,
-    # primary_category, name keyword, standalone EPA/DHA).
+    # Priority 4: omega panel-canonical / name-keyword detection.
+    # The panel-canonical (canonical_id ∈ {epa,dha,epa_dha} with positive
+    # quantity) is the strongest omega signal — it operates on the
+    # enricher's canonicalized identity. Name-keyword and standalone
+    # EPA/DHA fallbacks catch labels where canonicalization didn't run.
     if _is_omega_class(product, name_text):
         return "omega"
 
-    # Priority 6: generic (v3 single-nutrient / specialty / targeted /
-    # herbal / sports — generic handles all until later phases peel them off).
+    # Priority 5: legacy multivitamin fallback. Only fires when the
+    # taxonomy didn't classify the product (old enriched batch) — we
+    # explicitly do NOT trust legacy supp_type=multivitamin when the
+    # taxonomy is present, because that signal over-classified targeted
+    # products (Collagen Love, Mighty Night, Vitafusion Omega-3 EPA/DHA)
+    # as multivitamin (Bug C, 2026-05-20).
+    if not primary_type:
+        if legacy_supp_type == "multivitamin":
+            return "multi_or_prenatal"
+        primary_category = str((product or {}).get("primary_category") or "").strip().lower()
+        if primary_category == "multivitamin":
+            return "multi_or_prenatal"
+
+    # Priority 6: generic catch-all.
     return "generic"

@@ -30,10 +30,9 @@ Plus two SEPARATE adjustments (§6 line 390, module-agnostic):
     Manufacturer Violations    0 to -25   (manufacturer_violations.json rules
                                           + severity/recency; reuses generic)
 
-P1.6.0 state: all 5 dimensions return None (skeleton stubs). Router,
-completeness gate, and shadow scorer dispatch the omega class but
-score_omega returns the locked breakdown shape with dimensions
-populated to None. Subsequent slices fill them in-place.
+P1.6.6 state: all 5 dimensions, manufacturer adjustments, final assembly,
+and P1.5 affine calibration are online. Router, completeness gate, and
+shadow scorer dispatch the omega class into a complete module result.
 
 Per §13 architecture lock, this module does not import from
 `score_supplements.py` (v3). Shared infrastructure (DimensionResult,
@@ -146,10 +145,9 @@ def _empty_dimensions() -> Dict[str, DimensionResult]:
 def score_omega(product: Any) -> OmegaModuleResult:
     """Score an omega-class product against the v4 omega rubric.
 
-    P1.6.0 state: returns a fully-instantiated result with the 5-dimension
-    skeleton in place and each dimension score=None. Subsequent slices
-    populate scores/components/penalties in-place. Final assembly +
-    calibration lands at P1.6.6.
+    P1.6.6 state: returns a fully-instantiated result with all 5 dimensions,
+    manufacturer trust / violations, raw score, calibrated score, and module
+    metadata populated.
 
     Never raises on malformed input — empty / non-dict products get the
     same zero-math skeleton. Real input validation lives in the
@@ -168,9 +166,8 @@ def score_omega(product: Any) -> OmegaModuleResult:
 
     result = OmegaModuleResult(dimensions=_empty_dimensions())
 
-    # P1.6.1+ — each per-dimension slice fills in its dimension's score,
-    # components, penalties, and metadata. P1.6.0 stubs return None scores
-    # so the breakdown contract is fully wired before any math lands.
+    # P1.6.6 — each per-dimension scorer fills in its score, components,
+    # penalties, and metadata before final assembly below.
     formulation_payload = score_formulation(product)
     formulation_dim = result.dimensions["formulation"]
     formulation_dim.score = formulation_payload["score"]

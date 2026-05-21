@@ -11,16 +11,18 @@ plus stable shared helpers (cert_resolver, enhanced_normalizer lookups).
 NOT shared: the scoring policy itself — `scoring_v4/` owns rubrics,
 gates, modules, and confidence rules independently.
 
-Current P2.6 state:
-  - Router runs and decides the module (generic / probiotic / multi_or_prenatal).
+Current P3.6 / P2.6 / P1.6.6 state:
+  - Router runs and decides the module (generic / probiotic / omega /
+    multi_or_prenatal).
   - Safety gate short-circuits BLOCKED / UNSAFE and carries CAUTION forward.
   - Completeness gate marks unscoreable rows NOT_SCORED for archive / QA.
-  - Generic and probiotic modules emit populated dimensions plus manufacturer
-    trust / violations and final affine-calibrated 0-100 scores.
-  - shadow_score_v4_100 mirrors the module result for complete generic and
-    probiotic products.
+  - Generic, probiotic, omega, and multi_or_prenatal modules emit populated
+    dimensions plus manufacturer trust / violations and final affine-calibrated
+    0-100 scores.
+  - shadow_score_v4_100 mirrors the module result for complete products in
+    all four online modules.
   - shadow_score_v4_confidence = top-level typed confidence band for
-    complete generic/probiotic rows; blocked_by_* for gate failures.
+    complete scoreable rows; blocked_by_* for gate failures.
   - shadow_score_v4_breakdown.confidence contains typed sub-category
     levels / drivers for evidence, label_completeness, verification, identity.
   - shadow_score_v4_anchored = False (canary-set membership lands later).
@@ -138,16 +140,16 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
     input — robustly falls back to the generic module + skeleton shape.
 
     Pipeline (per §4 of SCORING_V4_PROPOSAL.md):
-      1. Router decides module (generic / probiotic / multi_or_prenatal).
+      1. Router decides module (generic / probiotic / omega /
+         multi_or_prenatal).
       2. Layer 1 Safety Gate. BLOCKED/UNSAFE short-circuit scoring
          (score=None, confidence='blocked_by_safety_gate'). CAUTION
          sets verdict but scoring continues.
       3. Layer 2 Completeness Gate. Incomplete products short-circuit
          to NOT_SCORED with confidence='blocked_by_completeness_gate'.
-      4. Layer 3 Scoring (per-module). Generic and probiotic modules emit
-         populated dimensions and final module scores. multi_or_prenatal
-         emits its P3.0 scaffold until its dimension slices land.
-      5. Layer 4 Confidence. Complete generic/probiotic rows get typed confidence
+      4. Layer 3 Scoring (per-module). Generic, probiotic, omega, and
+         multi_or_prenatal modules emit populated dimensions and final scores.
+      5. Layer 4 Confidence. Complete scoreable rows get typed confidence
          metadata plus a top-level band. Gate failures retain blocked_by_*.
 
     Note on `shadow_score_v4_anchored`: per §14, this flag means the
@@ -205,9 +207,8 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_confidence"] = "blocked_by_completeness_gate"
         return shadow
 
-    # Layer 3 — Per-class module dispatch. Generic (P1.3.x) and Probiotic
-    # (P2.x) are wired; multi_or_prenatal (P3) emits its own module block
-    # under the same `module` key when P3 lands.
+    # Layer 3 — Per-class module dispatch. Generic, probiotic, omega, and
+    # multi_or_prenatal are wired as complete score-producing modules.
     if module == "generic":
         module_result = score_generic(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = module_result.to_breakdown()
@@ -265,10 +266,9 @@ def score_product_v4_shadow(enriched_product: Dict[str, Any]) -> Dict[str, Any]:
         shadow["shadow_score_v4_breakdown"]["confidence"] = confidence
         shadow["shadow_score_v4_confidence"] = confidence["band"]
     elif module == "omega":
-        # P1.6.0: skeleton wired — all 5 dimensions return None (no scoring
-        # math yet). Breakdown shape is intact; score_100 stays None until
-        # P1.6.6 final assembly. Verdict resolves to NOT_SCORED (or carried
-        # CAUTION) since no real score lands yet.
+        # P1.6.6: full omega pipeline online — all 5 dimensions populate,
+        # manufacturer trust/violations apply, and final affine-calibrated
+        # score_100 + verdict + typed confidence match the shared contract.
         omega_result = score_omega(enriched_product)
         shadow["shadow_score_v4_breakdown"]["module"] = omega_result.to_breakdown()
         shadow["shadow_score_v4_100"] = omega_result.score_100
