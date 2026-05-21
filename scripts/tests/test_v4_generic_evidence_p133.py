@@ -259,6 +259,23 @@ def test_no_matches_scores_zero_not_none() -> None:
     assert payload["metadata"]["matched_entries"] == 0
 
 
+def test_reference_only_evidence_level_scores_zero() -> None:
+    """Authority pages and fact sheets are context, not clinical evidence.
+
+    They may live in backed_clinical_studies for display/provenance, but
+    `evidence_level=reference` must not produce Evidence points.
+    """
+    from scoring_v4.modules.generic_evidence import score_evidence
+
+    payload = score_evidence(
+        _product(matches=[_match(study_type="reference", evidence_level="reference")])
+    )
+
+    assert payload["score"] == 0.0
+    assert payload["components"]["clinical_evidence_pipeline"] == 0.0
+    assert payload["metadata"]["matched_entries"] == 1
+
+
 def test_shadow_wires_evidence_dimension() -> None:
     from score_supplements_v4_shadow import score_product_v4_shadow
 

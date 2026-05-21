@@ -2,9 +2,9 @@
 
 The pipeline already ships three canonical evidence vocabs, all LOCKED
 with clinician sign-off:
-  - evidence_level_vocab   (5 study-design tiers)
+  - evidence_level_vocab   (clinical-study tiers + non-scoring reference tier)
   - evidence_strength_vocab (6 qualitative strength tiers)
-  - study_type_vocab       (7 study-type tiers)
+  - study_type_vocab       (clinical study-type tiers + non-scoring reference tier)
 
 Per-vocab contract tests
 (`test_evidence_level_vocab_contract.py`, `test_evidence_strength_vocab_contract.py`,
@@ -18,8 +18,8 @@ This SP-6 test file adds the three things that were missing:
      by the data files must be a canonical ID from its respective vocab.
      If a data-file entry uses an off-vocab string, it's flagged here.
 
-  2. PROVENANCE AUDIT — clinical-evidence entries must carry a PMID or
-     NCT identifier so their grade is traceable to a real study. Per the
+  2. PROVENANCE AUDIT — clinical-evidence entries must carry a PMID, NCT,
+     or DOI identifier so their grade is traceable to a real study. Per the
      SP-0 design doc: "Map evidence grade to clinical-study data and
      audited identifiers. Do not infer evidence grade from marketing copy."
 
@@ -154,15 +154,17 @@ def test_ingredient_interaction_rules_uses_canonical_evidence_strength_ids(
 
 
 # ============================================================================
-# 2. Provenance audit — clinical evidence entries carry PMID or NCT
+# 2. Provenance audit — clinical evidence entries carry PMID/NCT/DOI
 # ============================================================================
 
 
 def test_clinical_evidence_entries_have_pmid_or_nct_provenance():
-    """Every entry in backed_clinical_studies.json with a non-`preclinical`
-    evidence_level should carry at least one PMID or NCT identifier. Locks
-    the SP-0 rule: "Map evidence grade to clinical-study data and audited
-    identifiers. Do not infer evidence grade from marketing copy."
+    """Every clinical-scoring entry in backed_clinical_studies.json must
+    carry at least one PMID, NCT, or DOI identifier.
+
+    URL-only authority pages are allowed only for `evidence_level=reference`
+    entries, which score 0. They must not masquerade as ingredient-human or
+    branded-rct evidence.
     """
     path = DATA / "backed_clinical_studies.json"
     if not path.is_file():
@@ -197,9 +199,9 @@ def test_clinical_evidence_entries_have_pmid_or_nct_provenance():
     if not entries:
         pytest.skip("backed_clinical_studies.json has no recognizable entries")
 
-    def _has_provenance(entry: dict) -> bool:
-        """A clinical-evidence entry carries provenance when any of these
-        produces a non-empty PMID / NCT / DOI value:
+    def _has_clinical_identifier(entry: dict) -> bool:
+        """A clinical-evidence entry carries study provenance when any of
+        these produces a non-empty PMID / NCT / DOI value:
           - top-level pmid / pmids / pmid_refs (flat schemas)
           - top-level nct / nct_ids / nct_refs
           - references_structured[] — `{type, pmid, nct_id, doi, ...}` items
@@ -217,7 +219,7 @@ def test_clinical_evidence_entries_have_pmid_or_nct_provenance():
             for ref in refs:
                 if not isinstance(ref, dict):
                     continue
-                for key in ("pmid", "nct_id", "nct", "doi", "url"):
+                for key in ("pmid", "nct_id", "nct", "doi"):
                     v = ref.get(key)
                     if isinstance(v, str) and v.strip():
                         return True
@@ -226,23 +228,78 @@ def test_clinical_evidence_entries_have_pmid_or_nct_provenance():
     missing_provenance: list[str] = []
     for entry in entries:
         level = entry.get("evidence_level") or ""
-        if level == "preclinical":
-            # Animal / in-vitro entries may legitimately have no PMID — skip.
+        if level in {"preclinical", "reference"}:
+            # Preclinical and reference-only entries do not receive clinical
+            # transfer credit and may legitimately lack clinical IDs.
             continue
-        if not _has_provenance(entry):
+        if not _has_clinical_identifier(entry):
             ing = entry.get("ingredient") or entry.get("standard_name") or entry.get("name") or entry.get("id") or "(unknown)"
             missing_provenance.append(f"{ing} [evidence_level={level}]")
 
-    # Soft threshold — allow up to 5% missing as known data-quality gaps
-    # rather than blocking the contract entirely. The contract is "every
-    # entry SHOULD carry provenance"; the test reports drift if it grows.
-    if missing_provenance:
-        rate = len(missing_provenance) / max(len(entries), 1)
-        assert rate <= 0.05, (
-            f"{len(missing_provenance)}/{len(entries)} clinical-evidence "
-            f"entries lack PMID/NCT provenance ({rate*100:.1f}% > 5% threshold). "
-            f"Sample: {missing_provenance[:5]}"
-        )
+    assert not missing_provenance, (
+        f"{len(missing_provenance)}/{len(entries)} clinical-evidence "
+        f"entries lack PMID/NCT/DOI provenance. URL-only authority pages "
+        f"must use evidence_level=reference so they cannot receive clinical "
+        f"evidence credit. Sample: {missing_provenance[:8]}"
+    )
+
+
+def test_reference_only_evidence_entries_are_non_scoring_and_url_backed():
+    """Reference-only evidence is allowed for authority/fact-sheet context,
+    but it must be explicit and non-scoring.
+    """
+    path = DATA / "backed_clinical_studies.json"
+    if not path.is_file():
+        pytest.skip("backed_clinical_studies.json missing")
+    with open(path) as fh:
+        data = json.load(fh)
+
+    entries = [
+        e for e in data.get("backed_clinical_studies", [])
+        if isinstance(e, dict) and e.get("evidence_level") == "reference"
+    ]
+    if not entries:
+        pytest.skip("no reference-only evidence entries")
+
+    bad: list[str] = []
+    for entry in entries:
+        refs = entry.get("references_structured")
+        has_url = any(
+            isinstance(ref, dict) and isinstance(ref.get("url"), str) and ref["url"].strip()
+            for ref in refs
+        ) if isinstance(refs, list) else False
+        if entry.get("study_type") != "reference" or not has_url:
+            bad.append(entry.get("id") or entry.get("standard_name") or "(unknown)")
+
+    assert not bad, (
+        "reference-only evidence entries must use study_type=reference and "
+        f"carry at least one structured URL-backed authority reference: {bad}"
+    )
+
+
+def test_reference_evidence_level_and_study_type_move_together():
+    """Avoid hybrid rows such as `evidence_level=reference` with RCT
+    study_type, or clinical evidence_level with `study_type=reference`.
+    """
+    path = DATA / "backed_clinical_studies.json"
+    if not path.is_file():
+        pytest.skip("backed_clinical_studies.json missing")
+    with open(path) as fh:
+        data = json.load(fh)
+
+    mismatches = []
+    for entry in data.get("backed_clinical_studies", []):
+        if not isinstance(entry, dict):
+            continue
+        evidence_is_ref = entry.get("evidence_level") == "reference"
+        study_is_ref = entry.get("study_type") == "reference"
+        if evidence_is_ref != study_is_ref:
+            mismatches.append(entry.get("id") or entry.get("standard_name") or "(unknown)")
+
+    assert not mismatches, (
+        "reference evidence_level and study_type must move together: "
+        f"{mismatches}"
+    )
 
 
 # ============================================================================

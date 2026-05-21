@@ -41,6 +41,7 @@ STUDY_TYPE_BASE_POINTS: Dict[str, float] = {
     "observational": 2.0,
     "animal_study": 2.0,
     "in_vitro": 1.0,
+    "reference": 0.0,
 }
 
 EVIDENCE_LEVEL_MULTIPLIERS: Dict[str, float] = {
@@ -56,6 +57,7 @@ EVIDENCE_LEVEL_MULTIPLIERS: Dict[str, float] = {
     "strain-clinical": 0.65,
     "strain_clinical": 0.65,
     "preclinical": 0.3,
+    "reference": 0.0,
 }
 
 EFFECT_DIRECTION_MULTIPLIERS: Dict[str, float] = {

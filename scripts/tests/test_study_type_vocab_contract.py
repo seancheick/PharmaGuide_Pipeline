@@ -27,13 +27,13 @@ def study_types(vocab):
 def test_metadata(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 7
+    assert md["total_entries"] == 8
     assert "LOCKED" in md["status"]
     assert md["char_limit_notes"] == 200
 
 
-def test_exactly_7_study_types(study_types):
-    assert len(study_types) == 7
+def test_exactly_8_study_types(study_types):
+    assert len(study_types) == 8
 
 
 REQUIRED_FIELDS = {"id", "name", "notes", "base_points", "tier"}
@@ -48,7 +48,7 @@ def test_required_fields_present(study_types):
         )
 
 
-def test_canonical_7_ids(study_types):
+def test_canonical_8_ids(study_types):
     expected = {
         "systematic_review_meta",
         "rct_multiple",
@@ -57,6 +57,7 @@ def test_canonical_7_ids(study_types):
         "observational",
         "animal_study",
         "in_vitro",
+        "reference",
     }
     actual = {entry["id"] for entry in study_types}
     assert actual == expected, f"missing={expected - actual} extra={actual - expected}"
@@ -93,4 +94,4 @@ def test_every_clinical_study_type_in_vocab(study_types):
     vocab_ids = {entry["id"] for entry in study_types}
     unknown = found - vocab_ids
     assert not unknown, f"clinical study_type values NOT in vocab: {unknown}"
-    assert len(found) == 7
+    assert len(found) == 8

@@ -650,12 +650,12 @@
         "forceval multivitamin"
       ],
       "category": "vitamin_supplement",
-      "evidence_level": "branded-rct",
+      "evidence_level": "reference",
       "published_studies": [
         "SmPC",
         "formulary"
       ],
-      "score_contribution": "tier_2",
+      "score_contribution": "tier_3",
       "key_endpoints": [
         "nutritional status ↑",
         "immunity ↑"
@@ -665,7 +665,7 @@
         "Increase Energy"
       ],
       "notes": "This is best treated as a formulary/regulatory multivitamin-mineral product rather than a product-trial evidence play.",
-      "study_type": "observational",
+      "study_type": "reference",
       "last_updated": "2026-03-23",
       "notable_studies": "No PubMed-indexed Forceval-specific randomized trial was identified. The strongest source is the UK SmPC, which documents Forceval as a therapeutic nutritional adjunct in malnutrition, malabsorption, recovery, and restricted-diet contexts rather than as a branded RCT-backed supplement.",
       "references_structured": [
@@ -687,10 +687,10 @@
       ],
       "effect_direction": "positive_weak",
       "primary_outcome": "Immune Support",
-      "total_enrollment": 42,
-      "registry_completed_trials_count": 3,
+      "total_enrollment": 0,
+      "registry_completed_trials_count": 0,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=observational; evidence_level=branded-rct; primary_outcome=Immune Support; published_tags=SmPC,formulary; registry_completed_trials_count=3; total_enrollment=42; endpoint_tags=digestive_health.",
+      "effect_direction_rationale": "Reference-only authority source; study_type=reference; evidence_level=reference; no product-specific RCT or PMID/NCT/DOI-backed clinical evidence identified.",
       "endpoint_relevance_tags": [
         "digestive_health"
       ]
@@ -17693,10 +17693,9 @@
         "manganese sulfate"
       ],
       "category": "mineral_supplement",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
-        "clinical",
-        "human study"
+        "reference"
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
@@ -17709,7 +17708,7 @@
       ],
       "notes": "Human supplementation evidence for manganese is limited. NIH ODS mainly supports manganese as an essential trace-element cofactor, while direct interventional outcome data are sparse and usually embedded in multimineral or deficiency-related contexts rather than stand-alone manganese efficacy trials.",
       "notable_studies": "NIH ODS Manganese anchors the evidence around enzyme-cofactor biology, dietary adequacy, and toxicity risk from excessive exposure. Because stand-alone manganese supplementation trials with clear clinical endpoints remain sparse, this entry should stay conservative and deficiency-oriented rather than claim broad therapeutic efficacy.",
-      "study_type": "observational",
+      "study_type": "reference",
       "last_updated": "2026-03-23",
       "references_structured": [
         {
@@ -17733,10 +17732,10 @@
       },
       "effect_direction": "positive_weak",
       "primary_outcome": "Joint & Bone Health",
-      "total_enrollment": 40,
-      "registry_completed_trials_count": 68,
+      "total_enrollment": 0,
+      "registry_completed_trials_count": 0,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=observational; evidence_level=ingredient-human; primary_outcome=Joint & Bone Health; published_tags=clinical,human study; registry_completed_trials_count=68; total_enrollment=40; endpoint_tags=muscle_recovery.",
+      "effect_direction_rationale": "Reference-only NIH ODS fact sheet; study_type=reference; evidence_level=reference; no PMID/NCT/DOI-backed standalone manganese clinical evidence identified.",
       "endpoint_relevance_tags": [
         "muscle_recovery"
       ]
@@ -17751,10 +17750,9 @@
         "cupric sulfate"
       ],
       "category": "immune",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
-        "clinical",
-        "human study"
+        "reference"
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
@@ -17768,7 +17766,7 @@
       ],
       "notes": "Human evidence supports copper as an essential cofactor with clinically meaningful effects in deficiency states.",
       "notable_studies": "NIH ODS Copper documents essentiality, deficiency manifestations, and upper-intake concerns. This entry is therefore anchored to nutrient adequacy and correction of deficiency risk rather than to a broad interventional clinical-trial literature.",
-      "study_type": "observational",
+      "study_type": "reference",
       "last_updated": "2026-03-23",
       "references_structured": [
         {
@@ -17792,10 +17790,10 @@
       },
       "effect_direction": "positive_weak",
       "primary_outcome": "Immune Support",
-      "total_enrollment": 40,
-      "registry_completed_trials_count": 220,
+      "total_enrollment": 0,
+      "registry_completed_trials_count": 0,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=observational; evidence_level=ingredient-human; primary_outcome=Immune Support; published_tags=clinical,human study; registry_completed_trials_count=220; total_enrollment=40; endpoint_tags=immune_support,cardiovascular.",
+      "effect_direction_rationale": "Reference-only NIH ODS fact sheet; study_type=reference; evidence_level=reference; no PMID/NCT/DOI-backed standalone copper clinical evidence identified.",
       "endpoint_relevance_tags": [
         "immune_support",
         "cardiovascular"
@@ -17811,10 +17809,9 @@
         "potassium phosphate"
       ],
       "category": "joint_bone",
-      "evidence_level": "ingredient-human",
+      "evidence_level": "reference",
       "published_studies": [
-        "clinical",
-        "human study"
+        "reference"
       ],
       "score_contribution": "tier_3",
       "key_endpoints": [
@@ -17827,7 +17824,7 @@
       ],
       "notes": "Evidence for phosphorus is primarily about essentiality, bone mineralization, and energy metabolism rather than supplement-specific performance or health benefits. NIH ODS indicates that frank deficiency is uncommon and that targeted supplementation is generally reserved for clinical or low-intake contexts.",
       "notable_studies": "NIH ODS Phosphorus supports phosphorus as an essential mineral for bone and ATP-related metabolism while emphasizing that routine supplementation is rarely necessary in the general population. This entry should therefore remain physiologic and deficiency-oriented rather than intervention-driven.",
-      "study_type": "observational",
+      "study_type": "reference",
       "last_updated": "2026-03-23",
       "references_structured": [
         {
@@ -17851,10 +17848,10 @@
       },
       "effect_direction": "positive_weak",
       "primary_outcome": "Joint & Bone Health",
-      "total_enrollment": 40,
-      "registry_completed_trials_count": 297,
+      "total_enrollment": 0,
+      "registry_completed_trials_count": 0,
       "effect_direction_confidence": "medium",
-      "effect_direction_rationale": "Retained positive_weak classification; study_type=observational; evidence_level=ingredient-human; primary_outcome=Joint & Bone Health; published_tags=clinical,human study; registry_completed_trials_count=297; total_enrollment=40; endpoint_tags=glycemic_control.",
+      "effect_direction_rationale": "Reference-only NIH ODS fact sheet; study_type=reference; evidence_level=reference; no PMID/NCT/DOI-backed standalone phosphorus clinical evidence identified.",
       "endpoint_relevance_tags": [
         "glycemic_control"
       ]

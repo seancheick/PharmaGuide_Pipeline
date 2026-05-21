@@ -33,12 +33,12 @@ def levels(vocab):
 def test_metadata(vocab):
     md = vocab["_metadata"]
     assert md["schema_version"] == "1.0.0"
-    assert md["total_entries"] == 5
+    assert md["total_entries"] == 6
     assert "LOCKED" in md["status"]
 
 
-def test_exactly_5_levels(levels):
-    assert len(levels) == 5
+def test_exactly_6_levels(levels):
+    assert len(levels) == 6
 
 
 REQUIRED_FIELDS = {"id", "name", "notes", "multiplier", "tier"}
@@ -53,10 +53,10 @@ def test_required_fields_present(levels):
         )
 
 
-def test_canonical_5_ids(levels):
+def test_canonical_6_ids(levels):
     expected = {
         "product-human", "branded-rct", "ingredient-human",
-        "strain-clinical", "preclinical",
+        "strain-clinical", "preclinical", "reference",
     }
     actual = {l["id"] for l in levels}
     assert actual == expected, f"missing={expected-actual} extra={actual-expected}"
@@ -84,7 +84,7 @@ def test_multipliers_match_scoring_config(levels):
 def test_tier_in_range(levels):
     for l in levels:
         t = l["tier"]
-        assert isinstance(t, int) and 1 <= t <= 5, f"{l['id']}: tier={t} not in [1,5]"
+        assert isinstance(t, int) and 1 <= t <= 6, f"{l['id']}: tier={t} not in [1,6]"
 
 
 def test_notes_within_char_limit(levels):
