@@ -70,12 +70,14 @@ SHADOW_CANARIES = {
         "score": None,
         "missing": {"epa_or_dha_disclosed"},
     },
-    # Typed confidence high: strong evidence/label/verification/identity.
+    # Typed confidence moderate: strong evidence/label/verification, but
+    # taxonomy-first identity confidence correctly surfaces that this is a
+    # mixed targeted creatine/HMB product rather than a clean class hit.
     "325587": {
         "label": "Transparent Labs Creatine HMB",
         "module": "generic",
         "verdict": "SAFE",
-        "confidence": "high",
+        "confidence": "moderate",
         "score_range": (76.0, 80.0),
     },
     # Typed confidence low + POOR verdict.

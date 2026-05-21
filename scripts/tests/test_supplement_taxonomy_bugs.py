@@ -392,6 +392,131 @@ def test_BUG_11b_omega_3_fatty_acids_parent_does_not_classify_as_epa_dha_omega()
     assert result["primary_type"] != "omega_3"
 
 
+def test_BUG_12_sleep_short_tokens_are_word_boundary_matched():
+    """Short sleep tokens must not match inside unrelated words.
+
+    Regression cases found during SP vocab review:
+      - forest -> contains "rest"
+      - rpm -> contains "pm"
+
+    Both used to classify as sleep_support when `_SLEEP_NAME_TOKENS`
+    used raw substring matching.
+    """
+    false_positive_cases = [
+        (
+            "Forest Mushroom Complex",
+            [{"name": "Reishi Mushroom", "canonical_id": "reishi", "category": "herb", "quantity": 500, "unit": "mg"}],
+        ),
+        (
+            "RPM Energy Booster",
+            [{"name": "Caffeine", "canonical_id": "caffeine", "category": "other", "quantity": 100, "unit": "mg"}],
+        ),
+    ]
+    for name, ingredients in false_positive_cases:
+        result = classify_supplement({
+            "product_name": name,
+            "ingredient_quality_data": {"ingredients": ingredients},
+        })
+        assert result["primary_type"] != "sleep_support", (
+            f"{name!r} must not classify as sleep_support via a short-token "
+            f"substring match; got reasons={result['classification_reasons']!r}."
+        )
+
+
+def test_BUG_12b_standalone_sleep_boundary_tokens_still_work():
+    """Boundary-matching fix must preserve legitimate labels."""
+    product = {
+        "product_name": "Good Night Melatonin PM",
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "Melatonin", "canonical_id": "melatonin", "category": "other", "quantity": 3, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "sleep_support"
+
+
+def test_BUG_13_functional_short_tokens_are_not_substring_false_positives():
+    """Functional label tokens must not match inside unrelated words.
+
+    Regression cases found during SP vocab review:
+      - chairman -> contains "hair"
+      - digestive enzymes -> "digestive" alone is too broad for fiber
+      - green tea superfood -> "superfood" alone is too broad for greens
+    """
+    false_positive_cases = [
+        (
+            "Chairman Daily Support",
+            [{"name": "Vitamin C", "canonical_id": "vitamin_c", "category": "vitamin", "quantity": 100, "unit": "mg"},
+             {"name": "Zinc", "canonical_id": "zinc", "category": "mineral", "quantity": 15, "unit": "mg"}],
+            "beauty_hair_skin_nails",
+        ),
+        (
+            "Digestive Enzymes",
+            [{"name": "Amylase", "canonical_id": "amylase", "category": "other", "quantity": 100, "unit": "mg"},
+             {"name": "Protease", "canonical_id": "protease", "category": "other", "quantity": 100, "unit": "mg"}],
+            "fiber_digestive",
+        ),
+        (
+            "Green Tea Superfood",
+            [{"name": "Green Tea Extract", "canonical_id": "green_tea", "category": "herb", "quantity": 500, "unit": "mg"},
+             {"name": "Matcha", "canonical_id": "matcha", "category": "herb", "quantity": 500, "unit": "mg"}],
+            "greens_powder",
+        ),
+    ]
+    for name, ingredients, forbidden_type in false_positive_cases:
+        result = classify_supplement({
+            "product_name": name,
+            "ingredient_quality_data": {"ingredients": ingredients},
+        })
+        assert result["primary_type"] != forbidden_type, (
+            f"{name!r} must not classify as {forbidden_type} via broad "
+            f"functional substring matching; got reasons={result['classification_reasons']!r}."
+        )
+
+
+def test_BUG_13b_functional_positive_cases_still_classify():
+    """Tightened functional tokens must preserve intended positive cases."""
+    cases = [
+        (
+            "Hair Skin Nails",
+            [{"name": "Biotin", "canonical_id": "biotin", "category": "vitamin", "quantity": 5000, "unit": "mcg"},
+             {"name": "Collagen", "canonical_id": "collagen", "category": "protein", "quantity": 1000, "unit": "mg"}],
+            "beauty_hair_skin_nails",
+        ),
+        (
+            "Digestive Fiber",
+            [{"name": "Psyllium", "canonical_id": "psyllium", "category": "fiber", "quantity": 5, "unit": "g"},
+             {"name": "Inulin", "canonical_id": "inulin", "category": "fiber", "quantity": 3, "unit": "g"}],
+            "fiber_digestive",
+        ),
+        (
+            "Super Greens Powder",
+            [{"name": "Wheatgrass", "canonical_id": "wheatgrass", "category": "greens", "quantity": 500, "unit": "mg"},
+             {"name": "Spirulina", "canonical_id": "spirulina", "category": "greens", "quantity": 500, "unit": "mg"}],
+            "greens_powder",
+        ),
+    ]
+    for name, ingredients, expected_type in cases:
+        result = classify_supplement({
+            "product_name": name,
+            "ingredient_quality_data": {"ingredients": ingredients},
+        })
+        assert result["primary_type"] == expected_type
+
+
+def test_BUG_14_sodium_chloride_are_mineral_canonicals():
+    """Electrolyte minerals should count as mineral actives in taxonomy."""
+    product = {
+        "product_name": "Sodium Chloride",
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "Sodium", "canonical_id": "sodium", "category": "mineral", "quantity": 200, "unit": "mg"},
+            {"name": "Chloride", "canonical_id": "chloride", "category": "mineral", "quantity": 300, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "single_mineral"
+
+
 # ============================================================================
 # Coverage assertion: every PRIMARY_TYPE must have at least one regression test
 # ============================================================================

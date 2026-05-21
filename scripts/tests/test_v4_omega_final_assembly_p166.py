@@ -11,8 +11,9 @@ Plus locks the calibrated canary scores so future drift in any of the
 5 dimensions surfaces immediately.
 
 Canary results vs v3 baselines:
-  - Sports Research Omega-3 (327776): v3=63.7 → v4=74.1 (+10.4)
-    The P1.5 omega-debt fix delivered.
+  - Sports Research Omega-3 (327776): v3=63.7 → v4=81.6 (+17.9)
+    The P1.5 omega-debt fix delivered, and P1.7 curated IFOS
+    product_line verification now adds omega Trust credit.
   - Nordic Naturals Ultimate Omega + CoQ10 (288740): v3=68.6 → v4=67.9
     (-0.7). Nordic loses form_disclosed credit (form=undefined per
     'do not invent fields' — Nordic is famously rTG but DSLD label
@@ -230,8 +231,8 @@ def _load_canaries(ids):
 # Wider than ±0.5 to tolerate small drifts in generic_evidence /
 # manufacturer pipeline; tighter than ±10 to catch real regressions.
 @pytest.mark.parametrize("dsld_id,brand,expected_score_min,expected_score_max", [
-    ("327776", "Sports Research",      71.0, 77.0),
-    ("326270", "Sports Research",      71.0, 77.0),
+    ("327776", "Sports Research",      79.0, 84.0),
+    ("326270", "Sports Research",      79.0, 84.0),
     ("288740", "Nordic Naturals",      64.0, 71.0),
     ("273630", "Garden of Life",       68.0, 74.0),
     ("239592", "CVS Health",           56.0, 63.0),

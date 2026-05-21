@@ -299,6 +299,17 @@ def test_dimension_cap_constant() -> None:
 
 
 _CANARY_TRUST_IDS = {"327776", "326270", "288740", "273630", "239592", "182968"}
+_CANARY_TRUST_EXPECTED = {
+    # P1.7 curated IFOS overrides verified the Sports Research line.
+    "327776": 10.0,
+    "326270": 10.0,
+    # Other anchor canaries still have only claimed_only/brand_only/unverified
+    # marine cert signals and must not receive product Trust.
+    "288740": 0.0,
+    "273630": 0.0,
+    "239592": 0.0,
+    "182968": 0.0,
+}
 _canary_cache = None
 
 
@@ -331,13 +342,14 @@ def _load_canaries(ids):
 
 
 @pytest.mark.parametrize("dsld_id", sorted(_CANARY_TRUST_IDS))
-def test_canary_trust_locked_at_zero(dsld_id):
-    """All 6 anchor canaries score Trust=0 under the verified-scopes-only
-    policy. This locks the discipline — IFOS at needs_review (Sports
-    Research) and brand_only (Nordic) do NOT silently regenerate credit.
-    When P1.7 triage converts specific IFOS rows to product_line via
-    curated overrides, these test expectations must be UPDATED, not
-    silently allowed to drift."""
+def test_canary_trust_matches_curated_override_state(dsld_id):
+    """Anchor canary Trust reflects verified scopes only.
+
+    P1.7 curated overrides intentionally moved Sports Research IFOS from
+    needs_review to product_line. Brand-only / claimed-only marine cert
+    signals still score 0; if a future triage batch verifies more rows,
+    update this table deliberately.
+    """
     from scoring_v4.modules.omega_trust import score_trust
 
     canaries = _load_canaries({dsld_id})
@@ -345,11 +357,11 @@ def test_canary_trust_locked_at_zero(dsld_id):
         pytest.skip(f"canary {dsld_id} not in catalog")
 
     payload = score_trust(canaries[dsld_id])
-    assert payload["score"] == 0.0, (
-        f"canary {dsld_id} Trust {payload['score']} != 0. "
-        f"Either omega rubric drifted OR P1.7 curated overrides converted "
-        f"a needs_review/brand_only IFOS to product_line for this product. "
-        f"If the latter, update this canary lock with the new expected score."
+    expected = _CANARY_TRUST_EXPECTED[dsld_id]
+    assert payload["score"] == expected, (
+        f"canary {dsld_id} Trust {payload['score']} != {expected}. "
+        f"Either omega rubric drifted OR P1.7 curated overrides changed. "
+        f"If the latter, update _CANARY_TRUST_EXPECTED deliberately."
     )
 
 
