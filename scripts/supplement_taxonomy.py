@@ -103,7 +103,12 @@ _B_VITAMIN_IDS = frozenset({
 
 _OMEGA_CANONICAL_IDS = frozenset({
     "omega_3", "epa", "dha", "fish_oil", "algae_oil", "krill_oil",
-    "cod_liver_oil", "ala", "omega_3_fatty_acids",
+    "cod_liver_oil",
+})
+
+_ALA_CANONICAL_IDS = frozenset({
+    "ala", "alpha_linolenic_acid", "alpha_linolenic_acid_ala",
+    "omega_3_fatty_acids",
 })
 
 _AMINO_ACID_IDS = frozenset({
@@ -412,6 +417,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             or any(t in product_name for t in ("multi", "daily vitamin", "one daily", "complete", "prenatal"))
         )
     )
+    ala_only_signal = bool(cid_set & _ALA_CANONICAL_IDS) and not bool(cid_set & _OMEGA_CANONICAL_IDS)
 
     # --- Probiotic ---
     probiotic_name_signal = any(term in product_name for term in PROBIOTIC_TERMS)
@@ -479,8 +485,12 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         )
 
     # --- Omega-3 / Fish Oil ---
+    # EPA/DHA, fish oil, krill, algae, and cod-liver products are omega_3.
+    # ALA-only products are not routed here even when the label says omega-3:
+    # ALA uses IOM AI semantics, while the omega scoring module uses EPA/DHA
+    # dose bands.
     # Word-boundary check for short tokens (dha, epa) to avoid "ashwagan-dha" false positives
-    elif omega_ids or _has_omega_name_signal(product_name):
+    elif (omega_ids or _has_omega_name_signal(product_name)) and not ala_only_signal:
         omega_signal = len(omega_ids)
         name_signal = any(t in product_name for t in ("omega", "fish oil", "krill", "cod liver"))
         if omega_signal > 0 or name_signal:

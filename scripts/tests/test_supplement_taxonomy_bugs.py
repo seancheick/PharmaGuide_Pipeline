@@ -360,6 +360,38 @@ def test_BUG_10_electrolyte_has_no_branch():
     )
 
 
+def test_BUG_11_ala_only_omega_3_label_does_not_classify_as_epa_dha_omega():
+    """ALA is an omega-3 fatty acid, but it is NOT EPA/DHA fish-oil-class
+    omega for v4 scoring or DRI semantics. A product labeled "Omega-3"
+    with only alpha-linolenic acid must stay out of the omega_3 taxonomy
+    class so the v4 router does not send it to the EPA/DHA module."""
+    product = {
+        "product_name": "ALA Omega-3",
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "Alpha-Linolenic Acid", "canonical_id": "ala",
+             "category": "fatty_acid", "quantity": 1000, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] != "omega_3"
+
+
+def test_BUG_11b_omega_3_fatty_acids_parent_does_not_classify_as_epa_dha_omega():
+    """The broad omega_3_fatty_acids parent is too ambiguous for EPA/DHA
+    taxonomy. It can represent ALA-style DRI semantics or parent mass and
+    must not be treated as an EPA/DHA omega product without disclosed EPA
+    or DHA children."""
+    product = {
+        "product_name": "Omega-3 Fatty Acids",
+        "ingredient_quality_data": {"ingredients": [
+            {"name": "Omega-3 Fatty Acids", "canonical_id": "omega_3_fatty_acids",
+             "category": "fatty_acid", "quantity": 1000, "unit": "mg"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] != "omega_3"
+
+
 # ============================================================================
 # Coverage assertion: every PRIMARY_TYPE must have at least one regression test
 # ============================================================================

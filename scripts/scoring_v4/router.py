@@ -74,6 +74,7 @@ _OMEGA_NAME_KEYWORDS = (
 # guard for `\bEPA\b` against any future EPA-prefix false-positives.
 # Case-insensitive so labels like "Pure epa" still route.
 _OMEGA_STANDALONE_RE = re.compile(r"\b(EPA|DHA)\b", re.IGNORECASE)
+_OMEGA_369_RE = re.compile(r"\bomega[\s-]*3[\s-]*[-/]?[\s-]*6[\s-]*[-/]?[\s-]*9\b", re.IGNORECASE)
 
 # Per scripts/data/omega_rubric.json router.primary_category_match. The
 # enricher emits these as primary_category values for fish-oil-class rows.
@@ -85,6 +86,11 @@ _OMEGA_PRIMARY_CATEGORIES = {"omega-3", "omega_3", "omega3", "fish_oil"}
 # any EPA/DHA canonical with positive quantity is omega regardless of
 # what the name says.
 _OMEGA_INGREDIENT_CANONICALS = {"epa", "dha", "epa_dha"}
+_NON_EPA_DHA_FATTY_ACID_CANONICALS = {
+    "ala", "alpha_linolenic_acid", "alpha_linolenic_acid_ala",
+    "omega_3_fatty_acids", "gla", "gamma_linolenic_acid",
+    "cla", "conjugated_linoleic_acid", "oleic_acid",
+}
 
 
 def _has_omega_ingredient(product: Dict[str, Any]) -> bool:
@@ -113,6 +119,29 @@ def _has_omega_ingredient(product: Dict[str, Any]) -> bool:
                     return True
             except (TypeError, ValueError):
                 continue
+    return False
+
+
+def _has_non_epa_dha_fatty_acid_panel(product: Dict[str, Any]) -> bool:
+    """Return True for ALA / GLA / CLA / 3-6-9 style panels with no EPA/DHA.
+
+    These are fatty-acid supplements, but not EPA/DHA omega-module products.
+    They must not route via name-only "omega" marketing.
+    """
+    if _has_omega_ingredient(product):
+        return False
+    iqd = (product or {}).get("ingredient_quality_data")
+    if not isinstance(iqd, dict):
+        return False
+    candidates = iqd.get("ingredients_scorable") or iqd.get("ingredients") or []
+    if not isinstance(candidates, list):
+        return False
+    for ing in candidates:
+        if not isinstance(ing, dict):
+            continue
+        canonical = str(ing.get("canonical_id") or "").strip().lower()
+        if canonical in _NON_EPA_DHA_FATTY_ACID_CANONICALS:
+            return True
     return False
 
 
@@ -152,6 +181,12 @@ def _is_omega_class(product: Dict[str, Any], name_text: str) -> bool:
     primary_category = str((product or {}).get("primary_category") or "").strip().lower()
     if primary_category in _OMEGA_PRIMARY_CATEGORIES:
         return True
+
+    # ALA / GLA / CLA / 3-6-9 products may use omega marketing language,
+    # but they do not belong in the EPA/DHA omega module unless EPA/DHA is
+    # actually disclosed in the panel.
+    if _OMEGA_369_RE.search(name_text) or _has_non_epa_dha_fatty_acid_panel(product):
+        return False
 
     name_text_lower = name_text.lower()
     if any(kw in name_text_lower for kw in _OMEGA_NAME_KEYWORDS):
@@ -269,12 +304,15 @@ def class_for_product(product: Dict[str, Any]) -> str:
             return "multi_or_prenatal"
         if module == "omega":
             return "omega"
-        # module == "generic" or None (unknown taxonomy type):
-        # don't return generic yet — let the omega panel-canonical check
-        # run, since a non-omega-classified product may still have EPA/DHA
-        # in the panel (taxonomy can mis-classify; the panel canonical
-        # is a stronger physical-fact signal).
-        # Fall through.
+        if module == "generic":
+            # Taxonomy is authoritative for generic classes, but the
+            # physical panel fact of disclosed EPA/DHA still wins. Do not let
+            # name-only omega marketing override taxonomy here — ALA / 3-6-9 /
+            # fatty-acid blends are intentionally generic unless EPA/DHA is
+            # actually disclosed.
+            return "omega" if _has_omega_ingredient(product) else "generic"
+        # Unknown taxonomy type: fall through to legacy omega / multi fallback
+        # rather than crashing.
 
     # Priority 4: omega panel-canonical / name-keyword detection.
     # The panel-canonical (canonical_id ∈ {epa,dha,epa_dha} with positive

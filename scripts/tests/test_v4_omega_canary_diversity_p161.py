@@ -388,22 +388,7 @@ def test_edge_cla_omega_3_6_9_mixed_routes_generic() -> None:
             ]
         },
     }
-    # NOTE: "Omega" in name does NOT route omega via current keywords
-    # ("omega-3" / "omega 3" / "omega3" are the exact keywords; "Omega 3-6-9"
-    # contains "omega 3" as a substring). This product DOES route omega
-    # via the substring match. But the COMPLETENESS GATE will block it
-    # (no EPA/DHA disclosed) → NOT_SCORED. That's the right safety net.
-    from scoring_v4.gate_completeness import evaluate_completeness_gate
-
-    # Verify the safety net: even if router catches it via "omega 3",
-    # the completeness gate blocks it from scoring.
-    if class_for_product(product) == "omega":
-        result = evaluate_completeness_gate(product, "omega")
-        assert not result.is_live_eligible, (
-            "Mixed-fatty-acid 'Omega 3-6-9' product must fail omega completeness "
-            "(no EPA/DHA disclosed) so it can't be live-scored as omega."
-        )
-        assert "epa_or_dha_disclosed" in result.missing_fields
+    assert class_for_product(product) == "generic"
 
 
 def test_edge_prenatal_dha_routes_multi_not_omega() -> None:
