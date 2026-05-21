@@ -227,6 +227,58 @@ def test_prenatal_dha_detection_accepts_final_detail_blob_ingredients_alias() ->
     assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
 
 
+def test_prenatal_dha_critical_anchor_accepts_gram_units() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Complete Prenatal with DHA",
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        ingredients=[_ingredient("dha", name="DHA", quantity=0.2, unit="g")],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 1.0
+    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+
+
+def test_prenatal_dha_critical_anchor_accepts_microgram_units() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Complete Prenatal with DHA",
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        ingredients=[_ingredient("dha", name="DHA", quantity=200000, unit="mcg")],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 1.0
+    assert "dha" not in payload["metadata"]["critical_nutrients_missing"]
+
+
+def test_prenatal_dha_critical_anchor_does_not_use_fish_oil_parent_mass() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Complete Prenatal with Fish Oil",
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        ingredients=[_ingredient("fish_oil", name="Fish Oil", quantity=1000, unit="mg")],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 0.0
+    assert "dha" in payload["metadata"]["critical_nutrients_missing"]
+
+
+def test_prenatal_dha_critical_anchor_does_not_match_dhea() -> None:
+    from scoring_v4.modules.multi_prenatal_dose import score_dose
+
+    payload = score_dose(_product(
+        name="Complete Prenatal",
+        adequacy_results=[_adequacy(n, pct_rda=60) for n in PRENATAL_CRITICAL],
+        ingredients=[_ingredient("dhea", name="DHEA", quantity=200, unit="mg")],
+    ))
+
+    assert payload["metadata"]["critical_nutrient_scores"]["dha"] == 0.0
+    assert "dha" in payload["metadata"]["critical_nutrients_missing"]
+
+
 def test_no_rda_reference_returns_zero_score_not_none_for_multi_direct_call() -> None:
     from scoring_v4.modules.multi_prenatal_dose import score_dose
 

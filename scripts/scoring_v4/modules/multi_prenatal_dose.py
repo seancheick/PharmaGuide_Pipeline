@@ -37,6 +37,7 @@ PHASE_MARKER = "P3.2_multi_prenatal_dose"
 METHOD_MARKER = "rda_ai_panel_coverage_from_enriched_rda_ul_data"
 
 PRENATAL_RE = re.compile(r"\b(prenatal|pregnancy|pre-natal|expecting|maternal|gestation)\b")
+DHA_RE = re.compile(r"\bdha\b|docosahexaenoic", re.IGNORECASE)
 
 CORE_MULTI_ANCHORS = (
     "vitamin_a",
@@ -209,17 +210,43 @@ def _score_panel_breadth(scores: Dict[str, float]) -> float:
     return _round(_clamp(0.0, CAP_PANEL_BREADTH, (count / PANEL_BREADTH_FULL_COUNT) * CAP_PANEL_BREADTH))
 
 
+def _is_dha_ingredient(ingredient: Dict[str, Any]) -> bool:
+    canonical = _norm_text(ingredient.get("canonical_id") or ingredient.get("standard_name") or "")
+    if canonical in {"dha", "epa_dha", "docosahexaenoic_acid"}:
+        return True
+    if DHA_RE.search(str(ingredient.get("name") or "")):
+        return True
+    return bool(DHA_RE.search(canonical.replace("_", "-")))
+
+
+def _quantity_mg(ingredient: Dict[str, Any]) -> Optional[float]:
+    qty = _as_float(ingredient.get("quantity"), None)
+    if qty is None or qty <= 0:
+        return None
+    unit = _norm_text(
+        ingredient.get("unit_normalized")
+        or ingredient.get("normalized_unit")
+        or ingredient.get("unit")
+    )
+    compact = unit.replace(" ", "")
+    if compact in {"mg", "milligram", "milligrams", "milligram(s)"}:
+        return qty
+    if compact in {"g", "gram", "grams", "gram(s)"}:
+        return qty * 1000.0
+    if compact in {"mcg", "ug", "microgram", "micrograms", "microgram(s)"}:
+        return qty / 1000.0
+    return None
+
+
 def _dha_score(product: Dict[str, Any]) -> float:
     best = 0.0
     for ing in _active_ingredients(product):
-        canonical = _norm_text(ing.get("canonical_id") or ing.get("standard_name") or ing.get("name"))
-        if canonical not in {"dha", "epa_dha"} and "dha" not in canonical:
+        if not _is_dha_ingredient(ing):
             continue
         if not has_usable_individual_dose(ing):
             continue
-        qty = _as_float(ing.get("quantity"), 0.0) or 0.0
-        unit = _norm_text(ing.get("unit_normalized") or ing.get("unit"))
-        if unit not in {"mg", "milligram", "milligrams"}:
+        qty = _quantity_mg(ing)
+        if qty is None:
             continue
         if qty >= PRENATAL_DHA_FULL_MG:
             best = max(best, 1.0)
