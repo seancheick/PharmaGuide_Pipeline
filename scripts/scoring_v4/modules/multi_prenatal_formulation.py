@@ -110,8 +110,25 @@ def _ingredient_text(ingredient: Dict[str, Any]) -> str:
 
 
 def _form_factor_text(product: Dict[str, Any]) -> str:
+    """Build a text blob for form-factor pattern matching (gummy detection,
+    dosage-form suitability scoring).
+
+    SP-3 (2026-05-21): also include `form_factor_canonical` so the canonical
+    id (`gummy`, `softgel`, etc.) participates in the regex match. The
+    legacy free-text fields and product name keep contributing because the
+    GUMMY_RE pattern also catches "chewable gummy multivitamin" name text
+    that the canonical field alone would miss.
+    """
     parts = []
-    for key in ("form_factor", "product_form", "dosage_form", "form", "product_name", "fullName"):
+    for key in (
+        "form_factor_canonical",
+        "form_factor",
+        "product_form",
+        "dosage_form",
+        "form",
+        "product_name",
+        "fullName",
+    ):
         value = product.get(key)
         if value:
             parts.append(str(value))

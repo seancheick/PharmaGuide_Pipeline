@@ -4645,7 +4645,14 @@ def generate_dosing_summary(enriched: Dict) -> Dict:
 
     Returns dict with keys: dosing_summary, servings_per_container
     """
-    form_factor = safe_str(enriched.get("form_factor")).lower()
+    # SP-3 (2026-05-21): prefer canonical form_factor for serving-verb derivation.
+    # Falls back to legacy free-text field for old enriched batches.
+    canonical = safe_str(enriched.get("form_factor_canonical")).lower()
+    form_factor = (
+        canonical
+        if canonical and canonical != "unknown"
+        else safe_str(enriched.get("form_factor")).lower()
+    )
 
     # Primary source: serving_basis (enricher-computed, scorer-aligned)
     sb = safe_dict(enriched.get("serving_basis"))
@@ -4927,7 +4934,18 @@ def build_core_row(
         # Product status
         safe_str(enriched.get("status")),
         disc_date,
-        safe_str(enriched.get("form_factor")),
+        # SP-3 (2026-05-21): write canonical form_factor when available.
+        # Avoids a column rename / migration by reusing the products_core
+        # form_factor column. New batches store the canonical id; old
+        # batches preserve the legacy free-text value.
+        safe_str(
+            enriched.get("form_factor_canonical")
+            if (
+                safe_str(enriched.get("form_factor_canonical")).lower()
+                not in {"", "unknown"}
+            )
+            else enriched.get("form_factor")
+        ),
         st_str,
         # Scores
         score_80,

@@ -138,6 +138,14 @@ def _mapped_coverage(product: Dict[str, Any], ingredients: List[Dict[str, Any]])
 
 
 def _form_factor(product: Dict[str, Any]) -> str:
+    """Return a usable form-factor string. SP-3 (2026-05-21): prefer
+    `form_factor_canonical` (the SP-3 normalizer output) over legacy
+    free-text fields. `unknown` and empty string are both treated as
+    missing so the completeness gate still flags "no form factor data".
+    """
+    canonical = _norm(product.get("form_factor_canonical"))
+    if canonical and canonical != "unknown":
+        return canonical
     for key in ("form_factor", "product_form", "dosage_form", "form"):
         value = _norm(product.get(key))
         if value:
