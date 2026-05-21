@@ -14,6 +14,7 @@ Manufacturer Trust slice (P1.3.6), not this dimension.
 from __future__ import annotations
 
 import json
+import re
 from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict
@@ -25,6 +26,8 @@ from scoring_v4.modules.generic_helpers import (
     get_active_ingredients,
 )
 
+
+_DHA_EPA_WORD_BOUNDARY_RE = re.compile(r"\b(epa|dha)\b", re.IGNORECASE)
 
 PHASE_MARKER = "P1.3.4_testing_trust"
 
@@ -183,21 +186,36 @@ def _score_b4c(product: Dict[str, Any]) -> float:
 
 
 def _is_omega_like(product: Dict[str, Any]) -> bool:
-    supp_payload = product.get("supplement_type")
-    supp_type = ""
-    if isinstance(supp_payload, dict):
-        supp_type = _norm_text(supp_payload.get("type"))
-    elif isinstance(supp_payload, str):
-        supp_type = _norm_text(supp_payload)
-    if supp_type == "specialty":
+    """Return True when marine-cert programs are relevant to this product.
+
+    Taxonomy `primary_type == omega_3` is the canonical current-batch signal.
+    The ingredient-text fallback exists for old batches and for physical panel
+    facts that should override stale taxonomy. It intentionally does not use
+    `supplement_type == specialty`, and it does not treat the word "marine"
+    alone as omega-like because marine collagen is not EPA/DHA fish oil.
+    """
+    if not isinstance(product, dict):
+        return False
+
+    direct = product.get("primary_type")
+    if isinstance(direct, str) and _norm_text(direct) == "omega_3":
         return True
 
+    taxonomy = product.get("supplement_taxonomy")
+    if isinstance(taxonomy, dict):
+        nested = taxonomy.get("primary_type")
+        if isinstance(nested, str) and _norm_text(nested) == "omega_3":
+            return True
+
+    omega_terms = ("omega", "fish oil", "krill", "cod liver")
     for ing in get_active_ingredients(product):
         text = " ".join(
             _norm_text(ing.get(field))
             for field in ("name", "standard_name", "raw_source_text", "canonical_id")
         )
-        if any(term in text for term in ("omega", "fish oil", "krill", "cod liver", "marine", "dha", "epa")):
+        if any(term in text for term in omega_terms):
+            return True
+        if _DHA_EPA_WORD_BOUNDARY_RE.search(text):
             return True
     return False
 

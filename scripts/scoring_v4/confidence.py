@@ -243,15 +243,41 @@ def _identity_confidence(
         level = _min_level(level, "moderate")
         drivers.append("form_factor_inferred")
 
-    supp = product.get("supplement_type")
-    supp_conf = None
-    if isinstance(supp, dict):
-        supp_conf = _as_float(supp.get("confidence"), None)
-    if supp_conf is not None and supp_conf < 0.80:
+    for driver in _supp_type_driver(product):
         level = _min_level(level, "moderate")
-        drivers.append("supplement_type_low_confidence")
+        drivers.append(driver)
 
     return level, drivers
+
+
+_TAXONOMY_CONFIDENCE_THRESHOLD = 0.70
+_LEGACY_SUPP_CONFIDENCE_THRESHOLD = 0.80
+
+
+def _supp_type_driver(product: Any) -> List[str]:
+    """Return the product-class confidence driver, if one should be emitted.
+
+    Taxonomy confidence is the canonical signal for current enriched batches.
+    Legacy `supplement_type.confidence` is kept only as a fallback for old
+    blobs that do not have taxonomy yet.
+    """
+    if not isinstance(product, dict):
+        return []
+
+    taxonomy = product.get("supplement_taxonomy")
+    if isinstance(taxonomy, dict):
+        tax_conf = _as_float(taxonomy.get("classification_confidence"), None)
+        if tax_conf is not None:
+            if tax_conf < _TAXONOMY_CONFIDENCE_THRESHOLD:
+                return ["taxonomy_classification_low_confidence"]
+            return []
+
+    supp = product.get("supplement_type")
+    if isinstance(supp, dict):
+        supp_conf = _as_float(supp.get("confidence"), None)
+        if supp_conf is not None and supp_conf < _LEGACY_SUPP_CONFIDENCE_THRESHOLD:
+            return ["supplement_type_low_confidence"]
+    return []
 
 
 def _clinical_matches(product: Dict[str, Any]) -> List[Dict[str, Any]]:

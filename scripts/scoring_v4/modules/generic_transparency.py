@@ -402,39 +402,29 @@ def _get_disclosure_blends(product: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def _b5_class_for_product(product: Dict[str, Any]) -> str:
-    payload = product.get("supplement_type")
-    if isinstance(payload, dict):
-        supp_type = _norm_text(payload.get("type"))
-    elif isinstance(payload, str):
-        supp_type = _norm_text(payload)
-    else:
-        supp_type = _norm_text(product.get("supp_type"))
+    """Return the B5 opacity class using the shared v4 router.
 
-    if supp_type == "probiotic":
-        return "probiotic"
+    This is not a separate product classifier. It delegates module/class
+    selection to `scoring_v4.router.class_for_product`, then applies only
+    B5-specific overlays: sports products get their own opacity multiplier,
+    and omega products roll into the generic opacity tier because B5 has no
+    dedicated omega multiplier.
+    """
+    from scoring_v4.router import class_for_product
 
     name_text = " ".join(
         str(product.get(key) or "")
         for key in ("product_name", "fullName", "brand_name", "bundleName")
     )
+
+    scoring_class = class_for_product(product)
+    if scoring_class == "probiotic":
+        return "probiotic"
+
     if B5_SPORTS_KEYWORDS.search(name_text):
         return "sports_active"
 
-    primary_category = _norm_text(product.get("primary_category"))
-    if (
-        primary_category in B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES
-        or (
-            B5_GENERIC_OVERRIDE_KEYWORDS.search(name_text)
-            and not B5_PRENATAL_KEYWORDS.search(name_text)
-        )
-    ):
-        return "generic"
-
-    if supp_type == "multivitamin":
-        return "multi_or_prenatal"
-    if B5_PRENATAL_KEYWORDS.search(name_text):
-        return "multi_or_prenatal"
-    if primary_category == "multivitamin":
+    if scoring_class == "multi_or_prenatal":
         return "multi_or_prenatal"
     return "generic"
 

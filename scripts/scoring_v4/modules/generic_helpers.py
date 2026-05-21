@@ -200,10 +200,38 @@ def canonical_key(ingredient: Dict[str, Any]) -> str:
 def supp_type_of(product: Dict[str, Any]) -> str:
     """Return the normalized supplement_type string ('single_nutrient',
     'probiotic', etc.) from the enriched payload. Handles both the dict
-    shape (`supplement_type.type`) and the legacy string shape."""
+    shape (`supplement_type.type`) and the legacy string shape.
+
+    Legacy helper. Prefer `primary_type_of()` for taxonomy-aware new code.
+    """
     payload = (product or {}).get("supplement_type")
     if isinstance(payload, dict):
         return _norm_text(payload.get("type"))
     if isinstance(payload, str):
         return _norm_text(payload)
+    return ""
+
+
+def primary_type_of(product: Any) -> str:
+    """Return the normalized taxonomy `primary_type`, or "" when absent.
+
+    Current enriched blobs write the value both at top level and under
+    `supplement_taxonomy.primary_type`; prefer the top-level field and use
+    the nested path as a defensive fallback. Callers that need old-batch
+    compatibility can explicitly fall back to `supp_type_of()`.
+    """
+    if not isinstance(product, dict):
+        return ""
+
+    direct = product.get("primary_type")
+    if isinstance(direct, str):
+        normalized = _norm_text(direct)
+        if normalized:
+            return normalized
+
+    taxonomy = product.get("supplement_taxonomy")
+    if isinstance(taxonomy, dict):
+        nested = taxonomy.get("primary_type")
+        if isinstance(nested, str):
+            return _norm_text(nested)
     return ""

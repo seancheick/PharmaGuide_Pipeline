@@ -55,8 +55,6 @@ EXPECTED_HITS_PER_FILE = {
     "scripts/build_final_db.py": 15,
     "scripts/scoring_v4/confidence.py": 1,
     "scripts/scoring_v4/modules/generic_helpers.py": 1,
-    "scripts/scoring_v4/modules/generic_transparency.py": 4,
-    "scripts/scoring_v4/modules/generic_trust.py": 1,
     "scripts/scoring_v4/router.py": 5,
 }
 
