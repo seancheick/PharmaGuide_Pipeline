@@ -403,6 +403,16 @@ def test_omega3_export_flags_follow_canonical_epa_dha_signals():
             "mapped": True,
         },
     ]
+    enriched["supplement_taxonomy"] = {
+        "primary_type": "omega_3",
+        "secondary_type": "fish_oil_epa_dha",
+        "percentile_category": "fish_oil",
+        "classification_confidence": 0.95,
+        "classification_reasons": ["omega-3: ids=['epa', 'dha']"],
+        "quantified_active_count": 2,
+        "non_quantified_base_count": 0,
+        "category_breakdown": {"fatty_acid": 2},
+    }
     scored = make_scored()
     scored["breakdown"]["A"]["omega3_dose_bonus"] = 1.5
     scored["breakdown"]["A"]["omega3_breakdown"] = {
@@ -415,7 +425,7 @@ def test_omega3_export_flags_follow_canonical_epa_dha_signals():
     row = row_as_dict(build_core_row(enriched, scored, "2026-04-10T12:00:00Z"))
     blob = build_detail_blob(enriched, scored)
 
-    assert row["primary_category"] == "omega-3"
+    assert row["primary_category"] == "omega_3"
     assert row["contains_omega3"] == 1
     assert blob["omega3_audit"]["contains_omega3"] is True
     assert blob["omega3_audit"]["bonus_score"] == 1.5

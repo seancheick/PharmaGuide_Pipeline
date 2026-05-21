@@ -53,7 +53,9 @@ from audit_evidence_utils import (
     derive_proprietary_blend_audit,
 )
 from inactive_ingredient_resolver import InactiveIngredientResolver
-from supplement_type_utils import infer_supplement_type
+# supplement_type_utils is no longer called directly — taxonomy is the
+# single source of truth for classification in the final DB export.
+# The import remains available for backward-compat callers but is unused.
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -440,20 +442,34 @@ def build_supplement_type_audit(enriched: Dict, scored: Optional[Dict] = None) -
         enriched_type = safe_str(supplement_type.get("type"))
     elif supplement_type is not None:
         enriched_type = safe_str(supplement_type)
-    inferred = infer_supplement_type(enriched)
+
+    taxonomy = enriched.get("supplement_taxonomy") or (scored or {}).get("supplement_taxonomy") or {}
+
     return {
         "enriched_type": enriched_type,
         "scored_type": safe_str((scored or {}).get("supp_type")),
-        "inferred_type": safe_str(inferred.get("type")),
         "export_type": resolve_export_supplement_type(enriched, scored),
-        "active_count": inferred.get("active_count"),
-        "source": safe_str(inferred.get("source")),
-        "category_breakdown": safe_dict(inferred.get("category_breakdown")),
-        "probiotic_signal": safe_bool(inferred.get("probiotic_signal")),
+        "primary_type": safe_str(taxonomy.get("primary_type")),
+        "secondary_type": taxonomy.get("secondary_type"),
+        "classification_confidence": taxonomy.get("classification_confidence"),
+        "classification_reasons": taxonomy.get("classification_reasons"),
+        "quantified_active_count": taxonomy.get("quantified_active_count"),
+        "non_quantified_base_count": taxonomy.get("non_quantified_base_count"),
+        "category_breakdown": safe_dict(taxonomy.get("category_breakdown")),
     }
 
 
 def resolve_export_supplement_type(enriched: Dict, scored: Optional[Dict] = None) -> str:
+    # Prefer taxonomy v2 primary_type (NP-filtered, expanded types) when available
+    taxonomy = enriched.get("supplement_taxonomy") or (scored or {}).get("supplement_taxonomy") or {}
+    primary_type = normalize_text(taxonomy.get("primary_type"))
+    if primary_type and primary_type != "general_supplement":
+        return primary_type
+
+    # Fall back to scored supp_type (legacy v1 classification)
+    scored_type = normalize_text((scored or {}).get("supp_type"))
+
+    # Fall back to enriched supplement_type.type
     enriched_type = ""
     supplement_type = enriched.get("supplement_type")
     if isinstance(supplement_type, dict):
@@ -461,21 +477,15 @@ def resolve_export_supplement_type(enriched: Dict, scored: Optional[Dict] = None
     elif supplement_type is not None:
         enriched_type = normalize_text(supplement_type)
 
-    scored_type = normalize_text((scored or {}).get("supp_type"))
-    inferred_type = normalize_text(infer_supplement_type(enriched).get("type"))
-
-    if enriched_type and enriched_type not in {"unknown"}:
-        if enriched_type == "specialty" and scored_type not in {"", "unknown", "specialty"}:
-            return scored_type
-        if enriched_type == "specialty" and inferred_type not in {"", "unknown", "specialty"}:
-            return inferred_type
-        return enriched_type
+    # If taxonomy said general_supplement, still use it over unknown/specialty
+    if primary_type == "general_supplement":
+        return primary_type
 
     if scored_type and scored_type != "unknown":
         return scored_type
-    if inferred_type and inferred_type != "unknown":
-        return inferred_type
-    return enriched_type or scored_type or inferred_type or "unknown"
+    if enriched_type and enriched_type != "unknown":
+        return enriched_type
+    return enriched_type or scored_type or "unknown"
 
 
 def contaminant_matches(enriched: Dict) -> List[Dict]:
@@ -3478,7 +3488,11 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
     blob = {
         "dsld_id": safe_str(enriched.get("dsld_id")),
         "product_name": safe_str(enriched.get("product_name")),
-        "brand_name": safe_str(enriched.get("brandName")),
+        "brand_name": safe_str(enriched.get("brand_name") or enriched.get("brandName")),
+        "primary_type": safe_str((enriched.get("supplement_taxonomy") or {}).get("primary_type")),
+        "secondary_type": (enriched.get("supplement_taxonomy") or {}).get("secondary_type"),
+        "classification_confidence": (enriched.get("supplement_taxonomy") or {}).get("classification_confidence"),
+        "classification_reasons": (enriched.get("supplement_taxonomy") or {}).get("classification_reasons"),
         "blob_version": 1,
         "ingredients": ingredients,
         "inactive_ingredients": inactive,
@@ -3534,7 +3548,7 @@ def build_detail_blob(enriched: Dict, scored: Dict) -> Dict:
             "max_servings_per_day": serving.get("max_servings_per_day"),
         },
         "manufacturer_detail": {
-            "brand_name": safe_str(enriched.get("brandName")),
+            "brand_name": safe_str(enriched.get("brand_name") or enriched.get("brandName")),
             "is_trusted": safe_bool(enriched.get("is_trusted_manufacturer")),
             "manufacturing_region": safe_str(enriched.get("manufacturing_region")),
             "violations": safe_dict(safe_dict(enriched.get("manufacturer_data")).get("violations")),
@@ -4100,7 +4114,7 @@ def generate_share_metadata(enriched: Dict, scored: Dict) -> Dict:
     Returns dict with keys: share_title, share_description, share_highlights, share_og_image_url
     """
     product_name = safe_str(enriched.get("product_name"))
-    brand_name = safe_str(enriched.get("brandName"))
+    brand_name = safe_str(enriched.get("brand_name") or enriched.get("brandName"))
     score_100 = safe_float(scored.get("score_100_equivalent"))
     grade = safe_str(scored.get("grade"))
     verdict = safe_str(scored.get("verdict")).upper()
@@ -4239,23 +4253,20 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
             ingredient_names.add(name)
         add_interaction_tag(ing.get("canonical_id"))
 
-    # Primary category detection
-    primary_category = None
-    supp_type = resolve_export_supplement_type(enriched, scored)
+    # Primary category — sourced from supplement_taxonomy (single source of truth)
+    taxonomy = enriched.get("supplement_taxonomy") or (scored or {}).get("supplement_taxonomy") or {}
+    primary_type = safe_str(taxonomy.get("primary_type"))
+    secondary_type = safe_str(taxonomy.get("secondary_type"))
 
-    if supp_type == "probiotic":
-        primary_category = "probiotic"
-    elif omega3_audit["contains_omega3"]:
-        primary_category = "omega-3"
-    elif any(name in ingredient_names for name in ["collagen", "collagen_peptides"]):
-        primary_category = "collagen"
-    elif len(ingredients) >= 10:  # Heuristic for multivitamin
-        primary_category = "multivitamin"
-    elif any(name in ingredient_names for name in ["protein", "whey_protein", "casein"]):
-        primary_category = "protein"
+    # Map taxonomy primary_type to Flutter-facing primary_category.
+    # Flutter uses this for search filtering and UI badges.
+    primary_category = primary_type or resolve_export_supplement_type(enriched, scored) or None
 
-    # Secondary categories
+    # Secondary categories — combine taxonomy secondary_type with
+    # composition-derived tags (adaptogens, nootropics, synergy clusters)
     secondary_categories = []
+    if secondary_type:
+        secondary_categories.append(secondary_type)
 
     adaptogens = {"ashwagandha", "rhodiola", "holy_basil", "ginseng", "maca", "reishi"}
     nootropics = {"lion's_mane", "bacopa", "ginkgo", "alpha-gpc", "l-theanine", "citicoline"}
@@ -4279,7 +4290,7 @@ def classify_product_categories(enriched: Dict, scored: Optional[Dict] = None) -
 
     # Boolean flags
     contains_omega3 = omega3_audit["contains_omega3"]
-    contains_probiotics = supp_type == "probiotic" or bool(
+    contains_probiotics = primary_type == "probiotic" or bool(
         safe_dict(enriched.get("probiotic_data")).get("is_probiotic_product")
     )
     contains_collagen = any(name in ingredient_names for name in ["collagen", "collagen_peptides"])
@@ -4628,25 +4639,29 @@ def _frequency_phrase(max_daily: Optional[int]) -> str:
 def generate_dosing_summary(enriched: Dict) -> Dict:
     """Generate user-friendly dosing summary and servings per container.
 
-    Reads the real cleaner-emitted fields (enhanced_normalizer._process_serving_sizes
-    and raw_data.servingsPerContainer) rather than a nonexistent "serving_info" path:
-
-      - enriched["servingsPerContainer"]  (int)
-      - enriched["servingSizes"]          (list[dict]: minQuantity, maxQuantity,
-                                           unit, minDailyServings, maxDailyServings,
-                                           normalizedServing, ...)
-      - enriched["form_factor"]           (str, e.g. "capsule", "powder")
+    Prefers enriched["serving_basis"] (enricher-computed, same source the
+    scorer uses for dose adequacy) over raw enriched["servingSizes"].
+    Falls back to servingSizes for backward compat with pre-serving_basis data.
 
     Returns dict with keys: dosing_summary, servings_per_container
     """
-    serving_sizes = safe_list(enriched.get("servingSizes"))
-    serving = safe_dict(serving_sizes[0]) if serving_sizes else {}
     form_factor = safe_str(enriched.get("form_factor")).lower()
 
-    min_qty_raw = serving.get("minQuantity")
-    max_qty_raw = serving.get("maxQuantity")
-    unit = safe_str(serving.get("unit"))
-    max_daily = serving.get("maxDailyServings")
+    # Primary source: serving_basis (enricher-computed, scorer-aligned)
+    sb = safe_dict(enriched.get("serving_basis"))
+    if sb.get("basis_count") is not None:
+        min_qty_raw = sb.get("basis_count")
+        max_qty_raw = sb.get("basis_count")
+        unit = safe_str(sb.get("basis_unit"))
+        max_daily = sb.get("max_servings_per_day")
+    else:
+        # Fallback: raw servingSizes from cleaner
+        serving_sizes = safe_list(enriched.get("servingSizes"))
+        serving = safe_dict(serving_sizes[0]) if serving_sizes else {}
+        min_qty_raw = serving.get("minQuantity")
+        max_qty_raw = serving.get("maxQuantity")
+        unit = safe_str(serving.get("unit"))
+        max_daily = serving.get("maxDailyServings")
 
     min_qty = safe_float(min_qty_raw)
     max_qty = safe_float(max_qty_raw)
@@ -4901,7 +4916,7 @@ def build_core_row(
     return (
         safe_str(enriched.get("dsld_id")),
         safe_str(enriched.get("product_name")),
-        safe_str(enriched.get("brandName")),
+        safe_str(enriched.get("brand_name") or enriched.get("brandName")),
         normalize_upc(enriched.get("upcSku")),
         safe_str(enriched.get("imageUrl")),
         image_url_is_pdf(enriched.get("imageUrl")),
@@ -4935,7 +4950,7 @@ def build_core_row(
         # Percentile
         safe_float(cp.get("percentile_rank")) if cp.get("available") else None,
         safe_float(cp.get("top_percent")) if cp.get("available") else None,
-        safe_str(cp.get("category_key")),
+        safe_str((enriched.get("supplement_taxonomy") or {}).get("percentile_category")) or safe_str(cp.get("category_key")),
         safe_str(cp.get("category_label")),
         cp.get("cohort_size", 0) if cp.get("available") else None,
         # Compliance
@@ -5121,7 +5136,7 @@ def update_audit_state(
             products_with_warnings_sample.append({
                 "dsld_id": pid,
                 "product_name": safe_str(enriched.get("product_name")),
-                "brand": safe_str(enriched.get("brandName")),
+                "brand": safe_str(enriched.get("brand_name") or enriched.get("brandName")),
                 "verdict": verdict,
                 "warnings": top,
             })

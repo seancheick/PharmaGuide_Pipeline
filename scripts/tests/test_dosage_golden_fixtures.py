@@ -415,7 +415,7 @@ class TestDosageNormalizerCleanedSchema:
             assert vit_d.original_unit == "IU"
 
     def test_no_conversion_rule_is_marked_nonfatal_in_conversion_evidence(self, normalizer):
-        """Expected no-rule conversion outcomes should be informational, not error-labeled."""
+        """Nutrients in standard mass units pass through as identity even without a rule."""
         product = {
             "servingSizes": [
                 {"quantity": 1, "unit": "capsule", "perDay": "once daily"}
@@ -430,11 +430,30 @@ class TestDosageNormalizerCleanedSchema:
         assert len(result.normalized_ingredients) == 1
 
         ev = result.normalized_ingredients[0].conversion_evidence
-        assert ev.get("success") is False
+        # Identity mass pass-through: mg nutrient without a rule succeeds
+        assert ev.get("success") is True
         assert ev.get("error") is None
+        assert ev.get("conversion_rule_id") == "identity_mass_passthrough"
+
+    def test_no_conversion_rule_for_non_mass_unit_is_failure(self, normalizer):
+        """Nutrients in non-mass units (e.g. IU) without a rule should fail."""
+        product = {
+            "servingSizes": [
+                {"quantity": 1, "unit": "capsule", "perDay": "once daily"}
+            ],
+            "activeIngredients": [
+                {"name": "Cactus", "quantity": 100, "unit": "IU"}
+            ]
+        }
+
+        result = normalizer.normalize_product_dosages(product)
+        assert result.success is True
+        assert len(result.normalized_ingredients) == 1
+
+        ev = result.normalized_ingredients[0].conversion_evidence
+        assert ev.get("success") is False
         assert ev.get("nonfatal_reason") == "no_conversion_rule"
         assert ev.get("conversion_status") == "not_converted_expected"
-        assert "No conversion rule found for nutrient: Cactus" in (ev.get("original_error") or "")
 
 
 class TestOverULFlagging:

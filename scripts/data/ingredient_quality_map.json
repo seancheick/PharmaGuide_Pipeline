@@ -19974,7 +19974,10 @@
           "organic matcha green tea",
           "matcha",
           "matcha green tea",
-          "organic matcha"
+          "organic matcha",
+          "organic green & white tea extract",
+          "green & white tea extract",
+          "green and white tea extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20502,7 +20505,8 @@
           "american ginseng root",
           "cereboost american ginseng (panax quinquefolius) extract",
           "cereboost american ginseng extract",
-          "cereboost"
+          "cereboost",
+          "american ginseng root extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -20544,7 +20548,10 @@
           "siberian ginseng root extract",
           "siberian eleutherococcus",
           "siberian root & rhizome powder",
-          "siberian root and rhizome powder"
+          "siberian root and rhizome powder",
+          "eleuthero root bark extract",
+          "eleuthero root bark 50:1 extract",
+          "eleuthero root bark"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -28695,7 +28702,13 @@
           "AMPK activator gynostemma",
           "ActivAMP Gynostemma pentaphyllum Extract",
           "activamp(tm) gynostemma pentaphyllum leaf extract",
-          "activamp gynostemma pentaphyllum leaf extract"
+          "activamp gynostemma pentaphyllum leaf extract",
+          "gynostemma leaf extract",
+          "jiaogulan aerial parts extract",
+          "jiaogulan gynostemma aerial part extract",
+          "gynostemma pentaphyllum extract",
+          "gynostemma pentaphyllum leaf extract",
+          "gynostemma aerial part extract"
         ],
         "dosage_importance": 1.5,
         "absorption_structured": {
@@ -28724,7 +28737,11 @@
       "last_reviewed_at": "2026-02-28",
       "research_status": "validated"
     },
-    "external_ids": {},
+    "external_ids": {
+      "unii": "CHC1JS541R",
+      "unii_substance_name": "GYNOSTEMMA PENTAPHYLLUM WHOLE",
+      "unii_note": "GSRS verified 2026-05-20; gypenosides are the active saponins from this plant"
+    },
     "aliases": []
   },
   "huperzine_a": {
@@ -34698,7 +34715,8 @@
           "Maitake mushroom fruiting body extract",
           "maitake (grifola frondosa) fruiting body proprietary extract",
           "maitake (grifola frondosa) fruit body powder",
-          "maitake mushroom mycelia powder"
+          "maitake mushroom mycelia powder",
+          "maitake fruiting body hot water extract"
         ],
         "score": 11,
         "dosage_importance": 1.0,
@@ -37443,7 +37461,7 @@
     "statistics": {
       "total_parents": 621,
       "total_forms": 1392,
-      "total_form_aliases": 12118,
+      "total_form_aliases": 12139,
       "parents_with_parent_aliases": 187,
       "parents_with_contains_aliases": 0,
       "parents_with_pattern_aliases": 0
@@ -51234,7 +51252,9 @@
           "agaricus brasiliensis fruiting body extract",
           "agaricus brasiliensis extract",
           "sun mushroom extract",
-          "agaricus blazei extract"
+          "agaricus blazei extract",
+          "agaricus fruiting body extract",
+          "agaricus fruiting body hot water extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -51258,7 +51278,9 @@
           "himematsutake",
           "agaricus brasiliensis",
           "blazei mushroom",
-          "agaricus blazei murill mushroom"
+          "agaricus blazei murill mushroom",
+          "agaricus",
+          "agaricus extract"
         ],
         "dosage_importance": 1.0,
         "absorption_structured": {
@@ -51286,7 +51308,12 @@
     "cui_note": "No confirmed exact UMLS concept found for Royal Sun Blazei.",
     "rxcui_note": "No RxNorm concept for supplement ingredient",
     "cui_status": "no_confirmed_umls_match",
-    "external_ids": {},
+    "external_ids": {
+      "unii": "VPV5NGT6E0",
+      "unii_substance_name": "AGARICUS BLAZEI FRUITING BODY",
+      "unii_whole": "11MSQ4JG7G",
+      "unii_note": "GSRS verified 2026-05-20; VPV5NGT6E0 = fruiting body, 11MSQ4JG7G = whole organism"
+    },
     "aliases": []
   },
   "rhaponticin": {
@@ -53990,7 +54017,10 @@
           "GojiRich",
           "Lycium barbarum Fruit Extract",
           "Lycium barbarum, Powder",
-          "lycium"
+          "lycium",
+          "lycium berry extract",
+          "goji lycium berry extract",
+          "lycium berry"
         ],
         "notes": "Lycium barbarum fruit. Rich in polysaccharides, zeaxanthin, and betaine. Traditional Chinese medicine tonic.",
         "natural": true,
@@ -54008,7 +54038,13 @@
       "Goji Berry Fruit Extract",
       "Goji Berry Juice, Powder"
     ],
-    "external_ids": {}
+    "external_ids": {
+      "unii": "930626MWDL",
+      "unii_substance_name": "LYCIUM BARBARUM FRUIT",
+      "cas": "85085-46-7",
+      "rxcui": "1311632",
+      "unii_note": "GSRS verified 2026-05-20; fruit (berry) substance, NOT root bark (766SVR5GCU)"
+    }
   },
   "african_mango": {
     "standard_name": "African Mango",

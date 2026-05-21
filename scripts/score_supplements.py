@@ -36,7 +36,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from constants import LOG_DATE_FORMAT, LOG_FORMAT
 from audit_evidence_utils import derive_non_gmo_audit
 from inactive_ingredient_resolver import InactiveIngredientResolver
-from supplement_type_utils import infer_supplement_type
+from supplement_taxonomy import classify_supplement
 
 try:
     from match_ledger import (
@@ -467,7 +467,25 @@ class SupplementScorer:
     # Classifier + mapping gate
     # ---------------------------------------------------------------------
 
+    # Taxonomy primary_type → legacy scoring-behavior mapping.
+    # Scoring logic checks against these sets — not raw primary_type strings.
+    _SINGLE_TYPES = frozenset({
+        "single", "single_nutrient",
+        "single_vitamin", "single_mineral",
+        "herbal_botanical", "amino_acid", "collagen",
+    })
+    _MULTI_TYPES = frozenset({"multivitamin"})
+    _PROBIOTIC_TYPES = frozenset({"probiotic"})
+
     def _classify_supplement_type(self, product: Dict[str, Any]) -> str:
+        """Resolve supplement type for scoring, preferring taxonomy primary_type."""
+        # Primary source: taxonomy v2 (NP-filtered, expanded types)
+        taxonomy = product.get("supplement_taxonomy") or {}
+        primary_type = norm_text(taxonomy.get("primary_type"))
+        if primary_type and primary_type != "general_supplement":
+            return primary_type
+
+        # Fallback: enricher's legacy supplement_type
         st = product.get("supplement_type", {})
         if isinstance(st, str):
             existing = norm_text(st) or st
@@ -476,37 +494,11 @@ class SupplementScorer:
         else:
             existing = ""
 
-        inferred = infer_supplement_type(product)
-        inferred_type = norm_text(inferred.get("type")) or "unknown"
-
-        if existing:
-            if existing == "single":
-                return "single"
-            if existing not in {"unknown", "specialty"}:
-                return existing
-            if inferred_type not in {"unknown", "specialty"}:
-                return inferred_type
+        if existing and existing not in {"unknown", ""}:
             return existing
 
-        if inferred_type:
-            return inferred_type
-
-        if isinstance(st, str):
-            return st
-        if not isinstance(st, dict):
-            st = {}
-
-        active_count = int(as_float(st.get("active_count"), 0) or 0)
-        if not active_count:
-            active_count = len(safe_list(product.get("ingredient_quality_data", {}).get("ingredients")))
-
-        if active_count == 1:
-            return "single_nutrient"
-        if active_count >= 6:
-            return "multivitamin"
-        if 2 <= active_count <= 5:
-            return "targeted"
-        return "unknown"
+        # Last resort: taxonomy general_supplement or unknown
+        return primary_type or "unknown"
 
     def _unmapped_active_names(self, product: Dict[str, Any]) -> List[str]:
         ingredients = safe_list(product.get("ingredient_quality_data", {}).get("ingredients"))
@@ -882,7 +874,7 @@ class SupplementScorer:
             )
             self._parent_total_warned = True
 
-        is_single = supp_type in {"single", "single_nutrient"}
+        is_single = supp_type in self._SINGLE_TYPES
         # Pre-compute: count of NON-blend candidates that would otherwise
         # contribute to A1. If any exist, blend parents are excluded
         # (the disclosed children/siblings are the real signal). If NONE
@@ -956,7 +948,7 @@ class SupplementScorer:
 
         avg_raw = sum(s * w for s, w in weighted_values) / denom
         a1_cfg = self.config.get("section_A_ingredient_quality", {}).get("A1_bioavailability_form", {})
-        if supp_type == "multivitamin":
+        if supp_type in self._MULTI_TYPES:
             smoothing = as_float(a1_cfg.get("multivitamin_smoothing_factor"), 0.7)
             if smoothing is None or smoothing < 0.0 or smoothing > 1.0:
                 smoothing = 0.7
@@ -1203,7 +1195,7 @@ class SupplementScorer:
             .get("A6_single_ingredient_efficiency", {})
             or {}
         )
-        single_types = set(a6_cfg.get("single_types") or ["single", "single_nutrient"])
+        single_types = set(a6_cfg.get("single_types") or []) | self._SINGLE_TYPES
         if supp_type not in single_types:
             return 0.0
 
@@ -1441,7 +1433,7 @@ class SupplementScorer:
 
         eligibility: Optional[Dict[str, Any]] = None
 
-        if supp_type != "probiotic":
+        if supp_type not in self._PROBIOTIC_TYPES:
             if not probiotic_flag:
                 return self._probiotic_bonus_zero(
                     {
@@ -2131,7 +2123,7 @@ class SupplementScorer:
         # Marine/omega-specific certs: only count when product contains omega-3 /
         # marine ingredients. (Same gate as v3, applied to verified entries.)
         marine_cert_tokens = self._get_marine_cert_tokens()
-        omega_like = supp_type == "specialty" or any(
+        omega_like = supp_type in {"specialty", "omega_3"} or any(
             any(term in norm_text(i.get("name") or i.get("standard_name"))
                 for term in ("omega", "fish oil", "krill", "cod liver", "marine", "dha", "epa"))
             for i in self._get_active_ingredients(product)
@@ -2418,7 +2410,7 @@ class SupplementScorer:
         supp_type = str(supp_type).strip().lower()
 
         # Priority 1: probiotic supp_type wins everything.
-        if supp_type == "probiotic":
+        if supp_type in self._PROBIOTIC_TYPES:
             return "probiotic"
 
         name_text = " ".join(
@@ -2446,7 +2438,7 @@ class SupplementScorer:
             return "generic"
 
         # Priority 4: multivitamin supp_type.
-        if supp_type == "multivitamin":
+        if supp_type in self._MULTI_TYPES:
             return "multi_or_prenatal"
 
         # Priority 5: prenatal keyword on a non-multivit product.
@@ -4322,7 +4314,7 @@ class SupplementScorer:
         output = {
             "dsld_id": product_id,
             "product_name": product_name,
-            "brand_name": product.get("brandName", ""),
+            "brand_name": product.get("brand_name") or product.get("brandName", ""),
             "quality_score": round(quality_score, 1) if quality_score is not None else None,
             "score_80": round(quality_score, 1) if quality_score is not None else None,
             "score_100_equivalent": score_100_equivalent,
@@ -4335,11 +4327,23 @@ class SupplementScorer:
             "badges": self._build_badges(product, verdict),
             "category_percentile": None,
             "category_percentile_text": None,
-            "percentile_category": product.get("percentile_category"),
+            "percentile_category": (
+                product.get("supplement_taxonomy", {}).get("percentile_category")
+                or product.get("percentile_category")
+            ),
             "percentile_category_label": product.get("percentile_category_label"),
-            "percentile_category_source": product.get("percentile_category_source"),
-            "percentile_category_confidence": product.get("percentile_category_confidence"),
-            "percentile_category_signals": product.get("percentile_category_signals"),
+            "percentile_category_source": (
+                "taxonomy_v2" if product.get("supplement_taxonomy", {}).get("percentile_category")
+                else product.get("percentile_category_source")
+            ),
+            "percentile_category_confidence": (
+                product.get("supplement_taxonomy", {}).get("classification_confidence")
+                or product.get("percentile_category_confidence")
+            ),
+            "percentile_category_signals": (
+                product.get("supplement_taxonomy", {}).get("classification_reasons")
+                or product.get("percentile_category_signals")
+            ),
             "output_schema_version": self.OUTPUT_SCHEMA_VERSION,
             "scoring_status": scoring_status,
             "score_basis": score_basis,
@@ -4347,6 +4351,9 @@ class SupplementScorer:
             "breakdown": breakdown,
             "flags": sorted(set(flags)),
             "supp_type": supp_type,
+            "primary_type": product.get("primary_type") or product.get("supplement_taxonomy", {}).get("primary_type"),
+            "secondary_type": product.get("secondary_type") or product.get("supplement_taxonomy", {}).get("secondary_type"),
+            "supplement_taxonomy": product.get("supplement_taxonomy", {}),
             "unmapped_actives": unmapped_actives,
             "unmapped_actives_total": int(unmapped_actives_total),
             "unmapped_actives_excluding_banned_exact_alias": int(

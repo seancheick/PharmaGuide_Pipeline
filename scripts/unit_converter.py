@@ -191,6 +191,48 @@ class UnitConverter:
         )
 
         if rule_id is None:
+            # No specific vitamin/mineral conversion rule found.
+            # Try mass conversion if a different target unit was requested
+            # (e.g. mg → mcg for "Generic" nutrient).
+            standard_mass_units = {'mg', 'mcg', 'g', 'ug', 'µg'}
+            target_for_fallback = to_unit or from_unit
+            if from_unit_lower in standard_mass_units:
+                target_lower = target_for_fallback.lower().strip()
+                # If from and to are the same unit (or to is unspecified),
+                # this is an identity pass-through — nutrient is already in
+                # its canonical unit (e.g. Vitamin C in mg, Calcium in mg).
+                if target_lower == from_unit_lower or to_unit is None:
+                    return ConversionResult(
+                        success=True,
+                        original_value=amount,
+                        original_unit=from_unit,
+                        converted_value=amount,
+                        converted_unit=from_unit,
+                        conversion_rule_id="identity_mass_passthrough",
+                        conversion_factor=1.0,
+                        nutrient_detected=nutrient,
+                        form_detected=None,
+                        form_detection_source="no_conversion_needed",
+                        confidence="high",
+                        notes=[f"Nutrient already in standard mass unit ({from_unit}); no conversion rule required"]
+                    )
+                # Different target unit — try mass conversion (e.g. mg → mcg)
+                mass_result = self.convert_mass(amount, from_unit, target_for_fallback)
+                if mass_result.success:
+                    return ConversionResult(
+                        success=True,
+                        original_value=amount,
+                        original_unit=from_unit,
+                        converted_value=mass_result.converted_value,
+                        converted_unit=mass_result.converted_unit,
+                        conversion_rule_id="mass_conversion",
+                        conversion_factor=mass_result.conversion_factor,
+                        nutrient_detected=nutrient,
+                        form_detected=None,
+                        form_detection_source="mass_conversion_fallback",
+                        confidence="high",
+                        notes=["No specific rule; used mass conversion"]
+                    )
             return ConversionResult(
                 success=False,
                 original_value=amount,
@@ -398,10 +440,16 @@ class UnitConverter:
             if nutrient_lower in std_name or std_name in nutrient_lower:
                 return rule_id, rule_data
 
-            # Check aliases
+            # Check aliases — exact match first, then substring for
+            # parenthetical forms like "Vitamin B3 (Niacin)" matching "vitamin b3"
             aliases = rule_data.get('aliases', [])
             for alias in aliases:
-                if alias.lower() == nutrient_lower:
+                alias_lower = alias.lower()
+                if alias_lower == nutrient_lower:
+                    return rule_id, rule_data
+                # Substring match: alias appears as a word boundary in nutrient
+                # e.g. "vitamin b3" in "vitamin b3 (niacin)"
+                if len(alias_lower) >= 2 and alias_lower in nutrient_lower:
                     return rule_id, rule_data
 
         return None, None

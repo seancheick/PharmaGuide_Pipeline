@@ -92,6 +92,7 @@ from constants import (
     PROMOTE_REASON_ABSORPTION_ENHANCER,
 )
 from supplement_type_utils import infer_supplement_type
+from supplement_taxonomy import classify_supplement
 
 # Form-keyword vocabulary — single source of truth for omega-3 / probiotic /
 # postbiotic / prebiotic / vitamin-mineral form patterns. Replaces 3-5
@@ -13636,7 +13637,11 @@ class SupplementEnricherV3:
             enriched.pop("percentDvFootnote", None)
             enriched.pop("hasOuterCarton", None)
             enriched.pop("upcValid", None)
-            enriched.pop("productType", None)  # enricher uses _classify_supplement_type instead
+            # Preserve DSLD productType for taxonomy cross-validation before popping
+            _raw_pt = enriched.get("productType")
+            if isinstance(_raw_pt, dict) and _raw_pt.get("langualCodeDescription"):
+                enriched["dsld_product_type_raw"] = _raw_pt
+            enriched.pop("productType", None)
             enriched.pop("events", None)  # only "Off Market"/"Date entered", no safety signal
             enriched.pop("labelRelationships", None)
             enriched.pop("metadata", None)  # mappingStats/transparencyMetrics recomputed via match_ledger
@@ -13647,6 +13652,8 @@ class SupplementEnricherV3:
                 enriched['dsld_id'] = enriched['id']
             if 'fullName' in enriched and 'product_name' not in enriched:
                 enriched['product_name'] = enriched['fullName']
+            if 'brandName' in enriched and 'brand_name' not in enriched:
+                enriched['brand_name'] = enriched['brandName']
 
             # Add enrichment metadata
             enriched["enrichment_version"] = self.VERSION
@@ -13727,6 +13734,14 @@ class SupplementEnricherV3:
 
             # Probiotic-specific data
             enriched["probiotic_data"] = self._collect_probiotic_data(product)
+
+            # Canonical taxonomy classification (v2) — NP-filtered, expanded types
+            # MUST run AFTER probiotic_data so the NP exemption gate for
+            # probiotic strains (is_probiotic_product) can fire correctly.
+            taxonomy = classify_supplement(enriched)
+            enriched["supplement_taxonomy"] = taxonomy
+            enriched["primary_type"] = taxonomy["primary_type"]
+            enriched["secondary_type"] = taxonomy["secondary_type"]
 
             # Dietary sensitivity data (sugar/sodium for diabetes/hypertension users)
             enriched["dietary_sensitivity_data"] = self._collect_dietary_sensitivity_data(product)
