@@ -144,8 +144,7 @@ def test_none_product_is_not_omega_like():
 
 
 def test_marine_keyword_in_ingredient_is_omega_like():
-    """'Marine collagen' is a marine product; 'Marine source DHA' is omega.
-    The ingredient-text branch catches both via 'marine'."""
+    """Marine source DHA is omega-like because DHA is explicit."""
     product = {
         "ingredient_quality_data": {"ingredients": [
             {"name": "Marine DHA from algae", "canonical_id": "dha", "quantity": 300, "unit": "mg"},
