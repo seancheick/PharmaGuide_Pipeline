@@ -2385,32 +2385,46 @@ class SupplementScorer:
         """Route a product to one of the B5 opacity classes:
         probiotic / multi_or_prenatal / sports_active / generic.
 
-        Priority (refined post-P0.2 canary inspection on real catalog):
-          1. supp_type=probiotic — strongest signal (enricher inspected ingredients).
-          2. Product-name sports keyword — catches pre-workout / BCAA / creatine
-             stacks even when the enricher labeled them `multivitamin` because
-             of bundled vitamins (e.g., Nutricost PRE Pre-Workout, SR Whey,
-             GNC BCAA Gummy). Sports opacity hides per-component dose — the
-             worst case — so it outranks multivit routing.
-          3. Generic override for omega/enzyme/joint/collagen/protein products
-             that carry a broad category signal but are not RDA-panel multis.
-          4. supp_type=multivitamin — fall through here only when no sports
-             keyword matched.
-          5. Product-name prenatal keyword — catches `Prenatal DHA` etc. that
-             classify as `specialty` due to small active count.
-          6. primary_category=multivitamin fallback — supp_type=specialty /
-             targeted / unknown with primary_category=multivitamin (e.g., GoL
-             MyKind Men's/Women's Multi) routes to multi_or_prenatal.
-          7. Fallback: generic (v3 behavior).
+        SP-2.7 (2026-05-21): taxonomy-first. Reads
+        `supplement_taxonomy.primary_type` (the canonical signal emitted by
+        the enricher post-2026-05-20) before falling back to the legacy
+        supplement_type / primary_category / name-keyword heuristics. Old
+        enriched batches without taxonomy keep the original v3 routing
+        intact — none of the legacy paths were removed, only a higher-
+        priority taxonomy check was added.
+
+        Priority order:
+          1. probiotic (taxonomy primary_type OR legacy supp_type).
+          2. Sports name keyword overlay (pre-workout / BCAA / creatine
+             stacks have their own 1.5x opacity tier; beats multi).
+          3. GENERIC_OVERRIDE (legacy v3 safety net for products that
+             carry a broad category signal but are not RDA-panel multis —
+             omega / enzyme / joint / collagen / protein). Kept active
+             across both taxonomy and legacy paths because it protects
+             against any future taxonomy mis-classification.
+          4. Taxonomy primary_type in {multivitamin, b_complex} -> multi.
+          5. Prenatal name keyword -> multi (catches Prenatal DHA where
+             taxonomy might classify as omega_3).
+          6. Legacy fallback (taxonomy absent or non-multi-class):
+                supp_type in _MULTI_TYPES                  -> multi
+                primary_category == multivitamin           -> multi
+                (GoL MyKind Men's/Women's Multi pattern)
+          7. Fallback: generic.
+
+        Taxonomy primary_type in {omega_3, collagen, joint_support, ...}
+        naturally falls through to generic at step 7 — B5 has no separate
+        opacity tier for omega; fish oil uses the 1.0x generic multiplier.
         """
+        primary_type = self._primary_type_from_product(product)
+
         st_payload = product.get("supplement_type", {})
         supp_type = (
             st_payload.get("type") if isinstance(st_payload, dict) else st_payload
         ) or product.get("supp_type") or ""
         supp_type = str(supp_type).strip().lower()
 
-        # Priority 1: probiotic supp_type wins everything.
-        if supp_type in self._PROBIOTIC_TYPES:
+        # Priority 1: probiotic (taxonomy first, legacy fallback).
+        if primary_type == "probiotic" or supp_type in self._PROBIOTIC_TYPES:
             return "probiotic"
 
         name_text = " ".join(
@@ -2418,16 +2432,14 @@ class SupplementScorer:
             for k in ("product_name", "fullName", "brand_name", "bundleName")
         )
 
-        # Priority 2: sports keywords beat multivitamin supp_type.
+        # Priority 2: sports keyword overlay beats multivitamin routing.
         if self._B5_SPORTS_KEYWORDS.search(name_text):
             return "sports_active"
 
         primary_category = str(product.get("primary_category") or "").strip().lower()
 
-        # Priority 3: shipped catalog correction for products that carry a
-        # prenatal/multivitamin signal but are actually single-purpose omega,
-        # enzyme, joint-support, or collagen/protein products. Their opacity
-        # semantics are not the multi/prenatal RDA panel case.
+        # Priority 3: legacy GENERIC_OVERRIDE safety net. Kept active so
+        # any future taxonomy mis-classification still routes correctly.
         if (
             primary_category in self._B5_GENERIC_OVERRIDE_PRIMARY_CATEGORIES
             or (
@@ -2437,20 +2449,40 @@ class SupplementScorer:
         ):
             return "generic"
 
-        # Priority 4: multivitamin supp_type.
-        if supp_type in self._MULTI_TYPES:
+        # Priority 4: taxonomy multivitamin / b_complex -> multi.
+        if primary_type in ("multivitamin", "b_complex"):
             return "multi_or_prenatal"
 
-        # Priority 5: prenatal keyword on a non-multivit product.
+        # Priority 5: prenatal name keyword -> multi.
         if self._B5_PRENATAL_KEYWORDS.search(name_text):
             return "multi_or_prenatal"
 
-        # Priority 6: primary_category=multivitamin fallback for specialty /
-        # targeted / unknown supp_type. Captures GoL Men's/Women's Multi.
+        # Priority 6: legacy fallback for old batches without taxonomy.
+        if supp_type in self._MULTI_TYPES:
+            return "multi_or_prenatal"
         if primary_category == "multivitamin":
             return "multi_or_prenatal"
 
         return "generic"
+
+    @staticmethod
+    def _primary_type_from_product(product: Dict[str, Any]) -> str:
+        """Read the canonical `primary_type` from an enriched product.
+
+        Prefers the top-level `primary_type` field (set by
+        `enrich_supplements_v3` post-2026-05-20), then nested
+        `supplement_taxonomy.primary_type`. Returns "" when the taxonomy
+        is absent (old enriched batches).
+        """
+        direct = product.get("primary_type") if isinstance(product, dict) else None
+        if isinstance(direct, str) and direct.strip():
+            return direct.strip().lower()
+        taxonomy = (product or {}).get("supplement_taxonomy")
+        if isinstance(taxonomy, dict):
+            nested = taxonomy.get("primary_type")
+            if isinstance(nested, str) and nested.strip():
+                return nested.strip().lower()
+        return ""
 
     def _blend_quantity_to_mg(self, amount: Any, unit: Any) -> Tuple[Optional[float], bool]:
         qty = as_float(amount, None)
@@ -3889,6 +3921,26 @@ class SupplementScorer:
     ) -> Tuple[str, str, str, Optional[float], List[str]]:
         def _stable_key(value: str) -> str:
             return re.sub(r"[^a-z0-9]+", "_", norm_text(value)).strip("_")
+
+        # SP-2.8 (2026-05-21): taxonomy is the source of truth for product
+        # class. Prefer `supplement_taxonomy.percentile_category` over the
+        # legacy explicit field — keeps the scorer aligned with the export
+        # path (build_final_db) and the taxonomy classifier itself.
+        # Legacy paths remain as fallback for old enriched batches.
+        taxonomy = product.get("supplement_taxonomy")
+        if isinstance(taxonomy, dict):
+            tax_category = norm_text(taxonomy.get("percentile_category"))
+            if tax_category:
+                category_key = _stable_key(tax_category)
+                category_label = re.sub(r"[_-]+", " ", tax_category).strip().title()
+                confidence = as_float(taxonomy.get("classification_confidence"), None)
+                reasons = taxonomy.get("classification_reasons")
+                signals = (
+                    [str(item) for item in reasons if item is not None]
+                    if isinstance(reasons, list)
+                    else []
+                )
+                return category_key, category_label, "taxonomy_v2", confidence, signals
 
         explicit_category = norm_text(product.get("percentile_category"))
         explicit_label = str(product.get("percentile_category_label") or "").strip()
