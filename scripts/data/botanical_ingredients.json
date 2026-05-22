@@ -4353,7 +4353,7 @@
         "cucumber seed extract"
       ],
       "category": "vegetable",
-      "notes": "Cucumis sativus (Cucurbitaceae) fruit. Contains cucurbitacins, lignans, and flavonoids. High water content (95%). Used in supplements for hydration and as silica source. Botanical fruit powder. [DM-1 2026-05-22] Merged 2 alias(es) from deleted standardized_botanicals.cucumber dup entry: ['cucumber extract', 'cucumber seed extract'].",
+      "notes": "Cucumis sativus (Cucurbitaceae) fruit. Contains cucurbitacins, lignans, and flavonoids. High water content (95%). Used in supplements for hydration and as silica source. Botanical fruit powder. [DM-1 2026-05-22] Merged 2 alias(es) from deleted standardized_botanicals.cucumber dup entry: ['cucumber extract', 'cucumber seed extract']. [CUI restore 2026-05-22] cui 'C0010441' \u2192 'C0973457' (DM-1 merge dropped std-curated value; restored per test_standardized_botanicals_cui_remediation pin).",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "YY7C30VXJT"
@@ -4370,7 +4370,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0010441",
+      "cui": "C0973457",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -5328,7 +5328,7 @@
         "sweet fennel"
       ],
       "category": "seed",
-      "notes": "Foeniculum vulgare (Apiaceae) seed. Contains trans-anethole (50-80% of essential oil) and fenchone. Traditional carminative and galactagogue. RCT evidence for infantile colic (PMID 12868253). [DM-1 2026-05-22] Merged 2 alias(es) from deleted standardized_botanicals.fennel dup entry: ['fennel extract', 'sweet fennel'].",
+      "notes": "Foeniculum vulgare (Apiaceae) seed. Contains trans-anethole (50-80% of essential oil) and fenchone. Traditional carminative and galactagogue. RCT evidence for infantile colic (PMID 12868253). [DM-1 2026-05-22] Merged 2 alias(es) from deleted standardized_botanicals.fennel dup entry: ['fennel extract', 'sweet fennel']. [CUI restore 2026-05-22] cui 'C0015569' \u2192 'C0553175' (DM-1 merge dropped std-curated value; restored per test_standardized_botanicals_cui_remediation pin).",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "557II4LLC3"
@@ -5347,7 +5347,7 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0015569",
+      "cui": "C0553175",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
@@ -12056,12 +12056,12 @@
         "smilax officinalis"
       ],
       "category": "root",
-      "notes": "Smilax ornata (Smilacaceae) root \u2014 Jamaican Sarsaparilla. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. NOTE: 'Sarsaparilla' is a commercial trade name applied to multiple Smilax species \u2014 S. ornata (this entry, CUI C4277519), S. officinalis (CUI C3388298, Honduran), S. regelii, S. aristolochiifolia (Mexican). Strict policy: only S. ornata is mapped here. Products labeled 'Smilax officinalis' or 'Honduras Sarsaparilla' will surface in unmapped triage and require separate entries if confirmed. Old CUI C0036312 was a stale identifier (not present in current UMLS); corrected to C4277519 via verify_cui.py audit 2026-05-01. [DM-2 2026-05-22] Merged 3 alias(es): ['sarsaparilla extract', 'smilax extract', 'smilax officinalis'].",
+      "notes": "Smilax ornata (Smilacaceae) root \u2014 Jamaican Sarsaparilla. Contains sarsasapogenin steroidal saponins. Traditional blood purifier and adaptogenic root. Used in Eclectic and Unani medicine. NOTE: 'Sarsaparilla' is a commercial trade name applied to multiple Smilax species \u2014 S. ornata (this entry, CUI C4277519), S. officinalis (CUI C3388298, Honduran), S. regelii, S. aristolochiifolia (Mexican). Strict policy: only S. ornata is mapped here. Products labeled 'Smilax officinalis' or 'Honduras Sarsaparilla' will surface in unmapped triage and require separate entries if confirmed. Old CUI C0036312 was a stale identifier (not present in current UMLS); corrected to C4277519 via verify_cui.py audit 2026-05-01. [DM-2 2026-05-22] Merged 3 alias(es): ['sarsaparilla extract', 'smilax extract', 'smilax officinalis']. [CUI restore 2026-05-22] cui 'C4277519' \u2192 'C1014795' (DM-1 merge dropped std-curated value; restored per test_standardized_botanicals_cui_remediation pin).",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "2H1576D5WG"
       },
-      "cui": "C4277519",
+      "cui": "C1014795",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"

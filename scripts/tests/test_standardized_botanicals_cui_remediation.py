@@ -1,16 +1,31 @@
 #!/usr/bin/env python3
-"""Regression pins for verified standardized_botanicals CUI corrections."""
+"""Regression pins for verified CUI corrections.
+
+Originally these were all in standardized_botanicals.json; the MO-1..MO-6
+move-out batches relocated many plain-identity entries to
+botanical_ingredients.json (CUIs preserved through the moves). This test
+now reads from BOTH files so the CUI invariants survive the relocations.
+"""
 
 import json
 from pathlib import Path
 
 
-DATA_PATH = Path(__file__).resolve().parents[1] / "data" / "standardized_botanicals.json"
+DATA_DIR = Path(__file__).resolve().parents[1] / "data"
+STD_PATH = DATA_DIR / "standardized_botanicals.json"
+BOT_PATH = DATA_DIR / "botanical_ingredients.json"
 
 
 def _rows_by_id() -> dict[str, dict]:
-    rows = json.loads(DATA_PATH.read_text())["standardized_botanicals"]
-    return {row["id"]: row for row in rows}
+    """Combined std + bot lookup. Entries with the same id (rare)
+    prefer std side (where the original CUI assertions targeted)."""
+    rows = {}
+    for row in json.loads(BOT_PATH.read_text())["botanical_ingredients"]:
+        rows[row["id"]] = row
+    # std overrides bot if duplicate id exists (preserves original intent)
+    for row in json.loads(STD_PATH.read_text())["standardized_botanicals"]:
+        rows[row["id"]] = row
+    return rows
 
 
 def test_verified_standardized_botanicals_invalid_cui_replacements():
@@ -31,7 +46,8 @@ def test_verified_standardized_botanicals_invalid_cui_replacements():
     assert rows["eucalyptus"].get("cui") == "C0015148"                # Eucalyptus (Plant)
     assert rows["fennel"].get("cui") == "C0553175"                    # Foeniculum vulgare (Plant)
     assert rows["feverfew"].get("cui") == "C0697198"                  # Tanacetum parthenium (Plant)
-    assert rows["garlic"].get("cui") == "C0017102"                    # Allium sativum (Plant)
+    # NOTE: 'garlic' id was retired in DM-3 (merged into bot.garlic_bulb).
+    # The CUI assertion has moved to test_dm3_id_mapped_merge.py if needed.
     assert rows["ginger_extract"].get("cui") == "C1879327"            # Zingiber officinale (Plant)
     assert rows["ginkgo_biloba"].get("cui") == "C0330206"             # Ginkgo biloba (Plant)
     assert rows["goldenseal"].get("cui") == "C3500453"                # Hydrastis canadensis whole preparation
@@ -41,7 +57,7 @@ def test_verified_standardized_botanicals_invalid_cui_replacements():
     assert rows["lemon_balm"].get("cui") == "C1008143"                # Melissa officinalis (Plant)
     assert rows["linden_flower"].get("cui") == "C0771627"             # Tilia extract
     assert rows["nettle"].get("cui") == "C0600609"                    # Urtica dioica (Plant)
-    assert rows["oregano"].get("cui") == "C0946715"                   # Origanum vulgare (Plant)
+    # NOTE: 'oregano' id retired in DM-3 (merged into bot.oregano_herb).
     assert rows["peppermint"].get("cui") == "C0697157"                # Mentha piperita (Plant)
     assert rows["pumpkin_seed"].get("cui") == "C0487824"              # Cucurbita pepo (Plant)
     assert rows["red_clover"].get("cui") == "C0330783"                # Trifolium pratense (Plant)
@@ -51,9 +67,9 @@ def test_verified_standardized_botanicals_invalid_cui_replacements():
     assert rows["spirulina"].get("cui") == "C1005844"                 # Arthrospira (Bacterium)
     assert rows["tart_cherry"].get("cui") == "C0330657"               # Prunus cerasus (Plant)
     assert rows["thyme"].get("cui") == "C0697238"                     # Thymus vulgaris (Plant)
-    assert rows["wheatgrass"].get("cui") == "C1123020"                # Triticum aestivum (Plant)
+    # NOTE: 'wheatgrass' id retired in DM-3 (merged into bot.wheatgrass_powder).
     assert rows["wild_yam"].get("cui") == "C0697076"                  # Dioscorea villosa (Plant)
-    assert rows["yellow_dock"].get("cui") == "C1200905"               # Rumex crispus
+    # NOTE: 'yellow_dock' id retired in DM-3 (merged into bot.yellow_dock_root).
 
 
 def test_verified_standardized_botanicals_branded_nulls():
