@@ -478,27 +478,26 @@ class SupplementScorer:
     _PROBIOTIC_TYPES = frozenset({"probiotic"})
 
     def _classify_supplement_type(self, product: Dict[str, Any]) -> str:
-        """Resolve supplement type for scoring, preferring taxonomy primary_type."""
-        # Primary source: taxonomy v2 (NP-filtered, expanded types)
+        """Resolve supplement type for scoring — always returns taxonomy primary_type.
+
+        No fallback to legacy supplement_type.type vocab. The taxonomy
+        primary_type drives both scoring behavior (via _SINGLE_TYPES,
+        _MULTI_TYPES, _PROBIOTIC_TYPES) and the exported supp_type field.
+        general_supplement is valid — it triggers no special bonuses, same
+        as the old targeted/specialty types.
+        """
         taxonomy = product.get("supplement_taxonomy") or {}
         primary_type = norm_text(taxonomy.get("primary_type"))
-        if primary_type and primary_type != "general_supplement":
+        if primary_type:
             return primary_type
 
-        # Fallback: enricher's legacy supplement_type
+        # Pre-taxonomy products (no supplement_taxonomy field at all)
         st = product.get("supplement_type", {})
         if isinstance(st, str):
-            existing = norm_text(st) or st
-        elif isinstance(st, dict):
-            existing = norm_text(st.get("type"))
-        else:
-            existing = ""
-
-        if existing and existing not in {"unknown", ""}:
-            return existing
-
-        # Last resort: taxonomy general_supplement or unknown
-        return primary_type or "unknown"
+            return norm_text(st) or "unknown"
+        if isinstance(st, dict):
+            return norm_text(st.get("type")) or "unknown"
+        return "unknown"
 
     def _unmapped_active_names(self, product: Dict[str, Any]) -> List[str]:
         ingredients = safe_list(product.get("ingredient_quality_data", {}).get("ingredients"))

@@ -493,6 +493,14 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
                 f"multivitamin (b-complex + extras): {len(vitamin_ids)} vitamins + {len(mineral_ids)} minerals"
             )
 
+    # --- Protein powder (name-driven, before multivitamin) ---
+    # Fortified protein powders have 1 protein + 5 vitamins → multivitamin by
+    # count, but the product identity is protein. Name signal overrides.
+    elif (cid_set & _PROTEIN_IDS) and any(t in product_name for t in _PROTEIN_NAME_TOKENS):
+        primary_type = "protein_powder"
+        confidence = 0.9
+        reasons.append(f"protein name+id signal: ids={list(cid_set & _PROTEIN_IDS)}")
+
     # --- Multivitamin / prenatal panel ---
     # Checked before omega so prenatal multis with DHA don't become omega_3.
     elif multi_panel_signal:
@@ -560,14 +568,75 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             primary_type = "amino_acid"
             confidence = 0.9
             reasons.append(f"single amino acid: {cid or cat}")
-        elif cat in ("herb", "botanical", "antioxidant"):
+        elif cat in ("herb", "botanical"):
             primary_type = "herbal_botanical"
             confidence = 0.9
             reasons.append(f"single herbal/botanical: {cid or cat}")
+        elif cat == "antioxidant":
+            # Botanical antioxidants (quercetin, resveratrol) → herbal_botanical
+            # Non-botanical antioxidants (CoQ10, ALA, PQQ) → general_supplement
+            _BOTANICAL_ANTIOXIDANTS = frozenset({
+                "quercetin", "resveratrol", "grape_seed_extract", "green_tea_extract",
+                "curcumin", "lycopene", "lutein", "zeaxanthin",
+            })
+            if cid in _BOTANICAL_ANTIOXIDANTS:
+                primary_type = "herbal_botanical"
+                confidence = 0.85
+                reasons.append(f"botanical antioxidant: {cid}")
+            else:
+                primary_type = "general_supplement"
+                confidence = 0.7
+                reasons.append(f"non-botanical antioxidant: {cid or cat}")
         else:
             primary_type = "general_supplement"
             confidence = 0.5
             reasons.append(f"single ingredient, uncategorized: {cid or cat}")
+
+    # --- Name-dominant single ingredient (active_count == 2, one is excipient) ---
+    # B12 1000mcg + Calcium 50mg (excipient) → single_vitamin, not combo.
+    # Fires when product name clearly names one ingredient but not the other.
+    elif active_count == 2 and len(canonical_ids) == 2:
+        def _cid_in_name(cid: str, name: str) -> bool:
+            """Check if a canonical_id is referenced in the product name."""
+            # Try canonical_id as space-separated words
+            if cid.replace("_", " ") in name:
+                return True
+            # Try secondary_type_map token
+            token = _SECONDARY_TYPE_MAP.get(cid, "")
+            if token and token in name:
+                return True
+            # Try common short forms (b12, d3, k2, etc.)
+            short_forms = {
+                "vitamin_b12": "b12", "vitamin_b12_cobalamin": "b12",
+                "vitamin_d": "vitamin d", "vitamin_d3": "d3",
+                "vitamin_c": "vitamin c", "vitamin_k2": "k2",
+                "vitamin_b6": "b6", "vitamin_b7_biotin": "biotin",
+            }
+            sf = short_forms.get(cid)
+            return bool(sf and sf in name)
+
+        cid_a, cid_b = canonical_ids[0], canonical_ids[1]
+        a_named = _cid_in_name(cid_a, product_name)
+        b_named = _cid_in_name(cid_b, product_name)
+        if a_named and not b_named:
+            dominant_cid = cid_a
+        elif b_named and not a_named:
+            dominant_cid = cid_b
+        else:
+            dominant_cid = None
+
+        if dominant_cid:
+            if dominant_cid in _VITAMIN_CANONICAL_IDS:
+                primary_type = "single_vitamin"
+            elif dominant_cid in _MINERAL_CANONICAL_IDS:
+                primary_type = "single_mineral"
+            elif dominant_cid in _AMINO_ACID_IDS:
+                primary_type = "amino_acid"
+            else:
+                primary_type = "general_supplement"
+            confidence = 0.85
+            other_cid = cid_b if dominant_cid == cid_a else cid_a
+            reasons.append(f"name-dominant single ingredient: {dominant_cid} (other={other_cid} not named)")
 
     # --- Vitamin + Mineral Combo (2-5 actives, mixed vitamins/minerals) ---
     elif 2 <= active_count <= 5 and (vitamin_ids or mineral_ids):
@@ -648,11 +717,18 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         if reason:
             reasons.append(reason)
 
-    # --- Fallback for remaining ---
+    # --- Fallback: zero quantified actives ---
+    # Products with all-NP ingredients (e.g. "Kids Sleep Gummies") still
+    # deserve a functional classification if the name strongly signals one.
     elif active_count == 0:
-        primary_type = "general_supplement"
-        confidence = 0.0
-        reasons.append("no quantified active ingredients")
+        if _has_functional_name_signal(product_name) or _has_sleep_signal(product_name) or _has_beauty_signal(product_name):
+            primary_type, confidence, reason = _detect_functional_name(product_name)
+            confidence *= 0.7  # lower confidence — no quantified backing
+            reasons.append(f"name-only classification (0 quantified actives): {reason}")
+        else:
+            primary_type = "general_supplement"
+            confidence = 0.0
+            reasons.append("no quantified active ingredients")
 
     # =========================================================================
     # SECONDARY TYPE

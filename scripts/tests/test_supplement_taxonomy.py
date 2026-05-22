@@ -561,3 +561,96 @@ class TestSubstringCollisionGuards:
             }
             result = classify_supplement(p)
             assert result["secondary_type"] != "iron", f"{name} got secondary_type=iron"
+
+
+# ============================================================================
+# Bug Regression Tests — found via 150-product spot-check audit
+# ============================================================================
+
+class TestBugRegressions:
+    """Each test encodes a real bug found during the 150-product audit."""
+
+    # Bug #4: CoQ10 is a lipid coenzyme, not a botanical
+    def test_coq10_not_herbal_botanical(self):
+        p = {
+            "product_name": "CoQ10 400 mg",
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "CoQ10", "canonical_id": "coq10", "category": "antioxidants",
+                 "quantity": 400, "unit": "mg"},
+            ]},
+        }
+        result = classify_supplement(p)
+        assert result["primary_type"] != "herbal_botanical", \
+            "CoQ10 is a lipid coenzyme, not a botanical"
+        assert result["secondary_type"] == "coq10"
+
+    def test_alpha_lipoic_acid_not_herbal(self):
+        p = {
+            "product_name": "Alpha-Lipoic Acid 600 mg",
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "Alpha-Lipoic Acid", "canonical_id": "alpha_lipoic_acid",
+                 "category": "antioxidants", "quantity": 600, "unit": "mg"},
+            ]},
+        }
+        result = classify_supplement(p)
+        assert result["primary_type"] != "herbal_botanical"
+
+    # Bug #5: B12 + calcium excipient → should be single_vitamin not combo
+    def test_b12_with_calcium_excipient_is_single_vitamin(self):
+        """B12 1000mcg + Calcium 50mg (excipient) → single_vitamin, not combo."""
+        p = {
+            "product_name": "Vitamin B12 1000 mcg",
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "Vitamin B12", "canonical_id": "vitamin_b12", "category": "vitamins",
+                 "quantity": 1000, "unit": "mcg"},
+                {"name": "Calcium", "canonical_id": "calcium", "category": "minerals",
+                 "quantity": 50, "unit": "mg"},
+            ]},
+        }
+        result = classify_supplement(p)
+        assert result["primary_type"] == "single_vitamin", \
+            f"B12+excipient calcium should be single_vitamin, got {result['primary_type']}"
+
+    # Bug #6: Fortified protein powder classified as multivitamin
+    def test_fortified_protein_powder_not_multivitamin(self):
+        """Whey protein + added vitamins → protein_powder, not multivitamin."""
+        p = {
+            "product_name": "Whey Protein Powder Chocolate",
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "Whey Protein", "canonical_id": "whey_protein", "category": "proteins",
+                 "quantity": 25000, "unit": "mg"},
+                {"name": "Vitamin A", "canonical_id": "vitamin_a", "category": "vitamins",
+                 "quantity": 500, "unit": "IU"},
+                {"name": "Vitamin C", "canonical_id": "vitamin_c", "category": "vitamins",
+                 "quantity": 60, "unit": "mg"},
+                {"name": "Calcium", "canonical_id": "calcium", "category": "minerals",
+                 "quantity": 200, "unit": "mg"},
+                {"name": "Iron", "canonical_id": "iron", "category": "minerals",
+                 "quantity": 4, "unit": "mg"},
+                {"name": "Magnesium", "canonical_id": "magnesium", "category": "minerals",
+                 "quantity": 50, "unit": "mg"},
+                {"name": "Zinc", "canonical_id": "zinc", "category": "minerals",
+                 "quantity": 5, "unit": "mg"},
+            ]},
+        }
+        result = classify_supplement(p)
+        assert result["primary_type"] == "protein_powder", \
+            f"Whey protein with fortification should be protein_powder, got {result['primary_type']}"
+
+    # Bug #7: Sleep gummies with all-NP ingredients → general_supplement
+    def test_sleep_gummies_all_np_still_classified(self):
+        """Products named 'Sleep' with all NP ingredients should be sleep_support."""
+        p = {
+            "product_name": "Kids Sleep Gummies Berry Flavor",
+            "ingredient_quality_data": {"ingredients": [
+                {"name": "L-Theanine", "canonical_id": "l_theanine", "category": "amino_acids",
+                 "quantity": 0, "unit": "NP"},
+                {"name": "Chamomile", "canonical_id": "chamomile", "category": "herbs",
+                 "quantity": 0, "unit": "NP"},
+                {"name": "Lemon Balm", "canonical_id": "lemon_balm", "category": "herbs",
+                 "quantity": 0, "unit": "NP"},
+            ]},
+        }
+        result = classify_supplement(p)
+        assert result["primary_type"] == "sleep_support", \
+            f"Sleep-named product with NP ingredients should be sleep_support, got {result['primary_type']}"
