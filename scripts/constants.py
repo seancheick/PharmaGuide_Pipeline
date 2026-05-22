@@ -435,6 +435,25 @@ EXCLUDED_LABEL_PHRASES = {
     "contains 2% or less:",
     "excipients c.s.p.",
     "vitamin k activity",
+    # B4 2026-05-22 — structural food-matrix descriptors / packaging artifacts
+    # surfaced as unmapped inactives in May 22 pipeline run. NOT individual
+    # ingredients; they're textural/sensory descriptors of confection or
+    # gummy bases. The underlying ingredients (cocoa, sugar, wheat, etc.)
+    # are mapped separately when listed individually.
+    "coloring",
+    "chocolate cookie crumbs",
+    "chocolate cookie pieces",
+    "chocolate chips",
+    "vanilla micro cookie gems",
+    "peanut flavored coating",
+    "yogurt flavored coating",
+    "chocolate flavored coating",
+    "chocolate flavoured coating",
+    "vegetable concentrate",
+    "certified organic fruit chew base blend",
+    "certified organic real food vitamin blend",
+    "certified organic real food vitamin blend:",
+    "other ingredients, redberry:",
 }
 
 # Nutritional warnings to track for UI display (but not map as ingredients)

@@ -3,15 +3,15 @@
     "description": "Other/inactive ingredients database for supplement excipients and additives",
     "purpose": "inactive_ingredient_classification",
     "schema_version": "5.4.0",
-    "last_updated": "2026-05-14",
-    "total_entries": 684,
+    "last_updated": "2026-05-22",
+    "total_entries": 691,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
       "vocab_source": "data/functional_roles_vocab.json (v1.0.0, 32 LOCKED IDs)",
-      "purpose": "Multi-valued functional role(s) for the Flutter UI tap-to-learn chip layer. Display-only — no scoring impact in V1. May be empty in V1 entries; populated in Phase 3 backfill batches per scripts/audits/functional_roles/. Final 100% completeness enforced by coverage_gate.py in Phase 5."
+      "purpose": "Multi-valued functional role(s) for the Flutter UI tap-to-learn chip layer. Display-only \u2014 no scoring impact in V1. May be empty in V1 entries; populated in Phase 3 backfill batches per scripts/audits/functional_roles/. Final 100% completeness enforced by coverage_gate.py in Phase 5."
     },
-    "additive_type_field_status": "DEPRECATED (Phase 4) — to be dropped after backfill batches complete. Replaced by functional_roles[] which expresses multi-valued roles correctly. Do not add new values to additive_type going forward.",
+    "additive_type_field_status": "DEPRECATED (Phase 4) \u2014 to be dropped after backfill batches complete. Replaced by functional_roles[] which expresses multi-valued roles correctly. Do not add new values to additive_type going forward.",
     "field_contract_additions": {
       "v5.2.0": {
         "is_label_descriptor": "Phase 4a flag (2026-04-30): true on label-noise entries (marketing_descriptor / phytochemical_marker / source_descriptor / etc.). Suppressed from Flutter inactive_ingredients[] blob.",
@@ -19,8 +19,8 @@
       }
     },
     "field_contract_changes": {
-      "v5.3.0": "2026-04-30 Phase 4c — category canonicalization. Renamed 241 → ~30 values per CLINICIAN_REVIEW.md Section 2B. Each category now equals either a functional_roles vocab ID or a transitional bucket (label_descriptor / active_pending_relocation / manual_review). No Flutter impact — Flutter reads functional_roles[], not category.",
-      "v5.4.0": "2026-04-30 Phase 6 — V1.1 attributes scaffolding. Added attributes object with is_branded_complex on heuristic-detected branded ingredient complexes (BioCell, Tonalin, AstraGin, etc.) — those flagged is_active_only AND with brand-marker name patterns."
+      "v5.3.0": "2026-04-30 Phase 4c \u2014 category canonicalization. Renamed 241 \u2192 ~30 values per CLINICIAN_REVIEW.md Section 2B. Each category now equals either a functional_roles vocab ID or a transitional bucket (label_descriptor / active_pending_relocation / manual_review). No Flutter impact \u2014 Flutter reads functional_roles[], not category.",
+      "v5.4.0": "2026-04-30 Phase 6 \u2014 V1.1 attributes scaffolding. Added attributes object with is_branded_complex on heuristic-detected branded ingredient complexes (BioCell, Tonalin, AstraGin, etc.) \u2014 those flagged is_active_only AND with brand-marker name patterns."
     }
   },
   "other_ingredients": [
@@ -182,7 +182,7 @@
       "is_additive": false,
       "additive_type": "natural_fiber",
       "allergen": false,
-      "notes": "Natural soluble fiber from Acacia senegal trees (E414). FDA GRAS. Prebiotic properties — fermented by colonic Bifidobacteria and Lactobacilli to produce short-chain fatty acids. Excellent safety profile with no ADI restriction (JECFA). Also functions as natural binder and stabilizer in tablets.",
+      "notes": "Natural soluble fiber from Acacia senegal trees (E414). FDA GRAS. Prebiotic properties \u2014 fermented by colonic Bifidobacteria and Lactobacilli to produce short-chain fatty acids. Excellent safety profile with no ADI restriction (JECFA). Also functions as natural binder and stabilizer in tablets.",
       "common_uses": [
         "dietary fiber",
         "prebiotic support",
@@ -227,7 +227,7 @@
       "is_additive": true,
       "additive_type": "preservative_natural",
       "allergen": false,
-      "notes": "Acetic acid (CH3COOH) — primary component of vinegar (4-8%). Used as pH adjuster and preservative in supplement formulations. FDA GRAS (21 CFR 184.1005). Antimicrobial at low pH; inhibits pathogenic bacteria. No ADI restriction (JECFA).",
+      "notes": "Acetic acid (CH3COOH) \u2014 primary component of vinegar (4-8%). Used as pH adjuster and preservative in supplement formulations. FDA GRAS (21 CFR 184.1005). Antimicrobial at low pH; inhibits pathogenic bacteria. No ADI restriction (JECFA).",
       "common_uses": [
         "preservation",
         "pH adjustment"
@@ -568,7 +568,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Branded marketing descriptor for age-related supplement formulations. Non-ingredient label text mapped for identity routing. No discrete chemical composition — functions as product naming convention.",
+      "notes": "Branded marketing descriptor for age-related supplement formulations. Non-ingredient label text mapped for identity routing. No discrete chemical composition \u2014 functions as product naming convention.",
       "common_uses": [
         "marketing claim"
       ],
@@ -804,7 +804,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Alpha-glycosyl isoquercitrin (AGIQ, enzymatically modified isoquercitrin) — water-soluble quercetin glycoside with enhanced bioavailability. FDA GRAS (GRN 220). Antioxidant. Used as food additive and supplement ingredient in Japan (FOSHU).",
+      "notes": "Alpha-glycosyl isoquercitrin (AGIQ, enzymatically modified isoquercitrin) \u2014 water-soluble quercetin glycoside with enhanced bioavailability. FDA GRAS (GRN 220). Antioxidant. Used as food additive and supplement ingredient in Japan (FOSHU).",
       "common_uses": [
         "identity mapping"
       ],
@@ -1018,7 +1018,7 @@
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
-      "notes": "Ammonium molybdate [(NH4)6Mo7O24] — inorganic molybdenum source used as trace mineral supplement. Cofactor for xanthine oxidase, sulfite oxidase, and aldehyde oxidase. FDA-permitted nutrient. UMLS C0002596.",
+      "notes": "Ammonium molybdate [(NH4)6Mo7O24] \u2014 inorganic molybdenum source used as trace mineral supplement. Cofactor for xanthine oxidase, sulfite oxidase, and aldehyde oxidase. FDA-permitted nutrient. UMLS C0002596.",
       "common_uses": [
         "molybdenum source",
         "catalyst in supplement manufacturing"
@@ -1057,7 +1057,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "AMP-XT — branded adenosine monophosphate or AMP-citrate stimulant complex. Identity mapping for proprietary energy/thermogenic supplement label tokens. Specific composition varies by manufacturer formulation.",
+      "notes": "AMP-XT \u2014 branded adenosine monophosphate or AMP-citrate stimulant complex. Identity mapping for proprietary energy/thermogenic supplement label tokens. Specific composition varies by manufacturer formulation.",
       "common_uses": [
         "identity mapping"
       ],
@@ -1209,7 +1209,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Anti-Fungi 10x/88 — branded antifungal herbal complex descriptor (typically caprylic acid + oregano base). Identity mapping for proprietary antifungal formulation naming. Specific composition varies by manufacturer.",
+      "notes": "Anti-Fungi 10x/88 \u2014 branded antifungal herbal complex descriptor (typically caprylic acid + oregano base). Identity mapping for proprietary antifungal formulation naming. Specific composition varies by manufacturer.",
       "common_uses": [
         "identity mapping"
       ],
@@ -1228,7 +1228,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Anti-Fungi 11x/88 — branded antifungal herbal complex descriptor (typically caprylic acid + oregano + undecylenic acid base). Identity mapping for proprietary formulation naming. Specific composition varies by manufacturer.",
+      "notes": "Anti-Fungi 11x/88 \u2014 branded antifungal herbal complex descriptor (typically caprylic acid + oregano + undecylenic acid base). Identity mapping for proprietary formulation naming. Specific composition varies by manufacturer.",
       "common_uses": [
         "identity mapping"
       ],
@@ -1504,7 +1504,7 @@
       "is_additive": false,
       "additive_type": "filler",
       "allergen": false,
-      "notes": "Arrowroot starch (Maranta arundinacea) — easily digestible, hypoallergenic starch used as filler, carrier, and binding agent in supplement tablets. GRAS food ingredient. Gluten-free. Bland taste, good for taste masking.",
+      "notes": "Arrowroot starch (Maranta arundinacea) \u2014 easily digestible, hypoallergenic starch used as filler, carrier, and binding agent in supplement tablets. GRAS food ingredient. Gluten-free. Bland taste, good for taste masking.",
       "common_uses": [
         "starch base",
         "binder"
@@ -1728,7 +1728,7 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "ATPro — branded adenosine triphosphate (ATP) support complex. Identity mapping for proprietary peak-ATP/energy-complex label tokens. Specific composition varies by manufacturer formulation.",
+      "notes": "ATPro \u2014 branded adenosine triphosphate (ATP) support complex. Identity mapping for proprietary peak-ATP/energy-complex label tokens. Specific composition varies by manufacturer formulation.",
       "common_uses": [
         "energy/performance branding"
       ],
@@ -1749,7 +1749,7 @@
       "additive_type": "descriptor",
       "allergen": true,
       "allergen_type": "soy",
-      "notes": "ASU (Avocado Soybean Unsaponifiables) — lipid extract from avocado and soybean oils. Studied for osteoarthritis via cartilage metabolism modulation (doi:10.1136/ard.60.2.171). Soy allergen. French prescription status (Piascledine 300).",
+      "notes": "ASU (Avocado Soybean Unsaponifiables) \u2014 lipid extract from avocado and soybean oils. Studied for osteoarthritis via cartilage metabolism modulation (doi:10.1136/ard.60.2.171). Soy allergen. French prescription status (Piascledine 300).",
       "common_uses": [
         "identity mapping"
       ],
@@ -2016,7 +2016,7 @@
       "is_additive": true,
       "additive_type": "clay_adsorbent",
       "allergen": false,
-      "notes": "Montmorillonite clay (bentonite) — aluminum phyllosilicate used as adsorbent, clarifying agent, and binder in supplement manufacturing. FDA GRAS for food processing. Ion-exchange and toxin-binding properties. Not significantly absorbed.",
+      "notes": "Montmorillonite clay (bentonite) \u2014 aluminum phyllosilicate used as adsorbent, clarifying agent, and binder in supplement manufacturing. FDA GRAS for food processing. Ion-exchange and toxin-binding properties. Not significantly absorbed.",
       "common_uses": [
         "processing aid",
         "binder"
@@ -2084,7 +2084,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Beta-ecdysterone (20-hydroxyecdysone) — insect molting hormone found in spinach and Cyanotis vaga. Studied for anabolic/protein synthesis effects (doi:10.1007/s00204-019-02490-x). WADA monitoring list. Identity mapping for label tokens.",
+      "notes": "Beta-ecdysterone (20-hydroxyecdysone) \u2014 insect molting hormone found in spinach and Cyanotis vaga. Studied for anabolic/protein synthesis effects (doi:10.1007/s00204-019-02490-x). WADA monitoring list. Identity mapping for label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -2231,7 +2231,7 @@
       "is_additive": false,
       "additive_type": "mineral_salt",
       "allergen": false,
-      "notes": "Bismuth citrate — mineral salt of bismuth used in specialty GI-support formulations. Related to bismuth subsalicylate (Pepto-Bismol). Mapped as non-scorable excipient. Not a standard supplement ingredient; OTC drug context.",
+      "notes": "Bismuth citrate \u2014 mineral salt of bismuth used in specialty GI-support formulations. Related to bismuth subsalicylate (Pepto-Bismol). Mapped as non-scorable excipient. Not a standard supplement ingredient; OTC drug context.",
       "common_uses": [
         "specialty support"
       ],
@@ -2516,7 +2516,7 @@
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Bovine bone marrow concentrate — used in traditional glandular/organ therapy formulations. Contains mesenchymal stem cell niche factors, collagen, and marrow fat. No controlled human efficacy data. USDA-inspected source.",
+      "notes": "Bovine bone marrow concentrate \u2014 used in traditional glandular/organ therapy formulations. Contains mesenchymal stem cell niche factors, collagen, and marrow fat. No controlled human efficacy data. USDA-inspected source.",
       "common_uses": [
         "glandular support"
       ],
@@ -2539,7 +2539,7 @@
       "is_additive": true,
       "additive_type": "natural_coating",
       "allergen": false,
-      "notes": "Plant-derived wax (carnauba, candelilla, or rice bran wax) used as tablet polish and moisture barrier coating. FDA GRAS. Inert — passes through GI tract unabsorbed. Provides glossy finish and protects against humidity.",
+      "notes": "Plant-derived wax (carnauba, candelilla, or rice bran wax) used as tablet polish and moisture barrier coating. FDA GRAS. Inert \u2014 passes through GI tract unabsorbed. Provides glossy finish and protects against humidity.",
       "common_uses": [
         "tablet polishing",
         "moisture barrier"
@@ -2752,7 +2752,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Calcium caprylate — calcium salt of caprylic acid (C8). Medium-chain fatty acid salt used as antifungal support and calcium source. Identity mapping for caprylic acid salt labels on supplement formulations.",
+      "notes": "Calcium caprylate \u2014 calcium salt of caprylic acid (C8). Medium-chain fatty acid salt used as antifungal support and calcium source. Identity mapping for caprylic acid salt labels on supplement formulations.",
       "common_uses": [
         "identity mapping"
       ],
@@ -2850,7 +2850,7 @@
       "additive_type": "milk_protein",
       "allergen": true,
       "allergen_type": "milk",
-      "notes": "Calcium salt of casein (milk protein) used as protein source and tablet binder. Contains ~90% protein with complete amino acid profile. Dairy allergen — must declare per FALCPA. GRAS food ingredient. Slow-digesting protein matrix.",
+      "notes": "Calcium salt of casein (milk protein) used as protein source and tablet binder. Contains ~90% protein with complete amino acid profile. Dairy allergen \u2014 must declare per FALCPA. GRAS food ingredient. Slow-digesting protein matrix.",
       "common_uses": [
         "binder",
         "protein source"
@@ -2878,7 +2878,7 @@
       "is_additive": true,
       "additive_type": "processing_salt",
       "allergen": false,
-      "notes": "Calcium chloride (CaCl2) — mineral salt used as firming agent, electrolyte source, and processing aid in supplement manufacturing. FDA GRAS (21 CFR 184.1193). Hygroscopic; also serves as desiccant in packaging.",
+      "notes": "Calcium chloride (CaCl2) \u2014 mineral salt used as firming agent, electrolyte source, and processing aid in supplement manufacturing. FDA GRAS (21 CFR 184.1193). Hygroscopic; also serves as desiccant in packaging.",
       "common_uses": [
         "firming agent",
         "electrolyte source",
@@ -3034,7 +3034,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Calcium glycerophosphate — organic calcium salt providing both calcium and phosphorus. Used as mineral source and buffering agent. ~19% elemental calcium. Good bioavailability. Identity mapping pending form-level IQM curation.",
+      "notes": "Calcium glycerophosphate \u2014 organic calcium salt providing both calcium and phosphorus. Used as mineral source and buffering agent. ~19% elemental calcium. Good bioavailability. Identity mapping pending form-level IQM curation.",
       "common_uses": [
         "identity mapping"
       ],
@@ -3082,7 +3082,7 @@
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
-      "notes": "Calcium hydroxide (Ca(OH)2, slaked lime) — strong alkaline pH adjuster used in small amounts in food and supplement processing. FDA GRAS (21 CFR 184.1205). Used in traditional nixtamalization and water treatment.",
+      "notes": "Calcium hydroxide (Ca(OH)2, slaked lime) \u2014 strong alkaline pH adjuster used in small amounts in food and supplement processing. FDA GRAS (21 CFR 184.1205). Used in traditional nixtamalization and water treatment.",
       "common_uses": [
         "pH adjustment",
         "processing aid"
@@ -3217,7 +3217,7 @@
       "is_additive": true,
       "additive_type": "filler",
       "allergen": false,
-      "notes": "Calcium sulfate (CaSO4, E516) — mineral excipient used as filler, desiccant, and tableting aid. FDA GRAS (21 CFR 184.1230). Provides ~23% elemental calcium. Also known as gypsum. Inert and well-tolerated.",
+      "notes": "Calcium sulfate (CaSO4, E516) \u2014 mineral excipient used as filler, desiccant, and tableting aid. FDA GRAS (21 CFR 184.1230). Provides ~23% elemental calcium. Also known as gypsum. Inert and well-tolerated.",
       "common_uses": [
         "filler",
         "firming agent"
@@ -3393,7 +3393,7 @@
       "rxcui": "1309202",
       "cui": "C5703431",
       "cui_status": "governed_null",
-      "cui_note": "UNII 331KBJ17RK (CANOLA OIL) removed 2026-05-14 — this is a pure source-descriptor entry for generic 'Canola' label disclosures, NOT for canola oil specifically. FDA cache contains no generic 'canola' UNII (only canola oil 331KBJ17RK and Brassica napus whole NFP6814VZ4). Tagging the descriptor with canola oil's UNII would force every generic 'Canola' label disclosure to UNII-match as the oil. RxCUI 1309202 (Canola oil) preserved for downstream reference but UNII intentionally absent. Specific canola products (PII_CANOLA_OIL, NHA_CANOLA_LECITHIN, etc.) keep their own UNIIs.",
+      "cui_note": "UNII 331KBJ17RK (CANOLA OIL) removed 2026-05-14 \u2014 this is a pure source-descriptor entry for generic 'Canola' label disclosures, NOT for canola oil specifically. FDA cache contains no generic 'canola' UNII (only canola oil 331KBJ17RK and Brassica napus whole NFP6814VZ4). Tagging the descriptor with canola oil's UNII would force every generic 'Canola' label disclosure to UNII-match as the oil. RxCUI 1309202 (Canola oil) preserved for downstream reference but UNII intentionally absent. Specific canola products (PII_CANOLA_OIL, NHA_CANOLA_LECITHIN, etc.) keep their own UNIIs.",
       "functional_roles": [],
       "is_label_descriptor": true
     },
@@ -3433,7 +3433,7 @@
       "is_additive": true,
       "additive_type": "capsule_shell",
       "allergen": false,
-      "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation. UNII 3NXW29V3WO (hypromelloses/HPMC) was removed 2026-05-14 — generic capsules can be gelatin, HPMC, pullulan, etc., so a single specific UNII would mis-anchor every generic-capsule disclosure to HPMC. Specific capsule materials are modeled in separate entries (PII_HPMC, PII_GELATIN_CAPSULE, etc.).",
+      "notes": "Generic capsule delivery format descriptor. Not a specific ingredient but a formulation type. Classified as non-active to prevent unmapped inflation. UNII 3NXW29V3WO (hypromelloses/HPMC) was removed 2026-05-14 \u2014 generic capsules can be gelatin, HPMC, pullulan, etc., so a single specific UNII would mis-anchor every generic-capsule disclosure to HPMC. Specific capsule materials are modeled in separate entries (PII_HPMC, PII_GELATIN_CAPSULE, etc.).",
       "common_uses": [
         "delivery format"
       ],
@@ -3443,7 +3443,7 @@
       },
       "cui": "C1704652",
       "cui_status": "governed_null",
-      "cui_note": "UNII intentionally omitted — generic capsule is a delivery-format class (gelatin / HPMC / pullulan / etc.), no single FDA-cataloged substance covers the class. Specific capsule materials carry their own UNIIs in dedicated entries.",
+      "cui_note": "UNII intentionally omitted \u2014 generic capsule is a delivery-format class (gelatin / HPMC / pullulan / etc.), no single FDA-cataloged substance covers the class. Specific capsule materials carry their own UNIIs in dedicated entries.",
       "functional_roles": [
         "coating",
         "gelling_agent"
@@ -3495,7 +3495,7 @@
       "is_additive": true,
       "additive_type": "stabilizer",
       "allergen": false,
-      "notes": "Carbomer (polyacrylic acid, e.g., Carbopol) — synthetic cross-linked polymer used for viscosity control and gel formation in liquid/topical supplements. USP/NF monographed. Not systemically absorbed. Used in oral gels and suspensions.",
+      "notes": "Carbomer (polyacrylic acid, e.g., Carbopol) \u2014 synthetic cross-linked polymer used for viscosity control and gel formation in liquid/topical supplements. USP/NF monographed. Not systemically absorbed. Used in oral gels and suspensions.",
       "common_uses": [
         "stabilizer",
         "thickener"
@@ -4548,7 +4548,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Cocoabuterol — branded cocoa extract (Theobroma cacao) standardized to naturally occurring alkaloids and catechins. Marketed for thermogenesis and beta-2 adrenergic stimulation. Identity mapping for proprietary label tokens.",
+      "notes": "Cocoabuterol \u2014 branded cocoa extract (Theobroma cacao) standardized to naturally occurring alkaloids and catechins. Marketed for thermogenesis and beta-2 adrenergic stimulation. Identity mapping for proprietary label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -4696,7 +4696,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "CogniBoost — branded cognitive support complex descriptor. Identity mapping for proprietary nootropic formulation naming. Specific composition (typically bacopa, phosphatidylserine, or alpha-GPC) varies by manufacturer.",
+      "notes": "CogniBoost \u2014 branded cognitive support complex descriptor. Identity mapping for proprietary nootropic formulation naming. Specific composition (typically bacopa, phosphatidylserine, or alpha-GPC) varies by manufacturer.",
       "common_uses": [
         "identity mapping"
       ],
@@ -4782,7 +4782,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Conjugated bile acids (glycocholic acid, taurocholic acid) — endogenous emulsifiers produced by liver. Used in digestive support supplements. Identity mapping for bile acid descriptor rows on supplement labels.",
+      "notes": "Conjugated bile acids (glycocholic acid, taurocholic acid) \u2014 endogenous emulsifiers produced by liver. Used in digestive support supplements. Identity mapping for bile acid descriptor rows on supplement labels.",
       "common_uses": [
         "identity mapping"
       ],
@@ -5028,7 +5028,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Crominex 3+ — branded trivalent chromium complex by Natreon Inc. containing chromium, Phyllanthus emblica, and Shilajit. Studied for blood glucose management. Identity mapping for proprietary chromium labels.",
+      "notes": "Crominex 3+ \u2014 branded trivalent chromium complex by Natreon Inc. containing chromium, Phyllanthus emblica, and Shilajit. Studied for blood glucose management. Identity mapping for proprietary chromium labels.",
       "common_uses": [
         "identity mapping"
       ],
@@ -5250,7 +5250,7 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "Cyplexinol — branded bone-protein complex containing collagen peptides and growth factors. Identity mapping for proprietary joint/bone support label tokens. Clinical studies in bone mineral density support.",
+      "notes": "Cyplexinol \u2014 branded bone-protein complex containing collagen peptides and growth factors. Identity mapping for proprietary joint/bone support label tokens. Clinical studies in bone mineral density support.",
       "common_uses": [
         "bone/joint support"
       ],
@@ -5301,7 +5301,7 @@
       "is_additive": true,
       "additive_type": "sweetener_natural",
       "allergen": false,
-      "notes": "Natural aldopentose sugar from wood/plant fiber. FDA GRAS. Used as sweetener/excipient (~40-70% sweetness of sucrose, ~2.4 cal/g). Not a bioactive supplement ingredient — no human clinical trials support therapeutic use.",
+      "notes": "Natural aldopentose sugar from wood/plant fiber. FDA GRAS. Used as sweetener/excipient (~40-70% sweetness of sucrose, ~2.4 cal/g). Not a bioactive supplement ingredient \u2014 no human clinical trials support therapeutic use.",
       "common_uses": [
         "sweetening",
         "carrier",
@@ -5402,7 +5402,7 @@
       "is_additive": true,
       "additive_type": "emulsifier",
       "allergen": false,
-      "notes": "Polyglycerol-10 laurate (decaglyceryl monolaurate) — food-grade nonionic emulsifier. GRAS. HLB ~15 (oil-in-water). Used for dispersion and texture stabilization in liquid supplement formulations. Derived from coconut lauric acid.",
+      "notes": "Polyglycerol-10 laurate (decaglyceryl monolaurate) \u2014 food-grade nonionic emulsifier. GRAS. HLB ~15 (oil-in-water). Used for dispersion and texture stabilization in liquid supplement formulations. Derived from coconut lauric acid.",
       "common_uses": [
         "emulsification",
         "stability"
@@ -5428,7 +5428,7 @@
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
-      "notes": "Deionized/distilled water — purified water with minerals and ions removed via deionization or distillation. USP-grade solvent used in liquid supplement formulations, reconstitution, and manufacturing. Meets USP <1231> specifications.",
+      "notes": "Deionized/distilled water \u2014 purified water with minerals and ions removed via deionization or distillation. USP-grade solvent used in liquid supplement formulations, reconstitution, and manufacturing. Meets USP <1231> specifications.",
       "common_uses": [
         "solvent",
         "processing"
@@ -5504,7 +5504,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "DHQVital — branded dihydroquercetin (taxifolin) ingredient. Potent flavonoid antioxidant from Larix sibirica (Siberian larch). Studied for capillary integrity and anti-inflammatory effects. Identity mapping for label tokens.",
+      "notes": "DHQVital \u2014 branded dihydroquercetin (taxifolin) ingredient. Potent flavonoid antioxidant from Larix sibirica (Siberian larch). Studied for capillary integrity and anti-inflammatory effects. Identity mapping for label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -5574,7 +5574,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Diatomaceous earth (amorphous silica from diatom fossils, E551c) — used as anti-caking agent and filtration aid. FDA GRAS for food-grade amorphous form. Contains 80-90% amorphous silica. Distinct from crystalline form (hazardous).",
+      "notes": "Diatomaceous earth (amorphous silica from diatom fossils, E551c) \u2014 used as anti-caking agent and filtration aid. FDA GRAS for food-grade amorphous form. Contains 80-90% amorphous silica. Distinct from crystalline form (hazardous).",
       "common_uses": [
         "identity mapping"
       ],
@@ -5685,7 +5685,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Dihydroquercetin 3-rhamnoside (astilbin) — flavanone glycoside found in Smilax glabra (sarsaparilla) and Astilbe thunbergii. Anti-inflammatory and immunomodulatory marker compound. Used as standardization marker on labels.",
+      "notes": "Dihydroquercetin 3-rhamnoside (astilbin) \u2014 flavanone glycoside found in Smilax glabra (sarsaparilla) and Astilbe thunbergii. Anti-inflammatory and immunomodulatory marker compound. Used as standardization marker on labels.",
       "common_uses": [
         "identity mapping"
       ],
@@ -5869,7 +5869,7 @@
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
-      "notes": "Disodium hydrogen phosphate (Na2HPO4, E339ii) — buffering salt used for pH stabilization and emulsification in supplement formulations. FDA GRAS (21 CFR 182.1751). Standard pharmaceutical excipient. ADI: 70 mg/kg/day as phosphorus (JECFA).",
+      "notes": "Disodium hydrogen phosphate (Na2HPO4, E339ii) \u2014 buffering salt used for pH stabilization and emulsification in supplement formulations. FDA GRAS (21 CFR 182.1751). Standard pharmaceutical excipient. ADI: 70 mg/kg/day as phosphorus (JECFA).",
       "common_uses": [
         "buffering",
         "stability"
@@ -5936,7 +5936,7 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "DNF-10 — branded yeast-hydrolysate ingredient (Saccharomyces cerevisiae) used in sleep and relaxation supplements. Contains gamma-aminobutyric acid (GABA) precursors. Identity mapping for branded label tokens.",
+      "notes": "DNF-10 \u2014 branded yeast-hydrolysate ingredient (Saccharomyces cerevisiae) used in sleep and relaxation supplements. Contains gamma-aminobutyric acid (GABA) precursors. Identity mapping for branded label tokens.",
       "common_uses": [
         "immune support branding"
       ],
@@ -6044,7 +6044,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Marketing descriptor for organic/ecologically-sourced blend formulations. Non-ingredient label text mapped for identity routing. No discrete chemical composition — functions as product branding text.",
+      "notes": "Marketing descriptor for organic/ecologically-sourced blend formulations. Non-ingredient label text mapped for identity routing. No discrete chemical composition \u2014 functions as product branding text.",
       "common_uses": [
         "marketing claim"
       ],
@@ -6063,7 +6063,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Ecoganic Super Fruits — branded organic/ecologically-sourced fruit blend descriptor. Identity mapping for proprietary blend naming. Non-discrete ingredient — represents marketing/formulation text.",
+      "notes": "Ecoganic Super Fruits \u2014 branded organic/ecologically-sourced fruit blend descriptor. Identity mapping for proprietary blend naming. Non-discrete ingredient \u2014 represents marketing/formulation text.",
       "common_uses": [
         "identity mapping"
       ],
@@ -6082,7 +6082,7 @@
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Edible hemoglobin (typically bovine or porcine blood-derived) — used as bioavailable heme iron source in supplement formulations. Iron content ~0.34%. Mapped as non-scorable identity entry. USDA-inspected source.",
+      "notes": "Edible hemoglobin (typically bovine or porcine blood-derived) \u2014 used as bioavailable heme iron source in supplement formulations. Iron content ~0.34%. Mapped as non-scorable identity entry. USDA-inspected source.",
       "common_uses": [
         "animal-derived nutrient source"
       ],
@@ -6116,7 +6116,7 @@
       "additive_type": "protein",
       "allergen": true,
       "allergen_type": "egg",
-      "notes": "Egg white (albumin) protein — complete protein source (3.6g protein per large egg white, PDCAAS 1.0). Used as binder and film former in supplement tablets. Egg allergen — must declare per FALCPA. Contains ovalbumin, ovotransferrin, ovomucoid.",
+      "notes": "Egg white (albumin) protein \u2014 complete protein source (3.6g protein per large egg white, PDCAAS 1.0). Used as binder and film former in supplement tablets. Egg allergen \u2014 must declare per FALCPA. Contains ovalbumin, ovotransferrin, ovomucoid.",
       "common_uses": [
         "binder",
         "protein source"
@@ -6208,7 +6208,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Emothion — branded reduced glutathione (L-GSH) ingredient. Identity mapping for proprietary antioxidant label tokens. Specific manufacturing process (fermentation-derived) varies by supplier.",
+      "notes": "Emothion \u2014 branded reduced glutathione (L-GSH) ingredient. Identity mapping for proprietary antioxidant label tokens. Specific manufacturing process (fermentation-derived) varies by supplier.",
       "common_uses": [
         "identity mapping"
       ],
@@ -6297,7 +6297,7 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "Enzopharm Plus — branded enzyme complex formulation. Identity mapping for proprietary digestive/systemic enzyme blend label text. Contains protease, lipase, amylase, and specialty enzymes per manufacturer specification.",
+      "notes": "Enzopharm Plus \u2014 branded enzyme complex formulation. Identity mapping for proprietary digestive/systemic enzyme blend label text. Contains protease, lipase, amylase, and specialty enzymes per manufacturer specification.",
       "common_uses": [
         "digestive enzyme branding"
       ],
@@ -6340,7 +6340,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Ergogen XT — branded ergogenic (performance-enhancing) complex descriptor. Identity mapping for proprietary sports supplement formulation naming. Specific composition varies by manufacturer.",
+      "notes": "Ergogen XT \u2014 branded ergogenic (performance-enhancing) complex descriptor. Identity mapping for proprietary sports supplement formulation naming. Specific composition varies by manufacturer.",
       "common_uses": [
         "identity mapping"
       ],
@@ -6436,7 +6436,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "ETAS (Enzyme-Treated Asparagus Extract) — branded asparagus officinalis extract by Amino Up Chemical. Contains hydroxymethylfurfural derivatives. Studied for heat shock protein 70 induction and stress response.",
+      "notes": "ETAS (Enzyme-Treated Asparagus Extract) \u2014 branded asparagus officinalis extract by Amino Up Chemical. Contains hydroxymethylfurfural derivatives. Studied for heat shock protein 70 induction and stress response.",
       "common_uses": [
         "identity mapping"
       ],
@@ -6480,7 +6480,7 @@
       "is_additive": true,
       "additive_type": "flavor_enhancer",
       "allergen": false,
-      "notes": "Ethyl maltol (2-ethyl-3-hydroxy-4H-pyran-4-one) — synthetic flavor enhancer 4-6× more potent than maltol. GRAS flavoring (FEMA 3487). Used at ppm levels for sweetness enhancement and flavor rounding in chewable/gummy supplements.",
+      "notes": "Ethyl maltol (2-ethyl-3-hydroxy-4H-pyran-4-one) \u2014 synthetic flavor enhancer 4-6\u00d7 more potent than maltol. GRAS flavoring (FEMA 3487). Used at ppm levels for sweetness enhancement and flavor rounding in chewable/gummy supplements.",
       "common_uses": [
         "flavor enhancement"
       ],
@@ -6525,7 +6525,7 @@
       "is_additive": true,
       "additive_type": "solvent_carrier",
       "allergen": false,
-      "notes": "Ethyl oleate (ethyl ester of oleic acid) — liquid lipid excipient used as solvent/carrier for injectable and oral supplement formulations. NF monographed. Low toxicity. Used to dissolve lipophilic active ingredients.",
+      "notes": "Ethyl oleate (ethyl ester of oleic acid) \u2014 liquid lipid excipient used as solvent/carrier for injectable and oral supplement formulations. NF monographed. Low toxicity. Used to dissolve lipophilic active ingredients.",
       "common_uses": [
         "solvent",
         "carrier"
@@ -6761,7 +6761,7 @@
       "is_additive": true,
       "additive_type": "synthetic_colorant",
       "allergen": false,
-      "notes": "Brilliant Blue FCF (FD&C Blue No. 1, E133) — synthetic triarylmethane dye. FDA-certified color additive (21 CFR 74.101). ADI 6 mg/kg bw/day (EFSA, 2010). Used for tablet/capsule identification. Low oral bioavailability (~5%).",
+      "notes": "Brilliant Blue FCF (FD&C Blue No. 1, E133) \u2014 synthetic triarylmethane dye. FDA-certified color additive (21 CFR 74.101). ADI 6 mg/kg bw/day (EFSA, 2010). Used for tablet/capsule identification. Low oral bioavailability (~5%).",
       "common_uses": [
         "synthetic blue coloring",
         "tablet/capsule coloring"
@@ -6845,7 +6845,7 @@
       "is_additive": true,
       "additive_type": "synthetic_colorant",
       "allergen": false,
-      "notes": "Quinoline Yellow (D&C Yellow No. 10, E104) — synthetic quinoline dye used for tablet/capsule coloring. FDA-approved for drugs and cosmetics. ADI 0.5 mg/kg bw/day (EFSA, 2009). Not permitted in food in some jurisdictions.",
+      "notes": "Quinoline Yellow (D&C Yellow No. 10, E104) \u2014 synthetic quinoline dye used for tablet/capsule coloring. FDA-approved for drugs and cosmetics. ADI 0.5 mg/kg bw/day (EFSA, 2009). Not permitted in food in some jurisdictions.",
       "common_uses": [
         "synthetic yellow coloring",
         "tablet/capsule coloring"
@@ -6917,7 +6917,7 @@
       "additive_type": "descriptor",
       "allergen": true,
       "allergen_type": "soy",
-      "notes": "Processing descriptor for fermented whole soybean products (natto, tempeh-derived). Non-discrete ingredient — mapped for identity routing of fermentation process labels. Contains soy allergen per FALCPA.",
+      "notes": "Processing descriptor for fermented whole soybean products (natto, tempeh-derived). Non-discrete ingredient \u2014 mapped for identity routing of fermentation process labels. Contains soy allergen per FALCPA.",
       "common_uses": [
         "marketing descriptor"
       ],
@@ -6936,7 +6936,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Flavanols — subclass of flavonoids including catechin, epicatechin, and proanthocyanidins. Constituent marker label descriptor. Found in cocoa, green tea, and grapes. Antioxidant and cardiovascular health markers.",
+      "notes": "Flavanols \u2014 subclass of flavonoids including catechin, epicatechin, and proanthocyanidins. Constituent marker label descriptor. Found in cocoa, green tea, and grapes. Antioxidant and cardiovascular health markers.",
       "common_uses": [
         "identity mapping"
       ],
@@ -7061,7 +7061,7 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "FRAC — branded antioxidant/ORAC (Oxygen Radical Absorbance Capacity) complex descriptor. Identity mapping for proprietary antioxidant blend naming. Specific composition varies by manufacturer formulation.",
+      "notes": "FRAC \u2014 branded antioxidant/ORAC (Oxygen Radical Absorbance Capacity) complex descriptor. Identity mapping for proprietary antioxidant blend naming. Specific composition varies by manufacturer formulation.",
       "common_uses": [
         "antioxidant branding"
       ],
@@ -7414,7 +7414,7 @@
           },
           {
             "type": "SALT/SOLVATE->PARENT",
-            "name": "1-(2-((4-CHLOROPHENYL)THIO)ETHYL)-6,7-DIMETHOXY-2-METHYL-1,2,3,4-TETRAHYDROISOQUINOLINE FUMARATE, (±)-",
+            "name": "1-(2-((4-CHLOROPHENYL)THIO)ETHYL)-6,7-DIMETHOXY-2-METHYL-1,2,3,4-TETRAHYDROISOQUINOLINE FUMARATE, (\u00b1)-",
             "unii": "II78F25NNB"
           },
           {
@@ -7765,7 +7765,7 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "Gamma-butyrobetaine HCl (GBB) — carnitine biosynthesis precursor. Substrate for gamma-butyrobetaine hydroxylase. Used in sports supplements as L-carnitine precursor. Identity mapping for branded ingredient labels (GBB-EXT).",
+      "notes": "Gamma-butyrobetaine HCl (GBB) \u2014 carnitine biosynthesis precursor. Substrate for gamma-butyrobetaine hydroxylase. Used in sports supplements as L-carnitine precursor. Identity mapping for branded ingredient labels (GBB-EXT).",
       "common_uses": [
         "metabolic support"
       ],
@@ -7809,7 +7809,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "GBB-GO — branded gamma-butyrobetaine ethyl ester ingredient for sports supplements. Carnitine biosynthesis precursor marketed for enhanced L-carnitine production and thermogenesis. Identity mapping for label tokens.",
+      "notes": "GBB-GO \u2014 branded gamma-butyrobetaine ethyl ester ingredient for sports supplements. Carnitine biosynthesis precursor marketed for enhanced L-carnitine production and thermogenesis. Identity mapping for label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -8021,7 +8021,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Marketing descriptor text for GlucoDOX branded formulations. Non-ingredient label token mapped for identity routing. No discrete chemical composition — functions as product naming element.",
+      "notes": "Marketing descriptor text for GlucoDOX branded formulations. Non-ingredient label token mapped for identity routing. No discrete chemical composition \u2014 functions as product naming element.",
       "common_uses": [
         "marketing claim"
       ],
@@ -8139,7 +8139,7 @@
       "is_additive": true,
       "additive_type": "emulsifier",
       "allergen": false,
-      "notes": "Glycerin esters of fatty acids (E472a-f) — food-grade emulsifiers produced by esterification of glycerol with food-grade fatty acids. GRAS. Used for emulsification, texture modification, and foam control in supplement formulations.",
+      "notes": "Glycerin esters of fatty acids (E472a-f) \u2014 food-grade emulsifiers produced by esterification of glycerol with food-grade fatty acids. GRAS. Used for emulsification, texture modification, and foam control in supplement formulations.",
       "common_uses": [
         "emulsification",
         "texture modification"
@@ -8284,7 +8284,7 @@
       "is_additive": true,
       "additive_type": "emulsifier",
       "allergen": false,
-      "notes": "Glyceryl caprylate/caprate — medium-chain glyceride ester used as co-emulsifier and solubilizer in supplement formulations. Derived from coconut/palm kernel oil fractions. GRAS. Enhances dispersion of lipophilic active ingredients.",
+      "notes": "Glyceryl caprylate/caprate \u2014 medium-chain glyceride ester used as co-emulsifier and solubilizer in supplement formulations. Derived from coconut/palm kernel oil fractions. GRAS. Enhances dispersion of lipophilic active ingredients.",
       "common_uses": [
         "emulsifier",
         "co-emulsifier"
@@ -8308,7 +8308,7 @@
       "is_additive": true,
       "additive_type": "emulsifier",
       "allergen": false,
-      "notes": "Glyceryl monooleate (GMO) — mono-unsaturated glyceride emulsifier used as wetting agent and drug release modifier. NF monographed. Forms cubic phase liquid crystals for controlled release. HLB ~3.8 (water-in-oil).",
+      "notes": "Glyceryl monooleate (GMO) \u2014 mono-unsaturated glyceride emulsifier used as wetting agent and drug release modifier. NF monographed. Forms cubic phase liquid crystals for controlled release. HLB ~3.8 (water-in-oil).",
       "common_uses": [
         "emulsifier",
         "stabilizer"
@@ -8348,7 +8348,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Glycosaponins — class of steroidal or triterpenoid saponin glycosides found in various botanicals (fenugreek, ginseng, yucca). Constituent marker label descriptor. Specific identity depends on source plant.",
+      "notes": "Glycosaponins \u2014 class of steroidal or triterpenoid saponin glycosides found in various botanicals (fenugreek, ginseng, yucca). Constituent marker label descriptor. Specific identity depends on source plant.",
       "common_uses": [
         "identity mapping"
       ],
@@ -8534,7 +8534,7 @@
       "is_additive": false,
       "additive_type": "natural_fiber",
       "allergen": false,
-      "notes": "Grapefruit (Citrus paradisi) fiber — plant-derived dietary fiber used as filler, carrier, and bulking agent in supplement tablets and capsules. Contains pectin and cellulose. GRAS food ingredient. Provides ~3g fiber per 10g.",
+      "notes": "Grapefruit (Citrus paradisi) fiber \u2014 plant-derived dietary fiber used as filler, carrier, and bulking agent in supplement tablets and capsules. Contains pectin and cellulose. GRAS food ingredient. Provides ~3g fiber per 10g.",
       "common_uses": [
         "fiber support",
         "bulking agent"
@@ -8641,7 +8641,7 @@
       "is_additive": true,
       "additive_type": "gum_stabilizer",
       "allergen": false,
-      "notes": "Gum ghatti (Anogeissus latifolia exudate) — natural plant gum used as emulsifier, stabilizer, and thickener. FDA GRAS (21 CFR 184.1333). Less viscous than gum arabic. Used in oil-in-water emulsions for lipophilic supplement actives.",
+      "notes": "Gum ghatti (Anogeissus latifolia exudate) \u2014 natural plant gum used as emulsifier, stabilizer, and thickener. FDA GRAS (21 CFR 184.1333). Less viscous than gum arabic. Used in oil-in-water emulsions for lipophilic supplement actives.",
       "common_uses": [
         "stabilizer",
         "thickener"
@@ -8735,7 +8735,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "99%+ purity CBD (cannabidiol) isolate from Cannabis sativa L. hemp. THC-free by definition (≤LOQ). Farm Bill 2018 compliant. Identity mapping for high-purity hemp isolate descriptors on supplement labels.",
+      "notes": "99%+ purity CBD (cannabidiol) isolate from Cannabis sativa L. hemp. THC-free by definition (\u2264LOQ). Farm Bill 2018 compliant. Identity mapping for high-purity hemp isolate descriptors on supplement labels.",
       "common_uses": [
         "identity mapping"
       ],
@@ -8843,7 +8843,7 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "Highly Branched Cyclic Dextrin (HBCD) — Glico-trademarked 'Cluster Dextrin' is the most prominent commercial form. Produced from waxy maize starch by 1,4-alpha-glucan branching enzyme treatment yielding a high-molecular-weight (typical avg MW ~160k Da) cyclic glucan with low osmolality. Marketed for sports/endurance nutrition (rapid gastric emptying vs. maltodextrin). Distinct from generic Modified Food Starch and from ModCarb (Lonza-branded multi-source dextrin blend, NHA_MODCARB). No single-compound CAS, PubChem CID, or UNII exists — HBCD is a polymer product class, not a single chemical entity. Generic parent class: Dextrin (NHA_DEXTRIN, CUI C0054527). UMLS verification 2026-05-01: no concept exists for 'highly branched cyclic dextrin', 'cluster dextrin', or 'branched dextrin' (verify_cui.py).",
+      "notes": "Highly Branched Cyclic Dextrin (HBCD) \u2014 Glico-trademarked 'Cluster Dextrin' is the most prominent commercial form. Produced from waxy maize starch by 1,4-alpha-glucan branching enzyme treatment yielding a high-molecular-weight (typical avg MW ~160k Da) cyclic glucan with low osmolality. Marketed for sports/endurance nutrition (rapid gastric emptying vs. maltodextrin). Distinct from generic Modified Food Starch and from ModCarb (Lonza-branded multi-source dextrin blend, NHA_MODCARB). No single-compound CAS, PubChem CID, or UNII exists \u2014 HBCD is a polymer product class, not a single chemical entity. Generic parent class: Dextrin (NHA_DEXTRIN, CUI C0054527). UMLS verification 2026-05-01: no concept exists for 'highly branched cyclic dextrin', 'cluster dextrin', or 'branched dextrin' (verify_cui.py).",
       "common_uses": [
         "carbohydrate fuel",
         "sports nutrition energy source",
@@ -8866,7 +8866,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Generic marketing descriptor for protein quality claims (e.g., 'high quality protein blend'). Non-discrete ingredient — mapped for identity routing of label marketing text. No specific chemical composition.",
+      "notes": "Generic marketing descriptor for protein quality claims (e.g., 'high quality protein blend'). Non-discrete ingredient \u2014 mapped for identity routing of label marketing text. No specific chemical composition.",
       "common_uses": [
         "marketing descriptor"
       ],
@@ -9248,7 +9248,7 @@
       "is_additive": true,
       "additive_type": "capsule_coating",
       "allergen": false,
-      "notes": "Hydroxypropyl methylcellulose (hypromellose, E464) — plant-derived cellulose ether used as vegetarian/vegan capsule shell material and tablet coating agent. FDA GRAS. Inert, non-toxic, and non-allergenic. Provides moisture barrier and controlled-release properties. Brand names include Vcaps, Caplique.",
+      "notes": "Hydroxypropyl methylcellulose (hypromellose, E464) \u2014 plant-derived cellulose ether used as vegetarian/vegan capsule shell material and tablet coating agent. FDA GRAS. Inert, non-toxic, and non-allergenic. Provides moisture barrier and controlled-release properties. Brand names include Vcaps, Caplique.",
       "common_uses": [
         "vegetarian capsule shell",
         "tablet coating",
@@ -9291,7 +9291,7 @@
       "is_additive": true,
       "additive_type": "enteric_coating",
       "allergen": false,
-      "notes": "Hypromellose phthalate (HPMCP) — cellulose-derived enteric coating polymer that resists gastric acid (pH <5.0) and dissolves in intestinal pH (>5.5). Used for acid-sensitive ingredients and targeted intestinal release. NF/EP excipient.",
+      "notes": "Hypromellose phthalate (HPMCP) \u2014 cellulose-derived enteric coating polymer that resists gastric acid (pH <5.0) and dissolves in intestinal pH (>5.5). Used for acid-sensitive ingredients and targeted intestinal release. NF/EP excipient.",
       "common_uses": [
         "enteric coating",
         "acid-resistant barrier"
@@ -9316,7 +9316,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Marketing descriptor for immune support/response claims on supplement labels. Non-discrete ingredient — mapped for identity routing of functional claim text. No specific chemical composition.",
+      "notes": "Marketing descriptor for immune support/response claims on supplement labels. Non-discrete ingredient \u2014 mapped for identity routing of functional claim text. No specific chemical composition.",
       "common_uses": [
         "identity mapping"
       ],
@@ -9335,7 +9335,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "ImmunoLin — branded immunoglobulin concentrate (IgG) from bovine serum (Proliant Health). Contains ≥50% IgG. Studied for GI immune support and pathogen binding. Identity mapping for proprietary label tokens.",
+      "notes": "ImmunoLin \u2014 branded immunoglobulin concentrate (IgG) from bovine serum (Proliant Health). Contains \u226550% IgG. Studied for GI immune support and pathogen binding. Identity mapping for proprietary label tokens.",
       "common_uses": [
         "immune support branding"
       ],
@@ -9474,7 +9474,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Branded chewable tablet base system by InVeTeK containing gum base, sweeteners, and texture modifiers. Non-discrete ingredient — mapped for identity routing of proprietary excipient system naming.",
+      "notes": "Branded chewable tablet base system by InVeTeK containing gum base, sweeteners, and texture modifiers. Non-discrete ingredient \u2014 mapped for identity routing of proprietary excipient system naming.",
       "common_uses": [
         "chewable base"
       ],
@@ -9708,7 +9708,7 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "Isovitexin (apigenin-6-C-glucoside) — C-glycosyl flavonoid marker compound found in passion flower, bamboo leaves, and hawthorn. Antioxidant and anxiolytic properties. Used as standardization marker on supplement labels.",
+      "notes": "Isovitexin (apigenin-6-C-glucoside) \u2014 C-glycosyl flavonoid marker compound found in passion flower, bamboo leaves, and hawthorn. Antioxidant and anxiolytic properties. Used as standardization marker on supplement labels.",
       "common_uses": [
         "botanical marker"
       ],
@@ -9767,7 +9767,7 @@
       "is_additive": true,
       "additive_type": "mineral_filler",
       "allergen": false,
-      "notes": "Kaolin (hydrated aluminum silicate, E559) — white clay mineral used as filler, adsorbent, and anti-caking agent in tablets. FDA GRAS. Also used as tablet coating opacifier. Not systemically absorbed; passes through GI tract intact.",
+      "notes": "Kaolin (hydrated aluminum silicate, E559) \u2014 white clay mineral used as filler, adsorbent, and anti-caking agent in tablets. FDA GRAS. Also used as tablet coating opacifier. Not systemically absorbed; passes through GI tract intact.",
       "common_uses": [
         "anti-caking filler",
         "tablet coating"
@@ -9906,7 +9906,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "L-Arabinose — five-carbon aldose sugar found in plant cell walls. Inhibits intestinal sucrase enzyme, reducing sucrose absorption. GRAS. Studied for postprandial blood glucose modulation (doi:10.1017/S0007114510002060).",
+      "notes": "L-Arabinose \u2014 five-carbon aldose sugar found in plant cell walls. Inhibits intestinal sucrase enzyme, reducing sucrose absorption. GRAS. Studied for postprandial blood glucose modulation (doi:10.1017/S0007114510002060).",
       "common_uses": [
         "identity mapping"
       ],
@@ -9930,7 +9930,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "L-Asparagine — non-essential amino acid synthesized from aspartate. Used in protein synthesis and nitrogen metabolism. Found in asparagus and many plant sources. Identity mapping pending dedicated amino acid IQM curation.",
+      "notes": "L-Asparagine \u2014 non-essential amino acid synthesized from aspartate. Used in protein synthesis and nitrogen metabolism. Found in asparagus and many plant sources. Identity mapping pending dedicated amino acid IQM curation.",
       "common_uses": [
         "identity mapping"
       ],
@@ -10180,7 +10180,7 @@
       "standard_name": "Lactium",
       "aliases": [
         "lactium",
-        "lactium®",
+        "lactium\u00ae",
         "lactium alpha-s1 casein hydrolysate",
         "alpha-s1 casein hydrolysate",
         "hydrolyzed milk protein (lactium)"
@@ -10215,7 +10215,7 @@
       "additive_type": "filler",
       "allergen": true,
       "allergen_type": "dairy",
-      "notes": "Lactose monohydrate (milk sugar) — disaccharide excipient used as tablet/capsule filler, carrier, and direct compression aid. USP/NF monographed. Dairy-derived. Contraindicated in lactose intolerance. Common pharmaceutical excipient.",
+      "notes": "Lactose monohydrate (milk sugar) \u2014 disaccharide excipient used as tablet/capsule filler, carrier, and direct compression aid. USP/NF monographed. Dairy-derived. Contraindicated in lactose intolerance. Common pharmaceutical excipient.",
       "common_uses": [
         "filler",
         "carrier"
@@ -10573,7 +10573,7 @@
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
-      "notes": "Bovine lymph glandular tissue extract — used in traditional glandular therapy formulations based on the organotherapy principle (like supports like). No controlled human efficacy data. USDA-inspected tissue source required.",
+      "notes": "Bovine lymph glandular tissue extract \u2014 used in traditional glandular therapy formulations based on the organotherapy principle (like supports like). No controlled human efficacy data. USDA-inspected tissue source required.",
       "common_uses": [
         "glandular support"
       ],
@@ -10893,7 +10893,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Malate — generic malic acid/salt descriptor on supplement labels. L-malic acid is a Krebs cycle intermediate. Used as acidulant, flavor enhancer, and mineral chelation acid. Identity mapping for unspecified malate forms. UNII 817L1N4CKP (MALIC ACID), CAS 6915-15-7, and PubChem CID 525 (all L-malic-acid specific) were removed 2026-05-14 — 'Malate' as a generic descriptor is ambiguous between malate ions, calcium/magnesium/potassium/sodium malate salts, and malic acid forms. FDA cache has no generic-malate UNII. Specific malate compounds (NHA_MALIC_ACID for the acid form, and per-salt entries) keep their own UNIIs.",
+      "notes": "Malate \u2014 generic malic acid/salt descriptor on supplement labels. L-malic acid is a Krebs cycle intermediate. Used as acidulant, flavor enhancer, and mineral chelation acid. Identity mapping for unspecified malate forms. UNII 817L1N4CKP (MALIC ACID), CAS 6915-15-7, and PubChem CID 525 (all L-malic-acid specific) were removed 2026-05-14 \u2014 'Malate' as a generic descriptor is ambiguous between malate ions, calcium/magnesium/potassium/sodium malate salts, and malic acid forms. FDA cache has no generic-malate UNII. Specific malate compounds (NHA_MALIC_ACID for the acid form, and per-salt entries) keep their own UNIIs.",
       "common_uses": [
         "identity mapping"
       ],
@@ -10901,7 +10901,7 @@
       "external_ids": {},
       "cui": "C0220873",
       "cui_status": "governed_null",
-      "cui_note": "UNII intentionally omitted — generic 'Malate' descriptor covers malate ions, calcium/magnesium/sodium/potassium malate salts, and acid forms. FDA cache has no generic-malate UNII. CAS/PubChem CID also removed because they were acid-specific (L-malic acid) and would mis-anchor every label-disclosed 'Malate' to the acid form. UMLS CUI C0220873 (Malates) retained because it's the generic concept identifier, not an acid-specific one.",
+      "cui_note": "UNII intentionally omitted \u2014 generic 'Malate' descriptor covers malate ions, calcium/magnesium/sodium/potassium malate salts, and acid forms. FDA cache has no generic-malate UNII. CAS/PubChem CID also removed because they were acid-specific (L-malic acid) and would mis-anchor every label-disclosed 'Malate' to the acid form. UMLS CUI C0220873 (Malates) retained because it's the generic concept identifier, not an acid-specific one.",
       "functional_roles": [],
       "is_label_descriptor": true
     },
@@ -11518,7 +11518,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Descriptor row for minor cannabinoid profile in hemp/CBD supplement labels (e.g., CBG, CBN, CBC, CBDV). Identity mapping for constituent profile descriptors. Non-discrete ingredient — represents analytical profile data.",
+      "notes": "Descriptor row for minor cannabinoid profile in hemp/CBD supplement labels (e.g., CBG, CBN, CBC, CBDV). Identity mapping for constituent profile descriptors. Non-discrete ingredient \u2014 represents analytical profile data.",
       "common_uses": [
         "identity mapping"
       ],
@@ -11557,7 +11557,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Mirtogenol — branded botanical blend of Pycnogenol (pine bark) + Mirtoselect (bilberry extract) by Horphag/Indena. Studied for intraocular pressure (doi:10.1159/000268121). Identity mapping for label tokens.",
+      "notes": "Mirtogenol \u2014 branded botanical blend of Pycnogenol (pine bark) + Mirtoselect (bilberry extract) by Horphag/Indena. Studied for intraocular pressure (doi:10.1159/000268121). Identity mapping for label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -11580,7 +11580,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Catch-all descriptor for food/extract heading rows on supplement labels (e.g., 'food extracts:', 'organic vegetable blend:'). Non-discrete ingredient — mapped for identity routing of label section headers.",
+      "notes": "Catch-all descriptor for food/extract heading rows on supplement labels (e.g., 'food extracts:', 'organic vegetable blend:'). Non-discrete ingredient \u2014 mapped for identity routing of label section headers.",
       "common_uses": [
         "section header"
       ],
@@ -11736,7 +11736,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Mobilee — branded hyaluronic acid matrix ingredient (Bioiberica). Contains HA, collagen, and polysaccharides from rooster comb extract. Studied for joint mobility. Identity mapping for proprietary label tokens.",
+      "notes": "Mobilee \u2014 branded hyaluronic acid matrix ingredient (Bioiberica). Contains HA, collagen, and polysaccharides from rooster comb extract. Studied for joint mobility. Identity mapping for proprietary label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -11803,7 +11803,7 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "Multi-element trace mineral product (typical brands: ConcenTrace, Trace Minerals Research, plus 'Ocean-derived'/'Clay-Derived' formulations). These products list 50-70+ elements at trace ppb-to-low-ppm levels — including lanthanides (Lanthanum, Cerium, Praseodymium, Neodymium, Samarium, Europium, Gadolinium, Terbium, Dysprosium, Holmium, Erbium, Thulium, Ytterbium, Lutetium, Yttrium, Scandium) and other rare/heavy elements (Barium, Beryllium, Cesium, Gallium, Hafnium, Indium, Iridium, Niobium, Palladium, Platinum, Gold, Rhenium, Rhodium, Ruthenium, Tantalum, Tellurium, Thallium, Thorium, Titanium, Tungsten, Uranium, Zirconium). EXECUTIVE DECISION 2026-05-01 (Option A): treat as a single non-bioactive descriptor entry rather than scoring each element individually. Rationale: (1) elements are at trace levels with no nutritional bioavailability scoring relevance; (2) per-element entries would explode complexity without scoring value; (3) toxic-at-high-dose elements (Pb, Hg, Cd, Tl, U) at ppb levels are considered safe per existing FDA guidance for these products; (4) avoids false penalties on legitimately-marketed trace mineral products. Sulfur and elemental Sulphur listings are NOT covered here — those should map to a proper sulfur entry if/when added (sulfur is nutritionally relevant via cysteine/methionine).",
+      "notes": "Multi-element trace mineral product (typical brands: ConcenTrace, Trace Minerals Research, plus 'Ocean-derived'/'Clay-Derived' formulations). These products list 50-70+ elements at trace ppb-to-low-ppm levels \u2014 including lanthanides (Lanthanum, Cerium, Praseodymium, Neodymium, Samarium, Europium, Gadolinium, Terbium, Dysprosium, Holmium, Erbium, Thulium, Ytterbium, Lutetium, Yttrium, Scandium) and other rare/heavy elements (Barium, Beryllium, Cesium, Gallium, Hafnium, Indium, Iridium, Niobium, Palladium, Platinum, Gold, Rhenium, Rhodium, Ruthenium, Tantalum, Tellurium, Thallium, Thorium, Titanium, Tungsten, Uranium, Zirconium). EXECUTIVE DECISION 2026-05-01 (Option A): treat as a single non-bioactive descriptor entry rather than scoring each element individually. Rationale: (1) elements are at trace levels with no nutritional bioavailability scoring relevance; (2) per-element entries would explode complexity without scoring value; (3) toxic-at-high-dose elements (Pb, Hg, Cd, Tl, U) at ppb levels are considered safe per existing FDA guidance for these products; (4) avoids false penalties on legitimately-marketed trace mineral products. Sulfur and elemental Sulphur listings are NOT covered here \u2014 those should map to a proper sulfur entry if/when added (sulfur is nutritionally relevant via cysteine/methionine).",
       "common_uses": [
         "trace mineral supplementation",
         "electrolyte source",
@@ -11830,7 +11830,7 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "ModCarb (Lonza-trademarked) — branded multi-source modified-carbohydrate complex used in sports/endurance nutrition. Polysaccharide blend; no single-compound CAS/CID/UNII identifier. Distinct from generic Modified Food Starch (NHA_MODIFIED_FOOD_STARCH) and from Highly Branched Cyclic Dextrin (HBCD/Glico Cluster Dextrin — different branded carb). Function: rapidly-available carbohydrate fuel source. Source plant composition is brand-disclosed (manufacturer documentation) but not standardized across products labeled 'ModCarb'.",
+      "notes": "ModCarb (Lonza-trademarked) \u2014 branded multi-source modified-carbohydrate complex used in sports/endurance nutrition. Polysaccharide blend; no single-compound CAS/CID/UNII identifier. Distinct from generic Modified Food Starch (NHA_MODIFIED_FOOD_STARCH) and from Highly Branched Cyclic Dextrin (HBCD/Glico Cluster Dextrin \u2014 different branded carb). Function: rapidly-available carbohydrate fuel source. Source plant composition is brand-disclosed (manufacturer documentation) but not standardized across products labeled 'ModCarb'.",
       "common_uses": [
         "carbohydrate fuel",
         "sports nutrition energy source"
@@ -11935,7 +11935,7 @@
       "is_additive": true,
       "additive_type": "natural_sweetener",
       "allergen": false,
-      "notes": "Monk fruit (Siraitia grosvenorii, also known as lo han guo/luo han guo) extract. FDA GRAS (GRN 301, 795). Natural zero-calorie sweetener 150-300× sweeter than sucrose. Active compounds are mogrosides (triterpenoid glycosides), primarily mogroside V. No ADI restriction per JECFA.",
+      "notes": "Monk fruit (Siraitia grosvenorii, also known as lo han guo/luo han guo) extract. FDA GRAS (GRN 301, 795). Natural zero-calorie sweetener 150-300\u00d7 sweeter than sucrose. Active compounds are mogrosides (triterpenoid glycosides), primarily mogroside V. No ADI restriction per JECFA.",
       "common_uses": [
         "flavor enhancement",
         "sugar replacement",
@@ -12064,7 +12064,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Generic descriptor for muscle tissue/muscle complex label rows (e.g., 'muscle tissue', 'cardiac muscle'). Non-discrete ingredient — mapped for identity routing of glandular tissue/organ label text.",
+      "notes": "Generic descriptor for muscle tissue/muscle complex label rows (e.g., 'muscle tissue', 'cardiac muscle'). Non-discrete ingredient \u2014 mapped for identity routing of glandular tissue/organ label text.",
       "common_uses": [
         "identity mapping"
       ],
@@ -12138,7 +12138,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Mythocondro — branded joint support complex containing chondroitin sulfate from bio-fermentation (non-animal source). Identity mapping for proprietary joint-health label tokens. Vegan chondroitin alternative.",
+      "notes": "Mythocondro \u2014 branded joint support complex containing chondroitin sulfate from bio-fermentation (non-animal source). Identity mapping for proprietary joint-health label tokens. Vegan chondroitin alternative.",
       "common_uses": [
         "identity mapping"
       ],
@@ -13065,7 +13065,7 @@
         "sweet orange oil",
         "Natural creamy Orange flavor",
         "natural creamy orange flavor",
-        "natural orange crème flavor"
+        "natural orange cr\u00e8me flavor"
       ],
       "category": "flavor_natural",
       "is_additive": true,
@@ -13564,7 +13564,7 @@
       "additive_type": "descriptor",
       "allergen": true,
       "allergen_type": "egg",
-      "notes": "NEM (Natural Eggshell Membrane) — branded eggshell membrane ingredient by ESM Technologies. Contains collagen, elastin, glycosaminoglycans (chondroitin, hyaluronic acid). Egg allergen — must declare per FALCPA. Joint support claims.",
+      "notes": "NEM (Natural Eggshell Membrane) \u2014 branded eggshell membrane ingredient by ESM Technologies. Contains collagen, elastin, glycosaminoglycans (chondroitin, hyaluronic acid). Egg allergen \u2014 must declare per FALCPA. Joint support claims.",
       "common_uses": [
         "joint support branding"
       ],
@@ -13625,7 +13625,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Neumentix — branded spearmint (Mentha spicata) extract by Kemin Industries. Standardized to rosmarinic acid (≥14.5%). Studied for working memory and cognitive performance. Identity mapping for label tokens.",
+      "notes": "Neumentix \u2014 branded spearmint (Mentha spicata) extract by Kemin Industries. Standardized to rosmarinic acid (\u226514.5%). Studied for working memory and cognitive performance. Identity mapping for label tokens.",
       "common_uses": [
         "cognitive support branding"
       ],
@@ -13680,7 +13680,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Nu-RICE — branded rice concentrate carrier/excipient matrix (RIBUS Inc.). Used as clean-label filler and flow agent alternative to silicon dioxide. Non-GMO rice-based. Mapped for identity routing of brand-specific label text.",
+      "notes": "Nu-RICE \u2014 branded rice concentrate carrier/excipient matrix (RIBUS Inc.). Used as clean-label filler and flow agent alternative to silicon dioxide. Non-GMO rice-based. Mapped for identity routing of brand-specific label text.",
       "common_uses": [
         "carrier base"
       ],
@@ -13822,7 +13822,7 @@
       "is_additive": false,
       "additive_type": "oil_carrier",
       "allergen": false,
-      "notes": "Generic oil-based carrier vehicle used for dissolving and delivering lipophilic supplement ingredients. Non-discrete ingredient — mapped for identity routing. Specific oils (MCT, olive, sunflower) have dedicated entries.",
+      "notes": "Generic oil-based carrier vehicle used for dissolving and delivering lipophilic supplement ingredients. Non-discrete ingredient \u2014 mapped for identity routing. Specific oils (MCT, olive, sunflower) have dedicated entries.",
       "common_uses": [
         "carrier",
         "vehicle"
@@ -13878,7 +13878,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Oleamide (9-octadecenamide) — endogenous fatty acid amide involved in sleep induction. Found in cerebrospinal fluid. CB1 receptor modulator. Used in sleep/relaxation supplement formulations. Identity mapping for label tokens.",
+      "notes": "Oleamide (9-octadecenamide) \u2014 endogenous fatty acid amide involved in sleep induction. Found in cerebrospinal fluid. CB1 receptor modulator. Used in sleep/relaxation supplement formulations. Identity mapping for label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -14538,7 +14538,7 @@
       "is_additive": false,
       "additive_type": "bioactive_constituent",
       "allergen": false,
-      "notes": "Paeoniflorin — monoterpene glycoside marker compound from Paeonia lactiflora (white peony root). Anti-inflammatory and immunomodulatory. Used as quality control marker for peony extract standardization in supplement labels.",
+      "notes": "Paeoniflorin \u2014 monoterpene glycoside marker compound from Paeonia lactiflora (white peony root). Anti-inflammatory and immunomodulatory. Used as quality control marker for peony extract standardization in supplement labels.",
       "common_uses": [
         "botanical marker"
       ],
@@ -14562,7 +14562,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Pack-level marketing descriptor text (e.g., 'convenience pak', 'daily pak'). Non-ingredient label element mapped for identity routing. No chemical composition — functions as packaging/marketing naming.",
+      "notes": "Pack-level marketing descriptor text (e.g., 'convenience pak', 'daily pak'). Non-ingredient label element mapped for identity routing. No chemical composition \u2014 functions as packaging/marketing naming.",
       "common_uses": [
         "marketing claim"
       ],
@@ -14583,7 +14583,7 @@
       "is_additive": true,
       "additive_type": "natural_disaccharide",
       "allergen": false,
-      "notes": "Palatinose (isomaltulose, E953) — naturally occurring disaccharide (glucose-fructose linked α-1,6). Low glycemic index (GI 32 vs sucrose 65). FDA GRAS (GRN 184). Slow-release energy. Found in honey and sugarcane.",
+      "notes": "Palatinose (isomaltulose, E953) \u2014 naturally occurring disaccharide (glucose-fructose linked \u03b1-1,6). Low glycemic index (GI 32 vs sucrose 65). FDA GRAS (GRN 184). Slow-release energy. Found in honey and sugarcane.",
       "common_uses": [
         "slow-release energy",
         "low-glycemic sweetener"
@@ -14761,7 +14761,7 @@
       "is_additive": false,
       "additive_type": "functional",
       "allergen": false,
-      "notes": "Bovine parotid gland tissue — used in traditional glandular therapy formulations. Contains parotid-derived enzymes and peptides. No controlled human efficacy data. USDA-inspected tissue source required for safety.",
+      "notes": "Bovine parotid gland tissue \u2014 used in traditional glandular therapy formulations. Contains parotid-derived enzymes and peptides. No controlled human efficacy data. USDA-inspected tissue source required for safety.",
       "common_uses": [
         "glandular supplement matrix"
       ],
@@ -14835,7 +14835,7 @@
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
-      "notes": "PHGG — enzymatically hydrolyzed galactomannan from Cyamopsis tetragonoloba. Low-viscosity soluble prebiotic fiber (Sunfiber brand). FDA GRAS (GRN 61). Fermented by colonic bacteria to butyrate. Studied for IBS-D (doi:10.1016/j.nut.2006.01.012).",
+      "notes": "PHGG \u2014 enzymatically hydrolyzed galactomannan from Cyamopsis tetragonoloba. Low-viscosity soluble prebiotic fiber (Sunfiber brand). FDA GRAS (GRN 61). Fermented by colonic bacteria to butyrate. Studied for IBS-D (doi:10.1016/j.nut.2006.01.012).",
       "common_uses": [
         "prebiotic fiber",
         "digestive support"
@@ -15169,7 +15169,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Phloridzin (phlorizin) — dihydrochalcone glycoside from apple tree bark. SGLT1/SGLT2 inhibitor — blocks renal glucose reabsorption. Historical antidiabetic compound; basis for modern gliflozin drugs. Standardization marker.",
+      "notes": "Phloridzin (phlorizin) \u2014 dihydrochalcone glycoside from apple tree bark. SGLT1/SGLT2 inhibitor \u2014 blocks renal glucose reabsorption. Historical antidiabetic compound; basis for modern gliflozin drugs. Standardization marker.",
       "common_uses": [
         "identity mapping"
       ],
@@ -15219,7 +15219,7 @@
       "is_additive": true,
       "additive_type": "pH_adjuster",
       "allergen": false,
-      "notes": "Phosphoric acid (H3PO4, E338) — mineral acid used for pH adjustment and buffering in liquid supplement formulations. FDA GRAS (21 CFR 182.1073). ADI 70 mg/kg bw/day (JECFA). Concerns at high chronic intake re calcium metabolism.",
+      "notes": "Phosphoric acid (H3PO4, E338) \u2014 mineral acid used for pH adjustment and buffering in liquid supplement formulations. FDA GRAS (21 CFR 182.1073). ADI 70 mg/kg bw/day (JECFA). Concerns at high chronic intake re calcium metabolism.",
       "common_uses": [
         "acidification",
         "pH control"
@@ -15427,7 +15427,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Branded film coating system containing methacrylic acid copolymers. Non-discrete ingredient — mapped for identity routing of proprietary coating brand names. Enteric or moisture-barrier function depending on grade.",
+      "notes": "Branded film coating system containing methacrylic acid copolymers. Non-discrete ingredient \u2014 mapped for identity routing of proprietary coating brand names. Enteric or moisture-barrier function depending on grade.",
       "common_uses": [
         "tablet coating"
       ],
@@ -15595,7 +15595,7 @@
       "category": "sweetener_sugar_alcohol",
       "is_additive": true,
       "additive_type": "sugar_alcohol_excipient",
-      "notes": "Hydrogenated starch hydrolysate (HSH) — a mixture of sugar alcohols (sorbitol, maltitol, longer-chain polyols) produced by partial hydrolysis and hydrogenation of starch. UNII: 27F77DSJ5V, CAS: 68425-17-2. Used as a tableting excipient, binder, and mild sweetener in dietary supplements. Generally recognized as safe; low glycemic impact. Not a harmful additive.",
+      "notes": "Hydrogenated starch hydrolysate (HSH) \u2014 a mixture of sugar alcohols (sorbitol, maltitol, longer-chain polyols) produced by partial hydrolysis and hydrogenation of starch. UNII: 27F77DSJ5V, CAS: 68425-17-2. Used as a tableting excipient, binder, and mild sweetener in dietary supplements. Generally recognized as safe; low glycemic impact. Not a harmful additive.",
       "external_ids": {
         "unii": "27F77DSJ5V"
       },
@@ -15617,7 +15617,7 @@
       "is_additive": true,
       "additive_type": "enteric_coating",
       "allergen": false,
-      "notes": "Methacrylic acid-methyl methacrylate copolymer (Eudragit L/S) — enteric coating that dissolves at pH >5.5-7.0 for targeted intestinal release. USP/NF monographed. Used for acid-labile ingredients (enzymes, probiotics). Not systemically absorbed.",
+      "notes": "Methacrylic acid-methyl methacrylate copolymer (Eudragit L/S) \u2014 enteric coating that dissolves at pH >5.5-7.0 for targeted intestinal release. USP/NF monographed. Used for acid-labile ingredients (enzymes, probiotics). Not systemically absorbed.",
       "common_uses": [
         "enteric coating",
         "controlled release"
@@ -15664,7 +15664,7 @@
       "is_additive": true,
       "additive_type": "solubilizer",
       "allergen": false,
-      "notes": "Polyoxyl castor oil (Cremophor EL/Kolliphor EL) — PEGylated castor oil surfactant (HLB 12-14). Used to solubilize lipophilic compounds (CoQ10, curcumin, fat-soluble vitamins). NF monographed. May cause GI sensitivity at high doses.",
+      "notes": "Polyoxyl castor oil (Cremophor EL/Kolliphor EL) \u2014 PEGylated castor oil surfactant (HLB 12-14). Used to solubilize lipophilic compounds (CoQ10, curcumin, fat-soluble vitamins). NF monographed. May cause GI sensitivity at high doses.",
       "common_uses": [
         "solubilization",
         "emulsification"
@@ -15752,7 +15752,7 @@
       "is_additive": true,
       "additive_type": "synthetic_binder",
       "allergen": false,
-      "notes": "Polyvinylpyrrolidone (povidone, E1201) — synthetic water-soluble polymer used as binder, film former, and solubilizer in tablet manufacturing. USP/NF monographed (K-values 12-90). Not systemically absorbed. FDA IIG listed.",
+      "notes": "Polyvinylpyrrolidone (povidone, E1201) \u2014 synthetic water-soluble polymer used as binder, film former, and solubilizer in tablet manufacturing. USP/NF monographed (K-values 12-90). Not systemically absorbed. FDA IIG listed.",
       "common_uses": [
         "binder",
         "film former",
@@ -16322,7 +16322,7 @@
       "is_additive": true,
       "additive_type": "natural_emulsifier",
       "allergen": false,
-      "notes": "Quillaja saponaria bark extract (E999) — natural saponin-rich emulsifier and foaming agent. FDA GRAS (21 CFR 172.510). Used in liquid supplement formulations for solubilization of lipophilic compounds. Adjuvant properties studied in vaccines.",
+      "notes": "Quillaja saponaria bark extract (E999) \u2014 natural saponin-rich emulsifier and foaming agent. FDA GRAS (21 CFR 172.510). Used in liquid supplement formulations for solubilization of lipophilic compounds. Adjuvant properties studied in vaccines.",
       "common_uses": [
         "emulsifier",
         "foaming agent"
@@ -16381,7 +16381,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Receptomax — branded controlled-release profile system descriptor. Identity mapping for proprietary time-release technology label text. Specific excipient composition varies by manufacturer formulation.",
+      "notes": "Receptomax \u2014 branded controlled-release profile system descriptor. Identity mapping for proprietary time-release technology label text. Specific excipient composition varies by manufacturer formulation.",
       "common_uses": [
         "identity mapping"
       ],
@@ -16827,7 +16827,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Rutaecarpine — quinazolinocarboline alkaloid from Evodia rutaecarpa (wu zhu yu). CYP1A2 inducer — accelerates caffeine metabolism. Used in stimulant-containing supplement formulations. Identity mapping for marker rows.",
+      "notes": "Rutaecarpine \u2014 quinazolinocarboline alkaloid from Evodia rutaecarpa (wu zhu yu). CYP1A2 inducer \u2014 accelerates caffeine metabolism. Used in stimulant-containing supplement formulations. Identity mapping for marker rows.",
       "common_uses": [
         "identity mapping"
       ],
@@ -16977,7 +16977,7 @@
       "additive_type": "functional",
       "allergen": true,
       "allergen_type": "fish",
-      "notes": "Salmon (Oncorhynchus spp.) nasal cartilage — marine-derived source of proteoglycans (chondroitin sulfate) and type II collagen. Used in joint support formulations. Fish allergen — must declare per FALCPA.",
+      "notes": "Salmon (Oncorhynchus spp.) nasal cartilage \u2014 marine-derived source of proteoglycans (chondroitin sulfate) and type II collagen. Used in joint support formulations. Fish allergen \u2014 must declare per FALCPA.",
       "common_uses": [
         "marine tissue ingredient"
       ],
@@ -17045,7 +17045,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Sarcosine (N-methylglycine) — endogenous amino acid derivative. NMDA receptor co-agonist. Studied for cognitive enhancement and adjunct therapy in schizophrenia (doi:10.1016/j.biopsych.2004.09.009). Identity mapping for label tokens.",
+      "notes": "Sarcosine (N-methylglycine) \u2014 endogenous amino acid derivative. NMDA receptor co-agonist. Studied for cognitive enhancement and adjunct therapy in schizophrenia (doi:10.1016/j.biopsych.2004.09.009). Identity mapping for label tokens.",
       "common_uses": [
         "identity mapping"
       ],
@@ -17135,7 +17135,7 @@
       "standard_name": "Senactiv",
       "aliases": [
         "senactiv",
-        "senactiv®",
+        "senactiv\u00ae",
         "senactiv branded blend",
         "panax notoginseng and rosa roxburghii blend"
       ],
@@ -17252,7 +17252,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Branded herbal formula descriptor for Shen Min product line. Non-discrete ingredient — mapped for identity routing of proprietary formulation naming. Contains TCM herbs (He Shou Wu base).",
+      "notes": "Branded herbal formula descriptor for Shen Min product line. Non-discrete ingredient \u2014 mapped for identity routing of proprietary formulation naming. Contains TCM herbs (He Shou Wu base).",
       "common_uses": [
         "branded blend heading"
       ],
@@ -17359,7 +17359,7 @@
       "is_additive": true,
       "additive_type": "anti_caking_agent",
       "allergen": false,
-      "notes": "Likely label misspelling of silicon dioxide (SiO2, E551). Anti-caking agent and tablet glidant. FDA GRAS (21 CFR 172.480, ≤2% of food weight). Amorphous form used in supplements; not systemically absorbed. Entry preserved for label matching.",
+      "notes": "Likely label misspelling of silicon dioxide (SiO2, E551). Anti-caking agent and tablet glidant. FDA GRAS (21 CFR 172.480, \u22642% of food weight). Amorphous form used in supplements; not systemically absorbed. Entry preserved for label matching.",
       "common_uses": [
         "anti-caking agent",
         "flow agent"
@@ -17426,7 +17426,7 @@
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
-      "notes": "Sodium bisulfate (NaHSO4, E514ii) — acidifying agent used for pH control in food and supplement applications. FDA GRAS (21 CFR 184.1721). Strong acid; used at low concentrations. May cause sulfite sensitivity in susceptible individuals.",
+      "notes": "Sodium bisulfate (NaHSO4, E514ii) \u2014 acidifying agent used for pH control in food and supplement applications. FDA GRAS (21 CFR 184.1721). Strong acid; used at low concentrations. May cause sulfite sensitivity in susceptible individuals.",
       "common_uses": [
         "pH adjustment",
         "acidification"
@@ -17847,7 +17847,7 @@
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
-      "notes": "Sodium copper chlorophyllin (E141ii) — water-soluble semisynthetic derivative of chlorophyll used as green colorant in supplements. FDA exempt from certification (21 CFR 73.125). Also studied for internal deodorant properties and aflatoxin binding.",
+      "notes": "Sodium copper chlorophyllin (E141ii) \u2014 water-soluble semisynthetic derivative of chlorophyll used as green colorant in supplements. FDA exempt from certification (21 CFR 73.125). Also studied for internal deodorant properties and aflatoxin binding.",
       "common_uses": [
         "natural coloring",
         "green color"
@@ -17886,7 +17886,7 @@
       "is_additive": true,
       "additive_type": "acidity_regulator",
       "allergen": false,
-      "notes": "Sodium malate (E350) — sodium salt of L-malic acid used as acidity regulator and flavor enhancer in supplement formulations. GRAS. Provides tart/sour taste. Good buffering capacity in pH 3-5 range. ADI: not specified (JECFA).",
+      "notes": "Sodium malate (E350) \u2014 sodium salt of L-malic acid used as acidity regulator and flavor enhancer in supplement formulations. GRAS. Provides tart/sour taste. Good buffering capacity in pH 3-5 range. ADI: not specified (JECFA).",
       "common_uses": [
         "pH adjustment",
         "buffering"
@@ -18006,7 +18006,7 @@
       "is_additive": true,
       "additive_type": "pH_adjuster",
       "allergen": false,
-      "notes": "Rochelle salt (E337) — double tartrate salt used as acidity regulator, leavening agent, and emulsifier. FDA GRAS (21 CFR 184.1804). Also known as Seignette's salt. Used in effervescent supplement formulations.",
+      "notes": "Rochelle salt (E337) \u2014 double tartrate salt used as acidity regulator, leavening agent, and emulsifier. FDA GRAS (21 CFR 184.1804). Also known as Seignette's salt. Used in effervescent supplement formulations.",
       "common_uses": [
         "pH regulation",
         "leavening"
@@ -18095,7 +18095,7 @@
       "category": "disintegrant",
       "is_additive": true,
       "additive_type": "superdisintegrant",
-      "notes": "Crosslinked sodium carboxymethyl starch — a superdisintegrant used in tablets and capsules to promote rapid disintegration and drug release. UNII: H8AV0SQX4D, CAS: 9063-38-1. Distinct from croscarmellose sodium (crosslinked CMC). Generally recognized as safe excipient. Not a harmful additive.",
+      "notes": "Crosslinked sodium carboxymethyl starch \u2014 a superdisintegrant used in tablets and capsules to promote rapid disintegration and drug release. UNII: H8AV0SQX4D, CAS: 9063-38-1. Distinct from croscarmellose sodium (crosslinked CMC). Generally recognized as safe excipient. Not a harmful additive.",
       "external_ids": {
         "unii": "H8AV0SQX4D"
       },
@@ -18300,7 +18300,7 @@
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
-      "notes": "Soluble corn fiber (SCF) — resistant dextrin from corn starch. FDA GRAS (GRN 449, Tate & Lyle). Prebiotic fermentation increases Bifidobacteria and butyrate. Low glycemic. Well-tolerated at 12g/day (doi:10.1017/S0007114512001560).",
+      "notes": "Soluble corn fiber (SCF) \u2014 resistant dextrin from corn starch. FDA GRAS (GRN 449, Tate & Lyle). Prebiotic fermentation increases Bifidobacteria and butyrate. Low glycemic. Well-tolerated at 12g/day (doi:10.1017/S0007114512001560).",
       "common_uses": [
         "prebiotic fiber",
         "bulking agent"
@@ -18691,7 +18691,7 @@
       "additive_type": "branded_complex",
       "allergen": true,
       "allergen_type": "soy",
-      "notes": "Soynatto — branded fermented whole soybean food product (natto-type). Contains nattokinase and vitamin K2 (MK-7). Identity mapping for fermented soy product labels. Soy allergen — must declare per FALCPA.",
+      "notes": "Soynatto \u2014 branded fermented whole soybean food product (natto-type). Contains nattokinase and vitamin K2 (MK-7). Identity mapping for fermented soy product labels. Soy allergen \u2014 must declare per FALCPA.",
       "common_uses": [
         "digestive support"
       ],
@@ -18788,7 +18788,7 @@
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
-      "notes": "Bovine spleen glandular tissue — used in traditional glandular therapy and immune support formulations. Contains tuftsin, splenopentin, and other immunomodulatory peptides. No controlled human efficacy data. USDA-inspected source.",
+      "notes": "Bovine spleen glandular tissue \u2014 used in traditional glandular therapy and immune support formulations. Contains tuftsin, splenopentin, and other immunomodulatory peptides. No controlled human efficacy data. USDA-inspected source.",
       "common_uses": [
         "glandular support"
       ],
@@ -19069,7 +19069,7 @@
       "is_additive": true,
       "additive_type": "natural_sweetener",
       "allergen": false,
-      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (≥95% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
+      "notes": "Natural, calorie-free sweetener from the Stevia rebaudiana plant. FDA GRAS status applies to HIGH-PURITY extracts (\u226595% steviol glycosides) including rebaudioside A and stevioside. Whole stevia leaves and crude extracts are NOT FDA GRAS approved. Includes branded forms like BetterStevia, Truvia, and PureVia. Clean label alternative to artificial sweeteners.",
       "common_uses": [
         "flavor enhancement",
         "sugar replacement",
@@ -19273,7 +19273,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Sumalate — branded mineral chelate form (Albion Minerals) using malic acid chelation. Identity mapping for proprietary mineral chelate label tokens. Typically used for iron (ferrous bisglycinate chelate with malate).",
+      "notes": "Sumalate \u2014 branded mineral chelate form (Albion Minerals) using malic acid chelation. Identity mapping for proprietary mineral chelate label tokens. Typically used for iron (ferrous bisglycinate chelate with malate).",
       "common_uses": [
         "identity mapping"
       ],
@@ -19295,7 +19295,7 @@
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
-      "notes": "Sunfiber (Taiyo International) — branded partially hydrolyzed guar gum (PHGG) prebiotic fiber. FDA GRAS (GRN 61). Low viscosity, water-soluble. Clinically studied for IBS symptoms and regularity. 5-7g/day effective dose.",
+      "notes": "Sunfiber (Taiyo International) \u2014 branded partially hydrolyzed guar gum (PHGG) prebiotic fiber. FDA GRAS (GRN 61). Low viscosity, water-soluble. Clinically studied for IBS symptoms and regularity. 5-7g/day effective dose.",
       "common_uses": [
         "prebiotic support",
         "digestive support"
@@ -19317,7 +19317,7 @@
       "is_additive": false,
       "additive_type": "dietary_fiber",
       "allergen": false,
-      "notes": "Sunfiber AG — agricultural/food-grade variant of Sunfiber PHGG prebiotic fiber (Taiyo International). Same base material as standard Sunfiber but formulated for food/supplement manufacturing applications. FDA GRAS.",
+      "notes": "Sunfiber AG \u2014 agricultural/food-grade variant of Sunfiber PHGG prebiotic fiber (Taiyo International). Same base material as standard Sunfiber but formulated for food/supplement manufacturing applications. FDA GRAS.",
       "common_uses": [
         "prebiotic support"
       ],
@@ -19520,7 +19520,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Syntol — branded probiotic + enzyme digestive cleanse formula name (Arthur Andrew Medical). Identity mapping for proprietary formulation name. Contains protease, cellulase, and probiotic strains.",
+      "notes": "Syntol \u2014 branded probiotic + enzyme digestive cleanse formula name (Arthur Andrew Medical). Identity mapping for proprietary formulation name. Contains protease, cellulase, and probiotic strains.",
       "common_uses": [
         "identity mapping"
       ],
@@ -20375,7 +20375,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Marketing descriptor text for TestoFuel/Test1700 branded formulations. Non-ingredient label token mapped for identity routing. No discrete chemical composition — functions as product naming element.",
+      "notes": "Marketing descriptor text for TestoFuel/Test1700 branded formulations. Non-ingredient label token mapped for identity routing. No discrete chemical composition \u2014 functions as product naming element.",
       "common_uses": [
         "marketing claim"
       ],
@@ -20499,7 +20499,7 @@
       "is_additive": false,
       "additive_type": "glandular_extract",
       "allergen": false,
-      "notes": "Bovine thymus glandular tissue — used in traditional immune support formulations. Contains thymic peptides (thymulin, thymopoietin). Historical use in complementary medicine. No FDA-approved efficacy claims. USDA-inspected tissue source.",
+      "notes": "Bovine thymus glandular tissue \u2014 used in traditional immune support formulations. Contains thymic peptides (thymulin, thymopoietin). Historical use in complementary medicine. No FDA-approved efficacy claims. USDA-inspected tissue source.",
       "common_uses": [
         "glandular support"
       ],
@@ -20520,7 +20520,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Bovine thyroid glandular tissue — used in traditional glandular therapy for thyroid support. Contains desiccated thyroid hormones (T3/T4 at trace levels). Identity mapping for glandular descriptor label rows.",
+      "notes": "Bovine thyroid glandular tissue \u2014 used in traditional glandular therapy for thyroid support. Contains desiccated thyroid hormones (T3/T4 at trace levels). Identity mapping for glandular descriptor label rows.",
       "common_uses": [
         "identity mapping"
       ],
@@ -20742,7 +20742,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Total sulfur content descriptor on supplement labels — represents elemental sulfur from MSM, SAMe, cysteine, methionine, or other sulfur-containing compounds. Not a discrete ingredient; analytical specification marker.",
+      "notes": "Total sulfur content descriptor on supplement labels \u2014 represents elemental sulfur from MSM, SAMe, cysteine, methionine, or other sulfur-containing compounds. Not a discrete ingredient; analytical specification marker.",
       "common_uses": [
         "identity mapping"
       ],
@@ -20847,7 +20847,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Transport C-Plus — branded enhanced vitamin C delivery complex. Identity mapping for proprietary ascorbic acid transport system label tokens. Composition varies by manufacturer (typically liposomal or buffered form).",
+      "notes": "Transport C-Plus \u2014 branded enhanced vitamin C delivery complex. Identity mapping for proprietary ascorbic acid transport system label tokens. Composition varies by manufacturer (typically liposomal or buffered form).",
       "common_uses": [
         "identity mapping"
       ],
@@ -20915,7 +20915,7 @@
       "is_additive": true,
       "additive_type": "mineral_salt",
       "allergen": false,
-      "notes": "Trimagnesium dicitrate — magnesium salt of citric acid providing ~16% elemental magnesium. Used as magnesium source and buffering agent in supplement formulations. Well-absorbed form. FDA GRAS. Common in powder supplements.",
+      "notes": "Trimagnesium dicitrate \u2014 magnesium salt of citric acid providing ~16% elemental magnesium. Used as magnesium source and buffering agent in supplement formulations. Well-absorbed form. FDA GRAS. Common in powder supplements.",
       "common_uses": [
         "magnesium source",
         "buffering agent"
@@ -21069,7 +21069,7 @@
       "is_additive": true,
       "additive_type": "buffering_agent",
       "allergen": false,
-      "notes": "Trisodium citrate dihydrate (E331iii) — sodium salt of citric acid used as buffering agent, emulsifier, and acidity regulator. FDA GRAS (21 CFR 184.1792). Same compound as sodium citrate. Standard pharmaceutical/food excipient.",
+      "notes": "Trisodium citrate dihydrate (E331iii) \u2014 sodium salt of citric acid used as buffering agent, emulsifier, and acidity regulator. FDA GRAS (21 CFR 184.1792). Same compound as sodium citrate. Standard pharmaceutical/food excipient.",
       "common_uses": [
         "buffering",
         "pH control"
@@ -21116,7 +21116,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "True Food/SuperPotency/SoyAgen — branded whole-food supplement formula names. Identity mapping for proprietary product naming text. Non-discrete ingredients — represent marketing/formulation branding.",
+      "notes": "True Food/SuperPotency/SoyAgen \u2014 branded whole-food supplement formula names. Identity mapping for proprietary product naming text. Non-discrete ingredients \u2014 represent marketing/formulation branding.",
       "common_uses": [
         "identity mapping"
       ],
@@ -21192,19 +21192,22 @@
       "id": "OI_ULTRA_PURE_MARINE_OIL",
       "standard_name": "Ultra-Pure Marine Oil",
       "aliases": [
-        "Ultra-Pure Marine Oil"
+        "Ultra-Pure Marine Oil",
+        "Highly Refined Marine Oil Concentrate",
+        "highly refined marine oil",
+        "refined marine oil concentrate"
       ],
       "category": "carrier_oil",
       "is_additive": false,
       "additive_type": "marine_oil_carrier",
       "allergen": true,
       "allergen_type": "fish",
-      "notes": "Marine oil disclosure preserved as an exact inactive identity when listed in other ingredients; source species may be disclosed separately in forms.",
+      "notes": "Marine oil disclosure preserved as an exact inactive identity when listed in other ingredients; source species may be disclosed separately in forms. [B2 2026-05-22] Aliases added: ['Highly Refined Marine Oil Concentrate', 'highly refined marine oil', 'refined marine oil concentrate'].",
       "common_uses": [
         "marine oil carrier",
         "softgel lipid matrix"
       ],
-      "last_updated": "2026-03-13",
+      "last_updated": "2026-05-22",
       "external_ids": {},
       "functional_roles": [
         "carrier_oil"
@@ -21230,7 +21233,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Univestin — branded botanical complex (Scutellaria baicalensis + Acacia catechu) by Unigen Inc. Standardized to baicalin and catechins. Studied for joint comfort (doi:10.1186/1472-6882-12-8). Aliases include both the brand token AND the standard label phrasing used on consumer products (e.g. GNC Women's Joint Health, Move Free Advanced) where the components are spelled out instead of the brand name. Identity mapping for both label tokens and component-name disclosures.",
+      "notes": "Univestin \u2014 branded botanical complex (Scutellaria baicalensis + Acacia catechu) by Unigen Inc. Standardized to baicalin and catechins. Studied for joint comfort (doi:10.1186/1472-6882-12-8). Aliases include both the brand token AND the standard label phrasing used on consumer products (e.g. GNC Women's Joint Health, Move Free Advanced) where the components are spelled out instead of the brand name. Identity mapping for both label tokens and component-name disclosures.",
       "common_uses": [
         "identity mapping",
         "joint comfort"
@@ -21305,7 +21308,7 @@
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": false,
-      "notes": "Descriptor variants for vegan/plant-based capsule shells (HPMC, pullulan, modified starch). Non-discrete ingredient — mapped for identity routing of label capsule material descriptions. All major types are inert excipients.",
+      "notes": "Descriptor variants for vegan/plant-based capsule shells (HPMC, pullulan, modified starch). Non-discrete ingredient \u2014 mapped for identity routing of label capsule material descriptions. All major types are inert excipients.",
       "common_uses": [
         "capsule shell description"
       ],
@@ -21442,7 +21445,7 @@
       "is_additive": true,
       "additive_type": "cellulose_filler",
       "allergen": false,
-      "notes": "Plant-derived cellulose used as a bulking agent, anti-caking agent, and texture enhancer. Provides dietary fiber and is physiologically inert. Commonly used in tablet and capsule manufacturing. UNII OP1R32D61U (MICROCRYSTALLINE CELLULOSE) was removed 2026-05-14 — 'Vegetable Cellulose' is a generic descriptor covering MCC, powdered cellulose, hydroxypropyl methylcellulose, ethylcellulose, etc. FDA cache has NO generic 'cellulose' UNII, only specific forms. Specific cellulose forms (MCC, powdered, modified) keep their own UNIIs in dedicated entries.",
+      "notes": "Plant-derived cellulose used as a bulking agent, anti-caking agent, and texture enhancer. Provides dietary fiber and is physiologically inert. Commonly used in tablet and capsule manufacturing. UNII OP1R32D61U (MICROCRYSTALLINE CELLULOSE) was removed 2026-05-14 \u2014 'Vegetable Cellulose' is a generic descriptor covering MCC, powdered cellulose, hydroxypropyl methylcellulose, ethylcellulose, etc. FDA cache has NO generic 'cellulose' UNII, only specific forms. Specific cellulose forms (MCC, powdered, modified) keep their own UNIIs in dedicated entries.",
       "common_uses": [
         "filler",
         "bulking agent"
@@ -21451,7 +21454,7 @@
       "external_ids": {},
       "cui": "C5964383",
       "cui_status": "governed_null",
-      "cui_note": "UNII intentionally omitted — generic 'Vegetable Cellulose' is a class of plant-derived cellulose products (MCC, powdered cellulose, HPMC, ethylcellulose, etc.). FDA cache contains no generic-cellulose UNII; only form-specific UNIIs exist. Tagging the generic with MCC's UNII would mis-anchor every label-disclosed vegetable cellulose to MCC specifically.",
+      "cui_note": "UNII intentionally omitted \u2014 generic 'Vegetable Cellulose' is a class of plant-derived cellulose products (MCC, powdered cellulose, HPMC, ethylcellulose, etc.). FDA cache contains no generic-cellulose UNII; only form-specific UNIIs exist. Tagging the generic with MCC's UNII would mis-anchor every label-disclosed vegetable cellulose to MCC specifically.",
       "functional_roles": [
         "filler"
       ]
@@ -21469,7 +21472,7 @@
       "is_additive": true,
       "additive_type": "cellulose_coating",
       "allergen": false,
-      "notes": "Plant-derived cellulose (methylcellulose or HPMC) applied as tablet coating for moisture protection, taste masking, and improved swallowability. FDA GRAS. Inert — not systemically absorbed. Standard clean-label coating material.",
+      "notes": "Plant-derived cellulose (methylcellulose or HPMC) applied as tablet coating for moisture protection, taste masking, and improved swallowability. FDA GRAS. Inert \u2014 not systemically absorbed. Standard clean-label coating material.",
       "common_uses": [
         "tablet coating",
         "moisture protection"
@@ -21578,7 +21581,7 @@
       "is_additive": true,
       "additive_type": "processing_aid",
       "allergen": false,
-      "notes": "Plant-derived glycerol (1,2,3-propanetriol, E422) used as humectant, solvent, and sweetener in supplement formulations. FDA GRAS. Essential for gummy texture and shelf life. Acts as carrier for flavors and herbal extracts. ADI: not specified (JECFA — acceptable for food use).",
+      "notes": "Plant-derived glycerol (1,2,3-propanetriol, E422) used as humectant, solvent, and sweetener in supplement formulations. FDA GRAS. Essential for gummy texture and shelf life. Acts as carrier for flavors and herbal extracts. ADI: not specified (JECFA \u2014 acceptable for food use).",
       "common_uses": [
         "moisture retention",
         "solvent",
@@ -21690,7 +21693,7 @@
       "is_additive": true,
       "additive_type": "plant_lubricant",
       "allergen": false,
-      "notes": "Plant-derived lubricants (vegetable magnesium stearate, stearic acid, or MCT oil) used to prevent tablet sticking to manufacturing equipment. FDA GRAS. Reduce friction during compression. Typically ≤1% of tablet weight.",
+      "notes": "Plant-derived lubricants (vegetable magnesium stearate, stearic acid, or MCT oil) used to prevent tablet sticking to manufacturing equipment. FDA GRAS. Reduce friction during compression. Typically \u22641% of tablet weight.",
       "common_uses": [
         "tablet lubrication",
         "anti-sticking"
@@ -21713,7 +21716,7 @@
       "is_additive": true,
       "additive_type": "anti_caking_agent",
       "allergen": false,
-      "notes": "Vegetable-sourced magnesium silicate (talc analog, E553a) — anti-caking agent and tablet glidant. FDA GRAS. Improves powder flow during manufacturing. Not systemically absorbed. Distinct from asbestos-contaminated talc.",
+      "notes": "Vegetable-sourced magnesium silicate (talc analog, E553a) \u2014 anti-caking agent and tablet glidant. FDA GRAS. Improves powder flow during manufacturing. Not systemically absorbed. Distinct from asbestos-contaminated talc.",
       "common_uses": [
         "anti-caking agent",
         "tablet glidant"
@@ -22025,7 +22028,7 @@
       "additive_type": "fiber",
       "allergen": true,
       "allergen_type": "wheat",
-      "notes": "Whole wheat (Triticum aestivum) bran — outer husk layer of wheat kernel. Provides insoluble dietary fiber (~43%). Non-scorable food ingredient. Gluten-containing — must declare per FALCPA. Used as filler/carrier.",
+      "notes": "Whole wheat (Triticum aestivum) bran \u2014 outer husk layer of wheat kernel. Provides insoluble dietary fiber (~43%). Non-scorable food ingredient. Gluten-containing \u2014 must declare per FALCPA. Used as filler/carrier.",
       "common_uses": [
         "fiber source"
       ],
@@ -22062,7 +22065,7 @@
       "additive_type": "functional",
       "allergen": true,
       "allergen_type": "gluten",
-      "notes": "Wheat (Triticum aestivum) germ flour — nutrient-dense wheat fraction used as filler and vitamin E/B source in whole-food supplement matrices. Gluten-containing — must declare per FALCPA. Rich in octacosanol.",
+      "notes": "Wheat (Triticum aestivum) germ flour \u2014 nutrient-dense wheat fraction used as filler and vitamin E/B source in whole-food supplement matrices. Gluten-containing \u2014 must declare per FALCPA. Rich in octacosanol.",
       "common_uses": [
         "whole-food base",
         "nutrient matrix"
@@ -22472,7 +22475,7 @@
       "is_additive": true,
       "additive_type": "natural_colorant",
       "allergen": false,
-      "notes": "Yellow ochre (iron(III) oxide-hydroxide, E172) — natural mineral pigment used as tablet colorant. FDA-approved color additive (21 CFR 73.1200). Inert, not absorbed. Provides yellow-brown coloring to supplement tablets.",
+      "notes": "Yellow ochre (iron(III) oxide-hydroxide, E172) \u2014 natural mineral pigment used as tablet colorant. FDA-approved color additive (21 CFR 73.1200). Inert, not absorbed. Provides yellow-brown coloring to supplement tablets.",
       "common_uses": [
         "coloring"
       ],
@@ -23278,7 +23281,7 @@
       "is_additive": true,
       "additive_type": "emulsifier",
       "allergen": false,
-      "notes": "Oleyl lactylate / oleyl lactylic acid — fatty acid ester emulsifier used to improve oil dispersion and softgel stability.",
+      "notes": "Oleyl lactylate / oleyl lactylic acid \u2014 fatty acid ester emulsifier used to improve oil dispersion and softgel stability.",
       "common_uses": [
         "emulsification",
         "oil dispersion",
@@ -23362,7 +23365,7 @@
       "is_additive": true,
       "additive_type": "flavor",
       "allergen": false,
-      "notes": "Generic flavor descriptor — non-specific label indicating taste/aroma additive without identified source.",
+      "notes": "Generic flavor descriptor \u2014 non-specific label indicating taste/aroma additive without identified source.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "functional_roles": [
@@ -23385,7 +23388,7 @@
       "is_additive": true,
       "additive_type": "source_descriptor",
       "allergen": false,
-      "notes": "Generic \"vegetable\" descriptor — non-specific label indicating plant source without identified species.",
+      "notes": "Generic \"vegetable\" descriptor \u2014 non-specific label indicating plant source without identified species.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "functional_roles": [],
@@ -23426,7 +23429,7 @@
       "is_additive": false,
       "additive_type": "bioactive_factor",
       "allergen": false,
-      "notes": "Vitamin U (S-methylmethionine) — not a true vitamin. Found in raw cabbage; historical stomach-ulcer research (Cheney 1952). Not RDA-defined.",
+      "notes": "Vitamin U (S-methylmethionine) \u2014 not a true vitamin. Found in raw cabbage; historical stomach-ulcer research (Cheney 1952). Not RDA-defined.",
       "last_updated": "2026-04-20",
       "external_ids": {},
       "functional_roles": [],
@@ -23476,7 +23479,7 @@
       "is_additive": true,
       "additive_type": "fiber",
       "allergen": false,
-      "notes": "CreaFibe — branded microcrystalline cellulose variant used as bulking agent and fiber source in supplement formulations. GRAS. Tracked separately from generic MCC (see ADD_MICROCRYSTALLINE_CELLULOSE in harmful_additives) because the branded name warrants explicit routing; behavior equivalent to MCC carrier quality signal.",
+      "notes": "CreaFibe \u2014 branded microcrystalline cellulose variant used as bulking agent and fiber source in supplement formulations. GRAS. Tracked separately from generic MCC (see ADD_MICROCRYSTALLINE_CELLULOSE in harmful_additives) because the branded name warrants explicit routing; behavior equivalent to MCC carrier quality signal.",
       "common_uses": [
         "bulking agent",
         "fiber source",
@@ -23505,7 +23508,7 @@
       "is_additive": true,
       "additive_type": "essential_oil",
       "allergen": false,
-      "notes": "ActivAIT — branded mustard seed essential oil standardised for allyl isothiocyanate (AITC). Used as a thermogenic / metabolism-support active in weight-management supplements. GRAS for flavor use; tracked here as non-scoring branded ingredient with documented but low-dose active (AITC).",
+      "notes": "ActivAIT \u2014 branded mustard seed essential oil standardised for allyl isothiocyanate (AITC). Used as a thermogenic / metabolism-support active in weight-management supplements. GRAS for flavor use; tracked here as non-scoring branded ingredient with documented but low-dose active (AITC).",
       "common_uses": [
         "thermogenic support",
         "flavor",
@@ -23621,7 +23624,7 @@
       "is_additive": true,
       "additive_type": "structural_lipid",
       "allergen": false,
-      "notes": "Glycolipids — carbohydrate-linked lipid class forming part of cell membranes. Appear as structural components in whole-food / marine-source supplements; minor caloric contribution, no scorable bioactivity on their own (the parent lipid extract carries the quality signal).",
+      "notes": "Glycolipids \u2014 carbohydrate-linked lipid class forming part of cell membranes. Appear as structural components in whole-food / marine-source supplements; minor caloric contribution, no scorable bioactivity on their own (the parent lipid extract carries the quality signal).",
       "common_uses": [
         "membrane component in whole-food extracts",
         "marine-source lipid fraction"
@@ -23647,7 +23650,7 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "Resolvin D5 — D-series resolvin, a Specialized Pro-resolving Mediator (SPM) derived from DHA via the 17-HDHA pathway. Distinct chemical entity from its 17-HDHA precursor (CUI C0639949). Endogenously short-lived; commercial supplements rarely contain measurable preformed Resolvin D5 — most 'SPM' products deliver the precursor (HDHA) which the body converts. Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule: no verified clinical bio_score data exists for oral preformed Resolvin D5 supplementation. Identity verified (UMLS C3492734 + PubChem CID 24932575). When/if clinical PK + efficacy data emerge, can be promoted to IQM.",
+      "notes": "Resolvin D5 \u2014 D-series resolvin, a Specialized Pro-resolving Mediator (SPM) derived from DHA via the 17-HDHA pathway. Distinct chemical entity from its 17-HDHA precursor (CUI C0639949). Endogenously short-lived; commercial supplements rarely contain measurable preformed Resolvin D5 \u2014 most 'SPM' products deliver the precursor (HDHA) which the body converts. Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule: no verified clinical bio_score data exists for oral preformed Resolvin D5 supplementation. Identity verified (UMLS C3492734 + PubChem CID 24932575). When/if clinical PK + efficacy data emerge, can be promoted to IQM.",
       "common_uses": [
         "SPM-marker label-identity matching"
       ],
@@ -23658,7 +23661,7 @@
       "cui": "C3492734",
       "cui_status": "verified",
       "confidence_level": "verified",
-      "clinical_notes": "Identity verified. Clinical role pending — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
+      "clinical_notes": "Identity verified. Clinical role pending \u2014 see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
       "functional_roles": [],
       "is_active_only": true
     },
@@ -23676,7 +23679,7 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "Protectin DX (PDX) — DHA-derived double-lipoxygenase Specialized Pro-resolving Mediator (SPM). Stereoisomer-distinct from Protectin D1; biologically less active per published mediator-lipidomics data but still a distinct chemical entity. Endogenously short-lived; commercial supplements rarely contain measurable preformed Protectin DX. Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule: no verified clinical bio_score data exists for oral preformed Protectin DX supplementation. Identity verified (UMLS C3886642 + PubChem CID 11968800).",
+      "notes": "Protectin DX (PDX) \u2014 DHA-derived double-lipoxygenase Specialized Pro-resolving Mediator (SPM). Stereoisomer-distinct from Protectin D1; biologically less active per published mediator-lipidomics data but still a distinct chemical entity. Endogenously short-lived; commercial supplements rarely contain measurable preformed Protectin DX. Listed in other_ingredients (not IQM) per 2026-05-01 IQM-purity rule: no verified clinical bio_score data exists for oral preformed Protectin DX supplementation. Identity verified (UMLS C3886642 + PubChem CID 11968800).",
       "common_uses": [
         "SPM-marker label-identity matching"
       ],
@@ -23687,7 +23690,7 @@
       "cui": "C3886642",
       "cui_status": "verified",
       "confidence_level": "verified",
-      "clinical_notes": "Identity verified. Clinical role pending — see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
+      "clinical_notes": "Identity verified. Clinical role pending \u2014 see CLINICIAN_REVIEW_REQUEST_2026-05-01.md.",
       "functional_roles": [],
       "is_active_only": true
     },
@@ -23746,9 +23749,9 @@
         "colorant_natural"
       ],
       "common_uses": [
-        "natural yellow colorant (FDA 21 CFR §73.450)"
+        "natural yellow colorant (FDA 21 CFR \u00a773.450)"
       ],
-      "notes": "Riboflavin used as a natural yellow color additive (E101). Distinct from B2 as an active nutritional ingredient — the active scoring path handles that case via the IQM. This entry covers ONLY the inactive/excipient use where the cleaner has classified Riboflavin into inactiveIngredients[].",
+      "notes": "Riboflavin used as a natural yellow color additive (E101). Distinct from B2 as an active nutritional ingredient \u2014 the active scoring path handles that case via the IQM. This entry covers ONLY the inactive/excipient use where the cleaner has classified Riboflavin into inactiveIngredients[].",
       "external_ids": {
         "unii": "TLM2976OFR"
       },
@@ -23811,9 +23814,9 @@
         "filler"
       ],
       "common_uses": [
-        "anti-caking agent / flow agent for powders and tableted products (FDA GRAS 21 CFR §184.1722)",
+        "anti-caking agent / flow agent for powders and tableted products (FDA GRAS 21 CFR \u00a7184.1722)",
         "bulking agent in tablets",
-        "calcium fortification source (when used as an active ingredient — covered by IQM, not this entry)"
+        "calcium fortification source (when used as an active ingredient \u2014 covered by IQM, not this entry)"
       ],
       "notes": "FDA GRAS anti-caking agent and tablet bulking agent. When listed in the Supplement Facts panel as an active calcium source, the active scoring path handles it via the IQM. This entry covers the excipient case only.",
       "external_ids": {
@@ -23845,7 +23848,7 @@
         "surfactant"
       ],
       "common_uses": [
-        "emulsifier / surfactant in softgel formulations and oil-based suspensions (FDA GRAS 21 CFR §172.854)",
+        "emulsifier / surfactant in softgel formulations and oil-based suspensions (FDA GRAS 21 CFR \u00a7172.854)",
         "viscosity reducer in chocolate / oil-based confectionery (food use, included for breadth)"
       ],
       "notes": "PGPR is the FDA-GRAS emulsifier derived from castor oil polyglycerol esters; commonly used in softgels to suspend oil-soluble actives. Safe at supplement dose levels. ADI 25 mg/kg bw per JECFA 2017.",
@@ -23873,7 +23876,7 @@
       "is_additive": false,
       "additive_type": null,
       "allergen": false,
-      "notes": "High Amylopectin Starch — sports-nutrition carbohydrate fuel derived from waxy maize (corn) starch, which is naturally >95% amylopectin. DSLD ships products like GNC Wheybolic with the FDA UNII TQI9LJM246 (AMYLOPECTIN, CORN) on this active-panel row at 250–500 mg per serving, with source-form 'Waxy Maize'. Same product family as Highly Branched Cyclic Dextrin (NHA_HBCD_CLUSTER_DEXTRIN); HBCD is the enzyme-treated derivative of this precursor. Marketed for fast gastric emptying / rapid post-workout glycogen replenishment vs. maltodextrin or sucrose. Recognized as an active fuel ingredient but not scored for therapeutic quality (no premium-vs-lower form distinction). UNII verified 2026-05-14 against fda_unii_cache.json: TQI9LJM246 → 'AMYLOPECTIN, CORN'. Generic unspecified-source UNII 4XO4QFV777 (AMYLOPECTIN, UNSPECIFIED SOURCE) and per-source UNIIs (wheat BZ5AL1C3TJ, rice FCF4HG24O1, potato CDT7MX9YQ5, tapioca KL9H9HAD19, pea RQ1DI8911W, oat 1LE22FEY4Z) exist for other source forms.",
+      "notes": "High Amylopectin Starch \u2014 sports-nutrition carbohydrate fuel derived from waxy maize (corn) starch, which is naturally >95% amylopectin. DSLD ships products like GNC Wheybolic with the FDA UNII TQI9LJM246 (AMYLOPECTIN, CORN) on this active-panel row at 250\u2013500 mg per serving, with source-form 'Waxy Maize'. Same product family as Highly Branched Cyclic Dextrin (NHA_HBCD_CLUSTER_DEXTRIN); HBCD is the enzyme-treated derivative of this precursor. Marketed for fast gastric emptying / rapid post-workout glycogen replenishment vs. maltodextrin or sucrose. Recognized as an active fuel ingredient but not scored for therapeutic quality (no premium-vs-lower form distinction). UNII verified 2026-05-14 against fda_unii_cache.json: TQI9LJM246 \u2192 'AMYLOPECTIN, CORN'. Generic unspecified-source UNII 4XO4QFV777 (AMYLOPECTIN, UNSPECIFIED SOURCE) and per-source UNIIs (wheat BZ5AL1C3TJ, rice FCF4HG24O1, potato CDT7MX9YQ5, tapioca KL9H9HAD19, pea RQ1DI8911W, oat 1LE22FEY4Z) exist for other source forms.",
       "common_uses": [
         "carbohydrate fuel",
         "sports nutrition energy source",
@@ -23887,6 +23890,175 @@
       "functional_roles": [],
       "is_active_only": true,
       "added_by": "gnc_amylopectin_coverage_gate_2026_05_14"
+    },
+    {
+      "id": "OI_ULTRA_TEX_4",
+      "standard_name": "ULTRA-TEX 4 (modified food starch)",
+      "aliases": [
+        "ULTRA-TEX 4",
+        "ultra-tex 4",
+        "ULTRA TEX 4",
+        "ultra tex 4"
+      ],
+      "category": "thickener",
+      "is_additive": true,
+      "additive_type": "modified_starch",
+      "allergen": false,
+      "notes": "ULTRA-TEX 4 (Ingredion) is a cook-up modified food starch used as a thickener / texturizer in supplement gummies and chewables. Functional inactive \u2014 does not contribute to active ingredient score.",
+      "common_uses": [
+        "thickener",
+        "texturizer",
+        "gummy base"
+      ],
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "branded_form": true,
+      "functional_roles": [
+        "thickener"
+      ]
+    },
+    {
+      "id": "OI_FLORIDA_CRYSTALS",
+      "standard_name": "Florida Crystals (organic cane sugar)",
+      "aliases": [
+        "Florida Crystals",
+        "florida crystals"
+      ],
+      "category": "sweetener_natural",
+      "is_additive": true,
+      "additive_type": "sweetener",
+      "allergen": false,
+      "notes": "Florida Crystals\u00ae is a branded organic-cane-sugar preparation (ASR Group) used as a sweetener in supplement gummies, powders, and ready-to-drinks. Functional inactive.",
+      "common_uses": [
+        "sweetener",
+        "bulking agent"
+      ],
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "branded_form": true,
+      "functional_roles": [
+        "sweetener_natural"
+      ]
+    },
+    {
+      "id": "OI_PANMOL_B_COMPLEX",
+      "standard_name": "PANMOL B-COMPLEX (food-fermented B vitamins)",
+      "aliases": [
+        "PANMOL B-COMPLEX",
+        "panmol b-complex",
+        "PANMOL B COMPLEX",
+        "panmol b complex"
+      ],
+      "category": "vitamin_complex_branded",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "PANMOL\u00ae B-COMPLEX (Mosbeau / mibe) is a branded yeast-fermented B-vitamin complex (B1, B2, B3, B5, B6, B9, B12) with whole-food matrix delivery. The IQM scorer treats the individual B vitamins (when listed separately) as scorable; this entry covers the branded blend-name appearance on labels.",
+      "common_uses": [
+        "multivitamin",
+        "B-complex"
+      ],
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "branded_form": true,
+      "functional_roles": []
+    },
+    {
+      "id": "OI_ALOE_POLYMAX",
+      "standard_name": "Aloe PolyMax (branded aloe vera concentrate)",
+      "aliases": [
+        "Aloe PolyMax",
+        "aloe polymax",
+        "Aloe PolyMax+",
+        "aloe polymax+",
+        "organic Aloe PolyMax",
+        "organic aloe polymax"
+      ],
+      "category": "botanical_branded",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Aloe PolyMax / Aloe PolyMax+ is a branded aloe vera inner-leaf polysaccharide concentrate used as a soothing functional ingredient. Identity-only mapping \u2014 companion plain identity lives in botanical_ingredients.aloe_vera.",
+      "common_uses": [
+        "gut soothing",
+        "skin support"
+      ],
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "branded_form": true,
+      "functional_roles": []
+    },
+    {
+      "id": "OI_PUREALGAE_OMEGA3",
+      "standard_name": "PureAlgaeOmega3 oil (algal omega-3)",
+      "aliases": [
+        "PureAlgaeOmega3 oil",
+        "purealgaeomega3 oil",
+        "PureAlgaeOmega3",
+        "purealgaeomega3"
+      ],
+      "category": "carrier_oil_branded",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "PureAlgaeOmega3 (Pharmavite / Nature Made) is a branded algal omega-3 oil concentrate. Identity-only inactive mapping; the EPA/DHA active fatty acids are scored separately when listed.",
+      "common_uses": [
+        "omega-3 source",
+        "vegetarian fish-oil alternative"
+      ],
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "branded_form": true,
+      "functional_roles": [
+        "carrier_oil"
+      ]
+    },
+    {
+      "id": "OI_PUREPLANT_OMEGA3",
+      "standard_name": "PurePlantOmega3 Oil (plant-source omega-3 carrier)",
+      "aliases": [
+        "PurePlantOmega3 Oil",
+        "pureplantomega3 oil",
+        "PurePlantOmega3",
+        "pureplantomega3"
+      ],
+      "category": "carrier_oil_branded",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "PurePlantOmega3 (Pharmavite / Nature Made) is a branded plant-source omega-3 carrier oil. Identity-only inactive mapping; the ALA / EPA / DHA actives are scored separately.",
+      "common_uses": [
+        "plant omega-3 source",
+        "vegetarian fish-oil alternative"
+      ],
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "branded_form": true,
+      "functional_roles": [
+        "carrier_oil"
+      ]
+    },
+    {
+      "id": "OI_CONCENTRATED_SEAWATER_MINERAL_COMPLEX",
+      "standard_name": "Concentrated Seawater Mineral Complex",
+      "aliases": [
+        "Concentrated Seawater Mineral Complex",
+        "concentrated seawater mineral complex",
+        "seawater mineral complex"
+      ],
+      "category": "mineral_complex",
+      "is_additive": false,
+      "additive_type": null,
+      "allergen": false,
+      "notes": "Concentrated seawater mineral complex (often AquaMin\u00ae or Aqualyte / Quinton-style preparations) used as a multi-mineral source delivering magnesium, calcium, sodium, potassium, and 70+ trace minerals. Identity-only inactive mapping; individual scoreable minerals (Ca/Mg) are picked up via their own IQM entries when present.",
+      "common_uses": [
+        "multimineral source",
+        "electrolytes"
+      ],
+      "last_updated": "2026-05-22",
+      "external_ids": {},
+      "branded_form": false,
+      "functional_roles": []
     }
   ]
 }
