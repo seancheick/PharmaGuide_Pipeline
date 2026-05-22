@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 500,
+    "total_entries": 507,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -7017,6 +7017,30 @@
       }
     },
     {
+      "id": "huperzine_a",
+      "standard_name": "Huperzine A",
+      "latin_name": "Huperzia serrata (source)",
+      "aliases": [
+        "huperzia serrata extract",
+        "chinese club moss extract"
+      ],
+      "category": "active_compound",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for huperzine A. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "0111871I23",
+        "cas": "102518-79-6",
+        "pubchem_cid": 854026
+      },
+      "cui": "C0063033",
+      "rxcui": "2267703",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "synthetic_or_natural",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "hydrangea_root",
       "standard_name": "Hydrangea",
       "latin_name": "Hydrangea arborescens",
@@ -7171,6 +7195,29 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "inulin",
+      "standard_name": "Inulin",
+      "aliases": [
+        "chicory root inulin",
+        "fructooligosaccharides",
+        "FOS"
+      ],
+      "category": "active_compound",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for inulin. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "cas": "53188-23-1",
+        "pubchem_cid": 439709,
+        "unii": "JOS53KRJ01"
+      },
+      "cui": "C0021936",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -7675,6 +7722,31 @@
       }
     },
     {
+      "id": "l_theanine",
+      "standard_name": "L-Theanine",
+      "latin_name": "Camellia sinensis (source)",
+      "aliases": [
+        "theanine",
+        "gamma-glutamylethylamide",
+        "suntheanine"
+      ],
+      "category": "active_compound",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for L-theanine. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "8021PR16QO",
+        "cas": "3081-61-6",
+        "pubchem_cid": 439378
+      },
+      "cui": "C0076380",
+      "rxcui": "38022",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "synthetic_or_natural",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "laminaria_digitata",
       "standard_name": "Laminaria digitata",
       "latin_name": "Laminaria digitata",
@@ -7694,6 +7766,100 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "algal"
+      }
+    },
+    {
+      "id": "mulungu",
+      "standard_name": "Mulungu",
+      "latin_name": "Erythrina mulungu",
+      "aliases": [
+        "coral tree",
+        "erythrina",
+        "erythrina mulungu",
+        "mulungu bark extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for erythrina alkaloids. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "NU815YHH1S"
+      },
+      "cui": "C0996829",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
+      "id": "onion",
+      "standard_name": "Onion",
+      "latin_name": "Allium cepa",
+      "aliases": [
+        "allium cepa",
+        "onion extract",
+        "onion bulb extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for quercetin, organosulfur compounds. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "492225Q21H"
+      },
+      "cui": "C2740652",
+      "rxcui": "1370469",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
+      "id": "phosphatidylserine",
+      "standard_name": "Phosphatidylserine",
+      "aliases": [
+        "ps",
+        "phosphatidyl serine",
+        "sharp ps",
+        "sunps"
+      ],
+      "category": "active_compound",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Phospholipid important for brain cell membranes. Supports cognitive function and stress response.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "394XK0IH40",
+        "cas": "1446756-47-3",
+        "pubchem_cid": 9547096
+      },
+      "cui": "C0301704",
+      "rxcui": "89959",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "synthetic_or_natural",
+        "bonus_eligible": false
+      }
+    },
+    {
+      "id": "pine_bark_extract",
+      "standard_name": "Pine Bark Extract",
+      "latin_name": "Pinus pinaster",
+      "aliases": [
+        "pinus pinaster",
+        "pine bark",
+        "maritime pine bark"
+      ],
+      "category": "bark",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-3, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Pycnogenol\u00ae (Horphag Research branded extract) alias dropped on move; recovered via future PROMOTE_V6_BRANDED pycnogenol entry. Standardized botanical extract with procyanidins, catechins as primary marker compounds.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "50JZ5Z98QY"
+      },
+      "cui": "C3255957",
+      "rxcui": "1368708",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {

@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 227,
+    "total_entries": 220,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -3814,74 +3814,6 @@
       "cui": "C0331745"
     },
     {
-      "standard_name": "Huperzine A",
-      "aliases": [
-        "huperzia serrata extract",
-        "chinese club moss extract"
-      ],
-      "markers": [
-        "huperzine A"
-      ],
-      "min_threshold": 1,
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "huperzine_a",
-      "notes": "Botanical ingredient standardized for huperzine A. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "0111871I23",
-        "cas": "102518-79-6",
-        "pubchem_cid": 854026
-      },
-      "rxcui": "2267703",
-      "gsrs": {
-        "substance_name": "HUPERZINE A",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 266,
-        "dsld_info_raw": "Dietary Supplement Label Database|chemical|Huperzine | 3336 (Number of products:266)",
-        "active_moiety": null,
-        "salt_parents": [
-          {
-            "type": "SALT/SOLVATE->PARENT",
-            "name": "HUPERZINE A MONOHYDRATE",
-            "unii": "9F4GM58TAA"
-          }
-        ],
-        "metabolic_relationships": [
-          {
-            "type": "TARGET->INHIBITOR",
-            "name": "ACETYLCHOLINESTERASE HUMAN",
-            "unii": "EK71H4HC3N"
-          }
-        ],
-        "metabolites": []
-      },
-      "cui": "C0063033"
-    },
-    {
-      "standard_name": "Inulin",
-      "aliases": [
-        "chicory root inulin",
-        "fructooligosaccharides",
-        "FOS"
-      ],
-      "markers": [
-        "inulin"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "inulin",
-      "notes": "Botanical ingredient standardized for inulin. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "cas": "53188-23-1",
-        "pubchem_cid": 439709,
-        "unii": "JOS53KRJ01"
-      },
-      "cui": "C0021936"
-    },
-    {
       "standard_name": "Kale",
       "aliases": [
         "brassica oleracea var. sabellica",
@@ -4067,47 +3999,6 @@
       "cui": "C5779733",
       "min_threshold": 40,
       "threshold_source": "40% puerarin \u2014 standard root extract"
-    },
-    {
-      "standard_name": "L-Theanine",
-      "aliases": [
-        "theanine",
-        "gamma-glutamylethylamide",
-        "suntheanine"
-      ],
-      "markers": [
-        "L-theanine"
-      ],
-      "min_threshold": 98,
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "l_theanine",
-      "notes": "Botanical ingredient standardized for L-theanine. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "8021PR16QO",
-        "cas": "3081-61-6",
-        "pubchem_cid": 439378
-      },
-      "rxcui": "38022",
-      "gsrs": {
-        "substance_name": "THEANINE",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 983,
-        "dsld_info_raw": "Dietary Supplement Label Database|Amino Acid|Theanine | 607 (Number of products:983)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [
-          {
-            "type": "TARGET->INHIBITOR",
-            "name": "AMPA-SELECTIVE GLUTAMATE RECEPTOR 2",
-            "unii": "P6W5IXV8V9"
-          }
-        ],
-        "metabolites": []
-      },
-      "cui": "C0076380"
     },
     {
       "standard_name": "Lavender",
@@ -4806,38 +4697,6 @@
       "cui": "C0885014"
     },
     {
-      "standard_name": "Mulungu",
-      "aliases": [
-        "coral tree",
-        "erythrina",
-        "erythrina mulungu",
-        "mulungu bark extract"
-      ],
-      "markers": [
-        "erythrina alkaloids"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "mulungu",
-      "notes": "Botanical ingredient standardized for erythrina alkaloids. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "NU815YHH1S"
-      },
-      "gsrs": {
-        "substance_name": "ERYTHRINA STRICTA WHOLE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0996829"
-    },
-    {
       "standard_name": "Nettle (Urtica dioica)",
       "aliases": [
         "urtica dioica",
@@ -4978,42 +4837,6 @@
       "min_threshold": 20,
       "external_ids": {},
       "cui": "C1364955"
-    },
-    {
-      "standard_name": "Onion",
-      "aliases": [
-        "allium cepa",
-        "onion extract",
-        "onion bulb extract"
-      ],
-      "markers": [
-        "quercetin",
-        "organosulfur compounds",
-        "allicin"
-      ],
-      "priority": "medium",
-      "id": "onion",
-      "last_updated": "2025-11-17",
-      "notes": "Botanical ingredient standardized for quercetin, organosulfur compounds. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "492225Q21H"
-      },
-      "rxcui": "1370469",
-      "gsrs": {
-        "substance_name": "ONION",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [
-          "21 CFR 102.39"
-        ],
-        "dsld_count": 324,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|onion | 62 (Number of products:324)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C2740652"
     },
     {
       "standard_name": "OptiBerry",
@@ -5255,81 +5078,6 @@
       "cui": "C0070325",
       "min_threshold": 38,
       "threshold_source": "38% menthol \u2014 USP monograph"
-    },
-    {
-      "standard_name": "Phosphatidylserine",
-      "aliases": [
-        "ps",
-        "phosphatidyl serine",
-        "sharp ps",
-        "sunps"
-      ],
-      "markers": [
-        "phosphatidylserine"
-      ],
-      "priority": "high",
-      "min_threshold": 100,
-      "category": "active_compound",
-      "id": "phosphatidylserine",
-      "notes": "Phospholipid important for brain cell membranes. Supports cognitive function and stress response.",
-      "last_updated": "2026-01-05",
-      "external_ids": {
-        "unii": "394XK0IH40",
-        "cas": "1446756-47-3",
-        "pubchem_cid": 9547096
-      },
-      "rxcui": "89959",
-      "gsrs": {
-        "substance_name": "PHOSPHATIDYL SERINE",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 644,
-        "dsld_info_raw": "Dietary Supplement Label Database|fat|Phosphatidylserine | 91 (Number of products:644)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0301704",
-      "attributes": {
-        "iqm_parent_id": "phosphatidylserine"
-      }
-    },
-    {
-      "standard_name": "Pine Bark Extract",
-      "aliases": [
-        "pinus pinaster",
-        "pycnogenol",
-        "pine bark",
-        "maritime pine bark"
-      ],
-      "markers": [
-        "procyanidins",
-        "catechins",
-        "phenolic acids"
-      ],
-      "min_threshold": 95,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "pine_bark_extract",
-      "notes": "Standardized botanical extract with procyanidins, catechins as primary marker compounds.",
-      "category": "bark",
-      "external_ids": {
-        "unii": "50JZ5Z98QY"
-      },
-      "rxcui": "1368708",
-      "gsrs": {
-        "substance_name": "MARITIME PINE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 77,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Pycnogenol | 104 (Number of products:77)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C3255957"
     },
     {
       "standard_name": "Polygala",

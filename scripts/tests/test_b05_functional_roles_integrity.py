@@ -80,4 +80,10 @@ def test_botanical_total_count_unchanged(botanicals):
     # century_plant (UNII 024852X0VD), d_mannose (UNII PHA4727WTP),
     # damiana (UNII 812R0W1I3K), elder_flower (UNII 07V4DX094T),
     # galdieria (UNII 2E5CL9KYZ8), grapefruit_seed (UNII 598D944HOL).
-    assert len(botanicals) == 500
+    # 507 after 2026-05-22 MO-3 batch: 7 more relocated. Moved:
+    # huperzine_a (UNII 0111871I23), inulin (UNII JOS53KRJ01),
+    # l_theanine (UNII 8021PR16QO), mulungu (UNII NU815YHH1S),
+    # onion (UNII 492225Q21H), phosphatidylserine (UNII 394XK0IH40),
+    # pine_bark_extract (UNII 50JZ5Z98QY — dropped 'pycnogenol' alias
+    # to preserve future PROMOTE_V6_BRANDED routing for Pycnogenol®).
+    assert len(botanicals) == 507
