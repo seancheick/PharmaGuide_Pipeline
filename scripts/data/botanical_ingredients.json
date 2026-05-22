@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 514,
+    "total_entries": 521,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -139,6 +139,28 @@
       }
     },
     {
+      "id": "african_mango",
+      "standard_name": "African Mango",
+      "latin_name": "Irvingia gabonensis",
+      "aliases": [
+        "irvingia gabonensis",
+        "wild mango",
+        "bush mango extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII 6V9H6XWU5P verified via scripts/data/fda_unii_cache.json. Botanical ingredient standardized for fiber. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "6V9H6XWU5P"
+      },
+      "cui": "C1033652",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "agarikon",
       "standard_name": "Agarikon",
       "latin_name": "Laricifomes officinalis",
@@ -155,6 +177,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "fungal"
+      }
+    },
+    {
+      "id": "akarkara",
+      "standard_name": "Akarkara",
+      "latin_name": "Anacyclus pyrethrum",
+      "aliases": [
+        "anacyclus pyrethrum",
+        "akarkara extract",
+        "pellitory root",
+        "spanish chamomile",
+        "akarkara root"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII E3L74Y262L verified via scripts/data/fda_unii_cache.json. Ayurvedic herb traditionally used for libido, oral health, and nerve stimulation.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "E3L74Y262L"
+      },
+      "cui": "C1669961",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -2458,6 +2504,40 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "camu_camu",
+      "standard_name": "Camu Camu",
+      "latin_name": "Myrciaria dubia",
+      "aliases": [
+        "myrciaria dubia",
+        "camu camu powder",
+        "camu camu extract",
+        "natural vitamin c",
+        "amazonian vitamin c",
+        "camu fruit c",
+        "camu camu supplement",
+        "natural vitamin c supplement",
+        "natural vit c",
+        "camu camu extract supplement",
+        "amazonian vitamin c supplement",
+        "amazonian vit c",
+        "camu fruit c supplement",
+        "camu camu fruit extract",
+        "Camu Camu Berry Extract"
+      ],
+      "category": "seed_fruit",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII EAG5BC91EK verified via scripts/data/fda_unii_cache.json. Botanical ingredient standardized for vitamin C. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "EAG5BC91EK"
+      },
+      "cui": "C2293178",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -7015,6 +7095,28 @@
       }
     },
     {
+      "id": "horsetail",
+      "standard_name": "Horsetail",
+      "latin_name": "Equisetum arvense",
+      "aliases": [
+        "equisetum arvense",
+        "horsetail extract",
+        "field horsetail"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII 1L0VKZ185E verified via scripts/data/fda_unii_cache.json. Botanical ingredient standardized for silica, flavonoids. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "1L0VKZ185E"
+      },
+      "cui": "C0331745",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "horsetail_aerial_parts",
       "standard_name": "Horsetail Aerial Parts",
       "latin_name": "Equisetum arvense",
@@ -7841,6 +7943,33 @@
       }
     },
     {
+      "id": "lion_s_mane",
+      "standard_name": "Lion's Mane",
+      "latin_name": "Hericium erinaceus",
+      "aliases": [
+        "bearded tooth mushroom",
+        "hericium erinaceus",
+        "lion's mane mushroom extract",
+        "yamabushitake",
+        "lion's mane extract",
+        "hericium mushroom",
+        "hedgehog mushroom",
+        "lions mane mushroom"
+      ],
+      "category": "mushroom",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII Y62T8P9AAP verified via scripts/data/fda_unii_cache.json. Cognitive mushroom standardized for beta-glucans (10-40%) and nerve growth factors (hericenones, erinacines).",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "Y62T8P9AAP"
+      },
+      "cui": "C1001731",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "fungal",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "mallow",
       "standard_name": "Mallow",
       "latin_name": "Malva sylvestris",
@@ -7856,6 +7985,29 @@
         "unii": "I01732476C"
       },
       "cui": "C1254223",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
+      "id": "muira_puama",
+      "standard_name": "Muira Puama",
+      "latin_name": "Ptychopetalum olacoides",
+      "aliases": [
+        "ptychopetalum olacoides",
+        "potency wood",
+        "marapuama",
+        "muira puama bark extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII G582QI158H verified via scripts/data/fda_unii_cache.json. Men's health herb often sold as crude extract (4:1 to 10:1 concentration ratio).",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "G582QI158H"
+      },
+      "cui": "C1136294",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant",
@@ -7973,6 +8125,28 @@
         "unii": "F6BP27WG28"
       },
       "cui": "C0997031",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
+      "id": "rosehip",
+      "standard_name": "Rosehip",
+      "latin_name": "Rosa canina (fruit)",
+      "aliases": [
+        "rosa canina",
+        "rosehip extract",
+        "rose hip powder"
+      ],
+      "category": "seed_fruit",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-5, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. UNII P5R39F12N2 verified via scripts/data/fda_unii_cache.json. Botanical ingredient standardized for galactolipids, vitamin C. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "P5R39F12N2"
+      },
+      "cui": "C1030673",
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant",

@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 192,
+    "total_entries": 185,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -143,24 +143,6 @@
       "cui": "C1054955"
     },
     {
-      "standard_name": "African Mango",
-      "aliases": [
-        "irvingia gabonensis",
-        "wild mango",
-        "bush mango extract"
-      ],
-      "markers": [
-        "fiber"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "african_mango",
-      "notes": "Botanical ingredient standardized for fiber. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C1033652"
-    },
-    {
       "standard_name": "Agaricus Blazei",
       "aliases": [
         "agaricus blazei murill",
@@ -195,28 +177,6 @@
       "cui": "C1086056",
       "min_threshold": 10,
       "threshold_source": "10% beta-glucans \u2014 functional mushroom standard"
-    },
-    {
-      "standard_name": "Akarkara",
-      "id": "akarkara",
-      "aliases": [
-        "anacyclus pyrethrum",
-        "akarkara extract",
-        "pellitory root",
-        "spanish chamomile",
-        "akarkara root"
-      ],
-      "markers": [
-        "pellitorine",
-        "anacyclin",
-        "pyrethrin"
-      ],
-      "category": "herb",
-      "priority": "medium",
-      "notes": "Ayurvedic herb traditionally used for libido, oral health, and nerve stimulation.",
-      "last_updated": "2026-01-05",
-      "external_ids": {},
-      "cui": "C1669961"
     },
     {
       "standard_name": "AlphaWave L-Theanine",
@@ -1322,36 +1282,6 @@
         "metabolites": []
       },
       "cui": "C1019150"
-    },
-    {
-      "standard_name": "Camu Camu",
-      "aliases": [
-        "myrciaria dubia",
-        "camu camu powder",
-        "camu camu extract",
-        "natural vitamin c",
-        "amazonian vitamin c",
-        "camu fruit c",
-        "camu camu supplement",
-        "natural vitamin c supplement",
-        "natural vit c",
-        "camu camu extract supplement",
-        "amazonian vitamin c supplement",
-        "amazonian vit c",
-        "camu fruit c supplement",
-        "camu camu fruit extract",
-        "Camu Camu Berry Extract"
-      ],
-      "markers": [
-        "vitamin C"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "camu_camu",
-      "notes": "Botanical ingredient standardized for vitamin C. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C2293178"
     },
     {
       "standard_name": "Cat's Claw",
@@ -3406,26 +3336,6 @@
       "cui": "C3484548"
     },
     {
-      "standard_name": "Horsetail",
-      "aliases": [
-        "equisetum arvense",
-        "horsetail extract",
-        "field horsetail"
-      ],
-      "markers": [
-        "silica",
-        "flavonoids"
-      ],
-      "min_threshold": 7,
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "horsetail",
-      "notes": "Botanical ingredient standardized for silica, flavonoids. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C0331745"
-    },
-    {
       "standard_name": "Kanna",
       "aliases": [
         "channa",
@@ -3716,32 +3626,6 @@
         "metabolites": []
       },
       "cui": "C0771627"
-    },
-    {
-      "standard_name": "Lion's Mane",
-      "aliases": [
-        "bearded tooth mushroom",
-        "hericium erinaceus",
-        "lion's mane mushroom extract",
-        "yamabushitake",
-        "lion's mane extract",
-        "hericium mushroom",
-        "hedgehog mushroom",
-        "lions mane mushroom"
-      ],
-      "markers": [
-        "beta-glucans",
-        "hericenones",
-        "erinacines"
-      ],
-      "priority": "high",
-      "last_updated": "2026-01-15",
-      "id": "lion_s_mane",
-      "notes": "Cognitive mushroom standardized for beta-glucans (10-40%) and nerve growth factors (hericenones, erinacines).",
-      "category": "mushroom",
-      "min_threshold": 10,
-      "external_ids": {},
-      "cui": "C1001731"
     },
     {
       "standard_name": "Lutemax 2020",
@@ -4096,27 +3980,6 @@
         "metabolites": []
       },
       "cui": "C1082338"
-    },
-    {
-      "standard_name": "Muira Puama",
-      "aliases": [
-        "ptychopetalum olacoides",
-        "potency wood",
-        "marapuama",
-        "muira puama bark extract"
-      ],
-      "markers": [
-        "sterols",
-        "lupeol"
-      ],
-      "priority": "medium",
-      "category": "herb",
-      "id": "muira_puama",
-      "notes": "Men's health herb often sold as crude extract (4:1 to 10:1 concentration ratio).",
-      "last_updated": "2026-01-15",
-      "min_threshold": 1,
-      "external_ids": {},
-      "cui": "C1136294"
     },
     {
       "standard_name": "Mulberry",
@@ -5020,26 +4883,6 @@
       "cui": "C1074162",
       "min_threshold": 3,
       "threshold_source": "3% aspalathin \u2014 concentrated rooibos extract"
-    },
-    {
-      "standard_name": "Rosehip",
-      "aliases": [
-        "rosa canina",
-        "rosehip extract",
-        "rose hip powder"
-      ],
-      "markers": [
-        "galactolipids",
-        "vitamin C"
-      ],
-      "min_threshold": 40,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "rosehip",
-      "notes": "Botanical ingredient standardized for galactolipids, vitamin C. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {},
-      "cui": "C1030673"
     },
     {
       "standard_name": "Rosemary",

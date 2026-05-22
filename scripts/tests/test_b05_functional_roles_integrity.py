@@ -92,4 +92,9 @@ def test_botanical_total_count_unchanged(botanicals):
     # (UNII JD6YPE8XLT — NEW), mallow (UNII I01732476C — NEW), polygala
     # (UNII F6BP27WG28 — NEW). The 4 NEW UNIIs were added during this
     # batch (verified via scripts/data/fda_unii_cache.json).
-    assert len(botanicals) == 514
+    # 521 after 2026-05-22 MO-5 batch: 7 more relocated, all with NEW
+    # UNIIs filled during move. Moved: african_mango (6V9H6XWU5P),
+    # akarkara (E3L74Y262L), horsetail (1L0VKZ185E), muira_puama
+    # (G582QI158H), rosehip (P5R39F12N2), lion_s_mane (Y62T8P9AAP —
+    # fungal), camu_camu (EAG5BC91EK — 15 aliases).
+    assert len(botanicals) == 521
