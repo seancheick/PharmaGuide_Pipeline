@@ -2520,7 +2520,16 @@
         "curcumin standardized extract",
         "diferuloylmethane",
         "curcumin complex",
-        "curcumin powder"
+        "curcumin powder",
+        "curcumin standardized to 95% curcuminoids",
+        "C3 Complex",
+        "Curcumin C3 Complex",
+        "BCM-95",
+        "BCM-95 Bio-Curcumin",
+        "Meriva",
+        "Meriva curcumin phytosome",
+        "Longvida",
+        "Theracurmin"
       ],
       "markers": [
         "curcuminoids",
@@ -2532,13 +2541,27 @@
       "priority": "high",
       "standardization": "95% curcuminoids",
       "category": "root",
-      "last_updated": "2026-01-15",
-      "notes": "Anti-inflammatory compound standardized for 95% curcuminoids. C3 Complex is the most studied form.",
+      "last_updated": "2026-05-22",
+      "notes": "Curcumin marker compound (UNII IT942ZTH98, verified). Anti-inflammatory standardized to 95% curcuminoids. C3 Complex (Sabinsa), BCM-95 Bio-Curcumin (Arjuna Natural), Meriva (Indena phytosome), Longvida, Theracurmin are bonus-eligible branded standardized extracts. Plain curcuminoid powder aliases (curcumin powder, curcumin extract) safe under runtime meets_threshold gate (score_supplements.py:1148) — bonus fires only when label proves measurable curcuminoid percentage.",
       "external_ids": {
         "unii": "IT942ZTH98",
         "cas": "458-37-7",
         "pubchem_cid": 969516
       },
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "marker_compounds": [
+        "curcumin",
+        "demethoxycurcumin",
+        "bisdemethoxycurcumin",
+        "curcuminoids (total)"
+      ],
+      "bonus_rationale": "Curcumin and the curcuminoid family are the bioactive principles of Curcuma longa. Clinical literature on anti-inflammatory, anti-oxidant, and joint-comfort endpoints uses standardized curcuminoid percentage (typically 95%+ curcuminoids for premium extracts) and quantified branded extracts (C3 Complex, BCM-95, Meriva, Longvida, Theracurmin). The marker_percent basis applies: bonus is granted only when the label proves measurable curcuminoid percentage or quantified branded-extract standardization. The enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148) enforce label-text percentage detection at runtime.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/29065496/",
+        "https://www.nccih.nih.gov/health/turmeric",
+        "https://pubmed.ncbi.nlm.nih.gov/27533649/"
+      ],
       "rxcui": "2955",
       "gsrs": {
         "substance_name": "Curcumin",
@@ -7281,7 +7304,10 @@
         "turmeric powder",
         "haldi",
         "turmeric curcumin",
-        "turmeric root powder"
+        "turmeric root powder",
+        "turmeric extract standardized to 95% curcuminoids",
+        "curcuma longa extract standardized to curcuminoids",
+        "Curcuma longa standardized extract"
       ],
       "markers": [
         "curcuminoids",
@@ -7291,9 +7317,9 @@
       ],
       "min_threshold": 95,
       "priority": "high",
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "turmeric",
-      "notes": "Anti-inflammatory spice standardized for 95% curcuminoids when in extract form. Raw turmeric contains only 2-5% curcuminoids.",
+      "notes": "Curcuma longa whole rhizome (UNII 856YO1Z64F = CURCUMA LONGA (TURMERIC) ROOT, verified). Anti-inflammatory spice standardized for 95% curcuminoids when in extract form. Raw turmeric powder contains only 2-5% curcuminoids and will NOT satisfy the runtime meets_threshold gate (score_supplements.py:1148) — plain rhizome aliases (turmeric powder, turmeric root, haldi) stay here so identity routing works, but the bonus fires only when the label proves a measurable curcuminoid percentage. Plain identity also lives in botanical_ingredients.turmeric and botanical_ingredients.turmeric_root_powder. Branded standardized extracts (C3 Complex, BCM-95, Meriva, Longvida, Theracurmin) are catalogued under standardized_botanicals.curcumin.",
       "category": "herb",
       "external_ids": {
         "unii": "856YO1Z64F"
@@ -7310,7 +7336,21 @@
         "metabolic_relationships": [],
         "metabolites": []
       },
-      "cui": "C0077524"
+      "cui": "C0077524",
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "marker_compounds": [
+        "curcumin",
+        "demethoxycurcumin",
+        "bisdemethoxycurcumin",
+        "curcuminoids (total)"
+      ],
+      "bonus_rationale": "Turmeric (Curcuma longa rhizome) extract is commercially and clinically standardized to total curcuminoid percentage (typically 95%+ for premium grades). Clinical literature on anti-inflammatory, joint-comfort, and anti-oxidant endpoints uses standardized curcuminoid percentage. The marker_percent basis applies: bonus is granted only when the label proves measurable curcuminoid percentage. Raw rhizome powder (2-5% curcuminoids) routes through identity-only mapping in botanical_ingredients without bonus. The enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148) enforce label-text percentage detection at runtime.",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/29065496/",
+        "https://www.nccih.nih.gov/health/turmeric",
+        "https://pubmed.ncbi.nlm.nih.gov/27533649/"
+      ]
     },
     {
       "standard_name": "TurmiPure Gold",
