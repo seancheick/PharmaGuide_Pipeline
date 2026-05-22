@@ -298,10 +298,12 @@
         "100% organic whole leaf Aloe vera",
         "99% organic whole leaf Aloe vera",
         "Aloe vera whole leaf",
-        "aloe vera extract"
+        "aloe vera extract",
+        "Aloe vera Inner Leaf Juice",
+        "aloe inner leaf juice"
       ],
       "category": "herb",
-      "notes": "Aloe barbadensis (Asphodelaceae) leaf gel and latex. Contains acemannan polysaccharides (gel) and anthraquinone glycosides (latex). The whole-leaf and gel preparations differ markedly in composition and safety profile. Common DSLD label disclosures include percentage-prefixed concentration claims (e.g. '88% organic whole leaf Aloe vera') \u2014 aliased rather than relying on cleaner-side prefix stripping to keep identity matching deterministic. [DM-1 2026-05-22] Merged 1 alias(es) from deleted standardized_botanicals.aloe_vera dup entry: ['aloe vera extract'].",
+      "notes": "Aloe barbadensis (Asphodelaceae) leaf gel and latex. Contains acemannan polysaccharides (gel) and anthraquinone glycosides (latex). The whole-leaf and gel preparations differ markedly in composition and safety profile. Common DSLD label disclosures include percentage-prefixed concentration claims (e.g. '88% organic whole leaf Aloe vera') \u2014 aliased rather than relying on cleaner-side prefix stripping to keep identity matching deterministic. [DM-1 2026-05-22] Merged 1 alias(es) from deleted standardized_botanicals.aloe_vera dup entry: ['aloe vera extract']. [B5 2026-05-22 inactive-coverage] +aliases: ['Aloe vera Inner Leaf Juice', 'aloe inner leaf juice'].",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "ZY81Z83H0X"
@@ -5462,10 +5464,13 @@
         "linum usitatissimum",
         "flaxseed oil",
         "flaxseed extract",
-        "ground flaxseed"
+        "ground flaxseed",
+        "Organic Cold-Milled Flax",
+        "cold-milled flax",
+        "cold milled flax"
       ],
       "category": "seed_fruit",
-      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for lignans, alpha-linolenic acid. Commonly used in dietary supplements.",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for lignans, alpha-linolenic acid. Commonly used in dietary supplements. [B5 2026-05-22 inactive-coverage] +aliases: ['Organic Cold-Milled Flax', 'cold-milled flax', 'cold milled flax'].",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "310OJT00CG"
@@ -12598,10 +12603,11 @@
       "aliases": [
         "glycine max",
         "soy extract",
-        "soy isoflavone extract"
+        "soy isoflavone extract",
+        "soy grits"
       ],
       "category": "active_compound",
-      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for isoflavones, genistein. Commonly used in dietary supplements.",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-6, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for isoflavones, genistein. Commonly used in dietary supplements. [B5 2026-05-22 inactive-coverage] +aliases: ['soy grits'].",
       "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "71B37NR06D",

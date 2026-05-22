@@ -6910,18 +6910,21 @@
       "standard_name": "Fermented Whole Soya Descriptor",
       "aliases": [
         "fermentation-activated organically grown whole soya",
-        "enzyme pre-digested whole soya"
+        "enzyme pre-digested whole soya",
+        "Soy, Fermented",
+        "fermented soy",
+        "soy fermented"
       ],
       "category": "label_descriptor",
       "is_additive": false,
       "additive_type": "descriptor",
       "allergen": true,
       "allergen_type": "soy",
-      "notes": "Processing descriptor for fermented whole soybean products (natto, tempeh-derived). Non-discrete ingredient \u2014 mapped for identity routing of fermentation process labels. Contains soy allergen per FALCPA.",
+      "notes": "Processing descriptor for fermented whole soybean products (natto, tempeh-derived). Non-discrete ingredient \u2014 mapped for identity routing of fermentation process labels. Contains soy allergen per FALCPA. [B5 2026-05-22] +aliases: ['Soy, Fermented', 'fermented soy', 'soy fermented'].",
       "common_uses": [
         "marketing descriptor"
       ],
-      "last_updated": "2026-03-01",
+      "last_updated": "2026-05-22",
       "external_ids": {},
       "functional_roles": [],
       "is_label_descriptor": true
