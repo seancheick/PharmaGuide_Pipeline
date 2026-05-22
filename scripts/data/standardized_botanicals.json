@@ -6035,28 +6035,54 @@
       "cui": "C0073096"
     },
     {
-      "standard_name": "Rhodiola",
+      "standard_name": "Rhodiola rosea",
       "aliases": [
         "rhodiola rosea",
+        "Rhodiola rosea",
         "golden root",
         "arctic root",
         "rhodiola rosea extract",
         "rose root",
         "roseroot",
-        "rhodiola root"
+        "rhodiola root",
+        "rhodiola rosea extract standardized to 3% rosavins, 1% salidroside",
+        "rhodiola rosea extract standardized to 3% rosavins",
+        "rhodiola rosea extract standardized to 1% salidroside",
+        "SHR-5",
+        "SHR-5 rhodiola rosea extract",
+        "Rosavin standardized rhodiola"
       ],
       "markers": [
         "rosavins",
         "salidroside",
         "rosavin"
       ],
+      "marker_compounds": [
+        "rosavins",
+        "rosavin",
+        "rosin",
+        "rosarin",
+        "salidroside",
+        "tyrosol"
+      ],
+      "bonus_eligible": true,
+      "standardization_basis": "marker_percent",
+      "bonus_rationale": "Rhodiola rosea (UNII 3S5ITS5ULN) is bonus-eligible when the product label declares the standard 3% rosavins + 1% salidroside specification (or a named branded standardized extract such as SHR-5 from Swedish Herbal Institute, which is the spec used in most adaptogen RCTs). The 3:1 rosavins-to-salidroside ratio is the historical Russian / Scandinavian pharmacopeial standard. Runtime enforcement: enricher's _extract_percentage + meets_threshold gate (score_supplements.py:1148). Plain 'Rhodiola' identity matches but defers to meets_threshold. The bonus pathway is species-specific to R. rosea — other Rhodiola species (R. crenulata UNII E1596V65V0, R. quadrifida / R. sacra UNII 11R149C3CY) have different marker profiles and are NOT covered by this entry's pathway. Editorial note: 'rhodiola root' is generic phrasing — UNII registry assigns it to R. quadrifida / R. sacra, but supplement-context labels typically mean R. rosea. Alias retained for runtime matching given that convention; products using non-R. rosea species should call them out explicitly (e.g., 'Rhodiola crenulata').",
+      "sources": [
+        "NCCIH Rhodiola rosea overview: https://www.nccih.nih.gov/health/rhodiola",
+        "Panossian et al. 2010 systematic review on Rhodiola rosea pharmacology (PMID 20378318)",
+        "Swedish Herbal Institute SHR-5 monograph (Rhodiola rosea standardized to 3% rosavins + 1% salidroside)",
+        "Olsson et al. 2009 randomized double-blind trial on SHR-5 for stress-related fatigue (PMID 18307390)"
+      ],
       "min_threshold": 3,
       "priority": "high",
-      "last_updated": "2026-01-15",
+      "last_updated": "2026-05-22",
       "id": "rhodiola",
-      "notes": "Adaptogenic herb standardized for rosavins (min 3%) and salidroside (min 1%). Traditional ratio is 3:1 rosavins:salidroside.",
+      "notes": "Rhodiola rosea (Crassulaceae) root. UNII 3S5ITS5ULN. Adaptogenic herb standardized for rosavins (rosavin, rosin, rosarin — collectively 'rosavins') at min 3% plus salidroside at min 1%, in the traditional 3:1 ratio. SHR-5 (Swedish Herbal Institute) is the original standardized extract used in adaptogen RCTs. SB-8 §8.5 fix + v6 annotation 2026-05-22: closed the missing-target-UNII gap (entry had empty external_ids; now populated with 3S5ITS5ULN); refined standard_name to species precision; added v6 contract fields + marker-explicit aliases for direct matching of labels carrying the standardization claim. Other Rhodiola species (R. crenulata UNII E1596V65V0, R. quadrifida / R. sacra UNII 11R149C3CY) are different species with different marker profiles — they are NOT covered by this entry's bonus pathway and should route to their own canonicals when products surface using them.",
       "category": "adaptogen",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "3S5ITS5ULN"
+      },
       "cui": "C0950013"
     },
     {
