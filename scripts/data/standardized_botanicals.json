@@ -2232,25 +2232,46 @@
       "threshold_source": "10% flavanols \u2014 standardized cocoa extract"
     },
     {
-      "standard_name": "Coffeeberry",
+      "standard_name": "CoffeeBerry (whole coffee fruit extract)",
       "aliases": [
         "coffea arabica",
         "coffee fruit extract",
-        "whole coffee fruit extract"
+        "whole coffee fruit extract",
+        "CoffeeBerry",
+        "CoffeeBerry whole Coffee fruit extract",
+        "NeuroFactor",
+        "NeuroFactor Coffee fruit extract",
+        "CognatiQ",
+        "CoffeeBerry standardized to 45% chlorogenic acids",
+        "whole coffee fruit extract standardized to chlorogenic acids"
       ],
       "markers": [
         "chlorogenic acids",
         "polyphenols"
       ],
       "priority": "medium",
-      "last_updated": "2025-11-17",
+      "last_updated": "2026-05-22",
       "id": "coffeeberry",
-      "notes": "Botanical ingredient standardized for chlorogenic acids, polyphenols. Commonly used in dietary supplements.",
+      "notes": "CoffeeBerry\u00ae is the Futureceuticals-branded standardized extract of whole coffee fruit (Coffea arabica). Clinical literature (NeuroFactor\u00ae, CognatiQ\u00ae) reports BDNF elevation and cognitive endpoints from the whole-fruit chlorogenic-acid pathway. UNII HOX6BEK27Q = COFFEA ARABICA FRUIT (the source identity; verified via scripts/data/fda_unii_cache.json). RC-1 2026-05-22: external_ids.unii set + v6 contract annotation. Identity (plain coffee fruit) lives in botanical_ingredients.coffee_fruit; this bonus entry fires only when the label evidences branded CoffeeBerry\u00ae/NeuroFactor\u00ae/CognatiQ\u00ae or quantified chlorogenic-acid %.",
       "category": "seed_fruit",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "HOX6BEK27Q"
+      },
       "cui": "C1138610",
       "min_threshold": 45,
-      "threshold_source": "45% chlorogenic acids \u2014 standard coffee fruit extract"
+      "threshold_source": "45% chlorogenic acids \u2014 standard coffee fruit extract",
+      "bonus_eligible": true,
+      "standardization_basis": "branded_extract",
+      "marker_compounds": [
+        "chlorogenic acids",
+        "polyphenols (catechins, procyanidins)"
+      ],
+      "bonus_rationale": "CoffeeBerry\u00ae (Futureceuticals) is a clinically-studied branded standardized whole-coffee-fruit extract; NeuroFactor\u00ae and CognatiQ\u00ae are the cognitive-endpoint product names within the CoffeeBerry\u00ae family. Clinical literature reports BDNF elevation and cognitive endpoints tied to standardized chlorogenic-acid + polyphenol content of the whole fruit (NOT the bean). The branded_extract basis applies: bonus is granted when the label names the verified brand (CoffeeBerry/NeuroFactor/CognatiQ) OR proves measurable chlorogenic-acid percentage (typically 45%+). The enricher's meets_threshold + has_standardized_botanical gates (score_supplements.py:1148) enforce label-text brand/percentage detection at runtime. Plain coffee-fruit identity (unstandardized) lives in botanical_ingredients.coffee_fruit (no bonus).",
+      "sources": [
+        "https://pubmed.ncbi.nlm.nih.gov/24013626/",
+        "https://pubmed.ncbi.nlm.nih.gov/23695488/",
+        "https://www.futureceuticals.com/"
+      ]
     },
     {
       "standard_name": "Cognigrape",
@@ -3854,6 +3875,11 @@
         "coffea canephora robusta bean extract",
         "Svetol French Green Coffee extract",
         "Svetol",
+        "Svetol Green Coffee bean extract",
+        "Slimpure",
+        "Slimpure decaffeinated green coffee extract",
+        "Slimpure(R) Decaffeinated Green Coffee Extract",
+        "slimpure green coffee extract",
         "green coffee bean extract standardized to 45% chlorogenic acids",
         "green coffee bean extract standardized to 50% chlorogenic acids",
         "green coffee bean extract standardized to chlorogenic acids",
@@ -3879,10 +3905,12 @@
       "priority": "medium",
       "last_updated": "2026-05-22",
       "id": "green_coffee_bean",
-      "notes": "Weight management extract standardized for 45-50% chlorogenic acids (GCA). v6 annotation 2026-05-22: this is the first entry to carry the new schema fields (bonus_eligible / standardization_basis / marker_compounds / bonus_rationale / sources) added under the bonus-eligibility contract. Plain aliases ('green coffee bean extract', 'coffea robusta', etc.) preserved for runtime matching \u2014 the enricher's meets_threshold gate (score_supplements.py:1148) is the authoritative bonus-eligibility check at scoring time. Shadow-score audit pre-commit confirmed 53/53 products that match this entry today have has_standardized_botanical=True via the percentage detection block; ~50% of spot-checked cases have explicit chlorogenic-acid % evidence in the broader product text (the gate works). Marker (chlorogenic acid) is what makes the extract bonus-worthy, not species \u2014 both Coffea arabica and Coffea canephora robusta source variants are valid.",
+      "notes": "Weight management extract standardized for 45-50% chlorogenic acids (GCA). v6 annotation 2026-05-22 (SB-2): this entry was the first to carry the new schema fields (bonus_eligible / standardization_basis / marker_compounds / bonus_rationale / sources) under the bonus-eligibility contract. Plain aliases ('green coffee bean extract', 'coffea robusta', etc.) preserved for runtime matching \u2014 the enricher's meets_threshold gate (score_supplements.py:1148) is the authoritative bonus-eligibility check at scoring time. RC-1 2026-05-22: external_ids.unii set to V5032728L7 (FDA ROBUSTA COFFEE BEAN / COFFEA ROBUSTA SEED POWDER \u2014 closest single canonical substance UNII for the chlorogenic-acid extract pathway, which is predominantly robusta-sourced; verified via scripts/data/fda_unii_cache.json). Absorbed \u00a78.5-misplaced branded aliases from coffee_fruit (Svetol\u00ae variants, Slimpure\u00ae variants \u2014 both Naturex-branded green coffee BEAN extracts, not fruit). Shadow-score audit pre-commit confirmed 53/53 products that match this entry today have has_standardized_botanical=True via the percentage detection block; ~50% of spot-checked cases have explicit chlorogenic-acid % evidence in the broader product text (the gate works). Marker (chlorogenic acid) is what makes the extract bonus-worthy, not species \u2014 both Coffea arabica and Coffea canephora robusta source variants are valid.",
       "category": "herb",
       "min_threshold": 45,
-      "external_ids": {},
+      "external_ids": {
+        "unii": "V5032728L7"
+      },
       "cui": "C5769444"
     },
     {

@@ -3438,17 +3438,8 @@
         "coffee fruit concentrate",
         "KonaRed Coffee fruit powder",
         "KonaRed Coffee fruit extract",
-        "Svetol Green Coffee bean extract",
-        "green coffee bean coffea robusta extract",
-        "C. canephora robusta extract",
-        "green coffee seed extract",
-        "green coffee (beans) pe",
         "organic neurofactor whole coffee",
         "Coffea arabica",
-        "Slimpure decaffeinated green coffee extract",
-        "Slimpure(R) Decaffeinated Green Coffee Extract",
-        "slimpure green coffee extract",
-        "decaffeinated green coffee extract",
         "Coffee Berry fruit extract",
         "coffee berry fruit extract",
         "Coffeeberry fruit powder",
@@ -3456,8 +3447,8 @@
         "coffeeberry"
       ],
       "category": "fruit",
-      "notes": "Coffea arabica (Rubiaceae) whole fruit (cherry). Contains chlorogenic acids and polyphenols distinct from coffee bean. NeuroFactor\u00ae studies show BDNF elevation from coffee fruit extract. Botanical fruit form.",
-      "last_updated": "2026-03-01",
+      "notes": "Coffea arabica (Rubiaceae) whole fruit (cherry). Contains chlorogenic acids and polyphenols distinct from coffee bean. NeuroFactor\u00ae and CognatiQ\u00ae studies show BDNF elevation from coffee fruit extract; KonaRed and CoffeeBerry\u00ae whole-fruit preparations stay here as plain identity. Botanical fruit form. RC-1 2026-05-22: removed \u00a78.5 BEAN aliases (Svetol, 'green coffee bean coffea robusta extract', 'C. canephora robusta extract', 'green coffee seed extract', 'green coffee (beans) pe', Slimpure\u00ae variants, 'decaffeinated green coffee extract') \u2014 they belong to botanical_ingredients.coffee_bean_plain (plain bean identity, no bonus) or standardized_botanicals.green_coffee_bean (Svetol/GCA marker-percent, runtime-gated bonus).",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "HOX6BEK27Q"
       },
@@ -3494,12 +3485,19 @@
         "Coffea arabica bean",
         "Coffee extract",
         "Coffee, Powder",
-        "coffee powder"
+        "coffee powder",
+        "green coffee bean coffea robusta extract",
+        "C. canephora robusta extract",
+        "green coffee seed extract",
+        "green coffee (beans) pe",
+        "decaffeinated green coffee extract"
       ],
       "category": "seed",
-      "notes": "Plain coffee bean / seed identity for unstandardized labels that do not match standardized_botanicals.green_coffee_bean's explicit aliases. Created 2026-05-22 alongside the v6 bonus-eligibility contract on standardized_botanicals \u2014 provides a fallback identity home for labels surfacing in the 2026-05-22 unmapped scan ('Coffea robusta Seed Extract' x5, 'Coffee Bean Extract' x5, 'Coffee, Powder' x3, etc., from GNC and Nature Made). NO A5b bonus from this entry \u2014 the bonus pathway lives in standardized_botanicals.green_coffee_bean, gated at runtime by the enricher's meets_threshold check. UNII varies by species and preparation (Coffea arabica seed UNII vs robusta seed UNII vs generic coffee bean extract UNII); no single target_unii assigned here.",
+      "notes": "Plain coffee bean / seed identity for unstandardized labels that do not match standardized_botanicals.green_coffee_bean's explicit aliases. Created 2026-05-22 alongside the v6 bonus-eligibility contract on standardized_botanicals \u2014 provides a fallback identity home for labels surfacing in the 2026-05-22 unmapped scan ('Coffea robusta Seed Extract' x5, 'Coffee Bean Extract' x5, 'Coffee, Powder' x3, etc., from GNC and Nature Made). NO A5b bonus from this entry \u2014 the bonus pathway lives in standardized_botanicals.green_coffee_bean, gated at runtime by the enricher's meets_threshold check. RC-1 2026-05-22: external_ids.unii set to JFH385Y744 (FDA COFFEE BEAN \u2014 species-agnostic substance UNII, verified via scripts/data/fda_unii_cache.json); absorbed \u00a78.5 bean aliases from coffee_fruit ('green coffee bean coffea robusta extract', 'C. canephora robusta extract', 'green coffee seed extract', 'green coffee (beans) pe', 'decaffeinated green coffee extract'). Branded standardized variants (Svetol\u00ae, Slimpure\u00ae) live on standardized_botanicals.green_coffee_bean for the bonus pathway.",
       "last_updated": "2026-05-22",
-      "external_ids": {},
+      "external_ids": {
+        "unii": "JFH385Y744"
+      },
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant",
