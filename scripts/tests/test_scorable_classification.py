@@ -210,15 +210,15 @@ class TestScorableClassificationPass1:
         skipped_dict = {ing['name']: ing for ing in result['ingredients_skipped']}
         assert skipped_dict['Proprietary Blend']['skip_reason'] == SKIP_REASON_BLEND_HEADER_NO_DOSE
 
-    def test_complex_with_dose_is_not_skipped(self, enricher, fixture_product_with_additives):
-        """'Complex' with a dose should NOT be skipped - it's a real ingredient."""
+    def test_complex_with_dose_but_no_scoreable_identity_is_not_scorable(self, enricher, fixture_product_with_additives):
+        """Dose alone is not enough for ingredients_scorable."""
         result = enricher._collect_ingredient_quality_data(fixture_product_with_additives)
 
         scorable_names = [ing['name'] for ing in result['ingredients_scorable']]
         skipped_names = [ing['name'] for ing in result['ingredients_skipped']]
 
-        assert "Vitamin B Complex" in scorable_names, "Vitamin B Complex with dose should be scorable"
-        assert "Vitamin B Complex" not in skipped_names
+        assert "Vitamin B Complex" not in scorable_names
+        assert "Vitamin B Complex" in skipped_names
 
     def test_botanical_with_dose_is_scorable(self, enricher, fixture_product_with_additives):
         """Real botanical with dose should be scorable."""
@@ -227,8 +227,8 @@ class TestScorableClassificationPass1:
         scorable_names = [ing['name'] for ing in result['ingredients_scorable']]
         assert "Elderberry Extract" in scorable_names
 
-    def test_botanical_from_standardized_db_is_scorable(self, enricher):
-        """Botanical present only in standardized_botanicals should be scorable."""
+    def test_botanical_from_standardized_db_is_recognized_not_scorable(self, enricher):
+        """Botanical present only in standardized_botanicals is transparent but not a scoring input."""
         quality_db = enricher.databases.get('ingredient_quality_map', {})
         botanicals_db = enricher.databases.get('standardized_botanicals', {})
 
@@ -283,7 +283,9 @@ class TestScorableClassificationPass1:
 
         result = enricher._collect_ingredient_quality_data(product)
         scorable_names = [ing['name'] for ing in result['ingredients_scorable']]
-        assert candidate in scorable_names
+        recognized_names = [ing['name'] for ing in result['ingredients_recognized_non_scorable']]
+        assert candidate not in scorable_names
+        assert candidate in recognized_names
 
 
 class TestScorableClassificationPass2:
@@ -356,16 +358,16 @@ class TestBackwardCompatibility:
         assert 'unmapped_scorable_count' in result
         assert 'total_scorable_active_count' in result
 
-    def test_legacy_ingredients_equals_scorable(self, enricher, fixture_product_with_additives):
-        """Legacy 'ingredients' should contain same items as 'ingredients_scorable'."""
+    def test_legacy_ingredients_superset_of_scorable(self, enricher, fixture_product_with_additives):
+        """Legacy 'ingredients' remains all evaluated rows; scorable is the strict scoring subset."""
         result = enricher._collect_ingredient_quality_data(fixture_product_with_additives)
 
         # Legacy 'ingredients' should match 'ingredients_scorable' (plus any promoted)
         legacy_names = set(ing['name'] for ing in result['ingredients'])
         scorable_names = set(ing['name'] for ing in result['ingredients_scorable'])
 
-        # They should be equal (promoted are added to both)
-        assert legacy_names == scorable_names
+        assert scorable_names.issubset(legacy_names)
+        assert legacy_names != scorable_names
 
 
 class TestSafetyCheckPreservation:
@@ -736,12 +738,11 @@ class TestHardeningCarrierOilsNotPromoted:
 
 
 class TestHardeningAbsorptionEnhancerWithoutDose:
-    """Test Risk C: Absorption enhancers can be promoted even without dose"""
+    """Test Risk C: inactive absorption enhancers require cleaner promotion."""
 
     def test_bioperine_without_dose_promoted(self, enricher):
         """
-        BioPerine (black pepper extract) should be promoted from inactive
-        even without explicit dose - it's a known absorption enhancer.
+        BioPerine in inactiveIngredients should not promote by name alone.
         """
         product = {
             "id": "test_bioperine_promoted",
@@ -771,18 +772,11 @@ class TestHardeningAbsorptionEnhancerWithoutDose:
         promoted = result['promoted_from_inactive']
         promoted_names = [ing['name'] for ing in promoted]
 
-        # BioPerine should be promoted as absorption enhancer
-        assert "BioPerine® black pepper extract" in promoted_names
-
-        # Check promotion reason
-        for promo in promoted:
-            if promo['name'] == "BioPerine® black pepper extract":
-                assert promo['promotion_reason'] == PROMOTE_REASON_ABSORPTION_ENHANCER
-                break
+        assert "BioPerine® black pepper extract" not in promoted_names
 
     def test_plain_black_pepper_without_dose_promoted(self, enricher):
         """
-        Plain 'black pepper extract' should also be promoted as absorption enhancer.
+        Plain 'black pepper extract' should not promote from inactive by name alone.
         """
         product = {
             "id": "test_pepper_promoted",
@@ -810,7 +804,7 @@ class TestHardeningAbsorptionEnhancerWithoutDose:
         result = enricher._collect_ingredient_quality_data(product)
         promoted_names = [ing['name'] for ing in result['promoted_from_inactive']]
 
-        assert "Black pepper extract" in promoted_names
+        assert "Black pepper extract" not in promoted_names
 
 
 class TestHardeningAliasCollisions:
@@ -1002,7 +996,7 @@ class TestBlendPatternCounterTests:
         assert 'Fish oil concentrate' in scorable_names
 
     def test_omega3_blend_with_dose_scorable(self, enricher):
-        """Omega-3 Blend (EPA/DHA) 1000 mg should be scorable, not skipped as header."""
+        """Omega-3 Blend (EPA/DHA) 1000 mg has dose, but no resolved scoreable identity."""
         product = {
             'dsld_id': 'test-omega3-blend',
             'fullName': 'Omega-3 Blend Test',
@@ -1015,9 +1009,8 @@ class TestBlendPatternCounterTests:
         scorable_names = [ing['name'] for ing in result['ingredients_scorable']]
         skipped_names = [ing['name'] for ing in result['ingredients_skipped']]
 
-        # Should be scorable because it has a therapeutic dose
-        assert 'Omega-3 Blend (EPA/DHA)' in scorable_names
-        assert 'Omega-3 Blend (EPA/DHA)' not in skipped_names
+        assert 'Omega-3 Blend (EPA/DHA)' not in scorable_names
+        assert 'Omega-3 Blend (EPA/DHA)' in skipped_names
 
     def test_mixed_tocotrienols_complex_with_dose_scorable(self, enricher):
         """Mixed Tocotrienols (Tocotrienol Complex) 50 mg - realistic label."""
@@ -1055,7 +1048,7 @@ class TestBlendPatternCounterTests:
         assert 'Carotenoid Complex' not in skipped_names
 
     def test_phospholipid_complex_with_dose_scorable(self, enricher):
-        """Phospholipid Complex 300 mg - realistic label."""
+        """Phospholipid Complex 300 mg has dose, but no resolved scoreable identity."""
         product = {
             'dsld_id': 'test-phospholipid-complex',
             'fullName': 'Phospholipid Test',
@@ -1068,9 +1061,8 @@ class TestBlendPatternCounterTests:
         scorable_names = [ing['name'] for ing in result['ingredients_scorable']]
         skipped_names = [ing['name'] for ing in result['ingredients_skipped']]
 
-        # Has specific dose, should be scorable
-        assert 'Phospholipid Complex' in scorable_names
-        assert 'Phospholipid Complex' not in skipped_names
+        assert 'Phospholipid Complex' not in scorable_names
+        assert 'Phospholipid Complex' in skipped_names
 
 
 class TestBlendPatternPositiveTests:
@@ -1828,8 +1820,9 @@ class TestRealLabelMapping:
 
         result = enricher._collect_ingredient_quality_data(product)
 
-        assert result['total_scorable_active_count'] >= 1, \
-            "'Liquorice' (UK spelling) should be scorable"
+        recognized_names = [ing['name'] for ing in result['ingredients_recognized_non_scorable']]
+        assert 'Liquorice Root Extract' in recognized_names, \
+            "'Liquorice' (UK spelling) should be recognized but not treated as scoreable without IQM identity"
 
     def test_botanical_with_latin_name_scorable(self, enricher):
         """Latin names should be recognized via aliases."""

@@ -58,9 +58,12 @@ class TestProvenanceFieldsPresence:
             assert "raw_source_text" in ing, f"Missing raw_source_text in {ing.get('name')}"
             assert ing["raw_source_text"] == ing["name"], "raw_source_text should equal name"
 
-            # raw_source_path must be activeIngredients
+            # raw_source_path must point to the exact raw DSLD ingredient row
             assert "raw_source_path" in ing, f"Missing raw_source_path in {ing.get('name')}"
-            assert ing["raw_source_path"] == "activeIngredients"
+            assert ing["raw_source_path"].startswith("ingredientRows[")
+            assert ing["source_section"] == "active"
+            assert "cleaner_row_role" in ing
+            assert "score_eligible_by_cleaner" in ing
 
             # normalized_key must be valid
             assert "normalized_key" in ing, f"Missing normalized_key in {ing.get('name')}"
@@ -93,9 +96,12 @@ class TestProvenanceFieldsPresence:
             assert "raw_source_text" in ing, f"Missing raw_source_text in {ing.get('name')}"
             assert ing["raw_source_text"] == ing["name"], "raw_source_text should equal name"
 
-            # raw_source_path must be inactiveIngredients
+            # raw_source_path must point to the exact raw DSLD other ingredient row
             assert "raw_source_path" in ing, f"Missing raw_source_path in {ing.get('name')}"
-            assert ing["raw_source_path"] == "inactiveIngredients"
+            assert ing["raw_source_path"].startswith("otheringredients.ingredients[")
+            assert ing["source_section"] == "inactive"
+            assert ing["cleaner_row_role"] == "inactive"
+            assert ing["score_eligible_by_cleaner"] is False
 
             # normalized_key must be valid
             assert "normalized_key" in ing, f"Missing normalized_key in {ing.get('name')}"
@@ -226,14 +232,14 @@ class TestRawSourceTextImmutability:
 
 
 class TestRawSourcePath:
-    """Ensure raw_source_path correctly identifies source section."""
+    """Ensure raw_source_path identifies exact raw JSON location."""
 
     @pytest.fixture
     def normalizer(self):
         return EnhancedDSLDNormalizer()
 
-    def test_active_path_is_activeIngredients(self, normalizer):
-        """Ingredients from ingredientRows should have path 'activeIngredients'."""
+    def test_active_path_is_raw_ingredient_row_index(self, normalizer):
+        """Ingredients from ingredientRows should carry exact raw row path."""
         product = {
             "dsld_id": 12345,
             "productName": "Test Product",
@@ -252,10 +258,11 @@ class TestRawSourcePath:
         active = result.get("activeIngredients", [])
 
         for ing in active:
-            assert ing["raw_source_path"] == "activeIngredients"
+            assert ing["raw_source_path"] == "ingredientRows[0]"
+            assert ing["source_section"] == "active"
 
-    def test_inactive_path_is_inactiveIngredients(self, normalizer):
-        """Ingredients from otherIngredients should have path 'inactiveIngredients'."""
+    def test_inactive_path_is_raw_otheringredients_index(self, normalizer):
+        """Ingredients from otherIngredients should carry exact raw row path."""
         product = {
             "dsld_id": 12345,
             "productName": "Test Product",
@@ -270,7 +277,8 @@ class TestRawSourcePath:
         inactive = result.get("inactiveIngredients", [])
 
         for ing in inactive:
-            assert ing["raw_source_path"] == "inactiveIngredients"
+            assert ing["raw_source_path"] == "otheringredients.ingredients[0]"
+            assert ing["source_section"] == "inactive"
 
 
 class TestNestedIngredientsProvenance:

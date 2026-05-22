@@ -116,6 +116,8 @@ FINAL_DB_DIR="$REPO_ROOT/scripts/final_db_output"
 ASSETS_DIR="$FLUTTER_REPO/assets/db"
 DIST_PRODUCT_IMAGES_DIR="$DIST_DIR/product_images"
 DIST_PRODUCT_IMAGE_INDEX="$DIST_PRODUCT_IMAGES_DIR/product_image_index.json"
+PRODUCTS_DIR="$REPO_ROOT/scripts/products"
+SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
 
 START_TS=$(date +%s)
 
@@ -205,6 +207,29 @@ except Exception:
 " 2>/dev/null
 }
 
+file_sha256() {
+  local path="$1"
+  [[ ! -f "$path" ]] && return 0
+  "$PG_PYTHON" -c "
+import hashlib, sys
+h = hashlib.sha256()
+with open(sys.argv[1], 'rb') as f:
+    for chunk in iter(lambda: f.read(1024 * 1024), b''):
+        h.update(chunk)
+print(h.hexdigest())
+" "$path" 2>/dev/null
+}
+
+run_strict_gate() {
+  local label="$1"; shift
+  info "Strict gate: $label"
+  "$@"
+  ok "Strict gate passed: $label"
+}
+
+run_strict_gate "source-of-truth matrix" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
+
 # ---------------------------------------------------------------------------
 # Step 1: Assemble final DB from per-brand outputs
 #
@@ -219,7 +244,6 @@ except Exception:
 #   • Re-running release_full with no upstream changes: SKIP.
 # ---------------------------------------------------------------------------
 
-PRODUCTS_DIR="$REPO_ROOT/scripts/products"
 DIST_CATALOG="$DIST_DIR/pharmaguide_core.db"
 FINAL_CATALOG="$FINAL_DB_DIR/pharmaguide_core.db"
 
@@ -384,6 +408,29 @@ else
   skip "Step 4/7: Interaction DB up to date with rule sources — skipping rebuild"
 fi
 
+run_strict_gate "cleaner/IQD row contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir "$PRODUCTS_DIR" --strict-release
+run_strict_gate "enrichment/IQD source-of-truth contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir "$PRODUCTS_DIR" --strict-release
+run_strict_gate "clinical drift contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir "$PRODUCTS_DIR" --strict-release
+run_strict_gate "interaction DB parity" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" interaction --dist-dir "$DIST_DIR" --strict-release
+run_strict_gate "artifact freshness" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" freshness \
+    --dist-dir "$DIST_DIR" \
+    --final-db-dir "$FINAL_DB_DIR" \
+    --products-dir "$PRODUCTS_DIR" \
+    --strict-release
+run_strict_gate "stamp export manifest contract metadata" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest --dist-dir "$DIST_DIR" --strict-release
+if [[ -f "$FINAL_DB_DIR/export_manifest.json" ]]; then
+  run_strict_gate "stamp final_db_output manifest contract metadata" \
+    "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest --dist-dir "$FINAL_DB_DIR" --strict-release
+fi
+run_strict_gate "export contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" export --dist-dir "$DIST_DIR" --require-stamped-manifest --strict-release
+
 # ---------------------------------------------------------------------------
 # Step 5: Sync to Supabase (with full cleanup)
 #
@@ -429,15 +476,21 @@ fi
 step5_needs_run() {
   (( FORCE == 1 )) && return 0
   # Compare both manifest checksums dist/ vs Flutter assets/
-  local dist_cat dist_int flu_cat flu_int
+  local dist_cat dist_int flu_cat flu_int dist_cat_manifest dist_int_manifest flu_cat_manifest flu_int_manifest
   dist_cat=$(json_field "$DIST_DIR/export_manifest.json" "checksum_sha256")
   dist_int=$(json_field "$DIST_DIR/interaction_db_manifest.json" "checksum_sha256")
   flu_cat=$(json_field "$ASSETS_DIR/export_manifest.json" "checksum_sha256")
   flu_int=$(json_field "$ASSETS_DIR/interaction_db_manifest.json" "checksum_sha256")
+  dist_cat_manifest=$(file_sha256 "$DIST_DIR/export_manifest.json")
+  dist_int_manifest=$(file_sha256 "$DIST_DIR/interaction_db_manifest.json")
+  flu_cat_manifest=$(file_sha256 "$ASSETS_DIR/export_manifest.json")
+  flu_int_manifest=$(file_sha256 "$ASSETS_DIR/interaction_db_manifest.json")
   # If any manifest missing on either side → run
   [[ -z "$dist_cat" || -z "$flu_cat" || -z "$dist_int" || -z "$flu_int" ]] && return 0
   # If either checksum differs → run
   [[ "$dist_cat" != "$flu_cat" || "$dist_int" != "$flu_int" ]] && return 0
+  # If manifest metadata differs → run so Flutter receives contract stamps too.
+  [[ "$dist_cat_manifest" != "$flu_cat_manifest" || "$dist_int_manifest" != "$flu_int_manifest" ]] && return 0
   return 1
 }
 
@@ -456,6 +509,11 @@ if (( SKIP_FLUTTER == 0 )); then
   else
     skip "Step 6/7: Flutter bundle checksums already match dist/ — skipping import"
   fi
+  run_strict_gate "Flutter bundle parity" \
+    "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" flutter \
+      --dist-dir "$DIST_DIR" \
+      --flutter-repo "$FLUTTER_REPO" \
+      --strict-release
 else
   skip "Step 6/7: Flutter import skipped (--skip-flutter)"
 fi

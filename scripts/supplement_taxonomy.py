@@ -82,6 +82,9 @@ _VITAMIN_CANONICAL_IDS = frozenset({
     "vitamin_e", "vitamin_k", "vitamin_k1", "vitamin_k2",
     "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5",
     "vitamin_b6", "vitamin_b7", "vitamin_b12",
+    "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine",
+    "vitamin_b7_biotin", "vitamin_b9_folate", "vitamin_b12_cobalamin",
     "folate", "folic_acid", "methylfolate", "niacin", "niacinamide",
     "thiamine", "riboflavin", "pyridoxine", "cobalamin",
     "pantothenic_acid", "biotin", "choline", "inositol",
@@ -97,6 +100,9 @@ _MINERAL_CANONICAL_IDS = frozenset({
 _B_VITAMIN_IDS = frozenset({
     "vitamin_b1", "vitamin_b2", "vitamin_b3", "vitamin_b5",
     "vitamin_b6", "vitamin_b7", "vitamin_b12",
+    "vitamin_b1_thiamine", "vitamin_b2_riboflavin", "vitamin_b3_niacin",
+    "vitamin_b5_pantothenic_acid", "vitamin_b6_pyridoxine",
+    "vitamin_b7_biotin", "vitamin_b9_folate", "vitamin_b12_cobalamin",
     "folate", "folic_acid", "methylfolate", "niacin", "niacinamide",
     "thiamine", "riboflavin", "pyridoxine", "cobalamin",
     "pantothenic_acid", "biotin", "choline", "inositol",
@@ -130,8 +136,9 @@ _COLLAGEN_IDS = frozenset({
 
 # Name-based signals for functional categories
 _SLEEP_NAME_TOKENS = {"sleep", "melatonin", "nighttime", "night time", "calm sleep"}
-# Short tokens that need word-boundary matching (avoid "forest"→"rest", "rpm"→"pm")
-_SLEEP_BOUNDARY_PATTERNS = [re.compile(r'\bnight\b'), re.compile(r'\bpm\b'), re.compile(r'\brest\b')]
+# Short tokens that need word-boundary matching (avoid "forest" -> "rest").
+# "PM" alone is packet timing, not a sleep claim.
+_SLEEP_BOUNDARY_PATTERNS = [re.compile(r'\bnight\b'), re.compile(r'\brest\b')]
 _IMMUNE_NAME_TOKENS = {"immune", "immunity", "defense", "elderberry", "echinacea"}
 _JOINT_NAME_TOKENS = {"joint", "glucosamine", "chondroitin", "msm", "flexibility", "cartilage"}
 _BEAUTY_NAME_TOKENS = {"skin", "nail", "nails", "beauty", "glow", "radiance", "keratin"}
@@ -161,7 +168,7 @@ _SECONDARY_TYPE_MAP = {
     "magnesium": "magnesium",
     "vitamin_d": "vitamin_d", "vitamin_d3": "vitamin_d", "vitamin_d2": "vitamin_d",
     "vitamin_c": "vitamin_c",
-    "biotin": "biotin", "vitamin_b7": "biotin",
+    "biotin": "biotin", "vitamin_b7": "biotin", "vitamin_b7_biotin": "biotin",
     "ashwagandha": "ashwagandha",
     "turmeric": "turmeric_curcumin", "curcumin": "turmeric_curcumin",
     "berberine": "berberine",
@@ -192,6 +199,7 @@ _SECONDARY_TYPE_MAP = {
     "cordyceps": "cordyceps",
     "reishi": "reishi",
     "folic_acid": "folate", "folate": "folate", "methylfolate": "folate",
+    "vitamin_b9_folate": "folate",
     "creatine": "creatine",
     "5_htp": "5_htp",
     "gaba": "gaba",
@@ -207,6 +215,39 @@ _NP_UNITS = frozenset({
     "not applicable", "proprietary",
 })
 
+_ENZYME_ACTIVITY_UNITS = frozenset({
+    "spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu", "fu"
+})
+_ENZYME_ACTIVITY_RE = re.compile(
+    r"\b(\d[\d,]*(?:\.\d+)?)\s*(SAPU|SPU|HUT|FCC|ALU|FIP|DU|SU|CU|FU)\b",
+    re.IGNORECASE,
+)
+
+
+def _has_enzyme_activity_dose(row: dict[str, Any]) -> bool:
+    if _normalize_text(row.get("dose_class")) == "enzyme_activity":
+        return True
+
+    unit = _normalize_text(row.get("activity_unit") or row.get("quantityUnit") or row.get("unit", ""))
+    qty = row.get("activity_quantity", row.get("quantity", row.get("amount", row.get("qty"))))
+    if unit in _ENZYME_ACTIVITY_UNITS:
+        try:
+            return float(str(qty).replace(",", "")) > 0
+        except (TypeError, ValueError):
+            pass
+
+    text = " ".join(
+        str(row.get(key) or "")
+        for key in ("name", "raw_source_text", "standard_name", "notes")
+    )
+    match = _ENZYME_ACTIVITY_RE.search(text)
+    if not match:
+        return False
+    try:
+        return float(match.group(1).replace(",", "")) > 0
+    except ValueError:
+        return False
+
 
 def _is_non_quantified(row: dict[str, Any]) -> bool:
     """Check if an ingredient row is non-quantified (zero potency / NP unit).
@@ -214,6 +255,9 @@ def _is_non_quantified(row: dict[str, Any]) -> bool:
     These ingredients should NOT influence type classification but are
     preserved as supporting/base ingredients for transparency.
     """
+    if _has_enzyme_activity_dose(row):
+        return False
+
     qty = row.get("quantity", row.get("amount", row.get("qty")))
     unit = _normalize_text(row.get("quantityUnit", row.get("unit", "")))
 
@@ -345,6 +389,15 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         category = canonical_category(row.get("category"))
         role = _normalize_text(row.get("role_classification"))
         name = _ingredient_name(row)
+        if row.get("score_eligible_by_cleaner") is False:
+            continue
+        cleaner_role = _normalize_text(row.get("cleaner_row_role"))
+        if cleaner_role in {
+            "blend_header_total", "nested_display_only", "composition_leaf",
+            "source_descriptor", "nutrition_rollup", "excipient", "inactive",
+            "label_header",
+        }:
+            continue
         is_probiotic_strain = category in {"probiotic", "bacteria"} or (
             name and any(term in name for term in PROBIOTIC_TERMS)
         )
@@ -453,14 +506,20 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     if (
         active_count == 0
         and probiotic_name_signal
-        and non_quantified_probiotic_count > 0
+        and (non_quantified_probiotic_count > 0 or probiotic_flag)
     ):
         primary_type = "probiotic"
-        confidence = 0.65
-        reasons.append(
-            f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"
-        )
-    elif (probiotic_flag or probiotic_count > 0 or probiotic_name_signal) and active_count > 0:
+        confidence = 0.8 if probiotic_flag else 0.65
+        if probiotic_flag:
+            reasons.append("probiotic name + product-level CFU evidence")
+        else:
+            reasons.append(
+                f"probiotic name + non-quantified strain rows: {non_quantified_probiotic_count}"
+            )
+    elif active_count > 0 and (
+        probiotic_count > 0
+        or (probiotic_name_signal and (probiotic_flag or probiotic_count > 0))
+    ):
         probiotic_majority = probiotic_count >= max(1, ceil(active_count * 0.5))
         if active_count == 1 or probiotic_majority or (
             (probiotic_name_signal or probiotic_flag)
@@ -474,6 +533,8 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # Checked before the broad multivitamin panel: B-complexes can have 6+
     # vitamins but are still a narrower peer class than full multis.
     elif (
+        "prenatal" not in product_name
+        and
         (b_vitamin_ids and len(b_vitamin_ids) >= 3)
         or "b-complex" in product_name
         or "b complex" in product_name
@@ -520,13 +581,12 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     # ALA uses IOM AI semantics, while the omega scoring module uses EPA/DHA
     # dose bands.
     # Word-boundary check for short tokens (dha, epa) to avoid "ashwagan-dha" false positives
-    elif (omega_ids or _has_omega_name_signal(product_name)) and not ala_only_signal:
+    elif omega_ids and not ala_only_signal:
         omega_signal = len(omega_ids)
         name_signal = any(t in product_name for t in ("omega", "fish oil", "krill", "cod liver"))
-        if omega_signal > 0 or name_signal:
-            primary_type = "omega_3"
-            confidence = 0.95 if (omega_signal and name_signal) else 0.8
-            reasons.append(f"omega-3: ids={list(omega_ids)}, name_match={name_signal}")
+        primary_type = "omega_3"
+        confidence = 0.95 if (omega_signal and name_signal) else 0.8
+        reasons.append(f"omega-3: ids={list(omega_ids)}, name_match={name_signal}")
 
     # --- Functional name-based categories (sleep, immune, beauty, joint, fiber) ---
     # Checked early because name intent overrides composition-based inference.
@@ -534,6 +594,25 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
     elif active_count >= 2 and _has_functional_name_signal(product_name):
         primary_type, confidence, reason = _detect_functional_name(product_name)
         reasons.append(reason)
+
+    # --- Sleep-support compounds with cofactors ---
+    elif cid_set & _SLEEP_SINGLE_IDS:
+        primary_type = "sleep_support"
+        confidence = 0.9
+        reasons.append(f"sleep-support ingredient with cofactors: {list(cid_set & _SLEEP_SINGLE_IDS)}")
+
+    # --- Named amino acid with cofactors ---
+    # L-Tryptophan + B6/Niacin style products are amino-acid products with
+    # nutrient cofactors, not vitamin/mineral combos.
+    elif (amino_ids - _SLEEP_SINGLE_IDS) and any(
+        cid.replace("_", " ") in product_name
+        or cid.replace("_", "-") in product_name
+        or cid.removeprefix("l_").replace("_", " ") in product_name
+        for cid in (amino_ids - _SLEEP_SINGLE_IDS)
+    ):
+        primary_type = "amino_acid"
+        confidence = 0.9
+        reasons.append(f"named amino acid with cofactors: {list(amino_ids - _SLEEP_SINGLE_IDS)}")
 
     # --- Single nutrient (active_count == 1) ---
     elif active_count == 1:
@@ -637,6 +716,21 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
             confidence = 0.85
             other_cid = cid_b if dominant_cid == cid_a else cid_a
             reasons.append(f"name-dominant single ingredient: {dominant_cid} (other={other_cid} not named)")
+        elif vitamin_ids or mineral_ids:
+            vm_count = len(vitamin_ids) + len(mineral_ids)
+            if vm_count >= active_count * 0.7:
+                if mineral_ids and not vitamin_ids:
+                    primary_type = "single_mineral"
+                    confidence = 0.8
+                    reasons.append(f"mineral combo: {list(mineral_ids)}")
+                elif vitamin_ids and not mineral_ids:
+                    primary_type = "single_vitamin"
+                    confidence = 0.8
+                    reasons.append(f"vitamin combo: {list(vitamin_ids)}")
+                else:
+                    primary_type = "vitamin_mineral_combo"
+                    confidence = 0.8
+                    reasons.append(f"vitamin+mineral combo: {list(vitamin_ids | mineral_ids)}")
 
     # --- Vitamin + Mineral Combo (2-5 actives, mixed vitamins/minerals) ---
     elif 2 <= active_count <= 5 and (vitamin_ids or mineral_ids):
@@ -758,6 +852,7 @@ def classify_supplement(product: dict[str, Any]) -> dict[str, Any]:
         "percentile_category": percentile_category,
         "classification_confidence": round(confidence, 2),
         "classification_reasons": reasons,
+        "classification_input_source": source,
         "quantified_active_count": active_count,
         "non_quantified_base_count": nq_count,
         "category_breakdown": category_counts,
@@ -945,9 +1040,14 @@ def _iter_classification_rows_v2(product: dict[str, Any]) -> tuple[list[dict[str
     handles NP/non-quantified filtering to partition into quantified vs base.
     """
     iqd = product.get("ingredient_quality_data", {})
-    iqd_rows = _safe_list(iqd.get("ingredients"))
-    if iqd_rows:
-        return [row for row in iqd_rows if isinstance(row, dict)], "ingredient_quality_data"
+    iqd_scorable_rows = _safe_list(iqd.get("ingredients_scorable"))
+    if isinstance(iqd, dict) and "ingredients_scorable" in iqd:
+        return [row for row in iqd_scorable_rows if isinstance(row, dict)], "ingredient_quality_data.ingredients_scorable"
+    if iqd_scorable_rows:
+        return [row for row in iqd_scorable_rows if isinstance(row, dict)], "ingredient_quality_data.ingredients_scorable"
+    iqd_fallback_rows = _safe_list(iqd.get("ingredients"))
+    if iqd_fallback_rows:
+        return [row for row in iqd_fallback_rows if isinstance(row, dict)], "ingredient_quality_data.ingredients_fallback"
 
     active_rows = _safe_list(product.get("activeIngredients"))
     return [row for row in active_rows if isinstance(row, dict)], "activeIngredients"

@@ -20,16 +20,27 @@ python3 -m pytest scripts/tests/test_score_supplements.py -v
 # Run tests matching a keyword
 python3 -m pytest scripts/tests/ -k "banned"
 
-# Run the full pipeline on a dataset folder
-python3 scripts/run_pipeline.py <dataset_dir>
+# Canonical operational runs
+bash batch_run_all_datasets.sh
+bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
+bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/staging/brands"
+
+# Rebuild dashboard/catalog snapshot from existing brand outputs
+bash scripts/rebuild_dashboard_snapshot.sh
+
+# Release-stage work: catalog staging, product images, interaction DB, Supabase, Flutter bundle
+bash scripts/release_full.sh
+
+# Single-brand/stage runner for local iteration only
+python3 scripts/run_pipeline.py --raw-dir <dataset_dir> --output-prefix scripts/products/output_<brand>
 
 # Run individual pipeline stages
 python3 scripts/clean_dsld_data.py <input> <output>
 python3 scripts/enrich_supplements_v3.py <cleaned_input> <output>
 python3 scripts/score_supplements.py <enriched_input> <output>
 
-# Build final DB export for Flutter
-python3 scripts/build_final_db.py <scored_input> <output>
+# Manual/internal final DB export; normal shipping goes through rebuild_dashboard_snapshot.sh + release_full.sh
+python3 scripts/build_final_db.py --enriched-dir <enriched_dir> --scored-dir <scored_dir> --output-dir <output>
 
 # Sync pipeline output to Supabase
 python3 scripts/sync_to_supabase.py <build_output_dir>
@@ -70,12 +81,16 @@ docs/                         # Technical deep-dives and infographics
 
 | Script                         | Role                                                        |
 | ------------------------------ | ----------------------------------------------------------- |
-| `run_pipeline.py`              | Orchestrates Clean → Enrich → Score                         |
+| `batch_run_all_datasets.sh`    | Main full-corpus / targeted operational runner               |
+| `scripts/rebuild_dashboard_snapshot.sh` | Rebuilds final DB/dashboard snapshot from brand outputs |
+| `scripts/release_full.sh`      | Release-stage owner: catalog, images, interaction DB, Supabase, Flutter |
+| `run_pipeline.py`              | Single-brand/stage Clean → Enrich → Score runner             |
 | `clean_dsld_data.py`           | Stage 1: normalize raw DSLD JSON                            |
 | `enrich_supplements_v3.py`     | Stage 2: match ingredients, classify, enrich (~13K lines)   |
 | `score_supplements.py`         | Stage 3: arithmetic scoring, verdict assignment (~4K lines) |
 | `enhanced_normalizer.py`       | Core text normalization engine (~7K lines)                  |
-| `build_final_db.py`            | Final export for Flutter app                                |
+| `build_final_db.py`            | Internal/manual final DB builder used by snapshot/release flows |
+| `audit_source_of_truth_contract.py` | Cleaner-first source-of-truth and strict release gates  |
 | `constants.py`                 | Shared constants and mappings (~1.5K lines)                 |
 | `batch_processor.py`           | Batch processing with resume capability                     |
 | `db_integrity_sanity_check.py` | Schema and data validation (~1.5K lines)                    |

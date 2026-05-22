@@ -251,6 +251,35 @@ class TestMultivitamin:
         assert result["primary_type"] == "multivitamin"
         assert result["classification_confidence"] >= 0.9
 
+    def test_multivitamin_with_current_iqd_scorable_canonical_ids(self):
+        """Current IQD emits suffixed B-vitamin IDs; taxonomy must consume them."""
+        p = {
+            "product_name": "One Daily Superfood Multi-Vitamin with Iron",
+            "ingredient_quality_data": {"ingredients_scorable": [
+                {"name": "Vitamin A", "canonical_id": "vitamin_a", "category": "vitamin", "quantity": 5000, "unit": "IU", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin C", "canonical_id": "vitamin_c", "category": "vitamin", "quantity": 100, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin D3", "canonical_id": "vitamin_d", "category": "vitamin", "quantity": 1000, "unit": "IU", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin E", "canonical_id": "vitamin_e", "category": "vitamin", "quantity": 30, "unit": "IU", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin K-2", "canonical_id": "vitamin_k", "category": "vitamin", "quantity": 80, "unit": "mcg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin B1", "canonical_id": "vitamin_b1_thiamine", "category": "vitamin", "quantity": 10, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin B2", "canonical_id": "vitamin_b2_riboflavin", "category": "vitamin", "quantity": 10, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin B-3", "canonical_id": "vitamin_b3_niacin", "category": "vitamin", "quantity": 20, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin B-6", "canonical_id": "vitamin_b6_pyridoxine", "category": "vitamin", "quantity": 10, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Folate", "canonical_id": "vitamin_b9_folate", "category": "vitamin", "quantity": 400, "unit": "mcg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Vitamin B12", "canonical_id": "vitamin_b12_cobalamin", "category": "vitamin", "quantity": 100, "unit": "mcg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Biotin", "canonical_id": "vitamin_b7_biotin", "category": "vitamin", "quantity": 300, "unit": "mcg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Calcium", "canonical_id": "calcium", "category": "mineral", "quantity": 10, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Iron", "canonical_id": "iron", "category": "mineral", "quantity": 6, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Magnesium", "canonical_id": "magnesium", "category": "mineral", "quantity": 10, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Zinc", "canonical_id": "zinc", "category": "mineral", "quantity": 10, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Selenium", "canonical_id": "selenium", "category": "mineral", "quantity": 70, "unit": "mcg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+                {"name": "Copper", "canonical_id": "copper", "category": "mineral", "quantity": 500, "unit": "mcg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            ]},
+        }
+        result = classify_supplement(p)
+        assert result["primary_type"] == "multivitamin"
+        assert result["classification_input_source"] == "ingredient_quality_data.ingredients_scorable"
+
 
 # ============================================================================
 # Herbal / Botanical
@@ -367,6 +396,112 @@ class TestVitaminMineralCombo:
         result = classify_supplement(p)
         assert result["primary_type"] == "vitamin_mineral_combo"
         assert result["percentile_category"] == "vitamin_mineral_combo"
+
+
+def test_product_level_probiotic_metadata_does_not_hijack_non_probiotic_scorable_active():
+    """Paradise-style base probiotic metadata must not classify Quercetin as probiotic."""
+    product = {
+        "product_name": "Quercetin",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 90000000,
+        },
+        "ingredient_quality_data": {
+            "ingredients_scorable": [
+                {
+                    "name": "Quercetin",
+                    "canonical_id": "quercetin",
+                    "category": "antioxidant",
+                    "quantity": 500,
+                    "unit": "mg",
+                    "score_eligible_by_cleaner": True,
+                    "cleaner_row_role": "active_scorable",
+                    "role_classification": "active_scorable",
+                }
+            ],
+            "ingredients_skipped": [
+                {
+                    "name": "Lactobacillus acidophilus",
+                    "category": "probiotic",
+                    "quantity": 0,
+                    "unit": "NP",
+                    "score_eligible_by_cleaner": False,
+                    "cleaner_row_role": "nested_display_only",
+                }
+            ],
+        },
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "herbal_botanical"
+    assert result["secondary_type"] == "quercetin"
+
+
+def test_real_cfu_probiotic_with_no_scorable_strain_rows_is_still_probiotic():
+    """A product-level CFU total is valid probiotic dose evidence for taxonomy."""
+    product = {
+        "product_name": "Digestive Probiotic 20 Billion",
+        "probiotic_data": {
+            "is_probiotic_product": True,
+            "total_cfu": 20000000000,
+        },
+        "ingredient_quality_data": {
+            "ingredients_scorable": [],
+            "ingredients_skipped": [
+                {
+                    "name": "Proprietary Probiotic Blend",
+                    "category": "probiotics",
+                    "quantity": 95,
+                    "unit": "mg",
+                    "score_eligible_by_cleaner": False,
+                    "cleaner_row_role": "blend_header_total",
+                }
+            ],
+        },
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "probiotic"
+
+
+def test_prenatal_with_b_vitamins_and_dha_is_not_b_complex():
+    product = {
+        "product_name": "Prenatal Essentials",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Folate", "canonical_id": "vitamin_b9_folate", "category": "vitamins", "quantity": 600, "unit": "mcg DFE", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "Folic Acid", "canonical_id": "vitamin_b9_folate", "category": "vitamins", "quantity": 360, "unit": "mcg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "Vitamin B12", "canonical_id": "vitamin_b12_cobalamin", "category": "vitamins", "quantity": 2.8, "unit": "mcg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "Choline", "canonical_id": "choline", "category": "amino_acids", "quantity": 550, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "Iron", "canonical_id": "iron", "category": "minerals", "quantity": 27, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "DHA", "canonical_id": "dha", "category": "fatty_acids", "quantity": 250, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "multivitamin"
+
+
+def test_named_amino_acid_with_vitamin_cofactors_is_amino_acid():
+    product = {
+        "product_name": "Best L-Tryptophan 500 mg",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Niacin", "canonical_id": "vitamin_b3_niacin", "category": "vitamins", "quantity": 20, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "Vitamin B6", "canonical_id": "vitamin_b6_pyridoxine", "category": "vitamins", "quantity": 10, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "L-Tryptophan", "canonical_id": "l_tryptophan", "category": "amino_acids", "quantity": 500, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "amino_acid"
+
+
+def test_5htp_with_vitamin_cofactors_stays_sleep_support():
+    product = {
+        "product_name": "5-HTP Enhanced with Vitamins B6 and C",
+        "ingredient_quality_data": {"ingredients_scorable": [
+            {"name": "Vitamin C", "canonical_id": "vitamin_c", "category": "vitamins", "quantity": 60, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "Vitamin B6", "canonical_id": "vitamin_b6_pyridoxine", "category": "vitamins", "quantity": 10, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+            {"name": "5-HTP", "canonical_id": "5_htp", "category": "amino_acids", "quantity": 100, "unit": "mg", "score_eligible_by_cleaner": True, "cleaner_row_role": "active_scorable", "role_classification": "active_scorable"},
+        ]},
+    }
+    result = classify_supplement(product)
+    assert result["primary_type"] == "sleep_support"
 
 
 # ============================================================================
@@ -487,9 +622,9 @@ class TestSubstringCollisionGuards:
         """'night' as a standalone word should still match."""
         assert self._classify("Good Night Melatonin") == "sleep_support"
 
-    def test_pm_standalone_is_sleep(self):
-        """'pm' as a standalone word should still match."""
-        assert self._classify("PM Calm Support") == "sleep_support"
+    def test_pm_standalone_without_sleep_evidence_is_not_sleep(self):
+        """'pm' alone is not clinical sleep evidence."""
+        assert self._classify("PM Calm Support") != "sleep_support"
 
     # --- Beauty tokens: "hair" must not match substrings ---
 
