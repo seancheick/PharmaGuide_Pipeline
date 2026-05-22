@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 213,
+    "total_entries": 206,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -249,44 +249,6 @@
         "metabolites": []
       },
       "cui": "C2349204"
-    },
-    {
-      "standard_name": "Aloe Vera",
-      "aliases": [
-        "aloe barbadensis",
-        "aloe vera extract",
-        "aloe vera gel",
-        "aloe vera leaf"
-      ],
-      "markers": [
-        "aloin",
-        "polysaccharides",
-        "acemannan"
-      ],
-      "priority": "high",
-      "min_threshold": 10,
-      "last_updated": "2025-11-17",
-      "id": "aloe_vera",
-      "notes": "Botanical ingredient standardized for aloin, polysaccharides. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "ZY81Z83H0X"
-      },
-      "rxcui": "1306128",
-      "gsrs": {
-        "substance_name": "ALOE VERA LEAF",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [
-          "21 CFR 172.510"
-        ],
-        "dsld_count": 348,
-        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Aloe vera | 2535 (Number of products:348)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0718405"
     },
     {
       "standard_name": "AlphaWave L-Theanine",
@@ -1424,41 +1386,6 @@
       "cui": "C2293178"
     },
     {
-      "standard_name": "Carrot",
-      "aliases": [
-        "daucus carota",
-        "carrot root",
-        "carrot extract",
-        "carrot powder"
-      ],
-      "markers": [
-        "beta-carotene",
-        "alpha-carotene",
-        "lutein"
-      ],
-      "priority": "medium",
-      "id": "carrot",
-      "last_updated": "2025-11-17",
-      "notes": "Botanical ingredient standardized for beta-carotene, alpha-carotene. Commonly used in dietary supplements.",
-      "category": "vegetable_greens",
-      "external_ids": {
-        "unii": "L56Z1JK48B"
-      },
-      "rxcui": "1428866",
-      "gsrs": {
-        "substance_name": "CARROT",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 1291,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Carrot | 373 (Number of products:1291)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C1141640"
-    },
-    {
       "standard_name": "Cat's Claw",
       "aliases": [
         "cat's claw bark extract",
@@ -1575,44 +1502,6 @@
       "min_threshold": 8,
       "external_ids": {},
       "cui": "C1079248"
-    },
-    {
-      "standard_name": "Chamomile",
-      "aliases": [
-        "matricaria recutita",
-        "matricaria chamomilla",
-        "german chamomile",
-        "chamomile extract",
-        "german chamomile extract",
-        "wild chamomile"
-      ],
-      "markers": [
-        "apigenin",
-        "bisabolol",
-        "chamazulene"
-      ],
-      "min_threshold": 1,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "chamomile",
-      "notes": "Botanical ingredient standardized for apigenin, bisabolol. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "FGL3685T2X"
-      },
-      "rxcui": "221916",
-      "gsrs": {
-        "substance_name": "CHAMOMILE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 206,
-        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Chamomile (unspecified) | 2257 (Number of products:206)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C1510478"
     },
     {
       "standard_name": "Chasteberry",
@@ -2161,40 +2050,6 @@
       "standardization_unit": "mg_per_dose"
     },
     {
-      "standard_name": "Cucumber",
-      "aliases": [
-        "cucumis sativus",
-        "cucumber extract",
-        "cucumber seed extract"
-      ],
-      "markers": [
-        "cucurbitacins",
-        "vitamin C",
-        "silica"
-      ],
-      "priority": "medium",
-      "id": "cucumber",
-      "last_updated": "2025-11-17",
-      "notes": "Botanical ingredient standardized for cucurbitacins, vitamin C. Commonly used in dietary supplements.",
-      "category": "vegetable_greens",
-      "external_ids": {
-        "unii": "YY7C30VXJT"
-      },
-      "rxcui": "899738",
-      "gsrs": {
-        "substance_name": "CUCUMBER",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 240,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|cucumber | 1325 (Number of products:240)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0973457"
-    },
-    {
       "id": "curcumin",
       "standard_name": "Curcumin",
       "aliases": [
@@ -2686,42 +2541,6 @@
       "cui": "C3728253",
       "min_threshold": 1,
       "threshold_source": "1% saponins \u2014 stem extract standard"
-    },
-    {
-      "standard_name": "Fennel",
-      "aliases": [
-        "foeniculum vulgare",
-        "fennel seed",
-        "fennel extract",
-        "sweet fennel"
-      ],
-      "markers": [
-        "anethole",
-        "fenchone"
-      ],
-      "priority": "medium",
-      "category": "seed_fruit",
-      "id": "fennel",
-      "notes": "Digestive herb containing anethole. Used for bloating and digestive comfort.",
-      "last_updated": "2026-01-05",
-      "external_ids": {
-        "unii": "557II4LLC3"
-      },
-      "rxcui": "1370467",
-      "gsrs": {
-        "substance_name": "SWEET FENNEL",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [
-          "21 CFR 310.528"
-        ],
-        "dsld_count": 703,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Fennel | 66 (Number of products:703)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0553175"
     },
     {
       "standard_name": "Fenugreek",
@@ -3775,40 +3594,6 @@
       "cui": "C0331745"
     },
     {
-      "standard_name": "Kale",
-      "aliases": [
-        "brassica oleracea var. sabellica",
-        "kale leaf",
-        "kale powder",
-        "curly kale"
-      ],
-      "markers": [
-        "glucosinolates",
-        "kaempferol",
-        "lutein"
-      ],
-      "priority": "medium",
-      "id": "kale",
-      "last_updated": "2025-11-17",
-      "notes": "Nutrient-dense leafy green used in greens blends and superfood powders. Rich in vitamins A, C, K and antioxidants.",
-      "category": "vegetable_greens",
-      "external_ids": {
-        "unii": "0Y3L4J38H1"
-      },
-      "gsrs": {
-        "substance_name": "KALE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 871,
-        "dsld_info_raw": "Dietary Supplement Label Database|botanical|Kale | 2285 (Number of products:871)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C3859186"
-    },
-    {
       "standard_name": "Kanna",
       "aliases": [
         "channa",
@@ -3960,30 +3745,6 @@
       "cui": "C5779733",
       "min_threshold": 40,
       "threshold_source": "40% puerarin \u2014 standard root extract"
-    },
-    {
-      "standard_name": "Lavender",
-      "aliases": [
-        "lavandula angustifolia",
-        "lavender extract",
-        "lavender oil",
-        "lavandula",
-        "english lavender"
-      ],
-      "markers": [
-        "linalool",
-        "linalyl acetate"
-      ],
-      "min_threshold": 20,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "lavender",
-      "notes": "Botanical ingredient standardized for linalool, linalyl acetate. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "ZBP1YXW0H8"
-      },
-      "cui": "C1623196"
     },
     {
       "standard_name": "Lemon Balm",

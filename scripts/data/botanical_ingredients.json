@@ -248,11 +248,12 @@
         "88% organic whole leaf Aloe vera",
         "100% organic whole leaf Aloe vera",
         "99% organic whole leaf Aloe vera",
-        "Aloe vera whole leaf"
+        "Aloe vera whole leaf",
+        "aloe vera extract"
       ],
       "category": "herb",
-      "notes": "Aloe barbadensis (Asphodelaceae) leaf gel and latex. Contains acemannan polysaccharides (gel) and anthraquinone glycosides (latex). The whole-leaf and gel preparations differ markedly in composition and safety profile. Common DSLD label disclosures include percentage-prefixed concentration claims (e.g. '88% organic whole leaf Aloe vera') \u2014 aliased rather than relying on cleaner-side prefix stripping to keep identity matching deterministic.",
-      "last_updated": "2026-05-14",
+      "notes": "Aloe barbadensis (Asphodelaceae) leaf gel and latex. Contains acemannan polysaccharides (gel) and anthraquinone glycosides (latex). The whole-leaf and gel preparations differ markedly in composition and safety profile. Common DSLD label disclosures include percentage-prefixed concentration claims (e.g. '88% organic whole leaf Aloe vera') \u2014 aliased rather than relying on cleaner-side prefix stripping to keep identity matching deterministic. [DM-1 2026-05-22] Merged 1 alias(es) from deleted standardized_botanicals.aloe_vera dup entry: ['aloe vera extract'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "ZY81Z83H0X"
       },
@@ -2623,11 +2624,13 @@
       "aliases": [
         "Daucus sativus",
         "daucus carota",
-        "carrot root"
+        "carrot root",
+        "carrot extract",
+        "carrot powder"
       ],
       "category": "root",
-      "notes": "Daucus carota subsp. sativus (Apiaceae) root. Rich in beta-carotene (provitamin A, 8-13 mg/100g), polyacetylenes (falcarinol), and dietary fiber. Used in whole-food supplement blends.",
-      "last_updated": "2026-03-01",
+      "notes": "Daucus carota subsp. sativus (Apiaceae) root. Rich in beta-carotene (provitamin A, 8-13 mg/100g), polyacetylenes (falcarinol), and dietary fiber. Used in whole-food supplement blends. [DM-1 2026-05-22] Merged 2 alias(es) from deleted standardized_botanicals.carrot dup entry: ['carrot extract', 'carrot powder'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "L56Z1JK48B"
       },
@@ -3061,11 +3064,15 @@
         "german chamomile",
         "camomile",
         "camomile flower",
-        "Camomile Flower"
+        "Camomile Flower",
+        "matricaria recutita",
+        "chamomile extract",
+        "german chamomile extract",
+        "wild chamomile"
       ],
       "category": "flower",
-      "notes": "Matricaria chamomilla (Asteraceae) flower. Contains apigenin, bisabolol, and chamazulene. RCT evidence for mild anxiolytic and sleep-promoting effects (PMID 27912875). Most-studied calming botanical.",
-      "last_updated": "2026-03-01",
+      "notes": "Matricaria chamomilla (Asteraceae) flower. Contains apigenin, bisabolol, and chamazulene. RCT evidence for mild anxiolytic and sleep-promoting effects (PMID 27912875). Most-studied calming botanical. [DM-1 2026-05-22] Merged 4 alias(es) from deleted standardized_botanicals.chamomile dup entry: ['matricaria recutita', 'chamomile extract', 'german chamomile extract', 'wild chamomile'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "FGL3685T2X"
       },
@@ -4184,11 +4191,13 @@
       "aliases": [
         "cucumis sativus",
         "cucumber powder",
-        "cucumber fruit"
+        "cucumber fruit",
+        "cucumber extract",
+        "cucumber seed extract"
       ],
       "category": "vegetable",
-      "notes": "Cucumis sativus (Cucurbitaceae) fruit. Contains cucurbitacins, lignans, and flavonoids. High water content (95%). Used in supplements for hydration and as silica source. Botanical fruit powder.",
-      "last_updated": "2026-03-01",
+      "notes": "Cucumis sativus (Cucurbitaceae) fruit. Contains cucurbitacins, lignans, and flavonoids. High water content (95%). Used in supplements for hydration and as silica source. Botanical fruit powder. [DM-1 2026-05-22] Merged 2 alias(es) from deleted standardized_botanicals.cucumber dup entry: ['cucumber extract', 'cucumber seed extract'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "YY7C30VXJT"
       },
@@ -5157,11 +5166,13 @@
         "fennel powder",
         "wild crafted fennel",
         "Fennel Oil",
-        "sweet fennel seed powder"
+        "sweet fennel seed powder",
+        "fennel extract",
+        "sweet fennel"
       ],
       "category": "seed",
-      "notes": "Foeniculum vulgare (Apiaceae) seed. Contains trans-anethole (50-80% of essential oil) and fenchone. Traditional carminative and galactagogue. RCT evidence for infantile colic (PMID 12868253).",
-      "last_updated": "2026-03-01",
+      "notes": "Foeniculum vulgare (Apiaceae) seed. Contains trans-anethole (50-80% of essential oil) and fenchone. Traditional carminative and galactagogue. RCT evidence for infantile colic (PMID 12868253). [DM-1 2026-05-22] Merged 2 alias(es) from deleted standardized_botanicals.fennel dup entry: ['fennel extract', 'sweet fennel'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "557II4LLC3"
       },
@@ -7592,11 +7603,12 @@
         "kale powder",
         "organic kale",
         "kale leaf",
-        "Brassica oleracea var. sabellica"
+        "Brassica oleracea var. sabellica",
+        "curly kale"
       ],
       "category": "vegetable",
-      "notes": "Brassica oleracea var. sabellica (Brassicaceae) leaf. Cruciferous vegetable rich in glucosinolates (glucobrassicin), lutein, zeaxanthin, and vitamin K. Used in green food supplement blends.",
-      "last_updated": "2026-03-01",
+      "notes": "Brassica oleracea var. sabellica (Brassicaceae) leaf. Cruciferous vegetable rich in glucosinolates (glucobrassicin), lutein, zeaxanthin, and vitamin K. Used in green food supplement blends. [DM-1 2026-05-22] Merged 1 alias(es) from deleted standardized_botanicals.kale dup entry: ['curly kale'].",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "0Y3L4J38H1"
       },
@@ -8155,8 +8167,8 @@
         "lavender"
       ],
       "category": "herb",
-      "notes": "Lavandula angustifolia (Lamiaceae) flower/aerial parts. Contains linalool and linalyl acetate. RCT evidence for anxiolytic effects (Silexan/Lavela WS 1265, PMID 19962288). Botanical herb form.",
-      "last_updated": "2026-03-01",
+      "notes": "Lavandula angustifolia (Lamiaceae) flower/aerial parts. Contains linalool and linalyl acetate. RCT evidence for anxiolytic effects (Silexan/Lavela WS 1265, PMID 19962288). Botanical herb form. [DM-1 2026-05-22] Deleted duplicate standardized_botanicals.lavender entry (no unique aliases to merge).",
+      "last_updated": "2026-05-22",
       "external_ids": {
         "unii": "ZBP1YXW0H8"
       },
