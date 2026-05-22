@@ -57,7 +57,7 @@
     "v6_migration_status": "PHASE 1: contract metadata + green_coffee_bean tutorial entry landed 2026-05-22. green_coffee_bean is the first entry annotated with the new schema fields; plain aliases retained for runtime matching while the meets_threshold gate continues to govern bonus eligibility. Remaining priority entries per audit: bladderwrack/brown_kelp, boswellia, bilberry, ginger_extract, nettle, rhodiola, grape_seed, cordyceps, turkey_tail, sea_buckthorn, turmeric. Each ships as its own 1-entry batch with shadow-score comparison.",
     "schema_version": "5.0.0",
     "last_updated": "2026-05-22",
-    "total_entries": 241,
+    "total_entries": 234,
     "scoring_rule": "Botanicals with min_threshold are scored higher when meeting standardization requirements. Priority level affects matching weight. After v6 migration: only entries with bonus_eligible=true (and a valid standardization_basis) are intended to trigger the A5b bonus; the runtime meets_threshold gate is the authoritative enforcement.",
     "required_fields": [
       "id",
@@ -310,40 +310,6 @@
       }
     },
     {
-      "standard_name": "American Ginseng",
-      "aliases": [
-        "panax quinquefolius",
-        "american ginseng root extract",
-        "panax quinquefolius root",
-        "american ginseng extract"
-      ],
-      "markers": [
-        "ginsenosides"
-      ],
-      "min_threshold": 10,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "american_ginseng",
-      "notes": "Botanical ingredient standardized for ginsenosides. Commonly used in dietary supplements.",
-      "category": "adaptogen",
-      "external_ids": {
-        "unii": "8W75VCV53Q"
-      },
-      "rxcui": "259473",
-      "gsrs": {
-        "substance_name": "AMERICAN GINSENG",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 238,
-        "dsld_info_raw": "Dietary Supplement Label Database|botanical|American Ginseng | 2562 (Number of products:238)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C1119918"
-    },
-    {
       "standard_name": "Amla",
       "aliases": [
         "phyllanthus emblica",
@@ -553,41 +519,6 @@
       "cui": "C1061163"
     },
     {
-      "standard_name": "Astaxanthin",
-      "aliases": [
-        "haematococcus pluvialis extract",
-        "astaxanthin extract",
-        "natural astaxanthin"
-      ],
-      "markers": [
-        "astaxanthin"
-      ],
-      "min_threshold": 1,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "astaxanthin",
-      "notes": "Botanical ingredient standardized for astaxanthin. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "8XPW32PR7I",
-        "cas": "472-61-7",
-        "pubchem_cid": 5281224
-      },
-      "rxcui": "18451",
-      "gsrs": {
-        "substance_name": "ASTAXANTHIN",
-        "substance_class": "chemical",
-        "cfr_sections": [],
-        "dsld_count": 746,
-        "dsld_info_raw": "Dietary Supplement Label Database|Chemical|Astaxanthin | 12 (Number of products:746)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0052565"
-    },
-    {
       "standard_name": "Astaxanthin (Haematococcus pluvialis)",
       "aliases": [
         "astaxanthin",
@@ -790,40 +721,6 @@
         "metabolites": []
       },
       "cui": "C0004755"
-    },
-    {
-      "standard_name": "Bee Pollen",
-      "aliases": [
-        "bee pollen extract",
-        "bee pollen granules",
-        "flower pollen",
-        "pollen granules"
-      ],
-      "markers": [
-        "flavonoids",
-        "phenolics"
-      ],
-      "priority": "medium",
-      "last_updated": "2025-11-17",
-      "id": "bee_pollen",
-      "notes": "Botanical ingredient standardized for flavonoids, phenolics. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "3729L8MA2C"
-      },
-      "rxcui": "253157",
-      "gsrs": {
-        "substance_name": "BEE POLLEN",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 273,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Bee Pollen | 343 (Number of products:273)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0795585"
     },
     {
       "standard_name": "Beetroot",
@@ -1095,42 +992,6 @@
       "cui": "C1509189"
     },
     {
-      "standard_name": "Black Cohosh",
-      "aliases": [
-        "actaea racemosa",
-        "cimicifuga racemosa",
-        "black cohosh root extract",
-        "black cohosh root standardized extract"
-      ],
-      "markers": [
-        "triterpene glycosides",
-        "actein",
-        "27-deoxyactein"
-      ],
-      "min_threshold": 2.5,
-      "priority": "high",
-      "last_updated": "2025-11-17",
-      "id": "black_cohosh",
-      "notes": "Botanical ingredient standardized for triterpene glycosides, actein. Commonly used in dietary supplements.",
-      "category": "herb",
-      "external_ids": {
-        "unii": "K73E24S6X9"
-      },
-      "rxcui": "259511",
-      "gsrs": {
-        "substance_name": "BLACK COHOSH",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 476,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Black Cohosh | 1068 (Number of products:476)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C0885226"
-    },
-    {
       "standard_name": "Black Currant",
       "aliases": [
         "ribes nigrum",
@@ -1164,41 +1025,6 @@
       "cui": "C0771400",
       "min_threshold": 25,
       "threshold_source": "25% anthocyanins \u2014 concentrated seed/fruit extract"
-    },
-    {
-      "standard_name": "Black Musli",
-      "id": "black_musli",
-      "aliases": [
-        "curculigo orchioides",
-        "black musli extract",
-        "kali musli",
-        "talamuli",
-        "musli kand"
-      ],
-      "markers": [
-        "curculigosides",
-        "curculigoside A",
-        "saponins"
-      ],
-      "category": "herb",
-      "priority": "medium",
-      "notes": "Ayurvedic herb (Curculigo orchioides) used for vitality and testosterone support.",
-      "last_updated": "2026-01-05",
-      "external_ids": {
-        "unii": "715B59598O"
-      },
-      "gsrs": {
-        "substance_name": "CURCULIGO ORCHIOIDES WHOLE",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": null,
-        "dsld_info_raw": null,
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C2800341"
     },
     {
       "standard_name": "Black Pepper Extract",
@@ -1291,41 +1117,6 @@
       "category": "herb",
       "external_ids": {},
       "cui": "C0946894"
-    },
-    {
-      "standard_name": "Blackberry",
-      "id": "blackberry",
-      "aliases": [
-        "rubus fruticosus",
-        "blackberry fruit extract",
-        "blackberry extract",
-        "blackberry juice",
-        "blackberry powder"
-      ],
-      "markers": [
-        "anthocyanins",
-        "ellagic acid",
-        "cyanidin-3-glucoside"
-      ],
-      "category": "seed_fruit",
-      "priority": "medium",
-      "notes": "Berry rich in anthocyanins and ellagic acid. High antioxidant capacity.",
-      "last_updated": "2026-01-05",
-      "external_ids": {
-        "unii": "8A6OMU3I8L"
-      },
-      "gsrs": {
-        "substance_name": "BLACKBERRY",
-        "substance_class": "structurallyDiverse",
-        "cfr_sections": [],
-        "dsld_count": 545,
-        "dsld_info_raw": "Dietary Supplement Label Database|Botanical|Blackberry | 1073 (Number of products:545)",
-        "active_moiety": null,
-        "salt_parents": [],
-        "metabolic_relationships": [],
-        "metabolites": []
-      },
-      "cui": "C2740597"
     },
     {
       "standard_name": "Bladderwrack",
@@ -1703,29 +1494,6 @@
       "category": "herb",
       "external_ids": {},
       "cui": "C2293178"
-    },
-    {
-      "standard_name": "Caraway",
-      "aliases": [
-        "carum carvi",
-        "caraway seed",
-        "caraway oil",
-        "caraway extract"
-      ],
-      "markers": [
-        "carvone",
-        "limonene"
-      ],
-      "priority": "medium",
-      "category": "seed_fruit",
-      "id": "caraway",
-      "notes": "Digestive seed containing carvone. Often combined with peppermint for IBS support.",
-      "last_updated": "2026-01-05",
-      "external_ids": {
-        "pubchem_cid": 320761,
-        "unii": "W2FH8O2BBE"
-      },
-      "cui": "C0331053"
     },
     {
       "standard_name": "Carrot",

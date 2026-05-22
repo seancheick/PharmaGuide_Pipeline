@@ -4,7 +4,7 @@
     "purpose": "ingredient_mapping",
     "schema_version": "5.2.0",
     "last_updated": "2026-05-22",
-    "total_entries": 486,
+    "total_entries": 493,
     "functional_roles_field": {
       "added_in": "5.1.0",
       "type": "string[]",
@@ -305,6 +305,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "fungal"
+      }
+    },
+    {
+      "id": "american_ginseng",
+      "standard_name": "American Ginseng",
+      "latin_name": "Panax quinquefolius",
+      "aliases": [
+        "panax quinquefolius",
+        "american ginseng root extract",
+        "panax quinquefolius root",
+        "american ginseng extract"
+      ],
+      "category": "adaptogen",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-1, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for ginsenosides. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "8W75VCV53Q"
+      },
+      "cui": "C1119918",
+      "rxcui": "259473",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -714,6 +738,31 @@
       }
     },
     {
+      "id": "astaxanthin",
+      "standard_name": "Astaxanthin",
+      "latin_name": "Haematococcus pluvialis (algal source)",
+      "aliases": [
+        "haematococcus pluvialis extract",
+        "astaxanthin extract",
+        "natural astaxanthin"
+      ],
+      "category": "active_compound",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-1, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for astaxanthin. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "8XPW32PR7I",
+        "cas": "472-61-7",
+        "pubchem_cid": 5281224
+      },
+      "cui": "C0052565",
+      "rxcui": "18451",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "algal",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "astragalus_root",
       "standard_name": "Astragalus Root",
       "latin_name": "Astragalus membranaceus",
@@ -989,6 +1038,29 @@
       }
     },
     {
+      "id": "bee_pollen",
+      "standard_name": "Bee Pollen",
+      "aliases": [
+        "bee pollen extract",
+        "bee pollen granules",
+        "flower pollen",
+        "pollen granules"
+      ],
+      "category": "animal_derived",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-1, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for flavonoids, phenolics. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "3729L8MA2C"
+      },
+      "cui": "C0795585",
+      "rxcui": "253157",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "animal",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "beet_root",
       "standard_name": "Beet Root",
       "latin_name": "Beta vulgaris",
@@ -1234,6 +1306,30 @@
       }
     },
     {
+      "id": "black_cohosh",
+      "standard_name": "Black Cohosh",
+      "latin_name": "Actaea racemosa (Cimicifuga racemosa)",
+      "aliases": [
+        "actaea racemosa",
+        "cimicifuga racemosa",
+        "black cohosh root extract",
+        "black cohosh root standardized extract"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-1, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Botanical ingredient standardized for triterpene glycosides, actein. Commonly used in dietary supplements.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "K73E24S6X9"
+      },
+      "cui": "C0885226",
+      "rxcui": "259511",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "black_garlic",
       "standard_name": "Black Garlic",
       "latin_name": "Allium sativum",
@@ -1342,6 +1438,30 @@
       }
     },
     {
+      "id": "black_musli",
+      "standard_name": "Black Musli",
+      "latin_name": "Curculigo orchioides",
+      "aliases": [
+        "curculigo orchioides",
+        "black musli extract",
+        "kali musli",
+        "talamuli",
+        "musli kand"
+      ],
+      "category": "herb",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-1, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Ayurvedic herb (Curculigo orchioides) used for vitality and testosterone support.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "715B59598O"
+      },
+      "cui": "C2800341",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
+      }
+    },
+    {
       "id": "black_pepper",
       "standard_name": "Black Pepper",
       "latin_name": "Piper nigrum",
@@ -1447,6 +1567,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "blackberry",
+      "standard_name": "Blackberry",
+      "latin_name": "Rubus fruticosus",
+      "aliases": [
+        "rubus fruticosus",
+        "blackberry fruit extract",
+        "blackberry extract",
+        "blackberry juice",
+        "blackberry powder"
+      ],
+      "category": "seed_fruit",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-1, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Berry rich in anthocyanins and ellagic acid. High antioxidant capacity.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "unii": "8A6OMU3I8L"
+      },
+      "cui": "C2740597",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {
@@ -2306,6 +2450,30 @@
       "functional_roles": [],
       "attributes": {
         "source_origin": "plant"
+      }
+    },
+    {
+      "id": "caraway",
+      "standard_name": "Caraway",
+      "latin_name": "Carum carvi",
+      "aliases": [
+        "carum carvi",
+        "caraway seed",
+        "caraway oil",
+        "caraway extract"
+      ],
+      "category": "seed_fruit",
+      "notes": "Plain identity (relocated from standardized_botanicals.json via MO-1, 2026-05-22). No documented standardization marker; identity-only mapping with no A5b bonus pathway. Digestive seed containing carvone. Often combined with peppermint for IBS support.",
+      "last_updated": "2026-05-22",
+      "external_ids": {
+        "pubchem_cid": 320761,
+        "unii": "W2FH8O2BBE"
+      },
+      "cui": "C0331053",
+      "functional_roles": [],
+      "attributes": {
+        "source_origin": "plant",
+        "bonus_eligible": false
       }
     },
     {

@@ -68,4 +68,11 @@ def test_botanical_total_count_unchanged(botanicals):
     # then re-added as proper canonicals with UNIIs in SB-3d. The merge
     # of sb/3d into main retained both copies. The stub copies were dropped
     # in favor of the SB-3d UNII-bearing canonicals. Net: -2 entries.
-    assert len(botanicals) == 486
+    # 493 after 2026-05-22 MO-1 batch: 7 plain-identity herb entries
+    # relocated from standardized_botanicals.json (no documented
+    # standardization marker → no A5b bonus pathway). Moved: american_ginseng
+    # (UNII 8W75VCV53Q), astaxanthin (UNII 8XPW32PR7I), bee_pollen
+    # (UNII 3729L8MA2C), black_cohosh (UNII K73E24S6X9), black_musli
+    # (UNII 715B59598O), blackberry (UNII 8A6OMU3I8L), caraway
+    # (UNII W2FH8O2BBE). See scripts/audits/sb_moveout_inventory_20260522/.
+    assert len(botanicals) == 493
