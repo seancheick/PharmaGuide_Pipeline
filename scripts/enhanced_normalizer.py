@@ -4758,6 +4758,12 @@ class EnhancedDSLDNormalizer:
                 logger.debug(f"Processing {len(nested_rows)} nestedRows from skipped parent: {name}")
                 nested_results = []
                 for nested_ing in nested_rows:
+                    if self._is_chemical_decomposition_leaf(nested_ing):
+                        logger.debug(
+                            "Skipping chemical-decomposition leaf '%s' (cat=%s) under skipped parent '%s'",
+                            nested_ing.get("name"), nested_ing.get("category"), name,
+                        )
+                        continue
                     nested_processed = self._process_single_ingredient_enhanced(nested_ing, is_active)
                     if nested_processed:
                         if isinstance(nested_processed, list):
@@ -5027,6 +5033,12 @@ class EnhancedDSLDNormalizer:
             _parent_blend_mass = quantity if isinstance(quantity, (int, float)) and quantity > 0 and unit not in ("", "NP") else None
             _parent_blend_unit = unit if _parent_blend_mass is not None else None
             for nested_ing in nested_rows:
+                if self._is_chemical_decomposition_leaf(nested_ing):
+                    logger.debug(
+                        "Skipping chemical-decomposition leaf '%s' (cat=%s) under parent '%s'",
+                        nested_ing.get("name"), nested_ing.get("category"), name,
+                    )
+                    continue
                 nested_ing_for_processing = dict(nested_ing)
                 nested_ing_for_processing.setdefault("parentBlend", name)
                 nested_ing_for_processing.setdefault("isNestedIngredient", True)
