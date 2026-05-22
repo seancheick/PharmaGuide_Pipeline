@@ -4895,7 +4895,10 @@ def build_core_row(
     # ingredient. Use a set to dedup, sort for deterministic builds.
     ing_tokens: set[str] = set()
     iqd = safe_dict(enriched.get("ingredient_quality_data"))
-    for ing in safe_list(iqd.get("ingredients_scorable")) or safe_list(iqd.get("ingredients")):
+    iqd_search_rows = safe_list(iqd.get("ingredients_scorable")) + safe_list(iqd.get("ingredients_recognized_non_scorable"))
+    if not iqd_search_rows:
+        iqd_search_rows = safe_list(iqd.get("ingredients"))
+    for ing in iqd_search_rows:
         if isinstance(ing, dict):
             for k in ("standard_name", "matched_name", "name", "raw_source_text",
                       "canonical_id", "display_label"):

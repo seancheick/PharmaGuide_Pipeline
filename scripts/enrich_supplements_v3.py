@@ -1368,6 +1368,8 @@ class SupplementEnricherV3:
         quality_entry["safety_canonical_id"] = canonical_id
         quality_entry["safety_canonical_source_db"] = "banned_recalled_ingredients"
         quality_entry["safety_canonical_preserved"] = True
+        quality_entry["fallback_class"] = "clinical_fail_safe"
+        quality_entry["fallback_reason"] = "cleaner_safety_canonical_preservation"
 
     @staticmethod
     def _preserve_cleaner_botanical_canonical(ingredient: Dict, quality_entry: Dict) -> None:
@@ -1393,6 +1395,8 @@ class SupplementEnricherV3:
         quality_entry["canonical_id"] = cleaner_cid
         quality_entry["canonical_source_db"] = cleaner_src
         quality_entry["canonical_preserved_from_cleaner"] = True
+        quality_entry["fallback_class"] = "clinical_fail_safe"
+        quality_entry["fallback_reason"] = "cleaner_botanical_canonical_preservation"
 
     def _compile_patterns(self):
         """Compile regex patterns for performance"""
@@ -2522,8 +2526,12 @@ class SupplementEnricherV3:
         active_ingredients = product.get('activeIngredients', [])
         inactive_ingredients = product.get('inactiveIngredients', [])
 
-        # Track classification results
+        # Track classification results. Contract semantics:
+        # - ingredients_scorable: scoring/taxonomy inputs only.
+        # - ingredients_recognized_non_scorable: recognized transparency rows.
+        # - ingredients_skipped: every evaluated row excluded from scoring.
         ingredients_scorable = []
+        ingredients_recognized_non_scorable = []
         ingredients_skipped = []
         promoted_from_inactive = []
         skipped_reasons_breakdown = {}
@@ -2544,7 +2552,14 @@ class SupplementEnricherV3:
         # =================================================================
         # PASS 1: Classify activeIngredients as scorable or skipped
         # =================================================================
+        product_activity_text = " ".join(
+            str(product.get(key) or "")
+            for key in ("fullName", "product_name", "bundleName")
+        )
         for ingredient in active_ingredients:
+            if product_activity_text:
+                ingredient = dict(ingredient)
+                ingredient.setdefault("_product_activity_text", product_activity_text)
             # Use branded_token_extracted for matching if present AND it differs from name.
             # When branded_token_extracted == name the clean stage collapsed the full label
             # to just the brand prefix (e.g. "Albion" from "Albion Magnesium Bisglycinate Chelate").
@@ -2564,8 +2579,10 @@ class SupplementEnricherV3:
             unit = ingredient.get('unit', '')
             hierarchy_type = ingredient.get('hierarchyType')
 
-            # Check for skip conditions
-            skip_reason = self._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
+            skip_reason = (
+                self._cleaner_skip_reason(ingredient)
+                or self._should_skip_from_scoring(ingredient, quality_map, botanicals_db)
+            )
 
             if skip_reason:
                 # Track skip reason breakdown
@@ -2588,7 +2605,7 @@ class SupplementEnricherV3:
 
                 # LABEL NAME PRESERVATION: Track raw label text for skipped items
                 raw_source_text = ingredient.get('raw_source_text') or ing_name
-                ingredients_skipped.append({
+                skipped_entry = {
                     # LABEL NAME PRESERVATION:
                     "name": ing_name,  # Label-facing name
                     "raw_source_text": raw_source_text,  # Exact label text (provenance)
@@ -2627,6 +2644,7 @@ class SupplementEnricherV3:
                     "recognition_type": (recognition_info or {}).get("recognition_type"),
                     "recognized_entry_id": (recognition_info or {}).get("matched_entry_id"),
                     "recognized_entry_name": (recognition_info or {}).get("matched_entry_name"),
+                    "mapped": bool(recognition_info) or bool(is_excipient),
                     "mapped_identity": bool(recognition_info) or bool(is_excipient),
                     "scoreable_identity": False,
                     "role_classification": "inactive_non_scorable",
@@ -2634,7 +2652,13 @@ class SupplementEnricherV3:
                     "identity_decision_reason": skip_reason,
                     "safety_hits": [],
                     "certificates": [],
-                    "source_section": "active",
+                    "source_section": ingredient.get("source_section") or "active",
+                    "raw_source_path": ingredient.get("raw_source_path", "activeIngredients"),
+                    "cleaner_row_role": ingredient.get("cleaner_row_role") or skip_reason,
+                    "score_eligible_by_cleaner": bool(ingredient.get("score_eligible_by_cleaner", False)),
+                    "score_exclusion_reason": ingredient.get("score_exclusion_reason") or skip_reason,
+                    "dose_class": ingredient.get("dose_class"),
+                    "raw_taxonomy": ingredient.get("raw_taxonomy"),
                     "hierarchyType": hierarchy_type,
                     "form_extraction_used": False,
                     "is_dual_form": False,
@@ -2644,7 +2668,24 @@ class SupplementEnricherV3:
                     "final_form_bio_score": None,
                     "additional_forms": [],
                     "form_source": None,
-                })
+                    "form_id": None,
+                    "form_unmapped": False,
+                    "matched_alias": None,
+                    "matched_target": None,
+                    "match_tier": None,
+                    "fallback_class": "clinical_fail_safe",
+                    "fallback_reason": skip_reason,
+                    "normalized_key": ingredient.get("normalized_key") or norm_module.make_normalized_key(raw_source_text),
+                }
+                self._mark_cleaner_contract_fallback(
+                    skipped_entry,
+                    self._missing_cleaner_contract_fields(ingredient),
+                )
+                ingredients_skipped.append(skipped_entry)
+                if recognition_info:
+                    skipped_entry["recognized_non_scorable"] = True
+                    skipped_entry["skip_reason"] = SKIP_REASON_RECOGNIZED_NON_SCORABLE
+                    self._append_unique_iqd_row(ingredients_recognized_non_scorable, skipped_entry)
                 # DO NOT track as unmapped - these are intentionally not scored
                 continue
 
@@ -2710,8 +2751,14 @@ class SupplementEnricherV3:
                     quality_entry['role_classification'] = 'recognized_non_scorable'
                     quality_entry['identity_confidence'] = 1.0
                     quality_entry['identity_decision_reason'] = 'proprietary_blend_member'
+                    self._tag_fallback_decision(quality_entry, 'clinical_fail_safe', 'proprietary_blend_member')
                     recognized_non_scorable_count += 1
-                    ingredients_scorable.append(quality_entry)
+                    self._route_non_scorable_iqd_row(
+                        quality_entry,
+                        ingredients_skipped,
+                        ingredients_recognized_non_scorable,
+                        skip_reason=SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+                    )
                     all_quality_data.append(quality_entry)
                     continue
 
@@ -2746,8 +2793,14 @@ class SupplementEnricherV3:
                     quality_entry['role_classification'] = 'recognized_non_scorable'
                     quality_entry['identity_confidence'] = 1.0
                     quality_entry['identity_decision_reason'] = 'source_descriptor_child_row'
+                    self._tag_fallback_decision(quality_entry, 'clinical_fail_safe', 'source_descriptor_child_row')
                     recognized_non_scorable_count += 1
-                    ingredients_scorable.append(quality_entry)
+                    self._route_non_scorable_iqd_row(
+                        quality_entry,
+                        ingredients_skipped,
+                        ingredients_recognized_non_scorable,
+                        skip_reason=SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+                    )
                     all_quality_data.append(quality_entry)
                     continue
 
@@ -2769,15 +2822,46 @@ class SupplementEnricherV3:
                     quality_entry['role_classification'] = 'recognized_non_scorable'
                     quality_entry['identity_confidence'] = 1.0
                     quality_entry['identity_decision_reason'] = recognition.get('recognition_reason') or 'recognized_non_scorable'
+                    self._tag_fallback_decision(
+                        quality_entry,
+                        'clinical_fail_safe',
+                        recognition.get('recognition_reason') or 'recognized_non_scorable',
+                    )
                     # Track for coverage metrics (separate from unmapped)
                     recognized_non_scorable_count += 1
                 else:
-                    # Truly unmapped - track as before
-                    unmapped_scorable_count += 1
-                    legacy_unmapped_count += 1
-                    self._track_unmapped(ing_name, 'active')
+                    if self._iqd_row_has_dose_evidence(quality_entry):
+                        # Truly unmapped eligible row - track for coverage gates,
+                        # but do not put it in the scoring/taxonomy input list.
+                        unmapped_scorable_count += 1
+                        legacy_unmapped_count += 1
+                        self._track_unmapped(ing_name, 'active')
+                    else:
+                        quality_entry['score_exclusion_reason'] = 'no_dose_evidence'
 
-            ingredients_scorable.append(quality_entry)
+            if self._is_contract_scorable_iqd_row(quality_entry):
+                ingredients_scorable.append(quality_entry)
+            else:
+                if quality_entry.get('scoreable_identity') is True and not self._iqd_row_has_dose_evidence(quality_entry):
+                    quality_entry['recognized_non_scorable'] = True
+                    quality_entry['scoreable_identity'] = False
+                    quality_entry['role_classification'] = 'recognized_non_scorable'
+                    quality_entry['recognition_source'] = quality_entry.get('recognition_source') or 'iqd_contract'
+                    quality_entry['recognition_type'] = quality_entry.get('recognition_type') or 'no_dose'
+                    quality_entry['recognition_reason'] = quality_entry.get('recognition_reason') or 'no_dose_evidence'
+                    quality_entry['identity_decision_reason'] = 'no_dose_evidence'
+                    self._tag_fallback_decision(quality_entry, 'clinical_fail_safe', 'no_dose_evidence')
+                    recognized_non_scorable_count += 1
+                self._route_non_scorable_iqd_row(
+                    quality_entry,
+                    ingredients_skipped,
+                    ingredients_recognized_non_scorable,
+                    skip_reason=(
+                        SKIP_REASON_RECOGNIZED_NON_SCORABLE
+                        if quality_entry.get('recognized_non_scorable')
+                        else quality_entry.get('score_exclusion_reason') or quality_entry.get('identity_decision_reason') or 'not_scorable'
+                    ),
+                )
             all_quality_data.append(quality_entry)
 
         # =================================================================
@@ -2866,13 +2950,43 @@ class SupplementEnricherV3:
                         quality_entry['identity_decision_reason'] = (
                             recognition.get('recognition_reason') or 'recognized_non_scorable'
                         )
+                        self._tag_fallback_decision(
+                            quality_entry,
+                            'clinical_fail_safe',
+                            recognition.get('recognition_reason') or 'recognized_non_scorable',
+                        )
                         recognized_non_scorable_count += 1
                     else:
-                        unmapped_scorable_count += 1
-                        legacy_unmapped_count += 1
-                        self._track_unmapped(ing_name, 'active_promoted')
+                        if self._iqd_row_has_dose_evidence(quality_entry):
+                            unmapped_scorable_count += 1
+                            legacy_unmapped_count += 1
+                            self._track_unmapped(ing_name, 'active_promoted')
+                        else:
+                            quality_entry['score_exclusion_reason'] = 'no_dose_evidence'
 
-                ingredients_scorable.append(quality_entry)
+                if self._is_contract_scorable_iqd_row(quality_entry):
+                    ingredients_scorable.append(quality_entry)
+                else:
+                    if quality_entry.get('scoreable_identity') is True and not self._iqd_row_has_dose_evidence(quality_entry):
+                        quality_entry['recognized_non_scorable'] = True
+                        quality_entry['scoreable_identity'] = False
+                        quality_entry['role_classification'] = 'recognized_non_scorable'
+                        quality_entry['recognition_source'] = quality_entry.get('recognition_source') or 'iqd_contract'
+                        quality_entry['recognition_type'] = quality_entry.get('recognition_type') or 'no_dose'
+                        quality_entry['recognition_reason'] = quality_entry.get('recognition_reason') or 'no_dose_evidence'
+                        quality_entry['identity_decision_reason'] = 'no_dose_evidence'
+                        self._tag_fallback_decision(quality_entry, 'clinical_fail_safe', 'no_dose_evidence')
+                        recognized_non_scorable_count += 1
+                    self._route_non_scorable_iqd_row(
+                        quality_entry,
+                        ingredients_skipped,
+                        ingredients_recognized_non_scorable,
+                        skip_reason=(
+                            SKIP_REASON_RECOGNIZED_NON_SCORABLE
+                            if quality_entry.get('recognized_non_scorable')
+                            else quality_entry.get('score_exclusion_reason') or quality_entry.get('identity_decision_reason') or 'not_scorable'
+                        ),
+                    )
                 all_quality_data.append(quality_entry)
                 # LABEL NAME PRESERVATION
                 raw_source_text = ingredient.get('raw_source_text') or ing_name
@@ -2910,6 +3024,14 @@ class SupplementEnricherV3:
                 ingredients_scorable, all_quality_data, ingredients_skipped
             )
         )
+        for row in all_quality_data:
+            if isinstance(row, dict) and row.get('role_classification') == 'recognized_non_scorable':
+                self._route_non_scorable_iqd_row(
+                    row,
+                    ingredients_skipped,
+                    ingredients_recognized_non_scorable,
+                    skip_reason=SKIP_REASON_RECOGNIZED_NON_SCORABLE,
+                )
 
         # =================================================================
         # BLEND-ONLY PRODUCT DETECTION
@@ -2944,8 +3066,14 @@ class SupplementEnricherV3:
         total_skipped = len(ingredients_skipped)
         total_promoted = len(promoted_from_inactive)
 
-        # Scorable from pass 1 = total scorable minus promoted from inactive
-        scorable_from_pass1 = total_scorable - total_promoted
+        # Scorable from pass 1 = active-source rows that remain in the strict
+        # scorable contract. Promoted inactive rows and recognized transparency
+        # rows are counted through their own buckets.
+        scorable_from_pass1 = sum(
+            1
+            for row in ingredients_scorable
+            if isinstance(row, dict) and row.get("source_section") == "active"
+        )
 
         # Invariant check: all active records must end up classified
         # scorable_from_pass1 + skipped should equal total_records_seen
@@ -2961,7 +3089,7 @@ class SupplementEnricherV3:
         # marker contributions declared in botanical_marker_contributions.json,
         # compute and attach the marker contribution list. Empty for marker-
         # canonical ingredients or botanicals without contribution mappings.
-        for ing_list in (all_quality_data, ingredients_scorable, ingredients_skipped):
+        for ing_list in (all_quality_data, ingredients_scorable, ingredients_recognized_non_scorable, ingredients_skipped):
             for ing in ing_list or []:
                 if not isinstance(ing, dict):
                     continue
@@ -2987,8 +3115,10 @@ class SupplementEnricherV3:
 
             # New two-pass classification fields
             "ingredients_scorable": ingredients_scorable,
+            "ingredients_recognized_non_scorable": ingredients_recognized_non_scorable,
             "ingredients_skipped": ingredients_skipped,
             "unmapped_scorable_count": unmapped_scorable_count,
+            "recognized_non_scorable_count": len(ingredients_recognized_non_scorable),
             "total_scorable_active_count": total_scorable,
             "skipped_non_scorable_count": total_skipped,
             "skipped_reasons_breakdown": skipped_reasons_breakdown,
@@ -3112,6 +3242,12 @@ class SupplementEnricherV3:
             row['demotion_reason'] = 'absorption_enhancer_sub_threshold'
             row['demotion_ref'] = f"{eid} (@ \u2264 {threshold_mg} mg)"
             row['demotion_rationale'] = rationale
+            row['recognized_non_scorable'] = True
+            row['recognition_source'] = row.get('recognition_source') or 'absorption_enhancers'
+            row['recognition_type'] = row.get('recognition_type') or 'threshold_demotion'
+            row['recognition_reason'] = row.get('recognition_reason') or 'absorption_enhancer_sub_threshold'
+            row['fallback_class'] = 'clinical_fail_safe'
+            row['fallback_reason'] = 'absorption_enhancer_sub_threshold'
             demoted.append({
                 'name': row.get('name'),
                 'standard_name': row.get('standard_name'),
@@ -3180,6 +3316,154 @@ class SupplementEnricherV3:
         unit_normalized = unit_normalized.replace('µg', 'mcg').replace('μg', 'mcg')
         unit_normalized = unit_normalized.replace(' ', '')
         return unit_normalized
+
+    _ENZYME_ACTIVITY_UNITS = frozenset({
+        "spu", "hut", "fcc", "su", "du", "alu", "fip", "sapu", "cu", "fu"
+    })
+    _ENZYME_ACTIVITY_RE = re.compile(
+        r"\b(\d[\d,]*(?:\.\d+)?)\s*(SAPU|SPU|HUT|FCC|ALU|FIP|DU|SU|CU|FU)\b",
+        re.IGNORECASE,
+    )
+
+    def _extract_enzyme_activity_dose(self, ingredient: Dict) -> Tuple[Optional[float], Optional[str]]:
+        """Extract enzyme activity dose from unit fields or raw label text."""
+        quantity = ingredient.get("quantity")
+        unit = self._normalize_unit_for_signal(ingredient.get("unit"))
+        if unit in self._ENZYME_ACTIVITY_UNITS:
+            try:
+                qty = float(str(quantity).replace(",", ""))
+                if qty > 0:
+                    return qty, unit.upper()
+            except (TypeError, ValueError):
+                pass
+
+        identity_text = " ".join(
+            str(ingredient.get(key) or "").lower()
+            for key in (
+                "name", "standardName", "raw_source_text", "category",
+                "ingredientGroup", "canonical_id"
+            )
+        )
+        if not any(
+            token in identity_text
+            for token in (
+                "enzyme", "serrapeptase", "serratiopeptidase", "nattokinase",
+                "protease", "amylase", "lipase", "lactase", "cellulase",
+                "bromelain", "papain"
+            )
+        ):
+            return None, None
+
+        text_parts = [
+            ingredient.get("name"),
+            ingredient.get("standardName"),
+            ingredient.get("raw_source_text"),
+            ingredient.get("notes"),
+            ingredient.get("_product_activity_text"),
+        ]
+        text = " ".join(str(part) for part in text_parts if part)
+        match = self._ENZYME_ACTIVITY_RE.search(text)
+        if not match:
+            return None, None
+        try:
+            return float(match.group(1).replace(",", "")), match.group(2).upper()
+        except ValueError:
+            return None, None
+
+    _IQD_DOSE_EVIDENCE_CLASSES = frozenset({
+        "therapeutic_mass",
+        "enzyme_activity",
+        "probiotic_cfu",
+        "percent_dv_only",
+    })
+    _CLEANER_CONTRACT_FIELDS = frozenset({
+        "source_section",
+        "raw_source_path",
+        "cleaner_row_role",
+        "score_eligible_by_cleaner",
+        "score_exclusion_reason",
+        "dose_class",
+        "raw_taxonomy",
+    })
+
+    @staticmethod
+    def _append_unique_iqd_row(rows: List[Dict], row: Dict) -> None:
+        if not any(existing is row for existing in rows):
+            rows.append(row)
+
+    @staticmethod
+    def _tag_fallback_decision(row: Dict, fallback_class: str, fallback_reason: str) -> None:
+        if fallback_class:
+            row["fallback_class"] = fallback_class
+        if fallback_reason:
+            row["fallback_reason"] = fallback_reason
+
+    def _missing_cleaner_contract_fields(self, ingredient: Dict) -> List[str]:
+        return sorted(field for field in self._CLEANER_CONTRACT_FIELDS if field not in ingredient)
+
+    def _mark_cleaner_contract_fallback(self, row: Dict, missing_fields: List[str]) -> None:
+        if not missing_fields:
+            return
+        row["cleaner_contract_fallback_used"] = True
+        row["cleaner_contract_missing_fields"] = missing_fields
+        row["fallback_class"] = "old_batch_compatibility"
+        row["fallback_reason"] = "missing_cleaner_contract_fields"
+
+    def _iqd_row_has_dose_evidence(self, row: Dict) -> bool:
+        """Return True when an IQD row has usable dose evidence for scoring."""
+        dose_class = str(row.get("dose_class") or "").strip()
+        if dose_class in self._IQD_DOSE_EVIDENCE_CLASSES:
+            return True
+        if row.get("activity_quantity") not in (None, "") and row.get("activity_unit"):
+            try:
+                return float(str(row.get("activity_quantity")).replace(",", "")) > 0
+            except (TypeError, ValueError):
+                return True
+        if row.get("has_dose") is True:
+            return True
+        quantity = row.get("quantity")
+        unit = self._normalize_unit_for_signal(row.get("unit"))
+        if not unit or unit in PSEUDO_UNITS_INVALID:
+            return False
+        try:
+            return float(str(quantity).replace(",", "")) > 0
+        except (TypeError, ValueError):
+            return False
+
+    def _is_contract_scorable_iqd_row(self, row: Dict) -> bool:
+        """Strict IQD contract for rows allowed to feed scoring/taxonomy."""
+        return (
+            row.get("score_eligible_by_cleaner") is True
+            and row.get("scoreable_identity") is True
+            and str(row.get("role_classification") or "") == "active_scorable"
+            and self._iqd_row_has_dose_evidence(row)
+        )
+
+    def _route_non_scorable_iqd_row(
+        self,
+        row: Dict,
+        ingredients_skipped: List[Dict],
+        ingredients_recognized_non_scorable: List[Dict],
+        *,
+        skip_reason: str,
+    ) -> None:
+        """Route a non-scorable evaluated row into explicit transparency buckets."""
+        row["scoreable_identity"] = False
+        row.setdefault("score_included", False)
+        row["skip_reason"] = skip_reason
+        row.setdefault("score_exclusion_reason", skip_reason)
+        row.setdefault("fallback_class", "clinical_fail_safe")
+        row.setdefault("fallback_reason", skip_reason)
+        row.setdefault("mapped", bool(row.get("mapped_identity") or row.get("canonical_id")))
+        row.setdefault(
+            "normalized_key",
+            norm_module.make_normalized_key(row.get("raw_source_text") or row.get("name") or ""),
+        )
+        if row.get("recognized_non_scorable") or row.get("role_classification") == "recognized_non_scorable":
+            row["recognized_non_scorable"] = True
+            row["role_classification"] = "recognized_non_scorable"
+            self._append_unique_iqd_row(ingredients_recognized_non_scorable, row)
+        self._append_unique_iqd_row(ingredients_skipped, row)
 
     def _compute_excipient_flags(self, ingredient: Dict) -> Tuple[bool, Optional[str]]:
         """Determine excipient status for ingredient-level signals.
@@ -3351,6 +3635,26 @@ class SupplementEnricherV3:
 
         return None
 
+    def _cleaner_skip_reason(self, ingredient: Dict) -> Optional[str]:
+        if ingredient.get("score_eligible_by_cleaner") is not False:
+            return None
+        role = str(
+            ingredient.get("cleaner_row_role")
+            or ingredient.get("score_exclusion_reason")
+            or ""
+        ).strip().lower()
+        if role == "blend_header_total":
+            return SKIP_REASON_BLEND_HEADER_WITH_WEIGHT
+        if role in {"nested_display_only", "composition_leaf"}:
+            return SKIP_REASON_NESTED_NON_THERAPEUTIC
+        if role == "excipient":
+            return SKIP_REASON_ADDITIVE
+        if role == "label_header":
+            return SKIP_REASON_LABEL_PHRASE
+        if role == "nutrition_rollup":
+            return SKIP_REASON_NUTRITION_FACT
+        return role or SKIP_REASON_RECOGNIZED_NON_SCORABLE
+
     def _should_skip_from_scoring(self, ingredient: Dict, quality_map: Dict, botanicals_db: Dict) -> Optional[str]:
         """
         Determine if an ingredient should be SKIPPED from quality scoring.
@@ -3452,8 +3756,15 @@ class SupplementEnricherV3:
                 return (
                     SKIP_REASON_BLEND_HEADER_WITH_WEIGHT if has_dose_pre
                     else SKIP_REASON_BLEND_HEADER_NO_DOSE
-                )
+            )
             # Else: fully-disclosed parent — fall through to scorable path.
+
+        if ingredient.get('isNestedIngredient', False):
+            parent_blend = ingredient.get('parentBlend', '')
+            has_nested_dose, _ = self._has_valid_therapeutic_dose(ingredient)
+            activity_qty, _activity_unit = self._extract_enzyme_activity_dose(ingredient)
+            if parent_blend and not has_nested_dose and activity_qty is None:
+                return SKIP_REASON_NESTED_NON_THERAPEUTIC
 
         # =================================================================
         # GROUP A: Structural flags from cleaning
@@ -3653,6 +3964,12 @@ class SupplementEnricherV3:
 
         Returns dict with {reason, confidence} if should promote, None otherwise.
         """
+        cleaner_role = str(ingredient.get("cleaner_row_role") or "").strip().lower()
+        if cleaner_role != "active_misfiled_in_inactive":
+            return None
+        if ingredient.get("score_eligible_by_cleaner") is not True:
+            return None
+
         ing_name = ingredient.get('name', '')
         std_name = ingredient.get('standardName', '') or ing_name
         name_lower = ing_name.lower().strip()
@@ -4263,9 +4580,13 @@ class SupplementEnricherV3:
         quantity = ingredient.get('quantity', 0)
         unit = ingredient.get('unit', '')
         has_dose, _ = self._has_valid_therapeutic_dose(ingredient)
+        activity_quantity, activity_unit = self._extract_enzyme_activity_dose(ingredient)
+        if activity_quantity is not None:
+            has_dose = True
         unit_normalized = self._normalize_unit_for_signal(unit)
         is_excipient, never_promote_reason = self._compute_excipient_flags(ingredient)
         blend_flags = self._compute_blend_flags(ingredient, None)
+        missing_cleaner_contract_fields = self._missing_cleaner_contract_fields(ingredient)
         is_form_unmapped = bool(
             match_result and isinstance(match_result, dict) and match_result.get("match_status") == "FORM_UNMAPPED"
         )
@@ -4392,6 +4713,7 @@ class SupplementEnricherV3:
                 "standard_name": match_result.get('standard_name', std_name),  # Canonical
                 "matched_form": match_result.get('form_name', 'standard'),
                 "canonical_id": match_result.get('canonical_id'),
+                "canonical_source_db": match_result.get('canonical_source_db') or "ingredient_quality_map",
                 "form_id": match_result.get('form_id'),
                 "match_tier": match_result.get('match_tier'),
                 "matched_alias": match_result.get('matched_alias'),
@@ -4517,6 +4839,46 @@ class SupplementEnricherV3:
             entry["promotion_reason"] = promotion_reason
             entry["promotion_confidence"] = promotion_confidence
             entry["dose_present"] = dose_present
+
+        cleaner_source = ingredient.get("source_section")
+        if cleaner_source in {"active", "inactive", "nutrition", "label", "unknown"}:
+            source_section = cleaner_source
+        elif source_section == "inactive_promoted":
+            source_section = "inactive"
+        entry["source_section"] = source_section
+        entry["raw_source_path"] = ingredient.get("raw_source_path") or (
+            "inactiveIngredients" if source_section == "inactive" else "activeIngredients"
+        )
+        entry["cleaner_row_role"] = ingredient.get("cleaner_row_role") or (
+            "active_scorable" if source_section == "active" else "inactive"
+        )
+        entry["score_eligible_by_cleaner"] = (
+            bool(ingredient.get("score_eligible_by_cleaner"))
+            if "score_eligible_by_cleaner" in ingredient
+            else source_section == "active"
+        )
+        entry["score_exclusion_reason"] = ingredient.get("score_exclusion_reason")
+        entry["dose_class"] = ingredient.get("dose_class")
+        entry["raw_taxonomy"] = ingredient.get("raw_taxonomy")
+        if activity_quantity is not None:
+            entry["activity_quantity"] = int(activity_quantity) if activity_quantity.is_integer() else activity_quantity
+            entry["activity_unit"] = activity_unit
+            entry["has_dose"] = True
+            entry["dose_class"] = "enzyme_activity"
+        entry.setdefault("canonical_source_db", ingredient.get("canonical_source_db"))
+        entry.setdefault("normalized_key", ingredient.get("normalized_key") or norm_module.make_normalized_key(raw_source_text))
+        entry.setdefault("recognition_source", None)
+        entry.setdefault("recognition_type", None)
+        entry.setdefault("recognition_reason", None)
+        entry.setdefault("form_id", None)
+        entry.setdefault("form_source", None)
+        entry.setdefault("form_unmapped", bool(is_form_unmapped))
+        entry.setdefault("delivers_markers", [])
+        entry.setdefault("fallback_class", None)
+        entry.setdefault("fallback_reason", None)
+        if entry.get("identity_decision_reason") == "form_unmapped_fallback":
+            self._tag_fallback_decision(entry, "clinical_fail_safe", "form_unmapped_fallback")
+        self._mark_cleaner_contract_fallback(entry, missing_cleaner_contract_fields)
 
         # Sprint 1.1: propagate cleaner-side match method (UNII / alternateNames)
         # so the downstream match_ledger emission can attribute it correctly.
@@ -7797,6 +8159,14 @@ class SupplementEnricherV3:
                         allowlist_id = allowlist_match.get("allowlist_id")
 
                 if match_method:
+                    if (
+                        banned_id == "HM_CHROMIUM_HEXAVALENT"
+                        and not self._has_explicit_hexavalent_chromium_evidence(
+                            candidate_ing_name,
+                        )
+                    ):
+                        continue
+
                     # Guardrail: do not flag explicitly negated mentions like
                     # "X-free" / "free from X" / "contains no X".
                     negation_target = matched_variant or banned_name
@@ -7859,6 +8229,18 @@ class SupplementEnricherV3:
             "found": len(found) > 0,
             "substances": found
         }
+
+    def _has_explicit_hexavalent_chromium_evidence(self, *values: Any) -> bool:
+        text = " ".join(str(v or "") for v in values).lower()
+        if not text:
+            return False
+        return bool(
+            re.search(r"\bhexavalent\s+chromium\b", text)
+            or re.search(r"\bchromium\s*(?:\(?vi\)?|\(?6\+?\)?)\b", text)
+            or re.search(r"\bcr\s*[\(\- ]?vi[\)]?\b", text)
+            or re.search(r"\bchromate\b", text)
+            or re.search(r"\bdichromate\b", text)
+        )
 
     def _derive_banned_severity(self, banned_item: Dict[str, Any]) -> str:
         """Derive severity from current banned DB policy fields."""
@@ -10345,7 +10727,7 @@ class SupplementEnricherV3:
             and str(top_manufacturer.get("match_type", "")).lower() == "exact"
         )
 
-        ingredients = ingredient_quality_data.get("ingredients_scorable", []) or ingredient_quality_data.get("ingredients", []) or []
+        ingredients = ingredient_quality_data.get("ingredients_scorable", []) or []
         has_missing_dose = any(
             isinstance(item, dict) and not bool(item.get("has_dose", False))
             for item in ingredients
@@ -10679,18 +11061,21 @@ class SupplementEnricherV3:
             # Try exact match first (faster, more reliable)
             brand_exact = self._exact_match(brand, std_name, aliases)
             mfr_exact = self._exact_match(manufacturer, std_name, aliases)
+            brand_family_exact = self._brand_family_exact_match(brand, std_name, aliases)
+            mfr_family_exact = self._brand_family_exact_match(manufacturer, std_name, aliases)
 
-            if brand_exact or mfr_exact:
+            if brand_exact or mfr_exact or brand_family_exact or mfr_family_exact:
                 # Determine which input matched (AC2)
-                matched_source = "brandName" if brand_exact else "manufacturer"
-                matched_raw = brand if brand_exact else manufacturer
-                matched_normalized = brand_normalized if brand_exact else mfr_normalized
+                matched_source = "brandName" if (brand_exact or brand_family_exact) else "manufacturer"
+                matched_raw = brand if (brand_exact or brand_family_exact) else manufacturer
+                matched_normalized = brand_normalized if (brand_exact or brand_family_exact) else mfr_normalized
 
                 return {
                     "found": True,
                     "manufacturer_id": top_mfr.get('id', ''),
                     "name": std_name,
                     "match_type": "exact",
+                    "match_detail": "brand_family_prefix" if (brand_family_exact or mfr_family_exact) else "exact_or_alias",
                     # AC2: Provenance fields for auditability
                     "product_manufacturer_raw": matched_raw,
                     "product_manufacturer_normalized": matched_normalized,
@@ -10743,6 +11128,29 @@ class SupplementEnricherV3:
             "product_manufacturer_normalized": mfr_normalized or brand_normalized,
             "source_path": "manufacturer" if manufacturer else "brandName",
         }
+
+    def _brand_family_exact_match(self, value: str, target_name: str, aliases: List[str]) -> bool:
+        """
+        Treat explicit brand-family prefixes as exact manufacturer matches.
+
+        This covers labels such as "GNC Beyond Raw" and "GNC Pro Performance".
+        They are not fuzzy matches: the first token is the trusted brand itself,
+        with the remaining text being a product line or sub-brand.
+        """
+        value_norm = self._normalize_company_name(value)
+        if not value_norm:
+            return False
+
+        family_candidates = [target_name] + list(aliases or [])
+        for candidate in family_candidates:
+            candidate_norm = self._normalize_company_name(candidate)
+            if not candidate_norm:
+                continue
+            if len(candidate_norm) < 3:
+                continue
+            if value_norm.startswith(f"{candidate_norm} "):
+                return True
+        return False
 
     def _check_violations(self, brand: str, manufacturer: str) -> Dict:
         """
@@ -11549,7 +11957,7 @@ class SupplementEnricherV3:
 
         canonical_ingredients: set[str] = set()
         iqd = enriched.get("ingredient_quality_data", {}) or {}
-        ingredient_rows = iqd.get("ingredients_scorable") or iqd.get("ingredients") or []
+        ingredient_rows = iqd.get("ingredients_scorable") or []
         for ingredient in ingredient_rows:
             if not isinstance(ingredient, dict):
                 continue

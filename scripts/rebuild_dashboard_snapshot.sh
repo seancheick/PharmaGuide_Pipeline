@@ -27,7 +27,17 @@ cd "$REPO_ROOT"
 source "$REPO_ROOT/scripts/python_env.sh"
 
 STAGING="/tmp/pg_dashboard_snapshot_$$"
+SOURCE_OF_TRUTH_AUDIT="$REPO_ROOT/scripts/audit_source_of_truth_contract.py"
 trap 'rm -rf "$STAGING"' EXIT
+
+run_strict_gate() {
+  local label="$1"; shift
+  echo "◦ Strict gate: $label"
+  "$@"
+}
+
+run_strict_gate "source-of-truth matrix" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" matrix --strict-release
 
 # 1. Collect enriched + scored dirs.
 ENR=(scripts/products/*_enriched/enriched)
@@ -73,6 +83,28 @@ echo "◦ Building from ${#ENR[@]} enriched dirs + ${#SCR[@]} scored dirs..."
 rm -rf scripts/final_db_output
 mkdir -p scripts/final_db_output
 cp -r "$STAGING/." scripts/final_db_output/
+
+run_strict_gate "cleaner/IQD row contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" cleaner --products-dir scripts/products --strict-release
+run_strict_gate "enrichment/IQD source-of-truth contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" enrichment --products-dir scripts/products --strict-release
+run_strict_gate "clinical drift contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" clinical --products-dir scripts/products --strict-release
+run_strict_gate "stamp dist export manifest contract metadata" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest --dist-dir scripts/dist --strict-release
+run_strict_gate "stamp final_db_output export manifest contract metadata" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" stamp-manifest --dist-dir scripts/final_db_output --strict-release
+run_strict_gate "dist export contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" export --dist-dir scripts/dist --require-stamped-manifest --strict-release
+run_strict_gate "final_db_output export contract" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" export --dist-dir scripts/final_db_output --require-stamped-manifest --strict-release
+run_strict_gate "catalog artifact freshness" \
+  "$PG_PYTHON" "$SOURCE_OF_TRUTH_AUDIT" freshness \
+    --dist-dir scripts/dist \
+    --final-db-dir scripts/final_db_output \
+    --products-dir scripts/products \
+    --skip-interaction-inputs \
+    --strict-release
 
 PRODUCT_COUNT=$("$PG_PYTHON" -c "import sqlite3; print(sqlite3.connect('scripts/dist/pharmaguide_core.db').execute('SELECT COUNT(*) FROM products_core').fetchone()[0])")
 BLOB_COUNT=$(ls scripts/dist/detail_blobs | wc -l | tr -d ' ')

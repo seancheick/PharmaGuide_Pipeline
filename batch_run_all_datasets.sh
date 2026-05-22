@@ -3,8 +3,8 @@
 ###############################################################################
 # Batch Pipeline Runner for All DSLD Datasets
 ###############################################################################
-# Processes child dataset folders through the pipeline → dashboard snapshot →
-# full release (catalog + DSLD images + interaction DB → Supabase → Flutter bundle).
+# Processes child dataset folders through the pipeline → strict dashboard snapshot →
+# strict full release (catalog + DSLD images + interaction DB → Supabase → Flutter bundle).
 #
 # Stop-on-fail: if any brand fails during clean/enrich/score, the post-pipeline
 # release stages are skipped so partial data never reaches Supabase or Flutter.
@@ -21,7 +21,7 @@
 #   bash batch_run_all_datasets.sh --root "$HOME/Documents/DataSetDsld/delta/olly"
 #   bash batch_run_all_datasets.sh --root "/Users/seancheick/Documents/DataSetDsld/staging/brands" --targets Olly,Thorne,Pure,CVS,Nature,Goli,Hum,Legion,Ora,Ritual,Transparent,Vitafusion
 #
-# Release-stage flags (apply after pipeline + snapshot succeed):
+# Release-stage flags (apply after pipeline + strict snapshot gates succeed):
 #   --skip-release            Skip the full release (snapshot only — old behavior)
 #   --skip-product-images     Run release without DSLD image extract/backfill
 #   --skip-supabase           Run snapshot + images + interaction DB + Flutter, but no Supabase sync
@@ -35,9 +35,9 @@
 #   SKIP_RELEASE=1  bash batch_run_all_datasets.sh          # Snapshot only, skip full release
 #
 # After every successful run:
-#   1. Dashboard snapshot is rebuilt (scripts/dist/ refreshed for streamlit).
+#   1. Dashboard snapshot is rebuilt and strict cleaner/source-of-truth gates pass.
 #   2. DSLD product images are extracted/backfilled into scripts/dist/ when needed.
-#   3. Interaction DB is rebuilt (verifies CUI/RXCUI live, stages to dist/).
+#   3. Interaction DB is rebuilt and strict interaction parity gates pass.
 #   4. dist/ is synced to Supabase with full cleanup (storage + manifest rows).
 #   5. Both DBs are atomically bundled into Flutter assets/db/ (17 gates).
 #   6. .previous backups in Flutter assets/db/ are pruned.

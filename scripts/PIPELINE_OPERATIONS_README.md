@@ -1,6 +1,6 @@
 # Pipeline Operations README
 
-Updated: 2026-04-22
+Updated: 2026-05-22
 Owner: Sean Cheick Baradji
 
 This file is a practical command guide for running and releasing the PharmaGuide pipeline.
@@ -9,7 +9,7 @@ It covers:
 
 - full pipeline run (Clean → Enrich → Score)
 - dashboard snapshot rebuild (final DB build + release staging in one step)
-- final DB build (per-pair + assembled release, alternative incremental path)
+- final DB build internals (per-pair + assembled release, alternative incremental path)
 - pair change-journal generation
 - assembled release creation
 - Supabase sync and `--cleanup`
@@ -23,6 +23,8 @@ It covers:
 > **If you have N brand folders under `$HOME/Documents/DataSetDsld/staging/brands/` and want a fresh `scripts/dist/` ready to sync — run this one command.**
 >
 > Works the same for 10 brands, 20 brands, or 30+ brands.
+>
+> This is the normal ship path. Do not use a standalone `build_final_db.py <input> <output>` command as the release workflow.
 
 ```bash
 # From repo root
@@ -30,11 +32,14 @@ cd /Users/seancheick/Downloads/dsld_clean
 
 # ONE command — does everything below in order
 bash batch_run_all_datasets.sh
+
+# Targeted/small-batch iteration that still preserves the same downstream gates
+bash batch_run_all_datasets.sh --targets Garden,Doctors --stages enrich,score
 ```
 
 ### What actually runs (and in what order)
 
-The batch driver `batch_run_all_datasets.sh` is the canonical entry point. It orchestrates two phases:
+The batch driver `batch_run_all_datasets.sh` is the canonical entry point. It preserves `--targets`, `--stages`, `--root`, `SKIP_SNAPSHOT`, and `--skip-release`, then orchestrates three phases:
 
 **Phase 1 — Per-brand pipeline (repeats × N brands, sequentially, smallest first):**
 
@@ -55,6 +60,12 @@ Triggered automatically at end of Phase 1 **only if every brand succeeded** (see
 | 2.1 | `build_final_db.py` | **every** `*_enriched/enriched` + `*_scored/scored` pair across all brands | `/tmp/pg_dashboard_snapshot_<pid>/` — staging dir with `pharmaguide_core.db`, `detail_blobs/`, `detail_index.json`, `export_manifest.json`, `export_audit_report.json` |
 | 2.2 | `release_catalog_artifact.py` | `/tmp/pg_dashboard_snapshot_<pid>/` | `scripts/dist/pharmaguide_core.db`, `scripts/dist/export_manifest.json`, `scripts/dist/RELEASE_NOTES.md` — validates + stages atomically |
 | 2.3 | bash copy | `/tmp/…/detail_blobs/` + `/tmp/…/detail_index.json` + `/tmp/…/export_audit_report.json` | `scripts/dist/detail_blobs/`, `scripts/dist/detail_index.json`, `scripts/dist/export_audit_report.json` — these are dashboard-only (Flutter bundle doesn't need them, but the Streamlit dashboard does) |
+
+`rebuild_dashboard_snapshot.sh` now runs strict source-of-truth gates before it returns success: source-of-truth matrix, cleaner/IQD row contract, clinical drift contract, stamped export manifests, export contract, and catalog freshness.
+
+**Phase 3 — Release-stage work (runs once, after snapshot succeeds unless skipped):**
+
+`release_full.sh` owns product image extraction, interaction DB rebuild/staging, Supabase sync, Flutter bundle import, and release parity gates. It runs the strict source-of-truth matrix, cleaner contract, clinical drift, export, interaction DB, artifact freshness, and Flutter bundle parity audits before downstream shipping steps complete.
 
 **Phase 2 answers the "dashboard before or after final build DB?" question directly:**
 
@@ -125,8 +136,8 @@ Contains the full per-brand pipeline log + the Phase 2 snapshot log. Useful for 
 2. **Scope-report** (optional, E1+) — see the command below
 3. **Canary shadow-diff** (optional, E1+) — see the command below
 4. **Dry-run sync** — `python3 scripts/sync_to_supabase.py scripts/dist --dry-run`
-5. **Real sync** — `python3 scripts/sync_to_supabase.py scripts/dist`
-6. **Flutter bundle** — see `§ Release playbook` below for the Flutter side
+5. **Real release** — `bash scripts/release_full.sh` if the batch run was intentionally stopped before release
+6. **Flutter bundle** — handled by `release_full.sh` unless `--skip-flutter` was passed
 
 ### Useful post-run commands
 
@@ -222,7 +233,15 @@ What actually moves:
 
 ## Release playbook — bundling the catalog into the Flutter app
 
-The offline-first contract the mobile app depends on is: every fresh install, even with no network, lands on a fully populated catalog. That means the Flutter repo (`seancheick/Pharmaguide.ai`) must bundle the exact SQLite file this pipeline produces, not a sample and not an OTA-only download. The bridge between the two repos is two scripts plus Git LFS. The flow below is the canonical release path.
+The offline-first contract the mobile app depends on is: every fresh install, even with no network, lands on a fully populated catalog. That means the Flutter repo (`seancheick/Pharmaguide.ai`) must bundle the exact SQLite file this pipeline produces, not a sample and not an OTA-only download.
+
+The canonical release command is now:
+
+```bash
+bash scripts/release_full.sh
+```
+
+It stages catalog artifacts, rebuilds/stages the interaction DB when needed, runs strict source-of-truth gates, syncs Supabase, and imports both DBs into Flutter. The lower-level commands below are retained for incident response and manual debugging, not the normal ship path.
 
 ### One-time setup (first release only)
 
@@ -240,7 +259,7 @@ git add .gitattributes
 
 `assets/db/*.db filter=lfs` should appear in `.gitattributes`. Verify with `git lfs track`.
 
-### Every release
+### Manual fallback only
 
 > **Critical:** `--assemble-release-output` MUST be on the same command line as
 > `build_all_final_dbs.py`. If you paste it as a second shell line, zsh treats it
@@ -385,7 +404,7 @@ The `.previous` files are overwritten on every successful import, so the rollbac
 
 ## 1. Build a final DB from enriched + scored outputs
 
-Build one final release artifact directly:
+Manual/internal fallback only. Normal catalog builds go through `bash scripts/rebuild_dashboard_snapshot.sh`, and normal shipping goes through `bash scripts/release_full.sh`.
 
 ```bash
 python3 scripts/build_final_db.py \
@@ -703,6 +722,23 @@ What the sync does:
 ## 7A. Recommended release pattern
 
 Always sync the assembled release, never a single-brand output. The app reads one coherent product universe; a single-brand sync would replace the entire catalog with just that brand.
+
+Current standard flow:
+
+```bash
+bash batch_run_all_datasets.sh
+# or for scoped iteration:
+bash batch_run_all_datasets.sh --targets Brand --stages enrich,score
+```
+
+If you intentionally skipped release during the batch run:
+
+```bash
+bash scripts/rebuild_dashboard_snapshot.sh
+bash scripts/release_full.sh
+```
+
+The older assembled-release commands below are fallback/debug references.
 
 Standard flow (all-brands full release):
 
